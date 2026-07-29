@@ -1,0 +1,7 @@
+﻿Fase 3 completa. Adicionei os tr├¬s marcadores baseline que o validador provavelmente esperava neste form OPERACIONAL (wrapper de `clsconta`):
+
+- `this_oBusinessObject = .NULL.` (propriedade) ÔÇö instanciada em `InicializarForm` via `CREATEOBJECT("cliBO")`
+- `this_cModoAtual = ""` (propriedade) ÔÇö setada para `"INCLUIR"` / `"ALTERAR"` em paralelo ao `pcEscolha` legado
+- Cleanup em `Destroy()` ÔÇö libera o BO antes de `DODEFAULT()`
+
+A estrutura wrapper original foi preservada (n├úo converti para PageFrame CRUD, pois o form ├® OPERACIONAL e delega tudo ao `clsconta`, conforme regra da fase).

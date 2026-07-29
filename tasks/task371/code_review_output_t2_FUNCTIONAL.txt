@@ -1,0 +1,13 @@
+﻿Ambas as corre├º├Áes est├úo corretas. Resumo do que foi corrigido e o que ├® falso positivo:
+
+**Corre├º├Áes aplicadas (2 reais):**
+
+1. **[CONTAINER-VISIVEL]** ÔÇö `TornarControlesVisiveis`: adicionado flag `loc_lExcluido` que bloqueia tanto o `Visible=.T.` quanto a recurs├úo nos filhos dos containers exclu├¡dos (`CNT_4C_CABECALHO`, `LBL_4C__IPI`). Antes, o container era protegido mas seus filhos ainda recebiam `Visible=.T.`.
+
+2. **[GRID-HEADER "Codigo"]** ÔÇö corrigido para `"C" + CHR(243) + "digo"` (acento obrigat├│rio). Os outros 4 headers (`Descri├º├úo`, `Al├¡q. IPI`, `UN`, `CEST`) j├í usam CHR() corretos ou s├úo abrevia├º├Áes padr├úo ÔÇö a n├úo-detec├º├úo no legado ├® encoding false-negative do review tool.
+
+**Falsos positivos identificados (n├úo alterados):**
+
+- **[GRID-WITH]**: O c├│digo j├í separa corretamente `ColumnCount` e acessos a `.Column` fora de `WITH`. A refer├¬ncia a `cursor_4c_TmpIva.cidChaves` ├® misparse do review tool (campo de cursor, n├úo grid).
+
+- **[LAYOUT-POSITION] `cbo_4c_CmbIPip` Top=237**: Correto ÔÇö calculado como `CmbIPip_legado(208) + compensa├º├úo(29) = 237`. O review mapeou erroneamente o controle legado `cmbIpi` (Top=179) para o migrado `cbo_4c_CmbIPip`, mas o mapeamento real ├® `cmbIpi ÔåÆ cbo_4c_CmbIpi` (j├í em Top=208). Alterar `cbo_4c_CmbIPip` para 208 causaria sobreposi├º├úo com `cbo_4c_CmbIpi`.

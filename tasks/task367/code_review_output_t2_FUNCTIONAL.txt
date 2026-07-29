@@ -1,0 +1,9 @@
+﻿Corre├º├úo aplicada. Resumo do que foi feito e descartado:
+
+**Corrigido:**
+- `TornarControlesVisiveis` ÔÇö introduziu vari├ível `loc_lExcluir` e envolveu todo o bloco (set Visible + recurs├úo para PageFrame + recurs├úo para Container) no `IF !loc_lExcluir`. Antes, o guard INLIST s├│ protegia o `Visible=.T.` mas deixava a recurs├úo acontecer, for├ºando todos os filhos de CNT_4C_CABECALHO a Visible=.T.
+
+**N├úo alterado (falsos positivos da ferramenta):**
+- **METODO-INEXISTENTE** ÔÇö `ObterJuroCarts` est├í definida na linha 2764 como `PROTECTED FUNCTION`, chamada corretamente via `THIS.ObterJuroCarts()`.
+- **GRID-HEADER (12 warnings)** ÔÇö `grd_4c_GradeCheque` j├í tem os headers legados corretos (linhas 1031ÔÇô1039: Bco, Agenc, N┬░ Conta, etc.). Os 12 warnings s├úo do `grd_4c_Dados` (grid de lista da Page1), elemento novo da arquitetura de 2 p├íginas com headers adequados (Lote/Data/Opera├º├úo/Total/Juros/Dt. Transporte) que n├úo existem no SCX legado porque ele n├úo tinha lista separada.
+- **LAYOUT-POSITION** ÔÇö `lbl_4c_Periodo` em `cnt_4c_Filtros` j├í est├í em Top=10, Left=12 (igual ao legado). A ferramenta identificou erroneamente `lbl_4c_Label13` (caption "Limpar Carteira", Page2) como sendo o mesmo controle.

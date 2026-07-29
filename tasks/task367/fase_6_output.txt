@@ -1,0 +1,28 @@
+﻿Phase 6/8 is complete. Here's a summary of what was implemented:
+
+**ConfigurarPaginaDados()** ÔÇö added 30+ new controls:
+- `lbl_4c_AvisoPortaM/T/S` ÔÇö hidden indicators (re-hidden after TornarControlesVisiveis)
+- `cmd_4c_Command3` (Hist├│rico, left=829) + `cmd_4c_BotConsulta` (PGV, left=884)
+- Grupo/Conta Origem: `txt_4c_GrupoOs` + `txt_4c_DGrupoOs` + `txt_4c_ContaOs` + `txt_4c_DCONTAOs` + labels + `cmd_4c_Command1`
+- Grupo/Conta Destino: `txt_4c_GrupoDs` + `txt_4c_DGrupoDs` + `txt_4c_ContaDs` + `txt_4c_DCONTADs` + labels + `cmd_4c_Command2`
+- Taxa fields: `txt_4c_Taxa`, `txt_4c_TaxaDia`, `txt_4c_TaxaIof` + labels + `lbl_4c_TpJuroS/C` indicators
+- Grupo/Conta Juros: `txt_4c_GruJuro` + `txt_4c_DGruJuro` + `txt_4c_ConJuro` + `txt_4c_DJuro` + labels
+- All BINDEVENTs registered for LostFocus (lookups) and Click (buttons)
+
+**HabilitarCampos()** ÔÇö all 9 new text fields + 4 command buttons added
+
+**LimparCampos()** ÔÇö all 12 new fields reset to empty/""/0
+
+**BOParaForm()** ÔÇö loads all 9 BO properties + SQL descriptions for all 6 grupo/conta fields
+
+**FormParaBO()** ÔÇö transfers all 9 new fields to BO properties
+
+**13 new PROCEDURE methods** added before ENDDEFINE:
+- `ObterJuroCarts()` (protected) ÔÇö queries SigCdPam for compound vs. simple interest
+- `ValidarGrupoOs/Ds/GruJuro` ÔÇö FormBuscaAuxiliar on SigCdGcr, clears dependent conta on group change
+- `ValidarContaOs/Ds/ConJuro` ÔÇö direct SQLEXEC with grupo filter (requires grupo first)
+- `TaxaLostFocus/TaxaDiaLostFocus` ÔÇö bidirectional compound/simple interest conversion with S/C indicator highlighting
+- `TaxaIofLostFocus` ÔÇö validates non-negative IOF
+- `BtnBotConsultaClick` ÔÇö queries SigCcChm and shows PGV summary
+- `BtnCommand1/2Click` ÔÇö open FormBuscaAuxiliar for conta lookup
+- `BtnCommand3Click` ÔÇö queries LogAuditoria for lote history

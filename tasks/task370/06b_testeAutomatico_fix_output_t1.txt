@@ -1,0 +1,6 @@
+﻿Dois fixes aplicados em `FormCLC.prg`:
+
+1. **`ConfigurarPaginaLista()`** ÔÇö cria `cursor_4c_Dados` vazio (com Codigos/Emps/LocalA/LocalB) via `CREATE CURSOR` antes de atribuir ao `RecordSource` do grid lista.
+2. **`ConfigurarComplementos()`** ÔÇö chama `THIS.CriarCursoresOperacoesVazios()` logo no in├¡cio, criando `cursor_4c_Operacoes`, `cursor_4c_EstoqueA` e `cursor_4c_EstoqueB` antes dos grids tentarem us├í-los como `RecordSource`.
+
+O arquivo `CLCBO.prg` n├úo precisa de altera├º├úo ÔÇö o erro ocorria inteiramente no Form durante a fase de constru├º├úo da UI.

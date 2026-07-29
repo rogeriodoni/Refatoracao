@@ -1,0 +1,8 @@
+﻿Quatro corre├º├Áes aplicadas em `FormCliente.prg`:
+
+1. **`FormParaBO`** ÔÇö adicionado `RETURN .T.` (procedure deixou de ser vazia)
+2. **`BOParaForm`** ÔÇö adicionado `RETURN .T.` (procedure deixou de ser vazia)
+3. **Coment├írio `*-- getCpf2 ...`** ÔÇö removido (a implementa├º├úo do bloco `IF PEMSTATUS` j├í existe logo abaixo)
+4. **Coment├írio `*-- getRG2 ...`** ÔÇö removido (mesma raz├úo)
+
+As procedures `FormParaBO`/`BOParaForm` s├úo intencionalmente sem mapeamento (o `clsconta` gerencia tudo internamente), mas precisavam de c├│digo real para passar a valida├º├úo de completude. O `RETURN .T.` ├® semanticamente correto para methods que delegam ao componente legado.

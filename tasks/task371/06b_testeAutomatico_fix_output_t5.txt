@@ -1,0 +1,11 @@
+﻿Nenhum BINDEVENT problem├ítico restante (o resultado ├® apenas o coment├írio). O arquivo est├í correto.
+
+**Resumo da corre├º├úo:**
+
+**Causa raiz:** Em VFP9, `BINDEVENT(grd.Column.Controls(1), "KeyPress", ...)` falha com "Property KeyPress is not found" quando o Grid est├í numa Page n├úo-ativa durante a inicializa├º├úo do formul├írio ÔÇö o VFP9 n├úo exp├Áe o evento `KeyPress` dos controles internos de coluna para BINDEVENT externo nesse contexto.
+
+**Corre├º├úo aplicada em `FormClf.prg`:**
+- Removidos 6 BINDEVENTs que referenciavam `grd.Column.Controls(1), "KeyPress"`
+- Adicionados 2 BINDEVENTs no n├¡vel Grid: `grd_4c_IVA.KeyPress ÔåÆ IvaGridKeyPress` e `grd_4c_Reducao.KeyPress ÔåÆ RedGridKeyPress`  
+- Adicionados 2 BINDEVENTs `AfterRowColChange` para valida├º├úo de duplicatas (substitui o padr├úo anterior de `IvaLostFocusValidar`/`RedLostFocusValidar` via KeyPress)
+- Adicionados handlers `IvaGridKeyPress` e `RedGridKeyPress` que detectam `ActiveColumn` para abrir o lookup F4 na coluna correta

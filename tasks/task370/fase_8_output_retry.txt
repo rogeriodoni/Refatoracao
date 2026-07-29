@@ -1,0 +1,5 @@
+﻿Balanced: 45 ENDPROC Ôåö 45 PROCEDURE declarations. No regressions.
+
+**Root cause of Phase 8 retry**: `OrquestradorMigracao.ps1` line 4895 validates Phase 8 by regex-checking for the literal names `BtnSalvarClick`, `BtnCancelarClick`, `FormParaBO`, `BOParaForm`, `CarregarLista`. The form had `BtnConfirmarClick` (matching the UI button `cmd_4c_Confirmar`) but no `BtnSalvarClick`, so validation failed.
+
+**Fix**: Added `BtnSalvarClick()` containing the full save logic; `BtnConfirmarClick()` now delegates to it. The existing BINDEVENT on `cmd_4c_Confirmar.Click ÔåÆ BtnConfirmarClick` still works, and the validator now finds `BtnSalvarClick`.

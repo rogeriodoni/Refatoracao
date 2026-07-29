@@ -1,0 +1,15 @@
+﻿Arquivo correto ÔÇö termina com `ENDDEFINE` na linha 1554. A Fase 6 est├í conclu├¡da.
+
+**O que foi adicionado:**
+
+Em `ConfigurarPaginaDados()`:
+- `lbl_4c_Label4` + `txt_4c_GdeGrps` ÔÇö campo "Grande Grupo" com BINDEVENT F4/DblClick
+- `grd_4c_Dados` ÔÇö grid ligado ao cursor `crGrdCdCom` (CGrus/DGrus), com RecordSource/ColumnCount FORA do WITH (Problema 36), ControlSource/Headers DEPOIS do RecordSource (Problema 48), e BINDEVENT AfterRowColChange
+- `cmd_4c_BtnCarregar` + `cmd_4c_CmdExcluir` ÔÇö bot├Áes com BINDEVENT
+
+Novos m├®todos adicionados (todos PUBLIC/PROTECTED corretos):
+- `GdeGrpsKeyPress` / `GdeGrpsDblClick` / `AbrirLookupGdeGrps` ÔÇö lookup para `SigCdGpr` (Codigos, Descs)
+- `GridGruposAfterRowColChange` ÔÇö dispatcher de valida├º├úo por coluna
+- `ValidarCGrusGrid` / `ValidarDGrusGrid` ÔÇö lookup `SigCdGrp` (CGrus/DGrus) ao sair de cada c├®lula, com REPLACE direto no cursor local
+- `BtnCarregarClick` ÔÇö carrega grupos de `SigCdGrp WHERE Mercs = GdeGrp`, adicionando apenas os n├úo existentes
+- `CmdExcluirClick` ÔÇö DELETE no registro corrente de `crGrdCdCom`

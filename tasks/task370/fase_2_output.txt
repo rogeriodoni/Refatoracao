@@ -1,0 +1,14 @@
+﻿CLCBO.prg est├í completo com 533 linhas. Os m├®todos CRUD adicionados foram:
+
+- **Buscar()** ÔÇö SELECT de todos os registros em `cursor_4c_Dados`, ordenado por `Codigos`
+- **CarregarPorCodigo()** ÔÇö SELECT espec├¡fico por PK, popula propriedades via `CarregarDoCursor`, reseta `this_lNovoRegistro = .F.`
+- **CarregarDoCursor()** ÔÇö mapeia todos os 26 campos de `SigLcLo` para as propriedades `this_*`, com convers├úo correta de l├│gicos (`NVL(campo,0)=1`)
+- **CarregarOperacoes()** ÔÇö SELECT de `SigLcLoI` em `cursor_4c_Operacoes` para o grid de opera├º├Áes
+- **CarregarEstoques()** ÔÇö SELECT de `SigLcLoE` filtrando por `Codigos` e `Locals` (A ou B)
+- **VerificarCodigoDuplicado()** ÔÇö COUNT para checar PK duplicada
+- **Inserir()** (PROTECTED) ÔÇö INSERT em `SigLcLo` com todos os 26 campos + `RegistrarAuditoria("INSERT")`
+- **Atualizar()** (PROTECTED) ÔÇö UPDATE em `SigLcLo` com todos os campos exceto PK + `RegistrarAuditoria("UPDATE")`
+- **ExecutarExclusao()** (PROTECTED) ÔÇö DELETE em cascata: `SigLcLoI` ÔåÆ `SigLcLoE` ÔåÆ `SigLcLo` + `RegistrarAuditoria("DELETE")`
+- **InserirOperacao()** ÔÇö INSERT de linha individual em `SigLcLoI` (chamado pelo Form ao gravar o grid)
+- **ExcluirOperacoes()** ÔÇö DELETE em massa de `SigLcLoI` por `Codigos`
+- **GravarEstoques()** ÔÇö DELETE + re-INSERT em `SigLcLoE` varrendo cursor de estoques marcados

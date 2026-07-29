@@ -1,0 +1,1522 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigCdCmr.SCX
+* Data/Hora: 29/07/2026 04:47:15
+* Total de registros: 31
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDCMR
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_dclasse
+  Parent: SIGCDCMR.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_classe
+  Parent: SIGCDCMR.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say5
+  Parent: SIGCDCMR.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say7
+  Parent: SIGCDCMR.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGCDCMR.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDescgrps
+  Parent: SIGCDCMR.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_ds_grupos
+  Parent: SIGCDCMR.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_cd_grupos
+  Parent: SIGCDCMR.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_operacaos
+  Parent: SIGCDCMR.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: optTpDatas
+  Parent: SIGCDCMR.Pagina.Dados
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: lbl_grupos
+  Parent: SIGCDCMR.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_analitico
+  Parent: SIGCDCMR.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGCDCMR.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cmb_operacaos
+  Parent: SIGCDCMR.Pagina.Dados
+  Class: combobox
+  BaseClass: combobox
+
+Objeto: opt_analiticos
+  Parent: SIGCDCMR.Pagina.Dados
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: optTpregs
+  Parent: SIGCDCMR.Pagina.Dados
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: fator
+  Parent: SIGCDCMR.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGCDCMR.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGCDCMR.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getTitulo
+  Parent: SIGCDCMR.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: sayTitulo
+  Parent: SIGCDCMR.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: SayDtitulo
+  Parent: SIGCDCMR.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Opt_CPartida
+  Parent: SIGCDCMR.Pagina.Dados
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getOrdems
+  Parent: SIGCDCMR.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say6
+  Parent: SIGCDCMR.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: opt_subtot100
+  Parent: SIGCDCMR.Pagina.Dados
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say8
+  Parent: SIGCDCMR.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCMR
+------------------------------------------------------------
+  DataSession = 1
+  DoCreate = .T.
+  Caption = ('Itens : '+alltrim(crSigCdmrr.Balancos))
+  llaltsubtot = .F.
+  Name = "SIGCDCMR"
+  Pagina.ErasePage = .T.
+  Pagina.Lista.cntSombra.lblSombra.Name = "lblSombra"
+  Pagina.Lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  Pagina.Lista.cntSombra.Name = "cntSombra"
+  Pagina.Lista.Grade.FontName = "Tahoma"
+  Pagina.Lista.Grade.FontSize = 8
+  Pagina.Lista.Grade.RowHeight = 16
+  Pagina.Lista.Grade.ForeColor = 90,90,90
+  Pagina.Lista.Grade.Name = "Grade"
+  Pagina.Lista.Grupo_op.AutoSize = .T.
+  Pagina.Lista.Grupo_op.Inserir.Top = 5
+  Pagina.Lista.Grupo_op.Inserir.Left = 5
+  Pagina.Lista.Grupo_op.Inserir.Name = "Inserir"
+  Pagina.Lista.Grupo_op.Consultar.Top = 5
+  Pagina.Lista.Grupo_op.Consultar.Left = 80
+  Pagina.Lista.Grupo_op.Consultar.Name = "Consultar"
+  Pagina.Lista.Grupo_op.Alterar.Top = 5
+  Pagina.Lista.Grupo_op.Alterar.Left = 155
+  Pagina.Lista.Grupo_op.Alterar.Name = "Alterar"
+  Pagina.Lista.Grupo_op.Excluir.Top = 5
+  Pagina.Lista.Grupo_op.Excluir.Left = 230
+  Pagina.Lista.Grupo_op.Excluir.Name = "Excluir"
+  Pagina.Lista.Grupo_op.procurar.Top = 5
+  Pagina.Lista.Grupo_op.procurar.Left = 305
+  Pagina.Lista.Grupo_op.procurar.Name = "procurar"
+  Pagina.Lista.Grupo_op.Height = 85
+  Pagina.Lista.Grupo_op.Left = 344
+  Pagina.Lista.Grupo_op.Top = -1
+  Pagina.Lista.Grupo_op.Width = 385
+  Pagina.Lista.Grupo_op.Name = "Grupo_op"
+  Pagina.Lista.Grupo_Saida.Sair.Top = 5
+  Pagina.Lista.Grupo_Saida.Sair.Left = 5
+  Pagina.Lista.Grupo_Saida.Sair.Name = "Sair"
+  Pagina.Lista.Grupo_Saida.Left = 719
+  Pagina.Lista.Grupo_Saida.Top = -1
+  Pagina.Lista.Grupo_Saida.Name = "Grupo_Saida"
+  Pagina.Lista.cntFiltros.Name = "cntFiltros"
+  Pagina.Lista.Name = "Lista"
+  Pagina.Dados.Grupo_Salva.AutoSize = .T.
+  Pagina.Dados.Grupo_Salva.Salva.Top = 5
+  Pagina.Dados.Grupo_Salva.Salva.Left = 5
+  Pagina.Dados.Grupo_Salva.Salva.Name = "Salva"
+  Pagina.Dados.Grupo_Salva.Cancelar.Top = 5
+  Pagina.Dados.Grupo_Salva.Cancelar.Left = 81
+  Pagina.Dados.Grupo_Salva.Cancelar.Name = "Cancelar"
+  Pagina.Dados.Grupo_Salva.TabIndex = 28
+  Pagina.Dados.Grupo_Salva.Name = "Grupo_Salva"
+  Pagina.Dados.Name = "Dados"
+  Pagina.Top = -27
+  Pagina.Left = -1
+  Pagina.Name = "Pagina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCMR.Pagina.Dados.Get_dclasse
+------------------------------------------------------------
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  ControlSource = ""
+  Format = "K"
+  Height = 25
+  Left = 385
+  MaxLength = 20
+  TabIndex = 11
+  Top = 257
+  Width = 220
+  ForeColor = 90,90,90
+  ZOrderSet = 2
+  Name = "Get_dclasse"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCMR.Pagina.Dados.Get_classe
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  ControlSource = "crSigCdMri.classes"
+  Height = 25
+  Left = 304
+  MaxLength = 10
+  TabIndex = 10
+  Top = 257
+  Width = 80
+  ForeColor = 90,90,90
+  ZOrderSet = 2
+  Name = "Get_classe"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCMR.Pagina.Dados.Say5
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = "Contra Partida :"
+  Left = 221
+  Top = 335
+  Visible = .T.
+  Width = 79
+  TabIndex = 16
+  ForeColor = 90,90,90
+  ZOrderSet = 3
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCMR.Pagina.Dados.Say7
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = "SubTotal 100% :"
+  Left = 217
+  Top = 358
+  Visible = .T.
+  Width = 83
+  TabIndex = 18
+  ForeColor = 90,90,90
+  ZOrderSet = 3
+  Name = "Say7"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCMR.Pagina.Dados.Say4
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = "Classe :"
+  Left = 260
+  Top = 263
+  Visible = .T.
+  Width = 40
+  TabIndex = 9
+  ForeColor = 90,90,90
+  ZOrderSet = 3
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCMR.Pagina.Dados.getDescgrps
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  ControlSource = "crSigCdMri.descgrps"
+  Height = 25
+  Left = 304
+  MaxLength = 30
+  TabIndex = 3
+  Top = 205
+  Width = 220
+  ForeColor = 90,90,90
+  ZOrderSet = 2
+  Name = "getDescgrps"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCMR.Pagina.Dados.get_ds_grupos
+------------------------------------------------------------
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  ControlSource = ""
+  Format = "K"
+  Height = 25
+  Left = 385
+  MaxLength = 20
+  TabIndex = 8
+  Top = 231
+  Width = 150
+  ForeColor = 90,90,90
+  ZOrderSet = 2
+  Name = "get_ds_grupos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCMR.Pagina.Dados.get_cd_grupos
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  ControlSource = "crSigCdMri.grupos"
+  Height = 25
+  Left = 304
+  MaxLength = 10
+  TabIndex = 7
+  Top = 231
+  Width = 80
+  ForeColor = 90,90,90
+  ZOrderSet = 2
+  Name = "get_cd_grupos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCMR.Pagina.Dados.lbl_operacaos
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = "Operação :"
+  Left = 244
+  Top = 289
+  Visible = .T.
+  Width = 56
+  TabIndex = 12
+  ForeColor = 90,90,90
+  ZOrderSet = 3
+  Name = "lbl_operacaos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCMR.Pagina.Dados.optTpDatas
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 4
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 3
+  ControlSource = "crSigCdMri.TpDatas"
+  Height = 25
+  Left = 298
+  Top = 431
+  Width = 315
+  TabIndex = 27
+  ZOrderSet = 10
+  Name = "optTpDatas"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Emissão"
+  Option1.Value = 0
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.Width = 56
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "optCot1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Lançamento"
+  Option2.Value = 0
+  Option2.Height = 15
+  Option2.Left = 78
+  Option2.Top = 5
+  Option2.Width = 76
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "optCot2"
+  Option3.FontName = "Tahoma"
+  Option3.FontSize = 8
+  Option3.BackStyle = 0
+  Option3.Caption = "Vencimento"
+  Option3.Value = 1
+  Option3.Height = 15
+  Option3.Left = 173
+  Option3.Top = 5
+  Option3.Width = 73
+  Option3.AutoSize = .T.
+  Option3.ForeColor = 90,90,90
+  Option3.Name = "Option3"
+  Option4.FontName = "Tahoma"
+  Option4.FontSize = 8
+  Option4.BackStyle = 0
+  Option4.Caption = "Baixa"
+  Option4.Height = 15
+  Option4.Left = 266
+  Option4.Top = 5
+  Option4.Width = 44
+  Option4.AutoSize = .T.
+  Option4.ForeColor = 90,90,90
+  Option4.Name = "Option4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCMR.Pagina.Dados.lbl_grupos
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = "Grupo :"
+  Left = 262
+  Top = 236
+  Visible = .T.
+  Width = 38
+  TabIndex = 6
+  ForeColor = 90,90,90
+  ZOrderSet = 3
+  Name = "lbl_grupos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCMR.Pagina.Dados.lbl_analitico
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = "Impressão Analítica :"
+  Left = 198
+  Top = 313
+  Visible = .T.
+  Width = 102
+  TabIndex = 14
+  ForeColor = 90,90,90
+  ZOrderSet = 3
+  Name = "lbl_analitico"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCMR.Pagina.Dados.Say1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = "Descrição  SubTotal :"
+  Left = 197
+  Top = 211
+  Visible = .T.
+  Width = 103
+  TabIndex = 2
+  ForeColor = 90,90,90
+  ZOrderSet = 3
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCMR.Pagina.Dados.cmb_operacaos
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 25
+  Left = 304
+  Style = 2
+  TabIndex = 13
+  Top = 283
+  Width = 150
+  ForeColor = 90,90,90
+  Name = "cmb_operacaos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCMR.Pagina.Dados.opt_analiticos
+------------------------------------------------------------
+  AutoSize = .F.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  ControlSource = "crSigCdMri.analiticos"
+  Height = 25
+  Left = 304
+  SpecialEffect = 0
+  Top = 308
+  Width = 97
+  TabIndex = 15
+  Name = "opt_analiticos"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Sim"
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.Width = 34
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Não"
+  Option2.Left = 51
+  Option2.Top = 5
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCMR.Pagina.Dados.optTpregs
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 3
+  BackStyle = 0
+  BorderStyle = 0
+  ControlSource = "crSigCdMri.tpregs"
+  Height = 26
+  Left = 304
+  SpecialEffect = 0
+  Top = 175
+  Width = 185
+  TabIndex = 1
+  Name = "optTpregs"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "\<Grupo"
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.Width = 47
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "\<SubTotal"
+  Option2.Left = 120
+  Option2.TabIndex = 3
+  Option2.Top = 6
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+  Option3.FontName = "Tahoma"
+  Option3.FontSize = 8
+  Option3.BackStyle = 0
+  Option3.Caption = "Classe"
+  Option3.Height = 15
+  Option3.Left = 59
+  Option3.TabIndex = 2
+  Option3.Top = 5
+  Option3.Width = 49
+  Option3.AutoSize = .T.
+  Option3.ForeColor = 90,90,90
+  Option3.Name = "Option3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCMR.Pagina.Dados.fator
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  ControlSource = "crSigCdMri.fators"
+  InputMask = "999"
+  Left = 304
+  TabIndex = 21
+  Top = 380
+  Width = 31
+  ForeColor = 90,90,90
+  Name = "fator"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCMR.Pagina.Dados.Say2
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Fator :"
+  Left = 265
+  Top = 383
+  TabIndex = 20
+  ForeColor = 90,90,90
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCMR.Pagina.Dados.Say3
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "%"
+  Left = 343
+  Top = 384
+  TabIndex = 22
+  ForeColor = 90,90,90
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCMR.Pagina.Dados.getTitulo
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  ControlSource = "crSigCdMri.Titulos"
+  InputMask = "!!!!!!!!!!"
+  Left = 304
+  TabIndex = 24
+  ToolTipText = "Cabeçalho da Coluna no Relatório"
+  Top = 404
+  Width = 80
+  ForeColor = 90,90,90
+  Name = "getTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCMR.Pagina.Dados.sayTitulo
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Título :"
+  Left = 265
+  Top = 407
+  TabIndex = 23
+  ForeColor = 90,90,90
+  Name = "sayTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCMR.Pagina.Dados.SayDtitulo
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "(Emissão de Mapa)"
+  Left = 388
+  Top = 410
+  TabIndex = 25
+  ForeColor = 90,90,90
+  Name = "SayDtitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCMR.Pagina.Dados.Opt_CPartida
+------------------------------------------------------------
+  AutoSize = .F.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 2
+  ControlSource = "crSigCdMri.cpartidas"
+  Height = 25
+  Left = 304
+  SpecialEffect = 0
+  Top = 330
+  Width = 97
+  TabIndex = 17
+  Name = "Opt_CPartida"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Sim"
+  Option1.Value = 0
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.Width = 34
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Não"
+  Option2.Value = 1
+  Option2.Left = 51
+  Option2.Top = 5
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCMR.Pagina.Dados.getOrdems
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  ControlSource = "crSigCdMri.ordems"
+  InputMask = "999"
+  Left = 574
+  TabIndex = 5
+  Top = 206
+  Width = 31
+  ForeColor = 90,90,90
+  Name = "getOrdems"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCMR.Pagina.Dados.Say6
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Ordem :"
+  Left = 526
+  Top = 210
+  TabIndex = 4
+  ForeColor = 90,90,90
+  Name = "Say6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCMR.Pagina.Dados.opt_subtot100
+------------------------------------------------------------
+  AutoSize = .F.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 2
+  ControlSource = "crSigCdMri.subtot100s"
+  Height = 25
+  Left = 304
+  SpecialEffect = 0
+  Top = 354
+  Width = 97
+  TabIndex = 19
+  Name = "opt_subtot100"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Sim"
+  Option1.Value = 0
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.Width = 34
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Não"
+  Option2.Value = 1
+  Option2.Left = 51
+  Option2.Top = 5
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCMR.Pagina.Dados.Say8
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Checar Data :"
+  Left = 231
+  Top = 436
+  TabIndex = 26
+  ForeColor = 90,90,90
+  Name = "Say8"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDCMR
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE mativapagina1
+------------------------------------------------------------
+PROCEDURE mativapagina1
+=DoDefault()
+
+lcCol = Padr(ThisForm.Busca,1)
+ThisForm.Pagina.Lista.Grade.SetFocus
+ThisForm.Pagina.Lista.Grade.Column&lcCol..SetFocus
+ThisForm.Pagina.Lista.Grade.Refresh
+
+Select crSigCdMri
+Index On Str(Ordems, 3) + Grupos Tag Ordems
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+lparameters pForm,datses,_Acesso
+
+set datasession to datses
+thisform.parentform = pform
+
+ThisForm.llaltsubtot = .T.
+
+ThisForm.Busca=1
+
+ThisForm.Caption='Itens : '+alltrim(crSigCdMrr.Balancos)
+
+WITH Thisform
+	.poDatamgr = CreateObject('fSqlConector',Thisform.Name)
+
+	If Not .poDatamgr.pnIdconn>0
+		Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),'Erro')
+		Return(.f.)
+	Endif
+
+	With .poDatamgr
+		.AddCursor('SigCdMri','CidChaves','crSigCdMri','Classes',ThisForm.pagina.lista.grade,[Select * From SigCdMri Where Balancos = ?crSigCdMrr.Balancos order by Ordems, Classes])
+		.pfSqlTabela(1).pColuna('Classes','','','Classe',80,.f.)
+		.pfSqlTabela(1).pColuna('Nivels','','','Nível',33,.f.)
+		.pfSqlTabela(1).pColuna('Operacaos','','','Oper',33,.f.)
+		.pfSqlTabela(1).pColuna('Grupos','','','Grupo',80,.f.)
+		.pfSqlTabela(1).pColuna('Analiticos','','','A/S',23,.f.)
+		.pfSqlTabela(1).pColuna('Descgrps','','','Descrição',220,.f.)
+		.pfSqlTabela(1).pColuna('Fators','','','Fator',32,.f.)
+		.pfSqlTabela(1).pColuna('Titulos','','','Titulo',80,.f.)
+		.pfSqlTabela(1).pColuna('Ordems','','','Ordem',50,.f.)
+	EndWith
+Endwith	
+
+=DoDefault( _Acesso )
+Select crSigCdMri
+Index On Str(Ordems, 3) + Grupos Tag Ordems
+
+ThisForm.Pagina.Lista.Grade.Column1.ControlSource=[Iif(EMPTY(crSigCdMri.grupos),crSigCdMri.classes,"")]
+ThisForm.Pagina.Lista.Grade.Column3.ControlSource="iif(crSigCdMri.operacaos='-','[-]','[+]')"
+ThisForm.Pagina.Lista.Grade.Column5.ControlSource=[iif(crSigCdMri.analiticos=1,'A','S')]
+ThisForm.Pagina.Dados.Cmb_Operacaos.AddItem( Padr( '(+) Soma', 15 ) )
+ThisForm.Pagina.Dados.Cmb_Operacaos.AddItem( Padr( '(-) Subtrai', 15 ) )
+ThisForm.Pagina.Dados.getTitulo.Visible = (crSigCdMrr.Mapas = 2)
+ThisForm.Pagina.Dados.sayTitulo.Visible = (crSigCdMrr.Mapas = 2)
+ThisForm.Pagina.Dados.sayDTitulo.Visible = (crSigCdMrr.Mapas = 2)
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Lista.Grupo_op.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Lista.Grupo_op.Click
+LParameters opcao
+
+If Type( 'Opcao' ) = 'N'
+	This.Value = Opcao
+EndIf
+
+Select Count(*) as QTD from crSigCdMri a where a.SubTot100s = 1 and a.DescGrps <> crSigCdMri.DescGrps into cursor crAux
+ThisForm.llaltsubtot = (crAux.QTD <=0)
+
+If !dodefault( OPCAO )
+	ThisForm.mAtivapagina1
+	Return
+Endif
+If IsEmpty(crSigCdMri.Fators)
+	With Thisform.Pagina.Dados.Fator
+		.Value=100
+		.Refresh
+	EndWith
+Endif
+If Inlist( ThisForm.pcEscolha,'INSERIR')
+	lcQuery = [Select Ordems ] + ;
+			    [From SigCdMri ] + ;
+			   [Where Balancos = '] + crSigCdMrr.Balancos + [' ] + ;
+			   [Order By Ordems Desc]
+
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'csChecagem') < 1)
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (csChecagem)')
+		Return 0
+	EndIf
+	Go Top In csChecagem
+
+	With Thisform.Pagina.Dados
+		optreg = 1
+		.getDescgrps.Enabled=(optreg=2)
+		.get_classe.Enabled=(optreg=3)
+		.get_dclasse.Enabled=(optreg=3)
+		.get_cd_grupos.Enabled=(optreg=1)
+		.get_ds_grupos.Enabled=(optreg=1)
+		.opt_analiticos.Option1.Enabled = .t.
+		.opt_analiticos.Option2.Enabled = .t.
+		.getTitulo.Enabled=.t.
+		.getOrdems.Value = Iif(Eof('csChecagem'), 1, csChecagem.Ordems + 1)
+	EndWith
+Endif
+If Inlist( ThisForm.pcEscolha,'ALTERAR','CONSULTAR','EXCLUIR')
+	With Thisform.Pagina.Dados
+		optreg = crSigCdMri.Tpregs
+		.getDescgrps.Enabled=(optreg=2)
+		.get_classe.Enabled=(optreg=3)
+		.get_dclasse.Enabled=(optreg=3)
+		.get_cd_grupos.Enabled=(optreg=1)
+		.get_ds_grupos.Enabled=(optreg=1)
+		.opt_analiticos.Option1.Enabled = .t.
+		.opt_analiticos.Option2.Enabled = .t.
+		.getTitulo.Enabled=.t.
+	EndWith
+Endif
+		
+If Inlist( ThisForm.pcEscolha, 'INSERIR', 'PROCURAR' )
+	With Thisform.Pagina.Dados
+		.Get_ds_grupos.Value = Space(20)
+		.Get_dClasse.Value = Space(20)
+		.Cmb_Operacaos.ListIndex = 1
+		.Opt_Analiticos.Value = 1
+		.optTpregs.Value = 1
+		.getTitulo.Value = Space(10)
+		
+		If ThisForm.pcEscolha=='INSERIR'
+			Replace crSigCdMri.Balancos with crSigCdMrr.Balancos In CrSigCdMri
+			.optTpregs.Option1.SetFocus
+		Else
+			.getDescgrps.SetFocus
+		EndIf
+	EndWith
+Else
+	ThisForm.podatamgr.CursorQuery('SigCdGcr','crSigCdGcr', 'Codigos', crSigCdMri.grupos)
+	ThisForm.Pagina.Dados.Get_ds_grupos.Value = crSigCdGcr.descrs
+	ThisForm.podatamgr.CursorQuery('SigCdCss','crSigCdCss', 'classes', crSigCdMri.classes)
+	ThisForm.Pagina.Dados.Get_dClasse.Value = crSigCdCss.Descrs
+	ThisForm.Pagina.Dados.Cmb_Operacaos.ListIndex = iif(crSigCdMri.operacaos='+',1,2)
+	If ThisForm.pcEscolha = 'ALTERAR'
+		ThisForm.Pagina.Dados.Cmb_Operacaos.SetFocus
+	Else
+		ThisForm.Pagina.Dados.Grupo_Salva.Salva.SetFocus
+	Endif
+Endif
+ThisForm.Pagina.Dados.Refresh
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+Local lnTpregs, lnRecno1
+
+m.lnTpregs = This.Parent.Parent.optTpregs.Value
+SELECT crSigCdMri
+m.lnRecno1 = RecNo()
+
+If InList(ThisForm.pcEscolha,'INSERIR')
+	SELECT crSigCdMri
+	Replace CidChaves WITH fUniqueIds()
+Endif
+
+
+If InList(ThisForm.pcEscolha,'INSERIR','ALTERAR')
+	If IsEmpty(crSigCdMri.Titulos) .and. (crSigCdMrr.Mapas = 2)
+		Messagebox( 'Título Não Preenchido!', 48, '' )
+		ThisForm.Pagina.Dados.getTitulo.SetFocus
+		Return
+	Endif
+
+	ThisForm.podatamgr.CursorQuery('SigCdGcr','crSigCdGcr', 'Codigos', crSigCdMri.Grupos)
+
+	Registro=ThisForm.podatamgr.ChkRegister('SigCdGcr', 'Codigos', crSigCdMri.Grupos)
+	If (m.lnTpregs==1.And.(IsEmpty( crSigCdMri.Grupos ) Or !Registro))
+		Messagebox( 'Grupo Inválido!', 48, '' )
+		ThisForm.Pagina.Dados.Get_cd_grupos.SetFocus
+		Return
+	Endif
+	
+	DECLARE laParms[2,2]
+	laParms[1,1]="Balancos"
+	laParms[1,2]=crSigCdMrr.Balancos
+	laParms[2,1]="Grupos"
+	laParms[2,2]=This.Parent.Parent.get_cd_grupos.Value
+
+	If (m.lnTpregs==1.And.ThisForm.podatamgr.ChkRegister('SigCdMri', @laParms))
+	
+		SELECT crSigCdMri
+		Skip 
+		
+	   If crSigCdMri.Grupos==This.Parent.Parent.get_cd_grupos.Value
+		
+			Messagebox( 'Grupo já cadastrado!', 48, '' )
+			ThisForm.Pagina.Dados.Get_cd_grupos.SetFocus
+			GoTo m.lnRecno1 
+			
+			Return
+			
+		EndIf
+	Endif
+	
+	Select crSigCdMri
+	GoTo m.lnRecno1 
+	
+	If m.lnTpregs==3 .And. IsEmpty( crSigCdMri.Classes )
+		Messagebox( 'Classe Inválida!', 48, '' )
+		ThisForm.Pagina.Dados.Get_classe.SetFocus
+		Return
+	Endif
+	
+	laParms[1,1]="Balancos"
+	laParms[1,2]=crSigCdMrr.Balancos
+	laParms[2,1]="Classes"
+	laParms[2,2]=This.Parent.Parent.get_classe.Value
+
+	If (m.lnTpregs==3.And.ThisForm.podatamgr.ChkRegister('SigCdMri', @laParms))
+	
+		SELECT crSigCdMri
+		Skip 
+		
+	   If crSigCdMri.Classes==This.Parent.Parent.get_classe.Value
+		
+			Messagebox( 'Classe já cadastrada!!', 48, '' )
+			ThisForm.Pagina.Dados.Get_classe.SetFocus
+			GoTo m.lnRecno1
+			
+			Return
+			
+		EndIf
+	Endif
+	
+	Select crSigCdMri
+	GoTo m.lnRecno1
+	
+	If IsEmpty( ThisForm.Pagina.Dados.Cmb_Operacaos.ListIndex )
+		Messagebox( 'Operação Inválida!', 48, '' )
+		ThisForm.Pagina.Dados.Cmb_Operacaos.SetFocus
+		Return
+	Endif
+	if !Inlist( crSigCdMri.Analiticos, 1, 2 )
+		Messagebox( 'Opção inválida !',16,'' )
+		Thisform.Pagina.Dados.Opt_analiticos.Setfocus
+		Return
+	Endif
+	If (Thisform.Pagina.Dados.Fator.Value<=0) or (Thisform.Pagina.Dados.Fator.Value>100)
+		Messagebox('Fator Inválido !!',0+48,'')
+		Thisform.Pagina.Dados.Fator.Value = 100
+		Thisform.Pagina.Dados.Fator.SetFocus
+		Return
+	Endif
+	If (m.lnTpregs==2.And.IsEmpty(This.Parent.Parent.getDescgrps.Value))
+		Messagebox( 'SubTotal Inválido.',16,'' )
+		This.Parent.Parent.getDescgrps.SetFocus
+		Return
+	EndIf
+	
+	DECLARE laParms[3,2]
+	laParms[1,1]="Balancos"
+	laParms[1,2]=crSigCdMrr.Balancos
+	laParms[2,1]="Grupos"
+	laParms[2,2]=This.Parent.Parent.get_cd_grupos.Value
+	laParms[3,1]="Descgrps"
+	laParms[3,2]=This.Parent.Parent.get_cd_grupos.Value
+
+	If (m.lnTpregs==2.And.;
+	   ThisForm.podatamgr.ChkRegister('SigCdMri', @laParms))
+	   
+	   SELECT crSigCdMri  
+	   Skip 
+	   
+	   If (crSigCdMrr.Balancos+crSigCdMri.Grupos+crSigCdMri.DescGrps)==(This.Parent.Parent.get_cd_grupos.Value+This.Parent.Parent.getDescgrps.Value)
+	   
+			Messagebox( 'SubTotal já Cadastrado.',16,'' )
+			This.Parent.Parent.getDescgrps.SetFocus
+			GoTo m.lnRecno1
+			Return
+			
+		EndIf
+	EndIf
+	
+	If m.lnTpregs==2 and Thisform.Pagina.Dados.Fator.Value<>100
+			Messagebox( 'Fator Inválido',16,'' )
+			GoTo m.lnRecno1
+			With Thisform.Pagina.Dados.Fator
+				.Value=100
+				.Refresh
+				.SetFocus
+			EndWith
+			Return
+	Endif	
+	Select crSigCdMri
+	GoTo m.lnRecno1
+
+	If crSigCdMri.Tpregs==1
+		Replace crSigCdMri.Classes with crSigCdGcr.Codigos in CrSigCdMri
+	Endif
+	If crSigCdMri.Tpregs==2
+		Replace crSigCdMri.Classes with '6' in CrSigCdMri
+	Endif
+	ThisForm.podatamgr.CursorQuery('SigCdCss','crSigCdCss', 'Classes', crSigCdMri.Classes)
+	If ThisForm.podatamgr.ChkRegister('SigCdCss', 'Classes', crSigCdMri.Classes)
+		Replace crSigCdMri.Nivels with crSigCdCss.Nivels in crSigCdMri
+	Else
+		Replace crSigCdMri.Nivels with 0 in crSigCdMri
+	Endif
+	ThisForm.podatamgr.CursorQuery('SigCdGcr','crSigCdGcr', 'Codigos', crSigCdMri.Grupos)
+	ThisForm.podatamgr.CursorQuery('SigCdCss','crSigCdCss', 'Classes', crSigCdMri.Classes)
+	Replace crSigCdMri.DescGrps With Iif(crSigCdMri.Tpregs==1.And.ThisForm.podatamgr.ChkRegister('SigCdGcr', 'Codigos', crSigCdMri.Grupos),crSigCdGcr.Descrs,crSigCdMri.DescGrps);
+	        crSigCdMri.Operacaos With Iif( Thisform.Pagina.Dados.Cmb_operacaos.Listindex = 1, '+', '-' ) ;
+			crSigCdMri.DescGrps With Iif(crSigCdMri.Tpregs==3.And.ThisForm.podatamgr.ChkRegister('SigCdCss', 'Classes', crSigCdMri.Classes),crSigCdCss.Descrs,crSigCdMri.DescGrps) in crSigCdMri
+Endif
+
+=DoDefault()
+
+ThisForm.mAtivaPagina1
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+=DoDefault()
+
+Select crSigCdMri
+
+If ThisForm.plCancelar
+	ThisForm.mAtivapagina1
+Endif
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDCMR.Pagina.Dados.Get_dclasse
+* Classe: fwget (Base: textbox)
+* Registro: 4
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+return(IsEmpty(thisform.pagina.dados.get_classe.value) and Inlist(thisform.pcEscolha,'INSERIR','ALTERAR'))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loBrowse
+
+If .Not.IsEmpty(This.Value)
+
+	ThisForm.podatamgr.CursorQuery('SigCdCss','crSigCdCss', 'Descrs', This.Value)
+	SELECT crSigCdCss
+
+   If EOF()
+		xBrox = CreateObject('fwBuscaExt',Thisform.poDatamgr.pnIdconn,'SigCdCss', 'crSigCdCss', 'Descrs', This.Value,'Seleção',.t.,'Descrs')
+
+		If  Not xBrox.plAchouRegistro
+			xBrox.mAddColuna('Descrs','','Descrição',.t.)
+			xBrox.mAddColuna('Classes','','Classe',.t.)
+			xBrox.Show()
+		EndIf 
+	Endif
+
+   Thisform.Pagina.Dados.Get_Classe.Value = Evaluate('crSigCdCss.Classes')
+   Thisform.Pagina.Dados.Get_Classe.Refresh
+   Thisform.Pagina.Dados.Get_dClasse.Value = Evaluate('crSigCdCss.Descrs')
+   Thisform.Pagina.Dados.Get_dClasse.Refresh
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDCMR.Pagina.Dados.Get_classe
+* Classe: fwget (Base: textbox)
+* Registro: 5
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return((This.Parent.optTpregs.Value==3.And.InList(Thisform.pcEscolha,'INSERIR','ALTERAR')).Or.Thisform.pcEscolha=='PROCURAR')
+If !IsEmpty(This.Value)
+	Thisform.Pagina.Dados.getTitulo.Value = This.Value
+Endif
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loBrowse
+
+IF Thisform.pcescolha <> "PROCURAR"
+
+	If .Not.IsEmpty(This.Value)
+
+		ThisForm.podatamgr.CursorQuery('SigCdCss','crSigCdCss', 'classes', This.Value)
+		SELECT crSigCdCss
+
+	   If EOF()
+			xBrox = CreateObject('fwBuscaExt',Thisform.poDatamgr.pnIdconn,'SigCdCss', 'crSigCdCss', 'classes', This.Value,'Seleção',.t.,'classes')
+
+			If  Not xBrox.plAchouRegistro
+				xBrox.mAddColuna('Classes','','Classe',.t.)
+				xBrox.mAddColuna('Descrs','','Descrição',.t.)
+				xBrox.Show()
+			EndIf 
+		Endif
+
+	   This.Value = Evaluate('crSigCdCss.Classes')
+	   This.Refresh
+	   Thisform.Pagina.Dados.Get_dClasse.Value = Evaluate('crSigCdCss.Descrs')
+	   Thisform.Pagina.Dados.Get_dClasse.Refresh
+	EndIf
+
+Endif
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDCMR.Pagina.Dados.getDescgrps
+* Classe: fwget (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+
+Return((This.Parent.optTpregs.Value==2.And.InList(Thisform.pcEscolha,'INSERIR','ALTERAR')).Or.Thisform.pcEscolha=='PROCURAR')
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !Thisform.pcEscolha='PROCURAR'
+	With Thisform.Pagina.Dados.get_cd_grupos 
+		.Value = 'SubTotal'
+		.Refresh
+	EndWith
+Endif
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDCMR.Pagina.Dados.get_ds_grupos
+* Classe: fwget (Base: textbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+return(IsEmpty(thisform.pagina.dados.get_cd_grupos.value) and Inlist(thisform.pcEscolha , 'INSERIR','ALTERAR'))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+= fAcessoContab(Usuar,'D',This.Value,ThisForm.Pagina.Dados.get_Cd_Grupos,ThisForm.Pagina.Dados.get_Ds_Grupos)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDCMR.Pagina.Dados.get_cd_grupos
+* Classe: fwget (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return((This.Parent.optTpregs.Value==1.And.InList(Thisform.pcEscolha,'INSERIR','ALTERAR')).Or.Thisform.pcEscolha=='PROCURAR')
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+IF Thisform.pcescolha <> "PROCURAR"
+	= fAcessoContab(Usuar,'C',This.Value,ThisForm.Pagina.Dados.get_Cd_Grupos,ThisForm.Pagina.Dados.get_Ds_Grupos)
+	If !IsEmpty(This.Value)
+		Thisform.Pagina.Dados.getTitulo.Value = This.Value
+	ENDIF
+ENdif
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDCMR.Pagina.Dados.cmb_operacaos
+* Classe: combobox (Base: combobox)
+* Registro: 17
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+return((This.Parent.optTpregs.Value==1 or This.Parent.optTpregs.Value==3).And.thisform.pcEscolha $ 'INSERIR/ALTERAR')
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDCMR.Pagina.Dados.opt_analiticos
+* Classe: fwoption (Base: optiongroup)
+* Registro: 18
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+return(This.Parent.optTpregs.Value==1.And.thisform.pcEscolha $ 'INSERIR/ALTERAR')
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDCMR.Pagina.Dados.optTpregs
+* Classe: fwoption (Base: optiongroup)
+* Registro: 19
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+With Thisform.Pagina.Dados
+	.getDescgrps.Value = Space(30)
+	.getDescgrps.Enabled=(This.Value=2)
+	.get_classe.Value= Space(10)
+	.get_classe.Enabled=(This.Value=3)
+	.get_dclasse.Value= Space(20)
+	.get_dclasse.Enabled=(This.Value=3)
+	.get_cd_grupos.Value= Space(10)
+	.get_cd_grupos.Enabled=(This.Value=1)
+	.get_ds_grupos.Value= Space(20)
+	.get_ds_grupos.Enabled=(This.Value=1)
+	.opt_analiticos.Value = Iif(This.Value=1,1,2)
+	.opt_analiticos.Option1.Enabled = (This.Value=1)
+	.opt_analiticos.Option2.Enabled = (This.Value=1)
+EndWith
+This.Parent.Refresh
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDCMR.Pagina.Dados.getTitulo
+* Classe: fwget (Base: textbox)
+* Registro: 23
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local lcBusca, lcRecno
+
+lcRecno = Recno()
+lcBusca = crSigCdMri.Balancos + This.Value
+
+SELECT crSigCdMrr
+LOCATE FOR Balancos = crSigCdMri.Balancos AND titulos =  This.Value
+If !IsEmpty(This.Value) .and. !EOF()
+	If lcRecno = Recno()
+		Skip
+		If lcBusca = crSigCdMrr.Balancos + crSigCdMrr.Titulos
+			Skip - 1
+			Messagebox( 'Título Já Utilizado!', 48, '' )
+			This.Value = Space(10)
+			Return
+		Else
+			Skip - 1
+		Endif
+	Else
+		Messagebox( 'Título Já Utilizado!', 48, '' )
+		This.Value = Space(10)
+		Return
+	Endif
+Endif
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDCMR.Pagina.Dados.Opt_CPartida
+* Classe: fwoption (Base: optiongroup)
+* Registro: 26
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(This.Parent.optTpregs.Value==1.And.thisform.pcEscolha $ 'INSERIR/ALTERAR' And;
+	This.Parent.opt_analiticos.Value = 1 )
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDCMR.Pagina.Dados.opt_subtot100
+* Classe: fwoption (Base: optiongroup)
+* Registro: 29
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(This.Parent.optTpregs.Value==2 .And. thisform.pcEscolha $ 'INSERIR/ALTERAR' .and. ThisForm.llaltsubtot )
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGCDCMR
+RESERVED3 (ClassInfo): busca
+llaltsubtot
+parentform
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 21
+================================================================================

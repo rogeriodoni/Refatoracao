@@ -1,0 +1,8 @@
+﻿Corre├º├úo aplicada. O problema era que `.Format = "!"` estava sendo atribu├¡do em `Column.Controls(1)`, mas em VFP9 esse objeto n├úo exp├Áe a propriedade `Format`. A propriedade `Format` pertence ao objeto `Column` em si.
+
+**O que foi corrigido em `FormClf.prg`:**
+- `grd_4c_IVA.Column1`: `.Format = "!"` movido de `Controls(1)` para o `WITH Column`
+- `grd_4c_IVA.Column2`: mesma corre├º├úo
+- `grd_4c_Reducao.Column1`: mesma corre├º├úo
+
+O efeito funcional ├® id├¬ntico ÔÇö `Column.Format` aplica a formata├º├úo a toda a coluna. A li├º├úo foi salva em mem├│ria para futuras migra├º├Áes.

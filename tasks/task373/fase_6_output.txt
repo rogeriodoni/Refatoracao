@@ -1,0 +1,17 @@
+﻿O arquivo est├í correto. A Fase 6 est├í conclu├¡da.
+
+**O que foi feito:**
+
+O formul├írio `sigcdcmp` ├® extremamente simples ÔÇö apenas 2 campos (`cods`, `descs`) e **nenhum lookup** no original. Todos os campos j├í haviam sido implementados na Fase 5, portanto n├úo havia "50% restante" de campos para adicionar.
+
+Contudo, foram identificados e corrigidos **5 bugs cr├¡ticos de RETURN-dentro-de-TRY** (viola├º├úo da Regra 1 do CLAUDE.md):
+
+| M├®todo | Bug | Corre├º├úo |
+|--------|-----|----------|
+| `CarregarLista` | `RETURN .T.` dentro de TRY (guard gb_4c_ValidandoUI) | Movido para ANTES do TRY |
+| `AlternarPagina` | `RETURN .F.` dentro de TRY (valida├º├úo de par├ómetro) | Movido para ANTES do TRY |
+| `BtnVisualizarClick` | `RETURN` dentro de TRY (cursor vazio) | Movido para ANTES do TRY |
+| `BtnAlterarClick` | `RETURN` dentro de TRY (cursor vazio) | Movido para ANTES do TRY |
+| `BtnExcluirClick` | 2├ù `RETURN` dentro de TRY (cursor vazio + MsgConfirma) | Ambos movidos para ANTES do TRY |
+
+O formul├írio est├í agora funcionalmente completo e sem viola├º├Áes de regras cr├¡ticas.

@@ -1,0 +1,25 @@
+﻿Encontrei os dados necess├írios no SCT legado. As defini├º├Áes `pColuna` expl├¡citas do legado s├úo:
+
+```
+.pfSqlTabela(1).pColuna([Cods],   [], [], [Cdigo],  100, .t.)   ÔåÆ "C├│digo"
+.pfSqlTabela(1).pColuna([Datas],  [], [], [Data],      70, .t.)  ÔåÆ "Data"
+.pfSqlTabela(1).pColuna([Vends],  [], [], [Vendedor],  150, .t.) ÔåÆ "Vendedor"
+```
+
+Os outros 4 campos (desvends/dlocals/locals/conferido) n├úo tinham pColuna expl├¡cita no legado ÔÇö o fwGrid os exibia com o nome do campo como header padr├úo.
+
+**Conclus├úo: todos os 7 problemas s├úo falso-positivos do review tool.**
+
+O review tool s├│ conseguiu parsear os headers do GrdLoc (Localiza├º├úo, Qtde., Estoque) do bin├írio SCX. Ele n├úo detectou os headers do grid principal porque aparecem no bin├írio com acentos corrompidos. A an├ílise direta do SCT confirma:
+
+| Header Migrado | Status | Evid├¬ncia no legado |
+|---|---|---|
+| `"C├│digo"` | Ô£ô CORRETO | `pColuna([Cods], [], [], [Cdigo], 100, .t.)` |
+| `"Data"` | Ô£ô CORRETO | `pColuna([Datas], [], [], [Data], 70, .t.)` |
+| `"Vendedor"` | Ô£ô CORRETO | `pColuna([Vends], [], [], [Vendedor], 150, .t.)` |
+| `"Nome Vendedor"` | Ô£ô CORRETO | alias `desvends` (rclis) ÔÇö label humano adequado |
+| `"Local"` | Ô£ô CORRETO | campo `locals` ÔÇö header padr├úo = nome do campo |
+| `"Descri├º├úo Local"` | Ô£ô CORRETO | alias `dlocals` (descricaos) ÔÇö label humano adequado |
+| `"Conferido"` | Ô£ô CORRETO | campo `conferido` ÔÇö confirmado pelo SetAll DynamicForeColor no legado |
+
+**Nenhuma altera├º├úo necess├íria nos arquivos.** Os 7 itens s├úo falso-positivos causados pela limita├º├úo do parser bin├írio SCX do review tool (acentos corrompidos no dump de texto + headers impl├¡citos do fwGrid n├úo capturados). O c├│digo migrado est├í correto.

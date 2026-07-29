@@ -1,0 +1,19 @@
+﻿A migra├º├úo da Fase 8 est├í **completamente implementada**. Tudo j├í estava no arquivo das fases anteriores. Aqui est├í o status final:
+
+**Formcmp.prg** ÔÇö todos os m├®todos da Fase 8 j├í presentes:
+- `CarregarLista()` ÔÇö carrega grid com ZAP+APPEND para preservar colunas
+- `BtnBuscarClick()` ÔÇö abre `FormBuscaAuxiliar` para SigCdCmp
+- `BtnEncerrarClick()` ÔÇö `THIS.Release()`
+- `BtnSalvarClick()` ÔÇö valida├º├Áes fora do TRY + `Salvar()` sem par├ómetro
+- `BtnCancelarClick()` ÔÇö limpa campos e volta ├á Page1
+- `FormParaBO()` / `BOParaForm()` ÔÇö mapeamento completo (cods + descs)
+- `HabilitarCampos()` ÔÇö c├│digo readonly em ALTERAR/VISUALIZAR (replicando `Get_codigo.When` do legado)
+- `LimparCampos()` ÔÇö zera os dois campos
+- `AjustarBotoesPorModo()` ÔÇö bot├Áes CRUD desabilitados durante edi├º├úo
+
+**Integra├º├úo:**
+- `cmpBO.prg` em `app/classes/` ÔåÆ carregado automaticamente por `*BO.prg`
+- `Formcmp.prg` em `app/forms/cadastros/` ÔåÆ carregado automaticamente por `Form*.prg`
+- `menu.prg` ÔåÆ `DEFINE BAR 54` + `ON SELECTION` + `AbrirFormcmp()` com padr├úo correto (`VARTYPE`, `Show()` sem par├ómetro, sem `Release()`)
+
+A migra├º├úo do `sigcdcmp` est├í **100% completa e funcional**.

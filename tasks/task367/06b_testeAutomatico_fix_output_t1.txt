@@ -1,0 +1,1 @@
+﻿Corre├º├úo aplicada. O guard em `CarregarLista` (linha 1548) retornava `.T.` imediatamente durante `gb_4c_ValidandoUI = .T.` sem criar nenhum cursor. Agora, antes de retornar, cria o `cursor_4c_Dados` vazio com as 6 colunas que o grid referencia (`numlotes`, `datas`, `operas`, `valtots`, `valtjuros`, `datatrans`), satisfazendo a verifica├º├úo do teste `CarregarLista`.

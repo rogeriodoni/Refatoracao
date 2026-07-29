@@ -1,0 +1,13 @@
+﻿Todas as edi├º├Áes foram aplicadas corretamente. Resumo das corre├º├Áes:
+
+**Corrigido:**
+
+1. **[CONTAINER-VISIVEL]** ÔÇö `TornarControlesVisiveis` (linha 2203): adicionado `IF !INLIST(UPPER(loc_oObjeto.Name), "CNT_4C_CABECALHO")` antes de for├ºar `Visible=.T.`, impedindo que o container de cabe├ºalho oculto seja re-exibido pelo m├®todo recursivo.
+
+2. **[GRID-HEADER] CHR(250)ÔåÆCHR(186)** ÔÇö 4 ocorr├¬ncias corrigidas: `"N├║ Conta"` e `"N├║ Cheque"` (CHR(250)=├║) passaram a `"N┬║ Conta"` e `"N┬║ Cheque"` (CHR(186)=┬║, o indicador ordinal correto). Afetou `ConfigurarPaginaDados()` (linhas 1033-1034) e `CarregarPaginaDados()` (linhas 2389-2390).
+
+**N├úo alterado (falsos positivos):**
+
+- **[METODO-INEXISTENTE]** ÔÇö `ObterJuroCarts` est├í definida na linha 2762 como `PROTECTED FUNCTION` e chamada com `THIS.` ÔÇö correto per regra VFP9 #8.
+- **[LAYOUT-POSITION]** ÔÇö `lbl_4c_Label13` ├® o label "Limpar Carteira" em Page2 (Top=74, Left=380); o `lbl_4c_Periodo` (Top=10, Left=12) j├í existe corretamente em Page1 ÔÇö o revisor mapeou controles errados.
+- **[GRID-HEADER] grd_4c_Dados** ÔÇö Os captions `Lote, Data, Opera├º├úo, Total, Juros, Dt. Transporte` s├úo da grade de lista de lotes (Page1), n├úo da grade de cheques (Page2). O revisor comparou todos os headers migrados contra a lista de headers da grade de cheques do legado ÔÇö misidentifica├º├úo de grid.

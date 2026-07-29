@@ -1,0 +1,3 @@
+﻿Both required methods (`ConfigurarPaginaLista` and `AlternarPagina`) are now in place with real, functional implementations tied to the internal `pgframeDados` of the `clsconta` wrapper. `KeyPress` (F5) now delegates to `AlternarPagina(2)` instead of calling the button directly, and `InicializarForm` invokes `ConfigurarPaginaLista()` after `mIniConta()` to set the initial page state.
+
+Fase 4 complete: added `ConfigurarPaginaLista()` (protected, sets pgframeDados to page 1 with defensive PEMSTATUS guards) and `AlternarPagina(par_nPagina)` (public, toggles between pages 1Ôåö2 delegating to `cmdgCadastro`/`cmdgPessoal` buttons for full clsconta compatibility).

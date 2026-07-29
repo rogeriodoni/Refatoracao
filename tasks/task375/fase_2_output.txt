@@ -1,0 +1,19 @@
+﻿O arquivo est├í correto e completo. A Fase 2/8 foi conclu├¡da com sucesso.
+
+**M├®todos adicionados ao CNFBO.prg:**
+
+| M├®todo | Tipo | Descri├º├úo |
+|--------|------|-----------|
+| `BuscarSeries()` | PUBLIC | Carrega s├®ries (SigCdSer) para o lookup do filtro |
+| `Inserir()` | PROTECTED | INSERT em SigMvNfi com todos os campos mapeados (57 campos) |
+| `Atualizar()` | PROTECTED | UPDATE em SigMvNfi pelos campos edit├íveis via formul├írio de corre├º├úo |
+| `ExecutarExclusao()` | PROTECTED | DELETE de SigMvNfi pelo cidchaves (PK) |
+
+**Padr├Áes aplicados:**
+- `loc_lSucesso` flag pattern (NUNCA RETURN dentro de TRY/CATCH)
+- SQL quebrado em blocos de 3-5 campos com `+;` para evitar linhas longas
+- `FormatarDataSQL()` para datetime, `FormatarNumeroSQL()` para num├®ricos, `EscaparSQL()` para strings
+- `IIF(EMPTY(dtField), "NULL", FormatarDataSQL(...))` para datas nullable
+- `PADR(..., N)` para campos char com tamanho exato da tabela
+- `RegistrarAuditoria("INSERT"/"UPDATE"/"DELETE")` ap├│s cada opera├º├úo bem-sucedida
+- Cursor tempor├írio fechado no `IF USED(...)` fora do TRY

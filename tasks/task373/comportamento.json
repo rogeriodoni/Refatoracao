@@ -1,0 +1,118 @@
+{
+  "resumo": {
+    "totalMetodos": 6,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 2,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fUniqueIds"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDCMP",
+      "evento": "Procedure",
+      "linhas": 7,
+      "codigoOriginal": "Local lcBusca\n\nIf .Not.IsEmpty(ThisForm.Pagina.Dados.Get_codigo.Value)\n\tThisForm.poDataMgr.LocateCursor('CrSigCdCmp','cods',ThisForm.Pagina.Dados.Get_codigo.Value)\nEndIf\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "LocateCursor",
+        "controlesReferenciados": "Get_codigo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCMP",
+      "evento": "Init",
+      "linhas": 12,
+      "codigoOriginal": "LPARAMETERS lcacesso\n\nWith ThisForm\n\t.poDatamgr = CreateObject('fSqlConector')\n\tWith .poDatamgr\n\t\t.AddCursor('SigCdCmp','cods','CrSigCdCmp','',ThisForm.pagina.lista.grade)\n\t\t.pfSqlTabela(1).pColuna('cods','','','Código',90,.t.)\n\t\t.pfSqlTabela(1).pColuna('descs','','','Descrição',337,.t.)\n\tEndWith\n\t= DoDefault()\n\t.LockScreen = .f.\nEndWith",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCMP",
+      "evento": "Click",
+      "linhas": 17,
+      "codigoOriginal": "LPARAMETERS opcao\n\nIf !dodefault( opcao )\n\tThisForm.mAtivapagina1\n\tReturn\nEndif\n\nSelect CrSigCdCmp\nDo Case\n\tCase Inlist( ThisForm.pcEscolha, 'INSERIR', 'PROCURAR' )\n\t\tThisForm.Pagina.Dados.Get_Codigo.SetFocus\n\tCase ThisForm.pcEscolha = 'ALTERAR'\n\t\tThisForm.Pagina.Dados.Get_Desc.SetFocus\nOther\n\tThisForm.Pagina.Dados.Grupo_Salva.Salva.SetFocus\nEndcase\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Codigo,Get_Desc",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCMP",
+      "evento": "Click",
+      "linhas": 22,
+      "codigoOriginal": "Select CrSigCdCmp\nIf ThisForm.pcEscolha = 'INSERIR'\n\tIf IsEmpty( CrSigCdCmp.Cods )\n\t\t=Messagebox( 'Código Inválido!', 48, '' )\n\t\tThisForm.Pagina.Dados.Get_Codigo.SetFocus\n\t\tReturn\n\tEndif\n\tIf ThisForm.poDataMgr.ChkRegister('SigCdCmp','cods',ThisForm.Pagina.Dados.Get_Codigo.Value)\n\t\t=Messagebox( 'Código já cadastrado!', 48, '' )\n\t\tThisForm.Pagina.Dados.Get_Codigo.SetFocus\n\t\tReturn\n\tEndif\nEndIf\n\nSelect CrSigCdCmp\nIf (ThisForm.pcEscolha = [INSERIR])\n\tReplace cIdChaves With fUniqueIds() in CrSigCdCmp... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "ChkRegister",
+        "controlesReferenciados": "Get_Codigo,ChkRegister('SigCdCmp'",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCMP",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "=DoDefault()\nIf ThisForm.plCancelar\n\tThisForm.mAtivapagina1\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCMP.Pagina.Dados.Get_codigo",
+      "evento": "When",
+      "linhas": 7,
+      "codigoOriginal": "LOCAL RET\n\nRET=DoDefault()\nIF THISFORM.pcEscolha='ALTERAR'\n\tRET=.F.\nENDIF\nRETURN(RET)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

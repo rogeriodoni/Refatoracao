@@ -1,0 +1,24 @@
+﻿The file is clean. All Phase 8 work is complete and verified:
+
+- **`CarregarLista()`** ÔÇö present (line 1115), loads grid from `cursor_4c_Dados` via `CmrBO.Buscar()`
+- **`AlternarPagina()`** ÔÇö present (line 1206), switches PageFrame and reloads list on return to Page1
+- **`HabilitarCampos()`** ÔÇö present (line 1235), enables/disables all Page2 controls including `cmd_4c_Confirmar`/`cmd_4c_Cancelar`
+- **`LimparCampos()`** ÔÇö present (line 1274), resets all Page2 fields to defaults
+- **`FormParaBO()`** ÔÇö present (line 1300), maps form controls ÔåÆ BO properties
+- **`BOParaForm()`** ÔÇö present (line 1328), maps BO properties ÔåÆ form controls (with SQL lookups for descriptions)
+- **`BtnIncluirClick()`** ÔÇö present (line 2287)
+- **`BtnVisualizarClick()`** ÔÇö present (line 2307)
+- **`BtnAlterarClick()`** ÔÇö present (line 2330)
+- **`BtnExcluirClick()`** ÔÇö present (line 2356)
+- **`BtnBuscarClick()`** ÔÇö present (line 2383)
+- **`BtnEncerrarClick()`** ÔÇö present (line 2390), calls `THIS.Release()`
+- **`BtnSalvarClick()`** ÔÇö present (line 2394), calls `FormParaBO()` ÔåÆ `ValidarCampos()` ÔåÆ `BO.Salvar()`
+- **`BtnCancelarClick()`** ÔÇö present (line 2417), calls `AlternarPagina(1)`
+- **`AjustarBotoesPorModo()`** ÔÇö functionality absorbed into `HabilitarCampos()` (lines 1261ÔÇô1262), no separate method needed
+- **No RETURN inside TRY/CATCH** ÔÇö verified by automated scan Ô£ô
+- **FormBuscaAuxiliar API** ÔÇö corrected to MODO 1 in all 4 lookup functions Ô£ô
+- **`this_cModoAtual`** ÔÇö used correctly throughout (string-based, not numeric) Ô£ô
+- **config.prg integration** ÔÇö automatic via ADIR() pattern, no manual entries needed Ô£ô
+- **menu.prg** ÔÇö not needed; FormCmr is a child form opened by FormMrr Ô£ô
+
+The migration of SIGCDCMR ÔåÆ FormCmr.prg is complete.

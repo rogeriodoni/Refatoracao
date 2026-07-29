@@ -1,0 +1,15 @@
+﻿O arquivo est├í correto. Fase 8 conclu├¡da com sucesso. Foram adicionados 9 m├®todos ao `FormCliente.prg` (1997 linhas no total):
+
+| M├®todo | Implementa├º├úo |
+|--------|---------------|
+| `CarregarLista` | Chama `cnt_4c_Conta.mLeDados()` com cliente atual |
+| `AjustarBotoesPorModo` | Habilita bot├úo OK apenas em INCLUIR/ALTERAR |
+| `HabilitarCampos` | Controla `Buttons(1).Enabled` do `cmg_4c_Sair` |
+| `LimparCampos` | Reinicializa estado para novo cliente + CarregarLista |
+| `FormParaBO` | Stub comentado ÔÇö `mGravaDados()` do clsconta ├® o respons├ível |
+| `BOParaForm` | Stub comentado ÔÇö `mLeDados()` do clsconta ├® o respons├ível |
+| `BtnSalvarClick` | Alias para `BtnOkClick()` |
+| `BtnEncerrarClick` | Alias para `BtnCancelarClick()` |
+| `BtnBuscarClick` | Abre `FormBuscaAuxiliar` sobre `SigCdCli` e carrega cliente selecionado em modo ALTERAR |
+
+**Observa├º├úo arquitetural**: Como este ├® um form OPERACIONAL wrapper de `clsconta`, `FormParaBO`/`BOParaForm` s├úo stubs leg├¡timos ÔÇö toda a transfer├¬ncia formÔåöbanco ├® gerenciada pelos m├®todos `mGravaDados()`/`mLeDados()` da classe legada `clsconta`.

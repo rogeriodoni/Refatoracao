@@ -1,0 +1,23 @@
+﻿Fase 1 conclu├¡da. O arquivo `C:\4c\projeto\app\classes\cnlBO.prg` foi criado com:
+
+**Propriedades declaradas (SigCdCnL - schema validado):**
+- `this_cCodigo` ÔÇö Cods char(10), chave de neg├│cio
+- `this_cCidChaves` ÔÇö cidchaves char(20), PK f├¡sica
+- `this_cEmps` ÔÇö emps char(3)
+- `this_cVends` ÔÇö vends char(10), FK SigCdCli.Iclis
+- `this_cLocals` ÔÇö locals char(10), FK SigPrLcl.codigos
+- `this_dDatas` ÔÇö datas datetime
+- `this_nQtds` ÔÇö qtds numeric(5,0), prefer├¬ncia de ordem do grid
+- `this_nConferido` ÔÇö conferido numeric(1,0), status aberta/encerrada
+
+**Propriedades de exibi├º├úo (joins da query Buscar):**
+- `this_cDesVends` ÔÇö alias desvends (SigCdCli.Rclis)
+- `this_cDLocals` ÔÇö alias dlocals (SigPrLcl.descricaos)
+
+**Controle:**
+- `this_cCursorItens = "csSigCdCnI"` ÔÇö cursor de itens SigCdCnI
+- `this_cCursorDados = "cursor_4c_Dados"` ÔÇö cursor principal
+
+**Init()** configurando `this_cTabela = "SigCdCnL"` e `this_cCampoChave = "Cods"` (nomes corretos do BusinessBase).
+
+Pr├│xima fase: completar o BO com `CarregarDoCursor()`, `Buscar()`, `Inserir()`, `Atualizar()` e `ExecutarExclusao()`.

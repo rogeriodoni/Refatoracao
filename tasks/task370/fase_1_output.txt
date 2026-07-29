@@ -1,0 +1,10 @@
+﻿**Fase 1/8 conclu├¡da.** Arquivo `C:\4c\projeto\app\classes\CLCBO.prg` criado com:
+
+- **27 propriedades** `this_*` mapeando todos os campos de `SigLcLo` identificados nos ControlSources do legado:
+  - Campos principais: `Codigos` (PK), `Emps`, `EmpContas`, `EmpTrans`, `Digitos`, `Autos`, `Toleras`, `Percents`
+  - Local A: `LocalA`, `GrupoA`, `ContaA`, `OperacaoA`, `GdeGrupoA`, `DataA`, `EtiquetaA`, `PalmA`, `DivisaoA`
+  - Local B: mesmos 9 campos com sufixo B
+- **`Init()`** configurando `this_cTabela = "SigLcLo"` e `this_cCampoChave = "Codigos"`
+- **`ObterChavePrimaria()`** retornando `this_cCodigos` para auditoria
+
+As tabelas relacionadas `SigLcLoI` (opera├º├Áes geradas, 9 campos) e `SigLcLoE` (estoques avaliados) ser├úo tratadas via cursores nas fases seguintes ÔÇö n├úo como propriedades do BO, pois s├úo rela├º├Áes 1:N.

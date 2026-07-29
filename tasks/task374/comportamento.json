@@ -1,0 +1,364 @@
+{
+  "resumo": {
+    "totalMetodos": 21,
+    "metodosComSQL": 8,
+    "metodosComValidacao": 10,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fUniqueIds", "fwBuscaExt", "fAcessoContab"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDCMR",
+      "evento": "Procedure",
+      "linhas": 10,
+      "codigoOriginal": "=DoDefault()\n\nlcCol = Padr(ThisForm.Busca,1)\nThisForm.Pagina.Lista.Grade.SetFocus\nThisForm.Pagina.Lista.Grade.Column&lcCol..SetFocus\nThisForm.Pagina.Lista.Grade.Refresh\n\nSelect crSigCdMri\nIndex On Str(Ordems, 3) + Grupos Tag Ordems\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCMR",
+      "evento": "Init",
+      "linhas": 46,
+      "codigoOriginal": "lparameters pForm,datses,_Acesso\n\nset datasession to datses\nthisform.parentform = pform\n\nThisForm.llaltsubtot = .T.\n\nThisForm.Busca=1\n\nThisForm.Caption='Itens : '+alltrim(crSigCdMrr.Balancos)\n\nWITH Thisform\n\t.poDatamgr = CreateObject('fSqlConector',Thisform.Name)\n\n\tIf Not .poDatamgr.pnIdconn>0\n\t\tMessagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),'Erro')\n\t\tReturn(.f.)\n\tEndif\n\n\tWith .poDatamgr\n\t\t.AddCursor('SigCdMri','CidChaves','crSigCdMri','Classes',ThisForm.pagina.li... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Caption='Itens : '+alltrim,AddItem,Visible =",
+        "controlesReferenciados": "Cmb_Operacaos",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCMR",
+      "evento": "Click",
+      "linhas": 88,
+      "codigoOriginal": "LParameters opcao\n\nIf Type( 'Opcao' ) = 'N'\n\tThis.Value = Opcao\nEndIf\n\nSelect Count(*) as QTD from crSigCdMri a where a.SubTot100s = 1 and a.DescGrps <> crSigCdMri.DescGrps into cursor crAux\nThisForm.llaltsubtot = (crAux.QTD <=0)\n\nIf !dodefault( OPCAO )\n\tThisForm.mAtivapagina1\n\tReturn\nEndif\nIf IsEmpty(crSigCdMri.Fators)\n\tWith Thisform.Pagina.Dados.Fator\n\t\t.Value=100\n\t\t.Refresh\n\tEndWith\nEndif\nIf Inlist( ThisForm.pcEscolha,'INSERIR')\n\tlcQuery = [Select Ordems ] + ;\n\t\t\t    [From SigCdMri ] + ;\n\t\t\t ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "llaltsubtot =,SqlExecute,CursorQuery",
+        "controlesReferenciados": "optreg,get_classe,get_dclasse,get_cd_grupos,get_ds_grupos,opt_analiticos,Option1,Option2,Cmb_Operacaos,optTpregs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCMR",
+      "evento": "Click",
+      "linhas": 165,
+      "codigoOriginal": "Local lnTpregs, lnRecno1\n\nm.lnTpregs = This.Parent.Parent.optTpregs.Value\nSELECT crSigCdMri\nm.lnRecno1 = RecNo()\n\nIf InList(ThisForm.pcEscolha,'INSERIR')\n\tSELECT crSigCdMri\n\tReplace CidChaves WITH fUniqueIds()\nEndif\n\n\nIf InList(ThisForm.pcEscolha,'INSERIR','ALTERAR')\n\tIf IsEmpty(crSigCdMri.Titulos) .and. (crSigCdMrr.Mapas = 2)\n\t\tMessagebox( 'Título Não Preenchido!', 48, '' )\n\t\tThisForm.Pagina.Dados.getTitulo.SetFocus\n\t\tReturn\n\tEndif\n\n\tThisForm.podatamgr.CursorQuery('SigCdGcr','crSigCdGcr', 'Codi... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "CursorQuery,ChkRegister,Value<=0) or",
+        "controlesReferenciados": "optTpregs,ChkRegister('SigCdGcr',Get_cd_grupos,ChkRegister('SigCdMri',Get_classe,Cmb_Operacaos,Opt_analiticos,ChkRegister('SigCdCss'",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCMR",
+      "evento": "Click",
+      "linhas": 8,
+      "codigoOriginal": "=DoDefault()\n\nSelect crSigCdMri\n\nIf ThisForm.plCancelar\n\tThisForm.mAtivapagina1\nEndif\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCMR.Pagina.Dados.Get_dclasse",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return(IsEmpty(thisform.pagina.dados.get_classe.value) and Inlist(thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_classe",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCMR.Pagina.Dados.Get_dclasse",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local loBrowse\n\nIf .Not.IsEmpty(This.Value)\n\n\tThisForm.podatamgr.CursorQuery('SigCdCss','crSigCdCss', 'Descrs', This.Value)\n\tSELECT crSigCdCss\n\n   If EOF()\n\t\txBrox = CreateObject('fwBuscaExt',Thisform.poDatamgr.pnIdconn,'SigCdCss', 'crSigCdCss', 'Descrs', This.Value,'Seleção',.t.,'Descrs')\n\n\t\tIf  Not xBrox.plAchouRegistro\n\t\t\txBrox.mAddColuna('Descrs','','Descrição',.t.)\n\t\t\txBrox.mAddColuna('Classes','','Classe',.t.)\n\t\t\txBrox.Show()\n\t\tEndIf \n\tEndif\n\n   Thisform.Pagina.Dados.Get_Classe.Value = Eva... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "Get_Classe,Get_dClasse",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCMR.Pagina.Dados.Get_classe",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "Return((This.Parent.optTpregs.Value==3.And.InList(Thisform.pcEscolha,'INSERIR','ALTERAR')).Or.Thisform.pcEscolha=='PROCURAR')\nIf !IsEmpty(This.Value)\n\tThisform.Pagina.Dados.getTitulo.Value = This.Value\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "optTpregs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCMR.Pagina.Dados.Get_classe",
+      "evento": "Valid",
+      "linhas": 26,
+      "codigoOriginal": "Local loBrowse\n\nIF Thisform.pcescolha <> \"PROCURAR\"\n\n\tIf .Not.IsEmpty(This.Value)\n\n\t\tThisForm.podatamgr.CursorQuery('SigCdCss','crSigCdCss', 'classes', This.Value)\n\t\tSELECT crSigCdCss\n\n\t   If EOF()\n\t\t\txBrox = CreateObject('fwBuscaExt',Thisform.poDatamgr.pnIdconn,'SigCdCss', 'crSigCdCss', 'classes', This.Value,'Seleção',.t.,'classes')\n\n\t\t\tIf  Not xBrox.plAchouRegistro\n\t\t\t\txBrox.mAddColuna('Classes','','Classe',.t.)\n\t\t\t\txBrox.mAddColuna('Descrs','','Descrição',.t.)\n\t\t\t\txBrox.Show()\n\t\t\tEndIf \n\t\tEnd... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "Get_dClasse",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCMR.Pagina.Dados.getDescgrps",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return((This.Parent.optTpregs.Value==2.And.InList(Thisform.pcEscolha,'INSERIR','ALTERAR')).Or.Thisform.pcEscolha=='PROCURAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "optTpregs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCMR.Pagina.Dados.getDescgrps",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "If !Thisform.pcEscolha='PROCURAR'\n\tWith Thisform.Pagina.Dados.get_cd_grupos \n\t\t.Value = 'SubTotal'\n\t\t.Refresh\n\tEndWith\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_grupos",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCMR.Pagina.Dados.get_ds_grupos",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return(IsEmpty(thisform.pagina.dados.get_cd_grupos.value) and Inlist(thisform.pcEscolha , 'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_grupos",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCMR.Pagina.Dados.get_ds_grupos",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "= fAcessoContab(Usuar,'D',This.Value,ThisForm.Pagina.Dados.get_Cd_Grupos,ThisForm.Pagina.Dados.get_Ds_Grupos)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Cd_Grupos,get_Ds_Grupos",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCMR.Pagina.Dados.get_cd_grupos",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return((This.Parent.optTpregs.Value==1.And.InList(Thisform.pcEscolha,'INSERIR','ALTERAR')).Or.Thisform.pcEscolha=='PROCURAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "optTpregs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCMR.Pagina.Dados.get_cd_grupos",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "IF Thisform.pcescolha <> \"PROCURAR\"\n\t= fAcessoContab(Usuar,'C',This.Value,ThisForm.Pagina.Dados.get_Cd_Grupos,ThisForm.Pagina.Dados.get_Ds_Grupos)\n\tIf !IsEmpty(This.Value)\n\t\tThisform.Pagina.Dados.getTitulo.Value = This.Value\n\tENDIF\nENdif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Cd_Grupos,get_Ds_Grupos",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCMR.Pagina.Dados.cmb_operacaos",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return((This.Parent.optTpregs.Value==1 or This.Parent.optTpregs.Value==3).And.thisform.pcEscolha $ 'INSERIR/ALTERAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "optTpregs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCMR.Pagina.Dados.opt_analiticos",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return(This.Parent.optTpregs.Value==1.And.thisform.pcEscolha $ 'INSERIR/ALTERAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "optTpregs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCMR.Pagina.Dados.optTpregs",
+      "evento": "Valid",
+      "linhas": 17,
+      "codigoOriginal": "With Thisform.Pagina.Dados\n\t.getDescgrps.Value = Space(30)\n\t.getDescgrps.Enabled=(This.Value=2)\n\t.get_classe.Value= Space(10)\n\t.get_classe.Enabled=(This.Value=3)\n\t.get_dclasse.Value= Space(20)\n\t.get_dclasse.Enabled=(This.Value=3)\n\t.get_cd_grupos.Value= Space(10)\n\t.get_cd_grupos.Enabled=(This.Value=1)\n\t.get_ds_grupos.Value= Space(20)\n\t.get_ds_grupos.Enabled=(This.Value=1)\n\t.opt_analiticos.Value = Iif(This.Value=1,1,2)\n\t.opt_analiticos.Option1.Enabled = (This.Value=1)\n\t.opt_analiticos.Option2.Enab... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_classe,get_dclasse,get_cd_grupos,get_ds_grupos,opt_analiticos,Option1,Option2",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCMR.Pagina.Dados.getTitulo",
+      "evento": "Valid",
+      "linhas": 25,
+      "codigoOriginal": "Local lcBusca, lcRecno\n\nlcRecno = Recno()\nlcBusca = crSigCdMri.Balancos + This.Value\n\nSELECT crSigCdMrr\nLOCATE FOR Balancos = crSigCdMri.Balancos AND titulos =  This.Value\nIf !IsEmpty(This.Value) .and. !EOF()\n\tIf lcRecno = Recno()\n\t\tSkip\n\t\tIf lcBusca = crSigCdMrr.Balancos + crSigCdMrr.Titulos\n\t\t\tSkip - 1\n\t\t\tMessagebox( 'Título Já Utilizado!', 48, '' )\n\t\t\tThis.Value = Space(10)\n\t\t\tReturn\n\t\tElse\n\t\t\tSkip - 1\n\t\tEndif\n\tElse\n\t\tMessagebox( 'Título Já Utilizado!', 48, '' )\n\t\tThis.Value = Space(10)\n\t\tRet... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCMR.Pagina.Dados.Opt_CPartida",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return(This.Parent.optTpregs.Value==1.And.thisform.pcEscolha $ 'INSERIR/ALTERAR' And;\n\tThis.Parent.opt_analiticos.Value = 1 )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "optTpregs,opt_analiticos",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCMR.Pagina.Dados.opt_subtot100",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(This.Parent.optTpregs.Value==2 .And. thisform.pcEscolha $ 'INSERIR/ALTERAR' .and. ThisForm.llaltsubtot )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "optTpregs",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDCMR.Click",
+      "queryOriginal": "Select Count(*) as QTD from crSigCdMri a where a.SubTot100s = 1 and a.DescGrps <> crSigCdMri.DescGrps into cursor crAux",
+      "tabelas": "crSigCdMri",
+      "colunas": "SubTot100s,crAux",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["crSigCdMri"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

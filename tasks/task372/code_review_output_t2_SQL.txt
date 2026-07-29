@@ -1,0 +1,47 @@
+﻿Completei a investiga├º├úo completa do arquivo. Aqui est├í minha an├ílise:
+
+## Resultado da Investiga├º├úo
+
+Ap├│s ler o arquivo completo (1968 linhas) e comparar com o original `sigcdcli_form_codigo_fonte.txt`, **este ├® um FALSO POSITIVO** do validador.
+
+### Evid├¬ncias
+
+**WHERE clauses no FormCliente.prg migrado** (apenas 2 existem):
+
+1. `checaibge`, query 1 (linha 1312):
+   ```
+   WHERE RTRIM(a.Descs) = '...' AND a.UFIBGEs = b.UFIBGEs AND b.Estados = '...'
+   ```
+
+2. `checaibge`, query 2 (linha 1337):
+   ```
+   WHERE Estados = '...'
+   ```
+
+**Nenhuma usa ICLIS.** Ambas correspondem exatamente ao original:
+
+```foxpro
+* Original (sigcdcli_form_codigo_fonte.txt linhas 2007-2011):
+[Where a.Descs = '] + Padr(fLimpaTexto(Upper(pMun)), 40) + [' And ]
+[a.UFIBGEs = b.UFIBGEs And ]
+[b.Estados = '] + pUFs + [']
+```
+
+### O que o validador detectou (erroneamente)
+
+O validador confundiu o par├ómetro `"IClis"` na linha 1922:
+
+```foxpro
+CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, "SigCdCli", "cursor_4c_BuscaCli", "IClis", "", ...)
+```
+
+Esse `"IClis"` ├® o **campo-chave retornado** na sele├º├úo (4┬║ par├ómetro), **n├úo uma cl├íusula WHERE**. A condi├º├úo WHERE do FormBuscaAuxiliar ├® o 5┬║ par├ómetro, que est├í vazio `""`.
+
+### Conclus├úo sobre a lista do validador
+
+A lista "WHERE original usa: DESCS, ESTADOS, LNERRO1, CODIGOS, CTVENDACS, UFIBGES" cont├®m erros:
+- `LNERRO1` = vari├ível `lnErro1` local, **n├úo coluna SQL**
+- `CODIGOS` = aparece no SELECT, n├úo no WHERE
+- `CTVENDACS` = n├úo encontrada no original
+
+**Nenhuma corre├º├úo ├® necess├íria no FormCliente.prg.** O c├│digo migrado est├í correto: as cl├íusulas WHERE da `checaibge` s├úo id├¬nticas ao original (DESCS, UFIBGES, ESTADOS), e n├úo h├í nenhum WHERE ICLIS inventado no arquivo.

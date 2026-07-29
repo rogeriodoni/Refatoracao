@@ -1,0 +1,20 @@
+﻿O arquivo est├í correto e completo. Fase 4 conclu├¡da com sucesso.
+
+**O que foi adicionado:**
+
+1. **`THIS.ConfigurarFiltros(loc_oPagina)`** ÔÇö chamada inserida em `ConfigurarPaginaLista()` ap├│s criar o container vazio `cnt_4c_Filtros`
+
+2. **`ConfigurarFiltros()`** ÔÇö popula o container de filtros com todos os controles do legado:
+   - `txt_4c_Emp` (empresa, MaxLength=3)
+   - `txt_4c_Serie` (s├®rie, MaxLength=8) com lookup via FormBuscaAuxiliar ÔåÆ SigCdSer
+   - `txt_4c_DtIni` / `txt_4c_DtFim` (per├¡odo de emiss├úo)
+   - `opt_4c_Filtro` (Entrada / Sa├¡da / Ambas, default=3=Ambas ÔÇö id├¬ntico ao pOpE=[E]/pOpS=[S] do legado)
+
+3. **Handlers dos filtros** (todos `PROCEDURE` PUBLIC para funcionar com BINDEVENT):
+   - `ValidarEmpresa()` ÔÇö valida em SigCdEmp, substitui `fAcessoEmpresa()` n├úo portada
+   - `ValidarSerie()` ÔÇö valida em SigCdSer, abre picker se n├úo encontrar
+   - `ValidarDtIni()` / `ValidarDtFim()` ÔÇö validam consist├¬ncia e disparam `CarregarLista()` quando filtros completos
+   - `DtFimWhenCheck()` ÔÇö `FUNCTION` que bloqueia foco em DtFim se DtIni estiver vazia (replicando `DtFim.When`)
+   - `FiltroChanged()` ÔÇö atualiza `this_cOpeFiltro` ("E"/"S"/"A") e recarrega lista
+
+4. **BINDEVENTs dos filtros** adicionados em `ConfigurarBindings()`

@@ -1,0 +1,14 @@
+﻿Arquivo criado corretamente com 323 linhas. Fase 3/8 conclu├¡da.
+
+**`C:\4c\projeto\app\forms\cadastros\FormCHM.prg`** criado com:
+
+- **DEFINE CLASS FormCHM AS FormBase** ÔÇö propriedades visuais padr├úo (Height=600, Width=1000, Caption ASCII para DEFINE CLASS)
+- **Init()** ÔÇö apenas `RETURN DODEFAULT()` (FormBase chama InicializarForm automaticamente)
+- **InicializarForm()** ÔÇö cria CHMBO, define Caption com CHR(231)/CHR(227) em runtime, chama ConfigurarPage*, guarda CarregarLista (respeitando gb_4c_ValidandoUI)
+- **ConfigurarPageFrame()** ÔÇö PageFrame.Top=-29, Tabs=.F., 2 pages com fundo_cad_1003.jpg
+- **ConfigurarPaginaLista()** ÔÇö cria `cnt_4c_Cabecalho` (com lbl_4c_Sombra/Titulo), `cnt_4c_Botoes` (canonical Left=542), `cnt_4c_Saida` (canonical Left=917 per Rule #10)
+- **ConfigurarPaginaDados()** ÔÇö cria `cnt_4c_BotoesDados` (Grupo_Salva: Left=627, Top=35, Width=172)
+- **CarregarLista()** ÔÇö chama BO.Buscar(""), grid wiring adicionado na Fase 4
+- **AlternarPagina()** ÔÇö implementa├º├úo completa
+- **TornarControlesVisiveis() / FormatarGridLista()** ÔÇö implementa├º├úo completa (padr├úo FormCor)
+- **Destroy()** ÔÇö fecha cursores e libera BO, chama DODEFAULT()

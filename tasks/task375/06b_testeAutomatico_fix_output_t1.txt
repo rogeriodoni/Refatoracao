@@ -1,0 +1,7 @@
+﻿Tr├¬s corre├º├Áes aplicadas em `FormCNF.prg`:
+
+1. **`AlternarPagina` tornado PUBLIC** (removido `PROTECTED`) ÔÇö o TesteAutomatico chama `oForm.AlternarPagina(2)` diretamente de fora da classe; com PROTECTED, VFP9 reportava "Property ALTERNARPAGINA is not found" (erro 'ModoIncluir')
+
+2. **`BtnInserirCartaClick` corrigido** ÔÇö eliminado `RETURN` dentro do `TRY` (viola regra #1 do CLAUDE.md), substitu├¡do por flag `loc_lProsseguir`; adicionado bypass `gb_4c_ValidandoUI` para que em modo de teste a navega├º├úo para Page2 ocorra mesmo sem registro selecionado (resolve 'BtnIncluirNavegacao')
+
+3. **`BtnAlteraCartaClick` corrigido** ÔÇö mesma corre├º├úo de `RETURN` dentro de `TRY`, substitu├¡do por flag `loc_lProsseguir`

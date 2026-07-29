@@ -1,0 +1,14 @@
+﻿Tudo correto. Fase 3 conclu├¡da com sucesso.
+
+**O que foi criado:**
+
+- **`C:/4c/projeto/app/forms/cadastros/Formcmp.prg`** ÔÇö Form completo com:
+  - Estrutura DEFINE CLASS com propriedades visuais (1000├ù600, Caption "Cadastro de Compra Para")
+  - `InicializarForm()` com guard `gb_4c_ValidandoUI` e DataSession fix via `DODEFAULT()`
+  - `ConfigurarPageFrame()` com 2 p├íginas (Lista/Dados), compensa├º├úo `Top=-29`
+  - `ConfigurarPaginaLista()` ÔÇö 5 bot├Áes CRUD + Encerrar canonico (cnt_4c_Saida/Left=917), grid 2 colunas (cods/90px, descs/337px)
+  - `ConfigurarPaginaDados()` ÔÇö Confirmar/Cancelar + 2 campos (txt_4c_Codigo readonly em ALTERAR conforme legado, txt_4c_Desc)
+  - Todos os eventos CRUD (`BtnIncluirClick` ÔåÆ foco txt_4c_Codigo; `BtnAlterarClick` ÔåÆ foco txt_4c_Desc, conforme legado)
+  - `TornarControlesVisiveis()` e `FormatarGridLista()` implementados
+
+- **`menu.prg`** ÔÇö BAR 54 em `popCadastros` + `ON SELECTION` + `PROCEDURE AbrirFormcmp()` com padr├úo `VARTYPE`/`Show()` sem `Release()`

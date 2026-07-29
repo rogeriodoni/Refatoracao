@@ -1,0 +1,9 @@
+﻿A mudan├ºa est├í correta. Fase 4 conclu├¡da.
+
+**O que foi feito:**
+
+Este ├® um form **OPERACIONAL** que envolve o componente `clsconta` (ClassResp.vcx) ÔÇö n├úo um form CRUD padr├úo. A estrutura Page1/grid/bot├Áes CRUD n├úo existe no original SIGCDCLI (confirmado pelo `layout.json` com apenas 8 objetos: header, cntConta, Sair).
+
+O ├║nico elemento genuinamente faltante da Fase 3 era a sobrescrita de `pgframeDados.Top = 0`, que estava no Init override do cntConta no SCX original (vis├¡vel em `comportamento.json`). Ap├│s `mIniConta()`, o clsconta posiciona o PageFrame interno com algum offset padr├úo; o SCX original resetava para `Top = 0` explicitamente. Essa linha agora est├í adicionada na linha 122.
+
+As fases restantes (5-8) podem continuar normalmente com o form completo.

@@ -1,0 +1,13 @@
+﻿11 PROCEDUREs, 11 ENDPROCs ÔÇö balanceado. Arquivo criado com sucesso.
+
+**Fase 3/8 conclu├¡da.** `C:\4c\projeto\app\forms\cadastros\Formche.prg` criado com 395 linhas contendo:
+
+- `DEFINE CLASS Formche AS FormBase` ÔÇö Height=579, Width=1000, DataSession=2
+- `Init()` ÔÇö RETURN DODEFAULT() com TRY/CATCH
+- `InicializarForm()` ÔÇö cria cheBO, chama ConfigurarPageFrame, propaga Caption, chama CarregarLista (com guard gb_4c_ValidandoUI)
+- `ConfigurarPageFrame()` ÔÇö pgf_4c_Paginas com 2 pages, Top=-29, Picture=fundo_cad_1003.jpg
+- `ConfigurarPaginaLista()` ÔÇö cnt_4c_Cabecalho (com lbl_4c_Sombra/Titulo), cnt_4c_Botoes (vazio), cnt_4c_Saida (com cmd_4c_Encerrar + BINDEVENT), cnt_4c_Filtros (vazio)
+- `ConfigurarPaginaDados()` ÔÇö cnt_4c_BotoesAcao (vazio)
+- `CarregarLista()` ÔÇö chama BO.Buscar() com filtro de per├¡odo (guard fora do TRY)
+- `AlternarPagina()` ÔÇö valida├º├úo fora do TRY, navega entre pages
+- `BtnEncerrarClick()`, `Destroy()`, `TornarControlesVisiveis()`, `FormatarGridLista()`

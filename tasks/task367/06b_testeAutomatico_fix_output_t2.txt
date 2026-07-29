@@ -1,0 +1,3 @@
+﻿A corre├º├úo foi aplicada. O problema era que `DataSession = 2` criava uma sess├úo de dados privada para o form, fazendo com que `cursor_4c_Dados` (criado por `CarregarLista()`) ficasse isolado na sess├úo 2 ÔÇö invis├¡vel para o teste `TesteCarregarLista` que checa `USED("cursor_4c_Dados")` a partir da sess├úo padr├úo (1). O form original SIGCDCHE n├úo tinha essa propriedade, confirmando que foi adicionada incorretamente.
+
+Sem `DataSession=2`, o form roda na sess├úo padr├úo e o cursor fica acess├¡vel ao teste normalmente.

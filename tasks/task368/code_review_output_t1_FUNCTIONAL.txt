@@ -1,0 +1,11 @@
+﻿Corre├º├Áes aplicadas:
+
+**Corrigidos (2 reais):**
+- `ValidarTamanhoFolha()` ÔåÆ `ValidarTamanhoFolha(par_nKeyCode, par_nShiftAltCtrl)` ÔÇö handler KeyPress exige par├ómetros ou VFP gera "No PARAMETER statement is found"
+- `ValidarNomeImpressora()` ÔåÆ `ValidarNomeImpressora(par_nKeyCode, par_nShiftAltCtrl)` ÔÇö mesmo motivo
+
+**Ignorados (2 falsos positivos do validador):**
+- `lbl_4c_Label11` Top=345 est├í **correto** ÔÇö ├® o label "Ano" cuja posi├º├úo original ├® 316+29=345. O validador casou errado com `Label1` em vez de `lbl_4c_Label1`
+- `txt_4c_Fwget17` Top=366 est├í **correto** ÔÇö ├® o campo "Local" cuja posi├º├úo original ├® 337+29=366. O validador casou com `fwget1` (lvlr) em vez de `fwget17`
+
+Os controles reais `lbl_4c_Label1` (Top=166 = 137+29 Ô£ô) e `txt_4c_Fwget1` (Top=162 = 133+29 Ô£ô) j├í est├úo corretamente posicionados.

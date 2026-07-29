@@ -1,0 +1,29 @@
+﻿Analisei todos os WHERE em ambos os arquivos. Os 3 problemas s├úo **falsos positivos** do validador est├ítico:
+
+---
+
+**[SQL-FILTRO-INVENTADO] coluna 'P'**
+N├úo existe nenhuma condi├º├úo `WHERE P = ...` ou `AND P = ...` em nenhum dos dois arquivos. O analisador extraiu incorretamente 'P' de tokens como `PADR()` ou outro contexto. **Nenhuma corre├º├úo necess├íria.**
+
+---
+
+**[SQL-FILTRO-INVENTADO] coluna 'CIDCHAVES'**
+Ocorre em 4 locais ÔÇö todos leg├¡timos:
+- `CNFBO.prg:583` ÔÇö `WHERE n.cidchaves = ...` em `CarregarPorCodigo()`: lookup pelo PK da tabela SigMvNfi. Padr├úo can├┤nico da nova arquitetura.
+- `CNFBO.prg:835` ÔÇö `WHERE cidchaves = ...` em `Atualizar()`: UPDATE pela PK.
+- `CNFBO.prg` (ExecutarExclusao) ÔÇö `WHERE cidchaves = ...`: DELETE pela PK.
+
+O legado usava `?pNEmps + dopes + numes` como chave composta, mas o `cidchaves` ├® exatamente a coluna `this_cCampoChave = "cidchaves"` declarada no BO. ├ë o padr├úo correto de lookup por PK. **N├úo ├® filtro inventado ÔÇö ├® a implementa├º├úo correta do CRUD.**
+
+---
+
+**[SQL-FILTRO-INVENTADO] coluna 'CEMPS'**
+Ocorre em `FormCNF.prg:1545`:
+```foxpro
+loc_cSQL = "SELECT CEmps, Razas FROM SigCdEmp WHERE CEmps = " + EscaparSQL(loc_cEmps)
+```
+Esta ├® a query de valida├º├úo do campo Empresa nos filtros. `CEmps` ├® a PK correta de `SigCdEmp` (confirmado pela mem├│ria `feedback_sigcdemp_cemps_razas.md`). O original usava `DataManager` com `?_Empr`, mas a nova arquitetura faz SQL direto. **N├úo ├® filtro inventado ÔÇö ├® a valida├º├úo correta da empresa.**
+
+---
+
+**Conclus├úo**: Os tr├¬s flags s├úo falsos positivos do validador est├ítico que compara nomes de colunas globalmente sem distinguir entre a query principal de lista e queries auxiliares (lookup/PK/valida├º├úo). Nenhuma altera├º├úo nos arquivos ├® necess├íria ÔÇö o c├│digo SQL est├í correto.

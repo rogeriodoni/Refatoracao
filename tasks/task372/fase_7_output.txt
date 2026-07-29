@@ -1,0 +1,9 @@
+﻿O arquivo foi atualizado corretamente. Os 4 eventos principais foram adicionados ao `FormCliente.prg` antes do `PROCEDURE Destroy`:
+
+- **`BtnIncluirClick`**: Reinicializa o `clsconta` com cliente em branco (`SPACE(10)`) para inclus├úo de novo registro, restaurando o bot├úo OK.
+
+- **`BtnAlterarClick`**: L├¬ o c├│digo do cliente atual a partir do controle `getcodigo` interno do `clsconta` (com fallback para `this_cCli`), e recarrega via `mLeDados` em modo ALTERAR.
+
+- **`BtnVisualizarClick`**: Recarrega o cliente via `mLeDados` e desabilita o bot├úo OK do `cmg_4c_Sair` para impedir grava├º├úo acidental em modo somente-leitura.
+
+- **`BtnExcluirClick`**: Obt├®m o c├│digo do cliente, solicita confirma├º├úo, verifica depend├¬ncias em `SigIvTrh` (movimentos) e `SigIvDre` (contas a receber) antes de executar `this_oBusinessObject.Excluir()` e fechar o form via `Release()`.

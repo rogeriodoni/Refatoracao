@@ -1,0 +1,11 @@
+﻿**4 corre├º├Áes aplicadas** (BINDEVENT-PARAMS):
+
+- `ValidarGrupo`, `ValidarDescGrupo`, `ValidarClasse`, `ValidarDescClasse` ÔÇö removido par├ómetros da assinatura `PROCEDURE Foo(p1, p2)` e adicionado `LPARAMETERS par_nKeyCode, par_nShiftAltCtrl` no corpo, conforme exigido pelo VFP9 para handlers BINDEVENT KeyPress.
+
+**6 problemas METODO-INEXISTENTE s├úo falsos positivos** ÔÇö todos os m├®todos citados existem no arquivo:
+- `AbrirLookupGrupo/GrupoDesc/Classe/ClasseDesc` ÔåÆ linhas 1694/1742/1794/1836
+- `CalcularAltSubtot` ÔåÆ linha 1964
+- `CalcularProximaOrdem` ÔåÆ linha 1937
+- `ValidarCampos` ÔåÆ linha 1999
+
+O code review provavelmente n├úo detectou esses m├®todos porque usa `FUNCTION` em vez de `PROCEDURE` como keyword ÔÇö ambas s├úo equivalentes dentro de `DEFINE CLASS` no VFP9.

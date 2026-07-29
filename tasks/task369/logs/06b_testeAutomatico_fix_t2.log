@@ -1,0 +1,23 @@
+[2026-07-28 21:11:29] [INFO] === CLAUDE CLI INVOKER ===
+[2026-07-28 21:11:29] [INFO] Prompt File: C:\4c\tasks\task369\runtime_fix_prompt_06b_testeAutomatico_t2.md
+[2026-07-28 21:11:29] [INFO] Output File: C:\4c\tasks\task369\06b_testeAutomatico_fix_output_t2.txt
+[2026-07-28 21:11:29] [INFO] Model: sonnet
+[2026-07-28 21:11:29] [INFO] Timeout: 3600 segundos
+[2026-07-28 21:11:29] [INFO] Max Output Tokens: 128000
+[2026-07-28 21:11:29] [INFO] Context Files: 0 arquivo(s)
+[2026-07-28 21:11:30] [INFO] Invocando Claude CLI...
+[2026-07-28 21:11:30] [INFO] Prompt carregado: 86973 caracteres
+[2026-07-28 21:11:30] [INFO] Executando: claude --model sonnet --dangerously-skip-permissions --add-dir C:\4c
+[2026-07-28 21:11:30] [INFO] Tamanho total do prompt: 86973 caracteres
+[2026-07-28 21:11:30] [INFO] Invocando Claude CLI (tentativa 1/7)...
+[2026-07-28 21:16:21] [INFO] Claude CLI finalizado em 291.6026052 segundos
+[2026-07-28 21:16:21] [INFO] Exit Code: 0
+[2026-07-28 21:16:21] [INFO] Output salvo em: C:\4c\tasks\task369\06b_testeAutomatico_fix_output_t2.txt
+[2026-07-28 21:16:21] [INFO] Output size: 879 bytes
+[2026-07-28 21:16:21] [INFO] SUCESSO: Claude CLI executado com sucesso
+[2026-07-28 21:16:21] [INFO] Preview do output:
+[2026-07-28 21:16:21] [INFO] A corre+º+úo est+í aplicada. O problema era que `FormCla` tem `DataSession = 2` (sess+úo privada), ent+úo o cursor `cursor_4c_Dados` criado dentro de `CarregarLista` ficava na sess+úo privada do form. O `USED("cursor_4c_Dados")` do TesteAutomatico (que roda na sess+úo 1) n+úo o enxergava, retornando `.F.` e falhando o teste.
+
+**A corre+º+úo** segue o padr+úo estabelecido em `FormACE.prg` e `FormBch.prg`:
+1. Salva a sess+úo atual: `loc_nDsAtual = THIS.DataSessionID`
+2. Muda para sess+úo 1: `S

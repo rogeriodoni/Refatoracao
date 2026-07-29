@@ -1,0 +1,5 @@
+﻿Corre├º├úo aplicada. Resumo do que foi feito e por qu├¬:
+
+**SQL-TABELA (`SigCdCmp`)**: Falso positivo confirmado. O arquivo original `sigcdcmp_form_codigo_fonte.txt` cont├®m `.AddCursor('SigCdCmp','cods',...)` e `ChkRegister('SigCdCmp','cods',...)` ÔÇö a tabela `SigCdCmp` est├í correta. N├úo h├í altera├º├úo necess├íria.
+
+**SQL-FILTRO-INVENTADO (`QTD`)**: O validador detectou `cursor_4c_ChkDup.qtd > 0` como se fosse uma condi├º├úo WHERE com coluna `qtd`. Era apenas um alias `COUNT(*) AS qtd` ÔÇö n├úo existia coluna `qtd` na tabela. Fix: trocado `SELECT COUNT(*) AS qtd ... AND cursor_4c_ChkDup.qtd > 0` por `SELECT cods ... AND RECCOUNT("cursor_4c_ChkDup") > 0`. O WHERE continua usando apenas `cods`, id├¬ntico ao original.

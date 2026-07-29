@@ -1,0 +1,1 @@
+﻿Corre├º├úo aplicada. Ap├│s `RecordSource = "cursor_4c_Dados"` na linha 396, o VFP9 faz auto-bind das colunas pela ordem dos campos do cursor (cidchaves, empdopnums, emps, ...), sobrescrevendo os ControlSources definidos antes. O fix re-define explicitamente os 3 ControlSources e os 3 Headers logo ap├│s a atribui├º├úo do RecordSource, garantindo o bind correto.

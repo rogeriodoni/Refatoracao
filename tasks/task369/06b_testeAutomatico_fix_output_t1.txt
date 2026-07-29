@@ -1,0 +1,1 @@
+﻿The guard was blocking `CarregarLista()` from running during initialization when `gb_4c_ValidandoUI = .T.`, so no cursor was ever created. Since `CarregarLista()` already handles the UI validation branch (creates a stub `cursor_4c_Dados`), calling it unconditionally is the correct pattern ÔÇö same as other CRUD forms in the system.

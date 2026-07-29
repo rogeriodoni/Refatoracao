@@ -1,0 +1,13 @@
+﻿Todas as corre├º├Áes est├úo corretas. Resumo do que foi corrigido:
+
+**FormCliente.prg** ÔÇö 5 `IF ... : stmt : ENDIF` em linha ├║nica (sintaxe inv├ílida no VFP9):
+- 3 blocos em `ConfigurarPaginaDados` (linhas 506-508): FontName, BackColor, ForeColor de `loc_oPg1`
+- 2 blocos em `ConfigurarPaginaDados2` (linhas 1384-1385): FontName, ForeColor de `loc_oPg2`
+
+O VFP9 n├úo aceita `:` como separador de comandos na mesma linha. O parser interpretava os `:` como tokens desconhecidos, corrompendo o TRY/CATCH aninhado e gerando os "Nesting error" e "IF|ELSE|ENDIF statement is missing" em cascata.
+
+**ClienteBO.prg** ÔÇö "Line is too long" por statements de 190+ campos:
+- `Inserir()` ÔåÆ `loc_cVals` dividido em 3 partes (split ap├│s `nmuncips` e ap├│s `tpcps`)
+- `Atualizar()` ÔåÆ `loc_cSQL` dividido em 3 partes (split ap├│s `tel2s` e ap├│s `tpcps`)
+
+Com ~190 fields ├ù ~55 chars cada, o statement compilado ultrapassava os ~8192 bytes de limite interno do VFP9. Cada parte agora tem ~2700-5100 chars, bem dentro do limite.

@@ -1,0 +1,9 @@
+﻿O bloco foi removido corretamente. O fluxo agora vai direto da valida├º├úo de exist├¬ncia do Grupo em SigCdGcr para o `ENDIF` que fecha o bloco `Tpregs=1`.
+
+**Resumo da corre├º├úo:**
+
+Removido o bloco TRY/ENDTRY de verifica├º├úo de duplicidade de Grupos (antigo linhas 2095ÔÇô2121 do FormCmr.prg) que continha as duas condi├º├Áes inventadas:
+- `AND Grupos = EscaparSQL(loc_cGrupos)` ÔÇö coluna Grupos n├úo aparece no WHERE original  
+- `AND CidChaves <> EscaparSQL(loc_oBO.this_cCidChaves)` ÔÇö coluna CidChaves n├úo aparece no WHERE original
+
+O original n├úo realizava esta checagem de unicidade de Grupos via SQL; o bloco foi integralmente criado pela LLM sem base no legado.

@@ -1,0 +1,16 @@
+﻿O arquivo est├í correto e completo. A Fase 4 foi implementada com sucesso:
+
+**O que foi adicionado em `Formcnl.prg`:**
+
+1. **`ConfigurarPaginaLista()` ÔÇö completo:**
+   - Container `cnt_4c_Cabecalho` com labels de t├¡tulo
+   - Container `cnt_4c_Botoes` com 5 bot├Áes CRUD: **Incluir, Visualizar, Alterar, Excluir, Buscar** (com ├¡cones, fontes Comic Sans MS, BINDEVENT)
+   - Container `cnt_4c_Saida` com bot├úo **Encerrar** (padr├úo can├┤nico Left=917)
+   - 3 bot├Áes especiais do legado: **Espelho** (Left=14), **Fechar** (Left=119), **Abrir** (Left=224), todos compensados Top=111
+   - Grid `grd_4c_Dados` (Top=155, Width=900, 7 colunas, Verdana 8)
+
+2. **`CarregarLista()` ÔÇö completo:** configura RecordSource, ColumnCount, ControlSource, Width e Header1.Caption de todas as 7 colunas ap├│s o Buscar()
+
+3. **Handlers CRUD (todos PUBLIC para BINDEVENT):** `BtnIncluirClick`, `BtnVisualizarClick`, `BtnAlterarClick`, `BtnExcluirClick`, `BtnBuscarClick`, `BtnEncerrarClick`, `BtnEspelhoClick`, `BtnFecharContagemClick`, `BtnAbrirContagemClick`
+
+4. **M├®todos auxiliares com PEMSTATUS guard:** `BOParaForm`, `FormParaBO`, `HabilitarCampos`, `LimparCampos` ÔÇö usam PEMSTATUS para verificar exist├¬ncia dos controles de Page2 antes de acess├í-los, tornando-os seguros para fases anteriores ├á Page2 ser populada.

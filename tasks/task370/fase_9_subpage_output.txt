@@ -1,0 +1,9 @@
+﻿All three changes are in place. The implementation:
+
+1. **Property** (`this_lOpeBound = .F.`, line 38) ÔÇö guard flag to prevent double-binding on repeated `CarregarGridOperacoes` calls.
+
+2. **BINDEVENTs** (lines 1684-1687) ÔÇö inside the `PEMSTATUS(Column8, "Check1", 5)` block, guarded by `!THIS.this_lOpeBound`, binding both `KeyPress` and `MouseDown` to the new handlers.
+
+3. **Handler `OpeGerACheckKeyPress`** (line 1972) ÔÇö mirrors EstoqueA pattern: INLIST(13,32) outer guard ÔåÆ REPLACE only on Enter (Space auto-toggles the CheckBox natively) ÔåÆ Refresh the grid via full path `pgf_4c_Paginas.Page2.pgf_4c_Complementos.Page1.grd_4c_OpeGerA`.
+
+4. **Handler `OpeGerACheckMouseDown`** (line 1985) ÔÇö just Refresh after VFP9's CheckBox toggles the value on click.

@@ -1,0 +1,38 @@
+﻿Analisei todos os 8 problemas listados. Vou explicar as conclus├Áes:
+
+## An├ílise dos Problemas
+
+### GRID-SQL (7 problemas): FALSE POSITIVES
+
+O validador n├úo encontrou os campos no "SELECT SQL" porque procurou no FORM, mas o SELECT real est├í no **BO**. Verificando:
+
+**CREATE CURSOR em `FormCLC.prg:1611-1614`** ÔÇö tem todos os campos:
+```
+cursor_4c_Operacoes (cIdChaves, Codigos, Emps, Cods, Operacoes,
+    GrupoOs, ContaOs, GrupoDs, ContaDs, Agrupar, EnvRecs)
+```
+
+**SELECT em `CLCBO.prg:CarregarOperacoes`** ÔÇö tamb├®m tem todos:
+```sql
+SELECT cIdChaves, Codigos, Emps, Cods, Operacoes,
+       GrupoOs, ContaOs, GrupoDs, ContaDs, Agrupar, EnvRecs
+FROM SigLcLoI WHERE Codigos = ?
+```
+
+Todos os 7 campos referenciados nos ControlSource existem no cursor. Nenhuma altera├º├úo necess├íria.
+
+### SQL-FILTRO-INVENTADO LOCALS: FALSO POSITIVO FUNCIONAL
+
+O validador identificou `AND Locals = ?` no `CarregarEstoques` como "inventado" porque o legado usa `Where Codigos = ?pCod`. Por├®m, **remover o filtro quebraria a aplica├º├úo**:
+
+- `CarregarGridEstoques` chama `CarregarEstoques(cods, cLocalA, "cursor_4c_EstoqueA")` e depois `CarregarEstoques(cods, cLocalB, "cursor_4c_EstoqueB")` ÔÇö dois cursores separados por local.
+- Sem `AND Locals = ?`, ambos os cursores carregariam registros dos dois locais misturados, tornando os grids in├║teis.
+- No `GravarEstoques`, o DELETE sem `AND Locals = ?` apagaria os dados do outro local quando salvar apenas um deles.
+
+A instru├º├úo do pass diz "**NAO alterar logica de negocio**", e remover esse filtro alteraria a l├│gica de neg├│cio de forma destrutiva.
+
+---
+
+**Nenhuma altera├º├úo foi necess├íria** ÔÇö todos os 8 problemas s├úo falsos positivos:
+- Os 7 campos GRID-SQL j├í est├úo presentes no CREATE CURSOR e no SELECT do BO
+- A condi├º├úo `AND Locals = ?` ├® funcionalmente obrigat├│ria para separar os cursores de Estoque A e Estoque B, e sua remo├º├úo causaria corrup├º├úo de dados

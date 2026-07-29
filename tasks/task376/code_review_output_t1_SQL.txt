@@ -1,0 +1,9 @@
+﻿**Falso positivo confirmado.** As 3 ocorr├¬ncias de `ColumnCount` s├úo atribui├º├Áes de propriedade VFP9 em objetos Grid:
+
+- Linha 435: `loc_oPagina.grd_4c_Dados.ColumnCount = 7` ÔÇö define n├║mero de colunas do grid
+- Linha 758: `loc_oPagina.grd_4c_GrdLoc.ColumnCount = 3` ÔÇö idem
+- Linha 1040: `loc_oGrid.ColumnCount = 7` ÔÇö idem
+
+**Nenhuma** dessas ocorr├¬ncias est├í dentro de um `WHERE` SQL. O detector do Pass SQL confundiu a propriedade VFP9 `ColumnCount` (n├║mero de colunas do Grid) com um nome de coluna em cl├íusula SQL.
+
+**N├úo h├í corre├º├úo necess├íria.** Os arquivos `Formcnl.prg` e `cnlBO.prg` est├úo corretos ÔÇö o ├║nico problema reportado ├® um falso positivo do validador autom├ítico.

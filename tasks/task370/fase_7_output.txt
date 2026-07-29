@@ -1,0 +1,9 @@
+﻿All 8 phases are now complete. Here's a summary of what was done:
+
+**FASE 7/8** ÔÇö already fully implemented in the file from the previous session (BtnIncluirClick, BtnAlterarClick, BtnVisualizarClick, BtnExcluirClick, all BINDEVENTs for lookups). Header updated to [OK].
+
+**FASE 8/8** ÔÇö implemented now:
+- **`ValidarCampos()`** (PROTECTED, lines 2622ÔÇô2654): validates Codigos required ÔåÆ checks duplicate in INCLUIR mode (via `BO.VerificarCodigoDuplicado`) ÔåÆ validates LocalA required ÔåÆ validates LocalB required. Uses CHR() codes for all accented chars per CLAUDE.md rule 4.
+- **`BtnConfirmarClick()`** updated: calls `ValidarCampos()` via `loc_lValido` flag before calling `Salvar()`, respecting the no-RETURN-inside-TRY rule (CLAUDE.md rule 1).
+
+FormCLC.prg is now complete ÔÇö all 8/8 phases [OK], 2657 lines total.

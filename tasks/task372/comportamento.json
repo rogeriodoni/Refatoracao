@@ -1,0 +1,166 @@
+{
+  "resumo": {
+    "totalMetodos": 9,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 3,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fChecaAcesso", "fConfigGeral", "fCanUniqueKey"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDCLI",
+      "evento": "Procedure",
+      "linhas": 52,
+      "codigoOriginal": "Lparameters pMun, pUFs, pObC, pObU\n\nlnRtC = 9999999\n\nlcQuery = [Select a.Codigos ] + ;\n\t\t    [From SigCdMun a, SigCdUfs b ] + ;\n\t\t   [Where a.Descs = '] + Padr(fLimpaTexto(Upper(pMun)), 40) + [' And ] + ;\n\t\t   \t\t [a.UFIBGEs = b.UFIBGEs And ] + ;\n\t\t   \t\t [b.Estados = '] + pUFs + [']\n\nIf (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalMunic]) < 1)\n\t=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalMunic)])\n\tReturn 0\nEndIf\n\nSelect LocalMunic\nGo Top In LocalMunic\nIf Not Eof(... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCLI",
+      "evento": "Init",
+      "linhas": 122,
+      "codigoOriginal": "Lparameters pCpf, pGrupo, pCep, pVal, pCli, pcTpBloqCar, pcMudaCpfCgc\nLocal lnErro1,lcOnError, lcCpf, lcCpfs, llVC\n\npCpf = Padr(Iif(Type('pCpf')=='C', pCpf, ''),20)\npGrupo = Padr(Iif(Type('pGrupo')=='C', pGrupo, ''),10)\npCep = Iif(Type('pCep')=='N', pCep, 0)\npVal = Iif(Type('pVal')=='L', pVal, .f.)\npCli = Padr(Iif(Type('pCli')=='C', pCli, ''),10)\npcTpBloqCar = Iif(Type('pcTpBloqCar')=='C', pcTpBloqCar, '0') && se for 1 bloqueia inserir/excl. caracteristica. ...\npcMudaCpfCgc = Iif(Type('pcMudaCpf... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso",
+        "metodosFormChamados": "SQLExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCLI",
+      "evento": "KeyPress",
+      "linhas": 6,
+      "codigoOriginal": "LPARAMETERS nKeyCode, nShiftAltCtrl\n\nIf( nKeyCode == -4 ) && F5\n\tNODEFAULT\n\tThisForm.cntConta.cmdGPessoal.cmdPessoal.Click()  && Aba de Dados Comerciais   \nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Click",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCLI",
+      "evento": "Procedure",
+      "linhas": 3,
+      "codigoOriginal": "=fConfigGeral()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCLI",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "ThisForm.poDatamgr.Release\nDoDefault()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCLI",
+      "evento": "Procedure",
+      "linhas": 3,
+      "codigoOriginal": "Return(Thisform.RetCodCliente)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCLI.cntConta",
+      "evento": "Procedure",
+      "linhas": 3,
+      "codigoOriginal": "Lparameters lcGrupo,lcIcli,lcTpCadCli,lcTpBloqCar,lcMudaCpfCgc\nDoDefault(lcGrupo,lcIcli,lcTpCadCli,lcTpBloqCar,lcMudaCpfCgc)\nthisform.cntConta.pgframeDados.Top = 0",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCLI.Sair",
+      "evento": "Click",
+      "linhas": 29,
+      "codigoOriginal": "Local lnRetorno1,lcCpfCgc\n\n&& lnRetorno1 = -1 && com erro de validacao\n&& lnRetorno1 = 0 && exclusao com registros pendentes em outras tabelas...\n&& lnRetorno1 = 1 && retorno valido p/ efetuar gravacao...\n\nlnRetorno1 = ThisForm.cntConta.mValidaObj()\n\nIf lnRetorno1<1\n\tThisForm.poDataMgr.RollBack()\nEndIf \nIf lnRetorno1>=0\n\tIf lnRetorno1>0\n\t\tIf ThisForm.cntConta.mGravaDados()>0\n\t\t\tlcCpfCgc = Alltrim(Strt( Strt( Strt( ThisForm.cntConta.pgframeDados.pgframeDados1.GetCPFCGC.Value, \".\", \"\" ), \"-\", \"\" )... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "mValidaObj,RollBack,mGravaDados",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCLI.Sair",
+      "evento": "Click",
+      "linhas": 21,
+      "codigoOriginal": "Local _Chave, lnIdConta\n\nnCodigo = crSigCdCli.NClis\nlnIdConta = crSigCdCli.IdConta\n\nIf ThisForm.pcEscolha=='INSERIR'\n\tIf crSigCdGcr.TpCods = 1 && Código Automático\n\t\tIf crSigCdGcr.TpEmps = 1 && Inclui Empresa\n\t\t\t= fCanUniqueKey( nCodigo, Alltrim( crSigCdGcr.Codigos ) + _EMPR ) \n\t\tElse && Não Inclui Empresa\n\t\t\t= fCanUniqueKey( nCodigo, Alltrim( crSigCdGcr.Codigos ) )\n\t\tEndif\n\tEndif\nEndIf \nWith ThisForm\n\t.poDataMgr.RollBack()\n\t.RetCodCliente = ' '\n\t.Release\nEndWith \n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fCanUniqueKey",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

@@ -1,0 +1,19 @@
+﻿All 9 edits are complete. Phase 6 is done. Here's a summary of what was added/changed:
+
+**Edit 1** (previous session): Added `lbl_4c_Label1`, `grd_4c_GrdLoc` (3 columns + BINDEVENT), and the 8 right-panel label/textbox pairs for location levels in `ConfigurarPaginaDados()`.
+
+**Edit 2** ÔÇö `BOParaForm()`: Loads `csSigCdCnI` from SQL Server (`locals AS Locals, qtds AS QtdCtg, estoque AS Qtde`) and binds `grd_4c_GrdLoc.RecordSource` with headers/widths.
+
+**Edit 3** ÔÇö `BtnIncluirClick()`: Creates empty `csSigCdCnI` cursor with the exact columns SalvarItens expects (`Locals C(10), QtdCtg N(5,0), Qtde N(10,2)`) and binds the grid.
+
+**Edit 4** ÔÇö `BtnSalvarClick()`: Calls `SalvarItens("csSigCdCnI", this_cCodigo)` after a successful `Salvar()`, then calls `CarregarLista()`.
+
+**Edit 5** ÔÇö `LimparCampos()`: Clears all 8 location-level textboxes (Base, DBase, Nvl2ÔÇôNvl4 and their descriptions).
+
+**Edit 6** ÔÇö `HabilitarCampos()`: Sets `Column2.ReadOnly` and `AllowAddNew` on `grd_4c_GrdLoc` based on edit mode.
+
+**Edit 7** ÔÇö `Destroy()`: Cleans up `csSigCdCnI` cursor before releasing the BO.
+
+**Edit 8** ÔÇö New `GrdLocAfterRowColChange(par_nColIndex)`: Parses `Locals` into 4 level codes (Base pos 1-2, Nvl2 3-4, Nvl3 5-6, Nvl4 7-9) and fills the right-panel textboxes.
+
+**Edit 9** ÔÇö `BtnCancelarClick()`: Closes `csSigCdCnI` before switching back to Page1.

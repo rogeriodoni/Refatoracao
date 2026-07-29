@@ -1,0 +1,26 @@
+﻿An├ílise conclu├¡da. Ap├│s verifica├º├úo detalhada:
+
+**Resultado: Falso positivo ÔÇö nenhuma corre├º├úo necess├íria.**
+
+**Evid├¬ncias:**
+
+1. **`CidChaves` existe no schema** ÔÇö confirmado em `schema.sql` linha 4989+:
+   ```sql
+   CREATE TABLE [dbo].[SIGCDMRI](
+     [cidchaves] [char](20) NOT NULL,
+     ...
+     CONSTRAINT [sigcdmri_cidchaves] PRIMARY KEY CLUSTERED ([cidchaves] ASC)
+   ```
+
+2. **├ë a PK da tabela** ÔÇö `CONSTRAINT [sigcdmri_cidchaves] PRIMARY KEY CLUSTERED`.
+
+3. **Todos os usos de `CidChaves` em WHERE s├úo CRUD padr├úo:**
+   - `CarregarPorCodigo`: `WHERE CidChaves = par_cCidChaves` ÔåÆ SELECT por PK Ô£ô
+   - `Atualizar`: `WHERE CidChaves = THIS.this_cCidChaves` ÔåÆ UPDATE por PK Ô£ô
+   - `ExecutarExclusao`: `WHERE CidChaves = THIS.this_cCidChaves` ÔåÆ DELETE por PK Ô£ô
+
+4. **No Form**, o c├│digo apenas l├¬ `cursor_4c_Dados.CidChaves` (leitura do cursor, n├úo WHERE de SQL).
+
+**Por que o revisor flagou:** O c├│digo original VFP usa navega├º├úo por cursor (`AddCursor` + ponteiro de registro) em vez de SQL WHERE para opera├º├Áes individuais, ent├úo `CidChaves` nunca aparece nos WHEREs originais. O c├│digo migrado usa o padr├úo correto da nova arquitetura SQL: `WHERE PK = valor`. Isso ├® esperado e correto.
+
+**Nenhuma altera├º├úo nos arquivos `FormCmr.prg` ou `CmrBO.prg` ├® necess├íria.** O c├│digo est├í correto.

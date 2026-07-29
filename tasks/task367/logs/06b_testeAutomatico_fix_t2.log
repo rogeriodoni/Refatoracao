@@ -1,0 +1,21 @@
+[2026-07-28 19:32:56] [INFO] === CLAUDE CLI INVOKER ===
+[2026-07-28 19:32:56] [INFO] Prompt File: C:\4c\tasks\task367\runtime_fix_prompt_06b_testeAutomatico_t2.md
+[2026-07-28 19:32:56] [INFO] Output File: C:\4c\tasks\task367\06b_testeAutomatico_fix_output_t2.txt
+[2026-07-28 19:32:56] [INFO] Model: sonnet
+[2026-07-28 19:32:56] [INFO] Timeout: 3600 segundos
+[2026-07-28 19:32:56] [INFO] Max Output Tokens: 128000
+[2026-07-28 19:32:56] [INFO] Context Files: 0 arquivo(s)
+[2026-07-28 19:32:57] [INFO] Invocando Claude CLI...
+[2026-07-28 19:32:57] [INFO] Prompt carregado: 158396 caracteres
+[2026-07-28 19:32:57] [INFO] Executando: claude --model sonnet --dangerously-skip-permissions --add-dir C:\4c
+[2026-07-28 19:32:57] [INFO] Tamanho total do prompt: 158396 caracteres
+[2026-07-28 19:32:57] [INFO] Invocando Claude CLI (tentativa 1/7)...
+[2026-07-28 19:36:59] [INFO] Claude CLI finalizado em 242.5830957 segundos
+[2026-07-28 19:36:59] [INFO] Exit Code: 0
+[2026-07-28 19:36:59] [INFO] Output salvo em: C:\4c\tasks\task367\06b_testeAutomatico_fix_output_t2.txt
+[2026-07-28 19:36:59] [INFO] Output size: 570 bytes
+[2026-07-28 19:36:59] [INFO] SUCESSO: Claude CLI executado com sucesso
+[2026-07-28 19:36:59] [INFO] Preview do output:
+[2026-07-28 19:36:59] [INFO] A corre+º+úo foi aplicada. O problema era que `DataSession = 2` criava uma sess+úo de dados privada para o form, fazendo com que `cursor_4c_Dados` (criado por `CarregarLista()`) ficasse isolado na sess+úo 2 ÔÇö invis+¡vel para o teste `TesteCarregarLista` que checa `USED("cursor_4c_Dados")` a partir da sess+úo padr+úo (1). O form original SIGCDCHE n+úo tinha essa propriedade, confirmando que foi adicionada incorretamente.
+
+Sem `DataSession=2`, o form roda na sess+úo padr+úo e o cursor fica ace

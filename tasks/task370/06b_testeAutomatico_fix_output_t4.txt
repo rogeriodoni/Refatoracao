@@ -1,0 +1,9 @@
+﻿**Causa do erro:** `WITH .Buttons(N)` dentro de `WITH loc_oCnt.obj_4c_OptDigitos` (caminho composto com ponto) n├úo funciona corretamente em VFP9. O `WITH` com caminho composto n├úo estabelece o contexto necess├írio para os `WITH .Buttons(N)` aninhados.
+
+**Corre├º├úo aplicada em `FormCLC.prg`:**
+
+1. **`ConfigurarPaginaDados`** ÔÇö `obj_4c_OptDigitos`: adicionado `loc_oOpt = loc_oCnt.obj_4c_OptDigitos` e trocado `WITH loc_oCnt.obj_4c_OptDigitos` por `WITH loc_oOpt`
+
+2. **`ConfigurarComplementos`** ÔÇö `opt_4c_EnvRecs`: adicionado `loc_oOpt = loc_oPg1C.opt_4c_EnvRecs` e trocado `WITH loc_oPg1C.opt_4c_EnvRecs` por `WITH loc_oOpt`
+
+O padr├úo com vari├ível intermedi├íria simples (j├í usado nos CommandGroups com `loc_oCmg`) permite que VFP9 resolva corretamente os `WITH .Buttons(N)` aninhados.
