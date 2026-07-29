@@ -1268,7 +1268,7 @@ DEFINE CLASS FormSigPdMp8 AS FormBase
     *   - Se nao encontrado: avisa usuario e limpa celula
     *==========================================================================
     PROCEDURE ValidarFuncionario()
-        LOCAL loc_cValor, loc_oErro
+        LOCAL loc_cValor, loc_oErro, loc_lContinuar
 
         IF !PEMSTATUS(THIS, "grd_4c_Inc", 5)
             RETURN
@@ -1280,10 +1280,12 @@ DEFINE CLASS FormSigPdMp8 AS FormBase
             RETURN
         ENDIF
 
+        loc_lContinuar = .T.
         TRY
             IF !USED("TmpCli")
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
 
             IF SEEK(loc_cValor, "TmpCli", "BalCodigo")
                 *-- Encontrado: atualiza celula com IClis (codigo da conta no balancete)
@@ -1300,6 +1302,7 @@ DEFINE CLASS FormSigPdMp8 AS FormBase
                 THIS.grd_4c_Inc.Refresh
             ENDIF
 
+            ENDIF
         CATCH TO loc_oErro
             MsgErro("Erro ao validar Funcion" + CHR(225) + "rio: " + loc_oErro.Message, ;
                     "FormSigPdMp8.ValidarFuncionario")

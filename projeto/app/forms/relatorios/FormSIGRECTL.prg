@@ -881,11 +881,13 @@ DEFINE CLASS FormSIGRECTL AS FormBase
     *   o BO for alimentado externamente (ex: modo automatico).
     *--------------------------------------------------------------------------
     PROTECTED PROCEDURE BOParaForm()
-        LOCAL loc_oPg
+        LOCAL loc_oPg, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             IF VARTYPE(THIS.this_oRelatorio) != "O"
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             loc_oPg = THIS.pgf_4c_Paginas.Page1
             WITH THIS.this_oRelatorio
                 IF VARTYPE(loc_oPg.txt_4c_Mes) = "O"
@@ -898,6 +900,7 @@ DEFINE CLASS FormSIGRECTL AS FormBase
                     loc_oPg.chk_4c_ImpTempo.Value = IIF(.this_lImpTempo = 1, 1, 0)
                 ENDIF
             ENDWITH
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;
                 "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;

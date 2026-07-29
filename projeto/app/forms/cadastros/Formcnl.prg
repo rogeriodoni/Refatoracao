@@ -1714,14 +1714,16 @@ DEFINE CLASS Formcnl AS FormBase
     * Replica OptOrdem.Valid do legado: SET ORDER TO {Locals/Nivel2s/Nivel3s/Nivel4s}
     *==========================================================================
     PROCEDURE OptOrdemChanged()
-        LOCAL loc_oErro, loc_nOrdem, loc_oPg2
+        LOCAL loc_oErro, loc_nOrdem, loc_oPg2, loc_lContinuar
 
+        loc_lContinuar = .T.
         TRY
             loc_oPg2 = THIS.pgf_4c_Paginas.Page2
 
             IF !PEMSTATUS(loc_oPg2, "opt_4c_OptOrdem", 5)
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
 
             loc_nOrdem = loc_oPg2.opt_4c_OptOrdem.Value
 
@@ -1746,6 +1748,7 @@ DEFINE CLASS Formcnl AS FormBase
                 ENDIF
             ENDIF
 
+            ENDIF
         CATCH TO loc_oErro
             MsgErro("Erro ao ordenar itens:" + CHR(13) + loc_oErro.Message, "Erro")
         ENDTRY
@@ -1853,12 +1856,14 @@ DEFINE CLASS Formcnl AS FormBase
     * Parseia Locals (10 chars) em 4 niveis: Base(1,2) Nvl2(3,2) Nvl3(5,2) Nvl4(7,3)
     *==========================================================================
     PROCEDURE GrdLocAfterRowColChange(par_nColIndex)
-        LOCAL loc_oErro, loc_oPg2, loc_cLocal, loc_cBase, loc_cNvl2, loc_cNvl3, loc_cNvl4
+        LOCAL loc_oErro, loc_oPg2, loc_cLocal, loc_cBase, loc_cNvl2, loc_cNvl3, loc_cNvl4, loc_lContinuar
 
+        loc_lContinuar = .T.
         TRY
             IF !USED("csSigCdCnI") OR EOF("csSigCdCnI")
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
 
             loc_oPg2   = THIS.pgf_4c_Paginas.Page2
             loc_cLocal = ALLTRIM(csSigCdCnI.Locals)
@@ -1905,6 +1910,7 @@ DEFINE CLASS Formcnl AS FormBase
                 loc_oPg2.txt_4c_DNvl4.Value = ""
             ENDIF
 
+            ENDIF
         CATCH TO loc_oErro
             MsgErro("Erro em GrdLocAfterRowColChange:" + CHR(13) + loc_oErro.Message, "Erro")
         ENDTRY

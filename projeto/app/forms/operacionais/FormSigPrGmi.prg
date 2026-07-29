@@ -740,7 +740,8 @@ DEFINE CLASS FormSigPrGmi AS FormBase
     * AbrirBuscaEmpresa - FormBuscaAuxiliar para SigCdEmp (Cemps + Razas)
     *==========================================================================
     PROCEDURE AbrirBuscaEmpresa(par_cModo, par_cValor)
-        LOCAL loc_oBusca, loc_nResultado, loc_cSQL, loc_cWhere
+        LOCAL loc_oBusca, loc_nResultado, loc_cSQL, loc_cWhere, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             IF par_cModo = "C"
                 loc_cWhere = IIF(EMPTY(ALLTRIM(par_cValor)), "", ;
@@ -756,8 +757,9 @@ DEFINE CLASS FormSigPrGmi AS FormBase
             ENDIF
             loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaEmp")
             IF loc_nResultado < 1
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
 
             loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, "", ;
                 "cursor_4c_BuscaEmp", IIF(par_cModo = "C", "Cemps", "Razas"), "", ;
@@ -773,6 +775,7 @@ DEFINE CLASS FormSigPrGmi AS FormBase
 
             IF USED("cursor_4c_BuscaEmp")
                 USE IN cursor_4c_BuscaEmp
+            ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro AbrirBuscaEmpresa")
@@ -832,7 +835,8 @@ DEFINE CLASS FormSigPrGmi AS FormBase
     * NOTA: SigCdGcr usa coluna descrs (com r), nao descrs
     *==========================================================================
     PROCEDURE AbrirBuscaGrEstoque(par_cModo, par_cValor)
-        LOCAL loc_oBusca, loc_nResultado, loc_cSQL, loc_cWhere
+        LOCAL loc_oBusca, loc_nResultado, loc_cSQL, loc_cWhere, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             IF par_cModo = "C"
                 loc_cWhere = IIF(EMPTY(ALLTRIM(par_cValor)), "", ;
@@ -848,8 +852,9 @@ DEFINE CLASS FormSigPrGmi AS FormBase
             ENDIF
             loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaGcr")
             IF loc_nResultado < 1
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
 
             loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, "", ;
                 "cursor_4c_BuscaGcr", IIF(par_cModo = "C", "codigos", "descrs"), "", ;
@@ -865,6 +870,7 @@ DEFINE CLASS FormSigPrGmi AS FormBase
 
             IF USED("cursor_4c_BuscaGcr")
                 USE IN cursor_4c_BuscaGcr
+            ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro AbrirBuscaGrEstoque")
@@ -928,7 +934,8 @@ DEFINE CLASS FormSigPrGmi AS FormBase
     * AbrirBuscaEstoque - FormBuscaAuxiliar para SigCdCli filtrado por grupo
     *==========================================================================
     PROCEDURE AbrirBuscaEstoque(par_cModo, par_cGrupo, par_cValor)
-        LOCAL loc_oBusca, loc_nResultado, loc_cSQL, loc_cWhere, loc_cWhereGrp
+        LOCAL loc_oBusca, loc_nResultado, loc_cSQL, loc_cWhere, loc_cWhereGrp, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             loc_cWhereGrp = IIF(EMPTY(ALLTRIM(par_cGrupo)), "", ;
                 " AND Grupos = " + EscaparSQL(PADR(ALLTRIM(par_cGrupo), 10)))
@@ -954,8 +961,9 @@ DEFINE CLASS FormSigPrGmi AS FormBase
             ENDIF
             loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaEst")
             IF loc_nResultado < 1
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
 
             loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, "", ;
                 "cursor_4c_BuscaEst", IIF(par_cModo = "C", "IClis", "RClis"), "", ;
@@ -971,6 +979,7 @@ DEFINE CLASS FormSigPrGmi AS FormBase
 
             IF USED("cursor_4c_BuscaEst")
                 USE IN cursor_4c_BuscaEst
+            ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro AbrirBuscaEstoque")
@@ -1018,7 +1027,8 @@ DEFINE CLASS FormSigPrGmi AS FormBase
     * AbrirBuscaLinha - FormBuscaAuxiliar para SigCdLin
     *==========================================================================
     PROCEDURE AbrirBuscaLinha(par_cModo, par_cValor)
-        LOCAL loc_oBusca, loc_nResultado, loc_cSQL, loc_cWhere
+        LOCAL loc_oBusca, loc_nResultado, loc_cSQL, loc_cWhere, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             IF par_cModo = "C"
                 loc_cWhere = IIF(EMPTY(ALLTRIM(par_cValor)), "", ;
@@ -1034,8 +1044,9 @@ DEFINE CLASS FormSigPrGmi AS FormBase
             ENDIF
             loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaLinha")
             IF loc_nResultado < 1
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
 
             loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, "", ;
                 "cursor_4c_BuscaLinha", IIF(par_cModo = "C", "linhas", "descs"), "", ;
@@ -1051,6 +1062,7 @@ DEFINE CLASS FormSigPrGmi AS FormBase
 
             IF USED("cursor_4c_BuscaLinha")
                 USE IN cursor_4c_BuscaLinha
+            ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro AbrirBuscaLinha")

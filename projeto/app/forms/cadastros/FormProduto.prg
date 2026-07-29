@@ -12074,7 +12074,7 @@ DEFINE CLASS FormProduto AS FormBase
     * CmdCompoExcluirClick - Botao excluir linha da composicao (grdCompo)
     *--------------------------------------------------------------------------
     PROCEDURE CmdCompoExcluirClick()
-        LOCAL loc_cCpros, loc_cMats, loc_cSQL, loc_nR, loc_oPg
+        LOCAL loc_cCpros, loc_cMats, loc_cSQL, loc_nR, loc_oPg, loc_lContinuar
         loc_oPg    = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page2
         loc_cCpros = ALLTRIM(THIS.this_oBusinessObject.this_cCpros)
 
@@ -12085,11 +12085,13 @@ DEFINE CLASS FormProduto AS FormBase
             RETURN
         ENDIF
 
+        loc_lContinuar = .T.
         TRY
             loc_cMats = ALLTRIM(NVL(cursor_4c_Compo.mats, ""))
             IF EMPTY(loc_cMats)
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             loc_cSQL = "DELETE FROM SIGPRCPO WHERE RTRIM(cpros)=" + EscaparSQL(loc_cCpros) + ;
                        " AND RTRIM(mats)=" + EscaparSQL(loc_cMats)
             loc_nR = SQLEXEC(gnConnHandle, loc_cSQL)
@@ -12097,6 +12099,7 @@ DEFINE CLASS FormProduto AS FormBase
                 THIS.CarregarComposicao()
             ELSE
                 MsgErro("Erro ao excluir linha da composi" + CHR(231) + CHR(227) + "o.", "FormProduto.CmdCompoExcluirClick")
+            ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "FormProduto.CmdCompoExcluirClick")
@@ -12181,7 +12184,7 @@ DEFINE CLASS FormProduto AS FormBase
     * CmdSubCpExcluirClick - Botao excluir sub-componente (grdsubcp)
     *--------------------------------------------------------------------------
     PROCEDURE CmdSubCpExcluirClick()
-        LOCAL loc_cCpros, loc_cMats, loc_cSQL, loc_nR
+        LOCAL loc_cCpros, loc_cMats, loc_cSQL, loc_nR, loc_lContinuar
         loc_cCpros = ALLTRIM(THIS.this_oBusinessObject.this_cCpros)
 
         IF NOT INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
@@ -12191,11 +12194,13 @@ DEFINE CLASS FormProduto AS FormBase
             RETURN
         ENDIF
 
+        loc_lContinuar = .T.
         TRY
             loc_cMats = ALLTRIM(NVL(cursor_4c_SubCompo.mats, ""))
             IF EMPTY(loc_cMats)
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             loc_cSQL = "DELETE FROM sigsubcp WHERE RTRIM(cpros)=" + EscaparSQL(loc_cCpros) + ;
                        " AND RTRIM(mats)=" + EscaparSQL(loc_cMats)
             loc_nR = SQLEXEC(gnConnHandle, loc_cSQL)
@@ -12203,6 +12208,7 @@ DEFINE CLASS FormProduto AS FormBase
                 THIS.CarregarComposicao()
             ELSE
                 MsgErro("Erro ao excluir sub-componente.", "FormProduto.CmdSubCpExcluirClick")
+            ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "FormProduto.CmdSubCpExcluirClick")
@@ -12383,14 +12389,16 @@ DEFINE CLASS FormProduto AS FormBase
     * AbrirLookupConsultaFase - Abre lookup SigCdPrf para selecionar fase (col 4)
     *--------------------------------------------------------------------------
     PROCEDURE AbrirLookupConsultaFase()
-        LOCAL loc_oPg, loc_oBusca, loc_cGrupos, loc_cDescrs
+        LOCAL loc_oPg, loc_oBusca, loc_cGrupos, loc_cDescrs, loc_lContinuar
 
         loc_oPg = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page6
 
+        loc_lContinuar = .T.
         TRY
             IF !USED("cursor_4c_Consulta") OR EOF("cursor_4c_Consulta")
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
 
             loc_cGrupos = ALLTRIM(NVL(cursor_4c_Consulta.grupos, ""))
             loc_oBusca  = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, "SigCdPrf", "cursor_4c_PrfSel", "grupos", loc_cGrupos, "Selecionar Fase")
@@ -12419,6 +12427,7 @@ DEFINE CLASS FormProduto AS FormBase
             loc_oBusca.Release()
             loc_oBusca = .NULL.
 
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "FormProduto.AbrirLookupConsultaFase")
         ENDTRY
@@ -12428,14 +12437,16 @@ DEFINE CLASS FormProduto AS FormBase
     * AbrirLookupConsultaCat - Abre lookup SigCdCat para selecionar categoria (col 8)
     *--------------------------------------------------------------------------
     PROCEDURE AbrirLookupConsultaCat()
-        LOCAL loc_oPg, loc_oBusca, loc_cCods, loc_cDescs
+        LOCAL loc_oPg, loc_oBusca, loc_cCods, loc_cDescs, loc_lContinuar
 
         loc_oPg = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page6
 
+        loc_lContinuar = .T.
         TRY
             IF !USED("cursor_4c_Consulta") OR EOF("cursor_4c_Consulta")
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
 
             loc_cCods  = ALLTRIM(NVL(cursor_4c_Consulta.cats, ""))
             loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, "SigCdCat", "cursor_4c_CatSel", "cods", loc_cCods, "Selecionar Categoria")
@@ -12464,6 +12475,7 @@ DEFINE CLASS FormProduto AS FormBase
             loc_oBusca.Release()
             loc_oBusca = .NULL.
 
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "FormProduto.AbrirLookupConsultaCat")
         ENDTRY
@@ -12574,16 +12586,18 @@ DEFINE CLASS FormProduto AS FormBase
     *--------------------------------------------------------------------------
     PROCEDURE GrdFasesAfterRowColChange
         LPARAMETERS par_nColIndex
-        LOCAL loc_oPg, loc_cCpros, loc_cGrupos, loc_cSQL, loc_nR, loc_cArquivo
+        LOCAL loc_oPg, loc_cCpros, loc_cGrupos, loc_cSQL, loc_nR, loc_cArquivo, loc_lContinuar
         LOCAL loc_nOrdems
 
+        loc_lContinuar = .T.
         TRY
             loc_oPg    = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page7
             loc_cCpros = ALLTRIM(THIS.this_oBusinessObject.this_cCpros)
 
             IF EMPTY(loc_cCpros) OR !USED("cursor_4c_Fases") OR EOF("cursor_4c_Fases") OR BOF("cursor_4c_Fases")
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
 
             loc_cGrupos  = ALLTRIM(NVL(cursor_4c_Fases.grupos, ""))
             loc_nOrdems  = NVL(cursor_4c_Fases.ordems, 0)
@@ -12645,6 +12659,7 @@ DEFINE CLASS FormProduto AS FormBase
                 ENDIF
             ENDIF
 
+            ENDIF
         CATCH TO loc_oErro
             MsgErro("Erro ao atualizar imagem da fase:" + CHR(13) + loc_oErro.Message, "FormProduto.GrdFasesAfterRowColChange")
         ENDTRY
@@ -13654,13 +13669,15 @@ DEFINE CLASS FormProduto AS FormBase
     * LPARAMETERS obrigatorio (BINDEVENT AfterRowColChange)
     *--------------------------------------------------------------------------
     PROCEDURE ArquivosGrd_AfterRowColChange(par_nColIndex)
-        LOCAL loc_oPg, loc_cArq, loc_cExt
+        LOCAL loc_oPg, loc_cArq, loc_cExt, loc_lContinuar
         loc_oPg = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page5
 
+        loc_lContinuar = .T.
         TRY
             IF !PEMSTATUS(loc_oPg, "img_4c_ImgArqJpg", 5)
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
 
             *-- Limpar preview
             CLEAR RESOURCES
@@ -13678,6 +13695,7 @@ DEFINE CLASS FormProduto AS FormBase
                         loc_oPg.img_4c_ImgArqJpg.Visible = .T.
                     ENDIF
                 ENDIF
+            ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "FormProduto.ArquivosGrd_AfterRowColChange")

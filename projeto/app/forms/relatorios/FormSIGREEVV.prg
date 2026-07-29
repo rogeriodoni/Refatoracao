@@ -1190,19 +1190,21 @@ DEFINE CLASS FormSIGREEVV AS FormBase
     * sistema busca o codigo correspondente e preenche txt_4c_Grupo.
     *--------------------------------------------------------------------------
     PROCEDURE AbrirBuscaDGrupo()
-        LOCAL loc_oPag, loc_cValor, loc_oForm, loc_lSelecionou, loc_oErro
+        LOCAL loc_oPag, loc_cValor, loc_oForm, loc_lSelecionou, loc_oErro, loc_lContinuar
         loc_oPag        = THIS.pgf_4c_Paginas.Page1
         loc_cValor      = ALLTRIM(loc_oPag.txt_4c_DGrupo.Value)
         loc_lSelecionou = .F.
 
+        loc_lContinuar = .T.
         TRY
             loc_oForm = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
                 "SigCdGcr", "cursor_4c_BuscaDGrupo", "descrs", loc_cValor, ;
                 "Sele" + CHR(231) + CHR(227) + "o - Grupo (por Descri" + CHR(231) + CHR(227) + "o)")
 
             IF ISNULL(loc_oForm)
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
 
             IF loc_oForm.this_lSelecionou AND loc_oForm.this_lAchouRegistro
                 loc_lSelecionou = .T.
@@ -1229,6 +1231,7 @@ DEFINE CLASS FormSIGREEVV AS FormBase
                 USE IN cursor_4c_BuscaDGrupo
             ENDIF
             loc_oForm.Release()
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "AbrirBuscaDGrupo")
         ENDTRY

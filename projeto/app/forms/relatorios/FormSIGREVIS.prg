@@ -725,12 +725,14 @@ DEFINE CLASS FormSIGREVIS AS FormBase
     *   par_nPagina: numero da pagina a ativar (1=Filtros). Default = 1.
     *--------------------------------------------------------------------------
     PROCEDURE AlternarPagina(par_nPagina)
-        LOCAL loc_nDestino, loc_oPgf, loc_oPg
+        LOCAL loc_nDestino, loc_oPgf, loc_oPg, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             loc_oPgf = THIS.pgf_4c_Paginas
             IF VARTYPE(loc_oPgf) != "O"
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
 
             *-- Validar parametro e limitar ao range valido do PageFrame.
             IF PCOUNT() = 0 OR VARTYPE(par_nPagina) != "N"
@@ -750,6 +752,7 @@ DEFINE CLASS FormSIGREVIS AS FormBase
             loc_oPg = loc_oPgf.Pages(loc_nDestino)
             IF VARTYPE(loc_oPg) = "O" AND PEMSTATUS(loc_oPg, "txt_4c_Datai", 5)
                 loc_oPg.txt_4c_Datai.SetFocus()
+            ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro AlternarPagina")
@@ -1367,11 +1370,13 @@ DEFINE CLASS FormSIGREVIS AS FormBase
     *   Neste relatorio repoe os filtros a partir das propriedades do BO.
     *--------------------------------------------------------------------------
     PROTECTED PROCEDURE BOParaForm()
-        LOCAL loc_oPg
+        LOCAL loc_oPg, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             IF VARTYPE(THIS.this_oRelatorio) != "O"
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             loc_oPg = THIS.pgf_4c_Paginas.Page1
             WITH THIS.this_oRelatorio
                 loc_oPg.txt_4c_Datai.Value   = .this_dDtInicial
@@ -1384,6 +1389,7 @@ DEFINE CLASS FormSIGREVIS AS FormBase
                 loc_oPg.opt_4c_Pedido.Value  = .this_nOpcaoPedido
             ENDWITH
             THIS.AtualizarEstadoCamposDescricao()
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
         ENDTRY

@@ -3092,12 +3092,14 @@ DEFINE CLASS FormSigPrRet AS FormBase
     * FormParaBO - Popula BO com valores dos campos de filtro do form
     *==========================================================================
     PROTECTED PROCEDURE FormParaBO()
-        LOCAL loc_oBO, loc_oErro
+        LOCAL loc_oBO, loc_oErro, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             loc_oBO = THIS.this_oBusinessObject
             IF VARTYPE(loc_oBO) != "O"
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
 
             loc_oBO.this_cCdEmpresa   = ALLTRIM(THIS.txt_4c_CdEmpresa.Value)
             loc_oBO.this_cDsEmpresa   = ALLTRIM(THIS.txt_4c_DsEmpresa.Value)
@@ -3133,6 +3135,7 @@ DEFINE CLASS FormSigPrRet AS FormBase
             loc_oBO.this_cTipo        = THIS.this_cTipo
             loc_oBO.this_cOpEscolha   = THIS.this_cOpEscolha
 
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro em FormParaBO")
         ENDTRY
@@ -3142,12 +3145,14 @@ DEFINE CLASS FormSigPrRet AS FormBase
     * BOParaForm - Popula campos do form com valores do BO
     *==========================================================================
     PROTECTED PROCEDURE BOParaForm()
-        LOCAL loc_oBO, loc_oErro
+        LOCAL loc_oBO, loc_oErro, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             loc_oBO = THIS.this_oBusinessObject
             IF VARTYPE(loc_oBO) != "O"
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
 
             THIS.txt_4c_CdEmpresa.Value   = ALLTRIM(loc_oBO.this_cCdEmpresa)
             THIS.txt_4c_DsEmpresa.Value   = ALLTRIM(loc_oBO.this_cDsEmpresa)
@@ -3189,6 +3194,7 @@ DEFINE CLASS FormSigPrRet AS FormBase
             THIS.OnChangeEtif()
             THIS.OnChangeCol()
 
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro em BOParaForm")
         ENDTRY

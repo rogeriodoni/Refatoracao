@@ -445,12 +445,14 @@ DEFINE CLASS FormSigReDct AS FormBase
     *   primeiro controle disponivel.
     *--------------------------------------------------------------------------
     PROCEDURE AlternarPagina(par_nPagina)
-        LOCAL loc_nDestino, loc_oPgf
+        LOCAL loc_nDestino, loc_oPgf, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             loc_oPgf = THIS.pgf_4c_Paginas
             IF VARTYPE(loc_oPgf) != "O"
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             IF PCOUNT() = 0 OR VARTYPE(par_nPagina) != "N"
                 loc_nDestino = 1
             ELSE
@@ -465,6 +467,7 @@ DEFINE CLASS FormSigReDct AS FormBase
             loc_oPgf.ActivePage = loc_nDestino
             IF PEMSTATUS(THIS, "chk_4c_ImpTotal", 5)
                 THIS.chk_4c_ImpTotal.SetFocus()
+            ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro AlternarPagina")

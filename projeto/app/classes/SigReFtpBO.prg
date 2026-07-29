@@ -1,4 +1,4 @@
-*==============================================================================
+﻿*==============================================================================
 * SIGREFTPBO.PRG
 * Business Object para Relatorio - Ficha Tecnica do Produto
 * Herda de RelatorioBase
@@ -146,19 +146,22 @@ DEFINE CLASS SigReFtpBO AS RelatorioBase
     * Visualizar - Exibe relatorio em modo preview (PREVIEW NOCONSOLE)
     *--------------------------------------------------------------------------
     PROCEDURE Visualizar()
-        LOCAL loc_lSucesso
+        LOCAL loc_lSucesso, loc_lContinuar
         loc_lSucesso = .F.
+        loc_lContinuar = .T.
         TRY
             IF !THIS.PrepararDados()
                 loc_lSucesso = .F.
-                RETURN loc_lSucesso
+                loc_lContinuar = .F.
             ENDIF
-            IF THIS.this_nTipoRelatorio = 1
-                REPORT FORM (THIS.this_cArqRelReduzido) PREVIEW NOCONSOLE
-            ELSE
-                REPORT FORM (THIS.this_cArqRelExpandido) PREVIEW NOCONSOLE
+            IF loc_lContinuar
+                IF THIS.this_nTipoRelatorio = 1
+                    REPORT FORM (THIS.this_cArqRelReduzido) PREVIEW NOCONSOLE
+                ELSE
+                    REPORT FORM (THIS.this_cArqRelExpandido) PREVIEW NOCONSOLE
+                ENDIF
+                loc_lSucesso = .T.
             ENDIF
-            loc_lSucesso = .T.
         CATCH TO loc_oErro
             THIS.this_cMensagemErro = loc_oErro.Message
             MsgErro(loc_oErro.Message, "Erro")
@@ -170,19 +173,22 @@ DEFINE CLASS SigReFtpBO AS RelatorioBase
     * Imprimir - Imprime relatorio com prompt de impressora
     *--------------------------------------------------------------------------
     PROCEDURE Imprimir()
-        LOCAL loc_lSucesso
+        LOCAL loc_lSucesso, loc_lContinuar
         loc_lSucesso = .F.
+        loc_lContinuar = .T.
         TRY
             IF !THIS.PrepararDados()
                 loc_lSucesso = .F.
-                RETURN loc_lSucesso
+                loc_lContinuar = .F.
             ENDIF
-            IF THIS.this_nTipoRelatorio = 1
-                REPORT FORM (THIS.this_cArqRelReduzido) TO PRINTER PROMPT NOCONSOLE
-            ELSE
-                REPORT FORM (THIS.this_cArqRelExpandido) TO PRINTER PROMPT NOCONSOLE
+            IF loc_lContinuar
+                IF THIS.this_nTipoRelatorio = 1
+                    REPORT FORM (THIS.this_cArqRelReduzido) TO PRINTER PROMPT NOCONSOLE
+                ELSE
+                    REPORT FORM (THIS.this_cArqRelExpandido) TO PRINTER PROMPT NOCONSOLE
+                ENDIF
+                loc_lSucesso = .T.
             ENDIF
-            loc_lSucesso = .T.
         CATCH TO loc_oErro
             THIS.this_cMensagemErro = loc_oErro.Message
             MsgErro(loc_oErro.Message, "Erro")
@@ -194,19 +200,22 @@ DEFINE CLASS SigReFtpBO AS RelatorioBase
     * Documento - Imprime relatorio direto sem prompt
     *--------------------------------------------------------------------------
     PROCEDURE Documento()
-        LOCAL loc_lSucesso
+        LOCAL loc_lSucesso, loc_lContinuar
         loc_lSucesso = .F.
+        loc_lContinuar = .T.
         TRY
             IF !THIS.PrepararDados()
                 loc_lSucesso = .F.
-                RETURN loc_lSucesso
+                loc_lContinuar = .F.
             ENDIF
-            IF THIS.this_nTipoRelatorio = 1
-                REPORT FORM (THIS.this_cArqRelReduzido) TO PRINTER
-            ELSE
-                REPORT FORM (THIS.this_cArqRelExpandido) TO PRINTER
+            IF loc_lContinuar
+                IF THIS.this_nTipoRelatorio = 1
+                    REPORT FORM (THIS.this_cArqRelReduzido) TO PRINTER
+                ELSE
+                    REPORT FORM (THIS.this_cArqRelExpandido) TO PRINTER
+                ENDIF
+                loc_lSucesso = .T.
             ENDIF
-            loc_lSucesso = .T.
         CATCH TO loc_oErro
             THIS.this_cMensagemErro = loc_oErro.Message
             MsgErro(loc_oErro.Message, "Erro")

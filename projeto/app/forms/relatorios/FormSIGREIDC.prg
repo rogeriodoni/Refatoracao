@@ -571,12 +571,14 @@ DEFINE CLASS FormSIGREIDC AS FormBase
     *   e reposiciona o foco no primeiro filtro (CdGrupo).
     *--------------------------------------------------------------------------
     PROCEDURE AlternarPagina(par_nPagina)
-        LOCAL loc_nDestino, loc_oPgf, loc_oPg
+        LOCAL loc_nDestino, loc_oPgf, loc_oPg, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             loc_oPgf = THIS.pgf_4c_Paginas
             IF VARTYPE(loc_oPgf) != "O"
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
 
             IF PCOUNT() = 0 OR VARTYPE(par_nPagina) != "N"
                 loc_nDestino = 1
@@ -594,6 +596,7 @@ DEFINE CLASS FormSIGREIDC AS FormBase
             loc_oPg = loc_oPgf.Pages(loc_nDestino)
             IF VARTYPE(loc_oPg) = "O" AND PEMSTATUS(loc_oPg, "txt_4c_CdGrupo", 5)
                 loc_oPg.txt_4c_CdGrupo.SetFocus()
+            ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro AlternarPagina")
@@ -1162,11 +1165,13 @@ DEFINE CLASS FormSIGREIDC AS FormBase
     ENDPROC
 
     PROTECTED PROCEDURE BOParaForm()
-        LOCAL loc_oPg
+        LOCAL loc_oPg, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             IF VARTYPE(THIS.this_oRelatorio) != "O"
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             loc_oPg = THIS.pgf_4c_Paginas.Page1
             WITH THIS.this_oRelatorio
                 loc_oPg.txt_4c_CdGrupo.Value  = .this_cCdGrupo
@@ -1178,6 +1183,7 @@ DEFINE CLASS FormSIGREIDC AS FormBase
                 loc_oPg.chk_4c_OptLogo.Value  = IIF(.this_lImprimirLogo, 1, 0)
             ENDWITH
             THIS.AtualizarEstadoCamposDescricao()
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
         ENDTRY

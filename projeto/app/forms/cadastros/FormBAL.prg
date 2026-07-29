@@ -4078,14 +4078,16 @@ DEFINE CLASS FormBAL AS FormBase
     * BtnImagemClick - Exibe imagem do produto selecionado
     *--------------------------------------------------------------------------
     PROCEDURE BtnImagemClick()
-        LOCAL loc_cProd, loc_cSQL, loc_nRes, loc_cImagem, loc_oPg3
+        LOCAL loc_cProd, loc_cSQL, loc_nRes, loc_cImagem, loc_oPg3, loc_lContinuar
         loc_oPg3 = THIS.pgf_4c_Paginas.Page3
 
+        loc_lContinuar = .T.
         TRY
             loc_cProd = ALLTRIM(loc_oPg3.txt_4c_Prod.Value)
             IF EMPTY(loc_cProd)
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
 
             loc_cSQL = "SELECT TOP 1 imagem FROM SigCdPro WHERE cpros = " + EscaparSQL(loc_cProd)
             loc_nRes = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_ImgProd")
@@ -4101,6 +4103,7 @@ DEFINE CLASS FormBAL AS FormBase
             ENDIF
             IF USED("cursor_4c_ImgProd")
                 USE IN cursor_4c_ImgProd
+            ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "FormBAL.BtnImagemClick")

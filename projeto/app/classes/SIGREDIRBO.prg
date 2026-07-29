@@ -1,4 +1,4 @@
-*==============================================================================
+﻿*==============================================================================
 * SIGREDIRBO.PRG
 * Business Object - Demonstrativo de Retencao de Impostos
 * CSLL, COFINS e PIS/PASEP
@@ -232,15 +232,18 @@ DEFINE CLASS SIGREDIRBO AS RelatorioBase
     * Imprimir - Prepara dados e envia relatorio para impressora (sem dialogo)
     *--------------------------------------------------------------------------
     PROCEDURE Imprimir()
-        LOCAL loc_lSucesso
+        LOCAL loc_lSucesso, loc_lContinuar
         loc_lSucesso = .F.
+        loc_lContinuar = .T.
         TRY
             IF !THIS.PrepararDados()
                 loc_lSucesso = .F.
-                RETURN loc_lSucesso
+                loc_lContinuar = .F.
             ENDIF
-            REPORT FORM (gc_4c_CaminhoReports + THIS.this_cArquivoFRX) TO PRINTER NOCONSOLE
-            loc_lSucesso = .T.
+            IF loc_lContinuar
+                REPORT FORM (gc_4c_CaminhoReports + THIS.this_cArquivoFRX) TO PRINTER NOCONSOLE
+                loc_lSucesso = .T.
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
             THIS.this_cMensagemErro = loc_oErro.Message
@@ -252,15 +255,18 @@ DEFINE CLASS SIGREDIRBO AS RelatorioBase
     * ImprimirComPrompt - Prepara dados e abre dialogo de impressao
     *--------------------------------------------------------------------------
     PROCEDURE ImprimirComPrompt()
-        LOCAL loc_lSucesso
+        LOCAL loc_lSucesso, loc_lContinuar
         loc_lSucesso = .F.
+        loc_lContinuar = .T.
         TRY
             IF !THIS.PrepararDados()
                 loc_lSucesso = .F.
-                RETURN loc_lSucesso
+                loc_lContinuar = .F.
             ENDIF
-            REPORT FORM (gc_4c_CaminhoReports + THIS.this_cArquivoFRX) TO PRINTER PROMPT NOCONSOLE
-            loc_lSucesso = .T.
+            IF loc_lContinuar
+                REPORT FORM (gc_4c_CaminhoReports + THIS.this_cArquivoFRX) TO PRINTER PROMPT NOCONSOLE
+                loc_lSucesso = .T.
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
             THIS.this_cMensagemErro = loc_oErro.Message
@@ -272,15 +278,18 @@ DEFINE CLASS SIGREDIRBO AS RelatorioBase
     * Visualizar - Prepara dados e exibe relatorio em preview na tela
     *--------------------------------------------------------------------------
     PROCEDURE Visualizar()
-        LOCAL loc_lSucesso
+        LOCAL loc_lSucesso, loc_lContinuar
         loc_lSucesso = .F.
+        loc_lContinuar = .T.
         TRY
             IF !THIS.PrepararDados()
                 loc_lSucesso = .F.
-                RETURN loc_lSucesso
+                loc_lContinuar = .F.
             ENDIF
-            REPORT FORM (gc_4c_CaminhoReports + THIS.this_cArquivoFRX) PREVIEW NOCONSOLE
-            loc_lSucesso = .T.
+            IF loc_lContinuar
+                REPORT FORM (gc_4c_CaminhoReports + THIS.this_cArquivoFRX) PREVIEW NOCONSOLE
+                loc_lSucesso = .T.
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
             THIS.this_cMensagemErro = loc_oErro.Message

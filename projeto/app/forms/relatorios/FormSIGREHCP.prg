@@ -684,15 +684,19 @@ DEFINE CLASS FormSIGREHCP AS FormBase
     *   Equivalente ao procedure "visualizacao" do form legado
     *--------------------------------------------------------------------------
     PROCEDURE BtnVisualizarClick()
+        LOCAL loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             IF !THIS.ValidarFiltros()
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             THIS.FormParaRelatorio()
             IF !THIS.this_oRelatorio.Visualizar()
                 IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
                 ENDIF
+            ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;
@@ -706,15 +710,19 @@ DEFINE CLASS FormSIGREHCP AS FormBase
     *   Equivalente ao procedure "impressao" do form legado
     *--------------------------------------------------------------------------
     PROCEDURE BtnImprimirClick()
+        LOCAL loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             IF !THIS.ValidarFiltros()
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             THIS.FormParaRelatorio()
             IF !THIS.this_oRelatorio.Imprimir()
                 IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
                 MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro")
                 ENDIF
+            ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;
@@ -1104,11 +1112,13 @@ DEFINE CLASS FormSIGREHCP AS FormBase
     ENDPROC
 
     PROTECTED PROCEDURE BOParaForm()
-        LOCAL loc_oPg
+        LOCAL loc_oPg, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             IF VARTYPE(THIS.this_oRelatorio) != "O"
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             loc_oPg = THIS.pgf_4c_Paginas.Page1
             WITH THIS.this_oRelatorio
                 loc_oPg.txt_4c_DtInicial.Value  = .this_dDtInicial
@@ -1120,6 +1130,7 @@ DEFINE CLASS FormSIGREHCP AS FormBase
                 loc_oPg.opt_4c_OptTipImps.Value = .this_nTipoImps
             ENDWITH
             THIS.AtualizarEstadoCamposDescricao()
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
         ENDTRY
@@ -1164,12 +1175,14 @@ DEFINE CLASS FormSIGREHCP AS FormBase
     ENDPROC
 
     PROCEDURE AlternarPagina(par_nPagina)
-        LOCAL loc_nDestino, loc_oPgf, loc_oPg
+        LOCAL loc_nDestino, loc_oPgf, loc_oPg, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             loc_oPgf = THIS.pgf_4c_Paginas
             IF VARTYPE(loc_oPgf) != "O"
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             IF PCOUNT() = 0 OR VARTYPE(par_nPagina) != "N"
                 loc_nDestino = 1
             ELSE
@@ -1185,6 +1198,7 @@ DEFINE CLASS FormSIGREHCP AS FormBase
             loc_oPg = loc_oPgf.Pages(loc_nDestino)
             IF VARTYPE(loc_oPg) = "O" AND PEMSTATUS(loc_oPg, "txt_4c_DtInicial", 5)
                 loc_oPg.txt_4c_DtInicial.SetFocus()
+            ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro AlternarPagina")

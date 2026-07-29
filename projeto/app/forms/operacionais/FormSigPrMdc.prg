@@ -806,19 +806,22 @@ DEFINE CLASS FormSigPrMdc AS FormBase
     * abre picker para selecao.
     *--------------------------------------------------------------------------
     PROCEDURE ValidarContaAnt()
-        LOCAL loc_cValor, loc_cEncontrado
+        LOCAL loc_cValor, loc_cEncontrado, loc_lContinuar
         loc_cValor      = ""
         loc_cEncontrado = ""
+        loc_lContinuar = .T.
         TRY
             IF USED("cursor_4c_Contas") AND NOT EOF("cursor_4c_Contas")
                 loc_cValor = ALLTRIM(NVL(cursor_4c_Contas.ContaAnt, ""))
             ENDIF
             IF EMPTY(loc_cValor)
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             loc_cEncontrado = THIS.this_oBusinessObject.ValidarCodigoConta(loc_cValor)
             IF EMPTY(loc_cEncontrado)
                 THIS.AbrirLookupContaAnt()
+            ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro ao validar Conta Antiga")
@@ -831,19 +834,22 @@ DEFINE CLASS FormSigPrMdc AS FormBase
     * abre picker para selecao.
     *--------------------------------------------------------------------------
     PROCEDURE ValidarContaNov()
-        LOCAL loc_cValor, loc_cEncontrado
+        LOCAL loc_cValor, loc_cEncontrado, loc_lContinuar
         loc_cValor      = ""
         loc_cEncontrado = ""
+        loc_lContinuar = .T.
         TRY
             IF USED("cursor_4c_Contas") AND NOT EOF("cursor_4c_Contas")
                 loc_cValor = ALLTRIM(NVL(cursor_4c_Contas.ContaNov, ""))
             ENDIF
             IF EMPTY(loc_cValor)
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             loc_cEncontrado = THIS.this_oBusinessObject.ValidarCodigoConta(loc_cValor)
             IF EMPTY(loc_cEncontrado)
                 THIS.AbrirLookupContaNov()
+            ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro ao validar Conta Nova")

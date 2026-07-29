@@ -1087,11 +1087,13 @@ DEFINE CLASS FormSigReAac AS FormBase
     *   util para restaurar o estado de filtros apos PrepararDados.
     *--------------------------------------------------------------------------
     PROTECTED PROCEDURE BOParaForm()
-        LOCAL loc_oPg
+        LOCAL loc_oPg, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             IF VARTYPE(THIS.this_oRelatorio) != "O"
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             loc_oPg = THIS.pgf_4c_Paginas.Page1
             WITH THIS.this_oRelatorio
                 loc_oPg.txt_4c_CUsuario.Value = NVL(.this_cCUsuario, "")
@@ -1100,6 +1102,7 @@ DEFINE CLASS FormSigReAac AS FormBase
                 loc_oPg.txt_4c_DGrupo.Value   = NVL(.this_cDGrupo, "")
             ENDWITH
             THIS.AtualizarEstadoCampos()
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
         ENDTRY

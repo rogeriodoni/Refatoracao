@@ -434,7 +434,7 @@ DEFINE CLASS Formsigreche AS FormBase
         loc_lSucesso = .F.
         TRY
             THIS.FormParaRelatorio()
-            IF !THIS.this_oRelatorio.Validar()
+            IF !THIS.this_oRelatorio.ValidarDados()
                 MsgAviso(THIS.this_oRelatorio.ObterMensagemErro(), "Excel")
                 RETURN
             ENDIF
@@ -1096,18 +1096,27 @@ DEFINE CLASS Formsigreche AS FormBase
             .BackColor    = RGB(255, 255, 255)
             .GridLineColor = RGB(238, 238, 238)
             .HighlightStyle = 2
+            .HeaderHeight = 0
             .Visible      = .T.
 
             *-- Coluna 1: CheckBox para marcar operacao (LOGICAL)
             WITH .Column1
-                .Width   = 22
-                .HeaderHeight       = 0
+                .Width     = 22
+                .Movable   = .F.
                 .Resizable = .F.
+                .Sparse    = .F.
+                .ReadOnly  = .F.
                 .AddObject("Check1", "CheckBox")
                 WITH .Check1
-                    .Caption  = ""
-                    .Value    = 0
-                    .Visible  = .T.
+                    .Caption   = ""
+                    .Alignment = 0
+                    .ReadOnly  = .F.
+                    .Visible   = .T.
+                    .Top       = 9
+                    .Left      = 2
+                    .Height    = 17
+                    .Width     = 22
+                    .Value     = 0
                 ENDWITH
                 .CurrentControl  = "Check1"
                 .ControlSource   = "cursor_4c_Operacoes.Marcas"
@@ -1176,18 +1185,27 @@ DEFINE CLASS Formsigreche AS FormBase
             .BackColor    = RGB(255, 255, 255)
             .GridLineColor = RGB(238, 238, 238)
             .HighlightStyle = 2
+            .HeaderHeight = 0
             .Visible      = .T.
 
             *-- Coluna 1: CheckBox para marcar campo (LOGICAL)
             WITH .Column1
-                .Width   = 22
-                .HeaderHeight       = 0
+                .Width     = 22
+                .Movable   = .F.
                 .Resizable = .F.
+                .Sparse    = .F.
+                .ReadOnly  = .F.
                 .AddObject("Check1", "CheckBox")
                 WITH .Check1
-                    .Caption  = ""
-                    .Value    = 0
-                    .Visible  = .T.
+                    .Caption   = ""
+                    .Alignment = 0
+                    .ReadOnly  = .F.
+                    .Visible   = .T.
+                    .Top       = 9
+                    .Left      = 2
+                    .Height    = 17
+                    .Width     = 22
+                    .Value     = 0
                 ENDWITH
                 .CurrentControl  = "Check1"
                 .ControlSource   = "cursor_4c_Imprimir.Marcas"
@@ -1517,24 +1535,47 @@ DEFINE CLASS Formsigreche AS FormBase
     ENDPROC
 
     PROCEDURE AbrirBuscaEmpresa()
-        LOCAL loLookup, loc_lSucesso
+        LOCAL loLookup, loc_cVal, loc_cCursor, loc_cSQL, loc_lSucesso
         loc_lSucesso = .F.
+        loc_cCursor  = "cursor_4c_EmpLst"
+        loc_cVal     = ALLTRIM(NVL(THIS.txt_4c_CdEmpresa.Value, ""))
         TRY
-            loLookup = CREATEOBJECT("FormBuscaAuxiliar")
-            IF VARTYPE(loLookup) = "O"
-                loLookup.this_cCursorDestino = "cursor_4c_EmpLst"
-                loLookup.ConfigurarBusca("SigCdEmp", "cEmps", "Razas", ;
-                    "Empresa", ALLTRIM(THIS.txt_4c_CdEmpresa.Value))
-                loLookup.Show()
-                IF !EMPTY(ALLTRIM(NVL(loLookup.this_cCodigoSelecionado, "")))
-                    THIS.txt_4c_CdEmpresa.Value = ALLTRIM(loLookup.this_cCodigoSelecionado)
-                    THIS.txt_4c_DsEmpresa.Value = ALLTRIM(loLookup.this_cDescricaoSelecionada)
-                ENDIF
-                loLookup = .NULL.
-                loc_lSucesso = .T.
+            *-- Init-with-params dispara SQLEXEC interno (SELECT SigCdEmp WHERE Cemps LIKE valor%);
+            *-- ConfigurarBusca nao existe em FormBuscaAuxiliar (so ConfigurarBuscaCursor)
+            loLookup = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, "SigCdEmp", ;
+                loc_cCursor, "Cemps", loc_cVal, "Empresa", .T., .T., "")
+            IF VARTYPE(loLookup) != "O"
+                RETURN .F.
             ENDIF
+            IF loLookup.this_lSelecionou AND loLookup.this_lAchouRegistro
+                *-- match direto pelo valor digitado
+                IF USED(loc_cCursor)
+                    THIS.txt_4c_CdEmpresa.Value = ALLTRIM(EVALUATE(loc_cCursor + ".Cemps"))
+                    THIS.txt_4c_DsEmpresa.Value = ALLTRIM(EVALUATE(loc_cCursor + ".Razas"))
+                ENDIF
+            ELSE
+                *-- fallback: popular cursor completo e abrir picker
+                IF USED(loc_cCursor)
+                    USE IN (loc_cCursor)
+                ENDIF
+                loc_cSQL = "SELECT * FROM SigCdEmp ORDER BY Cemps"
+                IF SQLEXEC(gnConnHandle, loc_cSQL, loc_cCursor) < 1
+                    MsgAviso("N" + CHR(227) + "o foi poss" + CHR(237) + "vel carregar empresas.", "Empresa")
+                    RETURN .F.
+                ENDIF
+                loLookup.mAddColuna("Cemps", "", "C" + CHR(243) + "digo")
+                loLookup.mAddColuna("Razas", "", "Raz" + CHR(227) + "o Social")
+                loLookup.Show()
+                IF loLookup.this_lSelecionou AND USED(loc_cCursor)
+                    THIS.txt_4c_CdEmpresa.Value = ALLTRIM(EVALUATE(loc_cCursor + ".Cemps"))
+                    THIS.txt_4c_DsEmpresa.Value = ALLTRIM(EVALUATE(loc_cCursor + ".Razas"))
+                ENDIF
+            ENDIF
+            loLookup = .NULL.
+            loc_lSucesso = .T.
         CATCH TO loc_oErro
-            MsgErro(loc_oErro.Message, "AbrirBuscaEmpresa")
+            MsgErro(loc_oErro.Message + CHR(13) + "Linha: " + TRANSFORM(loc_oErro.LineNo), ;
+                "AbrirBuscaEmpresa")
         ENDTRY
         RETURN loc_lSucesso
     ENDPROC

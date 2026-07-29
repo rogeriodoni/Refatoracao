@@ -1398,11 +1398,13 @@ DEFINE CLASS Formsigreffn AS FormBase
     * LimparCampos - Inicializa campos de filtro com valores padr" + CHR(227) + "o
     *--------------------------------------------------------------------------
     PROCEDURE LimparCampos()
-        LOCAL loc_oPag, loc_oErro
+        LOCAL loc_oPag, loc_oErro, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             IF VARTYPE(THIS.pgf_4c_Paginas) != "O"
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             loc_oPag = THIS.pgf_4c_Paginas.Page1
 
             IF VARTYPE(THIS.this_oRelatorio) = "O"
@@ -1434,6 +1436,7 @@ DEFINE CLASS Formsigreffn AS FormBase
             loc_oPag.obj_4c_Opt_situa.Value             = 2
             loc_oPag.obj_4c_Opt_saldo.Value             = 1
 
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "LimparCampos")
         ENDTRY
@@ -1940,17 +1943,20 @@ DEFINE CLASS Formsigreffn AS FormBase
     *   Quando "Listar Atrasos = N" + CHR(227) + "o" (Value=2): desabilita ConsidAtra
     *--------------------------------------------------------------------------
     PROCEDURE OptListaAtraChange()
-        LOCAL loc_oPag, loc_oErro
+        LOCAL loc_oPag, loc_oErro, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             IF VARTYPE(THIS.pgf_4c_Paginas) != "O"
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             loc_oPag = THIS.pgf_4c_Paginas.Page1
             IF loc_oPag.obj_4c_Opt_lista_atra.Value = 2
                 loc_oPag.obj_4c_Opt_consid_atra.Value   = 2
                 loc_oPag.obj_4c_Opt_consid_atra.Enabled = .F.
             ELSE
                 loc_oPag.obj_4c_Opt_consid_atra.Enabled = .T.
+            ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "OptListaAtraChange")
@@ -2038,11 +2044,13 @@ DEFINE CLASS Formsigreffn AS FormBase
     * HabilitarCampos - Habilita todos os campos de filtro para edicao
     *--------------------------------------------------------------------------
     PROCEDURE HabilitarCampos()
-        LOCAL loc_oPag, loc_oErro
+        LOCAL loc_oPag, loc_oErro, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             IF VARTYPE(THIS.pgf_4c_Paginas) != "O"
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             loc_oPag = THIS.pgf_4c_Paginas.Page1
             loc_oPag.txt_4c__dt_inicial.ReadOnly     = .F.
             loc_oPag.txt_4c__dt_final.ReadOnly       = .F.
@@ -2060,6 +2068,7 @@ DEFINE CLASS Formsigreffn AS FormBase
             loc_oPag.obj_4c_Opt_saldo.Enabled        = .T.
             loc_oPag.txt_4c__ds_moeda.ReadOnly = !EMPTY(ALLTRIM(loc_oPag.txt_4c__cd_moeda.Value))
             loc_oPag.txt_4c_ds_moedl.ReadOnly  = !EMPTY(ALLTRIM(loc_oPag.txt_4c_cd_moedl.Value))
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "HabilitarCampos")
         ENDTRY

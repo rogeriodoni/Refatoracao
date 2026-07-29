@@ -585,11 +585,13 @@ DEFINE CLASS Formsigreani AS FormBase
     ENDPROC
 
     PROTECTED PROCEDURE BOParaForm()
-        LOCAL loc_oPg
+        LOCAL loc_oPg, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             IF VARTYPE(THIS.this_oRelatorio) != "O"
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             loc_oPg = THIS.pgf_4c_Paginas.Page1
             WITH THIS.this_oRelatorio
                 IF !EMPTY(.this_dDtInicial)
@@ -599,6 +601,7 @@ DEFINE CLASS Formsigreani AS FormBase
                     loc_oPg.txt_4c_DtFinal.Value = .this_dDtFinal
                 ENDIF
             ENDWITH
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
         ENDTRY

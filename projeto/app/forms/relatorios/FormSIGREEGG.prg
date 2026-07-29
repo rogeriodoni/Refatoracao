@@ -660,11 +660,13 @@ DEFINE CLASS FormSIGREEGG AS FormBase
     *   DataPos = DATA() (conforme Init() do BO); opt_custo = 2 (Nao)
     *--------------------------------------------------------------------------
     PROCEDURE LimparCampos()
-        LOCAL loc_oPagina
+        LOCAL loc_oPagina, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             IF VARTYPE(THIS.pgf_4c_Paginas) != "O"
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             loc_oPagina = THIS.pgf_4c_Paginas.Page1
 
             loc_oPagina.txt_4c_Empresa.Value     = ""
@@ -683,6 +685,7 @@ DEFINE CLASS FormSIGREEGG AS FormBase
                 loc_oPagina.txt_4c_DataPos.Value = THIS.this_oRelatorio.this_dDataPos
             ELSE
                 loc_oPagina.txt_4c_DataPos.Value = DATE()
+            ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
@@ -1236,12 +1239,16 @@ DEFINE CLASS FormSIGREEGG AS FormBase
     *   Equivale ao btnReport.Visualiza.Click -> PROCEDURE visualizacao do original
     *--------------------------------------------------------------------------
     PROCEDURE BtnVisualizarClick()
+        loc_lContinuar = .T.
+        LOCAL loc_lContinuar
         TRY
             IF !THIS.ValidarCampos()
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             THIS.FormParaRelatorio()
             THIS.this_oRelatorio.Visualizar()
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
         ENDTRY
@@ -1252,12 +1259,16 @@ DEFINE CLASS FormSIGREEGG AS FormBase
     *   Equivale ao btnReport.Imprime.Click -> PROCEDURE impressao do original
     *--------------------------------------------------------------------------
     PROCEDURE BtnImprimirClick()
+        LOCAL loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             IF !THIS.ValidarCampos()
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             THIS.FormParaRelatorio()
             THIS.this_oRelatorio.Imprimir()
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
         ENDTRY

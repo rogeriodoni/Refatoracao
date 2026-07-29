@@ -1137,11 +1137,13 @@ DEFINE CLASS FormSigReIr1 AS FormBase
     *   Original: If CsSigCdPam.GesInd = 1 -> ocultar TipoOrdem/Descricao/Barras/Localiz
     *--------------------------------------------------------------------------
     PROTECTED PROCEDURE AplicarRegraGesInd()
-        LOCAL loc_oPg
+        LOCAL loc_oPg, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             IF !USED("CsSigCdPam")
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             SELECT CsSigCdPam
             GO TOP
             IF !EOF() AND CsSigCdPam.GesInd = 1
@@ -1154,6 +1156,7 @@ DEFINE CLASS FormSigReIr1 AS FormBase
                 loc_oPg.lbl_4c_LblDescricao.Visible    = .F.
                 loc_oPg.lbl_4c_LblBarras.Visible       = .F.
                 loc_oPg.lbl_4c_LblLocalizacao.Visible  = .F.
+            ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro AplicarRegraGesInd")
@@ -1531,11 +1534,13 @@ DEFINE CLASS FormSigReIr1 AS FormBase
     * LimparCampos - Restaura filtros para valores padrao (chamado por FormBase)
     *--------------------------------------------------------------------------
     PROTECTED PROCEDURE LimparCampos()
-        LOCAL loc_oPg
+        LOCAL loc_oPg, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             IF VARTYPE(THIS.pgf_4c_Paginas) != "O"
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             loc_oPg = THIS.pgf_4c_Paginas.Page1
             loc_oPg.obj_4c_TipoRelatorio.Value   = 1
             loc_oPg.obj_4c_TipoAnalitico.Value   = 1
@@ -1553,6 +1558,7 @@ DEFINE CLASS FormSigReIr1 AS FormBase
             loc_oPg.txt_4c_Local.Value           = ""
             loc_oPg.txt_4c__Dlocal.Value         = ""
             THIS.TipoRelatorioChange()
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro LimparCampos")
         ENDTRY
@@ -1583,16 +1589,19 @@ DEFINE CLASS FormSigReIr1 AS FormBase
     ENDPROC
 
     PROCEDURE AlternarPagina(par_nPagina)
-        LOCAL loc_oPgf, loc_oPg
+        LOCAL loc_oPgf, loc_oPg, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             loc_oPgf = THIS.pgf_4c_Paginas
             IF VARTYPE(loc_oPgf) != "O"
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             loc_oPgf.ActivePage = 1
             loc_oPg = loc_oPgf.Pages(1)
             IF VARTYPE(loc_oPg) = "O" AND PEMSTATUS(loc_oPg, "txt_4c__cd_codigo", 5)
                 loc_oPg.txt_4c__cd_codigo.SetFocus()
+            ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro AlternarPagina")
@@ -1604,11 +1613,13 @@ DEFINE CLASS FormSigReIr1 AS FormBase
     ENDPROC
 
     PROTECTED PROCEDURE BOParaForm()
-        LOCAL loc_oPg
+        LOCAL loc_oPg, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             IF VARTYPE(THIS.this_oRelatorio) != "O"
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             loc_oPg = THIS.pgf_4c_Paginas.Page1
             WITH THIS.this_oRelatorio
                 loc_oPg.obj_4c_TipoRelatorio.Value   = .this_nTipoRelatorio
@@ -1628,6 +1639,7 @@ DEFINE CLASS FormSigReIr1 AS FormBase
                 loc_oPg.chk_4c_ChkImpImg.Value       = .this_lImprimirImagem
             ENDWITH
             THIS.TipoRelatorioChange()
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro BOParaForm")
         ENDTRY

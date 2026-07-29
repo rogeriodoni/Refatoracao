@@ -1162,15 +1162,17 @@ DEFINE CLASS FormDepartamento AS FormBase
     * Colunas: Usuarios (Diretor), NComps (Nome)
     *--------------------------------------------------------------------------
     PROCEDURE ValidarDiretor(par_nKeyCode, par_nShiftAltCtrl)
-        LOCAL loc_cValor, loc_oBusca
+        LOCAL loc_cValor, loc_oBusca, loc_lContinuar
         loc_cValor = ""
 
+        loc_lContinuar = .T.
         TRY
             loc_cValor = ALLTRIM(THIS.pgf_4c_Paginas.Page2.txt_4c_Diretores.Value)
 
             IF EMPTY(loc_cValor)
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
 
             loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
                 "SigCdUsu", "cursor_4c_BuscaDiretor", "Usuarios", loc_cValor, ;
@@ -1202,6 +1204,7 @@ DEFINE CLASS FormDepartamento AS FormBase
 
             IF USED("cursor_4c_BuscaDiretor")
                 USE IN cursor_4c_BuscaDiretor
+            ENDIF
             ENDIF
         CATCH TO loException
             MostrarErro("Erro em FormDepartamento.ValidarDiretor:" + CHR(13) + loException.Message, "Erro")

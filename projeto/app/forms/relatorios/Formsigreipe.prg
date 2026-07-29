@@ -958,7 +958,7 @@ DEFINE CLASS Formsigreipe AS FormBase
     *   Replica: Get_codigo.Valid do original (fwbuscaext por Codigos)
     *--------------------------------------------------------------------------
     PROCEDURE ValidarCodigo()
-        LOCAL loc_oPg1, loc_cValor, loc_oForm
+        LOCAL loc_oPg1, loc_cValor, loc_oForm, loc_lContinuar
         loc_oPg1  = THIS.pgf_4c_Paginas.Page1
         loc_cValor = ALLTRIM(loc_oPg1.txt_4c_Codigo.Value)
 
@@ -969,14 +969,16 @@ DEFINE CLASS Formsigreipe AS FormBase
             RETURN
         ENDIF
 
+        loc_lContinuar = .T.
         TRY
             loc_oForm = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
                 "SigMlItn", "cursor_4c_BuscaCodigo", "Codigos", loc_cValor, ;
                 "Sele" + CHR(231) + CHR(227) + "o")
 
             IF VARTYPE(loc_oForm) != "O"
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
 
             IF loc_oForm.this_lSelecionou AND loc_oForm.this_lAchouRegistro
                 loc_oPg1.txt_4c_Codigo.Value = ALLTRIM(cursor_4c_BuscaCodigo.Codigos)
@@ -1001,6 +1003,7 @@ DEFINE CLASS Formsigreipe AS FormBase
             ENDIF
             loc_oForm.Release()
 
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;
                 "Linha: " + TRANSFORM(loc_oErro.LineNo), "Erro")
@@ -1016,7 +1019,7 @@ DEFINE CLASS Formsigreipe AS FormBase
     *   Replica: Get_desc.Valid do original (fwbuscaext por Descs)
     *--------------------------------------------------------------------------
     PROCEDURE ValidarDesc()
-        LOCAL loc_oPg1, loc_cValor, loc_oForm
+        LOCAL loc_oPg1, loc_cValor, loc_oForm, loc_lContinuar
         loc_oPg1  = THIS.pgf_4c_Paginas.Page1
         loc_cValor = ALLTRIM(loc_oPg1.txt_4c_Desc.Value)
 
@@ -1027,14 +1030,16 @@ DEFINE CLASS Formsigreipe AS FormBase
             RETURN
         ENDIF
 
+        loc_lContinuar = .T.
         TRY
             loc_oForm = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
                 "SigMlItn", "cursor_4c_BuscaDesc", "Descs", loc_cValor, ;
                 "Sele" + CHR(231) + CHR(227) + "o")
 
             IF VARTYPE(loc_oForm) != "O"
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
 
             IF loc_oForm.this_lSelecionou AND loc_oForm.this_lAchouRegistro
                 loc_oPg1.txt_4c_Codigo.Value = ALLTRIM(cursor_4c_BuscaDesc.Codigos)
@@ -1059,6 +1064,7 @@ DEFINE CLASS Formsigreipe AS FormBase
             ENDIF
             loc_oForm.Release()
 
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;
                 "Linha: " + TRANSFORM(loc_oErro.LineNo), "Erro")
@@ -1073,17 +1079,19 @@ DEFINE CLASS Formsigreipe AS FormBase
     * AbrirBuscaCodigo - Lookup direto (F4/DblClick) em SigMlItn por Codigos
     *--------------------------------------------------------------------------
     PROCEDURE AbrirBuscaCodigo()
-        LOCAL loc_oPg1, loc_oForm
+        LOCAL loc_oPg1, loc_oForm, loc_lContinuar
         loc_oPg1 = THIS.pgf_4c_Paginas.Page1
 
+        loc_lContinuar = .T.
         TRY
             loc_oForm = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
                 "SigMlItn", "cursor_4c_BuscaCodigo", "Codigos", "", ;
                 "Sele" + CHR(231) + CHR(227) + "o")
 
             IF VARTYPE(loc_oForm) != "O"
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
 
             loc_oForm.mAddColuna("Codigos", "", CHR(67) + CHR(243) + "digo")
             loc_oForm.mAddColuna("Descs",   "", "Descri" + CHR(231) + CHR(227) + "o")
@@ -1102,6 +1110,7 @@ DEFINE CLASS Formsigreipe AS FormBase
             ENDIF
             loc_oForm.Release()
 
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;
                 "Linha: " + TRANSFORM(loc_oErro.LineNo), "Erro")
@@ -1112,17 +1121,19 @@ DEFINE CLASS Formsigreipe AS FormBase
     * AbrirBuscaDesc - Lookup direto (F4/DblClick) em SigMlItn por Descs
     *--------------------------------------------------------------------------
     PROCEDURE AbrirBuscaDesc()
-        LOCAL loc_oPg1, loc_oForm
+        LOCAL loc_oPg1, loc_oForm, loc_lContinuar
         loc_oPg1 = THIS.pgf_4c_Paginas.Page1
 
+        loc_lContinuar = .T.
         TRY
             loc_oForm = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
                 "SigMlItn", "cursor_4c_BuscaDesc", "Descs", "", ;
                 "Sele" + CHR(231) + CHR(227) + "o")
 
             IF VARTYPE(loc_oForm) != "O"
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
 
             loc_oForm.mAddColuna("Descs",   "", "Descri" + CHR(231) + CHR(227) + "o")
             loc_oForm.mAddColuna("Codigos", "", CHR(67) + CHR(243) + "digo")
@@ -1141,6 +1152,7 @@ DEFINE CLASS Formsigreipe AS FormBase
             ENDIF
             loc_oForm.Release()
 
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;
                 "Linha: " + TRANSFORM(loc_oErro.LineNo), "Erro")
@@ -1856,7 +1868,7 @@ DEFINE CLASS Formsigreipe AS FormBase
     *   4. Expande ButtonCount de obj_4c_Opt_Impressora com impressoras encontradas
     *--------------------------------------------------------------------------
     PROCEDURE CarregarImpressoras()
-        LOCAL loc_lSucesso, loc_cSQL, loc_nResult, loc_nMaxImpEti
+        LOCAL loc_lSucesso, loc_cSQL, loc_nResult, loc_nMaxImpEti, loc_lContinuar
         LOCAL loc_nPrinters, loc_nI, loc_nCnt, loc_nImp, loc_nOk, loc_lcI
         LOCAL loc_nTop, loc_nHeight, loc_oPg1, loc_oOptImp
         DIMENSION loc_laPrinters(10, 2)
@@ -1864,6 +1876,7 @@ DEFINE CLASS Formsigreipe AS FormBase
         loc_lSucesso  = .F.
         loc_nMaxImpEti = 5
 
+        loc_lContinuar = .T.
         TRY
             *-- Parametros de impressao termica: SigCdPam
             loc_nResult = SQLEXEC(gnConnHandle, "SELECT * FROM SigCdPam", "cursor_4c_SigCdPam")
@@ -1950,8 +1963,9 @@ DEFINE CLASS Formsigreipe AS FormBase
             *-- Configurar botoes da OptionGroup de impressoras
             loc_oPg1 = THIS.pgf_4c_Paginas.Page1
             IF !PEMSTATUS(loc_oPg1, "obj_4c_Opt_Impressora", 5)
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             loc_oOptImp = loc_oPg1.obj_4c_Opt_Impressora
             loc_nTop    = 10
             loc_nHeight = 15
@@ -1998,6 +2012,7 @@ DEFINE CLASS Formsigreipe AS FormBase
             loc_oOptImp.Height  = loc_nHeight
             loc_lSucesso = .T.
 
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro CarregarImpressoras")
         ENDTRY

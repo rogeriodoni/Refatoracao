@@ -2072,13 +2072,15 @@ DEFINE CLASS Formsigprcom AS FormBase
     * GradeINovaLinha - Insere linha vazia no cursor_4c_Max e posiciona grade
     *--------------------------------------------------------------------------
     PROCEDURE GradeINovaLinha()
-        LOCAL loc_cEmps
+        LOCAL loc_cEmps, loc_lContinuar
         loc_cEmps = ""
 
+        loc_lContinuar = .T.
         TRY
             IF !USED("cursor_4c_Max")
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
 
             loc_cEmps = IIF(!EMPTY(ALLTRIM(go_4c_Sistema.cCodEmpresa)), ;
                 PADR(ALLTRIM(go_4c_Sistema.cCodEmpresa), 3), SPACE(3))
@@ -2091,6 +2093,7 @@ DEFINE CLASS Formsigprcom AS FormBase
             THIS.pgf_4c_Paginas.Page2.grd_4c_Gradei.Refresh()
             THIS.pgf_4c_Paginas.Page2.grd_4c_Gradei.SetFocus()
             THIS.pgf_4c_Paginas.Page2.grd_4c_Gradei.DoScroll(2)
+            ENDIF
         CATCH TO loc_oErro
             MsgErro("Erro em GradeINovaLinha: " + loc_oErro.Message, "Erro")
         ENDTRY

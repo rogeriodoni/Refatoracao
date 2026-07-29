@@ -1,4 +1,4 @@
-*==============================================================================
+﻿*==============================================================================
 * SIGREHCPBO.PRG
 * BO para Relatorio de Historico de Custo de Produtos
 * Relatorios: SigRehc1.frx / SigRehc2.frx / SigRehc3.frx
@@ -159,20 +159,23 @@ DEFINE CLASS SIGREHCPBO AS RelatorioBase
     * Imprimir - Prepara dados e envia para impressora
     *--------------------------------------------------------------------------
     PROCEDURE Imprimir()
-        LOCAL loc_lResultado, loc_cArquivo
+        LOCAL loc_lResultado, loc_cArquivo, loc_lContinuar
+        loc_lContinuar = .T.
         loc_lResultado = .F.
         TRY
             IF !THIS.PrepararDados()
                 loc_lResultado = .F.
-                RETURN 
+                loc_lContinuar = .F.
             ENDIF
-            loc_cArquivo = THIS.ObterCaminhoRelatorio()
-            SET POINT TO [,]
-            SET SEPARATOR TO [.]
-            REPORT FORM (loc_cArquivo) TO PRINTER PROMPT NOCONSOLE
-            SET POINT TO [.]
-            SET SEPARATOR TO [,]
-            loc_lResultado = .T.
+            IF loc_lContinuar
+                loc_cArquivo = THIS.ObterCaminhoRelatorio()
+                SET POINT TO [,]
+                SET SEPARATOR TO [.]
+                REPORT FORM (loc_cArquivo) TO PRINTER PROMPT NOCONSOLE
+                SET POINT TO [.]
+                SET SEPARATOR TO [,]
+                loc_lResultado = .T.
+            ENDIF
         CATCH TO loc_oErro
             THIS.this_cMensagemErro = loc_oErro.Message
             MsgErro(loc_oErro.Message, "Erro")
@@ -184,20 +187,23 @@ DEFINE CLASS SIGREHCPBO AS RelatorioBase
     * Visualizar - Prepara dados e exibe preview na tela
     *--------------------------------------------------------------------------
     PROCEDURE Visualizar()
-        LOCAL loc_lResultado, loc_cArquivo
+        LOCAL loc_lResultado, loc_cArquivo, loc_lContinuar
+        loc_lContinuar = .T.
         loc_lResultado = .F.
         TRY
             IF !THIS.PrepararDados()
                 loc_lResultado = .F.
-                RETURN 
+                loc_lContinuar = .F.
             ENDIF
-            loc_cArquivo = THIS.ObterCaminhoRelatorio()
-            SET POINT TO [,]
-            SET SEPARATOR TO [.]
-            REPORT FORM (loc_cArquivo) PREVIEW NOCONSOLE
-            SET POINT TO [.]
-            SET SEPARATOR TO [,]
-            loc_lResultado = .T.
+            IF loc_lContinuar
+                loc_cArquivo = THIS.ObterCaminhoRelatorio()
+                SET POINT TO [,]
+                SET SEPARATOR TO [.]
+                REPORT FORM (loc_cArquivo) PREVIEW NOCONSOLE
+                SET POINT TO [.]
+                SET SEPARATOR TO [,]
+                loc_lResultado = .T.
+            ENDIF
         CATCH TO loc_oErro
             THIS.this_cMensagemErro = loc_oErro.Message
             MsgErro(loc_oErro.Message, "Erro")

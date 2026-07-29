@@ -1284,11 +1284,13 @@ DEFINE CLASS Formsigrevto AS FormBase
     ENDPROC
 
     PROTECTED PROCEDURE BOParaForm()
-        LOCAL loc_oPg
+        LOCAL loc_oPg, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             IF VARTYPE(THIS.this_oRelatorio) != "O"
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             loc_oPg = THIS.pgf_4c_Paginas.Page1
             WITH THIS.this_oRelatorio
                 loc_oPg.txt_4c_Dopes.Value      = .this_cDopes
@@ -1301,6 +1303,7 @@ DEFINE CLASS Formsigrevto AS FormBase
             ENDWITH
             THIS.AtualizarEstadoMoedaDesc()
             THIS.AtualizarEstadoDesEmpresa()
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
         ENDTRY
@@ -1346,12 +1349,14 @@ DEFINE CLASS Formsigrevto AS FormBase
     ENDPROC
 
     PROCEDURE AlternarPagina(par_nPagina)
-        LOCAL loc_nDestino, loc_oPgf, loc_oPg
+        LOCAL loc_nDestino, loc_oPgf, loc_oPg, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             loc_oPgf = THIS.pgf_4c_Paginas
             IF VARTYPE(loc_oPgf) != "O"
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             IF PCOUNT() = 0 OR VARTYPE(par_nPagina) != "N"
                 loc_nDestino = 1
             ELSE
@@ -1367,6 +1372,7 @@ DEFINE CLASS Formsigrevto AS FormBase
             loc_oPg = loc_oPgf.Pages(loc_nDestino)
             IF VARTYPE(loc_oPg) = "O" AND PEMSTATUS(loc_oPg, "txt_4c_Dopes", 5)
                 loc_oPg.txt_4c_Dopes.SetFocus()
+            ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro AlternarPagina")

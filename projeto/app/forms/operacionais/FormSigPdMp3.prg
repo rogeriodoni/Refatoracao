@@ -2260,11 +2260,13 @@ DEFINE CLASS FormSigPdMp3 AS FormBase
     * corrente, atualiza imagem se crSigCdOpd.Imagems = 1).
     *==========================================================================
     PROCEDURE BtnVisualizarClick()
-        LOCAL loc_oErro, loc_nColAtual
+        LOCAL loc_oErro, loc_nColAtual, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             IF NOT USED("xOpi")
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
 
             *-- Forca atualizacao da linha corrente disparando AfterRowColChange
             IF PEMSTATUS(THIS, "grd_4c_Dados", 5)
@@ -2276,6 +2278,7 @@ DEFINE CLASS FormSigPdMp3 AS FormBase
                 THIS.grd_4c_Dados.Refresh()
             ENDIF
 
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
         ENDTRY
@@ -2347,11 +2350,13 @@ DEFINE CLASS FormSigPdMp3 AS FormBase
     * xPesa para cada linha de xOpi.
     *==========================================================================
     PROTECTED PROCEDURE ReprocessarPesagemPorAmarra()
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             IF NOT USED("xPesa") OR NOT USED("xOpi")
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
 
             SELECT xOpi
             GO TOP
@@ -2365,6 +2370,7 @@ DEFINE CLASS FormSigPdMp3 AS FormBase
                 THIS.grd_4c_Dados.Refresh()
             ENDIF
 
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
         ENDTRY
@@ -2386,11 +2392,13 @@ DEFINE CLASS FormSigPdMp3 AS FormBase
     * - lbl_4c_LblAtencao: FontBold=.T. (replica legado Say1)
     *==========================================================================
     PROTECTED PROCEDURE ConfigurarPaginaDados()
-        LOCAL loc_oGrid, loc_oErro
+        LOCAL loc_oGrid, loc_oErro, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             IF NOT PEMSTATUS(THIS, "grd_4c_Dados", 5)
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             loc_oGrid = THIS.grd_4c_Dados
 
             *-- Grade: propriedades gerais adicionais (legado: AllowHeaderSizing=.F., Panel=1)
@@ -2489,6 +2497,7 @@ DEFINE CLASS FormSigPdMp3 AS FormBase
                 THIS.lbl_4c_LblAtencao.FontBold = .T.
             ENDIF
 
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
         ENDTRY

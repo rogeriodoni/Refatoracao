@@ -1158,12 +1158,14 @@ DEFINE CLASS FormSigPrGl2 AS FormBase
         *-- OPERACIONAL: "Alterar" = alternar ordenacao da grade entre
         *-- EmpDopNum (Movimentacao) e Entrega, replicando o toggle do legado
         *-- Headers Click. Aplica ordem oposta a atual + atualiza BackColors.
-        LOCAL loc_oErro, loc_cOrdemAtual
+        LOCAL loc_oErro, loc_cOrdemAtual, loc_lContinuar
 
+        loc_lContinuar = .T.
         TRY
             IF VARTYPE(THIS.this_oBusinessObject) != "O"
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
 
             loc_cOrdemAtual = UPPER(NVL(THIS.this_oBusinessObject.this_cOrdConta, ""))
 
@@ -1176,6 +1178,7 @@ DEFINE CLASS FormSigPrGl2 AS FormBase
                     THIS.HeaderMovimentacaoClick()
             ENDCASE
 
+            ENDIF
         CATCH TO loc_oErro
             MsgErro("Erro em BtnAlterarClick: " + loc_oErro.Message + ;
                     " LN=" + TRANSFORM(loc_oErro.LineNo), "Erro SigPrGl2")
