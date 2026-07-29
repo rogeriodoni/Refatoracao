@@ -694,11 +694,13 @@ DEFINE CLASS Formsigrehbr AS FormBase
     *   Usa PEMSTATUS - seguro nas fases parciais.
     *--------------------------------------------------------------------------
     PROCEDURE AtualizarEstadoControles()
-        LOCAL loc_oPg, loc_oErro
+        LOCAL loc_oPg, loc_oErro, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             IF VARTYPE(THIS.pgf_4c_Paginas) != "O"
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             loc_oPg = THIS.pgf_4c_Paginas.Page1
 
             IF PEMSTATUS(loc_oPg, "txt_4c_DsGrEstoque", 5) AND ;
@@ -747,6 +749,7 @@ DEFINE CLASS Formsigrehbr AS FormBase
                PEMSTATUS(loc_oPg, "txt_4c_CdCodigo", 5)
                 loc_oPg.txt_4c_DsCodigo.ReadOnly = ;
                     !EMPTY(ALLTRIM(loc_oPg.txt_4c_CdCodigo.Value))
+            ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
@@ -870,7 +873,8 @@ DEFINE CLASS Formsigrehbr AS FormBase
     ENDPROC
 
     PROCEDURE HabilitarCampos(par_lHabilitar)
-        LOCAL loc_oPg, loc_lHab, loc_oErro
+        LOCAL loc_oPg, loc_lHab, loc_oErro, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             IF PCOUNT() = 0
                 loc_lHab = .T.
@@ -878,8 +882,9 @@ DEFINE CLASS Formsigrehbr AS FormBase
                 loc_lHab = par_lHabilitar
             ENDIF
             IF VARTYPE(THIS.pgf_4c_Paginas) != "O"
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             loc_oPg = THIS.pgf_4c_Paginas.Page1
 
             IF PEMSTATUS(loc_oPg, "txt_4c_DtInicial", 5)
@@ -962,6 +967,7 @@ DEFINE CLASS Formsigrehbr AS FormBase
                     loc_oPg.txt_4c_DsCodigo.Enabled = .F.
                 ENDIF
             ENDIF
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
         ENDTRY
@@ -981,12 +987,14 @@ DEFINE CLASS Formsigrehbr AS FormBase
     ENDPROC
 
     PROCEDURE AlternarPagina(par_nPagina)
-        LOCAL loc_nDestino, loc_oPgf, loc_oPg, loc_oErro
+        LOCAL loc_nDestino, loc_oPgf, loc_oPg, loc_oErro, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             loc_oPgf = THIS.pgf_4c_Paginas
             IF VARTYPE(loc_oPgf) != "O"
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             IF PCOUNT() = 0 OR VARTYPE(par_nPagina) != "N"
                 loc_nDestino = 1
             ELSE
@@ -1002,6 +1010,7 @@ DEFINE CLASS Formsigrehbr AS FormBase
             loc_oPg = loc_oPgf.Pages(loc_nDestino)
             IF VARTYPE(loc_oPg) = "O" AND PEMSTATUS(loc_oPg, "txt_4c_DtInicial", 5)
                 loc_oPg.txt_4c_DtInicial.SetFocus()
+            ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro AlternarPagina")

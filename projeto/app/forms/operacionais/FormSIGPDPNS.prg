@@ -665,12 +665,14 @@ DEFINE CLASS FormSIGPDPNS AS FormBase
     *   o rodape no primeiro registro (igual ao Init original apos MontaGrades).
     *==========================================================================
     PROCEDURE BtnIncluirClick()
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lContinuar
 
+        loc_lContinuar = .T.
         TRY
             IF VARTYPE(THIS.this_oBusinessObject) != "O"
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
 
             WAIT WINDOW "Aguarde!!! Atualizando pendentes..." NOWAIT
             THIS.this_oBusinessObject.SelecionarDados()
@@ -695,6 +697,7 @@ DEFINE CLASS FormSIGPDPNS AS FormBase
 
             IF PEMSTATUS(THIS, "grd_4c_Dados", 5)
                 THIS.grd_4c_Dados.Column1.SetFocus()
+            ENDIF
             ENDIF
         CATCH TO loc_oErro
             WAIT CLEAR

@@ -1316,15 +1316,17 @@ DEFINE CLASS FormSigPrSdd AS FormBase
     * SigCdEmp: Cemps char(3) = codigo, Razas char(40) = nome/razao
     *==========================================================================
     PROCEDURE AbrirLookupEmpresaCodigo()
-        LOCAL loc_oPag2, loc_cCodigo, loc_cSQL, loc_nRet, loc_oErro
+        LOCAL loc_oPag2, loc_cCodigo, loc_cSQL, loc_nRet, loc_oErro, loc_lContinuar
 
+        loc_lContinuar = .T.
         TRY
             loc_oPag2   = THIS.pgf_4c_Paginas.Page2
             loc_cCodigo = ALLTRIM(loc_oPag2.txt_4c_Cd_Empresa.Value)
 
             IF EMPTY(loc_cCodigo)
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
 
             loc_cSQL = "SELECT TOP 1 Cemps, Razas FROM SigCdEmp " + ;
                        "WHERE RTRIM(Cemps) = " + EscaparSQL(loc_cCodigo)
@@ -1341,6 +1343,7 @@ DEFINE CLASS FormSigPrSdd AS FormBase
 
             IF USED("cursor_4c_BuscaEmp")
                 USE IN cursor_4c_BuscaEmp
+            ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo) + ;

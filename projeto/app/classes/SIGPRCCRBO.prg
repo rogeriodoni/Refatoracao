@@ -1,4 +1,4 @@
-*==============================================================================
+﻿*==============================================================================
 * SIGPRCCRBO.PRG
 * Business Object - Relatorio: Impressao de Produtos com Precos Alterados
 *
@@ -26,9 +26,10 @@ DEFINE CLASS SIGPRCCRBO AS RelatorioBase
     * CrProdutos deve existir em memoria (criado pelo form pai com lMarca marcado)
     *--------------------------------------------------------------------------
     PROTECTED PROCEDURE PrepararDados()
-        LOCAL loc_lSucesso, loc_cSQL, loc_nResult, loc_cEmpresa
+        LOCAL loc_lSucesso, loc_cSQL, loc_nResult, loc_cEmpresa, loc_lContinuar
         LOCAL loc_cTitulo, loc_cSubTit
         loc_lSucesso = .F.
+        loc_lContinuar = .T.
 
         TRY
             *-- Verifica se cursor CrProdutos existe (fluxo child-modal via SigPrCcc/Ccp)
@@ -40,48 +41,50 @@ DEFINE CLASS SIGPRCCRBO AS RelatorioBase
                     "formul" + CHR(225) + "rio de Marca" + CHR(231) + CHR(227) + "o de Produtos " + ;
                     "(SigPrCcc / SigPrCcp), onde se seleciona os produtos com pre" + CHR(231) + ;
                     "os alterados antes de imprimir."
-                RETURN .F.
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
 
-            *-- Busca razao social da empresa
-            loc_cEmpresa = ""
-            loc_cSQL = "SELECT Razas FROM SigCdEmp WHERE Cemps = " + ;
-                EscaparSQL(go_4c_Sistema.cCodEmpresa)
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Emp")
-            IF loc_nResult > 0
-                SELECT cursor_4c_Emp
-                GO TOP
-                IF !EOF()
-                    loc_cEmpresa = ALLTRIM(NVL(cursor_4c_Emp.Razas, ""))
+                *-- Busca razao social da empresa
+                loc_cEmpresa = ""
+                loc_cSQL = "SELECT Razas FROM SigCdEmp WHERE Cemps = " + ;
+                    EscaparSQL(go_4c_Sistema.cCodEmpresa)
+                loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Emp")
+                IF loc_nResult > 0
+                    SELECT cursor_4c_Emp
+                    GO TOP
+                    IF !EOF()
+                        loc_cEmpresa = ALLTRIM(NVL(cursor_4c_Emp.Razas, ""))
+                    ENDIF
+                    USE IN cursor_4c_Emp
                 ENDIF
-                USE IN cursor_4c_Emp
+
+                *-- Monta cursor de cabecalho (alias legado: CsCabecalho)
+                loc_cTitulo = "Rela" + CHR(231) + CHR(227) + "o de Produtos com Pre" + CHR(231) + "o Alterado "
+                loc_cSubTit = "Em " + DTOC(DATE())
+
+                IF USED("CsCabecalho")
+                    USE IN CsCabecalho
+                ENDIF
+                CREATE CURSOR CsCabecalho (cb_empresa C(80), titulo C(80), SubTitulo C(80))
+                INSERT INTO CsCabecalho (cb_empresa, titulo, SubTitulo) ;
+                    VALUES (loc_cEmpresa, loc_cTitulo, loc_cSubTit)
+
+                *-- Monta cursor de relatorio filtrando produtos marcados (alias legado: CsRelatorio)
+                IF USED("CsRelatorio")
+                    USE IN CsRelatorio
+                ENDIF
+                SELECT * FROM CrProdutos WHERE lMarca = 1 INTO CURSOR CsRelatorio ORDER BY Cpros
+                SELECT CsRelatorio
+                GO TOP
+
+                IF RECCOUNT("CsRelatorio") = 0
+                    THIS.this_cMensagemErro = "Nenhum produto marcado para impress" + CHR(227) + "o."
+                    loc_lSucesso = .F.
+                ENDIF
+
+                loc_lSucesso = .T.
             ENDIF
-
-            *-- Monta cursor de cabecalho (alias legado: CsCabecalho)
-            loc_cTitulo = "Rela" + CHR(231) + CHR(227) + "o de Produtos com Pre" + CHR(231) + "o Alterado "
-            loc_cSubTit = "Em " + DTOC(DATE())
-
-            IF USED("CsCabecalho")
-                USE IN CsCabecalho
-            ENDIF
-            CREATE CURSOR CsCabecalho (cb_empresa C(80), titulo C(80), SubTitulo C(80))
-            INSERT INTO CsCabecalho (cb_empresa, titulo, SubTitulo) ;
-                VALUES (loc_cEmpresa, loc_cTitulo, loc_cSubTit)
-
-            *-- Monta cursor de relatorio filtrando produtos marcados (alias legado: CsRelatorio)
-            IF USED("CsRelatorio")
-                USE IN CsRelatorio
-            ENDIF
-            SELECT * FROM CrProdutos WHERE lMarca = 1 INTO CURSOR CsRelatorio ORDER BY Cpros
-            SELECT CsRelatorio
-            GO TOP
-
-            IF RECCOUNT("CsRelatorio") = 0
-                THIS.this_cMensagemErro = "Nenhum produto marcado para impress" + CHR(227) + "o."
-                loc_lSucesso = .F.
-            ENDIF
-
-            loc_lSucesso = .T.
 
         CATCH TO loc_oErro
             THIS.this_cMensagemErro = "Erro ao preparar dados: " + loc_oErro.Message

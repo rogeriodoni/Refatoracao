@@ -1202,7 +1202,8 @@ DEFINE CLASS FormSigPrEs1 AS FormBase
     * Substituto canonico de fAcessoEmpresa()
     *===========================================================================
     PROCEDURE AbrirBuscaEmpresa(par_cModo)
-        LOCAL loc_oBusca, loc_nResultado, loc_cSQL
+        LOCAL loc_oBusca, loc_nResultado, loc_cSQL, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             IF par_cModo = "C"
                 loc_cSQL = "SELECT TOP 200 Cemps AS Cemps, Razas AS Razas FROM SigCdEmp ORDER BY Cemps"
@@ -1216,8 +1217,9 @@ DEFINE CLASS FormSigPrEs1 AS FormBase
 
             loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaEmp")
             IF loc_nResultado < 1
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
 
             loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, "", ;
                 "cursor_4c_BuscaEmp", "Cemps", "", ;
@@ -1234,6 +1236,7 @@ DEFINE CLASS FormSigPrEs1 AS FormBase
             IF USED("cursor_4c_BuscaEmp")
                 USE IN cursor_4c_BuscaEmp
             ENDIF
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro AbrirBuscaEmpresa")
         ENDTRY
@@ -1243,7 +1246,8 @@ DEFINE CLASS FormSigPrEs1 AS FormBase
     * AbrirBuscaOperacao - Abre picker de operacao (SigCdOpe.Dopes)
     *===========================================================================
     PROCEDURE AbrirBuscaOperacao(par_cValor)
-        LOCAL loc_oBusca, loc_nResultado, loc_cSQL, loc_cWhere
+        LOCAL loc_oBusca, loc_nResultado, loc_cSQL, loc_cWhere, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             loc_cWhere = ""
             IF !EMPTY(ALLTRIM(par_cValor))
@@ -1258,8 +1262,9 @@ DEFINE CLASS FormSigPrEs1 AS FormBase
 
             loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaOpe")
             IF loc_nResultado < 1
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
 
             loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, "", ;
                 "cursor_4c_BuscaOpe", "Dopes", "", ;
@@ -1274,6 +1279,7 @@ DEFINE CLASS FormSigPrEs1 AS FormBase
             IF USED("cursor_4c_BuscaOpe")
                 USE IN cursor_4c_BuscaOpe
             ENDIF
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro AbrirBuscaOperacao")
         ENDTRY
@@ -1283,7 +1289,8 @@ DEFINE CLASS FormSigPrEs1 AS FormBase
     * AbrirBuscaMoeda - Abre picker de moeda (SigCdMoe)
     *===========================================================================
     PROCEDURE AbrirBuscaMoeda(par_cModo, par_cValor)
-        LOCAL loc_oBusca, loc_nResultado, loc_cSQL, loc_cWhere
+        LOCAL loc_oBusca, loc_nResultado, loc_cSQL, loc_cWhere, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             IF par_cModo = "C"
                 loc_cWhere = IIF(EMPTY(ALLTRIM(par_cValor)), "", ;
@@ -1303,8 +1310,9 @@ DEFINE CLASS FormSigPrEs1 AS FormBase
 
             loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaMoe")
             IF loc_nResultado < 1
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
 
             loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, "", ;
                 "cursor_4c_BuscaMoe", IIF(par_cModo = "C", "CMoes", "DMoes"), "", ;
@@ -1321,6 +1329,7 @@ DEFINE CLASS FormSigPrEs1 AS FormBase
             IF USED("cursor_4c_BuscaMoe")
                 USE IN cursor_4c_BuscaMoe
             ENDIF
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro AbrirBuscaMoeda")
         ENDTRY
@@ -1331,7 +1340,8 @@ DEFINE CLASS FormSigPrEs1 AS FormBase
     * Substituto canonico de fAcessoContas()
     *===========================================================================
     PROCEDURE AbrirBuscaConta(par_cModo, par_cGrupo, par_cValor)
-        LOCAL loc_oBusca, loc_nResultado, loc_cSQL, loc_cWhere
+        LOCAL loc_oBusca, loc_nResultado, loc_cSQL, loc_cWhere, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             IF par_cModo = "C"
                 loc_cWhere = "WHERE IClis LIKE " + EscaparSQL(ALLTRIM(par_cValor) + "%")
@@ -1356,8 +1366,9 @@ DEFINE CLASS FormSigPrEs1 AS FormBase
 
             loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaCli")
             IF loc_nResultado < 1
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
 
             loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, "", ;
                 "cursor_4c_BuscaCli", IIF(par_cModo = "C", "IClis", "RClis"), "", ;
@@ -1375,6 +1386,7 @@ DEFINE CLASS FormSigPrEs1 AS FormBase
             IF USED("cursor_4c_BuscaCli")
                 USE IN cursor_4c_BuscaCli
             ENDIF
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro AbrirBuscaConta")
         ENDTRY
@@ -1385,7 +1397,8 @@ DEFINE CLASS FormSigPrEs1 AS FormBase
     * Usa grupo padrao de vendedores (this_oBusinessObject.this_cGrPadVens)
     *===========================================================================
     PROCEDURE AbrirBuscaResponsavel(par_cModo, par_cValor)
-        LOCAL loc_oBusca, loc_nResultado, loc_cSQL, loc_cWhere, loc_cGrPadVens
+        LOCAL loc_oBusca, loc_nResultado, loc_cSQL, loc_cWhere, loc_cGrPadVens, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             loc_cGrPadVens = ""
             IF VARTYPE(THIS.this_oBusinessObject) = "O"
@@ -1420,8 +1433,9 @@ DEFINE CLASS FormSigPrEs1 AS FormBase
 
             loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaResp")
             IF loc_nResultado < 1
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
 
             loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, "", ;
                 "cursor_4c_BuscaResp", IIF(par_cModo = "C", "IClis", "RClis"), "", ;
@@ -1437,6 +1451,7 @@ DEFINE CLASS FormSigPrEs1 AS FormBase
 
             IF USED("cursor_4c_BuscaResp")
                 USE IN cursor_4c_BuscaResp
+            ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro AbrirBuscaResponsavel")
@@ -1644,7 +1659,8 @@ DEFINE CLASS FormSigPrEs1 AS FormBase
     * AbrirBuscaGrupoContabil - Picker SigCdGcr (codigos/descrs com r)
     *===========================================================================
     PROCEDURE AbrirBuscaGrupoContabil(par_cModo, par_cValor)
-        LOCAL loc_oBusca, loc_nResultado, loc_cSQL, loc_cWhere
+        LOCAL loc_oBusca, loc_nResultado, loc_cSQL, loc_cWhere, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             IF par_cModo = "C"
                 loc_cWhere = IIF(EMPTY(ALLTRIM(par_cValor)), "", ;
@@ -1660,8 +1676,9 @@ DEFINE CLASS FormSigPrEs1 AS FormBase
             ENDIF
             loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaGcr")
             IF loc_nResultado < 1
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
 
             loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, "", ;
                 "cursor_4c_BuscaGcr", IIF(par_cModo = "C", "codigos", "descrs"), "", ;
@@ -1677,6 +1694,7 @@ DEFINE CLASS FormSigPrEs1 AS FormBase
 
             IF USED("cursor_4c_BuscaGcr")
                 USE IN cursor_4c_BuscaGcr
+            ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro AbrirBuscaGrupoContabil")

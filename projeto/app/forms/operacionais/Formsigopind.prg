@@ -4348,13 +4348,15 @@ DEFINE CLASS Formsigopind AS FormBase
     * par_nColIndex: indice da coluna atual (obrigatorio pelo BINDEVENT)
     *==========================================================================
     PROCEDURE GrdLancamentoAfterRowColChange(par_nColIndex)
-        LOCAL loc_oErro, loc_oPagHist, loc_lEhPrevisao
+        LOCAL loc_oErro, loc_oPagHist, loc_lEhPrevisao, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             THIS.DesabContainer()
 
             IF !USED("CrSigMvCcr") OR RECCOUNT("CrSigMvCcr") = 0 OR EOF("CrSigMvCcr")
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
 
             loc_oPagHist = THIS.pgf_4c_1.Page2
             loc_lEhPrevisao = (CrSigMvCcr.Tipo = "P")
@@ -4444,6 +4446,7 @@ DEFINE CLASS Formsigopind AS FormBase
             ENDIF
             IF PEMSTATUS(loc_oPagHist, "chk_4c_Follow", 5)
                 loc_oPagHist.chk_4c_Follow.Enabled = !loc_lEhPrevisao
+            ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro em GrdLancamentoAfterRowColChange")
@@ -5911,12 +5914,14 @@ DEFINE CLASS Formsigopind AS FormBase
     * Apenas executa se houver grupo definido e conexao ativa.
     *==========================================================================
     PROCEDURE CarregarLista()
-        LOCAL loc_cGrupo, loc_oPag1, loc_oErro
+        LOCAL loc_cGrupo, loc_oPag1, loc_oErro, loc_lContinuar
 
+        loc_lContinuar = .T.
         TRY
             IF gnConnHandle <= 0
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             loc_oPag1  = THIS.pgf_4c_1.Page1
             loc_cGrupo = ""
             IF PEMSTATUS(loc_oPag1, "txt_4c_Grupo", 5)
@@ -5924,6 +5929,7 @@ DEFINE CLASS Formsigopind AS FormBase
             ENDIF
             IF !EMPTY(loc_cGrupo)
                 THIS.MontaGrade(loc_cGrupo)
+            ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro em CarregarLista")

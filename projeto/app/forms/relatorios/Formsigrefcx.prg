@@ -1320,11 +1320,13 @@ DEFINE CLASS Formsigrefcx AS FormBase
     ENDPROC
 
     PROCEDURE LimparCampos()
-        LOCAL loc_oPg, loc_nOptCol
+        LOCAL loc_oPg, loc_nOptCol, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             IF VARTYPE(THIS.this_oRelatorio) != "O"
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             loc_oPg = THIS.pgf_4c_Paginas.Page1
 
             loc_oPg.txt_4c_CdEmpresa.Value = ALLTRIM(THIS.this_oRelatorio.this_cCdEmpresa)
@@ -1377,6 +1379,7 @@ DEFINE CLASS Formsigrefcx AS FormBase
             loc_oPg.chk_4c_ChqDetalhado.Value = THIS.this_oRelatorio.this_nChqDetalhado
             loc_oPg.chk_4c_ChkDetLan.Value    = THIS.this_oRelatorio.this_nChkDetLan
 
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "LimparCampos")
         ENDTRY

@@ -902,11 +902,13 @@ DEFINE CLASS Formsigproer AS FormBase
     * FormParaBO - Atualiza BO com estado corrente do form
     *--------------------------------------------------------------------------
     PROCEDURE FormParaBO()
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             IF VARTYPE(THIS.this_oBusinessObject) != "O"
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             WITH THIS.this_oBusinessObject
                 .this_cEndSitef       = THIS.this_cEndSitef
                 .this_cCaixa          = THIS.this_cCaixa
@@ -924,6 +926,7 @@ DEFINE CLASS Formsigproer AS FormBase
                 .this_cMensagem       = THIS.this_cMensagem
                 .this_lIdentificado   = THIS.this_lIdent
             ENDWITH
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo) + ;
                     " PROC=" + loc_oErro.Procedure, "Erro")
@@ -934,11 +937,13 @@ DEFINE CLASS Formsigproer AS FormBase
     * BOParaForm - Atualiza estado do form com dados do BO
     *--------------------------------------------------------------------------
     PROCEDURE BOParaForm()
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             IF VARTYPE(THIS.this_oBusinessObject) != "O"
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             THIS.this_nProximoComando = THIS.this_oBusinessObject.this_nProximoComando
             THIS.this_nTipoCampo      = THIS.this_oBusinessObject.this_nTipoCampo
             THIS.this_nTamanhoMinimo  = THIS.this_oBusinessObject.this_nTamanhoMinimo
@@ -947,6 +952,7 @@ DEFINE CLASS Formsigproer AS FormBase
             THIS.this_nContinua       = THIS.this_oBusinessObject.this_nContinua
             THIS.this_cMensagem       = THIS.this_oBusinessObject.this_cMensagem
             THIS.this_lIdent          = THIS.this_oBusinessObject.this_lIdentificado
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo) + ;
                     " PROC=" + loc_oErro.Procedure, "Erro")

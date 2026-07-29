@@ -1257,11 +1257,13 @@ DEFINE CLASS FormSIGREADS AS FormBase
     *   (Segunda metade: Periodo, TipoVars, TipoRel, Margem, Obs - Fase 6)
     *--------------------------------------------------------------------------
     PROCEDURE LimparCampos()
-        LOCAL loc_oPagina
+        LOCAL loc_oPagina, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             IF VARTYPE(THIS.pgf_4c_Paginas) != "O"
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             loc_oPagina = THIS.pgf_4c_Paginas.Page1
 
             IF VARTYPE(THIS.this_oRelatorio) = "O"
@@ -1289,6 +1291,7 @@ DEFINE CLASS FormSIGREADS AS FormBase
                 loc_oPagina.txt_4c_Margem.Value     = 0
             ENDIF
             loc_oPagina.obj_4c_Obs.Value = 1    && Sim selecionado por padrao (igual ao legado)
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
         ENDTRY
@@ -1405,7 +1408,8 @@ DEFINE CLASS FormSIGREADS AS FormBase
     *   Usa Modo 2 de FormBuscaAuxiliar (cursor local via BO.CarregarEmpresas)
     *--------------------------------------------------------------------------
     PROCEDURE AbrirBuscaEmpresa()
-        LOCAL loc_oBusca, loc_oPagina, loc_cCursor
+        LOCAL loc_oBusca, loc_oPagina, loc_cCursor, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             loc_oPagina = THIS.pgf_4c_Paginas.Page1
             loc_cCursor = "cursor_4c_SigrJanEmp"
@@ -1415,8 +1419,9 @@ DEFINE CLASS FormSIGREADS AS FormBase
             ENDIF
 
             IF !USED(loc_cCursor)
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
 
             loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
             IF VARTYPE(loc_oBusca) = "O"
@@ -1431,6 +1436,7 @@ DEFINE CLASS FormSIGREADS AS FormBase
                     loc_oPagina.txt_4c_Dempresa.Value = ALLTRIM(Razas)
                 ENDIF
                 loc_oBusca.Release()
+            ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
@@ -1531,13 +1537,15 @@ DEFINE CLASS FormSIGREADS AS FormBase
     * ValidarOperacao - Valida codigo de operacao via SigCdOpe (Dopes)
     *--------------------------------------------------------------------------
     PROCEDURE ValidarOperacao()
-        LOCAL loc_cCodigo, loc_cSQL, loc_nResult, loc_oPagina
+        LOCAL loc_cCodigo, loc_cSQL, loc_nResult, loc_oPagina, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             loc_oPagina = THIS.pgf_4c_Paginas.Page1
             loc_cCodigo = ALLTRIM(loc_oPagina.txt_4c_Operacao.Value)
             IF EMPTY(loc_cCodigo)
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             loc_cSQL = "SELECT TOP 1 Dopes FROM SigCdOpe WHERE Dopes = " + ;
                        EscaparSQL(loc_cCodigo)
             loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_SigrOpeVal")
@@ -1551,6 +1559,7 @@ DEFINE CLASS FormSIGREADS AS FormBase
             ENDIF
             IF USED("cursor_4c_SigrOpeVal")
                 USE IN cursor_4c_SigrOpeVal
+            ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
@@ -1756,10 +1765,13 @@ DEFINE CLASS FormSIGREADS AS FormBase
     *   Equivale ao btnReport.Visualiza.Click do legado (PROCEDURE documento = preview)
     *--------------------------------------------------------------------------
     PROCEDURE BtnVisualizarClick()
+        loc_lContinuar = .T.
+        LOCAL loc_lContinuar
         TRY
             IF !THIS.ValidarCampos()
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             THIS.FormParaRelatorio()
             *-- Guard: MsgErro apenas se ha mensagem ? ExecutarReportForm ja exibe
             *-- MsgAviso propria quando cursor esta vazio ou FRX ausente (cMensagemErro fica "")
@@ -1767,6 +1779,7 @@ DEFINE CLASS FormSIGREADS AS FormBase
                AND !EMPTY(THIS.this_oRelatorio.this_cMensagemErro)
                 MsgErro(THIS.this_oRelatorio.this_cMensagemErro, ;
                         "Relat" + CHR(243) + "rio")
+            ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
@@ -1778,15 +1791,19 @@ DEFINE CLASS FormSIGREADS AS FormBase
     *   Equivale ao btnReport.Imprime.Click do legado (PROCEDURE impressao)
     *--------------------------------------------------------------------------
     PROCEDURE BtnImprimirClick()
+        loc_lContinuar = .T.
+        LOCAL loc_lContinuar
         TRY
             IF !THIS.ValidarCampos()
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             THIS.FormParaRelatorio()
             IF !THIS.this_oRelatorio.Inserir() ;
                AND !EMPTY(THIS.this_oRelatorio.this_cMensagemErro)
                 MsgErro(THIS.this_oRelatorio.this_cMensagemErro, ;
                         "Relat" + CHR(243) + "rio")
+            ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
@@ -1922,11 +1939,13 @@ DEFINE CLASS FormSIGREADS AS FormBase
     *   Forms REPORT nao alternam modos CRUD; par_lHabilitar=.T. por padrao
     *--------------------------------------------------------------------------
     PROCEDURE HabilitarCampos(par_lHabilitar)
-        LOCAL loc_oPagina, loc_lHab
+        LOCAL loc_oPagina, loc_lHab, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             IF VARTYPE(THIS.pgf_4c_Paginas) != "O"
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             loc_oPagina = THIS.pgf_4c_Paginas.Page1
             loc_lHab    = IIF(VARTYPE(par_lHabilitar) = "L", par_lHabilitar, .T.)
 
@@ -1959,6 +1978,7 @@ DEFINE CLASS FormSIGREADS AS FormBase
             ENDIF
             IF VARTYPE(loc_oPagina.txt_4c_Margem) = "O"
                 loc_oPagina.txt_4c_Margem.Enabled   = loc_lHab
+            ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")

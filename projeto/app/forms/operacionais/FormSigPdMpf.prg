@@ -709,11 +709,13 @@ DEFINE CLASS FormSigPdMpf AS FormBase
     * consulta limpa, devolvendo o estado inicial do Init() do legado.
     *==========================================================================
     PROCEDURE BtnIncluirClick()
-        LOCAL loc_oCnt, loc_oErro
+        LOCAL loc_oCnt, loc_oErro, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             IF VARTYPE(THIS.cnt_4c_Filtros) != "O"
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             loc_oCnt = THIS.cnt_4c_Filtros
 
             loc_oCnt.txt_4c_DtInicial.Value  = DATE()
@@ -731,6 +733,7 @@ DEFINE CLASS FormSigPdMpf AS FormBase
             loc_oCnt.txt_4c_DConta.Enabled = .F.
 
             loc_oCnt.txt_4c_DtInicial.SetFocus()
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
         ENDTRY
@@ -742,11 +745,13 @@ DEFINE CLASS FormSigPdMpf AS FormBase
     * para permitir edicao imediata dos criterios de consulta.
     *==========================================================================
     PROCEDURE BtnAlterarClick()
-        LOCAL loc_oCnt, loc_oErro
+        LOCAL loc_oCnt, loc_oErro, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             IF VARTYPE(THIS.cnt_4c_Filtros) != "O"
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             loc_oCnt = THIS.cnt_4c_Filtros
 
             THIS.Enabled = .T.
@@ -759,6 +764,7 @@ DEFINE CLASS FormSigPdMpf AS FormBase
                                               EMPTY(ALLTRIM(loc_oCnt.txt_4c_Conta.Value))
 
             loc_oCnt.txt_4c_DtInicial.SetFocus()
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
         ENDTRY

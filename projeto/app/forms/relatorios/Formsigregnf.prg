@@ -446,7 +446,6 @@ DEFINE CLASS Formsigregnf AS FormBase
 
             WITH .Column1
                 .Width             = 15
-                .HeaderHeight       = 0
                 .Movable           = .F.
                 .Resizable         = .F.
                 .ReadOnly          = .F.

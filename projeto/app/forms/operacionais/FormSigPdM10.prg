@@ -1871,12 +1871,14 @@ DEFINE CLASS FormSigPdM10 AS FormBase
     * e reaplica visibilidade conforme modo CntOps. Equivalente a um "refresh".
     *==========================================================================
     PROCEDURE BtnAlterarClick()
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lContinuar
 
+        loc_lContinuar = .T.
         TRY
             IF VARTYPE(THIS.this_oBusinessObject) <> "O"
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
 
             WAIT WINDOW "Aguarde!!! Atualizando dados..." NOWAIT
             THIS.this_oBusinessObject.VerificarModoCntOps()
@@ -1910,6 +1912,7 @@ DEFINE CLASS FormSigPdM10 AS FormBase
                     THIS.cnt_4c_Ops.grd_4c_GradeMatGeral.Refresh
                 ENDIF
             ENDIF
+            ENDIF
         CATCH TO loc_oErro
             WAIT CLEAR
             MsgErro(loc_oErro.Message, "Erro BtnAlterarClick")
@@ -1924,12 +1927,14 @@ DEFINE CLASS FormSigPdM10 AS FormBase
     * para sincronizar grids relacionados, igual ao GradePedOp.AfterRowColChange.
     *==========================================================================
     PROCEDURE BtnVisualizarClick()
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lContinuar
 
+        loc_lContinuar = .T.
         TRY
             IF VARTYPE(THIS.this_oBusinessObject) <> "O"
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
 
             *-- Inverte o estado lExibeCntOps do BO e reaplica visibilidade
             THIS.this_oBusinessObject.this_lExibeCntOps = ;
@@ -1953,6 +1958,7 @@ DEFINE CLASS FormSigPdM10 AS FormBase
                         ENDIF
                     ENDIF
                 ENDIF
+            ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro BtnVisualizarClick")

@@ -1653,20 +1653,23 @@ DEFINE CLASS FormCCJ AS FormBase
     *--------------------------------------------------------------------------
     PROCEDURE ValidarDataDetalhe
         LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
-        LOCAL loc_oPg2, loc_cAlias
+        LOCAL loc_oPg2, loc_cAlias, loc_lContinuar
         loc_oPg2  = THIS.pgf_4c_Paginas.Page2
         loc_cAlias = THIS.this_oBusinessObject.this_cCursorDetalhe
 
+        loc_lContinuar = .T.
         TRY
             IF !PEMSTATUS(loc_oPg2, "grd_4c_Detalhe", 5) OR !USED(loc_cAlias)
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
 
             SELECT (loc_cAlias)
 
             IF !EOF() AND !BOF() AND !EMPTY(datas) AND YEAR(TTOD(datas)) < 1900
                 REPLACE datas WITH {}
                 loc_oPg2.grd_4c_Detalhe.Refresh()
+            ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "ValidarDataDetalhe")

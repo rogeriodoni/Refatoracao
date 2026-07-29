@@ -1025,11 +1025,13 @@ DEFINE CLASS Formsigprtef AS FormBase
     *==========================================================================
     PROTECTED PROCEDURE ProcCntTxt
     *==========================================================================
-        LOCAL loc_cHeader, loc_lcTran, loc_nSistef, loc_cSQL, loc_oErro
+        LOCAL loc_cHeader, loc_lcTran, loc_nSistef, loc_cSQL, loc_oErro, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             IF !USED("crSigFiTef") OR EOF("crSigFiTef")
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
 
             loc_nSistef = THIS.this_oBusinessObject.this_nSistef
             SELECT crSigFiTef
@@ -1085,6 +1087,7 @@ DEFINE CLASS Formsigprtef AS FormBase
                     ENDIF
                 ENDIF
             ENDWITH
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo), "Erro ProcCntTxt")
         ENDTRY

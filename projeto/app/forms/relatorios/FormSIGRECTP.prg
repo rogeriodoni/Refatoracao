@@ -786,16 +786,19 @@ DEFINE CLASS FormSIGRECTP AS FormBase
     *   Este form tem apenas 1 p" + CHR(225) + "gina (Filtros). Reposiciona foco em DtInicial.
     *--------------------------------------------------------------------------
     PROCEDURE AlternarPagina(par_nPagina)
-        LOCAL loc_oPg, loc_oErro
+        LOCAL loc_oPg, loc_oErro, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             IF VARTYPE(THIS.pgf_4c_Paginas) != "O"
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             THIS.pgf_4c_Paginas.Visible = .T.
             THIS.pgf_4c_Paginas.ActivePage = 1
             loc_oPg = THIS.pgf_4c_Paginas.Page1
             IF VARTYPE(loc_oPg) = "O" AND PEMSTATUS(loc_oPg, "txt_4c_DtInicial", 5)
                 loc_oPg.txt_4c_DtInicial.SetFocus()
+            ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro AlternarPagina")
@@ -1151,13 +1154,15 @@ DEFINE CLASS FormSIGRECTP AS FormBase
     ENDPROC
 
     PROTECTED PROCEDURE ValidarComprador()
-        LOCAL loc_cValor, loc_cSQL, loc_nResult, loc_oPg, loc_oErro
+        LOCAL loc_cValor, loc_cSQL, loc_nResult, loc_oPg, loc_oErro, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             loc_oPg    = THIS.pgf_4c_Paginas.Page1
             loc_cValor = ALLTRIM(loc_oPg.txt_4c_Comprador.Value)
             IF EMPTY(loc_cValor)
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             loc_cSQL = "SELECT RTRIM(Usuarios) AS Usuarios FROM sigcdusu" + ;
                 " WHERE CAtivos = " + EscaparSQL("S") + ;
                 " AND RTRIM(Usuarios) = " + EscaparSQL(loc_cValor)
@@ -1172,6 +1177,7 @@ DEFINE CLASS FormSIGRECTP AS FormBase
             ENDIF
             IF USED("cursor_4c_ComprVal")
                 USE IN cursor_4c_ComprVal
+            ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
@@ -1216,13 +1222,15 @@ DEFINE CLASS FormSIGRECTP AS FormBase
     ENDPROC
 
     PROTECTED PROCEDURE ValidarAprovador()
-        LOCAL loc_cValor, loc_cSQL, loc_nResult, loc_oPg, loc_oErro
+        LOCAL loc_cValor, loc_cSQL, loc_nResult, loc_oPg, loc_oErro, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             loc_oPg    = THIS.pgf_4c_Paginas.Page1
             loc_cValor = ALLTRIM(loc_oPg.txt_4c_Aprovador.Value)
             IF EMPTY(loc_cValor)
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             loc_cSQL = "SELECT RTRIM(Usuarios) AS Usuarios FROM sigcdusu" + ;
                 " WHERE CAtivos = " + EscaparSQL("S") + ;
                 " AND RTRIM(Usuarios) = " + EscaparSQL(loc_cValor)
@@ -1237,6 +1245,7 @@ DEFINE CLASS FormSIGRECTP AS FormBase
             ENDIF
             IF USED("cursor_4c_AproVal")
                 USE IN cursor_4c_AproVal
+            ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
@@ -1552,11 +1561,13 @@ DEFINE CLASS FormSIGRECTP AS FormBase
     ENDPROC
 
     PROTECTED PROCEDURE BOParaForm()
-        LOCAL loc_oPg, loc_oErro
+        LOCAL loc_oPg, loc_oErro, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             IF VARTYPE(THIS.this_oRelatorio) != "O"
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             loc_oPg = THIS.pgf_4c_Paginas.Page1
             WITH THIS.this_oRelatorio
                 loc_oPg.txt_4c_DtInicial.Value  = .this_dDtInicial
@@ -1573,6 +1584,7 @@ DEFINE CLASS FormSIGRECTP AS FormBase
                 loc_oPg.opt_4c_Aprovados.Value  = .this_nAprovados
             ENDWITH
             THIS.AtualizarEstadoCamposDescricao()
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
         ENDTRY

@@ -488,7 +488,7 @@ DEFINE CLASS FormSIGREFUN AS FormBase
     *   Valida filtros, transfere para o BO e gera o preview do REPORT FORM.
     *--------------------------------------------------------------------------
     PROCEDURE BtnVisualizarClick()
-        IF !THIS.Validar()
+        IF !THIS.ValidarDados()
             RETURN
         ENDIF
         THIS.FormParaRelatorio()
@@ -554,7 +554,7 @@ DEFINE CLASS FormSIGREFUN AS FormBase
     * BtnImprimirClick - Enviar relatorio para impressora com dialogo (Buttons(2))
     *--------------------------------------------------------------------------
     PROCEDURE BtnImprimirClick()
-        IF !THIS.Validar()
+        IF !THIS.ValidarDados()
             RETURN
         ENDIF
         THIS.FormParaRelatorio()

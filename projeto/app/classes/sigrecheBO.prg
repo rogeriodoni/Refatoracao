@@ -536,24 +536,26 @@ DEFINE CLASS sigrecheBO AS RelatorioBase
     * Imprimir - Valida, prepara dados e envia para impressora
     *--------------------------------------------------------------------------
     PROCEDURE Imprimir()
-        LOCAL loc_lSucesso
-        loc_lSucesso = .F.
+        LOCAL loc_lSucesso, loc_lContinuar
+        loc_lSucesso  = .F.
+        loc_lContinuar = .T.
         TRY
-            IF !THIS.Validar()
-                loc_lSucesso = .F.
+            IF !THIS.ValidarDados()
+                loc_lContinuar = .F.
             ENDIF
-            IF !THIS.PrepararDados()
-                loc_lSucesso = .F.
-                RETURN loc_lSucesso
+            IF loc_lContinuar AND !THIS.PrepararDados()
+                loc_lContinuar = .F.
             ENDIF
-            REPORT FORM (THIS.this_cArquivoFrx) TO PRINTER PROMPT NOCONSOLE
-            IF USED("CsCabecalho")
-                USE IN CsCabecalho
+            IF loc_lContinuar
+                REPORT FORM (THIS.this_cArquivoFrx) TO PRINTER PROMPT NOCONSOLE
+                IF USED("CsCabecalho")
+                    USE IN CsCabecalho
+                ENDIF
+                IF USED("csRelatorio")
+                    USE IN csRelatorio
+                ENDIF
+                loc_lSucesso = .T.
             ENDIF
-            IF USED("csRelatorio")
-                USE IN csRelatorio
-            ENDIF
-            loc_lSucesso = .T.
         CATCH TO loc_oErro
             THIS.this_cMensagemErro = loc_oErro.Message
             MsgErro(loc_oErro.Message, "Imprimir")
@@ -565,24 +567,26 @@ DEFINE CLASS sigrecheBO AS RelatorioBase
     * Visualizar - Valida, prepara dados e exibe preview na tela
     *--------------------------------------------------------------------------
     PROCEDURE Visualizar()
-        LOCAL loc_lSucesso
-        loc_lSucesso = .F.
+        LOCAL loc_lSucesso, loc_lContinuar
+        loc_lSucesso  = .F.
+        loc_lContinuar = .T.
         TRY
-            IF !THIS.Validar()
-                loc_lSucesso = .F.
+            IF !THIS.ValidarDados()
+                loc_lContinuar = .F.
             ENDIF
-            IF !THIS.PrepararDados()
-                loc_lSucesso = .F.
-                RETURN loc_lSucesso
+            IF loc_lContinuar AND !THIS.PrepararDados()
+                loc_lContinuar = .F.
             ENDIF
-            REPORT FORM (THIS.this_cArquivoFrx) PREVIEW NOCONSOLE
-            IF USED("CsCabecalho")
-                USE IN CsCabecalho
+            IF loc_lContinuar
+                REPORT FORM (THIS.this_cArquivoFrx) PREVIEW NOCONSOLE
+                IF USED("CsCabecalho")
+                    USE IN CsCabecalho
+                ENDIF
+                IF USED("csRelatorio")
+                    USE IN csRelatorio
+                ENDIF
+                loc_lSucesso = .T.
             ENDIF
-            IF USED("csRelatorio")
-                USE IN csRelatorio
-            ENDIF
-            loc_lSucesso = .T.
         CATCH TO loc_oErro
             THIS.this_cMensagemErro = loc_oErro.Message
             MsgErro(loc_oErro.Message, "Visualizar")

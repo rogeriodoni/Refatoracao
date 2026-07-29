@@ -858,12 +858,14 @@ DEFINE CLASS FormSigPdMfa AS FormBase
     * Abre lookup diretamente sem verificar valor preenchido
     *==========================================================================
     PROCEDURE TxtGrupoDblClick()
-        LOCAL loc_oLookup, loc_oErro
+        LOCAL loc_oLookup, loc_oErro, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             IF !USED("TmpGccr")
                 IF !THIS.this_oBusinessObject.CarregarGruposContabeis()
-                    RETURN
+                    loc_lContinuar = .F.
                 ENDIF
+            IF loc_lContinuar
             ENDIF
 
             loc_oLookup = CREATEOBJECT("FormBuscaAuxiliar", "TmpGccr", "Codigos", ;
@@ -876,6 +878,7 @@ DEFINE CLASS FormSigPdMfa AS FormBase
                     THIS.txt_4c_Grupo.Value = ALLTRIM(TmpGccr.Codigos)
                 ENDIF
                 loc_oLookup = .NULL.
+            ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro na busca de grupo")
@@ -890,12 +893,14 @@ DEFINE CLASS FormSigPdMfa AS FormBase
     * Abre lookup diretamente sem verificar valor preenchido
     *==========================================================================
     PROCEDURE TxtContaDblClick()
-        LOCAL loc_oLookup, loc_oErro
+        LOCAL loc_oLookup, loc_oErro, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             IF !USED("TmpCli")
                 IF !THIS.this_oBusinessObject.CarregarContas()
-                    RETURN
+                    loc_lContinuar = .F.
                 ENDIF
+            IF loc_lContinuar
             ENDIF
 
             loc_oLookup = CREATEOBJECT("FormBuscaAuxiliar", "TmpCli", "IClis", ;
@@ -913,6 +918,7 @@ DEFINE CLASS FormSigPdMfa AS FormBase
                     ENDIF
                 ENDIF
                 loc_oLookup = .NULL.
+            ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro na busca de conta")
@@ -936,12 +942,14 @@ DEFINE CLASS FormSigPdMfa AS FormBase
             RETURN
         ENDIF
 
-        LOCAL loc_oLookup, loc_oErro
+        LOCAL loc_oLookup, loc_oErro, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             IF !USED("TmpCli")
                 IF !THIS.this_oBusinessObject.CarregarContas()
-                    RETURN
+                    loc_lContinuar = .F.
                 ENDIF
+            IF loc_lContinuar
             ENDIF
 
             loc_oLookup = CREATEOBJECT("FormBuscaAuxiliar", "TmpCli", "RClis", ;
@@ -959,6 +967,7 @@ DEFINE CLASS FormSigPdMfa AS FormBase
                     ENDIF
                 ENDIF
                 loc_oLookup = .NULL.
+            ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro na busca de descri" + CHR(231) + CHR(227) + "o de conta")

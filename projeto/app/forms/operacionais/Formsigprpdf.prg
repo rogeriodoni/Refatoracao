@@ -934,12 +934,14 @@ DEFINE CLASS Formsigprpdf AS FormBase
     * Chamado antes de invocar Inserir/Atualizar no BO (via CmdGerarPDFClick).
     *--------------------------------------------------------------------------
     PROTECTED PROCEDURE FormParaBO()
-        LOCAL loc_oCtn, loc_oErro
+        LOCAL loc_oCtn, loc_oErro, loc_lContinuar
 
+        loc_lContinuar = .T.
         TRY
             IF VARTYPE(THIS.this_oBusinessObject) != "O"
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
 
             THIS.this_oBusinessObject.this_cDiretorio    = THIS.this_cDiretorio
             THIS.this_oBusinessObject.this_cArquivoSaida = ALLTRIM(NVL(THIS.txt_4c_TxtNomeArqSaida.Value, ""))
@@ -953,6 +955,7 @@ DEFINE CLASS Formsigprpdf AS FormBase
             THIS.this_oBusinessObject.this_cEmailAssunto   = ALLTRIM(NVL(loc_oCtn.txt_4c_TxtEmail_Assunto.Value, ""))
             THIS.this_oBusinessObject.this_cEmailCorpo     = ALLTRIM(NVL(loc_oCtn.obj_4c_EdtEmail_Corpo.Value, ""))
 
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro FormParaBO")
         ENDTRY
@@ -963,12 +966,14 @@ DEFINE CLASS Formsigprpdf AS FormBase
     * Chamado apos CarregarEmailEmpresa para propagar dados da empresa.
     *--------------------------------------------------------------------------
     PROTECTED PROCEDURE BOParaForm()
-        LOCAL loc_oCtn, loc_oErro
+        LOCAL loc_oCtn, loc_oErro, loc_lContinuar
 
+        loc_lContinuar = .T.
         TRY
             IF VARTYPE(THIS.this_oBusinessObject) != "O"
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
 
             THIS.this_cDiretorio = THIS.this_oBusinessObject.this_cDiretorio
 
@@ -986,6 +991,7 @@ DEFINE CLASS Formsigprpdf AS FormBase
                 loc_oCtn.obj_4c_TxtEmail_EnviarPara.Value = ALLTRIM(NVL(THIS.this_oParentForm.Contaemail, ""))
             ENDIF
 
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro BOParaForm")
         ENDTRY

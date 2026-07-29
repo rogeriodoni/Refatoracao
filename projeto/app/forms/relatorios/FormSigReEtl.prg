@@ -1136,11 +1136,13 @@ DEFINE CLASS FormSigReEtl AS FormBase
     *==========================================================================
 
     PROCEDURE LimparCampos()
-        LOCAL loc_oPg
+        LOCAL loc_oPg, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             IF VARTYPE(THIS.pgf_4c_Paginas) != "O"
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             loc_oPg = THIS.pgf_4c_Paginas.Page1
 
             IF VARTYPE(THIS.this_oRelatorio) = "O"
@@ -1183,6 +1185,7 @@ DEFINE CLASS FormSigReEtl AS FormBase
             loc_oPg.txt_4c_Nvl2.Enabled = .F.
             loc_oPg.txt_4c_Nvl3.Enabled = .F.
             loc_oPg.txt_4c_Nvl4.Enabled = .F.
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
         ENDTRY
@@ -2321,24 +2324,32 @@ DEFINE CLASS FormSigReEtl AS FormBase
     *==========================================================================
 
     PROCEDURE BtnVisualizarClick()
+        loc_lContinuar = .T.
+        LOCAL loc_lContinuar
         TRY
             IF !THIS.ValidarCampos()
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             THIS.FormParaRelatorio()
             THIS.this_oRelatorio.Visualizar()
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
         ENDTRY
     ENDPROC
 
     PROCEDURE BtnImprimirClick()
+        LOCAL loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             IF !THIS.ValidarCampos()
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             THIS.FormParaRelatorio()
             THIS.this_oRelatorio.Imprimir()
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
         ENDTRY

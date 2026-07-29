@@ -1362,7 +1362,6 @@ DEFINE CLASS Formsigprccp AS FormBase
             *-- Column1: CheckBox lMarca
             WITH .Column1
                 .Width        = 17
-                .HeaderHeight       = 0
                 .Alignment    = 3
                 .Movable      = .F.
                 .Resizable    = .F.
@@ -1883,13 +1882,15 @@ DEFINE CLASS Formsigprccp AS FormBase
     *==========================================================================
     PROCEDURE BtnProcessarClick()
     *==========================================================================
-        LOCAL loc_lSucesso, loc_nVaria, loc_oErro
+        LOCAL loc_lSucesso, loc_nVaria, loc_oErro, loc_lContinuar
         loc_lSucesso = .F.
+        loc_lContinuar = .T.
         TRY
             IF USED("cursor_4c_Produtos") AND RECCOUNT("cursor_4c_Produtos") > 0
                 IF !MsgConfirma("Existem Dados Gerados. Deseja Reprocessar?")
-                    RETURN
+                    loc_lContinuar = .F.
                 ENDIF
+            IF loc_lContinuar
             ENDIF
             ZAP IN cursor_4c_Produtos
 
@@ -1914,6 +1915,7 @@ DEFINE CLASS Formsigprccp AS FormBase
                 THIS.grd_4c_Produto.Column1.SetFocus()
                 THIS.grd_4c_Produto.Refresh()
                 loc_lSucesso = .T.
+            ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + " LN=" + TRANSFORM(loc_oErro.LineNo), "Erro BtnProcessarClick")
@@ -2055,14 +2057,16 @@ DEFINE CLASS Formsigprccp AS FormBase
     ENDPROC
 
     PROTECTED PROCEDURE AbrirBuscaFornecedor()
-        LOCAL loc_cVal, loc_oForm, loc_oErro
+        LOCAL loc_cVal, loc_oForm, loc_oErro, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             loc_cVal  = ALLTRIM(THIS.txt_4c_CFornecs.Value)
             loc_oForm = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
                 "SigCdCli", "cursor_4c_BuscaFor", "IClis", loc_cVal, "Fornecedores")
             IF ISNULL(loc_oForm) OR VARTYPE(loc_oForm) # "O"
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             IF !loc_oForm.this_lSelecionou
                 loc_oForm.mAddColuna("IClis", "", "C" + CHR(243) + "digo")
                 loc_oForm.mAddColuna("RClis", "", "Nome")
@@ -2078,6 +2082,7 @@ DEFINE CLASS Formsigprccp AS FormBase
                 USE IN cursor_4c_BuscaFor
             ENDIF
             loc_oForm.Release()
+            ENDIF
         CATCH TO loc_oErro
             IF USED("cursor_4c_BuscaFor")
                 USE IN cursor_4c_BuscaFor
@@ -2144,14 +2149,16 @@ DEFINE CLASS Formsigprccp AS FormBase
     ENDPROC
 
     PROTECTED PROCEDURE AbrirBuscaGrandeGrupo(par_lIni)
-        LOCAL loc_cVal, loc_oForm, loc_oErro
+        LOCAL loc_cVal, loc_oForm, loc_oErro, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             loc_cVal = ALLTRIM(IIF(par_lIni, THIS.txt_4c_MercI.Value, THIS.txt_4c_MercF.Value))
             loc_oForm = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
                 "SigCdGpr", "cursor_4c_BuscaGGr", "Codigos", loc_cVal, "Grande Grupo")
             IF ISNULL(loc_oForm) OR VARTYPE(loc_oForm) # "O"
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             IF !loc_oForm.this_lSelecionou
                 loc_oForm.mAddColuna("Codigos", "", "C" + CHR(243) + "digo")
                 loc_oForm.mAddColuna("Descs",   "", "Descri" + CHR(231) + CHR(227) + "o")
@@ -2170,6 +2177,7 @@ DEFINE CLASS Formsigprccp AS FormBase
                 USE IN cursor_4c_BuscaGGr
             ENDIF
             loc_oForm.Release()
+            ENDIF
         CATCH TO loc_oErro
             IF USED("cursor_4c_BuscaGGr")
                 USE IN cursor_4c_BuscaGGr
@@ -2236,14 +2244,16 @@ DEFINE CLASS Formsigprccp AS FormBase
     ENDPROC
 
     PROTECTED PROCEDURE AbrirBuscaGrupo(par_lIni)
-        LOCAL loc_cVal, loc_oForm, loc_oErro
+        LOCAL loc_cVal, loc_oForm, loc_oErro, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             loc_cVal  = ALLTRIM(IIF(par_lIni, THIS.txt_4c_CGrui.Value, THIS.txt_4c_CGruf.Value))
             loc_oForm = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
                 "SigCdGrp", "cursor_4c_BuscaGrp", "CGrus", loc_cVal, "Grupos")
             IF ISNULL(loc_oForm) OR VARTYPE(loc_oForm) # "O"
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             IF !loc_oForm.this_lSelecionou
                 loc_oForm.mAddColuna("CGrus", "", "C" + CHR(243) + "digo")
                 loc_oForm.mAddColuna("DGrus", "", "Descri" + CHR(231) + CHR(227) + "o")
@@ -2262,6 +2272,7 @@ DEFINE CLASS Formsigprccp AS FormBase
                 USE IN cursor_4c_BuscaGrp
             ENDIF
             loc_oForm.Release()
+            ENDIF
         CATCH TO loc_oErro
             IF USED("cursor_4c_BuscaGrp")
                 USE IN cursor_4c_BuscaGrp
@@ -2328,14 +2339,16 @@ DEFINE CLASS Formsigprccp AS FormBase
     ENDPROC
 
     PROTECTED PROCEDURE AbrirBuscaSubgrupo(par_lIni)
-        LOCAL loc_cVal, loc_oForm, loc_oErro
+        LOCAL loc_cVal, loc_oForm, loc_oErro, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             loc_cVal  = ALLTRIM(IIF(par_lIni, THIS.txt_4c_SgruI.Value, THIS.txt_4c_SgruF.Value))
             loc_oForm = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
                 "SigCdPsg", "cursor_4c_BuscaSgr", "Codigos", loc_cVal, "Subgrupos")
             IF ISNULL(loc_oForm) OR VARTYPE(loc_oForm) # "O"
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             IF !loc_oForm.this_lSelecionou
                 loc_oForm.mAddColuna("Codigos",    "", "C" + CHR(243) + "digo")
                 loc_oForm.mAddColuna("Descricaos", "", "Descri" + CHR(231) + CHR(227) + "o")
@@ -2354,6 +2367,7 @@ DEFINE CLASS Formsigprccp AS FormBase
                 USE IN cursor_4c_BuscaSgr
             ENDIF
             loc_oForm.Release()
+            ENDIF
         CATCH TO loc_oErro
             IF USED("cursor_4c_BuscaSgr")
                 USE IN cursor_4c_BuscaSgr
@@ -2420,14 +2434,16 @@ DEFINE CLASS Formsigprccp AS FormBase
     ENDPROC
 
     PROTECTED PROCEDURE AbrirBuscaUnidade(par_lIni)
-        LOCAL loc_cVal, loc_oForm, loc_oErro
+        LOCAL loc_cVal, loc_oForm, loc_oErro, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             loc_cVal  = ALLTRIM(IIF(par_lIni, THIS.txt_4c_CUnii.Value, THIS.txt_4c_CUnif.Value))
             loc_oForm = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
                 "SigCdUni", "cursor_4c_BuscaUni", "CUnis", loc_cVal, "Unidades")
             IF ISNULL(loc_oForm) OR VARTYPE(loc_oForm) # "O"
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             IF !loc_oForm.this_lSelecionou
                 loc_oForm.mAddColuna("CUnis", "", "C" + CHR(243) + "digo")
                 loc_oForm.mAddColuna("DUnis", "", "Descri" + CHR(231) + CHR(227) + "o")
@@ -2446,6 +2462,7 @@ DEFINE CLASS Formsigprccp AS FormBase
                 USE IN cursor_4c_BuscaUni
             ENDIF
             loc_oForm.Release()
+            ENDIF
         CATCH TO loc_oErro
             IF USED("cursor_4c_BuscaUni")
                 USE IN cursor_4c_BuscaUni
@@ -2512,14 +2529,16 @@ DEFINE CLASS Formsigprccp AS FormBase
     ENDPROC
 
     PROTECTED PROCEDURE AbrirBuscaLinha(par_lIni)
-        LOCAL loc_cVal, loc_oForm, loc_oErro
+        LOCAL loc_cVal, loc_oForm, loc_oErro, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             loc_cVal  = ALLTRIM(IIF(par_lIni, THIS.txt_4c_Lini.Value, THIS.txt_4c_Linf.Value))
             loc_oForm = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
                 "SigCdLin", "cursor_4c_BuscaLin", "Linhas", loc_cVal, "Linhas")
             IF ISNULL(loc_oForm) OR VARTYPE(loc_oForm) # "O"
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             IF !loc_oForm.this_lSelecionou
                 loc_oForm.mAddColuna("Linhas", "", "Linha")
                 loc_oForm.mAddColuna("Descs",  "", "Descri" + CHR(231) + CHR(227) + "o")
@@ -2538,6 +2557,7 @@ DEFINE CLASS Formsigprccp AS FormBase
                 USE IN cursor_4c_BuscaLin
             ENDIF
             loc_oForm.Release()
+            ENDIF
         CATCH TO loc_oErro
             IF USED("cursor_4c_BuscaLin")
                 USE IN cursor_4c_BuscaLin
@@ -2604,14 +2624,16 @@ DEFINE CLASS Formsigprccp AS FormBase
     ENDPROC
 
     PROTECTED PROCEDURE AbrirBuscaColecao(par_lIni)
-        LOCAL loc_cVal, loc_oForm, loc_oErro
+        LOCAL loc_cVal, loc_oForm, loc_oErro, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             loc_cVal  = ALLTRIM(IIF(par_lIni, THIS.txt_4c_Coli.Value, THIS.txt_4c_Colf.Value))
             loc_oForm = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
                 "SigCdCol", "cursor_4c_BuscaCol", "Colecoes", loc_cVal, "Cole" + CHR(231) + CHR(245) + "es")
             IF ISNULL(loc_oForm) OR VARTYPE(loc_oForm) # "O"
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             IF !loc_oForm.this_lSelecionou
                 loc_oForm.mAddColuna("Colecoes", "", "C" + CHR(243) + "digo")
                 loc_oForm.mAddColuna("Descs",    "", "Descri" + CHR(231) + CHR(227) + "o")
@@ -2630,6 +2652,7 @@ DEFINE CLASS Formsigprccp AS FormBase
                 USE IN cursor_4c_BuscaCol
             ENDIF
             loc_oForm.Release()
+            ENDIF
         CATCH TO loc_oErro
             IF USED("cursor_4c_BuscaCol")
                 USE IN cursor_4c_BuscaCol
@@ -2696,14 +2719,16 @@ DEFINE CLASS Formsigprccp AS FormBase
     ENDPROC
 
     PROTECTED PROCEDURE AbrirBuscaMoeda(par_lIni)
-        LOCAL loc_cVal, loc_oForm, loc_oErro
+        LOCAL loc_cVal, loc_oForm, loc_oErro, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             loc_cVal  = ALLTRIM(IIF(par_lIni, THIS.txt_4c_Moedai.Value, THIS.txt_4c_Moedaf.Value))
             loc_oForm = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
                 "SigCdMoe", "cursor_4c_BuscaMoe", "CMoes", loc_cVal, "Moedas")
             IF ISNULL(loc_oForm) OR VARTYPE(loc_oForm) # "O"
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             IF !loc_oForm.this_lSelecionou
                 loc_oForm.mAddColuna("CMoes", "", "C" + CHR(243) + "digo")
                 loc_oForm.mAddColuna("DMoes", "", "Descri" + CHR(231) + CHR(227) + "o")
@@ -2722,6 +2747,7 @@ DEFINE CLASS Formsigprccp AS FormBase
                 USE IN cursor_4c_BuscaMoe
             ENDIF
             loc_oForm.Release()
+            ENDIF
         CATCH TO loc_oErro
             IF USED("cursor_4c_BuscaMoe")
                 USE IN cursor_4c_BuscaMoe
@@ -2760,14 +2786,16 @@ DEFINE CLASS Formsigprccp AS FormBase
     ENDPROC
 
     PROTECTED PROCEDURE AbrirBuscaFeitio()
-        LOCAL loc_cVal, loc_oForm, loc_oErro
+        LOCAL loc_cVal, loc_oForm, loc_oErro, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             loc_cVal  = ALLTRIM(THIS.txt_4c_Feitio.Value)
             loc_oForm = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
                 "SigPrFti", "cursor_4c_BuscaFti", "Cods", loc_cVal, "Feitios")
             IF ISNULL(loc_oForm) OR VARTYPE(loc_oForm) # "O"
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             IF !loc_oForm.this_lSelecionou
                 loc_oForm.mAddColuna("Cods",  "", "Cod")
                 loc_oForm.mAddColuna("Descs", "", "Descri" + CHR(231) + CHR(227) + "o")
@@ -2782,6 +2810,7 @@ DEFINE CLASS Formsigprccp AS FormBase
                 USE IN cursor_4c_BuscaFti
             ENDIF
             loc_oForm.Release()
+            ENDIF
         CATCH TO loc_oErro
             IF USED("cursor_4c_BuscaFti")
                 USE IN cursor_4c_BuscaFti
@@ -2820,14 +2849,16 @@ DEFINE CLASS Formsigprccp AS FormBase
     ENDPROC
 
     PROTECTED PROCEDURE AbrirBuscaNewMkp()
-        LOCAL loc_cVal, loc_oForm, loc_oErro
+        LOCAL loc_cVal, loc_oForm, loc_oErro, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             loc_cVal  = ALLTRIM(THIS.txt_4c_NewMkp.Value)
             loc_oForm = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
                 "SigPrFti WHERE Tipos = 1", "cursor_4c_BuscaNMkp", "Cods", loc_cVal, "Novo MKP")
             IF ISNULL(loc_oForm) OR VARTYPE(loc_oForm) # "O"
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             IF !loc_oForm.this_lSelecionou
                 loc_oForm.mAddColuna("Cods",  "", "Cod")
                 loc_oForm.mAddColuna("Descs", "", "Descri" + CHR(231) + CHR(227) + "o")
@@ -2842,6 +2873,7 @@ DEFINE CLASS Formsigprccp AS FormBase
                 USE IN cursor_4c_BuscaNMkp
             ENDIF
             loc_oForm.Release()
+            ENDIF
         CATCH TO loc_oErro
             IF USED("cursor_4c_BuscaNMkp")
                 USE IN cursor_4c_BuscaNMkp

@@ -662,16 +662,19 @@ DEFINE CLASS FormSigReIpr AS FormBase
     *   Form de relatorio tem s? 1 p?gina; alterna foco para o primeiro filtro.
     *--------------------------------------------------------------------------
     PROCEDURE AlternarPagina(par_nPagina)
-        LOCAL loc_oPgf, loc_oPg
+        LOCAL loc_oPgf, loc_oPg, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             loc_oPgf = THIS.pgf_4c_Paginas
             IF VARTYPE(loc_oPgf) != "O"
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             loc_oPgf.ActivePage = 1
             loc_oPg = loc_oPgf.Pages(1)
             IF VARTYPE(loc_oPg) = "O" AND PEMSTATUS(loc_oPg, "txt_4c_Codigo", 5)
                 loc_oPg.txt_4c_Codigo.SetFocus()
+            ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro AlternarPagina")
@@ -953,11 +956,13 @@ DEFINE CLASS FormSigReIpr AS FormBase
     * BOParaForm - Restaura filtros a partir das propriedades do BO
     *--------------------------------------------------------------------------
     PROTECTED PROCEDURE BOParaForm()
-        LOCAL loc_oPg
+        LOCAL loc_oPg, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             IF VARTYPE(THIS.this_oRelatorio) != "O"
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             loc_oPg = THIS.pgf_4c_Paginas.Page1
             WITH THIS.this_oRelatorio
                 loc_oPg.txt_4c_Codigo.Value          = .this_cCodigos
@@ -971,6 +976,7 @@ DEFINE CLASS FormSigReIpr AS FormBase
                 loc_oPg.opt_4c_OpOrdem.Value         = .this_nOrdemDirecao
             ENDWITH
             THIS.AtualizarEstadoDescricao()
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
         ENDTRY

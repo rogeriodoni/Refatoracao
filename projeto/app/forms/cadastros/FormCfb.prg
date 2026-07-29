@@ -2203,13 +2203,15 @@ DEFINE CLASS FormCfb AS FormBase
     *--------------------------------------------------------------------------
     PROCEDURE Text40LostFocus
         LPARAMETERS par_nKeyCode, par_nShiftAltCtrl
-        LOCAL loc_oPg2, loc_cTam, loc_cDescricao
+        LOCAL loc_oPg2, loc_cTam, loc_cDescricao, loc_lContinuar
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
 
+        loc_lContinuar = .T.
         TRY
             IF !PEMSTATUS(loc_oPg2, "txt_4c_Text40", 5)
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
 
             loc_cTam = ALLTRIM(loc_oPg2.txt_4c_Text40.Value)
 
@@ -2224,6 +2226,7 @@ DEFINE CLASS FormCfb AS FormBase
                 ENDIF
             ELSE
                 THIS.this_oBusinessObject.this_cCTamFolha = loc_cTam
+            ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "FormCfb.Text40LostFocus")
@@ -2446,8 +2449,9 @@ DEFINE CLASS FormCfb AS FormBase
     * BtnBuscarClick - Filtra a lista de condicoes de pagamento
     *--------------------------------------------------------------------------
     PROCEDURE BtnBuscarClick()
-        LOCAL loc_cFiltro, loc_oGrid
+        LOCAL loc_cFiltro, loc_oGrid, loc_lContinuar
 
+        loc_lContinuar = .T.
         TRY
             loc_oGrid  = THIS.pgf_4c_Paginas.Page1.grd_4c_Lista
             loc_cFiltro = ""
@@ -2458,8 +2462,9 @@ DEFINE CLASS FormCfb AS FormBase
             ENDIF
 
             IF !THIS.this_oBusinessObject.Buscar(loc_cFiltro)
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
 
             loc_oGrid.ColumnCount = 3
             loc_oGrid.RecordSource = "cursor_4c_Dados"
@@ -2472,6 +2477,7 @@ DEFINE CLASS FormCfb AS FormBase
             loc_oGrid.Column3.Header1.Caption = "Configurado"
 
             THIS.FormatarGridLista(loc_oGrid)
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "FormCfb.BtnBuscarClick")
         ENDTRY

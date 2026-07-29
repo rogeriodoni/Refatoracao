@@ -250,13 +250,16 @@ DEFINE CLASS FormSigPdM11 AS FormBase
     * Equivalente a =Seek(pForm._Dopp,'crSigCdOpd','Dopps') do legado
     *==========================================================================
     PROTECTED PROCEDURE PosicionarOperacao()
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lContinuar
 
+        loc_lContinuar = .T.
         TRY
             IF EMPTY(THIS.this_cDopp) OR NOT USED("crSigCdOpd")
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             =SEEK(THIS.this_cDopp, "crSigCdOpd", "Dopps")
+            ENDIF
         CATCH TO loc_oErro
             *-- Falha de seek nao deve abortar form; campos ficam em branco
         ENDTRY
@@ -1415,12 +1418,14 @@ DEFINE CLASS FormSigPdM11 AS FormBase
     * os controles vinculados. Tambem ajusta ReadOnly conforme modo do BO.
     *==========================================================================
     PROCEDURE BOParaForm()
-        LOCAL loc_oErro
+        LOCAL loc_oErro, loc_lContinuar
 
+        loc_lContinuar = .T.
         TRY
             IF VARTYPE(THIS.this_oBusinessObject) <> "O"
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
 
             *-- Sincroniza modo a partir do BO (caso BO tenha mudado)
             IF !EMPTY(THIS.this_oBusinessObject.this_cPcEscolha)
@@ -1439,6 +1444,7 @@ DEFINE CLASS FormSigPdM11 AS FormBase
             THIS.grd_4c_Grade.Refresh()
             THIS.txt_4c_DescCat.Refresh()
             THIS.AjustarIndicadores()
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro em BOParaForm")
         ENDTRY

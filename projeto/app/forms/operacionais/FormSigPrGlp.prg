@@ -2070,12 +2070,14 @@ DEFINE CLASS FormSigPrGlp AS FormBase
 
     PROCEDURE GradeItensAfterRowColChange
         LPARAMETERS par_nColIndex
-        LOCAL loc_cSQL, loc_lcArquivo, loc_lcFoto, loc_nSal, loc_nEst, loc_nPrz
+        LOCAL loc_cSQL, loc_lcArquivo, loc_lcFoto, loc_nSal, loc_nEst, loc_nPrz, loc_lContinuar
 
+        loc_lContinuar = .T.
         TRY
             IF !USED("TmpFinal") OR EOF("TmpFinal")
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
 
             THIS.obj_4c_ObsItens.Refresh
             THIS.lbl_4c_Txt_ObsItens.Caption = "Observa" + CHR(231) + CHR(227) + "o do Item " + ALLTRIM(TmpFinal.CPros)
@@ -2127,6 +2129,7 @@ DEFINE CLASS FormSigPrGlp AS FormBase
             ENDIF
 
             SELECT TmpFinal
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
         ENDTRY

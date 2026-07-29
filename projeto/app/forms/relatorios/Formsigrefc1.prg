@@ -748,11 +748,13 @@ DEFINE CLASS Formsigrefc1 AS FormBase
     *   ou ao reabrir com parametros salvos.
     *--------------------------------------------------------------------------
     PROCEDURE BOParaForm()
-        LOCAL loc_oPg
+        LOCAL loc_oPg, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             IF VARTYPE(THIS.this_oRelatorio) != "O"
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             loc_oPg = THIS.pgf_4c_Paginas.Page1
             WITH THIS.this_oRelatorio
                 loc_oPg.txt_4c_CdEmpresa.Value = ALLTRIM(.this_cCodEmpresa)
@@ -762,6 +764,7 @@ DEFINE CLASS Formsigrefc1 AS FormBase
                 loc_oPg.opt_4c_TpRel.Value     = IIF(.this_nTpRel >= 1 AND .this_nTpRel <= 2, ;
                     .this_nTpRel, 1)
             ENDWITH
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "BOParaForm")
         ENDTRY

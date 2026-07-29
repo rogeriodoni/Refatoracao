@@ -760,11 +760,13 @@ DEFINE CLASS Formsigreffi AS FormBase
     *   Valores padrao conforme original Init(): tipo=Pagamentos, situa=Baixados, ordem=Vencimento
     *--------------------------------------------------------------------------
     PROCEDURE LimparCampos()
-        LOCAL loc_oPag, loc_oErro
+        LOCAL loc_oPag, loc_oErro, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             IF VARTYPE(THIS.pgf_4c_Paginas) != "O"
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             loc_oPag = THIS.pgf_4c_Paginas.Page1
 
             IF VARTYPE(THIS.this_oRelatorio) = "O"
@@ -793,6 +795,7 @@ DEFINE CLASS Formsigreffi AS FormBase
             loc_oPag.obj_4c_Opt_lista_op.Value        = 2
             loc_oPag.obj_4c_Opt_saldo.Value           = 1
 
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "LimparCampos")
         ENDTRY
@@ -2114,17 +2117,20 @@ DEFINE CLASS Formsigreffi AS FormBase
     *   e forca Value=2 (Nao). Quando "Sim" (Value=1): reabilita.
     *--------------------------------------------------------------------------
     PROCEDURE OptListaAtraChange()
-        LOCAL loc_oPag, loc_oErro
+        LOCAL loc_oPag, loc_oErro, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             IF VARTYPE(THIS.pgf_4c_Paginas) != "O"
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             loc_oPag = THIS.pgf_4c_Paginas.Page1
             IF loc_oPag.obj_4c_Opt_lista_atra.Value = 2
                 loc_oPag.obj_4c_Opt_consid_atra.Value   = 2
                 loc_oPag.obj_4c_Opt_consid_atra.Enabled = .F.
             ELSE
                 loc_oPag.obj_4c_Opt_consid_atra.Enabled = .T.
+            ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "OptListaAtraChange")
@@ -2221,11 +2227,13 @@ DEFINE CLASS Formsigreffi AS FormBase
     *   Parametro par_lHabilitar ignorado - campos de filtro sao sempre editaveis.
     *--------------------------------------------------------------------------
     PROCEDURE HabilitarCampos(par_lHabilitar)
-        LOCAL loc_oPag, loc_oErro
+        LOCAL loc_oPag, loc_oErro, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             IF VARTYPE(THIS.pgf_4c_Paginas) != "O"
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             loc_oPag = THIS.pgf_4c_Paginas.Page1
 
             loc_oPag.txt_4c__dt_inicial.Enabled         = .T.
@@ -2258,6 +2266,7 @@ DEFINE CLASS Formsigreffi AS FormBase
                 loc_oPag.obj_4c_Opt_consid_atra.Enabled = (loc_oPag.obj_4c_Opt_lista_atra.Value = 1)
             ENDIF
 
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "HabilitarCampos")
         ENDTRY

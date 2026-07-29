@@ -3665,11 +3665,13 @@ DEFINE CLASS FormSrv AS FormBase
     ENDPROC
 
     PROTECTED PROCEDURE CarregarDescricoesConta()
-        LOCAL loc_pg1, loc_pg2
+        LOCAL loc_pg1, loc_pg2, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             IF NOT (USED("cursor_4c_Dados") AND !EOF("cursor_4c_Dados"))
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             loc_pg1 = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page1
             loc_pg2 = THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page2
             THIS.BuscarDescricaoConta(loc_pg1.txt_4c_Contao,      loc_pg1.txt_4c_Dcontao)
@@ -3679,16 +3681,19 @@ DEFINE CLASS FormSrv AS FormBase
             THIS.BuscarDescricaoConta(loc_pg2.txt_4c__containss,  loc_pg2.txt_4c__dcontainss)
             THIS.BuscarDescricaoConta(loc_pg2.txt_4c__contacsll,  loc_pg2.txt_4c__dcontacsll)
             THIS.BuscarDescricaoConta(loc_pg2.txt_4c__contaiss,   loc_pg2.txt_4c__dcontaiss)
+            ENDIF
         CATCH TO loc_oErro
         ENDTRY
     ENDPROC
 
     PROTECTED PROCEDURE FormParaBO()
-        LOCAL loc_oBO
+        LOCAL loc_oBO, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             IF NOT (USED("cursor_4c_Dados") AND !EOF("cursor_4c_Dados"))
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             loc_oBO = THIS.this_oBusinessObject
             loc_oBO.this_cCodServs   = ALLTRIM(cursor_4c_Dados.CodServs)
             loc_oBO.this_cDescServs  = ALLTRIM(cursor_4c_Dados.DescServs)
@@ -3756,6 +3761,7 @@ DEFINE CLASS FormSrv AS FormBase
             loc_oBO.this_cCodrecirrf = ALLTRIM(NVL(cursor_4c_Dados.codrecirrf, ""))
             loc_oBO.this_nNrpas      = NVL(cursor_4c_Dados.nrpas, 2)
             loc_oBO.this_nMaxretinss = NVL(cursor_4c_Dados.maxretinss, 0)
+            ENDIF
         CATCH TO loc_oErro
             THIS.this_cMensagemErro = loc_oErro.Message
         ENDTRY
@@ -4048,12 +4054,14 @@ DEFINE CLASS FormSrv AS FormBase
     ENDPROC
 
     PROTECTED PROCEDURE ValidarCampoOcorrencia(par_oControl)
-        LOCAL loc_cValor, loc_oBusca
+        LOCAL loc_cValor, loc_oBusca, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             loc_cValor = ALLTRIM(par_oControl.Value)
             IF EMPTY(loc_cValor)
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             IF NOT USED("cursor_4c_Ocorrencias")
                 THIS.CarregarOcorrencias()
             ENDIF
@@ -4074,6 +4082,7 @@ DEFINE CLASS FormSrv AS FormBase
                 ELSE
                     par_oControl.Value = ALLTRIM(cursor_4c_Ocorrencias.Codigos)
                 ENDIF
+            ENDIF
             ENDIF
         CATCH TO loc_oErro
         ENDTRY

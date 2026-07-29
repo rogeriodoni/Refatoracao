@@ -1391,15 +1391,17 @@ DEFINE CLASS Formsigpdmp2 AS FormBase
     * - Padrao: exclui agrupados por FlagIncs+Cmats+(Nenvs/Nops ou Amarracao)
     *==========================================================================
     PROCEDURE BtnExcluirClick()
-        LOCAL loc_lConfirma, loc_cCod, loc_nNenvs, loc_cMats, loc_nNops
+        LOCAL loc_lConfirma, loc_cCod, loc_nNenvs, loc_cMats, loc_nNops, loc_lContinuar
         LOCAL loc_nAmr, loc_lFlagIncs, loc_nSepPedras, loc_nChkQtdPs, loc_oErro
 
         loc_lConfirma = .F.
+        loc_lContinuar = .T.
         TRY
             IF USED("xNensi") AND RECCOUNT("xNensi") > 0 AND !EOF("xNensi")
                 IF !INLIST(THIS.pcEscolha, "INSERIR", "ALTERAR")
-                    RETURN
+                    loc_lContinuar = .F.
                 ENDIF
+                IF loc_lContinuar
                 loc_cCod      = ALLTRIM(NVL(xNensi.SigCdPro, ""))
                 loc_lConfirma = MsgConfirma("Confirma exclus" + CHR(227) + ;
                     "o do componente '" + loc_cCod + "'?", ;
@@ -1461,6 +1463,7 @@ DEFINE CLASS Formsigpdmp2 AS FormBase
                     ENDIF
                 ENDIF
             ENDIF
+                ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro ao excluir componente")
         ENDTRY

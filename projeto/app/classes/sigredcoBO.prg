@@ -1,4 +1,4 @@
-*==============================================================================
+﻿*==============================================================================
 * SIGREDCOBO.PRG
 * Business Object para Impressao de Documento de Ordem (SIGREDCO)
 * Herda de RelatorioBase
@@ -214,18 +214,21 @@ DEFINE CLASS sigredcoBO AS RelatorioBase
     * Visualizar - Preview do relatorio (equivalente a 'visualizacao' do legado)
     *--------------------------------------------------------------------------
     PROCEDURE Visualizar()
-        LOCAL loc_lResultado, loc_cFRX, loc_nCnt
+        LOCAL loc_lResultado, loc_cFRX, loc_nCnt, loc_lContinuar
+        loc_lContinuar = .T.
         loc_lResultado = .F.
         TRY
             IF !THIS.PrepararDados()
                 loc_lResultado = .F.
-                RETURN loc_lResultado
+                loc_lContinuar = .F.
             ENDIF
-            loc_cFRX = THIS.ObterNomeFRX()
-            FOR loc_nCnt = 1 TO THIS.this_nQbols
-                REPORT FORM (loc_cFRX) PREVIEW NOCONSOLE
-            ENDFOR
-            loc_lResultado = .T.
+            IF loc_lContinuar
+                loc_cFRX = THIS.ObterNomeFRX()
+                FOR loc_nCnt = 1 TO THIS.this_nQbols
+                    REPORT FORM (loc_cFRX) PREVIEW NOCONSOLE
+                ENDFOR
+                loc_lResultado = .T.
+            ENDIF
         CATCH TO loc_oErro
             THIS.this_cMensagemErro = loc_oErro.Message
             MsgErro(loc_oErro.Message, "Erro")
@@ -266,16 +269,19 @@ DEFINE CLASS sigredcoBO AS RelatorioBase
     * Equivalente ao procedimento 'documento' do legado
     *--------------------------------------------------------------------------
     PROCEDURE ImprimirDocumento()
-        LOCAL loc_lResultado, loc_cFRX
+        LOCAL loc_lResultado, loc_cFRX, loc_lContinuar
+        loc_lContinuar = .T.
         loc_lResultado = .F.
         TRY
             IF !THIS.PrepararDados()
                 loc_lResultado = .F.
-                RETURN loc_lResultado
+                loc_lContinuar = .F.
             ENDIF
-            loc_cFRX = THIS.ObterNomeFRX()
-            REPORT FORM (loc_cFRX) TO PRINTER NOCONSOLE
-            loc_lResultado = .T.
+            IF loc_lContinuar
+                loc_cFRX = THIS.ObterNomeFRX()
+                REPORT FORM (loc_cFRX) TO PRINTER NOCONSOLE
+                loc_lResultado = .T.
+            ENDIF
         CATCH TO loc_oErro
             THIS.this_cMensagemErro = loc_oErro.Message
             MsgErro(loc_oErro.Message, "Erro")

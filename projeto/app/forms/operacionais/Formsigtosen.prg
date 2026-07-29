@@ -1331,12 +1331,14 @@ DEFINE CLASS Formsigtosen AS FormBase
     * auto-preenche se so ha 1 empresa, limpa se ha varias
     *==========================================================================
     PROCEDURE TxtEmpGotFocus()
-        LOCAL loc_lSupervisor
+        LOCAL loc_lSupervisor, loc_lContinuar
 
+        loc_lContinuar = .T.
         TRY
             IF NOT THIS.this_lUsuarioOk
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
 
             loc_lSupervisor = (TYPE("gcTipoUsuario") = "C" AND ;
                 LEFT(gcTipoUsuario, 1) = "i")
@@ -1359,6 +1361,7 @@ DEFINE CLASS Formsigtosen AS FormBase
 
                 THIS.txt_4c_EMP.Refresh()
                 THIS.txt_4c_Demp.Refresh()
+            ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")

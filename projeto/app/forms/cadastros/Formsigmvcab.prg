@@ -1770,10 +1770,11 @@ DEFINE CLASS Formsigmvcab AS FormBase
     * Legado: Campos do form -> propriedades do TprMvCab cursor
     *--------------------------------------------------------------------------
     PROCEDURE FormParaBO()
-        LOCAL loc_oBO, loc_oPgDados, loc_oPgContas
+        LOCAL loc_oBO, loc_oPgDados, loc_oPgContas, loc_lContinuar
         loc_oBO = THIS.this_oBusinessObject
         loc_oPgDados = THIS.pgf_4c_Paginas.Page2
 
+        loc_lContinuar = .T.
         TRY
             *-- Empresa (sempre a empresa atual se for inclusao)
             IF loc_oBO.this_lNovoRegistro
@@ -1792,8 +1793,9 @@ DEFINE CLASS Formsigmvcab AS FormBase
             IF loc_oBO.this_lNovoRegistro
                 *-- Obter proximo numero da operacao
                 IF EMPTY(ALLTRIM(loc_oBO.this_cDopes))
-                    RETURN
+                    loc_lContinuar = .F.
                 ENDIF
+                IF loc_lContinuar
                 LOCAL loc_cSQL, loc_nRes
                 loc_cSQL = "SELECT ISNULL(MAX(numes),0) + 1 AS prox" + ;
                     " FROM SigMvCab WHERE emps = " + EscaparSQL(ALLTRIM(loc_oBO.this_cEmps)) + ;
@@ -1805,6 +1807,7 @@ DEFINE CLASS Formsigmvcab AS FormBase
                 ENDIF
                 loc_oBO.MontarChaveComposta()
             ENDIF
+                ENDIF
         CATCH TO loException
             MsgErro("Erro em FormParaBO:" + CHR(13) + loException.Message)
         ENDTRY

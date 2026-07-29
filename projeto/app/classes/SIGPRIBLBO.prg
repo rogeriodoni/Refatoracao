@@ -1,4 +1,4 @@
-*------------------------------------------------------------------------------
+﻿*------------------------------------------------------------------------------
 * SIGPRIBLBO.prg - Business Object para Impressao de Boleto Bancario
 * Herda de: BusinessBase
 * Tabela principal: SigCnFBl (configuracao de boleto)
@@ -197,64 +197,67 @@ DEFINE CLASS SIGPRIBLBO AS BusinessBase
     * Inserir - Insere nova configuracao de boleto em SigCnFBl
     *--------------------------------------------------------------------------
     PROCEDURE Inserir()
-        LOCAL loc_lSucesso, loc_cSQL, loc_nRet, loc_oErro
+        LOCAL loc_lSucesso, loc_cSQL, loc_nRet, loc_oErro, loc_lContinuar
         loc_lSucesso = .F.
+        loc_lContinuar = .T.
         TRY
             IF !THIS.ValidarDados()
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
-            loc_cSQL = "INSERT INTO SigCnFBl (" + ;
-                       " FPags, cIdChaves, cLocals, cTxtCds, cNomeImps," + ;
-                       " cFontePdrs, nTamFontes, cTamFolha," + ;
-                       " nLnLocals, nClLocals, nLnDtVencs, nClDtVencs," + ;
-                       " nLnDtDocs, nClDtDocs, nLnNrDocs, nClNrDocs," + ;
-                       " nLnVlDocs, nClVlDocs, nLnRazClis, nClRazClis," + ;
-                       " nLnCgcClis, nClCgcClis, nLnEndCobs, nClEndCobs," + ;
-                       " nLnBaiCobs, nClBaiCobs, nLnCidCobs, nClCidCobs," + ;
-                       " nLnEstCobs, nClEstCobs, nLnCepCobs, nClCepCobs," + ;
-                       " nLnTxtCds, nClTxtCds" + ;
-                       ") VALUES (" + ;
-                       EscaparSQL(PADR(THIS.this_cFPags, 12)) + ", " + ;
-                       EscaparSQL(THIS.this_cIdChaves) + ", " + ;
-                       EscaparSQL(THIS.this_cLocals) + ", " + ;
-                       EscaparSQL(THIS.this_cTxtCds) + ", " + ;
-                       EscaparSQL(THIS.this_cNomeImps) + ", " + ;
-                       EscaparSQL(THIS.this_cFontePdrs) + ", " + ;
-                       FormatarNumeroSQL(THIS.this_nTamFontes, 0) + ", " + ;
-                       EscaparSQL(THIS.this_cTamFolha) + ", " + ;
-                       FormatarNumeroSQL(THIS.this_nLnLocals, 2) + ", " + ;
-                       FormatarNumeroSQL(THIS.this_nClLocals, 2) + ", " + ;
-                       FormatarNumeroSQL(THIS.this_nLnDtVencs, 2) + ", " + ;
-                       FormatarNumeroSQL(THIS.this_nClDtVencs, 2) + ", " + ;
-                       FormatarNumeroSQL(THIS.this_nLnDtDocs, 2) + ", " + ;
-                       FormatarNumeroSQL(THIS.this_nClDtDocs, 2) + ", " + ;
-                       FormatarNumeroSQL(THIS.this_nLnNrDocs, 2) + ", " + ;
-                       FormatarNumeroSQL(THIS.this_nClNrDocs, 2) + ", " + ;
-                       FormatarNumeroSQL(THIS.this_nLnVlDocs, 2) + ", " + ;
-                       FormatarNumeroSQL(THIS.this_nClVlDocs, 2) + ", " + ;
-                       FormatarNumeroSQL(THIS.this_nLnRazClis, 2) + ", " + ;
-                       FormatarNumeroSQL(THIS.this_nClRazClis, 2) + ", " + ;
-                       FormatarNumeroSQL(THIS.this_nLnCgcClis, 2) + ", " + ;
-                       FormatarNumeroSQL(THIS.this_nClCgcClis, 2) + ", " + ;
-                       FormatarNumeroSQL(THIS.this_nLnEndCobs, 2) + ", " + ;
-                       FormatarNumeroSQL(THIS.this_nClEndCobs, 2) + ", " + ;
-                       FormatarNumeroSQL(THIS.this_nLnBaiCobs, 2) + ", " + ;
-                       FormatarNumeroSQL(THIS.this_nClBaiCobs, 2) + ", " + ;
-                       FormatarNumeroSQL(THIS.this_nLnCidCobs, 2) + ", " + ;
-                       FormatarNumeroSQL(THIS.this_nClCidCobs, 2) + ", " + ;
-                       FormatarNumeroSQL(THIS.this_nLnEstCobs, 2) + ", " + ;
-                       FormatarNumeroSQL(THIS.this_nClEstCobs, 2) + ", " + ;
-                       FormatarNumeroSQL(THIS.this_nLnCepCobs, 2) + ", " + ;
-                       FormatarNumeroSQL(THIS.this_nClCepCobs, 2) + ", " + ;
-                       FormatarNumeroSQL(THIS.this_nLnTxtCds, 2) + ", " + ;
-                       FormatarNumeroSQL(THIS.this_nClTxtCds, 2) + ;
-                       ")"
-            loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL)
-            IF loc_nRet > 0
-                THIS.RegistrarAuditoria("I")
-                loc_lSucesso = .T.
-            ELSE
-                MsgErro("Erro ao inserir configura" + CHR(231) + CHR(227) + "o de boleto.", "Erro")
+            IF loc_lContinuar
+                loc_cSQL = "INSERT INTO SigCnFBl (" + ;
+                           " FPags, cIdChaves, cLocals, cTxtCds, cNomeImps," + ;
+                           " cFontePdrs, nTamFontes, cTamFolha," + ;
+                           " nLnLocals, nClLocals, nLnDtVencs, nClDtVencs," + ;
+                           " nLnDtDocs, nClDtDocs, nLnNrDocs, nClNrDocs," + ;
+                           " nLnVlDocs, nClVlDocs, nLnRazClis, nClRazClis," + ;
+                           " nLnCgcClis, nClCgcClis, nLnEndCobs, nClEndCobs," + ;
+                           " nLnBaiCobs, nClBaiCobs, nLnCidCobs, nClCidCobs," + ;
+                           " nLnEstCobs, nClEstCobs, nLnCepCobs, nClCepCobs," + ;
+                           " nLnTxtCds, nClTxtCds" + ;
+                           ") VALUES (" + ;
+                           EscaparSQL(PADR(THIS.this_cFPags, 12)) + ", " + ;
+                           EscaparSQL(THIS.this_cIdChaves) + ", " + ;
+                           EscaparSQL(THIS.this_cLocals) + ", " + ;
+                           EscaparSQL(THIS.this_cTxtCds) + ", " + ;
+                           EscaparSQL(THIS.this_cNomeImps) + ", " + ;
+                           EscaparSQL(THIS.this_cFontePdrs) + ", " + ;
+                           FormatarNumeroSQL(THIS.this_nTamFontes, 0) + ", " + ;
+                           EscaparSQL(THIS.this_cTamFolha) + ", " + ;
+                           FormatarNumeroSQL(THIS.this_nLnLocals, 2) + ", " + ;
+                           FormatarNumeroSQL(THIS.this_nClLocals, 2) + ", " + ;
+                           FormatarNumeroSQL(THIS.this_nLnDtVencs, 2) + ", " + ;
+                           FormatarNumeroSQL(THIS.this_nClDtVencs, 2) + ", " + ;
+                           FormatarNumeroSQL(THIS.this_nLnDtDocs, 2) + ", " + ;
+                           FormatarNumeroSQL(THIS.this_nClDtDocs, 2) + ", " + ;
+                           FormatarNumeroSQL(THIS.this_nLnNrDocs, 2) + ", " + ;
+                           FormatarNumeroSQL(THIS.this_nClNrDocs, 2) + ", " + ;
+                           FormatarNumeroSQL(THIS.this_nLnVlDocs, 2) + ", " + ;
+                           FormatarNumeroSQL(THIS.this_nClVlDocs, 2) + ", " + ;
+                           FormatarNumeroSQL(THIS.this_nLnRazClis, 2) + ", " + ;
+                           FormatarNumeroSQL(THIS.this_nClRazClis, 2) + ", " + ;
+                           FormatarNumeroSQL(THIS.this_nLnCgcClis, 2) + ", " + ;
+                           FormatarNumeroSQL(THIS.this_nClCgcClis, 2) + ", " + ;
+                           FormatarNumeroSQL(THIS.this_nLnEndCobs, 2) + ", " + ;
+                           FormatarNumeroSQL(THIS.this_nClEndCobs, 2) + ", " + ;
+                           FormatarNumeroSQL(THIS.this_nLnBaiCobs, 2) + ", " + ;
+                           FormatarNumeroSQL(THIS.this_nClBaiCobs, 2) + ", " + ;
+                           FormatarNumeroSQL(THIS.this_nLnCidCobs, 2) + ", " + ;
+                           FormatarNumeroSQL(THIS.this_nClCidCobs, 2) + ", " + ;
+                           FormatarNumeroSQL(THIS.this_nLnEstCobs, 2) + ", " + ;
+                           FormatarNumeroSQL(THIS.this_nClEstCobs, 2) + ", " + ;
+                           FormatarNumeroSQL(THIS.this_nLnCepCobs, 2) + ", " + ;
+                           FormatarNumeroSQL(THIS.this_nClCepCobs, 2) + ", " + ;
+                           FormatarNumeroSQL(THIS.this_nLnTxtCds, 2) + ", " + ;
+                           FormatarNumeroSQL(THIS.this_nClTxtCds, 2) + ;
+                           ")"
+                loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL)
+                IF loc_nRet > 0
+                    THIS.RegistrarAuditoria("I")
+                    loc_lSucesso = .T.
+                ELSE
+                    MsgErro("Erro ao inserir configura" + CHR(231) + CHR(227) + "o de boleto.", "Erro")
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
@@ -266,23 +269,26 @@ DEFINE CLASS SIGPRIBLBO AS BusinessBase
     * Atualizar - Salva campos editaveis (cLocals, cTxtCds) em SigCnFBl
     *--------------------------------------------------------------------------
     PROCEDURE Atualizar()
-        LOCAL loc_lSucesso, loc_cSQL, loc_nRet, loc_oErro
+        LOCAL loc_lSucesso, loc_cSQL, loc_nRet, loc_oErro, loc_lContinuar
         loc_lSucesso = .F.
+        loc_lContinuar = .T.
         TRY
             IF EMPTY(ALLTRIM(THIS.this_cFPags))
                 MsgAviso("Condi" + CHR(231) + CHR(227) + "o de Pagamento n" + CHR(227) + "o selecionada.", "Aviso")
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
-            loc_cSQL = "UPDATE SigCnFBl SET" + ;
-                       " cLocals = " + EscaparSQL(THIS.this_cLocals) + "," + ;
-                       " cTxtCds = " + EscaparSQL(THIS.this_cTxtCds) + ;
-                       " WHERE FPags = " + EscaparSQL(PADR(THIS.this_cFPags, 12))
-            loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL)
-            IF loc_nRet > 0
-                THIS.RegistrarAuditoria("A")
-                loc_lSucesso = .T.
-            ELSE
-                MsgErro("Erro ao atualizar configura" + CHR(231) + CHR(227) + "o de boleto.", "Erro")
+            IF loc_lContinuar
+                loc_cSQL = "UPDATE SigCnFBl SET" + ;
+                           " cLocals = " + EscaparSQL(THIS.this_cLocals) + "," + ;
+                           " cTxtCds = " + EscaparSQL(THIS.this_cTxtCds) + ;
+                           " WHERE FPags = " + EscaparSQL(PADR(THIS.this_cFPags, 12))
+                loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL)
+                IF loc_nRet > 0
+                    THIS.RegistrarAuditoria("A")
+                    loc_lSucesso = .T.
+                ELSE
+                    MsgErro("Erro ao atualizar configura" + CHR(231) + CHR(227) + "o de boleto.", "Erro")
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
@@ -294,21 +300,24 @@ DEFINE CLASS SIGPRIBLBO AS BusinessBase
     * ExecutarExclusao - Exclui configuracao de boleto de SigCnFBl
     *--------------------------------------------------------------------------
     PROTECTED PROCEDURE ExecutarExclusao()
-        LOCAL loc_lSucesso, loc_cSQL, loc_nRet, loc_oErro
+        LOCAL loc_lSucesso, loc_cSQL, loc_nRet, loc_oErro, loc_lContinuar
         loc_lSucesso = .F.
+        loc_lContinuar = .T.
         TRY
             IF EMPTY(ALLTRIM(THIS.this_cFPags))
                 MsgAviso("Condi" + CHR(231) + CHR(227) + "o de Pagamento n" + CHR(227) + "o selecionada.", "Aviso")
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
-            loc_cSQL = "DELETE FROM SigCnFBl WHERE FPags = " + ;
-                       EscaparSQL(PADR(THIS.this_cFPags, 12))
-            loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL)
-            IF loc_nRet > 0
-                THIS.RegistrarAuditoria("E")
-                loc_lSucesso = .T.
-            ELSE
-                MsgErro("Erro ao excluir configura" + CHR(231) + CHR(227) + "o de boleto.", "Erro")
+            IF loc_lContinuar
+                loc_cSQL = "DELETE FROM SigCnFBl WHERE FPags = " + ;
+                           EscaparSQL(PADR(THIS.this_cFPags, 12))
+                loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL)
+                IF loc_nRet > 0
+                    THIS.RegistrarAuditoria("E")
+                    loc_lSucesso = .T.
+                ELSE
+                    MsgErro("Erro ao excluir configura" + CHR(231) + CHR(227) + "o de boleto.", "Erro")
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")

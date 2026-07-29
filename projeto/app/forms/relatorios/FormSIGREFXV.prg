@@ -658,7 +658,6 @@ DEFINE CLASS FormSIGREFXV AS FormBase
             WITH .Column1
                 .ControlSource    = "CsEstoque.Emps"
                 .Width            = 80
-                .HeaderHeight       = 0
                 .Header1.Caption  = "Empresa"
             ENDWITH
 

@@ -482,7 +482,7 @@ DEFINE CLASS FormCliente AS FormBase
     * (primeira metade: Shapes + primeiros Labels e TextBoxes).
     *============================================================
     PROTECTED PROCEDURE ConfigurarPaginaDados
-        LOCAL loc_oPgf, loc_oPg1, loc_oErro, loc_cNomeEndCtrl, loc_oEndCtrl, loc_cNomeRazCtrl, loc_oRazCtrl
+        LOCAL loc_oPgf, loc_oPg1, loc_oErro, loc_cNomeEndCtrl, loc_oEndCtrl, loc_cNomeRazCtrl, loc_oRazCtrl, loc_lContinuar
 
         IF !PEMSTATUS(THIS, "cnt_4c_Conta", 5) OR ISNULL(THIS.cnt_4c_Conta)
             RETURN
@@ -493,14 +493,16 @@ DEFINE CLASS FormCliente AS FormBase
 
         loc_oPgf = THIS.cnt_4c_Conta.pgframeDados
 
+        loc_lContinuar = .T.
         TRY
             IF PEMSTATUS(loc_oPgf, "ErasePage", 5)
                 loc_oPgf.ErasePage = .T.
             ENDIF
 
             IF !PEMSTATUS(loc_oPgf, "pgframeDados1", 5)
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             loc_oPg1 = loc_oPgf.pgframeDados1
 
             *-- Propriedades da pagina
@@ -1286,6 +1288,7 @@ DEFINE CLASS FormCliente AS FormBase
                 ENDWITH
             ENDIF
 
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;
                 "Linha: "     + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;

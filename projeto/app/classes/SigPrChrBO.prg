@@ -1,4 +1,4 @@
-*------------------------------------------------------------------------------
+﻿*------------------------------------------------------------------------------
 * SigPrChrBO.prg - Business Object: Consulta e Impressao de Cheques
 * Tipo: OPERACIONAL
 * Tabela principal: SigCqChi (cheques emitidos)
@@ -322,21 +322,24 @@ DEFINE CLASS SigPrChrBO AS BusinessBase
     * MarcarTodos - Marca todos os cheques nao emitidos/cancelados para impressao
     *--------------------------------------------------------------------------
     PROCEDURE MarcarTodos()
-        LOCAL loc_oErro, loc_nRecno
+        LOCAL loc_oErro, loc_nRecno, loc_lContinuar
+        loc_lContinuar = .T.
 
         TRY
             IF !USED(THIS.this_cCursorCheques)
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
 
-            SELECT (THIS.this_cCursorCheques)
-            loc_nRecno = RECNO()
+                SELECT (THIS.this_cCursorCheques)
+                loc_nRecno = RECNO()
 
-            UPDATE (THIS.this_cCursorCheques) SET NMarca1s = 1 ;
-             WHERE NMarca1s = 0 AND NEmitidos = 0 AND NCancelas = 0
+                UPDATE (THIS.this_cCursorCheques) SET NMarca1s = 1 ;
+                 WHERE NMarca1s = 0 AND NEmitidos = 0 AND NCancelas = 0
 
-            IF BETWEEN(loc_nRecno, 1, RECCOUNT(THIS.this_cCursorCheques))
-                GO loc_nRecno IN (THIS.this_cCursorCheques)
+                IF BETWEEN(loc_nRecno, 1, RECCOUNT(THIS.this_cCursorCheques))
+                    GO loc_nRecno IN (THIS.this_cCursorCheques)
+                ENDIF
             ENDIF
 
         CATCH TO loc_oErro
@@ -348,20 +351,23 @@ DEFINE CLASS SigPrChrBO AS BusinessBase
     * DesmarcarTodos - Remove marcacao de todos os cheques
     *--------------------------------------------------------------------------
     PROCEDURE DesmarcarTodos()
-        LOCAL loc_oErro, loc_nRecno
+        LOCAL loc_oErro, loc_nRecno, loc_lContinuar
+        loc_lContinuar = .T.
 
         TRY
             IF !USED(THIS.this_cCursorCheques)
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
 
-            SELECT (THIS.this_cCursorCheques)
-            loc_nRecno = RECNO()
+                SELECT (THIS.this_cCursorCheques)
+                loc_nRecno = RECNO()
 
-            UPDATE (THIS.this_cCursorCheques) SET NMarca1s = 0 WHERE NMarca1s = 1
+                UPDATE (THIS.this_cCursorCheques) SET NMarca1s = 0 WHERE NMarca1s = 1
 
-            IF BETWEEN(loc_nRecno, 1, RECCOUNT(THIS.this_cCursorCheques))
-                GO loc_nRecno IN (THIS.this_cCursorCheques)
+                IF BETWEEN(loc_nRecno, 1, RECCOUNT(THIS.this_cCursorCheques))
+                    GO loc_nRecno IN (THIS.this_cCursorCheques)
+                ENDIF
             ENDIF
 
         CATCH TO loc_oErro
@@ -374,23 +380,26 @@ DEFINE CLASS SigPrChrBO AS BusinessBase
     * par_cChave: bancos+agencias+ncontas+ncheques do cheque
     *--------------------------------------------------------------------------
     PROCEDURE AlternarMarcaCheque(par_cChave)
-        LOCAL loc_oErro, loc_nRecno
+        LOCAL loc_oErro, loc_nRecno, loc_lContinuar
+        loc_lContinuar = .T.
 
         TRY
             IF !USED(THIS.this_cCursorCheques)
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
 
-            SELECT (THIS.this_cCursorCheques)
-            loc_nRecno = RECNO()
+                SELECT (THIS.this_cCursorCheques)
+                loc_nRecno = RECNO()
 
-            UPDATE (THIS.this_cCursorCheques) ;
-               SET NMarca1s = IIF(NMarca1s = 1, 0, 1) ;
-             WHERE bancos + agencias + ncontas + ncheques = par_cChave ;
-               AND NEmitidos = 0 AND NCancelas = 0
+                UPDATE (THIS.this_cCursorCheques) ;
+                   SET NMarca1s = IIF(NMarca1s = 1, 0, 1) ;
+                 WHERE bancos + agencias + ncontas + ncheques = par_cChave ;
+                   AND NEmitidos = 0 AND NCancelas = 0
 
-            IF BETWEEN(loc_nRecno, 1, RECCOUNT(THIS.this_cCursorCheques))
-                GO loc_nRecno IN (THIS.this_cCursorCheques)
+                IF BETWEEN(loc_nRecno, 1, RECCOUNT(THIS.this_cCursorCheques))
+                    GO loc_nRecno IN (THIS.this_cCursorCheques)
+                ENDIF
             ENDIF
 
         CATCH TO loc_oErro

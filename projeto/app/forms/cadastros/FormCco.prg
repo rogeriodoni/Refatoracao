@@ -1294,18 +1294,21 @@ DEFINE CLASS FormCco AS FormBase
     * ValidarGrupo - Verifica grupo ao sair do campo (LostFocus)
     *==========================================================================
     PROCEDURE ValidarGrupo(par_nKeyCode, par_nShiftAltCtrl)
-        LOCAL loc_cGrupo, loc_oPg2
+        LOCAL loc_cGrupo, loc_oPg2, loc_lContinuar
         loc_cGrupo = ""
 
+        loc_lContinuar = .T.
         TRY
             loc_oPg2   = THIS.pgf_4c_Paginas.Page2
             loc_cGrupo = ALLTRIM(loc_oPg2.txt_4c_Grupo.Value)
 
             IF EMPTY(loc_cGrupo)
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
 
             THIS.AbrirBuscaGrupo()
+            ENDIF
         CATCH TO loException
             MsgErro("Erro em FormCco.ValidarGrupo: " + loException.Message, "Erro")
         ENDTRY
@@ -1363,18 +1366,21 @@ DEFINE CLASS FormCco AS FormBase
     * ValidarEmps - Verifica empresa ao sair do campo (LostFocus)
     *==========================================================================
     PROCEDURE ValidarEmps(par_nKeyCode, par_nShiftAltCtrl)
-        LOCAL loc_cEmps, loc_oPg2
+        LOCAL loc_cEmps, loc_oPg2, loc_lContinuar
         loc_cEmps = ""
 
+        loc_lContinuar = .T.
         TRY
             loc_oPg2  = THIS.pgf_4c_Paginas.Page2
             loc_cEmps = ALLTRIM(loc_oPg2.txt_4c_Emps.Value)
 
             IF EMPTY(loc_cEmps)
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
 
             THIS.AbrirBuscaEmps()
+            ENDIF
         CATCH TO loException
             MsgErro("Erro em FormCco.ValidarEmps: " + loException.Message, "Erro")
         ENDTRY
@@ -1477,14 +1483,16 @@ DEFINE CLASS FormCco AS FormBase
     * Campos de Page2 serao adicionados na Fase 5
     *==========================================================================
     PROTECTED PROCEDURE HabilitarCampos(par_lHabilitar)
-        LOCAL loc_lHabilitar, loc_oPg2
+        LOCAL loc_lHabilitar, loc_oPg2, loc_lContinuar
         loc_lHabilitar = (VARTYPE(par_lHabilitar) = "L" AND par_lHabilitar)
 
+        loc_lContinuar = .T.
         TRY
             loc_oPg2 = THIS.pgf_4c_Paginas.Page2
             IF VARTYPE(loc_oPg2) != "O"
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
 
             *-- Codigo: apenas editavel no modo INCLUIR (Get_codigo.When = pcEscolha=INSERIR)
             IF PEMSTATUS(loc_oPg2, "txt_4c_Codigo", 5)
@@ -1526,6 +1534,7 @@ DEFINE CLASS FormCco AS FormBase
             ENDIF
             IF PEMSTATUS(loc_oPg2, "txt_4c_FaixaF", 5)
                 loc_oPg2.txt_4c_FaixaF.Enabled = loc_lHabilitar
+            ENDIF
             ENDIF
         CATCH TO loException
             MsgErro("Erro em FormCco.HabilitarCampos: " + loException.Message, "Erro")

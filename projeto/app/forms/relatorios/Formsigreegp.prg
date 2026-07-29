@@ -1089,11 +1089,13 @@ DEFINE CLASS Formsigreegp AS FormBase
     * LimparCampos - Inicializa campos com valores padrao do BO
     *--------------------------------------------------------------------------
     PROCEDURE LimparCampos()
-        LOCAL loc_oPagina, loc_cCodEmpresa
+        LOCAL loc_oPagina, loc_cCodEmpresa, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             IF VARTYPE(THIS.pgf_4c_Paginas) != "O"
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             loc_oPagina = THIS.pgf_4c_Paginas.Page1
 
             loc_cCodEmpresa = ""
@@ -1130,6 +1132,7 @@ DEFINE CLASS Formsigreegp AS FormBase
             IF !EMPTY(loc_cCodEmpresa) AND USED("cursor_4c_SigCdEmp") AND ;
                SEEK(loc_cCodEmpresa, "cursor_4c_SigCdEmp", "cemps")
                 loc_oPagina.txt_4c__ds_empresa.Value = ALLTRIM(cursor_4c_SigCdEmp.razas)
+            ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
@@ -1782,24 +1785,32 @@ DEFINE CLASS Formsigreegp AS FormBase
     *==========================================================================
 
     PROCEDURE BtnVisualizarClick()
+        LOCAL loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             IF !THIS.ValidarCampos()
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             THIS.FormParaRelatorio()
             THIS.this_oRelatorio.Visualizar()
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
         ENDTRY
     ENDPROC
 
     PROCEDURE BtnImprimirClick()
+        LOCAL loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             IF !THIS.ValidarCampos()
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             THIS.FormParaRelatorio()
             THIS.this_oRelatorio.Imprimir()
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
         ENDTRY
@@ -1895,11 +1906,13 @@ DEFINE CLASS Formsigreegp AS FormBase
     *   Replica o When event original: Return(!Empty(ThisForm.get_moeda.Value))
     *--------------------------------------------------------------------------
     PROTECTED PROCEDURE AtualizarEstadoDtCotacao()
-        LOCAL loc_oPagina, loc_lTemMoeda
+        LOCAL loc_oPagina, loc_lTemMoeda, loc_lContinuar
+        loc_lContinuar = .T.
         TRY
             IF VARTYPE(THIS.pgf_4c_Paginas) != "O"
-                RETURN
+                loc_lContinuar = .F.
             ENDIF
+            IF loc_lContinuar
             loc_oPagina   = THIS.pgf_4c_Paginas.Page1
             loc_lTemMoeda = !EMPTY(ALLTRIM(loc_oPagina.txt_4c__moeda.Value))
 
@@ -1910,6 +1923,7 @@ DEFINE CLASS Formsigreegp AS FormBase
                     .Value = {}
                 ENDIF
             ENDWITH
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
         ENDTRY
