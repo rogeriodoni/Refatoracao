@@ -31,11 +31,16 @@ DEFINE CLASS SIGPRCCRBO AS RelatorioBase
         loc_lSucesso = .F.
 
         TRY
-            *-- Verifica se cursor CrProdutos existe
+            *-- Verifica se cursor CrProdutos existe (fluxo child-modal via SigPrCcc/Ccp)
+            *-- No fluxo standalone via menu, o cursor nao existe — mensagem
+            *-- actionable e RETURN antecipado evita "File 'crprodutos.dbf' does not exist."
+            *-- disparado pelo SELECT WHERE lMarca=1 abaixo.
             IF !USED("CrProdutos")
-                THIS.this_cMensagemErro = "Cursor CrProdutos n" + CHR(227) + "o encontrado. " + ;
-                    "Execute a marca" + CHR(231) + CHR(227) + "o de produtos antes de imprimir."
-                loc_lSucesso = .F.
+                THIS.this_cMensagemErro = "Este relat" + CHR(243) + "rio deve ser aberto pelo " + ;
+                    "formul" + CHR(225) + "rio de Marca" + CHR(231) + CHR(227) + "o de Produtos " + ;
+                    "(SigPrCcc / SigPrCcp), onde se seleciona os produtos com pre" + CHR(231) + ;
+                    "os alterados antes de imprimir."
+                RETURN .F.
             ENDIF
 
             *-- Busca razao social da empresa
