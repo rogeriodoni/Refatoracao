@@ -1,0 +1,7 @@
+﻿All three methods are correctly in place. FASE 5 is complete. The file now has full implementations of:
+
+- **`FormParaBO()`** ÔÇö reads all 25 fields from `cnt_4c_Codigos`, `cnt_4c_LocalA`, `cnt_4c_LocalB` and assigns to BO properties; checkboxes use `(chk.Value = 1)`, numeric fields read directly (already typed via `.Value = 0`), date fields use STRTRAN-based empty-check + CTOD, ReadOnly description fields skipped.
+
+- **`BOParaForm()`** ÔÇö writes all BO properties back to form controls; checkboxes use `IIF(lBool, 1, 0)`, OptionGroup gets fallback to 1 if value not in {1,2,3}, date fields use `IIF(EMPTY(d), "", DTOC(d))`, description TextBoxes cleared to `""`.
+
+- **`HabilitarCampos()`** ÔÇö enables/disables all editable fields; `txt_4c_Codigos` is only enabled in INCLUIR mode (`par_lHabilitar AND this_cModoAtual = "INCLUIR"`); ReadOnly description fields (`txt_4c_DGrupoA`, `txt_4c_DContaA`, etc.) are not touched (they keep their `.ReadOnly = .T.` from init).

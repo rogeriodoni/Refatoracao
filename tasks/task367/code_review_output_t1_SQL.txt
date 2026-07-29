@@ -1,0 +1,6 @@
+﻿Corre├º├Áes aplicadas em `cheBO.prg`:
+
+- **Linha 303** (`Atualizar`): `WHERE cidchaves = EscaparSQL(...)` ÔåÆ `WHERE numlotes = FormatarNumeroSQL(THIS.this_nNumLote)` ÔÇö consistente com o padr├úo do original (`Update SigCqLcm ... Where NumLotes = ...`).
+- **Linha 334** (`ExecutarExclusao`): mesmo fix, alinhado com o DELETE de SigCcChm que j├í usava `numlotes` corretamente na linha 330.
+
+**TABELAS** (`Formche.prg:3297`): sem altera├º├úo ÔÇö `WHERE tabelas = 'SigCqLcm'` ├® filtro v├ílido e necess├írio em `LogAuditoria`, coluna `tabelas` pertence ao schema dessa tabela e n├úo foi inventada sobre tabela de neg├│cio.

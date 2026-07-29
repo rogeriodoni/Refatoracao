@@ -1,0 +1,22 @@
+﻿Arquivo correto com ENDDEFINE na linha 1152. Fase 5 conclu├¡da com sucesso.
+
+**O que foi adicionado em FormCla.prg:**
+
+1. **`InicializarForm`** ÔÇö cria├º├úo do cursor `crGrdCdCom (CGrus C(3), DGrus C(20))` antes de `ConfigurarPageFrame()`
+
+2. **`ConfigurarPaginaDados`** (substitu├¡do) ÔÇö bot├Áes Confirmar/Cancelar com BINDEVENTs + primeiros 50% dos campos:
+   - `cnt_4c_BotoesAcao` (Left corrigido para 820 conforme Grupo_Salva.Left legado)
+   - `lbl_4c_Label1` + `txt_4c_Codigo` (Codigo, Top=110/114, Max=3)
+   - `lbl_4c_Label2` + `txt_4c_Descricao` (Descri├º├úo, Top=137/141, Max=40)
+   - `lbl_4c_Label5` + `txt_4c_Tipos` com BINDEVENT ValidarTipos (Tipo, Top=164/169, Max=1)
+   - `lbl_4c_Label3` + `obj_4c_OptSituas` 3 buttons aninhados via `WITH .Buttons(N)` (Top=187/192)
+
+3. **`Destroy`** ÔÇö cleanup de `crGrdCdCom`
+
+4. **Novos m├®todos adicionados:**
+   - `BtnSalvarClick` ÔÇö valida├º├Áes fora do TRY + FormParaBO + Salvar + SalvarGrupos
+   - `BtnCancelarClick` ÔÇö volta para lista
+   - `ValidarTipos` ÔÇö valida O/P/R/J
+   - `FormParaBO` / `BOParaForm` ÔÇö com PEMSTATUS para campos da Fase 6
+   - `HabilitarCampos` / `LimparCampos` ÔÇö com PEMSTATUS para grid/bot├Áes da Fase 6
+   - `CarregarGruposGrid` ÔÇö popula `crGrdCdCom` via `BuscarGrupos()` do BO

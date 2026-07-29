@@ -1,0 +1,11 @@
+﻿Phase 5 is complete. All four remaining edits were applied successfully:
+
+- **Edit 4 (BOParaForm)**: Populates all 9 `cnt_4c_DadosCab` fields from BO properties, with DateTimeÔåÆDate conversion for `this_tEmis` and `this_tDtsaidas`, `TRANSFORM()` for the numeric `this_nNumes`, and `ALLTRIM()` for all string fields.
+
+- **Edit 5 (LimparCampos)**: Resets all 9 cab fields to empty strings / `{}` date, wrapped in TRY/CATCH.
+
+- **Edit 6 (NotaLostFocus)**: PUBLIC handler that sets focus to `cmd_4c_Confirmar`, replicating the legado `Get_nota.LostFocus = Grupo_Salva.Salva.SetFocus` behavior.
+
+- **Edit 7 (ConfigurarBindings)**: Added `BINDEVENT(loc_oPg2.cnt_4c_DadosCab.txt_4c_Nota, "LostFocus", THIS, "NotaLostFocus")`.
+
+Phase 6/8 will add the inner PageFrame content (Impostos and Servi├ºos tabs inside `pgf_4c_InnerPage`).

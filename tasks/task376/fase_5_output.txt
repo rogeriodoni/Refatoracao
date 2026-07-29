@@ -1,0 +1,17 @@
+﻿O arquivo est├í correto. A Fase 5 foi implementada com sucesso. Aqui est├í o resumo do que foi adicionado em `Formcnl.prg`:
+
+**ConfigurarPaginaDados() ÔÇö controles adicionados (Fase 5):**
+- `cmd_4c_Confirmar` + `cmd_4c_Cancelar` dentro de `cnt_4c_BotoesAcao` com BINDEVENT
+- `shp_4c_Shape1` ÔÇö Shape decorativo (top 198, left 626)
+- `lbl_4c_Label4` + `txt_4c_Codigo` ÔÇö c├│digo da contagem (read-only, gerado pelo sistema)
+- `lbl_4c_Label2` + `txt_4c_Conta` + `txt_4c_DConta` ÔÇö vendedor + descri├º├úo, com BINDEVENT para `LostFocus`/`KeyPress`
+- `lbl_4c_Label9` + `opt_4c_OptOrdem` (4 bot├Áes: Local/Nv.2/Nv.3/Nv.4) com `InteractiveChange`
+
+**Novos m├®todos adicionados:**
+- `BtnSalvarClick()` ÔÇö valida obrigatoriedade do vendedor fora do TRY, chama `Salvar()`
+- `BtnCancelarClick()` ÔÇö volta para lista + recarrega
+- `OptOrdemChanged()` ÔÇö replica `OptOrdem.Valid` do legado: `SET ORDER TO {Locals/Nivel2s/Nivel3s/Nivel4s}`
+- `ValidarVendedor()` ÔÇö replica `getConta.Valid`: consulta `SigCdCli` e abre `FormBuscaAuxiliar` se n├úo encontrar
+- `TeclaContaKeyPress()` ÔÇö intercepta F4 para abrir lookup
+
+**M├®todos atualizados:** `BOParaForm`, `FormParaBO`, `HabilitarCampos`, `LimparCampos` ÔÇö todos com l├│gica completa para os campos da Fase 5.

@@ -1,0 +1,16 @@
+﻿O arquivo est├í completo e correto. Fase 2/8 conclu├¡da.
+
+**ClaBO.prg ÔÇö m├®todos CRUD adicionados:**
+
+| M├®todo | Visibilidade | Fun├º├úo |
+|--------|-------------|--------|
+| `Buscar(par_cFiltro)` | PUBLIC | SELECT SigCdCls ÔåÆ `cursor_4c_Dados`, filtra por cods/descs |
+| `CarregarPorCodigo(par_cCodigo)` | PUBLIC | SELECT por PK, chama CarregarDoCursor, seta `this_lNovoRegistro=.F.` |
+| `CarregarDoCursor(par_cAliasCursor)` | PUBLIC | `SELECT (alias)` + mapeia 4 campos para propriedades do BO |
+| `Inserir()` | PROTECTED | Valida c├│digo vazio + duplicidade, INSERT em SigCdCls, auditoria |
+| `Atualizar()` | PROTECTED | UPDATE SigCdCls (descs/tipos/situas), auditoria |
+| `ExecutarExclusao()` | PROTECTED | Verifica depend├¬ncia em `SigCdPro.cclass`, DELETE SigCdCla depois SigCdCls, auditoria |
+| `BuscarGrupos(par_cCodigo)` | PUBLIC | LEFT JOIN SigCdCla+SigCdGrp ÔåÆ `cursor_4c_Grupos` (para o grid) |
+| `SalvarGrupos(par_cCodigo, par_cCursorGrupos)` | PUBLIC | DELETE+INSERT em SigCdCla usando `fUniqueIds()` para cidchaves |
+
+Pontos cr├¡ticos respeitados: nenhum `RETURN` dentro de `TRY/CATCH`, nomes exatos das colunas do schema (`cods`/`descs`/`tipos`/`situas`/`cgrus`/`cidchaves`/`cclass`), `CATCH` com `MsgErro` em todos os blocos.

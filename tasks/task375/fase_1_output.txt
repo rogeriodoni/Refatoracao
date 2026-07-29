@@ -1,0 +1,9 @@
+﻿Phase 2/8 is complete. The file is 644 lines and correctly implements all five methods:
+
+- **`LimparDados`** (PROTECTED) ÔÇö resets all ~100 BO properties to defaults
+- **`CarregarDoCursor(par_cAliasCursor)`** ÔÇö maps cursor fields to BO properties; handles NULL datetimes with `ISNULL` guards, bit fields with `<> 0` coercion, and JOIN columns (`rclis`, `descricaos`) with `TYPE() <> "U"` guards
+- **`Buscar(par_cFiltro)`** ÔÇö builds the full filtered SQL with the conditional `SigCnFNF` JOIN (checks empresa config first), date range via `CAST(n.emis AS DATE) BETWEEN`, and separate WHERE fragments for s├®rie/datas/opera├º├úo/canceladas/NF range; outputs to `cursor_4c_Dados`
+- **`CarregarPorCodigo(par_cCidchaves)`** ÔÇö `SELECT n.*` + JOIN for rclis/descricaos by PK, delegates to CarregarDoCursor
+- **`CarregarTransportadora(par_cCodTrans)`** (PROTECTED) ÔÇö loads razaos/endes/cidas/estas from SigPrTrp; called by the form when navigating rows to populate the transport display fields
+
+Phase 3/8 is next: create `FormCNF.prg`.

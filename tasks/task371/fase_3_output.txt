@@ -1,0 +1,13 @@
+﻿Os RETURNs nas linhas 627/633 est├úo corretamente fora do TRY (que come├ºa na 636). A estrutura est├í correta.
+
+**Fase 3/8 conclu├¡da.** O arquivo `C:\4c\projeto\app\forms\cadastros\FormClf.prg` foi criado com 798 linhas contendo:
+
+- **DEFINE CLASS FormClf AS FormBase** com todas as propriedades visuais (Height=600, Width=1000, Caption, etc.)
+- **Init()** ÔÇö apenas `RETURN DODEFAULT()` conforme padr├úo can├┤nico
+- **InicializarForm()** ÔÇö cria ClfBO, chama ConfigurarPageFrame/PaginaLista/PaginaDados, guarda de `gb_4c_ValidandoUI`
+- **ConfigurarPageFrame()** ÔÇö PageFrame.Top=-29, Tabs=.F., 2 pages com fundo `fundo_cad_1003.jpg`
+- **ConfigurarPaginaLista()** ÔÇö cnt_4c_Cabecalho, cnt_4c_Botoes (5 bot├Áes CRUD), cnt_4c_Saida (Encerrar) can├┤nico (Left=917), grd_4c_Lista placeholder (5 colunas)
+- **ConfigurarPaginaDados()** ÔÇö cnt_4c_BotoesDados (Salvar/Cancelar) 
+- **Destroy()** ÔÇö limpa refer├¬ncia ao BO
+- **TornarControlesVisiveis()** e **FormatarGridLista()** ÔÇö m├®todos auxiliares completos
+- Todos os **Btn*Click**, **FormParaBO**, **BOParaForm**, **LimparCampos**, **HabilitarCampos** com implementa├º├úo funcional e sem RETURN dentro de TRY/CATCH

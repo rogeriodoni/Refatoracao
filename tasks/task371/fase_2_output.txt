@@ -1,0 +1,5 @@
+﻿Fase 2 conclu├¡da. O `ClfBO.prg` j├í estava completo da Fase 1 com todos os m├®todos CRUD. Corrigi dois bugs encontrados durante a revis├úo:
+
+1. **`Validar()` linha 247** ÔÇö preced├¬ncia de operadores: `AND` antes de `OR` sem par├¬nteses fazia a condi├º├úo de AliqFcp > 2 disparar erro mesmo quando `loc_lValido = .F.` (quebrava a cadeia de valida├º├úo sequencial)
+
+2. **`VerificarTemProduto()`** ÔÇö colunas erradas em SigCdPro: `clf` (n├úo existe) ÔåÆ `clfiscals`; `aipis > 0` (coluna s├│ existe em SIGCDCLF) ÔåÆ `ipis = 'S'` (flag char(1) correto de SigCdPro)

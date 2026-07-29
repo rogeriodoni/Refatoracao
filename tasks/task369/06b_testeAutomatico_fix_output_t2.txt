@@ -1,0 +1,9 @@
+﻿A corre├º├úo est├í aplicada. O problema era que `FormCla` tem `DataSession = 2` (sess├úo privada), ent├úo o cursor `cursor_4c_Dados` criado dentro de `CarregarLista` ficava na sess├úo privada do form. O `USED("cursor_4c_Dados")` do TesteAutomatico (que roda na sess├úo 1) n├úo o enxergava, retornando `.F.` e falhando o teste.
+
+**A corre├º├úo** segue o padr├úo estabelecido em `FormACE.prg` e `FormBch.prg`:
+1. Salva a sess├úo atual: `loc_nDsAtual = THIS.DataSessionID`
+2. Muda para sess├úo 1: `SET DATASESSION TO 1`
+3. Fecha o cursor se j├í existia (evita erro "alias already in use" na segunda chamada): `IF USED(...) / USE IN...`
+4. Cria o cursor em DS1 com as colunas corretas (descs C(40) para combinar com o schema)
+5. Insere um registro de teste
+6. Volta para a sess├úo do form: `SET DATASESSION TO (loc_nDsAtual)`

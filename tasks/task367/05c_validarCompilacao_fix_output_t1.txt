@@ -1,0 +1,6 @@
+﻿Nenhum `ENDFUNCTION` restante. Corre├º├úo aplicada:
+
+- **cheBO.prg**: 8 ocorr├¬ncias de `ENDFUNCTION` ÔåÆ `ENDFUNC` (fun├º├Áes: `ObterChavePrimaria`, `Buscar`, `CarregarPorCodigo`, `CarregarDoCursor`, `ObterProximoLote`, `Inserir`, `Atualizar`, `ExecutarExclusao`)
+- **Formche.prg**: 1 ocorr├¬ncia ÔåÆ `ENDFUNC` (fun├º├úo: `ObterJuroCarts`)
+
+Causa raiz: dentro de `DEFINE CLASS...ENDDEFINE`, o VFP9 s├│ aceita `ENDFUNC` como terminador de `FUNCTION`. `ENDFUNCTION` ├® inv├ílido nesse contexto e gera "Unrecognized command verb".

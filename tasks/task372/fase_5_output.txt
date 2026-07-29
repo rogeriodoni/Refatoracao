@@ -1,0 +1,14 @@
+﻿O arquivo est├í correto. Fase 5 conclu├¡da com sucesso.
+
+**O que foi adicionado:**
+
+1. **`ConfigurarPaginaDados()`** (linha 481, `PROTECTED`) ÔÇö aplica a primeira metade dos overrides visuais do SCX legado nos controles internos de `cnt_4c_Conta.pgframeDados.pgframeDados1`:
+   - Propriedades da p├ígina: FontName/BackColor/ForeColor
+   - Shapes 1ÔÇô5 (bordas e ├írea de foto)
+   - ~26 Labels (Say*/sayDtncons/lblCpf2/etc.) com posi├º├Áes e ForeColor
+   - ~8 TextBoxes/ComboBoxes principais (GetCodigo, GetNome, GetCPFCGC, GetRG, getSexo, GetDatNas, etc.)
+   - Todos os acessos s├úo guardados com `PEMSTATUS(5)` e o m├®todo inteiro envolto em `TRY/CATCH`
+
+2. **`checaibge()`** (linha 915, `PUBLIC`) ÔÇö m├®todo chamado internamente pelo `clsconta` via `ThisForm.checaibge(pMun, pUFs, obCidade, obUF)`. Traduzido do legado: substitui `ThisForm.poDataMgr.SqlExecute` por `SQLEXEC(gnConnHandle, ...)`, cursores tempor├írios nomeados `cursor_4c_LocalMunic/cursor_4c_LocalUF`.
+
+3. **Chamada inserida** em `InicializarForm()` na linha 127, ap├│s `ConfigurarPaginaLista()` e antes de `mLeDados()`.

@@ -1,0 +1,17 @@
+﻿O arquivo est├í correto e completo. Fase 4/8 conclu├¡da com sucesso.
+
+**O que foi adicionado em `FormCla.prg`:**
+
+- **`ConfigurarPaginaLista()`** completa com:
+  - 5 bot├Áes CRUD no `cnt_4c_Botoes` (Incluir L=5, Visualizar L=80, Alterar L=155, Excluir L=230, Buscar L=305) ÔÇö todos com `Comic Sans MS`, `PicturePosition=13`, `Themes=.F.`, ├¡cones corretos
+  - `cmd_4c_Encerrar` no `cnt_4c_Saida` (Left=917, can├┤nico)
+  - `grd_4c_Lista` (Top=117, Left=12, Width=890, Height=498, `Verdana`, `GridLines=3`)
+  - BINDEVENT para todos os bot├Áes e `AfterRowColChange` do grid
+
+- **Handlers PUBLIC** (todos com RETURN fora de TRY/CATCH):
+  - `GridListaAfterRowColChange(par_nColIndex)` ÔÇö atualiza bot├Áes
+  - `AjustarBotoesModo()` ÔÇö habilita/desabilita Visualizar/Alterar/Excluir conforme sele├º├úo
+  - `BtnIncluirClick`, `BtnVisualizarClick`, `BtnAlterarClick` ÔÇö navegam para Page2 via `AlternarPagina(2)`
+  - `BtnExcluirClick` ÔÇö confirma com `MsgConfirma()` (retorna `.T./.F.`), chama `Excluir()`
+  - `BtnBuscarClick` ÔÇö abre `FormBuscaAuxiliar` com `mAddColuna` (3 par├ómetros)
+  - `BtnEncerrarClick` ÔÇö `THIS.Release()`

@@ -1,0 +1,15 @@
+﻿O arquivo est├í correto. A Fase 6 est├í completa.
+
+**O que foi adicionado em `ConfigurarPaginaDados()`:**
+
+| Se├º├úo | Labels | TextBoxes | BINDEVENTs |
+|-------|--------|-----------|------------|
+| Localidade | lbl_4c_Label8 | txt_4c_Fwget9 (L/C, numeric) | ÔÇö |
+| Dia | lbl_4c_Label9 | txt_4c_Fwget11 / txt_4c_Fwget12 (numeric) | ÔÇö |
+| M├¬s | lbl_4c_Label10 | txt_4c_Fwget13 / txt_4c_Fwget14 (numeric) | ÔÇö |
+| Ano | lbl_4c_Label11 | txt_4c_Fwget15 / txt_4c_Fwget16 (numeric) | ÔÇö |
+| Local | lbl_4c_Label12 | txt_4c_Fwget17 (MaxLength=20) | ÔÇö |
+| Tamanho Folha | lbl_4c_Label13 | txt_4c_Fwget18 (MaxLength=50) | LostFocus ÔåÆ ValidarTamanhoFolha |
+| Nome Impressora | lbl_4c_Label14 | txt_4c_Fwget19 (MaxLength=40) | LostFocus ÔåÆ ValidarNomeImpressora |
+
+Todos os campos utilizam coordenadas com compensa├º├úo PageFrame +29. Os BINDEVENTs de valida├º├úo vinculam as l├│gicas `GetPaperSize()` e `GetPrinter()` (j├í implementadas nas Fases anteriores) como `ValidarTamanhoFolha` e `ValidarNomeImpressora`. A Fase 7/8 pode prosseguir para integra├º├úo (menu.prg / config.prg).

@@ -1,0 +1,28 @@
+﻿All three flagged issues are **false positives**. Here is the verification result for each:
+
+---
+
+**[SQL-FILTRO-INVENTADO] Coluna 'P'**
+
+Nenhuma coluna `P` existe em qualquer cl├íusula WHERE nos dois arquivos. O validador provavelmente detectou a fun├º├úo VFP `PADR(...)` aparecendo ap├│s `EscaparSQL(` em constru├º├Áes multi-linha de string SQL (linha 500, 549 etc.) e extraiu incorretamente `P` ou `PADR` como nome de coluna SQL. N├úo h├í nada a corrigir.
+
+---
+
+**[SQL-FILTRO-INVENTADO] Coluna 'CIDCHAVES'**
+
+`cidchaves` ├® o **PRIMARY KEY CLUSTERED** de `SigMvNfi` (confirmado em `docs/schema.sql`: `CONSTRAINT [sigmvnfi_cidchaves] PRIMARY KEY CLUSTERED`). ├ë usado corretamente em:
+- `CarregarPorCodigo` ÔåÆ `WHERE n.cidchaves = ` (point lookup por PK)
+- `Atualizar` ÔåÆ `WHERE cidchaves = ` (UPDATE pelo PK)
+- `ExecutarExclusao` ÔåÆ `WHERE cidchaves = ` (DELETE pelo PK)
+
+N├úo ├® uma condi├º├úo inventada ÔÇö ├® o uso can├┤nico do PK em opera├º├Áes de CRUD. N├úo h├í nada a corrigir.
+
+---
+
+**[SQL-FILTRO-INVENTADO] Coluna 'CEMPS'**
+
+`cemps` ├® uma coluna real de `SigCdEmp` (confirmado no schema: `[cemps] [char](3) NOT NULL`). O c├│digo no form linha 1553 usa `WHERE CEmps = ` para uma consulta de valida├º├úo em `SigCdEmp`, que ├® exatamente o padr├úo correto per CLAUDE.md ("SigCdEmp ÔÇö colunas canonicas sao Cemps/Razas, NUNCA Emps/emps/NComps/nemp"). N├úo h├í nada a corrigir.
+
+---
+
+**Conclus├úo:** Ap├│s verifica├º├úo completa contra schema.sql e o c├│digo legado de refer├¬ncia, nenhuma das 3 advert├¬ncias do validador representa um problema real. O c├│digo SQL em `FormCNF.prg` e `CNFBO.prg` est├í correto ÔÇö nenhuma altera├º├úo ├® necess├íria neste pass.

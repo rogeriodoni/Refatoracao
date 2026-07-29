@@ -1,0 +1,15 @@
+﻿O arquivo est├í correto. Fase 2 conclu├¡da. 
+
+**Resumo do que foi adicionado ao `cheBO.prg`:**
+
+| M├®todo | Tipo | Fun├º├úo |
+|--------|------|--------|
+| `Buscar(par_cFiltro)` | PUBLIC | SELECT de todos os lotes com filtro WHERE opcional (para o grid da lista) |
+| `CarregarPorCodigo(par_nNumLote)` | PUBLIC | SELECT por numlotes, popula propriedades via CarregarDoCursor |
+| `CarregarDoCursor(par_cAlias)` | PROTECTED | Mapeia cursor ÔåÆ `this_*` properties (usa `SELECT (alias)` antes dos campos) |
+| `ObterProximoLote()` | PROTECTED | `MAX(numlotes)+1` por empresa, usado no Inserir |
+| `Inserir()` | PROTECTED | INSERT em SigCqLcm com gera├º├úo de `cidchaves` (PK real da tabela) e `numlotes` sequencial |
+| `Atualizar()` | PROTECTED | UPDATE em SigCqLcm filtrando por `cidchaves` |
+| `ExecutarExclusao()` | PROTECTED | DELETE em SigCcChm (dependente) + SigCqLcm, na ordem correta |
+
+**Detalhe de mapeamento cr├¡tico:** A PK real da tabela ├® `cidchaves` (char(20)), n├úo `numlotes`. O `numlotes` ├® a chave vis├¡vel ao usu├írio. O INSERT gera `cidchaves` como `emps + PADL(numlotes, 17, '0')`. Os campos de descri├º├úo (`this_cDGrupoDs`, etc.) n├úo s├úo armazenados no banco ÔÇö ser├úo preenchidos pelo Form via lookup.

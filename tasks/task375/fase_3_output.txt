@@ -1,0 +1,8 @@
+﻿The file ends cleanly at line 909. Phase 4 is complete. The key additions:
+
+- **`grd_4c_Lista`** added to `ConfigurarPaginaLista()`: 4 columns (nfis/NF N┬░, emis/Emiss├úo, totnotas/Total NF, rclis/Cliente/Fornecedor), widths 70+95+120+715=1000px, `ColumnCount=4` set before `RecordSource` to prevent auto-column expansion, `DynamicForeColor` in red for NFs with correction letters (`correcs > 0`), formatted via `FormatarGridLista()`
+- **`CarregarLista()`** updated: after `Buscar("")` succeeds, reassigns `RecordSource` and calls `Refresh()` so the grid picks up the new cursor data
+- **`GrdListaAfterRowColChange(par_nColIndex)`** added as PUBLIC handler: enables/disables AlteraCarta and ImpCarta buttons based on whether the selected row has a correction letter (`correcs > 0`)
+- **`BINDEVENT`** for `AfterRowColChange` wired in `ConfigurarBindings()`
+
+Phase 5/8 is next: TextBoxes and Labels in `cnt_4c_DadosCab` plus filling `FormParaBO`/`BOParaForm` with all field assignments.

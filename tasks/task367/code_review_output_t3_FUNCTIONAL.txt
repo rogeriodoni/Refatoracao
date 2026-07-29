@@ -1,0 +1,4 @@
+﻿Corrigido. Resumo do pass:
+
+- **ColumnCount=3 ÔåÆ 6** (`CarregarLista`, linha 1570): bug real ÔÇö com `ColumnCount=3`, Column4-6 n├úo existiam, impossibilitando atribuir `ControlSource` e `Header1.Caption` para Total, Juros e Dt. Transporte.
+- **Demais 15 itens**: falsos positivos do validador ÔÇö o filtro `INLIST` para `CNT_4C_CABECALHO` j├í existia (linha 2202), `ObterJuroCarts()` j├í estava implementado (linha 2766), os headers do `grd_4c_GradeCheque` j├í correspondiam ao legado (linhas 1031-1039), e o controle de layout comparado ├® de um container diferente na Page1.

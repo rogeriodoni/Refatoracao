@@ -1,0 +1,19 @@
+﻿Encontrei a resposta definitiva. O legado no `Init` configura a grade via `poDataMgr`:
+
+```foxpro
+.pfSqlTabela(1).pColuna([Cods],  [], [], [C?digo],    045, .t.)
+.pfSqlTabela(1).pColuna([Descs], [], [], [Descri??o], 290, .t.)
+```
+
+O legado **usou sim "C├│digo" como header da Column1** da grade de lista (Page1). O checker automatizado detectou apenas "Grupo" e "Descri├º├úo" porque procurou propriedades `Caption = "..."` no SCT, mas o header "C├│digo" estava dentro de uma chamada de m├®todo (`.pColuna(...)`) que n├úo foi rastreada pelo parser.
+
+O c├│digo migrado na linha 747 est├í **correto**:
+```foxpro
+loc_oGrid.Column1.Header1.Caption = "C" + CHR(243) + "digo"   && = "C├│digo" Ô£ô
+```
+
+Isso ├® um **falso positivo** do checker. A detec├º├úo falhou porque:
+- "Grupo" e "Descri├º├úo" estavam como propriedades `Caption = "..."` no `grdProdutos` (Page2) ÔÇö f├íceis de parsear
+- "C├│digo" estava dentro de `.pfSqlTabela(1).pColuna([Cods], [], [], [C?digo], ...)` ÔÇö chamada de m├®todo ignorada pelo parser
+
+**Nenhuma altera├º├úo ├® necess├íria.** O header "C" + CHR(243) + "digo" produz exatamente "C├│digo", que ├® id├¬ntico ao legado (`[C?digo]` no SCT com o byte cru do `├│`). O arquivo `FormCla.prg` est├í correto conforme o legado.

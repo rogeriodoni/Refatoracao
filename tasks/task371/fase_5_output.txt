@@ -1,0 +1,9 @@
+﻿File is correct and complete. Phase 5/8 is now fully done. Summary of what was added:
+
+- **`PopularCmbTipoMerc()`** (PROTECTED): populates `cbo_4c_CmbTipoMerc` with 76 items "01".."76"
+- **`TpSubStChanged()`** (PUBLIC/BINDEVENT): enables `txt_4c_IVAST` only when IVA option is selected AND in INCLUIR/ALTERAR mode ÔÇö port of legacy `getIVAST.When = Return(opt_TpSubSt.Value == 1)`
+- **`CmbTipoMercChange()`** (PUBLIC/BINDEVENT): updates `lbl_4c_LblTipoMerc.Caption` with the full description for all 76 merchandise types, using CHR() for all accented characters
+- **`HabilitarCampos` fix**: `txt_4c_IVAST.Enabled` now respects `opt_TpSubSt.Value = 1` constraint
+- **`BOParaForm` fix**: calls `TpSubStChanged()` and `CmbTipoMercChange()` after loading data so the label and IVAST state reflect the loaded record immediately
+
+Phase 6/8 remains: second 50% of Page2 controls (Cmbbred, CmbAred, txt_4c_Areduzida, cbo_4c_CmbIpi, cbo_4c_CmbIPip, txt_4c_Aipi, txt_4c_AliqFcp, txt_4c_Cest, labels, IVA grid buttons, GradIva, InsRed/ExcRed, GradRed).

@@ -1,0 +1,2335 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: sigcdcli.SCX
+* Data/Hora: 29/07/2026 01:41:09
+* Total de registros: 9
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDCLI
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGCDCLI
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGCDCLI.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGCDCLI.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: cntConta
+  Parent: SIGCDCLI
+  Class: clsconta
+  BaseClass: container
+  ClassLoc: ..\framework\classresp.vcx
+
+Objeto: Sair
+  Parent: SIGCDCLI
+  Class: commandgroup
+  BaseClass: commandgroup
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 665
+  Height = 341
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCLI
+------------------------------------------------------------
+  DataSession = 2
+  Height = 600
+  Width = 852
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Cadastro de Cliente"
+  ControlBox = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  KeyPreview = .T.
+  TitleBar = 0
+  WindowType = 1
+  WindowState = 0
+  mudavend = .F.
+  Name = "SIGCDCLI"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCLI.cntSombra
+------------------------------------------------------------
+  Top = -1
+  Left = -1
+  Width = 865
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCLI.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCLI.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCLI.cntConta
+------------------------------------------------------------
+  Top = 132
+  Left = 12
+  Width = 768
+  Height = 450
+  Name = "cntConta"
+  pgframeDados.ErasePage = .T.
+  pgframeDados.pgframeDados1.Shape1.Top = 2
+  pgframeDados.pgframeDados1.Shape1.Left = 6
+  pgframeDados.pgframeDados1.Shape1.Height = 195
+  pgframeDados.pgframeDados1.Shape1.Width = 751
+  pgframeDados.pgframeDados1.Shape1.SpecialEffect = 1
+  pgframeDados.pgframeDados1.Shape1.BorderColor = 136,188,189
+  pgframeDados.pgframeDados1.Shape1.Name = "Shape1"
+  pgframeDados.pgframeDados1.Shape2.Top = 196
+  pgframeDados.pgframeDados1.Shape2.Left = 6
+  pgframeDados.pgframeDados1.Shape2.Width = 751
+  pgframeDados.pgframeDados1.Shape2.SpecialEffect = 1
+  pgframeDados.pgframeDados1.Shape2.BorderColor = 136,188,189
+  pgframeDados.pgframeDados1.Shape2.Name = "Shape2"
+  pgframeDados.pgframeDados1.Shape4.Top = 344
+  pgframeDados.pgframeDados1.Shape4.Left = 6
+  pgframeDados.pgframeDados1.Shape4.SpecialEffect = 1
+  pgframeDados.pgframeDados1.Shape4.BorderColor = 136,188,189
+  pgframeDados.pgframeDados1.Shape4.Name = "Shape4"
+  pgframeDados.pgframeDados1.shpFigura.Name = "shpFigura"
+  pgframeDados.pgframeDados1.Shape3.Top = 71
+  pgframeDados.pgframeDados1.Shape3.Left = 573
+  pgframeDados.pgframeDados1.Shape3.Height = 77
+  pgframeDados.pgframeDados1.Shape3.Width = 182
+  pgframeDados.pgframeDados1.Shape3.Name = "Shape3"
+  pgframeDados.pgframeDados1.Shape5.Top = 8
+  pgframeDados.pgframeDados1.Shape5.Left = 573
+  pgframeDados.pgframeDados1.Shape5.Width = 182
+  pgframeDados.pgframeDados1.Shape5.BorderColor = 100,100,100
+  pgframeDados.pgframeDados1.Shape5.Name = "Shape5"
+  pgframeDados.pgframeDados1.Say2.FontName = "Tahoma"
+  pgframeDados.pgframeDados1.Say2.Left = 31
+  pgframeDados.pgframeDados1.Say2.Top = 58
+  pgframeDados.pgframeDados1.Say2.ForeColor = 90,90,90
+  pgframeDados.pgframeDados1.Say2.Name = "Say2"
+  pgframeDados.pgframeDados1.Say12.AutoSize = .T.
+  pgframeDados.pgframeDados1.Say12.FontName = "Tahoma"
+  pgframeDados.pgframeDados1.Say12.Left = 17
+  pgframeDados.pgframeDados1.Say12.Top = 81
+  pgframeDados.pgframeDados1.Say12.ForeColor = 90,90,90
+  pgframeDados.pgframeDados1.Say12.Name = "Say12"
+  pgframeDados.pgframeDados1.Say16.FontName = "Tahoma"
+  pgframeDados.pgframeDados1.Say16.Left = 67
+  pgframeDados.pgframeDados1.Say16.Top = 15
+  pgframeDados.pgframeDados1.Say16.ForeColor = 90,90,90
+  pgframeDados.pgframeDados1.Say16.Name = "Say16"
+  pgframeDados.pgframeDados1.Say22.FontName = "Tahoma"
+  pgframeDados.pgframeDados1.Say22.Left = 17
+  pgframeDados.pgframeDados1.Say22.Top = 104
+  pgframeDados.pgframeDados1.Say22.ForeColor = 90,90,90
+  pgframeDados.pgframeDados1.Say22.Name = "Say22"
+  pgframeDados.pgframeDados1.sayConjuges.AutoSize = .T.
+  pgframeDados.pgframeDados1.sayConjuges.FontName = "Tahoma"
+  pgframeDados.pgframeDados1.sayConjuges.Left = 19
+  pgframeDados.pgframeDados1.sayConjuges.Top = 150
+  pgframeDados.pgframeDados1.sayConjuges.ForeColor = 90,90,90
+  pgframeDados.pgframeDados1.sayConjuges.Name = "sayConjuges"
+  pgframeDados.pgframeDados1.sayDtncons.FontName = "Tahoma"
+  pgframeDados.pgframeDados1.sayDtncons.Caption = "Aniv : "
+  pgframeDados.pgframeDados1.sayDtncons.Left = 362
+  pgframeDados.pgframeDados1.sayDtncons.Top = 150
+  pgframeDados.pgframeDados1.sayDtncons.ForeColor = 90,90,90
+  pgframeDados.pgframeDados1.sayDtncons.Name = "sayDtncons"
+  pgframeDados.pgframeDados1.sayDtcasas.FontName = "Tahoma"
+  pgframeDados.pgframeDados1.sayDtcasas.Left = 330
+  pgframeDados.pgframeDados1.sayDtcasas.Top = 173
+  pgframeDados.pgframeDados1.sayDtcasas.ForeColor = 90,90,90
+  pgframeDados.pgframeDados1.sayDtcasas.Name = "sayDtcasas"
+  pgframeDados.pgframeDados1.Say_end6.Name = "Say_end6"
+  pgframeDados.pgframeDados1.Say_end1.Name = "Say_end1"
+  pgframeDados.pgframeDados1.Say_end8.Name = "Say_end8"
+  pgframeDados.pgframeDados1.Say29.FontName = "Tahoma"
+  pgframeDados.pgframeDados1.Say29.Left = 575
+  pgframeDados.pgframeDados1.Say29.Top = 45
+  pgframeDados.pgframeDados1.Say29.ForeColor = 90,90,90
+  pgframeDados.pgframeDados1.Say29.Name = "Say29"
+  pgframeDados.pgframeDados1.Say_end2.Name = "Say_end2"
+  pgframeDados.pgframeDados1.Say30.FontName = "Tahoma"
+  pgframeDados.pgframeDados1.Say30.Left = 578
+  pgframeDados.pgframeDados1.Say30.Top = 17
+  pgframeDados.pgframeDados1.Say30.ForeColor = 90,90,90
+  pgframeDados.pgframeDados1.Say30.Name = "Say30"
+  pgframeDados.pgframeDados1.Say_end9.Name = "Say_end9"
+  pgframeDados.pgframeDados1.Say_end4.Name = "Say_end4"
+  pgframeDados.pgframeDados1.Say10.Name = "Say10"
+  pgframeDados.pgframeDados1.Say_end5.Name = "Say_end5"
+  pgframeDados.pgframeDados1.Say13.Left = 61
+  pgframeDados.pgframeDados1.Say13.Top = 295
+  pgframeDados.pgframeDados1.Say13.Name = "Say13"
+  pgframeDados.pgframeDados1.Say19.Left = 55
+  pgframeDados.pgframeDados1.Say19.Top = 318
+  pgframeDados.pgframeDados1.Say19.Name = "Say19"
+  pgframeDados.pgframeDados1.Say3.FontName = "Tahoma"
+  pgframeDados.pgframeDados1.Say3.ForeColor = 90,90,90
+  pgframeDados.pgframeDados1.Say3.Name = "Say3"
+  pgframeDados.pgframeDados1.Say_end3.Name = "Say_end3"
+  pgframeDados.pgframeDados1.SayIm.FontName = "Tahoma"
+  pgframeDados.pgframeDados1.SayIm.Left = 390
+  pgframeDados.pgframeDados1.SayIm.Top = 105
+  pgframeDados.pgframeDados1.SayIm.ForeColor = 90,90,90
+  pgframeDados.pgframeDados1.SayIm.Name = "SayIm"
+  pgframeDados.pgframeDados1.lblCpf2.FontName = "Tahoma"
+  pgframeDados.pgframeDados1.lblCpf2.Left = 39
+  pgframeDados.pgframeDados1.lblCpf2.Top = 173
+  pgframeDados.pgframeDados1.lblCpf2.ForeColor = 90,90,90
+  pgframeDados.pgframeDados1.lblCpf2.Name = "lblCpf2"
+  pgframeDados.pgframeDados1.Say31.FontName = "Tahoma"
+  pgframeDados.pgframeDados1.Say31.Left = 619
+  pgframeDados.pgframeDados1.Say31.Top = 77
+  pgframeDados.pgframeDados1.Say31.ForeColor = 90,90,90
+  pgframeDados.pgframeDados1.Say31.Name = "Say31"
+  pgframeDados.pgframeDados1.lblRg2.FontName = "Tahoma"
+  pgframeDados.pgframeDados1.lblRg2.Left = 181
+  pgframeDados.pgframeDados1.lblRg2.Top = 173
+  pgframeDados.pgframeDados1.lblRg2.ForeColor = 90,90,90
+  pgframeDados.pgframeDados1.lblRg2.Name = "lblRg2"
+  pgframeDados.pgframeDados1.SayRgIe.FontName = "Tahoma"
+  pgframeDados.pgframeDados1.SayRgIe.Left = 263
+  pgframeDados.pgframeDados1.SayRgIe.Top = 35
+  pgframeDados.pgframeDados1.SayRgIe.ForeColor = 90,90,90
+  pgframeDados.pgframeDados1.SayRgIe.Name = "SayRgIe"
+  pgframeDados.pgframeDados1.sayDatNas.FontName = "Tahoma"
+  pgframeDados.pgframeDados1.sayDatNas.Left = 444
+  pgframeDados.pgframeDados1.sayDatNas.Top = 58
+  pgframeDados.pgframeDados1.sayDatNas.ForeColor = 90,90,90
+  pgframeDados.pgframeDados1.sayDatNas.Name = "sayDatNas"
+  pgframeDados.pgframeDados1.SayResp.FontName = "Tahoma"
+  pgframeDados.pgframeDados1.SayResp.Left = 29
+  pgframeDados.pgframeDados1.SayResp.Top = 128
+  pgframeDados.pgframeDados1.SayResp.ForeColor = 90,90,90
+  pgframeDados.pgframeDados1.SayResp.Name = "SayResp"
+  pgframeDados.pgframeDados1.Say1.FontName = "Tahoma"
+  pgframeDados.pgframeDados1.Say1.ForeColor = 90,90,90
+  pgframeDados.pgframeDados1.Say1.Name = "Say1"
+  pgframeDados.pgframeDados1.Say11.Name = "Say11"
+  pgframeDados.pgframeDados1.SaySexo.FontName = "Tahoma"
+  pgframeDados.pgframeDados1.SaySexo.Left = 443
+  pgframeDados.pgframeDados1.SaySexo.Top = 35
+  pgframeDados.pgframeDados1.SaySexo.ForeColor = 90,90,90
+  pgframeDados.pgframeDados1.SaySexo.Name = "SaySexo"
+  pgframeDados.pgframeDados1.Get_usualt.Left = 590
+  pgframeDados.pgframeDados1.Get_usualt.Top = 42
+  pgframeDados.pgframeDados1.Get_usualt.ForeColor = 90,90,90
+  pgframeDados.pgframeDados1.Get_usualt.Name = "Get_usualt"
+  pgframeDados.pgframeDados1.Say17.Left = 13
+  pgframeDados.pgframeDados1.Say17.Top = 352
+  pgframeDados.pgframeDados1.Say17.Name = "Say17"
+  pgframeDados.pgframeDados1.lblObs.Left = 62
+  pgframeDados.pgframeDados1.lblObs.Top = 371
+  pgframeDados.pgframeDados1.lblObs.Name = "lblObs"
+  pgframeDados.pgframeDados1.Get_usuar.Left = 590
+  pgframeDados.pgframeDados1.Get_usuar.Top = 14
+  pgframeDados.pgframeDados1.Get_usuar.ForeColor = 90,90,90
+  pgframeDados.pgframeDados1.Get_usuar.Name = "Get_usuar"
+  pgframeDados.pgframeDados1.Say21.FontName = "Tahoma"
+  pgframeDados.pgframeDados1.Say21.ForeColor = 90,90,90
+  pgframeDados.pgframeDados1.Say21.Name = "Say21"
+  pgframeDados.pgframeDados1.getResp.Left = 151
+  pgframeDados.pgframeDados1.getResp.Top = 124
+  pgframeDados.pgframeDados1.getResp.Name = "getResp"
+  pgframeDados.pgframeDados1.lblEstCivil.FontName = "Tahoma"
+  pgframeDados.pgframeDados1.lblEstCivil.Left = 503
+  pgframeDados.pgframeDados1.lblEstCivil.Top = 174
+  pgframeDados.pgframeDados1.lblEstCivil.ForeColor = 90,90,90
+  pgframeDados.pgframeDados1.lblEstCivil.Name = "lblEstCivil"
+  pgframeDados.pgframeDados1.Get_grupoven.Left = 70
+  pgframeDados.pgframeDados1.Get_grupoven.Top = 124
+  pgframeDados.pgframeDados1.Get_grupoven.Name = "Get_grupoven"
+  pgframeDados.pgframeDados1.Say25.FontName = "Tahoma"
+  pgframeDados.pgframeDados1.Say25.Left = 581
+  pgframeDados.pgframeDados1.Say25.Top = 139
+  pgframeDados.pgframeDados1.Say25.ForeColor = 90,90,90
+  pgframeDados.pgframeDados1.Say25.Name = "Say25"
+  pgframeDados.pgframeDados1.Get_num.Left = 561
+  pgframeDados.pgframeDados1.Get_num.Top = 223
+  pgframeDados.pgframeDados1.Get_num.Name = "Get_num"
+  pgframeDados.pgframeDados1.getNresp.Left = 232
+  pgframeDados.pgframeDados1.getNresp.Top = 124
+  pgframeDados.pgframeDados1.getNresp.Name = "getNresp"
+  pgframeDados.pgframeDados1.Get_comp.Left = 102
+  pgframeDados.pgframeDados1.Get_comp.Top = 246
+  pgframeDados.pgframeDados1.Get_comp.Name = "Get_comp"
+  pgframeDados.pgframeDados1.GetEstado.Left = 483
+  pgframeDados.pgframeDados1.GetEstado.Top = 269
+  pgframeDados.pgframeDados1.GetEstado.Name = "GetEstado"
+  pgframeDados.pgframeDados1.GetCEP.Left = 102
+  pgframeDados.pgframeDados1.GetCEP.Top = 200
+  pgframeDados.pgframeDados1.GetCEP.Name = "GetCEP"
+  pgframeDados.pgframeDados1.GetTel1.Left = 179
+  pgframeDados.pgframeDados1.GetTel1.Top = 292
+  pgframeDados.pgframeDados1.GetTel1.Name = "GetTel1"
+  pgframeDados.pgframeDados1.GetCodigo.Left = 290
+  pgframeDados.pgframeDados1.GetCodigo.Top = 8
+  pgframeDados.pgframeDados1.GetCodigo.Name = "GetCodigo"
+  pgframeDados.pgframeDados1.GetBairro.Left = 334
+  pgframeDados.pgframeDados1.GetBairro.Top = 246
+  pgframeDados.pgframeDados1.GetBairro.Name = "GetBairro"
+  pgframeDados.pgframeDados1.GetFax.Left = 596
+  pgframeDados.pgframeDados1.GetFax.Top = 292
+  pgframeDados.pgframeDados1.GetFax.Name = "GetFax"
+  pgframeDados.pgframeDados1.GetCidade.Height = 23
+  pgframeDados.pgframeDados1.GetCidade.Left = 102
+  pgframeDados.pgframeDados1.GetCidade.Top = 269
+  pgframeDados.pgframeDados1.GetCidade.Width = 230
+  pgframeDados.pgframeDados1.GetCidade.Name = "GetCidade"
+  pgframeDados.pgframeDados1.GetNome.Left = 70
+  pgframeDados.pgframeDados1.GetNome.Top = 55
+  pgframeDados.pgframeDados1.GetNome.Name = "GetNome"
+  pgframeDados.pgframeDados1.GetEndereço.Left = 102
+  pgframeDados.pgframeDados1.GetEndereço.Top = 223
+  pgframeDados.pgframeDados1.GetEndereço.Name = "GetEndereço"
+  pgframeDados.pgframeDados1.GetTel2.Left = 385
+  pgframeDados.pgframeDados1.GetTel2.Top = 292
+  pgframeDados.pgframeDados1.GetTel2.Name = "GetTel2"
+  pgframeDados.pgframeDados1.getDdds.Left = 102
+  pgframeDados.pgframeDados1.getDdds.Top = 292
+  pgframeDados.pgframeDados1.getDdds.Name = "getDdds"
+  pgframeDados.pgframeDados1.Get_Grupo.Left = 108
+  pgframeDados.pgframeDados1.Get_Grupo.Top = 8
+  pgframeDados.pgframeDados1.Get_Grupo.Name = "Get_Grupo"
+  pgframeDados.pgframeDados1.GetEmail.Left = 102
+  pgframeDados.pgframeDados1.GetEmail.Top = 315
+  pgframeDados.pgframeDados1.GetEmail.Name = "GetEmail"
+  pgframeDados.pgframeDados1.GetPais.Left = 230
+  pgframeDados.pgframeDados1.GetPais.Top = 200
+  pgframeDados.pgframeDados1.GetPais.Name = "GetPais"
+  pgframeDados.pgframeDados1.Data_ent.Left = 670
+  pgframeDados.pgframeDados1.Data_ent.Top = 14
+  pgframeDados.pgframeDados1.Data_ent.ForeColor = 90,90,90
+  pgframeDados.pgframeDados1.Data_ent.Name = "Data_ent"
+  pgframeDados.pgframeDados1.Data_alt.Left = 670
+  pgframeDados.pgframeDados1.Data_alt.Top = 42
+  pgframeDados.pgframeDados1.Data_alt.ForeColor = 90,90,90
+  pgframeDados.pgframeDados1.Data_alt.Name = "Data_alt"
+  pgframeDados.pgframeDados1.Say_end7.Name = "Say_end7"
+  pgframeDados.pgframeDados1.Get_Regiao.Left = 596
+  pgframeDados.pgframeDados1.Get_Regiao.Top = 269
+  pgframeDados.pgframeDados1.Get_Regiao.Name = "Get_Regiao"
+  pgframeDados.pgframeDados1.Get_Emps.Left = 70
+  pgframeDados.pgframeDados1.Get_Emps.Top = 101
+  pgframeDados.pgframeDados1.Get_Emps.Name = "Get_Emps"
+  pgframeDados.pgframeDados1.Say32.FontName = "Tahoma"
+  pgframeDados.pgframeDados1.Say32.Left = 244
+  pgframeDados.pgframeDados1.Say32.Top = 10
+  pgframeDados.pgframeDados1.Say32.ForeColor = 90,90,90
+  pgframeDados.pgframeDados1.Say32.Name = "Say32"
+  pgframeDados.pgframeDados1.Say23.FontName = "Tahoma"
+  pgframeDados.pgframeDados1.Say23.Left = 600
+  pgframeDados.pgframeDados1.Say23.Top = 123
+  pgframeDados.pgframeDados1.Say23.ForeColor = 90,90,90
+  pgframeDados.pgframeDados1.Say23.Name = "Say23"
+  pgframeDados.pgframeDados1.Say33.FontName = "Tahoma"
+  pgframeDados.pgframeDados1.Say33.Left = 594
+  pgframeDados.pgframeDados1.Say33.Top = 100
+  pgframeDados.pgframeDados1.Say33.ForeColor = 90,90,90
+  pgframeDados.pgframeDados1.Say33.Name = "Say33"
+  pgframeDados.pgframeDados1.Get_Situa.Left = 673
+  pgframeDados.pgframeDados1.Get_Situa.Top = 74
+  pgframeDados.pgframeDados1.Get_Situa.Name = "Get_Situa"
+  pgframeDados.pgframeDados1.Get_DEmps.Left = 100
+  pgframeDados.pgframeDados1.Get_DEmps.Top = 101
+  pgframeDados.pgframeDados1.Get_DEmps.Name = "Get_DEmps"
+  pgframeDados.pgframeDados1.GetRG.Height = 23
+  pgframeDados.pgframeDados1.GetRG.Left = 290
+  pgframeDados.pgframeDados1.GetRG.Top = 32
+  pgframeDados.pgframeDados1.GetRG.Width = 149
+  pgframeDados.pgframeDados1.GetRG.Name = "GetRG"
+  pgframeDados.pgframeDados1.GetCPFCGC.Left = 108
+  pgframeDados.pgframeDados1.GetCPFCGC.Top = 32
+  pgframeDados.pgframeDados1.GetCPFCGC.Name = "GetCPFCGC"
+  pgframeDados.pgframeDados1.OpcaoCPFCGC.Option1.Left = 2
+  pgframeDados.pgframeDados1.OpcaoCPFCGC.Option1.Top = 2
+  pgframeDados.pgframeDados1.OpcaoCPFCGC.Option1.Name = "Option1"
+  pgframeDados.pgframeDados1.OpcaoCPFCGC.Option2.Left = 43
+  pgframeDados.pgframeDados1.OpcaoCPFCGC.Option2.Top = 2
+  pgframeDados.pgframeDados1.OpcaoCPFCGC.Option2.Name = "Option2"
+  pgframeDados.pgframeDados1.OpcaoCPFCGC.Left = 14
+  pgframeDados.pgframeDados1.OpcaoCPFCGC.Top = 33
+  pgframeDados.pgframeDados1.OpcaoCPFCGC.Name = "OpcaoCPFCGC"
+  pgframeDados.pgframeDados1.getClacod.Left = 673
+  pgframeDados.pgframeDados1.getClacod.Top = 120
+  pgframeDados.pgframeDados1.getClacod.Name = "getClacod"
+  pgframeDados.pgframeDados1.getTelem.Left = 673
+  pgframeDados.pgframeDados1.getTelem.Top = 97
+  pgframeDados.pgframeDados1.getTelem.Name = "getTelem"
+  pgframeDados.pgframeDados1.getSexo.Left = 483
+  pgframeDados.pgframeDados1.getSexo.Top = 32
+  pgframeDados.pgframeDados1.getSexo.Name = "getSexo"
+  pgframeDados.pgframeDados1.getDtncons.Left = 396
+  pgframeDados.pgframeDados1.getDtncons.Top = 147
+  pgframeDados.pgframeDados1.getDtncons.Name = "getDtncons"
+  pgframeDados.pgframeDados1.getConjuges.Left = 70
+  pgframeDados.pgframeDados1.getConjuges.Top = 147
+  pgframeDados.pgframeDados1.getConjuges.Name = "getConjuges"
+  pgframeDados.pgframeDados1.getDtcasas.Left = 396
+  pgframeDados.pgframeDados1.getDtcasas.Top = 170
+  pgframeDados.pgframeDados1.getDtcasas.Name = "getDtcasas"
+  pgframeDados.pgframeDados1.GetDatNas.Left = 483
+  pgframeDados.pgframeDados1.GetDatNas.Top = 55
+  pgframeDados.pgframeDados1.GetDatNas.Name = "GetDatNas"
+  pgframeDados.pgframeDados1.cmdEnderecos.AutoSize = .T.
+  pgframeDados.pgframeDados1.cmdEnderecos.cmdEnderecos.Top = 5
+  pgframeDados.pgframeDados1.cmdEnderecos.cmdEnderecos.Left = 5
+  pgframeDados.pgframeDados1.cmdEnderecos.cmdEnderecos.Height = 40
+  pgframeDados.pgframeDados1.cmdEnderecos.cmdEnderecos.Width = 40
+  pgframeDados.pgframeDados1.cmdEnderecos.cmdEnderecos.FontName = "Verdana"
+  pgframeDados.pgframeDados1.cmdEnderecos.cmdEnderecos.FontSize = 8
+  pgframeDados.pgframeDados1.cmdEnderecos.cmdEnderecos.WordWrap = .T.
+  pgframeDados.pgframeDados1.cmdEnderecos.cmdEnderecos.Picture = ..\vbmp\x_dados.bmp
+  pgframeDados.pgframeDados1.cmdEnderecos.cmdEnderecos.ForeColor = 100,155,0
+  pgframeDados.pgframeDados1.cmdEnderecos.cmdEnderecos.BackColor = 255,255,255
+  pgframeDados.pgframeDados1.cmdEnderecos.cmdEnderecos.Themes = .F.
+  pgframeDados.pgframeDados1.cmdEnderecos.cmdEnderecos.Name = "cmdEnderecos"
+  pgframeDados.pgframeDados1.cmdEnderecos.Left = 444
+  pgframeDados.pgframeDados1.cmdEnderecos.Top = 360
+  pgframeDados.pgframeDados1.cmdEnderecos.Name = "cmdEnderecos"
+  pgframeDados.pgframeDados1.Get_InsMuns.Height = 23
+  pgframeDados.pgframeDados1.Get_InsMuns.Left = 431
+  pgframeDados.pgframeDados1.Get_InsMuns.Top = 101
+  pgframeDados.pgframeDados1.Get_InsMuns.Width = 141
+  pgframeDados.pgframeDados1.Get_InsMuns.Name = "Get_InsMuns"
+  pgframeDados.pgframeDados1.chkObservas.Top = 387
+  pgframeDados.pgframeDados1.chkObservas.Left = 59
+  pgframeDados.pgframeDados1.chkObservas.Alignment = 0
+  pgframeDados.pgframeDados1.chkObservas.Name = "chkObservas"
+  pgframeDados.pgframeDados1.GetDesFun.Left = 130
+  pgframeDados.pgframeDados1.GetDesFun.Top = 349
+  pgframeDados.pgframeDados1.GetDesFun.Name = "GetDesFun"
+  pgframeDados.pgframeDados1.GetCodFun.Left = 97
+  pgframeDados.pgframeDados1.GetCodFun.Top = 349
+  pgframeDados.pgframeDados1.GetCodFun.Name = "GetCodFun"
+  pgframeDados.pgframeDados1.MemoFun.Left = 97
+  pgframeDados.pgframeDados1.MemoFun.Top = 373
+  pgframeDados.pgframeDados1.MemoFun.Name = "MemoFun"
+  pgframeDados.pgframeDados1.GetRazão.Left = 70
+  pgframeDados.pgframeDados1.GetRazão.Top = 78
+  pgframeDados.pgframeDados1.GetRazão.Name = "GetRazão"
+  pgframeDados.pgframeDados1.getCpf2.Left = 70
+  pgframeDados.pgframeDados1.getCpf2.Top = 170
+  pgframeDados.pgframeDados1.getCpf2.Name = "getCpf2"
+  pgframeDados.pgframeDados1.getRG2.Left = 211
+  pgframeDados.pgframeDados1.getRG2.Top = 170
+  pgframeDados.pgframeDados1.getRG2.Name = "getRG2"
+  pgframeDados.pgframeDados1.chkInativa.FontName = "Tahoma"
+  pgframeDados.pgframeDados1.chkInativa.Alignment = 0
+  pgframeDados.pgframeDados1.chkInativa.ForeColor = 90,90,90
+  pgframeDados.pgframeDados1.chkInativa.Name = "chkInativa"
+  pgframeDados.pgframeDados1.cmbEstcivils.Left = 572
+  pgframeDados.pgframeDados1.cmbEstcivils.Top = 170
+  pgframeDados.pgframeDados1.cmbEstcivils.Name = "cmbEstcivils"
+  pgframeDados.pgframeDados1.getUFIBGE.Left = 508
+  pgframeDados.pgframeDados1.getUFIBGE.Top = 269
+  pgframeDados.pgframeDados1.getUFIBGE.Name = "getUFIBGE"
+  pgframeDados.pgframeDados1.getCidasIBGE.Left = 334
+  pgframeDados.pgframeDados1.getCidasIBGE.Top = 269
+  pgframeDados.pgframeDados1.getCidasIBGE.Name = "getCidasIBGE"
+  pgframeDados.pgframeDados1.getNacionals.Name = "getNacionals"
+  pgframeDados.pgframeDados1.cmdgFigura.cmdFigura.Top = 5
+  pgframeDados.pgframeDados1.cmdgFigura.cmdFigura.Left = 5
+  pgframeDados.pgframeDados1.cmdgFigura.cmdFigura.Name = "cmdFigura"
+  pgframeDados.pgframeDados1.cmdgFigura.Name = "cmdgFigura"
+  pgframeDados.pgframeDados1.olebcFigura.Top = 298
+  pgframeDados.pgframeDados1.olebcFigura.Left = 584
+  pgframeDados.pgframeDados1.olebcFigura.Height = 82
+  pgframeDados.pgframeDados1.olebcFigura.Width = 82
+  pgframeDados.pgframeDados1.olebcFigura.Name = "olebcFigura"
+  pgframeDados.pgframeDados1.ImgFigJpg.Name = "ImgFigJpg"
+  pgframeDados.pgframeDados1.GetUltCom.Name = "GetUltCom"
+  pgframeDados.pgframeDados1.Say9.FontName = "Tahoma"
+  pgframeDados.pgframeDados1.Say9.ForeColor = 90,90,90
+  pgframeDados.pgframeDados1.Say9.Name = "Say9"
+  pgframeDados.pgframeDados1.Get_Idconta.Name = "Get_Idconta"
+  pgframeDados.pgframeDados1.getEmissors.Name = "getEmissors"
+  pgframeDados.pgframeDados1.Say14.FontName = "Tahoma"
+  pgframeDados.pgframeDados1.Say14.ForeColor = 90,90,90
+  pgframeDados.pgframeDados1.Say14.Name = "Say14"
+  pgframeDados.pgframeDados1.Get_Contato.Name = "Get_Contato"
+  pgframeDados.pgframeDados1.GetPro.Name = "GetPro"
+  pgframeDados.pgframeDados1.Say24.FontName = "Tahoma"
+  pgframeDados.pgframeDados1.Say24.ForeColor = 90,90,90
+  pgframeDados.pgframeDados1.Say24.Name = "Say24"
+  pgframeDados.pgframeDados1.Get_Seg.Name = "Get_Seg"
+  pgframeDados.pgframeDados1.getDtVals.Name = "getDtVals"
+  pgframeDados.pgframeDados1.getPastas.Name = "getPastas"
+  pgframeDados.pgframeDados1.btnPastasC.Name = "btnPastasC"
+  pgframeDados.pgframeDados1.btnPastasA.Name = "btnPastasA"
+  pgframeDados.pgframeDados1.Say26.Name = "Say26"
+  pgframeDados.pgframeDados1.cmdSociais.cmdSociais.Top = 2
+  pgframeDados.pgframeDados1.cmdSociais.cmdSociais.Left = 2
+  pgframeDados.pgframeDados1.cmdSociais.cmdSociais.Name = "cmdSociais"
+  pgframeDados.pgframeDados1.cmdSociais.Name = "cmdSociais"
+  pgframeDados.pgframeDados1.cmdCdlRio.cmdCdlRio.Top = 2
+  pgframeDados.pgframeDados1.cmdCdlRio.cmdCdlRio.Left = 2
+  pgframeDados.pgframeDados1.cmdCdlRio.cmdCdlRio.Name = "cmdCdlRio"
+  pgframeDados.pgframeDados1.cmdCdlRio.Name = "cmdCdlRio"
+  pgframeDados.pgframeDados1.getDdd2s.Name = "getDdd2s"
+  pgframeDados.pgframeDados1.cmgGlbVnd.cmdGlbVnd.Top = 2
+  pgframeDados.pgframeDados1.cmgGlbVnd.cmdGlbVnd.Left = 2
+  pgframeDados.pgframeDados1.cmgGlbVnd.cmdGlbVnd.Name = "cmdGlbVnd"
+  pgframeDados.pgframeDados1.cmgGlbVnd.Name = "cmgGlbVnd"
+  pgframeDados.pgframeDados1.optValEmail.Option1.Left = 2
+  pgframeDados.pgframeDados1.optValEmail.Option1.Top = 2
+  pgframeDados.pgframeDados1.optValEmail.Option1.Name = "Option1"
+  pgframeDados.pgframeDados1.optValEmail.Option2.Left = 43
+  pgframeDados.pgframeDados1.optValEmail.Option2.Top = 2
+  pgframeDados.pgframeDados1.optValEmail.Option2.Name = "Option2"
+  pgframeDados.pgframeDados1.optValEmail.Name = "optValEmail"
+  pgframeDados.pgframeDados1.FontName = "Tahoma"
+  pgframeDados.pgframeDados1.PageOrder = 1
+  pgframeDados.pgframeDados1.BackColor = 255,255,255
+  pgframeDados.pgframeDados1.ForeColor = 90,90,90
+  pgframeDados.pgframeDados1.Name = "pgframeDados1"
+  pgframeDados.pgframeDados2.Shape1.Name = "Shape1"
+  pgframeDados.pgframeDados2.grdCartoes.COLUMN1.Header1.FontName = "Verdana"
+  pgframeDados.pgframeDados2.grdCartoes.COLUMN1.Header1.ForeColor = 36,84,155
+  pgframeDados.pgframeDados2.grdCartoes.COLUMN1.Header1.Name = "Header1"
+  pgframeDados.pgframeDados2.grdCartoes.COLUMN1.Check1.Alignment = 0
+  pgframeDados.pgframeDados2.grdCartoes.COLUMN1.Check1.Name = "Check1"
+  pgframeDados.pgframeDados2.grdCartoes.COLUMN1.Name = "COLUMN1"
+  pgframeDados.pgframeDados2.grdCartoes.COLUMN2.Header1.FontName = "Verdana"
+  pgframeDados.pgframeDados2.grdCartoes.COLUMN2.Header1.ForeColor = 36,84,155
+  pgframeDados.pgframeDados2.grdCartoes.COLUMN2.Header1.Name = "Header1"
+  pgframeDados.pgframeDados2.grdCartoes.COLUMN2.Text1.Name = "Text1"
+  pgframeDados.pgframeDados2.grdCartoes.COLUMN2.Name = "COLUMN2"
+  pgframeDados.pgframeDados2.grdCartoes.COLUMN3.Header1.Name = "Header1"
+  pgframeDados.pgframeDados2.grdCartoes.COLUMN3.Text1.Name = "Text1"
+  pgframeDados.pgframeDados2.grdCartoes.COLUMN3.Name = "COLUMN3"
+  pgframeDados.pgframeDados2.grdCartoes.Name = "grdCartoes"
+  pgframeDados.pgframeDados2.getEndtrabs.Name = "getEndtrabs"
+  pgframeDados.pgframeDados2.getMaes.Name = "getMaes"
+  pgframeDados.pgframeDados2.GetPais.Name = "GetPais"
+  pgframeDados.pgframeDados2.GetPro.Name = "GetPro"
+  pgframeDados.pgframeDados2.Say4.FontName = "Tahoma"
+  pgframeDados.pgframeDados2.Say4.Left = 72
+  pgframeDados.pgframeDados2.Say4.ForeColor = 90,90,90
+  pgframeDados.pgframeDados2.Say4.Name = "Say4"
+  pgframeDados.pgframeDados2.Say1.Name = "Say1"
+  pgframeDados.pgframeDados2.Say2.Name = "Say2"
+  pgframeDados.pgframeDados2.Say5.FontName = "Tahoma"
+  pgframeDados.pgframeDados2.Say5.Left = 76
+  pgframeDados.pgframeDados2.Say5.ForeColor = 90,90,90
+  pgframeDados.pgframeDados2.Say5.Name = "Say5"
+  pgframeDados.pgframeDados2.sayDtcasas.FontName = "Tahoma"
+  pgframeDados.pgframeDados2.sayDtcasas.Left = 296
+  pgframeDados.pgframeDados2.sayDtcasas.ForeColor = 90,90,90
+  pgframeDados.pgframeDados2.sayDtcasas.Name = "sayDtcasas"
+  pgframeDados.pgframeDados2.Say27.Name = "Say27"
+  pgframeDados.pgframeDados2.Say26.FontName = "Tahoma"
+  pgframeDados.pgframeDados2.Say26.ForeColor = 90,90,90
+  pgframeDados.pgframeDados2.Say26.Name = "Say26"
+  pgframeDados.pgframeDados2.Say6.FontName = "Tahoma"
+  pgframeDados.pgframeDados2.Say6.Left = 316
+  pgframeDados.pgframeDados2.Say6.Top = 231
+  pgframeDados.pgframeDados2.Say6.ForeColor = 90,90,90
+  pgframeDados.pgframeDados2.Say6.Name = "Say6"
+  pgframeDados.pgframeDados2.Say8.FontName = "Tahoma"
+  pgframeDados.pgframeDados2.Say8.Left = 98
+  pgframeDados.pgframeDados2.Say8.ForeColor = 90,90,90
+  pgframeDados.pgframeDados2.Say8.Name = "Say8"
+  pgframeDados.pgframeDados2.Say19.FontName = "Tahoma"
+  pgframeDados.pgframeDados2.Say19.Left = 536
+  pgframeDados.pgframeDados2.Say19.ForeColor = 90,90,90
+  pgframeDados.pgframeDados2.Say19.Name = "Say19"
+  pgframeDados.pgframeDados2.Say12.FontName = "Tahoma"
+  pgframeDados.pgframeDados2.Say12.Left = 92
+  pgframeDados.pgframeDados2.Say12.Top = 279
+  pgframeDados.pgframeDados2.Say12.ForeColor = 90,90,90
+  pgframeDados.pgframeDados2.Say12.Name = "Say12"
+  pgframeDados.pgframeDados2.Say11.FontName = "Tahoma"
+  pgframeDados.pgframeDados2.Say11.ForeColor = 90,90,90
+  pgframeDados.pgframeDados2.Say11.Name = "Say11"
+  pgframeDados.pgframeDados2.Say13.ForeColor = 90,90,90
+  pgframeDados.pgframeDados2.Say13.Name = "Say13"
+  pgframeDados.pgframeDados2.Say15.FontName = "Tahoma"
+  pgframeDados.pgframeDados2.Say15.ForeColor = 90,90,90
+  pgframeDados.pgframeDados2.Say15.Name = "Say15"
+  pgframeDados.pgframeDados2.Say10.FontName = "Tahoma"
+  pgframeDados.pgframeDados2.Say10.Left = 537
+  pgframeDados.pgframeDados2.Say10.ForeColor = 90,90,90
+  pgframeDados.pgframeDados2.Say10.Name = "Say10"
+  pgframeDados.pgframeDados2.Say20.FontName = "Tahoma"
+  pgframeDados.pgframeDados2.Say20.ForeColor = 90,90,90
+  pgframeDados.pgframeDados2.Say20.Name = "Say20"
+  pgframeDados.pgframeDados2.Say7.FontName = "Tahoma"
+  pgframeDados.pgframeDados2.Say7.Left = 52
+  pgframeDados.pgframeDados2.Say7.ForeColor = 90,90,90
+  pgframeDados.pgframeDados2.Say7.Name = "Say7"
+  pgframeDados.pgframeDados2.SayTel1.FontName = "Tahoma"
+  pgframeDados.pgframeDados2.SayTel1.Left = 91
+  pgframeDados.pgframeDados2.SayTel1.ForeColor = 90,90,90
+  pgframeDados.pgframeDados2.SayTel1.Name = "SayTel1"
+  pgframeDados.pgframeDados2.Say21.FontName = "Tahoma"
+  pgframeDados.pgframeDados2.Say21.ForeColor = 90,90,90
+  pgframeDados.pgframeDados2.Say21.Name = "Say21"
+  pgframeDados.pgframeDados2.Say23.FontName = "Tahoma"
+  pgframeDados.pgframeDados2.Say23.ForeColor = 90,90,90
+  pgframeDados.pgframeDados2.Say23.Name = "Say23"
+  pgframeDados.pgframeDados2.Say24.FontName = "Tahoma"
+  pgframeDados.pgframeDados2.Say24.ForeColor = 90,90,90
+  pgframeDados.pgframeDados2.Say24.Name = "Say24"
+  pgframeDados.pgframeDados2.Say25.FontName = "Tahoma"
+  pgframeDados.pgframeDados2.Say25.ForeColor = 90,90,90
+  pgframeDados.pgframeDados2.Say25.Name = "Say25"
+  pgframeDados.pgframeDados2.Say9.FontName = "Tahoma"
+  pgframeDados.pgframeDados2.Say9.Left = 84
+  pgframeDados.pgframeDados2.Say9.ForeColor = 90,90,90
+  pgframeDados.pgframeDados2.Say9.Name = "Say9"
+  pgframeDados.pgframeDados2.getEmpTrabs.Name = "getEmpTrabs"
+  pgframeDados.pgframeDados2.getTelTrabs.Name = "getTelTrabs"
+  pgframeDados.pgframeDados2.getSalarios.Name = "getSalarios"
+  pgframeDados.pgframeDados2.Say22.FontName = "Tahoma"
+  pgframeDados.pgframeDados2.Say22.Left = 85
+  pgframeDados.pgframeDados2.Say22.ForeColor = 90,90,90
+  pgframeDados.pgframeDados2.Say22.Name = "Say22"
+  pgframeDados.pgframeDados2.getDtAdmis.Name = "getDtAdmis"
+  pgframeDados.pgframeDados2.getBairTrabs.Name = "getBairTrabs"
+  pgframeDados.pgframeDados2.getCepTrabs.Name = "getCepTrabs"
+  pgframeDados.pgframeDados2.getEstaTrabs.Name = "getEstaTrabs"
+  pgframeDados.pgframeDados2.getCidaTrabs.Name = "getCidaTrabs"
+  pgframeDados.pgframeDados2.getCnpjTrabs.Name = "getCnpjTrabs"
+  pgframeDados.pgframeDados2.getRendaFams.Name = "getRendaFams"
+  pgframeDados.pgframeDados2.Say18.FontName = "Tahoma"
+  pgframeDados.pgframeDados2.Say18.Left = 294
+  pgframeDados.pgframeDados2.Say18.ForeColor = 90,90,90
+  pgframeDados.pgframeDados2.Say18.Name = "Say18"
+  pgframeDados.pgframeDados2.say_Limite.FontName = "Tahoma"
+  pgframeDados.pgframeDados2.say_Limite.ForeColor = 90,90,90
+  pgframeDados.pgframeDados2.say_Limite.Name = "say_Limite"
+  pgframeDados.pgframeDados2.Say14.FontName = "Tahoma"
+  pgframeDados.pgframeDados2.Say14.Left = 47
+  pgframeDados.pgframeDados2.Say14.Top = 302
+  pgframeDados.pgframeDados2.Say14.ForeColor = 90,90,90
+  pgframeDados.pgframeDados2.Say14.Name = "Say14"
+  pgframeDados.pgframeDados2.getGrauParens.Left = 376
+  pgframeDados.pgframeDados2.getGrauParens.Top = 299
+  pgframeDados.pgframeDados2.getGrauParens.Name = "getGrauParens"
+  pgframeDados.pgframeDados2.Say16.FontName = "Tahoma"
+  pgframeDados.pgframeDados2.Say16.Left = 25
+  pgframeDados.pgframeDados2.Say16.Top = 333
+  pgframeDados.pgframeDados2.Say16.ForeColor = 90,90,90
+  pgframeDados.pgframeDados2.Say16.Name = "Say16"
+  pgframeDados.pgframeDados2.Say3.FontName = "Tahoma"
+  pgframeDados.pgframeDados2.Say3.ForeColor = 90,90,90
+  pgframeDados.pgframeDados2.Say3.Name = "Say3"
+  pgframeDados.pgframeDados2.getNumTrabs.Name = "getNumTrabs"
+  pgframeDados.pgframeDados2.Get_Contato.Name = "Get_Contato"
+  pgframeDados.pgframeDados2.getComplTrabs.Name = "getComplTrabs"
+  pgframeDados.pgframeDados2.Say17.FontName = "Tahoma"
+  pgframeDados.pgframeDados2.Say17.Left = 504
+  pgframeDados.pgframeDados2.Say17.ForeColor = 90,90,90
+  pgframeDados.pgframeDados2.Say17.Name = "Say17"
+  pgframeDados.pgframeDados2.Get_Seg.Name = "Get_Seg"
+  pgframeDados.pgframeDados2.Cnt_Limite.Say1.FontName = "Tahoma"
+  pgframeDados.pgframeDados2.Cnt_Limite.Say1.ForeColor = 90,90,90
+  pgframeDados.pgframeDados2.Cnt_Limite.Say1.Name = "Say1"
+  pgframeDados.pgframeDados2.Cnt_Limite.Get_tabp.Name = "Get_tabp"
+  pgframeDados.pgframeDados2.Cnt_Limite.Say7.Name = "Say7"
+  pgframeDados.pgframeDados2.Cnt_Limite.getPrazoEnts.Name = "getPrazoEnts"
+  pgframeDados.pgframeDados2.Cnt_Limite.Say8.FontName = "Tahoma"
+  pgframeDados.pgframeDados2.Cnt_Limite.Say8.ForeColor = 90,90,90
+  pgframeDados.pgframeDados2.Cnt_Limite.Say8.Name = "Say8"
+  pgframeDados.pgframeDados2.Cnt_Limite.Get_ListaPreco.Name = "Get_ListaPreco"
+  pgframeDados.pgframeDados2.Cnt_Limite.getFPags.Name = "getFPags"
+  pgframeDados.pgframeDados2.Cnt_Limite.Say19.Name = "Say19"
+  pgframeDados.pgframeDados2.Cnt_Limite.Say9.Name = "Say9"
+  pgframeDados.pgframeDados2.Cnt_Limite.getTabD2s.Name = "getTabD2s"
+  pgframeDados.pgframeDados2.Cnt_Limite.getMaxTransps.Name = "getMaxTransps"
+  pgframeDados.pgframeDados2.Cnt_Limite.Say22.Name = "Say22"
+  pgframeDados.pgframeDados2.Cnt_Limite.Get_Dtabp.Name = "Get_Dtabp"
+  pgframeDados.pgframeDados2.Cnt_Limite.getDTabD2s.Name = "getDTabD2s"
+  pgframeDados.pgframeDados2.Cnt_Limite.Shape2.Name = "Shape2"
+  pgframeDados.pgframeDados2.Cnt_Limite.Name = "Cnt_Limite"
+  pgframeDados.pgframeDados2.getPis.Name = "getPis"
+  pgframeDados.pgframeDados2.GetPolegar.Name = "GetPolegar"
+  pgframeDados.pgframeDados2.GetIndicador.Name = "GetIndicador"
+  pgframeDados.pgframeDados2.GetMedio.Name = "GetMedio"
+  pgframeDados.pgframeDados2.getAnular.Name = "getAnular"
+  pgframeDados.pgframeDados2.GetMinimo.Name = "GetMinimo"
+  pgframeDados.pgframeDados2.GetObsPagto.Name = "GetObsPagto"
+  pgframeDados.pgframeDados2.GetUsuarioCrm.Name = "GetUsuarioCrm"
+  pgframeDados.pgframeDados2.FontName = "Tahoma"
+  pgframeDados.pgframeDados2.PageOrder = 3
+  pgframeDados.pgframeDados2.BackColor = 255,255,255
+  pgframeDados.pgframeDados2.ForeColor = 90,90,90
+  pgframeDados.pgframeDados2.Name = "pgframeDados2"
+  pgframeDados.pgframeDados3.Pageframe1.ErasePage = .T.
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Shape2.Name = "Shape2"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.gridRefbanco.Column1.Header1.FontName = "Tahoma"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.gridRefbanco.Column1.Header1.ForeColor = 90,90,90
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.gridRefbanco.Column1.Header1.Name = "Header1"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.gridRefbanco.Column1.Text1.Name = "Text1"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.gridRefbanco.Column1.Name = "Column1"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.gridRefbanco.Column2.Header1.FontName = "Tahoma"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.gridRefbanco.Column2.Header1.ForeColor = 90,90,90
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.gridRefbanco.Column2.Header1.Name = "Header1"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.gridRefbanco.Column2.Text1.Name = "Text1"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.gridRefbanco.Column2.Name = "Column2"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.gridRefbanco.Column3.Header1.FontName = "Tahoma"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.gridRefbanco.Column3.Header1.ForeColor = 90,90,90
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.gridRefbanco.Column3.Header1.Name = "Header1"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.gridRefbanco.Column3.Text1.Name = "Text1"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.gridRefbanco.Column3.Name = "Column3"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.gridRefbanco.Column4.Header1.FontName = "Tahoma"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.gridRefbanco.Column4.Header1.ForeColor = 90,90,90
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.gridRefbanco.Column4.Header1.Name = "Header1"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.gridRefbanco.Column4.Text1.Name = "Text1"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.gridRefbanco.Column4.Name = "Column4"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.gridRefbanco.Column5.Header1.FontName = "Tahoma"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.gridRefbanco.Column5.Header1.ForeColor = 90,90,90
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.gridRefbanco.Column5.Header1.Name = "Header1"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.gridRefbanco.Column5.Text1.Name = "Text1"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.gridRefbanco.Column5.Name = "Column5"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.gridRefbanco.Column6.Header1.FontName = "Tahoma"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.gridRefbanco.Column6.Header1.ForeColor = 90,90,90
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.gridRefbanco.Column6.Header1.Name = "Header1"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.gridRefbanco.Column6.Text1.Name = "Text1"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.gridRefbanco.Column6.Name = "Column6"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.gridRefbanco.Column7.Header1.FontName = "Tahoma"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.gridRefbanco.Column7.Header1.ForeColor = 90,90,90
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.gridRefbanco.Column7.Header1.Name = "Header1"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.gridRefbanco.Column7.Text1.Name = "Text1"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.gridRefbanco.Column7.Name = "Column7"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.gridRefbanco.Column8.Header1.FontName = "Tahoma"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.gridRefbanco.Column8.Header1.ForeColor = 90,90,90
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.gridRefbanco.Column8.Header1.Name = "Header1"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.gridRefbanco.Column8.Text1.Name = "Text1"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.gridRefbanco.Column8.Name = "Column8"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.gridRefbanco.Column9.Header1.Name = "Header1"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.gridRefbanco.Column9.Check1.Alignment = 0
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.gridRefbanco.Column9.Check1.Name = "Check1"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.gridRefbanco.Column9.Name = "Column9"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.gridRefbanco.COLUMN10.Header1.Name = "Header1"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.gridRefbanco.COLUMN10.Text1.Name = "Text1"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.gridRefbanco.COLUMN10.Name = "COLUMN10"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.gridRefbanco.GridLineColor = 238,238,238
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.gridRefbanco.Name = "gridRefbanco"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.cmdApagaitem.Command1.Top = 5
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.cmdApagaitem.Command1.Left = 5
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.cmdApagaitem.Command1.FontBold = .T.
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.cmdApagaitem.Command1.FontItalic = .T.
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.cmdApagaitem.Command1.FontName = "Comic Sans MS"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.cmdApagaitem.Command1.ForeColor = 90,90,90
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.cmdApagaitem.Command1.Name = "Command1"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.cmdApagaitem.BackColor = 100,100,100
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.cmdApagaitem.Name = "cmdApagaitem"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Shape1.Name = "Shape1"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Get_Nbco.Name = "Get_Nbco"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Ndigito.Name = "Ndigito"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Get_Nage.Name = "Get_Nage"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Say1.FontName = "Tahoma"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Say1.Left = 52
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Say1.Top = 227
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Say1.ForeColor = 90,90,90
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Say1.Name = "Say1"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Say2.FontName = "Tahoma"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Say2.Left = 43
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Say2.Top = 252
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Say2.ForeColor = 90,90,90
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Say2.Name = "Say2"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Say25.FontName = "Tahoma"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Say25.Left = 55
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Say25.Top = 290
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Say25.ForeColor = 90,90,90
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Say25.Name = "Say25"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Get_Leitura.Name = "Get_Leitura"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Say3.FontName = "Tahoma"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Say3.Left = 45
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Say3.Top = 315
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Say3.ForeColor = 90,90,90
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Say3.Name = "Say3"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Get_arquivo.Name = "Get_arquivo"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Say4.Name = "Say4"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Get_Cnab.Name = "Get_Cnab"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Say5.FontName = "Tahoma"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Say5.Left = 32
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Say5.Top = 340
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Say5.ForeColor = 90,90,90
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Say5.Name = "Say5"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.getFavorecs.Name = "getFavorecs"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Say6.FontName = "Tahoma"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Say6.Left = 73
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Say6.Top = 202
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Say6.ForeColor = 90,90,90
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Say6.Name = "Say6"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Say7.FontName = "Tahoma"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Say7.Left = 531
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Say7.Top = 291
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Say7.ForeColor = 90,90,90
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Say7.Name = "Say7"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.getCodCtArq.Name = "getCodCtArq"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Say8.FontName = "Tahoma"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Say8.Left = 534
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Say8.Top = 316
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Say8.ForeColor = 90,90,90
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Say8.Name = "Say8"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.getCodCtBol.Name = "getCodCtBol"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.getMoras.Name = "getMoras"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Say9.FontName = "Tahoma"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Say9.Left = 316
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Say9.Top = 341
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Say9.ForeColor = 90,90,90
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Say9.Name = "Say9"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Say10.FontName = "Tahoma"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Say10.Left = 543
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Say10.Top = 342
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Say10.ForeColor = 90,90,90
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Say10.Name = "Say10"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.getInstrus.Name = "getInstrus"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.getDiasProts.Name = "getDiasProts"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Say11.FontName = "Tahoma"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Say11.Left = 553
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Say11.Top = 370
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Say11.ForeColor = 90,90,90
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Say11.Name = "Say11"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Say12.FontName = "Tahoma"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Say12.Left = 567
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Say12.Top = 396
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Say12.ForeColor = 90,90,90
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Say12.Name = "Say12"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.getTpConta.Name = "getTpConta"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Check1.Alignment = 0
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Check1.Name = "Check1"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Check2.Alignment = 0
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Check2.Name = "Check2"
+  pgframeDados.pgframeDados3.Pageframe1.pgNac.Name = "pgNac"
+  pgframeDados.pgframeDados3.Pageframe1.pgInt.gridRefbanco.Column1.Header1.FontName = "Tahoma"
+  pgframeDados.pgframeDados3.Pageframe1.pgInt.gridRefbanco.Column1.Header1.ForeColor = 90,90,90
+  pgframeDados.pgframeDados3.Pageframe1.pgInt.gridRefbanco.Column1.Header1.Name = "Header1"
+  pgframeDados.pgframeDados3.Pageframe1.pgInt.gridRefbanco.Column1.Text1.Name = "Text1"
+  pgframeDados.pgframeDados3.Pageframe1.pgInt.gridRefbanco.Column1.Name = "Column1"
+  pgframeDados.pgframeDados3.Pageframe1.pgInt.gridRefbanco.Column2.Header1.FontName = "Tahoma"
+  pgframeDados.pgframeDados3.Pageframe1.pgInt.gridRefbanco.Column2.Header1.ForeColor = 90,90,90
+  pgframeDados.pgframeDados3.Pageframe1.pgInt.gridRefbanco.Column2.Header1.Name = "Header1"
+  pgframeDados.pgframeDados3.Pageframe1.pgInt.gridRefbanco.Column2.Text1.Name = "Text1"
+  pgframeDados.pgframeDados3.Pageframe1.pgInt.gridRefbanco.Column2.Name = "Column2"
+  pgframeDados.pgframeDados3.Pageframe1.pgInt.gridRefbanco.Column3.Header1.FontName = "Tahoma"
+  pgframeDados.pgframeDados3.Pageframe1.pgInt.gridRefbanco.Column3.Header1.ForeColor = 90,90,90
+  pgframeDados.pgframeDados3.Pageframe1.pgInt.gridRefbanco.Column3.Header1.Name = "Header1"
+  pgframeDados.pgframeDados3.Pageframe1.pgInt.gridRefbanco.Column3.Text1.Name = "Text1"
+  pgframeDados.pgframeDados3.Pageframe1.pgInt.gridRefbanco.Column3.Name = "Column3"
+  pgframeDados.pgframeDados3.Pageframe1.pgInt.gridRefbanco.GridLineColor = 238,238,238
+  pgframeDados.pgframeDados3.Pageframe1.pgInt.gridRefbanco.Name = "gridRefbanco"
+  pgframeDados.pgframeDados3.Pageframe1.pgInt.cmdApagaitem.Command1.Top = 5
+  pgframeDados.pgframeDados3.Pageframe1.pgInt.cmdApagaitem.Command1.Left = 5
+  pgframeDados.pgframeDados3.Pageframe1.pgInt.cmdApagaitem.Command1.FontBold = .T.
+  pgframeDados.pgframeDados3.Pageframe1.pgInt.cmdApagaitem.Command1.FontItalic = .T.
+  pgframeDados.pgframeDados3.Pageframe1.pgInt.cmdApagaitem.Command1.FontName = "Comic Sans MS"
+  pgframeDados.pgframeDados3.Pageframe1.pgInt.cmdApagaitem.Command1.ForeColor = 90,90,90
+  pgframeDados.pgframeDados3.Pageframe1.pgInt.cmdApagaitem.Command1.Name = "Command1"
+  pgframeDados.pgframeDados3.Pageframe1.pgInt.cmdApagaitem.BorderStyle = 0
+  pgframeDados.pgframeDados3.Pageframe1.pgInt.cmdApagaitem.BorderColor = 100,100,100
+  pgframeDados.pgframeDados3.Pageframe1.pgInt.cmdApagaitem.Name = "cmdApagaitem"
+  pgframeDados.pgframeDados3.Pageframe1.pgInt.Get_Nage.Name = "Get_Nage"
+  pgframeDados.pgframeDados3.Pageframe1.pgInt.Say2.FontName = "Tahoma"
+  pgframeDados.pgframeDados3.Pageframe1.pgInt.Say2.Left = 50
+  pgframeDados.pgframeDados3.Pageframe1.pgInt.Say2.Top = 236
+  pgframeDados.pgframeDados3.Pageframe1.pgInt.Say2.ForeColor = 90,90,90
+  pgframeDados.pgframeDados3.Pageframe1.pgInt.Say2.Name = "Say2"
+  pgframeDados.pgframeDados3.Pageframe1.pgInt.getFavorecs.Name = "getFavorecs"
+  pgframeDados.pgframeDados3.Pageframe1.pgInt.Say6.FontName = "Tahoma"
+  pgframeDados.pgframeDados3.Pageframe1.pgInt.Say6.Left = 80
+  pgframeDados.pgframeDados3.Pageframe1.pgInt.Say6.Top = 210
+  pgframeDados.pgframeDados3.Pageframe1.pgInt.Say6.ForeColor = 90,90,90
+  pgframeDados.pgframeDados3.Pageframe1.pgInt.Say6.Name = "Say6"
+  pgframeDados.pgframeDados3.Pageframe1.pgInt.Get_Endes.Name = "Get_Endes"
+  pgframeDados.pgframeDados3.Pageframe1.pgInt.Say3.FontName = "Tahoma"
+  pgframeDados.pgframeDados3.Pageframe1.pgInt.Say3.Left = 88
+  pgframeDados.pgframeDados3.Pageframe1.pgInt.Say3.Top = 261
+  pgframeDados.pgframeDados3.Pageframe1.pgInt.Say3.ForeColor = 90,90,90
+  pgframeDados.pgframeDados3.Pageframe1.pgInt.Say3.Name = "Say3"
+  pgframeDados.pgframeDados3.Pageframe1.pgInt.Get_btels.Name = "Get_btels"
+  pgframeDados.pgframeDados3.Pageframe1.pgInt.Say1.FontName = "Tahoma"
+  pgframeDados.pgframeDados3.Pageframe1.pgInt.Say1.Left = 91
+  pgframeDados.pgframeDados3.Pageframe1.pgInt.Say1.Top = 287
+  pgframeDados.pgframeDados3.Pageframe1.pgInt.Say1.ForeColor = 90,90,90
+  pgframeDados.pgframeDados3.Pageframe1.pgInt.Say1.Name = "Say1"
+  pgframeDados.pgframeDados3.Pageframe1.pgInt.Get_clidesdes.Name = "Get_clidesdes"
+  pgframeDados.pgframeDados3.Pageframe1.pgInt.Say4.FontName = "Tahoma"
+  pgframeDados.pgframeDados3.Pageframe1.pgInt.Say4.Left = 67
+  pgframeDados.pgframeDados3.Pageframe1.pgInt.Say4.Top = 313
+  pgframeDados.pgframeDados3.Pageframe1.pgInt.Say4.ForeColor = 90,90,90
+  pgframeDados.pgframeDados3.Pageframe1.pgInt.Say4.Name = "Say4"
+  pgframeDados.pgframeDados3.Pageframe1.pgInt.Name = "pgInt"
+  pgframeDados.pgframeDados3.Pageframe1.Name = "Pageframe1"
+  pgframeDados.pgframeDados3.FontName = "Tahoma"
+  pgframeDados.pgframeDados3.PageOrder = 4
+  pgframeDados.pgframeDados3.BackColor = 255,255,255
+  pgframeDados.pgframeDados3.ForeColor = 90,90,90
+  pgframeDados.pgframeDados3.Name = "pgframeDados3"
+  pgframeDados.pgframeDados4.Shape1.Top = 328
+  pgframeDados.pgframeDados4.Shape1.Left = 8
+  pgframeDados.pgframeDados4.Shape1.Height = 50
+  pgframeDados.pgframeDados4.Shape1.Width = 50
+  pgframeDados.pgframeDados4.Shape1.SpecialEffect = 1
+  pgframeDados.pgframeDados4.Shape1.BorderColor = 136,188,189
+  pgframeDados.pgframeDados4.Shape1.Name = "Shape1"
+  pgframeDados.pgframeDados4.gridFollowup.Column1.Header1.FontName = "Tahoma"
+  pgframeDados.pgframeDados4.gridFollowup.Column1.Header1.FontSize = 8
+  pgframeDados.pgframeDados4.gridFollowup.Column1.Header1.ForeColor = 90,90,90
+  pgframeDados.pgframeDados4.gridFollowup.Column1.Header1.Name = "Header1"
+  pgframeDados.pgframeDados4.gridFollowup.Column1.Text1.Name = "Text1"
+  pgframeDados.pgframeDados4.gridFollowup.Column1.Name = "Column1"
+  pgframeDados.pgframeDados4.gridFollowup.Column2.Header1.FontName = "Tahoma"
+  pgframeDados.pgframeDados4.gridFollowup.Column2.Header1.FontSize = 8
+  pgframeDados.pgframeDados4.gridFollowup.Column2.Header1.ForeColor = 90,90,90
+  pgframeDados.pgframeDados4.gridFollowup.Column2.Header1.Name = "Header1"
+  pgframeDados.pgframeDados4.gridFollowup.Column2.Text1.Name = "Text1"
+  pgframeDados.pgframeDados4.gridFollowup.Column2.Name = "Column2"
+  pgframeDados.pgframeDados4.gridFollowup.GridLineColor = 238,238,238
+  pgframeDados.pgframeDados4.gridFollowup.Name = "gridFollowup"
+  pgframeDados.pgframeDados4.cmdApagaitem.Command1.Top = 5
+  pgframeDados.pgframeDados4.cmdApagaitem.Command1.Left = 5
+  pgframeDados.pgframeDados4.cmdApagaitem.Command1.Height = 40
+  pgframeDados.pgframeDados4.cmdApagaitem.Command1.Width = 40
+  pgframeDados.pgframeDados4.cmdApagaitem.Command1.FontName = "Verdana"
+  pgframeDados.pgframeDados4.cmdApagaitem.Command1.FontSize = 8
+  pgframeDados.pgframeDados4.cmdApagaitem.Command1.WordWrap = .T.
+  pgframeDados.pgframeDados4.cmdApagaitem.Command1.Picture = ..\vbmp\wzdelete.bmp
+  pgframeDados.pgframeDados4.cmdApagaitem.Command1.Caption = ""
+  pgframeDados.pgframeDados4.cmdApagaitem.Command1.ToolTipText = "Apaga Item"
+  pgframeDados.pgframeDados4.cmdApagaitem.Command1.ForeColor = 36,84,155
+  pgframeDados.pgframeDados4.cmdApagaitem.Command1.BackColor = 255,255,255
+  pgframeDados.pgframeDados4.cmdApagaitem.Command1.DisabledBackColor = 255,255,255
+  pgframeDados.pgframeDados4.cmdApagaitem.Command1.Themes = .F.
+  pgframeDados.pgframeDados4.cmdApagaitem.Command1.Name = "Command1"
+  pgframeDados.pgframeDados4.cmdApagaitem.Left = 57
+  pgframeDados.pgframeDados4.cmdApagaitem.SpecialEffect = 1
+  pgframeDados.pgframeDados4.cmdApagaitem.Top = 328
+  pgframeDados.pgframeDados4.cmdApagaitem.BorderColor = 136,188,189
+  pgframeDados.pgframeDados4.cmdApagaitem.Name = "cmdApagaitem"
+  pgframeDados.pgframeDados4.Relatório.Top = 333
+  pgframeDados.pgframeDados4.Relatório.Left = 13
+  pgframeDados.pgframeDados4.Relatório.Height = 40
+  pgframeDados.pgframeDados4.Relatório.Width = 40
+  pgframeDados.pgframeDados4.Relatório.FontName = "Verdana"
+  pgframeDados.pgframeDados4.Relatório.FontSize = 8
+  pgframeDados.pgframeDados4.Relatório.WordWrap = .T.
+  pgframeDados.pgframeDados4.Relatório.Picture = ..\vbmp\a_print4.bmp
+  pgframeDados.pgframeDados4.Relatório.Caption = ""
+  pgframeDados.pgframeDados4.Relatório.ToolTipText = "Listagem"
+  pgframeDados.pgframeDados4.Relatório.ForeColor = 36,84,155
+  pgframeDados.pgframeDados4.Relatório.BackColor = 255,255,255
+  pgframeDados.pgframeDados4.Relatório.DisabledBackColor = 255,255,255
+  pgframeDados.pgframeDados4.Relatório.Themes = .F.
+  pgframeDados.pgframeDados4.Relatório.Name = "Relatório"
+  pgframeDados.pgframeDados4.FontName = "Tahoma"
+  pgframeDados.pgframeDados4.PageOrder = 6
+  pgframeDados.pgframeDados4.BackColor = 255,255,255
+  pgframeDados.pgframeDados4.ForeColor = 90,90,90
+  pgframeDados.pgframeDados4.Name = "pgframeDados4"
+  pgframeDados.pgframeDados5.Shape2.Height = 46
+  pgframeDados.pgframeDados5.Shape2.SpecialEffect = 1
+  pgframeDados.pgframeDados5.Shape2.BorderColor = 136,188,189
+  pgframeDados.pgframeDados5.Shape2.Name = "Shape2"
+  pgframeDados.pgframeDados5.Say1.FontName = "Tahoma"
+  pgframeDados.pgframeDados5.Say1.Left = 203
+  pgframeDados.pgframeDados5.Say1.Top = 84
+  pgframeDados.pgframeDados5.Say1.ForeColor = 90,90,90
+  pgframeDados.pgframeDados5.Say1.Name = "Say1"
+  pgframeDados.pgframeDados5.Get_Grupo.Name = "Get_Grupo"
+  pgframeDados.pgframeDados5.Say2.FontName = "Tahoma"
+  pgframeDados.pgframeDados5.Say2.Left = 44
+  pgframeDados.pgframeDados5.Say2.ForeColor = 90,90,90
+  pgframeDados.pgframeDados5.Say2.Name = "Say2"
+  pgframeDados.pgframeDados5.Say4.FontName = "Tahoma"
+  pgframeDados.pgframeDados5.Say4.Left = 36
+  pgframeDados.pgframeDados5.Say4.ForeColor = 90,90,90
+  pgframeDados.pgframeDados5.Say4.Name = "Say4"
+  pgframeDados.pgframeDados5.Say22.FontName = "Tahoma"
+  pgframeDados.pgframeDados5.Say22.Left = 24
+  pgframeDados.pgframeDados5.Say22.ForeColor = 90,90,90
+  pgframeDados.pgframeDados5.Say22.Name = "Say22"
+  pgframeDados.pgframeDados5.Say12.FontName = "Tahoma"
+  pgframeDados.pgframeDados5.Say12.Left = 21
+  pgframeDados.pgframeDados5.Say12.ForeColor = 90,90,90
+  pgframeDados.pgframeDados5.Say12.Name = "Say12"
+  pgframeDados.pgframeDados5.Get_descr.Name = "Get_descr"
+  pgframeDados.pgframeDados5.Get_codigo.FontName = "Tahoma"
+  pgframeDados.pgframeDados5.Get_codigo.ForeColor = 90,90,90
+  pgframeDados.pgframeDados5.Get_codigo.Name = "Get_codigo"
+  pgframeDados.pgframeDados5.cnt_balanco.Say19.Name = "Say19"
+  pgframeDados.pgframeDados5.cnt_balanco.CmbgBals.Name = "CmbgBals"
+  pgframeDados.pgframeDados5.cnt_balanco.Say1.Name = "Say1"
+  pgframeDados.pgframeDados5.cnt_balanco.CmbPaga.Name = "CmbPaga"
+  pgframeDados.pgframeDados5.cnt_balanco.Say2.FontName = "Tahoma"
+  pgframeDados.pgframeDados5.cnt_balanco.Say2.ForeColor = 90,90,90
+  pgframeDados.pgframeDados5.cnt_balanco.Say2.Name = "Say2"
+  pgframeDados.pgframeDados5.cnt_balanco.CmbRecebe.FontName = "Tahoma"
+  pgframeDados.pgframeDados5.cnt_balanco.CmbRecebe.ForeColor = 90,90,90
+  pgframeDados.pgframeDados5.cnt_balanco.CmbRecebe.Name = "CmbRecebe"
+  pgframeDados.pgframeDados5.cnt_balanco.Get_Grupo.Name = "Get_Grupo"
+  pgframeDados.pgframeDados5.cnt_balanco.Say3.FontName = "Tahoma"
+  pgframeDados.pgframeDados5.cnt_balanco.Say3.ForeColor = 90,90,90
+  pgframeDados.pgframeDados5.cnt_balanco.Say3.Name = "Say3"
+  pgframeDados.pgframeDados5.cnt_balanco.Get_tpcp.Name = "Get_tpcp"
+  pgframeDados.pgframeDados5.cnt_balanco.Say4.FontName = "Tahoma"
+  pgframeDados.pgframeDados5.cnt_balanco.Say4.ForeColor = 90,90,90
+  pgframeDados.pgframeDados5.cnt_balanco.Say4.Name = "Say4"
+  pgframeDados.pgframeDados5.cnt_balanco.Get_ObsOp.Name = "Get_ObsOp"
+  pgframeDados.pgframeDados5.cnt_balanco.Say5.FontName = "Tahoma"
+  pgframeDados.pgframeDados5.cnt_balanco.Say5.ForeColor = 90,90,90
+  pgframeDados.pgframeDados5.cnt_balanco.Say5.Name = "Say5"
+  pgframeDados.pgframeDados5.cnt_balanco.Top = 225
+  pgframeDados.pgframeDados5.cnt_balanco.Left = 6
+  pgframeDados.pgframeDados5.cnt_balanco.Name = "cnt_balanco"
+  pgframeDados.pgframeDados5.Say6.FontName = "Tahoma"
+  pgframeDados.pgframeDados5.Say6.ForeColor = 90,90,90
+  pgframeDados.pgframeDados5.Say6.Name = "Say6"
+  pgframeDados.pgframeDados5.AlteraSenha.Height = 40
+  pgframeDados.pgframeDados5.AlteraSenha.FontName = "Comic Sans MS"
+  pgframeDados.pgframeDados5.AlteraSenha.FontSize = 8
+  pgframeDados.pgframeDados5.AlteraSenha.WordWrap = .T.
+  pgframeDados.pgframeDados5.AlteraSenha.ForeColor = 90,90,90
+  pgframeDados.pgframeDados5.AlteraSenha.BackColor = 255,255,255
+  pgframeDados.pgframeDados5.AlteraSenha.DisabledBackColor = 255,255,255
+  pgframeDados.pgframeDados5.AlteraSenha.Themes = .F.
+  pgframeDados.pgframeDados5.AlteraSenha.Name = "AlteraSenha"
+  pgframeDados.pgframeDados5.Get_Emps.Name = "Get_Emps"
+  pgframeDados.pgframeDados5.Get_DEmps.Name = "Get_DEmps"
+  pgframeDados.pgframeDados5.Get_CARGO.Name = "Get_CARGO"
+  pgframeDados.pgframeDados5.Say_Cargo.FontName = "Tahoma"
+  pgframeDados.pgframeDados5.Say_Cargo.Left = 36
+  pgframeDados.pgframeDados5.Say_Cargo.ForeColor = 90,90,90
+  pgframeDados.pgframeDados5.Say_Cargo.Name = "Say_Cargo"
+  pgframeDados.pgframeDados5.chklnativa.FontName = "Tahoma"
+  pgframeDados.pgframeDados5.chklnativa.Alignment = 0
+  pgframeDados.pgframeDados5.chklnativa.BackStyle = 0
+  pgframeDados.pgframeDados5.chklnativa.ForeColor = 90,90,90
+  pgframeDados.pgframeDados5.chklnativa.Name = "chklnativa"
+  pgframeDados.pgframeDados5.Gradebf.Column1.Header1.FontName = "Verdana"
+  pgframeDados.pgframeDados5.Gradebf.Column1.Header1.ForeColor = 36,84,155
+  pgframeDados.pgframeDados5.Gradebf.Column1.Header1.Name = "Header1"
+  pgframeDados.pgframeDados5.Gradebf.Column1.Text1.Name = "Text1"
+  pgframeDados.pgframeDados5.Gradebf.Column1.Name = "Column1"
+  pgframeDados.pgframeDados5.Gradebf.Name = "Gradebf"
+  pgframeDados.pgframeDados5.GetRazão.Name = "GetRazão"
+  pgframeDados.pgframeDados5.op_vincula.FontName = "Tahoma"
+  pgframeDados.pgframeDados5.op_vincula.Alignment = 0
+  pgframeDados.pgframeDados5.op_vincula.ForeColor = 90,90,90
+  pgframeDados.pgframeDados5.op_vincula.Name = "op_vincula"
+  pgframeDados.pgframeDados5.Opt_Patrim.FontName = "Tahoma"
+  pgframeDados.pgframeDados5.Opt_Patrim.Alignment = 0
+  pgframeDados.pgframeDados5.Opt_Patrim.ForeColor = 90,90,90
+  pgframeDados.pgframeDados5.Opt_Patrim.Name = "Opt_Patrim"
+  pgframeDados.pgframeDados5.op_concilia.FontName = "Tahoma"
+  pgframeDados.pgframeDados5.op_concilia.Alignment = 0
+  pgframeDados.pgframeDados5.op_concilia.ForeColor = 90,90,90
+  pgframeDados.pgframeDados5.op_concilia.Name = "op_concilia"
+  pgframeDados.pgframeDados5.getPastas.FontName = "Tahoma"
+  pgframeDados.pgframeDados5.getPastas.BorderColor = 100,100,100
+  pgframeDados.pgframeDados5.getPastas.Name = "getPastas"
+  pgframeDados.pgframeDados5.btnPastasC.Name = "btnPastasC"
+  pgframeDados.pgframeDados5.btnPastasA.Name = "btnPastasA"
+  pgframeDados.pgframeDados5.Say26.Name = "Say26"
+  pgframeDados.pgframeDados5.grdApontamtos.Column1.Header1.Name = "Header1"
+  pgframeDados.pgframeDados5.grdApontamtos.Column1.Text1.Name = "Text1"
+  pgframeDados.pgframeDados5.grdApontamtos.Column1.Name = "Column1"
+  pgframeDados.pgframeDados5.grdApontamtos.Column2.Header1.Name = "Header1"
+  pgframeDados.pgframeDados5.grdApontamtos.Column2.Text1.Name = "Text1"
+  pgframeDados.pgframeDados5.grdApontamtos.Column2.Name = "Column2"
+  pgframeDados.pgframeDados5.grdApontamtos.Column3.Header1.Name = "Header1"
+  pgframeDados.pgframeDados5.grdApontamtos.Column3.Text1.Name = "Text1"
+  pgframeDados.pgframeDados5.grdApontamtos.Column3.Name = "Column3"
+  pgframeDados.pgframeDados5.grdApontamtos.Name = "grdApontamtos"
+  pgframeDados.pgframeDados5.btnInsApts.Name = "btnInsApts"
+  pgframeDados.pgframeDados5.btnExcApts.Name = "btnExcApts"
+  pgframeDados.pgframeDados5.op_invisivel.FontName = "Tahoma"
+  pgframeDados.pgframeDados5.op_invisivel.Alignment = 0
+  pgframeDados.pgframeDados5.op_invisivel.ForeColor = 90,90,90
+  pgframeDados.pgframeDados5.op_invisivel.Name = "op_invisivel"
+  pgframeDados.pgframeDados5.Shape1.Name = "Shape1"
+  pgframeDados.pgframeDados5.Command1.FontName = "Comic Sans MS"
+  pgframeDados.pgframeDados5.Command1.ForeColor = 90,90,90
+  pgframeDados.pgframeDados5.Command1.Name = "Command1"
+  pgframeDados.pgframeDados5.Say_Balanco.FontName = "Tahoma"
+  pgframeDados.pgframeDados5.Say_Balanco.FontSize = 8
+  pgframeDados.pgframeDados5.Say_Balanco.Left = 9
+  pgframeDados.pgframeDados5.Say_Balanco.Top = 211
+  pgframeDados.pgframeDados5.Say_Balanco.ForeColor = 90,90,90
+  pgframeDados.pgframeDados5.Say_Balanco.Name = "Say_Balanco"
+  pgframeDados.pgframeDados5.Get_contaven.Name = "Get_contaven"
+  pgframeDados.pgframeDados5.Say3.Name = "Say3"
+  pgframeDados.pgframeDados5.Get_grupoven.Name = "Get_grupoven"
+  pgframeDados.pgframeDados5.FontName = "Tahoma"
+  pgframeDados.pgframeDados5.PageOrder = 5
+  pgframeDados.pgframeDados5.BackColor = 255,255,255
+  pgframeDados.pgframeDados5.ForeColor = 90,90,90
+  pgframeDados.pgframeDados5.Name = "pgframeDados5"
+  pgframeDados.pgframeDados6.Shape7.Top = 237
+  pgframeDados.pgframeDados6.Shape7.Left = 560
+  pgframeDados.pgframeDados6.Shape7.SpecialEffect = 1
+  pgframeDados.pgframeDados6.Shape7.BorderColor = 100,100,100
+  pgframeDados.pgframeDados6.Shape7.Name = "Shape7"
+  pgframeDados.pgframeDados6.Shape5.SpecialEffect = 1
+  pgframeDados.pgframeDados6.Shape5.BorderColor = 100,100,100
+  pgframeDados.pgframeDados6.Shape5.Name = "Shape5"
+  pgframeDados.pgframeDados6.Shape6.SpecialEffect = 1
+  pgframeDados.pgframeDados6.Shape6.BorderColor = 100,100,100
+  pgframeDados.pgframeDados6.Shape6.Name = "Shape6"
+  pgframeDados.pgframeDados6.Say2.FontName = "Tahoma"
+  pgframeDados.pgframeDados6.Say2.Left = 59
+  pgframeDados.pgframeDados6.Say2.Top = 48
+  pgframeDados.pgframeDados6.Say2.ForeColor = 90,90,90
+  pgframeDados.pgframeDados6.Say2.Name = "Say2"
+  pgframeDados.pgframeDados6.Say11.FontName = "Tahoma"
+  pgframeDados.pgframeDados6.Say11.Left = 49
+  pgframeDados.pgframeDados6.Say11.Top = 72
+  pgframeDados.pgframeDados6.Say11.ForeColor = 90,90,90
+  pgframeDados.pgframeDados6.Say11.Name = "Say11"
+  pgframeDados.pgframeDados6.Say16.FontName = "Tahoma"
+  pgframeDados.pgframeDados6.Say16.Left = 110
+  pgframeDados.pgframeDados6.Say16.Top = 23
+  pgframeDados.pgframeDados6.Say16.ForeColor = 90,90,90
+  pgframeDados.pgframeDados6.Say16.Name = "Say16"
+  pgframeDados.pgframeDados6.Get_Cfo.Left = 147
+  pgframeDados.pgframeDados6.Get_Cfo.Top = 19
+  pgframeDados.pgframeDados6.Get_Cfo.Name = "Get_Cfo"
+  pgframeDados.pgframeDados6.Get_Transp.Left = 147
+  pgframeDados.pgframeDados6.Get_Transp.Top = 44
+  pgframeDados.pgframeDados6.Get_Transp.Name = "Get_Transp"
+  pgframeDados.pgframeDados6.Say12.FontName = "Tahoma"
+  pgframeDados.pgframeDados6.Say12.Left = 15
+  pgframeDados.pgframeDados6.Say12.ForeColor = 90,90,90
+  pgframeDados.pgframeDados6.Say12.Name = "Say12"
+  pgframeDados.pgframeDados6.Say13.FontName = "Tahoma"
+  pgframeDados.pgframeDados6.Say13.Left = 32
+  pgframeDados.pgframeDados6.Say13.ForeColor = 90,90,90
+  pgframeDados.pgframeDados6.Say13.Name = "Say13"
+  pgframeDados.pgframeDados6.Say14.FontName = "Tahoma"
+  pgframeDados.pgframeDados6.Say14.Left = 41
+  pgframeDados.pgframeDados6.Say14.ForeColor = 90,90,90
+  pgframeDados.pgframeDados6.Say14.Name = "Say14"
+  pgframeDados.pgframeDados6.Say15.FontName = "Tahoma"
+  pgframeDados.pgframeDados6.Say15.Left = 283
+  pgframeDados.pgframeDados6.Say15.Top = 300
+  pgframeDados.pgframeDados6.Say15.ForeColor = 90,90,90
+  pgframeDados.pgframeDados6.Say15.Name = "Say15"
+  pgframeDados.pgframeDados6.Say23.FontName = "Tahoma"
+  pgframeDados.pgframeDados6.Say23.ForeColor = 90,90,90
+  pgframeDados.pgframeDados6.Say23.Name = "Say23"
+  pgframeDados.pgframeDados6.Say1.FontName = "Tahoma"
+  pgframeDados.pgframeDados6.Say1.Left = 503
+  pgframeDados.pgframeDados6.Say1.Top = 269
+  pgframeDados.pgframeDados6.Say1.ForeColor = 90,90,90
+  pgframeDados.pgframeDados6.Say1.Name = "Say1"
+  pgframeDados.pgframeDados6.Say4.FontName = "Tahoma"
+  pgframeDados.pgframeDados6.Say4.Left = 559
+  pgframeDados.pgframeDados6.Say4.Top = 301
+  pgframeDados.pgframeDados6.Say4.ForeColor = 90,90,90
+  pgframeDados.pgframeDados6.Say4.Name = "Say4"
+  pgframeDados.pgframeDados6.Say17.FontName = "Tahoma"
+  pgframeDados.pgframeDados6.Say17.Left = 208
+  pgframeDados.pgframeDados6.Say17.Top = 250
+  pgframeDados.pgframeDados6.Say17.ForeColor = 90,90,90
+  pgframeDados.pgframeDados6.Say17.Name = "Say17"
+  pgframeDados.pgframeDados6.Get_nome.Left = 231
+  pgframeDados.pgframeDados6.Get_nome.Top = 44
+  pgframeDados.pgframeDados6.Get_nome.Name = "Get_nome"
+  pgframeDados.pgframeDados6.Get_tif.Left = 147
+  pgframeDados.pgframeDados6.Get_tif.Top = 69
+  pgframeDados.pgframeDados6.Get_tif.Name = "Get_tif"
+  pgframeDados.pgframeDados6.Get_Dtif.Left = 180
+  pgframeDados.pgframeDados6.Get_Dtif.Top = 69
+  pgframeDados.pgframeDados6.Get_Dtif.Name = "Get_Dtif"
+  pgframeDados.pgframeDados6.GetEstCob.Left = 257
+  pgframeDados.pgframeDados6.GetEstCob.Top = 247
+  pgframeDados.pgframeDados6.GetEstCob.Name = "GetEstCob"
+  pgframeDados.pgframeDados6.GetCepCob.Left = 76
+  pgframeDados.pgframeDados6.GetCepCob.Top = 247
+  pgframeDados.pgframeDados6.GetCepCob.Name = "GetCepCob"
+  pgframeDados.pgframeDados6.GetBaiCob.Left = 76
+  pgframeDados.pgframeDados6.GetBaiCob.Top = 297
+  pgframeDados.pgframeDados6.GetBaiCob.Name = "GetBaiCob"
+  pgframeDados.pgframeDados6.GetCidCob.Left = 328
+  pgframeDados.pgframeDados6.GetCidCob.Top = 297
+  pgframeDados.pgframeDados6.GetCidCob.Name = "GetCidCob"
+  pgframeDados.pgframeDados6.GetEndCob.Left = 76
+  pgframeDados.pgframeDados6.GetEndCob.Top = 272
+  pgframeDados.pgframeDados6.GetEndCob.Name = "GetEndCob"
+  pgframeDados.pgframeDados6.Say18.FontName = "Tahoma"
+  pgframeDados.pgframeDados6.Say18.ForeColor = 90,90,90
+  pgframeDados.pgframeDados6.Say18.Name = "Say18"
+  pgframeDados.pgframeDados6.Get_suframa.Name = "Get_suframa"
+  pgframeDados.pgframeDados6.Say19.FontName = "Tahoma"
+  pgframeDados.pgframeDados6.Say19.Left = 33
+  pgframeDados.pgframeDados6.Say19.ForeColor = 90,90,90
+  pgframeDados.pgframeDados6.Say19.Name = "Say19"
+  pgframeDados.pgframeDados6.GetPraca.Left = 76
+  pgframeDados.pgframeDados6.GetPraca.Top = 322
+  pgframeDados.pgframeDados6.GetPraca.Name = "GetPraca"
+  pgframeDados.pgframeDados6.getEAN13Cobs.Left = 383
+  pgframeDados.pgframeDados6.getEAN13Cobs.Top = 247
+  pgframeDados.pgframeDados6.getEAN13Cobs.Name = "getEAN13Cobs"
+  pgframeDados.pgframeDados6.Say27.FontName = "Tahoma"
+  pgframeDados.pgframeDados6.Say27.Left = 339
+  pgframeDados.pgframeDados6.Say27.Top = 250
+  pgframeDados.pgframeDados6.Say27.ForeColor = 90,90,90
+  pgframeDados.pgframeDados6.Say27.Name = "Say27"
+  pgframeDados.pgframeDados6.getEAN13Ents.Name = "getEAN13Ents"
+  pgframeDados.pgframeDados6.Get_GrupoM.Name = "Get_GrupoM"
+  pgframeDados.pgframeDados6.Get_grupocob.Name = "Get_grupocob"
+  pgframeDados.pgframeDados6.Get_contacob.Name = "Get_contacob"
+  pgframeDados.pgframeDados6.Get_ContaM.Name = "Get_ContaM"
+  pgframeDados.pgframeDados6.Get_DContaM.Name = "Get_DContaM"
+  pgframeDados.pgframeDados6.Get_dcontacob.Name = "Get_dcontacob"
+  pgframeDados.pgframeDados6.Say3.FontName = "Tahoma"
+  pgframeDados.pgframeDados6.Say3.ForeColor = 90,90,90
+  pgframeDados.pgframeDados6.Say3.Name = "Say3"
+  pgframeDados.pgframeDados6.Say5.FontName = "Tahoma"
+  pgframeDados.pgframeDados6.Say5.ForeColor = 90,90,90
+  pgframeDados.pgframeDados6.Say5.Name = "Say5"
+  pgframeDados.pgframeDados6.Say10.FontName = "Tahoma"
+  pgframeDados.pgframeDados6.Say10.ForeColor = 90,90,90
+  pgframeDados.pgframeDados6.Say10.Name = "Say10"
+  pgframeDados.pgframeDados6.Say9.FontName = "Tahoma"
+  pgframeDados.pgframeDados6.Say9.ForeColor = 90,90,90
+  pgframeDados.pgframeDados6.Say9.Name = "Say9"
+  pgframeDados.pgframeDados6.Say20.FontName = "Tahoma"
+  pgframeDados.pgframeDados6.Say20.ForeColor = 90,90,90
+  pgframeDados.pgframeDados6.Say20.Name = "Say20"
+  pgframeDados.pgframeDados6.Say21.FontName = "Tahoma"
+  pgframeDados.pgframeDados6.Say21.ForeColor = 90,90,90
+  pgframeDados.pgframeDados6.Say21.Name = "Say21"
+  pgframeDados.pgframeDados6.Get_NMuncips.Name = "Get_NMuncips"
+  pgframeDados.pgframeDados6.Get_microemp.Name = "Get_microemp"
+  pgframeDados.pgframeDados6.cmdEnderecos.AutoSize = .T.
+  pgframeDados.pgframeDados6.cmdEnderecos.cmdEnderecos.Top = 5
+  pgframeDados.pgframeDados6.cmdEnderecos.cmdEnderecos.Left = 5
+  pgframeDados.pgframeDados6.cmdEnderecos.cmdEnderecos.Height = 40
+  pgframeDados.pgframeDados6.cmdEnderecos.cmdEnderecos.Width = 40
+  pgframeDados.pgframeDados6.cmdEnderecos.cmdEnderecos.FontName = "Verdana"
+  pgframeDados.pgframeDados6.cmdEnderecos.cmdEnderecos.FontSize = 8
+  pgframeDados.pgframeDados6.cmdEnderecos.cmdEnderecos.WordWrap = .T.
+  pgframeDados.pgframeDados6.cmdEnderecos.cmdEnderecos.Picture = ..\vbmp\x_dados.bmp
+  pgframeDados.pgframeDados6.cmdEnderecos.cmdEnderecos.Caption = ""
+  pgframeDados.pgframeDados6.cmdEnderecos.cmdEnderecos.ForeColor = 36,84,155
+  pgframeDados.pgframeDados6.cmdEnderecos.cmdEnderecos.BackColor = 255,255,255
+  pgframeDados.pgframeDados6.cmdEnderecos.cmdEnderecos.DisabledBackColor = 255,255,255
+  pgframeDados.pgframeDados6.cmdEnderecos.cmdEnderecos.Themes = .F.
+  pgframeDados.pgframeDados6.cmdEnderecos.cmdEnderecos.Name = "cmdEnderecos"
+  pgframeDados.pgframeDados6.cmdEnderecos.SpecialEffect = 1
+  pgframeDados.pgframeDados6.cmdEnderecos.BorderColor = 136,188,189
+  pgframeDados.pgframeDados6.cmdEnderecos.Name = "cmdEnderecos"
+  pgframeDados.pgframeDados6.cmbRegime.Name = "cmbRegime"
+  pgframeDados.pgframeDados6.getPis.Name = "getPis"
+  pgframeDados.pgframeDados6.FontName = "Tahoma"
+  pgframeDados.pgframeDados6.PageOrder = 7
+  pgframeDados.pgframeDados6.BackColor = 255,255,255
+  pgframeDados.pgframeDados6.ForeColor = 90,90,90
+  pgframeDados.pgframeDados6.Name = "pgframeDados6"
+  pgframeDados.pgframeDados7.Shape1.Name = "Shape1"
+  pgframeDados.pgframeDados7.Shp_Grade.Name = "Shp_Grade"
+  pgframeDados.pgframeDados7.Shape2.Name = "Shape2"
+  pgframeDados.pgframeDados7.Shp_LimCom.Name = "Shp_LimCom"
+  pgframeDados.pgframeDados7.Shp_Oper.Name = "Shp_Oper"
+  pgframeDados.pgframeDados7.Cnt_Respo.Get_grupoven.Name = "Get_grupoven"
+  pgframeDados.pgframeDados7.Cnt_Respo.getResp2.Name = "getResp2"
+  pgframeDados.pgframeDados7.Cnt_Respo.getNresp2.Name = "getNresp2"
+  pgframeDados.pgframeDados7.Cnt_Respo.Say10.FontName = "Tahoma"
+  pgframeDados.pgframeDados7.Cnt_Respo.Say10.ForeColor = 90,90,90
+  pgframeDados.pgframeDados7.Cnt_Respo.Say10.Name = "Say10"
+  pgframeDados.pgframeDados7.Cnt_Respo.Name = "Cnt_Respo"
+  pgframeDados.pgframeDados7.Say4.FontName = "Tahoma"
+  pgframeDados.pgframeDados7.Say4.FontSize = 8
+  pgframeDados.pgframeDados7.Say4.Left = 77
+  pgframeDados.pgframeDados7.Say4.Top = 167
+  pgframeDados.pgframeDados7.Say4.ForeColor = 90,90,90
+  pgframeDados.pgframeDados7.Say4.Name = "Say4"
+  pgframeDados.pgframeDados7.Say2.FontName = "Tahoma"
+  pgframeDados.pgframeDados7.Say2.FontSize = 8
+  pgframeDados.pgframeDados7.Say2.Left = 108
+  pgframeDados.pgframeDados7.Say2.Top = 182
+  pgframeDados.pgframeDados7.Say2.ForeColor = 90,90,90
+  pgframeDados.pgframeDados7.Say2.Name = "Say2"
+  pgframeDados.pgframeDados7.Say5.FontName = "Tahoma"
+  pgframeDados.pgframeDados7.Say5.FontSize = 8
+  pgframeDados.pgframeDados7.Say5.Left = 51
+  pgframeDados.pgframeDados7.Say5.Top = 212
+  pgframeDados.pgframeDados7.Say5.ForeColor = 90,90,90
+  pgframeDados.pgframeDados7.Say5.Name = "Say5"
+  pgframeDados.pgframeDados7.Say3.FontName = "Tahoma"
+  pgframeDados.pgframeDados7.Say3.FontSize = 8
+  pgframeDados.pgframeDados7.Say3.Left = 151
+  pgframeDados.pgframeDados7.Say3.Top = 197
+  pgframeDados.pgframeDados7.Say3.ForeColor = 90,90,90
+  pgframeDados.pgframeDados7.Say3.Name = "Say3"
+  pgframeDados.pgframeDados7.Say6.ForeColor = 90,90,90
+  pgframeDados.pgframeDados7.Say6.Name = "Say6"
+  pgframeDados.pgframeDados7.Consigna.Option1.FontName = "Tahoma"
+  pgframeDados.pgframeDados7.Consigna.Option1.Left = 1
+  pgframeDados.pgframeDados7.Consigna.Option1.Top = 6
+  pgframeDados.pgframeDados7.Consigna.Option1.ForeColor = 90,90,90
+  pgframeDados.pgframeDados7.Consigna.Option1.Name = "Option1"
+  pgframeDados.pgframeDados7.Consigna.Option2.FontName = "Tahoma"
+  pgframeDados.pgframeDados7.Consigna.Option2.Left = 43
+  pgframeDados.pgframeDados7.Consigna.Option2.Top = 6
+  pgframeDados.pgframeDados7.Consigna.Option2.ForeColor = 90,90,90
+  pgframeDados.pgframeDados7.Consigna.Option2.Name = "Option2"
+  pgframeDados.pgframeDados7.Consigna.Option3.FontName = "Tahoma"
+  pgframeDados.pgframeDados7.Consigna.Option3.Left = 150
+  pgframeDados.pgframeDados7.Consigna.Option3.Top = 6
+  pgframeDados.pgframeDados7.Consigna.Option3.ForeColor = 90,90,90
+  pgframeDados.pgframeDados7.Consigna.Option3.Name = "Option3"
+  pgframeDados.pgframeDados7.Consigna.Name = "Consigna"
+  pgframeDados.pgframeDados7.Get_ComCargo.Option1.Left = 5
+  pgframeDados.pgframeDados7.Get_ComCargo.Option1.Top = 3
+  pgframeDados.pgframeDados7.Get_ComCargo.Option1.Name = "Option1"
+  pgframeDados.pgframeDados7.Get_ComCargo.Option2.Left = 49
+  pgframeDados.pgframeDados7.Get_ComCargo.Option2.Top = 3
+  pgframeDados.pgframeDados7.Get_ComCargo.Option2.Name = "Option2"
+  pgframeDados.pgframeDados7.Get_ComCargo.Name = "Get_ComCargo"
+  pgframeDados.pgframeDados7.op_PenaCmv.Option1.Left = 5
+  pgframeDados.pgframeDados7.op_PenaCmv.Option1.Top = 5
+  pgframeDados.pgframeDados7.op_PenaCmv.Option1.Name = "Option1"
+  pgframeDados.pgframeDados7.op_PenaCmv.Option2.Left = 49
+  pgframeDados.pgframeDados7.op_PenaCmv.Option2.Top = 5
+  pgframeDados.pgframeDados7.op_PenaCmv.Option2.Name = "Option2"
+  pgframeDados.pgframeDados7.op_PenaCmv.Name = "op_PenaCmv"
+  pgframeDados.pgframeDados7.op_vincula.Option1.Left = 5
+  pgframeDados.pgframeDados7.op_vincula.Option1.Top = 3
+  pgframeDados.pgframeDados7.op_vincula.Option1.Name = "Option1"
+  pgframeDados.pgframeDados7.op_vincula.Option2.Left = 49
+  pgframeDados.pgframeDados7.op_vincula.Option2.Top = 3
+  pgframeDados.pgframeDados7.op_vincula.Option2.Name = "Option2"
+  pgframeDados.pgframeDados7.op_vincula.Name = "op_vincula"
+  pgframeDados.pgframeDados7.op_concilia.Option1.Left = 5
+  pgframeDados.pgframeDados7.op_concilia.Option1.Top = 5
+  pgframeDados.pgframeDados7.op_concilia.Option1.Name = "Option1"
+  pgframeDados.pgframeDados7.op_concilia.Option2.Left = 49
+  pgframeDados.pgframeDados7.op_concilia.Option2.Top = 5
+  pgframeDados.pgframeDados7.op_concilia.Option2.Name = "Option2"
+  pgframeDados.pgframeDados7.op_concilia.Name = "op_concilia"
+  pgframeDados.pgframeDados7.inserir.FontName = "Tahoma"
+  pgframeDados.pgframeDados7.inserir.FontSize = 8
+  pgframeDados.pgframeDados7.inserir.WordWrap = .T.
+  pgframeDados.pgframeDados7.inserir.ForeColor = 90,90,90
+  pgframeDados.pgframeDados7.inserir.BackColor = 255,255,255
+  pgframeDados.pgframeDados7.inserir.DisabledBackColor = 255,255,255
+  pgframeDados.pgframeDados7.inserir.Themes = .F.
+  pgframeDados.pgframeDados7.inserir.Name = "inserir"
+  pgframeDados.pgframeDados7.excluir.FontName = "Tahoma"
+  pgframeDados.pgframeDados7.excluir.FontSize = 8
+  pgframeDados.pgframeDados7.excluir.WordWrap = .T.
+  pgframeDados.pgframeDados7.excluir.ForeColor = 90,90,90
+  pgframeDados.pgframeDados7.excluir.BackColor = 255,255,255
+  pgframeDados.pgframeDados7.excluir.DisabledBackColor = 255,255,255
+  pgframeDados.pgframeDados7.excluir.Themes = .F.
+  pgframeDados.pgframeDados7.excluir.Name = "excluir"
+  pgframeDados.pgframeDados7.Cmd_LimCre.FontName = "Verdana"
+  pgframeDados.pgframeDados7.Cmd_LimCre.FontSize = 8
+  pgframeDados.pgframeDados7.Cmd_LimCre.ForeColor = 36,84,155
+  pgframeDados.pgframeDados7.Cmd_LimCre.BackColor = 255,255,255
+  pgframeDados.pgframeDados7.Cmd_LimCre.DisabledBackColor = 255,255,255
+  pgframeDados.pgframeDados7.Cmd_LimCre.Themes = .F.
+  pgframeDados.pgframeDados7.Cmd_LimCre.Name = "Cmd_LimCre"
+  pgframeDados.pgframeDados7.Cmd_Comissao.FontName = "Verdana"
+  pgframeDados.pgframeDados7.Cmd_Comissao.FontSize = 8
+  pgframeDados.pgframeDados7.Cmd_Comissao.WordWrap = .T.
+  pgframeDados.pgframeDados7.Cmd_Comissao.ForeColor = 36,84,155
+  pgframeDados.pgframeDados7.Cmd_Comissao.BackColor = 255,255,255
+  pgframeDados.pgframeDados7.Cmd_Comissao.DisabledBackColor = 255,255,255
+  pgframeDados.pgframeDados7.Cmd_Comissao.Themes = .F.
+  pgframeDados.pgframeDados7.Cmd_Comissao.Name = "Cmd_Comissao"
+  pgframeDados.pgframeDados7.Cnt_Cargo.Get_CARGO.Name = "Get_CARGO"
+  pgframeDados.pgframeDados7.Cnt_Cargo.Say_Cargo.FontName = "Tahoma"
+  pgframeDados.pgframeDados7.Cnt_Cargo.Say_Cargo.ForeColor = 90,90,90
+  pgframeDados.pgframeDados7.Cnt_Cargo.Say_Cargo.Name = "Say_Cargo"
+  pgframeDados.pgframeDados7.Cnt_Cargo.Say2.Left = 7
+  pgframeDados.pgframeDados7.Cnt_Cargo.Say2.Top = 19
+  pgframeDados.pgframeDados7.Cnt_Cargo.Say2.Name = "Say2"
+  pgframeDados.pgframeDados7.Cnt_Cargo.Name = "Cnt_Cargo"
+  pgframeDados.pgframeDados7.Cnt_Coletor.Say_Coletor.Name = "Say_Coletor"
+  pgframeDados.pgframeDados7.Cnt_Coletor.Cmb_Coletor.Left = 67
+  pgframeDados.pgframeDados7.Cnt_Coletor.Cmb_Coletor.Top = 16
+  pgframeDados.pgframeDados7.Cnt_Coletor.Cmb_Coletor.Name = "Cmb_Coletor"
+  pgframeDados.pgframeDados7.Cnt_Coletor.Say1.Left = 16
+  pgframeDados.pgframeDados7.Cnt_Coletor.Say1.Top = 46
+  pgframeDados.pgframeDados7.Cnt_Coletor.Say1.Name = "Say1"
+  pgframeDados.pgframeDados7.Cnt_Coletor.GetVcolet.Left = 67
+  pgframeDados.pgframeDados7.Cnt_Coletor.GetVcolet.Top = 41
+  pgframeDados.pgframeDados7.Cnt_Coletor.GetVcolet.Name = "GetVcolet"
+  pgframeDados.pgframeDados7.Cnt_Coletor.Say2.FontName = "Tahoma"
+  pgframeDados.pgframeDados7.Cnt_Coletor.Say2.ForeColor = 90,90,90
+  pgframeDados.pgframeDados7.Cnt_Coletor.Say2.Name = "Say2"
+  pgframeDados.pgframeDados7.Cnt_Coletor.Name = "Cnt_Coletor"
+  pgframeDados.pgframeDados7.cnt_balanco.Gradebf.Column1.Header1.FontName = "Verdana"
+  pgframeDados.pgframeDados7.cnt_balanco.Gradebf.Column1.Header1.ForeColor = 36,84,155
+  pgframeDados.pgframeDados7.cnt_balanco.Gradebf.Column1.Header1.Name = "Header1"
+  pgframeDados.pgframeDados7.cnt_balanco.Gradebf.Column1.Text1.Name = "Text1"
+  pgframeDados.pgframeDados7.cnt_balanco.Gradebf.Column1.Name = "Column1"
+  pgframeDados.pgframeDados7.cnt_balanco.Gradebf.Left = 188
+  pgframeDados.pgframeDados7.cnt_balanco.Gradebf.Top = 14
+  pgframeDados.pgframeDados7.cnt_balanco.Gradebf.Name = "Gradebf"
+  pgframeDados.pgframeDados7.cnt_balanco.Say19.Left = 4
+  pgframeDados.pgframeDados7.cnt_balanco.Say19.Top = 19
+  pgframeDados.pgframeDados7.cnt_balanco.Say19.Name = "Say19"
+  pgframeDados.pgframeDados7.cnt_balanco.CmbgBals.Left = 104
+  pgframeDados.pgframeDados7.cnt_balanco.CmbgBals.Top = 15
+  pgframeDados.pgframeDados7.cnt_balanco.CmbgBals.Name = "CmbgBals"
+  pgframeDados.pgframeDados7.cnt_balanco.Say1.Left = 32
+  pgframeDados.pgframeDados7.cnt_balanco.Say1.Top = 43
+  pgframeDados.pgframeDados7.cnt_balanco.Say1.Name = "Say1"
+  pgframeDados.pgframeDados7.cnt_balanco.CmbPaga.Left = 104
+  pgframeDados.pgframeDados7.cnt_balanco.CmbPaga.Top = 39
+  pgframeDados.pgframeDados7.cnt_balanco.CmbPaga.Name = "CmbPaga"
+  pgframeDados.pgframeDados7.cnt_balanco.Say2.Left = 18
+  pgframeDados.pgframeDados7.cnt_balanco.Say2.Top = 67
+  pgframeDados.pgframeDados7.cnt_balanco.Say2.Name = "Say2"
+  pgframeDados.pgframeDados7.cnt_balanco.CmbRecebe.Left = 104
+  pgframeDados.pgframeDados7.cnt_balanco.CmbRecebe.Name = "CmbRecebe"
+  pgframeDados.pgframeDados7.cnt_balanco.Get_Grupo.Left = 104
+  pgframeDados.pgframeDados7.cnt_balanco.Get_Grupo.Top = 87
+  pgframeDados.pgframeDados7.cnt_balanco.Get_Grupo.Name = "Get_Grupo"
+  pgframeDados.pgframeDados7.cnt_balanco.Say3.Left = 25
+  pgframeDados.pgframeDados7.cnt_balanco.Say3.Top = 91
+  pgframeDados.pgframeDados7.cnt_balanco.Say3.Name = "Say3"
+  pgframeDados.pgframeDados7.cnt_balanco.Get_ObsOp.Height = 23
+  pgframeDados.pgframeDados7.cnt_balanco.Get_ObsOp.Left = 8
+  pgframeDados.pgframeDados7.cnt_balanco.Get_ObsOp.Top = 202
+  pgframeDados.pgframeDados7.cnt_balanco.Get_ObsOp.Width = 285
+  pgframeDados.pgframeDados7.cnt_balanco.Get_ObsOp.Name = "Get_ObsOp"
+  pgframeDados.pgframeDados7.cnt_balanco.Say4.Name = "Say4"
+  pgframeDados.pgframeDados7.cnt_balanco.Say_Balanco.FontName = "Tahoma"
+  pgframeDados.pgframeDados7.cnt_balanco.Say_Balanco.ForeColor = 90,90,90
+  pgframeDados.pgframeDados7.cnt_balanco.Say_Balanco.Name = "Say_Balanco"
+  pgframeDados.pgframeDados7.cnt_balanco.Top = 3
+  pgframeDados.pgframeDados7.cnt_balanco.Left = 453
+  pgframeDados.pgframeDados7.cnt_balanco.Width = 302
+  pgframeDados.pgframeDados7.cnt_balanco.Height = 229
+  pgframeDados.pgframeDados7.cnt_balanco.Name = "cnt_balanco"
+  pgframeDados.pgframeDados7.Cnt_prod.Get_grupoprd.Name = "Get_grupoprd"
+  pgframeDados.pgframeDados7.Cnt_prod.Get_contaprd.Name = "Get_contaprd"
+  pgframeDados.pgframeDados7.Cnt_prod.Say1.FontName = "Tahoma"
+  pgframeDados.pgframeDados7.Cnt_prod.Say1.ForeColor = 90,90,90
+  pgframeDados.pgframeDados7.Cnt_prod.Say1.Name = "Say1"
+  pgframeDados.pgframeDados7.Cnt_prod.Say_Coletor.Left = 8
+  pgframeDados.pgframeDados7.Cnt_prod.Say_Coletor.Top = 19
+  pgframeDados.pgframeDados7.Cnt_prod.Say_Coletor.Name = "Say_Coletor"
+  pgframeDados.pgframeDados7.Cnt_prod.Say2.Left = 9
+  pgframeDados.pgframeDados7.Cnt_prod.Say2.Top = 43
+  pgframeDados.pgframeDados7.Cnt_prod.Say2.Name = "Say2"
+  pgframeDados.pgframeDados7.Cnt_prod.Name = "Cnt_prod"
+  pgframeDados.pgframeDados7.Gradei.Column1.Header1.Name = "Header1"
+  pgframeDados.pgframeDados7.Gradei.Column1.fwcombo1.Name = "fwcombo1"
+  pgframeDados.pgframeDados7.Gradei.Column1.Name = "Column1"
+  pgframeDados.pgframeDados7.Gradei.Column2.Header1.Name = "Header1"
+  pgframeDados.pgframeDados7.Gradei.Column2.Text1.Name = "Text1"
+  pgframeDados.pgframeDados7.Gradei.Column2.Name = "Column2"
+  pgframeDados.pgframeDados7.Gradei.Column3.Header1.Name = "Header1"
+  pgframeDados.pgframeDados7.Gradei.Column3.fwcombo1.Name = "fwcombo1"
+  pgframeDados.pgframeDados7.Gradei.Column3.Name = "Column3"
+  pgframeDados.pgframeDados7.Gradei.Name = "Gradei"
+  pgframeDados.pgframeDados7.Gradec.Column1.Header1.Name = "Header1"
+  pgframeDados.pgframeDados7.Gradec.Column1.Text1.Name = "Text1"
+  pgframeDados.pgframeDados7.Gradec.Column1.Name = "Column1"
+  pgframeDados.pgframeDados7.Gradec.Column2.Header1.Name = "Header1"
+  pgframeDados.pgframeDados7.Gradec.Column2.Text1.Name = "Text1"
+  pgframeDados.pgframeDados7.Gradec.Column2.Name = "Column2"
+  pgframeDados.pgframeDados7.Gradec.Name = "Gradec"
+  pgframeDados.pgframeDados7.Container1.Say_Coletor.Name = "Say_Coletor"
+  pgframeDados.pgframeDados7.Container1.cmbRestFors.Left = 71
+  pgframeDados.pgframeDados7.Container1.cmbRestFors.Top = 16
+  pgframeDados.pgframeDados7.Container1.cmbRestFors.Name = "cmbRestFors"
+  pgframeDados.pgframeDados7.Container1.Say2.FontName = "Tahoma"
+  pgframeDados.pgframeDados7.Container1.Say2.ForeColor = 90,90,90
+  pgframeDados.pgframeDados7.Container1.Say2.Name = "Say2"
+  pgframeDados.pgframeDados7.Container1.Name = "Container1"
+  pgframeDados.pgframeDados7.Shape3.Name = "Shape3"
+  pgframeDados.pgframeDados7.AlteraSenha.Name = "AlteraSenha"
+  pgframeDados.pgframeDados7.Container2.Say1.Name = "Say1"
+  pgframeDados.pgframeDados7.Container2.Get_juros.Name = "Get_juros"
+  pgframeDados.pgframeDados7.Container2.Name = "Container2"
+  pgframeDados.pgframeDados7.FontName = "Tahoma"
+  pgframeDados.pgframeDados7.PageOrder = 2
+  pgframeDados.pgframeDados7.BackColor = 255,255,255
+  pgframeDados.pgframeDados7.ForeColor = 90,90,90
+  pgframeDados.pgframeDados7.Name = "pgframeDados7"
+  pgframeDados.pgframeDados8.Say1.FontName = "Tahoma"
+  pgframeDados.pgframeDados8.Say1.Left = 57
+  pgframeDados.pgframeDados8.Say1.Top = 62
+  pgframeDados.pgframeDados8.Say1.ForeColor = 90,90,90
+  pgframeDados.pgframeDados8.Say1.Name = "Say1"
+  pgframeDados.pgframeDados8.Say2.FontName = "Tahoma"
+  pgframeDados.pgframeDados8.Say2.Left = 469
+  pgframeDados.pgframeDados8.Say2.Top = 16
+  pgframeDados.pgframeDados8.Say2.ForeColor = 90,90,90
+  pgframeDados.pgframeDados8.Say2.Name = "Say2"
+  pgframeDados.pgframeDados8.Say3.FontName = "Tahoma"
+  pgframeDados.pgframeDados8.Say3.Left = 67
+  pgframeDados.pgframeDados8.Say3.Top = 39
+  pgframeDados.pgframeDados8.Say3.ForeColor = 90,90,90
+  pgframeDados.pgframeDados8.Say3.Name = "Say3"
+  pgframeDados.pgframeDados8.Say4.FontName = "Tahoma"
+  pgframeDados.pgframeDados8.Say4.Left = 475
+  pgframeDados.pgframeDados8.Say4.Top = 39
+  pgframeDados.pgframeDados8.Say4.ForeColor = 90,90,90
+  pgframeDados.pgframeDados8.Say4.Name = "Say4"
+  pgframeDados.pgframeDados8.Say5.Left = 324
+  pgframeDados.pgframeDados8.Say5.Top = 39
+  pgframeDados.pgframeDados8.Say5.Name = "Say5"
+  pgframeDados.pgframeDados8.Say6.FontName = "Tahoma"
+  pgframeDados.pgframeDados8.Say6.ForeColor = 90,90,90
+  pgframeDados.pgframeDados8.Say6.Name = "Say6"
+  pgframeDados.pgframeDados8.Get_Dtfundacao.Name = "Get_Dtfundacao"
+  pgframeDados.pgframeDados8.Get_DtAlteracao.Name = "Get_DtAlteracao"
+  pgframeDados.pgframeDados8.fwmemo_Fornecs.Name = "fwmemo_Fornecs"
+  pgframeDados.pgframeDados8.Say9.FontName = "Tahoma"
+  pgframeDados.pgframeDados8.Say9.ForeColor = 90,90,90
+  pgframeDados.pgframeDados8.Say9.Name = "Say9"
+  pgframeDados.pgframeDados8.Say10.FontName = "Tahoma"
+  pgframeDados.pgframeDados8.Say10.ForeColor = 90,90,90
+  pgframeDados.pgframeDados8.Say10.Name = "Say10"
+  pgframeDados.pgframeDados8.Say11.FontName = "Tahoma"
+  pgframeDados.pgframeDados8.Say11.ForeColor = 90,90,90
+  pgframeDados.pgframeDados8.Say11.Name = "Say11"
+  pgframeDados.pgframeDados8.Say12.FontName = "Tahoma"
+  pgframeDados.pgframeDados8.Say12.ForeColor = 90,90,90
+  pgframeDados.pgframeDados8.Say12.Name = "Say12"
+  pgframeDados.pgframeDados8.Say13.FontName = "Tahoma"
+  pgframeDados.pgframeDados8.Say13.ForeColor = 90,90,90
+  pgframeDados.pgframeDados8.Say13.Name = "Say13"
+  pgframeDados.pgframeDados8.Get_Socio1s.Name = "Get_Socio1s"
+  pgframeDados.pgframeDados8.Get_Cpf1s.Name = "Get_Cpf1s"
+  pgframeDados.pgframeDados8.Get_Conjuge1s.Name = "Get_Conjuge1s"
+  pgframeDados.pgframeDados8.Get_Dtnconj1.Name = "Get_Dtnconj1"
+  pgframeDados.pgframeDados8.Get_Dtnasc1s.Name = "Get_Dtnasc1s"
+  pgframeDados.pgframeDados8.Label1.AutoSize = .T.
+  pgframeDados.pgframeDados8.Label1.FontName = "Verdana"
+  pgframeDados.pgframeDados8.Label1.FontSize = 8
+  pgframeDados.pgframeDados8.Label1.Name = "Label1"
+  pgframeDados.pgframeDados8.Say7.FontName = "Tahoma"
+  pgframeDados.pgframeDados8.Say7.ForeColor = 90,90,90
+  pgframeDados.pgframeDados8.Say7.Name = "Say7"
+  pgframeDados.pgframeDados8.Say14.FontName = "Tahoma"
+  pgframeDados.pgframeDados8.Say14.ForeColor = 90,90,90
+  pgframeDados.pgframeDados8.Say14.Name = "Say14"
+  pgframeDados.pgframeDados8.Say15.FontName = "Tahoma"
+  pgframeDados.pgframeDados8.Say15.ForeColor = 90,90,90
+  pgframeDados.pgframeDados8.Say15.Name = "Say15"
+  pgframeDados.pgframeDados8.Say16.FontName = "Tahoma"
+  pgframeDados.pgframeDados8.Say16.ForeColor = 90,90,90
+  pgframeDados.pgframeDados8.Say16.Name = "Say16"
+  pgframeDados.pgframeDados8.Say17.FontName = "Tahoma"
+  pgframeDados.pgframeDados8.Say17.ForeColor = 90,90,90
+  pgframeDados.pgframeDados8.Say17.Name = "Say17"
+  pgframeDados.pgframeDados8.Get_Socio2s.Name = "Get_Socio2s"
+  pgframeDados.pgframeDados8.Get_Cpf2s.Name = "Get_Cpf2s"
+  pgframeDados.pgframeDados8.Say23.FontName = "Tahoma"
+  pgframeDados.pgframeDados8.Say23.Left = 95
+  pgframeDados.pgframeDados8.Say23.Top = 16
+  pgframeDados.pgframeDados8.Say23.ForeColor = 90,90,90
+  pgframeDados.pgframeDados8.Say23.Name = "Say23"
+  pgframeDados.pgframeDados8.Get_Conjuge2s.Name = "Get_Conjuge2s"
+  pgframeDados.pgframeDados8.Get_Dtnconj2.Name = "Get_Dtnconj2"
+  pgframeDados.pgframeDados8.Get_Dtnasc2s.Name = "Get_Dtnasc2s"
+  pgframeDados.pgframeDados8.Say8.FontName = "Tahoma"
+  pgframeDados.pgframeDados8.Say8.ForeColor = 90,90,90
+  pgframeDados.pgframeDados8.Say8.Name = "Say8"
+  pgframeDados.pgframeDados8.Say18.FontName = "Tahoma"
+  pgframeDados.pgframeDados8.Say18.ForeColor = 90,90,90
+  pgframeDados.pgframeDados8.Say18.Name = "Say18"
+  pgframeDados.pgframeDados8.Say19.FontName = "Tahoma"
+  pgframeDados.pgframeDados8.Say19.ForeColor = 90,90,90
+  pgframeDados.pgframeDados8.Say19.Name = "Say19"
+  pgframeDados.pgframeDados8.Say20.FontName = "Tahoma"
+  pgframeDados.pgframeDados8.Say20.ForeColor = 90,90,90
+  pgframeDados.pgframeDados8.Say20.Name = "Say20"
+  pgframeDados.pgframeDados8.Say21.FontName = "Tahoma"
+  pgframeDados.pgframeDados8.Say21.ForeColor = 90,90,90
+  pgframeDados.pgframeDados8.Say21.Name = "Say21"
+  pgframeDados.pgframeDados8.Get_Socio3s.Name = "Get_Socio3s"
+  pgframeDados.pgframeDados8.Get_Cpf3s.Name = "Get_Cpf3s"
+  pgframeDados.pgframeDados8.Get_Conjuge3s.Name = "Get_Conjuge3s"
+  pgframeDados.pgframeDados8.Get_Dtnconj3.Name = "Get_Dtnconj3"
+  pgframeDados.pgframeDados8.Get_Dtnasc3s.Name = "Get_Dtnasc3s"
+  pgframeDados.pgframeDados8.Label4.AutoSize = .T.
+  pgframeDados.pgframeDados8.Label4.FontName = "Verdana"
+  pgframeDados.pgframeDados8.Label4.FontSize = 8
+  pgframeDados.pgframeDados8.Label4.Name = "Label4"
+  pgframeDados.pgframeDados8.Label2.AutoSize = .T.
+  pgframeDados.pgframeDados8.Label2.FontName = "Verdana"
+  pgframeDados.pgframeDados8.Label2.FontSize = 8
+  pgframeDados.pgframeDados8.Label2.Name = "Label2"
+  pgframeDados.pgframeDados8.Get_RazaoAnterior.Name = "Get_RazaoAnterior"
+  pgframeDados.pgframeDados8.Get_Grucolis.Name = "Get_Grucolis"
+  pgframeDados.pgframeDados8.Get_Nrlojas.Name = "Get_Nrlojas"
+  pgframeDados.pgframeDados8.Get_InsMuns.Name = "Get_InsMuns"
+  pgframeDados.pgframeDados8.FontName = "Tahoma"
+  pgframeDados.pgframeDados8.PageOrder = 8
+  pgframeDados.pgframeDados8.BackColor = 255,255,255
+  pgframeDados.pgframeDados8.ForeColor = 90,90,90
+  pgframeDados.pgframeDados8.Name = "pgframeDados8"
+  pgframeDados.pgFrameDados9.Shape1.SpecialEffect = 1
+  pgframeDados.pgFrameDados9.Shape1.BorderColor = 136,188,189
+  pgframeDados.pgFrameDados9.Shape1.Name = "Shape1"
+  pgframeDados.pgFrameDados9.Say5.FontName = "Tahoma"
+  pgframeDados.pgFrameDados9.Say5.Left = 198
+  pgframeDados.pgFrameDados9.Say5.Top = 74
+  pgframeDados.pgFrameDados9.Say5.ForeColor = 90,90,90
+  pgframeDados.pgFrameDados9.Say5.Name = "Say5"
+  pgframeDados.pgFrameDados9.Say6.FontName = "Tahoma"
+  pgframeDados.pgFrameDados9.Say6.Left = 153
+  pgframeDados.pgFrameDados9.Say6.Top = 96
+  pgframeDados.pgFrameDados9.Say6.ForeColor = 90,90,90
+  pgframeDados.pgFrameDados9.Say6.Name = "Say6"
+  pgframeDados.pgFrameDados9.Say20.FontName = "Tahoma"
+  pgframeDados.pgFrameDados9.Say20.Left = 191
+  pgframeDados.pgFrameDados9.Say20.Top = 22
+  pgframeDados.pgFrameDados9.Say20.ForeColor = 90,90,90
+  pgframeDados.pgFrameDados9.Say20.Name = "Say20"
+  pgframeDados.pgFrameDados9.Say21.FontName = "Tahoma"
+  pgframeDados.pgFrameDados9.Say21.Left = 206
+  pgframeDados.pgFrameDados9.Say21.Top = 49
+  pgframeDados.pgFrameDados9.Say21.ForeColor = 90,90,90
+  pgframeDados.pgFrameDados9.Say21.Name = "Say21"
+  pgframeDados.pgFrameDados9.Get_ccontab.Name = "Get_ccontab"
+  pgframeDados.pgFrameDados9.GetHists.Name = "GetHists"
+  pgframeDados.pgFrameDados9.OpTpHists.Option1.FontName = "Tahoma"
+  pgframeDados.pgFrameDados9.OpTpHists.Option1.Left = 4
+  pgframeDados.pgFrameDados9.OpTpHists.Option1.Top = 2
+  pgframeDados.pgFrameDados9.OpTpHists.Option1.ForeColor = 90,90,90
+  pgframeDados.pgFrameDados9.OpTpHists.Option1.Name = "Option1"
+  pgframeDados.pgFrameDados9.OpTpHists.Option2.FontName = "Tahoma"
+  pgframeDados.pgFrameDados9.OpTpHists.Option2.Left = 4
+  pgframeDados.pgFrameDados9.OpTpHists.Option2.Top = 22
+  pgframeDados.pgFrameDados9.OpTpHists.Option2.ForeColor = 90,90,90
+  pgframeDados.pgFrameDados9.OpTpHists.Option2.Name = "Option2"
+  pgframeDados.pgFrameDados9.OpTpHists.Option4.FontName = "Tahoma"
+  pgframeDados.pgFrameDados9.OpTpHists.Option4.FontSize = 8
+  pgframeDados.pgFrameDados9.OpTpHists.Option4.Left = 110
+  pgframeDados.pgFrameDados9.OpTpHists.Option4.Top = 3
+  pgframeDados.pgFrameDados9.OpTpHists.Option4.ForeColor = 90,90,90
+  pgframeDados.pgFrameDados9.OpTpHists.Option4.Name = "Option4"
+  pgframeDados.pgFrameDados9.OpTpHists.Option3.FontName = "Tahoma"
+  pgframeDados.pgFrameDados9.OpTpHists.Option3.FontSize = 8
+  pgframeDados.pgFrameDados9.OpTpHists.Option3.Left = 110
+  pgframeDados.pgFrameDados9.OpTpHists.Option3.Top = 23
+  pgframeDados.pgFrameDados9.OpTpHists.Option3.ForeColor = 90,90,90
+  pgframeDados.pgFrameDados9.OpTpHists.Option3.Name = "Option3"
+  pgframeDados.pgFrameDados9.OpTpHists.Name = "OpTpHists"
+  pgframeDados.pgFrameDados9.op_intcontab.Option1.Left = 5
+  pgframeDados.pgFrameDados9.op_intcontab.Option1.Top = 5
+  pgframeDados.pgFrameDados9.op_intcontab.Option1.Name = "Option1"
+  pgframeDados.pgFrameDados9.op_intcontab.Option2.Left = 49
+  pgframeDados.pgFrameDados9.op_intcontab.Option2.Top = 5
+  pgframeDados.pgFrameDados9.op_intcontab.Option2.Name = "Option2"
+  pgframeDados.pgFrameDados9.op_intcontab.Name = "op_intcontab"
+  pgframeDados.pgFrameDados9.Get_grupocob.Name = "Get_grupocob"
+  pgframeDados.pgFrameDados9.Get_contacob.Name = "Get_contacob"
+  pgframeDados.pgFrameDados9.Get_dcontacob.Name = "Get_dcontacob"
+  pgframeDados.pgFrameDados9.Say3.FontName = "Tahoma"
+  pgframeDados.pgFrameDados9.Say3.ForeColor = 90,90,90
+  pgframeDados.pgFrameDados9.Say3.Name = "Say3"
+  pgframeDados.pgFrameDados9.FontName = "Tahoma"
+  pgframeDados.pgFrameDados9.PageOrder = 9
+  pgframeDados.pgFrameDados9.BackColor = 255,255,255
+  pgframeDados.pgFrameDados9.ForeColor = 90,90,90
+  pgframeDados.pgFrameDados9.Name = "pgFrameDados9"
+  pgframeDados.pgframeDados10.Shape1.SpecialEffect = 1
+  pgframeDados.pgframeDados10.Shape1.BorderColor = 136,188,189
+  pgframeDados.pgframeDados10.Shape1.Name = "Shape1"
+  pgframeDados.pgframeDados10.grdInformacoes.Column1.Header1.FontName = "Verdana"
+  pgframeDados.pgframeDados10.grdInformacoes.Column1.Header1.FontSize = 8
+  pgframeDados.pgframeDados10.grdInformacoes.Column1.Header1.ForeColor = 36,84,155
+  pgframeDados.pgframeDados10.grdInformacoes.Column1.Header1.Name = "Header1"
+  pgframeDados.pgframeDados10.grdInformacoes.Column1.Text1.Name = "Text1"
+  pgframeDados.pgframeDados10.grdInformacoes.Column1.Name = "Column1"
+  pgframeDados.pgframeDados10.grdInformacoes.Column2.Header1.FontName = "Verdana"
+  pgframeDados.pgframeDados10.grdInformacoes.Column2.Header1.FontSize = 8
+  pgframeDados.pgframeDados10.grdInformacoes.Column2.Header1.ForeColor = 36,84,155
+  pgframeDados.pgframeDados10.grdInformacoes.Column2.Header1.Name = "Header1"
+  pgframeDados.pgframeDados10.grdInformacoes.Column2.Text1.Name = "Text1"
+  pgframeDados.pgframeDados10.grdInformacoes.Column2.Name = "Column2"
+  pgframeDados.pgframeDados10.grdInformacoes.Name = "grdInformacoes"
+  pgframeDados.pgframeDados10.getEmpresa.Name = "getEmpresa"
+  pgframeDados.pgframeDados10.Say1.FontName = "Tahoma"
+  pgframeDados.pgframeDados10.Say1.Left = 406
+  pgframeDados.pgframeDados10.Say1.Top = 27
+  pgframeDados.pgframeDados10.Say1.ForeColor = 90,90,90
+  pgframeDados.pgframeDados10.Say1.Name = "Say1"
+  pgframeDados.pgframeDados10.getConceito.Name = "getConceito"
+  pgframeDados.pgframeDados10.Say2.FontName = "Tahoma"
+  pgframeDados.pgframeDados10.Say2.Left = 405
+  pgframeDados.pgframeDados10.Say2.Top = 51
+  pgframeDados.pgframeDados10.Say2.ForeColor = 90,90,90
+  pgframeDados.pgframeDados10.Say2.Name = "Say2"
+  pgframeDados.pgframeDados10.Say3.FontName = "Tahoma"
+  pgframeDados.pgframeDados10.Say3.Left = 381
+  pgframeDados.pgframeDados10.Say3.Top = 75
+  pgframeDados.pgframeDados10.Say3.ForeColor = 90,90,90
+  pgframeDados.pgframeDados10.Say3.Name = "Say3"
+  pgframeDados.pgframeDados10.getPagamento.Name = "getPagamento"
+  pgframeDados.pgframeDados10.Say4.FontName = "Tahoma"
+  pgframeDados.pgframeDados10.Say4.Left = 377
+  pgframeDados.pgframeDados10.Say4.Top = 99
+  pgframeDados.pgframeDados10.Say4.ForeColor = 90,90,90
+  pgframeDados.pgframeDados10.Say4.Name = "Say4"
+  pgframeDados.pgframeDados10.getValUltCompra.Name = "getValUltCompra"
+  pgframeDados.pgframeDados10.Say5.FontName = "Tahoma"
+  pgframeDados.pgframeDados10.Say5.Left = 363
+  pgframeDados.pgframeDados10.Say5.Top = 123
+  pgframeDados.pgframeDados10.Say5.ForeColor = 90,90,90
+  pgframeDados.pgframeDados10.Say5.Name = "Say5"
+  pgframeDados.pgframeDados10.Say6.FontName = "Tahoma"
+  pgframeDados.pgframeDados10.Say6.Left = 364
+  pgframeDados.pgframeDados10.Say6.Top = 147
+  pgframeDados.pgframeDados10.Say6.ForeColor = 90,90,90
+  pgframeDados.pgframeDados10.Say6.Name = "Say6"
+  pgframeDados.pgframeDados10.Say7.FontName = "Tahoma"
+  pgframeDados.pgframeDados10.Say7.Left = 384
+  pgframeDados.pgframeDados10.Say7.Top = 171
+  pgframeDados.pgframeDados10.Say7.ForeColor = 90,90,90
+  pgframeDados.pgframeDados10.Say7.Name = "Say7"
+  pgframeDados.pgframeDados10.getDesde.Name = "getDesde"
+  pgframeDados.pgframeDados10.getDtUltCompra.Name = "getDtUltCompra"
+  pgframeDados.pgframeDados10.getObservacao.Name = "getObservacao"
+  pgframeDados.pgframeDados10.getMoeda.Name = "getMoeda"
+  pgframeDados.pgframeDados10.shpInserir.Top = 104
+  pgframeDados.pgframeDados10.shpInserir.Left = 688
+  pgframeDados.pgframeDados10.shpInserir.Height = 90
+  pgframeDados.pgframeDados10.shpInserir.Width = 50
+  pgframeDados.pgframeDados10.shpInserir.SpecialEffect = 1
+  pgframeDados.pgframeDados10.shpInserir.BorderColor = 136,188,189
+  pgframeDados.pgframeDados10.shpInserir.Name = "shpInserir"
+  pgframeDados.pgframeDados10.btnInserir.Top = 109
+  pgframeDados.pgframeDados10.btnInserir.Left = 693
+  pgframeDados.pgframeDados10.btnInserir.Height = 40
+  pgframeDados.pgframeDados10.btnInserir.Width = 40
+  pgframeDados.pgframeDados10.btnInserir.FontName = "Verdana"
+  pgframeDados.pgframeDados10.btnInserir.FontSize = 8
+  pgframeDados.pgframeDados10.btnInserir.WordWrap = .T.
+  pgframeDados.pgframeDados10.btnInserir.Picture = ..\vbmp\plus_48.ico
+  pgframeDados.pgframeDados10.btnInserir.Caption = ""
+  pgframeDados.pgframeDados10.btnInserir.ToolTipText = "Incluir"
+  pgframeDados.pgframeDados10.btnInserir.ForeColor = 36,84,155
+  pgframeDados.pgframeDados10.btnInserir.BackColor = 255,255,255
+  pgframeDados.pgframeDados10.btnInserir.Themes = .F.
+  pgframeDados.pgframeDados10.btnInserir.Name = "btnInserir"
+  pgframeDados.pgframeDados10.btnExcluir.Top = 149
+  pgframeDados.pgframeDados10.btnExcluir.Left = 693
+  pgframeDados.pgframeDados10.btnExcluir.Height = 40
+  pgframeDados.pgframeDados10.btnExcluir.Width = 40
+  pgframeDados.pgframeDados10.btnExcluir.FontName = "Verdana"
+  pgframeDados.pgframeDados10.btnExcluir.FontSize = 8
+  pgframeDados.pgframeDados10.btnExcluir.WordWrap = .T.
+  pgframeDados.pgframeDados10.btnExcluir.Picture = ..\vbmp\onebit_33.ico
+  pgframeDados.pgframeDados10.btnExcluir.Caption = ""
+  pgframeDados.pgframeDados10.btnExcluir.ToolTipText = "Excluir"
+  pgframeDados.pgframeDados10.btnExcluir.ForeColor = 36,84,155
+  pgframeDados.pgframeDados10.btnExcluir.BackColor = 255,255,255
+  pgframeDados.pgframeDados10.btnExcluir.DisabledBackColor = 255,255,255
+  pgframeDados.pgframeDados10.btnExcluir.Themes = .F.
+  pgframeDados.pgframeDados10.btnExcluir.Name = "btnExcluir"
+  pgframeDados.pgframeDados10.FontName = "Tahoma"
+  pgframeDados.pgframeDados10.PageOrder = 10
+  pgframeDados.pgframeDados10.BackColor = 255,255,255
+  pgframeDados.pgframeDados10.ForeColor = 90,90,90
+  pgframeDados.pgframeDados10.Name = "pgframeDados10"
+  pgframeDados.pgFrameDados11.GetMemo.Name = "GetMemo"
+  pgframeDados.pgFrameDados11.getComples.Name = "getComples"
+  pgframeDados.pgFrameDados11.GradeCarac.Column1.Header1.FontName = "Verdana"
+  pgframeDados.pgFrameDados11.GradeCarac.Column1.Header1.FontSize = 8
+  pgframeDados.pgFrameDados11.GradeCarac.Column1.Header1.ForeColor = 36,84,155
+  pgframeDados.pgFrameDados11.GradeCarac.Column1.Header1.Name = "Header1"
+  pgframeDados.pgFrameDados11.GradeCarac.Column1.Text1.FontName = "Courier New"
+  pgframeDados.pgFrameDados11.GradeCarac.Column1.Text1.Name = "Text1"
+  pgframeDados.pgFrameDados11.GradeCarac.Column1.FontName = "Courier New"
+  pgframeDados.pgFrameDados11.GradeCarac.Column1.Name = "Column1"
+  pgframeDados.pgFrameDados11.GradeCarac.Column2.Header1.FontName = "Verdana"
+  pgframeDados.pgFrameDados11.GradeCarac.Column2.Header1.FontSize = 8
+  pgframeDados.pgFrameDados11.GradeCarac.Column2.Header1.ForeColor = 36,84,155
+  pgframeDados.pgFrameDados11.GradeCarac.Column2.Header1.Name = "Header1"
+  pgframeDados.pgFrameDados11.GradeCarac.Column2.fwmemo1.FontName = "Courier New"
+  pgframeDados.pgFrameDados11.GradeCarac.Column2.fwmemo1.Name = "fwmemo1"
+  pgframeDados.pgFrameDados11.GradeCarac.Column2.FontName = "Courier New"
+  pgframeDados.pgFrameDados11.GradeCarac.Column2.Name = "Column2"
+  pgframeDados.pgFrameDados11.GradeCarac.Name = "GradeCarac"
+  pgframeDados.pgFrameDados11.cmdGExcItem.cmdExcItem.Top = 5
+  pgframeDados.pgFrameDados11.cmdGExcItem.cmdExcItem.Left = 5
+  pgframeDados.pgFrameDados11.cmdGExcItem.cmdExcItem.Height = 40
+  pgframeDados.pgFrameDados11.cmdGExcItem.cmdExcItem.Width = 40
+  pgframeDados.pgFrameDados11.cmdGExcItem.cmdExcItem.FontName = "Verdana"
+  pgframeDados.pgFrameDados11.cmdGExcItem.cmdExcItem.FontSize = 8
+  pgframeDados.pgFrameDados11.cmdGExcItem.cmdExcItem.WordWrap = .T.
+  pgframeDados.pgFrameDados11.cmdGExcItem.cmdExcItem.Picture = ..\vbmp\wzdelete.bmp
+  pgframeDados.pgFrameDados11.cmdGExcItem.cmdExcItem.Caption = ""
+  pgframeDados.pgFrameDados11.cmdGExcItem.cmdExcItem.ToolTipText = "Apaga Item"
+  pgframeDados.pgFrameDados11.cmdGExcItem.cmdExcItem.ForeColor = 36,84,155
+  pgframeDados.pgFrameDados11.cmdGExcItem.cmdExcItem.BackColor = 255,255,255
+  pgframeDados.pgFrameDados11.cmdGExcItem.cmdExcItem.DisabledBackColor = 255,255,255
+  pgframeDados.pgFrameDados11.cmdGExcItem.cmdExcItem.Themes = .F.
+  pgframeDados.pgFrameDados11.cmdGExcItem.cmdExcItem.Name = "cmdExcItem"
+  pgframeDados.pgFrameDados11.cmdGExcItem.BorderStyle = 0
+  pgframeDados.pgFrameDados11.cmdGExcItem.SpecialEffect = 1
+  pgframeDados.pgFrameDados11.cmdGExcItem.BorderColor = 100,100,100
+  pgframeDados.pgFrameDados11.cmdGExcItem.Name = "cmdGExcItem"
+  pgframeDados.pgFrameDados11.grdAceMovs.Column1.Header1.Name = "Header1"
+  pgframeDados.pgFrameDados11.grdAceMovs.Column1.Text1.Name = "Text1"
+  pgframeDados.pgFrameDados11.grdAceMovs.Column1.Name = "Column1"
+  pgframeDados.pgFrameDados11.grdAceMovs.Column2.Header1.Name = "Header1"
+  pgframeDados.pgFrameDados11.grdAceMovs.Column2.Text1.Name = "Text1"
+  pgframeDados.pgFrameDados11.grdAceMovs.Column2.Name = "Column2"
+  pgframeDados.pgFrameDados11.grdAceMovs.Column3.Header1.Name = "Header1"
+  pgframeDados.pgFrameDados11.grdAceMovs.Column3.Text1.Name = "Text1"
+  pgframeDados.pgFrameDados11.grdAceMovs.Column3.Name = "Column3"
+  pgframeDados.pgFrameDados11.grdAceMovs.Name = "grdAceMovs"
+  pgframeDados.pgFrameDados11.btnInsApts.Name = "btnInsApts"
+  pgframeDados.pgFrameDados11.btnExcApts.Name = "btnExcApts"
+  pgframeDados.pgFrameDados11.Say1.Name = "Say1"
+  pgframeDados.pgFrameDados11.Say24.FontName = "Tahoma"
+  pgframeDados.pgFrameDados11.Say24.ForeColor = 90,90,90
+  pgframeDados.pgFrameDados11.Say24.Name = "Say24"
+  pgframeDados.pgFrameDados11.lblAceMovs.Name = "lblAceMovs"
+  pgframeDados.pgFrameDados11.FontName = "Tahoma"
+  pgframeDados.pgFrameDados11.PageOrder = 11
+  pgframeDados.pgFrameDados11.BackColor = 255,255,255
+  pgframeDados.pgFrameDados11.ForeColor = 90,90,90
+  pgframeDados.pgFrameDados11.Name = "pgFrameDados11"
+  pgframeDados.PgFrameDados12.get_perfil.Name = "get_perfil"
+  pgframeDados.PgFrameDados12.FontName = "Tahoma"
+  pgframeDados.PgFrameDados12.PageOrder = 12
+  pgframeDados.PgFrameDados12.BackColor = 255,255,255
+  pgframeDados.PgFrameDados12.ForeColor = 90,90,90
+  pgframeDados.PgFrameDados12.Name = "PgFrameDados12"
+  pgframeDados.Top = 0
+  pgframeDados.Left = 0
+  pgframeDados.Width = 768
+  pgframeDados.Height = 453
+  pgframeDados.Name = "pgframeDados"
+  cmdGCarac.cmdCarac.Top = 5
+  cmdGCarac.cmdCarac.Left = 5
+  cmdGCarac.cmdCarac.Height = 40
+  cmdGCarac.cmdCarac.Width = 40
+  cmdGCarac.cmdCarac.FontName = "Verdana"
+  cmdGCarac.cmdCarac.FontSize = 8
+  cmdGCarac.cmdCarac.WordWrap = .T.
+  cmdGCarac.cmdCarac.Picture = ..\vbmp\x_planilha.bmp
+  cmdGCarac.cmdCarac.ForeColor = 36,84,155
+  cmdGCarac.cmdCarac.BackColor = 255,255,255
+  cmdGCarac.cmdCarac.DisabledBackColor = 255,255,255
+  cmdGCarac.cmdCarac.Themes = .F.
+  cmdGCarac.cmdCarac.Name = "cmdCarac"
+  cmdGCarac.Left = 633
+  cmdGCarac.Top = 397
+  cmdGCarac.BackColor = 255,255,255
+  cmdGCarac.Themes = .F.
+  cmdGCarac.Name = "cmdGCarac"
+  cmdGFtec.cmdFTec.Top = 5
+  cmdGFtec.cmdFTec.Left = 5
+  cmdGFtec.cmdFTec.Height = 40
+  cmdGFtec.cmdFTec.Width = 40
+  cmdGFtec.cmdFTec.FontName = "Verdana"
+  cmdGFtec.cmdFTec.FontSize = 8
+  cmdGFtec.cmdFTec.WordWrap = .T.
+  cmdGFtec.cmdFTec.Picture = ..\vbmp\x_planilha.bmp
+  cmdGFtec.cmdFTec.ForeColor = 36,84,155
+  cmdGFtec.cmdFTec.BackColor = 255,255,255
+  cmdGFtec.cmdFTec.DisabledBackColor = 255,255,255
+  cmdGFtec.cmdFTec.Themes = .F.
+  cmdGFtec.cmdFTec.Name = "cmdFTec"
+  cmdGFtec.Left = 672
+  cmdGFtec.Top = 397
+  cmdGFtec.BackColor = 255,255,255
+  cmdGFtec.Themes = .F.
+  cmdGFtec.Name = "cmdGFtec"
+  cmdgpessoal.cmdPessoal.Top = 5
+  cmdgpessoal.cmdPessoal.Left = 5
+  cmdgpessoal.cmdPessoal.Height = 40
+  cmdgpessoal.cmdPessoal.Width = 40
+  cmdgpessoal.cmdPessoal.FontName = "Verdana"
+  cmdgpessoal.cmdPessoal.FontSize = 8
+  cmdgpessoal.cmdPessoal.WordWrap = .T.
+  cmdgpessoal.cmdPessoal.Picture = ..\vbmp\x_planilha.bmp
+  cmdgpessoal.cmdPessoal.ForeColor = 36,84,155
+  cmdgpessoal.cmdPessoal.BackColor = 255,255,255
+  cmdgpessoal.cmdPessoal.DisabledBackColor = 255,255,255
+  cmdgpessoal.cmdPessoal.Themes = .F.
+  cmdgpessoal.cmdPessoal.Name = "cmdPessoal"
+  cmdgpessoal.Left = 711
+  cmdgpessoal.Top = 397
+  cmdgpessoal.BackColor = 255,255,255
+  cmdgpessoal.Themes = .F.
+  cmdgpessoal.Name = "cmdgpessoal"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCLI.Sair
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 85
+  Left = 688
+  SpecialEffect = 1
+  Top = -2
+  Width = 161
+  TabIndex = 38
+  BorderColor = 100,100,100
+  Name = "Sair"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.WordWrap = .T.
+  Command1.Picture = ..\framework\imagens\cadastro_salvar_60.jpg
+  Command1.Caption = "\<Ok"
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "Ok"
+  Command2.Top = 5
+  Command2.Left = 81
+  Command2.Height = 75
+  Command2.Width = 75
+  Command2.FontBold = .T.
+  Command2.FontItalic = .T.
+  Command2.FontName = "Comic Sans MS"
+  Command2.FontSize = 8
+  Command2.WordWrap = .T.
+  Command2.Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Command2.Cancel = .T.
+  Command2.Caption = "\<Cancelar"
+  Command2.ForeColor = 90,90,90
+  Command2.BackColor = 255,255,255
+  Command2.Themes = .F.
+  Command2.Name = "Cancela"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 1, 8, 6, 13, 11, 32, 2, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDCLI
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE checaibge
+------------------------------------------------------------
+PROCEDURE checaibge
+Lparameters pMun, pUFs, pObC, pObU
+
+lnRtC = 9999999
+
+lcQuery = [Select a.Codigos ] + ;
+		    [From SigCdMun a, SigCdUfs b ] + ;
+		   [Where a.Descs = '] + Padr(fLimpaTexto(Upper(pMun)), 40) + [' And ] + ;
+		   		 [a.UFIBGEs = b.UFIBGEs And ] + ;
+		   		 [b.Estados = '] + pUFs + [']
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalMunic]) < 1)
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalMunic)])
+	Return 0
+EndIf
+
+Select LocalMunic
+Go Top In LocalMunic
+If Not Eof([LocalMunic])
+	lnRtC = Int(Val(LocalMunic.Codigos))
+EndIf
+
+pObC.Value = lnRtC
+pObC.Refresh
+pObC.Forecolor = Rgb(0,0,0)
+If (lnRtC = 9999999)
+	pObC.Forecolor = Rgb(255,0,0)
+EndIf
+
+lnRtU = 99
+
+lcQuery = [Select UFIBGEs ] + ;
+		    [From SigCdUfs ] + ;
+		   [Where Estados = '] + Padr(pUFs, 2) + [']
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalUF]) < 1)
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalUF)])
+	Return 0
+EndIf
+
+Select LocalUF
+Go Top In LocalUF
+If Not Eof([LocalUF])
+	lnRtU = LocalUF.UFIBGEs
+EndIf
+
+pObU.Value = lnRtU
+pObU.Refresh
+pObU.Forecolor = Rgb(0,0,0)
+If (lnRtU = 99)
+	pObU.Forecolor = Rgb(255,0,0)
+EndIf
+* Fim ********************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+
+Lparameters pCpf, pGrupo, pCep, pVal, pCli, pcTpBloqCar, pcMudaCpfCgc
+Local lnErro1,lcOnError, lcCpf, lcCpfs, llVC
+
+pCpf = Padr(Iif(Type('pCpf')=='C', pCpf, ''),20)
+pGrupo = Padr(Iif(Type('pGrupo')=='C', pGrupo, ''),10)
+pCep = Iif(Type('pCep')=='N', pCep, 0)
+pVal = Iif(Type('pVal')=='L', pVal, .f.)
+pCli = Padr(Iif(Type('pCli')=='C', pCli, ''),10)
+pcTpBloqCar = Iif(Type('pcTpBloqCar')=='C', pcTpBloqCar, '0') && se for 1 bloqueia inserir/excl. caracteristica. ...
+pcMudaCpfCgc = Iif(Type('pcMudaCpfCgc')=='C', pcMudaCpfCgc, '0') && se for 1 permite a mudanca de CPF p/ CNPG e vice/versa...
+lcCpfs = pCpf
+lcCpfs = StrTran( lcCpfs, '.', '' )
+lcCpfs = StrTran( lcCpfs, '-', '' )
+lcCpfs = StrTran( lcCpfs, '/', '' )
+lcCpfs = AllTrim( lcCpfs )
+
+With Thisform
+	.LockScreen = .t.
+	.RetCodCliente = ' '
+	.MudaVend = fChecaAcesso([SIGCDCTA], [VENDEDOR])
+	
+	If Not Empty(lcCpfs) Or Not Empty(pCli)
+		.poDataMgr = CreateObject('fSqlConector','sige')
+
+		If .poDataMgr.pnIdConn>0
+			* Acessando a Dll de Validação de Inscrição Estadual (Fornecida Pelo Sintegra)
+			.ValidaIE = .f.
+			lcOnError = On('Error')
+			On Error lnErro1 = Error()
+			lnErro1 = 0
+
+			Declare Integer ConsisteInscricaoEstadual In 'DllInscE32.Dll' String @Insc, String @Uf
+
+			.ValidaIE = (lnErro1==0)
+			On Error &lcOnError.
+
+			.cntConta.mIniConta() && checar / crias propriedades necessarios e os cursores...
+			ThisForm.cntConta.cmdgPessoal.cmdPessoal.ToolTipText = 'F5 - Dados Pessoais/Comerciais'     
+			
+			lnErro1 = .poDataMgr.pnIdConn
+		
+			If Used('crSigCdPam') And Reccount('crSigCdPam')>0
+				If Used('crSigCdGcr') And Reccount('crSigCdGcr')>0
+					Select crSigCdPam
+					Locate 
+
+					If Empty(pGrupo)
+						pGrupo = Padr(crSigCdPam.GrPadClis,10)
+					EndIf 
+
+					Select crSigCdGcr
+					Locate For Codigos==pGrupo
+Set Step On 
+					&& habilita a tela se for cadastro de conta,se for de cliente habilita apenas se existe o grupo do crSigCdPam.GrPadClis...
+					If Not Empty(pGrupo) And Not Eof('crSigCdGcr')
+						lcQuery = [Select a.Iclis From SigCdCli a] + ;
+								   [ Where ] + Iif(Not Empty(lcCpfs), [a.Cpfs = '] + pCpf + ['], [a.IClis = '] + pCli + [']) + [ Order By 1]
+						If lnErro1>0
+							lnErro1 = ThisForm.poDataMgr.SQLExecute(lcQuery,'crTmpCli')
+						EndIf
+						If Used('crTmpCli')
+							Select crTmpCli
+							Locate 
+							
+							If Not Eof('crTmpCli')
+								pCli = crTmpCli.Iclis
+							EndIf
+						EndIf 
+						llvc = Iif(Not IsEmpty(CrSigCdPac.CtVendaCs) And CrSigCdPac.CtVendaCs = pCli,.t.,.f. )
+						.plAltCd = (Not Eof('crTmpCli') And Not Empty(pCli))
+						.pcEscolha = Iif(fChecaAcesso('SIGCDCTA', 'ALTERAR') And Not llVC, Iif(Not .plAltCd,'INSERIR','ALTERAR'), 'CONSULTAR')
+
+						If .pcEscolha=='INSERIR' Or Not Eof('crTmpCli')
+							If .cntConta.mLeDados(pGrupo, pCli, '1', pcTpBloqCar, pcMudaCpfCgc)
+								ThisForm.cntConta.cmdgftec.Visible = .F.  
+								If .pcEscolha=='INSERIR'
+
+									lcCpf = pCpf
+									lcCpf = Alltrim(Strt(Strt(Strt(lcCpf, '.', ''), '-', ''), '/', ''))
+									
+									With This.cntConta.pgframeDados.pgframeDados1
+										.OpcaoCPFCGC.Value = Iif(Not Len(lcCpf)==14, 1, 2)
+										.GetCPFCGC.Value = pCpf
+									EndWith 
+
+									This.cntConta.mAtuGetCpf()
+								EndIf 
+								
+								.cntConta.Visible = .t.
+								.cntConta.Refresh
+							Else 
+								= Messagebox('Erro Na Leitura dos Dados',(0+48),'Erro')
+								Return(.f.)
+							EndIf 
+						Else 
+							= Messagebox('Usuário Não Possui Acesso p/ Incluir / Alterar Dados de Clientes.',(0+48),'Erro')
+							Return(.f.)
+						EndIf 
+					Else 
+						= Messagebox('Grupo Padrão Não Configurado.',(0+48),'Erro')
+						Return(.f.)
+					EndIf 
+				Else 
+					= Messagebox('Nenhum Grupo de Conta Cadastrado.',(0+48),'Erro')
+					Return(.f.)
+				EndIf 
+			Else 
+				= Messagebox('Configuração de Parametros do Sistema Não Encontrado.',(0+48),'Erro')
+				Return(.f.)
+			EndIf 
+		Else 
+			= Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),'Erro')
+			Return(.f.)
+		EndIf 
+	Else
+		= Messagebox('Referencia do Cliente Inválido (Cpf / Conta).',(0+48),'Erro')
+		Return(.f.)
+	EndIf 
+	.LockScreen = .f.
+EndWith
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LPARAMETERS nKeyCode, nShiftAltCtrl
+
+If( nKeyCode == -4 ) && F5
+	NODEFAULT
+	ThisForm.cntConta.cmdGPessoal.cmdPessoal.Click()  && Aba de Dados Comerciais   
+Endif
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+
+=fConfigGeral()
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+
+ThisForm.poDatamgr.Release
+DoDefault()
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Unload
+------------------------------------------------------------
+PROCEDURE Unload
+
+Return(Thisform.RetCodCliente)
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDCLI.cntConta
+* Classe: clsconta (Base: container)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE mledados
+------------------------------------------------------------
+PROCEDURE mledados
+Lparameters lcGrupo,lcIcli,lcTpCadCli,lcTpBloqCar,lcMudaCpfCgc
+DoDefault(lcGrupo,lcIcli,lcTpCadCli,lcTpBloqCar,lcMudaCpfCgc)
+thisform.cntConta.pgframeDados.Top = 0
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDCLI.Sair
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Ok.Click
+------------------------------------------------------------
+PROCEDURE Ok.Click
+
+Local lnRetorno1,lcCpfCgc
+
+&& lnRetorno1 = -1 && com erro de validacao
+&& lnRetorno1 = 0 && exclusao com registros pendentes em outras tabelas...
+&& lnRetorno1 = 1 && retorno valido p/ efetuar gravacao...
+
+lnRetorno1 = ThisForm.cntConta.mValidaObj()
+
+If lnRetorno1<1
+	ThisForm.poDataMgr.RollBack()
+EndIf 
+If lnRetorno1>=0
+	If lnRetorno1>0
+		If ThisForm.cntConta.mGravaDados()>0
+			lcCpfCgc = Alltrim(Strt( Strt( Strt( ThisForm.cntConta.pgframeDados.pgframeDados1.GetCPFCGC.Value, ".", "" ), "-", "" ), "/", "" ))
+
+			If Empty(lcCpfCgc)
+				ThisForm.RetCodCliente = ThisForm.cntConta.pgframeDados.pgframeDados1.getcodigo.Value 
+			Else
+				ThisForm.RetCodCliente = ThisForm.cntConta.pgframeDados.pgframeDados1.GetCPFCGC.Value 
+			Endif
+			ThisForm.Release
+		Else 
+			= Messagebox('Erro na Gravação dos Dados, Favor Clicar no Botão [OK] Novamente.',(0+48),'Erro')
+		EndIf 
+	EndIf 
+EndIf 
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Cancela.Click
+------------------------------------------------------------
+PROCEDURE Cancela.Click
+
+Local _Chave, lnIdConta
+
+nCodigo = crSigCdCli.NClis
+lnIdConta = crSigCdCli.IdConta
+
+If ThisForm.pcEscolha=='INSERIR'
+	If crSigCdGcr.TpCods = 1 && Código Automático
+		If crSigCdGcr.TpEmps = 1 && Inclui Empresa
+			= fCanUniqueKey( nCodigo, Alltrim( crSigCdGcr.Codigos ) + _EMPR ) 
+		Else && Não Inclui Empresa
+			= fCanUniqueKey( nCodigo, Alltrim( crSigCdGcr.Codigos ) )
+		Endif
+	Endif
+EndIf 
+With ThisForm
+	.poDataMgr.RollBack()
+	.RetCodCliente = ' '
+	.Release
+EndWith 
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGCDCLI
+RESERVED3 (ClassInfo): inicio
+mudavend
+plaltcd
+podatamgr
+retcodcliente
+validaie
+*checaibge 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 9
+================================================================================

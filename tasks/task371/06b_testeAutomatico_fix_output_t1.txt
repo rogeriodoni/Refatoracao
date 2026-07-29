@@ -1,0 +1,3 @@
+﻿Corrigi todas as 7 ocorr├¬ncias de `.BorderStyle = 0` nos blocos `Controls(1)` das colunas dos grids `grd_4c_IVA` e `grd_4c_Reducao`.
+
+**Causa raiz:** Em VFP9, o controle TextBox padr├úo dentro de uma coluna de Grid n├úo exp├Áe a propriedade `BorderStyle` ÔÇö ela simplesmente n├úo existe nesse contexto, diferente de um TextBox standalone. O erro explodiu na linha 1120 (primeira ocorr├¬ncia) e derrubou o CREATEOBJECT do form.

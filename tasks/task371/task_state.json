@@ -1,0 +1,262 @@
+﻿{
+    "taskId":  "task371",
+    "arquivoOriginal":  "",
+    "tipoArquivo":  "SCX",
+    "comentario_tipoArquivo":  "SCX=Form, FRX=Report, VCX=ClassLib",
+    "status":  "COMPLETED",
+    "statusComentario":  "PENDING | IN_PROGRESS | COMPLETED | FAILED | BLOCKED",
+    "criadoEm":  "2026-07-28T23:36:44",
+    "atualizadoEm":  "2026-07-29T01:41:09",
+    "etapas":  {
+                   "01_moverArquivos":  {
+                                            "status":  "COMPLETED",
+                                            "inicio":  "2026-07-28T23:36:44",
+                                            "fim":  "2026-07-28T23:36:44",
+                                            "tentativas":  1,
+                                            "erro":  null,
+                                            "sctFile":  "C:\\4c\\tasks\\task371\\SigCdClf.sct",
+                                            "baseName":  "SigCdClf",
+                                            "scxFile":  "C:\\4c\\tasks\\task371\\SigCdClf.scx"
+                                        },
+                   "02_extractCode":  {
+                                          "status":  "COMPLETED",
+                                          "inicio":  "2026-07-28T23:36:44",
+                                          "fim":  "2026-07-28T23:36:44",
+                                          "tentativas":  1,
+                                          "arquivoGerado":  "SIGCDCOR_codigo_fonte.txt",
+                                          "erro":  null,
+                                          "baseNameNormalizado":  "SigCdClf",
+                                          "txtFile":  "C:\\4c\\tasks\\task371\\SigCdClf_form_codigo_fonte.txt"
+                                      },
+                   "02b_analisarTarefa":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-07-28T23:36:44",
+                                              "fim":  "2026-07-28T23:36:44",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "analise.json",
+                                              "erro":  null,
+                                              "comentario":  "NOVO - Analise inteligente do codigo fonte",
+                                              "analiseFile":  "C:\\4c\\tasks\\task371\\analise.json"
+                                          },
+                   "03_gerarMetaPrompt":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-07-28T23:36:45",
+                                              "fim":  "2026-07-28T23:36:53",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "meta_prompt.md",
+                                              "erro":  null,
+                                              "formType":  "CRUD",
+                                              "phaseBFile":  "C:\\4c\\tasks\\task371\\meta_prompt_phaseB.md",
+                                              "metaPromptFile":  "C:\\4c\\tasks\\task371\\meta_prompt.md",
+                                              "boClass":  "ClfBO",
+                                              "formClass":  "FormClf",
+                                              "phaseAFile":  "C:\\4c\\tasks\\task371\\meta_prompt_phaseA.md"
+                                          },
+                   "04_gerarMapeamento":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-07-28T23:36:53",
+                                              "fim":  "2026-07-28T23:36:54",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "mapeamento.json",
+                                              "erro":  null,
+                                              "jsonFile":  "C:\\4c\\tasks\\task371\\mapeamento.json"
+                                          },
+                   "04b_gerarEsqueletos":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-07-28T23:36:54",
+                                               "fim":  "2026-07-28T23:36:54",
+                                               "tentativas":  1,
+                                               "arquivosGerados":  [
+
+                                                                   ],
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Geracao de codigo base ~70% completo",
+                                               "esqueletosDir":  "C:\\4c\\tasks\\task371\\esqueletos",
+                                               "arquivos":  [
+                                                                "ClfBO_esqueleto.prg",
+                                                                "FormClf_esqueleto.prg"
+                                                            ]
+                                           },
+                   "05_migracao":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-07-28T23:36:54",
+                                       "fim":  "2026-07-29T00:46:05",
+                                       "tentativas":  1,
+                                       "maxTentativas":  3,
+                                       "arquivosGerados":  [
+
+                                                           ],
+                                       "comentario":  "FormXXX.prg, XXXBO.prg",
+                                       "erro":  null,
+                                       "boExists":  true,
+                                       "boFile":  "C:\\4c\\projeto\\app\\classes\\ClfBO.prg",
+                                       "formExists":  true,
+                                       "tamanhoKB":  70.38,
+                                       "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormClf.prg",
+                                       "complexidade":  "COMPLEXO",
+                                       "linhas":  2425
+                                   },
+                   "05b_corrigirAutomatico":  {
+                                                  "status":  "COMPLETED",
+                                                  "inicio":  "2026-07-29T00:46:05",
+                                                  "fim":  "2026-07-29T00:46:20",
+                                                  "tentativas":  1,
+                                                  "correcoesAplicadas":  0,
+                                                  "erro":  null,
+                                                  "comentario":  "NOVO - Correcao automatica de anti-padroes",
+                                                  "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormClf.prg",
+                                                  "boFile":  "C:\\4c\\projeto\\app\\classes\\ClfBO.prg"
+                                              },
+                   "05c_validarCompilacao":  {
+                                                 "status":  "COMPLETED",
+                                                 "inicio":  "2026-07-29T00:46:21",
+                                                 "fim":  "2026-07-29T00:46:22",
+                                                 "tentativas":  1,
+                                                 "errosCompilacao":  [
+
+                                                                     ],
+                                                 "erro":  null,
+                                                 "comentario":  "NOVO - Valida compilacao dos .prg antes de testar",
+                                                 "arquivosValidados":  2,
+                                                 "sucesso":  true
+                                             },
+                   "06_testForm":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-07-29T01:04:22",
+                                       "fim":  "2026-07-29T01:05:08",
+                                       "tentativas":  1,
+                                       "maxTentativas":  5,
+                                       "errosEncontrados":  [
+
+                                                            ],
+                                       "erro":  null,
+                                       "tentativasUsadas":  1
+                                   },
+                   "06b_testeAutomatico":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-07-29T01:05:08",
+                                               "fim":  "2026-07-29T01:41:07",
+                                               "tentativas":  1,
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Testes CRUD automaticos",
+                                               "threshold":  100,
+                                               "falhou":  0,
+                                               "passou":  9,
+                                               "total":  9,
+                                               "percentual":  100,
+                                               "tentativasUsadas":  8,
+                                               "resultFile":  "C:\\4c\\tasks\\task371\\teste_resultado.json"
+                                           },
+                   "07_validarUI":  {
+                                        "status":  "COMPLETED",
+                                        "inicio":  "2026-07-29T01:41:07",
+                                        "fim":  "2026-07-29T01:41:09",
+                                        "tentativas":  1,
+                                        "maxTentativas":  5,
+                                        "problemas":  {
+                                                          "erros":  0,
+                                                          "avisos":  0,
+                                                          "diferencas":  0,
+                                                          "total":  0
+                                                      },
+                                        "limiteProblemas":  10,
+                                        "erro":  null,
+                                        "exitCode":  0,
+                                        "htmlFile":  "C:\\4c\\projeto\\app\\utils\\relatorios\\UIFidelity_FormClf_20260729014108.html",
+                                        "diferencas":  0,
+                                        "erros":  0,
+                                        "totalProblemas":  459,
+                                        "avisos":  459
+                                    },
+                   "08_gerarTestManual":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-07-29T01:41:09",
+                                              "fim":  "2026-07-29T01:41:09",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  null,
+                                              "erro":  null,
+                                              "testManualFile":  "C:\\4c\\SolicitacaoTesteManual\\task371_SigCdClf.md"
+                                          },
+                   "02c_analisarComportamento":  {
+                                                     "inicio":  "2026-07-28T23:36:44",
+                                                     "tentativas":  1,
+                                                     "erro":  null,
+                                                     "fim":  "2026-07-28T23:36:45",
+                                                     "comportamentoFile":  "C:\\4c\\tasks\\task371\\comportamento.json",
+                                                     "status":  "COMPLETED"
+                                                 },
+                   "02d_extrairLayout":  {
+                                             "inicio":  "2026-07-28T23:36:45",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-07-28T23:36:45"
+                                         },
+                   "05b2_atualizarMapeamento":  {
+                                                    "inicio":  "2026-07-29T00:46:20",
+                                                    "status":  "COMPLETED",
+                                                    "tentativas":  1,
+                                                    "erro":  null,
+                                                    "fim":  "2026-07-29T00:46:21",
+                                                    "destFile":  "C:\\4c\\projeto\\app\\utils\\mapeamentos\\FormClf_mapeamento.json",
+                                                    "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormClf.prg",
+                                                    "mapeamentoFile":  "C:\\4c\\tasks\\task371\\mapeamento.json"
+                                                },
+                   "05d_validarCompletude":  {
+                                                 "inicio":  "2026-07-29T00:46:22",
+                                                 "status":  "COMPLETED",
+                                                 "tentativas":  1,
+                                                 "erro":  null,
+                                                 "fim":  "2026-07-29T00:46:22",
+                                                 "sucesso":  true,
+                                                 "arquivosComProblema":  0
+                                             },
+                   "05e_codeReview":  {
+                                          "inicio":  "2026-07-29T00:46:23",
+                                          "status":  "COMPLETED",
+                                          "erro":  null,
+                                          "fim":  "2026-07-29T01:03:50",
+                                          "passes":  3,
+                                          "problemas":  "[CONTAINER-VISIVEL] TornarControlesVisiveis() NAO filtra containers ocultos: CNT_4C_CABECALHO. Estes containers tem Visible=.F. mas serao forcados a Visible=.T. pelo metodo recursivo.; [GRID-WITH] Bloco WITH cursor_4c_TmpIva.cidChaves define .RecordSource E acessa .Column dentro do mesmo WITH. Isso causa \u0027Unknown member COLUMN1\u0027 porque colunas nao sao criadas imediatamente dentro de WITH. SOLUCAO: Mover .RecordSource e .ColumnCount para FORA do WITH (usar referencia explicita: cursor_4c_TmpIva.cidChaves.RecordSource).; [GRID-HEADER] Header Caption \u0027Código\u0027 no codigo migrado NAO foi encontrado no fonte legado. Headers legado encontrados: UF Ori, UF Des, IVA, IVA Im, UF Dest, Aliq Red, Aliq B Red. Verificar se o caption foi inventado ou abreviado pelo Claude - deve ser IDENTICO ao legado.; [GRID-HEADER] Header Caption \u0027Descrição\u0027 no codigo migrado NAO foi encontrado no fonte legado. Headers legado encontrados: UF Ori, UF Des, IVA, IVA Im, UF Dest, Aliq Red, Aliq B Red. Verificar se o caption foi inventado ou abreviado pelo Claude - deve ser IDENTICO ao legado.; [GRID-HEADER] Header Caption \u0027Alíq. IPI\u0027 no codigo migrado NAO foi encontrado no fonte legado. Headers legado encontrados: UF Ori, UF Des, IVA, IVA Im, UF Dest, Aliq Red, Aliq B Red. Verificar se o caption foi inventado ou abreviado pelo Claude - deve ser IDENTICO ao legado.; [GRID-HEADER] Header Caption \u0027UN\u0027 no codigo migrado NAO foi encontrado no fonte legado. Headers legado encontrados: UF Ori, UF Des, IVA, IVA Im, UF Dest, Aliq Red, Aliq B Red. Verificar se o caption foi inventado ou abreviado pelo Claude - deve ser IDENTICO ao legado.; [GRID-HEADER] Header Caption \u0027CEST\u0027 no codigo migrado NAO foi encontrado no fonte legado. Headers legado encontrados: UF Ori, UF Des, IVA, IVA Im, UF Dest, Aliq Red, Aliq B Red. Verificar se o caption foi inventado ou abreviado pelo Claude - deve ser IDENTICO ao legado.; [LAYOUT-POSITION] Controle \u0027cmbIpi\u0027 (parent: SIGCDCLF.Pagina.Dados): Top original=179 vs migrado \u0027cbo_4c_CmbIPip\u0027 Top=237 (diff=58px, tolerancia=30px)",
+                                          "tentativas":  3,
+                                          "problemasRestantes":  8
+                                      },
+                   "05f_validarSQLSchema":  {
+                                                "inicio":  "2026-07-29T01:03:50",
+                                                "tentativas":  1,
+                                                "erro":  null,
+                                                "fim":  "2026-07-29T01:04:22",
+                                                "status":  "PASSED",
+                                                "boFile":  "C:\\4c\\projeto\\app\\classes\\ClfBO.prg",
+                                                "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormClf.prg"
+                                            },
+                   "06c_validarLayout":  {
+                                             "inicio":  "2026-07-29T01:41:07",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-07-29T01:41:07",
+                                             "thresholdPx":  5,
+                                             "unmatched":  1,
+                                             "errors":  1,
+                                             "matched":  40,
+                                             "warnings":  49,
+                                             "reportFile":  "C:\\4c\\tasks\\task371\\layout_vs_prg_report.json"
+                                         }
+               },
+    "metricas":  {
+                     "tempoTotalSegundos":  0,
+                     "tempoExtracao":  0,
+                     "tempoAnalise":  0,
+                     "tempoEsqueletos":  0,
+                     "tempoMigracao":  0,
+                     "tempoCorrecao":  0,
+                     "tempoCompilacao":  0,
+                     "tempoTesteAuto":  0,
+                     "tempoValidacao":  0,
+                     "linhasCodigoOriginal":  0,
+                     "linhasCodigoGerado":  0,
+                     "correcoesAutomaticas":  0,
+                     "testesAutomaticos":  0
+                 }
+}

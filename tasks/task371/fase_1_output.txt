@@ -1,0 +1,11 @@
+﻿Fase 1 conclu├¡da. O arquivo `C:\4c\projeto\app\classes\ClfBO.prg` foi criado com:
+
+- **17 propriedades** mapeadas diretamente do schema SIGCDCLF (todos os campos com tipos corretos)
+- **Init()** configurando `this_cTabela = "SIGCDCLF"` e `this_cCampoChave = "codigos"`
+- **CarregarDoCursor()** usando o padr├úo `SELECT (par_cAliasCursor)` + campos sem alias (regra cr├¡tica)
+- **Buscar/CarregarPorCodigo** para a entidade principal
+- **CarregarIVAsPorCodigo/CarregarReducoesPorCodigo** para as tabelas filhas `sigcdiva` e `sigcdred`
+- **Inserir/Atualizar/ExecutarExclusao** com l├│gica completa incluindo tabelas filhas
+- **SalvarIVAs/SalvarReducoes** ÔÇö estrat├®gia DELETE+INSERT (cursores crIva/crRed do form)
+- **VerificarTemProduto** ÔÇö verifica├º├úo da propriedade `temproduto` do form legado
+- Todos os CATCH com `MsgErro` (regra cr├¡tica #9)

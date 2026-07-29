@@ -1,0 +1,21 @@
+﻿The structure is correct. All 9 new methods are in place, all 5 existing stubs are updated, and the file ends with ENDDEFINE at line 2092.
+
+**Phase 5/8 is now complete.** Here's what was implemented:
+
+**Updated existing methods:**
+- `AlternarPagina()` ÔÇö now calls `CarregarPaginaDados()` when navigating to Page2
+- `HabilitarCampos()` ÔÇö enables/disables OperL, Data, GrupoT, Moeda, Cotacao, GradeCheque, ExcCheque, Confirmar
+- `LimparCampos()` ÔÇö resets all Page2 TextBoxes + ZAPs TempChq
+- `BOParaForm()` ÔÇö populates all 14 Page2 fields from BO properties, with SQL lookup for GrupoT description
+- `FormParaBO()` ÔÇö collects editable fields to BO + calculates totals from TempChq rows
+
+**New methods added:**
+- `BtnSalvarClick()` ÔÇö validates OperL/Data/Moeda/TempChq, calls FormParaBO+Salvar, navigates to Page1
+- `BtnCancelarClick()` ÔÇö returns to Page1 list
+- `CarregarPaginaDados()` ÔÇö creates TempChq cursor, loads SigCcChm JOIN SigChe JOIN SigCdCli, binds 9-column grid
+- `BtnExcChequeClick()` ÔÇö deletes current TempChq row, maintains minimum 1 blank row
+- `BtnImprimeClick()` ÔÇö queries SigCcChm, merges with TempChq.valjuros, runs SigMvChe report with locale isolation + menu restore
+- `ValidarOperL()` ÔÇö FormBuscaAuxiliar on SigCdOpt, sets Opera (S/E/' ') and Moeda default
+- `ValidarMoeda()` ÔÇö FormBuscaAuxiliar on SigCdMoe, loads latest cotacao from SigCdCot
+- `CotacaoLostFocus()` ÔÇö recalculates ValConv = ROUND(Valor/Cotacao, 2)
+- `ValidarGrupoT()` ÔÇö FormBuscaAuxiliar on SigCdGcr, fills code + descrs

@@ -1,0 +1,7 @@
+﻿As ocorr├¬ncias de `COLUMNCOUNT` encontradas s├úo **todas propriedades VFP9 de Grid** (`loc_oGrid.ColumnCount = 7`), n├úo condi├º├Áes SQL WHERE. Isso ├® um **falso positivo** do checker.
+
+- Linha 439: `loc_oPagina.grd_4c_Dados.ColumnCount = 7` ÔÇö propriedade Grid
+- Linha 762: `loc_oPagina.grd_4c_GrdLoc.ColumnCount = 3` ÔÇö propriedade Grid
+- Linha 1044: `loc_oGrid.ColumnCount = 7` ÔÇö propriedade Grid
+
+Nenhuma das tr├¬s ├® um filtro SQL inventado. O c├│digo migrado n├úo possui nenhum `WHERE` com `COLUMNCOUNT`. **Nenhuma corre├º├úo necess├íria.** O erro [SQL-FILTRO-INVENTADO] ├® falso positivo neste arquivo.

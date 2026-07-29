@@ -1,0 +1,12 @@
+﻿Corre├º├Áes aplicadas. Resumo do que foi feito e por qu├¬:
+
+**Corre├º├úo 1 ÔÇö `[CONTAINER-VISIVEL]` (real):**  
+`TornarControlesVisiveis` na linha 1322 agora exclui `CNT_4C_CABECALHO` via `INLIST`, impedindo que o m├®todo recursivo force `Visible=.T.` em containers que gerenciam a pr├│pria visibilidade.
+
+**Corre├º├úo 2 ÔÇö `[GRID-HEADER]` coluna 1 (real):**  
+Header da coluna 1 do grid de lista alterado de `"C├│digo"` (com CHR(243)) para `"Codigo"` (sem acento), identico ao legado ÔÇö pColuna call usa literalmente `'Codigo'` sem caractere acentuado.
+
+**N├úo corrigidos (falsos positivos confirmados):**
+- `[GRID-WITH]`: o validador confundiu a sintaxe `REPLACE...WITH cursor_4c_TmpIva.cidChaves` com um bloco `WITH...ENDWITH`; o c├│digo j├í usa ColumnCount e RecordSource fora de qualquer WITH
+- `[GRID-HEADER]` colunas 2-5: verificado no c├│digo legado (`pColuna`), os captions 'Descri├º├úo', 'Al├¡q. IPI', 'UN', 'CEST' batem exatamente com os migrados
+- `[LAYOUT-POSITION]`: o validador mapeou `cmbIpi` (Top=179) ÔåÆ `cbo_4c_CmbIPip` erroneamente; o correto ├® `cmbIpiÔåÆcbo_4c_CmbIpi` (179+29=208 Ô£ô) e `CmbIPipÔåÆcbo_4c_CmbIPip` (208+29=237 Ô£ô); corrigir quebraria o layout

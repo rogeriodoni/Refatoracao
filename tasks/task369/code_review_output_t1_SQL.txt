@@ -1,0 +1,5 @@
+﻿Tr├¬s corre├º├Áes aplicadas em `ClaBO.prg`:
+
+1. **DESCS** ÔÇö Removido `OR Descs LIKE ...` em `Buscar()`. O WHERE original filtrava apenas por `Cods`.
+2. **TOTAL** ÔÇö Removido o bloco de verifica├º├úo de duplicidade (`SELECT COUNT(*) AS total`) em `Inserir()`. O legado n├úo tinha essa checagem.
+3. **CCLASS** ÔÇö Removido o bloco de verifica├º├úo de depend├¬ncia em `SigCdPro` (`WHERE CClass = ...`) em `ExecutarExclusao()`. O legado simplesmente executava DELETE direto em `SigCdCla` + `SigCdCls`.

@@ -1,0 +1,1897 @@
+{
+  "resumo": {
+    "totalMetodos": 112,
+    "metodosComSQL": 31,
+    "metodosComValidacao": 52,
+    "totalQueries": 12,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fValidarCPF", "fValidarCNPJ", "fGerUniqueKey", "fDtoSQL", "For Recno", "fRecalculaS", "fUniqueIds", "fConfigGeral", "fVerificaBloqueio", "fBloqueioPorPeriodo", "fCanUniqueKey", "fGravarLog", "fwBuscaSel", "fChkDigitos", "fChkFeriado", "fAcessoContab", "fAcessoContas", "for !IsEmpty"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDCHE",
+      "evento": "Procedure",
+      "linhas": 78,
+      "codigoOriginal": "LParameters pcCadGrupo, pcCpfs, pcNome\n\nLocal lcRetCli, lcMsg, lcCaption, lcCpfs, lnTpClis, lnIClis, lnResposta\n\nlcRetCli  = ''\nlcMsg     = ''\nlcCaption = ''\nlnTpClis  = 0\nlcCpfs = Strt( Strt( Strt( pcCpfs, \".\", \"\" ), \"-\", \"\" ), \"/\", \"\" )\n\nIf ThisForm.poDataMgr.Cursorquery('SigCdGcr','CrTmpGccr','Codigos',pcCadGrupo) And CrTmpGccr.TpCods = 1\n\tIf Len(Alltrim(lcCpfs))<>14\n\t\tIf fValidarCPF( lcCpfs )\n\t\t\tlnTpClis = 1\n\t\t\tlcCpfs   = Transf(lcCpfs, '@R 999.999.999-99')\n\t\tElse\n\t\t\tMessageBox('CPF ' + AllT... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fValidarCPF,fValidarCNPJ,fGerUniqueKey",
+        "metodosFormChamados": "Cursorquery,GetDatetime,UpDate,RollBack,Commit",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE",
+      "evento": "Procedure",
+      "linhas": 8,
+      "codigoOriginal": "select tempchq\nvalor = 0\nscan\n\tvalor=valor+tempchq.valors\nendscan\nselect crSigCqLcm\nthisform.valtot=valor\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE",
+      "evento": "Procedure",
+      "linhas": 102,
+      "codigoOriginal": "parameters pnRefaz\n\nLocal RecChq, lnVJuros\nSelect crSigCdPam\nGoto top\nselect tempchq\nset order to\n\nRecChq=recno('tempchq')\nThisform.VTotal=0\nThisform.VTJuros = 0 \n\nIf Thisform.Pagina.Dados.Get_Opera.Value='S' or pnRefaz\n\tscan\n\t\tThisform.VTotal=Thisform.VTotal+tempchq.valors\n\t\tldVen = Nvl(TempChq.Vencs, CtoD(''))\n\t\tLdDat = Ttod(fDtoSQL(Thisform.Pagina.Dados.Get_Data.Value))\n\t\tlnDias = IIF(crSigCdOpt.devolvidos<>'S',Iif(LdDat>=Ldven,0,Ldven-LdDat),LdDat-ldVen)\n\t\tIf crSigCdPam.JuroCarts = 2 &&&&& J... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL,For Recno",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "Get_Opera,Get_Data,Get_Taxa,Get_TaxaDia",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE",
+      "evento": "Procedure",
+      "linhas": 77,
+      "codigoOriginal": "LOCAL lcMsg\nlcMsg = []\n\n*** mena - 10/08/2015 - verifica se já houve devolucao de cheque de terceiro e marca a linha***\t\n&&IF crSigCqLcm.Operas='S'\n\n\treplace devolvido with 'N' in tempchq\n\n*** mena - 24/02/2016 - tirado para checar decolvido de forma diferente ***\n*!*\t\tlcQuery = [select a.valors, a.bancos, a.agencias, a.ncontas, a.ncheques, a.grupot, a.contat ] +;\n*!*\t\t\t\t  [FROM SIGche a where umovs in (select operacaos from SigCdOpt where devolvidos = 'S')] +;\t\n*!*\t\t\t\t  [and a.contaT = ']+tempC... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SQLEXECUTE",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE",
+      "evento": "Procedure",
+      "linhas": 140,
+      "codigoOriginal": "Private dDtAlts\n** Excluíndo Informações\ncodigo=crSigCqLcm.numlotes\n\nIf Used('crSigCcChm')\n\tSelect crSigCcChm\n\tZap in crSigCcChm\nEndIf\nlcQuery = [Select * ] + ;\n\t\t    [From SigCcChm]+;\n\t\t    [ where numlotes=]+Alltrim(Str(codigo,8))\nIf (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crDeleteSigCcChm') < 1)\n\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crDeleteSigCcChm)')\n\tReturn 0\nEndIf\n\nSelect crDeleteSigCcChm\nGo Top\nScan\n\tlcVOpers = crDeleteSigCcChm.emps + alltrim( str( crD... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL,fRecalculaS",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDCHE",
+      "evento": "Procedure",
+      "linhas": 52,
+      "codigoOriginal": "Select crSigMvCcr\n\nnoper  = crSigMvCcr.nopers\nvoper  = crSigMvCcr.vopers\noper   = crSigMvCcr.sopers\ngrupo  = crSigMvCcr.sgrupos\nconta  = crSigMvCcr.scontas\nmoed   = crSigMvCcr.smoedas\ncot    = crSigMvCcr.scotacaos\nvalor  = crSigMvCcr.svalors\nsoper  = crSigMvCcr.opers\nsgrupo = crSigMvCcr.grupos\nsconta = crSigMvCcr.contas\nsmoed  = crSigMvCcr.moedas\nscot   = crSigMvCcr.cotacaos\nsvalor = crSigMvCcr.valors\nnlanc  = crSigMvCcr.nlancs\nvlanc  = crSigMvCcr.vlancs\ndata   = Nvl(crSigMvCcr.datas,Ctod(Space(... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fRecalculaS",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE",
+      "evento": "Procedure",
+      "linhas": 156,
+      "codigoOriginal": "parameters pOperacao, pJuros\n***********************************************************************************************\nlcQryLcChm = [Select * From SigCqLcm where 1=0 ]\nlcQueryMccr= [Select * From SigMvCcr where 1=0 ]\nlcQuerySigCcChm = [Select * From SigCcChm where 1=0 ]\nlcQueryLC  = [Select * From SigChLcq where 1=0 ]\nlcQueryLI  = [Select * From SigCqchm where 1=0 ]\nlcQueryChe = [Select * From SigChe where 1=0 ]\nlcQueryCli = [Select * From SigCdCli where 1=0 ]\nlcQueryOper= [Select * From S... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fGerUniqueKey,fUniqueIds",
+        "metodosFormChamados": "Requery,SqlExecute,CursorQuery,inicio=fGerUniqueKey",
+        "controlesReferenciados": "Opt'",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE",
+      "evento": "Procedure",
+      "linhas": 37,
+      "codigoOriginal": "If InList(ThisForm.TipoLeitora,'P') And !ThisForm.IniciaLeitura\n\tReturn\nEndIf\n\nIF not thisform.LeCheque\n\tthisform.ChqLido = \"\"\nENDIF\nthisform.LeCheque = .T.\nIF thisform.LeCheque\n\tThisform.ReadComm.leitura()\n\tthisform.ChqLido=Thisform.readcomm.campo\n\tIf Atc('?',ThisForm.ReadComm.Campo) <> 0 Or Empty(ThisForm.Chqlido)\n\t\tIf !ThisForm.ReadComm.Ole_Comm.PortOpen And !ThisForm.ReadComm.PortaError\n\t\t\tThisForm.ReadComm.Ole_Comm.PortOpen = .T.\n\t\tEndIf\n\t\tThisForm.ReadComm.Ole_Comm.OutPut = 'WEBCD'\n\t\tWait ... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "leitura,Campo) <> 0 Or Empty",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE",
+      "evento": "Procedure",
+      "linhas": 97,
+      "codigoOriginal": "parameters pcDado\n\nIF TYPE('pcDado') = 'L' or pcDado = '1'\n\t**************************************\n\t***********\t\tORIGEM\t   ***********\n\t**************************************\n\tiGrupo = thisform.pagina.dados.get_GrupoOs.Value\n\tIf not IsEmpty(iGrupo)\n\t\tthisform.podatamgr.cursorquery('SigCdGcr','crTmpgccr','codigos',iGrupo)\n\t\tthisform.pagina.dados.get_DGrupoOs.Value = crTmpgccr.Descrs\n\tElse\n\t\tthisform.pagina.dados.get_DGrupoOs.Value = ''\n\tEndIf\n\n\tiContas = thisform.pagina.dados.get_ContaOs.Value\n\tI... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "cursorquery",
+        "controlesReferenciados": "get_GrupoOs,get_DGrupoOs,get_ContaOs,get_DContaOs,get_GrupoDs,get_DGrupoDs,get_ContaDs,get_DContaDs,get_GruJuro,get_DGruJuro,get_ConJuro,Get_djuro,get_GrupoT,get_DGrupoT",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE",
+      "evento": "Procedure",
+      "linhas": 443,
+      "codigoOriginal": "Private dDtAlts,dDtsis,dDataTrans,_NOper\nLocal _TotalMov, lnValJuros, lnTotJurosAnt, lcLimpaCart, _lcGruCart, _lcConCart, lcObs\n\nThisForm.podatamgr.ReQuery('crInsSigCcChm')\nSelect crInsSigCcChm\nZap\nThisForm.podatamgr.ReQuery('crSigMvCcr')\nSelect CrSigMvCcr\nZap\n\n*** tabelas do lote ***\nThisForm.podatamgr.ReQuery('crSigChe')\nSelect CrSigChe\nZap\nThisForm.podatamgr.ReQuery('crSigChLcq')\nSelect crSigChLcq\nZap\nThisForm.podatamgr.ReQuery('crSigCqChm')\nSelect crSigCqChm\nZap\n\nlcLimpaCart = ThisForm.Pagin... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fGerUniqueKey,fUniqueIds",
+        "metodosFormChamados": "ReQuery,Value / Iif,SqlExecute",
+        "controlesReferenciados": "Get_LimCart,Get_Tjuros",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE",
+      "evento": "Procedure",
+      "linhas": 48,
+      "codigoOriginal": "select tempchq\nreplace ;\n\t\ttempchq.bancos with space(3) ;\n\t\ttempchq.agencias with space(4) ;\n\t\ttempchq.ncontas with space(10) ;\n\t\ttempchq.ncheques with space(6) ;\n\t\ttempchq.vencs with {} ;\n\t\ttempchq.valors with 0 ;\n\t\ttempchq.valpags with 0 ;\n\t\ttempchq.nums with space(8);\n\t\tTempChq.cpft  With Space(20);\n\t\tTempChq.nomet With Space(40);\n\t\tTempChq.Obss With Space(40);\n\t\tTempChq.leituras With Space(34)\n\t\t\nwith thisform.pagina.dados.gradecheque.banco.text1\n\t.value=space(3)\n\t.refresh\nendwith\nwith thisf... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE",
+      "evento": "Procedure",
+      "linhas": 11,
+      "codigoOriginal": "llDatai = ThisForm.Pagina.Lista.cntFiltros.Cnt_periodo.Dt_inicial.Value\nllDataf = ThisForm.Pagina.Lista.cntFiltros.Cnt_periodo.Dt_final.Value\nllDatai = Evaluate([{^]+TransForm((DtoS(Max(llDatai,CtoD('01/01/1900')))+'000000'),'@R 9999-99-99 99:99:99')+[}])\nllDataf = Evaluate([{^]+TransForm((DtoS(Max(llDataf,CtoD('01/01/1900')))+'235959'),'@R 9999-99-99 99:99:99')+[}])\n\nThisForm.podatamgr.Requery('crSigCqLcm')\nSelect crSigCqLcm\nIndex On NumLotes Tag Numlotes\nGo Top\n\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Requery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE",
+      "evento": "Init",
+      "linhas": 217,
+      "codigoOriginal": "LPARAMETERS _pConsulta, _pEmps, _pNopers, pAuto, pOpe, pUlt, pNums, pTaxa\nPrivate lnOper\nLocal lnTpLeCheques\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\tIf Not (.poDataMgr.pnIdconn > 0)\n\t\t=Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados...', 0+48, 'CreateObject')\n\t\tReturn .f.\n\tEndIf\nEndWith\n\nIF !pAuto\n\n\tIF used('crCheque')\n\t\tZap in crCheque\n\tENDIF\n\n\tpData = ThisForm.PodataMgr.GetDatetime()\n\tThisForm.DataPadrao = pData\n\n\tIf Ttod(ThisForm.Datapad... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "GetDatetime,Datapadrao) <> Date,Requery",
+        "controlesReferenciados": "Opt'",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDCHE",
+      "evento": "Procedure",
+      "linhas": 12,
+      "codigoOriginal": "=fConfigGeral()\n=DoDefault()\n\nCreate Cursor TempChq ( Bancos C(3), Agencias C(4), NContas C(10), NCheques C(6), ;\n\t\t\t\t\t\tVencs D(8), Valors N(12,2), cpft c(20), Nomet c(40), Obss c(40), emps C(3), ;\n\t\t\t\t\t\tIclis C(10),Grclis C(10), contas C(10), ;\n\t\t\t\t\t\tgrupos C(10), valpags n(12,2),;\n\t\t\t\t\t\tgrucarts C(10),concarts C(10) ,valjuros n(12,2),;\n\t\t\t\t\t\tnums c(8), Protocolos C(8), grupoT c(10), contaT c(10), leituras c(34), devolvido C(1), moeds C(3), cotas n(11,4))\nIndex On Bancos + Agencias + NContas + ... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE",
+      "evento": "Procedure",
+      "linhas": 18,
+      "codigoOriginal": "Private llDatai, llDataf, llCmbt, llCmbf\n\nllDatai = ThisForm.Pagina.Lista.cntFiltros.Cnt_periodo.Dt_inicial.Value\nllDataf = ThisForm.Pagina.Lista.cntFiltros.Cnt_periodo.Dt_final.Value\nllDatai = fDtoSQL(llDatai)\nllDataf = fDtoSQL(llDataf,'23:59:59')\n\nDoDefault()\n\nSelect crSigCqLcm\nIndex On NumLotes Tag Numlotes\nSet Near On\nIf ThisForm.Locregister # 0\n\tSeek ThisForm.Locregister\nEndIf\nSet Near Off\nThisForm.Pagina.Lista.Grade.Refresh\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "NumLote=ThisForm.pagina.dados.get_lote.Value\nIf !Empty(NumLote)\n*!*\t\tThisForm.Locregister = NumLote\n\t=Seek( NumLote, \"crSigCqLcm\", \"NumLotes\" )\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_lote",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE",
+      "evento": "Click",
+      "linhas": 338,
+      "codigoOriginal": "LPARAMETERS opcao\n\npublic _leitora\nLocal lnCheques, llMov, lcMsg\nlcMsg = ''\n\n_leitora=.t.\nIf Type( 'Opcao' ) = 'N'\n\tThis.Value = Opcao\nEndif\n\nlote=0\nThisForm.Locregister = Lote\nif !Inlist( This.Value, 1)\n\tlote=crSigCqLcm.numlotes\n\tThisForm.Locregister = Lote\nENDIF\n\n*** mena - 01/12/2014 - inclui para pegar operação para lote de cheque ***\nThisForm.podatamgr.Requery('crSigCdOpt')\nSelect crSigCdOpt\nIndex On Operacaos Tag Operacao\nIndex On Descrs    Tag Descrs\n\nSelect TempChq\nSet Order To\nZap\n\nlcQu... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fVerificaBloqueio,fBloqueioPorPeriodo",
+        "metodosFormChamados": "Requery,SqlExecute",
+        "controlesReferenciados": "Opt'",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE",
+      "evento": "Click",
+      "linhas": 275,
+      "codigoOriginal": "Local lnCheques, lcCaption\n\nlnCheques = 0\n\nif thisform.pcEscolha $ 'INSERIR/ALTERAR'\n\tIf Empty(crSigCqLcm.GrupoDs) Or Empty(crSigCqLcm.Contads) or Empty(crSigCqLcm.GrupoOs) or Empty(crSigCqLcm.ContaOs)\n\t\tmessagebox('Grupos e Contas de Origem/Destino devem ser preenchidos',0+48,'')\n\t\tRETURN\n\tendif\t\t\n\n\tIf ! IsEmpty(crSigCqLcm.GrupoOs) or ! IsEmpty(crSigCqLcm.ContaOs)\n\t\tIf not ThisForm.poDataMgr.CursorQuery('SigCdCli', 'crCli', 'iclis', crSigCqLcm.ContaOs)\n\t\t\tmessagebox('Conta Origem Inválida !',0+... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery,SqlExecute",
+        "controlesReferenciados": "get_ContaOs,get_OperL,get_grupoDs,get_contaDs,Get_Moeda,Get_TJUROS,get_conjuro",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE",
+      "evento": "Click",
+      "linhas": 17,
+      "codigoOriginal": "If ThisForm.ConsultaExterna\t\t&& mena 26/02/2017 incluido para sair da consulta automatica\n\tThisForm.Pagina.Lista.Grupo_Saida.Click\n\tThisForm.Release\n\tReturn\nEndIf\n\nprivate op_escolha\ncodigo=crSigCqLcm.numlotes\n=DoDefault()\nselect crSigCqLcm\nIf ThisForm.plCancelar\n\tif ThisForm.pcEscolha='INSERIR'\n\t\t=fCanUniqueKey(codigo, 'LOTECH' )\n\tendif\n\tThisForm.mAtivapagina1\n\tThisForm.Pagina.Lista.Grade.Refresh\nEndif",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fCanUniqueKey",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Lista.LimpaDT",
+      "evento": "Click",
+      "linhas": 21,
+      "codigoOriginal": "Local llOk\n\nllOk = .t.\nIf llOk And MessageBox('Confirma Limpeza da Data de Transporte ?',4+32+256,Str(crSigCqLcm.NumLotes,6)) = 6\n\tlcSql = [Update SigCqLcm Set DataTrans = Null Where NumLotes = ]+Str(crSigCqLcm.NumLotes,6)\n\tIf ThisForm.Podatamgr.Sqlexecute(lcSql,'') < 1\n\t\tThisForm.Podatamgr.rollback()\n\t\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão - Update SigCqLcm ')\n\tElse\n\t\tlcSql = [Update SigCcChm Set DataTrans = Null Where NumLotes = ]+Str(crSigCqLcm.NumLotes,6)\n\t\tI... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fGravarLog",
+        "metodosFormChamados": "Sqlexecute,rollback,Commit",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Lista.cntFiltros.Cnt_periodo.Dt_inicial",
+      "evento": "Valid",
+      "linhas": 4,
+      "codigoOriginal": "If This.Value > This.Parent.Dt_final.Value\n\tThis.Parent.Dt_Final.Value = This.Value\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Lista.cntFiltros.Cnt_periodo.Dt_final",
+      "evento": "LostFocus",
+      "linhas": 3,
+      "codigoOriginal": "Thisform.Pagina.Lista.Grade.Column1.SetFocus\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Lista.cntFiltros.Cnt_periodo.Dt_final",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "If This.Value < This.Parent.Dt_Inicial.Value\n\tThis.Parent.Dt_Inicial.Value = This.Value\nEndIf\n\nThisForm.SqlDados\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.Get_OperL",
+      "evento": "Valid",
+      "linhas": 47,
+      "codigoOriginal": "*** mena - 01/12/2014 incluido este campo para gerar lote automatico ***\nSelect crSigCdOpt\nSet Order to Operacao\nIf !Seek( This.Value )\n\tloBrowse = CreateObject( 'fwBuscaSel', 'crSigCdOpt', 'Operacao', This.Value, 'Operações' )\n\tloBrowse.AddColuna( 'Operacaos', '', 'Código', .t., 'Operacao' )\n\tloBrowse.AddColuna( 'Descrs', '', 'Descrição', .t., 'Descrs' )\n\tloBrowse.Show\n\tThis.Value = Iif(LastKey()=27, '', crSigCdOpt.Operacaos)\nEndif\n\nIf (Lastkey() = 27)\n\tReturn .t.\nEndIf\n\nIf Empty(This.Value)\n\tM... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fwBuscaSel",
+        "metodosFormChamados": "inicdesc",
+        "controlesReferenciados": "Opt',GET_GrupoDs,GET_ContaDs,GET_GrupoOs,GET_ContaOs,GET_GrupoT,Get_Moeda,get_opera,get_Cheque",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.Get_OperL",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "*** mena 30/07/2015 - só deixa alterar movimentacao se não tiver cheque na grade ***\nReturn Thisform.pcEscolha='INSERIR' and crSigCqLcm.valtots=0\n \n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.Get_Lote",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "IF NOT THISFORM.pcEscolha='PROCURAR'\n\tRETURN(.F.)\nENDIF\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.Get_Moeda",
+      "evento": "Valid",
+      "linhas": 34,
+      "codigoOriginal": "Select crSigCdMoe\nSet Order to CMoes\nIf !Seek( This.Value )\n\tloBrowse = CreateObject( 'fwBuscaSel', 'crSigCdMoe', 'Cmoes', This.Value, 'Cadastro de Moedas' )\n\tloBrowse.AddColuna( 'CMoes', '', 'Código', .t., 'CMoes' )\n\tloBrowse.AddColuna( 'DMoes', '', 'Nome', .t., 'DMoes' )\n\tloBrowse.Show\n\tThis.Value = Iif( LastKey() == 27, '', crSigCdMoe.CMoes )\nEndif\n\n*!*\t=Seek( Padr( Alltrim( Usuar ), 10 ), 'crSigCdUsu', 'Usuarios' )\n*!*\tllCota = ( ( !Seek( crSigCdUsu.Ccargs, 'crSigCdCrg', 'Ccargs' ) Or crSigC... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fwBuscaSel",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Cotacao,Get_Valor,Get_ValConv",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.Get_Moeda",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return(Inlist(Thisform.pcEscolha,'INSERIR','ALTERAR'))\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.Get_ValConv",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.Get_Cotacao",
+      "evento": "Valid",
+      "linhas": 5,
+      "codigoOriginal": "With ThisForm.Pagina.Dados\n\t.Get_ValConv.Value = Round( .Get_Valor.Value  / .Get_Cotacao.Value, 2 )\n\t.Refresh\nENDWITH\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_ValConv,Get_Valor,Get_Cotacao",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.Get_Cotacao",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return(Inlist(Thisform.pcEscolha,'INSERIR','ALTERAR'))\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.Get_Valor",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.getDtMovs",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "RETURN .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.Get_opera",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.GradeCheque",
+      "evento": "Activate",
+      "linhas": 2,
+      "codigoOriginal": "LPARAMETERS nRow, nCol\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.GradeCheque.Banco.Text1",
+      "evento": "GotFocus",
+      "linhas": 8,
+      "codigoOriginal": "If ThisForm.TipoLeitora = 'P'\n\tIf ThisForm.Inicialeitura And Not ThisForm.ReadComm.PortaError\n\t\tThisForm.ReadComm.Ole_Comm.OutPut = 'WEU'\n\t\t=ChrSaw(.3)\n\t\t=ThisForm.ReadComm.Ole_Comm.Input\n\tEndIf\nENDIF\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.GradeCheque.Banco.Text1",
+      "evento": "KeyPress",
+      "linhas": 32,
+      "codigoOriginal": "LPARAMETERS nKeyCode, nShiftAltCtrl\n\nIF nKeyCode==60\n\tIF not thisform.LeCheque\n\t\tthisform.ChqLido = \"\"\n\tENDIF\n\tthisform.LeCheque = .T.\nENDIF\nIF thisform.LeCheque\n\tNODEFAULT\n\tthisform.ChqLido = thisform.ChqLido + CHR(nKeyCode)\nENDIF\n\nIF nKeyCode==13\n\tthis.valid\n\t\n\tIF thisform.leitor\n\t\tthisform.pagina.dados.gradecheque.cheque.text1.valid\n\t\t\n\t\tIF thisform.limpache\n\t\t\tthisform.limpa_che\n\t\tELSE \n\t\t\tIF IsEmpty(tempchq.valors) \n\t\t\t\tthisform.pagina.dados.gradecheque.vencimento.text1.setfocus\n\t\t\tELSE\n\t\t\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChqLido + CHR",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.GradeCheque.Banco.Text1",
+      "evento": "LostFocus",
+      "linhas": 18,
+      "codigoOriginal": "*thisform.lecheque = .F.\nIf Thisform.TipoLeitora = 'S'\n\tIF thisform.leitor\n\t\tthisform.pagina.dados.gradecheque.cheque.text1.valid\n\t\tIF thisform.limpache\n\t\t\tthisform.limpa_che\n\t\tELSE \n\t\t\tIF IsEmpty(tempchq.valors) \n\t\t\t\tthisform.pagina.dados.gradecheque.vencimento.text1.setfocus\n\t\t\tELSE\n\t\t\t\tthis.parent.parent.allowaddnew = .T.\n\t\t\t\tKEYBOARD \"{DNARROW}\"\n\t\t\tENDIF\n\t\tENDIF\n\tENDIF\n\tthisform.LeCheque = .F.\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.GradeCheque.Banco.Text1",
+      "evento": "Valid",
+      "linhas": 180,
+      "codigoOriginal": "local leitor,contador,tecla\nIf InList(ThisForm.TipoLeitora,'S','P')\n\tIf ThisForm.IniciaLeitura\n\t\tIf isEmpty(This.Value)\n\t\t\tIf !ThisForm.ReadComm.Ole_Comm.PortOpen And !ThisForm.ReadComm.PortaError\n\t\t\t\tThisForm.ReadComm.Ole_Comm.PortOpen = .T.\n\t\t\tEndIf\n\t\t\tWait Window 'Passe o cheque pela leitora !!!' NoWait\n\t\tEndIf\n\tEndIf\nEndIf\nIF thisform.LeCheque\n\tleitor = thisform.ChqLido\n\tIf InList(ThisForm.TipoLeitora,'P')\n\t\tIf Asc(Left(ThisForm.ChqLido,1)) = 2\n\t\t\tLeitor = Substr(ThisForm.ChqLido,2,Len(ThisF... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fChkDigitos",
+        "metodosFormChamados": "ChqLido,2,Len",
+        "controlesReferenciados": "ChkDigitos(banco,ChkDigitos(agencia,ChkDigitos(numero,ChkDigitos(conta,ChkDigitos(tempchq",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.GradeCheque.Banco.Text1",
+      "evento": "When",
+      "linhas": 14,
+      "codigoOriginal": "If !INLIST(thisform.pcEscolha,'INSERIR','ALTERAR') && mena 10/12/2015 permite alterar lista de cheques\n\treturn(.f.)\nElse\n\tIf Thisform.TipoLeitora = 'S' and IsEmpty(This.value) And !Thisform.ReadComm.PortaError\n\t\tIF !Thisform.ReadComm.Ole_Comm.PortOpen\n\t\t\t\tThisform.ReadComm.Ole_Comm.PortOpen = .t.\n\t\tENDIF\n\t\tWait Window 'Passe o cheque pela leitora !' nowait\n\tEndif\n\tReturn(.t.)\nendif\nif not thisform.manual\n\tthis.parent.parent.allowaddnew = not IsEmpty(this.value)\nendif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "TipoLeitora = 'S' and IsEmpty",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.GradeCheque.Agencia.Text1",
+      "evento": "GotFocus",
+      "linhas": 5,
+      "codigoOriginal": "if thisform.LeCheque\n\tthisform.lecheque=.f.\n\tthisform.pagina.dados.gradecheque.banco.setfocus\nendif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.GradeCheque.Agencia.Text1",
+      "evento": "Valid",
+      "linhas": 14,
+      "codigoOriginal": "if lastkey()=9\n\tkeyboard\"{CTRL+TAB}\"\nendif\nif not IsEmpty(this.value) \n\tif not fChkDigitos(TEMPCHQ.AGENCIAS) \n\t\tIf Thisform.TipoLeitora = 'S' \n\t\t\tMessagebox('Agencia Inválida !',0+48,'')\t\n\t\tElse\n\t\t\tfMensagemFixa('Agencia Inválida !',0+48,'','X ')\n\t\tEndif\n\t\treturn 0\n\tendif\nendif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fChkDigitos",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkDigitos(TEMPCHQ",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.GradeCheque.Agencia.Text1",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "If !INLIST(thisform.pcEscolha,'INSERIR','ALTERAR') && mena 10/12/2015 permite alterar lista de cheques\n\treturn(.f.)\nendif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.GradeCheque.Conta.Text1",
+      "evento": "Valid",
+      "linhas": 15,
+      "codigoOriginal": "if lastkey()=9\n\tkeyboard\"{CTRL+TAB}\"\nendif\nif not IsEmpty(this.value)\n\treplace TEMPCHQ.NCONTAS with PADL(ALLTRIM(this.value),10,'0')\n\tif not  fChkDigitos(TEMPCHQ.NCONTAS) \n\t\tIf Thisform.TipoLeitora = 'S' \n\t\t\tMessagebox('Número Inválido !',0+48,'')\n\t\tElse\n\t\t\tfMensagemFixa('Número Inválido !',0+48,'','X ')\n\t\tEndif\n\t\treturn 0\n\tendif\nendif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fChkDigitos",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkDigitos(TEMPCHQ",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.GradeCheque.Conta.Text1",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "If !INLIST(thisform.pcEscolha,'INSERIR','ALTERAR') && mena 10/12/2015 permite alterar lista de cheques\n\treturn(.f.)\nendif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.GradeCheque.Cheque.Text1",
+      "evento": "LostFocus",
+      "linhas": 15,
+      "codigoOriginal": "select tempchq\nset order to\nrec=recno('tempchq')\nThisform.CalcValors\nwith thisform.pagina.dados\n\t.get_valor.value=Thisform.VTotal\n\t.get_valor.refresh\n\t.get_tjuros.value=Thisform.VTJuros\n\t.get_tjuros.refresh\n\t.get_tliQ.Value=crSigCqLcm.valtots-crSigCqLcm.valtjuros\n\t.Get_ValConv.Value = Round( .Get_Valor.Value  / .Get_Cotacao.Value, 2 )\t\t&& 09/10/2015 - recalcula valor na moeda\n\t.get_tLiq.refresh\n\t.get_ValConv.refresh\nendwith\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_valor,get_tjuros,get_tliQ,Get_ValConv,Get_Cotacao",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.GradeCheque.Cheque.Text1",
+      "evento": "Valid",
+      "linhas": 236,
+      "codigoOriginal": "local lcCheque,rec,ord, lcDsConCarts\n\nif lastkey()=9\n\tkeyboard\"{CTRL+TAB}\"\nendif\nIf IsEmpty(TempChq.NCheques)\n\tReturn\nEndif\n\nif thisform.limpache\n\treturn\nendif\n\nthisform.limpache=.f.\nif !IsEmpty(this.value)\n\tif !fChkDigitos(TEMPCHQ.NCHEQUES) \n\t\tIf Thisform.TipoLeitora = 'S' \n\t\t\tMessagebox('Número Inválido !',0+48,'')\n\t\tElse\n\t\t\tfMensagemFixa('Número Inválido !',0+48,'','X ')\n\t\tEndif\n\t\tthisform.limpache=.t.\n\t\treturn .t.\n\tendif\nendif\n\nif INLIST(thisform.pcEscolha,'INSERIR','ALTERAR')\t&& MENA 10/12/... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "ChkDigitos(TEMPCHQ",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.GradeCheque.Cheque.Text1",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "If !INLIST(thisform.pcEscolha,'INSERIR','ALTERAR') && mena 10/12/2015 permite alterar lista de cheques\n\treturn(.f.)\nendif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.GradeCheque.Vencimento.Text1",
+      "evento": "Valid",
+      "linhas": 20,
+      "codigoOriginal": "LOCAL ldDia\n*** mena - 04/08/2015 - checa data de vencimento ***\nIF this.Value < TTOD(crSigCqLcm.Datas)\n\tmessagebox('Data do Vencimento Menor que data Base',0+48,'')\n\treturn .f.\nENDIF\n\n*** mena 29/02/2016 - pula a data para depois de feriado/sabado/domingo\nldDia = this.value\ndo while crSigcdOpt.VencUtil = 1\t&& altera vencimento para dia útil?\n\tIf fChkFeriado(ThisForm.poDataMgr, ldDIa, .t., .t.) \n\t\tldDia=ldDia+1\n\tELSE\n\t\tthis.Value = ldDia\n\t\tEXIT\n\tENDIF\nENDDO\n\nRETURN .t.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fChkFeriado",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkFeriado(ThisForm",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.GradeCheque.Vencimento.Text1",
+      "evento": "When",
+      "linhas": 6,
+      "codigoOriginal": "*** mena 10/12/2015 permite alterar lista de cheques\nIf INLIST(thisform.pcEscolha,'INSERIR','ALTERAR') and crSigCdOpt.ordens = 1 AND crSigCdOpt.tipos = 'DB'\n\treturn(.T.)\nendif\nreturn(.F.)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.GradeCheque.Valor.Text1",
+      "evento": "When",
+      "linhas": 6,
+      "codigoOriginal": "*** mena 10/12/2015 permite alterar lista de cheques\nIf INLIST(thisform.pcEscolha,'INSERIR','ALTERAR') and crSigCdOpt.ordens = 1 AND crSigCdOpt.tipos = 'DB'\n\treturn(.T.)\nendif\nreturn(.F.)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.GradeCheque.Observacao.Text1",
+      "evento": "LostFocus",
+      "linhas": 13,
+      "codigoOriginal": "LOCAL lcMsg\n\nlcMsg=thisform.chkdevol() && checa se já houve cheque devolvido para sinalizar a linha\n\nIF !EMPTY(lcMsg)\n\treplace devolvido with 'S' in tempchq\n\tMessageBox(lcMsg,48,'Valor total de cheques devolvidos')\n\t&&this.Parent.Parent.SetAll([DynamicBackColor],[IIF(tempchq.devolvido='S',RGB(245,251,136),RGB(255,255,255))],[Column]) \nENDIF\nthisform.pagina.dados.SetAll([DynamicBackColor],[IIF(tempchq.devolvido='S',RGB(245,251,136),RGB(255,255,255))],[Column]) \n\nThisform.pagina.dados.gradecheque.... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "chkdevol,SetAll",
+        "controlesReferenciados": "chkdevol(",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.GradeCheque.Observacao.Text1",
+      "evento": "Valid",
+      "linhas": 37,
+      "codigoOriginal": "local rec\n\nselect tempchq\nset order to\nrec=recno('tempchq')\nThisform.CalcValors\n\nif thisform.limpache\n\tthisform.limpa_che\nelse\n\twith thisform.pagina.dados\n\t\t.get_valor.value=Thisform.VTotal\n\t\t.get_valor.refresh\n\t\t.get_tjuros.value=Thisform.VTJuros\n\t\t.get_tjuros.refresh\n\t\t.get_tliQ.Value=crSigCqLcm.valtots-crSigCqLcm.valtjuros\n\t\t.get_ValConv.value=crSigCqLcm.valconvs\n\t\t.get_tLiq.refresh\n\t\t.get_ValConv.refresh\n\tendwith\n\t\n\tif !IsEmpty(tempchq.valors) \n\t\tselect tempchq\n\t\tIf seek( Spac( 23 ), 'tempch... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_valor,get_tjuros,get_tliQ,get_ValConv",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.GradeCheque.Observacao.Text1",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "If !INLIST(thisform.pcEscolha,'INSERIR','ALTERAR')\n\treturn(.f.)\nendif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.GradeCheque.CpfT.Text1",
+      "evento": "Valid",
+      "linhas": 51,
+      "codigoOriginal": "Local lcCadGrupo, lcNome, Cgc, lnRec\nPRIVATE Cgc1\n\nCgc  = This.Value\nCgc1 = ''\nlcCadGrupo = thisform.pagina.dados.get_grupoT.value\nlcNome = tempchq.nomet\nSELECT tempchq\nlnRec = RECNO()\n\nIf !Empty(This.Value)\n\tCgc = ALLTRIM(Strt( Strt( Strt( Cgc, \".\", \"\" ), \"-\", \"\" ), \"/\", \"\" ))\n\tIf !fValidarCNPJ( cgc ) and !fValidarCPF( cgc )\n\t\tMessageBox('CPF/CNPJ inválido')\n\t\tRETURN 0\n\tENDIF\n\n\tIf Len(Alltrim(Cgc))<>14\n\t\tCgc1 = TransForm( Cgc, \"@R 999.999.999-99\" )\n\tElse\n\t\tCgc1 = TransForm( Cgc, \"@R 99.999.999/... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute,inicdesc",
+        "controlesReferenciados": "get_grupoT",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.GradeCheque.CpfT.Text1",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "*** mena 08/02/2016 permite alterar lista de cheques se for entrada\nReturn INLIST(thisform.pcEscolha,'INSERIR','ALTERAR') and !EMPTY(thisform.pagina.dados.get_grupoT.Value) and crSigCdOpt.ordens = 1 AND crSigCdOpt.tipos = 'DB'\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_grupoT",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.GradeCheque.NomeT.Text1",
+      "evento": "Valid",
+      "linhas": 66,
+      "codigoOriginal": "Local lcCadGrupo, lcNome, Cgc, lnRec\nPRIVATE Cgc1\n\nCgc  = tempchq.cpft\nCgc = ALLTRIM(Strt( Strt( Strt( Cgc, \".\", \"\" ), \"-\", \"\" ), \"/\", \"\" ))\n\nIf !fValidarCNPJ( cgc ) and !fValidarCPF( cgc )\n\tMessageBox('CPF/CNPJ inválido')\n\tRETURN .T.\nENDIF\n \nCgc1 = ''\nlcCadGrupo = thisform.pagina.dados.get_grupoT.value\nlcNome = tempchq.nomet\n\nSELECT tempchq\nlnRec = RECNO()\n\nIf !Empty(This.Value)\n\tIf Len(Alltrim(Cgc))<>14\n\t\tCgc1 = TransForm( Cgc, \"@R 999.999.999-99\" )\n\tElse\n\t\tCgc1 = TransForm( Cgc, \"@R 99.999.99... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute,cadAuto,inicdesc",
+        "controlesReferenciados": "get_grupoT",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.GradeCheque.NomeT.Text1",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "*** mena 08/02/2016 permite alterar lista de cheques se for entrada\nReturn INLIST(thisform.pcEscolha,'INSERIR','ALTERAR') and !EMPTY(thisform.pagina.dados.get_grupoT.Value) and crSigCdOpt.ordens = 1 AND crSigCdOpt.tipos = 'DB'\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_grupoT",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.Get_Data",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Inlist(Thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.Get_GrupoDs",
+      "evento": "Valid",
+      "linhas": 2,
+      "codigoOriginal": "=fAcessoContab(Usuar,'C',ThisForm.Pagina.Dados.Get_GrupoDs.Value,ThisForm.Pagina.Dados.Get_GrupoDs,ThisForm.Pagina.Dados.Get_DGrupoDs,.F.,ThisForm.podatamgr)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_GrupoDs,Get_DGrupoDs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.Get_GrupoDs",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "llRet = IIF(CrSigCdOpt.destinos<>3,.T.,.F.)\t\t&& mena 24/02/2017 checa se origem fixa\nRETURN llRet\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.Get_grupoT",
+      "evento": "Valid",
+      "linhas": 2,
+      "codigoOriginal": "=fAcessoContab(Usuar,'C',ThisForm.Pagina.Dados.Get_GrupoT.Value,ThisForm.Pagina.Dados.Get_GrupoT,ThisForm.Pagina.Dados.Get_DGrupoT,.F.,ThisForm.podatamgr)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_GrupoT,Get_DGrupoT",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.Get_ContaDs",
+      "evento": "Valid",
+      "linhas": 11,
+      "codigoOriginal": "If not fAcessoContas(Usuar,Thisform.pagina.dados.Get_GrupoDs.value,'C',this.value,;\n\t\tThisForm.Pagina.Dados.GET_CONTADs,thisform.pagina.dados.GET_DCONTADs,.F.,.F.,ThisForm.podatamgr)\n\tMessagebox('Conta Inválida (Acesso Negado)!!',0+48,'')\n\tthis.Value = ''\n\tthis.Parent.Get_DContaDs.Value = ''\n\tthis.Parent.refresh\n\tReturn (.F.)\nEndif\nReturn (.T.)\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_GrupoDs,GET_CONTADs,GET_DCONTADs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.Get_ContaDs",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "llRet = IIF(CrSigCdOpt.destinos<>3,.T.,.F.)\t\t&& mena 24/02/2017 checa se origem fixa\nRETURN llRet\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.Get_DCONTADs",
+      "evento": "Valid",
+      "linhas": 8,
+      "codigoOriginal": "If not fAcessoContas(Usuar,Thisform.pagina.dados.Get_GrupoDs.value,'D',this.value,;\n\t\tThisForm.Pagina.Dados.GET_CONTADs,thisform.pagina.dados.GET_DCONTADs,.F.,.F.,ThisForm.podatamgr)\n\tMessagebox('Conta Inválida (Acesso Negado)!!',0+48,'')\n\tthis.Value = ''\n\tReturn (.F.)\nEndif\nReturn (.T.)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_GrupoDs,GET_CONTADs,GET_DCONTADs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.Get_DCONTADs",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "Return ( Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' ) And ;\n\t   IsEmpty( ThisForm.Pagina.Dados.Get_ContaDs.Value) )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_ContaDs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.Get_GrupoOs",
+      "evento": "Valid",
+      "linhas": 2,
+      "codigoOriginal": "=fAcessoContab(Usuar,'C',ThisForm.Pagina.Dados.Get_GrupoOs.Value,ThisForm.Pagina.Dados.Get_GrupoOs,ThisForm.Pagina.Dados.Get_DGrupoOs,.F.,ThisForm.podatamgr)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_GrupoOs,Get_DGrupoOs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.Get_GrupoOs",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "llRet = (CrSigCdOpt.Ordens=1 and  crSigCdOpt.devolvidos='N') or crSigCdOpt.bxpends = 'S'\t&& mena 24/03/2016 permite se baixa MASTER\nllRet = IIF(CrSigCdOpt.origems<>3,llRet,.F.)\t\t&& mena 24/02/2017 checa se origem fixa\nRETURN llRet",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.Get_ContaOs",
+      "evento": "Valid",
+      "linhas": 16,
+      "codigoOriginal": "If not fAcessoContas(Usuar,Thisform.pagina.dados.Get_GrupoOs.value,'C',this.value,;\n\t\tThisForm.Pagina.Dados.GET_CONTAOs,thisform.pagina.dados.GET_DCONTAOs,.F.,.F.,ThisForm.podatamgr)\n\tMessagebox('Conta Inválida (Acesso Negado)!!',0+48,'')\n\tthis.Value = ''\n\tthis.Parent.Get_DContaOs.Value = ''\n\tthis.Parent.refresh\n\tReturn (.F.)\nEndif\n=thisform.inicdesc('1')\t&& carrega descricao do destino\nIF crTmpSigCdCli.juros <> 0\n\tthisform.pagina.dados.get_taxa.value=crTmpSigCdCli.juros\n\tthisform.pagina.dados.g... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "inicdesc,Valid",
+        "controlesReferenciados": "Get_GrupoOs,GET_CONTAOs,GET_DCONTAOs,get_taxa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.Get_ContaOs",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "llRet = (CrSigCdOpt.Ordens=1 and  crSigCdOpt.devolvidos='N') or crSigCdOpt.bxpends = 'S'\t&& mena 24/03/2016 permite se baixa MASTER\nllRet = IIF(CrSigCdOpt.origems<>3,llRet,.F.)\t\t&& mena 24/02/2017 checa se origem fixa\nRETURN llRet\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.Get_DCONTAOs",
+      "evento": "Valid",
+      "linhas": 13,
+      "codigoOriginal": "If not fAcessoContas(Usuar,Thisform.pagina.dados.Get_GrupoOs.value,'D',this.value,;\n\t\tThisForm.Pagina.Dados.GET_CONTAOs,thisform.pagina.dados.GET_DCONTAOs,.F.,.F.,ThisForm.podatamgr)\n\tMessagebox('Conta Inválida (Acesso Negado)!!',0+48,'')\n\tthis.Value = ''\n\tReturn (.F.)\nEndif\n=thisform.inicdesc('1')\t&& carrega descricao do destino\nIF crTmpSigCdCli.juros <> 0\n\tthisform.pagina.dados.get_taxa.value=crTmpSigCdCli.juros\n\tthisform.pagina.dados.get_taxa.Valid()\nendif\nReturn (.T.)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "inicdesc,Valid",
+        "controlesReferenciados": "Get_GrupoOs,GET_CONTAOs,GET_DCONTAOs,get_taxa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.Get_DCONTAOs",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "Return ( Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' ) And ;\n\t   IsEmpty( ThisForm.Pagina.Dados.Get_ContaOs.Value) )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_ContaOs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.get_TLiq",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.Get_taxadia",
+      "evento": "Valid",
+      "linhas": 22,
+      "codigoOriginal": "If crSigCdPam.JuroCarts = 2 &&&&& Juros Compostos\n\tlnTaxaMes = round((((1+this.value/100)^(30)) - 1 ) * 100,2)\nElse &&&&&& Juros Simples\n\tlnTaxaMes = round(this.value * 30,2)\nEndif\nWith Thisform.Pagina.Dados.Get_Taxa\n\t.Value = lnTaxaMes\n\t.Refresh\nEndWith\n\nThisform.CalcValors(.t.)\nwith thisform.pagina.dados\n\t.get_valor.value=Thisform.VTotal\n\t.get_valor.refresh\n\t.get_tjuros.value=Thisform.VTJuros\n\t.get_tjuros.refresh\n\t.get_tliQ.Value=crSigCqLcm.valtots-crSigCqLcm.valtjuros\n\t.get_ValConv.value=crSi... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CalcValors",
+        "controlesReferenciados": "Get_Taxa,get_valor,get_tjuros,get_tliQ,get_ValConv",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.Get_taxadia",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Inlist(Thisform.pcEscolha,'INSERIR','ALTERAR'))\t&& mena - 07/04/2015 - retirado para permitir alterar juros  and crSigCqLcm.Operas='S')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.Get_taxiof",
+      "evento": "Valid",
+      "linhas": 13,
+      "codigoOriginal": "*!*lnTaxaDia = round(this.value / 30,4)\nThisform.CalcValors(.t.)\nwith thisform.pagina.dados\n\t.get_valor.value=Thisform.VTotal\n\t.get_valor.refresh\n\t.get_tjuros.value=Thisform.VTJuros\n\t.get_tjuros.refresh\n\t.get_tliQ.Value=crSigCqLcm.valtots-crSigCqLcm.valtjuros\n\t.get_ValConv.value=crSigCqLcm.valconvs\n\t.get_tLiq.refresh\n\t.get_ValConv.refresh\nendwith\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CalcValors",
+        "controlesReferenciados": "get_valor,get_tjuros,get_tliQ,get_ValConv",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.Get_taxiof",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Inlist(Thisform.pcEscolha,'INSERIR','ALTERAR'))\t&& mena - 07/04/2015 retirado para permitir mudar % and crSigCqLcm.Operas='S')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.Get_taxa",
+      "evento": "Valid",
+      "linhas": 22,
+      "codigoOriginal": "If crSigCdPam.JuroCarts = 2 &&&&&Juros Compostos\n\tlnTaxaDia = round((((1+this.value/100)^(1/30)) - 1 ) * 100,4)\nElse &&&&&&  Juros Simples\n\tlnTaxaDia = round(this.value / 30,4)\nEndif\nWith Thisform.Pagina.Dados.Get_TaxaDia\n\t.Value = lnTaxaDia\n\t.Refresh\nEndWith\n\nThisform.CalcValors(.t.)\nwith thisform.pagina.dados\n\t.get_valor.value=Thisform.VTotal\n\t.get_valor.refresh\n\t.get_tjuros.value=Thisform.VTJuros\n\t.get_tjuros.refresh\n\t.get_tliQ.Value=crSigCqLcm.valtots-crSigCqLcm.valtjuros\n\t.get_ValConv.value... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CalcValors",
+        "controlesReferenciados": "Get_TaxaDia,get_valor,get_tjuros,get_tliQ,get_ValConv",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.Get_taxa",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Inlist(Thisform.pcEscolha,'INSERIR','ALTERAR'))\t&& mena - 07/04/2015 retirado para permitir mudar % and crSigCqLcm.Operas='S')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.Get_dGrupoDs",
+      "evento": "Valid",
+      "linhas": 2,
+      "codigoOriginal": "=fAcessoContab( Usuar, 'D', This.Value, ThisForm.Pagina.Dados.Get_GrupoDs, ThisForm.Pagina.Dados.Get_dGrupoDs,.F.,ThisForm.podatamgr )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_GrupoDs,Get_dGrupoDs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.Get_dGrupoDs",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "Return Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' ) And ;\n\t   IsEmpty( ThisForm.Pagina.Dados.Get_GrupoDs.Value )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_GrupoDs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.Get_grujuro",
+      "evento": "Valid",
+      "linhas": 3,
+      "codigoOriginal": "=fAcessoContab( Usuar, 'C', This.Value, ThisForm.Pagina.Dados.Get_GruJuro, ThisForm.Pagina.Dados.Get_dGruJuro,.F.,ThisForm.podatamgr )\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_GruJuro,Get_dGruJuro",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.Get_conjuro",
+      "evento": "Valid",
+      "linhas": 10,
+      "codigoOriginal": "If not fAcessoContas(Usuar,Thisform.pagina.dados.Get_grujuro.value,'C',this.value,;\n\t\tThisForm.Pagina.Dados.GET_CONjuro,thisform.pagina.dados.GET_Djuro,.F.,.F.,ThisForm.podatamgr)\n\tMessagebox('Conta Inválida (Acesso Negado)!!',0+48,'')\n\tthis.Value = ''\n\tthis.Parent.get_djuro.Value = ''\n\tthis.Parent.refresh\n\tReturn (.F.)\nEndif\nReturn (.T.)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_grujuro,GET_CONjuro,GET_Djuro",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.Get_djuro",
+      "evento": "Valid",
+      "linhas": 8,
+      "codigoOriginal": "If not fAcessoContas(Usuar,Thisform.pagina.dados.Get_grujuro.value,'D',this.value,;\n\t\tThisForm.Pagina.Dados.GET_CONjuro,thisform.pagina.dados.GET_Djuro,.F.,.F.,ThisForm.podatamgr)\n\tMessagebox('Conta Inválida (Acesso Negado)!!',0+48,'')\n\tthis.Value = ''\n\tReturn (.F.)\nEndif\nReturn (.T.)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_grujuro,GET_CONjuro,GET_Djuro",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.Get_djuro",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "Return ( Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' ) And ;\n\t   IsEmpty( ThisForm.Pagina.Dados.Get_conjuro.Value) )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_conjuro",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.Get_dGruJuro",
+      "evento": "Valid",
+      "linhas": 2,
+      "codigoOriginal": "=fAcessoContab( Usuar, 'D', This.Value, ThisForm.Pagina.Dados.Get_GruJuro, ThisForm.Pagina.Dados.Get_dGruJuro,.F.,ThisForm.podatamgr )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_GruJuro,Get_dGruJuro",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.Get_dGruJuro",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "Return Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' ) And ;\n\t   IsEmpty( ThisForm.Pagina.Dados.Get_GruJuro.Value )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_GruJuro",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.Get_dGrupoT",
+      "evento": "Valid",
+      "linhas": 2,
+      "codigoOriginal": "=fAcessoContab( Usuar, 'D', This.Value, ThisForm.Pagina.Dados.Get_GrupoT, ThisForm.Pagina.Dados.Get_dGrupoT,.F.,ThisForm.podatamgr )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_GrupoT,Get_dGrupoT",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.Get_dGrupoT",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "Return Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' ) And ;\n\t   IsEmpty( ThisForm.Pagina.Dados.Get_GrupoT.Value )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_GrupoT",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.Get_dGrupoOs",
+      "evento": "Valid",
+      "linhas": 2,
+      "codigoOriginal": "=fAcessoContab( Usuar, 'D', This.Value, ThisForm.Pagina.Dados.Get_GrupoOs, ThisForm.Pagina.Dados.Get_dGrupoOs,.F.,ThisForm.podatamgr )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_GrupoOs,Get_dGrupoOs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.Get_dGrupoOs",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "Return Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' ) And ;\n\t   IsEmpty( ThisForm.Pagina.Dados.Get_GrupoOs.Value )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_GrupoOs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.Get_TJUROS",
+      "evento": "Valid",
+      "linhas": 34,
+      "codigoOriginal": "*** mena 30/07/2015 - calcula as porcentagens a partir do valor dos juros ***\nIF crSigCqLcm.valtots <> 0\n\tselect tempchq\n\tGO top\n\tlnVal = 0\n\tscan\n\t\tldVen = Nvl(TempChq.Vencs, CtoD(''))\n\t\tLdDat = Ttod(fDtoSQL(Thisform.Pagina.Dados.Get_Data.Value))\n\t\tlnDias = IIF(crSigCdOpt.devolvidos<>'S',Iif(LdDat>=Ldven,0,Ldven-LdDat),LdDat-ldVen)\t&& Mena - 06/05/2016 se cheque devolvido camcula juros de vencimento até hoje\n\t\tlnVal = lnVal+(lnDias*TempChq.Valors)\n\tENDSCAN\n\n\tlnVIof=lnVal*thisform.pagina.dados.ge... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "CalcValors",
+        "controlesReferenciados": "Get_Data,get_taxiof,Get_TaxaDia,get_valor,get_tjuros,get_tliQ,get_ValConv",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.Get_TJUROS",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Inlist(Thisform.pcEscolha,'INSERIR','ALTERAR'))\t&& and crSigCqLcm.Operas='E')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.Imprime",
+      "evento": "Click",
+      "linhas": 17,
+      "codigoOriginal": "lcQuery = [Select * From SigCcChm where NumLotes = ]+Str(crSigcqlcm.numlotes)\nIf (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crRel') < 1)\n\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigCcChm)')\n\tReturn 0\nEndIf\nSELECT a.*, b.valjuros as valjur from tempchq a, crRel b where ;\na.bancos = b.bancos and a.agencias = b.agencias and a.ncontas = b.ncontas and a.ncheques = b.ncheques into cursor crRel1\n\nSELECT crRel1\nGo Top\n\nIf not eof()\n\tReport form SigMvChe to printer prompt ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.Cmd_Protocolos",
+      "evento": "Click",
+      "linhas": 10,
+      "codigoOriginal": "Local lnCheques, lcCaption\n\nSelect TempChq\nCount to lnCheques for !IsEmpty(Protocolos)\n\nlcCaption = 'Impressão do Protocolo de ' + AllTrim(Transform(lnCheques,'999999')) + ;\n\t\t\t' cheque' + Iif(lnCheques>1,'s','')\n\nDo Form SigOpIbo With Thisform, 1, lcCaption\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "for !IsEmpty",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.Cmd_Protocolos",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(!InList(Thisform.pcEscolha,'EXCLUIR','PROCURAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.ExcCheque",
+      "evento": "Click",
+      "linhas": 43,
+      "codigoOriginal": "ThisForm.Pagina.Dados.GradeCheque.Banco.Text1.SetFocus\nSelect TempChq\nIf !Eof()\n\tDelete\n\tSkip\nEndif\nIf Eof()\n\tSkip -1\n\tIf Bof()\n\t\tAppend Blank\n\t\tReplace Emps With _Empr\n\t\tGo Top\n\tEndif\nEndif\nThisForm.Pagina.Dados.GradeCheque.Banco.Text1.SetFocus\nThisForm.Pagina.Dados.GradeCheque.Refresh\t\n\nset order to\nIf Eof()\n\trec=-1\nElse\n\trec=recno()\nEndif\nThisform.CalcValors\n\nSelect TempChq\nIf rec > 0\n\tgo (rec)\nEndif\nwith thisform.pagina.dados\n\t.get_valor.value=Thisform.VTotal\n\t.get_valor.refresh\n\t.get_tjuros... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_valor,get_tjuros,get_tliQ,get_ValConv",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.Comm_Ini",
+      "evento": "Click",
+      "linhas": 13,
+      "codigoOriginal": "If !ThisForm.IniciaLeitura\n\tThisForm.IniciaLeitura = .T.\n\tIf InList(ThisForm.TipoLeitora,'P','S') And Not ThisForm.ReadComm.PortaError\n\t\tThisForm.ReadComm.Ole_Comm.OutPut = 'WE'\n\tEndIf\nElse\n\tThisForm.Inicialeitura = .F.\n\tIf InList(ThisForm.TipoLeitora,'P','S') And Not ThisForm.ReadComm.PortaError\n\t\tThisForm.ReadComm.Ole_Comm.OutPut = 'WE'\n\tEndIf\nEndIf\nThisForm.Pagina.Dados.GradeCheque.Banco.SetFocus\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.Comm_Fim",
+      "evento": "Click",
+      "linhas": 3,
+      "codigoOriginal": "If InList(ThisForm.TipoLeitora,'P','S') And Not ThisForm.ReadComm.PortaError\n\tThisForm.ReadComm.Ole_Comm.OutPut = 'N'\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.Get_Cheque",
+      "evento": "GotFocus",
+      "linhas": 3,
+      "codigoOriginal": "this.Value = ''\nthis.Refresh\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.Get_Cheque",
+      "evento": "LostFocus",
+      "linhas": 32,
+      "codigoOriginal": "*!*\tLocal lcCheque, lnRecNo, llNovoRegistro, lnFoco\n*!*\tDeclare LaCampo(4,2)\n\n*!*\tSelect TempChq\n*!*\tIf !Eof()\n*!*\t\tlnRecNo = RecNo()\n*!*\t\tlcCheque = TempChq.Bancos + TempChq.Agencias + TempChq.NContas + TempChq.NCheques\n*!*\t\tLaCampo(1,1)='Bancos'\n*!*\t\tLaCampo(2,1)='Agencias'\n*!*\t\tLaCampo(3,1)='nContas'\n*!*\t\tLaCampo(4,1)='Ncheques'\n*!*\t\tLaCampo(1,2)=TempChq.Bancos\n*!*\t\tLaCampo(2,2)=TempChq.Agencias\n*!*\t\tLaCampo(3,2)=TempChq.NContas\n*!*\t\tLaCampo(4,2)=TempChq.NCheques\n*!*\t*!*\tElse\n*!*\t*!*\t\tlnRecNo... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.Get_Cheque",
+      "evento": "Valid",
+      "linhas": 61,
+      "codigoOriginal": "Local lcBanco, lcAgencia, lcConta, lcNumero, lcCheque, llRetorno\n\nif thisform.limpache\n\tthisform.limpa_che\nendif\n\nllRetorno = .T.\nlcLeitor = This.Value\n*Thisform.ChqLido = ''\nIf CrSigCdOpt.ValidaChqs = 'S'\nElse\n\tIf InList(ThisForm.TipoLeitora,'S','P')\n\t\tIf Asc(Left(lcLeitor,1)) = 2\n\t\t\tlcLeitor = Substr(lcLeitor,2,Len(lcLeitor) - 1)\n\t\tElse\n\t\t\tlcLeitor = lcLeitor\n\t\tEndIf\n\tEndif\n\tlcBanco   = Substr(lcLeitor,2,3)\n\tlcAgencia = Substr(lcLeitor,5,4)\n\tlcNumero  = Substr(lcLeitor,14,6)\n\tlcConta   = Subst... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.Get_Cheque",
+      "evento": "When",
+      "linhas": 12,
+      "codigoOriginal": "Set Confirm On\n\nIf (InList(ThisForm.pcEscolha,'INSERIR','ALTERAR') And ;\n    InList(Thisform.TipoLeitora,'S','P') And Empty(This.value) And ;\n    Not ThisForm.Pagina.Dados.ReadComm.PortaError)\n\tIf !ThisForm.Pagina.Dados.ReadComm.Ole_Comm.PortOpen\n\t\tThisForm.Pagina.Dados.ReadComm.Ole_Comm.PortOpen = .t.\n\tEndIf\n\tWait Window 'Passe o Cheque pela Leitora !' NoWait\nEndif\n\nReturn InList(ThisForm.pcEscolha,'INSERIR','ALTERAR') ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "TipoLeitora,'S','P') And Empty",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.Bot_Consulta",
+      "evento": "Click",
+      "linhas": 10,
+      "codigoOriginal": "If IsEmpty( tempchq.contat ) \n\tMessageBox( 'É necessário selecionar a Conta de terceiro...', 48 ) \n\tReturn 0\nEndIf\n\nIf Inlist( ThisForm.pcEscolha, 'CONSULTAR', 'INSERIR', 'ALTERAR' )\n\tThisForm.Enabled = .f.\n\tDo Form SigOpCgv With ThisForm, tempchq.contat\nEndIf \n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.Bot_Consulta",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR', 'CONSULTAR' )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.Command1",
+      "evento": "Click",
+      "linhas": 10,
+      "codigoOriginal": "If IsEmpty( crSigCqLcm.ContaOs ) \n\tMessageBox( 'É necessário selecionar a Conta de terceiro...', 48 ) \n\tReturn 0\nEndIf\n\nIf Inlist( ThisForm.pcEscolha, 'CONSULTAR', 'INSERIR', 'ALTERAR' )\n\tThisForm.Enabled = .f.\n\tDo Form SigOpCgv With ThisForm, crSigCqLcm.ContaOs\nEndIf \n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.Command1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR', 'CONSULTAR' )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.Command2",
+      "evento": "Click",
+      "linhas": 10,
+      "codigoOriginal": "If IsEmpty( crSigCqLcm.ContaDs ) \n\tMessageBox( 'É necessário selecionar a Conta de terceiro...', 48 ) \n\tReturn 0\nEndIf\n\nIf Inlist( ThisForm.pcEscolha, 'CONSULTAR', 'INSERIR', 'ALTERAR' )\n\tThisForm.Enabled = .f.\n\tDo Form SigOpCgv With ThisForm, crSigCqLcm.ContaDs\nEndIf \n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.Command2",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR', 'CONSULTAR' )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.Command3",
+      "evento": "Click",
+      "linhas": 30,
+      "codigoOriginal": "If Inlist( ThisForm.pcEscolha, 'CONSULTAR', 'INSERIR', 'ALTERAR' )\n\tSELECT tempchq\n\tGO top\n\tThisForm.Enabled = .f.\n\n*!*\t\tSELECT * from tempchq into cursor  crGraCart\t\t&& salva cursor da grade \n*!*\t\tSELECT * from crSigche into cursor crCheCart\t\t&& salva cursor de cheques\n\n*!*\t\tlcQuery = [Select * From SigChe ]+;\n*!*\t\t\t\t  [ Where Bancos=']+tempchq.bancos+[']+;\n*!*\t\t\t\t  [ and agencias=']+tempchq.agencias+[']+;\n*!*\t\t\t\t  [ and  ncontas=']+tempchq.ncontas+[']+;\n*!*\t\t\t\t  [ and ncheques=']+tempchq.ncheq... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCHE.Pagina.Dados.Command3",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist( ThisForm.pcEscolha, 'CONSULTAR', 'INSERIR', 'ALTERAR' )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDCHE.Procedure",
+      "queryOriginal": "lcQryLcChm = [Select * From SigCqLcm where 1=0 ]",
+      "tabelas": "SigCqLcm",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDCHE.Procedure",
+      "queryOriginal": "lcQueryMccr= [Select * From SigMvCcr where 1=0 ]",
+      "tabelas": "SigMvCcr",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDCHE.Procedure",
+      "queryOriginal": "lcQuerySigCcChm = [Select * From SigCcChm where 1=0 ]",
+      "tabelas": "SigCcChm",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDCHE.Procedure",
+      "queryOriginal": "lcQueryLC  = [Select * From SigChLcq where 1=0 ]",
+      "tabelas": "SigChLcq",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDCHE.Procedure",
+      "queryOriginal": "lcQueryLI  = [Select * From SigCqchm where 1=0 ]",
+      "tabelas": "SigCqchm",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDCHE.Procedure",
+      "queryOriginal": "lcQueryChe = [Select * From SigChe where 1=0 ]",
+      "tabelas": "SigChe",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDCHE.Procedure",
+      "queryOriginal": "lcQueryCli = [Select * From SigCdCli where 1=0 ]",
+      "tabelas": "SigCdCli",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDCHE.Pagina.Lista.LimpaDT.Click",
+      "queryOriginal": "\tlcSql = [Update SigCqLcm Set DataTrans = Null Where NumLotes = ]+Str(crSigCqLcm.NumLotes,6) \tIf ThisForm.Podatamgr.Sqlexecute(lcSql,'') < 1",
+      "tabelas": "SigCqLcm",
+      "colunas": "DataTrans",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDCHE.Pagina.Lista.LimpaDT.Click",
+      "queryOriginal": "\t\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão - Update SigCqLcm ')",
+      "tabelas": "SigCqLcm",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDCHE.Pagina.Lista.LimpaDT.Click",
+      "queryOriginal": "\t\tlcSql = [Update SigCcChm Set DataTrans = Null Where NumLotes = ]+Str(crSigCqLcm.NumLotes,6) \t\tI... [TRUNCADO]",
+      "tabelas": "SigCcChm",
+      "colunas": "DataTrans",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDCHE.Pagina.Dados.Imprime.Click",
+      "queryOriginal": "lcQuery = [Select * From SigCcChm where NumLotes = ]+Str(crSigcqlcm.numlotes) If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crRel') < 1)",
+      "tabelas": "SigCcChm",
+      "colunas": "NumLotes,SqlExecutelcQuery,crRel",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDCHE.Pagina.Dados.Imprime.Click",
+      "queryOriginal": "SELECT a.*, b.valjuros as valjur from tempchq a, crRel b where ; a.bancos = b.bancos and a.agencias = b.agencias and a.ncontas = b.ncontas and a.ncheques = b.ncheques into cursor crRel1",
+      "tabelas": "tempchq",
+      "colunas": "valjuros,bancos,agencias,ncontas,ncheques,crRel1",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCqLcm", "SigMvCcr", "SigCcChm", "SigChLcq", "SigCqchm", "SigChe", "SigCdCli", "tempchq"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

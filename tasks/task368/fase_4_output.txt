@@ -1,0 +1,13 @@
+﻿Fase 4 conclu├¡da com sucesso. O arquivo `FormCHM.prg` foi atualizado com **992 linhas** e **25 m├®todos**:
+
+**Adicionado nesta fase:**
+
+- **`ConfigurarPaginaLista()`** ÔÇö completa com 5 bot├Áes CRUD no `cnt_4c_Botoes` (Incluir/Visualizar/Alterar/Excluir/Buscar), `cmd_4c_Encerrar` no `cnt_4c_Saida`, grid `grd_4c_Lista` (top=148, left=32, width=940, height=470, 4 colunas), e todos os BINDEVENTs
+
+- **`CarregarLista()`** ÔÇö atualizada com `RecordSource`/`ColumnCount` fora do `WITH` (Problema 36/48) e 4 colunas: `banco`, `local`, `ctamanho`, `cnomimpre` com headers ap├│s ControlSource (Problema 32)
+
+- **Handlers PUBLIC** (BINDEVENTs exigem PUBLIC): `BtnIncluirClick`, `BtnVisualizarClick`, `BtnAlterarClick`, `BtnExcluirClick`, `BtnBuscarClick`, `BtnEncerrarClick`, `BtnSalvarClick`, `BtnCancelarClick`
+
+- **M├®todos auxiliares**: `FormParaBO`, `BOParaForm`, `LimparCampos`, `HabilitarCampos`, `AjustarBotoesPorModo`, `ValidarTamanhoFolha`, `ValidarNomeImpressora` (├║ltimas duas para BINDEVENTs da Fase 5)
+
+Regras cr├¡ticas respeitadas: sem RETURN dentro de TRY/CATCH, `this_cModoAtual` setado ANTES de `HabilitarCampos`, `NovoRegistro()` antes de `LimparCampos`, `MsgConfirma()` com `IF !var`, CATCH com `MsgErro` em todos os blocos, banco readonly exceto no modo INCLUIR (replicando legado `Get_Banco.When`).

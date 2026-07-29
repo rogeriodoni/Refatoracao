@@ -1,0 +1,6 @@
+﻿Corre├º├úo aplicada em 4 locais. O problema era: `.InputMask` definido em `Column.Controls(1)` (o TextBox embutido de colunas criadas dinamicamente sem RecordSource ainda vinculado) n├úo existe nesse est├ígio ÔÇö o VFP9 n├úo inicializa completamente o TextBox interno at├® que haja binding. A propriedade `InputMask` ├® suportada diretamente no `Column` e foi movida para l├í:
+
+- `grd_4c_IVA.Column3` ÔÇö `.InputMask = "999.999"` agora no WITH Column
+- `grd_4c_IVA.Column4` ÔÇö idem  
+- `grd_4c_Reducao.Column2` ÔÇö idem  
+- `grd_4c_Reducao.Column3` ÔÇö idem

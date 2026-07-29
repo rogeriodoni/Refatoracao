@@ -1,0 +1,7 @@
+﻿Todas as altera├º├Áes est├úo corretas. Resumo das corre├º├Áes aplicadas em `FormCLC.prg`:
+
+1. **[GRID-HEADER] ├ù 8** ÔÇö Headers do `grd_4c_Lista` corrigidos nos dois locais (`ConfigurarPaginaLista` linha 377 e `CarregarLista` linha 2261): `"C├│digo"ÔåÆ""`, `"Empresa"ÔåÆ"Emp"`, `"Local A"ÔåÆ"Local"`, `"Local B"ÔåÆ"Local"`, alinhados com os captions encontrados no legado.
+
+2. **[CARGA-DADOS]** ÔÇö Adicionado `BINDEVENT` para `InteractiveChange` do `opt_4c_EnvRecs` (linha 1364) e implementado o handler `EnvRecsInteractiveChange` (linha 1947): l├¬ o valor do OptionGroup e atualiza o campo `EnvRecs` da linha corrente do cursor, depois faz `Refresh()` no grid.
+
+3. **[LAYOUT-POSITION]** ÔÇö Falso positivo confirmado: o c├│digo j├í tem `obj_4c_OptDigitos.Left = 642` (correto, igual ao legado); o checker leu erroneamente `Buttons(1).Left = 1` do WITH aninhado. Nenhuma altera├º├úo necess├íria.

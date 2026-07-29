@@ -1,0 +1,5 @@
+﻿Corre├º├Áes aplicadas:
+
+1. **[BINDEVENT-PARAMS] Corrigido** ÔÇö adicionado `LPARAMETERS par_nKeyCode, par_nShiftAltCtrl` como primeira linha do corpo de `ValidarTipos` (linha 1083). O VFP9 requer a declara├º├úo expl├¡cita via LPARAMETERS para handlers de BINDEVENT receberem os par├ómetros corretamente.
+
+2. **[GRID-HEADER] Falso positivo** ÔÇö o legado confirma que "C├│digo" ├® o caption correto: `.pColuna([Cods], [], [], [C├│digo], 045, .t.)` em `SigCdCla_form_codigo_fonte.txt`. O c├│digo review n├úo reconheceu a chamada `.pColuna()` como defini├º├úo de header. O c├│digo migrado com `"C" + CHR(243) + "digo"` est├í correto e n├úo foi alterado.

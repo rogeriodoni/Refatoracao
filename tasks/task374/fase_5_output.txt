@@ -1,0 +1,16 @@
+﻿O FormCmr.prg e o CmrBO.prg j├í est├úo **completamente implementados** ÔÇö todas as 8 fases foram conclu├¡das em sess├Áes anteriores. Resumo do estado atual:
+
+**FormCmr.prg** (2178 linhas) ÔÇö completo:
+- `ConfigurarPageFrame()`, `ConfigurarPaginaLista()`, `ConfigurarPaginaDados()` ÔÇö todos implementados
+- Todos os campos da Page2: `obj_4c_OptTpregs`, `txt_4c_Descgrps`, `txt_4c__cd_grupos`, `txt_4c_Classe`, `cbo_4c_Cmb_operacaos`, `obj_4c_Opt_analiticos`, `obj_4c_Opt_CPartida`, `obj_4c_Opt_subtot100`, `txt_4c_Fator`, `txt_4c_Titulo`, `obj_4c_OptTpDatas`
+- Todos os event handlers: `BtnIncluirClick`, `BtnAlterarClick`, `BtnVisualizarClick`, `BtnExcluirClick`, `BtnSalvarClick`, `BtnCancelarClick`, `BtnEncerrarClick`
+- Valida├º├Áes completas: `ValidarGrupo`, `ValidarClasse`, `ValidarDescGrupo`, `ValidarDescClasse`, `ValidarCampos`
+- Handler `OptTpregsChanged` com l├│gica completa de habilita├º├úo por tipo
+
+**CmrBO.prg** (257 linhas) ÔÇö completo com todas as propriedades e m├®todos CRUD.
+
+**Integra├º├úo** ÔÇö autom├ítica: `config.prg` usa `ADIR()` que carrega `*BO.prg` de `classes/` e `Form*.prg` de `forms/cadastros/` dinamicamente. Nenhum `SET PROCEDURE` manual necess├írio.
+
+**Menu** ÔÇö n├úo necess├írio: `FormCmr` ├® um formul├írio **filho** aberto pelo `FormMrr` (Mapas de Resultados) via `CREATEOBJECT("FormCmr", par_cBalancos, par_nMapas)`, n├úo por item de menu pr├│prio.
+
+A Fase 5/8 j├í estava conclu├¡da. Nada a modificar.
