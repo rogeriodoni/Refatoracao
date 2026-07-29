@@ -34,7 +34,7 @@ DEFINE CLASS sigrecgpBO AS RelatorioBase
     *--------------------------------------------------------------------------
     * PrepararDados - Prepara cursor Relatorio com dados de composicao
     * Equivalente ao metodo processamento do legado
-    * REQUER que CrProdutos esteja populado pelo form chamador
+    * CrProdutos: populado por form chamador OU por este BO (fluxo menu standalone)
     *--------------------------------------------------------------------------
     PROCEDURE PrepararDados()
         LOCAL loc_lSucesso, loc_nOrdem, loc_nTpRel, loc_lOK
@@ -290,6 +290,21 @@ DEFINE CLASS sigrecgpBO AS RelatorioBase
                     ENDIF
                 ENDIF
 
+                *-- Popula CrProdutos se nao foi fornecido pelo form chamador
+                *-- (fluxo standalone via menu; legado tinha parent form populando)
+                IF loc_lOK AND !USED("CrProdutos")
+                    loc_nResult = SQLEXEC(gnConnHandle, ;
+                        "SELECT DISTINCT p.cpros, p.dpros " + ;
+                        "FROM SigCdPro p " + ;
+                        "INNER JOIN SigPrCpo c ON c.cpros = p.cpros " + ;
+                        "ORDER BY p.cpros", ;
+                        "CrProdutos")
+                    IF loc_nResult < 1
+                        THIS.this_cMensagemErro = "Falha ao carregar cursor CrProdutos"
+                        loc_lOK = .F.
+                    ENDIF
+                ENDIF
+
                 IF loc_lOK
                     *-- CsRels: join CrProdutos x Tmp_Compos
                     SELECT a.cpros      AS Codigo, ;
@@ -325,7 +340,7 @@ DEFINE CLASS sigrecgpBO AS RelatorioBase
                         FROM CrProdutos a, Tmp_Compos c ;
                         WHERE a.cpros = c.cpros ;
                             AND IIF(INLIST(loc_nTpRel, 2), c.vlrcvs # 0, .T.) ;
-                        ORDER BY a.cpros + c.cgrus ;
+                        ORDER BY Grupos ;
                         INTO CURSOR CsRels
 
                     *-- CsRelatorio: adiciona colunas de memo (imagem, totais)
@@ -427,12 +442,10 @@ DEFINE CLASS sigrecgpBO AS RelatorioBase
                             REPLACE Relatorio.OrdImg WITH "FBRANCOS"
                         ELSE
                             REPLACE Relatorio.OrdImg WITH "F" + PADL(RECNO(), 7, "0")
-                            loc_cFotoRel = STRCONV(STRTRAN(STRTRAN(STRTRAN( ;
-                                Relatorio.Imagem, ;
-                                "data:image/png;base64,",""), ;
-                                "data:image/jpeg;base64,",""), ;
-                                "data:image/jpg;base64,",""), 14)
-                            STRTOFILE(loc_cFotoRel, SYS(2023) + "\F" + ;
+                            *-- Relatorio.Imagem ja contem JPEG binario decodificado
+                            *-- na REPLACE anterior (STRCONV base64->binario). Escrever
+                            *-- direto; um segundo STRCONV corromperia o arquivo.
+                            STRTOFILE(Relatorio.Imagem, SYS(2023) + "\F" + ;
                                       PADL(RECNO(), 7, "0") + ".Jpg")
                         ENDIF
 
@@ -605,12 +618,22 @@ DEFINE CLASS sigrecgpBO AS RelatorioBase
                 REPLACE Branco WITH loc_lcImgJpg IN CrBranco
             ENDIF
 
-            *-- Verifica cursor de produtos do form chamador
+            *-- Popula CrProdutos se nao foi fornecido pelo form chamador
+            *-- (fluxo standalone via menu; legado tinha parent form populando)
             IF !USED("CrProdutos")
-                THIS.this_cMensagemErro = "Cursor CrProdutos n" + CHR(227) + ;
-                    "o encontrado. O form chamador deve popular este cursor antes de chamar PrepararDados."
-                loc_lSucesso = .F.
-                loc_lOK = .F.
+                loc_nResult = SQLEXEC(gnConnHandle, ;
+                    "SELECT DISTINCT p.cpros, p.dpros " + ;
+                    "FROM SigCdPro p " + ;
+                    "INNER JOIN SigPrCpo c ON c.cpros = p.cpros " + ;
+                    "ORDER BY p.cpros", ;
+                    "CrProdutos")
+                IF loc_nResult < 1
+                    THIS.this_cMensagemErro = "Falha ao carregar cursor CrProdutos"
+                    loc_lSucesso = .F.
+                    loc_lOK = .F.
+                ELSE
+                    loc_lOK = .T.
+                ENDIF
             ELSE
                 loc_lOK = .T.
             ENDIF
@@ -882,6 +905,12 @@ DEFINE CLASS sigrecgpBO AS RelatorioBase
         TRY
             loc_nTpRel = THIS.this_nOpcRel
 
+            *-- FRXs SigReCgp/Cg1/Cg2 tem Print When referenciando pnVal (era
+            *-- ThisForm.lnVal no legado; sem form no escopo do REPORT FORM
+            *-- em BO, foi promovido a PUBLIC).
+            PUBLIC pnVal
+            pnVal = THIS.this_nVal
+
             IF loc_nTpRel = 1
                 THIS.ExecutarReportForm("SigReCgp", "PRINTER_PROMPT")
             ENDIF
@@ -922,6 +951,12 @@ DEFINE CLASS sigrecgpBO AS RelatorioBase
 
         TRY
             loc_nTpRel = THIS.this_nOpcRel
+
+            *-- FRXs SigReCgp/Cg1/Cg2 tem Print When referenciando pnVal (era
+            *-- ThisForm.lnVal no legado; sem form no escopo do REPORT FORM
+            *-- em BO, foi promovido a PUBLIC).
+            PUBLIC pnVal
+            pnVal = THIS.this_nVal
 
             IF loc_nTpRel = 1
                 THIS.ExecutarReportForm("SigReCgp", "PREVIEW")
@@ -1006,6 +1041,9 @@ DEFINE CLASS sigrecgpBO AS RelatorioBase
         ENDIF
         IF USED("CrBranco")
             USE IN CrBranco
+        ENDIF
+        IF USED("CrProdutos")
+            USE IN CrProdutos
         ENDIF
     ENDPROC
 
