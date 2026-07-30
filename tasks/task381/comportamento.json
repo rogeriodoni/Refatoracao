@@ -1,0 +1,134 @@
+{
+  "resumo": {
+    "totalMetodos": 7,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 2,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": []
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDCOR",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "Local lcBusca\n\nIf .Not.Empty(ThisForm.Pagina.Dados.Getcods.Value)\n\tThisForm.poDataMgr.LocateCursor('crSigCdCor','cods',ThisForm.Pagina.Dados.Getcods.Value)\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "LocateCursor",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCOR",
+      "evento": "Init",
+      "linhas": 14,
+      "codigoOriginal": "LPARAMETERS lcacesso\n\nWith ThisForm\n\t.poDatamgr = CreateObject('fSqlConector', THISFORM.NAME)\n\tWith .poDatamgr\n\t\t.AddCursor('SigCdCor','cods','crSigCdCor','',ThisForm.pagina.lista.grade)\n\t\t.pfSqlTabela(1).pColuna('cods','','','Código',75,.t.)\n\t\t.pfSqlTabela(1).pColuna('descs','','','Descrição',301,.t.)\n\t\t.pfSqlTabela(1).pColuna('varias','','','Variação Preço',100,.t.)\n\t\t.pfSqlTabela(1).pColuna('Pesos','','','Variação Peso',100,.t.)\n\tEndWith\n\t= DoDefault()\n\t.LockScreen = .f.\nEndWith",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCOR",
+      "evento": "Click",
+      "linhas": 16,
+      "codigoOriginal": "LParameters opcao\n\nIf !dodefault( Opcao )\n\tThisForm.mAtivapagina1\n\tReturn\nEndif\n\nDo Case\n\tCase Inlist( ThisForm.pcEscolha, 'INSERIR', 'PROCURAR' )\n\t\tThisForm.Pagina.Dados.GetCods.SetFocus\n\tCase ThisForm.pcEscolha = 'ALTERAR'\n\t\tThisForm.Pagina.Dados.GetDescs.SetFocus\n\tCase Inlist( ThisForm.pcEscolha, 'EXCLUIR', 'CONSULTAR' )\n\t\tThisForm.Pagina.Dados.Grupo_Salva.Salva.SetFocus\nEndcase\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCOR",
+      "evento": "Click",
+      "linhas": 32,
+      "codigoOriginal": "If ThisForm.pcEscolha = 'INSERIR'\n\tIf Empty( CrSigCdCor.Cods )\n\t\tMessagebox( 'Código não pode ficar em branco!', 48, '' ) \n\t\tThisForm.Pagina.Dados.GetCods.SetFocus\n\t\tReturn\n\tEndif\n\tIf ThisForm.poDataMgr.ChkRegister('SigCdCor','cods',ThisForm.Pagina.Dados.Getcods.Value)\n\t\tMessagebox( 'Código já Cadastrado!', 48, '' ) \n\t\tThisForm.Pagina.Dados.GetCods.SetFocus\n\t\tReturn\n\tEndif\nEndif\n\nIf (ThisForm.pcEscolha = 'EXCLUIR')\n\tlcQuery = [Select Count(*) As nNreg1s ] + ;\n\t\t\t    [From SigPrPrr a Inner Join S... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChkRegister,SqlExecute",
+        "controlesReferenciados": "ChkRegister('SigCdCor'",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCOR",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "=DoDefault()\nIf ThisForm.plCancelar\n\tThisForm.mAtivapagina1\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCOR.Pagina.Dados.Getcods",
+      "evento": "When",
+      "linhas": 6,
+      "codigoOriginal": "local saida\nsaida = .t.\nif inlist(thisform.Pagina.Lista.Grupo_op.value,2,3)\n\tsaida = .f.\nendif\nreturn saida",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCOR.Pagina.Dados.Get_TpCor",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist(This.Value,\"S\",\"N\",\" \")",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

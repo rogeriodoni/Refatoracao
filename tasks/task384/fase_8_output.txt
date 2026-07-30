@@ -1,0 +1,16 @@
+﻿A migra├º├úo est├í **100% completa**. Todos os artefatos j├í existem e est├úo corretos:
+
+**Formcrp.prg** ÔÇö 1.280 linhas com todos os m├®todos da Fase 8 implementados:
+- `CarregarLista()`, `AlternarPagina()` ÔÇö navega├º├úo
+- `BtnIncluirClick()`, `BtnAlterarClick()`, `BtnExcluirClick()`, `BtnVisualizarClick()` ÔÇö CRUD
+- `BtnBuscarClick()`, `BtnEncerrarClick()` ÔÇö auxiliares Page1
+- `BtnSalvarClick()`, `BtnCancelarClick()` ÔÇö Page2
+- `FormParaBO()`, `BOParaForm()` ÔÇö todos os 6 campos mapeados
+- `HabilitarCampos()`, `LimparCampos()`, `AjustarBotoesPorModo()` ÔÇö controle de estado
+- `AbrirLookupGrupo()`, `OrdemLostFocus()` ÔÇö lookups e valida├º├Áes
+
+**crpBO.prg** ÔÇö `classes/` (auto-carregado pelo ADIR `*BO.prg` no config.prg)
+
+**menu.prg** ÔÇö 3 entradas no `popCadastros` (BAR 63/64/65) com 3 procedures (`AbrirFormcrp`, `AbrirFormcrpContas`, `AbrirFormcrpMovim`) usando o padr├úo can├┤nico correto (VARTYPE, Show() sem par├ómetro, sem Release).
+
+Nenhuma altera├º├úo necess├íria ÔÇö a Fase 8 j├í estava implementada corretamente nas sess├Áes anteriores.

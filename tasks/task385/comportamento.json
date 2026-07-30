@@ -1,0 +1,204 @@
+{
+  "resumo": {
+    "totalMetodos": 11,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 3,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDCRT",
+      "evento": "Init",
+      "linhas": 27,
+      "codigoOriginal": "lcQryCrt = [Select * From SigPrCrt Where Emps = ']+_Empr+[' Or Emps = ' ' ]\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tWith .poDataMgr\n\t\t\t.AddCursor('SigPrCrt', 'cods', 'crSigPrCrt', '', ThisForm.Pagina.Lista.Grade, lcQryCrt)\n\t\t\t.pfSqlTabela(1).pColuna('Cods', '', '', 'Código', 80, .t.)\n\t\t\t.pfSqlTabela(1).pColuna('Descs', '', '', 'Descrição', 220, .t.)\n\t\t\t.pfSqlTabela(1).pColuna('Fators', '', '', 'Fator', 80)\n\t\t\t.pfSqlTabela(1).pColu... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDCRT",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "=fConfigGeral()\n=DoDefault()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCRT",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "Select crSigPrCrt\nSet Near On\nSet Order To cods\nSeek Cods\nSet Near Off\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCRT",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.podatamgr.Release\n=DoDefault()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCRT",
+      "evento": "Click",
+      "linhas": 16,
+      "codigoOriginal": "LParameters opcao\n\nIf !dodefault( opcao )\n\tThisForm.mAtivapagina1\n\tReturn\nEndif\n\nDo Case\n\tCase Inlist( ThisForm.pcEscolha, 'INSERIR', 'PROCURAR' )\n\t\tThisForm.Pagina.Dados.Get_Codigo.SetFocus\n\tCase ThisForm.pcEscolha = 'ALTERAR'\n\t\tThisForm.Pagina.Dados.Get_Descricao.SetFocus\nOther\n\tThisForm.Pagina.Dados.Grupo_Salva.Salva.SetFocus\nEndcase\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Codigo,Get_Descricao",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCRT",
+      "evento": "Click",
+      "linhas": 15,
+      "codigoOriginal": "If ThisForm.pcEscolha = 'INSERIR'\n\tIf IsEmpty( ThisForm.pagina.dados.get_codigo.Value )\n\t\tMessagebox( 'Codigo não pode ficar em branco!', 48, '' )\n\t\tThisForm.Pagina.Dados.Get_Codigo.SetFocus\n\t\tReturn\n\tEndIf\n\tIf ThisForm.poDataMgr.CursorQuery('SigPrCrt', 'crPesqSigPrCrt', 'cods', ThisForm.pagina.dados.get_codigo.Value)\n\t\tMessagebox( 'Código já Cadastrado!', 48, '' )\n\t\tThisForm.Pagina.Dados.Get_Codigo.SetFocus\n\t\tReturn\n\tEndif\nEndif\n=DoDefault()\nThisForm.mAtivapagina1\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "get_codigo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCRT",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "=DoDefault()\nIf ThisForm.plCancelar\n\tThisForm.mAtivapagina1\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCRT.Pagina.Lista.Justifica",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "If Reccount() <> 0\n\tDo Form SigCdJus With Thisform, CrSigPrCrt.Cods\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCRT.Pagina.Dados.Get_codigo",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "return( !thisform.pcEscolha $ 'ALTERAR/EXCLUIR/CONSULTAR' )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCRT.Pagina.Dados.Get_EmpPad",
+      "evento": "Valid",
+      "linhas": 12,
+      "codigoOriginal": "LOCAL xBrox\n\nIf !IsEmpty( This.Value )\n\txBrox = CreateObject('fwBuscaExt',Thisform.poDatamgr.pnIdconn,'SigCdEmp','crSigCdEmp','cEmps',This.Value,'Empresas',.t.,'cEmps')\n\n\tIf  Not xBrox.plAchouRegistro\n\t\txBrox.mAddColuna('CEmps', 'XXXXXX', 'Código', .t.)\n\t\txBrox.mAddColuna('Razas', '', 'Descrição', .t.)\n\t\txBrox.Show()\n\t\tThis.Value = Iif( LastKey() # 27, Evaluate('crSigCdEmp.CEmps'), '' )\n\tEndIf \nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCRT.Pagina.Dados.Get_EmpPad",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Inlist( ThisForm.pcEscolha, \"INSERIR\", \"ALTERAR\" )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDCRT.Init",
+      "queryOriginal": "lcQryCrt = [Select * From SigPrCrt Where Emps = ']+_Empr+[' Or Emps = ' ' ] ",
+      "tabelas": "SigPrCrt",
+      "colunas": "Emps",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigPrCrt"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

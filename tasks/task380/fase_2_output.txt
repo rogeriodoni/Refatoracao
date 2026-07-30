@@ -1,0 +1,19 @@
+﻿O arquivo est├í completo e bem estruturado. Fase 2/8 conclu├¡da com sucesso.
+
+**COMBO.prg** agora cont├®m os seguintes m├®todos CRUD completos:
+
+| M├®todo | Tipo | Fun├º├úo |
+|--------|------|--------|
+| `Buscar(par_cFiltro)` | PUBLIC | SELECT de SigCmCab com JOIN SigCdEmp |
+| `CarregarPorCodigo(par_cCodigo)` | PUBLIC | Carrega 1 registro + 3 cursores de itens |
+| `CarregarDoCursor(par_cAlias)` | PUBLIC | Mapeia todos os campos para `this_*` |
+| `CarregarItens(par_cFkChaves)` | PUBLIC | Popula crGrdItP/crGrdItV/crGrdItM do banco |
+| `SalvarItens(par_cFkChaves)` | PROTECTED | DELETE antigos + INSERT todos cursores em SigCmItn |
+| `Inserir()` | PROTECTED | INSERT SigCmCab + SalvarItens + auditoria |
+| `Atualizar()` | PROTECTED | UPDATE SigCmCab + SalvarItens + auditoria |
+| `ExecutarExclusao()` | PROTECTED | DELETE SigCmItn primeiro, depois SigCmCab |
+| `InicializarCursores()` | PUBLIC | Cria crGrdItP/crGrdItV/crGrdItM vazios |
+| `FecharCursores()` | PUBLIC | Fecha todos os cursores |
+| `CarregarConfigGeral()` | PUBLIC | Carrega GrPadVens/GrPadRess/GrPadGers de SigCdCfg |
+
+Pontos cr├¡ticos respeitados: RETURN nunca dentro de TRY/CATCH, SELECT (cursor) antes de acessar campos em CarregarDoCursor, colunas exatas do schema (pkchaves, cods, emps, dtinis, dtfims, moedas, etc.), e tratamento separado dos 3 tipos de item (PRO/VEN/MET) em SigCmItn.

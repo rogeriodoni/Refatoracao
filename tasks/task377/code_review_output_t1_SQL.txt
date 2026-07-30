@@ -1,0 +1,18 @@
+﻿Tudo correto. Corre├º├Áes aplicadas com sucesso em ambos os arquivos.
+
+**Resumo das altera├º├Áes:**
+
+**CNQBO.prg:**
+- Removida property `this_cPkChaves` (coluna inexistente na tabela real)
+- Removido m├®todo `GerarChavePrimaria()` (desnecess├írio sem surrogate key)
+- `CarregarDoCursor`: removida linha que lia `pkChaves`
+- `Inserir`: INSERT sem `pkChaves`, usando apenas `conquilhas, codtams, valors`
+- `Atualizar`: WHERE mudado para `conquilhas = ... AND codtams = ...` (igual ao legado)
+- `ExecutarExclusao`: mesmo fix do WHERE
+- `Buscar`: SELECT e CREATE CURSOR sem `pkChaves`
+- `CarregarPorCodigo`: recebe chave composta `"conquilha|codtam"`, faz split por `|`, WHERE usa `conquilhas AND codtams`
+- `ObterChavePrimaria`: retorna `conquilhas + "|" + codtams`
+
+**FormCNQ.prg** (3 handlers):
+- `BtnVisualizarClick`, `BtnAlterarClick`, `BtnExcluirClick`: substitu├¡do `cursor_4c_Dados.pkChaves` por `cursor_4c_Dados.conquilhas + "|" + cursor_4c_Dados.codtams`
+- Guard EMPTY alterado para `EMPTY(STRTRAN(loc_cPK, "|", ""))` para detectar linha sem conquilha v├ílida

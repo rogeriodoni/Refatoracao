@@ -1,0 +1,134 @@
+{
+  "resumo": {
+    "totalMetodos": 7,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 4,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDCOL",
+      "evento": "Procedure",
+      "linhas": 10,
+      "codigoOriginal": "Local lcBusca\n\nIf .Not.IsEmpty(ThisForm.Pagina.Dados.Getcolecoes.Value)\n\tThisForm.poDataMgr.LocateCursor('crSigCdCol','colecoes',ThisForm.Pagina.Dados.Getcolecoes.Value)\nElse\n\tIf .Not.IsEmpty(ThisForm.Pagina.Dados.Getdescs.Value)\n\t\tThisForm.poDataMgr.LocateCursor('crSigCdCol','descs',ThisForm.Pagina.Dados.Getdescs.Value)\n\tEndIf\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "LocateCursor",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCOL",
+      "evento": "Init",
+      "linhas": 13,
+      "codigoOriginal": "LParameters lcacesso\n\nWith ThisForm\n\t.poDatamgr = CreateObject('fSqlConector')\n\tWith .poDatamgr\n\t\t.AddCursor('SigCdCol','colecoes','crSigCdCol','',ThisForm.pagina.lista.grade)\n\t\t.pfSqlTabela(1).pColuna('colecoes','','','Grupo',79,.t.)\n\t\t.pfSqlTabela(1).pColuna('descs','','','Descrição',290,.t.)\n\t\t.pfSqlTabela(1).pColuna('codcols','','','Cod. Coletor',75,.t.)\n\tEndWith\n\t= DoDefault()\n\t.LockScreen = .f.\nEndWith",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCOL",
+      "evento": "Click",
+      "linhas": 46,
+      "codigoOriginal": "Lparameters opcao\n\nThisForm.LockScreen = .t.\n\nIf Type( 'Opcao' ) = 'N'\n\tThis.Value = Opcao\n\nEndIf \n\nIf This.Value == 4 And ThisForm.poDataMgr.ChkRegister('SigCdPro', 'Colecoes', crSigCdCol.Colecoes)\n\t= MessageBox('Existem Produtos Utilizando Esse Grupo de Venda.', 0+48, 'Impossível Exclusão...')\n\n\tThisform.mAtivapagina1\n\tThisForm.LockScreen = .f.\n\tReturn\nEndIf\n\nIf DoDefault(m.Opcao)\n\n\tSelect CrSigCdCol\n\n\tIf (ThisForm.pcEscolha = [INSERIR])\n\t\tReplace Usuars With Usuar, ;\n\t\t\t\tDtIncs With Datetime(... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChkRegister",
+        "controlesReferenciados": "ChkRegister('SigCdPro'",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCOL",
+      "evento": "Click",
+      "linhas": 45,
+      "codigoOriginal": "Local llRetorno\n\nm.llRetorno = .t.\n\nIf Inlist(ThisForm.pcEscolha,'INSERIR','ALTERAR')\n\n\tWith ThisForm.Pagina.Dados\n\n\t\tDo Case\n\t\t\tCase IsEmpty(.getColecoes.Value)\n\t\t\t\n\t\t\t\t  MessageBox('Grupo de Venda Inválido.',48,'')\n\t\t\t\t  .getColecoes.SetFocus\n\t\t\t\t  m.llRetorno = .f.\n\n\t\t\tCase IsEmpty(.getDescs.Value)\n\t\t\t\n\t\t\t\t  MessageBox('Descrição Inválida.',48,'')\n\t\t\t\t  .getDescs.SetFocus\n\t\t\t\t  m.llRetorno = .f.\n\n\t\t\tCase !IsEmpty(.get1.Value)\n\t\t\t\t If ThisForm.poDataMgr.ChkRegister('SigCdCol','codcols',ThisFor... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChkRegister",
+        "controlesReferenciados": "ChkRegister('SigCdCol'",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCOL",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "= DoDefault()\nIf ThisForm.plCancelar\n\tThisForm.mAtivapagina1\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCOL.Pagina.Dados.getUsuars",
+      "evento": "Valid",
+      "linhas": 21,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdUsu', ;\n\t\t\t\t\t\t   'crListaRemota', 'Usuarios', This.Value, 'Seleção', .t., .f., [Not cAtivos='N'])\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Usuarios', '', 'Usuário')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value = Iif(Lastkey()=27, '', crListaRemota.Usuarios)\n\tUse In crListaRemota\nEndIf\nThis.Refresh\n\nIf Not Empty(This.Value) And IsEmpty(crSigCdCol.DtIncs)\n\tReplace DtIncs With Dat... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCOL.Pagina.Dados.getColecoes",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha,'INSERIR','PROCURAR'))\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

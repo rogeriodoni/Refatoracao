@@ -1,0 +1,24 @@
+﻿Estrutura perfeita - todos os ENDPROCs fechados e ENDDEFINE no lugar. 
+
+**Fase 6 conclu├¡da.** O `FormCRC.prg` agora tem 1240 linhas e inclui:
+
+**Controles adicionados a `ConfigurarPaginaDados()`:**
+- `txt_4c_Grupo` ÔÇö campo c├│digo do grupo (getGrupos: Top=254, Left=341, Width=80, MaxLength=10)
+- `txt_4c_DGrupos` ÔÇö campo descri├º├úo do grupo (getDGrupos: Top=254, Left=425, Width=290, habilitado apenas quando Grupo vazio)
+- `chk_4c_Check1` ÔÇö checkbox gr├ífico estilo 1 com ├¡cone de cadeado `geral_lock_on_34.jpg` (Top=188, Left=494, 35├ù35)
+- `chk_4c_ChkAuto` ÔÇö "Autom├ítico" (Top=203, Left=535)
+- `chk_4c_ChkBloqueios` ÔÇö "Bloquear Altera├º├Áes" (Top=285, Left=341)
+- `chk_4c_ChkObrigs` ÔÇö "Lan├ºamento Obrigat├│rio" (Top=308, Left=341)
+- BINDEVENTs para lookup em `txt_4c_Grupo` e `txt_4c_DGrupos` (KeyPress F4 + LostFocus)
+
+**`chk_4c_Check1` integrado em:**
+- `LimparCampos()` ÔåÆ `.Value = .F.`
+- `HabilitarCampos()` ÔåÆ `.Enabled = par_lHabilitar`
+- `BOParaForm()` ÔåÆ carrega de `this_nLocks`
+- `FormParaBO()` ÔåÆ salva para `this_nLocks`
+
+**6 m├®todos de lookup adicionados (todos PUBLIC):**
+- `GrupoKeyPress` / `GrupoLostFocus` ÔÇö valida c├│digo e preenche descri├º├úo via `BuscarDescricaoGrupo()`
+- `DGruposKeyPress` / `DGruposLostFocus` ÔÇö busca por descri├º├úo
+- `AbrirLookupGrupoCodigo()` ÔÇö picker SigCdGcr por c├│digo (substitui `fAcessoContab('C', ...)`)
+- `AbrirLookupGrupoDescrs()` ÔÇö picker SigCdGcr por descri├º├úo (substitui `fAcessoContab('D', ...)`)

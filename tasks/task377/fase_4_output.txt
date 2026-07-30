@@ -1,0 +1,11 @@
+﻿Arquivo completo e bem estruturado ÔÇö 844 linhas, todos os `ENDPROC` balanceados, `ENDDEFINE` no lugar certo.
+
+**Fase 4 conclu├¡da.** O FormCNQ.prg agora cont├®m:
+
+- **Grid `grd_4c_Lista`** (Top=117, Width=910, 3 colunas: Conquilha/Aro/Valor) com RecordSource/Headers configurados em `CarregarLista()`
+- **5 bot├Áes CRUD** em `cnt_4c_Botoes` (Incluir, Visualizar, Alterar, Excluir, Buscar) + Encerrar em `cnt_4c_Saida` ÔÇö todos com `Comic Sans MS`, `PicturePosition=13`, ├¡cones corretos
+- **2 bot├Áes em Page2** (Confirmar = `cadastro_salvar_60.jpg`, Cancelar) com BINDEVENTs
+- **Todos os handlers**: `BtnIncluirClick` / `BtnVisualizarClick` / `BtnAlterarClick` / `BtnExcluirClick` / `BtnBuscarClick` / `BtnEncerrarClick` / `BtnSalvarClick` / `BtnCancelarClick`
+- **M├®todos de suporte**: `FormParaBO`, `BOParaForm`, `LimparCampos`, `HabilitarCampos`, `AjustarBotoesPorModo`
+- **Propriedade `this_cFiltroBusca`** usada por `BtnBuscarClick` ÔåÆ `CarregarLista()` (sem duplica├º├úo de l├│gica)
+- **Destroy** agora fecha `cursor_4c_Dados` explicitamente

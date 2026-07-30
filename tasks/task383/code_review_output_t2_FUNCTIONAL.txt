@@ -1,0 +1,5 @@
+﻿Corre├º├úo aplicada. Resumo do que foi feito:
+
+**[CONTAINER-VISIVEL] ÔÇö CORRIGIDO**: O `INLIST(UPPER(loc_oObjeto.Name), "CNT_4C_CABECALHO")` foi movido para ser a **primeira verifica├º├úo** dentro do `IF VARTYPE(loc_oObjeto) = "O"`, antes de qualquer recurs├úo. Com isso, quando `cnt_4c_Cabecalho` ├® encontrado, o `LOOP` dispara imediatamente ÔÇö sem entrar no container para definir `Visible=.T.` nos filhos, e sem tocar no pr├│prio container.
+
+**[GRID-HEADER] ├ù 3 ÔÇö FALSOS POSITIVOS CONFIRMADOS**: O Init legado (linha 982ÔÇô985 do SCT) define explicitamente `pColuna([Datas],...,"Data")`, `pColuna([Vends],...,"Vendedor")`, `pColuna([Cods],...,"C├│digo")`. Os headers do `grd_4c_Lista` est├úo **id├¬nticos ao legado**. O scanner da review varreu apenas a se├º├úo de propriedades de objetos (Section 2) e n├úo parseou o c├│digo do m├®todo `Init` (Section 3), onde os captions da Grade s├úo definidos via `pfSqlTabela(1).pColuna(...)`.

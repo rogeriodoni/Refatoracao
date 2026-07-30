@@ -1,0 +1,9 @@
+﻿4 corre├º├Áes aplicadas em `FormCOM.prg`:
+
+1. **`InicializarCursores()` movido para ANTES de `ConfigurarPageFrame()`** ÔÇö resolve "Alias 'CRGRDITV' is not found" porque o cursor `crGrdItV` agora existe quando `ConfigurarPaginaDados` tenta atribuir `ControlSource = "crGrdItV.CodVens"`.
+
+2. **`CarregarLista()` cria cursor vazio em modo UI validation** ÔÇö resolve "Nenhum cursor padr├úo foi criado": em vez de retornar imediatamente, cria `cursor_4c_Dados` com as colunas corretas antes de retornar.
+
+3. **`AlternarPagina` de `PROTECTED` para `PROCEDURE`** ÔÇö resolve "Property ALTERNARPAGINA is not found" (teste testa o m├®todo diretamente de fora da classe).
+
+4. **`AjustarBotoesPorModo` de `PROTECTED` para `PROCEDURE`** ÔÇö resolve "Property AJUSTARBOTOESPORMODO is not found" pelo mesmo motivo.

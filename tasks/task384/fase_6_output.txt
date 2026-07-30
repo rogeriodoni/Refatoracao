@@ -1,0 +1,22 @@
+﻿O arquivo est├í correto. A Fase 6 foi implementada com sucesso.
+
+**O que foi adicionado:**
+
+1. **Controles restantes em `ConfigurarPaginaDados()`** (antes de `TornarControlesVisiveis`):
+   - `lbl_4c_Grupo` ÔÇö label "Grupo :" (top=273, left=343)
+   - `txt_4c_CdGrupo` ÔÇö c├│digo do grupo (top=269, left=383, width=31, MaxLength=3) + BINDEVENTs KeyPress/DblClick
+   - `txt_4c_DsGrupo` ÔÇö descri├º├úo do grupo (top=269, left=416, width=150) + BINDEVENTs KeyPress/DblClick
+   - `chk_4c_Obrig` ÔÇö checkbox "Obrigat├│rio" (top=273, left=573)
+   - BINDEVENT `LostFocus` no `txt_4c_Ordens` ÔåÆ `OrdemLostFocus`
+
+2. **Novos m├®todos PUBLIC** (handlers BINDEVENT):
+   - `CdGrupoKeyPress` / `CdGrupoDblClick` ÔåÆ chamam `AbrirLookupGrupo("CODIGO")`
+   - `DsGrupoKeyPress` / `DsGrupoDblClick` ÔåÆ chamam `AbrirLookupGrupo("DESCRICAO")`
+   - `OrdemLostFocus` ÔÇö valida duplicidade de ordem via `SELECT Ordens FROM SigCrRap WHERE Ordens=X AND Codigos<>Y AND nTipos=Z` (l├│gica exata do legado)
+
+3. **`AbrirLookupGrupo` (PROTECTED)** ÔÇö l├│gica bifurcada:
+   - `pnTipo=2` (Movimenta├º├Áes): busca em `SigCdGpr` (codigos/descs)
+   - `pnTipo=0/1` (Produtos/Contas): busca em `SigCdGrp` (cgrus/dgrus)
+   - Preenche ambos `txt_4c_CdGrupo` e `txt_4c_DsGrupo` ap├│s sele├º├úo
+
+4. **`Destroy`** atualizado com limpeza de `cursor_4c_BuscaGrupo` e `cursor_4c_ValidaOrdem`.

@@ -1,0 +1,17 @@
+﻿Estrutura correta. A Fase 4 est├í completa com:
+
+**Adicionado em `ConfigurarPaginaLista()`:**
+- Grid `grd_4c_Lista` com `ColumnCount=4` fora do WITH (regra Problema 36)
+- 5 bot├Áes CRUD em `cnt_4c_Botoes`: Incluir, Visualizar, Alterar, Excluir, Buscar (Left=5/80/155/230/305)
+- `cmd_4c_Encerrar` em `cnt_4c_Saida` (padr├úo can├┤nico: Left=917, Width=90, Caption="Encerrar")
+- BINDEVENT para todos os bot├Áes e DblClick do grid ÔåÆ BtnVisualizarClick
+
+**`CarregarLista()` completo:**
+- `RecordSource` fora do WITH (Problema 36)
+- `ControlSource` ap├│s RecordSource (Problema 48)
+- Headers reconfigurados ap├│s RecordSource (Problema 2/32)
+
+**Novos m├®todos:**
+- `AlternarPagina(par_nPagina)` ÔÇö troca ActivePage, chama `CarregarLista()` ao voltar para Page1
+- `FormatarGridLista(par_oGrid)` ÔÇö SetAll FontName/FontSize
+- `BtnIncluirClick/BtnVisualizarClick/BtnAlterarClick/BtnExcluirClick/BtnBuscarClick/BtnEncerrarClick` ÔÇö todos PUBLIC (Problema 17), l├│gica completa

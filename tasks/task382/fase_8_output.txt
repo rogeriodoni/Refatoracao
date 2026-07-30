@@ -1,0 +1,12 @@
+﻿Tudo integrado corretamente. Fase 8/8 conclu├¡da.
+
+**Resumo do que foi feito:**
+
+**FormCRC.prg** ÔÇö adicionado `AjustarBotoesPorModo()` (├║nico m├®todo que faltava): habilita/desabilita os bot├Áes Visualizar/Alterar/Excluir da Page1 conforme disponibilidade de registros no cursor. Header atualizado para `8/8 - COMPLETO`.
+
+**menu.prg** ÔÇö 3 adi├º├Áes:
+- `DEFINE BAR 60 OF popCadastros` com prompt "Caracter├¡sticas de Contas"
+- `ON SELECTION BAR 60 OF popCadastros DO AbrirFormCRC`
+- `PROCEDURE AbrirFormCRC()` usando o padr├úo can├┤nico correto (VARTYPE, Show() sem par├ómetro, sem Release())
+
+**config.prg** ÔÇö nenhuma altera├º├úo necess├íria (ADIR() j├í carrega `*BO.prg` e `Form*.prg` automaticamente).

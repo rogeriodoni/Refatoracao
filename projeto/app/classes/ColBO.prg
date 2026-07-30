@@ -1,28 +1,46 @@
 *------------------------------------------------------------------------------
 * ColBO.prg - Business Object para Cadastro de Grupo de Venda
-* Tabela: SigCdCol
-* Fase 1/8: Propriedades e Init()
+* Tabela: SigCdCol | PK: colecoes
+* Herda de: BusinessBase
 *------------------------------------------------------------------------------
 
 DEFINE CLASS ColBO AS BusinessBase
 
-    *-- Propriedades mapeadas da tabela SigCdCol
-    this_cCodcols  = ""    && codcols  char(1)
-    this_cColecoes = ""    && colecoes char(10) - PK
-    this_cDescs    = ""    && descs    char(40)
-    this_nRepoauts = 0     && repoauts numeric(1,0)
-    this_nConprods = 0     && conprods numeric(1,0)
-    this_nAltprods = 0     && altprods numeric(1,0)
-    this_dDtincs   = {}    && dtincs   datetime
-    this_cUsuars   = ""    && usuars   char(10)
-    this_cAgrupas  = ""    && agrupas  char(10)
+    *-- Propriedades mapeadas da tabela SigCdCol (schema.sql)
+    *-- colecoes char(10) NOT NULL (PK)
+    this_cColecoes  = ""
+    *-- descs char(40) NOT NULL
+    this_cDescs     = ""
+    *-- codcols char(1) NOT NULL
+    this_cCodcols   = ""
+    *-- repoauts numeric(1,0) NOT NULL
+    this_nRepoauts  = 0
+    *-- conprods numeric(1,0) NOT NULL
+    this_nConprods  = 0
+    *-- altprods numeric(1,0) NOT NULL
+    this_nAltProds  = 0
+    *-- dtincs datetime NULL
+    this_tDtIncs    = {}
+    *-- usuars char(10) NOT NULL
+    this_cUsuars    = ""
+    *-- agrupas char(10) NOT NULL
+    this_cAgrupas   = ""
 
     *--------------------------------------------------------------------------
+    * Init - Inicializa o Business Object
+    *--------------------------------------------------------------------------
     PROCEDURE Init()
-        DODEFAULT()
-        THIS.this_cTabela     = "SigCdCol"
-        THIS.this_cCampoChave = "colecoes"
-        RETURN .T.
+        LOCAL loc_lSucesso
+        loc_lSucesso = .F.
+        TRY
+            DODEFAULT()
+            THIS.this_cTabela     = "SigCdCol"
+            THIS.this_cCampoChave = "colecoes"
+            loc_lSucesso = .T.
+        CATCH TO loException
+            MostrarErro(loException, "ColBO.Init")
+        ENDTRY
+        RETURN loc_lSucesso
     ENDPROC
 
     *--------------------------------------------------------------------------
@@ -33,234 +51,311 @@ DEFINE CLASS ColBO AS BusinessBase
     ENDFUNC
 
     *--------------------------------------------------------------------------
-    * Buscar - Retorna todos os registros com filtro opcional
+    * CarregarDoCursor - Carrega propriedades do BO a partir de um cursor
     *--------------------------------------------------------------------------
-    FUNCTION Buscar(par_cFiltro)
-        LOCAL loc_cSQL, loc_nResult, loc_lSucesso
-        loc_lSucesso = .F.
-
-        TRY
-            loc_cSQL = "SELECT colecoes, descs, codcols, repoauts, conprods," + ;
-                       " altprods, dtincs, usuars, agrupas" + ;
-                       " FROM SigCdCol"
-
-            IF VARTYPE(par_cFiltro) = "C" AND !EMPTY(ALLTRIM(par_cFiltro))
-                loc_cSQL = loc_cSQL + " WHERE " + ALLTRIM(par_cFiltro)
-            ENDIF
-
-            loc_cSQL = loc_cSQL + " ORDER BY colecoes"
-
-            *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
-            IF USED("cursor_4c_Dados")
-                TABLEREVERT(.T., "cursor_4c_Dados")
-                USE IN cursor_4c_Dados
-            ENDIF
-
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Dados")
-
-            IF loc_nResult >= 0
-                loc_lSucesso = .T.
-            ELSE
-                MostrarErro("Erro ao buscar registros:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
-            ENDIF
-        CATCH TO loException
-            MostrarErro(loException, "ColBO.Buscar")
-        ENDTRY
-
-        RETURN loc_lSucesso
-    ENDFUNC
-
-    *--------------------------------------------------------------------------
-    * CarregarPorCodigo - Carrega registro pelo codigo (PK)
-    *--------------------------------------------------------------------------
-    FUNCTION CarregarPorCodigo(par_cCodigo)
-        LOCAL loc_cSQL, loc_nResult, loc_lSucesso
-        loc_lSucesso = .F.
-
-        TRY
-            loc_cSQL = "SELECT colecoes, descs, codcols, repoauts, conprods," + ;
-                       " altprods, dtincs, usuars, agrupas" + ;
-                       " FROM SigCdCol" + ;
-                       " WHERE colecoes = " + EscaparSQL(ALLTRIM(par_cCodigo))
-
-            *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
-            IF USED("cursor_4c_Carrega")
-                TABLEREVERT(.T., "cursor_4c_Carrega")
-                USE IN cursor_4c_Carrega
-            ENDIF
-
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Carrega")
-
-            IF loc_nResult >= 0 AND RECCOUNT("cursor_4c_Carrega") > 0
-                loc_lSucesso = THIS.CarregarDoCursor("cursor_4c_Carrega")
-                THIS.this_lNovoRegistro = .F.
-            ELSE
-                IF loc_nResult < 0
-                    MostrarErro("Erro ao carregar registro:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
-                ENDIF
-            ENDIF
-        CATCH TO loException
-            MostrarErro(loException, "ColBO.CarregarPorCodigo")
-        ENDTRY
-
-        IF USED("cursor_4c_Carrega")
-            USE IN cursor_4c_Carrega
-        ENDIF
-
-        RETURN loc_lSucesso
-    ENDFUNC
-
-    *--------------------------------------------------------------------------
-    * CarregarDoCursor - Mapeia campos do cursor para propriedades do BO
-    *--------------------------------------------------------------------------
-    FUNCTION CarregarDoCursor(par_cAliasCursor)
+    PROTECTED PROCEDURE CarregarDoCursor(par_cAliasCursor)
         LOCAL loc_lSucesso
         loc_lSucesso = .F.
 
-        IF USED(par_cAliasCursor)
-            SELECT (par_cAliasCursor)
-            THIS.this_cColecoes = TratarNulo(colecoes, "C")
-            THIS.this_cDescs    = TratarNulo(descs,    "C")
-            THIS.this_cCodcols  = TratarNulo(codcols,  "C")
-            THIS.this_nRepoauts = TratarNulo(repoauts, "N")
-            THIS.this_nConprods = TratarNulo(conprods, "N")
-            THIS.this_nAltprods = TratarNulo(altprods, "N")
-            THIS.this_dDtincs   = TratarNulo(dtincs,   "T")
-            THIS.this_cUsuars   = TratarNulo(usuars,   "C")
-            THIS.this_cAgrupas  = TratarNulo(agrupas,  "C")
-            loc_lSucesso = .T.
-        ENDIF
+        TRY
+            IF USED(par_cAliasCursor)
+                SELECT (par_cAliasCursor)
+                THIS.this_cColecoes  = TratarNulo(colecoes, "C")
+                THIS.this_cDescs     = TratarNulo(descs,    "C")
+                THIS.this_cCodcols   = TratarNulo(codcols,  "C")
+                THIS.this_nRepoauts  = TratarNulo(repoauts, "N")
+                THIS.this_nConprods  = TratarNulo(conprods, "N")
+                THIS.this_nAltProds  = TratarNulo(altprods, "N")
+                THIS.this_tDtIncs    = TratarNulo(dtincs,   "T")
+                THIS.this_cUsuars    = TratarNulo(usuars,   "C")
+                THIS.this_cAgrupas   = TratarNulo(agrupas,  "C")
+                loc_lSucesso = .T.
+            ENDIF
+        CATCH TO loException
+            MostrarErro("Erro ao carregar do cursor:" + CHR(13) + loException.Message, "ColBO.CarregarDoCursor")
+        ENDTRY
 
         RETURN loc_lSucesso
-    ENDFUNC
+    ENDPROC
 
     *--------------------------------------------------------------------------
-    * Inserir - INSERT na tabela SigCdCol (PROTECTED)
+    * ValidarDados - Valida dados antes de salvar
     *--------------------------------------------------------------------------
-    PROTECTED FUNCTION Inserir()
-        LOCAL loc_cSQL, loc_nResult, loc_lSucesso
+    PROTECTED PROCEDURE ValidarDados()
+        LOCAL loc_lValido
+        loc_lValido = .T.
+
+        IF EMPTY(THIS.this_cColecoes)
+            MsgAviso("Grupo de Venda Inv" + CHR(225) + "lido.")
+            loc_lValido = .F.
+        ENDIF
+
+        IF EMPTY(THIS.this_cDescs)
+            MsgAviso("Descri" + CHR(231) + CHR(227) + "o Inv" + CHR(225) + "lida.")
+            loc_lValido = .F.
+        ENDIF
+
+        RETURN loc_lValido
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * Inserir - Insere novo registro na tabela SigCdCol
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE Inserir()
+        LOCAL loc_cSQL, loc_nResultado, loc_lSucesso
         loc_lSucesso = .F.
 
         TRY
-            loc_cSQL = "INSERT INTO SigCdCol" + ;
-                       " (colecoes, descs, codcols, repoauts, conprods," + ;
-                       "  altprods, dtincs, usuars, agrupas)" + ;
-                       " VALUES (" + ;
-                       EscaparSQL(ALLTRIM(THIS.this_cColecoes)) + ", " + ;
-                       EscaparSQL(ALLTRIM(THIS.this_cDescs))    + ", " + ;
-                       EscaparSQL(ALLTRIM(THIS.this_cCodcols))  + ", " + ;
-                       FormatarNumeroSQL(THIS.this_nRepoauts)   + ", " + ;
-                       FormatarNumeroSQL(THIS.this_nConprods)   + ", " + ;
-                       FormatarNumeroSQL(THIS.this_nAltprods)   + ", " + ;
-                       IIF(EMPTY(THIS.this_dDtincs), "NULL", FormatarDataSQL(THIS.this_dDtincs)) + ", " + ;
-                       EscaparSQL(ALLTRIM(THIS.this_cUsuars))   + ", " + ;
-                       EscaparSQL(ALLTRIM(THIS.this_cAgrupas))  + ;
-                       ")"
+            *-- Definir usuario e data/hora de inclusao automaticamente
+            THIS.this_cUsuars = ALLTRIM(gc_4c_UsuarioLogado)
+            THIS.this_tDtIncs = DATETIME()
 
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL)
+            TEXT TO loc_cSQL TEXTMERGE NOSHOW
+                INSERT INTO SigCdCol (colecoes, descs, codcols, repoauts, conprods, altprods, dtincs, usuars, agrupas)
+                VALUES (
+                    <<EscaparSQL(THIS.this_cColecoes)>>,
+                    <<EscaparSQL(THIS.this_cDescs)>>,
+                    <<EscaparSQL(THIS.this_cCodcols)>>,
+                    <<FormatarNumeroSQL(THIS.this_nRepoauts, 0)>>,
+                    <<FormatarNumeroSQL(THIS.this_nConprods, 0)>>,
+                    <<FormatarNumeroSQL(THIS.this_nAltProds, 0)>>,
+                    GETDATE(),
+                    <<EscaparSQL(THIS.this_cUsuars)>>,
+                    <<EscaparSQL(THIS.this_cAgrupas)>>
+                )
+            ENDTEXT
 
-            IF loc_nResult >= 0
+            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL)
+
+            IF loc_nResultado >= 0
                 THIS.RegistrarAuditoria("INSERT")
                 loc_lSucesso = .T.
             ELSE
-                MostrarErro("Erro ao inserir registro:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
+                MostrarErro("Erro ao inserir grupo de venda:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
             ENDIF
+
         CATCH TO loException
-            MostrarErro(loException, "ColBO.Inserir")
+            MostrarErro("Erro ao inserir:" + CHR(13) + loException.Message, "ColBO.Inserir")
         ENDTRY
 
         RETURN loc_lSucesso
-    ENDFUNC
+    ENDPROC
 
     *--------------------------------------------------------------------------
-    * Atualizar - UPDATE na tabela SigCdCol (PROTECTED)
+    * Atualizar - Atualiza registro existente na tabela SigCdCol
     *--------------------------------------------------------------------------
-    PROTECTED FUNCTION Atualizar()
-        LOCAL loc_cSQL, loc_nResult, loc_lSucesso
+    PROTECTED PROCEDURE Atualizar()
+        LOCAL loc_cSQL, loc_nResultado, loc_lSucesso
         loc_lSucesso = .F.
 
         TRY
-            loc_cSQL = "UPDATE SigCdCol SET" + ;
-                       " descs    = " + EscaparSQL(ALLTRIM(THIS.this_cDescs))    + ", " + ;
-                       " codcols  = " + EscaparSQL(ALLTRIM(THIS.this_cCodcols))  + ", " + ;
-                       " repoauts = " + FormatarNumeroSQL(THIS.this_nRepoauts)   + ", " + ;
-                       " conprods = " + FormatarNumeroSQL(THIS.this_nConprods)   + ", " + ;
-                       " altprods = " + FormatarNumeroSQL(THIS.this_nAltprods)   + ", " + ;
-                       " dtincs   = " + IIF(EMPTY(THIS.this_dDtincs), "NULL", FormatarDataSQL(THIS.this_dDtincs)) + ", " + ;
-                       " usuars   = " + EscaparSQL(ALLTRIM(THIS.this_cUsuars))   + ", " + ;
-                       " agrupas  = " + EscaparSQL(ALLTRIM(THIS.this_cAgrupas))  + ;
-                       " WHERE colecoes = " + EscaparSQL(ALLTRIM(THIS.this_cColecoes))
+            TEXT TO loc_cSQL TEXTMERGE NOSHOW
+                UPDATE SigCdCol
+                SET descs    = <<EscaparSQL(THIS.this_cDescs)>>,
+                    codcols  = <<EscaparSQL(THIS.this_cCodcols)>>,
+                    repoauts = <<FormatarNumeroSQL(THIS.this_nRepoauts, 0)>>,
+                    conprods = <<FormatarNumeroSQL(THIS.this_nConprods, 0)>>,
+                    altprods = <<FormatarNumeroSQL(THIS.this_nAltProds, 0)>>,
+                    agrupas  = <<EscaparSQL(THIS.this_cAgrupas)>>
+                WHERE colecoes = <<EscaparSQL(THIS.this_cColecoes)>>
+            ENDTEXT
 
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL)
+            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL)
 
-            IF loc_nResult >= 0
+            IF loc_nResultado >= 0
                 THIS.RegistrarAuditoria("UPDATE")
                 loc_lSucesso = .T.
             ELSE
-                MostrarErro("Erro ao atualizar registro:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
+                MostrarErro("Erro ao atualizar grupo de venda:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
             ENDIF
+
         CATCH TO loException
-            MostrarErro(loException, "ColBO.Atualizar")
+            MostrarErro("Erro ao atualizar:" + CHR(13) + loException.Message, "ColBO.Atualizar")
         ENDTRY
 
         RETURN loc_lSucesso
-    ENDFUNC
+    ENDPROC
 
     *--------------------------------------------------------------------------
-    * ExecutarExclusao - DELETE na tabela SigCdCol (PROTECTED)
-    * Verifica integridade referencial com SigCdPro antes de excluir
+    * ExecutarExclusao - Exclui registro da tabela SigCdCol
+    * Verifica dependencia em SigCdPro antes de excluir
     *--------------------------------------------------------------------------
-    PROTECTED FUNCTION ExecutarExclusao()
-        LOCAL loc_cSQL, loc_nResult, loc_lSucesso, loc_nDependentes
+    PROTECTED PROCEDURE ExecutarExclusao()
+        LOCAL loc_cSQL, loc_nResultado, loc_lSucesso, loc_nUso
         loc_lSucesso = .F.
 
         TRY
-            *-- Verificar se existem produtos usando este grupo de venda
-            loc_cSQL = "SELECT COUNT(*) AS nExiste FROM SigCdPro" + ;
-                       " WHERE Colecoes = " + EscaparSQL(ALLTRIM(THIS.this_cColecoes))
-
-            *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
-            IF USED("cursor_4c_ChkPro")
-                TABLEREVERT(.T., "cursor_4c_ChkPro")
-                USE IN cursor_4c_ChkPro
-            ENDIF
-
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_ChkPro")
-
-            IF loc_nResult >= 0 AND RECCOUNT("cursor_4c_ChkPro") > 0
+            *-- Verificar se produtos utilizam este grupo de venda
+            loc_cSQL = "SELECT COUNT(*) AS qtd FROM SigCdPro WHERE Colecoes = " + ;
+                EscaparSQL(THIS.this_cColecoes)
+            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_ChkPro")
+            IF loc_nResultado >= 0 AND USED("cursor_4c_ChkPro")
                 SELECT cursor_4c_ChkPro
-                loc_nDependentes = cursor_4c_ChkPro.nExiste
-            ELSE
-                loc_nDependentes = 0
-            ENDIF
-
-            IF USED("cursor_4c_ChkPro")
+                loc_nUso = cursor_4c_ChkPro.qtd
                 USE IN cursor_4c_ChkPro
-            ENDIF
-
-            IF loc_nDependentes > 0
-                MostrarErro("Existem Produtos Utilizando Esse Grupo de Venda.", "Imposs" + CHR(237) + "vel Exclus" + CHR(227) + "o...")
-            ELSE
-                loc_cSQL = "DELETE FROM SigCdCol" + ;
-                           " WHERE colecoes = " + EscaparSQL(ALLTRIM(THIS.this_cColecoes))
-
-                loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL)
-
-                IF loc_nResult >= 0
-                    THIS.RegistrarAuditoria("DELETE")
-                    loc_lSucesso = .T.
+                IF loc_nUso > 0
+                    MsgAviso("Existem Produtos Utilizando Esse Grupo de Venda.")
+                    loc_lSucesso = .F.
                 ELSE
-                    MostrarErro("Erro ao excluir registro:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
+                    loc_cSQL = "DELETE FROM SigCdCol WHERE colecoes = " + ;
+                        EscaparSQL(THIS.this_cColecoes)
+                    loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL)
+                    IF loc_nResultado >= 0
+                        THIS.RegistrarAuditoria("DELETE")
+                        loc_lSucesso = .T.
+                    ELSE
+                        MostrarErro("Erro ao excluir grupo de venda:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
+                    ENDIF
                 ENDIF
+            ELSE
+                MostrarErro("Erro ao verificar depend" + CHR(234) + "ncias:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
             ENDIF
+
         CATCH TO loException
-            MostrarErro(loException, "ColBO.ExecutarExclusao")
-            IF USED("cursor_4c_ChkPro")
-                USE IN cursor_4c_ChkPro
-            ENDIF
+            MostrarErro("Erro ao excluir:" + CHR(13) + loException.Message, "ColBO.ExecutarExclusao")
         ENDTRY
 
         RETURN loc_lSucesso
-    ENDFUNC
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * Buscar - Busca registros com filtro opcional
+    * Retorna cursor_4c_Dados com colecoes, descs, codcols
+    *--------------------------------------------------------------------------
+    PROCEDURE Buscar(par_cFiltro)
+        LOCAL loc_cSQL, loc_nResultado, loc_lSucesso
+        loc_lSucesso = .F.
+
+        TRY
+            IF TYPE("gnConnHandle") != "N" OR gnConnHandle <= 0
+                IF !USED("cursor_4c_Dados")
+                    SET NULL ON
+                    CREATE CURSOR cursor_4c_Dados (colecoes C(10), descs C(40), codcols C(1))
+                    SET NULL OFF
+                ENDIF
+                loc_lSucesso = .T.
+            ELSE
+                loc_cSQL = "SELECT colecoes, descs, codcols FROM SigCdCol"
+
+                IF !EMPTY(par_cFiltro)
+                    loc_cSQL = loc_cSQL + " WHERE " + par_cFiltro
+                ENDIF
+
+                loc_cSQL = loc_cSQL + " ORDER BY colecoes"
+
+                IF USED("cursor_4c_Dados")
+                    loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_DadosTmp")
+                    IF loc_nResultado >= 0
+                        SELECT cursor_4c_Dados
+                        ZAP
+                        SET NULL ON
+                        APPEND FROM DBF("cursor_4c_DadosTmp")
+                        SET NULL OFF
+                        USE IN cursor_4c_DadosTmp
+                        loc_lSucesso = .T.
+                    ELSE
+                        MostrarErro("Erro ao buscar grupos de venda:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
+                    ENDIF
+                ELSE
+                    loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Dados")
+                    IF loc_nResultado >= 0
+                        loc_lSucesso = .T.
+                    ELSE
+                        MostrarErro("Erro ao buscar grupos de venda:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
+                    ENDIF
+                ENDIF
+            ENDIF
+
+        CATCH TO loException
+            MostrarErro("Erro ao buscar:" + CHR(13) + loException.Message, "ColBO.Buscar")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * CarregarPorCodigo - Carrega registro pela chave primaria
+    *--------------------------------------------------------------------------
+    PROCEDURE CarregarPorCodigo(par_cCodigo)
+        LOCAL loc_cSQL, loc_nResultado, loc_lSucesso
+        loc_lSucesso = .F.
+
+        TRY
+            loc_cSQL = "SELECT colecoes, descs, codcols, repoauts, conprods, altprods," + ;
+                " dtincs, usuars, agrupas" + ;
+                " FROM SigCdCol WHERE colecoes = " + EscaparSQL(par_cCodigo)
+
+            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Carrega")
+
+            IF loc_nResultado >= 0
+                IF RECCOUNT("cursor_4c_Carrega") > 0
+                    loc_lSucesso = THIS.CarregarDoCursor("cursor_4c_Carrega")
+                    THIS.this_lNovoRegistro = .F.
+                ELSE
+                    MsgAviso("Grupo de Venda n" + CHR(227) + "o encontrado!")
+                ENDIF
+
+                IF USED("cursor_4c_Carrega")
+                    USE IN cursor_4c_Carrega
+                ENDIF
+            ELSE
+                MostrarErro("Erro ao carregar grupo de venda:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
+            ENDIF
+
+        CATCH TO loException
+            MostrarErro("Erro ao carregar:" + CHR(13) + loException.Message, "ColBO.CarregarPorCodigo")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * VerificarCodigoColetor - Verifica se codcols ja existe em outro registro
+    *--------------------------------------------------------------------------
+    PROCEDURE VerificarCodigoColetor(par_cCodcols)
+        LOCAL loc_cSQL, loc_nResultado, loc_lExiste
+        loc_lExiste = .F.
+
+        TRY
+            IF !EMPTY(par_cCodcols)
+                loc_cSQL = "SELECT COUNT(*) AS qtd FROM SigCdCol" + ;
+                    " WHERE codcols = " + EscaparSQL(par_cCodcols) + ;
+                    " AND colecoes <> " + EscaparSQL(THIS.this_cColecoes)
+                loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_ChkCod")
+                IF loc_nResultado >= 0 AND USED("cursor_4c_ChkCod")
+                    SELECT cursor_4c_ChkCod
+                    loc_lExiste = (cursor_4c_ChkCod.qtd > 0)
+                    USE IN cursor_4c_ChkCod
+                ENDIF
+            ENDIF
+        CATCH TO loException
+            MostrarErro("Erro ao verificar c" + CHR(243) + "digo coletor:" + CHR(13) + loException.Message, "ColBO.VerificarCodigoColetor")
+        ENDTRY
+
+        RETURN loc_lExiste
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * VerificarColecaoExistente - Verifica se colecoes ja existe (para INSERT)
+    *--------------------------------------------------------------------------
+    PROCEDURE VerificarColecaoExistente(par_cColecoes)
+        LOCAL loc_cSQL, loc_nResultado, loc_lExiste
+        loc_lExiste = .F.
+
+        TRY
+            loc_cSQL = "SELECT COUNT(*) AS qtd FROM SigCdCol" + ;
+                " WHERE colecoes = " + EscaparSQL(par_cColecoes)
+            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_ChkCol")
+            IF loc_nResultado >= 0 AND USED("cursor_4c_ChkCol")
+                SELECT cursor_4c_ChkCol
+                loc_lExiste = (cursor_4c_ChkCol.qtd > 0)
+                USE IN cursor_4c_ChkCol
+            ENDIF
+        CATCH TO loException
+            MostrarErro("Erro ao verificar cole" + CHR(231) + CHR(227) + "o:" + CHR(13) + loException.Message, "ColBO.VerificarColecaoExistente")
+        ENDTRY
+
+        RETURN loc_lExiste
+    ENDPROC
 
 ENDDEFINE

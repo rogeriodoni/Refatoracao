@@ -1,0 +1,7 @@
+﻿3 altera├º├Áes aplicadas em `FormCRC.prg`:
+
+1. **Linha 653**: `BINDEVENT` de `GrupoLostFocus` corrigido de `"KeyPress"` para `"LostFocus"`
+2. **Linha 655**: `BINDEVENT` de `DGruposLostFocus` corrigido de `"KeyPress"` para `"LostFocus"`
+3. **Linhas 1061/1103**: Assinaturas de `GrupoLostFocus()` e `DGruposLostFocus()` sem par├ómetros, pois o evento `LostFocus` n├úo passa argumentos em VFP9
+
+A raiz do problema era que ambos os handlers `*LostFocus` estavam vinculados a `KeyPress` (mesmo evento de `GrupoKeyPress`/`DGruposKeyPress`), o que faria a valida├º├úo disparar em cada tecla digitada em vez de apenas ao sair do campo.

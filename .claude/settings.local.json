@@ -274,7 +274,25 @@
       "Bash(cp -p C:/4install/FortyusMC/Fortyus/SigReAcs.frx C:/4c/projeto/app/reports/)",
       "Bash(cp -p C:/4install/FortyusMC/Fortyus/SigReAcs.frt C:/4c/projeto/app/reports/)",
       "PowerShell($bytes = [System.IO.File]::ReadAllBytes\\(\"C:\\\\4c\\\\projeto\\\\app\\\\reports\\\\SigReBal.frt\"\\); $text = [System.Text.Encoding]::GetEncoding\\(\"iso-8859-1\"\\).GetString\\($bytes\\); if \\($text -match \"crCabecalho\"\\) { Write-Output \"SigReBal.frt REFERENCES crCabecalho\" } else { Write-Output \"SigReBal.frt OK \\(no crCabecalho ref\\)\" }; $bytes = [System.IO.File]::ReadAllBytes\\(\"C:\\\\4c\\\\projeto\\\\app\\\\reports\\\\SigReAcs.frt\"\\); $text = [System.Text.Encoding]::GetEncoding\\(\"iso-8859-1\"\\).GetString\\($bytes\\); if \\($text -match \"crCabecalho\"\\) { Write-Output \"SigReAcs.frt REFERENCES crCabecalho\" } else { Write-Output \"SigReAcs.frt OK \\(no crCabecalho ref\\)\" })",
-      "PowerShell($ErrorActionPreference = 'Stop'; try { . C:\\\\4c\\\\automation\\\\CorretorAutomatico.ps1; Write-Output \"OK - CorretorAutomatico parses\" } catch { Write-Output \"FAIL: $\\($_.Exception.Message\\)\"; Write-Output \"Line: $\\($_.InvocationInfo.ScriptLineNumber\\)\" })"
+      "PowerShell($ErrorActionPreference = 'Stop'; try { . C:\\\\4c\\\\automation\\\\CorretorAutomatico.ps1; Write-Output \"OK - CorretorAutomatico parses\" } catch { Write-Output \"FAIL: $\\($_.Exception.Message\\)\"; Write-Output \"Line: $\\($_.InvocationInfo.ScriptLineNumber\\)\" })",
+      "Bash(\"C:/Program Files \\(x86\\)/Microsoft Visual FoxPro 9/vfp9.exe\" -d -c -t test_compile.prg)",
+      "Bash(\"C:/Program Files \\(x86\\)/Microsoft Visual FoxPro 9/vfp9.exe\" -c -t -d)",
+      "PowerShell($content = Get-Content 'C:\\\\4c\\\\projeto\\\\app\\\\reports\\\\SigReCgp.frt' -Raw -Encoding Byte; $text = [System.Text.Encoding]::ASCII.GetString\\($content\\); $text -split \"[\\\\x00-\\\\x1f]\" | Where-Object { $_.Length -gt 3 } | Where-Object { $_ -match 'thisform|_screen|_vfp|thisformset|pcTotais|_EMPR|Empr|thisform' } | Select-Object -First 30)",
+      "Bash(\"C:/Program Files \\(x86\\)/Microsoft Visual FoxPro 9/vfp9.exe\" -d fix_frx_thisform.prg)",
+      "Bash(\"C:/Program Files \\(x86\\)/Microsoft Visual FoxPro 9/vfp9.exe\" -c -t fix_frx_thisform.prg)",
+      "Bash(\"C:/Program Files \\(x86\\)/Microsoft Visual FoxPro 9/vfp9.exe\" fix_frx_thisform.prg)",
+      "PowerShell($frt = \"C:\\\\4c\\\\projeto\\\\app\\\\reports\\\\SigReCgp.frt\"; $bytes = [System.IO.File]::ReadAllBytes\\($frt\\); $text = [System.Text.Encoding]::ASCII.GetString\\($bytes\\); $text -split \"[\\\\x00-\\\\x1f]\" | Where-Object { $_.Length -gt 3 } | Where-Object { $_ -match 'Jpg|SYS\\\\\\(|OrdImg|FBRANCOS|Imagem' } | Select-Object -Unique | ForEach-Object { Write-Host $_ })",
+      "Bash(perl -0777 -ne ' *)",
+      "Bash(perl *)",
+      "Bash(cp C:/4c/projeto/app/classes/SigReFtpBO.prg C:/tmp_test_SigReFtpBO.prg)",
+      "Bash(mkdir -p /tmp)",
+      "Bash(cp C:/4c/projeto/app/classes/SigReFtpBO.prg /tmp/SigReFtpBO.prg)",
+      "PowerShell(& C:\\\\4c\\\\tools\\\\fix_return_in_try.ps1 -Files @\\(\"C:\\\\4c\\\\projeto\\\\app\\\\classes\\\\SigReFtpBO.prg\"\\))",
+      "PowerShell($PSVersionTable.PSVersion)",
+      "PowerShell(& C:\\\\4c\\\\_fix_return_in_try.ps1 -FileList C:\\\\4c\\\\_form_list.txt -OutReport C:\\\\4c\\\\_fix_report_dryrun.txt)",
+      "PowerShell(& C:\\\\4c\\\\_fix_return_in_try.ps1 -FileList C:\\\\4c\\\\_form_single.txt -OutReport C:\\\\4c\\\\_fix_report_single.txt -Apply)",
+      "PowerShell(& C:\\\\4c\\\\_fix_return_in_try.ps1 -FileList C:\\\\4c\\\\_form_list.txt -OutReport C:\\\\4c\\\\_fix_report_apply.txt -Apply)",
+      "PowerShell(& C:\\\\4c\\\\_validate_fixes.ps1 -FileList C:\\\\4c\\\\_form_list.txt 2>&1 | Select-Object -First 200)"
     ]
   }
 }

@@ -1,0 +1,29 @@
+﻿Phase 6/8 is complete. Here's what was delivered across all 5 edits:
+
+**Edit 2 ÔÇö `CarregarGridItens()` completo:**
+- `RecordSource` + `ColumnCount=6` definidos **fora** do `WITH` (Problema 36)
+- `ControlSource` para cada coluna: `Emps` / `QtdCtg` / `qtde` / `Grupos` / `Estos` / `Descr`
+- Headers redefinidos ap├│s `RecordSource` (VFP9 os reseta ao mudar RecordSource)
+- `FormatarGridLista` + `Refresh()`
+
+**Edit 3 ÔÇö `AlternarPagina()` atualizado:**
+- Branch `ELSE` adicionado: quando navega para Page2, chama `CarregarGridItens()` automaticamente ÔÇö `BtnIncluirClick`, `BtnVisualizarClick` e `BtnAlterarClick` ganham o grid populado sem mudan├ºas individuais
+
+**Edit 4 ÔÇö `LimparCampos()` completo:**
+- Limpa todos os 9 campos da Page2, incluindo `txt_4c_Busca`, `txt_4c_TotQt`, `txt_4c_DContas`, `opt_4c_OptBusca.Value=1`, `img_4c_ImgJpg.Visible=.F.` e `img_4c_ImgJpg.Picture=""`
+- CATCH com `MostrarErro` (n├úo mais silencioso)
+
+**Edit 5 ÔÇö `HabilitarCampos()` completo:**
+- `txt_4c_Busca` e `txt_4c_TotQt`: edit├íveis em INCLUIR/ALTERAR, readonly em VISUALIZAR
+- `txt_4c_DContas`: sempre readonly
+- `grd_4c_Dados.Column2.ReadOnly = !par_lHabilitar`
+- CATCH com `MostrarErro`
+
+**Edit 6 ÔÇö 5 handlers novos antes de `Destroy()`:**
+- `ValidarBusca()` ÔÇö SELECT local em csSigCdCri com `m.` prefix, GO pelo RecNo, foca TotQt
+- `ValidarQuantidade()` ÔÇö UPDATE csSigCdCri com `m.` prefix, limpa campos, foca Busca
+- `GridDadosAfterRowColChange(par_nColIndex)` ÔÇö par├ómetro obrigat├│rio, chama `CarregarImagemProduto`
+- `CarregarImagemProduto(par_cCpros)` ÔÇö SQLEXEC + strip prefixo `base64,` + `STRCONV(str,14)` uma ├║nica vez + `STRTOFILE`
+- `OptBuscaChanged()` ÔÇö limpa Busca/DContas e foca txt_4c_Busca
+
+`Destroy()` agora tamb├®m fecha `csImgProduto` e `csProcuraBusca`.

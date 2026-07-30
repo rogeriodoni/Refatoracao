@@ -1,0 +1,3 @@
+﻿Corre├º├úo aplicada. O problema era datasession: `FormCol` tinha `DataSession = 2` (datasession privada), ent├úo `cursor_4c_Dados` criado em `CarregarLista()` ficava invis├¡vel para o `FormTester` que opera na datasession padr├úo (1). Mudando para `DataSession = 1`, o cursor ├® criado na datasession compartilhada e o `USED("cursor_4c_Dados")` do teste o encontra.
+
+O form ├® modal (`WindowType = 1`), ent├úo n├úo h├í risco de conflito de cursores com outros forms abertos em paralelo.

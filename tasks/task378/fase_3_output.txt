@@ -1,0 +1,17 @@
+﻿Fase 3 conclu├¡da. O arquivo `FormCOC.prg` foi criado em `C:\4c\projeto\app\forms\cadastros\` com 287 linhas.
+
+**O que foi implementado:**
+
+| M├®todo | Status | Notas |
+|--------|--------|-------|
+| `Init()` | Completo | TRY/CATCH, `DODEFAULT()`, sem duplicar `InicializarForm` |
+| `InicializarForm()` | Completo | Cria `COCBO`, chama `CarregarParametros()`, guarda `gb_4c_ValidandoUI` |
+| `ConfigurarPageFrame()` | Completo | `pgf_4c_Paginas`, Top=-29, Tabs=.F., imagem de fundo |
+| `ConfigurarPaginaLista()` | Completo | `cnt_4c_Cabecalho` + labels + `cnt_4c_Botoes` + `cnt_4c_Saida` canonico (Left=917) |
+| `ConfigurarPaginaDados()` | Completo | `cnt_4c_BotoesAcao` (Left=842, Top=33) |
+| `CarregarLista()` | Funcional | Chama `Buscar("")` ÔÇö grid binding ser├í adicionado na Fase 4 |
+| `TornarControlesVisiveis()` | Completo | Recurs├úo em Pages + Controls |
+| `FormatarGridLista()` | Completo | Tahoma 8 |
+| `Destroy()` | Completo | Nula BO + `DODEFAULT()` |
+
+**Regras aplicadas:** compensa├º├úo +29px nos Tops (PageFrame.Top=-29), padr├úo can├┤nico `cnt_4c_Saida` (Left=917, Width=90), CHR() para acentos no Caption, RETURN apenas fora de TRY/CATCH.

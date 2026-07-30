@@ -1,0 +1,182 @@
+{
+  "resumo": {
+    "totalMetodos": 10,
+    "metodosComSQL": 3,
+    "metodosComValidacao": 3,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fAcessoContab"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDCRC",
+      "evento": "Procedure",
+      "linhas": 3,
+      "codigoOriginal": "Select crSigCrRac\nLocate for Codigos >= ThisForm.Pagina.Dados.GetCodigos.Value\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCRC",
+      "evento": "Init",
+      "linhas": 20,
+      "codigoOriginal": "With ThisForm\n\t.poDataMgr = CreateObject('fSqlConector')\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tWith .poDataMgr\n\t\t\t.AddCursor('SigCrRac', 'Codigos', 'crSigCrRac', '', ThisForm.Pagina.Lista.Grade)\n\t\t\t.pfSqlTabela(1).pColuna('Grupos',  '', '', 'Grupo', \t 080, .t.)\n\t\t\t.pfSqlTabela(1).pColuna('Codigos', '', '', 'Código',    150, .t.)\n\t\t\t.pfSqlTabela(1).pColuna('Descrs',  '', '', 'Descrição', 290, .t.)\n\t\tEndWith\n\n\t\t=DoDefault()\n\n\t\tThisForm.Pagina.Lista.Grade.Column1.SetFocus\n\tElse\n\t\t=Messagebox('Impossível... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDCRC",
+      "evento": "Click",
+      "linhas": 22,
+      "codigoOriginal": "Lparameters Opcao\n\nIf Not DoDefault(Opcao)\n\tThisForm.mAtivaPagina1\n\tReturn 0\nEndIf\n\nDo Case\n\tCase InList(Thisform.pcEscolha, 'INSERIR', 'PROCURAR')\n\t\tThisform.Pagina.Dados.getCodigos.Setfocus\n\n\tCase (Thisform.pcEscolha = 'ALTERAR')\n\t\tThisform.Pagina.Dados.getDescrs.Setfocus\n\n\tCase InList(Thisform.pcEscolha, 'CONSULTAR', 'EXCLUIR')\n\t\tThisform.Pagina.Dados.Grupo_Salva.Salva.Setfocus\nEndCase\n\nSelect crSigCrRac\n\nThisForm.Pagina.Dados.getGrupos.Valid()\n* Fim ******************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Valid",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCRC",
+      "evento": "Click",
+      "linhas": 54,
+      "codigoOriginal": "If Inlist(ThisForm.Pagina.Lista.Grupo_op.Value, 1, 3)\n\tIf Empty(Thisform.Pagina.Dados.getCodigos.Value)\n\t\t=Messagebox('Código Inválido!!!', 0+64, '')\n\t\tThisform.Pagina.Dados.getCodigos.Setfocus\n\t\tReturn 0\n\tElse\n\t\tIf InList(ThisForm.pcEscolha, 'INSERIR')\n\t\t\tThisForm.poDataMgr.CursorQuery('SigCrRac', 'crBusca', 'Codigos', crSigCrRac.Codigos, 'Codigos')\n\t\t\tIf Not Eof('crBusca')\n\t\t\t\t=MessageBox('Código da Característica Já Cadastrado!!!', 0+64, '')\n\t\t\t\tThisform.Pagina.Dados.getDescrs.Setfocus\n\t\t\t\tRe... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery,SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCRC",
+      "evento": "Click",
+      "linhas": 6,
+      "codigoOriginal": "=DoDefault()\n\nIf ThisForm.plCancelar\n\tThisForm.mAtivaPagina1\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCRC.Pagina.Dados.getCodigos",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (ThisForm.pcEscolha = 'INSERIR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCRC.Pagina.Dados.getDescrs",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' ) )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCRC.Pagina.Dados.getGrupos",
+      "evento": "Valid",
+      "linhas": 2,
+      "codigoOriginal": "=fAcessoContab(Usuar, 'C', This.Value, This, This.Parent.getDGrupos)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCRC.Pagina.Dados.getDGrupos",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(This.Parent.getGrupos.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCRC.Pagina.Dados.getDGrupos",
+      "evento": "Valid",
+      "linhas": 2,
+      "codigoOriginal": "=fAcessoContab(Usuar, 'D', This.Value, This.Parent.getGrupos, This)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

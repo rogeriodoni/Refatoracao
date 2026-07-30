@@ -1,0 +1,18 @@
+﻿Everything is in order. FASE 6/8 est├í completa:
+
+**O que foi feito:**
+- **Edit 2** (linha 959): After `loc_oGridV.RecordSource = "crGrdItV"` ÔÇö re-assign `Column6.ControlSource = "crGrdItV.VMetItns"` (fix auto-bind que mapeava campo 6=fkChaves) + `BINDEVENT AfterRowColChange ÔåÆ GrdVendedoresAfterRowColChange`
+- **Edit 3** (linha 1041): `BINDEVENT(loc_oGridP, "AfterRowColChange", ...)` ÔåÆ `GrdProdutosAfterRowColChange`
+- **Edit 4** (linha 1128): `BINDEVENT(loc_oGridM, "AfterRowColChange", ...)` ÔåÆ `GrdMetasAfterRowColChange`
+- **Edit 5**: 12 novos m├®todos adicionados (linhas 1851ÔÇô2225):
+  - `GrdProdutosAfterRowColChange` ÔÇö despacha col1ÔåÆMercs, col2ÔåÆCGrus, col3ÔåÆSGrus, col4+col=1ÔåÆAutoAdd
+  - `AbrirLookupMercsProd` ÔÇö FormBuscaAuxiliar em SigCdGpr; limpa CGrus/SGrus se Mercs mudou
+  - `AbrirLookupCGrusProd` ÔÇö FormBuscaAuxiliar em SigCdGrp filtrado por Mercs; limpa SGrus
+  - `AbrirLookupSGrusProd` ÔÇö FormBuscaAuxiliar em SigCdPsg filtrado por CGrus
+  - `AutoAddLinhaGrdProd` ÔÇö scan independente de posi├º├úo; INSERT Tipos="PRO" se dados sem linha vazia
+  - `GrdVendedoresAfterRowColChange` ÔÇö col1ÔåÆCodVens, col2ÔåÆABS(VMetas), col3ÔåÆABS(SalBases), col4ÔåÆCodResps, col5/6+col=1ÔåÆAutoAdd
+  - `AbrirLookupCodVens` / `AbrirLookupCodResps` ÔÇö FormBuscaAuxiliar em SigCdCli filtrado por `Grupos IN (GrPadVens, GrPadRess)`
+  - `AutoAddLinhaGrdVend` ÔÇö INSERT Tipos="VEN"
+  - `GrdMetasAfterRowColChange` ÔÇö col2ÔåÆABS(FxaInis), col3ÔåÆValidarFxaFims, col4/5+col=1ÔåÆAutoAdd
+  - `ValidarFxaFims` ÔÇö alerta + REPLACE FxaFims=0 se Ôëñ FxaInis
+  - `AutoAddLinhaGrdMeta` ÔÇö renumera CodFaixas, calcula pr├│xima FxaInis=├║ltimo FxaFims, INSERT Tipos="MET"

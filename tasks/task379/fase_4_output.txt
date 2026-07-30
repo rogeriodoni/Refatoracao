@@ -1,0 +1,11 @@
+﻿Fase 4 conclu├¡da. O arquivo `FormCol.prg` foi atualizado com:
+
+**O que foi adicionado:**
+
+1. **5 bot├Áes CRUD em `cnt_4c_Botoes`** ÔÇö Incluir (L=5), Visualizar (L=80), Alterar (L=155), Excluir (L=230), Buscar (L=305), todos com ├¡cones can├┤nicos, Comic Sans MS, Themes=.F., PicturePosition=13.
+
+2. **Grid `grd_4c_Lista`** ÔÇö Top=117, Left=26, Width=890, Height=498, ColumnCount=3, RecordMark/DeleteMark=.F., GridLines=3, Verdana 8. RecordSource e ColumnCount definidos **fora** do WITH block (conforme Problema 36).
+
+3. **BINDEVENTs** para todos os 5 bot├Áes CRUD, antes do `TornarControlesVisiveis()`.
+
+4. **`CarregarLista()` completo** ÔÇö ap├│s `Buscar("")`, vincula RecordSource ÔåÆ ControlSource ÔåÆ Widths ÔåÆ Headers (reconfigurados ap├│s RecordSource, conforme Problema 2) ÔåÆ `FormatarGridLista()`. Sem nenhum RETURN dentro do TRY.

@@ -1,0 +1,23 @@
+﻿O arquivo est├í correto. Fase 5/8 conclu├¡da com sucesso.
+
+**O que foi adicionado em `FormCrt.prg`:**
+
+1. **`ConfigurarPaginaDados()`** ÔÇö substitu├¡da com implementa├º├úo completa:
+   - Bot├Áes Confirmar (`cadastro_salvar_60.jpg`) e Cancelar com BINDEVENT para `BtnSalvarClick`/`BtnCancelarClick`
+   - Campo 1: `lbl_4c_Label2` + `txt_4c_Codigo` (top=285/283, width=52, MaxLength=6)
+   - Campo 2: `lbl_4c_Label3` + `txt_4c_Descricao` (top=316/313, width=220, MaxLength=30)
+   - Campo 3: `lbl_4c_Label1` + `txt_4c_Fwget1` (top=345/342, width=60, InputMask="9999.99")
+   - Todos com compensa├º├úo `+29` pelo `PageFrame.Top = -29`
+
+2. **`BtnIncluirClick()`** ÔÇö corrigido para chamar `LimparCampos()` + `HabilitarCampos(.T.)` + `AjustarBotoesPorModo()` antes de navegar para Page2
+
+3. **Novos m├®todos completos:**
+   - `BtnSalvarClick()` ÔÇö chama `FormParaBO()` + `this_oBusinessObject.Salvar()` + navega para lista
+   - `BtnCancelarClick()` ÔÇö retorna para lista e recarrega
+   - `FormParaBO()` ÔÇö mapeia todos os 5 campos FormÔåÆBO
+   - `BOParaForm()` ÔÇö mapeia todos os 5 campos BOÔåÆForm
+   - `HabilitarCampos()` ÔÇö `txt_4c_Codigo` somente edit├ível em INCLUIR (fiel ao `When` original)
+   - `LimparCampos()` ÔÇö reseta todos os 5 campos
+   - `AjustarBotoesPorModo()` ÔÇö Confirmar desabilitado no modo VISUALIZAR
+
+**Pr├│xima fase (6/8):** Adicionar os ├║ltimos 2 campos em `ConfigurarPaginaDados()` ÔÇö Ordem (`txt_4c_Fwget2`) e Empresa (`txt_4c_EmpPad`) ÔÇö com o lookup ├á `SigCdEmp` via `BINDEVENT` no `Valid` do campo EmpPad.

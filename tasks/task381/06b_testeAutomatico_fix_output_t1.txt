@@ -1,0 +1,7 @@
+﻿As tr├¬s corre├º├Áes foram aplicadas:
+
+1. **`CarregarLista` (linhas 755-757 removidas)** ÔÇö guard `gb_4c_ValidandoUI` que fazia `RETURN .T.` sem criar cursor foi removido. O m├®todo agora sempre chama `Buscar("")`, que em modo sem conex├úo cria o `cursor_4c_Dados` stub.
+
+2. **`AlternarPagina` (linha 804)** ÔÇö removido `PROTECTED`. O TesteAutomatico chama este m├®todo diretamente de fora da classe no teste "ModoIncluir"; com `PROTECTED` o VFP9 retornava "Property not found".
+
+3. **`AjustarBotoesPorModo` (linha 1168)** ÔÇö removido `PROTECTED` pelo mesmo motivo, chamado externamente no teste "ModoVisualizar".

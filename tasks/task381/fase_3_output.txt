@@ -1,0 +1,19 @@
+﻿Todos os `RETURN` est├úo fora de `TRY/CATCH` ÔÇö regra #1 respeitada. Fase 3 conclu├¡da com sucesso.
+
+---
+
+**Fase 3/8 entregue** ÔÇö `C:\4c\projeto\app\forms\cadastros\FormCor.prg` criado com:
+
+| Componente | Detalhes |
+|---|---|
+| `DEFINE CLASS` | Height=600, Width=1000, Caption="Cadastro de Cores", WindowType=1, ControlBox=.F. |
+| `Init()` | Apenas `RETURN DODEFAULT()` ÔÇö sem duplicar InicializarForm |
+| `InicializarForm()` | Cria CorBO ÔåÆ ConfigurarPageFrame ÔåÆ ActivePage=1 ÔåÆ CarregarLista (guarda gb_4c_ValidandoUI) |
+| `ConfigurarPageFrame()` | Top=-29, Tabs=.F., 2 pages, Width=THIS.Width |
+| `ConfigurarPaginaLista()` | cnt_4c_Cabecalho (Top=31), lbl_4c_Sombra/Titulo (AutoSize=.F.), cnt_4c_Botoes (Left=542, Top=29), cnt_4c_Saida (can├┤nico: Left=917, Top=29) |
+| `ConfigurarPaginaDados()` | cnt_4c_BotoesAcao (Left=842, Top=33) |
+| `CarregarLista()` | Chama BO.Buscar() sem grid binding (grid vem na Fase 4) |
+| `TornarControlesVisiveis()` | Recursivo com suporte a PageFrames e Containers |
+| `Destroy()` | Libera BO + cursor_4c_Dados + DODEFAULT() |
+
+**Pr├│xima fase (4/8):** Grid `grd_4c_Lista` + bot├Áes CRUD em `cnt_4c_Botoes` + `cmd_4c_Encerrar` em `cnt_4c_Saida` + `cmd_4c_Confirmar`/`cmd_4c_Cancelar` em `cnt_4c_BotoesAcao`.

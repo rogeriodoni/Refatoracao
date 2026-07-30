@@ -1,0 +1,19 @@
+﻿O arquivo est├í correto. Fase 5/8 conclu├¡da com sucesso.
+
+**O que foi feito:**
+
+`ConfigurarPaginaDados()` foi expandida com a primeira metade dos campos da Page2:
+- `cnt_4c_BotoesAcao` corrigido (Left=817, Top=38 conforme original) com bot├Áes **Confirmar** (`cadastro_salvar_60.jpg`) e **Cancelar**
+- `lbl_4c_SayCodigo` + `txt_4c_Codigo` (Top=135/138, Left=293/246, Width=80, InputMask=XXXXXXXXXX)
+- `lbl_4c_SayDescricao` + `txt_4c_Descricao` (Top=160/163, Width=220, Height=23)
+- `lbl_4c_SayGrupo` + `txt_4c_Grupo` (Top=185/188, Width=80, com BINDEVENT F4+LostFocus para lookup SigCdGcr)
+
+**Novos m├®todos adicionados:**
+- `BtnSalvarClick` ÔÇö valida Codigo e Grupo, chama FormParaBO() e Salvar()
+- `BtnCancelarClick` ÔÇö retorna para lista via AlternarPagina(1)
+- `TeclaGrupo` / `ValidarGrupo` / `AbrirBuscaGrupo` ÔÇö lookup completo em SigCdGcr via FormBuscaAuxiliar
+- `BOParaForm` / `FormParaBO` ÔÇö binding bidirecional (campos desta fase)
+- `HabilitarCampos` ÔÇö Codigo desabilitado em ALTERAR/VISUALIZAR, demais campos conforme modo
+- `LimparCampos` ÔÇö limpa campos para INCLUIR
+
+**BtnIncluirClick, BtnVisualizarClick, BtnAlterarClick** atualizados para chamar `LimparCampos/BOParaForm/HabilitarCampos` antes de navegar para Page2.

@@ -1,0 +1,13 @@
+﻿Fase 4 conclu├¡da. O arquivo `FormCOC.prg` foi atualizado com:
+
+**O que foi adicionado:**
+
+- **`ConfigurarPaginaLista()`** ÔÇö 5 bot├Áes CRUD dentro de `cnt_4c_Botoes` (Incluir, Visualizar, Alterar, Excluir, Buscar) + `cmd_4c_Encerrar` no `cnt_4c_Saida` (padr├úo can├┤nico Left=917), todos com BINDEVENT e ├¡cones corretos. Grid `grd_4c_Lista` com ColumnCount=3, RecordSource/ColumnCount definidos fora do WITH (regra Problema 36).
+
+- **`CarregarLista()`** ÔÇö configura RecordSource ÔåÆ ColumnCount ÔåÆ ControlSources ÔåÆ Header1.Captions (na ordem correta p├│s auto-bind, regra Problema 48) usando `this_cFiltroAtual` para suportar busca filtrada.
+
+- **`AlternarPagina(par_nPagina)`** ÔÇö alterna entre pages, reseta modo para LISTA e recarrega ao voltar para Page1.
+
+- **6 handlers de bot├úo** (PUBLIC para BINDEVENT): Incluir (NovoRegistro), Visualizar/Alterar (CarregarPorCodigo), Excluir (confirma├º├úo + Excluir() + reload), Buscar (INPUTBOX + filtro via `this_cFiltroAtual`), Encerrar (Release).
+
+- **Propriedade `this_cFiltroAtual`** ÔÇö mant├®m o filtro entre chamadas de `CarregarLista()`, evitando que BtnBuscarClick perdesse o filtro ao chamar CarregarLista internamente.

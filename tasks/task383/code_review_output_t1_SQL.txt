@@ -1,0 +1,5 @@
+﻿Correto. Resumo das a├º├Áes:
+
+**RCLIS (corrigido)** ÔÇö `crfBO.prg:676-677` ÔÇö Removido `loc_cFiltroVal` e sua vari├ível local. O c├│digo original n├úo filtra vendedores por RCLIS/ICLIS no WHERE ÔÇö busca todos do grupo e usa SEEK no cursor depois. O filtro din├ómico inventado pela LLM gerava `AND a.Rclis LIKE '...'` ao buscar por nome.
+
+**COLUMNCOUNT (falso positivo)** ÔÇö Nenhuma corre├º├úo necess├íria. `loc_oGrid.ColumnCount = 3/5/6` s├úo atribui├º├Áes de propriedade do Grid VFP9, n├úo condi├º├Áes SQL WHERE. O checker de SQL confundiu o padr├úo `ColumnCount = N` com uma cl├íusula WHERE.

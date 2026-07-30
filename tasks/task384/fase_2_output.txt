@@ -1,0 +1,14 @@
+﻿O arquivo est├í correto e completo. A Fase 2/8 est├í conclu├¡da.
+
+**O que foi implementado em `crpBO.prg`:**
+
+| M├®todo | Descri├º├úo |
+|--------|-----------|
+| `ObterChavePrimaria()` | Retorna `this_cCodigos` para auditoria |
+| `CarregarDoCursor()` | Mapeia todos os 9 campos da tabela + `dgrus` (JOIN) |
+| `ValidarDados()` | Valida Codigos obrigat├│rio, Descrs obrigat├│rio, Codigos duplicado (INSERT), Ordem duplicada |
+| `Inserir()` | INSERT com todos os campos; gera `cidchaves` via `SYS(2015)+SYS(2015)` (substitui `fUniqueIds` do framework) |
+| `Atualizar()` | UPDATE de todos os campos exceto PK/ntipos/cidchaves; filtra por Codigos + nTipos |
+| `ExecutarExclusao()` | Para `nTipos=0` verifica depend├¬ncia em `sigprcar`; demais tipos excluem direto |
+| `Buscar()` | SELECT com JOIN condicional (SigCdGpr para nTipos=2, SigCdGrp para 0/1); suporte a cursor pr├®-existente (ZAP+APPEND) |
+| `CarregarPorCodigo()` | SELECT completo com JOIN condicional por `this_nTipos`; reseta `this_lNovoRegistro = .F.` |

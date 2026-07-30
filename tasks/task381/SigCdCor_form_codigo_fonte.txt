@@ -1,0 +1,608 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigCdCor.SCX
+* Data/Hora: 29/07/2026 22:00:53
+* Total de registros: 20
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDCOR
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGCDCOR.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGCDCOR.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGCDCOR.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say7
+  Parent: SIGCDCOR.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGCDCOR.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Getcods
+  Parent: SIGCDCOR.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Grupo
+  Parent: SIGCDCOR.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDiasEnts
+  Parent: SIGCDCOR.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Peso
+  Parent: SIGCDCOR.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Getvarias
+  Parent: SIGCDCOR.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Getdescs
+  Parent: SIGCDCOR.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_TpCor
+  Parent: SIGCDCOR.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say9
+  Parent: SIGCDCOR.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say5
+  Parent: SIGCDCOR.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say6
+  Parent: SIGCDCOR.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say8
+  Parent: SIGCDCOR.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCOR
+------------------------------------------------------------
+  DataSession = 2
+  Height = 600
+  Width = 1000
+  DoCreate = .T.
+  Caption = "Cadastro de Cores"
+  ForeColor = 0,0,0
+  Name = "SIGCDCOR"
+  Pagina.ErasePage = .T.
+  Pagina.Lista.cntSombra.lblSombra.Name = "lblSombra"
+  Pagina.Lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  Pagina.Lista.cntSombra.Top = 1
+  Pagina.Lista.cntSombra.Left = 0
+  Pagina.Lista.cntSombra.Width = 1008
+  Pagina.Lista.cntSombra.Height = 80
+  Pagina.Lista.cntSombra.Name = "cntSombra"
+  Pagina.Lista.Grade.FontName = "Tahoma"
+  Pagina.Lista.Grade.FontSize = 8
+  Pagina.Lista.Grade.Height = 470
+  Pagina.Lista.Grade.Left = 12
+  Pagina.Lista.Grade.RowHeight = 16
+  Pagina.Lista.Grade.Top = 121
+  Pagina.Lista.Grade.Width = 940
+  Pagina.Lista.Grade.ForeColor = 90,90,90
+  Pagina.Lista.Grade.Name = "Grade"
+  Pagina.Lista.Grupo_op.AutoSize = .F.
+  Pagina.Lista.Grupo_op.Inserir.Top = 5
+  Pagina.Lista.Grupo_op.Inserir.Left = 5
+  Pagina.Lista.Grupo_op.Inserir.Name = "Inserir"
+  Pagina.Lista.Grupo_op.Consultar.Top = 5
+  Pagina.Lista.Grupo_op.Consultar.Left = 81
+  Pagina.Lista.Grupo_op.Consultar.Name = "Consultar"
+  Pagina.Lista.Grupo_op.Alterar.Top = 5
+  Pagina.Lista.Grupo_op.Alterar.Left = 157
+  Pagina.Lista.Grupo_op.Alterar.Name = "Alterar"
+  Pagina.Lista.Grupo_op.Excluir.Top = 5
+  Pagina.Lista.Grupo_op.Excluir.Left = 233
+  Pagina.Lista.Grupo_op.Excluir.Name = "Excluir"
+  Pagina.Lista.Grupo_op.procurar.Top = 5
+  Pagina.Lista.Grupo_op.procurar.Left = 309
+  Pagina.Lista.Grupo_op.procurar.Name = "procurar"
+  Pagina.Lista.Grupo_op.Height = 85
+  Pagina.Lista.Grupo_op.Left = 538
+  Pagina.Lista.Grupo_op.Top = -1
+  Pagina.Lista.Grupo_op.Width = 389
+  Pagina.Lista.Grupo_op.Name = "Grupo_op"
+  Pagina.Lista.Grupo_Saida.SAIR.Top = 5
+  Pagina.Lista.Grupo_Saida.SAIR.Left = 5
+  Pagina.Lista.Grupo_Saida.SAIR.Name = "SAIR"
+  Pagina.Lista.Grupo_Saida.Left = 918
+  Pagina.Lista.Grupo_Saida.Top = -1
+  Pagina.Lista.Grupo_Saida.Name = "Grupo_Saida"
+  Pagina.Lista.cntFiltros.Name = "cntFiltros"
+  Pagina.Lista.Picture = ..\framework\imagens\new_background.jpg
+  Pagina.Lista.Name = "Lista"
+  Pagina.Dados.Grupo_Salva.AutoSize = .T.
+  Pagina.Dados.Grupo_Salva.Salva.Top = 5
+  Pagina.Dados.Grupo_Salva.Salva.Left = 5
+  Pagina.Dados.Grupo_Salva.Salva.Name = "Salva"
+  Pagina.Dados.Grupo_Salva.Cancelar.Top = 5
+  Pagina.Dados.Grupo_Salva.Cancelar.Left = 80
+  Pagina.Dados.Grupo_Salva.Cancelar.Name = "Cancelar"
+  Pagina.Dados.Grupo_Salva.Left = 819
+  Pagina.Dados.Grupo_Salva.Top = 9
+  Pagina.Dados.Grupo_Salva.TabIndex = 17
+  Pagina.Dados.Grupo_Salva.Name = "Grupo_Salva"
+  Pagina.Dados.Picture = ..\framework\imagens\new_background.jpg
+  Pagina.Dados.Name = "Dados"
+  Pagina.Width = 1003
+  Pagina.Name = "Pagina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCOR.Pagina.Dados.Say1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Código : "
+  Left = 338
+  Top = 131
+  TabIndex = 1
+  ForeColor = 90,90,90
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCOR.Pagina.Dados.Say2
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Descrição : "
+  Left = 325
+  Top = 158
+  TabIndex = 3
+  ForeColor = 90,90,90
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCOR.Pagina.Dados.Say3
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Variação de Preço : "
+  Left = 285
+  Top = 185
+  TabIndex = 5
+  ForeColor = 90,90,90
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCOR.Pagina.Dados.Say7
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Tipo de Cor : "
+  Left = 316
+  Top = 266
+  TabIndex = 11
+  ForeColor = 90,90,90
+  ZOrderSet = 4
+  Name = "Say7"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCOR.Pagina.Dados.Say4
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Grupo : "
+  Left = 342
+  Top = 212
+  TabIndex = 7
+  ForeColor = 90,90,90
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCOR.Pagina.Dados.Getcods
+------------------------------------------------------------
+  ControlSource = "CrSigCdCor.cods"
+  Height = 24
+  Left = 387
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 127
+  Width = 41
+  ZOrderSet = 6
+  plprocurar = .T.
+  Name = "Getcods"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCOR.Pagina.Dados.Get_Grupo
+------------------------------------------------------------
+  ControlSource = "CrSigCdCor.grupos"
+  Height = 24
+  InputMask = "!!!!!!!!!!"
+  Left = 387
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 8
+  Top = 208
+  Width = 80
+  ZOrderSet = 7
+  Name = "Get_Grupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCOR.Pagina.Dados.getDiasEnts
+------------------------------------------------------------
+  Alignment = 3
+  Value = 0
+  ControlSource = "CrSigCdCor.DiasEnts"
+  Height = 24
+  InputMask = "999"
+  Left = 386
+  MaxLength = 3
+  SpecialEffect = 1
+  TabIndex = 15
+  Top = 289
+  Width = 31
+  ZOrderSet = 8
+  Name = "getDiasEnts"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCOR.Pagina.Dados.Get_Peso
+------------------------------------------------------------
+  Alignment = 3
+  Value = 0
+  ControlSource = "CrSigCdCor.Pesos"
+  Height = 24
+  InputMask = "9999.99"
+  Left = 387
+  SpecialEffect = 1
+  TabIndex = 10
+  Top = 235
+  Width = 70
+  ZOrderSet = 8
+  Name = "Get_Peso"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCOR.Pagina.Dados.Getvarias
+------------------------------------------------------------
+  Alignment = 3
+  Value = 0
+  ControlSource = "CrSigCdCor.varias"
+  Height = 24
+  InputMask = "9999.99"
+  Left = 387
+  SpecialEffect = 1
+  TabIndex = 6
+  Top = 181
+  Width = 60
+  ZOrderSet = 8
+  Name = "Getvarias"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCOR.Pagina.Dados.Getdescs
+------------------------------------------------------------
+  ControlSource = "CrSigCdCor.descs"
+  Height = 24
+  Left = 387
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 154
+  Width = 290
+  ZOrderSet = 7
+  Name = "Getdescs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCOR.Pagina.Dados.Get_TpCor
+------------------------------------------------------------
+  Alignment = 3
+  Value = 
+  ControlSource = "CrSigCdCor.tpCors"
+  Format = ""
+  Left = 387
+  SpecialEffect = 1
+  TabIndex = 12
+  Top = 262
+  Width = 17
+  ZOrderSet = 9
+  Name = "Get_TpCor"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCOR.Pagina.Dados.Say9
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "(S/N)"
+  Left = 413
+  Top = 266
+  TabIndex = 13
+  ForeColor = 90,90,90
+  ZOrderSet = 6
+  Name = "Say9"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCOR.Pagina.Dados.Say5
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Variação de Peso : "
+  Left = 289
+  Top = 239
+  TabIndex = 9
+  ForeColor = 90,90,90
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCOR.Pagina.Dados.Say6
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Adicionar na Entrega :"
+  Left = 274
+  Top = 293
+  TabIndex = 14
+  ForeColor = 90,90,90
+  Name = "Say6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCOR.Pagina.Dados.Say8
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Dias"
+  Left = 422
+  Top = 293
+  TabIndex = 16
+  ForeColor = 90,90,90
+  Name = "Say8"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDCOR
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE msv_procurar
+------------------------------------------------------------
+PROCEDURE msv_procurar
+Local lcBusca
+
+If .Not.Empty(ThisForm.Pagina.Dados.Getcods.Value)
+	ThisForm.poDataMgr.LocateCursor('crSigCdCor','cods',ThisForm.Pagina.Dados.Getcods.Value)
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LPARAMETERS lcacesso
+
+With ThisForm
+	.poDatamgr = CreateObject('fSqlConector', THISFORM.NAME)
+	With .poDatamgr
+		.AddCursor('SigCdCor','cods','crSigCdCor','',ThisForm.pagina.lista.grade)
+		.pfSqlTabela(1).pColuna('cods','','','Código',75,.t.)
+		.pfSqlTabela(1).pColuna('descs','','','Descrição',301,.t.)
+		.pfSqlTabela(1).pColuna('varias','','','Variação Preço',100,.t.)
+		.pfSqlTabela(1).pColuna('Pesos','','','Variação Peso',100,.t.)
+	EndWith
+	= DoDefault()
+	.LockScreen = .f.
+EndWith
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Lista.Grupo_op.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Lista.Grupo_op.Click
+LParameters opcao
+
+If !dodefault( Opcao )
+	ThisForm.mAtivapagina1
+	Return
+Endif
+
+Do Case
+	Case Inlist( ThisForm.pcEscolha, 'INSERIR', 'PROCURAR' )
+		ThisForm.Pagina.Dados.GetCods.SetFocus
+	Case ThisForm.pcEscolha = 'ALTERAR'
+		ThisForm.Pagina.Dados.GetDescs.SetFocus
+	Case Inlist( ThisForm.pcEscolha, 'EXCLUIR', 'CONSULTAR' )
+		ThisForm.Pagina.Dados.Grupo_Salva.Salva.SetFocus
+Endcase
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+If ThisForm.pcEscolha = 'INSERIR'
+	If Empty( CrSigCdCor.Cods )
+		Messagebox( 'Código não pode ficar em branco!', 48, '' ) 
+		ThisForm.Pagina.Dados.GetCods.SetFocus
+		Return
+	Endif
+	If ThisForm.poDataMgr.ChkRegister('SigCdCor','cods',ThisForm.Pagina.Dados.Getcods.Value)
+		Messagebox( 'Código já Cadastrado!', 48, '' ) 
+		ThisForm.Pagina.Dados.GetCods.SetFocus
+		Return
+	Endif
+Endif
+
+If (ThisForm.pcEscolha = 'EXCLUIR')
+	lcQuery = [Select Count(*) As nNreg1s ] + ;
+			    [From SigPrPrr a Inner Join SigCdPro b On b.cPros = a.cPros] + ;
+			   [ Where a.CodCors = '] + ThisForm.Pagina.Dados.getCods.Value + [']
+
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigPrPrr') < 1)
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigPrPrr)')
+		Return 0
+	EndIf
+
+	If Nvl(crSigPrPrr.nNreg1s, 0) > 0
+		=MessageBox('Cor Sendo Utilizada Em Fichas Técnicas!!!', 16, '')
+		Return 0
+	EndIf
+EndIf
+
+=DoDefault()
+ThisForm.mAtivapagina1
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+=DoDefault()
+If ThisForm.plCancelar
+	ThisForm.mAtivapagina1
+Endif
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDCOR.Pagina.Dados.Getcods
+* Classe: fwget (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+local saida
+saida = .t.
+if inlist(thisform.Pagina.Lista.Grupo_op.value,2,3)
+	saida = .f.
+endif
+return saida
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDCOR.Pagina.Dados.Get_TpCor
+* Classe: fwget (Base: textbox)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Return Inlist(This.Value,"S","N"," ")
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 7
+================================================================================

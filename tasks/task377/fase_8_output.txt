@@ -1,0 +1,18 @@
+﻿A migra├º├úo da SIGCDCNQ est├í **completamente integrada**. Resumo do que foi verificado:
+
+**FormCNQ.prg** (`C:\4c\projeto\app\forms\cadastros\FormCNQ.prg` ÔÇö 1042 linhas):
+- Todos os m├®todos da Fase 8 j├í implementados:
+  - `CarregarLista()` com cursor ZAP+APPEND, headers p├│s-RecordSource
+  - `BtnBuscarClick()` com INPUTBOX + filtro din├ómico
+  - `BtnEncerrarClick()` ÔåÆ `THIS.Release()`
+  - `BtnSalvarClick()` com valida├º├úo fora do TRY + `Salvar()` sem par├ómetro
+  - `BtnCancelarClick()` ÔåÆ `AlternarPagina(1)`
+  - `FormParaBO()` / `BOParaForm()` mapeando os 3 campos (Conquilha, CodTam, Valor)
+  - `HabilitarCampos()` ÔÇö Conquilha/CodTam s├│ edit├íveis no modo INCLUIR
+  - `LimparCampos()` / `AjustarBotoesPorModo()`
+
+**Integra├º├úo**:
+- `menu.prg`: `DEFINE BAR 56` "Conquilhas" + `ON SELECTION BAR 56 DO AbrirFormCNQ` + procedimento `AbrirFormCNQ()` com padr├úo can├┤nico (VARTYPE, Show() sem par├ómetro, sem Release())
+- `config.prg`: carregamento autom├ítico via `ADIR(*BO.prg)` e `ADIR(cadastros\Form*.prg)` ÔÇö nenhuma entrada manual necess├íria
+
+A migra├º├úo est├í 100% completa e funcional. O formul├írio "Conquilhas" est├í acess├¡vel via menu Cadastros ÔåÆ Conquilhas.

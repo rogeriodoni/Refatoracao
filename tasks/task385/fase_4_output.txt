@@ -1,0 +1,7 @@
+﻿Fase 4 conclu├¡da. O arquivo `FormCrt.prg` foi atualizado com:
+
+**`ConfigurarPaginaLista()`** ÔÇö 5 bot├Áes CRUD populados em `cnt_4c_Botoes` (Incluir, Visualizar, Alterar, Excluir, Buscar), `cmd_4c_Encerrar` em `cnt_4c_Saida`, `cmd_4c_Justifica` (posi├º├úo original 604/111 com compensa├º├úo +29), e `grd_4c_Lista` com 3 colunas (Cods/Descs/Fators) e `ColumnCount` definido fora do WITH. Todos com BINDEVENT vinculado.
+
+**`CarregarLista()`** ÔÇö completo: chama `Buscar("")`, seta `RecordSource` fora de WITH, define `ControlSource` e reconfigura `Header1.Caption` imediatamente ap├│s (evita o bug de reset de cabe├ºalhos ao mudar RecordSource).
+
+**7 handlers** adicionados (todos PUBLIC para BINDEVENT funcionar): `BtnIncluirClick`, `BtnVisualizarClick`, `BtnAlterarClick`, `BtnExcluirClick`, `BtnBuscarClick`, `BtnEncerrarClick`, `BtnJustificaClick` ÔÇö com l├│gica real, TRY/CATCH com RETURN apenas fora do bloco, e CHR() para acentos.

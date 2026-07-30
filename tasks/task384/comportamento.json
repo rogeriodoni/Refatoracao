@@ -1,0 +1,211 @@
+{
+  "resumo": {
+    "totalMetodos": 11,
+    "metodosComSQL": 5,
+    "metodosComValidacao": 6,
+    "totalQueries": 2,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fUniqueIds", "fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDCRP",
+      "evento": "Procedure",
+      "linhas": 3,
+      "codigoOriginal": "Select crSigCrRaP\nLocate for Codigos >= ThisForm.Pagina.Dados.GetCodigos.Value\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCRP",
+      "evento": "Init",
+      "linhas": 49,
+      "codigoOriginal": "Lparameters pcTipo\n\n** Tipo ( = 0 - Carac Produtos, = 1 - Carac Contas, = 2 - Movimentações ) para manter compatibilidade\nThisForm.pnTipo = Iif(Type([pcTipo])<>[C],0,Iif(pcTipo == 'C',1,2))\n\nDo case\nCase( ThisForm.pnTipo = 1 )\n\tThisForm.Caption = [Características de Contas]\n\tThisForm.Name    = [SIGCDCRPC]\n\nCase( ThisForm.pnTipo = 2 )\n\tThisForm.Caption = [Características de Movimentações]\n\tThisForm.Name    = [SIGCDCRPO]\n\t\nOtherWise\n\tThisForm.Caption = [Características de Produtos]\n\tThisForm.Name ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "pnTipo = Iif",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDCRP",
+      "evento": "Click",
+      "linhas": 22,
+      "codigoOriginal": "Lparameters Opcao\n\nIf Not DoDefault(Opcao)\n\tThisForm.mAtivaPagina1\n\tReturn 0\nEndIf\n\nReplace Dgrus With Nvl(Dgrus,'') in crSigCrRaP\n\nDo Case\n\tCase InList(Thisform.pcEscolha, 'INSERIR', 'PROCURAR')\n\t\tThisform.Pagina.Dados.getCodigos.Setfocus\n\n\tCase (Thisform.pcEscolha = 'ALTERAR')\n\t\tThisform.Pagina.Dados.getDescrs.Setfocus\n\n\tCase InList(Thisform.pcEscolha, 'CONSULTAR', 'EXCLUIR')\n\t\tThisform.Pagina.Dados.Grupo_Salva.Salva.Setfocus\nEndCase\n\nSelect crSigCrRaP\n* Fim ***********************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCRP",
+      "evento": "Click",
+      "linhas": 77,
+      "codigoOriginal": "If Inlist(Thisform.pcEscolha, [INSERIR], [ALTERAR])\n\n\tIf Empty(Thisform.Pagina.Dados.getCodigos.Value)\n\t\t=Messagebox('Código Inválido!!!', 0+64, '')\n\t\tThisform.Pagina.Dados.getCodigos.SetFocus\n\t\tReturn 0\n\tElse\n\t\tIf (Thisform.Pagina.Lista.Grupo_op.Value = 1)\n\t\t\tlcQuery = [Select * From SigCrRaP ] + ;\n\t\t\t\t[Where Codigos = '] + Thisform.Pagina.Dados.getCodigos.Value + [' ] + ;\n\t\t\t\t[And nTipos = ]+Alltrim(Str(Thisform.pnTipo))\n\t\t\tIf (Thisform.poDataMgr.SqlExecute(lcQuery, 'crBusca') < 1)\n\t\t\t\t=Messag... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "get_ordem",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCRP",
+      "evento": "Click",
+      "linhas": 6,
+      "codigoOriginal": "=DoDefault()\n\nIf ThisForm.plCancelar\n\tThisForm.mAtivaPagina1\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCRP.Pagina.Dados.Get_Ordem",
+      "evento": "Valid",
+      "linhas": 13,
+      "codigoOriginal": "If This.Value > 0\n\tlcSQl = [Select Ordens From SigCrRap Where Ordens = ]+Str(This.Value)+[ And Codigos <> ']+ThisForm.pagina.dados.getCodigos.Value+[' And nTipos = ]+Alltrim(Str(Thisform.pnTipo))\n\tIf ThisForm.Podatamgr.Sqlexecute(lcSql,'TmpCarap') < 1\n\t\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigClCrc)')\n\t\tReturn 0\n\tEndIf\n\tIf Reccount('TmpCarap') > 0\n\t\t=MessageBox('Ordem já cadastrada!!!',0+32,'')\n\t\tReturn 0\n\tEndif\nEndIf\nReturn .t.\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Sqlexecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCRP.Pagina.Dados.getCodigos",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist(ThisForm.pcEscolha, [INSERIR], [PROCURAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCRP.Pagina.Dados.get_ds_grupo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Inlist(ThisForm.pcEscolha, [INSERIR], [ALTERAR]) And Empty(This.Parent.Get_Cd_Grupo.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Cd_Grupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCRP.Pagina.Dados.get_ds_grupo",
+      "evento": "Valid",
+      "linhas": 33,
+      "codigoOriginal": "If !Empty(This.Value)\n\tIf ThisForm.pnTipo=2  \n\t\tm.loLista = CreateObject('fwbuscaext',ThisForm.poDataMgr.pnIdConn,'SigCdGpr','CrGrupos','Descs',This.Value,'Gde.Grupo',.T.)\n\t\tIf !(m.loLista.plAchouRegistro)\n\t\t\tm.loLista.mAddColuna('Descs','','Descrição')\n\t\t\tm.loLista.mAddColuna('Codigos','XXXXXX','Código')\n\t\t\tm.loLista.Show()\n\t\tEndIf\n\t\tIf LastKey() <> 27 And Used('CrGrupos')\n\t\t\tThis.Value                     = Evaluate('CrGrupos.Descs')\n\t\t\tThis.Parent.Get_Cd_Grupo.Value = Evaluate('CrGrupos.Codig... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Cd_Grupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCRP.Pagina.Dados.get_cd_grupo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist(ThisForm.pcEscolha, [INSERIR], [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCRP.Pagina.Dados.get_cd_grupo",
+      "evento": "Valid",
+      "linhas": 36,
+      "codigoOriginal": "If !Empty(This.Value)\n\t\n\tIf ThisForm.pnTipo=2  &&Movimentações tem que ser grande grupo\n\t\tm.loLista = CreateObject('fwbuscaext',ThisForm.poDataMgr.pnIdConn,'SigCdGpr','CrGrupos','Codigos',This.Value,'Gde.Grupo',.T.)\n\t\tIf !(m.loLista.plAchouRegistro)\n\t\t\tm.loLista.mAddColuna('Codigos','XXXXXX','Código')\n\t\t\tm.loLista.mAddColuna('Descs','','Descrição')\n\t\t\tm.loLista.Show()\n\t\tEndIf\n\t\tIf LastKey() <> 27 And Used('CrGrupos')\n\t\t\tThis.Value                     = Evaluate('CrGrupos.Codigos')\n\t\t\tThis.Parent... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Ds_Grupo",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDCRP.Click",
+      "queryOriginal": "\t\t\tlcQuery = [Select * From SigCrRaP ] + ; \t\t\t\t[Where Codigos = '] + Thisform.Pagina.Dados.getCodigos.Value + [' ] + ; \t\t\t\t[And nTipos = ]+Alltrim(Str(Thisform.pnTipo)) \t\t\tIf (Thisform.poDataMgr.SqlExecute(lcQuery, 'crBusca') < 1)",
+      "tabelas": "SigCrRaP",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDCRP.Pagina.Dados.Get_Ordem.Valid",
+      "queryOriginal": "\tlcSQl = [Select Ordens From SigCrRap Where Ordens = ]+Str(This.Value)+[ And Codigos <> ']+ThisForm.pagina.dados.getCodigos.Value+[' And nTipos = ]+Alltrim(Str(Thisform.pnTipo)) \tIf ThisForm.Podatamgr.Sqlexecute(lcSql,'TmpCarap') < 1",
+      "tabelas": "SigCrRap",
+      "colunas": "Ordens,Value+[,Codigos,nTipos,pnTipo,SqlexecutelcSql,TmpCarap",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCrRaP"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

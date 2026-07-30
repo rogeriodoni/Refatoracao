@@ -1,0 +1,17 @@
+﻿**Fase 1/8 conclu├¡da.** `C:\4c\projeto\app\classes\ColBO.prg` criado com:
+
+- **9 propriedades** extra├¡das dos `ControlSource` do SCX original:
+  - `this_cColecoes` (PK, colecoes C10)
+  - `this_cDescs` (descs C40)
+  - `this_cCodcols` (codcols C1 ÔÇö confirmado pelo `Get1.MaxLength=1`)
+  - `this_cUsuars` (Usuars ÔÇö lookup em SigCdUsu)
+  - `this_tDtIncs` (DtIncs ÔÇö Datetime, confirmado pelo `Replace DtIncs With Datetime()`)
+  - `this_cAgrupas` (agrupas C10)
+  - `this_nConprods` (conprods ÔÇö OptionGroup 1=Sim/2=N├úo)
+  - `this_nAltProds` (AltProds ÔÇö OptionGroup 1=Sim/2=N├úo)
+  - `this_nRepoauts` (repoauts ÔÇö legado, `Visible=.F.`, "sem uso")
+
+- **`Init()`** configurando `this_cTabela = "SigCdCol"` e `this_cCampoChave = "colecoes"` com TRY/CATCH can├┤nico (RETURN fora do TRY)
+- **`ObterChavePrimaria()`** para auditoria
+
+Pr├│xima fase (2/8): completar o BO com `CarregarDoCursor()`, `Buscar()`, `CarregarPorCodigo()`, `Inserir()`, `Atualizar()` e `ExecutarExclusao()`.

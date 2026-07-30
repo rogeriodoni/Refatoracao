@@ -1,0 +1,16 @@
+﻿O arquivo est├í completo e correto. A Fase 2/8 est├í conclu├¡da.
+
+**CRCBO.prg ÔÇö Fase 2/8 completa.** Os seguintes m├®todos foram adicionados ao BO existente:
+
+| M├®todo | Tipo | Fun├º├úo |
+|--------|------|--------|
+| `CarregarDoCursor()` | PROTECTED | Mapeia todas as 14 colunas de SigCrRac |
+| `ValidarDados()` | PROTECTED | Valida Codigos/Descrs obrigat├│rios + duplicidade por c├│digo (INSERT) e por descri├º├úo (INSERT+UPDATE) |
+| `Inserir()` | PROTECTED | INSERT com todos os campos, RegistrarAuditoria("INSERT") |
+| `Atualizar()` | PROTECTED | UPDATE de todos os campos exceto PK, RegistrarAuditoria("UPDATE") |
+| `ExecutarExclusao()` | PROTECTED | Verifica SigClCrc.Caracteris antes de DELETE, RegistrarAuditoria("DELETE") |
+| `Buscar()` | PUBLIC | SELECT grupos/codigos/descrs para o grid (padr├úo ZAP+APPEND para preservar colunas) |
+| `CarregarPorCodigo()` | PUBLIC | SELECT completo por PK, reseta `this_lNovoRegistro = .F.` |
+| `BuscarDescricaoGrupo()` | PUBLIC | Substitui `fAcessoContab(Usuar,'C',...)` ÔÇö busca descrs em SigCdGcr pelo c├│digo |
+
+Pontos cr├¡ticos aplicados: RETURN apenas fora de TRY/CATCH via `loc_lSucesso`, campos datetime com guard `IIF(EMPTY(...), "NULL", ...)`, SELECT correto no CarregarDoCursor, verifica├º├úo de depend├¬ncia em SigClCrc via Descrs (como o original faz: `Where Caracteris = ThisForm.Pagina.Dados.GetDescrs.Value`).

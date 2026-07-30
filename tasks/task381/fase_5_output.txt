@@ -1,0 +1,21 @@
+﻿Arquivo completo e correto. Fase 5/8 conclu├¡da com sucesso.
+
+**O que foi adicionado em `FormCor.prg`:**
+
+**`ConfigurarPaginaDados()` atualizada** (linhas 362ÔÇô590):
+- Bot├Áes `cmd_4c_Confirmar` e `cmd_4c_Cancelar` dentro de `cnt_4c_BotoesAcao`, com BINDEVENT para `BtnSalvarClick`/`BtnCancelarClick`
+- Campos da 1┬¬ metade (com compensa├º├úo PageFrame +29):
+  - Campo 1: `lbl_4c_Codigo` + `txt_4c_Codigo` (top=160/156, cods, MaxLength=20)
+  - Campo 2: `lbl_4c_Descricao` + `txt_4c_Descricao` (top=187/183, descs, MaxLength=40)
+  - Campo 3: `lbl_4c_VariacaoPreco` + `txt_4c_VariacaoPreco` (top=214/210, varias, InputMask num├®rico)
+  - Campo 4: `lbl_4c_Grupo` + `txt_4c_Grupo` (top=241/237, grupos, MaxLength=20)
+
+**Novos m├®todos adicionados** (linhas 863ÔÇô961):
+- `BtnSalvarClick()` ÔÇö chama `FormParaBO()` + `Salvar()` + navega para lista
+- `BtnCancelarClick()` ÔÇö retorna para lista + recarrega
+- `FormParaBO()` ÔÇö transfere 4 campos do form para o BO
+- `BOParaForm()` ÔÇö transfere 4 campos do BO para o form
+- `HabilitarCampos(par_lHabilitar)` ÔÇö habilita/desabilita com `PEMSTATUS` guard; c├│digo readonly no Alterar/Visualizar
+- `LimparCampos()` ÔÇö zera campos com `PEMSTATUS` guard para robustez
+
+**Fase 6** adicionar├í os campos restantes: `Pesos`, `tpCors` (S/N), `DiasEnts` + lookups.

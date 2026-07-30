@@ -1,0 +1,9 @@
+﻿Todas as 4 corre├º├Áes aplicadas com sucesso:
+
+1. **CarregarLista** ÔÇö `Buscar("")` agora ├® chamado mesmo com `gb_4c_ValidandoUI=.T.`, criando `cursor_4c_Dados`; s├│ o bind do grid ├® pulado no modo valida├º├úo.
+
+2. **AlternarPagina** (linha 696) ÔÇö removido `PROTECTED`, agora PUBLIC; o harness de teste pode cham├í-lo diretamente.
+
+3. **AjustarBotoesPorModo** (linha 945) ÔÇö removido `PROTECTED`, agora PUBLIC; mesmo motivo.
+
+4. **BOParaForm** (linha 879) ÔÇö corrigido bug sint├ítico `.this_nChkobrig .Value = ...` para `IIF(THIS.this_oBusinessObject.this_nChkobrig = 1, 1, 0)`.

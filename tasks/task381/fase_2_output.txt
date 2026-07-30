@@ -1,0 +1,12 @@
+﻿CorBO.prg completo com todos os m├®todos CRUD implementados. Resumo do que foi adicionado:
+
+- **`Init()`** ÔÇö atualizado com TRY/CATCH (padr├úo ColBO)
+- **`ObterChavePrimaria()`** ÔÇö retorna `this_cCodigo` para auditoria
+- **`CarregarDoCursor()`** ÔÇö `SELECT (par_cAliasCursor)` antes de acessar campos; mapeia todos os 7 campos (cods, descs, varias, grupos, Pesos, tpCors, DiasEnts)
+- **`ValidarDados()`** ÔÇö valida c├│digo n├úo vazio, verifica duplicata em INSERT, valida tipo cor (S/N)
+- **`VerificarCodigoExistente()`** ÔÇö COUNT(*) no banco para checagem de PK duplicada
+- **`Inserir()`** ÔÇö INSERT com TEXT/TEXTMERGE + `RegistrarAuditoria("INSERT")`
+- **`Atualizar()`** ÔÇö UPDATE com TEXT/TEXTMERGE + `RegistrarAuditoria("UPDATE")`
+- **`ExecutarExclusao()`** ÔÇö verifica uso em `SigPrPrr JOIN SigCdPro WHERE CodCors` (exato do legado); se em uso mostra "Cor Sendo Utilizada Em Fichas T├®cnicas!!!"; sen├úo DELETE + auditoria
+- **`Buscar()`** ÔÇö SELECT cods/descs/varias/Pesos (4 colunas do grid do legado); suporte a cursor_4c_Dados pr├®-existente via ZAP+APPEND
+- **`CarregarPorCodigo()`** ÔÇö SELECT completo (7 campos) + `this_lNovoRegistro = .F.` ap├│s carregar

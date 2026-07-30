@@ -1,0 +1,10 @@
+﻿O arquivo est├í completo e correto. Fase 4 conclu├¡da com sucesso.
+
+**O que foi adicionado em `Formcrp.prg`:**
+
+- **5 bot├Áes CRUD** em `cnt_4c_Botoes` (Incluir, Visualizar, Alterar, Excluir, Buscar) com ├¡cones, layout e BINDEVENTs corretos
+- **Grid `grd_4c_Dados`** com 5 colunas: `ColumnCount=5` fora do WITH (Problema 36), `RecordSource` s├│ em runtime via `CarregarLista()` (Problema 48)
+- **`CarregarLista()`** completo: chama `Buscar("")`, vincula RecordSource ÔåÆ ControlSource ÔåÆ Headers (nessa ordem obrigat├│ria, Problemas 32/48)
+- **`AlternarPagina()`**: navega entre p├íginas, recarrega lista ao voltar para Page1
+- **Handlers CRUD**: `BtnIncluirClick`, `BtnVisualizarClick`, `BtnAlterarClick`, `BtnExcluirClick`, `BtnBuscarClick`
+- **Helpers**: `BOParaForm()`, `LimparCampos()`, `HabilitarCampos()`, `AjustarBotoesPorModo()`, `FormatarGridLista()` ÔÇö todos com `PEMSTATUS` guards, seguros mesmo com Page2 sem campos ainda

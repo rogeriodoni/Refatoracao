@@ -1,0 +1,16 @@
+﻿O arquivo foi criado corretamente. 
+
+**Fase 3 entregue:** `C:\4c\projeto\app\forms\cadastros\Formcrp.prg`
+
+**O que foi criado:**
+- `DEFINE CLASS Formcrp AS FormBase` com todas as propriedades visuais (Height=600, Width=1000) e de estado (`this_oBusinessObject`, `this_cModoAtual`, `this_nTipos=0`)
+- `Init(par_nTipo)` ÔÇö captura o tipo (0=Produtos, 1=Contas, 2=Movimenta├º├Áes) **antes** do `DODEFAULT()`, ajustando o Caption com CHR() correto
+- `InicializarForm()` ÔÇö cria o `crpBO`, propaga `this_nTipos` para o BO, chama `ConfigurarPageFrame()`, aplica Caption nos labels, guarda `gb_4c_ValidandoUI`
+- `ConfigurarPageFrame()` ÔÇö PageFrame com `Top=-29`, `Tabs=.F.`, 2 pages com imagem de fundo
+- `ConfigurarPaginaLista()` ÔÇö `cnt_4c_Cabecalho` (com `lbl_4c_Sombra`/`lbl_4c_Titulo`), `cnt_4c_Botoes` (vazio, Fase 4), `cnt_4c_Saida` com `cmd_4c_Encerrar` can├┤nico (Left=917, Width=75)
+- `ConfigurarPaginaDados()` ÔÇö `cnt_4c_BotoesAcao` (vazio, Fase 4)
+- `CarregarLista()` ÔÇö guarda `gb_4c_ValidandoUI`, chama `Buscar("")` para preparar o cursor
+- `TornarControlesVisiveis()` ÔÇö implementa├º├úo completa com recurs├úo em Pages e Controls
+- `BtnEncerrarClick()` e `Destroy()` ÔÇö limpeza correta
+
+**Fase 4** adicionar├í os bot├Áes CRUD em `cnt_4c_Botoes`, Salvar/Cancelar em `cnt_4c_BotoesAcao`, e o grid na Page1.

@@ -1,0 +1,16 @@
+﻿O arquivo est├í correto. Fase 4 conclu├¡da com sucesso.
+
+**O que foi adicionado em `Formcrf.prg`:**
+
+**`ConfigurarPaginaLista()` agora cont├®m:**
+- `cnt_4c_Botoes` com 5 bot├Áes CRUD: Incluir (Left=5), Visualizar (Left=80), Alterar (Left=155), Excluir (Left=230), Buscar (Left=305) ÔÇö todos com ├¡cones, Comic Sans MS, PicturePosition=13
+- `cnt_4c_Saida` com `cmd_4c_Encerrar` ÔÇö padr├úo can├┤nico Left=917, Width=90 (CLAUDE.md regra #10)
+- `cnt_4c_BotoesEspeciais` com `cmd_4c_Espelho`, `cmd_4c_FecharContagem`, `cmd_4c_AbrirContagem` ÔÇö posi├º├Áes calculadas do legado (Top=82+29=111)
+- `grd_4c_Lista` ÔÇö Top=162, Width=913, Height=400, Verdana 8, GridLines=3, RecordMark/DeleteMark=.F.
+- 9 BINDEVENTs conectando todos os bot├Áes aos handlers (implementados nas fases 5-8)
+
+**`CarregarLista()` agora:**
+- Chama `Buscar("")` no BO
+- Define `loc_oGrid.RecordSource` e `loc_oGrid.ColumnCount` **fora do WITH** (Problema 36)
+- Reconfigura todos os 5 ColumnN.ControlSource + Width + Header1.Caption ap├│s cada carga (Problema 32)
+- Chama `FormatarGridLista()` ao final

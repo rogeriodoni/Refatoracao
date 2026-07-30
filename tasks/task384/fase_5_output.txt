@@ -1,0 +1,18 @@
+﻿O arquivo est├í correto. Fase 5 conclu├¡da com sucesso.
+
+**O que foi adicionado em `Formcrp.prg`:**
+
+- **`ConfigurarPaginaDados()`** expandido com:
+  - Bot├Áes `cmd_4c_Confirmar` e `cmd_4c_Cancelar` dentro de `cnt_4c_BotoesAcao` (com ├¡cones, BINDEVENT para `BtnSalvarClick`/`BtnCancelarClick`)
+  - `lbl_4c_Codigo` + `txt_4c_Codigos` (top=221/217, left=339/383, maxlength=20)
+  - `lbl_4c_Descrs` + `txt_4c_Descrs` (top=247/243, left=326/383, width=290, maxlength=40)
+  - `lbl_4c_Ordem` + `txt_4c_Ordens` (top=221/217, left=573/619, width=54)
+  - Todos com compensa├º├úo +29 do PageFrame
+
+- **`BtnSalvarClick()`** ÔÇö modo BUSCAR filtra a lista; modos INCLUIR/ALTERAR validam, chamam `FormParaBO()` e `Salvar()`
+
+- **`BtnCancelarClick()`** ÔÇö volta para lista e recarrega
+
+- **`FormParaBO()`** ÔÇö transfere campos ÔåÆ BO (inverso do `BOParaForm()` j├í existente)
+
+Fase 6 adicionar├í os campos restantes (Grupo c├│digo/descri├º├úo e CheckBox Obrigat├│rio) na segunda metade de `ConfigurarPaginaDados()`.

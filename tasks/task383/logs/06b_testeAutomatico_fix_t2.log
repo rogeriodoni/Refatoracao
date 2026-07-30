@@ -1,0 +1,25 @@
+[2026-07-30 01:31:31] [INFO] === CLAUDE CLI INVOKER ===
+[2026-07-30 01:31:31] [INFO] Prompt File: C:\4c\tasks\task383\runtime_fix_prompt_06b_testeAutomatico_t2.md
+[2026-07-30 01:31:31] [INFO] Output File: C:\4c\tasks\task383\06b_testeAutomatico_fix_output_t2.txt
+[2026-07-30 01:31:31] [INFO] Model: sonnet
+[2026-07-30 01:31:31] [INFO] Timeout: 3600 segundos
+[2026-07-30 01:31:31] [INFO] Max Output Tokens: 128000
+[2026-07-30 01:31:31] [INFO] Context Files: 0 arquivo(s)
+[2026-07-30 01:31:31] [INFO] Invocando Claude CLI...
+[2026-07-30 01:31:31] [INFO] Prompt carregado: 113329 caracteres
+[2026-07-30 01:31:31] [INFO] Executando: claude --model sonnet --dangerously-skip-permissions --add-dir C:\4c
+[2026-07-30 01:31:31] [INFO] Tamanho total do prompt: 113329 caracteres
+[2026-07-30 01:31:31] [INFO] Invocando Claude CLI (tentativa 1/7)...
+[2026-07-30 01:34:58] [INFO] Claude CLI finalizado em 207.394728 segundos
+[2026-07-30 01:34:58] [INFO] Exit Code: 0
+[2026-07-30 01:34:58] [INFO] Output salvo em: C:\4c\tasks\task383\06b_testeAutomatico_fix_output_t2.txt
+[2026-07-30 01:34:58] [INFO] Output size: 794 bytes
+[2026-07-30 01:34:58] [INFO] SUCESSO: Claude CLI executado com sucesso
+[2026-07-30 01:34:58] [INFO] Preview do output:
+[2026-07-30 01:34:58] [INFO] Todos os 5 fixes foram aplicados corretamente. Resumo do que foi corrigido:
+
+| Erro | Causa | Fix |
+|------|-------|-----|
+| `CarregarLista`: cursor n+úo criado | Guard de UI retornava sem chamar `Buscar` | Chama `this_oBusinessObject.Buscar("")` antes de retornar (BO j+í cria cursor vazio sem conex+úo) |
+| `ModoIncluir`: Property ALTERNARPAGINA | `AlternarPagina` era PROTECTED, teste chama externamente | Removido `PROTECTED` |
+| `ModoVisualizar`: Property AJUSTARBOTOESPORMODO | `AjustarBo

@@ -1,0 +1,6 @@
+﻿Corre├º├úo aplicada. Resumo das decis├Áes:
+
+- **Column3 ControlSource**: `cursor_4c_Dados.Opers` ÔåÆ `cursor_4c_Dados.Grupos` ÔÇö o original SCX mostrava `crSigOpOco.grupos` na 3┬¬ coluna do grid de lista; `Grupos` j├í est├í no SELECT do BO (`SELECT Codigos, Descrs, Grupos, ...`).
+- **Column3 Caption**: `"Opera" + CHR(231) + CHR(227) + "o"` ÔåÆ `"Grupo"` ÔÇö adequado ao campo exibido.
+- **ICLIS WHERE**: mantido ÔÇö `Iclis` ├® a PK de SigCdCli e o `WHERE Iclis = ...` ├® valida├º├úo FK leg├¡tima para os campos Contas/DContas; remov├¬-lo quebraria os lookups de Conta e DConta.
+- **Codigos/Descrs no GRID-SQL**: falso positivo ÔÇö ambos est├úo no `SELECT Codigos, Descrs, Grupos, ... FROM SigOpOco INTO cursor_4c_Dados` no COCBO.prg:Buscar.
