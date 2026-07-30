@@ -1,0 +1,17 @@
+﻿O arquivo est├í completo e correto. A Fase 2 foi conclu├¡da com sucesso.
+
+**ColBO.prg** foi completado com os seguintes m├®todos CRUD:
+
+| M├®todo | Tipo | O que faz |
+|--------|------|-----------|
+| `Init()` | PROCEDURE | Define `this_cTabela="SigCdCol"` e `this_cCampoChave="colecoes"` |
+| `CarregarDoCursor()` | PROTECTED | Usa `SELECT (par_cAliasCursor)` + mapeia todas as 9 colunas do schema |
+| `ValidarDados()` | PROTECTED | Valida colecoes e descs obrigat├│rios |
+| `Inserir()` | PROTECTED | INSERT com todas as colunas, define `usuars=gc_4c_UsuarioLogado` e `dtincs=GETDATE()` automaticamente |
+| `Atualizar()` | PROTECTED | UPDATE de todos os campos exceto PK e dtincs/usuars |
+| `ExecutarExclusao()` | PROTECTED | Verifica refer├¬ncias em `SigCdPro.Colecoes` antes de excluir (l├│gica do legado preservada) |
+| `Buscar()` | PUBLIC | SELECT colecoes/descs/codcols com padr├úo ZAP+APPEND para preservar colunas do Grid |
+| `CarregarPorCodigo()` | PUBLIC | SELECT completo por PK + `this_lNovoRegistro=.F.` |
+| `VerificarCodigoColetor()` | PUBLIC | Checa unicidade do codcols (para Form usar na valida├º├úo) |
+| `VerificarColecaoExistente()` | PUBLIC | Checa duplicidade do colecoes no INSERT |
+| `ObterChavePrimaria()` | FUNCTION | Retorna `this_cColecoes` para auditoria |

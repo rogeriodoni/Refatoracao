@@ -1,0 +1,821 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigCdCol.SCX
+* Data/Hora: 29/07/2026 19:39:40
+* Total de registros: 22
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDCOL
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Optiongroup1
+  Parent: SIGCDCOL.Pagina.Dados
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: getUsuars
+  Parent: SIGCDCOL.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say8
+  Parent: SIGCDCOL.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say7
+  Parent: SIGCDCOL.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get1
+  Parent: SIGCDCOL.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDtInicial
+  Parent: SIGCDCOL.Pagina.Dados
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGCDCOL.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say6
+  Parent: SIGCDCOL.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say5
+  Parent: SIGCDCOL.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGCDCOL.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGCDCOL.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say9
+  Parent: SIGCDCOL.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGCDCOL.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: optAltProds
+  Parent: SIGCDCOL.Pagina.Dados
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: getAgrupa
+  Parent: SIGCDCOL.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getColecoes
+  Parent: SIGCDCOL.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: optConProds
+  Parent: SIGCDCOL.Pagina.Dados
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: getDescs
+  Parent: SIGCDCOL.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCOL
+------------------------------------------------------------
+  DataSession = 2
+  Height = 600
+  Width = 1000
+  DoCreate = .T.
+  Caption = "Cadastro de Grupo de Venda"
+  Name = "SIGCDCOL"
+  Pagina.ErasePage = .T.
+  Pagina.Lista.cntSombra.lblSombra.Name = "lblSombra"
+  Pagina.Lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  Pagina.Lista.cntSombra.Top = 1
+  Pagina.Lista.cntSombra.Left = -1
+  Pagina.Lista.cntSombra.Width = 1008
+  Pagina.Lista.cntSombra.Height = 80
+  Pagina.Lista.cntSombra.Name = "cntSombra"
+  Pagina.Lista.Grade.FontName = "Tahoma"
+  Pagina.Lista.Grade.FontSize = 8
+  Pagina.Lista.Grade.Height = 470
+  Pagina.Lista.Grade.Left = 12
+  Pagina.Lista.Grade.RowHeight = 16
+  Pagina.Lista.Grade.Top = 121
+  Pagina.Lista.Grade.Width = 937
+  Pagina.Lista.Grade.ForeColor = 90,90,90
+  Pagina.Lista.Grade.Name = "Grade"
+  Pagina.Lista.Grupo_op.AutoSize = .F.
+  Pagina.Lista.Grupo_op.Inserir.Top = 5
+  Pagina.Lista.Grupo_op.Inserir.Left = 5
+  Pagina.Lista.Grupo_op.Inserir.Name = "Inserir"
+  Pagina.Lista.Grupo_op.Consultar.Top = 5
+  Pagina.Lista.Grupo_op.Consultar.Left = 80
+  Pagina.Lista.Grupo_op.Consultar.Name = "Consultar"
+  Pagina.Lista.Grupo_op.Alterar.Top = 5
+  Pagina.Lista.Grupo_op.Alterar.Left = 155
+  Pagina.Lista.Grupo_op.Alterar.Name = "Alterar"
+  Pagina.Lista.Grupo_op.Excluir.Top = 5
+  Pagina.Lista.Grupo_op.Excluir.Left = 230
+  Pagina.Lista.Grupo_op.Excluir.Name = "Excluir"
+  Pagina.Lista.Grupo_op.procurar.Top = 5
+  Pagina.Lista.Grupo_op.procurar.Left = 305
+  Pagina.Lista.Grupo_op.procurar.Name = "procurar"
+  Pagina.Lista.Grupo_op.Height = 85
+  Pagina.Lista.Grupo_op.Left = 543
+  Pagina.Lista.Grupo_op.Top = -1
+  Pagina.Lista.Grupo_op.Width = 385
+  Pagina.Lista.Grupo_op.Name = "Grupo_op"
+  Pagina.Lista.Grupo_Saida.SAIR.Top = 5
+  Pagina.Lista.Grupo_Saida.SAIR.Left = 5
+  Pagina.Lista.Grupo_Saida.SAIR.Name = "SAIR"
+  Pagina.Lista.Grupo_Saida.Left = 918
+  Pagina.Lista.Grupo_Saida.Top = -1
+  Pagina.Lista.Grupo_Saida.Name = "Grupo_Saida"
+  Pagina.Lista.cntFiltros.Name = "cntFiltros"
+  Pagina.Lista.Picture = ..\framework\imagens\new_background.jpg
+  Pagina.Lista.Name = "Lista"
+  Pagina.Dados.Grupo_Salva.AutoSize = .T.
+  Pagina.Dados.Grupo_Salva.Salva.Top = 5
+  Pagina.Dados.Grupo_Salva.Salva.Left = 5
+  Pagina.Dados.Grupo_Salva.Salva.Name = "Salva"
+  Pagina.Dados.Grupo_Salva.Cancelar.Top = 5
+  Pagina.Dados.Grupo_Salva.Cancelar.Left = 80
+  Pagina.Dados.Grupo_Salva.Cancelar.Name = "Cancelar"
+  Pagina.Dados.Grupo_Salva.Left = 820
+  Pagina.Dados.Grupo_Salva.Top = 8
+  Pagina.Dados.Grupo_Salva.TabIndex = 13
+  Pagina.Dados.Grupo_Salva.ZOrderSet = 6
+  Pagina.Dados.Grupo_Salva.Name = "Grupo_Salva"
+  Pagina.Dados.Picture = ..\framework\imagens\new_background.jpg
+  Pagina.Dados.Name = "Dados"
+  Pagina.Width = 1003
+  Pagina.Name = "Pagina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCOL.Pagina.Dados.Optiongroup1
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  ControlSource = "crSigCdCol.repoauts"
+  Height = 25
+  Left = 491
+  Top = 541
+  Width = 99
+  TabIndex = 14
+  Visible = .F.
+  ZOrderSet = 19
+  Name = "Optiongroup1"
+  Option1.FontName = "Verdana"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Sim"
+  Option1.Value = 1
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.Width = 41
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 36,84,155
+  Option1.Name = "Option1"
+  Option2.FontName = "Verdana"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Não"
+  Option2.Height = 15
+  Option2.Left = 53
+  Option2.Top = 5
+  Option2.Width = 41
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 36,84,155
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCOL.Pagina.Dados.getUsuars
+------------------------------------------------------------
+  ControlSource = "crSigCdCol.Usuars"
+  Height = 25
+  Left = 366
+  SpecialEffect = 1
+  TabIndex = 6
+  Top = 179
+  Width = 80
+  ZOrderSet = 3
+  Name = "getUsuars"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCOL.Pagina.Dados.Say8
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Data de Início :"
+  Height = 15
+  Left = 287
+  Top = 211
+  Width = 75
+  TabIndex = 7
+  ForeColor = 90,90,90
+  ZOrderSet = 4
+  Name = "Say8"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCOL.Pagina.Dados.Say7
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Usuário :"
+  Height = 15
+  Left = 317
+  Top = 183
+  Width = 45
+  TabIndex = 5
+  ForeColor = 90,90,90
+  ZOrderSet = 5
+  Name = "Say7"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCOL.Pagina.Dados.Get1
+------------------------------------------------------------
+  ControlSource = "crSigCdCol.codcols"
+  Format = "!K"
+  Height = 25
+  InputMask = ""
+  Left = 491
+  MaxLength = 1
+  SpecialEffect = 1
+  TabIndex = 15
+  Top = 517
+  Visible = .F.
+  Width = 20
+  BorderColor = 36,84,155
+  ZOrderSet = 7
+  Name = "Get1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCOL.Pagina.Dados.getDtInicial
+------------------------------------------------------------
+  ControlSource = "crSigCdCol.DtIncs"
+  Height = 25
+  Left = 366
+  SpecialEffect = 1
+  TabIndex = 8
+  Top = 207
+  ZOrderSet = 8
+  NullDisplay = "  /  /"
+  Name = "getDtInicial"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCOL.Pagina.Dados.Say3
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Caption = "sem uso :"
+  Height = 15
+  Left = 410
+  Top = 521
+  Visible = .F.
+  Width = 59
+  TabIndex = 17
+  ForeColor = 255,0,0
+  ZOrderSet = 9
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCOL.Pagina.Dados.Say6
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Alertar ao Alterar Produtos :"
+  Height = 15
+  Left = 223
+  Top = 260
+  Width = 139
+  TabIndex = 11
+  ForeColor = 90,90,90
+  ZOrderSet = 10
+  Name = "Say6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCOL.Pagina.Dados.Say5
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Consulta de Produtos :"
+  Height = 15
+  Left = 250
+  Top = 238
+  Width = 112
+  TabIndex = 9
+  ForeColor = 90,90,90
+  ZOrderSet = 11
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCOL.Pagina.Dados.Say4
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Verdana"
+  FontSize = 8
+  Caption = "sem uso :"
+  Height = 15
+  Left = 410
+  Top = 546
+  Visible = .F.
+  Width = 59
+  TabIndex = 16
+  ForeColor = 255,0,0
+  ZOrderSet = 12
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCOL.Pagina.Dados.Say1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Grupo :"
+  Height = 15
+  Left = 324
+  Top = 127
+  Width = 38
+  TabIndex = 1
+  ForeColor = 90,90,90
+  ZOrderSet = 13
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCOL.Pagina.Dados.Say9
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Agrupamento :"
+  Height = 15
+  Left = 288
+  Top = 285
+  Width = 74
+  TabIndex = 1
+  ForeColor = 90,90,90
+  ZOrderSet = 13
+  Name = "Say9"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCOL.Pagina.Dados.Say2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Descrição :"
+  Height = 15
+  Left = 307
+  Top = 155
+  Width = 55
+  TabIndex = 3
+  ForeColor = 90,90,90
+  ZOrderSet = 14
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCOL.Pagina.Dados.optAltProds
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  ControlSource = "crSigCdCol.AltProds"
+  Height = 25
+  Left = 362
+  Top = 255
+  Width = 95
+  TabIndex = 12
+  ZOrderSet = 15
+  Name = "optAltProds"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Sim"
+  Option1.Value = 1
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.Width = 34
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Não"
+  Option2.Height = 15
+  Option2.Left = 53
+  Option2.Top = 5
+  Option2.Width = 37
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCOL.Pagina.Dados.getAgrupa
+------------------------------------------------------------
+  ControlSource = "crSigCdCol.agrupas"
+  Height = 25
+  InputMask = "XXXXXXXXXX"
+  Left = 367
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 281
+  Width = 79
+  ZOrderSet = 16
+  plprocurar = .T.
+  Name = "getAgrupa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCOL.Pagina.Dados.getColecoes
+------------------------------------------------------------
+  ControlSource = "crSigCdCol.colecoes"
+  Height = 25
+  InputMask = "XXXXXXXXXX"
+  Left = 366
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 123
+  Width = 79
+  ZOrderSet = 16
+  plprocurar = .T.
+  Name = "getColecoes"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCOL.Pagina.Dados.optConProds
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  ControlSource = "crSigCdCol.conprods"
+  Height = 25
+  Left = 362
+  Top = 235
+  Width = 95
+  TabIndex = 10
+  ZOrderSet = 17
+  Name = "optConProds"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Sim"
+  Option1.Value = 1
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.Width = 34
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Não"
+  Option2.Height = 15
+  Option2.Left = 53
+  Option2.Top = 5
+  Option2.Width = 37
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDCOL.Pagina.Dados.getDescs
+------------------------------------------------------------
+  ControlSource = "crSigCdCol.descs"
+  Height = 25
+  InputMask = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+  Left = 366
+  MaxLength = 40
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 151
+  Width = 289
+  ZOrderSet = 18
+  plprocurar = .T.
+  Name = "getDescs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDCOL
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE msv_procurar
+------------------------------------------------------------
+PROCEDURE msv_procurar
+Local lcBusca
+
+If .Not.IsEmpty(ThisForm.Pagina.Dados.Getcolecoes.Value)
+	ThisForm.poDataMgr.LocateCursor('crSigCdCol','colecoes',ThisForm.Pagina.Dados.Getcolecoes.Value)
+Else
+	If .Not.IsEmpty(ThisForm.Pagina.Dados.Getdescs.Value)
+		ThisForm.poDataMgr.LocateCursor('crSigCdCol','descs',ThisForm.Pagina.Dados.Getdescs.Value)
+	EndIf
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters lcacesso
+
+With ThisForm
+	.poDatamgr = CreateObject('fSqlConector')
+	With .poDatamgr
+		.AddCursor('SigCdCol','colecoes','crSigCdCol','',ThisForm.pagina.lista.grade)
+		.pfSqlTabela(1).pColuna('colecoes','','','Grupo',79,.t.)
+		.pfSqlTabela(1).pColuna('descs','','','Descrição',290,.t.)
+		.pfSqlTabela(1).pColuna('codcols','','','Cod. Coletor',75,.t.)
+	EndWith
+	= DoDefault()
+	.LockScreen = .f.
+EndWith
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Lista.Grupo_op.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Lista.Grupo_op.Click
+
+Lparameters opcao
+
+ThisForm.LockScreen = .t.
+
+If Type( 'Opcao' ) = 'N'
+	This.Value = Opcao
+
+EndIf 
+
+If This.Value == 4 And ThisForm.poDataMgr.ChkRegister('SigCdPro', 'Colecoes', crSigCdCol.Colecoes)
+	= MessageBox('Existem Produtos Utilizando Esse Grupo de Venda.', 0+48, 'Impossível Exclusão...')
+
+	Thisform.mAtivapagina1
+	ThisForm.LockScreen = .f.
+	Return
+EndIf
+
+If DoDefault(m.Opcao)
+
+	Select CrSigCdCol
+
+	If (ThisForm.pcEscolha = [INSERIR])
+		Replace Usuars With Usuar, ;
+				DtIncs With Datetime() In crSigCdCol
+	EndIf
+	
+	Do Case
+		Case Inlist(ThisForm.pcEscolha,'INSERIR','PROCURAR')
+			  ThisForm.Pagina.Dados.getColecoes.SetFocus	
+		Case ThisForm.pcEscolha=='ALTERAR'
+			  ThisForm.Pagina.Dados.getDescs.SetFocus	
+		Case Inlist(ThisForm.pcEscolha,'CONSULTAR','EXCLUIR')
+			  ThisForm.Pagina.Dados.Grupo_Salva.Salva.SetFocus
+	Endcase
+	
+	Thisform.Pagina.Dados.Say3.Visible=.T.
+	Thisform.Pagina.Dados.Get1.Visible=.T.
+	
+	ThisForm.Pagina.Dados.Refresh
+
+Else
+	ThisForm.mAtivapagina1
+Endif
+
+ThisForm.LockScreen = .f.
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+Local llRetorno
+
+m.llRetorno = .t.
+
+If Inlist(ThisForm.pcEscolha,'INSERIR','ALTERAR')
+
+	With ThisForm.Pagina.Dados
+
+		Do Case
+			Case IsEmpty(.getColecoes.Value)
+			
+				  MessageBox('Grupo de Venda Inválido.',48,'')
+				  .getColecoes.SetFocus
+				  m.llRetorno = .f.
+
+			Case IsEmpty(.getDescs.Value)
+			
+				  MessageBox('Descrição Inválida.',48,'')
+				  .getDescs.SetFocus
+				  m.llRetorno = .f.
+
+			Case !IsEmpty(.get1.Value)
+				 If ThisForm.poDataMgr.ChkRegister('SigCdCol','codcols',ThisForm.Pagina.Dados.Get1.Value)
+					=MESSAGEBOX("Código do Coletor já Existe", 16, "Atenção")
+			 		.get1.SetFocus
+					m.llRetorno = .f.
+				 Endif   
+				  
+			Case ThisForm.poDataMgr.ChkRegister('SigCdCol','colecoes',ThisForm.Pagina.Dados.Getcolecoes.Value) ;
+					And ThisForm.pcEscolha='INSERIR'
+
+	               Messagebox('Grupo de Venda Já Cadastrada.',0+64,goSistema.NomeSistema)
+				   .getColecoes.SetFocus
+				   m.llRetorno = .f.
+				  
+		EndCase
+
+	EndWith
+
+Endif
+
+If m.llRetorno
+	= DoDefault()
+	ThisForm.mAtivapagina1
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+= DoDefault()
+If ThisForm.plCancelar
+	ThisForm.mAtivapagina1
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDCOL.Pagina.Dados.getUsuars
+* Classe: fwget (Base: textbox)
+* Registro: 5
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdUsu', ;
+						   'crListaRemota', 'Usuarios', This.Value, 'Seleção', .t., .f., [Not cAtivos='N'])
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Usuarios', '', 'Usuário')
+		loLista.Show()
+	EndIf
+	
+	This.Value = Iif(Lastkey()=27, '', crListaRemota.Usuarios)
+	Use In crListaRemota
+EndIf
+This.Refresh
+
+If Not Empty(This.Value) And IsEmpty(crSigCdCol.DtIncs)
+	Replace DtIncs With Datetime() In crSigCdCol
+EndIf
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDCOL.Pagina.Dados.getColecoes
+* Classe: fwget (Base: textbox)
+* Registro: 19
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(InList(ThisForm.pcEscolha,'INSERIR','PROCURAR'))
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 7
+================================================================================

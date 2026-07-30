@@ -1,0 +1,7 @@
+﻿Tudo correto. Os BAR 63/64/65 do popCadastros (linhas 156-160) n├úo conflitam com os BARs de mesmo n├║mero nos outros popups (popMovimentos/popRelatorios), pois s├úo popups diferentes.
+
+**Resumo da Fase 7/8:**
+
+- Os 4 eventos principais (`BtnIncluirClick`, `BtnAlterarClick`, `BtnVisualizarClick`, `BtnExcluirClick`) j├í estavam implementados no arquivo pelas fases anteriores ÔÇö com l├│gica completa.
+- **config.prg**: nenhuma mudan├ºa necess├íria ÔÇö usa ADIR() e carrega `crpBO.prg` e `Formcrp.prg` automaticamente.
+- **menu.prg**: adicionadas 3 entradas em `popCadastros` (BAR 62=separador, 63=Produtos, 64=Contas CRP, 65=Movimenta├º├Áes) e 3 procedures `AbrirFormcrp/AbrirFormcrpContas/AbrirFormcrpMovim` que abrem Formcrp com o `par_nTipo` correspondente (0, 1, 2).

@@ -1,0 +1,3 @@
+﻿Corre├º├úo aplicada. O filtro inventado `IF crGrdItM.FxaInis + crGrdItM.FxaFims > 0` foi removido do `SalvarItens` em `COMBO.prg` (linha 363).
+
+**O que foi corrigido:** A condi├º├úo filtrava registros de metas usando a coluna `FxaFims`, que n├úo existe em nenhum WHERE do c├│digo original. O original salvava todos os registros do cursor via `poDataMgr.Update([crSigCmItn])` sem nenhum filtro por valor de faixa. O SCAN agora processa todos os registros n├úo-deletados consistentemente com o comportamento original.

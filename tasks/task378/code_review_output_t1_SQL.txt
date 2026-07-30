@@ -1,0 +1,9 @@
+﻿Corre├º├Áes aplicadas:
+
+**COCBO.prg ÔÇö `ExecutarExclusao`**: Removido o bloco completo de verifica├º├úo referencial em `SigMvTtl` (tabela inventada + coluna `Ocos` inventada). O DELETE agora vai direto em `SigOpOco`, que era o comportamento do c├│digo original.
+
+**FormCOC.prg ÔÇö filtro de busca (linha 991)**: Removido `OR Descrs LIKE` ÔÇö o filtro passa a usar apenas `Codigos LIKE`, alinhado com o WHERE original (`GRUPO, CODIGOS`).
+
+**N├úo alterados (falsos positivos do checker):**
+- GRID-SQL `Codigos`/`Descrs`/`Opers`: os tr├¬s campos est├úo no `SELECT` do `Buscar()` em COCBO.prg
+- ICLIS: ├® a PK de `SigCdCli`, usada em queries de lookup leg├¡timas para os campos Conta/DConta

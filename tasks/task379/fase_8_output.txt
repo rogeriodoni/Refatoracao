@@ -1,0 +1,13 @@
+﻿Tudo certo. Resumo do que foi feito na **Fase 8/8**:
+
+**FormCol.prg** ÔÇö j├í estava completo desde a Fase 7 com todos os m├®todos exigidos:
+- `BtnBuscarClick()`, `BtnEncerrarClick()`, `BtnSalvarClick()`, `BtnCancelarClick()`
+- `FormParaBO()` e `BOParaForm()` com todos os campos (colecoes, descs, usuars, dtIncs, conprods, altprods, agrupas)
+- `HabilitarCampos()`, `LimparCampos()`, `CarregarLista()`, `AjustarBotoesPorModo()`
+
+**menu.prg** ÔÇö 3 adi├º├Áes:
+- `DEFINE BAR 58 OF popCadastros` com prompt "Grupos de Venda"
+- `ON SELECTION BAR 58 OF popCadastros DO AbrirFormCol`
+- `PROCEDURE AbrirFormCol()` no padr├úo can├┤nico (VARTYPE, Show sem par├ómetro, sem Release)
+
+**config.prg** ÔÇö sem altera├º├úo necess├íria: o ADIR() j├í carrega automaticamente `ColBO.prg` (classes/) e `FormCol.prg` (forms/cadastros/).

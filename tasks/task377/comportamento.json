@@ -1,0 +1,195 @@
+{
+  "resumo": {
+    "totalMetodos": 10,
+    "metodosComSQL": 4,
+    "metodosComValidacao": 3,
+    "totalQueries": 2,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fUniqueIds", "fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDCNQ",
+      "evento": "Init",
+      "linhas": 28,
+      "codigoOriginal": "lcQryCnq = [Select * From SigCdCnq]\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tWith .poDataMgr\n\t\t\t.AddCursor('SigCdCnq', 'pkChaves', 'crSigCdCnq', '', ThisForm.Pagina.Lista.Grade, lcQryCnq)\n\t\t\t.pfSqlTabela(1).pColuna('conquilhas', '', '', 'Conquilha', 100, .t.)\n\t\t\t.pfSqlTabela(1).pColuna('codtams', '', '', 'Aro', 80, .t.)\n\t\t\t.pfSqlTabela(1).pColuna('valors', '', '', 'Valor', 100, .t.)\n\t\tEndWith\n\n\t\tSelect crSigCdCnq\n\t\tIndex On conquil... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDCNQ",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "=fConfigGeral()\n=DoDefault()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCNQ",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.podatamgr.Release\n=DoDefault()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCNQ",
+      "evento": "Click",
+      "linhas": 20,
+      "codigoOriginal": "LPARAMETERS opcao\nIf !dodefault( Opcao )\n\tThisForm.mAtivapagina1\n\tReturn\nEndif\n\nSelect crSigCdCnq\n\n* posiciona o cursor de acordo com a opção\nDo Case\n\tCase Inlist( ThisForm.pcEscolha, 'INSERIR', 'PROCURAR', 'ALTERAR' )\n\t\tthisform.pagina.dados.get_conquilha.setfocus\t\n\tCase Inlist( ThisForm.pcEscolha, 'CONSULTAR', 'EXCLUIR' )\n\t\tthisform.pagina.dados.grupo_salva.salva.setfocus\nEndcase\n\nSelect crSigCdCnq\n=DoDefault()\nThisForm.Pagina.Dados.Refresh\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_conquilha",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCNQ",
+      "evento": "Click",
+      "linhas": 28,
+      "codigoOriginal": "LOCAL lcQuery, lcCon, lcCod\n\nIf ThisForm.pcEscolha = 'INSERIR'\n\tIf IsEmpty(ThisForm.Pagina.Dados.Get_conquilha.Value)\n\t\tMessageBox( 'Obrigatório Informar a Conquilha.', 48, '' )\n\t\tThisForm.Pagina.Dados.Get_conquilha.SetFocus\n\t\tReturn\n\tENDIF  \n\n\t*** Verifica se registro ja cdastrado ***\n\tlcCon = ThisForm.Pagina.Dados.Get_conquilha.Value\n\tlcCod = ThisForm.Pagina.Dados.Get_codtam.Value\n\tlcQuery = [Select * From SigCdCnq Where conquilhas = '] + lcCon + [' And codtams = '] + lcCod + [']\n\tThisForm.poD... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "Get_conquilha,Get_codtam",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCNQ",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "=DoDefault()\nIf ThisForm.plCancelar\n\tThisForm.mAtivapagina1\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCNQ.Pagina.Dados.Get_valor",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Inlist(ThisForm.pcEscolha, \"INSERIR\", \"ALTERAR\")\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCNQ.Pagina.Dados.Get_conquilha",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Inlist(ThisForm.pcEscolha, \"INSERIR\", \"PROCURAR\", \"ALTERAR\")\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCNQ.Pagina.Dados.Get_codtam",
+      "evento": "Valid",
+      "linhas": 18,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdTam', ;\n\t\t\t\t\t\t   'CrListaRemota', 'cods', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('cods',  '', 'Cod Tam')\n\t\tloLista.mAddColuna('descs',  '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value = CrListaRemota.cods\n\tUse In CrListaRemota\nEndIf\nThis.Refresh\n\nSELECT crSigcdcnq",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCNQ.Pagina.Dados.Get_codtam",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Inlist(ThisForm.pcEscolha, \"INSERIR\", \"ALTERAR\")\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDCNQ.Init",
+      "queryOriginal": "lcQryCnq = [Select * From SigCdCnq]",
+      "tabelas": "SigCdCnq",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDCNQ.Click",
+      "queryOriginal": "\tlcQuery = [Select * From SigCdCnq Where conquilhas = '] + lcCon + [' And codtams = '] + lcCod + [']",
+      "tabelas": "SigCdCnq",
+      "colunas": "conquilhas,lcCon,codtams,lcCod",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdCnq"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

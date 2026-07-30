@@ -1,0 +1,3 @@
+﻿Corre├º├úo aplicada: `CRCBO.prg` linha 246 ÔÇö `EscaparSQL(THIS.this_cDescrs)` ÔåÆ `EscaparSQL(THIS.this_cCodigos)`.
+
+`SigClCrc.Caracteris` ├® FK para `SigCrRac.Codigos` (PK char 20), n├úo para `SigCrRac.Descrs`. O migrador trocou erroneamente o valor do filtro pela descri├º├úo ao inv├®s da chave prim├íria, o que causaria falhas silenciosas na verifica├º├úo de uso antes da exclus├úo (registros em uso passariam pelo check sem ser detectados).

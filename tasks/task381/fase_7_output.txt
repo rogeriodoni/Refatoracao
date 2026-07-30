@@ -1,0 +1,11 @@
+﻿Ambos os arquivos est├úo **completamente implementados**. A Fase 7/8 j├í estava conclu├¡da:
+
+**FormCor.prg** (1.171 linhas) ÔÇö todos os eventos da Fase 7 j├í existem:
+- `BtnIncluirClick()` linha 843 ÔÇö chama `NovoRegistro()`, `LimparCampos()`, `HabilitarCampos(.T.)`, `AlternarPagina(2)`
+- `BtnVisualizarClick()` linha 855 ÔÇö l├¬ `cursor_4c_Dados.cods`, carrega via `CarregarPorCodigo()`, modo somente leitura
+- `BtnAlterarClick()` linha 880 ÔÇö carrega registro, chama `EditarRegistro()`, modo edi├º├úo
+- `BtnExcluirClick()` linha 906 ÔÇö confirma com `MsgConfirma()`, chama `Excluir()` (que internamente usa `ExecutarExclusao()`)
+
+**CorBO.prg** (339 linhas) ÔÇö completo com `Inserir`, `Atualizar`, `ExecutarExclusao` (inclui a verifica├º├úo de uso em fichas t├®cnicas via `SigPrPrr`), `Buscar` e `CarregarPorCodigo`.
+
+A migra├º├úo do FormCor est├í finalizada. Nenhuma altera├º├úo foi necess├íria.

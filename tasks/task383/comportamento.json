@@ -1,0 +1,514 @@
+{
+  "resumo": {
+    "totalMetodos": 26,
+    "metodosComSQL": 14,
+    "metodosComValidacao": 21,
+    "totalQueries": 11,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fChecaAcesso", "fCarregaGrade", "fGerUniqueKey", "fUniqueIds", "fwBuscaInt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDCRF",
+      "evento": "Procedure",
+      "linhas": 17,
+      "codigoOriginal": "llOk = .t.\n\nIf Not Thisform.poDataMgr.Update('crSigCdCrf')\n\t=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update - crSigCdCrf)')\n\tllOks = .F.\nEndif\n\nIf llOk And Not Thisform.poDataMgr.Update('crSigCdCri')\n\t=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update - crSigCdCri)')\n\tllOk = .F.\nEndif\nIf llOk\n\tThisForm.poDataMgr.Commit()\nElse\n\tThisform.poDataMgr.Rollback()\n\tReturn .F.\nEndif",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Update,Commit,Rollback",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDCRF",
+      "evento": "Procedure",
+      "linhas": 21,
+      "codigoOriginal": "llOk = .t.\n\nlcCods = crSigCdCrf.Cods\nIf (ThisForm.poDataMgr.SQLExecute([Delete From SigCdCrf Where Cods = ?lcCods], '') < 1)\n\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (msv_excluir - 1)')\n\tllOk = .f.\nEndIf\n\nIf llOk\n\tIf (ThisForm.poDataMgr.SQLExecute([Delete From SigCdCri Where Cods = ?lcCods], '') < 1)\n\t\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (msv_excluir - 2)')\n\t\tllOk = .f.\n\tEndIf\nEndIf\n\nIf llOk\n\tThisForm.poDataMgr.Commit()\nElse\n\tThis... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SQLExecute,Commit,Rollback",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDCRF",
+      "evento": "Procedure",
+      "linhas": 31,
+      "codigoOriginal": "llOk = .t.\n\nlcCods = crSigCdCrf.Cods\nIf (ThisForm.poDataMgr.SQLExecute([Delete From SigCdCrf Where Cods = ?lcCods], '') < 1)\n\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (msv_excluir - 1)')\n\tllOk = .f.\nEndIf\n\nIf llOk\n\tIf (ThisForm.poDataMgr.SQLExecute([Delete From SigCdCri Where Cods = ?lcCods], '') < 1)\n\t\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (msv_excluir - 2)')\n\t\tllOk = .f.\n\tEndIf\nEndIf\n\nIf llOk And Not Thisform.poDataMgr.Update('crSi... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SQLExecute,Update,Commit,Rollback",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDCRF",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "Local lcBusca\n\nIf Not Empty(ThisForm.Pagina.Dados.getConta.Value)\n\tThisForm.poDataMgr.LocateCursor([crSigCdCrf], [Vends], ThisForm.Pagina.Dados.getConta.Value)\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "LocateCursor",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCRF",
+      "evento": "Init",
+      "linhas": 73,
+      "codigoOriginal": "With ThisForm\n\t.poDataMgr = CreateObject([fSqlConector], .Name)\n\t\n\tlcQryCnl = [select a.*, b.rclis as desvends ] + ;\n\t\t\t\t[from SigCdCrf a ] + ;\n\t\t\t\t[join sigcdcli b on a.vends = b.iclis ] + ;\n\t\t\t\t[Where a.Emps = ']+_Empr+[' ]\n\t\n\tlcCods = Space(10)\n\tlcSqlCdCni = [Select * From SigCdCri Where Cods = ?lcCods]\n\t\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tWith .poDataMgr\n\t\t\t.AddCursor([SigCdCrf], [cIdChaves], [crSigCdCrf], [], ThisForm.Pagina.Lista.Grade,lcQryCnl)\n\t\t\t.pfSqlTabela(1).pColuna([Datas],  [], [], [D... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso,fCarregaGrade",
+        "metodosFormChamados": "CursorQuery,SetAll",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDCRF",
+      "evento": "Click",
+      "linhas": 122,
+      "codigoOriginal": "Parameters lnOpcao\n\nlcCods = []\n\nIf Not DoDefault(lnOpcao)\n\tThisform.mAtivaPagina1\n\tReturn .F.\nEndIf\n\nIf InList(ThisForm.pcEscolha,'ALTERAR','EXCLUIR') And crSigCdCrf.Conferido = 1\n\tMessagebox('Contagem Já Encerrada !!!',48,'')\n\tThisForm.mAtivaPagina1\n\tReturn\nEndIf \n\nIf (ThisForm.pcEscolha = 'INSERIR')\n\tlcCods = fGerUniqueKey('SigCdCrf')\n\t\n\tReplace Cods With Alltrim(Str(lcCods,10)) in crSigCdCrf\n\tReplace Emps With _Empr In crSigCdCrf\nEndIf \n\nLocal lnOldSel\nlnOldSel = Select()\n\nlcCods = Iif(Empty... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso,fGerUniqueKey",
+        "metodosFormChamados": "SqlExecute,Requery,Refresh",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDCRF",
+      "evento": "Click",
+      "linhas": 40,
+      "codigoOriginal": "Local lcCodigo\nlcCodigo = This.parent.parent.getCods.Value \n\nIf InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])\n\tIf Empty(ThisForm.Pagina.Dados.getConta.Value)\n\t\t=Messagebox([Vendedor Inválido!!!], 48, [Atenção!!!])\n\t\tThisForm.Pagina.Dados.getConta.SetFocus()\n\t\tReturn .f.\n\tEndIf\nEndIf\n\nIf Inlist( ThisForm.pcEscolha,[INSERIR],[ALTERAR] )\n\tReplace cIdChaves With fUniqueIds() ,;\n\t\t\tDatas\t  With Date() in crSigCdCrf \n\n\tSelect csSigCdCri\n\tScan \n\t\tScatter Memvar\n\t\t\n\t\tSelect crSigCdCri\n\t\tAppend Blank ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "SetFocus",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDCRF",
+      "evento": "Click",
+      "linhas": 6,
+      "codigoOriginal": "=DoDefault()\n\nIf ThisForm.plCancelar\n\tThisForm.mAtivapagina1\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCRF.Pagina.Lista.cmdEspelho",
+      "evento": "Click",
+      "linhas": 27,
+      "codigoOriginal": "Local lnOldSel\nlnOldSel = Select()\n\nlcQuery = [Select a.Emps, a.Grupos, a.Estos, a.cpros, sum(sqtds) as qtde, convert(numeric(5,0),0) as QtdCtg, b.dpros as Descr ] + ;  \n\t[From SigMvEst a ] + ;    \n\t[Join SigCdpro b on a.CPros = b.Cpros ] + ;    \n\t[Join SigCdCli c on a.Estos = c.Iclis ] + ;    \n\t[join SigCtCtg d on a.empgruests = d.empresa + d.grupos + d.contas ] + ;   \n\t[Where a.emps = ']+_Empr+[' ] + ;       \n\t[And b.Cunis = 'UN' ] + ;       \n\t[group by a.Emps, a.Grupos, a.Estos, b.dpros, a.cp... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDCRF.Pagina.Lista.Fecha",
+      "evento": "Click",
+      "linhas": 42,
+      "codigoOriginal": "Local lnErro1\n\nlnErro1 = Thisform.poDataMgr.pnIdConn\n\nSelect CrSigCdCrf\n\nIf Eof()\n\tReturn\nEndif\n\nIf CrSigCdCrf.Conferido = 1\n\tMessagebox('Contagem Já Encerrada !!!',48,'')\n\tReturn\nEndif\n\n\nlcCod = CrSigCdCrf.Cods\n\nIf Messagebox('Este Contagem será Finalizada, Deseja encerrar a Contagem ???',4+32+256,'ATENÇÃO !!!') = 6\n\n\tWait Clear\n\t\n\tSelect CrSigCdCrf\n\tReplace Conferido With 1  In CrSigCdCrf\n\n\tIf lnErro1>0\n\t\tlnErro1 = Iif(Thisform.poDataMgr.Update('CrSigCdCrf'),1,-1)\n\tEndif\n\tIf lnErro1>0\n\t\tlnErro... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Update,Commit,Rollback",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCRF.Pagina.Lista.Abre",
+      "evento": "Click",
+      "linhas": 42,
+      "codigoOriginal": "Local lnErro1\n\nlnErro1 = Thisform.poDataMgr.pnIdConn\n\nSelect CrSigCdCrf\n\nIf Eof()\n\tReturn\nEndif\n\nIf CrSigCdCrf.Conferido = 0\n\tMessagebox('Contagem Não está Encerrada !!!',48,'')\n\tReturn\nEndif\n\n\nlcCod = CrSigCdCrf.Cods\n\nIf Messagebox('Este Contagem será Aberta Novamente, Deseja Continuar a Contagem ???',4+32+256,'ATENÇÃO !!!') = 6\n\n\tWait Clear\n\t\n\tSelect CrSigCdCrf\n\tReplace Conferido With 0  In CrSigCdCrf\n\n\tIf lnErro1>0\n\t\tlnErro1 = Iif(Thisform.poDataMgr.Update('CrSigCdCrf'),1,-1)\n\tEndif\n\tIf lnErr... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Update,Commit,Rollback",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCRF.Pagina.Dados.getConta",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, [INSERIR],[CONSULTAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCRF.Pagina.Dados.getConta",
+      "evento": "Valid",
+      "linhas": 43,
+      "codigoOriginal": "Local loLista\n\nIf !Empty(This.Value)\n\tlcSql = [Select a.iclis,a.rclis,a.grupos,a.situas,a.Cpfs,a.inativas,a.ContaMats,a.Emps ] + ;\n\t\t\t[From SigCdCli a ] + ;  \n\t\t\t[Inner Join SigCdGcr b On a.Grupos = b.Codigos ] + ;\n\t\t\t[Inner Join SigCdAce c on a.Iclis = c.Usuarios ] + ;\n\t\t\t[Where (Not b.Coletors = 10 Or (b.Coletors = 10  ] + ;\n\t\t\t[And a.IClis Not In (Select Distinct c.Jobs From SigCdAcJ c ] + ;\n\t\t\t\t\t\t\t\t\t[Where c.Jobs Not In (Select Distinct d.Jobs From SigCdAcJ d Where d.Usuars = ']+This.Value+[... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt",
+        "metodosFormChamados": "Sqlexecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCRF.Pagina.Dados.getCods",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDCRF.Pagina.Dados.getDConta",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, [INSERIR]) And Empty(This.parent.getConta.Value)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "pcEscolha, [INSERIR]) And Empty",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCRF.Pagina.Dados.getDConta",
+      "evento": "Valid",
+      "linhas": 41,
+      "codigoOriginal": "Local lcVends, loLista\nlcVends  = []\n\nIf !Empty(This.Value)\n\tlcSql = [Select a.iclis,a.rclis,a.grupos,a.situas,a.Cpfs,a.inativas,a.ContaMats,a.Emps ] + ;\n\t\t\t[From SigCdCli a ] + ;  \n\t\t\t[Inner Join SigCdGcr b On a.Grupos = b.Codigos  ] + ;\n\t\t\t[And (Not b.Coletors = 10 Or (b.Coletors = 10  ] + ;\n\t\t\t[And a.IClis Not In (Select Distinct c.Jobs From SigCdAcJ c ] + ;\n\t\t\t\t\t\t\t\t\t[Where c.Jobs Not In (Select Distinct d.Jobs From SigCdAcJ d Where d.Usuars = ']+lcVends+[')))) ] + ;\n\t\t\t[And a.grupos = ']+Loc... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt",
+        "metodosFormChamados": "Sqlexecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCRF.Pagina.Dados.getDContas",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .F.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDCRF.Pagina.Dados.GrdLoc",
+      "evento": "Procedure",
+      "linhas": 24,
+      "codigoOriginal": "LPARAMETERS nColIndex\n\nlcArquivo2 = Sys(2023) + [\\] + goSistema.Sys2015Tmp + Sys(2015) + [.jpg]\n\nSelect csSigCdCri\nThis.parent.getDContas.Value = csSigCdCri.Descr\n\nSelect csSigCdCri\n= ThisForm.poDataMgr.CursorQuery('SigCdPro','crTPro','Cpros',csSigCdCri.Cpros,'FigJpgs')\nIf Not IsNull(crTPro.FigJpgs) And Not IsEmpty(crTPro.FigJpgs)\n\tThis.parent.ImgJpg.Visible = .F.\n\tThis.parent.ImgJpg.Picture = ''\n\tSelect crTPro\n\tlcFoto=Strtran(Strtran(Strtran(crTPro.FigJpgs,\"data:image/png;base64,\",\"\"),\"data:ima... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCRF.Pagina.Dados.GrdLoc.Column1.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDCRF.Pagina.Dados.GrdLoc.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, [INSERIR],[ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCRF.Pagina.Dados.GrdLoc.Column3.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDCRF.Pagina.Dados.getBusca",
+      "evento": "Valid",
+      "linhas": 46,
+      "codigoOriginal": "Local lcCpros, lnCBars, lnOptBusca\nlnOptBusca = This.parent.Opt_Busca.Value\n\nIf Not Empty(This.Value)\n\tlcArquivo2 = Sys(2023) + [\\] + goSistema.Sys2015Tmp + Sys(2015) + [.jpg]\n\t\n\tSelect csSigCdCri\n\tIf lnOptBusca = 1\n\t\tlnCBars = This.Value\n\t\tSelect RecNo() As nRecNo From csSigCdCri Where CBars = Int(Val(Alltrim(lnCBars))) Into Cursor csProcura\n\tElse\n\t\tlcCpros = This.Value\n\t\tSelect RecNo() As nRecNo From csSigCdCri Where Cpros = lcCpros Into Cursor csProcura\n\tEndIf\n\t\n\tSelect csProcura\n\tGo Top\n\tIf ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "OptBusca,Opt_Busca",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDCRF.Pagina.Dados.getBusca",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, [INSERIR],[ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCRF.Pagina.Dados.TotQt",
+      "evento": "LostFocus",
+      "linhas": 3,
+      "codigoOriginal": "This.Value = 0\nThis.parent.getBusca.Value = []\nThis.parent.getBusca.SetFocus()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCRF.Pagina.Dados.TotQt",
+      "evento": "Valid",
+      "linhas": 20,
+      "codigoOriginal": "Local lcBusca, lnQtds, lnOptBusca\nlcBusca = This.parent.getBusca.Value\nlnQtds  = This.Value\nlnOptBusca = This.parent.Opt_Busca.Value\n\nIf Not Empty(lnQtds) And Not Empty(lcBusca)\n\tSelect csSigCdCri\n\tGo Top\n\t\n\tIf lnOptBusca = 1\n\t\tUpdate csSigCdCri Set QtdCtg = lnQtds Where CBars = Int(Val(Alltrim(lcBusca)))\n\tElse\n\t\tUpdate csSigCdCri Set QtdCtg = lnQtds Where Cpros = lcBusca\n\tEndIf \n\t\n\tGo Top\nEndIf \n\nThisForm.Pagina.dados.grdLoc.Refresh \nThisform.Refresh ",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "OptBusca,Opt_Busca",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCRF.Pagina.Dados.TotQt",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, [INSERIR],[ALTERAR]) And Not Empty(This.parent.getBusca.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDCRF.Procedure",
+      "queryOriginal": "If (ThisForm.poDataMgr.SQLExecute([Delete From SigCdCrf Where Cods = ?lcCods], '') < 1)",
+      "tabelas": "SigCdCrf",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDCRF.Procedure",
+      "queryOriginal": "\tIf (ThisForm.poDataMgr.SQLExecute([Delete From SigCdCri Where Cods = ?lcCods], '') < 1)",
+      "tabelas": "SigCdCri",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDCRF.Procedure",
+      "queryOriginal": "If (ThisForm.poDataMgr.SQLExecute([Delete From SigCdCrf Where Cods = ?lcCods], '') < 1)",
+      "tabelas": "SigCdCrf",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDCRF.Procedure",
+      "queryOriginal": "\tIf (ThisForm.poDataMgr.SQLExecute([Delete From SigCdCri Where Cods = ?lcCods], '') < 1)",
+      "tabelas": "SigCdCri",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDCRF.Init",
+      "queryOriginal": "\tlcSqlCdCni = [Select * From SigCdCri Where Cods = ?lcCods]",
+      "tabelas": "SigCdCri",
+      "colunas": "Cods",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDCRF.Pagina.Dados.getConta.Valid",
+      "queryOriginal": "\tlcSql = [Select a.iclis,a.rclis,a.grupos,a.situas,a.Cpfs,a.inativas,a.ContaMats,a.Emps ] + ; \t\t\t[From SigCdCli a ] + ; \t\t\t[Inner Join SigCdGcr b On a.Grupos = b.Codigos ] + ; \t\t\t[Inner Join SigCdAce c on a.Iclis = c.Usuarios ] + ; \t\t\t[Where (Not b.Coletors = 10 Or (b.Coletors = 10  ] + ; \t\t\t[And a.IClis Not In (Select Distinct c.Jobs From SigCdAcJ c ] + ; \t\t\t\t\t\t\t\t\t[Where c.Jobs Not In (Select Distinct d.Jobs From SigCdAcJ d Where d.Usuars = ']+This.Value+[... [TRUNCADO]",
+      "tabelas": "SigCdAcJ,SigCdGcr,SigCdAce",
+      "colunas": "iclis,rclis,grupos,situas,Cpfs,inativas,ContaMats,Jobs,Usuars",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDCRF.Pagina.Dados.getDConta.Valid",
+      "queryOriginal": "\tlcSql = [Select a.iclis,a.rclis,a.grupos,a.situas,a.Cpfs,a.inativas,a.ContaMats,a.Emps ] + ; \t\t\t[From SigCdCli a ] + ; \t\t\t[Inner Join SigCdGcr b On a.Grupos = b.Codigos  ] + ; \t\t\t[And (Not b.Coletors = 10 Or (b.Coletors = 10  ] + ; \t\t\t[And a.IClis Not In (Select Distinct c.Jobs From SigCdAcJ c ] + ; \t\t\t\t\t\t\t\t\t[Where c.Jobs Not In (Select Distinct d.Jobs From SigCdAcJ d Where d.Usuars = ']+lcVends+[')))) ] + ; \t\t\t[And a.grupos = ']+Loc... [TRUNCADO]",
+      "tabelas": "SigCdAcJ,SigCdGcr",
+      "colunas": "iclis,rclis,grupos,situas,Cpfs,inativas,ContaMats,Jobs,Usuars",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDCRF.Pagina.Dados.getBusca.Valid",
+      "queryOriginal": "\t\tSelect RecNo() As nRecNo From csSigCdCri Where CBars = Int(Val(Alltrim(lnCBars))) Into Cursor csProcura",
+      "tabelas": "csSigCdCri",
+      "colunas": "CBars,IntValAlltrimlnCBars,csProcura",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDCRF.Pagina.Dados.getBusca.Valid",
+      "queryOriginal": "\t\tSelect RecNo() As nRecNo From csSigCdCri Where Cpros = lcCpros Into Cursor csProcura",
+      "tabelas": "csSigCdCri",
+      "colunas": "Cpros,lcCpros,csProcura",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDCRF.Pagina.Dados.TotQt.Valid",
+      "queryOriginal": "\t\tUpdate csSigCdCri Set QtdCtg = lnQtds Where CBars = Int(Val(Alltrim(lcBusca)))",
+      "tabelas": "csSigCdCri",
+      "colunas": "QtdCtg",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDCRF.Pagina.Dados.TotQt.Valid",
+      "queryOriginal": "\t\tUpdate csSigCdCri Set QtdCtg = lnQtds Where Cpros = lcBusca",
+      "tabelas": "csSigCdCri",
+      "colunas": "QtdCtg",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdCrf", "SigCdCri", "SigCdAcJ", "SigCdGcr", "SigCdAce", "csSigCdCri"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

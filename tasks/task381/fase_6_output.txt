@@ -1,0 +1,14 @@
+﻿Fase 6 conclu├¡da. Aqui est├í o resumo do que foi adicionado ao `FormCor.prg`:
+
+**Campos adicionados em `ConfigurarPaginaDados()`** (50% restante):
+- **Campo 5** ÔÇö `txt_4c_Peso` + `lbl_4c_VariacaoPeso`: Varia├º├úo de Peso (top=264/268, InputMask `9999999.99`)
+- **Campo 6** ÔÇö `txt_4c_TipoCor` + `lbl_4c_TipoCor` + `lbl_4c_TipoCorSN`: Tipo de Cor S/N (top=291/295, MaxLength=1) com BINDEVENT LostFocus ÔåÆ `ValidarTipoCor`
+- **Campo 7** ÔÇö `txt_4c_DiasEntrega` + `lbl_4c_DiasEntrega` + `lbl_4c_DiasLabel`: Dias na Entrega (top=318/322, InputMask `999`)
+
+**Novo m├®todo `ValidarTipoCor()`**: replica o `Valid` do legado (`INLIST("S","N"," ")`), limpa o campo se inv├ílido (sem `SetFocus` para evitar loop em LostFocus).
+
+**M├®todos completados** com os 3 campos restantes:
+- `FormParaBO()` ÔåÆ `this_nPeso`, `this_cTipoCor` (com `UPPER()`), `this_nDiasEntrega`
+- `BOParaForm()` ÔåÆ `txt_4c_Peso`, `txt_4c_TipoCor`, `txt_4c_DiasEntrega`
+- `HabilitarCampos()` ÔåÆ 3 campos adicionais com `PEMSTATUS`
+- `LimparCampos()` ÔåÆ 3 campos adicionais zerados/limpos

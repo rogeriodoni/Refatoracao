@@ -1,0 +1,198 @@
+{
+  "resumo": {
+    "totalMetodos": 11,
+    "metodosComSQL": 7,
+    "metodosComValidacao": 7,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fwBuscaExt", "fAcessoContas"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDCOC",
+      "evento": "Procedure",
+      "linhas": 9,
+      "codigoOriginal": "select crSigOpOco\ncod=thisform.pagina.dados.getcodigo.value\nset order to codigos\nif not IsEmpty(cod)\n\tset near on\n\tseek cod\n\tset near off\nendif\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCOC",
+      "evento": "Init",
+      "linhas": 32,
+      "codigoOriginal": "LParameters lcAcesso\n\nWITH Thisform\n\t.poDatamgr = CreateObject('fSqlConector',ThisForm.Name)\n\n\tIf Not .poDatamgr.pnIdconn>0\n\t\tMessagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),'Erro')\n\t\tReturn(.f.)\n\tEndif\n\n\tWith .poDatamgr\n\t\t.AddCursor('SigOpOco','Codigos','crSigOpOco','Codigos',ThisForm.pagina.lista.grade)\n\t\t.pfSqlTabela(1).pColuna('Codigos','','','Código',80,.t.)\n\t\t.pfSqlTabela(1).pColuna('Descrs','','','Descrição',220,.t.)\n\t\t.pfSqlTabela(1).pColuna('Opers','','','... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Sqlexecute",
+        "controlesReferenciados": "option1,option2,option3",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDCOC",
+      "evento": "Click",
+      "linhas": 30,
+      "codigoOriginal": "LPARAMETERS opcao\nselect crSigOpOco\nIf !dodefault( opcao )\n\tThisForm.mAtivapagina1\n\tReturn\nEndif\n\nif crSigOpOco.Opers = \"DB\"\n   ThisForm.Pagina.Dados.opcaoOcorrencia.Value = 1\nelse\n   ThisForm.Pagina.Dados.opcaoOcorrencia.Value = 2\nendif\nif thisform.pcEscolha='INSERIR'\n\twith thisform.pagina.dados.opcaocontab\n\t\t.value=2\n\t\t.refresh\n\tendwith\nendif\nif ThisForm.pcEscolha = 'INSERIR' or ;\n\tthisform.pcEscolha='PROCURAR'\n    ThisForm.Pagina.Dados.getCodigo.SetFocus\nendif\nif ThisForm.pcEscolha = 'ALTERAR... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCOC",
+      "evento": "Click",
+      "linhas": 35,
+      "codigoOriginal": "if thisform.pcEscolha='INSERIR'\n   if IsEmpty(ThisForm.Pagina.Dados.getCodigo.Value)\n      MessageBox(\"Código Inválido!\",0+48,\"\")\n      ThisForm.Pagina.Dados.getCodigo.SetFocus\n      return\n   endif\n   if ThisForm.podatamgr.ChkRegister('SigOpOco', 'Codigos', crSigOpOco.Codigos)\n      MessageBox(\"Código já cadastrado!\",0+48,\"\")\n      ThisForm.Pagina.Dados.getCodigo.SetFocus\n      RETURN \n   endif   \nEndif\nif Inlist(thisform.pcEscolha,'INSERIR','ALTERAR')\n   if IsEmpty(ThisForm.Pagina.Dados.get_gr... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChkRegister",
+        "controlesReferenciados": "ChkRegister('SigOpOco',get_grupo,get_conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCOC",
+      "evento": "Click",
+      "linhas": 8,
+      "codigoOriginal": "Select crSigOpOco\n=DoDefault()\n\nIf ThisForm.plCancelar\n\tThisForm.mAtivapagina1\nEndif\n\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCOC",
+      "evento": "Activate",
+      "linhas": 5,
+      "codigoOriginal": "If Type( \"ThisForm.pcEscolha\" ) # \"C\"\n\tThisForm.Pagina.Lista.Grupo_Op.CLick( 2 )\nEndif\nDODEFAULT()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CLick",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCOC.Pagina.Dados.getCodigo",
+      "evento": "When",
+      "linhas": 5,
+      "codigoOriginal": "if not thisform.pcEscolha='INSERIR' and ;\n\tnot thisform.pcEscolha='PROCURAR'\n\treturn(.f.)\nendif\n\t",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCOC.Pagina.Dados.Get_grupo",
+      "evento": "Valid",
+      "linhas": 19,
+      "codigoOriginal": "local lcod,lfan,codcor,xobj\n\nif !IsEmpty(this.value)\n\tThisForm.podatamgr.CursorQuery('SigCdGcr','crSigCdGcr', 'Codigos', This.Value)\n\tSELECT crSigCdGcr\n\tif EOF()\n\t\txBrox = CreateObject('fwBuscaExt',Thisform.poDatamgr.pnIdconn,'SigCdGcr','crSigCdGcr','Codigos',This.Value,'seleção',.t.,'Codigos')\n\t\tIf  Not xBrox.plAchouRegistro\n\t\t\txBrox.mAddColuna('Codigos', '', 'Código', .t.)\n\t\t\txBrox.mAddColuna('Descrs', 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX', 'Descrição', .t.)\n\t\t\txBrox.Show()\n\t\tEndif\n\tendif... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCOC.Pagina.Dados.Get_conta",
+      "evento": "Valid",
+      "linhas": 14,
+      "codigoOriginal": "local lcod,lfan,codcor,xobj,grupo,codigo,ordem,valor\ngrupo=thisform.pagina.dados.get_grupo.value\t\nIf !IsEmpty(this.value)\n\tIf !fAcessoContas(Usuar,grupo,'C',this.value,this,thisform.pagina.dados.get_dconta)\n\t\tMessagebox('Acesso Negado !!',0+48,'')\n\t\tThis.Value=''\n\t\tThis.Refresh\n\t\tthisform.pagina.dados.get_conta.Value = ''\n\t\tthisform.pagina.dados.get_conta.Refresh\n\tEndif\nendif\nselect crSigOpOco\nreturn(.t.)\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_grupo,get_dconta,get_conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCOC.Pagina.Dados.Get_dconta",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "REturn(EMPTY(ThisForm.pagina.dados.get_conta.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCOC.Pagina.Dados.Get_dconta",
+      "evento": "Valid",
+      "linhas": 14,
+      "codigoOriginal": "local lcod,lfan,codcor,xobj,grupo,codigo,ordem,valor\ngrupo=thisform.pagina.dados.get_grupo.value\t\nIf !IsEmpty(this.value)\n\tIf !fAcessoContas(Usuar,grupo,'D',this.value,thisform.pagina.dados.get_conta,this)\n\t\tMessagebox('Acesso Negado !!',0+48,'')\n\t\tThis.Value=''\n\t\tThis.Refresh\n\t\tthisform.pagina.dados.get_conta.Value = ''\n\t\tthisform.pagina.dados.get_conta.Refresh\n\tEndif\nendif\nselect crSigOpOco\nreturn(.t.)\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_grupo,get_conta",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

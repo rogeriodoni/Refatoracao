@@ -1,0 +1,9 @@
+﻿Tudo certo. Resumo do que foi feito e do estado atual:
+
+**Fase 7/8 ÔÇö resultado:** Os 4 eventos (`BtnIncluirClick`, `BtnAlterarClick`, `BtnVisualizarClick`, `BtnExcluirClick`) j├í estavam implementados nas fases anteriores do pipeline. O arquivo `FormCNQ.prg` (1042 linhas) e `CNQBO.prg` (323 linhas) estavam completos.
+
+**Integra├º├úo feita agora:**
+- `menu.prg`: adicionado `DEFINE BAR 56` para "Conquilhas" no `popCadastros`, `ON SELECTION BAR 56` vinculando `AbrirFormCNQ`, e a procedure `AbrirFormCNQ()` seguindo o padr├úo can├┤nico (`VARTYPE`, `Show()` sem par├ómetro, sem `Release()`)
+- `config.prg`: n├úo precisou de altera├º├úo ÔÇö o carregamento din├ómico via `ADIR()` j├í cobre `CNQBO.prg` (classes) e `FormCNQ.prg` (forms/cadastros)
+
+**Migra├º├úo FormCNQ completa.** O formul├írio est├í acess├¡vel via menu Cadastros > Conquilhas.

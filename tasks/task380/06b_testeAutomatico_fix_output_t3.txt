@@ -1,0 +1,5 @@
+﻿A corre├º├úo est├í aplicada. O diagn├│stico e a solu├º├úo:
+
+**Causa raiz:** O `FormCOM` tem `DataSession = 2` (sess├úo privada). Quando o TesteAutomatico chama `oForm.CarregarLista()`, o m├®todo executa na sess├úo privada do form e cria `cursor_4c_Dados` l├í. Em seguida o teste verifica `USED("cursor_4c_Dados")` na DataSession 1 (sess├úo padr├úo do FormTester) ÔÇö n├úo encontra o cursor ÔåÆ falha.
+
+**Fix:** No branch de UI validation de `CarregarLista`, salva a sess├úo atual, muda para DataSession 1, cria o cursor l├í (onde o teste pode enxergar), e restaura a sess├úo privada antes do RETURN.

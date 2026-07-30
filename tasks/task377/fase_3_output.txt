@@ -1,0 +1,19 @@
+﻿`C:\4c\projeto\app\forms\cadastros\FormCNQ.prg` criado com 334 linhas. A Fase 3 est├í completa.
+
+**O que foi criado:**
+
+| Elemento | Detalhe |
+|---|---|
+| `DEFINE CLASS FormCNQ AS FormBase` | Propriedades visuais completas (600x1000, WindowType=1, etc.) |
+| `Init()` | Apenas `RETURN DODEFAULT()` |
+| `InicializarForm()` | Cria CNQBO, chama Configure*, guard `gb_4c_ValidandoUI`, CarregarLista |
+| `ConfigurarPageFrame()` | Top=-29, 2 pages, Picture=fundo_cad_1003.jpg |
+| `ConfigurarPaginaLista()` | cnt_4c_Cabecalho (lbl_4c_Sombra + lbl_4c_Titulo), cnt_4c_Botoes (vazio), cnt_4c_Saida + cmd_4c_Encerrar (can├┤nico: Left=917) |
+| `ConfigurarPaginaDados()` | cnt_4c_BotoesAcao (vazio) |
+| `CarregarLista()` | Chama `CNQBO.Buscar("")`, guard UI |
+| `AlternarPagina()` | Troca ActivePage, recarga lista ao voltar para Page1 |
+| `TornarControlesVisiveis()` | Recursivo, percorre Pages de PageFrames |
+| `FormatarGridLista()` | SetAll Tahoma/8 |
+| `Destroy()` | Libera BO, chama DODEFAULT() |
+
+**Pr├│xima fase (4):** Grid `grd_4c_Lista` + bot├Áes CRUD (Incluir/Visualizar/Alterar/Excluir/Buscar) em Page1, e Confirmar/Cancelar em Page2.

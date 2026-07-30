@@ -1,0 +1,14 @@
+﻿The file is complete and correct. Phase 6 is done ÔÇö `FormCOM.prg` now has all three item grids, the delete buttons, and the supporting method updates. The file ends cleanly at `ENDDEFINE` on line 1848.
+
+Summary of what Phase 6 added to `FormCOM.prg`:
+
+- **`shp_4c_Shape1`** ÔÇö horizontal separator line (Top=149, Width=793, Height=0)
+- **`lbl_4c_Label11` + `grd_4c_Vendedores`** ÔÇö 6-column grid (CodVens/VMetas/SalBases/CodResps/RPctFixs/VMetItns) at Top=171, Left=7, W=624├ùH=224
+- **`cmd_4c_BtnExcV`** ÔÇö delete-row button for Vendedores, BINDEVENTÔåÆ`GrdVendExcluirClick()`
+- **`lbl_4c_Label9` + `grd_4c_Produtos`** ÔÇö 4-column grid (Mercs/CGrus/SGrus/PPctFixs) at Top=171, Left=679, W=260├ùH=445
+- **`cmd_4c_BtnExcP`** ÔÇö delete-row button for Produtos, BINDEVENTÔåÆ`GrdProdExcluirClick()`
+- **`lbl_4c_Label12` + `grd_4c_Metas`** ÔÇö 5-column grid (CodFaixas/FxaInis/FxaFims/PctFaixas/Bonus) at Top=426, Left=7, W=507├ùH=190
+- **`cmd_4c_BtnExcM`** ÔÇö delete-row button for Metas, BINDEVENTÔåÆ`GrdMetaExcluirClick()`
+- **`GrdVendExcluirClick()`**, **`GrdProdExcluirClick()`**, **`GrdMetaExcluirClick()`** ÔÇö PUBLIC methods: DELETE on current cursor row + grid Refresh
+- **`BOParaForm()`** updated ÔÇö Refresh() added after each RecordSource assignment
+- **`LimparCampos()`** updated ÔÇö Refresh() called on all three grids after `InicializarCursores()`

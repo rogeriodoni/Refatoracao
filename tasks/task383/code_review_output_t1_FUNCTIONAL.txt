@@ -1,0 +1,7 @@
+﻿Todas as corre├º├Áes foram aplicadas corretamente. Resumo do que foi feito:
+
+**[CONTAINER-VISIVEL]** ÔÇö `TornarControlesVisiveis()` reformulado: a recurs├úo (em pages do PageFrame e em containers filhos) agora ocorre **antes** do bloco `Visible = .T.`, e o guard `INLIST(UPPER(...), "CNT_4C_CABECALHO")` impede que o container seja for├ºado a vis├¡vel, enquanto seus filhos ainda s├úo processados.
+
+**[BINDEVENT-PARAMS] ├ù 3** ÔÇö `ValidarConta`, `ValidarBusca` e `ValidarQuantidade` foram corrigidos: par├ómetros removidos da assinatura do PROCEDURE e declarados com `LPARAMETERS` dentro do corpo, conforme exige o VFP9 ao invocar handlers via BINDEVENT.
+
+**[GRID-HEADER] ├ù 5** ÔÇö Grid da lista (Page1) corrigido para espelhar o legado (`sigcdcrf_form_codigo_fonte.txt`, chamadas `pColuna`): reduzido de 5 para 3 colunas, ordem e captions id├¬nticos ao legado ÔÇö Column1: `Datas`/"Data", Column2: `Vends`/"Vendedor", Column3: `Cods`/"C?digo". As colunas "Nome do Vendedor" e "Encerrada" foram removidas (n├úo existiam no legado; o status era indicado por `DynamicForeColor`, n├úo por coluna separada). Os dados `DesVends` e `Conferido` permanecem no cursor `cursor_4c_Dados` para uso nas demais funcionalidades do form.

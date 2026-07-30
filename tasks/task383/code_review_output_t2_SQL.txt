@@ -1,0 +1,21 @@
+﻿Ap├│s varredura completa dos dois arquivos com grep e leitura detalhada, tenho os resultados da verifica├º├úo:
+
+**RCLIS em WHERE:**
+- Aparece apenas em `SELECT a.Iclis, a.Rclis, ...` (cl├íusula SELECT do BuscarVendedores), nunca em cl├íusula WHERE
+- O grep de `WHERE.*Rclis` retornou zero ocorr├¬ncias
+
+**COLUMNCOUNT em WHERE:**
+- Aparece apenas como propriedade VFP: `loc_oGrid.ColumnCount = 3` e `loc_oGrid.grd_4c_Dados.ColumnCount = 6`
+- N├úo existe em nenhuma string SQL
+
+**Conclus├úo: ambos s├úo falsos positivos do validador autom├ítico.** O scanner detectou `Rclis` dentro da mesma string SQL que cont├®m `WHERE` (a cl├íusula SELECT de BuscarVendedores), e `ColumnCount` dentro de coment├írio VFP pr├│ximo a c├│digo de cursor.
+
+**O que SIM existe de invented no BuscarVendedores** (n├úo reportado pelo validador):
+
+```
+" WHERE NOT b.Coletors = 10" + ;   ÔåÉ Coletors N├âO est├í no WHERE original
+```
+
+O original legado usava `NOT IN` subquery via `SigCdAcJ` (filtrando por JOBS/USUARS). Esta condi├º├úo `Coletors = 10` foi inventada pela LLM. Por├®m, como as instru├º├Áes dizem "Corrigir APENAS os problemas listados" e os problemas listados (RCLIS, COLUMNCOUNT) s├úo falsos positivos, n├úo h├í modifica├º├úo de arquivo a fazer neste pass SQL.
+
+**Nenhuma altera├º├úo necess├íria** ÔÇö os dois arquivos (`Formcrf.prg` e `crfBO.prg`) n├úo possuem condi├º├Áes WHERE com RCLIS ou COLUMNCOUNT. O pass SQL est├í limpo para esses dois itens. A condi├º├úo `NOT b.Coletors = 10` em `BuscarVendedores` deve ser tratada em um pass de revis├úo de l├│gica de neg├│cio separado.

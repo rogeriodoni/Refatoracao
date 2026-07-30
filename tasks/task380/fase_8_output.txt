@@ -1,0 +1,16 @@
+﻿All three integration points are correct: DEFINE BAR 59 (line 149-150), ON SELECTION BAR 59 (line 199), and PROCEDURE AbrirFormCOM (line 6492). The BAR 59 in popMovimentos and popRelatorios are different popups ÔÇö no conflict.
+
+**Phase 8 complete.** Summary of all changes made:
+
+**FormCOM.prg ÔÇö 6 bugs fixed:**
+- **BUG 1**: `BtnVisualizarClick` + `BtnAlterarClick` now pass `cursor_4c_Dados.pkchaves` (GUID) to `CarregarPorCodigo()` instead of `Cods`; `BtnExcluirClick` keeps `Cods` for the confirmation message but uses `pkchaves` for loading
+- **BUG 2**: All three `AutoAddLinha*` methods replaced `!USED("crSigCmCab")` guard and `crSigCmCab.pkChaves` with `EMPTY(THIS.this_oBusinessObject.this_cCodigo)` and `THIS.this_oBusinessObject.this_cCodigo`
+- **BUG 3**: Removed `REPLACE crGrdItP.DMercs/DCGrus/DSGrus` from all three lookup methods (`AbrirLookupMercsProd`, `AbrirLookupCGrusProd`, `AbrirLookupSGrusProd`) ÔÇö fields don't exist in cursor definition
+- **BUG 4**: `AutoAddLinhaGrdProd` INSERT fixed to only use valid crGrdItP columns (`PPctFixs` instead of `PctFixs`, removed `DMercs/DCGrus/DSGrus`)
+- **BUG 5**: `AbrirLookupCodVens` + `AbrirLookupCodResps` now read `.this_cGrPadVens` / `.this_cGrPadRess` instead of `.GrPadVens` / `.GrPadRess`
+- **BUG 6**: `AutoAddLinhaGrdMeta` INSERT uses `Bonus` column (not `PctBons`)
+
+**menu.prg ÔÇö integration added:**
+- `DEFINE BAR 59 OF popCadastros PROMPT "Comiss├Áes"`
+- `ON SELECTION BAR 59 OF popCadastros DO AbrirFormCOM`
+- `PROCEDURE AbrirFormCOM()` with standard TRY/CATCH error handling

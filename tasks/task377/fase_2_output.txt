@@ -1,0 +1,21 @@
+﻿Arquivo completo e correto. A Fase 2 est├í conclu├¡da.
+
+**O que foi adicionado ao CNQBO.prg:**
+
+| M├®todo | Tipo | Fun├º├úo |
+|--------|------|--------|
+| `CarregarDoCursor()` | PROTECTED | Mapeia cursor ÔåÆ propriedades (`pkChaves`, `Conquilhas`, `Codtams`, `Valors`) |
+| `GerarChavePrimaria()` | PROTECTED | Gera PK via `SELECT LEFT(NEWID(),20)` no SQL Server |
+| `VerificarDuplicidade()` | PROTECTED | Checa duplicidade conquilha+codtam antes do INSERT (reproduz l├│gica original) |
+| `ValidarDados()` | PROTECTED | Conquilha obrigat├│ria + sem duplicata no INSERT |
+| `Inserir()` | PROTECTED | INSERT com PK gerada, auditoria |
+| `Atualizar()` | PROTECTED | UPDATE por pkChaves, auditoria |
+| `ExecutarExclusao()` | PROTECTED | DELETE por pkChaves, auditoria |
+| `Buscar()` | PUBLIC | SELECT com ZAP+APPEND para preservar colunas do grid; cria cursor vazio sem conex├úo |
+| `CarregarPorCodigo()` | PUBLIC | SELECT por pkChaves, reseta `this_lNovoRegistro = .F.` |
+
+**Decis├Áes cr├¡ticas:**
+- `pkChaves` char(20) ├® gerado via SQL Server `NEWID()` (reproduz `fUniqueIds()` do legado)
+- `Buscar` usa ELSE para n├úo chamar SQLEXEC sem conex├úo (melhoria sobre o padr├úo CorBO)
+- `SET NULL ON/OFF` ao redor do CREATE CURSOR placeholder (Problema 35)
+- `valors` formatado com 3 decimais conforme schema `numeric(6,3)`

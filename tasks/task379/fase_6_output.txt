@@ -1,0 +1,18 @@
+﻿O arquivo est├í correto. Fase 6 conclu├¡da com sucesso.
+
+**O que foi adicionado:**
+
+- **`lbl_4c_Label5`** ÔÇö "Consulta de Produtos :" (Top=267, Left=250)
+- **`opt_4c_ConProds`** ÔÇö OptionGroup S/N, mapeia `this_nConprods` (Top=264, Left=362, Width=95)
+- **`lbl_4c_Label6`** ÔÇö "Alertar ao Alterar Produtos :" (Top=289, Left=223)
+- **`opt_4c_AltProds`** ÔÇö OptionGroup S/N, mapeia `this_nAltProds` (Top=284, Left=362, Width=95)
+- **`lbl_4c_Label9`** ÔÇö "Agrupamento :" (Top=314, Left=288)
+- **`txt_4c_Agrupa`** ÔÇö TextBox MaxLength=10, mapeia `this_cAgrupas` (Top=310, Left=367)
+
+**Padr├Áes respeitados:**
+- OptionGroups com `WITH .Buttons(N)` aninhado dentro do `WITH` pai (Problema #42)
+- `.Value` apenas no OptionGroup pai, nunca nos Buttons individuais (evita "todos marcados")
+- Posi├º├Áes com compensa├º├úo +29 em todos os controles da Page2
+- `FormParaBO`/`BOParaForm` atualizados com mapeamento num├®rico: `IIF(opt.Value = 1, 1, 0)` Ôåö `IIF(nProp = 1, 1, 2)`
+- `HabilitarCampos` usa `.Enabled` nos OptionGroups e `.ReadOnly` no TextBox
+- `LimparCampos` reseta OptionGroups para `Value=2` (N=N├úo, padr├úo BO)

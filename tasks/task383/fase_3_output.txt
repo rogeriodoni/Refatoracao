@@ -1,0 +1,17 @@
+﻿Perfeito - 9 WITH e 9 ENDWITH balanceados. Todos os blocos est├úo corretos:
+
+- 1 DEFINE CLASS / 1 ENDDEFINE Ô£ô
+- 10 PROCEDURE / 10 ENDPROC Ô£ô  
+- 5 TRY / 5 ENDTRY Ô£ô
+- 9 WITH / 9 ENDWITH Ô£ô
+
+O arquivo `C:/4c/projeto/app/forms/cadastros/Formcrf.prg` foi criado com 341 linhas. A Fase 3/8 est├í conclu├¡da com:
+
+**O que foi entregue:**
+- `DEFINE CLASS Formcrf AS FormBase` com todas as propriedades visuais (Height=600, Width=1000, Caption via CHR(234), DataSession=2, sem barra de t├¡tulo)
+- `Init()` ÔåÆ apenas `DODEFAULT()` (FormBase.Init chama InicializarForm)
+- `InicializarForm()` ÔåÆ cria crfBO, chama ConfigurarPageFrame/PaginaLista/PaginaDados, guarda contra `gb_4c_ValidandoUI`
+- `ConfigurarPageFrame()` ÔåÆ PageFrame com Top=-29, Tabs=.F., 2 p├íginas com imagem de fundo
+- `ConfigurarPaginaLista()` ÔåÆ cnt_4c_Cabecalho (com labels sombra/t├¡tulo), cnt_4c_Botoes (Left=543), cnt_4c_BotoesEspeciais (para Espelho/Fecha/Abre), cnt_4c_Saida (can├┤nico Left=917)
+- `ConfigurarPaginaDados()` ÔåÆ cnt_4c_Salva vazio (para Confirmar/Cancelar)
+- `CarregarLista()`, `AlternarPagina()`, `TornarControlesVisiveis()`, `FormatarGridLista()`, `Destroy()` com restaura├º├úo do menu
