@@ -57,7 +57,7 @@ DEFINE CLASS SIGREFXVBO AS RelatorioBase
     PROCEDURE Init()
         THIS.this_cTabela     = "SigMvEst"
         THIS.this_cCampoChave = ""
-        THIS.this_cArquivoFRX = gc_4c_CaminhoBase + "reports\SigReFxv.frx"
+        THIS.this_cArquivoFRX = gc_4c_CaminhoReports + "SigReFxv.frx"
         THIS.this_cTitulo     = "Relat" + CHR(243) + "rio de Posi" + CHR(231) + CHR(227) + ;
                                  "o de Estoque por Grupo de Produto/Faixa de Valor"
         RETURN DODEFAULT()

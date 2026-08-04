@@ -5852,6 +5852,9 @@ function Corrigir-PictureReportIconesInexistentes {
         '"impressora\.jpg"'        = '"relatorio_impressora_26.jpg"'
         '"excel\.jpg"'             = '"geral_envelope_32.jpg"'
         '"botao_encerrar\.jpg"'    = '"relatorio_sair_60.jpg"'
+        # Erro87 (2026-08-04, Formsigrechp/redtv/rehpr): nomes "cadastro_*" inventados por gerador — NAO existem em vbmp/
+        'cadastro_imprimir_60\.jpg' = 'relatorio_impressora_26.jpg'
+        'cadastro_excel_60\.jpg'    = 'geral_envelope_32.jpg'
     }
 
     $resultado = @()
@@ -9689,6 +9692,210 @@ function Corrigir-ReportVisualizarFallthroughPrepara {
     return $Linhas
 }
 
+# =============================================================================
+# Pattern #154: FormBuscaAuxiliar par_cTabela concatenando " WHERE ..."
+# Detecta CREATEOBJECT("FormBuscaAuxiliar", ..., "Tabela" + <var>, ...) onde
+# a variavel foi definida com prefixo " WHERE ..." — gera SQL com WHERE duplicado
+# em runtime (SQL Server: "Sintaxe incorreta proxima a palavra-chave 'WHERE'").
+# WARNING-only: nao muta porque o fix requer refactor manual (extrair a condicao
+# sem WHERE + adicionar 3 params extras para chegar ao 9o par_cFiltro).
+# Bug em Formsigrechp AbrirLookupDesConta+AbrirLookupEmiConta (2026-08-04, Erro87).
+# =============================================================================
+function Corrigir-FormBuscaAuxiliarWhereConcat {
+    param([string[]]$Linhas)
+
+    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
+
+    $countWarn = 0
+    $sitesEncontrados = @()
+
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        $linha = $Linhas[$i]
+
+        # Detecta o 2o param no formato: "Xxx" + loc_c<var>
+        # Pode estar na mesma linha do CREATEOBJECT ou em linha de continuacao (`;`)
+        if ($linha -match '"[A-Za-z][A-Za-z0-9_]*"\s*\+\s*(loc_c\w+)\s*,\s*;?\s*$') {
+            $varName = $Matches[1]
+
+            # Confirma que estamos num bloco CREATEOBJECT("FormBuscaAuxiliar")
+            # Olhar ate 5 linhas para tras
+            $ehFormBusca = $false
+            for ($j = [Math]::Max(0, $i - 5); $j -le $i; $j++) {
+                if ($Linhas[$j] -match '(?i)CREATEOBJECT\s*\(\s*"FormBuscaAuxiliar"') {
+                    $ehFormBusca = $true
+                    break
+                }
+            }
+
+            if (-not $ehFormBusca) { continue }
+
+            # Olhar ate 20 linhas para tras a atribuicao dessa variavel
+            # e verificar se ela contem " WHERE"
+            $temWhere = $false
+            for ($j = [Math]::Max(0, $i - 20); $j -lt $i; $j++) {
+                # captura padrao: loc_cVar = " WHERE ..."
+                if ($Linhas[$j] -match "(?i)^\s*$varName\s*=\s*""\s*WHERE\b") {
+                    $temWhere = $true
+                    break
+                }
+                # captura padrao: loc_cVar = loc_cVar + " WHERE ..."
+                if ($Linhas[$j] -match "(?i)$varName\s*=\s*$varName\s*\+\s*""\s*(AND\s+)?WHERE\b") {
+                    $temWhere = $true
+                    break
+                }
+            }
+
+            if ($temWhere) {
+                $sitesEncontrados += "linha $($i + 1)"
+                $countWarn++
+            }
+        }
+    }
+
+    if ($countWarn -gt 0) {
+        $lista = ($sitesEncontrados -join ", ")
+        Add-Correcao -Tipo "WARN-154-FORMBUSCA-WHERE-CONCAT" -Linha 1 `
+            -Original "CREATEOBJECT('FormBuscaAuxiliar', ..., 'Tabela' + <var-com-WHERE>, ...) em $lista" `
+            -Corrigido "(REVISAR MANUAL) Passar tabela pura + condicao SEM WHERE no 9o param par_cFiltro" `
+            -Descricao "Pattern #154 WARNING: encontradas $countWarn ocorrencias de CREATEOBJECT FormBuscaAuxiliar com WHERE concatenado no 2o param (par_cTabela). Isso gera SQL final com DUPLO WHERE = SQL Server 'Sintaxe incorreta proxima a palavra-chave WHERE'. FIX MANUAL: (1) Trocar 2o param para nome puro da tabela (ex: 'SigCdCli'); (2) Extrair a condicao sem prefixo WHERE (ex: loc_cFiltro = 'grupos = ' + EscaparSQL(loc_cGrupo)); (3) Adicionar 3 novos params positionais: `, .F., .T., loc_cFiltro`. FormBuscaAuxiliar concatena internamente ' AND (par_cFiltro)'. Padrao canonico: Formsigrechp.prg:2049-2068 pos-Erro87. Sites: $lista"
+        Write-Host "[Pattern #154] WARNING: $countWarn ocorrencias FormBuscaAuxiliar com WHERE em par_cTabela ($lista) - refactor manual necessario." -ForegroundColor Yellow
+    }
+
+    return $Linhas
+}
+
+# =============================================================================
+# Pattern #155: SigCdCli.grclis (coluna inexistente — usar SigCdCli.grupos)
+# Detecta SELECT/WHERE em SigCdCli filtrando por grclis — coluna nao existe em
+# SigCdCli (pertence a SigChe/SigCqChm). Gera runtime "Invalid column name 'grclis'"
+# mascarado em CATCH silencioso de Validar*/AbrirLookup*.
+# WARNING-only: nao muta porque a semantica pode variar (grupos pode ser grupocobs,
+# grupovens, etc. dependendo do contexto de negocio — precisa validacao humana).
+# Bug em Formsigrechp (2026-08-04, Erro87, 6 sites).
+# =============================================================================
+function Corrigir-SigCdCliGrclisInvalida {
+    param([string[]]$Linhas)
+
+    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
+
+    $conteudo = $Linhas -join "`n"
+
+    # Guard: file precisa mencionar SigCdCli E grclis
+    if ($conteudo -notmatch '(?i)\bSigCdCli\b' -or $conteudo -notmatch '(?i)\bgrclis\b') {
+        return $Linhas
+    }
+
+    $countWarn = 0
+    $sitesEncontrados = @()
+
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        $linha = $Linhas[$i]
+
+        # Caso 1: linha contem "AND grclis =" ou "AND grclis=" ou "WHERE grclis"
+        # e alguma linha ate 10 acima menciona "FROM SigCdCli" na mesma query concat
+        if ($linha -match '(?i)\b(AND|WHERE)\s+grclis\s*=') {
+            # Backtrack: procura FROM SigCdCli na mesma sequencia de concat SQL (linhas com `+ ;`)
+            $ehSigCdCli = $false
+            for ($j = [Math]::Max(0, $i - 15); $j -lt $i; $j++) {
+                if ($Linhas[$j] -match '(?i)\bFROM\s+SigCdCli\b') {
+                    $ehSigCdCli = $true
+                    break
+                }
+            }
+            # Tambem detecta a mesma linha (SQL single-line)
+            if ($linha -match '(?i)\bFROM\s+SigCdCli\b.*\bgrclis\s*=') {
+                $ehSigCdCli = $true
+            }
+
+            if ($ehSigCdCli) {
+                $sitesEncontrados += "linha $($i + 1)"
+                $countWarn++
+            }
+        }
+
+        # Caso 2: par_cFiltro literal "grclis = ..." apos CREATEOBJECT FormBuscaAuxiliar "SigCdCli"
+        if ($linha -match '(?i)"grclis\s*=') {
+            $ehSigCdCliLookup = $false
+            for ($j = [Math]::Max(0, $i - 10); $j -le [Math]::Min($i + 10, $Linhas.Count - 1); $j++) {
+                if ($Linhas[$j] -match '(?i)CREATEOBJECT\s*\(\s*"FormBuscaAuxiliar"' -and
+                    ($Linhas[$j..([Math]::Min($j + 15, $Linhas.Count - 1))] -join "`n") -match '(?i)"SigCdCli"') {
+                    $ehSigCdCliLookup = $true
+                    break
+                }
+            }
+            if ($ehSigCdCliLookup) {
+                $sitesEncontrados += "linha $($i + 1)"
+                $countWarn++
+            }
+        }
+    }
+
+    if ($countWarn -gt 0) {
+        $lista = ($sitesEncontrados | Select-Object -Unique) -join ", "
+        Add-Correcao -Tipo "WARN-155-SIGCDCLI-GRCLIS" -Linha 1 `
+            -Original "SELECT/WHERE em SigCdCli filtrando por 'grclis' em $lista" `
+            -Corrigido "(REVISAR MANUAL) Trocar 'grclis' por 'grupos' (ou coluna semantica correta: grupocobs/grupovens/etc)" `
+            -Descricao "Pattern #155 WARNING: $countWarn ocorrencias filtrando SigCdCli.grclis — coluna NAO EXISTE em SigCdCli. Colunas de grupo disponiveis: grupos, grupocobs, grupomats, grupovens, grupocents, gruprods, grufals. Coluna canonica default: 'grupos' (char 10). grclis pertence a SigChe/SigCqChm (grupo do emitente do cheque). FIX MANUAL: consultar docs/schema.sql (UTF-16 — usar Get-Content -Encoding Unicode) para escolher a coluna semantica correta e substituir 'grclis' por 'grupos' (99% dos casos). Reciproca: em SigChe/SigCqChm com alias, grclis (grupo emissor) e grupos (grupo destino) COEXISTEM e tem semanticas opostas — nao trocar. Padrao canonico: Formsigrechp.prg pos-Erro87. Sites: $lista"
+        Write-Host "[Pattern #155] WARNING: $countWarn ocorrencias SigCdCli.grclis ($lista) - substituir por 'grupos' (ou coluna semantica correta) manualmente." -ForegroundColor Yellow
+    }
+
+    return $Linhas
+}
+
+# =============================================================================
+# Pattern #156: gc_4c_CaminhoBase + "reports\..." — path corrompido (falta separador
+# + falta navegacao ..\). Substitui pelo canonico gc_4c_CaminhoReports (config.prg
+# ja resolve ADDBS + ..\reports\ corretamente).
+#
+# Variantes cobertas (regex-based):
+#   (a) `gc_4c_CaminhoBase + "reports\..."`         → gera "startreports\..." (sem sep)
+#   (b) `ADDBS(gc_4c_CaminhoBase) + "reports\..."`  → gera "start\reports\..." (falta ..\)
+# Ambas viram: `gc_4c_CaminhoReports + "..."`
+#
+# Zero falso positivo: `gc_4c_CaminhoBase + "reports\` NUNCA eh valido.
+# Idempotente. Auto-mutating (safe).
+# Bug em sigrecmmBO/sigrehtcBO/SIGREFXVBO/FormSIGREFXV (2026-08-04, Erro88).
+# =============================================================================
+function Corrigir-GcCaminhoBasePlusReports {
+    param([string[]]$Linhas)
+
+    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
+
+    $countFix = 0
+
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        $linha = $Linhas[$i]
+        $original = $linha
+
+        # Skip linhas de comentario (nao mutar em docs/comments)
+        if ($linha -match '^\s*\*') { continue }
+
+        # Variante (a): gc_4c_CaminhoBase + "reports\..."
+        if ($linha -match 'gc_4c_CaminhoBase\s*\+\s*"reports\\') {
+            $linha = $linha -replace 'gc_4c_CaminhoBase\s*\+\s*"reports\\', 'gc_4c_CaminhoReports + "'
+        }
+        # Variante (b): ADDBS(gc_4c_CaminhoBase) + "reports\..."
+        if ($linha -match 'ADDBS\s*\(\s*gc_4c_CaminhoBase\s*\)\s*\+\s*"reports\\') {
+            $linha = $linha -replace 'ADDBS\s*\(\s*gc_4c_CaminhoBase\s*\)\s*\+\s*"reports\\', 'gc_4c_CaminhoReports + "'
+        }
+
+        if ($linha -ne $original) {
+            $Linhas[$i] = $linha
+            $countFix++
+            Add-Correcao -Tipo "PATH-FRX-CAMINHOREPORTS" -Linha ($i + 1) `
+                -Original $original.Trim() `
+                -Corrigido $linha.Trim() `
+                -Descricao "Pattern #156: 'gc_4c_CaminhoBase + \`"reports\\...\`"' gera path corrompido (falta separador ou navegacao ..\\). Substituido por 'gc_4c_CaminhoReports + \`"...\`"' (config.prg ja resolve corretamente). Origem: Erro88 (2026-08-04, FormSigReCmm)."
+        }
+    }
+
+    if ($countFix -gt 0) {
+        Write-Host "[Pattern #156] $countFix path(s) FRX/reports corrigido(s) para gc_4c_CaminhoReports." -ForegroundColor Green
+    }
+
+    return $Linhas
+}
+
 function Invoke-CorrecaoAutomatica {
     param(
         [string]$Arquivo,
@@ -9866,6 +10073,9 @@ function Invoke-CorrecaoAutomatica {
     $linhas = Corrigir-CheckBoxValueDiretoLogicalProp -Linhas $linhas
     $linhas = Corrigir-ValSetDecimalsWrap -Linhas $linhas
     $linhas = Corrigir-ReportVisualizarFallthroughPrepara -Linhas $linhas
+    $linhas = Corrigir-FormBuscaAuxiliarWhereConcat -Linhas $linhas
+    $linhas = Corrigir-SigCdCliGrclisInvalida -Linhas $linhas
+    $linhas = Corrigir-GcCaminhoBasePlusReports -Linhas $linhas
 
     # Salva arquivo corrigido (sem BOM - VFP9 nao suporta UTF8 com BOM)
     $conteudoFinal = $linhas -join "`r`n"

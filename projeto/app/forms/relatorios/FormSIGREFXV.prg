@@ -658,6 +658,7 @@ DEFINE CLASS FormSIGREFXV AS FormBase
             WITH .Column1
                 .ControlSource    = "CsEstoque.Emps"
                 .Width            = 80
+                .HeaderHeight       = 0
                 .Header1.Caption  = "Empresa"
             ENDWITH
 
@@ -924,7 +925,7 @@ DEFINE CLASS FormSIGREFXV AS FormBase
         TRY
             IF THIS.this_oRelatorio.PrepararDados()
                 IF USED("CsRelatorio")
-                    loc_cArquivo = gc_4c_CaminhoBase + "reports\SigReFxv_" + ;
+                    loc_cArquivo = gc_4c_CaminhoReports + "SigReFxv_" + ;
                                    STRTRAN(DTOC(DATE(), 1), "-", "") + ".xls"
                     SELECT CsRelatorio
                     COPY TO (loc_cArquivo) TYPE XL5
