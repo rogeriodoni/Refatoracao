@@ -1,4 +1,4 @@
-﻿*------------------------------------------------------------------------------
+*------------------------------------------------------------------------------
 * SIGPRIBLBO.prg - Business Object para Impressao de Boleto Bancario
 * Herda de: BusinessBase
 * Tabela principal: SigCnFBl (configuracao de boleto)
