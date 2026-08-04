@@ -6594,3 +6594,198 @@ CorretorAutomatico Pattern **#153**:
 - Complementa: `#147 REPORT FORM bare` (Erro62 — mesmo padrao de fluxo defeituoso; fix menor overlap), `#117 ExecutarReportForm helper canonico` (template do fix ideal)
 - Origem: Erro68 (2026-07-28, FormSigReCgc Visualizar — clicar Visualizar sem selecionar filtros nao mostrava mensagem "nenhum registro")
 
+## 154. FormBuscaAuxiliar par_cTabela recebendo `"Tabela" + " WHERE ..."` gera SQL com DUPLO WHERE (Erro87 Formsigrechp 2026-08-04)
+
+### Sintoma
+Ao pressionar F4/Enter/Tab em campo de Conta Destino (ou similar) que abre lookup FormBuscaAuxiliar, dialog nativo do SQL Server aparece:
+```
+Microsoft Visual FoxPro
+Connectivity error: [Microsoft][ODBC SQL Server Driver][SQL Server]
+Sintaxe incorreta proxima a palavra-chave 'WHERE'.
+```
+CATCH em `AbrirLookup<X>` engole (msg generica) — user nao sabe qual query estourou.
+
+### Causa
+
+`FormBuscaAuxiliar.Init(par_nConn, par_cTabela, par_cCursor, par_cCampo, par_cValor, par_cTitulo, par_lBuscaExata, par_lMostraGrid, par_cFiltro)` monta INTERNAMENTE:
+```foxpro
+loc_cWhere = IIF(EMPTY(par_cFiltro), "", " AND (" + par_cFiltro + ")")
+loc_cSQL = "SELECT * FROM " + par_cTabela + " " + ;
+           "WHERE CAST(" + par_cCampo + " AS VARCHAR(50)) = " + EscaparSQL(par_cValor) + ;
+           loc_cWhere
+```
+Se `par_cTabela` chega como `"SigCdCli WHERE grupos = 'X'"` (por concatenacao no caller), o SQL final vira:
+```
+SELECT * FROM SigCdCli WHERE grupos = 'X' WHERE CAST(Iclis AS VARCHAR(50)) = '1'
+```
+→ SQL Server tokeniza como 2 clausulas WHERE → erro sintatico.
+
+### Bug pattern proibido
+```foxpro
+PROCEDURE AbrirLookupDesConta()
+    LOCAL loc_cSQL
+    IF !EMPTY(loc_cGrupo)
+        loc_cSQL = " WHERE grupos = " + EscaparSQL(loc_cGrupo)   && <-- BUG
+    ELSE
+        loc_cSQL = ""
+    ENDIF
+    loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+        "SigCdCli" + loc_cSQL, ;                                   && <-- BUG: tabela + WHERE
+        "cursor_4c_BuscaDesCli", "Iclis", loc_cCodAtual, "Buscar Conta Destino")
+ENDPROC
+```
+
+### Fix canonico
+```foxpro
+PROCEDURE AbrirLookupDesConta()
+    LOCAL loc_cFiltro
+    IF !EMPTY(loc_cGrupo)
+        loc_cFiltro = "grupos = " + EscaparSQL(loc_cGrupo)         && SEM prefixo "WHERE"
+    ELSE
+        loc_cFiltro = ""
+    ENDIF
+    loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+        "SigCdCli", ;                                              && tabela pura
+        "cursor_4c_BuscaDesCli", ;
+        "Iclis", ;
+        loc_cCodAtual, ;
+        "Buscar Conta Destino", ;
+        .F., ;                                                     && par_lBuscaExata
+        .T., ;                                                     && par_lMostraGrid
+        loc_cFiltro)                                               && 9o param par_cFiltro
+ENDPROC
+```
+
+Se filtro tem multiplas condicoes: `loc_cFiltro = "col1 = 'a' AND col2 = 'b'"` (sem WHERE, com aspas SQL via `EscaparSQL`).
+
+### Auto-fix
+- **CorretorAutomatico Pattern #154** (WARNING-only): detecta `CREATEOBJECT\("FormBuscaAuxiliar",\s*[^,]+,\s*"[A-Za-z]+"\s*\+\s*loc_c\w+` (concat no 2o param) e emite WARNING amarelo pedindo refactor manual (nao muta — mudar assinatura para passar 3 params extras eh cirurgico).
+
+### Referencias
+- Memoria detalhada: `feedback_formbuscaauxiliar_where_in_tabela.md`
+- Origem: Erro87 (2026-08-04, Formsigrechp AbrirLookupDesConta + AbrirLookupEmiConta) — user clicou Conta/Destino apos digitar "1" com Grupo/Destino="11101"; dialog SQL error apareceu.
+
+## 155. `SigCdCli.grclis` NAO EXISTE — coluna de grupo eh `grupos` (Erro87 Formsigrechp 2026-08-04)
+
+### Sintoma
+Ao validar lookup de conta (`SELECT ... FROM SigCdCli WHERE ... AND grclis = 'X'`), SQL Server retorna:
+```
+Invalid column name 'grclis'.
+```
+Mascarado por CATCH silencioso de Validar*/AbrirLookup*: user nao consegue selecionar conta com filtro de grupo.
+
+### Causa
+Tabela `SIGCDCLI` (cadastro de clientes/contas) NAO tem coluna `grclis`. Colunas de agrupamento canonicas:
+| Coluna | Tipo | Semantica |
+|--------|------|-----------|
+| `grupos` | char(10) | grupo padrao (usar para filtros genericos) |
+| `grupocobs` | char(10) | grupo cobranca |
+| `grupomats` | char(10) | grupo material |
+| `grupovens` | char(10) | grupo vendedor |
+| `grupocents` | char(10) | grupo centro |
+| `gruprods` | char(10) | grupo produto |
+| `grufals` | char(10) | grupo falencia |
+
+`grclis` pertence a **SigChe** (tabela de cheques, "grupo do emitente do cheque") e a **SigCqChm**.
+
+### Origem do bug
+Copy-paste do report SQL legado. Ex `sigrechp.PRG:1051`:
+```
+lcVerEmiGrupo = ' and b.grclis = ?lcCdEmiGrupo '   && b = SigChe (correto)
+lcVerDesGrupo = ' and b.grupos = ?lcCdDesGrupo '   && b = SigChe.grupos (destino DO CHEQUE)
+```
+Gerador migrou os 4 metodos ValidarCd/DsDes/EmiConta + 2 AbrirLookupDes/EmiConta usando `grclis` (tomou o primeiro que viu no legado) — mas esses lookups filtram `SigCdCli`, nao `SigChe`.
+
+### Bug pattern proibido
+```foxpro
+loc_cSql = "SELECT TOP 1 rClis FROM SigCdCli WHERE Iclis = " + EscaparSQL(loc_cCod)
+IF !EMPTY(loc_cGrupo)
+    loc_cSql = loc_cSql + " AND grclis = " + EscaparSQL(loc_cGrupo)   && <-- grclis nao existe em SigCdCli
+ENDIF
+```
+
+### Fix
+```foxpro
+loc_cSql = "SELECT TOP 1 rClis FROM SigCdCli WHERE Iclis = " + EscaparSQL(loc_cCod)
+IF !EMPTY(loc_cGrupo)
+    loc_cSql = loc_cSql + " AND grupos = " + EscaparSQL(loc_cGrupo)   && CORRETO em SigCdCli
+ENDIF
+```
+
+**Reciproca**: em queries sobre SigChe/SigCqChm, `grclis` (grupo emissor) e `grupos` (grupo destino) COEXISTEM com semanticas OPOSTAS — nao trocar cegamente.
+
+### Auto-fix
+- **CorretorAutomatico Pattern #155** (WARNING-only): detecta `FROM\s+SigCdCli[^"]*\bgrclis\b` e emite WARNING amarelo pedindo confirmacao humana (semantica pode variar; safest refactor manual).
+
+### Regra generica
+SEMPRE consultar `docs/schema.sql` (UTF-16 — usar `Get-Content -Encoding Unicode` em PowerShell) antes de escrever nome de coluna de tabela `Sig*Cd*`. Nomes nao seguem convencao previsivel. Complementa `#115 SigCdGcr tem descrs`.
+
+### Referencias
+- Memoria detalhada: `feedback_sigcdcli_grupos_nao_grclis.md`
+- Complementa: `#115 SigCdGcr tem descrs (com r)`, `#125 SigCdEmp tem Cemps/Razas`
+- Origem: Erro87 (2026-08-04, Formsigrechp — 6 sites: 4 Validar* + 2 AbrirLookup*). Sweep global confirmou 0 outros forms afetados.
+
+## 156. Path do FRX/reports com `gc_4c_CaminhoBase + "reports\..."` corrompe caminho (falta separador + falta ..\ navigation) (Erro88 sigrecmmBO 2026-08-04)
+
+### Sintoma
+Ao clicar Visualizar/Imprimir num relatorio, dialog vermelho aparece:
+```
+Erro
+Arquivo de relatorio nao encontrado:
+C:\4C\PROJETO\APP\STARTreports\SigReCmm.frx
+```
+Note `STARTreports\` (sem barra entre `START` e `reports`). FRX de fato esta em `C:\4c\projeto\app\reports\SigReCmm.frx`.
+
+### Causa
+`gc_4c_CaminhoBase` eh atribuido em `config.prg:48` como:
+```foxpro
+gc_4c_CaminhoBase = JUSTPATH(SYS(16))
+```
+`SYS(16)` retorna o path COMPLETO do PRG atual (ex: `C:\4c\projeto\app\start\main.prg`). `JUSTPATH()` remove o filename mas **NAO adiciona trailing backslash** — resultado: `C:\4c\projeto\app\start` (sem `\` final).
+
+BO que faz `loc_cFrx = gc_4c_CaminhoBase + "reports\SigReCmm.frx"` obtem `C:\4c\projeto\app\startreports\SigReCmm.frx` — path invalido. Ate se adicionasse ADDBS ficaria `C:\4c\projeto\app\start\reports\SigReCmm.frx` — TAMBEM invalido (a pasta `start\reports\` nao existe).
+
+`gc_4c_CaminhoReports` (config.prg:68) ja faz a construcao correta:
+```foxpro
+gc_4c_CaminhoReports = ADDBS(gc_4c_CaminhoBase) + "..\reports\"
+                     = "C:\4c\projeto\app\start\" + "..\reports\"
+                     = "C:\4c\projeto\app\start\..\reports\"
+```
+VFP9 `FILE()`/`REPORT FORM` resolvem o `..\` para `C:\4c\projeto\app\reports\` — funciona.
+
+### Bug pattern proibido
+```foxpro
+loc_cFrx = gc_4c_CaminhoBase + "reports\SigReCmm.frx"           && <-- BUG (sem sep)
+loc_cFrx = ADDBS(gc_4c_CaminhoBase) + "reports\SigReCmm.frx"    && <-- BUG (falta ..\)
+THIS.this_cArquivoFRX = gc_4c_CaminhoBase + "reports\SigReFxv.frx"  && <-- BUG idem
+loc_cArquivo = gc_4c_CaminhoBase + "reports\SigReFxv_20260804.xls"  && <-- BUG (XLS export)
+```
+
+### Fix canonico
+```foxpro
+loc_cFrx = gc_4c_CaminhoReports + "SigReCmm.frx"                     && CORRETO
+THIS.this_cArquivoFRX = gc_4c_CaminhoReports + "SigReFxv.frx"        && CORRETO
+loc_cArquivo = gc_4c_CaminhoReports + "SigReFxv_" + DTOS(DATE()) + ".xls"  && CORRETO
+```
+
+Regra generica: **NUNCA reconstruir path a partir de `gc_4c_CaminhoBase`**. Usar sempre a variavel publica ja resolvida:
+| Uso | Variavel canonica |
+|---|---|
+| FRX/RPT/XLS gerados em reports/ | `gc_4c_CaminhoReports` |
+| Classes VFP (SET PROCEDURE) | `gc_4c_CaminhoClasses` |
+| Utils (SET PROCEDURE) | `gc_4c_CaminhoUtils` |
+| Forms | `gc_4c_CaminhoForms` |
+| Icones/imagens | `gc_4c_CaminhoIcones` |
+
+### Auto-fix
+- **CorretorAutomatico Pattern #156** (`Corrigir-GcCaminhoBasePlusReports`): regex `gc_4c_CaminhoBase\s*\+\s*"reports\\` → `gc_4c_CaminhoReports + "` (single replacement). Zero falso positivo porque `gc_4c_CaminhoBase + "reports\` NUNCA eh valido. Idempotente.
+- Tambem detecta variante `ADDBS(gc_4c_CaminhoBase) + "reports\` (mesmo padrao raiz, tambem gera path invalido).
+
+### Correlato — FRX ausente
+Se apos corrigir o path o BO ainda reporta "Arquivo de relatorio nao encontrado", o FRX legitimamente nao existe em `projeto/app/reports/`. Fix: copiar `<Base>.frx` + `<Base>.frt` de `C:\4install\FortyusMC\Fortyus\` preservando o nome case original. Windows filesystem eh case-insensitive por default — VFP `FILE("SigReCmm.frx")` acha `sigrecmm.frx` copiado do legado.
+
+### Referencias
+- Memoria detalhada: `feedback_gc_caminhoreports_nunca_concatenar_base.md`
+- Complementa: `#117 ExecutarReportForm helper canonico` (usa gc_4c_CaminhoReports internamente)
+- Origem: Erro88 (2026-08-04, FormSigReCmm Visualizar — 5 sites em 4 arquivos: sigrecmmBO/sigrehtcBO/SIGREFXVBO/FormSIGREFXV; 3 FRXs faltantes copiados de C:\4install\FortyusMC\Fortyus\).
+

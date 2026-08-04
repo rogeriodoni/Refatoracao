@@ -173,7 +173,7 @@ DEFINE CLASS Formsigrechp AS FormBase
             .FontBold        = .T.
             .FontItalic      = .T.
             .FontSize        = 8
-            .Picture         = gc_4c_CaminhoIcones + "cadastro_vizualizar_60.jpg"
+            .Picture         = gc_4c_CaminhoIcones + "relatorio_video_26.jpg"
             .PicturePosition = 13
             .SpecialEffect   = 0
             .MousePointer    = 15
@@ -195,7 +195,7 @@ DEFINE CLASS Formsigrechp AS FormBase
             .FontBold        = .T.
             .FontItalic      = .T.
             .FontSize        = 8
-            .Picture         = gc_4c_CaminhoIcones + "cadastro_imprimir_60.jpg"
+            .Picture         = gc_4c_CaminhoIcones + "relatorio_impressora_26.jpg"
             .PicturePosition = 13
             .SpecialEffect   = 0
             .MousePointer    = 15
@@ -218,7 +218,7 @@ DEFINE CLASS Formsigrechp AS FormBase
             .FontBold        = .T.
             .FontItalic      = .T.
             .FontSize        = 8
-            .Picture         = gc_4c_CaminhoIcones + "cadastro_excel_60.jpg"
+            .Picture         = gc_4c_CaminhoIcones + "geral_envelope_32.jpg"
             .PicturePosition = 13
             .SpecialEffect   = 0
             .MousePointer    = 15
@@ -241,7 +241,7 @@ DEFINE CLASS Formsigrechp AS FormBase
             .FontBold        = .T.
             .FontItalic      = .T.
             .FontSize        = 8
-            .Picture         = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
+            .Picture         = gc_4c_CaminhoIcones + "relatorio_sair_60.jpg"
             .PicturePosition = 13
             .SpecialEffect   = 0
             .MousePointer    = 15
@@ -761,38 +761,44 @@ DEFINE CLASS Formsigrechp AS FormBase
         *-- Botao Selecionar Todos (Command3 original: Top=146, Left=429 -> Page: Top=61)
         loc_oPagina.AddObject("cmd_4c_SelecionarTodos", "CommandButton")
         WITH loc_oPagina.cmd_4c_SelecionarTodos
-            .Top           = 61
-            .Left          = 429
-            .Width         = 45
-            .Height        = 45
-            .Caption       = "Sel."
-            .FontName      = "Tahoma"
-            .FontSize      = 7
-            .SpecialEffect = 0
-            .MousePointer  = 15
-            .Themes        = .F.
-            .BackColor     = RGB(255, 255, 255)
-            .ForeColor     = RGB(90, 90, 90)
-            .Visible       = .T.
+            .Top             = 61
+            .Left            = 429
+            .Width           = 45
+            .Height          = 45
+            .Caption         = ""
+            .Picture         = gc_4c_CaminhoIcones + "geral_marcar_26.jpg"
+            .DisabledPicture = gc_4c_CaminhoIcones + "geral_marcar_26.jpg"
+            .ToolTipText     = "Selecionar Todos"
+            .FontName        = "Tahoma"
+            .FontSize        = 7
+            .SpecialEffect   = 0
+            .MousePointer    = 15
+            .Themes          = .T.
+            .BackColor       = RGB(255, 255, 255)
+            .ForeColor       = RGB(90, 90, 90)
+            .Visible         = .T.
         ENDWITH
         BINDEVENT(loc_oPagina.cmd_4c_SelecionarTodos, "Click", THIS, "SelecionarTodosClick")
 
         *-- Botao Deselecionar Todos (Command4 original: Top=191, Left=429 -> Page: Top=106)
         loc_oPagina.AddObject("cmd_4c_DeselecionarTodos", "CommandButton")
         WITH loc_oPagina.cmd_4c_DeselecionarTodos
-            .Top           = 106
-            .Left          = 429
-            .Width         = 45
-            .Height        = 45
-            .Caption       = "Desel."
-            .FontName      = "Tahoma"
-            .FontSize      = 7
-            .SpecialEffect = 0
-            .MousePointer  = 15
-            .Themes        = .F.
-            .BackColor     = RGB(255, 255, 255)
-            .ForeColor     = RGB(90, 90, 90)
-            .Visible       = .T.
+            .Top             = 106
+            .Left            = 429
+            .Width           = 45
+            .Height          = 45
+            .Caption         = ""
+            .Picture         = gc_4c_CaminhoIcones + "cadastro_excluir_26.jpg"
+            .DisabledPicture = gc_4c_CaminhoIcones + "cadastro_excluir_26.jpg"
+            .ToolTipText     = "Desmarcar Todos"
+            .FontName        = "Tahoma"
+            .FontSize        = 7
+            .SpecialEffect   = 0
+            .MousePointer    = 15
+            .Themes          = .T.
+            .BackColor       = RGB(255, 255, 255)
+            .ForeColor       = RGB(90, 90, 90)
+            .Visible         = .T.
         ENDWITH
         BINDEVENT(loc_oPagina.cmd_4c_DeselecionarTodos, "Click", THIS, "DeselecionarTodosClick")
 
@@ -886,7 +892,6 @@ DEFINE CLASS Formsigrechp AS FormBase
             .Left      = 128
             .Top       = 0
             .Caption   = IIF(VARTYPE(loc_oRel) = "O" AND !EMPTY(loc_oRel.this_cCapOpcao3), ;
-            .WordWrap        = .T.
                              loc_oRel.this_cCapOpcao3, "Ambos")
             .BackStyle = 0
             .FontName  = "Comic Sans MS"
@@ -894,6 +899,7 @@ DEFINE CLASS Formsigrechp AS FormBase
             .AutoSize  = .T.
             .ForeColor = RGB(90, 90, 90)
             .Themes    = .F.
+            .WordWrap  = .T.
         ENDWITH
 
         *-- Empresa: label + codigo + descricao
@@ -1169,10 +1175,20 @@ DEFINE CLASS Formsigrechp AS FormBase
             .FontName  = "Verdana"
             .FontSize  = 8
             .Alignment = 2
+            .Sparse    = .F.
         ENDWITH
         loc_oGrid.Column1.Header1.Caption = ""
         loc_oGrid.Column1.AddObject("Check1", "CheckBox")
-        loc_oGrid.Column1.Check1.Caption  = ""
+        WITH loc_oGrid.Column1.Check1
+            .Caption   = ""
+            .Alignment = 0
+            .ReadOnly  = .F.
+            .Visible   = .T.
+            .Top       = 9
+            .Left      = 2
+            .Height    = 17
+            .Width     = 22
+        ENDWITH
         loc_oGrid.Column1.CurrentControl  = "Check1"
 
         *-- Column2: TextBox somente leitura para Operacaos
@@ -1604,7 +1620,7 @@ DEFINE CLASS Formsigrechp AS FormBase
             loc_cSql = "SELECT TOP 1 rClis FROM SigCdCli WHERE Iclis = " + ;
                        EscaparSQL(loc_cCod)
             IF !EMPTY(loc_cGrupo)
-                loc_cSql = loc_cSql + " AND grclis = " + EscaparSQL(loc_cGrupo)
+                loc_cSql = loc_cSql + " AND grupos = " + EscaparSQL(loc_cGrupo)
             ENDIF
             loc_nResult = SQLEXEC(gnConnHandle, loc_cSql, "cursor_4c_CliVal")
             IF loc_nResult > 0
@@ -1656,7 +1672,7 @@ DEFINE CLASS Formsigrechp AS FormBase
             loc_cSql = "SELECT TOP 1 Iclis, rClis FROM SigCdCli " + ;
                        "WHERE rClis LIKE " + EscaparSQL(loc_cDesc + "%")
             IF !EMPTY(loc_cGrupo)
-                loc_cSql = loc_cSql + " AND grclis = " + EscaparSQL(loc_cGrupo)
+                loc_cSql = loc_cSql + " AND grupos = " + EscaparSQL(loc_cGrupo)
             ENDIF
             loc_cSql    = loc_cSql + " ORDER BY Iclis"
             loc_nResult = SQLEXEC(gnConnHandle, loc_cSql, "cursor_4c_CliVal")
@@ -1852,7 +1868,7 @@ DEFINE CLASS Formsigrechp AS FormBase
             loc_cSql = "SELECT TOP 1 rClis FROM SigCdCli WHERE Iclis = " + ;
                        EscaparSQL(loc_cCod)
             IF !EMPTY(loc_cGrupo)
-                loc_cSql = loc_cSql + " AND grclis = " + EscaparSQL(loc_cGrupo)
+                loc_cSql = loc_cSql + " AND grupos = " + EscaparSQL(loc_cGrupo)
             ENDIF
             loc_nResult = SQLEXEC(gnConnHandle, loc_cSql, "cursor_4c_EmiCliVal")
             IF loc_nResult > 0
@@ -1904,7 +1920,7 @@ DEFINE CLASS Formsigrechp AS FormBase
             loc_cSql = "SELECT TOP 1 Iclis, rClis FROM SigCdCli " + ;
                        "WHERE rClis LIKE " + EscaparSQL(loc_cDesc + "%")
             IF !EMPTY(loc_cGrupo)
-                loc_cSql = loc_cSql + " AND grclis = " + EscaparSQL(loc_cGrupo)
+                loc_cSql = loc_cSql + " AND grupos = " + EscaparSQL(loc_cGrupo)
             ENDIF
             loc_cSql    = loc_cSql + " ORDER BY Iclis"
             loc_nResult = SQLEXEC(gnConnHandle, loc_cSql, "cursor_4c_EmiCliVal")
@@ -2050,14 +2066,17 @@ DEFINE CLASS Formsigrechp AS FormBase
             IF EMPTY(loc_cGrupo)
                 loc_cSQL = ""
             ELSE
-                loc_cSQL = " WHERE grclis = " + EscaparSQL(loc_cGrupo)
+                loc_cSQL = "grupos = " + EscaparSQL(loc_cGrupo)
             ENDIF
             loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
-                "SigCdCli" + loc_cSQL, ;
+                "SigCdCli", ;
                 "cursor_4c_BuscaDesCli", ;
                 "Iclis", ;
                 loc_cCodAtual, ;
-                "Buscar Conta Destino")
+                "Buscar Conta Destino", ;
+                .F., ;
+                .T., ;
+                loc_cSQL)
             loc_oBusca.mAddColuna("Iclis", "", "C" + CHR(243) + "digo")
             loc_oBusca.mAddColuna("rClis", "", "Nome")
             loc_oBusca.Show()
@@ -2301,14 +2320,17 @@ DEFINE CLASS Formsigrechp AS FormBase
             IF EMPTY(loc_cGrupo)
                 loc_cSQL = ""
             ELSE
-                loc_cSQL = " WHERE grclis = " + EscaparSQL(loc_cGrupo)
+                loc_cSQL = "grupos = " + EscaparSQL(loc_cGrupo)
             ENDIF
             loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
-                "SigCdCli" + loc_cSQL, ;
+                "SigCdCli", ;
                 "cursor_4c_BuscaEmiCli", ;
                 "Iclis", ;
                 loc_cCodAtual, ;
-                "Buscar Conta Emissor")
+                "Buscar Conta Emissor", ;
+                .F., ;
+                .T., ;
+                loc_cSQL)
             loc_oBusca.mAddColuna("Iclis", "", "C" + CHR(243) + "digo")
             loc_oBusca.mAddColuna("rClis", "", "Nome")
             loc_oBusca.Show()

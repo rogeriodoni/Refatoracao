@@ -202,7 +202,7 @@ DEFINE CLASS Formsigredtv AS FormBase
             .FontBold        = .T.
             .FontItalic      = .T.
             .FontSize        = 8
-            .Picture         = gc_4c_CaminhoIcones + "cadastro_imprimir_60.jpg"
+            .Picture         = gc_4c_CaminhoIcones + "relatorio_impressora_26.jpg"
             .PicturePosition = 13
             .SpecialEffect   = 0
             .MousePointer    = 15
@@ -224,7 +224,7 @@ DEFINE CLASS Formsigredtv AS FormBase
             .FontBold        = .T.
             .FontItalic      = .T.
             .FontSize        = 8
-            .Picture         = gc_4c_CaminhoIcones + "cadastro_excel_60.jpg"
+            .Picture         = gc_4c_CaminhoIcones + "geral_envelope_32.jpg"
             .PicturePosition = 13
             .SpecialEffect   = 0
             .MousePointer    = 15
