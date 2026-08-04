@@ -874,16 +874,26 @@ function Corrigir-OptionGroupButton {
 function Corrigir-EncodingInvalido {
     <#
     .SYNOPSIS
-    Remove caracteres de encoding invalido (> 127 ASCII) em comentarios
+    Substitui APENAS o REPLACEMENT CHAR U+FFFD (chr 65533 / "ï¿½") por '?' em comentarios.
 
     .DESCRIPTION
-    Caracteres acentuados mal formados (ï¿½ ï¿½ ï¿½) causam erro "Statement is not valid in a class definition"
-    porque o compilador VFP9 nao consegue processar UTF-8 com encoding invalido.
-    Solucao: Substituir caracteres > 127 ASCII por '?' apenas em linhas de comentario.
+    Quando um arquivo com encoding invalido eh decodificado como UTF-8, bytes
+    invalidos viram o REPLACEMENT CHAR U+FFFD (ï¿½ / chr 65533). Esse char eh
+    o unico sinal REAL de "encoding invalido" — outros chars > 127 (a=225,
+    ao=227, c=231, e=233, i=237, o=243, u=250, e Unicode ampliado como —, →,
+    «, », etc) sao LEGITIMOS em comentarios e NAO devem ser substituidos.
+
+    BUG PRE-FIX (2026-08-04): esta funcao substituia QUALQUER char > 127 por
+    '?', destruindo acentos legitimos em comentarios (ex: "Codigo do Relatorio"
+    perdia todas as acentuacoes) e chars Unicode uteis. Observado apos sweep
+    global em ~5 arquivos (SIGPRCCRBO, SIGPRIBLBO, SigReFtpBO, FormDepartamento).
+
+    FIX: filtrar SOMENTE U+FFFD (o sinal real de dano).
     #>
     param([string[]]$Linhas)
 
     $resultado = @()
+    $replacementChar = [char]0xFFFD  # U+FFFD REPLACEMENT CHARACTER (ï¿½)
 
     for ($i = 0; $i -lt $Linhas.Count; $i++) {
         $linha = $Linhas[$i]
@@ -892,32 +902,15 @@ function Corrigir-EncodingInvalido {
 
         # Detecta linhas de comentario (* no inicio)
         if ($linha -match '^\s*\*') {
-            # Verifica se tem caracteres > 127 ASCII
-            $temCaracterInvalido = $false
-            foreach ($char in $linha.ToCharArray()) {
-                if ([int][char]$char -gt 127) {
-                    $temCaracterInvalido = $true
-                    break
-                }
-            }
-
-            if ($temCaracterInvalido) {
-                # Substitui caracteres invalidos por '?'
-                $novaLinha = ""
-                foreach ($char in $linha.ToCharArray()) {
-                    if ([int][char]$char -gt 127) {
-                        $novaLinha += '?'
-                    } else {
-                        $novaLinha += $char
-                    }
-                }
-                $linha = $novaLinha
+            if ($linha.IndexOf($replacementChar) -ge 0) {
+                # Substitui APENAS U+FFFD por '?' — preserva acentos e Unicode legitimos
+                $linha = $linha.Replace($replacementChar, '?')
                 $modificada = $true
             }
         }
 
         if ($modificada) {
-            Add-Correcao -Tipo "ENCODING_INVALIDO" -Linha ($i + 1) -Original $linhaOriginal.Trim() -Corrigido $linha.Trim() -Descricao "Caracteres invalidos substituidos por '?' em comentario"
+            Add-Correcao -Tipo "ENCODING_INVALIDO" -Linha ($i + 1) -Original $linhaOriginal.Trim() -Corrigido $linha.Trim() -Descricao "REPLACEMENT CHAR U+FFFD (sinal de dano de encoding) substituido por '?' em comentario. Chars Unicode legitimos preservados."
         }
 
         $resultado += $linha
@@ -3988,6 +3981,26 @@ function Corrigir-NvlBitField {
         if ($linha -match '(?i)IIF\s*\(\s*VARTYPE\s*\(' -and $linha -match '(?i)NVL\s*\(') {
             $resultado += $linha
             continue
+        }
+        # GUARD IDEMPOTENCIA (2026-08-04): pular se esta linha eh o ramo ELSE de
+        # um IF VARTYPE(<campo>) = "L" ja emitido por este proprio pattern.
+        # Estrutura ja-corrigida:
+        #   [i-3] IF VARTYPE(campo) = "L"
+        #   [i-2]     target = campo
+        #   [i-1] ELSE
+        #   [i  ]     target = (NVL(campo, 0) = 1)   <-- linha atual
+        #   [i+1] ENDIF
+        # Sem esse guard, o pattern re-envolve a linha [i] gerando IF/ELSE aninhado
+        # redundante a cada re-run do sweep. Bug observado em 10 arquivos apos sweep
+        # 2026-08-04 (SigPdM10BO, sigopdivBO, SigPrGloTBO, sigredocBO, SigReIr1BO,
+        # SigReJurBO, sigtosenBO, etc).
+        if ($resultado.Count -ge 3) {
+            $prev1 = $resultado[$resultado.Count - 1]  # deve ser "ELSE"
+            $prev3 = $resultado[$resultado.Count - 3]  # deve ser "IF VARTYPE(...)"
+            if ($prev1 -match '(?i)^\s*ELSE\s*$' -and $prev3 -match '(?i)^\s*IF\s+VARTYPE\s*\(') {
+                $resultado += $linha
+                continue
+            }
         }
 
         # Detecta: <target> = NVL(campo, 0) = 1/0 ou <target> = (NVL(campo, 0) = 1/0) (assignment context)
@@ -10077,9 +10090,16 @@ function Invoke-CorrecaoAutomatica {
     $linhas = Corrigir-SigCdCliGrclisInvalida -Linhas $linhas
     $linhas = Corrigir-GcCaminhoBasePlusReports -Linhas $linhas
 
-    # Salva arquivo corrigido (sem BOM - VFP9 nao suporta UTF8 com BOM)
+    # Salva arquivo corrigido em UTF-8 SEM BOM.
+    # - VFP9 nao suporta BOM (por isso removemos no read com bytes[3..])
+    # - CP1252 (encoding 1252) NAO preserva chars Unicode como emdash, seta, etc.
+    #   O read acima usa UTF8.GetString(), entao write DEVE ser UTF8 para preservar
+    #   round-trip. Salvar como CP1252 chars fora do CP1252 viram "?" (data loss).
+    #   Bug observado no sweep 2026-08-04: `—` (U+2014) e `→` (U+2192) foram
+    #   corrompidos em ~5 arquivos ao serem re-salvos como CP1252.
     $conteudoFinal = $linhas -join "`r`n"
-    [System.IO.File]::WriteAllText($Arquivo, $conteudoFinal, [System.Text.Encoding]::GetEncoding(1252))
+    $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+    [System.IO.File]::WriteAllText($Arquivo, $conteudoFinal, $utf8NoBom)
 
     Write-Host ""
     Write-Host "Correcoes aplicadas: $($script:Correcoes.Count)" -ForegroundColor $(if ($script:Correcoes.Count -gt 0) { "Green" } else { "Gray" })

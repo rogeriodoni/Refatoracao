@@ -1,4 +1,4 @@
-﻿*==============================================================================
+*==============================================================================
 * SIGREFTPBO.PRG
 * Business Object para Relatorio - Ficha Tecnica do Produto
 * Herda de RelatorioBase
