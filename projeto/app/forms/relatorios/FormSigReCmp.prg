@@ -763,6 +763,7 @@ DEFINE CLASS FormSigReCmp AS FormBase
                 *-- Column1: CheckBox para Marca (campo booleano de selecao)
                 WITH .Column1
                     .Width = 25
+                    .Sparse = .F.
                     .Header1.Caption = ""
                     .AddObject("Check1", "CheckBox")
                     .Check1.Caption = ""
@@ -856,7 +857,7 @@ DEFINE CLASS FormSigReCmp AS FormBase
                 .Width         = 31
                 .Height        = 25
                 .Value         = ""
-                .InputMask     = "##"
+                .MaxLength     = 3
                 .FontName      = "Tahoma"
                 .FontSize      = 8
                 .ForeColor     = RGB(90, 90, 90)
@@ -903,7 +904,7 @@ DEFINE CLASS FormSigReCmp AS FormBase
                 .Width         = 31
                 .Height        = 25
                 .Value         = ""
-                .InputMask     = "XXX"
+                .MaxLength     = 3
                 .FontName      = "Tahoma"
                 .FontSize      = 8
                 .ForeColor     = RGB(90, 90, 90)
@@ -1150,6 +1151,8 @@ DEFINE CLASS FormSigReCmp AS FormBase
                 THIS, "TxtEmpresaKeyPress")
             BINDEVENT(loc_oPagina.txt_4c__Cd_GrEstoque, "KeyPress", ;
                 THIS, "TxtGrEstoqueKeyPress")
+            BINDEVENT(loc_oPagina.txt_4c__cd_estoque, "KeyPress", ;
+                THIS, "TxtEstoqueKeyPress")
             BINDEVENT(loc_oPagina.txt_4c__cd_ggrupo, "KeyPress", ;
                 THIS, "TxtGrdGrupoKeyPress")
             BINDEVENT(loc_oPagina.txt_4c__ds_ggrupo, "KeyPress", ;
@@ -2123,39 +2126,226 @@ DEFINE CLASS FormSigReCmp AS FormBase
     ENDPROC
 
     *==========================================================================
-    * TxtGrEstoqueKeyPress - F4 abre selecao; ENTER/TAB habilita conta
-    *   GrEstoque e Estoque sao codigos de grupo/conta contabil.
-    *   fAcessoContab/fAcessoContas nao migrados: campos aceitam texto livre.
+    * TxtGrEstoqueKeyPress - F4 abre picker SigCdGcr; ENTER/TAB valida codigo
+    *   Substitui fAcessoContab (nao portada com semantica de picker).
     *==========================================================================
     PROCEDURE TxtGrEstoqueKeyPress(par_nKeyCode, par_nShift)
-        IF par_nKeyCode = 13 OR par_nKeyCode = 9
-            THIS.ValidarGrEstoque()
+        IF par_nKeyCode = 115
+            THIS.AbrirBuscaGrEstoque()
+        ELSE
+            IF par_nKeyCode = 13 OR par_nKeyCode = 9
+                THIS.ValidarGrEstoqueCod()
+            ENDIF
         ENDIF
     ENDPROC
 
-    PROTECTED PROCEDURE ValidarGrEstoque()
-        LOCAL loc_oPg, loc_cCod
+    PROTECTED PROCEDURE ValidarGrEstoqueCod()
+        LOCAL loc_oPg, loc_cCod, loc_cSQL, loc_nResult
         loc_oPg  = THIS.pgf_4c_Paginas.Page1
         IF !PEMSTATUS(loc_oPg, "txt_4c__Cd_GrEstoque", 5)
             RETURN
         ENDIF
         loc_cCod = ALLTRIM(loc_oPg.txt_4c__Cd_GrEstoque.Value)
-        IF PEMSTATUS(loc_oPg, "txt_4c__Ds_GrEstoque", 5)
-            loc_oPg.txt_4c__Ds_GrEstoque.Enabled = !EMPTY(loc_cCod)
-            IF EMPTY(loc_cCod)
+        IF EMPTY(loc_cCod)
+            IF PEMSTATUS(loc_oPg, "txt_4c__Ds_GrEstoque", 5)
                 loc_oPg.txt_4c__Ds_GrEstoque.Value = ""
+                loc_oPg.txt_4c__Ds_GrEstoque.Enabled = .F.
             ENDIF
-        ENDIF
-        IF PEMSTATUS(loc_oPg, "txt_4c__cd_estoque", 5)
-            loc_oPg.txt_4c__cd_estoque.Enabled = !EMPTY(loc_cCod)
-            IF EMPTY(loc_cCod)
+            IF PEMSTATUS(loc_oPg, "txt_4c__cd_estoque", 5)
                 loc_oPg.txt_4c__cd_estoque.Value = ""
+                loc_oPg.txt_4c__cd_estoque.Enabled = .F.
                 IF PEMSTATUS(loc_oPg, "txt_4c__ds_estoque", 5)
                     loc_oPg.txt_4c__ds_estoque.Value = ""
                     loc_oPg.txt_4c__ds_estoque.Enabled = .F.
                 ENDIF
             ENDIF
+            RETURN
         ENDIF
+        loc_cSQL = "SELECT codigos, descrs FROM SigCdGcr WHERE codigos = " + ;
+                   EscaparSQL(PADR(loc_cCod, 10))
+        loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_GrEstVal")
+        IF loc_nResult > 0
+            SELECT cursor_4c_GrEstVal
+            GO TOP
+            IF !EOF()
+                IF PEMSTATUS(loc_oPg, "txt_4c__Cd_GrEstoque", 5)
+                    loc_oPg.txt_4c__Cd_GrEstoque.Value = ALLTRIM(cursor_4c_GrEstVal.codigos)
+                ENDIF
+                IF PEMSTATUS(loc_oPg, "txt_4c__Ds_GrEstoque", 5)
+                    loc_oPg.txt_4c__Ds_GrEstoque.Value = ALLTRIM(cursor_4c_GrEstVal.descrs)
+                    loc_oPg.txt_4c__Ds_GrEstoque.Enabled = .T.
+                ENDIF
+                IF PEMSTATUS(loc_oPg, "txt_4c__cd_estoque", 5)
+                    loc_oPg.txt_4c__cd_estoque.Enabled = .T.
+                ENDIF
+                USE IN cursor_4c_GrEstVal
+            ELSE
+                USE IN cursor_4c_GrEstVal
+                THIS.AbrirBuscaGrEstoque()
+            ENDIF
+        ELSE
+            THIS.AbrirBuscaGrEstoque()
+        ENDIF
+    ENDPROC
+
+    PROTECTED PROCEDURE AbrirBuscaGrEstoque()
+        LOCAL loc_oPg, loc_cValor, loc_oBusca, loc_oErro
+        TRY
+            loc_oPg    = THIS.pgf_4c_Paginas.Page1
+            loc_cValor = IIF(PEMSTATUS(loc_oPg, "txt_4c__Cd_GrEstoque", 5), ;
+                             ALLTRIM(loc_oPg.txt_4c__Cd_GrEstoque.Value), "")
+            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+                "SigCdGcr", "cursor_4c_BuscaGrEst", "codigos", loc_cValor, ;
+                "Grupo Contabil")
+            IF VARTYPE(loc_oBusca) = "O"
+                IF loc_oBusca.this_lSelecionou AND loc_oBusca.this_lAchouRegistro
+                    IF USED("cursor_4c_BuscaGrEst")
+                        SELECT cursor_4c_BuscaGrEst
+                        IF PEMSTATUS(loc_oPg, "txt_4c__Cd_GrEstoque", 5)
+                            loc_oPg.txt_4c__Cd_GrEstoque.Value = ALLTRIM(cursor_4c_BuscaGrEst.codigos)
+                        ENDIF
+                        IF PEMSTATUS(loc_oPg, "txt_4c__Ds_GrEstoque", 5)
+                            loc_oPg.txt_4c__Ds_GrEstoque.Value = ALLTRIM(cursor_4c_BuscaGrEst.descrs)
+                            loc_oPg.txt_4c__Ds_GrEstoque.Enabled = .T.
+                        ENDIF
+                        IF PEMSTATUS(loc_oPg, "txt_4c__cd_estoque", 5)
+                            loc_oPg.txt_4c__cd_estoque.Enabled = .T.
+                        ENDIF
+                    ENDIF
+                ELSE
+                    IF !loc_oBusca.this_lAchouRegistro
+                        loc_oBusca.mAddColuna("codigos", "", "C" + CHR(243) + "digo")
+                        loc_oBusca.mAddColuna("descrs",  "", "Descri" + CHR(231) + CHR(227) + "o")
+                        loc_oBusca.Show()
+                        IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaGrEst")
+                            SELECT cursor_4c_BuscaGrEst
+                            IF PEMSTATUS(loc_oPg, "txt_4c__Cd_GrEstoque", 5)
+                                loc_oPg.txt_4c__Cd_GrEstoque.Value = ALLTRIM(cursor_4c_BuscaGrEst.codigos)
+                            ENDIF
+                            IF PEMSTATUS(loc_oPg, "txt_4c__Ds_GrEstoque", 5)
+                                loc_oPg.txt_4c__Ds_GrEstoque.Value = ALLTRIM(cursor_4c_BuscaGrEst.descrs)
+                                loc_oPg.txt_4c__Ds_GrEstoque.Enabled = .T.
+                            ENDIF
+                            IF PEMSTATUS(loc_oPg, "txt_4c__cd_estoque", 5)
+                                loc_oPg.txt_4c__cd_estoque.Enabled = .T.
+                            ENDIF
+                        ENDIF
+                    ENDIF
+                ENDIF
+                loc_oBusca.Release()
+            ENDIF
+            IF USED("cursor_4c_BuscaGrEst")
+                USE IN cursor_4c_BuscaGrEst
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro na busca de grupo cont" + CHR(225) + "bil")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    * TxtEstoqueKeyPress - F4 abre picker SigCdCli filtrado por grupo;
+    *   ENTER/TAB valida codigo. Substitui fAcessoContas (nao portada).
+    *==========================================================================
+    PROCEDURE TxtEstoqueKeyPress(par_nKeyCode, par_nShift)
+        IF par_nKeyCode = 115
+            THIS.AbrirBuscaEstoque()
+        ELSE
+            IF par_nKeyCode = 13 OR par_nKeyCode = 9
+                THIS.ValidarEstoqueCod()
+            ENDIF
+        ENDIF
+    ENDPROC
+
+    PROTECTED PROCEDURE ValidarEstoqueCod()
+        LOCAL loc_oPg, loc_cCod, loc_cGrp, loc_cSQL, loc_nResult
+        loc_oPg  = THIS.pgf_4c_Paginas.Page1
+        IF !PEMSTATUS(loc_oPg, "txt_4c__cd_estoque", 5)
+            RETURN
+        ENDIF
+        loc_cCod = ALLTRIM(loc_oPg.txt_4c__cd_estoque.Value)
+        loc_cGrp = IIF(PEMSTATUS(loc_oPg, "txt_4c__Cd_GrEstoque", 5), ;
+                       ALLTRIM(loc_oPg.txt_4c__Cd_GrEstoque.Value), "")
+        IF EMPTY(loc_cCod)
+            IF PEMSTATUS(loc_oPg, "txt_4c__ds_estoque", 5)
+                loc_oPg.txt_4c__ds_estoque.Value = ""
+                loc_oPg.txt_4c__ds_estoque.Enabled = .F.
+            ENDIF
+            RETURN
+        ENDIF
+        loc_cSQL = "SELECT iclis, rclis FROM SigCdCli WHERE iclis = " + ;
+                   EscaparSQL(PADR(loc_cCod, 10)) + " AND grupos = " + ;
+                   EscaparSQL(PADR(loc_cGrp, 10))
+        loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_EstVal")
+        IF loc_nResult > 0
+            SELECT cursor_4c_EstVal
+            GO TOP
+            IF !EOF()
+                IF PEMSTATUS(loc_oPg, "txt_4c__cd_estoque", 5)
+                    loc_oPg.txt_4c__cd_estoque.Value = ALLTRIM(cursor_4c_EstVal.iclis)
+                ENDIF
+                IF PEMSTATUS(loc_oPg, "txt_4c__ds_estoque", 5)
+                    loc_oPg.txt_4c__ds_estoque.Value = ALLTRIM(cursor_4c_EstVal.rclis)
+                    loc_oPg.txt_4c__ds_estoque.Enabled = .T.
+                ENDIF
+                USE IN cursor_4c_EstVal
+            ELSE
+                USE IN cursor_4c_EstVal
+                THIS.AbrirBuscaEstoque()
+            ENDIF
+        ELSE
+            THIS.AbrirBuscaEstoque()
+        ENDIF
+    ENDPROC
+
+    PROTECTED PROCEDURE AbrirBuscaEstoque()
+        LOCAL loc_oPg, loc_cValor, loc_cGrp, loc_cFiltro, loc_oBusca, loc_oErro
+        TRY
+            loc_oPg    = THIS.pgf_4c_Paginas.Page1
+            loc_cValor = IIF(PEMSTATUS(loc_oPg, "txt_4c__cd_estoque", 5), ;
+                             ALLTRIM(loc_oPg.txt_4c__cd_estoque.Value), "")
+            loc_cGrp   = IIF(PEMSTATUS(loc_oPg, "txt_4c__Cd_GrEstoque", 5), ;
+                             ALLTRIM(loc_oPg.txt_4c__Cd_GrEstoque.Value), "")
+            loc_cFiltro = "grupos = " + EscaparSQL(PADR(loc_cGrp, 10))
+            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+                "SigCdCli", "cursor_4c_BuscaEst", "iclis", loc_cValor, ;
+                "Conta Cont" + CHR(225) + "bil", "iclis", "asc", loc_cFiltro)
+            IF VARTYPE(loc_oBusca) = "O"
+                IF loc_oBusca.this_lSelecionou AND loc_oBusca.this_lAchouRegistro
+                    IF USED("cursor_4c_BuscaEst")
+                        SELECT cursor_4c_BuscaEst
+                        IF PEMSTATUS(loc_oPg, "txt_4c__cd_estoque", 5)
+                            loc_oPg.txt_4c__cd_estoque.Value = ALLTRIM(cursor_4c_BuscaEst.iclis)
+                        ENDIF
+                        IF PEMSTATUS(loc_oPg, "txt_4c__ds_estoque", 5)
+                            loc_oPg.txt_4c__ds_estoque.Value = ALLTRIM(cursor_4c_BuscaEst.rclis)
+                            loc_oPg.txt_4c__ds_estoque.Enabled = .T.
+                        ENDIF
+                    ENDIF
+                ELSE
+                    IF !loc_oBusca.this_lAchouRegistro
+                        loc_oBusca.mAddColuna("iclis", "", "C" + CHR(243) + "digo")
+                        loc_oBusca.mAddColuna("rclis", "", "Descri" + CHR(231) + CHR(227) + "o")
+                        loc_oBusca.Show()
+                        IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaEst")
+                            SELECT cursor_4c_BuscaEst
+                            IF PEMSTATUS(loc_oPg, "txt_4c__cd_estoque", 5)
+                                loc_oPg.txt_4c__cd_estoque.Value = ALLTRIM(cursor_4c_BuscaEst.iclis)
+                            ENDIF
+                            IF PEMSTATUS(loc_oPg, "txt_4c__ds_estoque", 5)
+                                loc_oPg.txt_4c__ds_estoque.Value = ALLTRIM(cursor_4c_BuscaEst.rclis)
+                                loc_oPg.txt_4c__ds_estoque.Enabled = .T.
+                            ENDIF
+                        ENDIF
+                    ENDIF
+                ENDIF
+                loc_oBusca.Release()
+            ENDIF
+            IF USED("cursor_4c_BuscaEst")
+                USE IN cursor_4c_BuscaEst
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro na busca de conta cont" + CHR(225) + "bil")
+        ENDTRY
     ENDPROC
 
     *==========================================================================
@@ -2189,11 +2379,11 @@ DEFINE CLASS FormSigReCmp AS FormBase
         loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_GGruVal")
         IF loc_nResult > 0
             SELECT cursor_4c_GGruVal
-            LOCATE FOR ALLTRIM(STR(codigos, 5)) = ALLTRIM(loc_cCod)
+            LOCATE FOR ALLTRIM(codigos) == ALLTRIM(loc_cCod)
             IF !EOF()
                 IF PEMSTATUS(loc_oPg, "txt_4c__cd_ggrupo", 5)
                     loc_oPg.txt_4c__cd_ggrupo.Value = ;
-                        ALLTRIM(STR(cursor_4c_GGruVal.codigos, 2))
+                        ALLTRIM(cursor_4c_GGruVal.codigos)
                 ENDIF
                 IF PEMSTATUS(loc_oPg, "txt_4c__ds_ggrupo", 5)
                     loc_oPg.txt_4c__ds_ggrupo.Value = ALLTRIM(cursor_4c_GGruVal.descs)
@@ -2229,7 +2419,7 @@ DEFINE CLASS FormSigReCmp AS FormBase
                         SELECT cursor_4c_BuscaGGru
                         IF PEMSTATUS(loc_oPg, "txt_4c__cd_ggrupo", 5)
                             loc_oPg.txt_4c__cd_ggrupo.Value = ;
-                                ALLTRIM(STR(cursor_4c_BuscaGGru.codigos, 2))
+                                ALLTRIM(cursor_4c_BuscaGGru.codigos)
                         ENDIF
                         IF PEMSTATUS(loc_oPg, "txt_4c__ds_ggrupo", 5)
                             loc_oPg.txt_4c__ds_ggrupo.Value = ALLTRIM(cursor_4c_BuscaGGru.descs)
@@ -2245,7 +2435,7 @@ DEFINE CLASS FormSigReCmp AS FormBase
                         SELECT cursor_4c_BuscaGGru
                         IF PEMSTATUS(loc_oPg, "txt_4c__cd_ggrupo", 5)
                             loc_oPg.txt_4c__cd_ggrupo.Value = ;
-                                ALLTRIM(STR(cursor_4c_BuscaGGru.codigos, 2))
+                                ALLTRIM(cursor_4c_BuscaGGru.codigos)
                         ENDIF
                         IF PEMSTATUS(loc_oPg, "txt_4c__ds_ggrupo", 5)
                             loc_oPg.txt_4c__ds_ggrupo.Value = ALLTRIM(cursor_4c_BuscaGGru.descs)
@@ -2304,7 +2494,7 @@ DEFINE CLASS FormSigReCmp AS FormBase
                             SELECT cursor_4c_BuscaGGruD
                             IF PEMSTATUS(loc_oPg, "txt_4c__cd_ggrupo", 5)
                                 loc_oPg.txt_4c__cd_ggrupo.Value = ;
-                                    ALLTRIM(STR(cursor_4c_BuscaGGruD.codigos, 2))
+                                    ALLTRIM(cursor_4c_BuscaGGruD.codigos)
                             ENDIF
                             IF PEMSTATUS(loc_oPg, "txt_4c__ds_ggrupo", 5)
                                 loc_oPg.txt_4c__ds_ggrupo.Value = ;
@@ -2320,7 +2510,7 @@ DEFINE CLASS FormSigReCmp AS FormBase
                             SELECT cursor_4c_BuscaGGruD
                             IF PEMSTATUS(loc_oPg, "txt_4c__cd_ggrupo", 5)
                                 loc_oPg.txt_4c__cd_ggrupo.Value = ;
-                                    ALLTRIM(STR(cursor_4c_BuscaGGruD.codigos, 2))
+                                    ALLTRIM(cursor_4c_BuscaGGruD.codigos)
                             ENDIF
                             IF PEMSTATUS(loc_oPg, "txt_4c__ds_ggrupo", 5)
                                 loc_oPg.txt_4c__ds_ggrupo.Value = ;

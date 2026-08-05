@@ -6789,3 +6789,328 @@ Se apos corrigir o path o BO ainda reporta "Arquivo de relatorio nao encontrado"
 - Complementa: `#117 ExecutarReportForm helper canonico` (usa gc_4c_CaminhoReports internamente)
 - Origem: Erro88 (2026-08-04, FormSigReCmm Visualizar — 5 sites em 4 arquivos: sigrecmmBO/sigrehtcBO/SIGREFXVBO/FormSIGREFXV; 3 FRXs faltantes copiados de C:\4install\FortyusMC\Fortyus\).
 
+
+## 157. Dead code `IF !FILE(loc_cFrx)` em REPORT `Visualizar`/`Imprimir` — LOCAL nao atribuida dispara VFP9 erro 11 (Erro89 sigrecmmBO 2026-08-05)
+
+### Sintoma
+Ao clicar Visualizar/Imprimir num relatorio, dialog vermelho aparece com o titulo generico "Erro" e a mensagem VFP9 do CATCH:
+```
+Erro
+Function argument value, type, or count is invalid.
+```
+Nenhum log de qual linha/procedure quebrou (CATCH original nao inclui LineNo). Preview nao abre.
+
+### Causa
+Template legado do BO REPORT deixava um bloco DEAD-CODE:
+```foxpro
+PROCEDURE Visualizar()
+    LOCAL loc_lResultado, loc_oErro, loc_cFrx    && loc_cFrx declarado, NUNCA atribuido
+    loc_lResultado = .F.
+
+    TRY
+        IF !THIS.PrepararDados()
+            loc_lResultado = .F.
+        ENDIF
+
+        IF !FILE(loc_cFrx)                        && <-- BUG: loc_cFrx = .F. (default LOCAL)
+            THIS.this_cMensagemErro = "Arquivo de relatorio nao encontrado: " + loc_cFrx
+            MsgErro(THIS.this_cMensagemErro, "Erro")
+            loc_lResultado = .F.
+        ENDIF
+
+        THIS.ExecutarReportForm("SigReCmm", "PREVIEW")
+        ...
+```
+`LOCAL loc_cFrx` sem atribuicao → VFP9 inicializa como `.F.` (logical). `FILE(.F.)` espera character — dispara **erro 11 "Function argument value, type, or count is invalid."**. Cascata: TRY captura, CATCH mostra a msg generica sem contexto.
+
+Bloco eh residuo do template pre-Pattern #117: antes do helper `ExecutarReportForm`, o BO fazia inline `REPORT FORM (loc_cFrx)` e precisava validar o path. Ao refatorar para o helper (que ja faz `FULLPATH+FILE+MostrarErro`), o migrador deixou o bloco de validacao antigo mas nunca populou `loc_cFrx` (o helper recebe apenas o basename).
+
+### Bug pattern proibido — Shape A (dead code puro)
+```foxpro
+LOCAL loc_lSucesso, loc_oErro, loc_cFrx
+loc_lSucesso = .F.
+
+TRY
+    IF !THIS.PrepararDados()
+        loc_lSucesso = .F.
+    ENDIF
+
+    IF !FILE(loc_cFrx)                            && <-- REMOVER
+        THIS.this_cMensagemErro = "Arquivo de relatorio nao encontrado: " + loc_cFrx
+        MsgErro(THIS.this_cMensagemErro, "Erro")
+        loc_lSucesso = .F.
+    ENDIF
+
+    THIS.ExecutarReportForm("SigReCmm", "PREVIEW")
+    loc_lSucesso = .T.
+
+CATCH TO loc_oErro
+    MsgErro(loc_oErro.Message, "Erro")
+ENDTRY
+```
+
+### Fix canonico — fluxo positivo (respeita CLAUDE.md #1: NUNCA `RETURN` dentro de TRY/CATCH)
+```foxpro
+PROCEDURE Visualizar()
+    LOCAL loc_lResultado, loc_oErro                && loc_cFrx REMOVIDO (nao usado)
+    loc_lResultado = .F.
+
+    TRY
+        IF THIS.PrepararDados()
+            loc_lResultado = THIS.ExecutarReportForm("SigReCmm", "PREVIEW", "crImpressao")
+        ENDIF
+    CATCH TO loc_oErro
+        THIS.this_cMensagemErro = loc_oErro.Message + " (Visualizar linha " + ;
+            TRANSFORM(loc_oErro.LineNo) + ")"
+        MsgErro(THIS.this_cMensagemErro, "Erro")
+    ENDTRY
+
+    RETURN loc_lResultado
+ENDPROC
+```
+
+Idem para `Imprimir()` (usando `"PRINTER_PROMPT"` ou `"PRINTER"`). Padrao completo:
+| Elemento | Como fazer |
+|---|---|
+| Nunca declarar `loc_cFrx` | Helper `ExecutarReportForm` resolve o path internamente via `gc_4c_CaminhoReports` |
+| Fluxo positivo | `IF THIS.PrepararDados() / loc_lSucesso = THIS.ExecutarReportForm(...) / ENDIF` — sem `IF !` + fall-through (Pattern #153) |
+| 3o param do helper | Passar nome do cursor principal (para o guard `RECCOUNT=0 → MsgAviso "Nenhum registro..."`) |
+| CATCH com LineNo | `MsgErro(loc_oErro.Message + " (<PROC> linha " + TRANSFORM(loc_oErro.LineNo) + ")", "Erro")` — permite localizar erros VFP mascarados |
+
+### Auto-fix
+- **CorretorAutomatico Pattern #157** (`Corrigir-DeadCodeIfFileLocFrx`):
+  - Detecta `IF !FILE(loc_cFrx)` em BO que herda de `RelatorioBase`.
+  - Verifica que `loc_cFrx` nunca eh atribuido no arquivo inteiro (grep `\bloc_cFrx\b\s*=`).
+  - Verifica que o bloco eh seguido por `THIS.ExecutarReportForm(...)` em ate 5 linhas.
+  - Se OK: remove o `IF !FILE(loc_cFrx) ... ENDIF` inteiro + limpa `loc_cFrx` da LOCAL declaration (se orphan).
+  - Se `loc_cFrx` eh atribuido no arquivo: emite `WARN-157-LOC_CFRX-ASSIGNED` (manual review — pode ser uso legitimo tipo `sigprnfeBO`).
+  - Se estrutura eh `IF !FILE / ... / ELSE / ExecutarReportForm / ENDIF` (Shape B `sigrehtcBO`): emite `WARN-157-IF-ELSE` para unwrap manual da ELSE branch.
+
+### Shape B (WARNING-only, manual)
+```foxpro
+IF !FILE(loc_cFrx)
+    THIS.this_cMensagemErro = "Arquivo nao encontrado: " + loc_cFrx
+    MsgAviso(THIS.this_cMensagemErro, "Aviso")
+ELSE
+    THIS.ExecutarReportForm("SigReHtc", "PRINTER_PROMPT")
+    loc_lSucesso = .T.
+ENDIF
+```
+Fix manual: remover IF header + THEN body + ELSE + ENDIF, manter apenas o corpo do ELSE (helper ja valida FRX).
+
+### Sweep 2026-08-05 (Erro89)
+5 BOs REPORT com o pattern:
+| BO | Shape | Fix |
+|---|---|---|
+| `sigrecmmBO` | A | Auto (sigrecmmBO ja corrigido manualmente antes do sweep) |
+| `sigreimcBO` | A | Auto Pattern #157 |
+| `SigReInvBO` | A (2 metodos) | Auto Pattern #157 |
+| `sigrehtcBO` | B (IF-ELSE) | Manual — unwrap ELSE branch |
+| `sigrecgrBO` | Legitimate `loc_cFrx = "SigReCgr"` inside IF (fallback) — nao eh dead-code | WARN-157-LOC_CFRX-ASSIGNED — manual review |
+| `sigprnfeBO` | Legitimate `loc_cFrx = gc_4c_CaminhoReports + "..."` antes do IF — raw REPORT FORM | WARN-157-LOC_CFRX-ASSIGNED — refactor para helper (nao critico, funciona) |
+
+### Referencias
+- Memoria detalhada: `feedback_reportbo_dead_code_iffile_locfrx.md`
+- Complementa: `#117 ExecutarReportForm helper canonico` (torna o bloco desnecessario), `#153 fall-through positive flow` (mesmo metodo, complementar)
+- Origem: Erro89 (2026-08-05, FormSigReCmm Visualizar; template pos-refactor #117 nao removeu o bloco de validacao antigo).
+
+
+## 158. `STR(<coluna_char>, N)` dispara VFP9 erro 11 — colunas Sig* char NUNCA envolver com STR (Erro90-a FormSigReCmp 2026-08-05)
+
+### Sintoma
+Dialog vermelho ao digitar/validar codigo em TextBox de lookup:
+```
+Erro
+Function argument value, type, or count is invalid.
+```
+Origem: `LOCATE FOR ALLTRIM(STR(codigos, 5)) = ALLTRIM(loc_cCod)` ou `.Value = ALLTRIM(STR(cursor_4c_X.codigos, 2))`.
+
+### Causa
+Migrador wrapou coluna char com `STR()` assumindo numerico. VFP9 `STR()` **exige NUMERIC first arg** — passar char dispara erro 11 em runtime.
+
+Colunas CHAR problematicas em tabelas Sig* (extraido de schema.sql):
+| Coluna | Tabela(s) | Tipo |
+|---|---|---|
+| `codigos` | SigCdGpr, SigCdGcr, SigCdCta, SigCdEnr | char(3), char(10) |
+| `cgrus` | SigCdGrp, SigMvItn, SigCdPro | char(3) |
+| `cemps` | SigCdEmp | char(3) |
+| `emps` | SigMvCab, SigMvItn (e outras Mv*) | char(3) |
+| `iclis` | SigCdCli | char(10) |
+| `cpros` | SigCdPro, SigMvItn | char(14) |
+| `cunis` | SigCdUni, SigCdPro | char(3) |
+| `dopes` | SigCdOpe, SigMvCab | char(2) |
+| `grupos` | SigCdCli | char(10) |
+| `classes` | SigCdGcr, SigCdCss | char(10) |
+| `descs`, `descrs`, `dgrus`, `rclis`, `razas` | Varias | char |
+
+### Bug pattern proibido
+```foxpro
+LOCATE FOR ALLTRIM(STR(codigos, 5)) = ALLTRIM(loc_cCod)     && ERRO 11
+loc_oPg.txt_4c__cd.Value = ALLTRIM(STR(cursor_4c_X.codigos, 2))    && ERRO 11
+```
+
+### Fix canonico
+```foxpro
+LOCATE FOR ALLTRIM(codigos) == ALLTRIM(loc_cCod)              && char comparison
+loc_oPg.txt_4c__cd.Value = ALLTRIM(cursor_4c_X.codigos)       && char direto
+```
+
+### Regra generica
+**SEMPRE consultar `docs/schema.sql` antes de escrever `STR(<coluna>)`.** Se a coluna eh char, remover o STR. Nao existe conversao implicita — VFP9 quebra em runtime.
+
+### Auto-fix
+**CorretorAutomatico Pattern #158** (`Corrigir-StrEmColunaCharDoCursor`):
+- Whitelist conservadora de colunas char conhecidas (via schema.sql)
+- Regex `STR\(\s*(cursor\.)?<col>\s*,\s*\d+\s*\)` → `<col>`
+- Skip strings SQL (detecta aspas duplas ou colchetes antes do match)
+- Idempotente (segundo run nao encontra o padrao)
+
+### Referencias
+- Memoria detalhada: `feedback_str_coluna_char_erro11.md`
+- Complementa: `#152 VAL(SET("Decimals"))` (mesma classe de erro 11 — funcao numerica recebendo tipo errado)
+- Origem: Erro90-a (2026-08-05, FormSigReCmp Grande Grupo — 6 sites em `ValidarGrdGrupoCod`, `AbrirBuscaGrdGrupo`, `ValidarGrdGrupoDesc`).
+
+
+## 159. `.InputMask = "##..#"` em TextBox `.Value = ""` (char) bloqueia digitacao de letras (Erro90-b FormSigReCmp 2026-08-05)
+
+### Sintoma
+Usuario nao consegue digitar letras num campo cujo codigo no banco eh alfanumerico. Ex: `SigCdGpr.codigos = 'A01'` — o char 'A' eh recusado pelo TextBox mesmo sendo valido no banco.
+
+### Causa
+Em VFP9, o caracter `#` no `InputMask` aceita APENAS digitos, espacos, sinais (`+`, `-`, `.`). Migrador copia InputMask numerico do legado sem checar tipo da coluna — no legado o TextBox era numerico (`.Value = 0`), mas no migrado virou char (`.Value = ""`) sem trocar o InputMask.
+
+Codigos VFP9 InputMask:
+| Char | Aceita |
+|---|---|
+| `#` | Digitos, espacos, sinais (`+`, `-`, `.`) |
+| `9` | Digitos e sinais (nao espaco) |
+| `X` | Qualquer caracter |
+| `A` | Letras apenas |
+| `N` | Letras e digitos (alfanumerico) |
+| `L` | Logico (`T`, `F`, `Y`, `N`) |
+
+### Bug pattern proibido
+```foxpro
+loc_oPagina.AddObject("txt_4c__cd_ggrupo", "TextBox")
+WITH loc_oPagina.txt_4c__cd_ggrupo
+    .Value     = ""                && CHAR (SigCdGpr.codigos char(3))
+    .InputMask = "##"              && BLOQUEIA letras!
+ENDWITH
+```
+
+### Fix canonico
+Se `.Value = ""` (char), substituir `.InputMask = "#+"` por `.MaxLength = N`:
+```foxpro
+WITH loc_oPagina.txt_4c__cd_ggrupo
+    .Value     = ""
+    .MaxLength = 3       && limita tamanho, aceita letras
+ENDWITH
+```
+
+Se `.Value = 0` (numeric), MANTER InputMask numerico:
+```foxpro
+WITH loc_oPagina.txt_4c_Numes
+    .Value     = 0                 && NUMERIC
+    .InputMask = "######"          && OK — restringe a digitos
+ENDWITH
+```
+
+Alternativa (nao usar): `.InputMask = "XXX"` — aceita qualquer char mas VFP9 renderiza com comportamento cursor idiossincratico. Preferir `.MaxLength`.
+
+### Auto-fix
+**CorretorAutomatico Pattern #159** (`Corrigir-InputMaskHashEmTextBoxChar`):
+- Detecta `.InputMask = "#+"` na mesma janela WITH (+/- 6 linhas)
+- Se `.Value = ""` proximo → substitui por `.MaxLength = <count-hashes>`
+- Se `.Value = 0` proximo → mantem (numerico OK)
+- Se ambiguo (nenhum `.Value` proximo) → emite `WARN-159-INPUTMASK-AMBIGUO`
+
+### Referencias
+- Memoria detalhada: `feedback_inputmask_hash_bloqueia_letras.md`
+- Origem: Erro90-b (2026-08-05, FormSigReCmp Grande Grupo `txt_4c__cd_ggrupo` com `.InputMask = "##"` + `.Value = ""`).
+
+
+## 160. `<Cursor>.<Coluna>` DEVE bater com SELECT list — nao prefixar por convencao Sig* (Erro91 SigReCmpBO 2026-08-05)
+
+### Sintoma
+Dialog "Variable '<COLUNA>' is not found." ao clicar Visualizar (ou em qualquer runtime que toque o cursor).
+
+### Causa
+Migrador prefixa coluna por padrao de nomenclatura Sig*Cd* — mas VFP9 exige que o nome da coluna referenciada bata EXATAMENTE com o SELECT list. Nao ha auto-prefixamento, nem alias implicito.
+
+Exemplo:
+```foxpro
+loc_cSQL = "SELECT a.Emps, a.Dopes, a.Datas FROM SigMvCab a"
+SQLEXEC(gnConnHandle, loc_cSQL, "CrSigMvCab")
+...
+INSERT INTO TmpRelat VALUES (CrSigMvCab.Cemps, ...)     && ERRO — cursor tem 'Emps', nao 'Cemps'
+```
+
+O `C` foi inventado por convencao (achando que colunas de tabelas `SigCd*` sempre comecam com `C`). Mas `SigMvCab.Emps` (tabela Mv, movimento) nao segue esse padrao — a coluna eh literalmente `Emps` char(3). O SELECT list determina os nomes disponiveis no cursor.
+
+### Bug pattern proibido
+```foxpro
+SELECT a.Emps FROM SigMvCab a INTO CURSOR CrSigMvCab
+...
+loc_cX = CrSigMvCab.Cemps       && "Variable 'CEMPS' is not found."
+```
+
+### Fix canonico
+```foxpro
+loc_cX = CrSigMvCab.Emps        && bate com SELECT list
+```
+
+### Regra generica
+**Apos escrever SELECT list, listar as colunas selecionadas e SEMPRE usar EXATAMENTE esses nomes.** Nunca renomear por convencao. Se precisa mudar o nome, usar alias no SELECT (`SELECT a.Emps AS Cemps FROM SigMvCab a` — mas raramente necessario).
+
+### Auto-fix
+**CorretorAutomatico Pattern #160** (`Corrigir-CursorColunaInexistente`):
+- Mapa `<Cursor>` → `[<colunas referenciadas>]` no arquivo
+- WARNING-only nesta versao (parse SQL completo eh fragil — futuras versoes podem melhorar)
+- Detecta `SQLEXEC(..., "<Cursor>")` e `INTO CURSOR <Cursor>` para catalogar cursores locais
+
+### Referencias
+- Memoria detalhada: `feedback_cursor_coluna_prefixo_inventado.md`
+- Complementa: `#129/#130/#131 SELECT VFP local` (variantes correlatas de coluna nao encontrada)
+- Origem: Erro91 (2026-08-05, SigReCmpBO.prg linhas 675 e 707: `CrSigMvCab.Cemps` vs SELECT `a.Emps`).
+
+
+## 161. FRXs legados DEVEM ser copiados para projeto/app/reports/ ao gerar BO REPORT (Erro92 FormSigReCmp 2026-08-05)
+
+### Sintoma
+Dialog "Arquivo de relatorio nao encontrado: C:\4C\PROJETO\APP\START\..\reports\SigReXxx.frx" ao clicar Visualizar (path esta correto — o problema eh arquivo faltante).
+
+### Causa
+BO REPORT referencia FRX via `THIS.ExecutarReportForm("SigReXxx", ...)` ou via `THIS.ObterNomeFRX()` retornando `"SigReXxx"`. Helper Pattern #117 valida `FILE(<path>)` e exibe `MostrarErro` descritivo. Se o FRX nunca foi copiado do legado para `projeto/app/reports/`, quebra em runtime.
+
+Migrador MIGROU o BO mas nao os FRXs. FRXs sao arquivos BINARIOS (VFP9 report definitions) — nao ha "geracao" automatica; precisa copia do sistema legado Fortyus.
+
+### Fix canonico
+Copiar do legado preservando nome-case do BO:
+```powershell
+Copy-Item C:\4install\FortyusMC\Fortyus\sigrecp2.frx C:\4c\projeto\app\reports\SigReCp2.frx
+Copy-Item C:\4install\FortyusMC\Fortyus\sigrecp2.frt C:\4c\projeto\app\reports\SigReCp2.frt
+```
+
+Windows FS eh case-insensitive — `SigReCp2.frx` casa com `sigrecp2.frx` no `FILE()`. Preservar o case do BO garante consistencia visual.
+
+### Ferramenta automatica
+**Helper `CopiarFRXsAusentes.ps1`**:
+```powershell
+powershell -ExecutionPolicy Bypass -File C:\4c\automation\CopiarFRXsAusentes.ps1
+```
+- Detecta todos os BOs REPORT (`AS RelatorioBase`)
+- Extrai nomes FRX referenciados (`ExecutarReportForm` + `ObterNomeFRX` branches)
+- Verifica presenca em `projeto/app/reports/`
+- Copia ausentes de `C:\4install\FortyusMC\Fortyus\` (fallback: `C:\4install\WorkSpace\FortyusMC\Fortyus\`)
+- Retorna exit code 2 se algum FRX nao existe no legado (bug de referencia, nao de arquivo)
+
+Suporta `-DryRun` para preview sem modificar.
+
+### Regra generica
+**Ao gerar BO REPORT, SEMPRE executar `CopiarFRXsAusentes.ps1` no fim do pipeline.** Alternativa: incluir no ValidarUIFidelity + fase de deployment.
+
+### Referencias
+- Memoria detalhada: `feedback_frxs_ausentes_reports.md`
+- Complementa: `#156 gc_4c_CaminhoBase + "reports\"` (path corrompido) — este pattern trata ARQUIVOS AUSENTES (path correto mas file missing).
+- Origem: Erro92 (2026-08-05, FormSigReCmp — SigReCp2.frx + SigReCp3.frx nunca portados; sweep confirmou 49 FRXs referenciados, 48 ja presentes).
+
