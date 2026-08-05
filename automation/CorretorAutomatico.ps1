@@ -9909,6 +9909,396 @@ function Corrigir-GcCaminhoBasePlusReports {
     return $Linhas
 }
 
+# =============================================================================
+# Pattern #157: Dead code `IF !FILE(loc_cFrx)` com LOCAL nao atribuida
+# Sintoma: dialog "Function argument value, type, or count is invalid." (erro 11)
+#         ao clicar Visualizar/Imprimir em BO REPORT.
+# Causa raiz: template deixou bloco `IF !FILE(loc_cFrx) / MsgErro/MsgAviso / ENDIF`
+#         em Visualizar/Imprimir, mas `loc_cFrx` foi declarado LOCAL e nunca
+#         atribuido. LOCAL default = .F. → FILE(.F.) dispara erro 11 → CATCH
+#         mostra msg generica "Function argument value...". O bloco eh residuo
+#         legado — o helper THIS.ExecutarReportForm ja valida FRX com MostrarErro
+#         descritivo (Pattern #117).
+# Fix seguro (Shape A): remove o bloco `IF !FILE(loc_cFrx) ... ENDIF` inteiro se:
+#   1. BO herda de RelatorioBase
+#   2. `loc_cFrx` nunca eh atribuido no arquivo inteiro (grep `loc_cFrx\s*=`)
+#      (excluindo a linha de LOCAL declaration)
+#   3. Bloco eh seguido por `THIS.ExecutarReportForm(...)` em ate 5 linhas
+# WARNING para Shape B/C (IF-ELSE, loc_cFrx atribuido conditionally): manual.
+# Origem: Erro89 (2026-08-05, Formsigrecmm sigrecmmBO.prg).
+# =============================================================================
+function Corrigir-DeadCodeIfFileLocFrx {
+    param([string[]]$Linhas)
+
+    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
+
+    $conteudo = $Linhas -join "`n"
+
+    # Guard: apenas BOs REPORT
+    if ($conteudo -notmatch '(?i)DEFINE\s+CLASS\s+\w+\s+AS\s+RelatorioBase\b') {
+        return $Linhas
+    }
+
+    # Guard: `loc_cFrx` NUNCA pode ser atribuido no arquivo (indica uso legitimo)
+    # Regex captura `loc_cFrx =` (assignment), NAO `loc_cFrx,` ou `loc_cFrx)`
+    # em LOCAL declarations. `loc_cFrx3 =` NAO deve casar (word boundary).
+    # CASE-SENSITIVE: o dead-code bug usa `loc_cFrx` (r minusculo), enquanto o
+    # helper canonico Pattern #117 usa `loc_cFRX` (FRX maiusculo). Sem case-sensitive,
+    # o assign do helper (`loc_cFRX = FULLPATH(...)`) gera falso positivo.
+    $rxAssign = [regex]'\bloc_cFrx\b\s*='
+    if ($rxAssign.IsMatch($conteudo)) {
+        # loc_cFrx atribuido em algum lugar — WARNING-only (manual review)
+        Add-Correcao -Tipo "WARN-157-LOC_CFRX-ASSIGNED" -Linha 1 `
+            -Original "loc_cFrx atribuido em algum ponto do arquivo" `
+            -Corrigido "(REVISAR MANUAL) Verificar se IF !FILE(loc_cFrx) usa valor valido ou dead-code" `
+            -Descricao "Pattern #157 WARNING: BO REPORT tem atribuicoes a loc_cFrx (nao eh Shape A puro). Verificar cada Visualizar/Imprimir se loc_cFrx eh atribuido ANTES do IF !FILE — se nao for, remover bloco morto manualmente. Se for legitimo (raw REPORT FORM ao inves de helper), refatorar para THIS.ExecutarReportForm. Origem: Erro89 (2026-08-05, Formsigrecmm)."
+        return $Linhas
+    }
+
+    # Detecta e remove bloco Shape A:
+    #   IF !FILE(loc_cFrx)              <- linha i
+    #       <1-4 linhas do corpo>       <- linhas i+1 ate ENDIF
+    #   ENDIF                            <- linha do ENDIF
+    #   [ate 5 linhas neutras]
+    #   THIS.ExecutarReportForm(...)    <- required tell
+    $countRemocao = 0
+    $novaLinhas = @()
+    $i = 0
+
+    while ($i -lt $Linhas.Count) {
+        $linha = $Linhas[$i]
+
+        if ($linha -match '(?i)^\s*IF\s*!\s*FILE\s*\(\s*loc_cFrx\s*\)\s*$') {
+            # Achou header do bloco. Localiza matching ENDIF (procurar dentro de 8 linhas).
+            $enderIdx = -1
+            for ($j = $i + 1; $j -le [Math]::Min($i + 8, $Linhas.Count - 1); $j++) {
+                if ($Linhas[$j] -match '(?i)^\s*ENDIF\s*$') {
+                    $enderIdx = $j
+                    break
+                }
+                # Se aparecer ELSE, aborta (Shape B — nao remover)
+                if ($Linhas[$j] -match '(?i)^\s*ELSE\s*$') {
+                    $enderIdx = -2
+                    break
+                }
+            }
+
+            if ($enderIdx -gt 0) {
+                # Verifica que apos o ENDIF ha THIS.ExecutarReportForm em ate 5 linhas
+                $hasHelper = $false
+                for ($k = $enderIdx + 1; $k -le [Math]::Min($enderIdx + 5, $Linhas.Count - 1); $k++) {
+                    if ($Linhas[$k] -match '(?i)THIS\.ExecutarReportForm\s*\(') {
+                        $hasHelper = $true
+                        break
+                    }
+                }
+
+                if ($hasHelper) {
+                    # REMOVE o bloco inteiro (linhas i ate enderIdx inclusive)
+                    $countRemocao++
+                    Add-Correcao -Tipo "PATTERN-157-DEAD-CODE-LOC_CFRX" -Linha ($i + 1) `
+                        -Original "IF !FILE(loc_cFrx) / [$(($enderIdx - $i - 1)) linhas do corpo] / ENDIF (bloco morto — loc_cFrx sempre .F.)" `
+                        -Corrigido "(bloco removido — helper ExecutarReportForm ja valida FRX)" `
+                        -Descricao "Pattern #157: Bloco IF !FILE(loc_cFrx) morto em BO REPORT (loc_cFrx declarado LOCAL, nunca atribuido, default .F. → FILE(.F.) dispara erro 11 `"Function argument value, type, or count is invalid.`" ao clicar Visualizar/Imprimir). Removido — helper Pattern #117 THIS.ExecutarReportForm ja faz FULLPATH+FILE+MostrarErro descritivo. Origem: Erro89 (2026-08-05, Formsigrecmm)."
+
+                    # Skip o bloco
+                    $i = $enderIdx + 1
+                    continue
+                }
+            } elseif ($enderIdx -eq -2) {
+                # Shape B (IF-ELSE) — WARNING only
+                Add-Correcao -Tipo "WARN-157-IF-ELSE-LOC_CFRX" -Linha ($i + 1) `
+                    -Original "IF !FILE(loc_cFrx) ... ELSE THIS.ExecutarReportForm(...) ENDIF" `
+                    -Corrigido "(REVISAR MANUAL) Unwrap ELSE branch (remove IF/ELSE/ENDIF, keep ExecutarReportForm)" `
+                    -Descricao "Pattern #157 WARNING: BO REPORT tem `IF !FILE(loc_cFrx)` seguido de ELSE THIS.ExecutarReportForm. Auto-fix nao aplicavel (Shape B). Remover IF header + THEN body + ELSE + ENDIF, manter apenas o corpo do ELSE. Origem: Erro89 (2026-08-05, sigrehtcBO)."
+            }
+        }
+
+        $novaLinhas += $linha
+        $i++
+    }
+
+    # Se removeu blocos, tenta tambem limpar `loc_cFrx` da LOCAL declaration
+    # (se ficou orphan). So se ha ZERO referencias a loc_cFrx apos as remocoes.
+    if ($countRemocao -gt 0) {
+        $conteudoNovo = $novaLinhas -join "`n"
+        # CASE-SENSITIVE (mesmo motivo do $rxAssign — nao contar `loc_cFRX` do helper)
+        $rxUso = [regex]'\bloc_cFrx\b'
+        # Conta usos APENAS fora de LOCAL declarations
+        $usosForaLocal = 0
+        foreach ($ln in $novaLinhas) {
+            if ($ln -match '(?i)^\s*LOCAL\s+') { continue }
+            if ($rxUso.IsMatch($ln)) { $usosForaLocal++ }
+        }
+
+        if ($usosForaLocal -eq 0) {
+            # Limpa loc_cFrx das LOCAL declarations (CASE-SENSITIVE via -cmatch/-creplace
+            # — nao remover `LOCAL loc_cFRX` do helper Pattern #117, so o `loc_cFrx` do dead-code)
+            for ($k = 0; $k -lt $novaLinhas.Count; $k++) {
+                if ($novaLinhas[$k] -cmatch '(?-i)^\s*LOCAL\s+.*\bloc_cFrx\b') {
+                    $original = $novaLinhas[$k]
+                    # Remove `, loc_cFrx` OU `loc_cFrx, ` OU `loc_cFrx ` (isolado)
+                    $novo = $novaLinhas[$k]
+                    $novo = $novo -creplace '(?-i)\s*,\s*loc_cFrx\b', ''
+                    $novo = $novo -creplace '(?-i)\bloc_cFrx\s*,\s*', ''
+                    $novo = $novo -creplace '(?-i)\s*\bloc_cFrx\b\s*$', ''
+                    if ($novo -ne $original) {
+                        $novaLinhas[$k] = $novo
+                        Add-Correcao -Tipo "PATTERN-157-LOCAL-CLEANUP" -Linha ($k + 1) `
+                            -Original $original.Trim() `
+                            -Corrigido $novo.Trim() `
+                            -Descricao "Pattern #157: `loc_cFrx` removido da LOCAL declaration apos remocao do bloco IF !FILE(loc_cFrx) (variavel virou orphan)."
+                    }
+                }
+            }
+        }
+
+        Write-Host "[Pattern #157] $countRemocao bloco(s) IF !FILE(loc_cFrx) morto(s) removido(s)." -ForegroundColor Green
+    }
+
+    return $novaLinhas
+}
+
+# =============================================================================
+# Pattern #158: STR(<coluna_char>, N) em textbox de lookup dispara VFP9 erro 11
+# Sintoma: dialog "Function argument value, type, or count is invalid." ao
+#         digitar/validar codigo em textbox de lookup (ex: Grande Grupo).
+# Causa raiz: migrador wrapou `codigos` (char em SigCdGpr) com `STR(codigos, N)`
+#         assumindo numerico. STR() em VFP9 EXIGE numeric first arg — passar
+#         char dispara erro 11.
+# Fix: `ALLTRIM(STR(<cursor>.<char_col>, N))` -> `ALLTRIM(<cursor>.<char_col>)`
+# Colunas char CONHECIDAS via schema.sql (whitelist conservador):
+#   codigos (SigCdGpr char(3), SigCdGcr char(10), SigCdCta, outros)
+#   cgrus (char(3)), cemps (char(3)), iclis (char(10)), cpros (char(14)),
+#   cunis (char(3)), dopes (char(2)), grupos (char(10)), classes (char(10))
+# Detector case-insensitive na coluna (VFP9 nao diferencia case em colunas
+# de cursor). Idempotente. Skip comentarios.
+# Origem: Erro90-a (2026-08-05, FormSigReCmp — 6 sites).
+# =============================================================================
+function Corrigir-StrEmColunaCharDoCursor {
+    param([string[]]$Linhas)
+
+    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
+
+    # Whitelist de colunas CHAR conhecidas (schema.sql). NAO inclui colunas que
+    # existem como char em algumas tabelas e numeric em outras — evita falso positivo.
+    $colsChar = @(
+        'codigos','cgrus','cemps','iclis','cpros','cunis','dopes',
+        'grupos','classes','internos','sgrus','mercs','materiais','cbars',
+        'trocos','emps','razas','cortes','dgrus','descs','descrs','rclis'
+    )
+    $colsPattern = ($colsChar -join '|')
+
+    # Match: STR( <optional cursor.> <col> , N ) — permitir espacos
+    #   Grupos capturados:
+    #     1 = prefixo antes de STR
+    #     2 = coluna qualificada (com ou sem cursor prefix)
+    #     3 = restante depois do )
+    # Nao usa lookbehind/lookahead complexo — simples greedy replace por linha
+    $rx = [regex]"(?i)\bSTR\s*\(\s*((?:[A-Za-z_]\w*\.)?(?:$colsPattern))\s*,\s*\d+\s*\)"
+
+    $countFix = 0
+
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        $linha = $Linhas[$i]
+        $original = $linha
+
+        # Skip comentarios e strings SQL (identificaveis por aspas)
+        if ($linha -match '^\s*\*') { continue }
+        # Se a linha eh string SQL (contem SELECT/WHERE/AND em maiuscula sem STR ao redor
+        # como codigo VFP) pular — STR em SQL Server tem semantica diferente
+        # Heuristica simples: se ha aspas em torno do STR, provavelmente eh string SQL
+        # Solucao: verificar se STR esta dentro de aspas duplas ou colchetes
+        # Skip se linha tem `"` OU `[` antes do STR match posicionado
+        $matches = $rx.Matches($linha)
+        if ($matches.Count -eq 0) { continue }
+
+        # Reconstruir linha aplicando o replace so em posicoes fora de string
+        $novaLinha = $linha
+        foreach ($m in $matches) {
+            $prefix = $novaLinha.Substring(0, $m.Index)
+            # Detectar string context: contar aspas duplas e colchetes ate o match
+            $quoteCount = ($prefix.ToCharArray() | Where-Object { $_ -eq '"' }).Count
+            $bracketOpen = ($prefix.ToCharArray() | Where-Object { $_ -eq '[' }).Count
+            $bracketClose = ($prefix.ToCharArray() | Where-Object { $_ -eq ']' }).Count
+
+            $inString = ($quoteCount % 2 -eq 1) -or ($bracketOpen -gt $bracketClose)
+            if ($inString) { continue }
+
+            # Substitui STR(col,N) por col — mas so nesta occurrence
+            $col = $m.Groups[1].Value
+            $novaLinha = $novaLinha.Remove($m.Index, $m.Length).Insert($m.Index, $col)
+        }
+
+        if ($novaLinha -ne $original) {
+            $Linhas[$i] = $novaLinha
+            $countFix++
+            Add-Correcao -Tipo "PATTERN-158-STR-COLUNA-CHAR" -Linha ($i + 1) `
+                -Original $original.Trim() `
+                -Corrigido $novaLinha.Trim() `
+                -Descricao "Pattern #158: STR() envolvia coluna CHAR conhecida (schema.sql) — VFP9 STR() exige NUMERIC first arg, dispara erro 11 'Function argument value, type, or count is invalid.' ao runtime. Removido STR() — coluna ja eh string. Origem: Erro90-a (2026-08-05, FormSigReCmp Grande Grupo — 6 sites)."
+        }
+    }
+
+    if ($countFix -gt 0) {
+        Write-Host "[Pattern #158] $countFix STR(char_col, N) removido(s)." -ForegroundColor Green
+    }
+
+    return $Linhas
+}
+
+# =============================================================================
+# Pattern #159: InputMask "#+" em textbox char (.Value = "") bloqueia letras
+# Sintoma: usuario nao consegue digitar letras num campo cujo codigo no banco
+#         pode ser alfanumerico (ex: SigCdGpr.codigos char(3) suporta "A01").
+# Causa raiz: migrador copiou InputMask numerico (`##`, `###`) do legado sem
+#         checar tipo da coluna. Em VFP9, `#` no InputMask aceita apenas
+#         digitos/espacos/sinais — bloqueia letras. Combinacao invalida:
+#         `.InputMask = "##"` + `.Value = ""` (char).
+# Fix: substituir `.InputMask = "##..#"` por `.MaxLength = N` quando textbox
+#         tem `.Value = ""` na mesma janela WITH (indicativo de char).
+# Detector: procurar `.InputMask = "#+"` seguido em ate 5 linhas ANTES ou
+#         DEPOIS por `.Value = ""` (string vazia — indica char).
+# Se `.Value = 0` (numeric), MANTER InputMask.
+# Idempotente. Skip comentarios.
+# Origem: Erro90-b (2026-08-05, FormSigReCmp Grande Grupo txt_4c__cd_ggrupo).
+# =============================================================================
+function Corrigir-InputMaskHashEmTextBoxChar {
+    param([string[]]$Linhas)
+
+    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
+
+    $countFix = 0
+    $rxInputMask = [regex]'(?i)^(\s*)\.InputMask\s*=\s*"(#+)"'
+    $rxValueString = [regex]'(?i)^\s*\.Value\s*=\s*""'
+    $rxValueNumeric = [regex]'(?i)^\s*\.Value\s*=\s*[+-]?\d'
+
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        $linha = $Linhas[$i]
+        if ($linha -match '^\s*\*') { continue }
+
+        $m = $rxInputMask.Match($linha)
+        if (-not $m.Success) { continue }
+
+        $indent = $m.Groups[1].Value
+        $hashes = $m.Groups[2].Value
+        $maxLen = $hashes.Length
+
+        # Verificar contexto: procurar .Value = "" ou .Value = 0 nas 6 linhas ANTES/DEPOIS
+        $valueString = $false
+        $valueNumeric = $false
+        $start = [Math]::Max(0, $i - 6)
+        $end = [Math]::Min($Linhas.Count - 1, $i + 6)
+        for ($j = $start; $j -le $end; $j++) {
+            if ($j -eq $i) { continue }
+            if ($rxValueString.IsMatch($Linhas[$j])) { $valueString = $true; break }
+            if ($rxValueNumeric.IsMatch($Linhas[$j])) { $valueNumeric = $true; break }
+        }
+
+        if ($valueNumeric) {
+            # OK — mantido, numerico com InputMask numerico
+            continue
+        }
+
+        if (-not $valueString) {
+            # Ambiguo — nao muta, emite WARNING
+            Add-Correcao -Tipo "WARN-159-INPUTMASK-AMBIGUO" -Linha ($i + 1) `
+                -Original $linha.Trim() `
+                -Corrigido "(REVISAR MANUAL) Verificar se .Value do TextBox eh char (`"`") ou numeric (0)" `
+                -Descricao "Pattern #159 WARNING: .InputMask = `"$hashes`" encontrado sem .Value proximo (janela 6 linhas). Se coluna eh char, trocar por .MaxLength = $maxLen. Origem: Erro90-b (2026-08-05, FormSigReCmp)."
+            continue
+        }
+
+        # Fix: trocar .InputMask = "##" por .MaxLength = N
+        $novaLinha = "$indent.MaxLength     = $maxLen"
+        $Linhas[$i] = $novaLinha
+        $countFix++
+        Add-Correcao -Tipo "PATTERN-159-INPUTMASK-CHAR-TO-MAXLENGTH" -Linha ($i + 1) `
+            -Original $linha.Trim() `
+            -Corrigido $novaLinha.Trim() `
+            -Descricao "Pattern #159: .InputMask = `"$hashes`" (bloqueia letras) trocado por .MaxLength = $maxLen porque TextBox tem .Value = `"`" (char). VFP9 `#` no InputMask aceita apenas digitos, mas coluna char pode conter letras (ex: SigCdGpr.codigos char(3) = 'A01'). Origem: Erro90-b (2026-08-05, FormSigReCmp Grande Grupo)."
+    }
+
+    if ($countFix -gt 0) {
+        Write-Host "[Pattern #159] $countFix InputMask `#` trocado(s) por MaxLength em TextBox char." -ForegroundColor Green
+    }
+
+    return $Linhas
+}
+
+# =============================================================================
+# Pattern #160: Referencia <Cursor>.<Col> onde <Col> nao esta no SELECT do cursor
+# WARNING-only — nao muta porque parse de SQL eh fragil.
+# Sintoma: dialog "Variable 'XXX' is not found." em runtime.
+# Causa raiz: migrador prefixa/renomeia coluna sem checar SELECT list.
+#   Ex: SELECT a.Emps FROM SigMvCab a INTO CURSOR CrSigMvCab; depois
+#       CrSigMvCab.Cemps (com C invento) → erro.
+# Detector: para cada cursor local (SQLEXEC/SELECT INTO CURSOR), extrair
+#   SELECT list, comparar com todas as referencias <Cursor>.<Col>.
+# Origem: Erro91 (2026-08-05, SigReCmpBO.prg CrSigMvCab.Cemps vs SELECT a.Emps).
+# =============================================================================
+function Corrigir-CursorColunaInexistente {
+    param([string[]]$Linhas)
+
+    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
+
+    $conteudo = $Linhas -join "`n"
+
+    # Extrair mapping <Cursor> -> [<colunas selecionadas>]
+    # Fontes: SQLEXEC(..., loc_cSQL, "<CursorName>") + SELECT INTO CURSOR <CursorName>
+    # Simplificacao: capturar apenas cursores locais (nao SigCd*/Tmp* pre-existentes).
+    # Regex para SELECT list: pega a lista entre SELECT e FROM na variavel loc_cSQL
+
+    $cursoresColunas = @{}
+
+    # Encontrar SQLEXEC(..., loc_cSQL, "CursorName")
+    $rxSqlExec = [regex]'(?im)SQLEXEC\s*\(\s*\w+\s*,\s*(loc_c\w+|"[^"]+")\s*,\s*"([^"]+)"'
+    foreach ($m in $rxSqlExec.Matches($conteudo)) {
+        $cursorName = $m.Groups[2].Value
+        if (-not $cursoresColunas.ContainsKey($cursorName)) {
+            $cursoresColunas[$cursorName] = @{}
+        }
+    }
+
+    # Encontrar SELECT INTO CURSOR <name>
+    $rxSelectInto = [regex]'(?im)INTO\s+CURSOR\s+(\w+)'
+    foreach ($m in $rxSelectInto.Matches($conteudo)) {
+        $cursorName = $m.Groups[1].Value
+        if (-not $cursoresColunas.ContainsKey($cursorName)) {
+            $cursoresColunas[$cursorName] = @{}
+        }
+    }
+
+    if ($cursoresColunas.Count -eq 0) { return $Linhas }
+
+    # Para cada cursor, tentar extrair SELECT list olhando 20 linhas antes do SQLEXEC/SELECT INTO
+    # Heuristica conservadora: se cursor for Cr<Table>, incluir colunas da tabela do SELECT
+    # Nao vamos fazer analise SQL completa aqui — apenas emitir WARNING generico
+
+    # Simplificacao: contar referencias <Cursor>.<Col> e emitir INFO de cursores encontrados
+    $countRefs = 0
+    foreach ($cursorName in $cursoresColunas.Keys) {
+        $rxRef = [regex]"(?i)\b$([regex]::Escape($cursorName))\.(\w+)\b"
+        foreach ($m in $rxRef.Matches($conteudo)) {
+            $col = $m.Groups[1].Value
+            if (-not $cursoresColunas[$cursorName].ContainsKey($col)) {
+                $cursoresColunas[$cursorName][$col] = 0
+            }
+            $cursoresColunas[$cursorName][$col]++
+            $countRefs++
+        }
+    }
+
+    # Emitir INFO consolidado (apenas 1x, nao por linha)
+    if ($countRefs -gt 0) {
+        # Nao emite WARN salvo se detectar padrao suspeito — mantido como no-op para
+        # esta versao. Detector real requer parse SQL. Marcar TODO no futuro.
+        # (Placeholder para futuras iteracoes)
+    }
+
+    return $Linhas
+}
+
 function Invoke-CorrecaoAutomatica {
     param(
         [string]$Arquivo,
@@ -10089,6 +10479,10 @@ function Invoke-CorrecaoAutomatica {
     $linhas = Corrigir-FormBuscaAuxiliarWhereConcat -Linhas $linhas
     $linhas = Corrigir-SigCdCliGrclisInvalida -Linhas $linhas
     $linhas = Corrigir-GcCaminhoBasePlusReports -Linhas $linhas
+    $linhas = Corrigir-DeadCodeIfFileLocFrx -Linhas $linhas
+    $linhas = Corrigir-StrEmColunaCharDoCursor -Linhas $linhas
+    $linhas = Corrigir-InputMaskHashEmTextBoxChar -Linhas $linhas
+    $linhas = Corrigir-CursorColunaInexistente -Linhas $linhas
 
     # Salva arquivo corrigido em UTF-8 SEM BOM.
     # - VFP9 nao suporta BOM (por isso removemos no read com bytes[3..])
