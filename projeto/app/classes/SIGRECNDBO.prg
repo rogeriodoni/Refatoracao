@@ -114,12 +114,9 @@ DEFINE CLASS SIGRECNDBO AS RelatorioBase
                  Debitos N(12,2), Creditos N(12,2), Docus C(10), cIdChaves C(20))
             INDEX ON Grupos + Contas + cIdChaves TAG ContData
 
-            *-- Query principal em SigMvCcr
-            *-- Erro94: NAO usar CAST(Datas AS DATE) — driver ODBC/OLEDB VFP9
-            *-- pode retornar SQL Server DATE (adicionado em 2008) como VARCHAR,
-            *-- e depois DTOC/CTOD estora "Function argument value, type, or count
-            *-- is invalid." (erro 11) na SCAN. Datas datetime retorna como VFP
-            *-- DateTime (T) e funciona com INSERT em coluna D e com EMPTY() check.
+            *-- Query principal em SigMvCcr (identica ao legado — sem CAST em Datas)
+            *-- Datas datetime (T) eh inserida diretamente em TmpHist.Datas D(8):
+            *-- VFP9 faz coercion automatica T→D dropando a parte time.
             loc_cSQL = "SELECT Grupos, Contas, cIdChaves, Datas," + ;
                        " Opers, Valors, Moedas, Docus, Emps, DtAudits, Hists, Hist2s " + ;
                        " FROM SigMvCcr" + ;
@@ -179,10 +176,7 @@ DEFINE CLASS SIGRECNDBO AS RelatorioBase
                         (Audits, Datas, Grupos, Contas, RClis, Saldo1, Opers, ;
                          Hists, Hist2s, Emps, Debitos, Creditos, Docus, cIdChaves) ;
                         VALUES (!EMPTY(cursor_4c_CcrDados.DtAudits), ;
-                                IIF(ISNULL(cursor_4c_CcrDados.Datas), {}, ;
-                                    IIF(VARTYPE(cursor_4c_CcrDados.Datas) = "T", ;
-                                        TTOD(cursor_4c_CcrDados.Datas), ;
-                                        cursor_4c_CcrDados.Datas)), ;
+                                cursor_4c_CcrDados.Datas, ;
                                 cursor_4c_CcrDados.Grupos, ;
                                 cursor_4c_CcrDados.Contas, ;
                                 loc_lcDes, ;
