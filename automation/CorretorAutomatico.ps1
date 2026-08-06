@@ -10074,6 +10074,15 @@ function Corrigir-DeadCodeIfFileLocFrx {
 # Detector case-insensitive na coluna (VFP9 nao diferencia case em colunas
 # de cursor). Idempotente. Skip comentarios.
 # Origem: Erro90-a (2026-08-05, FormSigReCmp — 6 sites).
+#
+# ATENCAO CRITICA (Erro93 2026-08-06): `codigos` NAO eh universalmente char.
+# SigCdTom.codigos = numeric(2,0). Se o arquivo tem `FROM SigCdTom` ou
+# `CREATE CURSOR ... Codigos N(`, remover STR de `Codigos` INTRODUZ erro 11
+# em runtime (form nao abre). Pattern agora faz safety-check por-arquivo:
+# blacklists 'codigos' quando o arquivo contem SigCdTom ou declara Codigos
+# como numeric. NUNCA replicar manualmente esse Pattern sem consultar
+# schema.sql — commits "chore mudanca manual pos-sweep" que removem STR
+# por analogia sao a fonte #1 de regressao (bug em SigReCmpBO:124).
 # =============================================================================
 function Corrigir-StrEmColunaCharDoCursor {
     param([string[]]$Linhas)
@@ -10087,6 +10096,20 @@ function Corrigir-StrEmColunaCharDoCursor {
         'grupos','classes','internos','sgrus','mercs','materiais','cbars',
         'trocos','emps','razas','cortes','dgrus','descs','descrs','rclis'
     )
+
+    # SAFETY-CHECK Erro93: se o arquivo contem contexto de tabela com coluna
+    # NUMERIC de mesmo nome (SigCdTom.codigos = numeric(2,0)), remover 'codigos'
+    # do whitelist. Detector conservador olha marcadores textuais no arquivo:
+    #   - "FROM SigCdTom" (SELECT populando cursor de SigCdTom)
+    #   - "Codigos N(" ou "codigos N(" (CREATE CURSOR declarando codigos numeric)
+    # Isso evita over-fix que quebra formas Init/InicializarDados no runtime.
+    $fileText = ($Linhas -join "`n")
+    $temSigCdTom = ($fileText -match '(?i)\bFROM\s+SigCdTom\b') `
+                -or ($fileText -match '(?i)\bcodigos\s+N\s*\(')
+    if ($temSigCdTom) {
+        $colsChar = @($colsChar | Where-Object { $_ -ne 'codigos' })
+        Write-Host "[Pattern #158] SAFETY: arquivo contem SigCdTom/Codigos N() — 'codigos' removido do whitelist (evita Erro93)." -ForegroundColor Yellow
+    }
     $colsPattern = ($colsChar -join '|')
 
     # Match: STR( <optional cursor.> <col> , N ) — permitir espacos

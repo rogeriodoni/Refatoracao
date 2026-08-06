@@ -7114,3 +7114,95 @@ Suporta `-DryRun` para preview sem modificar.
 - Complementa: `#156 gc_4c_CaminhoBase + "reports\"` (path corrompido) — este pattern trata ARQUIVOS AUSENTES (path correto mas file missing).
 - Origem: Erro92 (2026-08-05, FormSigReCmp — SigReCp2.frx + SigReCp3.frx nunca portados; sweep confirmou 49 FRXs referenciados, 48 ja presentes).
 
+
+## 162. `ALLTRIM(<cursor>.<coluna_numeric>)` dispara VFP9 erro 11 — verificar tipo no schema.sql antes de remover `STR()` (Erro93 SigReCmpBO 2026-08-06)
+
+### Sintoma
+Dialog vermelho **ao abrir o form REPORT/OPERACIONAL** (antes de qualquer click do usuario):
+```
+Erro
+Function argument value, type, or count is invalid.
+```
+Origem: `Init` -> `FormBase.Init()` -> `InicializarForm` -> `BO.InicializarDados()` -> linha com `ALLTRIM(<cursor>.<coluna_numeric>)`.
+
+Padrao correlato mesmo bug: **concat direto** `<numeric> + "-"` em INSERT — dispara "Operator/operand type mismatch" (VFP9 erro 1817) no mesmo ponto.
+
+### Causa
+`ALLTRIM` e `EscaparSQL` exigem **char first arg**. Se o cursor recebeu coluna numerica de um SELECT (`Codigos` de `SigCdTom` = `numeric(2,0)` p.ex.), envelopar com `ALLTRIM(cursor.Codigos)` dispara erro 11 no primeiro `SCAN` que atinge a linha.
+
+O bug foi introduzido por **replicacao manual do Pattern #158** sem checar schema.sql. Pattern #158 remove `STR()` de `ALLTRIM(STR(<col>, N))` **APENAS quando a coluna eh CHAR** (whitelist via schema.sql). Um commit "chore" aplicou o mesmo padrao manualmente em `SigReCmpBO:124` acreditando estar corrigindo — mas `SigCdTom.codigos` eh numeric, nao char como `SigCdGpr.codigos`.
+
+### Tabela de referencia — colunas `codigos` por tabela
+
+| Tabela | Coluna `codigos` | Tipo | Pattern #158 aplica? |
+|---|---|---|---|
+| `SigCdGpr` | codigos | **char(3)** | SIM — remove STR |
+| `SigCdGcr` | codigos | **char(10)** | SIM — remove STR |
+| `SigCdCta` | codigos | **char(10)** | SIM — remove STR |
+| `SigCdEnr` | codigos | **char(3)** | SIM — remove STR |
+| `SigInTgo` | codigos | **char(10)** | SIM — remove STR |
+| `SigCdMdSc` | codigos | **char** | SIM — remove STR |
+| **`SigCdTom`** | **codigos** | **`numeric(2,0)`** | **NAO — MANTER STR** |
+
+Regra generica: para toda tabela `Sig*Cd*` com coluna `codigos`, consultar `docs/schema.sql` antes de aplicar transforms sobre ALLTRIM/EscaparSQL.
+
+### Bug pattern proibido
+```foxpro
+* SigCdTom.codigos = numeric(2,0) — ALLTRIM sobre numeric estora erro 11:
+INSERT INTO cursor_4c_TipoMov (Marca, Codigos, Descri) ;
+    VALUES (0, cursor_4c_TipoMovTemp.Codigos, ;
+            ALLTRIM(cursor_4c_TipoMovTemp.Codigos) + "-" + ;
+            ALLTRIM(cursor_4c_TipoMovTemp.Descrs))     && ERRO 11
+
+* Concat direto numeric + "-" tambem estora ("Operator/operand type mismatch"):
+INSERT INTO cs_SigCdTom (Marca, Codigos, Descri) ;
+    VALUES (1, crSigCdTomTemp.Codigos, ;
+            crSigCdTomTemp.Codigos + "-" + ;                && ERRO 1817
+            ALLTRIM(crSigCdTomTemp.Descrs))
+```
+
+### Fix canonico
+```foxpro
+* Manter STR() com tamanho da coluna numeric:
+INSERT INTO cursor_4c_TipoMov (Marca, Codigos, Descri) ;
+    VALUES (0, cursor_4c_TipoMovTemp.Codigos, ;
+            ALLTRIM(STR(cursor_4c_TipoMovTemp.Codigos, 2)) + "-" + ;
+            ALLTRIM(cursor_4c_TipoMovTemp.Descrs))
+
+* Concat: sempre STR primeiro
+INSERT INTO cs_SigCdTom (Marca, Codigos, Descri) ;
+    VALUES (1, crSigCdTomTemp.Codigos, ;
+            ALLTRIM(STR(crSigCdTomTemp.Codigos, 2)) + "-" + ;
+            ALLTRIM(crSigCdTomTemp.Descrs))
+```
+
+### Regra generica
+**Antes de aplicar `ALLTRIM(cur.col)` OU concat `cur.col + "string"` OU `EscaparSQL(cur.col)`, SEMPRE consultar `docs/schema.sql` para confirmar tipo char da coluna.**
+
+**Se em duvida, MANTER `STR(cur.col, N)`** — custo negligenciavel (algumas comparacoes ficam char-em-char), sempre funciona. O erro 11 quebra o form INTEIRO no primeiro Init.
+
+**Nunca replicar manualmente Pattern #158** — se o LLM decide remover STR() em bloco novo, checar schema.sql em cada site.
+
+### Auto-fix (WARNING-only)
+NAO existe Pattern #162 com auto-fix. Motivo: adicionar detector reverso (auto-injetar STR quando `ALLTRIM(cur.numeric_col)` for detectado) exige mesma logica de whitelist do #158 — errar aqui replica o proprio bug em direcao oposta. Pattern #158 permanece autoritativo; o correto eh o Prompt-level warning (rule adicionada nos 4 blocos do OrquestradorMigracao.ps1).
+
+### Sweep Erro93 (2026-08-06)
+7 sites corrigidos em 4 BOs (`ALLTRIM/concat sobre SigCdTom.codigos`):
+- `SigReCmpBO.prg:124` — reverteu manualmente `STR()` por engano (commit chore 386e86bf)
+- `sigrefcxBO.prg:230` — `crSigCdTomTemp.Codigos + "-"` (concat direto numeric)
+- `SIGREADSBO.prg:174` — mesmo padrao SigReCmpBO
+- `SIGREADSBO.prg:371` — `"o.TipoOps = " + ALLTRIM(Codigos)` construindo SQL
+- `sigreatoBO.prg:238` — MontarListaTipos em `cursor_4c_OperacoesE/S` (declaradas com `Codigos N(2,0)`)
+- + 2 reverts correlatos `CrSigMvCab.Cemps` → `CrSigMvCab.Emps` em `SigReCmpBO:675/707` (mesmo commit chore reverteu fix Erro91 — complementa Pattern #160)
+
+BOs auditados como safe:
+- `sigreimpBO.prg` — atribui a `loc_nCodigos` numerico
+- `sigrecmcBO.prg` — usa `STR(codigos,2)` dentro de string SQL Server (server-side, OK)
+- `sigrecmmBO.prg` — subquery SQL apenas
+- Cursors de `SigCdGpr/SigCdGcr/SigCdCli/SigInTgo` — todos char (30+ sites em forms nao tocados)
+
+### Referencias
+- Memoria detalhada: `feedback_alltrim_numeric_col_erro11.md`
+- Complementa: `#158` (fix char — este eh o inverso p/ numeric); `#160` (Cemps→Emps do mesmo commit chore)
+- Origem: Erro93 (2026-08-06, FormSigReCmp — Listagem de Composicao Por Movimentacao/OP nao abria).
+
