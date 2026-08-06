@@ -260,7 +260,11 @@ DEFINE CLASS SIGRECNDBO AS RelatorioBase
         loc_nBehaviorOrig = SET("REPORTBEHAVIOR")
         SET POINT TO "."
         SET SEPARATOR TO ","
-        SET REPORTBEHAVIOR 80
+        *-- Erro97: SET REPORTBEHAVIOR 80 estava disparando VFP9 erro 10
+        *-- ("Syntax error.") ao carregar SigReCnd.frx. Mudado para 90 (default
+        *-- VFP9 moderno). Pode reintroduzir asteriscos em campos numericos
+        *-- (Erro28) — se acontecer, tratar por PICTURE explicito no FRX.
+        SET REPORTBEHAVIOR 90
 
         DO CASE
             CASE par_cModo == "PREVIEW"
