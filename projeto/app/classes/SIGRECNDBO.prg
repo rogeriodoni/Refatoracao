@@ -254,14 +254,19 @@ DEFINE CLASS SIGRECNDBO AS RelatorioBase
 
 
         *-- Isolamento de locale + modo de renderizacao (Pattern #117 / Erro28)
-        LOCAL loc_cPointOrig, loc_cSepOrig, loc_nBehaviorOrig, loc_cCdOrig
+        LOCAL loc_cPointOrig, loc_cSepOrig, loc_nBehaviorOrig, loc_cCdOrig, loc_nStrictOrig
         loc_cPointOrig    = SET("POINT")
         loc_cSepOrig      = SET("SEPARATOR")
         loc_nBehaviorOrig = SET("REPORTBEHAVIOR")
+        loc_nStrictOrig   = SET("STRICTDATE")
         loc_cCdOrig       = FULLPATH(CURDIR())
         SET POINT TO "."
         SET SEPARATOR TO ","
         SET REPORTBEHAVIOR 90
+        *-- Erro98/99: DataSession=2 do form reseta STRICTDATE para VFP default (2 strict).
+        *-- FRX legado tem literais/expressoes de data (DATE(), {01/01/2020} etc.) que o
+        *-- parser strict rejeita como "Syntax error." (VFP9 erro 10) ao carregar FRX.
+        SET STRICTDATE TO 0
 
         *-- Erro98: parenthesized (loc_cFRX) disparava VFP9 erro 10 "Syntax
         *-- error." ao carregar SigReCnd.frx. Bypass: CD para pasta reports e
@@ -284,6 +289,7 @@ DEFINE CLASS SIGRECNDBO AS RelatorioBase
         SET POINT TO (loc_cPointOrig)
         SET SEPARATOR TO (loc_cSepOrig)
         SET REPORTBEHAVIOR (loc_nBehaviorOrig)
+        SET STRICTDATE TO (loc_nStrictOrig)
 
         *-- Restaurar menu (Erro63): REPORT FORM PREVIEW abre toolbar propria
         *-- que corrompe cache visual do _MSYSMENU. Sem RELEASE + Criar aqui,
