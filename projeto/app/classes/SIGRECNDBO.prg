@@ -347,12 +347,19 @@ DEFINE CLASS SIGRECNDBO AS RelatorioBase
     * Visualizar - Prepara dados e exibe preview na tela
     *--------------------------------------------------------------------------
     PROCEDURE Visualizar()
-        LOCAL loc_lSucesso, loc_cFrx, loc_oErro
+        LOCAL loc_lSucesso, loc_cCdOrig, loc_cReports, loc_oErro
         loc_lSucesso = .F.
 
         TRY
             IF THIS.PrepararDados()
-                THIS.ExecutarReportForm("SigReCnd", "PREVIEW", THIS.this_cCursorDados)
+                *-- Erro100: bypass ExecutarReportForm — REPORT FORM direto,
+                *-- MINIMO possivel, identico ao legado processamento+visualizacao.
+                loc_cCdOrig  = FULLPATH(CURDIR())
+                loc_cReports = FULLPATH(gc_4c_CaminhoReports)
+                CD (loc_cReports)
+                SELECT TmpHist
+                REPORT FORM SigReCnd NOENVIRONMENT PREVIEW NOCONSOLE
+                CD (loc_cCdOrig)
                 loc_lSucesso = .T.
             ENDIF
         CATCH TO loc_oErro
