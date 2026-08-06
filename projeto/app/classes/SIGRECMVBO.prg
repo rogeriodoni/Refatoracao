@@ -90,12 +90,31 @@ DEFINE CLASS SIGRECMVBO AS RelatorioBase
                     EXIT
                 ENDIF
 
+                *-- Erro95: alerta quando SQL sucede mas cursor volta vazio
+                *-- (dados nao satisfazem filtro CMV — picker de Operacao abriria vazio)
+                IF RECCOUNT(THIS.this_cCursorOpe) = 0
+                    MsgAviso("Nenhuma opera" + CHR(231) + CHR(227) + "o CMV encontrada." + CHR(13) + ;
+                        "Verifique se existem registros em SigCdOpe com" + CHR(13) + ;
+                        "vendas=1, caixas=1, copers=1 e SigCdTom.GeraCmvs=1.", ;
+                        "Configura" + CHR(231) + CHR(227) + "o CMV")
+                ENDIF
+
                 *-- Carrega configuracao padrao PAC
                 loc_cSQL = "SELECT GruCmvs, ConCmvs, OpeCmvs FROM SigCdPac"
                 loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, THIS.this_cCursorPac)
                 IF loc_nResult < 1
                     THIS.this_cMensagemErro = "Falha ao carregar configura" + CHR(231) + CHR(227) + CHR(227) + "o PAC"
                     EXIT
+                ENDIF
+
+                *-- Erro95: alerta quando SigCdPac esta vazio — defaults de Operacao,
+                *-- Grupo e Conta vao aparecer em branco (o legado assumia >=1 linha).
+                IF RECCOUNT(THIS.this_cCursorPac) = 0
+                    MsgAviso("Tabela SigCdPac vazia — filtros Opera" + CHR(231) + CHR(227) + ;
+                        "o, Grupo e Conta iniciar" + CHR(227) + "o em branco." + CHR(13) + ;
+                        "Preencha SigCdPac com a configura" + CHR(231) + CHR(227) + "o padr" + ;
+                        CHR(227) + "o (GruCmvs/ConCmvs/OpeCmvs).", ;
+                        "Configura" + CHR(231) + CHR(227) + "o PAC")
                 ENDIF
 
                 *-- Mes/ano atual como default

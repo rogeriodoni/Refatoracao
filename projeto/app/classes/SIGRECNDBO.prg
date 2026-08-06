@@ -115,7 +115,12 @@ DEFINE CLASS SIGRECNDBO AS RelatorioBase
             INDEX ON Grupos + Contas + cIdChaves TAG ContData
 
             *-- Query principal em SigMvCcr
-            loc_cSQL = "SELECT Grupos, Contas, cIdChaves, CAST(Datas AS DATE) AS Datas," + ;
+            *-- Erro94: NAO usar CAST(Datas AS DATE) — driver ODBC/OLEDB VFP9
+            *-- pode retornar SQL Server DATE (adicionado em 2008) como VARCHAR,
+            *-- e depois DTOC/CTOD estora "Function argument value, type, or count
+            *-- is invalid." (erro 11) na SCAN. Datas datetime retorna como VFP
+            *-- DateTime (T) e funciona com INSERT em coluna D e com EMPTY() check.
+            loc_cSQL = "SELECT Grupos, Contas, cIdChaves, Datas," + ;
                        " Opers, Valors, Moedas, Docus, Emps, DtAudits, Hists, Hist2s " + ;
                        " FROM SigMvCcr" + ;
                        " WHERE Grupos = " + EscaparSQL(loc_cGru) + ;
@@ -156,9 +161,9 @@ DEFINE CLASS SIGRECNDBO AS RelatorioBase
                     loc_nVal = cursor_4c_CcrDados.Valors
                     IF ALLTRIM(cursor_4c_CcrDados.Moedas) != ALLTRIM(loc_cMoe)
                         loc_nCt1 = THIS.BuscarCotacao(ALLTRIM(cursor_4c_CcrDados.Moedas), ;
-                                                       CTOD(DTOC(cursor_4c_CcrDados.Datas)))
+                                                       cursor_4c_CcrDados.Datas)
                         loc_nCt2 = THIS.BuscarCotacao(loc_cMoe, ;
-                                                       CTOD(DTOC(cursor_4c_CcrDados.Datas)))
+                                                       cursor_4c_CcrDados.Datas)
                         IF loc_nCt2 != 0
                             loc_nVal = (cursor_4c_CcrDados.Valors * loc_nCt1) / loc_nCt2
                         ENDIF
@@ -174,7 +179,10 @@ DEFINE CLASS SIGRECNDBO AS RelatorioBase
                         (Audits, Datas, Grupos, Contas, RClis, Saldo1, Opers, ;
                          Hists, Hist2s, Emps, Debitos, Creditos, Docus, cIdChaves) ;
                         VALUES (!EMPTY(cursor_4c_CcrDados.DtAudits), ;
-                                CTOD(DTOC(cursor_4c_CcrDados.Datas)), ;
+                                IIF(ISNULL(cursor_4c_CcrDados.Datas), {}, ;
+                                    IIF(VARTYPE(cursor_4c_CcrDados.Datas) = "T", ;
+                                        TTOD(cursor_4c_CcrDados.Datas), ;
+                                        cursor_4c_CcrDados.Datas)), ;
                                 cursor_4c_CcrDados.Grupos, ;
                                 cursor_4c_CcrDados.Contas, ;
                                 loc_lcDes, ;
@@ -348,7 +356,9 @@ DEFINE CLASS SIGRECNDBO AS RelatorioBase
         LOCAL loc_nCotacao, loc_cSQL, loc_nResult, loc_oErro
         loc_nCotacao = 1
 
-        IF EMPTY(par_cMoeda) OR VARTYPE(par_dData) != "D" OR EMPTY(par_dData)
+        *-- Erro94: aceitar D (date) OU T (datetime) — SigMvCcr.Datas eh datetime
+        *-- e chega como T no cursor. FormatarDataSQL abaixo trata ambos os tipos.
+        IF EMPTY(par_cMoeda) OR !INLIST(VARTYPE(par_dData), "D", "T") OR EMPTY(par_dData)
             RETURN 1
         ENDIF
 
