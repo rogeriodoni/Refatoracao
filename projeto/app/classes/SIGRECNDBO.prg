@@ -350,15 +350,24 @@ DEFINE CLASS SIGRECNDBO AS RelatorioBase
         LOCAL loc_lSucesso, loc_cCdOrig, loc_cReports, loc_oErro
         loc_lSucesso = .F.
 
+        LOCAL loc_nBehaviorOrig
         TRY
             IF THIS.PrepararDados()
-                *-- Erro100: bypass ExecutarReportForm — REPORT FORM direto,
+                *-- Erro100/101: bypass ExecutarReportForm — REPORT FORM direto,
                 *-- MINIMO possivel, identico ao legado processamento+visualizacao.
                 loc_cCdOrig  = FULLPATH(CURDIR())
                 loc_cReports = FULLPATH(gc_4c_CaminhoReports)
                 CD (loc_cReports)
+                *-- Erro102: REPORTBEHAVIOR 80 (classic) — modo 90 (default VFP9 em
+                *-- private datasession) re-mede fontes em runtime e faz PICTURE
+                *-- "999999999.99" (sem "@Z") renderizar como asteriscos nas linhas
+                *-- de detalhe (Debito/Credito/Saldo). Totais usam "@Z 999,999,999.99"
+                *-- e renderizam OK. Modo 80 mede fonte como IDE de design legado.
+                loc_nBehaviorOrig = SET("REPORTBEHAVIOR")
+                SET REPORTBEHAVIOR 80
                 SELECT TmpHist
                 REPORT FORM SigReCnd PREVIEW NOCONSOLE
+                SET REPORTBEHAVIOR (loc_nBehaviorOrig)
                 CD (loc_cCdOrig)
                 loc_lSucesso = .T.
             ENDIF
