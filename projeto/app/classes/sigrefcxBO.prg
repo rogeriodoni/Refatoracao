@@ -227,7 +227,7 @@ DEFINE CLASS sigrefcxBO AS RelatorioBase
                     SCAN
                         INSERT INTO cs_SigCdTom (Marca, Codigos, Descri) ;
                             VALUES (1, crSigCdTomTemp.Codigos, ;
-                                    STR(crSigCdTomTemp.Codigos, 2) + "-" + ;
+                                    ALLTRIM(STR(crSigCdTomTemp.Codigos, 2)) + "-" + ;
                                     ALLTRIM(crSigCdTomTemp.Descrs))
                     ENDSCAN
                     USE IN crSigCdTomTemp
