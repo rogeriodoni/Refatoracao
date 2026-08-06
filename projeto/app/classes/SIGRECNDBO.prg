@@ -205,8 +205,15 @@ DEFINE CLASS SIGRECNDBO AS RelatorioBase
             ENDIF
 
         CATCH TO loc_oErro
-            THIS.this_cMensagemErro = loc_oErro.Message
-            MsgErro(loc_oErro.Message, "Erro")
+            *-- Erro96: CATCH verboso para capturar LineNo/Procedure/ErrorNo
+            *-- quando "Syntax error." (VFP9 erro 10) dispara em PrepararDados.
+            THIS.this_cMensagemErro = "[" + TRANSFORM(loc_oErro.ErrorNo) + "] " + ;
+                loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure + CHR(13) + ;
+                "Details: " + loc_oErro.Details + CHR(13) + ;
+                "LineContents: " + loc_oErro.LineContents
+            MsgErro(THIS.this_cMensagemErro, "Erro PrepararDados")
         ENDTRY
 
         RETURN loc_lSucesso
@@ -333,8 +340,15 @@ DEFINE CLASS SIGRECNDBO AS RelatorioBase
                 loc_lSucesso = .T.
             ENDIF
         CATCH TO loc_oErro
-            THIS.this_cMensagemErro = loc_oErro.Message
-            MsgErro(loc_oErro.Message, "Erro")
+            *-- Erro96: CATCH verboso para capturar LineNo/Procedure/ErrorNo
+            *-- quando "Syntax error." dispara em Visualizar/ExecutarReportForm.
+            THIS.this_cMensagemErro = "[" + TRANSFORM(loc_oErro.ErrorNo) + "] " + ;
+                loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                "Procedure: " + loc_oErro.Procedure + CHR(13) + ;
+                "Details: " + loc_oErro.Details + CHR(13) + ;
+                "LineContents: " + loc_oErro.LineContents
+            MsgErro(THIS.this_cMensagemErro, "Erro Visualizar")
         ENDTRY
 
         RETURN loc_lSucesso
