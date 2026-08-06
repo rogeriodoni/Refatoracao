@@ -254,27 +254,33 @@ DEFINE CLASS SIGRECNDBO AS RelatorioBase
 
 
         *-- Isolamento de locale + modo de renderizacao (Pattern #117 / Erro28)
-        LOCAL loc_cPointOrig, loc_cSepOrig, loc_nBehaviorOrig
+        LOCAL loc_cPointOrig, loc_cSepOrig, loc_nBehaviorOrig, loc_cCdOrig
         loc_cPointOrig    = SET("POINT")
         loc_cSepOrig      = SET("SEPARATOR")
         loc_nBehaviorOrig = SET("REPORTBEHAVIOR")
+        loc_cCdOrig       = FULLPATH(CURDIR())
         SET POINT TO "."
         SET SEPARATOR TO ","
-        *-- Erro97: SET REPORTBEHAVIOR 80 estava disparando VFP9 erro 10
-        *-- ("Syntax error.") ao carregar SigReCnd.frx. Mudado para 90 (default
-        *-- VFP9 moderno). Pode reintroduzir asteriscos em campos numericos
-        *-- (Erro28) — se acontecer, tratar por PICTURE explicito no FRX.
         SET REPORTBEHAVIOR 90
+
+        *-- Erro98: parenthesized (loc_cFRX) disparava VFP9 erro 10 "Syntax
+        *-- error." ao carregar SigReCnd.frx. Bypass: CD para pasta reports e
+        *-- REPORT FORM com filename BARE (SEM parenteses, SEM extensao) —
+        *-- identico ao legado `Report Form SigReCnd Preview NoConsole`.
+        LOCAL loc_cReports
+        loc_cReports = FULLPATH(gc_4c_CaminhoReports)
+        CD (loc_cReports)
 
         DO CASE
             CASE par_cModo == "PREVIEW"
-                REPORT FORM (loc_cFRX) PREVIEW NOCONSOLE
+                REPORT FORM SigReCnd PREVIEW NOCONSOLE
             CASE par_cModo == "PRINTER_PROMPT"
-                REPORT FORM (loc_cFRX) TO PRINTER PROMPT NOCONSOLE
+                REPORT FORM SigReCnd TO PRINTER PROMPT NOCONSOLE
             CASE par_cModo == "PRINTER"
-                REPORT FORM (loc_cFRX) TO PRINTER NOCONSOLE
+                REPORT FORM SigReCnd TO PRINTER NOCONSOLE
         ENDCASE
 
+        CD (loc_cCdOrig)
         SET POINT TO (loc_cPointOrig)
         SET SEPARATOR TO (loc_cSepOrig)
         SET REPORTBEHAVIOR (loc_nBehaviorOrig)
