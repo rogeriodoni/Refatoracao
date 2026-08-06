@@ -358,7 +358,7 @@ DEFINE CLASS SIGRECNDBO AS RelatorioBase
                 loc_cReports = FULLPATH(gc_4c_CaminhoReports)
                 CD (loc_cReports)
                 SELECT TmpHist
-                REPORT FORM SigReCnd NOENVIRONMENT PREVIEW NOCONSOLE
+                REPORT FORM SigReCnd PREVIEW NOCONSOLE
                 CD (loc_cCdOrig)
                 loc_lSucesso = .T.
             ENDIF
