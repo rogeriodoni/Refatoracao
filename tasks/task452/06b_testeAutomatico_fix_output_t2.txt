@@ -1,0 +1,3 @@
+﻿**Bug:** `ColumnCount = 3` com cursor de 2 campos. Quando `RecordSource = "cursor_4c_Emps"` era definido, o VFP9 tentava auto-vincular a Column3 ao 3┬║ campo do cursor (inexistente) ÔåÆ erro de runtime ÔåÆ CATCH em `InicializarForm` ÔåÆ `MostrarErro` (FormErro modal bloqueante) ÔåÆ timeout 300s.
+
+**Fix:** Troquei a ordem (RecordSource primeiro, ColumnCount depois, com valor correto = 2). Isso elimina a Column3 esp├║ria e segue o mesmo padr├úo do `CarregarLista` (`RecordSource` ÔåÆ `ColumnCount` para "travar" em 2 colunas).

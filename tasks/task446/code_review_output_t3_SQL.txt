@@ -1,0 +1,22 @@
+﻿Ap├│s ler os dois arquivos completos, analisei todos os WHEREs SQL:
+
+**CIDCHAVES** ÔÇö Aparece na linha 303 do ICDBO.prg:
+```
+"WHERE cidchaves = " + EscaparSQL(ALLTRIM(THIS.this_cCidChaves))
+```
+Isso ├® no m├®todo `Atualizar()`, que usa `UPDATE SigPrTri SET ... WHERE cidchaves = ...`. O original legado usava `REPLACE ALL + UpDate()` em cursor ÔÇö a tradu├º├úo correta para SQL Server ├® exatamente um UPDATE com WHERE pela PK. **Remover esse WHERE destruiria TODOS os registros da tabela.** Falso positivo.
+
+**CONTROLCOUNT** ÔÇö Aparece na linha 361 do FormICD.prg:
+```vfp
+IF PEMSTATUS(loc_oControl, "ControlCount", 5) AND loc_oControl.ControlCount > 0
+```
+Isso ├® c├│digo VFP verificando a propriedade `.ControlCount` de um objeto de interface ÔÇö **n├úo ├® uma coluna SQL em nenhum WHERE**. O analisador confundiu a palavra-chave VFP com uma coluna SQL. Falso positivo.
+
+---
+
+**Diagn├│stico: ambos os alertas s├úo falsos positivos.** Nenhuma corre├º├úo ├® necess├íria:
+
+- O `WHERE cidchaves = ...` no `Atualizar()` ├® correto e obrigat├│rio (UPDATE por PK)
+- `ControlCount` n├úo est├í em nenhum WHERE SQL ÔÇö ├® propriedade de controle VFP na recurs├úo de visibilidade
+
+Os arquivos est├úo corretos como est├úo. Nenhuma altera├º├úo deve ser feita.

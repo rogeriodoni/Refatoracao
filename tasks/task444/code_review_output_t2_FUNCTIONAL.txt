@@ -1,0 +1,19 @@
+﻿Todos os 9 m├®todos flagados como "METODO-INEXISTENTE" **j├í existem** no arquivo. Confirmei:
+
+| M├®todo | Linha | Status |
+|--------|-------|--------|
+| `AjustarTela` | 828 | EXISTS (FUNCTION) |
+| `MontarGradeMesAno` | 886 | EXISTS (FUNCTION) |
+| `MontarCalendario` | 915 | EXISTS (FUNCTION) |
+| `ValidarDias` | 996 | EXISTS (FUNCTION) |
+| `CmdInserirClick` | 1139 | EXISTS (FUNCTION) |
+| `CmdAlterarClick` | 1185 | EXISTS (FUNCTION) |
+| `CmdExcluirClick` | 1224 | EXISTS (FUNCTION) |
+| `CmdSalvarClick` | 1314 | EXISTS (FUNCTION) |
+| `CmdCancelarClick` | 1402 | EXISTS (FUNCTION) |
+
+**Causa dos falsos positivos**: o validador est├ítico estava procurando pelo keyword `PROCEDURE`, mas em VFP9 dentro de `DEFINE CLASS`, `FUNCTION`/`ENDFUNC` e `PROCEDURE`/`ENDPROC` s├úo **equivalentes** ÔÇö ambos definem m├®todos p├║blicos acess├¡veis via BINDEVENT. Todos os m├®todos s├úo p├║blicos (nenhum tem `PROTECTED FUNCTION`) e todos os BINDEVENT apontam para handlers existentes.
+
+**Nenhuma altera├º├úo ├® necess├íria** neste arquivo. Os 9 alertas s├úo falsos positivos do scanner est├ítico que n├úo reconheceu `FUNCTION` como declara├º├úo de m├®todo v├ílida em VFP9 (esperava `PROCEDURE`).
+
+O `FormHOR.prg` est├í correto ÔÇö pass FUNCTIONAL n├úo requer nenhuma corre├º├úo.

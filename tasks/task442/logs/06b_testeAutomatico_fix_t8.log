@@ -1,0 +1,23 @@
+[2026-08-08 11:03:03] [INFO] === CLAUDE CLI INVOKER ===
+[2026-08-08 11:03:03] [INFO] Prompt File: C:\4c\tasks\task442\runtime_fix_prompt_06b_testeAutomatico_t8.md
+[2026-08-08 11:03:03] [INFO] Output File: C:\4c\tasks\task442\06b_testeAutomatico_fix_output_t8.txt
+[2026-08-08 11:03:03] [INFO] Model: sonnet
+[2026-08-08 11:03:03] [INFO] Timeout: 3600 segundos
+[2026-08-08 11:03:03] [INFO] Max Output Tokens: 128000
+[2026-08-08 11:03:03] [INFO] Context Files: 0 arquivo(s)
+[2026-08-08 11:03:04] [INFO] Invocando Claude CLI...
+[2026-08-08 11:03:04] [INFO] Prompt carregado: 78325 caracteres
+[2026-08-08 11:03:04] [INFO] Executando: claude --model sonnet --dangerously-skip-permissions --add-dir C:\4c
+[2026-08-08 11:03:04] [INFO] Tamanho total do prompt: 78325 caracteres
+[2026-08-08 11:03:04] [INFO] Invocando Claude CLI (tentativa 1/7)...
+[2026-08-08 11:12:59] [INFO] Claude CLI finalizado em 595.7358986 segundos
+[2026-08-08 11:12:59] [INFO] Exit Code: 0
+[2026-08-08 11:12:59] [INFO] Output salvo em: C:\4c\tasks\task442\06b_testeAutomatico_fix_output_t8.txt
+[2026-08-08 11:12:59] [INFO] Output size: 754 bytes
+[2026-08-08 11:12:59] [INFO] SUCESSO: Claude CLI executado com sucesso
+[2026-08-08 11:12:59] [INFO] Preview do output:
+[2026-08-08 11:12:59] [INFO] Fix aplicado. O arquivo est+í correto agora: apenas `ShowWindow = 0`, sem a linha duplicada `ShowWindow = 1`.
+
+**Causa raiz:** A linha duplicada `ShowWindow = 1` na defini+º+úo de classe fazia o VFP9 em modo headless (`-T`) tentar registrar o form como top-level window via Windows messaging. Sem GUI, o dispatch Win32 travava exatamente 300 segundos (timeout do processo). Em produ+º+úo (`ShowWindow = 1` +® "In Top-Level Form") o form funcionaria, mas em modo headless bloqueava.
+
+**Por que os 

@@ -1,0 +1,22 @@
+﻿Agora tenho o quadro completo. Verifiquei o c├│digo-fonte original (`sigcdgpr_form_codigo_fonte.txt`) e o c├│digo migrado.
+
+**An├ílise dos 3 itens:**
+
+### [SQL-FILTRO-INVENTADO] CONTROLCOUNT
+`par_oContainer.ControlCount` na linha 1176 ├® uma **propriedade VFP9 de objeto** (itera├º├úo `FOR ... TO container.ControlCount`), n├úo uma coluna SQL em WHERE. O validador automatizado confundiu o identificador VFP9 com nome de coluna SQL. **Falso positivo ÔÇö nenhuma altera├º├úo necess├íria.**
+
+### [SQL-FILTRO-INVENTADO] CPROS
+O original usa `CursorQuery('SigCdPro', 'crSigCdPro', 'CPros', crSigCdGpr.CodConPads, 'DPros')` (linha 1054 do SCX) e `loLista = CreateObject('fwBuscaExt', ..., 'SigCdPro', ..., 'CPros', ...)` ÔÇö o mesmo lookup de produto. O migrado usa equivalente `WHERE CPros = EscaparSQL(...)` em SigCdPro. **Falso positivo ÔÇö CPros est├í no original, apenas em outra sintaxe VFP9.**
+
+### [SQL-FILTRO-INVENTADO] LINHAS
+O original usa `CursorQuery('SigCdLin', 'crSigCdLin', 'Linhas', crSigCdGpr.Linhas, 'Descs')` (linha 1060 do SCX) e `loLista = CreateObject([fwBuscaExt], ..., [SigCdLin], ..., [Linhas], ...)`. O migrado usa equivalente `WHERE Linhas = EscaparSQL(...)` em SigCdLin. **Falso positivo ÔÇö Linhas est├í no original, apenas em outra sintaxe VFP9.**
+
+---
+
+**Os 3 problemas s├úo falsos positivos.** O validador autom├ítico:
+- Confundiu `ControlCount` (propriedade de objeto VFP9) com coluna SQL
+- Listou no "WHERE original" apenas PCESCOLHA/CODIGOS/MERCS, mas ignorou que CPros e Linhas **tamb├®m aparecem no original** (nas chamadas CursorQuery e fwBuscaExt)
+
+**Nenhuma altera├º├úo nos arquivos ├® necess├íria.** Remover os `WHERE CPros` ou `WHERE Linhas` quebraria os lookups de descri├º├úo de produto e de linha ÔÇö funcionalidades presentes no original e corretamente migradas.
+
+> **Observa├º├úo fora do escopo deste pass:** O original tem uma checagem FK antes de EXCLUIR ÔÇö `ChkRegister('SigCdGrp','Mercs', GetCodigos.Value)` que impede exclus├úo quando h├í Grupos cadastrados com esse Grande Grupo. Este check est├í ausente no `ExecutarExclusao` migrado, mas ├® uma omiss├úo de l├│gica de neg├│cio, n├úo um filtro inventado.

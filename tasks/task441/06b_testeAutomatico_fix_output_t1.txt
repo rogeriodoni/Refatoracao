@@ -1,0 +1,7 @@
+﻿As corre├º├Áes aplicadas em `FormGps.prg`:
+
+1. **`WindowType = 1` ÔåÆ `WindowType = 0`**: o form j├í implementa comportamento modal manualmente (`this_oParentForm.Enabled = .F./.T.`). `WindowType = 1` fazia o VFP9 auto-exibir o form como modal ao completar o `CREATEOBJECT`, bloqueando o teste pelos 300s inteiros.
+
+2. **`ALLTRIM(NVL(par_cDopes, ""))` ÔåÆ `IIF(VARTYPE(par_cDopes) = "C", ALLTRIM(par_cDopes), "")`**: em VFP9, par├ómetros n├úo passados defaultam para `.F.` (l├│gico). `ALLTRIM(.F.)` gera erro 11. O `IIF(VARTYPE=...)` protege contra isso para todos os 4 par├ómetros.
+
+3. **`par_oParentForm.Enabled = .F.` ÔåÆ `THIS.this_oParentForm.Enabled = .F.`**: usa a property j├í validada ao inv├®s de reler o par├ómetro raw.

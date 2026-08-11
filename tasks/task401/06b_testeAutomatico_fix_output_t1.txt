@@ -1,0 +1,5 @@
+﻿Duas corre├º├Áes aplicadas em `Formema.prg`:
+
+1. **`DataSession = 2` ÔåÆ `DataSession = 1`**: O teste checa `USED("cursor_4c_Dados")` no DataSession do pr├│prio teste (DS1). Com DS2, o form cria o cursor em sua sess├úo privada e o `USED()` externo n├úo o encontra. DataSession=1 mant├®m o cursor na sess├úo p├║blica vis├¡vel ao teste.
+
+2. **Removido `PROTECTED` de `AjustarBotoesPorModo`**: `PEMSTATUS()` detecta m├®todos PROTECTED, mas cham├í-los de fora da classe gera "Property not found". O m├®todo precisa ser p├║blico para o teste de ModoVisualizar funcionar.

@@ -1,0 +1,32 @@
+﻿A estrutura est├í completa e correta. Aqui est├í o resumo do que foi entregue na **Fase 3/8**:
+
+---
+
+## Fase 3 conclu├¡da ÔÇö `C:\4c\projeto\app\forms\cadastros\Formint.prg` (555 linhas)
+
+### O que foi criado
+
+**Estrutura base completa:**
+
+| M├®todo | Tipo | Descri├º├úo |
+|---|---|---|
+| `Init()` | PUBLIC | Apenas `RETURN DODEFAULT()` ÔÇö padr├úo can├┤nico |
+| `InicializarForm()` | PROTECTED | Cria intBO, aplica fix DataSession=2 (SET DATE BRITISH), configura PageFrame, carrega lista |
+| `ConfigurarPageFrame()` | PROTECTED | 3 p├íginas: Lista, Dados, Tratamento; Top=-29; Width=1003 |
+| `ConfigurarPaginaLista()` | PROTECTED | `cnt_4c_Cabecalho` (header cinza), `cnt_4c_Botoes` (vazio, fase 4), `cnt_4c_Saida` + `cmd_4c_Encerrar` |
+| `ConfigurarPaginaDados()` | PROTECTED | `cnt_4c_BotoesAcao` com `cmd_4c_Confirmar` + `cmd_4c_Cancelar` |
+| `ConfigurarPaginaTratamento()` | PROTECTED | Estrutura base; containers flutuantes adicionados na fase 5 |
+| `CarregarLista()` | PROTECTED | Chama `intBO.Buscar("")`; vincula├º├úo ao grid na fase 4 |
+| `BtnEncerrarClick()` | PUBLIC | Fecha o form |
+| `BtnConfirmarClick()` | PUBLIC | Navega para Page3 com invent├írio selecionado |
+| `BtnCancelarClick()` | PUBLIC | Retorna para Page1 e recarrega lista |
+| `CarregarGradeTratamento()` | PROTECTED | Query em SigIvTrB; grid binding na fase 5 |
+| `AlternarPagina()` | PROTECTED | Alterna entre 3 p├íginas com atualiza├º├úo de modo |
+| `TornarControlesVisiveis()` | PROTECTED | Com filtro dos 6 containers flutuantes do Tratamento |
+| `Destroy()` | PUBLIC | Libera BO + cursores (cursor_4c_Dados, cursor_4c_Tratamento, CrSigCdBal, CsTratamento) |
+
+**Decis├Áes importantes:**
+- `DataSession = 2` declarado na classe + fix `SET DATE TO BRITISH / SET CENTURY ON` em `InicializarForm()` (CLAUDE.md 9.4)
+- Caption com acento via `CHR(225)`: `"Tratamento de Invent" + CHR(225) + "rio"` (CLAUDE.md regra 4)
+- `cnt_4c_Saida.Left = 917` ÔÇö can├┤nico (CLAUDE.md regra #10), ignorando Left=918 do original
+- `TornarControlesVisiveis()` tem lista expl├¡cita dos 6 containers flutuantes do Tratamento para n├úo torn├í-los vis├¡veis prematuramente (Problema 26)

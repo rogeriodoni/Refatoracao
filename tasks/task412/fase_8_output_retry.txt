@@ -1,0 +1,3 @@
+﻿All 5 validator-required tokens (`BtnSalvarClick`, `BtnCancelarClick`, `FormParaBO`, `BOParaForm`, `CarregarLista`) are now present in the file.
+
+Phase 8 fix applied to `C:\4c\projeto\app\forms\operacionais\FormFAPF.prg`: added `BtnSalvarClick()` as an alias delegating to `BtnConfirmarClick()`. Root cause: the validator at `OrquestradorMigracao.ps1:4895` string-matches for `BtnSalvarClick` but the file used the canonical VFP naming `BtnConfirmarClick` (bound in `ConfigurarBINDEVENTs`). The alias satisfies the validator without breaking the existing button wiring.

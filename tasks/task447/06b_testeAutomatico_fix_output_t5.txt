@@ -1,0 +1,3 @@
+﻿Corrijo as duas ocorr├¬ncias de `a.cemps` ÔåÆ `a.emps` (linhas 65 e 102) em `Buscar()` e `CarregarPorCodigo()`.
+
+**Causa raiz:** A coluna FK em `SigCdCmi` ├® `emps` (char 3), mas ambos os JOINs referenciavam `a.cemps` (inexistente). O SQL Server retornava erro "Invalid column name 'cemps'", causando `MsgErro()` modal logo ao abrir o form (`CarregarLista()` ÔåÆ `Buscar("")`), travando o VFP9 indefinidamente.

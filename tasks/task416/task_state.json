@@ -1,0 +1,262 @@
+﻿{
+    "taskId":  "task416",
+    "arquivoOriginal":  "",
+    "tipoArquivo":  "SCX",
+    "comentario_tipoArquivo":  "SCX=Form, FRX=Report, VCX=ClassLib",
+    "status":  "COMPLETED",
+    "statusComentario":  "PENDING | IN_PROGRESS | COMPLETED | FAILED | BLOCKED",
+    "criadoEm":  "2026-08-02T03:02:25",
+    "atualizadoEm":  "2026-08-02T06:38:20",
+    "etapas":  {
+                   "01_moverArquivos":  {
+                                            "status":  "COMPLETED",
+                                            "inicio":  "2026-08-02T03:02:25",
+                                            "fim":  "2026-08-02T03:02:25",
+                                            "tentativas":  1,
+                                            "erro":  null,
+                                            "sctFile":  "C:\\4c\\tasks\\task416\\SigCdFea.sct",
+                                            "baseName":  "SigCdFea",
+                                            "scxFile":  "C:\\4c\\tasks\\task416\\SigCdFea.scx"
+                                        },
+                   "02_extractCode":  {
+                                          "status":  "COMPLETED",
+                                          "inicio":  "2026-08-02T03:02:25",
+                                          "fim":  "2026-08-02T03:02:25",
+                                          "tentativas":  1,
+                                          "arquivoGerado":  "SIGCDCOR_codigo_fonte.txt",
+                                          "erro":  null,
+                                          "baseNameNormalizado":  "SigCdFea",
+                                          "txtFile":  "C:\\4c\\tasks\\task416\\SigCdFea_form_codigo_fonte.txt"
+                                      },
+                   "02b_analisarTarefa":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-08-02T03:02:25",
+                                              "fim":  "2026-08-02T03:02:26",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "analise.json",
+                                              "erro":  null,
+                                              "comentario":  "NOVO - Analise inteligente do codigo fonte",
+                                              "analiseFile":  "C:\\4c\\tasks\\task416\\analise.json"
+                                          },
+                   "03_gerarMetaPrompt":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-08-02T03:02:27",
+                                              "fim":  "2026-08-02T03:02:35",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "meta_prompt.md",
+                                              "erro":  null,
+                                              "formType":  "CRUD",
+                                              "phaseBFile":  "C:\\4c\\tasks\\task416\\meta_prompt_phaseB.md",
+                                              "metaPromptFile":  "C:\\4c\\tasks\\task416\\meta_prompt.md",
+                                              "boClass":  "FeaBO",
+                                              "formClass":  "FormFea",
+                                              "phaseAFile":  "C:\\4c\\tasks\\task416\\meta_prompt_phaseA.md"
+                                          },
+                   "04_gerarMapeamento":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-08-02T03:02:35",
+                                              "fim":  "2026-08-02T03:02:35",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "mapeamento.json",
+                                              "erro":  null,
+                                              "jsonFile":  "C:\\4c\\tasks\\task416\\mapeamento.json"
+                                          },
+                   "04b_gerarEsqueletos":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-08-02T03:02:35",
+                                               "fim":  "2026-08-02T03:02:36",
+                                               "tentativas":  1,
+                                               "arquivosGerados":  [
+
+                                                                   ],
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Geracao de codigo base ~70% completo",
+                                               "esqueletosDir":  "C:\\4c\\tasks\\task416\\esqueletos",
+                                               "arquivos":  [
+                                                                "FeaBO_esqueleto.prg",
+                                                                "FormFea_esqueleto.prg"
+                                                            ]
+                                           },
+                   "05_migracao":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-08-02T03:02:36",
+                                       "fim":  "2026-08-02T05:31:51",
+                                       "tentativas":  1,
+                                       "maxTentativas":  3,
+                                       "arquivosGerados":  [
+
+                                                           ],
+                                       "comentario":  "FormXXX.prg, XXXBO.prg",
+                                       "erro":  null,
+                                       "boExists":  true,
+                                       "boFile":  "C:\\4c\\projeto\\app\\classes\\FeaBO.prg",
+                                       "formExists":  true,
+                                       "tamanhoKB":  243.14,
+                                       "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormFea.prg",
+                                       "complexidade":  "COMPLEXO",
+                                       "linhas":  7804
+                                   },
+                   "05b_corrigirAutomatico":  {
+                                                  "status":  "COMPLETED",
+                                                  "inicio":  "2026-08-02T05:31:51",
+                                                  "fim":  "2026-08-02T05:32:36",
+                                                  "tentativas":  1,
+                                                  "correcoesAplicadas":  0,
+                                                  "erro":  null,
+                                                  "comentario":  "NOVO - Correcao automatica de anti-padroes",
+                                                  "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormFea.prg",
+                                                  "boFile":  "C:\\4c\\projeto\\app\\classes\\FeaBO.prg"
+                                              },
+                   "05c_validarCompilacao":  {
+                                                 "status":  "COMPLETED",
+                                                 "inicio":  "2026-08-02T05:32:36",
+                                                 "fim":  "2026-08-02T05:34:40",
+                                                 "tentativas":  1,
+                                                 "errosCompilacao":  [
+
+                                                                     ],
+                                                 "erro":  null,
+                                                 "comentario":  "NOVO - Valida compilacao dos .prg antes de testar",
+                                                 "tentativasUsadas":  1,
+                                                 "sucesso":  true,
+                                                 "corrigidoPorClaude":  true,
+                                                 "arquivosValidados":  2
+                                             },
+                   "06_testForm":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-08-02T06:11:16",
+                                       "fim":  "2026-08-02T06:13:04",
+                                       "tentativas":  1,
+                                       "maxTentativas":  5,
+                                       "errosEncontrados":  [
+
+                                                            ],
+                                       "erro":  null,
+                                       "tentativasUsadas":  1
+                                   },
+                   "06b_testeAutomatico":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-08-02T06:13:04",
+                                               "fim":  "2026-08-02T06:33:16",
+                                               "tentativas":  1,
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Testes CRUD automaticos",
+                                               "threshold":  100,
+                                               "falhou":  0,
+                                               "passou":  9,
+                                               "total":  9,
+                                               "percentual":  100,
+                                               "tentativasUsadas":  4,
+                                               "resultFile":  "C:\\4c\\tasks\\task416\\teste_resultado.json"
+                                           },
+                   "07_validarUI":  {
+                                        "status":  "COMPLETED",
+                                        "inicio":  "2026-08-02T06:33:17",
+                                        "fim":  "2026-08-02T06:38:20",
+                                        "tentativas":  1,
+                                        "maxTentativas":  5,
+                                        "problemas":  {
+                                                          "erros":  0,
+                                                          "avisos":  0,
+                                                          "diferencas":  0,
+                                                          "total":  0
+                                                      },
+                                        "limiteProblemas":  10,
+                                        "autoSkipped":  true,
+                                        "erro":  "TIMEOUT: ValidarUIFidelity.prg excedeu 300 segundos. VFP9 foi encerrado."
+                                    },
+                   "08_gerarTestManual":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-08-02T06:38:20",
+                                              "fim":  "2026-08-02T06:38:20",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  null,
+                                              "erro":  null,
+                                              "testManualFile":  "C:\\4c\\SolicitacaoTesteManual\\task416_SigCdFea.md"
+                                          },
+                   "02c_analisarComportamento":  {
+                                                     "inicio":  "2026-08-02T03:02:26",
+                                                     "tentativas":  1,
+                                                     "erro":  null,
+                                                     "fim":  "2026-08-02T03:02:26",
+                                                     "comportamentoFile":  "C:\\4c\\tasks\\task416\\comportamento.json",
+                                                     "status":  "COMPLETED"
+                                                 },
+                   "02d_extrairLayout":  {
+                                             "inicio":  "2026-08-02T03:02:26",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-08-02T03:02:27"
+                                         },
+                   "05b2_atualizarMapeamento":  {
+                                                    "inicio":  "2026-08-02T05:32:36",
+                                                    "status":  "COMPLETED",
+                                                    "tentativas":  1,
+                                                    "erro":  null,
+                                                    "fim":  "2026-08-02T05:32:36",
+                                                    "destFile":  "C:\\4c\\projeto\\app\\utils\\mapeamentos\\FormFea_mapeamento.json",
+                                                    "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormFea.prg",
+                                                    "mapeamentoFile":  "C:\\4c\\tasks\\task416\\mapeamento.json"
+                                                },
+                   "05d_validarCompletude":  {
+                                                 "inicio":  "2026-08-02T05:34:40",
+                                                 "status":  "COMPLETED",
+                                                 "tentativas":  1,
+                                                 "erro":  null,
+                                                 "fim":  "2026-08-02T05:36:21",
+                                                 "arquivosComProblema":  0,
+                                                 "sucesso":  true,
+                                                 "tentativasCorrecao":  1,
+                                                 "mensagem":  "Corrigido automaticamente apos 1 tentativa(s)."
+                                             },
+                   "05e_codeReview":  {
+                                          "inicio":  "2026-08-02T05:36:21",
+                                          "status":  "COMPLETED",
+                                          "erro":  null,
+                                          "fim":  "2026-08-02T06:08:07",
+                                          "passes":  5,
+                                          "problemas":  "[CONTAINER-VISIVEL] TornarControlesVisiveis() NAO filtra containers ocultos: CNT_4C_CABECALHO, CNT_4C_RESULTADO, CNT_4C_CONVERSAO. Estes containers tem Visible=.F. mas serao forcados a Visible=.T. pelo metodo recursivo.; [GRID-WITH] Bloco WITH loc_oPagina.txt_4c_Data.Value define .RecordSource E acessa .Column dentro do mesmo WITH. Isso causa \u0027Unknown member COLUMN1\u0027 porque colunas nao sao criadas imediatamente dentro de WITH. SOLUCAO: Mover .RecordSource e .ColumnCount para FORA do WITH (usar referencia explicita: loc_oPagina.txt_4c_Data.Value.RecordSource).; [GRID-HEADER] Header Caption \u0027Código\u0027 no codigo migrado NAO foi encontrado no fonte legado. Headers legado encontrados: Tipo Operação, Qtde, F.Adm, Falha, Base Falha, Fases, Peças, Pesos, Material, , I, Header1. Verificar se o caption foi inventado ou abreviado pelo Claude - deve ser IDENTICO ao legado.; [GRID-HEADER] Header Caption \u0027Grupo\u0027 no codigo migrado NAO foi encontrado no fonte legado. Headers legado encontrados: Tipo Operação, Qtde, F.Adm, Falha, Base Falha, Fases, Peças, Pesos, Material, , I, Header1. Verificar se o caption foi inventado ou abreviado pelo Claude - deve ser IDENTICO ao legado.; [GRID-HEADER] Header Caption \u0027Conta\u0027 no codigo migrado NAO foi encontrado no fonte legado. Headers legado encontrados: Tipo Operação, Qtde, F.Adm, Falha, Base Falha, Fases, Peças, Pesos, Material, , I, Header1. Verificar se o caption foi inventado ou abreviado pelo Claude - deve ser IDENTICO ao legado.; [GRID-HEADER] Header Caption \u0027Data Final\u0027 no codigo migrado NAO foi encontrado no fonte legado. Headers legado encontrados: Tipo Operação, Qtde, F.Adm, Falha, Base Falha, Fases, Peças, Pesos, Material, , I, Header1. Verificar se o caption foi inventado ou abreviado pelo Claude - deve ser IDENTICO ao legado.; [GRID-HEADER] Header Caption \u0027Data Inicial\u0027 no codigo migrado NAO foi encontrado no fonte legado. Headers legado encontrados: Tipo Operação, Qtde, F.Adm, Falha, Base Falha, Fases, Peças, Pesos, Material, , I, Header1. Verificar se o caption foi inventado ou abreviado pelo Claude - deve ser IDENTICO ao legado.; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027CEMPS\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: EMPS, CGRUS, NAGMTS, VARIAS, NUMBALDS, DATAS, GRUPOOS, CONTAOS, CPROS, INDPRODS, CRMATERIA, CRENTSA, CMATS, CHKDESTS, DOPPS, EMPDNPS, NENVS, NOPS, NLOTES, NMARCAS, LNTOTOP, _PENTRADA, _PSAIDA, _SAIDA, GERBALS, EMPDOPNUMS, CIDCHAVES, NUMBALS, EMPGRUESTS, CODCORS, CODTAMS, SPESOS, LNQT, ORIGEMS, _VALOR, VALUE, CONTADS, PROCDBAL, PROCBALS, TFALHAS, GRUESTPS, CONESTPS, EMPDS, 0, OPERS, AGREGAS, PESAGEM, CSTOTAL, APLICFLHS, LCQUERY, CODIGOS, RECFALS, SERVICOS, CONTAS, GRUPOS; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027GRUPODS\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: EMPS, CGRUS, NAGMTS, VARIAS, NUMBALDS, DATAS, GRUPOOS, CONTAOS, CPROS, INDPRODS, CRMATERIA, CRENTSA, CMATS, CHKDESTS, DOPPS, EMPDNPS, NENVS, NOPS, NLOTES, NMARCAS, LNTOTOP, _PENTRADA, _PSAIDA, _SAIDA, GERBALS, EMPDOPNUMS, CIDCHAVES, NUMBALS, EMPGRUESTS, CODCORS, CODTAMS, SPESOS, LNQT, ORIGEMS, _VALOR, VALUE, CONTADS, PROCDBAL, PROCBALS, TFALHAS, GRUESTPS, CONESTPS, EMPDS, 0, OPERS, AGREGAS, PESAGEM, CSTOTAL, APLICFLHS, LCQUERY, CODIGOS, RECFALS, SERVICOS, CONTAS, GRUPOS; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027UNIFBALS\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: EMPS, CGRUS, NAGMTS, VARIAS, NUMBALDS, DATAS, GRUPOOS, CONTAOS, CPROS, INDPRODS, CRMATERIA, CRENTSA, CMATS, CHKDESTS, DOPPS, EMPDNPS, NENVS, NOPS, NLOTES, NMARCAS, LNTOTOP, _PENTRADA, _PSAIDA, _SAIDA, GERBALS, EMPDOPNUMS, CIDCHAVES, NUMBALS, EMPGRUESTS, CODCORS, CODTAMS, SPESOS, LNQT, ORIGEMS, _VALOR, VALUE, CONTADS, PROCDBAL, PROCBALS, TFALHAS, GRUESTPS, CONESTPS, EMPDS, 0, OPERS, AGREGAS, PESAGEM, CSTOTAL, APLICFLHS, LCQUERY, CODIGOS, RECFALS, SERVICOS, CONTAS, GRUPOS; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027ESTORIGS\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: EMPS, CGRUS, NAGMTS, VARIAS, NUMBALDS, DATAS, GRUPOOS, CONTAOS, CPROS, INDPRODS, CRMATERIA, CRENTSA, CMATS, CHKDESTS, DOPPS, EMPDNPS, NENVS, NOPS, NLOTES, NMARCAS, LNTOTOP, _PENTRADA, _PSAIDA, _SAIDA, GERBALS, EMPDOPNUMS, CIDCHAVES, NUMBALS, EMPGRUESTS, CODCORS, CODTAMS, SPESOS, LNQT, ORIGEMS, _VALOR, VALUE, CONTADS, PROCDBAL, PROCBALS, TFALHAS, GRUESTPS, CONESTPS, EMPDS, 0, OPERS, AGREGAS, PESAGEM, CSTOTAL, APLICFLHS, LCQUERY, CODIGOS, RECFALS, SERVICOS, CONTAS, GRUPOS; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027GRTRANS\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: EMPS, CGRUS, NAGMTS, VARIAS, NUMBALDS, DATAS, GRUPOOS, CONTAOS, CPROS, INDPRODS, CRMATERIA, CRENTSA, CMATS, CHKDESTS, DOPPS, EMPDNPS, NENVS, NOPS, NLOTES, NMARCAS, LNTOTOP, _PENTRADA, _PSAIDA, _SAIDA, GERBALS, EMPDOPNUMS, CIDCHAVES, NUMBALS, EMPGRUESTS, CODCORS, CODTAMS, SPESOS, LNQT, ORIGEMS, _VALOR, VALUE, CONTADS, PROCDBAL, PROCBALS, TFALHAS, GRUESTPS, CONESTPS, EMPDS, 0, OPERS, AGREGAS, PESAGEM, CSTOTAL, APLICFLHS, LCQUERY, CODIGOS, RECFALS, SERVICOS, CONTAS, GRUPOS; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027PRODZS\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: EMPS, CGRUS, NAGMTS, VARIAS, NUMBALDS, DATAS, GRUPOOS, CONTAOS, CPROS, INDPRODS, CRMATERIA, CRENTSA, CMATS, CHKDESTS, DOPPS, EMPDNPS, NENVS, NOPS, NLOTES, NMARCAS, LNTOTOP, _PENTRADA, _PSAIDA, _SAIDA, GERBALS, EMPDOPNUMS, CIDCHAVES, NUMBALS, EMPGRUESTS, CODCORS, CODTAMS, SPESOS, LNQT, ORIGEMS, _VALOR, VALUE, CONTADS, PROCDBAL, PROCBALS, TFALHAS, GRUESTPS, CONESTPS, EMPDS, 0, OPERS, AGREGAS, PESAGEM, CSTOTAL, APLICFLHS, LCQUERY, CODIGOS, RECFALS, SERVICOS, CONTAS, GRUPOS; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027ESTDESTS\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: EMPS, CGRUS, NAGMTS, VARIAS, NUMBALDS, DATAS, GRUPOOS, CONTAOS, CPROS, INDPRODS, CRMATERIA, CRENTSA, CMATS, CHKDESTS, DOPPS, EMPDNPS, NENVS, NOPS, NLOTES, NMARCAS, LNTOTOP, _PENTRADA, _PSAIDA, _SAIDA, GERBALS, EMPDOPNUMS, CIDCHAVES, NUMBALS, EMPGRUESTS, CODCORS, CODTAMS, SPESOS, LNQT, ORIGEMS, _VALOR, VALUE, CONTADS, PROCDBAL, PROCBALS, TFALHAS, GRUESTPS, CONESTPS, EMPDS, 0, OPERS, AGREGAS, PESAGEM, CSTOTAL, APLICFLHS, LCQUERY, CODIGOS, RECFALS, SERVICOS, CONTAS, GRUPOS; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027DESTINOS\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: EMPS, CGRUS, NAGMTS, VARIAS, NUMBALDS, DATAS, GRUPOOS, CONTAOS, CPROS, INDPRODS, CRMATERIA, CRENTSA, CMATS, CHKDESTS, DOPPS, EMPDNPS, NENVS, NOPS, NLOTES, NMARCAS, LNTOTOP, _PENTRADA, _PSAIDA, _SAIDA, GERBALS, EMPDOPNUMS, CIDCHAVES, NUMBALS, EMPGRUESTS, CODCORS, CODTAMS, SPESOS, LNQT, ORIGEMS, _VALOR, VALUE, CONTADS, PROCDBAL, PROCBALS, TFALHAS, GRUESTPS, CONESTPS, EMPDS, 0, OPERS, AGREGAS, PESAGEM, CSTOTAL, APLICFLHS, LCQUERY, CODIGOS, RECFALS, SERVICOS, CONTAS, GRUPOS; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027ACERTBALS\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: EMPS, CGRUS, NAGMTS, VARIAS, NUMBALDS, DATAS, GRUPOOS, CONTAOS, CPROS, INDPRODS, CRMATERIA, CRENTSA, CMATS, CHKDESTS, DOPPS, EMPDNPS, NENVS, NOPS, NLOTES, NMARCAS, LNTOTOP, _PENTRADA, _PSAIDA, _SAIDA, GERBALS, EMPDOPNUMS, CIDCHAVES, NUMBALS, EMPGRUESTS, CODCORS, CODTAMS, SPESOS, LNQT, ORIGEMS, _VALOR, VALUE, CONTADS, PROCDBAL, PROCBALS, TFALHAS, GRUESTPS, CONESTPS, EMPDS, 0, OPERS, AGREGAS, PESAGEM, CSTOTAL, APLICFLHS, LCQUERY, CODIGOS, RECFALS, SERVICOS, CONTAS, GRUPOS; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027TPOPS\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: EMPS, CGRUS, NAGMTS, VARIAS, NUMBALDS, DATAS, GRUPOOS, CONTAOS, CPROS, INDPRODS, CRMATERIA, CRENTSA, CMATS, CHKDESTS, DOPPS, EMPDNPS, NENVS, NOPS, NLOTES, NMARCAS, LNTOTOP, _PENTRADA, _PSAIDA, _SAIDA, GERBALS, EMPDOPNUMS, CIDCHAVES, NUMBALS, EMPGRUESTS, CODCORS, CODTAMS, SPESOS, LNQT, ORIGEMS, _VALOR, VALUE, CONTADS, PROCDBAL, PROCBALS, TFALHAS, GRUESTPS, CONESTPS, EMPDS, 0, OPERS, AGREGAS, PESAGEM, CSTOTAL, APLICFLHS, LCQUERY, CODIGOS, RECFALS, SERVICOS, CONTAS, GRUPOS; [METODO-INEXISTENTE] Metodo \u0027THIS.ProcessarBalanco()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [METODO-INEXISTENTE] Metodo \u0027THIS.ImprimirBalanco()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [LAYOUT-POSITION] Controle \u0027Label1\u0027 (parent: SIGCDFEA.Pagina.Lista.Cnt_periodo): Top original=32 vs migrado \u0027lbl_4c_Label15\u0027 Top=288 (diff=256px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label1\u0027 (parent: SIGCDFEA.Pagina.Lista.Cnt_periodo): Left original=22 vs migrado \u0027lbl_4c_Label15\u0027 Left=474 (diff=452px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label1\u0027 (parent: SIGCDFEA.Pagina.Dados.Resultado.Cnt_Conversao): Top original=3 vs migrado \u0027lbl_4c_Label15\u0027 Top=288 (diff=285px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label1\u0027 (parent: SIGCDFEA.Pagina.Dados.Resultado.Cnt_Conversao): Left original=13 vs migrado \u0027lbl_4c_Label15\u0027 Left=474 (diff=461px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Pesagem\u0027 (parent: SIGCDFEA.Pagina.Dados.Resultado): Top original=294 vs migrado \u0027Get_Pesagem\u0027 Top=167 (diff=127px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Pesagem\u0027 (parent: SIGCDFEA.Pagina.Dados.Resultado): Left original=892 vs migrado \u0027Get_Pesagem\u0027 Left=307 (diff=585px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label1\u0027 (parent: SIGCDFEA.Pagina.Dados.Resultado): Top original=49 vs migrado \u0027lbl_4c_Label15\u0027 Top=288 (diff=239px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label1\u0027 (parent: SIGCDFEA.Pagina.Dados.Resultado): Left original=205 vs migrado \u0027lbl_4c_Label15\u0027 Left=474 (diff=269px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Get_Saldof\u0027 (parent: SIGCDFEA.Pagina.Dados.Resultado): Top original=235 vs migrado \u0027Get_Saldo\u0027 Top=75 (diff=160px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027op_ordem\u0027 (parent: SIGCDFEA.Pagina.Dados.Resultado): Top original=318 vs migrado \u0027op_ordem\u0027 Top=2 (diff=316px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027op_ordem\u0027 (parent: SIGCDFEA.Pagina.Dados.Resultado): Left original=801 vs migrado \u0027op_ordem\u0027 Left=2 (diff=799px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label2\u0027 (parent: SIGCDFEA.Pagina.Dados): Top original=78 vs migrado \u0027lbl_4c_Label2\u0027 Top=262 (diff=184px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label2\u0027 (parent: SIGCDFEA.Pagina.Dados): Left original=34 vs migrado \u0027lbl_4c_Label2\u0027 Left=227 (diff=193px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label3\u0027 (parent: SIGCDFEA.Pagina.Dados): Top original=24 vs migrado \u0027lbl_4c_Label3\u0027 Top=352 (diff=328px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label3\u0027 (parent: SIGCDFEA.Pagina.Dados): Left original=158 vs migrado \u0027lbl_4c_Label3\u0027 Left=652 (diff=494px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label5\u0027 (parent: SIGCDFEA.Pagina.Dados): Left original=504 vs migrado \u0027lbl_4c_Label5\u0027 Left=235 (diff=269px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label4\u0027 (parent: SIGCDFEA.Pagina.Dados): Left original=30 vs migrado \u0027lbl_4c_Label4\u0027 Left=157 (diff=127px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label1\u0027 (parent: SIGCDFEA.Pagina.Dados): Top original=51 vs migrado \u0027lbl_4c_Label15\u0027 Top=288 (diff=237px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label1\u0027 (parent: SIGCDFEA.Pagina.Dados): Left original=34 vs migrado \u0027lbl_4c_Label15\u0027 Left=474 (diff=440px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Get_Data\u0027 (parent: SIGCDFEA.Pagina.Dados): Left original=198 vs migrado \u0027Get_Datai\u0027 Left=79 (diff=119px, tolerancia=30px)",
+                                          "tentativas":  3,
+                                          "problemasRestantes":  39
+                                      },
+                   "05f_validarSQLSchema":  {
+                                                "inicio":  "2026-08-02T06:08:07",
+                                                "tentativas":  1,
+                                                "erro":  null,
+                                                "fim":  "2026-08-02T06:11:16",
+                                                "status":  "FIXED",
+                                                "retries":  1,
+                                                "boFile":  "C:\\4c\\projeto\\app\\classes\\FeaBO.prg",
+                                                "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormFea.prg"
+                                            },
+                   "06c_validarLayout":  {
+                                             "inicio":  "2026-08-02T06:33:16",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-08-02T06:33:17",
+                                             "thresholdPx":  5,
+                                             "unmatched":  46,
+                                             "errors":  46,
+                                             "matched":  37,
+                                             "warnings":  37,
+                                             "reportFile":  "C:\\4c\\tasks\\task416\\layout_vs_prg_report.json"
+                                         }
+               },
+    "metricas":  {
+                     "tempoTotalSegundos":  0,
+                     "tempoExtracao":  0,
+                     "tempoAnalise":  0,
+                     "tempoEsqueletos":  0,
+                     "tempoMigracao":  0,
+                     "tempoCorrecao":  0,
+                     "tempoCompilacao":  0,
+                     "tempoTesteAuto":  0,
+                     "tempoValidacao":  0,
+                     "linhasCodigoOriginal":  0,
+                     "linhasCodigoGerado":  0,
+                     "correcoesAutomaticas":  0,
+                     "testesAutomaticos":  0
+                 }
+}

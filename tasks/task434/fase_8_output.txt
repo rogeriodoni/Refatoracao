@@ -1,0 +1,9 @@
+﻿All changes are in place. Phase 8/8 is complete:
+
+- **7 invalid `ControlSource = "crSigPrFti.*"` removed** from FormFti.prg ÔÇö these would have caused "Variable not found" runtime errors since the cursor is never created (form uses BOParaForm/FormParaBO instead)
+- **`DEFINE BAR 101 OF popCadastros`** added with prompt "Feitios" and message "Cadastro de Feitios (SIGCDFTI)"
+- **`ON SELECTION BAR 101 OF popCadastros DO AbrirFormFti`** registered
+- **`AbrirFormFti()` procedure** added after AbrirFormFTF, following the canonical pattern
+- **config.prg**: no changes needed (ADIR auto-loading picks up FtiBO.prg and FormFti.prg automatically)
+
+FormFti (Cadastro de Feitios) is fully migrated and integrated.

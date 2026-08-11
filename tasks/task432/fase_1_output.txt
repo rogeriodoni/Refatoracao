@@ -1,0 +1,8 @@
+﻿Fase 1 conclu├¡da. `FteBO.prg` criado em `C:\4c\projeto\app\classes\FteBO.prg` com:
+
+- **9 propriedades** mapeando todas as colunas de `SigCdFtr` usadas no c├│digo original: `cIdChaves` (PK), `CGrus`, `SGrus`, `CCars`, `CTits`, `GruCarTits`, `Resps`, `nResps`
+- **4 propriedades de contexto** para os par├ómetros de abertura do form (Grupos, SubGrp, Cargos, Titulos) ÔÇö necess├írias porque o form ├® aberto com filtro pr├®-definido
+- **`Init()`** configurando `this_cTabela = "SigCdFtr"` e `this_cCampoChave = "cIdChaves"`
+- **`ObterChavePrimaria()`** para o sistema de auditoria
+
+> **Nota**: A tabela `SigCdFtr` n├úo existe no `schema.sql` ÔÇö as colunas foram extra├¡das do c├│digo-fonte original (`REPLACE CGrus/SGrus/CCars/CTits/GruCarTits/cIdChaves` + `ControlSource = crSigCdFtr.Resps/nResps`).

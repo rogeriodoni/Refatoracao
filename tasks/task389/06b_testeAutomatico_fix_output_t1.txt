@@ -1,0 +1,9 @@
+﻿Confirmado ÔÇö o guard do `InicializarForm` permanece (correto), o guard do `CarregarLista` foi removido, e nenhum dos dois m├®todos ├® mais PROTECTED.
+
+**Resumo das corre├º├Áes:**
+
+1. **`CarregarLista`** ÔÇö removido o early-return `gb_4c_ValidandoUI`: o `CtgBO.Buscar("")` j├í cria `cursor_4c_Dados` vazio quando n├úo h├í conex├úo, ent├úo o teste agora encontra o cursor esperado.
+
+2. **`AlternarPagina`** ÔÇö removido `PROTECTED`: o `TesteAutomatico` chama este m├®todo diretamente no objeto de fora da classe; m├®todos PROTECTED s├úo inacess├¡veis externamente em VFP9, causando "Property ALTERNARPAGINA is not found".
+
+3. **`AjustarBotoesPorModo`** ÔÇö removido `PROTECTED`: mesma raz├úo ÔÇö chamado diretamente pelo teste `ModoVisualizar` na linha 542.

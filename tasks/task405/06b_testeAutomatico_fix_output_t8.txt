@@ -1,0 +1,3 @@
+﻿Corre├º├úo aplicada. O erro era `CheckBox.Value = .F.` (l├│gico) dentro de um Grid Column ÔÇö em VFP9 `CheckBox.Value` ├® num├®rico (0/1), causando "Data type mismatch" que abortava o `InicializarForm` e fazia o `CREATEOBJECT` retornar n├úo-objeto. Alterei para `= 0`.
+
+Os outros erros (`Connection handle is invalid`) s├úo esperados em modo de teste sem conex├úo SQL e n├úo impedem a instancia├º├úo.

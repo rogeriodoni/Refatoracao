@@ -1,0 +1,7 @@
+﻿Feito. As corre├º├Áes aplicadas:
+
+**1 altera├º├úo real em `TornarControlesVisiveis` (linha 1909):**
+- `"CNT_4C_COPIARMES"` ÔåÆ `"CNT_4C_COPIAMES"` ÔÇö corrige o typo que fazia o filtro nunca bater com o container `cnt_4c_CopiaMes`
+- Adicionados `"CNT_4C_CABECALHO"` e `"CNT_4C_BOTOESACAO"` ao INLIST para que TornarControlesVisiveis recurse nos filhos mas n├úo sobrescreva o `Visible` desses containers
+
+**3 problemas BINDEVENT-PARAMS sem altera├º├úo** ÔÇö `ValidarCodCli`, `ValidarDesCli` e `ValidarCodCgo` j├í declaram `(par_nKeyCode, par_nShiftAltCtrl)` corretamente nas linhas 1773, 1852 e 1697 respectivamente. Eram falsos positivos do review.

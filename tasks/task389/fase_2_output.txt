@@ -1,0 +1,11 @@
+﻿Fase 2 conclu├¡da. O `CtgBO.prg` agora tem todos os m├®todos CRUD implementados:
+
+- **`ObterChavePrimaria()`** ÔÇö retorna `this_cCidchaves` para auditoria
+- **`CarregarDoCursor()`** ÔÇö l├¬ `cidchaves`, `cods`, `descs` via `SELECT (alias)` antes de acessar campos
+- **`ValidarDados()`** ÔÇö valida `cods` (obrigat├│rio + ├║nico no INSERT) e `descs` (obrigat├│rio), mensagens id├¬nticas ao legado
+- **`VerificarCodigoExistente()`** ÔÇö `SELECT COUNT(*) WHERE cods = ?`
+- **`Inserir()`** ÔÇö gera UUID via `SELECT LEFT(NEWID(), 20)` (substitui `fUniqueIds` do legado), depois `INSERT` com os 3 campos, chama `RegistrarAuditoria("INSERT")`
+- **`Atualizar()`** ÔÇö `UPDATE` apenas `descs` (o `cods` ├® imut├ível p├│s-inser├º├úo, conforme comportamento do legado onde `getCods.When` s├│ habilita no INCLUIR), `WHERE cidchaves`, chama `RegistrarAuditoria("UPDATE")`
+- **`ExecutarExclusao()`** ÔÇö `DELETE WHERE cidchaves`, chama `RegistrarAuditoria("DELETE")`
+- **`Buscar()`** ÔÇö `SELECT cidchaves, cods, descs ORDER BY cods`, com padr├úo ZAP+APPEND quando cursor j├í existe
+- **`CarregarPorCodigo(par_cCods)`** ÔÇö busca pelo c├│digo de neg├│cio `cods` (chave vis├¡vel no grid), reseta `this_lNovoRegistro = .F.`

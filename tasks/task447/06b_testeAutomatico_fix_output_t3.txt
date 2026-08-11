@@ -1,0 +1,4 @@
+﻿Corre├º├úo aplicada em ambos os m├®todos. O bug era um typo no JOIN: `a.cemps` n├úo existe em `SigCdCmi` ÔÇö a coluna correta ├® `a.emps`. O erro SQL gerava `MsgErro` modal que bloqueava o VFP9 indefinidamente durante o teste automatizado.
+
+**Causa raiz:** `ICMBO.prg` linhas 65 e 102 ÔÇö `b.cemps = a.cemps` ÔåÆ `b.cemps = a.emps`  
+**Efeito:** `SQLEXEC` retornava erro ÔåÆ `MsgErro(CapturarErroSQL())` ÔåÆ dialog modal ÔåÆ timeout 300s

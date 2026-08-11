@@ -1,0 +1,12 @@
+﻿All 7 corrections are confirmed:
+- `cmd_4c_Incluir.Left` = 5 Ô£ô (was 542)
+- `cmd_4c_Visualizar.Left` = 82 Ô£ô (was 542)
+- `cmd_4c_Alterar.Left` = 159 Ô£ô (was 542)
+- `cmd_4c_Excluir.Left` = 236 Ô£ô (was 542)
+- `cmd_4c_Buscar.Left` = 313 Ô£ô (was 542)
+- `cmd_4c_Encerrar.Left` = 5 Ô£ô (was 917)
+- `cmd_4c_Encerrar.Width` = 75 Ô£ô (was 90)
+
+The container `cnt_4c_Botoes.Left = 542` (line 158) and `cnt_4c_Saida.Left = 917` (line 280) are correct ÔÇö those are the container positions on the page, not child control positions.
+
+The fix is saved. All 5 action buttons inside `cnt_4c_Botoes` now have `.Left` values relative to the container (5, 82, 159, 236, 313 at 77px gaps), and `cmd_4c_Encerrar` inside `cnt_4c_Saida` follows the canonical pattern (Left=5, Width=75). VFP9 was freezing because buttons positioned 152px beyond the right edge of their parent container triggered a rendering hang during form initialization.

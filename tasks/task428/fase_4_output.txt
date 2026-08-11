@@ -1,0 +1,9 @@
+﻿Phase 4/8 is complete and verified. `FormFpo.prg` (714 lines) has:
+
+- `ConfigurarPaginaLista()`: cabecalho em `Top=31` (compensa├º├úo correta), `cnt_4c_Botoes` com 3 bot├Áes (Inserir/Excluir/Encerrar) + BINDEVENTs, `grd_4c_Dados` 5 colunas + BINDEVENTs `KeyPress`/`AfterRowColChange`, labels Say1ÔÇôSay3
+- `CarregarGrade()`: SQLEXEC ÔåÆ `CREATE CURSOR cursor_4c_Dados` (edit├ível) ÔåÆ RecordSource/ColumnCount fora do WITH ÔåÆ ControlSources + 7 props nas colunas CheckBox
+- Bot├Áes: `BtnInserirClick`, `BtnExcluirClick`, `BtnEncerrarClick` (chama `SalvarLote`)
+- Lookups: `GradeCol1KeyPress`/`GradeCol5KeyPress` (F4=63) ÔåÆ `AbrirLookupFPags` (Modo 2, `crSigOpFp` pr├®-carregado)
+- `AlternarPagina`, `Destroy` (libera cursores), `TornarControlesVisiveis`, `FormatarGridLista`
+
+Aguardando prompt da Fase 5/8.

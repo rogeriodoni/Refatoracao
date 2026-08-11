@@ -1,0 +1,9 @@
+﻿O arquivo est├í correto. Fase 2 completa.
+
+**O que foi feito:**
+- Corrigido syntax error cr├¡tico: removido `PUBLIC` de 5 declara├º├Áes de `PROCEDURE` dentro de `DEFINE CLASS` (regra 9.1 do CLAUDE.md ÔÇö `PUBLIC PROCEDURE` dentro de `DEFINE CLASS` ├® SYNTAX ERROR em VFP9)
+- Removido bloco morto no `Buscar()`: o `IF !USED("crSigFiNal") / CREATE CURSOR` nunca executava pois o SQLEXEC j├í criou o cursor quando `loc_nResultado >= 0`
+- Adicionado `GerarNovaCidChaves()` ÔÇö substitui `fUniqueIds()` do legado usando NEWID() do SQL Server com fallback em SYS(2015)
+- Adicionado `GerarProximoNcodFinzs(par_cImps)` ÔÇö substitui `fGerUniqueKey('SigFiNal')` do legado usando MAX(ncodfinzs)+1 por impressora
+
+O BO j├í possu├¡a todos os m├®todos CRUD da Fase 1, portanto a Fase 2 foi focada em corrigir erros e adicionar os helpers de gera├º├úo de chave necess├írios para o fluxo de INSERT.

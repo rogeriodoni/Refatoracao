@@ -1,0 +1,6 @@
+﻿Corrigido. O bug era um mismatch de nome de classe:
+
+- **Linha 52** `FormGrupo.prg`: `CREATEOBJECT("GrpBO")` ÔåÆ `CREATEOBJECT("GrupoBO")`
+- **Classe real** em `GrupoBO.prg`: `DEFINE CLASS GrupoBO AS BusinessBase`
+
+O `CREATEOBJECT("GrpBO")` falhava silenciosamente (classe inexistente), entrava no bloco CATCH e abria `MsgErro()` ÔÇö um dialog modal customizado que `SYS(2335,0)` n├úo consegue auto-dispensar, travando o VFP9 at├® o timeout de 300s.

@@ -1,0 +1,16 @@
+﻿The code looks correct. Phase 5 is complete. Here's what was added to `FormFUN.prg`:
+
+**Edit 1** (already done before context break): Added two method calls in `ConfigurarPaginaDados()` to populate the containers.
+
+**Edit 2** (just completed): Added 10 new methods (635 new lines, file grew from 1201 to 1837 lines):
+
+- **`ConfigurarContainer1`** ÔÇö 4 labels + 4 TextBoxes for the foundry header (n├║mero, data, usu├írio, m├íquina), with `BINDEVENT` on `txt_4c_Maq.LostFocus ÔåÆ ValidarMaquina`
+- **`ConfigurarContainer2`** ÔÇö Label "Tubos", `opt_4c_Status` OptionGroup (4 buttons: Nenhum/Cera/Fundir/Pe├ºa), and 24 CheckBoxes in a 4├ù6 grid (Style=1 graphical, Tag="TUBE:N", initial pictures for 1/2/3, all bound to `ChkTuboClick`)
+- **`ChkTuboClick`** ÔÇö reads `_VFP.ActiveForm.ActiveControl.Tag`, extracts tube number N, calls `THIS.ChkTubo(N)`
+- **`OptStatusChanged`** ÔÇö iterates checked tubes, updates `TmpCera.nStatus` and CheckBox Picture
+- **`ValidarMaquina`** ÔÇö LostFocus handler: SQLEXEC on `SigCfMqf`, sets `this_nMaqTubos`, calls `AtualizarVisibilidadeCheckboxes`
+- **`AtualizarVisibilidadeCheckboxes`** ÔÇö shows/hides checkboxes 1ÔÇô24 based on machine tube count
+- **`ChkTubo`** ÔÇö updates `this_nTuboAtual`, refreshes all checkbox pictures from TmpTrf/TmpNop/TmpCera using `LOCATE FOR` (safe with `SET EXACT ON`)
+- **`LimparCampos`** ÔÇö clears Container1 fields, resets checkboxes+opt_status, ZAPs TmpCera/TmpTrf/TmpNop, calls `AtualizarVisibilidadeCheckboxes(0)`
+- **`BOParaForm`** ÔÇö loads BO header into Container1, queries `SigCdFud LEFT JOIN SigCdArv` into TmpCera, updates checkbox pictures from nStatus
+- **`FormParaBO`** ÔÇö copies editable Container1 fields + auto-fills usu├írio/empresa/nNTubos back to BO

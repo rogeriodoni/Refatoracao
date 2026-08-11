@@ -1,0 +1,5 @@
+﻿Corre├º├úo aplicada. O problema era `.Check1.Value = 0` (num├®rico) numa coluna cujo `ControlSource = "crGrade.Atuals"` ├® campo l├│gico (`L`). VFP9 detecta a incompatibilidade em `configurargrid:418` e lan├ºa "Data type mismatch", fazendo `InicializarForm` falhar no TRY/CATCH e `CREATEOBJECT` retornar `.NULL.`.
+
+**Fix:** `.Check1.Value = .F.` ÔÇö tipo correto para ControlSource l├│gico.
+
+Os erros de "Connection handle is invalid" em `CarregarConfigGrupo` e `CarregarEnderecos` s├úo esperados no ambiente de teste (sem conex├úo SQL Server) e j├í est├úo tratados nos blocos CATCH com fallback para valores default ÔÇö n├úo causam falha de instancia├º├úo.

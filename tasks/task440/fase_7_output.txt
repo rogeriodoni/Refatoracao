@@ -1,0 +1,7 @@
+﻿Fase 7 conclu├¡da. Os 4 eventos j├í existiam no arquivo das fases anteriores. Corrigi os bugs encontrados:
+
+1. **`AjustarBotoesPorModo`** ÔÇö referenciava `Page2.cnt_4c_Botoes` (inexistente) e `cmd_4c_Salvar` (errado); corrigido para `cnt_4c_Salva` + `cmd_4c_Confirmar`
+2. **`BtnIncluirClick/AlterarClick/VisualizarClick/BuscarClick/CancelarClick`** ÔÇö adicionado `this_cModoAtual` antes de `HabilitarCampos()` (Problem 19)
+3. **`BtnSalvarClick`** ÔÇö chamava `Inserir()`/`Atualizar()` diretamente (PROTECTED no BusinessBase); corrigido para `Salvar()` (Problem 4)
+4. **`AbrirLookupMatPrincs`** ÔÇö recriado com MODO 1 (`FormBuscaAuxiliar` com params) e `mAddColuna` com 3 params corretos (Problem 28/29)
+5. **`BtnBuscarClick`** ÔÇö mesmo padr├úo: MODO 1 + `mAddColuna` corretos

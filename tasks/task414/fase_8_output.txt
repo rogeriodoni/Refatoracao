@@ -1,0 +1,14 @@
+﻿Fase 8 conclu├¡da. Resumo do que foi verificado e integrado:
+
+**FormFBI.prg** ÔÇö j├í estava completo desde a Fase 7 com todos os m├®todos exigidos pela Fase 8:
+- `CarregarLista()`, `AlternarPagina()` 
+- `FormParaBO()` / `BOParaForm()` com todos os 22 campos
+- `HabilitarCampos()`, `LimparCampos()`, `AjustarBotoesPorModo()`
+- `BtnBuscarClick()`, `BtnEncerrarClick()`, `BtnSalvarClick()`, `BtnCancelarClick()`
+
+**config.prg** ÔÇö carregamento din├ómico j├í cobre `*BO.prg` (classes/) e `Form*.prg` (forms/cadastros/), sem necessidade de altera├º├úo.
+
+**menu.prg** ÔÇö adicionados:
+- `DEFINE BAR 91` ÔåÆ "Fabrica├º├úo" em popCadastros
+- `ON SELECTION BAR 91` ÔåÆ `AbrirFormFBI`
+- Procedure `AbrirFormFBI()` no final do arquivo (padr├úo can├┤nico com `VARTYPE + Show() sem Release()`)

@@ -1,0 +1,9 @@
+﻿Fase 2 conclu├¡da. O `FpbBO.prg` agora tem todos os m├®todos CRUD completos:
+
+- **`CarregarDoCursor`** ÔÇö mapeia cursorÔåÆpropriedades, com convers├úo segura de DateTimeÔåÆDate
+- **`ValidarDados`** ÔÇö valida `codbins` e `fpags` obrigat├│rios (sem literais acentuados)
+- **`Inserir` / `Atualizar` / `ExecutarExclusao`** ÔÇö SQL completo com auditoria, sem `RETURN` dentro de TRY/CATCH
+- **`CarregarBINs`** ÔÇö carrega BINs do SQL Server via cursor tempor├írio + APPEND (prote├º├úo do grid)
+- **`ValidarDuplicidade`** ÔÇö SELECT VFP local com `HAVING SUM(1) > 1` (espelho exato do original)
+- **`SalvarBINs`** ÔÇö DELETE antigos + SCAN com `WHILE !loc_lErroInsert` para abortar sem RETURN dentro de TRY
+- **`GerarChavePrimaria`** ÔÇö `TTOC(DATETIME(),1)` + 6 d├¡gitos random = 20 chars (substitui `fUniqueIds()`)

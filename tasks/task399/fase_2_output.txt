@@ -1,0 +1,15 @@
+﻿Fase 2/8 conclu├¡da. O `DspBO.prg` agora tem todos os m├®todos CRUD completos:
+
+**M├®todos adicionados:**
+- `Buscar(par_cFiltro)` ÔÇö SELECT com JOIN em `SigCdGcr` (descri├º├úo do grupo) e `SigCdCli` (descri├º├úo da conta), ordenado por Grupos+Contas
+- `CarregarPorCodigo(par_cCodigo)` ÔÇö carrega por PK `CidChaves`, seta `this_lNovoRegistro = .F.`
+- `CarregarDoCursor(par_cAliasCursor)` ÔÇö usa padr├úo `SELECT (alias)` + campos diretos sem alias
+- `Inserir()` PROTECTED ÔÇö gera `CidChaves = LEFT(SYS(2015)+SYS(2015), 20)`, verifica duplicidade (Grupos+Contas), INSERT + auditoria
+- `Atualizar()` PROTECTED ÔÇö verifica duplicidade excluindo o pr├│prio registro, UPDATE + auditoria
+- `ExecutarExclusao()` PROTECTED ÔÇö DELETE por `CidChaves` + auditoria
+- `ObterChavePrimaria()` ÔÇö retorna `this_cCidChaves`
+- `VerificarDuplicidade(grupo, conta, excluirChave)` ÔÇö COUNT(*) verificando unicidade do par Grupos+Contas
+- `ValidarGrupo(par_cGrupo)` ÔÇö valida em `SigCdGcr`, popula `this_cDsGrupo`
+- `ValidarConta(par_cGrupo, par_cConta)` ÔÇö valida em `SigCdCli` filtrado por Grupos, popula `this_cDsConta`
+- `BuscarGrupos(par_cFiltro)` ÔÇö cursor `cursor_4c_BuscaGrupo` de `SigCdGcr`
+- `BuscarContas(par_cGrupo, par_cFiltro)` ÔÇö cursor `cursor_4c_BuscaConta` de `SigCdCli` filtrado por grupo

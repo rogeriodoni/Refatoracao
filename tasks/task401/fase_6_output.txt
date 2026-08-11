@@ -1,0 +1,10 @@
+﻿O arquivo est├í completo e correto. Fase 6 conclu├¡da com as seguintes mudan├ºas:
+
+**`emaBO.prg`** ÔÇö corrigido bug: `CarregarPorCodigo` agora usa `WHERE cIdChaves =` (antes usava `WHERE Cods =`, o que nunca encontraria o registro pois o form passa o UUID como par├ómetro).
+
+**`Formema.prg`** ÔÇö 5 mudan├ºas:
+1. `cmd_4c_Salvar` + `cmd_4c_Cancelar` adicionados a `cnt_4c_BotoesAcao` com ├¡cones e propriedades can├┤nicas (`cadastro_salvar_60.jpg`, `cadastro_cancelar_60.jpg`)
+2. `BINDEVENT` para ambos os bot├Áes apontando para `BtnSalvarClick`/`BtnCancelarClick`
+3. `BtnSalvarClick()` ÔÇö valida email vazio antes do TRY, delega ao BO que j├í trata duplicidade e gera├º├úo de UUID
+4. `BtnCancelarClick()` ÔÇö volta para Page1
+5. `FormParaBO`/`BOParaForm` ÔÇö corrigido `this_cCodigo` ÔåÆ `this_cCods` (nome real da propriedade no emaBO)

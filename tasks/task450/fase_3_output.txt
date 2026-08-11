@@ -1,0 +1,15 @@
+﻿Estrutura do c├│digo verificada. Todos os TRY/CATCH/ENDTRY e PROCEDURE/ENDPROC est├úo balanceados, sem RETURN dentro de TRY.
+
+`C:\4c\projeto\app\forms\cadastros\FormIct.prg` criado com 429 linhas. A Fase 3 entrega:
+
+- **DEFINE CLASS FormIct AS FormBase** com todas as propriedades visuais (Height=600, Width=1000, DataSession=2, sem acentos no DEFINE CLASS)
+- **Init()** ÔåÆ apenas `RETURN DODEFAULT()`
+- **InicializarForm()** ÔåÆ cria IctBO, chama ConfigurarPageFrame/PaginaLista/PaginaDados, guarda `gb_4c_ValidandoUI`, define Caption com CHR()
+- **ConfigurarPageFrame()** ÔåÆ PageFrame.Top=-29, Tabs=.F., 2 Pages com `new_background.jpg`
+- **ConfigurarPaginaLista()** ÔåÆ `cnt_4c_Cabecalho` (com lbl_4c_Sombra/Titulo), `cnt_4c_Botoes` vazio (Fase 4), `cnt_4c_Saida` can├┤nico (Left=917) com `cmd_4c_Encerrar` + BINDEVENT
+- **ConfigurarPaginaDados()** ÔåÆ `cnt_4c_Salva` (cmd_4c_Confirmar/Cancelar) + `cnt_4c_Container1` vazio (Fase 5) + BINDEVENTs
+- **CarregarLista(), AlternarPagina(), BtnEncerrarClick(), BtnCancelarClick()** implementados
+- **TornarControlesVisiveis()** com recurs├úo para PageFrame e Containers
+- **Destroy()** com DODEFAULT()
+
+Compensa├º├úo +29 aplicada: `cnt_4c_Cabecalho.Top=30`, `cnt_4c_Botoes.Top=28`, `cnt_4c_Saida.Top=29`, `cnt_4c_Salva.Top=25`, `cnt_4c_Container1.Top=78`.

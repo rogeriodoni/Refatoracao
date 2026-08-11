@@ -1,0 +1,33 @@
+﻿Todas as edits est├úo corretas. Resumo das corre├º├Áes aplicadas:
+
+---
+
+## Corre├º├Áes aplicadas
+
+### [CONTAINER-VISIVEL] - TornarControlesVisiveis (linha 1139-1143)
+Adicionado guard `INLIST` para `CNT_4C_CABECALHO` e tamb├®m `GRD_4C_GRADEOPERACAO` (a grade est├í com `Visible=.F.` por padr├úo e seria incorretamente for├ºada vis├¡vel pelo m├®todo recursivo):
+```foxpro
+IF PEMSTATUS(loc_oObjeto, "Visible", 5)
+    IF !INLIST(UPPER(loc_oObjeto.Name), "CNT_4C_CABECALHO", "GRD_4C_GRADEOPERACAO")
+        loc_oObjeto.Visible = .T.
+    ENDIF
+ENDIF
+```
+
+### [GRID-HEADER] - Captions corrigidas (linhas 355/363/367/371/375 e 1079/1081/1082/1083/1084)
+Headers encontrados no m├®todo `Init` legado (`.pfSqlTabela(1).pColuna(...)`):
+| Inventado | Correto (legado) |
+|---|---|
+| `"N" + CHR(250) + "mero"` | `"C" + CHR(243) + "digo"` |
+| `"Gr.Origem"` | `"Gr. Origem"` |
+| `"Conta Origem"` | `"Ct. Origem"` |
+| `"Gr.Destino"` | `"Gr. Destino"` |
+| `"Conta Destino"` | `"Ct. Destino"` |
+
+Aplicados em `ConfigurarPaginaLista` E `CarregarLista` (ambas as ocorr├¬ncias duplicadas).
+
+### [GRID-SQLEXEC] - BtnBotOrdensClick (linha 2073-2085)
+SQLEXEC agora grava em `cursor_4c_OperacoesTemp`. Ap├│s, se `cursor_4c_Operacoes` j├í existe (├® RecordSource do grid): `ZAP` + `APPEND FROM DBF`. Caso contr├írio: `SELECT * INTO CURSOR`. Elimina a destrui├º├úo das colunas do Grid.
+
+### [LAYOUT-POSITION] - FALSO POSITIVO (n├úo alterado)
+SCX confirma: `GradeOpera├º├úo` no legado est├í em `Top=68, Left=266` ÔåÆ migrado `Top=97 (68+29), Left=266` est├í **correto**. O checker mapeou incorretamente o bot├úo `Operacao` (Top=6, Left=616) para `grd_4c_GradeOperacao`. A posi├º├úo do grid est├í conforme o legado.

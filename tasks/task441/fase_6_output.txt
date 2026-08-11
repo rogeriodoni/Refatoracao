@@ -1,0 +1,7 @@
+﻿Fase 6 completa. As 3 altera├º├Áes feitas foram:
+
+1. **`GrdDadosCol2When`** ÔÇö novo m├®todo que retorna `.F.`, bloqueando edi├º├úo na coluna 2 via BINDEVENT `When` (fiel ao `Column2.Text1.When = Return .f.` do legado)
+
+2. **BINDEVENT em `ConfigurarPaginaDados`** ÔÇö registra `GrdDadosCol2When` para `Column2.Text1 / When`
+
+3. **`THIS.this_lGravaDados = .T.`** em `GrdDadosCol1KeyPress` ÔÇö marcado tanto quando a busca direta encontra e preenche Dgrus, quanto quando o picker seleciona um grupo (equivalente ao `GravaDados = .t.` impl├¡cito no legado toda vez que o Valid modifica o cursor)

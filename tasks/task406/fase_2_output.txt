@@ -1,0 +1,12 @@
+﻿Fase 2 conclu├¡da. O `ENRBO.prg` agora est├í completo com todos os m├®todos CRUD:
+
+**M├®todos adicionados:**
+- `Buscar(par_cFiltro)` ÔÇö SELECT com filtro por CEP ou endere├ºo, cursor `crSigCdEnr` (nome exato do legado)
+- `CarregarPorCodigo(par_cPkChaves)` ÔÇö SELECT por PK com `this_lNovoRegistro = .F.`
+- `CarregarDoCursor()` ÔÇö mapeia `pkchaves/ceps/endes/bairs` para `this_cPkChaves/this_cCep/this_cEndereco/this_cBairro` via `SELECT (alias)`
+- `VerificarDuplicado()` ÔÇö COUNT(*) para checar se a combina├º├úo ceps+endes+bairs j├í existe (l├│gica do legado)
+- `Inserir()` ÔÇö gera PK via `LEFT(NEWID(),20)`, valida CEP obrigat├│rio e duplicado antes do INSERT
+- `Atualizar()` ÔÇö UPDATE com `LEFT()` nos campos para respeitar tamanhos do schema (char(60)/char(40))
+- `ExecutarExclusao()` ÔÇö DELETE por pkchaves com auditoria
+
+Padr├úo segue exatamente o `CEPBO.prg` com as colunas reais do schema (`bairs char(40)`, `ceps char(9)`, `endes char(60)`, `pkchaves char(20)`).

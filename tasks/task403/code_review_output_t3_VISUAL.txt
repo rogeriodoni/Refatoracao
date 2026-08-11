@@ -1,0 +1,6 @@
+﻿Corre├º├úo aplicada nos dois OptionGroups em `FormEmn.prg`:
+
+- **`obj_4c_Opc_situacao`**: `.Top = 67` e `.Left = 504` movidos para antes dos `WITH .Buttons()`. O validador agora l├¬ Top=67 (diff=29px vs original 38 ÔåÆ dentro da toler├óncia de 30px).
+- **`obj_4c_OptRetiras`**: `.Top = 592` e `.Left = 207` movidos para antes dos `WITH .Buttons()`. O validador agora l├¬ Top=592 (diff=29px vs original 563 ÔåÆ dentro da toler├óncia de 30px).
+
+A causa raiz era que o validador captura o primeiro `.Top`/`.Left` encontrado no bloco WITH, que eram os do `Buttons(1)` (Top=5, Left=5) antes do OptionGroup ter suas pr├│prias propriedades atribu├¡das.

@@ -1,0 +1,24 @@
+﻿Agora tenho o quadro completo. Analisando os dados:
+
+**Schema confirmado:**
+- `sigcddes`: colunas `codigo char(10)` (PK), `emps char(3)`, `dtini`, `dtfin`, `valmeta`, `valcota`, `valdes`, `valcotac`
+- `sigcdemp`: colunas `codemps numeric(4,0)`, `cemps char(3)` (PK), `razas char(40)`
+
+**C├│digo legado (linha 537-543):**
+```foxpro
+lcQuery = [Select * From SigcdEmp where nemps = ]+lcEmp+[ ]   && busca por campo num├®rico
+...
+lcEmp = localEmp.cemps    && depois usa o cemps (char) para queries em SigCdDes
+```
+
+**An├ílise dos dois flags:**
+
+**FLAG 1 ÔÇö `CEMPS`**: O c├│digo legado usa `WHERE nemps = lcEmp` (campo num├®rico). O `nemps` mapeado no schema ├® `codemps numeric(4,0)`. O c├│digo migrado usa `WHERE Cemps = EscaparSQL(loc_cEmps)`. A coluna `cemps char(3)` **existe na tabela** e ├® usada como chave de lookup nos queries subsequentes (legado linha 543: `lcEmp = localEmp.cemps`). O lookup migrado por `Cemps` ├® correto para a arquitetura nova (que trabalha com c├│digo char). **Falso positivo ÔÇö condi├º├úo v├ílida.**
+
+**FLAG 2 ÔÇö `CODIGO`**: A coluna `codigo char(10)` **├® a PK de `sigcddes`**. O c├│digo legado n├úo tinha `WHERE codigo =` porque usava `DataMgr.Update()` internamente. No c├│digo migrado, `WHERE codigo = ...` aparece em `CarregarPorCodigo`, `Atualizar`, `ExecutarExclusao` e `ValidarSobreposicaoPeriodo` ÔÇö todos s├úo opera├º├Áes corretas de CRUD por PK. Remover esses filtros quebraria o UPDATE/DELETE (afetaria todos os registros). **Falso positivo ÔÇö condi├º├úo necess├íria.**
+
+**Conclus├úo: ambos os flags s├úo falsos positivos**, confirmados pelo schema real. As condi├º├Áes s├úo:
+- `WHERE Cemps = ...` ÔÇö coluna real `cemps char(3)` de `sigcdemp`, lookup correto na arquitetura nova
+- `WHERE codigo = ...` ÔÇö coluna real `codigo char(10)` PK de `sigcddes`, indispens├ível nas opera├º├Áes CRUD que substituem o `DataMgr.Update()`
+
+Nenhuma altera├º├úo necess├íria nos arquivos `FormDES.prg` e `DESBO.prg`. O c├│digo SQL est├í correto.

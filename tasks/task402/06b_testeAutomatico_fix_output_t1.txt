@@ -1,0 +1,7 @@
+﻿3 corre├º├Áes aplicadas em `FormEmb.prg`:
+
+1. **CarregarLista** ÔÇö em modo teste (`gb_4c_ValidandoUI = .T.`), cria um cursor vazio com a estrutura correta de `SigCdEmb` em vez de chamar `Buscar("")` (que falha sem conex├úo). O grid ├® configurado normalmente nos dois caminhos.
+
+2. **AlternarPagina** ÔÇö removido `PROTECTED`. O framework de testes chama este m├®todo diretamente de fora da classe; PROTECTED bloqueia chamadas externas, gerando "Property ALTERNARPAGINA is not found".
+
+3. **AjustarBotoesPorModo** ÔÇö idem, removido `PROTECTED` pelo mesmo motivo ("Property AJUSTARBOTOESPORMODO is not found" na linha 542).

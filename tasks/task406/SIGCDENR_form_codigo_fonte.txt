@@ -1,0 +1,494 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGCDENR.SCX
+* Data/Hora: 01/08/2026 16:54:45
+* Total de registros: 10
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDENR
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetCEP
+  Parent: SIGCDENR.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetBairro
+  Parent: SIGCDENR.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say5
+  Parent: SIGCDENR.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGCDENR.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say6
+  Parent: SIGCDENR.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetEndereço
+  Parent: SIGCDENR.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 181
+  Left = 62
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDENR
+------------------------------------------------------------
+  DataSession = 2
+  DoCreate = .T.
+  Caption = (prompt())
+  tipocep = .F.
+  tipopais = .F.
+  Name = "SIGCDENR"
+  Pagina.ErasePage = .T.
+  Pagina.Lista.cntSombra.lblSombra.Name = "lblSombra"
+  Pagina.Lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  Pagina.Lista.cntSombra.Name = "cntSombra"
+  Pagina.Lista.Grade.Height = 482
+  Pagina.Lista.Grade.Left = 32
+  Pagina.Lista.Grade.Top = 100
+  Pagina.Lista.Grade.Width = 736
+  Pagina.Lista.Grade.Name = "Grade"
+  Pagina.Lista.Grupo_op.AutoSize = .T.
+  Pagina.Lista.Grupo_op.Inserir.Top = 5
+  Pagina.Lista.Grupo_op.Inserir.Left = 5
+  Pagina.Lista.Grupo_op.Inserir.Name = "Inserir"
+  Pagina.Lista.Grupo_op.Consultar.Top = 5
+  Pagina.Lista.Grupo_op.Consultar.Left = 80
+  Pagina.Lista.Grupo_op.Consultar.Name = "Consultar"
+  Pagina.Lista.Grupo_op.Alterar.Top = 5
+  Pagina.Lista.Grupo_op.Alterar.Left = 155
+  Pagina.Lista.Grupo_op.Alterar.Name = "Alterar"
+  Pagina.Lista.Grupo_op.Excluir.Top = 5
+  Pagina.Lista.Grupo_op.Excluir.Left = 230
+  Pagina.Lista.Grupo_op.Excluir.Name = "Excluir"
+  Pagina.Lista.Grupo_op.procurar.Top = 5
+  Pagina.Lista.Grupo_op.procurar.Left = 305
+  Pagina.Lista.Grupo_op.procurar.Name = "procurar"
+  Pagina.Lista.Grupo_op.Height = 85
+  Pagina.Lista.Grupo_op.Left = 344
+  Pagina.Lista.Grupo_op.Top = -1
+  Pagina.Lista.Grupo_op.Width = 385
+  Pagina.Lista.Grupo_op.Name = "Grupo_op"
+  Pagina.Lista.Grupo_Saida.Sair.Top = 5
+  Pagina.Lista.Grupo_Saida.Sair.Left = 5
+  Pagina.Lista.Grupo_Saida.Sair.Name = "Sair"
+  Pagina.Lista.Grupo_Saida.Left = 719
+  Pagina.Lista.Grupo_Saida.Top = -1
+  Pagina.Lista.Grupo_Saida.Name = "Grupo_Saida"
+  Pagina.Lista.cntFiltros.Top = 25
+  Pagina.Lista.cntFiltros.Left = 287
+  Pagina.Lista.cntFiltros.Name = "cntFiltros"
+  Pagina.Lista.Name = "Lista"
+  Pagina.Dados.Grupo_Salva.AutoSize = .T.
+  Pagina.Dados.Grupo_Salva.Salva.Top = 5
+  Pagina.Dados.Grupo_Salva.Salva.Left = 5
+  Pagina.Dados.Grupo_Salva.Salva.Name = "Salva"
+  Pagina.Dados.Grupo_Salva.Cancelar.Top = 5
+  Pagina.Dados.Grupo_Salva.Cancelar.Left = 80
+  Pagina.Dados.Grupo_Salva.Cancelar.Name = "Cancelar"
+  Pagina.Dados.Grupo_Salva.Left = 643
+  Pagina.Dados.Grupo_Salva.Top = -3
+  Pagina.Dados.Grupo_Salva.TabIndex = 28
+  Pagina.Dados.Grupo_Salva.ZOrderSet = 1
+  Pagina.Dados.Grupo_Salva.Name = "Grupo_Salva"
+  Pagina.Dados.Name = "Dados"
+  Pagina.Name = "Pagina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDENR.Pagina.Dados.GetCEP
+------------------------------------------------------------
+  ControlSource = "crSigCdenr.ceps"
+  InputMask = "99999-999"
+  Left = 226
+  TabIndex = 53
+  Top = 193
+  Width = 80
+  ForeColor = 0,0,0
+  Name = "GetCEP"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDENR.Pagina.Dados.GetBairro
+------------------------------------------------------------
+  ControlSource = "crSigCdenr.bairs"
+  Format = "K!"
+  Height = 23
+  Left = 226
+  TabIndex = 62
+  Top = 239
+  Width = 272
+  ForeColor = 0,0,0
+  Name = "GetBairro"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDENR.Pagina.Dados.Say5
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "Bairro :"
+  Left = 187
+  Top = 242
+  TabIndex = 64
+  ZOrderSet = 12
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDENR.Pagina.Dados.Say4
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "Endereço :"
+  Left = 170
+  Top = 219
+  TabIndex = 59
+  ZOrderSet = 11
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDENR.Pagina.Dados.Say6
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "CEP :"
+  Left = 196
+  Top = 196
+  TabIndex = 55
+  ZOrderSet = 13
+  Name = "Say6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDENR.Pagina.Dados.GetEndereço
+------------------------------------------------------------
+  ControlSource = "crSigCdenr.endes"
+  Format = "K!"
+  Height = 23
+  InputMask = ""
+  Left = 226
+  MaxLength = 50
+  TabIndex = 57
+  Top = 216
+  Width = 403
+  ForeColor = 0,0,0
+  Name = "GetEndereço"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Verdana, 0, 9, 6, 14, 12, 25, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDENR
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.podatamgr.Release
+=DoDefault()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+=DoDefault()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+lcQryEnr = [Select * From SigCdEnr]
+
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		With .poDataMgr
+			.AddCursor('SigCdEnr', 'pkChaves', 'crSigCdEnr', '', ThisForm.Pagina.Lista.Grade, lcQryEnr)
+			.pfSqlTabela(1).pColuna('ceps', '', '', 'Cep', 100, .t.)
+			.pfSqlTabela(1).pColuna('endes', '', '', 'Endereço', 200, .t.)
+			.pfSqlTabela(1).pColuna('bairs', '', '', 'Bairro', 100, .t.)
+		EndWith
+
+		Select crSigCdEnr
+		Index On ceps tag ceps
+		Set Order To ceps
+		ThisForm.Pagina.Lista.Grade.Column1.SetFocus
+		=DoDefault()
+	Else
+		=Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Lista.Grupo_op.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Lista.Grupo_op.Click
+LPARAMETERS opcao
+If !dodefault( Opcao )
+	ThisForm.mAtivapagina1
+	Return
+Endif
+
+Select crSigCdEnr
+
+* posiciona o cursor de acordo com a opção
+Do Case
+	Case Inlist( ThisForm.pcEscolha, 'INSERIR', 'PROCURAR', 'ALTERAR' )
+		thisform.pagina.dados.getCep.setfocus	
+	Case Inlist( ThisForm.pcEscolha, 'CONSULTAR', 'EXCLUIR' )
+		thisform.pagina.dados.grupo_salva.salva.setfocus
+Endcase
+
+Select crSigCdEnr
+=DoDefault()
+ThisForm.Pagina.Dados.Refresh
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+LOCAL lcQuery
+private lcQuery, lcCep, lcEnd, lcBai
+
+If ThisForm.pcEscolha = 'INSERIR'
+	*** Verifica se registro ja cdastrado ***
+	lcCep = ThisForm.Pagina.Dados.GetCep.Value
+	lcEnd = ThisForm.Pagina.Dados.GetEndereço.Value
+	lcBai = ThisForm.Pagina.Dados.GetBairro.Value
+
+	lcQuery = 'Select * From SigCdEnr Where ceps=?lcCep And endes=?lcEnd And bairs=?lcBai'
+	ThisForm.poDataMgr.SqlExecute(lcQuery, [crLocal])
+
+	IF RECCOUNT('crLocal') > 0
+		MessageBox( 'Endereço já cadastrado...', 48, '' )
+		ThisForm.Pagina.Dados.GetCep.SetFocus
+		SELECT crSigCdEnr
+		Return
+	EndIf
+
+	If IsEmpty(ThisForm.Pagina.Dados.getCEP.Value)
+		MessageBox( 'Obrigatório Informar o Cep.', 48, '' )
+		ThisForm.Pagina.Dados.GetCep.SetFocus
+		Return
+	ENDIF  
+
+	Replace pkChaves With fUniqueIds() in crSigCdEnr
+ENDIF
+SELECT crSigCdEnr
+=DoDefault()
+ThisForm.mAtivapagina1
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+=DoDefault()
+If ThisForm.plCancelar
+	ThisForm.mAtivapagina1
+Endif
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDENR.Pagina.Dados.GetCEP
+* Classe: fwget (Base: textbox)
+* Registro: 4
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+return InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+If Not Empty(Strtran(This.Value, '-', ''))
+	loCep = CreateObject('fwCep', This.Value, 'CEPS', .f.)
+	loCep.Show
+
+	If Not loCep.plAchouRegistro
+		loCep.Release
+		Return .f.
+	EndIf
+
+	lcCep = loCep.Ceps
+	lcEnd = loCep.Nomes
+	lcTpC = loCep.TipoCeps
+	lcTpN = loCep.TipoNomes
+	lcBai = loCep.Bairros
+
+	loCep.Release
+
+	If Not Empty(At([,], lcEnd)) And (lcTpC <> [9])
+		lcEnd = Alltrim(Substr(lcEnd, At([,], lcEnd) + 1)) + [ ] + Substr(lcEnd, 1, At([,], lcEnd) - 1)
+	EndIf
+
+	Replace Endes With Alltrim(lcTpN) + [ ] + Alltrim(lcEnd), ;
+			Bairs With Alltrim(lcBai), ;
+			Ceps  With lcCep In crSigcdenr
+
+	ThisForm.Refresh
+ENDIF
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDENR.Pagina.Dados.GetBairro
+* Classe: fwget (Base: textbox)
+* Registro: 5
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+return InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDENR.Pagina.Dados.GetEndereço
+* Classe: fwget (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+return InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR') and Empty(Strtran(this.Parent.getCEP.Value, '-', ''))
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+If Not Empty(Strtran(This.Value, '-', ''))
+	loCep = CreateObject('fwCep', This.Value, 'NOMES', .f.)
+	loCep.Show
+
+	If Not loCep.plAchouRegistro
+		loCep.Release
+		Return .f.
+	EndIf
+
+	lcCep = loCep.Ceps
+	lcEnd = loCep.Nomes
+	lcTpC = loCep.TipoCeps
+	lcTpN = loCep.TipoNomes
+	lcBai = loCep.Bairros
+
+	loCep.Release
+
+	If Not Empty(At([,], lcEnd)) And (lcTpC <> [9])
+		lcEnd = Alltrim(Substr(lcEnd, At([,], lcEnd) + 1)) + [ ] + Substr(lcEnd, 1, At([,], lcEnd) - 1)
+	EndIf
+
+
+	Replace Endes With Alltrim(lcTpN) + [ ] + Alltrim(lcEnd), ;
+			Bairs With Alltrim(lcBai), ;
+			Ceps  With lcCep In crSigcdEnr
+
+	ThisForm.Refresh
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGCDENR
+RESERVED3 (ClassInfo): tipocep
+tipopais
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 11
+================================================================================

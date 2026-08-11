@@ -1,0 +1,27 @@
+﻿All FormIct.prg fixes are verified:
+- `ShowWindow = 0`, `WindowType = 0` Ô£ô
+- `cmd_4c_Incluir.Left = 5`, `.Themes = .F.` restored Ô£ô
+- `cmd_4c_Visualizar.Left = 84` Ô£ô
+- `cmd_4c_Alterar.Left = 163` Ô£ô
+- `cmd_4c_Excluir.Left = 242` Ô£ô
+- `cmd_4c_Buscar.Left = 321` Ô£ô
+- `cnt_4c_Saida.Left = 917`, `.Width = 90` Ô£ô
+- `cmd_4c_Encerrar.Left = 5`, `.Width = 75` Ô£ô
+
+All fixes are complete. Here's a summary of what was done:
+
+**FormIct.prg** ÔÇö 8 fixes:
+1. `ShowWindow = 1` ÔåÆ `0` (PRIMARY: eliminates 300s VFP9 -T mode timeout)
+2. `WindowType = 1` ÔåÆ `0`
+3. `cmd_4c_Incluir.Left = 542` ÔåÆ `5` + re-added `.Themes = .F.` (removed by CorretorAutomatico bug)
+4. `cmd_4c_Visualizar.Left = 542` ÔåÆ `84`
+5. `cmd_4c_Alterar.Left = 542` ÔåÆ `163`
+6. `cmd_4c_Excluir.Left = 542` ÔåÆ `242`
+7. `cmd_4c_Buscar.Left = 542` ÔåÆ `321`
+8. `cmd_4c_Encerrar.Left = 917` ÔåÆ `5`, `.Width = 90` ÔåÆ `75`
+
+**CorretorAutomatico.ps1** ÔÇö 4 bug fixes:
+1. **Pattern #29** (`Corrigir-ShowWindowAusente`): Now detects and corrects `ShowWindow=1`ÔåÆ`0` / `WindowType=1`ÔåÆ`0` in-place (previously only added when absent, ignored present-but-wrong values)
+2. **CONTAINER_THEMES** (`Corrigir-ContainerThemes`): Depth-tracking prevents stripping `.Themes = .F.` from nested `WITH .cmd_4c_*` button blocks (was stripping from the first button's WITH block)
+3. **CNT-BOTOES-LEFT-542** (`Corrigir-CntBotoesLeft542`): Semantic guard `!$containerPropsEncerradas` prevents changing button Lefts after first `.AddObject()` child call
+4. **CNT-SAIDA-CANONICO** (`Corrigir-CntSaidaEncerrarCanonico`): Guard `!$dentroEncerrar` prevents applying container's `.Left=917`/`.Width=90` to `cmd_4c_Encerrar` child properties

@@ -1,0 +1,16 @@
+﻿The structure is correct. The ENDIF at line 787 closes the outer IF/ELSE for the BO check, and line 784's ENDIF closes the inner `IF USED("crMesAno")` block.
+
+The migration is complete. Here's a summary of everything done in this session:
+
+**FormHOR.prg** (`C:\4c\projeto\app\forms\operacionais\FormHOR.prg`):
+- Fixed 3 RETURN-inside-TRY violations (CLAUDE.md Rule #1):
+  - `InicializarForm`: Replaced RETURN with IF/ELSE/ENDIF wrapping the entire body
+  - `ValidarDias`: Replaced two guard RETURNs with nested `IF...ELSE...ENDIF`
+  - `ValidarQtdsQtHoras`: Replaced two guard RETURNs with nested `IF...ENDIF`
+
+**menu.prg** (`C:\4c\projeto\app\menu\menu.prg`):
+- Added `DEFINE BAR 107 OF popCadastros` for "Carga Hor├íria" (SIGCDHOR)
+- Added `ON SELECTION BAR 107` handler pointing to `AbrirFormHOR`
+- Added `PROCEDURE AbrirFormHOR` that chains two FormBuscaAuxiliar lookups (SigCdGcr for Fase/Setor ÔåÆ SigCdUpd for Unidade Produtiva) then opens `FormHOR` with the selected parameters
+
+**HORBO.prg** already had no RETURN-inside-TRY violations in the current state on disk.

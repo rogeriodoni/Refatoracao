@@ -260,7 +260,7 @@ DEFINE CLASS sigrehbrBO AS RelatorioBase
         GO TOP IN TmpEti
 
         SCAN
-            loc_cBar = ALLTRIM(STR(TmpEti.CBars, 14))
+            loc_cBar = ALLTRIM(TmpEti.CBars)
 
             *-- Marca primeiro registro de cada combinacao produto/conta para imagem
             IF par_llIImg AND (loc_cKey <> TmpEti.Emps + TmpEti.Grupos + TmpEti.Contas + TmpEti.CPros)
@@ -311,7 +311,7 @@ DEFINE CLASS sigrehbrBO AS RelatorioBase
 
             IF par_llIImg
                 loc_cArq = SYS(2023) + "\SigReHb3_" + ;
-                           PADL(ALLTRIM(STR(TmpEti.CBars, 14)), 14, "0") + ".jpg"
+                           PADL(ALLTRIM(TmpEti.CBars), 14, "0") + ".jpg"
                 CLEAR RESOURCES
                 loc_lHasImg = .F.
                 IF !ISNULL(TmpEti.FigJpgs)
@@ -361,7 +361,7 @@ DEFINE CLASS sigrehbrBO AS RelatorioBase
             ENDIF
 
             loc_cArq = SYS(2023) + "\SigReHb3_" + ;
-                       PADL(ALLTRIM(STR(TmpEti.CBars, 14)), 14, "0") + ".jpg"
+                       PADL(ALLTRIM(TmpEti.CBars), 14, "0") + ".jpg"
             CLEAR RESOURCES
             loc_lHasImg = .F.
             IF !ISNULL(TmpEti.FigJpgs)

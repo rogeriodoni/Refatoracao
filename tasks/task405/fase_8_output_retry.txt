@@ -1,0 +1,9 @@
+﻿Fase 8 completa. Adicionei os tr├¬s m├®todos que faltavam ao `FormEnd.prg` antes de `ENDDEFINE`:
+
+- **`FormParaBO()`** (linha 1920) ÔÇö sincroniza os 16 campos do registro corrente de `crCursorCliEE` (o cursor bindado via `ControlSource` em todos os TextBoxes) para as propriedades do `EndBO` (`this_cIClis`, `this_nCodigos`, `this_lAtuals`, `this_cDescrs`, `this_cCeps`, `this_cPaises`, `this_cEndes`, `this_cNums`, `this_cCompls`, `this_cBairs`, `this_cCidas`, `this_cEstas`, `this_cDdds`, `this_cTel1s`, `this_cTel2s`, `this_cContatos`, `this_cRefers`).
+
+- **`BOParaForm()`** (linha 1962) ÔÇö grava as propriedades do BO de volta em `crCursorCliEE` via `REPLACE` e chama `.Refresh()` em cada TextBox bindado.
+
+- **`AjustarBotoesPorModo()`** (linha 2016) ÔÇö wrapper can├┤nico para `AjustarBotoes()` existente, seguindo a naming convention da interface `FormBase`.
+
+Os demais m├®todos requeridos pela Fase 8 j├í estavam presentes: `BtnSalvarClick` (1363), `BtnCancelarClick` (1466), `BtnEncerrarClick` (1488), `HabilitarCampos` (1053), `LimparCampos` (1879), `CarregarLista` (1908). Arquivo final: 2020 linhas, encerra corretamente em `ENDDEFINE`.

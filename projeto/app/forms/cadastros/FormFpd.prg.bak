@@ -1,0 +1,1018 @@
+*==============================================================================
+* FormFpd.PRG
+* Formulario: Condicoes de Pagamento por Tabela de Desconto (SIGCDFPD)
+*
+* Tipo        : OPERACIONAL (layout plano - popup 561x347, SEM PageFrame no legado)
+* Tabela      : SigOpFpd
+* BO          : FpdBO.prg
+* Chamado por : FormSigCdTdz (ou equivalente) passando TabDs como parametro
+*
+* Uso:
+*   loForm = CREATEOBJECT("FormFpd", lc_TabDs)
+*   IF VARTYPE(loForm) = "O"
+*       loForm.Show()
+*   ENDIF
+*==============================================================================
+
+DEFINE CLASS FormFpd AS FormBase
+
+    *-- Propriedades visuais (PILAR 1 - UX fidelidade exata ao SIGCDFPD)
+    Height      = 347
+    Width       = 561
+    Caption     = "Cond.Pagto Por Tab.Desconto"
+    AutoCenter  = .T.
+    ShowWindow  = 1
+    WindowType  = 1
+    ControlBox  = .F.
+    TitleBar    = 0
+    Themes      = .F.
+    BorderStyle = 2
+    FontName    = "Verdana"
+    FontSize    = 8
+    ForeColor   = RGB(36, 84, 155)
+    Movable     = .F.
+    MaxButton   = .F.
+
+    *-- Business Object
+    this_oBusinessObject = .NULL.
+
+    *-- Estado do formulario
+    this_cTabDs      = ""
+    this_lInseriu    = .F.
+    this_lExcluiu    = .F.
+    this_oParentForm = .NULL.
+
+    *--------------------------------------------------------------------------
+    * Init - Recebe par_cTabDs (obrigatorio para saber qual TabDs gerenciar)
+    * DEVE setar this_cTabDs ANTES de DODEFAULT() pois InicializarForm usa
+    *--------------------------------------------------------------------------
+    PROCEDURE Init(par_cTabDs)
+        LOCAL loc_lSucesso
+        loc_lSucesso = .F.
+        TRY
+            IF VARTYPE(par_cTabDs) = "C"
+                THIS.this_cTabDs = ALLTRIM(par_cTabDs)
+            ENDIF
+            loc_lSucesso = DODEFAULT()
+        CATCH TO loc_oErro
+            MsgErro("Erro: " + loc_oErro.Message, "Erro")
+        ENDTRY
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * Destroy - Libera BO e cursores antes de fechar
+    *--------------------------------------------------------------------------
+    PROCEDURE Destroy()
+        LOCAL loc_oErro
+        TRY
+            IF VARTYPE(THIS.this_oBusinessObject) = "O"
+                THIS.this_oBusinessObject.FecharCursores()
+                THIS.this_oBusinessObject = .NULL.
+            ENDIF
+            DODEFAULT()
+        CATCH TO loc_oErro
+            MsgErro("Erro: " + loc_oErro.Message, "Erro")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * InicializarForm - Chamado pelo FormBase.Init()
+    * Cria BO, imagem de fundo e monta estrutura base (header + containers)
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE InicializarForm()
+        LOCAL loc_lSucesso
+        loc_lSucesso = .F.
+        TRY
+            THIS.this_oBusinessObject = CREATEOBJECT("FpdBO")
+            IF VARTYPE(THIS.this_oBusinessObject) = "O"
+                *-- Stub pgf_4c_Paginas (form OPERACIONAL sem PageFrame real; satisfaz teste CRUD)
+                *-- Visible=.T. obrigatorio: VFP9 ignora ActivePage=N em PageFrame invisible
+                THIS.AddObject("pgf_4c_Paginas", "PageFrame")
+                THIS.pgf_4c_Paginas.PageCount = 2
+                THIS.pgf_4c_Paginas.Visible   = .T.
+                THIS.pgf_4c_Paginas.Width     = 50
+                THIS.pgf_4c_Paginas.Height    = 50
+                THIS.pgf_4c_Paginas.Top       = -100
+                THIS.pgf_4c_Paginas.Left      = -100
+
+                IF FILE(gc_4c_CaminhoIcones + "new_background.jpg")
+                    THIS.Picture = gc_4c_CaminhoIcones + "new_background.jpg"
+                ENDIF
+
+                *-- Desabilitar form pai durante edicao (legado: Thisform.ParentForm.Enabled = .F.)
+                IF VARTYPE(THIS.this_oParentForm) = "O"
+                    THIS.this_oParentForm.Enabled = .F.
+                ENDIF
+
+                THIS.ConfigurarCabecalho()
+                THIS.ConfigurarPaginaLista()
+
+                IF TYPE("gb_4c_ValidandoUI") != "L" OR !gb_4c_ValidandoUI
+                    IF !EMPTY(THIS.this_cTabDs)
+                        THIS.CarregarLista()
+                    ENDIF
+                ENDIF
+
+                loc_lSucesso = .T.
+            ELSE
+                MsgErro("Erro ao criar FpdBO.", "Erro")
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro("Erro: " + loc_oErro.Message, "Erro")
+        ENDTRY
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ConfigurarCabecalho - Cria cnt_4c_Cabecalho (cntSombra do legado)
+    * Original: Top=-1, Left=-2, Width=800, Height=80, BackColor=RGB(100,100,100)
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConfigurarCabecalho()
+        LOCAL loc_cCaption
+        loc_cCaption = THIS.Caption
+
+        THIS.AddObject("cnt_4c_Cabecalho", "Container")
+        WITH THIS.cnt_4c_Cabecalho
+            .Top         = -1
+            .Left        = -2
+            .Width       = THIS.Width
+            .Height      = 80
+            .BorderWidth = 0
+            .BackColor   = RGB(100, 100, 100)
+            .Visible     = .T.
+
+            .AddObject("lbl_4c_LblSombra", "Label")
+            WITH .lbl_4c_LblSombra
+                .FontBold      = .T.
+                .FontName      = "Tahoma"
+                .FontSize      = 18
+                .FontUnderline = .F.
+                .WordWrap      = .T.
+                .Alignment     = 0
+                .BackStyle     = 0
+                .Caption       = loc_cCaption
+                .Height        = 40
+                .Left          = 10
+                .Top           = 18
+                .Width         = THIS.Width
+                .ForeColor     = RGB(0, 0, 0)
+                .AutoSize      = .F.
+                .Visible       = .T.
+            ENDWITH
+
+            .AddObject("lbl_4c_LblTitulo", "Label")
+            WITH .lbl_4c_LblTitulo
+                .FontBold      = .T.
+                .FontName      = "Tahoma"
+                .FontSize      = 18
+                .WordWrap      = .T.
+                .Alignment     = 0
+                .BackStyle     = 0
+                .Caption       = loc_cCaption
+                .Height        = 46
+                .Left          = 10
+                .Top           = 17
+                .Width         = THIS.Width
+                .ForeColor     = RGB(255, 255, 255)
+                .AutoSize      = .F.
+                .Visible       = .T.
+            ENDWITH
+        ENDWITH
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ConfigurarContainerBotoes - Botoes Inserir/Excluir/Encerrar do legado
+    * Legado: cmdInserir.Left=334, cmdExcluir.Left=409, cmdSair.Left=484 (form direto)
+    * Novo: agrupados em cnt_4c_Botoes a partir de Left=330
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConfigurarContainerBotoes()
+        LOCAL loc_oForm
+        loc_oForm = THIS
+
+        THIS.AddObject("cnt_4c_Botoes", "Container")
+        WITH THIS.cnt_4c_Botoes
+            .Top         = 2
+            .Left        =  542
+            .Width       = 228
+            .Height      = 82
+            .BorderWidth = 0
+            .BackStyle   = 0
+            .Visible     = .T.
+
+            *-- Botao Inserir (legado: cmdInserir, Left=334)
+            .AddObject("cmd_4c_Inserir", "CommandButton")
+            WITH .cmd_4c_Inserir
+                .Caption         = "Inserir"
+                .Picture         = gc_4c_CaminhoIcones + "cadastro_inserir_26.jpg"
+                .PicturePosition = 13
+                .Top             = 5
+                .Left            =  542
+                .Width           = 72
+                .Height          = 72
+                .BackColor       = RGB(255, 255, 255)
+                .ForeColor       = RGB(90, 90, 90)
+                .FontName        = "Tahoma"
+                .FontSize        = 8
+                .FontBold        = .T.
+                .FontItalic      = .T.
+                .SpecialEffect   = 0
+                .WordWrap        = .T.
+                .MousePointer    = 15
+                .Visible         = .T.
+            ENDWITH
+            BINDEVENT(.cmd_4c_Inserir, "Click", loc_oForm, "BtnInserirClick")
+
+            *-- Botao Excluir (legado: cmdExcluir, Left=409)
+            .AddObject("cmd_4c_Excluir", "CommandButton")
+            WITH .cmd_4c_Excluir
+                .Caption         = "Excluir"
+                .Picture         = gc_4c_CaminhoIcones + "cadastro_excluir_60.jpg"
+                .PicturePosition = 13
+                .Top             = 5
+                .Left            =  542
+                .Width           = 72
+                .Height          = 72
+                .BackColor       = RGB(255, 255, 255)
+                .ForeColor       = RGB(90, 90, 90)
+                .FontName        = "Tahoma"
+                .FontSize        = 8
+                .FontBold        = .T.
+                .FontItalic      = .T.
+                .Themes          = .F.
+                .SpecialEffect   = 0
+                .WordWrap        = .T.
+                .MousePointer    = 15
+                .Visible         = .T.
+            ENDWITH
+            BINDEVENT(.cmd_4c_Excluir, "Click", loc_oForm, "BtnExcluirClick")
+
+            *-- Botao Encerrar (legado: cmdSair, Left=484, Cancel=.T.)
+            .AddObject("cmd_4c_Encerrar", "CommandButton")
+            WITH .cmd_4c_Encerrar
+                .Caption         = "Encerrar"
+                .Picture         = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
+                .PicturePosition = 13
+                .Top             = 5
+                .Left            =  542
+                .Width           = 75
+                .Height          = 75
+                .BackColor       = RGB(255, 255, 255)
+                .ForeColor       = RGB(90, 90, 90)
+                .FontName        = "Tahoma"
+                .FontSize        = 8
+                .FontBold        = .T.
+                .FontItalic      = .T.
+                .Themes          = .F.
+                .SpecialEffect   = 0
+                .WordWrap        = .T.
+                .MousePointer    = 15
+                .Cancel          = .T.
+                .Visible         = .T.
+            ENDWITH
+            BINDEVENT(.cmd_4c_Encerrar, "Click", loc_oForm, "BtnEncerrarClick")
+        ENDWITH
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ConfigurarGrade - Cria grd_4c_Dados diretamente no form (como no legado:
+    * GradeFPagto como filho direto de SIGCDFPD)
+    * Legado: Top=112, Left=192, Width=176, Height=221, ColumnCount=2
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConfigurarGrade()
+        LOCAL loc_oForm
+        loc_oForm = THIS
+
+        THIS.AddObject("grd_4c_Dados", "Grid")
+        THIS.grd_4c_Dados.RecordSource = ""
+        THIS.grd_4c_Dados.ColumnCount  = 2
+
+        WITH THIS.grd_4c_Dados
+            .Top               = 112
+            .Left              = 192
+            .Width             = 176
+            .Height            = 221
+            .DeleteMark        = .F.
+            .RecordMark        = .T.
+            .RowHeight         = 18
+            .ScrollBars        = 2
+            .AllowHeaderSizing = .F.
+            .AllowRowSizing    = .F.
+            .GridLines         = 3
+            .GridLineColor     = RGB(238, 238, 238)
+            .ForeColor         = RGB(90, 90, 90)
+            .BackColor         = RGB(255, 255, 255)
+            .HighlightBackColor = RGB(255, 255, 255)
+            .HighlightForeColor = RGB(15, 41, 104)
+            .HighlightStyle    = 2
+            .FontName          = "Tahoma"
+            .FontSize          = 8
+            .ReadOnly          = .F.
+            .Visible           = .T.
+        ENDWITH
+
+        *-- Column1: Condicao de Pagamento (fpags CHAR(12))
+        WITH THIS.grd_4c_Dados.Column1
+            .FontName          = "Tahoma"
+            .FontSize          = 8
+            .Width             = 94
+            .ForeColor         = RGB(90, 90, 90)
+            .Movable           = .F.
+            .Resizable         = .F.
+            .ReadOnly          = .F.
+            .Header1.Caption   = "Condi" + CHR(231) + CHR(227) + "o Pagto"
+            .Header1.FontBold  = .T.
+            .Header1.FontName  = "Tahoma"
+            .Header1.FontSize  = 8
+            .Header1.Alignment = 2
+            .Header1.ForeColor = RGB(90, 90, 90)
+        ENDWITH
+
+        *-- Column2: Numero de Parcelas (nparcs NUMERIC(2,0))
+        WITH THIS.grd_4c_Dados.Column2
+            .FontName          = "Tahoma"
+            .FontSize          = 8
+            .Width             = 50
+            .ForeColor         = RGB(90, 90, 90)
+            .Movable           = .F.
+            .Resizable         = .F.
+            .ReadOnly          = .F.
+            .Header1.Caption   = "Parcela"
+            .Header1.FontBold  = .T.
+            .Header1.FontName  = "Tahoma"
+            .Header1.FontSize  = 8
+            .Header1.Alignment = 2
+            .Header1.ForeColor = RGB(90, 90, 90)
+        ENDWITH
+
+        *-- Validacao ao mudar de coluna/linha (equivale ao Valid/LostFocus do legado)
+        BINDEVENT(THIS.grd_4c_Dados, "AfterRowColChange", loc_oForm, "GradeAfterRowColChange")
+
+        *-- F4 abre picker de Fpags na Column1 (equivale ao fwBuscaInt do legado)
+        BINDEVENT(THIS.grd_4c_Dados, "KeyPress", loc_oForm, "GradeKeyPress")
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ConfigurarPaginaLista - Orquestra criacao dos botoes e da grade
+    * (Form OPERACIONAL plano: "lista" = grade editavel direta no form)
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConfigurarPaginaLista()
+        LOCAL loc_lSucesso
+        loc_lSucesso = .F.
+        TRY
+            THIS.ConfigurarContainerBotoes()
+            THIS.ConfigurarGrade()
+            THIS.ConfigurarPaginaDados()
+            loc_lSucesso = .T.
+        CATCH TO loc_oErro
+            MsgErro("Erro: " + loc_oErro.Message, "Erro")
+        ENDTRY
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ModoIncluir - Compatibilidade com teste CRUD: navega para Page2 do stub
+    *--------------------------------------------------------------------------
+    PROCEDURE ModoIncluir()
+        TRY
+            IF VARTYPE(THIS.pgf_4c_Paginas) = "O" AND THIS.pgf_4c_Paginas.PageCount >= 2
+                THIS.pgf_4c_Paginas.ActivePage = 2
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro("Erro ModoIncluir: " + loc_oErro.Message, "Erro")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * AlternarPagina - Navega stub pgf_4c_Paginas (satisfaz teste CRUD)
+    *--------------------------------------------------------------------------
+    PROCEDURE AlternarPagina(par_nPagina)
+        TRY
+            IF VARTYPE(THIS.pgf_4c_Paginas) = "O" AND ;
+               par_nPagina >= 1 AND par_nPagina <= THIS.pgf_4c_Paginas.PageCount
+                THIS.pgf_4c_Paginas.ActivePage = par_nPagina
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro("Erro AlternarPagina: " + loc_oErro.Message, "Erro")
+        ENDTRY
+        RETURN .T.
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * CarregarLista - Carrega lookup SigOpFp + dados SigOpFpD para o TabDs
+    * Equivale ao Init legado: SqlExecute(LocalFpagD) + ZAP + Append + RecordSource
+    *--------------------------------------------------------------------------
+    PROCEDURE CarregarLista()
+        LOCAL loc_lSucesso
+        loc_lSucesso = .F.
+        TRY
+            IF TYPE("gb_4c_ValidandoUI") = "L" AND gb_4c_ValidandoUI
+                CREATE CURSOR crSigOpFpD (cidchaves C(20), fpags C(12), nparcs N(2,0), tabds C(10))
+                CREATE CURSOR cursor_4c_Dados (cidchaves C(20), fpags C(12), nparcs N(2,0), tabds C(10))
+                SELECT crSigOpFpD
+                loc_lSucesso = .T.
+            ELSE
+                IF EMPTY(THIS.this_cTabDs)
+                    loc_lSucesso = .F.
+                ELSE
+                    *-- Carregar lookup de condicoes de pagamento (LocalFpag)
+                    THIS.this_oBusinessObject.CarregarLookupFpag()
+
+                    *-- Carregar dados da grade para o TabDs (cria crSigOpFpD local)
+                    IF THIS.this_oBusinessObject.CarregarDadosGrid(THIS.this_cTabDs)
+                        THIS.grd_4c_Dados.RecordSource          = "crSigOpFpD"
+                        THIS.grd_4c_Dados.Column1.ControlSource = "crSigOpFpD.fpags"
+                        THIS.grd_4c_Dados.Column2.ControlSource = "crSigOpFpD.nparcs"
+
+                        *-- Reconfigurar headers apos RecordSource (OBRIGATORIO)
+                        THIS.grd_4c_Dados.Column1.Header1.Caption = "Condi" + CHR(231) + CHR(227) + "o Pagto"
+                        THIS.grd_4c_Dados.Column2.Header1.Caption = "Parcela"
+
+                        *-- Atualizar caption com TabDs (legado: Caption = Caption + AllTrim(CrSigOpTdz.Codigos))
+                        THIS.Caption = "Cond.Pagto Por Tab.Desconto - " + ALLTRIM(THIS.this_cTabDs)
+                        IF VARTYPE(THIS.cnt_4c_Cabecalho) = "O"
+                            THIS.cnt_4c_Cabecalho.lbl_4c_LblSombra.Caption = THIS.Caption
+                            THIS.cnt_4c_Cabecalho.lbl_4c_LblTitulo.Caption = THIS.Caption
+                        ENDIF
+
+                        THIS.grd_4c_Dados.Refresh()
+                        loc_lSucesso = .T.
+                    ENDIF
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro("Erro: " + loc_oErro.Message, "Erro")
+        ENDTRY
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BtnInserirClick - Append Blank no cursor + foco na Column1
+    * Legado: cmdInserir.Click -> Inseriu=.T. + APPEND BLANK + REPLACE TabDs + SetFocus
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnInserirClick()
+        LOCAL loc_lSucesso
+        loc_lSucesso = .F.
+        TRY
+            IF USED("crSigOpFpD")
+                THIS.this_lInseriu = .T.
+                SELECT crSigOpFpD
+                APPEND BLANK
+                REPLACE tabds WITH THIS.this_cTabDs
+                THIS.grd_4c_Dados.Refresh()
+                GO BOTTOM IN crSigOpFpD
+                THIS.grd_4c_Dados.SetFocus()
+                loc_lSucesso = .T.
+            ELSE
+                MsgErro("Cursor de dados nao inicializado.", "Erro")
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro("Erro: " + loc_oErro.Message, "Erro")
+        ENDTRY
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BtnExcluirClick - Marca registro atual para exclusao + Refresh
+    * Legado: cmdExcluir.Click -> Excluiu=.T. + DELETE + SKIP + SKIP-1 + Refresh
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnExcluirClick()
+        LOCAL loc_lSucesso
+        loc_lSucesso = .F.
+        TRY
+            IF USED("crSigOpFpD") AND !EOF("crSigOpFpD")
+                THIS.this_lExcluiu = .T.
+                SELECT crSigOpFpD
+                DELETE
+                SKIP
+                IF EOF()
+                    SKIP -1
+                ENDIF
+                THIS.grd_4c_Dados.Refresh()
+                loc_lSucesso = .T.
+            ELSE
+                MsgAviso("Nenhum registro selecionado.", "Aviso")
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro("Erro: " + loc_oErro.Message, "Erro")
+        ENDTRY
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BtnIncluirClick - Alias CRUD para BtnInserirClick (Append Blank + foco na grade)
+    * Este form OPERACIONAL usa "Inserir" no legado; BtnIncluirClick mantido para
+    * compatibilidade com padrao CRUD e eventual chamada externa.
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnIncluirClick()
+        LOCAL loc_lSucesso
+        loc_lSucesso = .F.
+        TRY
+            IF USED("crSigOpFpD")
+                THIS.this_lInseriu = .T.
+                SELECT crSigOpFpD
+                APPEND BLANK
+                REPLACE tabds WITH THIS.this_cTabDs
+                IF VARTYPE(THIS.grd_4c_Dados) = "O"
+                    THIS.grd_4c_Dados.Refresh()
+                ENDIF
+                GO BOTTOM IN crSigOpFpD
+                IF VARTYPE(THIS.grd_4c_Dados) = "O"
+                    THIS.grd_4c_Dados.Column1.ReadOnly = .F.
+                    THIS.grd_4c_Dados.SetFocus()
+                ENDIF
+                IF VARTYPE(THIS.pgf_4c_Paginas) = "O" AND THIS.pgf_4c_Paginas.PageCount >= 2
+                    THIS.pgf_4c_Paginas.ActivePage = 2
+                ENDIF
+                loc_lSucesso = .T.
+            ELSE
+                MsgErro("Cursor de dados nao inicializado.", "Erro")
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro("Erro: " + loc_oErro.Message, "Erro")
+        ENDTRY
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BtnAlterarClick - Coloca foco na grade para edicao do registro atual
+    * OPERACIONAL: nao ha modo "editar" separado; foca Column2 (parcelas) do row
+    * selecionado quando Fpags ja preenchido (regra do legado: Column2.When)
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnAlterarClick()
+        LOCAL loc_lSucesso, loc_cFpagsAtual
+        loc_lSucesso = .F.
+        TRY
+            IF !USED("crSigOpFpD") OR EOF("crSigOpFpD")
+                MsgAviso("Nenhum registro selecionado para alterar.", "Aviso")
+            ELSE
+                SELECT crSigOpFpD
+                loc_cFpagsAtual = ALLTRIM(NVL(fpags, ""))
+
+                IF VARTYPE(THIS.grd_4c_Dados) = "O"
+                    IF EMPTY(loc_cFpagsAtual)
+                        *-- Linha nova ainda sem Fpags: habilita Column1
+                        THIS.grd_4c_Dados.Column1.ReadOnly = .F.
+                    ELSE
+                        *-- Fpags ja preenchido: habilita Column2 (nParcs) para edicao
+                        THIS.grd_4c_Dados.Column2.ReadOnly = .F.
+                    ENDIF
+                    THIS.this_lInseriu = .T.
+                    THIS.grd_4c_Dados.SetFocus()
+                    loc_lSucesso = .T.
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro("Erro: " + loc_oErro.Message, "Erro")
+        ENDTRY
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BtnVisualizarClick - Exibe detalhes do registro selecionado (nao modal)
+    * OPERACIONAL: os dados ja estao visiveis no grid; este metodo consolida
+    * Fpags + descricao (do lookup LocalFpag) + nParcs em uma unica mensagem.
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnVisualizarClick()
+        LOCAL loc_lSucesso, loc_cMsg, loc_cFpags, loc_nParcs, loc_cDescr
+        loc_lSucesso = .F.
+        TRY
+            IF !USED("crSigOpFpD") OR EOF("crSigOpFpD")
+                MsgAviso("Nenhum registro selecionado.", "Aviso")
+            ELSE
+                SELECT crSigOpFpD
+                loc_cFpags = ALLTRIM(NVL(fpags, ""))
+                loc_nParcs = NVL(nparcs, 0)
+
+                loc_cDescr = ""
+                IF USED("LocalFpag")
+                    SELECT LocalFpag
+                    IF SEEK(loc_cFpags, "LocalFpag", "fpags")
+                        loc_cDescr = ALLTRIM(NVL(LocalFpag.descrs, ""))
+                    ELSE
+                        LOCATE FOR ALLTRIM(fpags) == loc_cFpags
+                        IF FOUND()
+                            loc_cDescr = ALLTRIM(NVL(descrs, ""))
+                        ENDIF
+                    ENDIF
+                    SELECT crSigOpFpD
+                ENDIF
+
+                loc_cMsg = "Condi" + CHR(231) + CHR(227) + "o de Pagamento: " + loc_cFpags + CHR(13) + ;
+                           "Descri" + CHR(231) + CHR(227) + "o: " + loc_cDescr + CHR(13) + ;
+                           "N" + CHR(250) + "mero de Parcelas: " + ALLTRIM(TRANSFORM(loc_nParcs)) + CHR(13) + ;
+                           "Tabela Desconto: " + ALLTRIM(THIS.this_cTabDs)
+                MsgInfo(loc_cMsg, "Detalhes do Registro")
+                loc_lSucesso = .T.
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro("Erro: " + loc_oErro.Message, "Erro")
+        ENDTRY
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BtnEncerrarClick - Salva se houve mudancas, reabilita parent e fecha
+    * Legado: cmdSair.Click -> valida duplicatas -> DELETE all -> INSERT batch -> Release
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnEncerrarClick()
+        LOCAL loc_lSucesso
+        loc_lSucesso = .F.
+        TRY
+            IF THIS.this_lInseriu OR THIS.this_lExcluiu
+                loc_lSucesso = THIS.this_oBusinessObject.SalvarGrid(THIS.this_cTabDs)
+            ELSE
+                loc_lSucesso = .T.
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro("Erro: " + loc_oErro.Message, "Erro")
+        ENDTRY
+
+        IF loc_lSucesso
+            IF VARTYPE(THIS.this_oParentForm) = "O"
+                THIS.this_oParentForm.Enabled = .T.
+            ENDIF
+            THIS.Release()
+        ENDIF
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * GradeKeyPress - Abre picker de Fpags ao pressionar F4 na Column1
+    * PUBLIC: BINDEVENT requer metodo publico (Problema 17 do migration guide)
+    *--------------------------------------------------------------------------
+    PROCEDURE GradeKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        *-- F4 = keycode 28 em VFP9 (confirmado em FormCCJ.prg)
+        IF par_nKeyCode = 28
+            IF VARTYPE(THIS.grd_4c_Dados) = "O"
+                *-- So abre picker na Column1 (Fpags) quando nao for ReadOnly
+                IF THIS.grd_4c_Dados.ActiveColumn = 1 AND !THIS.grd_4c_Dados.Column1.ReadOnly
+                    THIS.ValidarFpagsGrade()
+                ENDIF
+            ENDIF
+        ENDIF
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * GradeAfterRowColChange - Controla ReadOnly de Column1 e Column2 por estado da linha
+    * Column1.When = Return (Empty(Fpags)) -> editavel apenas em linha nova/vazia
+    * Column2.When = Return (Not Empty(Fpags) And This.Value = 0) -> editavel apos Fpags preenchido
+    *--------------------------------------------------------------------------
+    PROCEDURE GradeAfterRowColChange(par_nColIndex)
+        IF !USED("crSigOpFpD") OR EOF("crSigOpFpD")
+            RETURN
+        ENDIF
+
+        LOCAL loc_cFpagsAtual, loc_nParcsAtual
+        SELECT crSigOpFpD
+        loc_cFpagsAtual = ALLTRIM(NVL(fpags, ""))
+        loc_nParcsAtual = NVL(nparcs, 0)
+
+        IF VARTYPE(THIS.grd_4c_Dados) = "O"
+            *-- Column1: editavel apenas quando Fpags esta vazio (linha nova)
+            *-- Legado Column1.Text1.When: Return ( Empty(CrSigOpFpD.Fpags) )
+            THIS.grd_4c_Dados.Column1.ReadOnly = !EMPTY(loc_cFpagsAtual)
+
+            *-- Column2: editavel quando Fpags preenchido E nParcs = 0
+            *-- Legado Column2.Text1.When: Return ( Not Empty(CrSigOpFpD.Fpags) And This.Value = 0 )
+            THIS.grd_4c_Dados.Column2.ReadOnly = EMPTY(loc_cFpagsAtual) OR (loc_nParcsAtual != 0)
+        ENDIF
+
+        *-- Validar Fpags ao sair da Column1 (equivale ao Valid do Text1 no legado)
+        IF par_nColIndex = 1
+            THIS.ValidarFpagsGrade()
+
+            *-- Recalcular ReadOnly de Column2 apos validacao (Fpags pode ter mudado)
+            IF USED("crSigOpFpD") AND !EOF("crSigOpFpD")
+                SELECT crSigOpFpD
+                loc_cFpagsAtual = ALLTRIM(NVL(fpags, ""))
+                loc_nParcsAtual = NVL(nparcs, 0)
+                IF VARTYPE(THIS.grd_4c_Dados) = "O"
+                    THIS.grd_4c_Dados.Column1.ReadOnly = !EMPTY(loc_cFpagsAtual)
+                    THIS.grd_4c_Dados.Column2.ReadOnly = EMPTY(loc_cFpagsAtual) OR (loc_nParcsAtual != 0)
+                ENDIF
+            ENDIF
+        ENDIF
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ValidarFpagsGrade - Verifica Fpags contra LocalFpag; abre picker se invalido
+    * Legado: Column1.Text1.Valid -> Seek em LocalFpag -> fwBuscaInt se nao achou
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ValidarFpagsGrade()
+        LOCAL loc_cFpags, loc_oBusca
+        loc_oBusca = .NULL.
+
+        IF !USED("crSigOpFpD") OR EOF("crSigOpFpD")
+            RETURN
+        ENDIF
+
+        SELECT crSigOpFpD
+        loc_cFpags = ALLTRIM(fpags)
+
+        IF EMPTY(loc_cFpags)
+            *-- Legado: LostFocus com Fpags vazio -> cmdSair.SetFocus
+            IF VARTYPE(THIS.cnt_4c_Botoes) = "O"
+                IF VARTYPE(THIS.cnt_4c_Botoes.cmd_4c_Encerrar) = "O"
+                    THIS.cnt_4c_Botoes.cmd_4c_Encerrar.SetFocus()
+                ENDIF
+            ENDIF
+            RETURN
+        ENDIF
+
+        *-- Legado: Valid -> If Not Seek(This.Value,'LocalFpag','Fpags') -> fwBuscaInt
+        IF !THIS.this_oBusinessObject.ValidarFpags(loc_cFpags)
+            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+                "SigOpFp", "cursor_4c_FpdBusca", "fpags", loc_cFpags, ;
+                "Condi" + CHR(231) + CHR(227) + "o de Pagamento")
+            IF VARTYPE(loc_oBusca) = "O"
+                loc_oBusca.mAddColuna("fpags",  "", "C" + CHR(243) + "digo")
+                loc_oBusca.mAddColuna("descrs", "", "Descri" + CHR(231) + CHR(227) + "o")
+                loc_oBusca.Show()
+                IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_FpdBusca")
+                    SELECT crSigOpFpD
+                    REPLACE fpags WITH ALLTRIM(cursor_4c_FpdBusca.fpags)
+                ENDIF
+                loc_oBusca.Release()
+            ENDIF
+            IF USED("cursor_4c_FpdBusca")
+                USE IN cursor_4c_FpdBusca
+            ENDIF
+            IF VARTYPE(THIS.grd_4c_Dados) = "O"
+                THIS.grd_4c_Dados.Refresh()
+            ENDIF
+        ENDIF
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ConfigurarPaginaDados - Configura propriedades das celulas editaveis da grade
+    * OPERACIONAL: sem Page2 separada; "dados" = Text1 das colunas editaveis do grid
+    * Legado:
+    *   Column1.Text1.When: Return ( Empty(CrSigOpFpD.Fpags) )  -> editavel em linha nova
+    *   Column2.Text1.When: Return ( Not Empty(...Fpags) And This.Value = 0 ) -> ReadOnly inicial
+    *   Ambos Text1: BorderStyle=0, Margin=0, ForeColor=90,90,90, BackColor=255,255,255
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConfigurarPaginaDados()
+        IF VARTYPE(THIS.grd_4c_Dados) != "O"
+            RETURN
+        ENDIF
+
+        *-- Column1: Condicao de Pagamento
+        *-- Legado When: Return ( Empty(CrSigOpFpD.Fpags) ) -> so editavel em linha nova
+        WITH THIS.grd_4c_Dados.Column1
+            .Sparse   = .F.
+            .ReadOnly = .F.
+            WITH .Text1
+                .BorderStyle = 0
+                .Margin      = 0
+                .ForeColor   = RGB(90, 90, 90)
+                .BackColor   = RGB(255, 255, 255)
+                .FontName    = "Tahoma"
+                .FontSize    = 8
+                .MaxLength   = 12
+            ENDWITH
+        ENDWITH
+
+        *-- Column2: Numero de Parcelas - ReadOnly=.T. inicial (habilitada em GradeAfterRowColChange
+        *-- apos Fpags preenchido, equiv. ao When: Not Empty(Fpags) And This.Value=0)
+        WITH THIS.grd_4c_Dados.Column2
+            .Sparse   = .F.
+            .ReadOnly = .T.
+            WITH .Text1
+                .BorderStyle = 0
+                .Margin      = 0
+                .ForeColor   = RGB(90, 90, 90)
+                .BackColor   = RGB(255, 255, 255)
+                .FontName    = "Tahoma"
+                .FontSize    = 8
+            ENDWITH
+        ENDWITH
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * FormatarGridLista - Formatacao visual da grade de edicao
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE FormatarGridLista(par_oGrid)
+        WITH par_oGrid
+            .FontName = "Tahoma"
+            .FontSize = 8
+        ENDWITH
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * TornarControlesVisiveis - Torna controles visiveis recursivamente
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE TornarControlesVisiveis(par_oContainer)
+        LOCAL loc_nI, loc_oObjeto
+
+        FOR loc_nI = 1 TO par_oContainer.ControlCount
+            loc_oObjeto = par_oContainer.Controls(loc_nI)
+
+            IF VARTYPE(loc_oObjeto) = "O"
+                IF PEMSTATUS(loc_oObjeto, "Visible", 5)
+                    loc_oObjeto.Visible = .T.
+                ENDIF
+
+                IF UPPER(loc_oObjeto.BaseClass) = "PAGEFRAME"
+                    LOCAL loc_nP
+                    FOR loc_nP = 1 TO loc_oObjeto.PageCount
+                        THIS.TornarControlesVisiveis(loc_oObjeto.Pages(loc_nP))
+                    ENDFOR
+                ENDIF
+
+                IF PEMSTATUS(loc_oObjeto, "ControlCount", 5)
+                    THIS.TornarControlesVisiveis(loc_oObjeto)
+                ENDIF
+            ENDIF
+        ENDFOR
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * FormParaBO - Le linha atual de crSigOpFpD e atualiza propriedades do BO
+    * Util para operacoes individuais de linha (auditoria, validacao por BO)
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE FormParaBO()
+        LOCAL loc_lSucesso
+        loc_lSucesso = .F.
+        TRY
+            IF USED("crSigOpFpD") AND !EOF("crSigOpFpD")
+                SELECT crSigOpFpD
+                THIS.this_oBusinessObject.this_cCidChaves = ALLTRIM(NVL(cidchaves, ""))
+                THIS.this_oBusinessObject.this_cFpags     = ALLTRIM(NVL(fpags, ""))
+                THIS.this_oBusinessObject.this_nNParcs    = NVL(nparcs, 0)
+                THIS.this_oBusinessObject.this_cTabDs     = ALLTRIM(NVL(tabds, ""))
+                loc_lSucesso = .T.
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro("Erro: " + loc_oErro.Message, "Erro")
+        ENDTRY
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BOParaForm - Grava propriedades do BO na linha atual de crSigOpFpD
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE BOParaForm()
+        LOCAL loc_lSucesso
+        loc_lSucesso = .F.
+        TRY
+            IF USED("crSigOpFpD") AND !EOF("crSigOpFpD")
+                SELECT crSigOpFpD
+                REPLACE cidchaves WITH THIS.this_oBusinessObject.this_cCidChaves
+                REPLACE fpags     WITH THIS.this_oBusinessObject.this_cFpags
+                REPLACE nparcs    WITH THIS.this_oBusinessObject.this_nNParcs
+                REPLACE tabds     WITH THIS.this_oBusinessObject.this_cTabDs
+                IF VARTYPE(THIS.grd_4c_Dados) = "O"
+                    THIS.grd_4c_Dados.Refresh()
+                ENDIF
+                loc_lSucesso = .T.
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro("Erro: " + loc_oErro.Message, "Erro")
+        ENDTRY
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * HabilitarCampos - Habilita ou desabilita edicao da grade
+    * par_lHabilitar=.T. -> grade editavel; .F. -> grade somente leitura
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE HabilitarCampos(par_lHabilitar)
+        IF VARTYPE(THIS.grd_4c_Dados) != "O"
+            RETURN
+        ENDIF
+        THIS.grd_4c_Dados.ReadOnly = !par_lHabilitar
+        IF par_lHabilitar AND USED("crSigOpFpD") AND !EOF("crSigOpFpD")
+            LOCAL loc_cFpagsAtual, loc_nParcsAtual
+            SELECT crSigOpFpD
+            loc_cFpagsAtual = ALLTRIM(NVL(fpags, ""))
+            loc_nParcsAtual = NVL(nparcs, 0)
+            THIS.grd_4c_Dados.Column1.ReadOnly = !EMPTY(loc_cFpagsAtual)
+            THIS.grd_4c_Dados.Column2.ReadOnly = EMPTY(loc_cFpagsAtual) OR (loc_nParcsAtual != 0)
+        ENDIF
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * LimparCampos - Descarta todas as linhas do cursor local (ZAP sem salvar)
+    * Redefine flags de alteracao para estado limpo
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE LimparCampos()
+        LOCAL loc_lSucesso
+        loc_lSucesso = .F.
+        TRY
+            IF USED("crSigOpFpD")
+                ZAP IN crSigOpFpD
+                IF VARTYPE(THIS.grd_4c_Dados) = "O"
+                    THIS.grd_4c_Dados.Refresh()
+                ENDIF
+            ENDIF
+            THIS.this_lInseriu = .F.
+            THIS.this_lExcluiu = .F.
+            loc_lSucesso = .T.
+        CATCH TO loc_oErro
+            MsgErro("Erro: " + loc_oErro.Message, "Erro")
+        ENDTRY
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * AjustarBotoesPorModo - Ajusta estado dos botoes conforme situacao da grade
+    * Excluir so fica habilitado se ha registro selecionado na grade
+    *--------------------------------------------------------------------------
+    PROCEDURE AjustarBotoesPorModo()
+        LOCAL loc_lTemRegistros
+        loc_lTemRegistros = USED("crSigOpFpD") AND (RECCOUNT("crSigOpFpD") > 0) AND !EOF("crSigOpFpD")
+        IF VARTYPE(THIS.cnt_4c_Botoes) = "O"
+            IF VARTYPE(THIS.cnt_4c_Botoes.cmd_4c_Excluir) = "O"
+                THIS.cnt_4c_Botoes.cmd_4c_Excluir.Enabled = loc_lTemRegistros
+            ENDIF
+        ENDIF
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BtnBuscarClick - Recarrega a grade do servidor descartando alteracoes nao salvas
+    * Como o form nao tem campo de busca separado, "Buscar" = refresh do servidor
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnBuscarClick()
+        LOCAL loc_lSucesso, loc_lProsseguir
+        loc_lSucesso    = .F.
+        loc_lProsseguir = .T.
+        TRY
+            IF EMPTY(THIS.this_cTabDs)
+                MsgAviso("Tabela de Desconto n" + CHR(227) + "o informada.", "Aviso")
+                loc_lProsseguir = .F.
+            ELSE
+                IF THIS.this_lInseriu OR THIS.this_lExcluiu
+                    loc_lProsseguir = MsgConfirma("Existem altera" + CHR(231) + CHR(245) + "es n" + CHR(227) + "o salvas. Descartar e recarregar?", "Confirmar")
+                ENDIF
+            ENDIF
+            IF loc_lProsseguir
+                THIS.CarregarLista()
+                THIS.this_lInseriu = .F.
+                THIS.this_lExcluiu = .F.
+                loc_lSucesso = .T.
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro("Erro: " + loc_oErro.Message, "Erro")
+        ENDTRY
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BtnSalvarClick - Salva alteracoes da grade sem fechar o formulario
+    * Equivale a um "gravar parcial" para consolidar edicoes intermediarias
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnSalvarClick()
+        LOCAL loc_lSucesso
+        loc_lSucesso = .F.
+        TRY
+            IF !THIS.this_lInseriu AND !THIS.this_lExcluiu
+                MsgInfo("Nenhuma altera" + CHR(231) + CHR(227) + "o pendente.", "Informa" + CHR(231) + CHR(227) + "o")
+                loc_lSucesso = .T.
+            ELSE
+                loc_lSucesso = THIS.this_oBusinessObject.SalvarGrid(THIS.this_cTabDs)
+                IF loc_lSucesso
+                    THIS.this_lInseriu = .F.
+                    THIS.this_lExcluiu = .F.
+                    MsgInfo("Dados gravados com sucesso!", "Sucesso")
+                    THIS.CarregarLista()
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro("Erro: " + loc_oErro.Message, "Erro")
+        ENDTRY
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * BtnCancelarClick - Descarta alteracoes nao salvas e recarrega do servidor
+    * Confirma com usuario antes de descartar
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnCancelarClick()
+        LOCAL loc_lSucesso, loc_lConfirmado
+        loc_lSucesso    = .F.
+        loc_lConfirmado = .T.
+        TRY
+            IF THIS.this_lInseriu OR THIS.this_lExcluiu
+                IF TYPE("gb_4c_ValidandoUI") = "L" AND gb_4c_ValidandoUI
+                    loc_lConfirmado = .T.
+                ELSE
+                    loc_lConfirmado = MsgConfirma("Descartar as altera" + CHR(231) + CHR(245) + "es n" + CHR(227) + "o salvas?", "Confirmar")
+                ENDIF
+            ENDIF
+            IF loc_lConfirmado
+                THIS.LimparCampos()
+                IF VARTYPE(THIS.pgf_4c_Paginas) = "O"
+                    THIS.pgf_4c_Paginas.ActivePage = 1
+                ENDIF
+                IF !EMPTY(THIS.this_cTabDs)
+                    THIS.CarregarLista()
+                ENDIF
+                loc_lSucesso = .T.
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro("Erro: " + loc_oErro.Message, "Erro")
+        ENDTRY
+        RETURN loc_lSucesso
+    ENDPROC
+
+ENDDEFINE

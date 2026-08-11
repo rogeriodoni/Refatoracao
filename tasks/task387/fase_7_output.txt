@@ -1,0 +1,12 @@
+﻿Integra├º├Áes conclu├¡das. Resumo do que foi feito:
+
+**Fase 7 j├í estava completa** ÔÇö FormCst.prg j├í continha BtnIncluirClick, BtnAlterarClick, BtnVisualizarClick e BtnExcluirClick (linhas 816ÔÇô903) de fases anteriores.
+
+**Integra├º├úo (Fase 8) executada agora:**
+
+1. **menu.prg** ÔÇö Adicionadas 3 mudan├ºas:
+   - `DEFINE BAR 69` (separador) e `DEFINE BAR 70 "Constantes"` no popup `popCadastros`
+   - `ON SELECTION BAR 70 OF popCadastros DO AbrirFormCst`
+   - Procedure `AbrirFormCst()` no final do arquivo (padr├úo can├┤nico: VARTYPE, Show() sem par├ómetro, sem Release())
+
+2. **config.prg** ÔÇö N├úo precisa de altera├º├úo: carrega `*BO.prg` e `cadastros\Form*.prg` dinamicamente via ADIR(), ent├úo CstBO.prg e FormCst.prg j├í s├úo carregados automaticamente.

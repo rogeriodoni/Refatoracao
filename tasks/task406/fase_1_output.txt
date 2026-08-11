@@ -1,0 +1,11 @@
+﻿**Fase 1/8 conclu├¡da.** Arquivo criado em `C:\4c\projeto\app\classes\ENRBO.prg` com:
+
+- 4 propriedades mapeadas do schema `SigCdEnr`:
+  - `this_cPkChaves` (pkchaves char(20) - PK)
+  - `this_cCep` (ceps char(9))
+  - `this_cEndereco` (endes char(60))
+  - `this_cBairro` (bairs char(40))
+- `Init()` configurando `this_cTabela = "SigCdEnr"` e `this_cCampoChave = "pkchaves"`
+- `ObterChavePrimaria()` para auditoria
+
+**Observa├º├úo:** O campo `pkchaves` ├® gerado via `SELECT LEFT(NEWID(), 20)` (padr├úo CEPBO) em substitui├º├úo ao `fUniqueIds()` legado, que n├úo est├í portado no novo sistema. Isso ser├í implementado no m├®todo `Inserir()` na Fase 2.

@@ -1,0 +1,19 @@
+﻿Nenhum `RETURN` dentro de TRY/CATCH. A Fase 3 est├í conclu├¡da.
+
+**Resumo da Fase 3:**
+
+`FormCst.prg` criado em `C:\4c\projeto\app\forms\cadastros\FormCst.prg` (312 linhas) com:
+
+| M├®todo | Descri├º├úo |
+|--------|-----------|
+| `Init()` | Apenas `RETURN DODEFAULT()` ÔÇö sem duplicar InicializarForm |
+| `InicializarForm()` | Cria CstBO, chama ConfigurarPageFrame, propaga Caption, respeita `gb_4c_ValidandoUI` |
+| `ConfigurarPageFrame()` | PageFrame Top=-29, Tabs=.F., 2 p├íginas com `fundo_cad_1003.jpg` |
+| `ConfigurarPaginaLista()` | `cnt_4c_Cabecalho` (com lbl_4c_Sombra/Titulo), `cnt_4c_Botoes` (Left=543), `cnt_4c_Saida` (Left=917 can├┤nico) |
+| `ConfigurarPaginaDados()` | `cnt_4c_BotoesAcao` (Left=820, Top=37) |
+| `CarregarLista()` | Chama `this_oBusinessObject.Buscar("")` ÔÇö grid ser├í vinculado na Fase 4 |
+| `Destroy()` | Libera BO e fecha cursor `crSigCdCnt` |
+| `TornarControlesVisiveis()` | Recursivo, itera Pages e Controls |
+| `FormatarGridLista()` | SetAll FontName=Tahoma, FontSize=8 |
+
+Pr├│xima fase (4/8): adicionar Grid e bot├Áes CRUD na Page1.

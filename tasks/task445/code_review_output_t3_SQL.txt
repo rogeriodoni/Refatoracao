@@ -1,0 +1,33 @@
+﻿## An├ílise: Falso Positivo Confirmado
+
+Ap├│s verificar o c├│digo completo, este ├® um **falso positivo** do detector. Nenhuma altera├º├úo ├® necess├íria.
+
+### Por qu├¬ o detector disparou
+
+O c├│digo original usa o framework Fortyus (`poDataMgr.Update([crSigCdIbp])`) que **n├úo tem WHERE expl├¡cito** - o framework resolve o PK internamente. O detector comparou os WHEREs literais dos SQL strings e concluiu que `WHERE cidchaves = ...` foi "inventado".
+
+### Por qu├¬ o c├│digo migrado est├í CORRETO
+
+O fluxo em `ImportarPlanilha()` ├®:
+
+```
+1. SELECT cidchaves FROM SigCdIbp WHERE ufs=X AND codigo=Y AND chave=Z AND versao=W
+   ÔåÆ cursor_4c_AuxIbp              ÔåÉ ID├èNTICO ao original
+
+2. SE n├úo encontrou ÔåÆ INSERT         ÔåÉ ID├èNTICO ao original
+
+3. SE encontrou:
+   loc_lcCidChaves = cursor_4c_AuxIbp.cidchaves  ÔåÉ vem do SELECT, n├úo inventado
+   UPDATE SigCdIbp SET ... WHERE cidchaves = loc_lcCidChaves
+```
+
+O `WHERE cidchaves = loc_lcCidChaves` na linha 402 do IBPBO.prg:
+- **N├úo ├® inventado**: o valor veio do SELECT anterior (linha 392)
+- **├ë obrigat├│rio**: sem ele, o UPDATE afetaria TODOS os registros de SigCdIbp
+- **├ë equivalente** ao `poDataMgr.Update()` original, que tamb├®m usava o PK internamente
+
+### Conclus├úo
+
+O check `WHERE original usa: I, UFS, CODIGO, CHAVE, VERSAO` se refere ao SQL de **busca/exist├¬ncia** ÔÇö e esse SQL no c├│digo migrado usa exatamente essas colunas (ufs, codigo, chave, versao). O `WHERE cidchaves` aparece apenas no UPDATE (como PK), que ├® o padr├úo correto de atualiza├º├úo por chave prim├íria.
+
+**Nenhuma altera├º├úo necess├íria.** O c├│digo est├í correto.

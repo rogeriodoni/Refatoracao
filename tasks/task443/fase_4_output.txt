@@ -1,0 +1,11 @@
+﻿O arquivo est├í correto. Fase 4 implementada com sucesso.
+
+**O que foi adicionado em `FormGrupo.prg`:**
+
+- **`ConfigurarPaginaLista()`** ÔÇö cria o `grd_4c_Dados` (r├®plica do GradeOpe: Top=115, Left=236, W=264, H=274, 2 colunas), com Column1 edit├ível (Cgrus) e Column2 read-only (Dgrus), mais os 4 bot├Áes standalone: `cmd_4c_Inserir` (Left=500), `cmd_4c_Excluir` (575), `cmd_4c_Confirmar` (650), `cmd_4c_Cancelar` (725) ÔÇö todos com Themes=.T. e BINDEVENTs ligados.
+
+- **Handlers dos bot├Áes:** `BtnInserirClick` / `BtnExcluirClick` delegam ao BO; `BtnConfirmarClick` chama `Confirmar()` e libera s├│ se bem-sucedido; `BtnCancelarClick` libera diretamente.
+
+- **`GrdOpeAfterRowColChange`** ÔÇö equivalente ao `Valid` do legado: ap├│s o usu├írio sair de Column1 (commit), valida Cgrus contra SigCdGrp e preenche Dgrus automaticamente.
+
+- **`TxtGrupoKeyPress` + `AbrirBuscaGrupo`** ÔÇö F4 em Column1 abre `FormBuscaAuxiliar` para SigCdGrp; na sele├º├úo, atualiza `Text1.Value` + REPLACE Dgrus no cursor.

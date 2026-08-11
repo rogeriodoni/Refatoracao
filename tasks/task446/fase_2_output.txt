@@ -1,0 +1,16 @@
+﻿ICDBO.prg est├í completo. Aqui est├í o resumo do que foi implementado na **Fase 2/8**:
+
+**Propriedades adicionadas:**
+- `this_cCidChaves` ÔÇö PK do registro carregado (necess├íria para auditoria e `ObterChavePrimaria()`)
+- `this_nAliqIcmsts` ÔÇö coluna `aliqicmsts numeric(5,2)` que existia no schema mas faltava na Fase 1
+
+**M├®todos implementados:**
+
+| M├®todo | Papel |
+|--------|-------|
+| `ObterChavePrimaria()` | Retorna `this_cCidChaves` para `RegistrarAuditoria` no BusinessBase |
+| `CarregarDoCursor(par_cAlias)` | Mapeia todos os 11 campos de `SigPrTri` para propriedades do BO via `SELECT (alias)` + `TratarNulo` |
+| `Buscar(par_cFiltro)` | SELECT geral em `SigPrTri` com filtro opcional ÔåÆ cursor `cnSigPrTri` |
+| `BuscarPorTipo(par_cTipos)` | SELECT por `tipos = ?` ÔåÆ carrega cursor e popula BO via `CarregarDoCursor` (equivalente ao `Requery` legado) |
+| `VerificarTipoExistente(par_cTipos)` | `COUNT(*)` para checar duplicidade antes do INSERT (equivalente ao `SELECT csSigPrTri + !EOF()` original) |
+| `DuplicarTipo(origem, novoTipo, novaDesc)` | Opera├º├úo principal: valida ÔåÆ checa duplicidade ÔåÆ carrega origem ÔåÆ INSERT com `fUniqueIds()` ÔåÆ `RegistrarAuditoria("DUPLICAR")` |

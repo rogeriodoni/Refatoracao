@@ -418,7 +418,7 @@ DEFINE CLASS SigReIfvBO AS RelatorioBase
                        "LEFT JOIN SigCdPro b ON b.CPros = a.Produto " + ;
                        "LEFT JOIN SigOpEtq c ON c.CBars = a.Barras " + ;
                        "WHERE a.Emps = '" + ALLTRIM(Balancos.Emps) + "' " + ;
-                       "AND a.Codigos = " + ALLTRIM(STR(Balancos.Codigos,4)) + " " + ;
+                       "AND a.Codigos = " + ALLTRIM(Balancos.Codigos) + " " + ;
                        "ORDER BY a.Emps,a.Codigos,a.Tipos,a.Produto,a.Barras," + ;
                        "a.Apurado,a.Estoque,a.Falta,a.Sobra,a.Ocorrencia," + ;
                        "a.PesReals,a.CCustos,a.Barra2s,a.Ocor2s,a.CCusto2s," + ;
@@ -534,7 +534,7 @@ DEFINE CLASS SigReIfvBO AS RelatorioBase
                        "FROM SigIvTrT a " + ;
                        "LEFT JOIN SigCdPro b ON b.CPros = a.Produto " + ;
                        "WHERE a.Emps = '" + ALLTRIM(Balancos.Emps) + "' " + ;
-                       "AND a.Codigos = " + ALLTRIM(STR(Balancos.Codigos,4)) + " " + ;
+                       "AND a.Codigos = " + ALLTRIM(Balancos.Codigos) + " " + ;
                        "ORDER BY a.Emps,a.Codigos,a.Tipos,a.Produto,a.Barras," + ;
                        "a.Apurado,a.Estoque,a.Falta,a.Sobra,a.Ocorrencia," + ;
                        "a.PesReals,a.CCustos,a.Barra2s,a.Ocor2s,a.CCusto2s," + ;
@@ -705,7 +705,7 @@ DEFINE CLASS SigReIfvBO AS RelatorioBase
                        "FROM SigIvTrT a " + ;
                        "LEFT JOIN SigCdPro b ON b.CPros = a.Produto " + ;
                        "WHERE a.Emps = '" + ALLTRIM(Balancos.Emps) + "' " + ;
-                       "AND a.Codigos = " + ALLTRIM(STR(Balancos.Codigos,4)) + " " + ;
+                       "AND a.Codigos = " + ALLTRIM(Balancos.Codigos) + " " + ;
                        "AND a.Barras = " + ALLTRIM(STR(par_nBarra, 8)) + " " + ;
                        "ORDER BY a.Emps,a.Codigos,a.Tipos,a.Produto,a.Barras," + ;
                        "a.Apurado,a.Estoque,a.Falta,a.Sobra,a.Ocorrencia," + ;

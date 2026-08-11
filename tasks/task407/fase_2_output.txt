@@ -1,0 +1,14 @@
+﻿O arquivo est├í correto e completo. A Fase 2/8 foi executada com sucesso.
+
+**Resumo do que foi adicionado ao `epdBO.prg`:**
+
+| M├®todo | Tipo | Fun├º├úo |
+|--------|------|--------|
+| `Buscar(par_cFiltro)` | PUBLIC | SELECT em SigCdNec filtrado por empresa + `ENCERRAMENTO DIRETO`, com ORDER BY numps |
+| `CarregarPorCodigo(par_cChave)` | PUBLIC | SELECT por `empdnps` (chave composta 33 chars), seta `this_lNovoRegistro = .F.` |
+| `CarregarDoCursor(par_cAliasCursor)` | PROTECTED | Usa `SELECT (par_cAlias)` + mapeamento direto de todos os campos |
+| `Inserir()` | PROTECTED | INSERT em SigCdNec com todos os 40 campos NOT NULL; `cidchaves` derivado de `SUBSTR(empdnps, 14, 20)` |
+| `Atualizar()` | PROTECTED | UPDATE dos campos edit├íveis (datas, grupos, contas, vends, usuars) |
+| `ExecutarExclusao()` | PROTECTED | DELETE em cascade: SigCdNei primeiro, depois SigCdNec |
+
+Todos os m├®todos seguem as regras cr├¡ticas: sem RETURN dentro de TRY/CATCH, usando `loc_lResultado`, helpers `EscaparSQL`/`FormatarDataSQL`/`FormatarNumeroSQL`, e `RegistrarAuditoria` em INSERT/UPDATE/DELETE.

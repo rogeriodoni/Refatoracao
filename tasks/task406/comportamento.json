@@ -1,0 +1,211 @@
+{
+  "resumo": {
+    "totalMetodos": 11,
+    "metodosComSQL": 3,
+    "metodosComValidacao": 5,
+    "totalQueries": 2,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fUniqueIds"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDENR",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.podatamgr.Release\n=DoDefault()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDENR",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "=fConfigGeral()\n=DoDefault()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDENR",
+      "evento": "Init",
+      "linhas": 27,
+      "codigoOriginal": "lcQryEnr = [Select * From SigCdEnr]\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tWith .poDataMgr\n\t\t\t.AddCursor('SigCdEnr', 'pkChaves', 'crSigCdEnr', '', ThisForm.Pagina.Lista.Grade, lcQryEnr)\n\t\t\t.pfSqlTabela(1).pColuna('ceps', '', '', 'Cep', 100, .t.)\n\t\t\t.pfSqlTabela(1).pColuna('endes', '', '', 'Endereço', 200, .t.)\n\t\t\t.pfSqlTabela(1).pColuna('bairs', '', '', 'Bairro', 100, .t.)\n\t\tEndWith\n\n\t\tSelect crSigCdEnr\n\t\tIndex On ceps tag ceps\n\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDENR",
+      "evento": "Click",
+      "linhas": 20,
+      "codigoOriginal": "LPARAMETERS opcao\nIf !dodefault( Opcao )\n\tThisForm.mAtivapagina1\n\tReturn\nEndif\n\nSelect crSigCdEnr\n\n* posiciona o cursor de acordo com a opção\nDo Case\n\tCase Inlist( ThisForm.pcEscolha, 'INSERIR', 'PROCURAR', 'ALTERAR' )\n\t\tthisform.pagina.dados.getCep.setfocus\t\n\tCase Inlist( ThisForm.pcEscolha, 'CONSULTAR', 'EXCLUIR' )\n\t\tthisform.pagina.dados.grupo_salva.salva.setfocus\nEndcase\n\nSelect crSigCdEnr\n=DoDefault()\nThisForm.Pagina.Dados.Refresh\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDENR",
+      "evento": "Click",
+      "linhas": 31,
+      "codigoOriginal": "LOCAL lcQuery\nprivate lcQuery, lcCep, lcEnd, lcBai\n\nIf ThisForm.pcEscolha = 'INSERIR'\n\t*** Verifica se registro ja cdastrado ***\n\tlcCep = ThisForm.Pagina.Dados.GetCep.Value\n\tlcEnd = ThisForm.Pagina.Dados.GetEndereço.Value\n\tlcBai = ThisForm.Pagina.Dados.GetBairro.Value\n\n\tlcQuery = 'Select * From SigCdEnr Where ceps=?lcCep And endes=?lcEnd And bairs=?lcBai'\n\tThisForm.poDataMgr.SqlExecute(lcQuery, [crLocal])\n\n\tIF RECCOUNT('crLocal') > 0\n\t\tMessageBox( 'Endereço já cadastrado...', 48, '' )\n\t\tThisForm... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDENR",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "=DoDefault()\nIf ThisForm.plCancelar\n\tThisForm.mAtivapagina1\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDENR.Pagina.Dados.GetCEP",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "return InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDENR.Pagina.Dados.GetCEP",
+      "evento": "LostFocus",
+      "linhas": 28,
+      "codigoOriginal": "If Not Empty(Strtran(This.Value, '-', ''))\n\tloCep = CreateObject('fwCep', This.Value, 'CEPS', .f.)\n\tloCep.Show\n\n\tIf Not loCep.plAchouRegistro\n\t\tloCep.Release\n\t\tReturn .f.\n\tEndIf\n\n\tlcCep = loCep.Ceps\n\tlcEnd = loCep.Nomes\n\tlcTpC = loCep.TipoCeps\n\tlcTpN = loCep.TipoNomes\n\tlcBai = loCep.Bairros\n\n\tloCep.Release\n\n\tIf Not Empty(At([,], lcEnd)) And (lcTpC <> [9])\n\t\tlcEnd = Alltrim(Substr(lcEnd, At([,], lcEnd) + 1)) + [ ] + Substr(lcEnd, 1, At([,], lcEnd) - 1)\n\tEndIf\n\n\tReplace Endes With Alltrim(lcTpN) +... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDENR.Pagina.Dados.GetBairro",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "return InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDENR.Pagina.Dados.GetEndereço",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "return InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR') and Empty(Strtran(this.Parent.getCEP.Value, '-', ''))\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDENR.Pagina.Dados.GetEndereço",
+      "evento": "LostFocus",
+      "linhas": 29,
+      "codigoOriginal": "If Not Empty(Strtran(This.Value, '-', ''))\n\tloCep = CreateObject('fwCep', This.Value, 'NOMES', .f.)\n\tloCep.Show\n\n\tIf Not loCep.plAchouRegistro\n\t\tloCep.Release\n\t\tReturn .f.\n\tEndIf\n\n\tlcCep = loCep.Ceps\n\tlcEnd = loCep.Nomes\n\tlcTpC = loCep.TipoCeps\n\tlcTpN = loCep.TipoNomes\n\tlcBai = loCep.Bairros\n\n\tloCep.Release\n\n\tIf Not Empty(At([,], lcEnd)) And (lcTpC <> [9])\n\t\tlcEnd = Alltrim(Substr(lcEnd, At([,], lcEnd) + 1)) + [ ] + Substr(lcEnd, 1, At([,], lcEnd) - 1)\n\tEndIf\n\n\n\tReplace Endes With Alltrim(lcTpN)... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDENR.Init",
+      "queryOriginal": "lcQryEnr = [Select * From SigCdEnr]",
+      "tabelas": "SigCdEnr",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDENR.Click",
+      "queryOriginal": "\tlcQuery = 'Select * From SigCdEnr Where ceps=?lcCep And endes=?lcEnd And bairs=?lcBai'",
+      "tabelas": "SigCdEnr",
+      "colunas": "ceps,endes,bairs",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdEnr"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

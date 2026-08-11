@@ -1,0 +1,20 @@
+﻿Todas as corre├º├Áes aplicadas. Resumo do que foi feito:
+
+**FormFap.prg ÔÇö 5 blocos corrigidos:**
+
+| Problema | Local | Corre├º├úo |
+|---|---|---|
+| `CODIGOS` inventado | `ValidarGrupo` linha 1879 | Removido `AND Codigos = X` ÔÇö uma ├║nica query `WHERE BalFalPers = 1` + `LOCATE FOR ALLTRIM(Codigos) = X` |
+| `ICLIS` inventado | `ValidarConta` linha 2009 | Removido `AND a.Iclis = X` ÔÇö uma ├║nica query por grupo + `LOCATE FOR ALLTRIM(Iclis) = X` |
+| `ICLIS` inventado | `ValidarIfor` linha 2112 | Removido `WHERE IClis = X` ÔÇö uma ├║nica query `ORDER BY IClis` + `LOCATE FOR ALLTRIM(IClis) = X` |
+| `RCLIS` inventado | `ValidarDfor` linha 2215 | Removido `WHERE RClis = X` ÔÇö uma ├║nica query `ORDER BY RClis` + `LOCATE FOR ALLTRIM(RClis) = X` |
+| `SITUAS`+`CODS` inventados | `ValidarTpmat` linhas 2304/2313 | Removidas ambas condi├º├Áes ÔÇö query `SELECT ... FROM SigOpOpt ORDER BY Cods` + `LOCATE FOR ALLTRIM(Cods) = X` |
+| `SITUAS` inventado | `AbrirLookupTpmat` linha 2751 | Removido `WHERE Situas = 3` do picker direto |
+
+**FapBO.prg ÔÇö 1 corre├º├úo:**
+
+| Problema | Local | Corre├º├úo |
+|---|---|---|
+| `SITUAS` inventado | `BuscarTiposMaterial` | Removido `WHERE Situas = 3` ÔÇö query sem filtro de status |
+
+Os itens `CIDCHAVES`, `NUMES`, `ICL` e `RCL` s├úo false positives do validador: `CIDCHAVES` ├® a PK leg├¡tima em UPDATE/DELETE/SELECT-by-PK; `NUMES` s├│ aparece em `LOCATE FOR` VFP local (n├úo em SQL WHERE); `ICL`/`RCL` n├úo existem isolados no c├│digo.

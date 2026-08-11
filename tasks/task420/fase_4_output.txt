@@ -1,0 +1,18 @@
+﻿O arquivo est├í correto. Fase 4 conclu├¡da. O `Formfnl.prg` agora tem:
+
+- **`ConfigurarPaginaLista()`** completo com:
+  - 5 bot├Áes CRUD em `cnt_4c_Botoes` (Incluir/Visualizar/Alterar/Excluir/Buscar) com ├¡cones, fontes Comic Sans MS e BINDEVENTs
+  - `cmd_4c_Encerrar` em `cnt_4c_Saida` (padr├úo can├┤nico Left=917)
+  - `grd_4c_Lista` (Top=117, Width=890, 4 colunas: Impressora/Ordem/Descri├º├úo/Rel.Gerencial)
+
+- **`CarregarLista()`** completo: chama `Buscar("")`, seta `RecordSource`/`ColumnCount` fora do WITH (problema 48/36), depois configura ControlSource e Header1.Caption dentro do WITH, chama `FormatarGridLista()`
+
+- **`AlternarPagina(par_nPagina)`**: alterna entre Page1/Page2, recarrega lista ao voltar
+
+- **Handlers Btn*Click** (PUBLIC, funcionam com BINDEVENT):
+  - `BtnIncluirClick` ÔåÆ `NovoRegistro()` + `LimparCampos()` + modo "INCLUIR" + Page2
+  - `BtnVisualizarClick` ÔåÆ guard cursor + `CarregarPorCodigo()` + `BOParaForm()` + modo "VISUALIZAR"
+  - `BtnAlterarClick` ÔåÆ guard cursor + `CarregarPorCodigo()` + `EditarRegistro()` + modo "ALTERAR"
+  - `BtnExcluirClick` ÔåÆ `MsgConfirma()` + `Excluir()`
+  - `BtnBuscarClick` ÔåÆ `CarregarLista()`
+  - `BtnEncerrarClick` ÔåÆ `Release()`

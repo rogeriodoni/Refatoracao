@@ -1,0 +1,15 @@
+﻿Fase 4 conclu├¡da. O arquivo `Formgem.prg` foi atualizado com:
+
+**`ConfigurarPaginaLista()`** ÔÇö agora completa com:
+- 5 bot├Áes CRUD em `cnt_4c_Botoes` (Incluir/Left=5, Visualizar/80, Alterar/155, Excluir/230, Buscar/305) + Encerrar em `cnt_4c_Saida`
+- `grd_4c_Lista` (Top=126, Left=30, Width=938, Height=488, ColumnCount=2) com todas as propriedades visuais do Framework
+- BINDEVENTs conectando cada bot├úo ao handler correspondente
+
+**`CarregarLista()`** ÔÇö agora configura o grid ap├│s `Buscar("")`: RecordSource, ControlSource das 2 colunas (grupo/class), larguras (115px), headers corretamente recalibrados ap├│s RecordSource, e `FormatarGridLista()`
+
+**Handlers adicionados** (todos PUBLIC para funcionar com BINDEVENT):
+- `BtnIncluirClick`: `NovoRegistro()` + mode + `AlternarPagina(2)`
+- `BtnVisualizarClick`: l├¬ `cidchaves` do cursor + `CarregarPorCodigo()` + mode VISUALIZAR
+- `BtnAlterarClick`: `CarregarPorCodigo()` + `EditarRegistro()` + mode ALTERAR
+- `BtnExcluirClick`: confirma├º├úo com descri├º├úo do registro + `Excluir()` + `CarregarLista()`
+- `BtnBuscarClick`: `CarregarLista()` (equivalente ao `msv_procurar` do legado)

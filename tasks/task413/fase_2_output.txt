@@ -1,0 +1,12 @@
+﻿Fase 2 conclu├¡da. FAPPBO.prg agora tem implementa├º├úo completa com todos os m├®todos CRUD:
+
+- **`CarregarDoCursor()`** ÔÇö mapeia `cods`/`descs` do cursor para `this_cCods`/`this_cDescs`
+- **`ValidarDados()`** ÔÇö valida c├│digo n├úo vazio, sem duplicata, descri├º├úo n├úo vazia
+- **`VerificarCodigoExistente()`** ÔÇö COUNT(*) no SQL Server para checar duplicidade
+- **`Inserir()`** ÔÇö INSERT INTO SigCdFAPP + `RegistrarAuditoria("INSERT")`
+- **`Atualizar()`** ÔÇö UPDATE SigCdFAPP + `RegistrarAuditoria("UPDATE")`
+- **`ExecutarExclusao()`** ÔÇö DELETE + `RegistrarAuditoria("DELETE")`
+- **`Buscar()`** ÔÇö SELECT com filtro opcional, com prote├º├úo do cursor do grid (ZAP + APPEND)
+- **`CarregarPorCodigo()`** ÔÇö carrega registro completo por PK
+
+**Nota:** O SCX original estava completamente vazio (sem campos, sem c├│digo), portanto a estrutura foi inferida pela conven├º├úo `SigCd*` (cods PK + descs descri├º├úo). Se houver colunas adicionais no schema real de SigCdFAPP, basta adicion├í-las como `this_cXxx` no topo e inclu├¡-las em `CarregarDoCursor`, `Inserir` e `Atualizar`.

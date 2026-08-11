@@ -1,0 +1,27 @@
+[2026-08-09 03:50:00] [INFO] === CLAUDE CLI INVOKER ===
+[2026-08-09 03:50:00] [INFO] Prompt File: C:\4c\tasks\task446\runtime_fix_prompt_06b_testeAutomatico_t7.md
+[2026-08-09 03:50:00] [INFO] Output File: C:\4c\tasks\task446\06b_testeAutomatico_fix_output_t7.txt
+[2026-08-09 03:50:00] [INFO] Model: sonnet
+[2026-08-09 03:50:00] [INFO] Timeout: 3600 segundos
+[2026-08-09 03:50:00] [INFO] Max Output Tokens: 128000
+[2026-08-09 03:50:00] [INFO] Context Files: 0 arquivo(s)
+[2026-08-09 03:50:00] [INFO] Invocando Claude CLI...
+[2026-08-09 03:50:00] [INFO] Prompt carregado: 60230 caracteres
+[2026-08-09 03:50:00] [INFO] Executando: claude --model sonnet --dangerously-skip-permissions --add-dir C:\4c
+[2026-08-09 03:50:00] [INFO] Tamanho total do prompt: 60230 caracteres
+[2026-08-09 03:50:00] [INFO] Invocando Claude CLI (tentativa 1/7)...
+[2026-08-09 03:52:39] [INFO] Claude CLI finalizado em 158.9712866 segundos
+[2026-08-09 03:52:39] [INFO] Exit Code: 0
+[2026-08-09 03:52:39] [INFO] Output salvo em: C:\4c\tasks\task446\06b_testeAutomatico_fix_output_t7.txt
+[2026-08-09 03:52:39] [INFO] Output size: 844 bytes
+[2026-08-09 03:52:39] [INFO] SUCESSO: Claude CLI executado com sucesso
+[2026-08-09 03:52:39] [INFO] Preview do output:
+[2026-08-09 03:52:39] [INFO] Corre+º+úo aplicada. O `ShowWindow = 1` duplicado foi removido ÔÇö a classe agora tem apenas `ShowWindow = 0`.
+
+**Causa raiz:** A defini+º+úo da classe tinha duas linhas conflitantes:
+```
+ShowWindow  = 0   ÔåÉ inten+º+úo correta
+ShowWindow = 1    ÔåÉ duplicata; VFP9 usa o +¦ltimo valor ÔåÆ forma final = 1
+```
+
+Com `ShowWindow = 1` efetivo, o form criava uma janela top-level mesmo durante testes autom+íticos (modo `-T`), causando bloqueio indefinido de 300s. O coment+írio no pr+¦prio `Ini

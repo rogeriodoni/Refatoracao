@@ -1,0 +1,9 @@
+﻿O arquivo est├í correto. A Fase 4 est├í conclu├¡da. O `Formepd.prg` agora tem:
+
+**O que foi adicionado:**
+- `ConfigurarPaginaLista()` completo com:
+  - 5 bot├Áes CRUD no `cnt_4c_Botoes` (Incluir, Visualizar, Alterar, Excluir, Buscar) ÔÇö ├¡cones, posi├º├Áes e BINDEVENT corretos
+  - Bot├úo Encerrar no `cnt_4c_Saida` (padr├úo can├┤nico: Left=917, Width=90, cmd Width=75)
+  - Grid `grd_4c_Lista` com 7 colunas (numps, datas, grupoos, contaos, grupods, contads, usuars) ÔÇö 905px largura, Verdana 8pt
+- `CarregarLista()` completo com binding do grid ao `cursor_4c_Dados` + reconfigura├º├úo de headers p├│s-RecordSource
+- Handlers dos 6 bot├Áes: `BtnIncluirClick`, `BtnVisualizarClick`, `BtnAlterarClick`, `BtnExcluirClick`, `BtnBuscarClick`, `BtnEncerrarClick` ÔÇö todos PUBLIC (sem PROTECTED) para funcionar com BINDEVENT

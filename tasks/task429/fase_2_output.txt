@@ -1,0 +1,22 @@
+﻿FPPBO.prg completo. Resumo do que foi implementado na Fase 2:
+
+**M├®todos adicionados ao FPPBO.prg:**
+
+| M├®todo | Tipo | Descri├º├úo |
+|--------|------|-----------|
+| `CarregarDoCursor()` | PUBLIC | Mapeia todas as 7 colunas do xFPagi para props `this_*` |
+| `Inserir()` | PUBLIC | INSERT individual em SigOpFpp com `SYS(2015)` como cidchaves |
+| `Atualizar()` | PUBLIC | UPDATE individual por cidchaves |
+| `CarregarDados(fpags)` | PUBLIC | Cria xFPagi via CREATE CURSOR + SQLEXEC ÔåÆ APPEND FROM DBF |
+| `InserirLinha(fpags)` | PUBLIC | Adiciona linha vazia no cursor local xFPagi |
+| `ExcluirLinha()` | PUBLIC | Remove linha atual do xFPagi (DELETE + SKIP/SKIP-1) |
+| `ValidarAntesDeSalvar()` | PROTECTED | Detecta nparcs+descs duplicados via GROUP BY HAVING |
+| `SalvarDados(fpags)` | PUBLIC | DELETE FROM SigOpFpp + re-INSERT de todas as linhas v├ílidas |
+| `RegistrarAuditoria()` | PUBLIC | INSERT em LogAuditoria com GETDATE() |
+
+**Pontos cr├¡ticos respeitados:**
+- Nenhum `RETURN` dentro de `TRY/CATCH` ÔÇö usado padr├úo `loc_lSucesso` + `IF/ELSE`
+- Schema confirmado: tabela `SigOpFpp`, colunas lowercase (`descs`, `valmins`, `valmaxs`, `parcdes`, `cidchaves` char(20))
+- `fUniqueIds()` substitu├¡do por `SYS(2015)` (gera ID ├║nico de 10 chars, cabe em `cidchaves char(20)`)
+- `APPEND FROM DBF()` precedido de `SELECT xFPagi` para garantir work area correta
+- CATCH em todos os m├®todos com `Message + LineNo + Procedure`

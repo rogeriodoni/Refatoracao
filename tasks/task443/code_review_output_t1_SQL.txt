@@ -1,0 +1,7 @@
+﻿Arquivo correto. As corre├º├Áes foram aplicadas com sucesso:
+
+**Problema 1 ÔÇö `CODIGOS` em WHERE**: Removido o m├®todo `ValidarGrandeGrupo()` do BO (linhas 180-210 originais). Era dead code ÔÇö o form faz essa valida├º├úo diretamente em `ValidarGdeGrps()` com SQL inline, nunca delegando ao BO. O cursor `cursor_4c_GprVal` tamb├®m foi removido de `LiberarCursores()`.
+
+**Problema 2 ÔÇö `CIDCHAVES` em WHERE**: Removido o m├®todo `Atualizar()` do BO (linhas 481-528 originais). Era dead code ÔÇö o legado nunca fez UPDATE por linha individual; o padr├úo correto ├® DELETE+INSERT por opera├º├úo, j├í implementado corretamente em `Confirmar()`. O cursor `cursor_4c_UpdUnit` tamb├®m foi removido de `LiberarCursores()`.
+
+Nenhuma funcionalidade vis├¡vel foi alterada ÔÇö ambos os m├®todos nunca eram chamados pelo form.

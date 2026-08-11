@@ -202,7 +202,11 @@ DEFINE CLASS sigreinrBO AS RelatorioBase
                                                                                                                                                             IF VARTYPE(CsSigCdPam.BalcTrats) = "L"
                                                                                                                                                                 THIS.this_lBalcTrats = CsSigCdPam.BalcTrats
                                                                                                                                                             ELSE
-                                                                                                                                                                THIS.this_lBalcTrats = (NVL(CsSigCdPam.BalcTrats, 0) = 1)
+                                                                                                                                                                IF VARTYPE(CsSigCdPam.BalcTrats) = "L"
+                                                                                                                                                                    THIS.this_lBalcTrats = CsSigCdPam.BalcTrats
+                                                                                                                                                                ELSE
+                                                                                                                                                                    THIS.this_lBalcTrats = (NVL(CsSigCdPam.BalcTrats, 0) = 1)
+                                                                                                                                                                ENDIF
                                                                                                                                                             ENDIF
                                                                                                                                                         ENDIF
                                                                                                                                                     ENDIF
@@ -490,7 +494,7 @@ DEFINE CLASS sigreinrBO AS RelatorioBase
                     IF !EMPTY(crTmpHist.CBars)
                         lnbarra_val = crTmpHist.CBars
                         lcSql = [Select * from SigIvTrE Where Cbars = ] + ;
-                            STR(crTmpHist.CBars, 14) + [ And Codigos = ?lnNumBal ]
+                            crTmpHist.CBars + [ And Codigos = ?lnNumBal ]
                         IF SQLEXEC(gnConnHandle, lcSql, "CrTmpEti") > 0
                             IF EOF("CrTmpEti")
                                 IF SQLEXEC(gnConnHandle, ;
@@ -593,7 +597,7 @@ DEFINE CLASS sigreinrBO AS RelatorioBase
                             SELECT CsRelatorio
                             IF THIS.this_nOptFoto = 1
                                 lcCampoTc = "TcLinhas" + STR(lnTcLinhas, 1)
-                                lcBarra = ALLTRIM(STR(crBarras.cBars, 14)) + ", "
+                                lcBarra = ALLTRIM(crBarras.cBars) + ", "
                                 IF lnTcLinhas < 5
                                     IF LEN(ALLTRIM(&lcCampoTc)) + LEN(lcBarra) > 146
                                         lnTcLinhas = lnTcLinhas + 1
@@ -746,7 +750,7 @@ DEFINE CLASS sigreinrBO AS RelatorioBase
                             m.TcLinhas = ""
                             SELECT crBarras
                             SCAN
-                                lcBarra = ALLTRIM(STR(crBarras.cBars, 14)) + ", "
+                                lcBarra = ALLTRIM(crBarras.cBars) + ", "
                                 IF LEN(m.TcLinhas) + LEN(lcBarra) > 114
                                     SELECT CsRelatorio
                                     APPEND BLANK
@@ -902,7 +906,7 @@ DEFINE CLASS sigreinrBO AS RelatorioBase
                     Colecoes c(50), Categoria c(50), pLocals c(10), cbars_old n(10), ;
                     CodTams c(3), Localizas c(10), Obs c(200))
                 INDEX ON CBars TAG CBars
-                INDEX ON Tipos + Contas + CPros + STR(CBars, 14) TAG TpProBar
+                INDEX ON Tipos + Contas + CPros + CBars TAG TpProBar
 
                 THIS.this_nTotalLido = 0
                 THIS.this_nTotalEsto = 0
@@ -956,7 +960,7 @@ DEFINE CLASS sigreinrBO AS RelatorioBase
 
                             lnbarra_val = CsHistorico.CBars
                             loc_cSQL = [Select Empos,Grupos,Contas From SigOpEtq Where Cbars = ] + ;
-                                STR(CsHistorico.CBars, 14)
+                                CsHistorico.CBars
                             IF SQLEXEC(gnConnHandle, loc_cSQL, "TmpProEtq") < 1
                                 THIS.this_cMensagemErro = "Falha na conex" + CHR(227) + CHR(227) + "o (TmpProEtq)"
                                 loc_lSucesso = .F.

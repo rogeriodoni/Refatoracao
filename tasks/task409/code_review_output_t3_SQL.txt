@@ -1,0 +1,17 @@
+﻿Verifica├º├úo conclu├¡da. Estes dois alertas s├úo **falsos positivos** ÔÇö nenhuma corre├º├úo necess├íria.
+
+**An├ílise:**
+
+**CODIGOS (SigCdGcr):**
+- O validador detectou `WHERE Codigos = ...` no m├®todo `ObterDescricaoGrupo` do EVEBO.prg
+- `Codigos` ├® a PK v├ílida de `SigCdGcr` (confirmado na mem├│ria: feedback `SigCdGcr tem coluna 'descrs' (com r)` lista `Codigos` como coluna correta)
+- O legado fazia `Select crSigCdGcr` + SEEK/LOCATE impl├¡cito via DataEnvironment ÔÇö o migrado substitui corretamente por `SQLEXEC WHERE Codigos = ...`
+- No Form, linha 1121: `FormBuscaAuxiliar(..., "SigCdGcr", ..., "Codigos", ...)` e linha 1134 l├¬ `cursor_4c_BuscaGrupo.Codigos` ÔÇö ambos corretos
+
+**ICLIS (SigCdCli):**
+- O validador detectou `WHERE Iclis = ...` no m├®todo `ObterDescricaoConta`
+- `Iclis` e `Rclis` s├úo colunas v├ílidas de `SigCdCli` (o pr├│prio EVEBO documenta: `this_cConta = "" && Conta char(10) (ref SigCdCli.Iclis)`)
+- O legado fazia `Select crSigCdCli` via DataEnvironment ÔÇö substitu├¡do corretamente por `SQLEXEC WHERE Iclis = ...`
+- No Form, linha 1197: `FormBuscaAuxiliar(..., "SigCdCli", ..., "Iclis", ...)` e linha 1210 l├¬ `cursor_4c_BuscaConta.Iclis` ÔÇö ambos corretos
+
+**Conclus├úo:** O validador comparou globalmente todas as cl├íusulas WHERE com a query principal de SigCdEve (`SELECT Codigo FROM SigCdEve`), sem distinguir queries em tabelas relacionadas. `Codigos` e `Iclis` s├úo filtros corretos e necess├írios para suas respectivas tabelas auxiliares. Remover esses WHEREs quebraria os lookups de descri├º├úo. Nenhuma altera├º├úo nos arquivos.

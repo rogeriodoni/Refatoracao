@@ -1,0 +1,17 @@
+﻿Fase 3 conclu├¡da. O arquivo `C:\4c\projeto\app\forms\cadastros\FormCtg.prg` foi criado com 290 linhas contendo:
+
+**O que foi criado:**
+- `DEFINE CLASS FormCtg AS FormBase` com todas as propriedades visuais do original (Width=1000, Height=600, Caption="Cadastro de Categorias")
+- `Init()` ÔÇö apenas `RETURN DODEFAULT()` (padr├úo correto, sem duplicar InicializarForm)
+- `InicializarForm()` ÔÇö cria CtgBO, chama ConfigurarPageFrame, propaga Caption para labels, verifica `gb_4c_ValidandoUI` antes de CarregarLista
+- `ConfigurarPageFrame()` ÔÇö PageFrame.Top=-29, Tabs=.F., 2 pages com Picture/BackColor
+- `ConfigurarPaginaLista()` ÔÇö cnt_4c_Cabecalho **completo** (lbl_4c_Sombra + lbl_4c_Titulo), cnt_4c_Botoes **vazio** (Left=542, canonico), cnt_4c_Saida **vazio** (Left=917, canonico)
+- `ConfigurarPaginaDados()` ÔÇö cnt_4c_BotoesAcao **vazio** (Top=33 com compensa├º├úo +29)
+- `CarregarLista()` ÔÇö chama `Buscar("")` sem configurar grid (Fase 4 adiciona isso)
+- `TornarControlesVisiveis()` ÔÇö implementa├º├úo completa recursiva (c├│pia de FormCor.prg:956-984)
+- `Destroy()` ÔÇö limpa BO + cursores + DODEFAULT()
+
+**Pr├│ximas fases:**
+- Fase 4: `grd_4c_Lista` em Page1 + bot├Áes CRUD nos containers vazios (Incluir, Visualizar, Alterar, Excluir, Buscar, Encerrar, Confirmar, Cancelar)
+- Fases 5-6: labels + textboxes em Page2 (Say1/Say2, getCods/getDescs)
+- Fases 7-8: BINDEVENTs + handlers (BtnIncluirClick, etc.), FormParaBO, BOParaForm, HabilitarCampos, LimparCampos, AlternarPagina

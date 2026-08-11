@@ -377,7 +377,7 @@ DEFINE CLASS SigReIr1BO AS RelatorioBase
                 MoeCusFs C(3), Qtds N(16,6), FigJpgs M(4) NULL, OrdImg C(11), ;
                 ImpCustos N(1), Totais C(250), Saldos N(16,6), Lidos N(16,6), ;
                 Relidos N(16,6), SaldoPs N(16,6), LidoPs N(16,6), RelidoPs N(16,6))
-            INDEX ON Ps + CPros + CodCors + CodTams + STR(Cbars, 14) TAG Ordem
+            INDEX ON Ps + CPros + CodCors + CodTams + Cbars TAG Ordem
 
             *-- Imagem em branco para relatorios com imagem
             loc_lcBrancos = ADDBS(gc_4c_CaminhoBase) + "BrJpg.JPG"
@@ -1395,7 +1395,7 @@ DEFINE CLASS SigReIr1BO AS RelatorioBase
 
             CREATE CURSOR CsRelatorio (Contas C(10), CBars N(14), CPros C(14), Tipos C(20), ;
                 PS C(1), OrdImg C(8), Reffs C(40), Dpros C(40), Cgrus C(3), Sgrus C(6), Pvens N(11,2))
-            INDEX ON Tipos + CPros + STR(CBars,14) TAG TpProBar
+            INDEX ON Tipos + CPros + CBars TAG TpProBar
 
             SELECT CsEtiqueta
             SCAN

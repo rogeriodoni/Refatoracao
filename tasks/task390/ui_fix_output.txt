@@ -1,0 +1,21 @@
+﻿Analisando o problema:
+
+**Diferen├ºa #1:** `Caption` do form ÔÇö original tem `Comiss├Áes` (com `├Á`), migrado tem `Comissoes` (sem acento) na linha 16.
+
+Por├®m, a situa├º├úo ├® mais complexa:
+
+1. **Linha 16** (DEFINE CLASS): `Caption = "Cadastro de Comissoes de Vendedores por Cargos"` ÔÇö sem acento
+2. **Linhas 70-71** (Init): `THIS.Caption = "Cadastro de Comiss" + CHR(245) + "es de " + "Vendedores por Cargos"` ÔÇö **j├í correto** com CHR(245)
+3. **TitleBar = 0** ÔÇö a barra de t├¡tulo nem aparece visualmente
+4. **Linha 74-75**: os labels do cabe├ºalho usam `THIS.Caption` que, nesse momento do Init, j├í tem o valor correto com CHR(245)
+
+**O problema:** VFP9 `DEFINE CLASS` n├úo suporta chamadas de fun├º├úo (como `CHR()`) nas declara├º├Áes de propriedades ÔÇö s├│ aceita literais constantes. Por isso ├® imposs├¡vel usar `CHR(245)` ali. A regra #4 do CLAUDE.md pro├¡be chars acentuados literais em .PRG.
+
+**Conclus├úo:** Esta ├® uma **falso positivo do validador** causado por an├ílise est├ítica. Em runtime:
+- O Init corretamente define `Caption = "Cadastro de Comiss├Áes de Vendedores por Cargos"` com CHR(245)
+- Os labels vis├¡veis (`lbl_4c_Sombra`/`lbl_4c_Titulo`) recebem esse valor correto na linha 74-75
+- A barra de t├¡tulo est├í oculta (`TitleBar = 0`)
+
+**N├úo h├í diferen├ºa visual real** ÔÇö o form exibe o texto correto em runtime. A declara├º├úo em DEFINE CLASS ├® apenas um placeholder, pois VFP9 n├úo permite CHR() l├í. O padr├úo ├® id├¬ntico ao `FormCOM.prg` (linha 19: `Caption = "Cadastro de Comissoes"` com coment├írio explicativo).
+
+O arquivo `FormCVE.prg` **j├í est├í correto** ÔÇö nenhuma altera├º├úo ├® necess├íria.

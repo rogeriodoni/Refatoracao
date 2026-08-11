@@ -1,0 +1,32 @@
+﻿An├ílise conclu├¡da. Ambas as detec├º├Áes s├úo **falsos positivos** ÔÇö nenhuma corre├º├úo ├® necess├íria.
+
+---
+
+**[SQL-FILTRO-INVENTADO] CIDCHAVES**
+
+O checker encontrou `WHERE CidChaves = ` nos m├®todos `Atualizar()` (FopBO.prg:643) e `ExecutarExclusao()` (FopBO.prg:684). Ap├│s verifica├º├úo:
+
+- `CidChaves` **├® a chave prim├íria real** de `SigPrFnc` (confirmado na linha 12 do BO e no `INSERT INTO SigPrFnc (cPros, CidChaves)` do legado original)
+- Usar o PK em `WHERE` para UPDATE/DELETE de registro individual ├® **correto e obrigat├│rio** pela arquitetura BusinessBase
+- O caminho de save em lote (`SalvarAlteracoes`: DELETE por `cPros` + INSERT todos) replica fielmente o `fSqlConector.ReQuery` do legado ÔÇö esses dois m├®todos extras s├úo complementares ├á arquitetura, n├úo um conflito
+
+**Conclus├úo**: falso positivo. O checker comparou o conjunto de colunas usadas em WHEREs do legado (que s├│ fazia batch por `cPros`) com o c├│digo novo que tamb├®m tem m├®todos individuais por PK. Correto n├úo alterar.
+
+---
+
+**[SQL-FILTRO-INVENTADO] CONTROLCOUNT**
+
+O checker encontrou `ControlCount` no form em duas linhas (FormFop.prg:389 e 409):
+
+```foxpro
+FOR loc_i = 1 TO par_oContainer.ControlCount          && linha 389
+IF PEMSTATUS(loc_oControl, "ControlCount", 5) AND ...  && linha 409
+```
+
+Isso ├® **propriedade de objeto VFP9** (`Container.ControlCount`) usada para iterar recursivamente sobre controles visuais no m├®todo `TornarControlesVisiveis`. **N├úo ├® cl├íusula SQL**. O analisador est├ítico confundiu o nome `ControlCount` com uma coluna de banco de dados.
+
+**Conclus├úo**: falso positivo. C├│digo correto, sem altera├º├Áes necess├írias.
+
+---
+
+Nenhum arquivo foi modificado. Os dois alertas deste pass SQL s├úo falsos positivos confirmados.

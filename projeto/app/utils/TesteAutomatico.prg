@@ -50,6 +50,10 @@
 *====================================================================
 LPARAMETERS par_cFormClass, par_cTaskDir, par_cFormType
 
+*-- Modo nao-assistido: suprime dialogs nativos do VFP9 (file-not-found, assert, etc.)
+*-- Sem isso, qualquer dialog nativo bloqueia o processo indefinidamente em modo headless (-T)
+SYS(2335, 0)
+
 *-- Variaveis globais para testes
 PUBLIC gb_4c_ValidandoUI
 gb_4c_ValidandoUI = .T.  && Evita CarregarLista automatico durante testes

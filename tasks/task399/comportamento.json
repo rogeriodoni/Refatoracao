@@ -1,0 +1,246 @@
+{
+  "resumo": {
+    "totalMetodos": 14,
+    "metodosComSQL": 6,
+    "metodosComValidacao": 9,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fUniqueIds", "fAcessoContab", "fAcessoContas"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDDSP",
+      "evento": "Procedure",
+      "linhas": 17,
+      "codigoOriginal": "IF ! EMPTY(ThisForm.Pagina.Dados.get_cd_conta.Value)\n\tSELECT crSigCdDis\n\tSET order to contas\n\tSET NEAR on\n\tSEEK ALLTRIM(ThisForm.Pagina.Dados.get_cd_conta.Value)\n\tSET NEAR off\n\tThisFOrm.Busca=2\nENDIF\nIF ! EMPTY(ThisForm.Pagina.Dados.get_cd_grupo.Value)\n\tSELECT crSigCdDis\n\tSET order to Grupos\n\tSET NEAR on\n\tSEEK ALLTRIM(ThisForm.Pagina.Dados.get_cd_grupo.Value)\n\tSET NEAR off\n\tThisFOrm.Busca=1\nENDIF\nThisForm.Pagina.Lista.Grade.Refresh",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_conta,get_cd_grupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDDSP",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "=DoDefault()\n\nlcCol = Padr(ThisForm.Busca,1)\nThisForm.Pagina.Lista.Grade.SetFocus\nThisForm.Pagina.Lista.Grade.Column&lcCol..SetFocus\nThisForm.Pagina.Lista.Grade.Refresh",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDDSP",
+      "evento": "Init",
+      "linhas": 22,
+      "codigoOriginal": "LParameters lcAcesso\n\nThisFOrm.Busca=1\n\nWITH Thisform\n\t.poDatamgr = CreateObject('fSqlConector',ThisForm.Name)\n\n\tIf Not .poDatamgr.pnIdconn>0\n\t\tMessagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),'Erro')\n\t\tReturn(.f.)\n\tEndif\n\n\tWith .poDatamgr\n\t\t.AddCursor('SigCdDis','CidChaves','crSigCdDis','Grupos',ThisForm.pagina.lista.grade)\n\t\t.pfSqlTabela(1).pColuna('Grupos','','','Grupo',80,.t.)\n\t\t.pfSqlTabela(1).pColuna('Contas','','','Conta',80,.t.)\n\tEndWith\nEndwith\t\n\n=DoDefault... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDDSP",
+      "evento": "Click",
+      "linhas": 46,
+      "codigoOriginal": "LPARAMETERS opcao\n\nIf !dodefault( OPCAO )\n\tThisForm.mAtivapagina1\n\tReturn\nEndif\n\n* inicializa os campos para inserção e procura\ndo case\ncase thisform.pcEscolha $ 'INSERIR/PROCURAR'\n\twith thisform.pagina.dados\n\t\t.get_ds_grupo.value = ''\n\t\t.get_ds_conta.value = ''\n\t\t.get_ds_grupo.refresh\n\t\t.get_ds_conta.refresh\n\tendwith\ncase thisform.pcEscolha $ 'ALTERAR/CONSULTAR/EXCLUIR'\n\tif ThisForm.podatamgr.CursorQuery('SigCdGcr','crSigCdGcr', 'Codigos', crSigCdDis.grupos)\n\t\twith thisform.pagina.dados.get_ds_... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "get_ds_grupo,get_ds_conta,get_cd_conta,get_cd_grupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDDSP",
+      "evento": "Click",
+      "linhas": 68,
+      "codigoOriginal": "local lcCdGrupo,lcDsGrupo,lcCdConta,lcDsConta,lnRegistro\n\n* inicializa as variáveis de campos\nlcCdGrupo = thisform.pagina.dados.get_cd_grupo.value\nlcDsGrupo = thisform.pagina.dados.get_ds_grupo.value\nlcCdConta = thisform.pagina.dados.get_cd_conta.value\nlcDsConta = thisform.pagina.dados.get_ds_conta.value\n\nif thisform.pcEscolha $ 'INSERIR/ALTERAR'\n\t* consiste o campo grupo\n\tif IsEmpty(lcCdGrupo) or not ThisForm.podatamgr.ChkRegister('SigCdGcr', 'Codigos', lcCdGrupo)\n\t\tmessagebox('Grupo inválido !... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "ChkRegister",
+        "controlesReferenciados": "get_cd_grupo,get_ds_grupo,get_cd_conta,get_ds_conta,ChkRegister('SigCdGcr',ChkRegister('SigCdCli',ChkRegister('SigCdDis'",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDDSP",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "DoDefault()\nif thisform.plCancelar\n\tthisform.mAtivapagina1\nendif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDDSP.Pagina.Dados.get_ds_grupo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return(thisform.pcEscolha $ 'INSERIR'.and.Empty(ThisForm.Pagina.Dados.Get_cd_grupo.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Empty",
+        "controlesReferenciados": "Get_cd_grupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDDSP.Pagina.Dados.get_ds_grupo",
+      "evento": "Valid",
+      "linhas": 11,
+      "codigoOriginal": "If thisform.pcEscolha='INSERIR' or ;\n\tthisform.pcEscolha='ALTERAR'\n\tIf !IsEmpty(this.value)\n\t\tfAcessoContab(Usuar,'D',this.value,thisform.pagina.dados.get_cd_grupo,this)\n\tElse\n\t\tthisform.pagina.dados.get_cd_grupo.value = ''\n\t\tthisform.pagina.dados.get_cd_grupo.refresh\n\tendif\n\tselect crSigCdDis\n\treturn(.t.)\nEndif",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_grupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDDSP.Pagina.Dados.get_cd_conta",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return(thisform.pcEscolha $ 'INSERIR/ALTERAR/PROCURAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDDSP.Pagina.Dados.get_cd_conta",
+      "evento": "Valid",
+      "linhas": 57,
+      "codigoOriginal": "If thisform.pcEscolha='INSERIR' or ;\n\tthisform.pcEscolha='ALTERAR'\n\tgrupo = thisform.pagina.dados.get_cd_grupo.value\n\tIf !IsEmpty(this.value)\n\t\tIf !fAcessoContas(Usuar,grupo,'C',this.value,This,thisform.pagina.dados.get_ds_conta)\n\t\t\tMessagebox('Acesso Negado !!',0+48,'')\n\t\t\tThis.Value=''\n\t\t\tThis.Refresh\n\t\t\tthisform.pagina.dados.get_ds_conta.Value = ''\n\t\t\tthisform.pagina.dados.get_ds_conta.Refresh\n\t\t\tselect crSigCdDis\n\t\t\treturn 0 \n\t\tEndif\n\tElse\n\t\tthisform.pagina.dados.get_ds_conta.Value = ''\n\t\tth... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_grupo,get_ds_conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDDSP.Pagina.Dados.get_ds_conta",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return(thisform.pcEscolha $ 'INSERIR/ALTERAR'.and.Empty(ThisForm.Pagina.Dados.get_cd_Conta.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_Conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDDSP.Pagina.Dados.get_ds_conta",
+      "evento": "Valid",
+      "linhas": 22,
+      "codigoOriginal": "If thisform.pcEscolha='INSERIR' or ;\n\tthisform.pcEscolha='ALTERAR'\n\tgrupo = thisform.pagina.dados.get_cd_grupo.value\n\tIf !IsEmpty(this.value)\n\t\tIf !fAcessoContas(Usuar,grupo,'D',this.value,thisform.pagina.dados.get_cd_conta,this)\n\t\t\tMessagebox('Acesso Negado !!',0+48,'')\n\t\t\tThis.Value=''\n\t\t\tThis.Refresh\n\t\t\tthisform.pagina.dados.get_cd_conta.Value = ''\n\t\t\tthisform.pagina.dados.get_cd_conta.Refresh\n\t\t\tselect crSigCdDis\n\t\t\treturn 0 \n\t\tEndif\n\tElse\n\t\tthisform.pagina.dados.get_cd_conta.Value = ''\n\t\tth... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_grupo,get_cd_conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDDSP.Pagina.Dados.get_cd_grupo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return(thisform.pcEscolha $ 'INSERIR/PROCURAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDDSP.Pagina.Dados.get_cd_grupo",
+      "evento": "Valid",
+      "linhas": 41,
+      "codigoOriginal": "If thisform.pcEscolha='INSERIR' or ;\n\tthisform.pcEscolha='ALTERAR'\n\tIf !IsEmpty(this.value)\n\t\tfAcessoContab(Usuar,'C',this.value,This,thisform.pagina.dados.get_ds_grupo)\n\tElse\n\t\tthisform.pagina.dados.get_ds_grupo.value = ''\n\t\tthisform.pagina.dados.get_ds_grupo.refresh\n\tendif\n\tselect crSigCdDis\n\treturn(.t.)\nEndif\n\n*!*\tlocal lcod,lfan,xobj\n\n*!*\tif thisform.pcEscolha='INSERIR' or ;\n*!*\t\tthisform.pcEscolha='ALTERAR'\n*!*\t\tif IsEmpty(thisform.pagina.dados.get_cd_grupo.value)\n*!*\t\t\tthisform.pagina.dado... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_ds_grupo",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

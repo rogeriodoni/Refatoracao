@@ -1,0 +1,16 @@
+﻿All edits are verified correct:
+
+**FormIBP.prg** ÔÇö button Left values inside `cnt_4c_Botoes` now container-relative:
+- `cmd_4c_Incluir.Left = 5` Ô£ô
+- `cmd_4c_Visualizar.Left = 80` Ô£ô
+- `cmd_4c_Alterar.Left = 155` Ô£ô
+- `cmd_4c_Excluir.Left = 230` Ô£ô
+- `cmd_4c_Buscar.Left = 305` Ô£ô
+- `cmd_4c_Encerrar.Left = 5`, `Width = 75` Ô£ô (was 917 / 90 ÔÇö matched the container instead of being relative to it)
+
+**IBPBO.prg** ÔÇö `Buscar()` now uses the CorBO pattern: when `gnConnHandle <= 0`, creates an empty `cursor_4c_Dados` and returns `.T.` instead of returning `.F.`. This ensures `CarregarLista()` can bind the grid even when there's no DB connection (the `ELSE` SQL path is still intact for production).
+
+The three root causes of the 300s timeout are all now handled:
+1. `GETDIR()` in `ImportarPlanilha` ÔÇö guarded by `gb_4c_ValidandoUI OR gb_4c_ModoTeste`
+2. `WindowType = 1` modal loop ÔÇö overridden to `0` in `InicializarForm` when `gb_4c_ModoTeste`
+3. `IBPBO.Buscar()` returning `.F.` instead of creating mock cursor ÔÇö fixed to CorBO pattern

@@ -1,0 +1,24 @@
+﻿Ap├│s an├ílise completa dos dois arquivos, os dois problemas detectados s├úo **falsos positivos** do validador automatizado.
+
+**Problema 1 ÔÇö Column 'CONTROLCOUNT'**
+
+Linhas 1795 e 1811 de `FormFti.prg` usam `.ControlCount` como propriedade de objeto VFP, dentro do m├®todo `TornarControlesVisiveis`:
+
+```foxpro
+FOR loc_nI = 1 TO par_oContainer.ControlCount   && VFP property, n├úo SQL
+...
+IF PEMSTATUS(loc_oObjeto, "ControlCount", 5) AND loc_oObjeto.ControlCount > 0  && idem
+```
+
+Isso n├úo ├® uma condi├º├úo SQL WHERE ÔÇö ├® itera├º├úo sobre controles visuais VFP. O validador detectou `ControlCount` em texto de c├│digo e erroneamente o classificou como coluna SQL.
+
+**Problema 2 ÔÇö Column '2'**
+
+N├úo existe nenhuma condi├º├úo WHERE com coluna `'2'` em nenhum dos dois arquivos. O validador provavelmente detectou `.ColumnCount = 2` (propriedade de Grid VFP) nas linhas 290, 1341, 1963 de `FormFti.prg` e confundiu com refer├¬ncia a coluna SQL.
+
+**Conclus├úo:** Todos os WHERE do c├│digo migrado usam colunas v├ílidas:
+- `cods`, `Cgrus`, `Cpros`, `Coefs`, `Ordem` ÔÇö todas presentes na lista original
+- `FtiBO.prg` tem 13 cl├íusulas WHERE, nenhuma com coluna inventada
+- `FormFti.prg` tem 2 cl├íusulas WHERE SQL (linhas 2230 e 2408), ambas corretas
+
+Nenhuma altera├º├úo necess├íria. O c├│digo est├í correto.

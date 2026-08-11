@@ -1,0 +1,17 @@
+﻿Todos os `RETURN` est├úo fora dos blocos `TRY/CATCH`. O arquivo est├í correto.
+
+**Resumo da Fase 3 conclu├¡da:**
+
+`C:\4c\projeto\app\forms\cadastros\FormDsp.prg` criado com 348 linhas contendo:
+
+- **DEFINE CLASS FormDsp AS FormBase** ÔÇö propriedades visuais can├┤nicas (1000├ù600, Caption, WindowType=1, sem TitleBar/ControlBox)
+- **Init()** ÔÇö apenas `RETURN DODEFAULT()`
+- **InicializarForm()** ÔÇö cria DspBO, chama ConfigurarPageFrame, ativa Page1, chama CarregarLista com guard `gb_4c_ValidandoUI`
+- **ConfigurarPageFrame()** ÔÇö PageFrame Top=-29, Tabs=.F., 2 pages com fundo `fundo_cad_1003.jpg`
+- **ConfigurarPaginaLista()** ÔÇö cria `cnt_4c_Cabecalho` (Top=31, fundo escuro, lbl_4c_Sombra/Titulo), `cnt_4c_Botoes` (Left=542, can├┤nico), `cnt_4c_Saida` (Left=917, can├┤nico)
+- **ConfigurarPaginaDados()** ÔÇö cria `cnt_4c_BotoesAcao` (Top=33, Left=842)
+- **CarregarLista()** ÔÇö chama `Buscar("")` no BO
+- **AlternarPagina()** ÔÇö alterna ActivePage, reseta modo LISTA na volta
+- **FormParaBO/BOParaForm** ÔÇö refer├¬ncias aos campos corretos (preenchidos na Fase 5)
+- **TornarControlesVisiveis/FormatarGridLista** ÔÇö implementa├º├Áes completas recursivas
+- **Destroy()** ÔÇö libera BO e cursor_4c_Dados, chama DODEFAULT()

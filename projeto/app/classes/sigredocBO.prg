@@ -258,7 +258,7 @@ DEFINE CLASS sigredocBO AS RelatorioBase
                                NVL(b.Abrevs, '') AS cAbrevs ;
                             FROM CrTmpEstPe a ;
                             LEFT JOIN CrTmpOpe b ;
-                                ON b.NDopes = VAL(LEFT(STR(a.Codigos, 10), 4)) ;
+                                ON b.NDopes = VAL(LEFT(a.Codigos, 4)) ;
                             WHERE a.Emps + a.Dopes + STR(a.Numes, 6) == ;
                                   loc_pEmp + loc_pDop + STR(loc_pNum, 6) ;
                             INTO CURSOR TmpEstPe
@@ -1478,7 +1478,7 @@ DEFINE CLASS sigredocBO AS RelatorioBase
                         ALLTRIM(loc_lcSubNivel) + " ( "
                 ENDIF
                 LOCAL loc_lcCod2
-                loc_lcCod2 = fGerMascara(VAL(RIGHT(STR(TmpEstPe.Codigos, 10), 6)))
+                loc_lcCod2 = fGerMascara(VAL(RIGHT(TmpEstPe.Codigos, 6)))
                 THIS.this_cCabec = THIS.this_cCabec + ALLTRIM(loc_lcCod2) + " "
             ENDSCAN
             THIS.this_cCabec = THIS.this_cCabec + " )" + CHR(13) + CHR(10)

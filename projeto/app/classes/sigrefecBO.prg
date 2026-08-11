@@ -162,7 +162,7 @@ DEFINE CLASS sigrefecBO AS RelatorioBase
                            "CASE WHEN c.trocos=1 THEN -b.valos ELSE b.valos END AS valos, " + ;
                            "b.MoeFpgs, b.Vencs, b.Outros, c.DetFecCxs " + ;
                            "FROM SigMvPec a, SigMvPar b, SigOpFp c " + ;
-                           "WHERE a.Codigos = " + LTRIM(STR(crDados.Codigos, 10)) + ;
+                           "WHERE a.Codigos = " + LTRIM(crDados.Codigos) + ;
                            " AND a.EmpDopNums = b.EmpDopNums AND b.FPags = c.FPags"
 
                 IF !EMPTY(loc_cFPags)
@@ -219,7 +219,7 @@ DEFINE CLASS sigrefecBO AS RelatorioBase
 
                 loc_cSQL = "SELECT p.EmpDopNums " + ;
                            "FROM SigMvPec p " + ;
-                           "WHERE p.Codigos = " + LTRIM(STR(crDetalhe.Codigos, 10)) + ;
+                           "WHERE p.Codigos = " + LTRIM(crDetalhe.Codigos) + ;
                            " ORDER BY p.EmpDopNums"
 
                 loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "crVista1")

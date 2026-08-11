@@ -1,0 +1,12 @@
+﻿Steps 05b e 05c conclu├¡dos. Resumo das corre├º├Áes aplicadas:
+
+**CorretorAutomatico (autom├ítico):**
+- FormHOR.prg (56 corre├º├Áes): Comic Sans removido dos CommandGroups, `ShowWindow=0` adicionado, `RecordMark=.F.` injetado na grade, `BackStyle` inv├ílido em CommandGroups removido, larguras de cabe├ºalho corrigidas
+- HORBO.prg (46 corre├º├Áes): apenas encoding em coment├írios
+
+**Corre├º├Áes manuais (3 bugs cr├¡ticos):**
+1. **RecordMark no lugar errado**: CorretorAutomatico injetou dentro de `WITH .Header1` ÔÇö movido para o bloco correto `WITH THIS.grd_4c_Dados`
+2. **INSERT sem `codigos`**: `SigCdThs.codigos` ├® `NOT NULL` ÔÇö adicionado `codigos = 0` no INSERT em `EnviarCursorParaServidor`
+3. **UPDATE 0-rows n├úo dispara INSERT**: para registros novos (novo GUID), UPDATE retorna `nRet=1` mas afeta 0 linhas ÔÇö adicionado check de `@@ROWCOUNT` para detectar a situa├º├úo e redirecionar para INSERT
+
+O c├│digo est├í pronto para o passo 06 (teste manual do form). Para testar: abrir o sistema VFP9, navegar ao menu Cadastros ÔåÆ "Cadastro de Carga Hor├íria (SIGCDHOR)" e verificar abertura com Fase/Setor e Unidade Produtiva v├ílidos.

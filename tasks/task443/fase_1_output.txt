@@ -1,0 +1,11 @@
+﻿Arquivo criado em `C:\4c\projeto\app\classes\GrupoBO.prg`.
+
+**Fase 1/8 conclu├¡da.** O BO cont├®m:
+
+- **`this_cTabela = "SigOpGpo"`** e **`this_cCampoChave = "cidchaves"`** ÔÇö confirmados no schema (PK `cidchaves char(20)`)
+- **`this_cDopes`** ÔÇö c├│digo da opera├º├úo passada pelo form pai (vem de `crSigCdOpe.Dopes`)
+- **`this_cGdeGrps`** ÔÇö filtro de Grande Grupo (`SigCdGpr.codigos char(3)`)
+- **`this_lGravaDados`** ÔÇö flag de altera├º├úo pendente (equivalente ao `GravaDados` do legado)
+- **`this_cCursorOpe`** / **`this_cCursorSigOpGpo`** ÔÇö nomes dos cursores de trabalho para as pr├│ximas fases
+- **`Init()`** ÔÇö delega ao `BusinessBase` via `DODEFAULT()`
+- **`ObterChavePrimaria()`** ÔÇö retorna `this_cDopes` para auditoria

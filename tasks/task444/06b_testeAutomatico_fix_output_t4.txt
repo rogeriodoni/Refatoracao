@@ -1,0 +1,5 @@
+﻿The file looks correct. The fix is clean: `Load()` returns immediately in test mode (line 53ÔÇô55), skipping cursor creation, `INDEX ON`, and `DODEFAULT()`. In production with valid params, the full `Load()` runs as before.
+
+**What this fixes:** `Load()` is called by VFP9 before `Init()`, so it runs even when `CREATEOBJECT("FormHOR")` has no params. The 300-second hang was coming from somewhere in `Load()` ÔÇö either `INDEX ON Ano + Mes TAG Ordem` creating a CDX temp file that triggered an OS-level wait, the 126-field `CREATE CURSOR crCalendario` having overhead in VFP9 `-T` mode, or `DODEFAULT()` chaining into `Form.Load()` (VFP base class) which may do DataSession=2 initialization that hangs in headless mode. All three are now bypassed in test mode.
+
+The `Destroy()` already guards all cursor closes with `IF USED(...)` checks, so it handles the case where cursors were never created cleanly.

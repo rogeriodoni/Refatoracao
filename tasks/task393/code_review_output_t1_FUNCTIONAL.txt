@@ -1,0 +1,7 @@
+﻿Corre├º├úo aplicada. Resumo do que foi feito e o que n├úo precisou de altera├º├úo:
+
+**Fix aplicado** ÔÇö `TornarControlesVisiveis` (linha 938): guard alterado de `IF loc_cNome = "CMD_4C_BTNCARREGAR"` para `IF INLIST(loc_cNome, "CMD_4C_BTNCARREGAR", "CNT_4C_CABECALHO")`, com recurs├úo adicionada antes do `LOOP` (padr├úo do memory feedback `feedback_tcv_skip_recursao.md`: LOOP sem recurs├úo deixa filhos permanentemente ocultos).
+
+**N├úo alterado** ÔÇö Issue 2 (`ValidarEmps`): j├í possui `(par_nKeyCode, par_nShiftAltCtrl)` na assinatura da linha 802 ÔÇö corretamente declarado.
+
+**N├úo alterado** ÔÇö Issue 3 (`ImportaPlan`): m├®todo existe na linha 1421 como `PROTECTED FUNCTION ImportaPlan()` ÔÇö review foi falso positivo.

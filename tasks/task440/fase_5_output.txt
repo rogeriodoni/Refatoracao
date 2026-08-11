@@ -1,0 +1,16 @@
+﻿Fase 5/8 conclu├¡da. `Formgpr.prg` passou de 530 para 1081 linhas.
+
+**O que foi adicionado em `ConfigurarPaginaDados()`:**
+
+| Controle | Original | Top Comp. | Mapeamento BO |
+|----------|----------|-----------|---------------|
+| `txt_4c_Codigos` / `lbl_4c_Codigo` | getCodigos / Say1 | 114/119 | `this_cCodigos` |
+| `txt_4c_Descricao` / `lbl_4c_Descricao` | getDescs / Say2 | 114/119 | `this_cDescs` |
+| `txt_4c_CodConPads` + `txt_4c_DCodConPads` / `lbl_4c_CodConPads` | getCodConPads / getDCodConPads | 142/146 | `this_cCodConPads` + lookup SigCdPro |
+| `txt_4c_Lin` + `txt_4c_DLin` / `lbl_4c_Lin` | GetLin / GetDLin | 170/173 | `this_cLinhas` + lookup SigCdLin |
+| `txt_4c_CodAut` / `lbl_4c_CodAut` | Get_CodAut / Say6 | 196/201 | `this_cDigauts` |
+| `txt_4c_Prioridade` / `lbl_4c_Prioridade` | Get_prioridade / Say11 | 196/201 | `this_nPriors` |
+| `opt_4c_BlqEtq` / `lbl_4c_BlqEtq` | Get_BlqEtq / Say10 | 223/228 | `this_nBarrefs` (Sim/N├úo) |
+| `opt_4c_AlteEtiq` / `lbl_4c_AlteEtiq` | fwoption4 / Say13 | 249/254 | `this_nAltetiqs` (Sim/N├úo) |
+
+**4 handlers de lookup adicionados** (todos PUBLIC, compat├¡veis com BINDEVENT): `AbrirLookupCodConPads`, `AbrirLookupDCodConPads`, `AbrirLookupLin`, `AbrirLookupDLin` ÔÇö todos usando `FormBuscaAuxiliar` com o padr├úo can├┤nico do sistema.

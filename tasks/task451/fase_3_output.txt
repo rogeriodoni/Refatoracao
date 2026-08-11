@@ -1,0 +1,13 @@
+﻿Fase 3/8 conclu├¡da. O arquivo `C:\4c\projeto\app\forms\cadastros\FormImp.prg` foi criado com:
+
+**Estrutura criada:**
+- `DEFINE CLASS FormImp AS FormBase` com todas as propriedades visuais obrigat├│rias (Height=600, Width=1000, DataSession=2, etc.)
+- `Init()` ÔåÆ apenas `DODEFAULT()` (nunca chama `InicializarForm()` diretamente)
+- `InicializarForm()` ÔåÆ cria `ImpBO`, chama `ConfigurarPageFrame()`, chama `CarregarLista()` (com guard `gb_4c_ValidandoUI`)
+- `ConfigurarPageFrame()` ÔåÆ cria `pgf_4c_Paginas` (Top=-29, Tabs=.F.) com Page1/Page2
+- `ConfigurarPaginaLista()` ÔåÆ cria `cnt_4c_Cabecalho` (com lbl_4c_Sombra/lbl_4c_Titulo), `cnt_4c_Botoes` (vazio), `cnt_4c_Saida` (posi├º├úo can├┤nica Left=917)
+- `ConfigurarPaginaDados()` ÔåÆ cria `cnt_4c_Salva` (Top=33), `pgf_4c_Dados` (inner PageFrame com Top=152=123+29, Tabs=.T., Page2 iniciando Enabled=.F. at├® chkChqf=1)
+- `CarregarLista()` ÔåÆ chama `Buscar("")` sem binding de grid (Fase 4)
+- `Destroy()`, `TornarControlesVisiveis()`, `FormatarGridLista()` auxiliares
+
+**Pr├│xima fase:** Fase 4/8 ÔÇö adicionar grid `grd_4c_Lista` na Page1 com 2 colunas (Impres/MaxCols) e os bot├Áes CRUD nos containers.

@@ -1,0 +1,262 @@
+﻿{
+    "taskId":  "task391",
+    "arquivoOriginal":  "",
+    "tipoArquivo":  "SCX",
+    "comentario_tipoArquivo":  "SCX=Form, FRX=Report, VCX=ClassLib",
+    "status":  "COMPLETED",
+    "statusComentario":  "PENDING | IN_PROGRESS | COMPLETED | FAILED | BLOCKED",
+    "criadoEm":  "2026-07-31T22:37:48",
+    "atualizadoEm":  "2026-07-31T23:43:27",
+    "etapas":  {
+                   "01_moverArquivos":  {
+                                            "status":  "COMPLETED",
+                                            "inicio":  "2026-07-31T22:37:48",
+                                            "fim":  "2026-07-31T22:37:48",
+                                            "tentativas":  1,
+                                            "erro":  null,
+                                            "sctFile":  "C:\\4c\\tasks\\task391\\SIGCDCVI.sct",
+                                            "baseName":  "SIGCDCVI",
+                                            "scxFile":  "C:\\4c\\tasks\\task391\\SIGCDCVI.scx"
+                                        },
+                   "02_extractCode":  {
+                                          "status":  "COMPLETED",
+                                          "inicio":  "2026-07-31T22:37:48",
+                                          "fim":  "2026-07-31T22:37:48",
+                                          "tentativas":  1,
+                                          "arquivoGerado":  "SIGCDCOR_codigo_fonte.txt",
+                                          "erro":  null,
+                                          "baseNameNormalizado":  "SIGCDCVI",
+                                          "txtFile":  "C:\\4c\\tasks\\task391\\SIGCDCVI_form_codigo_fonte.txt"
+                                      },
+                   "02b_analisarTarefa":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-07-31T22:37:48",
+                                              "fim":  "2026-07-31T22:37:48",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "analise.json",
+                                              "erro":  null,
+                                              "comentario":  "NOVO - Analise inteligente do codigo fonte",
+                                              "analiseFile":  "C:\\4c\\tasks\\task391\\analise.json"
+                                          },
+                   "03_gerarMetaPrompt":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-07-31T22:37:49",
+                                              "fim":  "2026-07-31T22:37:58",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "meta_prompt.md",
+                                              "erro":  null,
+                                              "formType":  "CRUD",
+                                              "phaseBFile":  "C:\\4c\\tasks\\task391\\meta_prompt_phaseB.md",
+                                              "metaPromptFile":  "C:\\4c\\tasks\\task391\\meta_prompt.md",
+                                              "boClass":  "CVIBO",
+                                              "formClass":  "FormCVI",
+                                              "phaseAFile":  "C:\\4c\\tasks\\task391\\meta_prompt_phaseA.md"
+                                          },
+                   "04_gerarMapeamento":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-07-31T22:37:58",
+                                              "fim":  "2026-07-31T22:37:58",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "mapeamento.json",
+                                              "erro":  null,
+                                              "jsonFile":  "C:\\4c\\tasks\\task391\\mapeamento.json"
+                                          },
+                   "04b_gerarEsqueletos":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-07-31T22:37:58",
+                                               "fim":  "2026-07-31T22:37:59",
+                                               "tentativas":  1,
+                                               "arquivosGerados":  [
+
+                                                                   ],
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Geracao de codigo base ~70% completo",
+                                               "esqueletosDir":  "C:\\4c\\tasks\\task391\\esqueletos",
+                                               "arquivos":  [
+                                                                "CVIBO_esqueleto.prg",
+                                                                "FormCVI_esqueleto.prg"
+                                                            ]
+                                           },
+                   "05_migracao":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-07-31T22:37:59",
+                                       "fim":  "2026-07-31T23:18:26",
+                                       "tentativas":  1,
+                                       "maxTentativas":  3,
+                                       "arquivosGerados":  [
+
+                                                           ],
+                                       "comentario":  "FormXXX.prg, XXXBO.prg",
+                                       "erro":  null,
+                                       "boExists":  true,
+                                       "boFile":  "C:\\4c\\projeto\\app\\classes\\CVIBO.prg",
+                                       "formExists":  true,
+                                       "tamanhoKB":  53.42,
+                                       "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormCVI.prg",
+                                       "complexidade":  "COMPLEXO",
+                                       "linhas":  1941
+                                   },
+                   "05b_corrigirAutomatico":  {
+                                                  "status":  "COMPLETED",
+                                                  "inicio":  "2026-07-31T23:18:26",
+                                                  "fim":  "2026-07-31T23:18:34",
+                                                  "tentativas":  1,
+                                                  "correcoesAplicadas":  0,
+                                                  "erro":  null,
+                                                  "comentario":  "NOVO - Correcao automatica de anti-padroes",
+                                                  "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormCVI.prg",
+                                                  "boFile":  "C:\\4c\\projeto\\app\\classes\\CVIBO.prg"
+                                              },
+                   "05c_validarCompilacao":  {
+                                                 "status":  "COMPLETED",
+                                                 "inicio":  "2026-07-31T23:18:34",
+                                                 "fim":  "2026-07-31T23:18:35",
+                                                 "tentativas":  1,
+                                                 "errosCompilacao":  [
+
+                                                                     ],
+                                                 "erro":  null,
+                                                 "comentario":  "NOVO - Valida compilacao dos .prg antes de testar",
+                                                 "arquivosValidados":  2,
+                                                 "sucesso":  true
+                                             },
+                   "06_testForm":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-07-31T23:37:38",
+                                       "fim":  "2026-07-31T23:39:17",
+                                       "tentativas":  1,
+                                       "maxTentativas":  5,
+                                       "errosEncontrados":  [
+
+                                                            ],
+                                       "erro":  null,
+                                       "tentativasUsadas":  1
+                                   },
+                   "06b_testeAutomatico":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-07-31T23:39:17",
+                                               "fim":  "2026-07-31T23:43:25",
+                                               "tentativas":  1,
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Testes CRUD automaticos",
+                                               "threshold":  100,
+                                               "falhou":  0,
+                                               "passou":  9,
+                                               "total":  9,
+                                               "percentual":  100,
+                                               "tentativasUsadas":  2,
+                                               "resultFile":  "C:\\4c\\tasks\\task391\\teste_resultado.json"
+                                           },
+                   "07_validarUI":  {
+                                        "status":  "COMPLETED",
+                                        "inicio":  "2026-07-31T23:43:25",
+                                        "fim":  "2026-07-31T23:43:27",
+                                        "tentativas":  1,
+                                        "maxTentativas":  5,
+                                        "problemas":  {
+                                                          "erros":  0,
+                                                          "avisos":  0,
+                                                          "diferencas":  0,
+                                                          "total":  0
+                                                      },
+                                        "limiteProblemas":  10,
+                                        "erro":  null,
+                                        "exitCode":  0,
+                                        "htmlFile":  "C:\\4c\\projeto\\app\\utils\\relatorios\\UIFidelity_FormCVI_20260731234326.html",
+                                        "diferencas":  0,
+                                        "erros":  0,
+                                        "totalProblemas":  304,
+                                        "avisos":  304
+                                    },
+                   "08_gerarTestManual":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-07-31T23:43:27",
+                                              "fim":  "2026-07-31T23:43:27",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  null,
+                                              "erro":  null,
+                                              "testManualFile":  "C:\\4c\\SolicitacaoTesteManual\\task391_SIGCDCVI.md"
+                                          },
+                   "02c_analisarComportamento":  {
+                                                     "inicio":  "2026-07-31T22:37:48",
+                                                     "tentativas":  1,
+                                                     "erro":  null,
+                                                     "fim":  "2026-07-31T22:37:49",
+                                                     "comportamentoFile":  "C:\\4c\\tasks\\task391\\comportamento.json",
+                                                     "status":  "COMPLETED"
+                                                 },
+                   "02d_extrairLayout":  {
+                                             "inicio":  "2026-07-31T22:37:49",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-07-31T22:37:49"
+                                         },
+                   "05b2_atualizarMapeamento":  {
+                                                    "inicio":  "2026-07-31T23:18:34",
+                                                    "status":  "COMPLETED",
+                                                    "tentativas":  1,
+                                                    "erro":  null,
+                                                    "fim":  "2026-07-31T23:18:34",
+                                                    "destFile":  "C:\\4c\\projeto\\app\\utils\\mapeamentos\\FormCVI_mapeamento.json",
+                                                    "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormCVI.prg",
+                                                    "mapeamentoFile":  "C:\\4c\\tasks\\task391\\mapeamento.json"
+                                                },
+                   "05d_validarCompletude":  {
+                                                 "inicio":  "2026-07-31T23:18:35",
+                                                 "status":  "COMPLETED",
+                                                 "tentativas":  1,
+                                                 "erro":  null,
+                                                 "fim":  "2026-07-31T23:19:23",
+                                                 "arquivosComProblema":  0,
+                                                 "sucesso":  true,
+                                                 "tentativasCorrecao":  1,
+                                                 "mensagem":  "Corrigido automaticamente apos 1 tentativa(s)."
+                                             },
+                   "05e_codeReview":  {
+                                          "inicio":  "2026-07-31T23:19:23",
+                                          "status":  "COMPLETED",
+                                          "erro":  null,
+                                          "fim":  "2026-07-31T23:29:49",
+                                          "passes":  3,
+                                          "problemas":  "[CONTAINER-VISIVEL] TornarControlesVisiveis() NAO filtra containers ocultos: CNT_4C_CABECALHO, CNT_4C_BOTOESACAO. Estes containers tem Visible=.F. mas serao forcados a Visible=.T. pelo metodo recursivo.; [MADDCOLUNA-PARAMS] Chamada mAddColuna com 2 parametros (esperado: 3). Assinatura correta: mAddColuna(campo, mascara_ou_vazio, titulo). NAO passar largura ou tabela como parametro. Exemplo: loc_oBusca.mAddColuna(\u0027Codigos\u0027, \u0027\u0027, \u0027Codigo\u0027); [MADDCOLUNA-PARAMS] Chamada mAddColuna com 2 parametros (esperado: 3). Assinatura correta: mAddColuna(campo, mascara_ou_vazio, titulo). NAO passar largura ou tabela como parametro. Exemplo: loc_oBusca.mAddColuna(\u0027Codigos\u0027, \u0027\u0027, \u0027Codigo\u0027); [MADDCOLUNA-PARAMS] Chamada mAddColuna com 2 parametros (esperado: 3). Assinatura correta: mAddColuna(campo, mascara_ou_vazio, titulo). NAO passar largura ou tabela como parametro. Exemplo: loc_oBusca.mAddColuna(\u0027Codigos\u0027, \u0027\u0027, \u0027Codigo\u0027)",
+                                          "tentativas":  3,
+                                          "problemasRestantes":  4
+                                      },
+                   "05f_validarSQLSchema":  {
+                                                "inicio":  "2026-07-31T23:29:49",
+                                                "status":  "FAILED",
+                                                "tentativas":  1,
+                                                "erro":  "SQL schema validation failed: 1 unresolved problem(s). See C:\\4c\\tasks\\task391\\sql_schema_problems.txt",
+                                                "fim":  "2026-07-31T23:37:38"
+                                            },
+                   "06c_validarLayout":  {
+                                             "inicio":  "2026-07-31T23:43:25",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-07-31T23:43:25",
+                                             "thresholdPx":  5,
+                                             "unmatched":  21,
+                                             "errors":  21,
+                                             "matched":  23,
+                                             "warnings":  0,
+                                             "reportFile":  "C:\\4c\\tasks\\task391\\layout_vs_prg_report.json"
+                                         }
+               },
+    "metricas":  {
+                     "tempoTotalSegundos":  0,
+                     "tempoExtracao":  0,
+                     "tempoAnalise":  0,
+                     "tempoEsqueletos":  0,
+                     "tempoMigracao":  0,
+                     "tempoCorrecao":  0,
+                     "tempoCompilacao":  0,
+                     "tempoTesteAuto":  0,
+                     "tempoValidacao":  0,
+                     "linhasCodigoOriginal":  0,
+                     "linhasCodigoGerado":  0,
+                     "correcoesAutomaticas":  0,
+                     "testesAutomaticos":  0
+                 }
+}

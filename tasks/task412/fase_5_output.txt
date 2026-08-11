@@ -1,0 +1,19 @@
+﻿O arquivo est├í correto e completo. Vou fazer um resumo do que foi implementado na Fase 5:
+
+---
+
+**Fase 5/8 conclu├¡da.** Altera├º├Áes em `FormFAPF.prg`:
+
+1. **`ConfigurarPaginaDados()`** (novo) ÔÇö cria `cnt_4c_PainelDados` (inicialmente oculto) com `cnt_4c_BotoesDados` contendo `cmd_4c_Confirmar` + `cmd_4c_Cancelar` no canto inferior direito
+
+2. **`TornarVisivelRecursivo()`** ÔÇö atualizado para pular `cnt_4c_PainelDados` (permanece oculto), mas recursa nos filhos para deix├í-los prontos
+
+3. **`AlternarPagina()`** ÔÇö agora alterna visibilidade real: p├ígina 1 = grid vis├¡vel + painel oculto; p├ígina 2 = grid oculto + painel vis├¡vel
+
+4. **`ConfigurarBINDEVENTs()`** ÔÇö adicionados BINDEVENTs para Confirmar e Cancelar (dentro do TRY)
+
+5. **Bot├Áes CRUD atualizados** ÔÇö Incluir/Visualizar/Alterar agora chamam `BOParaForm()` e `HabilitarCampos()` antes de `AlternarPagina(2)`
+
+6. **Novos m├®todos**: `BtnConfirmarClick()`, `BtnCancelarClick()`, `FormParaBO()`, `BOParaForm()`, `HabilitarCampos()` ÔÇö todos funcionais (o form n├úo tem campos pr├│prios, ent├úo os m├®todos de mapeamento s├úo no-ops)
+
+> **Nota**: O SCX original (SIGCDFAPF) ├® essencialmente vazio ÔÇö apenas Form1 sem campos, m├®todos ou tabela. A Fase 5 implementou a infraestrutura completa do painel de dados para uma entidade sem campos pr├│prios, o que ├® a paridade 100% correta com o legado.

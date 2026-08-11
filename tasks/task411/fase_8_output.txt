@@ -1,0 +1,20 @@
+﻿A Fase 8/8 est├í conclu├¡da. Aqui est├í o resumo do que foi feito:
+
+**Fase 8 - Integra├º├úo ao Sistema (menu.prg):**
+
+O FormFap.prg j├í estava **completo** das fases anteriores (1-7), com todos os m├®todos implementados:
+- `BtnBuscarClick()`, `BtnEncerrarClick()`, `BtnSalvarClick()`, `BtnCancelarClick()`
+- `FormParaBO()`, `BOParaForm()`, `HabilitarCampos()`, `LimparCampos()`
+- `CarregarLista()`, `AjustarBotoesPorModo()`
+- Todos os lookups (Grupo, Conta, Recuperadora, Tipo Material)
+- `Destroy()` com limpeza de cursores
+
+**Altera├º├Áes feitas no menu.prg:**
+
+1. `DEFINE BAR 90 OF popCadastros` ÔåÆ "Envio para Recupera├º├úo" (linha 209)
+2. `ON SELECTION BAR 90 OF popCadastros DO AbrirFormFap` (linha 287)
+3. `PROCEDURE AbrirFormFap()` com padr├úo can├┤nico `VARTYPE/Show()/sem Release()` (linha 7320)
+
+**Integra├º├úo autom├ítica via config.prg:**
+- `FapBO.prg` em `classes/` ÔåÆ carregado pelo ADIR `*BO.prg`
+- `FormFap.prg` em `forms/cadastros/` ÔåÆ carregado pelo ADIR `Form*.prg`

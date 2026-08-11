@@ -1,0 +1,13 @@
+﻿**Fase 1/8 conclu├¡da.** `C:\4c\projeto\app\classes\FreBO.prg` criado com:
+
+- **4 propriedades** mapeadas diretamente do schema:
+  - `this_cCidade` ÔåÆ `cidas CHAR(30)` (PK modo global)
+  - `this_nFrete` ÔåÆ `valors NUMERIC(11,2)` (comum ├ás duas tabelas)
+  - `this_cDopes` ÔåÆ `dopes CHAR(20)` (controla qual tabela usar)
+  - `this_cChaveUnica` ÔåÆ `cidchaves CHAR(20)` (PK modo operacional)
+
+- **Init()** configura `this_cTabela = "SigCdFrt"` e `this_cCampoChave = "cidas"` (modo global padr├úo ÔÇö quando `this_cDopes` for setado, os m├®todos das fases seguintes ajustar├úo para `SigOpFrt`).
+
+- **ObterChavePrimaria()** retorna a PK correta conforme o modo ativo.
+
+**Decis├úo de design**: O form original opera em dois modos completamente distintos (duas tabelas diferentes) controlados pelo par├ómetro `pDopes`. O BO usa `this_cDopes = ""` como flag ÔÇö vazio = `SigCdFrt`/`cidas`, preenchido = `SigOpFrt`/`cidchaves`.

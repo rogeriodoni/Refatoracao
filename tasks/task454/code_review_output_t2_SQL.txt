@@ -1,0 +1,31 @@
+﻿Analisei todos os 7 problemas comparando com o c├│digo original e o c├│digo migrado. Aqui est├í o resultado da an├ílise:
+
+## Resultado: Todos os 7 problemas s├úo FALSE POSITIVES
+
+O validador SQL est├í identificando incorretamente condi├º├Áes WHERE leg├¡timas e at├® c├│digo VFP9 n├úo-SQL como "filtros inventados".
+
+### An├ílise de cada problema
+
+| # | Coluna Flagged | Onde aparece | Diagn├│stico |
+|---|---|---|---|
+| 1 | `PKCHAVE` | `JrnBO.prg` linhas 218, 305, 331, 371, 386 ÔÇö `WHERE pkchave = ...` | **V├üLIDO** ÔÇö convers├úo do padr├úo `Seek(cPkChave,'crSigCdJrn','pkchave')` do legado para SQL. Remover destruiria UPDATE/DELETE/SELECT (afetaria todos os registros!) |
+| 2 | `CARGOS` | `JrnBO.prg` linha 446 ÔÇö `BuscarMesesDisponiveis` | **V├üLIDO** ÔÇö o original tem literalmente `lcQuery = [... where (iclis=?pCta or ?pCta='') and (cargos=?pCgo or ?pCgo='') ...]` ÔÇö `cargos` est├í no WHERE original |
+| 3 | `REFERS` | `FormJrn.prg` linha 1564 ÔÇö `BtnBuscarClick`: `a.refers LIKE '%...%'` | **V├üLIDO** ÔÇö filtro de busca livre no campo `refers` (coluna real de `SigCdJrn`) |
+| 4 | `RCLIS` | `FormJrn.prg` linhas 1565, 1865 ÔÇö busca por nome e filtro | **V├üLIDO** ÔÇö `rclis` ├® coluna real de `SigCdCli` (nome do funcion├írio) |
+| 5 | `CCARGS` | `FormJrn.prg` linha 1709 ÔÇö `WHERE ccargs = ...` em `SigCdCrg` | **V├üLIDO** ÔÇö lookup de valida├º├úo de cargo; `ccargs` ├® PK de `SigCdCrg` |
+| 6 | `CONTROLCOUNT` | `FormJrn.prg` linhas 1903, 1926 ÔÇö `par_oContainer.ControlCount` | **FALSO POSITIVO** ÔÇö ├® propriedade VFP9 de container, n├úo coluna SQL. Nenhum `WHERE ControlCount` existe |
+| 7 | `BUSCARMESESDISPONIVE` | `FormJrn.prg` linha 1935 ÔÇö **coment├írio**: `* Cursor deve ser criado por JrnBO.BuscarMesesDisponiveis` | **FALSO POSITIVO** ÔÇö ├® nome de m├®todo em coment├írio, n├úo coluna SQL. O validador leu o texto do coment├írio como SQL |
+
+### Conclus├úo
+
+**Nenhum arquivo precisa ser alterado.** Os problemas reportados s├úo falsos positivos do validador, causados por:
+
+1. **Problema 6 (`CONTROLCOUNT`)**: o validador confundiu `.ControlCount` (propriedade VFP9 de container, linhas 1903/1926) com coluna SQL
+2. **Problema 7 (`BUSCARMESESDISPONIVE`)**: o validador leu texto de coment├írio (linha 1935) como se fosse c├│digo SQL
+3. **Problemas 1ÔÇô5**: o validador comparou todas as queries de todos os m├®todos contra um ├║nico WHERE do original (`lcQuery`) ÔÇö mas o c├│digo migrado tem m├║ltiplos m├®todos (CarregarPorCodigo, Atualizar, ExecutarExclusao, BuscarMesesDisponiveis) cada um com seu pr├│prio WHERE leg├¡timo
+
+Aplicar as "corre├º├Áes" sugeridas (remover os WHERE) quebraria o sistema:
+- Remover `WHERE pkchave = ...` do `Atualizar` ÔåÆ **UPDATE sem WHERE ÔÇö atualizaria TODOS os registros**
+- Remover `WHERE pkchave = ...` do `ExecutarExclusao` ÔåÆ **DELETE sem WHERE ÔÇö apagaria TODA a tabela**
+
+O c├│digo em `FormJrn.prg` e `JrnBO.prg` est├í correto. Nenhuma altera├º├úo necess├íria neste pass.

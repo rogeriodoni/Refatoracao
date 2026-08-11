@@ -1,0 +1,18 @@
+﻿Fase 2 conclu├¡da. O `FteBO.prg` agora est├í completo com todos os m├®todos CRUD:
+
+**M├®todos adicionados:**
+
+| M├®todo | Visibilidade | Fun├º├úo |
+|--------|-------------|--------|
+| `Buscar(par_cFiltro)` | PUBLIC | SELECT filtrado por `GruCarTits` (contexto da abertura) |
+| `CarregarPorCodigo(par_cCodigo)` | PUBLIC | SELECT por PK `cIdChaves`, seta `this_lNovoRegistro = .F.` |
+| `CarregarDoCursor(par_cAliasCursor)` | PROTECTED | Mapeia as 8 colunas via `SELECT (alias)` + `TratarNulo` |
+| `Inserir()` | PROTECTED | Gera PK via `NEWID()` no SQL Server, monta `GruCarTits`, INSERT + auditoria |
+| `Atualizar()` | PROTECTED | Recalcula `GruCarTits`, UPDATE + auditoria |
+| `ExecutarExclusao()` | PROTECTED | DELETE por `cIdChaves` + auditoria |
+
+**Decis├Áes de design:**
+- PK `cIdChaves` gerada via `SELECT CONVERT(varchar(36), NEWID())` no SQL Server (substitui `fUniqueIds()` do legado)
+- `GruCarTits` recalculado em Inserir/Atualizar como `CGrus + CCars + CTits + SGrus` (ordem exata do legado: linha 246 do c├│digo original)
+- `Resps` (memo) tratado via `EscaparSQL()` para proteger apostrofes
+- Nenhum `RETURN` dentro de `TRY/CATCH` ÔÇö padr├úo `loc_lSucesso`

@@ -1,0 +1,5 @@
+﻿A corre├º├úo est├í correta. Agora a classe define `ShowWindow = 0` e `WindowType = 0` como padr├úo, e o `Init()` eleva para `1` apenas em produ├º├úo (quando n├úo est├í em modo teste/valida├º├úo).
+
+**Causa raiz:** `ShowWindow = 1` estava duplicado na defini├º├úo da classe ÔÇö a primeira ocorr├¬ncia (`ShowWindow = 0`) era anulada pela segunda (`ShowWindow = 1`), ent├úo o form iniciava sempre com `ShowWindow=1`. No modo de teste (VFP9 -T), isso causava o bloqueio top-level que travava o processo por exatamente 300 segundos. O `Init()` protegia contra isso somente para assignments em produ├º├úo, mas n├úo contra o valor j├í vindo da pr├│pria classe.
+
+**Fix:** Removida a linha `ShowWindow = 1` duplicada. Agora a classe tem `ShowWindow = 0` como padr├úo (seguro para teste), e o `Init()` define `ShowWindow = 1` apenas em produ├º├úo ÔÇö exatamente como o coment├írio documentava que deveria ser.

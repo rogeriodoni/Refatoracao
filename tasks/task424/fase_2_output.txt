@@ -1,0 +1,17 @@
+﻿O arquivo foi gerado corretamente com 369 linhas. Aqui est├í o resumo do que foi implementado na Fase 2:
+
+**M├®todos CRUD padr├úo adicionados:**
+- `Buscar(par_cFiltro)` ÔÇö SELECT com filtro opcional ÔåÆ `crSigOpFpD`
+- `CarregarPorCodigo(par_cCodigo)` ÔÇö SELECT por `cidchaves` (PK)
+- `CarregarDoCursor(par_cAliasCursor)` ÔÇö mapeia cursor ÔåÆ propriedades BO (usa `SELECT (alias)` antes de acessar campos)
+- `ObterChavePrimaria()` ÔÇö `PROTECTED FUNCTION` retorna `this_cCidChaves`
+- `Inserir()` ÔÇö `PROTECTED`, INSERT com `EscaparSQL`/`FormatarNumeroSQL`
+- `Atualizar()` ÔÇö `PROTECTED`, UPDATE por cidchaves
+- `ExecutarExclusao()` ÔÇö `PROTECTED`, DELETE por cidchaves
+
+**M├®todos operacionais espec├¡ficos da l├│gica do legado:**
+- `CarregarDadosGrid(par_cTabDs)` ÔÇö busca no SQL Server + cria cursor edit├ível `crSigOpFpD` local com `SET NULL ON`/`APPEND FROM DBF`
+- `CarregarLookupFpag()` ÔÇö carrega `SigOpFp` ÔåÆ `LocalFpag` indexado por `fpags` (para SEEK na valida├º├úo da grade)
+- `ValidarFpags(par_cFpags)` ÔÇö helper que faz SEEK em LocalFpag
+- `SalvarGrid(par_cTabDs)` ÔÇö reproduz a l├│gica do `cmdSair.Click` legado: remove vazios ÔåÆ gera cidchaves ÔåÆ verifica duplicatas (SUM(1) GROUP BY fpags+nparcs) ÔåÆ DELETE all for TabDs ÔåÆ INSERT batch
+- `FecharCursores()` ÔÇö limpa `crSigOpFpD` e `LocalFpag` no Destroy

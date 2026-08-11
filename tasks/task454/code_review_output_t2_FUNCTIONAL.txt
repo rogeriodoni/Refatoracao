@@ -1,0 +1,7 @@
+﻿O arquivo j├í cont├®m a corre├º├úo correta: o `INLIST` na linha 1911 j├í inclui `CNT_4C_CABECALHO` e `CNT_4C_BOTOESACAO`, impedindo que `TornarControlesVisiveis` force `Visible=.T.` nesses containers.
+
+O ├║nico problema listado no pass ÔÇö `[CONTAINER-VISIVEL]` ÔÇö j├í est├í corrigido no arquivo atual. O `TornarControlesVisiveis` na linha 1911 filtra corretamente os tr├¬s containers:
+- `CNT_4C_COPIAMES`: deve ficar oculto (aberto s├│ via BtnCopiarMesClick)
+- `CNT_4C_CABECALHO` e `CNT_4C_BOTOESACAO`: inclu├¡dos no filtro por precau├º├úo (ambos j├í t├¬m `Visible=.T.` expl├¡cito na inicializa├º├úo, ent├úo o filtro ├® harmless mas defensivo)
+
+A l├│gica est├í correta: o INLIST recursa nos filhos (`TornarControlesVisiveis(loc_oObjeto)`) mas pula o `PEMSTATUS/Visible=.T.` do container pai via `LOOP`. Nenhuma altera├º├úo necess├íria ÔÇö o arquivo j├í est├í ├¡ntegro para este pass.

@@ -1,0 +1,18 @@
+﻿O arquivo FormFis.prg j├í est├í completo. Todos os campos do SIGCDFIS original est├úo implementados nas fases anteriores.
+
+**An├ílise do que j├í existe vs. o que a Fase 5 pede:**
+
+| Controle original | Implementado em | Status |
+|---|---|---|
+| `cnt_4c_Sombra` (header) | `ConfigurarCabecalho()` | Ô£à |
+| `lbl_4c_Label1` + `obj_4c_Spinner1` (Porta) | `ConfigurarCampos()` | Ô£à |
+| `lbl_4c_Label2` + `cbo_4c_CmbHand` (HandShaking) | `ConfigurarCampos()` | Ô£à |
+| `lbl_4c_Label3` + `txt_4c_Set` (Settings) | `ConfigurarCampos()` | Ô£à |
+| `lbl_4c_Label4` + `chk_4c_ChkDtr` (DTRenable) | `ConfigurarCampos()` | Ô£à |
+| `lbl_4c_Label5` + `chk_4c_ChkRts` (RTSenable) | `ConfigurarCampos()` | Ô£à |
+| `lbl_4c_Label6` + `cbo_4c_CmbImp` (Impressora) | `ConfigurarCampos()` | Ô£à |
+| `cmd_4c_Confirmar` + `cmd_4c_Encerrar` | `ConfigurarBotoes()` | Ô£à |
+
+A Fase 5 foi absorvida nas fases anteriores porque o pipeline foi estruturado para form CRUD (Page1/Page2), mas o SIGCDFIS ├® um **di├ílogo plano sem PageFrame** ÔÇö todos os 6 controles da tela original cabem numa ├║nica fase e j├í foram implementados em `ConfigurarCampos()`.
+
+N├úo h├í nada a adicionar. O FormFis.prg est├í com paridade funcional 100% com o legado: 566 linhas, todos os controles, ControlSources corretos para `CrSigFiFis`, ComboBoxes populados com os mesmos itens do legado, e os handlers de bot├úo vinculados via BINDEVENT.

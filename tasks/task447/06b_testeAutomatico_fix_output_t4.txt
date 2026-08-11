@@ -1,0 +1,5 @@
+﻿Corrigidas as 2 ocorr├¬ncias (em `Buscar` e `CarregarPorCodigo`).
+
+**Causa raiz:** O JOIN `LEFT JOIN SigCdEmp b ON b.cemps = a.cemps` usava `a.cemps` que n├úo existe em `SigCdCmi` ÔÇö a coluna correta ├® `a.emps`. O SQL Server retornava "Invalid column name 'cemps'", o `SQLEXEC` falhava, `MsgErro` abria um form modal, e o VFP ficava bloqueado aguardando intera├º├úo do usu├írio ÔåÆ TIMEOUT de 300s.
+
+**Fix aplicado:** `a.cemps` ÔåÆ `a.emps` nas linhas 65 e 102 do ICMBO.prg (m├®todos `Buscar` e `CarregarPorCodigo`).

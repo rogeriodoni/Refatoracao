@@ -1,0 +1,218 @@
+{
+  "resumo": {
+    "totalMetodos": 11,
+    "metodosComSQL": 4,
+    "metodosComValidacao": 5,
+    "totalQueries": 3,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fChecaAcesso", "fConfigGeral", "fUniqueIds"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDFPB",
+      "evento": "Init",
+      "linhas": 50,
+      "codigoOriginal": "LParameters poForm, pnDataSes\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nSet DataSession to pnDataSes\n\nThisform.ParentForm          = poForm\nThisform.ParentForm.Enabled  = .F.\n\nThisform.GravaDados = .f.\n\nWith Thisform\n\t.cmdInserir.Visible = fChecaAcesso('SIGCDFPP','INSERIR')\n\t.cmdInserir.Enabled = fChecaAcesso('SIGCDFPP','INSERIR')\n\t.cmdExcluir.Visible = fChecaAcesso('SIGCDFPP','EXCLUIR')\n\t.cmdExcluir.Enabled = fChecaAcesso('... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso",
+        "metodosFormChamados": "Sqlexecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDFPB",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "=fConfigGeral()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFPB.GradeFPagto.Column2.Text1",
+      "evento": "Valid",
+      "linhas": 4,
+      "codigoOriginal": "If This.Value # Thisform.peantvalue\n\tThisForm.GravaDados = .t.\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFPB.GradeFPagto.Column2.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.peantvalue = This.Value\nReturn (Not IsEmpty(xFpagi.CodBins))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFPB.GradeFPagto.Column3.Text1",
+      "evento": "Valid",
+      "linhas": 4,
+      "codigoOriginal": "If Nvl(This.Value,Ctod('01/01/1900')) # Thisform.peantvalue\n\tThisForm.GravaDados = .t.\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFPB.GradeFPagto.Column3.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Thisform.peantvalue = Nvl(This.Value,Ctod('01/01/1900'))\nReturn (Not IsEmpty(xFpagi.CodBins) )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "peantvalue = Nvl",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFPB.GradeFPagto.Column4.Text1",
+      "evento": "Valid",
+      "linhas": 4,
+      "codigoOriginal": "If This.Value # Thisform.peantvalue\n\tThisForm.GravaDados = .t.\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFPB.GradeFPagto.Column4.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Thisform.peantvalue = This.Value\nReturn (Not IsEmpty(xFpagi.CodBins) )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFPB.cmdInserir",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "Insert Into xFPagI (fPags) Values ( crTSigfPag.fpags )\nSelect xFPagi\nThisForm.GravaDados = .t.\nThisform.GradeFPagto.Column1.SetFocus\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFPB.cmdExcluir",
+      "evento": "Click",
+      "linhas": 8,
+      "codigoOriginal": "Select xFPagi\nIf Not Eof()\n\tDelete\n\tSkip\n\tSkip -1\nEndIf\nThisForm.GravaDados = .t.\nThisform.GradeFPagto.Refresh",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFPB.cmdSair",
+      "evento": "Click",
+      "linhas": 28,
+      "codigoOriginal": "Retorno = .t.\nIf Thisform.cmdInserir.Visible And ThisForm.GravaDados\n\tSelect CodBins,Sum(1) From xFPagi group by CodBins having sum(1) > 1;\n\tInto Cursor TT\n\tSelect TT\n\tIf Reccount('TT') > 0\n\t\tMessageBox('Dados Inconsistentes. Codigo BIN em duplicidade!!!',0+16,'')\n\t\tReturn .f.\n\tEndif\n\t\n\tSelect crSigOpFpB\n\tDelete all\n\tSelect xFPagi\n\tScan\n\t\tIf !IsEmpty(xFPagi.CodBins)\n\t\t\tScatter to memvar\n\t\t\tInsert Into crSigOpFpB From array memvar\n\t\t\tSELECT crSigOpFpB\n\t\t\tReplace cidChaves WITH fUniqueIds()\n\t\t\tSEL... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDFPB.cmdInserir.Click",
+      "queryOriginal": "Insert Into xFPagI (fPags) Values ( crTSigfPag.fpags )",
+      "tabelas": "xFPagI",
+      "colunas": "fPags",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDFPB.cmdSair.Click",
+      "queryOriginal": "\tSelect CodBins,Sum(1) From xFPagi group by CodBins having sum(1) > 1; \tInto Cursor TT",
+      "tabelas": "xFPagi",
+      "colunas": "CodBins",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDFPB.cmdSair.Click",
+      "queryOriginal": "\t\t\tInsert Into crSigOpFpB From array memvar",
+      "tabelas": "array,crSigOpFpB",
+      "colunas": "",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["xFPagI", "array", "crSigOpFpB"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

@@ -1,0 +1,21 @@
+﻿O arquivo est├í correto. A Fase 4 est├í completa. Aqui est├í o resumo do que foi adicionado:
+
+**Adicionado ao `FormFPP.prg`:**
+
+1. **`ConfigurarGrade()`** ÔÇö cria `grd_4c_Dados` com 5 colunas mapeando exatamente o `GradeFPagto` original (top=114, left=163, width=336, height=244):
+   - Col1 "Parcelas" ÔåÆ `xFPagi.nparcs` (55px)
+   - Col2 "% Desconto" ÔåÆ `xFPagi.Descs` (75px)
+   - Col3 "Valor M├¡nimo" ÔåÆ `xFPagi.ValMins` (75px, CHR(237) para 'i' acentuado)
+   - Col4 "P" ÔåÆ `xFPagi.parcDes` (30px)
+   - Col5 "Valor M├íximo" ÔåÆ `xFPagi.ValMaxs` (101px, CHR(225) para 'a' acentuado)
+   - BINDEVENT do `AfterRowColChange` ÔåÆ `GrdAfterRowColChange`
+
+2. **`ConfigurarLabels()`** ÔÇö cria `lbl_4c_Label1` ("[ Condi├º├úo de Pagamento ]") e `lbl_4c_Label2` ("[ P ] = Quantidade de Parcelas de Desconto") com posi├º├Áes id├¬nticas ao legado
+
+3. **`CmdInserirClick()`** ÔÇö delega para `BO.InserirLinha()`, marca `GravaDados=.T.`, vai para o fim e d├í foco ao grid
+
+4. **`CmdExcluirClick()`** ÔÇö delega para `BO.ExcluirLinha()`, marca `GravaDados=.T.`, faz Refresh do grid
+
+5. **`CmdEncerrarClick()`** ÔÇö implementa a l├│gica completa do `cmdSair.Click` legado: salva via `BO.SalvarDados()` somente se `cmdInserir.Visible AND GravaDados`, depois `Release()`
+
+6. **`GrdAfterRowColChange()`** ÔÇö implementa os eventos `When` das colunas 2-5 (exclusividade DescsÔåöparcDes, habilita├º├úo baseada em nparcs) e rastreia altera├º├Áes via `GETFLDSTATE(0, "xFPagi")`

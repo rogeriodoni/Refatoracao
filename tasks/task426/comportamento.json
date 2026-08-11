@@ -1,0 +1,243 @@
+{
+  "resumo": {
+    "totalMetodos": 13,
+    "metodosComSQL": 5,
+    "metodosComValidacao": 8,
+    "totalQueries": 2,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fChecaAcesso", "Fpags + Str", "fAcessoEmpresa", "fUniqueIds"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDFPM",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "=fConfigGeral()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFPM",
+      "evento": "Init",
+      "linhas": 49,
+      "codigoOriginal": "LParameters poForm, pnDataSes\n\nSet DataSession to pnDataSes\n\nThisform.ParentForm          = poForm\nThisform.ParentForm.Enabled  = .F.\n\nThisform.GravaDados = .f.\n\nWith Thisform\n\t.Caption = 'Valor Mínimo/Máximo Cond.Pagto ' + AllTrim(crTSigfPag.fpags)\n*\t.Caption = 'Valor Mínimo/Máximo Cond.Pagto ' + AllTrim(crSigOpFp.fpags)\n\t.cmdInserir.Visible = fChecaAcesso('SIGCDFPM','INSERIR')\n\t.cmdInserir.Enabled = fChecaAcesso('SIGCDFPM','INSERIR')\n\t.cmdExcluir.Visible = fChecaAcesso('SIGCDFPM','EXCLUIR')\n\t.... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso,Fpags + Str",
+        "metodosFormChamados": "Sqlexecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDFPM.GradeFPagto.Column2.Text1",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "Thisform.peantvalue = This.Value\nReturn Empty(xFpagi.ValMaxs)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFPM.GradeFPagto.Column2.Text1",
+      "evento": "Valid",
+      "linhas": 30,
+      "codigoOriginal": "Local lcFpags, lnRecNo, loBrowse\n\nIf Thisform.peantvalue # This.Value Or This.Value = 0\n\t\n\tThisForm.GravaDados = .t.\n\n\tlcFPags = xfPagi.fpags + Str(This.Value,2)\n\n\tSelect xFPagI\n\tlnRecNo = RecNo('xFPagi')\n\tSet Order to FPags\n\tSeek (xfPagi.fpags + Str(This.Value,2))\n\tIf Not Eof()\n\t\tSkip\n\t\tIf xFPagi.fpags + Str(xFPagi.NParcs,2) = lcFPags\n\t\t\tMessageBox('Número de Parcelas já Digitada para esta Condição de Pagamento ... ',48,'')\n\t\t\tThis.Value = 0\n\t\t\tReturn .F.\n\t\tEndIf\n\tEndif\n\tSelect xFPagI\n\tSet Orde... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDFPM.GradeFPagto.Column3.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Thisform.peantvalue = This.Value\nReturn !IsEmpty(xFpagi.nparcs)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFPM.GradeFPagto.Column3.Text1",
+      "evento": "Valid",
+      "linhas": 4,
+      "codigoOriginal": "If This.Value # Thisform.peantvalue\n\tThisForm.GravaDados = .t.\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFPM.GradeFPagto.Column1.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Thisform.peantvalue = This.Value\nReturn IsEmpty(xFpagi.nparcs)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFPM.GradeFPagto.Column1.Text1",
+      "evento": "Valid",
+      "linhas": 4,
+      "codigoOriginal": "If This.Value # Thisform.peantvalue\n\tThisForm.GravaDados = .t.\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFPM.GradeFPagto.Column4.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.peantvalue = This.Value\nReturn Empty(xFpagi.nparcs)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFPM.GradeFPagto.Column4.Text1",
+      "evento": "Valid",
+      "linhas": 11,
+      "codigoOriginal": "Local llRetorno\n\nllRetorno = .T.\nIf This.Value # Thisform.peantvalue\n\tThisForm.GravaDados = .t.\nEndIf\nIf Not Empty(This.Value)\n\tllRetorno = fAcessoEmpresa(Usuar,'C',This.Value,This)\nEndif\nReturn(llRetorno)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFPM.cmdInserir",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "Insert Into xFPagI (fPags) Values ( crTSigfPag.fpags )\nSelect xFPagi\nThisForm.GravaDados = .t.\nThisform.GradeFPagto.Column2.SetFocus\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFPM.cmdExcluir",
+      "evento": "Click",
+      "linhas": 6,
+      "codigoOriginal": "Select xFPagi\nIf Not Eof()\n\tDelete\nEndif\nThisForm.GravaDados = .t.\nThisform.GradeFPagto.Refresh",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFPM.cmdSair",
+      "evento": "Click",
+      "linhas": 32,
+      "codigoOriginal": "Retorno = .t.\nIf Thisform.cmdInserir.Visible And ThisForm.GravaDados\nSet Step On \n\tSelect nParcs,sum(1) From xFPagi Where nParcs > 0 Or xFPagi.ValMaxs > 0 ;\n\tgroup by nparcs having sum(1) > 1;\n\tInto Cursor TT\n\tSelect TT\n\tIf Reccount('TT') > 0\n\t\tMessageBox('Dados Inconsistentes!!!',0+16,'')\n\t\tReturn .f.\n\tEndif\n\t\n\tSelect crSigOpFpi\n\tLOCATE FOR Fpags = crTSigfPag.fpags\n\tDele While crSigOpFpi.fpags = crTSigfPag.fpags\n\tSelect xFPagi\n\tScan\n\t\tIf !IsEmpty(xFPagi.nparcs) Or Not Empty(xFPagi.ValMaxs)\n\t\t\tS... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDFPM.cmdInserir.Click",
+      "queryOriginal": "Insert Into xFPagI (fPags) Values ( crTSigfPag.fpags )",
+      "tabelas": "xFPagI",
+      "colunas": "fPags",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDFPM.cmdSair.Click",
+      "queryOriginal": "\tSelect nParcs,sum(1) From xFPagi Where nParcs > 0 Or xFPagi.ValMaxs > 0 ; \tgroup by nparcs having sum(1) > 1; \tInto Cursor TT",
+      "tabelas": "xFPagi",
+      "colunas": "nParcs,ValMaxs,having,sum1",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["xFPagI"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

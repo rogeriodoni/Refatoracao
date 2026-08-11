@@ -1,0 +1,7 @@
+﻿Fase 4 conclu├¡da. As tr├¬s altera├º├Áes aplicadas:
+
+1. **`InicializarForm()` retorno correto**: adicionado `LOCAL loc_lSucesso`, inicializado em `.F.`, setado para `.T.` apenas ap├│s todo o setup bem-sucedido, e `RETURN loc_lSucesso` expl├¡cito no final. Antes, a fun├º├úo retornava o resultado de `DODEFAULT()` por acidente (`.T.` mesmo em caso de erro).
+
+2. **`AlternarPagina(par_nPagina)`**: m├®todo adicionado que para este form OPERACIONAL (sem PageFrame) equivale ao "IrParaLista" dos forms CRUD ÔÇö chama `AjustarTela()` para restaurar modo CONSULTAR e recarrega o calend├írio do m├¬s corrente.
+
+O form OPERACIONAL j├í estava completo da Fase 3 com todos os controles, handlers e l├│gica de neg├│cio. Pr├│ximo: Fase 5/8.

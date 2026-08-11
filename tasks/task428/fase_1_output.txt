@@ -1,0 +1,9 @@
+﻿`C:\4c\projeto\app\classes\FpoBO.prg` criado com sucesso. A Fase 1/8 est├í conclu├¡da.
+
+**O que foi feito:**
+- 8 propriedades mapeando todas as colunas de `SigOpFpo` (schema.sql confirmado): `this_cCidChaves`, `this_cDopes`, `this_cFPags`, `this_nObrigs`, `this_nAutos`, `this_nContabs`, `this_cFPagss`, `this_nBlqAltExc`
+- Propriedade auxiliar `this_cDopesAtual` (contexto da opera├º├úo corrente, necess├íria porque o form sempre filtra por Dopes do pai)
+- `Init()` configura `this_cTabela = "SigOpFpo"` e `this_cCampoChave = "cidchaves"` (PK confirmada no schema como `CONSTRAINT sigopfpo_cidchaves`)
+- `ObterChavePrimaria()` para o sistema de auditoria
+
+**Pr├│xima fase (2/8):** Completar o BO com `CarregarDoCursor()`, `Inserir()`, `Atualizar()`, `ExecutarExclusao()`, `Buscar()` e `SalvarLote()` (equivalente ao `cmdSair.Click` do legado que faz valida├º├úo de duplicidade + gera├º├úo de `CidChaves` + commit).

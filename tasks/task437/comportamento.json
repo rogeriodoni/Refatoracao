@@ -1,0 +1,172 @@
+{
+  "resumo": {
+    "totalMetodos": 9,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 2,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fUniqueIds"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDGEM",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n=DoDefault()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGEM",
+      "evento": "Procedure",
+      "linhas": 7,
+      "codigoOriginal": "Select crSigCdGre\nIndex On grupo+class tag gruclass\nSet Near On\n=Seek(ThisForm.Pagina.Dados.Get_Grupo.Value+ThisForm.Pagina.Dados.Get_Class.Value,'crSigCdGre','gruclass')\nSet Near Off\n\n=DoDefault()",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Grupo,Get_Class",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGEM",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "=fConfigGeral()\n=DoDefault()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGEM",
+      "evento": "Init",
+      "linhas": 23,
+      "codigoOriginal": "lcQryGruEmp = [Select * From SigCdGre Order By Grupo,Class ]\n\nThisForm.pCol = 1\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tWith .poDataMgr\n\t\t\t.AddCursor('SigCdGre', 'cIdChaves', 'crSigCdGre', '', ThisForm.Pagina.Lista.Grade, lcQryGruEmp)\n\t\t\t.pfSqlTabela(1).pColuna('grupo', '', '', 'Grupo',  115, .T.)\n\t\t\t.pfSqlTabela(1).pColuna('class','', '','Classificação', 115, .F.)\n\t\tEndWith\n\n\t\t=DoDefault()\n\n\t\tThisForm.Pagina.Lista.Grade.Column1.S... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGEM",
+      "evento": "Click",
+      "linhas": 19,
+      "codigoOriginal": "LParameters opcao\n\nIf !dodefault( opcao )\n\tThisForm.mAtivaPagina1\n\tReturn\nEndif\n\nDo Case\n\tthisform.pagina.dados.Get_Grupo.enabled = .F.\n\tthisform.pagina.dados.Get_Class.enabled = .F.\n\n\tCase Inlist( ThisForm.pcEscolha, 'PROCURAR', 'INSERIR' )\n\t\tthisform.pagina.dados.Get_Grupo.enabled = .T.\n\t\tthisform.pagina.dados.Get_Class.enabled = .T.\n\t\tthisform.pagina.dados.Get_Grupo.setfocus\t\n\tCase Inlist( ThisForm.pcEscolha, 'CONSULTAR', 'EXCLUIR' )\n\t\tthisform.pagina.dados.grupo_salva.salva.setfocus\nEndcase\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Grupo,Get_Class",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGEM",
+      "evento": "Click",
+      "linhas": 24,
+      "codigoOriginal": "If ThisForm.pcEscolha = 'INSERIR'\n   If IsEmpty(ThisForm.Pagina.Dados.Get_Grupo.Value)\n\t    MessageBox( 'Obrigatório Informar o Grupo.', 48, '' )\n        ThisForm.Pagina.Dados.Get_Grupo.SetFocus\n\t\tReturn\n\tEndif\n   If IsEmpty(ThisForm.Pagina.Dados.Get_Class.Value)\n\t    MessageBox( 'Obrigatório Informar uma Classificação.', 48, '' )\n        ThisForm.Pagina.Dados.Get_Class.SetFocus\n\t\tReturn\n\tEndIf\n\tlcCHave=ThisForm.Pagina.Dados.Get_Grupo.Value+ThisForm.Pagina.Dados.Get_Class.Value\n\tIf ThisForm.poDa... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "ChkRegister",
+        "controlesReferenciados": "Get_Grupo,Get_Class,ChkRegister('SigCdGre'",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGEM",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "=DoDefault()\nIf ThisForm.plCancelar\n\tThisForm.mAtivapagina1\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGEM.Pagina.Dados.Get_Class",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "RETURN(Inlist( ThisForm.pcEscolha, 'PROCURAR','INSERIR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGEM.Pagina.Dados.Get_Grupo",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "RETURN(Inlist( ThisForm.pcEscolha, 'PROCURAR','INSERIR'))\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDGEM.Init",
+      "queryOriginal": "lcQryGruEmp = [Select * From SigCdGre Order By Grupo,Class ]",
+      "tabelas": "SigCdGre",
+      "colunas": "",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdGre"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

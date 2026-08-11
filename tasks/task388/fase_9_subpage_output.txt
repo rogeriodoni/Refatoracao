@@ -1,0 +1,9 @@
+﻿The `ConfigurarPgpgframeDados` method is now at line 769, exactly where it should be ÔÇö after `ConfigurarPaginaDados` ends and before `ConfigurarSubPagina1`.
+
+The implementation is complete:
+- `ConfigurarPagina Dados()` (line 541) now calls `THIS.ConfigurarPgpgframeDados(loc_oPagina)` before `THIS.TornarControlesVisiveis(loc_oPagina)` (lines 755-758)
+- `ConfigurarPgpgframeDados(par_oPagina)` (line 769) delegates to all 12 `ConfigurarSubPagina*` methods
+- All 12 existing sub-pagina implementations remain intact (lines 788-4260)
+- `MostrarSubPagina`, `NavPaginasClick`, and all event handlers continue working unchanged
+
+The FASE 9 refactor adds the requested `ConfigurarPgpgframeDados()` wrapper method as the architectural entry point for populating the pgframeDados equivalent, while preserving the fully-implemented 12 sub-page structure that the pipeline generated.

@@ -1,0 +1,23 @@
+﻿O arquivo FormDrs.prg j├í est├í **completamente implementado** com 1753 linhas ÔÇö bem al├®m do que a Fase 5 solicitaria. Veja o estado atual:
+
+**J├í existe em ConfigurarPaginaDados() (linhas 492ÔÇô607):**
+- `cnt_4c_BotoesAcao` com Confirmar/Cancelar
+- `lbl_4c_Codigo` + `txt_4c_Cods`
+- `cnt_4c_Campos` (container para campos din├ómicos)
+- `TornarControlesVisiveis()`
+
+**Por que n├úo h├í campos est├íticos para adicionar:**  
+Este form ├® especial ÔÇö os campos s├úo **din├ómicos**, definidos em `SigSyCit`. O m├®todo `MontarObjetos()` (linhas 726ÔÇô1027) cria os controles em runtime conforme o tipo de ficha t├®cnica (`Tits`). O equivalente ├á "Parte 1 dos campos" j├í existe como o sistema de `Labels + EditBox/TextBox` din├ómico.
+
+**O que j├í est├í implementado (al├®m das fases 1ÔÇô4):**
+- `MontarObjetos()` ÔÇö cria campos din├ómicos + campos fixos (Emps, Dopes, Numes, Aprova, Datas)
+- `DesmontarObjetos()` ÔÇö remove controles ao sair
+- `CarregarDados()` ÔÇö popula campos via `LocalCadRs`
+- `GravarDados()` ÔÇö l├¬ controles e grava em `crGrvCadRs`
+- `BtnAprovarClick()` / `BtnBaixarClick()` ÔÇö workflow completo
+- `GrdAfterRowColChange()`, `OptFiltroInteractiveChange()`
+- `Destroy()` com limpeza de cursores
+
+A Fase 5/8 n├úo tem trabalho a fazer ÔÇö o FormDrs.prg j├í est├í **completamente migrado**. Pode avan├ºar diretamente para as fases seguintes (6, 7, 8), que provavelmente envolvem integra├º├úo com `config.prg` e `menu.prg`.
+
+Deseja que eu verifique o DrsBO.prg e os arquivos de integra├º├úo?

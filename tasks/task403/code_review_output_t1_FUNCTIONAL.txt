@@ -1,0 +1,12 @@
+﻿Feito. Resumo do que foi feito e o que j├í estava correto:
+
+**Corrigido agora (5 cabe├ºalhos de grade inv├ílidos):**
+- `Column1.Header1.Caption`: `"C├│digo"` ÔåÆ `""` (legado n├úo tinha esse header)
+- `Column2.Header1.Caption`: `"Descri├º├úo"` ÔåÆ `"Produto"` (nome id├¬ntico ao legado)
+- `Column3.Header1.Caption`: `"Fornecedor"` ÔåÆ `""` (n├úo existe no legado)
+- `Column4.Header1.Caption`: `"Refer├¬ncia"` ÔåÆ `""` (n├úo existe no legado)
+- `Column5.Header1.Caption`: `"Sub-Grupo"` ÔåÆ `""` (n├úo existe no legado)
+
+**J├í estava correto no c├│digo atual (review estava desatualizado):**
+- **BINDEVENT-PARAMS**: Os 4 handlers (`EmpColLostFocus`, `QtdeColLostFocus`, `LocalColLostFocus`, `QIdealColLostFocus`) j├í declaram `(par_nKeyCode, par_nShiftAltCtrl)` nas suas assinaturas ÔÇö mesmo padr├úo dos outros handlers n├úo-flagados.
+- **LAYOUT-POSITION**: `obj_4c_Opc_situacao` j├í estava com `Top=67, Left=504` (38+29=67, Left=504); `obj_4c_OptRetiras` j├í com `Top=592, Left=207` (563+29=592) ÔÇö todos dentro da toler├óncia com compensa├º├úo de PageFrame aplicada.

@@ -1,0 +1,5 @@
+﻿O `ChkChqfChanged` s├│ ├® chamado via intera├º├úo do usu├írio quando o campo est├í habilitado ÔÇö em VISUALIZAR/EXCLUIR mode o chk est├í desabilitado (linha 2261), ent├úo n├úo h├í risco. O ├║nico ponto era o `BOParaForm`, que j├í corrigimos.
+
+A **Fase 9 j├í estava completa** ÔÇö todos os 32 controles do `pg2` (cheques em formul├írio cont├¡nuo) est├úo implementados no m├®todo `ConfigurarPg2Cheques()` (linhas 1274ÔÇô1803), chamados de `ConfigurarPaginaDados()`, e integrados em `FormParaBO()`, `BOParaForm()` e `LimparCampos()`.
+
+A ├║nica corre├º├úo aplicada: em `BOParaForm()` (linha 2161), `pg2.Enabled` agora considera tamb├®m o modo atual ÔÇö era `= .this_lChkChqf` (permitia edi├º├úo em VISUALIZAR), passou a ser `= .this_lChkChqf AND INLIST(this_cModoAtual, "INCLUIR", "ALTERAR")`.

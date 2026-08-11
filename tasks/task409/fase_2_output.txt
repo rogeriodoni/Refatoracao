@@ -1,0 +1,20 @@
+﻿EVEBO.prg completo e correto. Resumo do que foi implementado na Fase 2:
+
+**M├®todos adicionados ao EVEBO.prg:**
+
+| M├®todo | Tipo | Fun├º├úo |
+|--------|------|--------|
+| `Init()` | PUBLIC | Corrigido com TRY/CATCH; configura `SigCdEve` / `pkChaves` |
+| `ObterChavePrimaria()` | PUBLIC | Retorna `this_cPkChaves` para auditoria |
+| `CarregarDoCursor()` | PROTECTED | Mapeia todos os 7 campos via `SELECT (alias)` |
+| `ValidarDados()` | PROTECTED | Valida Codigo (obrigat├│rio + unicidade) e Nome (obrigat├│rio) |
+| `VerificarCodigoExistente()` | PUBLIC | COUNT(*) WHERE Codigo = X |
+| `Inserir()` | PROTECTED | INSERT com pkChaves gerado via `SYS(2015)+SYS(2015)` (20 chars) |
+| `Atualizar()` | PROTECTED | UPDATE WHERE pkChaves (Codigo n├úo alter├ível) |
+| `ExecutarExclusao()` | PROTECTED | DELETE WHERE pkChaves |
+| `Buscar()` | PUBLIC | SELECT com padr├úo ZAP+APPEND para preservar colunas do Grid |
+| `CarregarPorCodigo()` | PUBLIC | SELECT WHERE Codigo + reseta `this_lNovoRegistro = .F.` |
+| `ObterDescricaoGrupo()` | PUBLIC | SELECT Descrs FROM SigCdGcr WHERE Codigos = X |
+| `ObterDescricaoConta()` | PUBLIC | SELECT Rclis FROM SigCdCli WHERE Iclis = X |
+
+Os dois ├║ltimos m├®todos suportam o `BOParaForm` do Form que precisar├í popular `txt_4c_DGrupo` e `txt_4c_DConta` com as descri├º├Áes dos lookups.

@@ -1,0 +1,11 @@
+﻿Ambas as corre├º├Áes est├úo aplicadas corretamente.
+
+---
+
+**2 corre├º├Áes aplicadas** em `FormGpe.prg`:
+
+1. **[NULL-CURSOR]** (linha 3511): Adicionado `SET NULL ON` antes e `SET NULL OFF` depois do `CREATE CURSOR cursor_4c_Operacoes`, evitando falha ao APPEND FROM quando SQL Server retornar NULLs.
+
+2. **[CONTAINER-VISIVEL]** (linha 4022): Adicionado `IF INLIST(UPPER(loc_oObjeto.Name), "CNT_4C_CABECALHO") / LOOP / ENDIF` no in├¡cio do loop em `TornarControlesVisiveis`, impedindo que o m├®todo force `Visible=.T.` nesse container que deve permanecer oculto.
+
+**[GRID-HEADER] ÔÇö verifica├º├úo feita, sem altera├º├úo necess├íria**: Consultei a SCT legada (`SigCdGpe.SCT`) e confirmei que "Grupo Operacional" ├ë o caption legado correto para a coluna `DgOpes` da lista (`.pColuna('DgOpes','','','Grupo Operacional',150,.t.)`). O caption "N┬░" para `ngopes` ├® uma coluna extra (o legado mostrava s├│ `DgOpes` na lista), mas n├úo remove funcionalidade ÔÇö e as instru├º├Áes pro├¡bem remover campos/funcionalidades. Os captions "Opera├º├Áes Poss├¡veis" / "Opera├º├úo Confer├¬ncia" do `grd_4c_GradeOpe` j├í est├úo corretos nas linhas 3365-3368 e 3516-3519.

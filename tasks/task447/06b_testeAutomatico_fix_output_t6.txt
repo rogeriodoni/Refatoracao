@@ -1,0 +1,1 @@
+﻿Bug corrigido em `ICMBO.prg`. O JOIN usava `a.cemps` mas a coluna em `SigCdCmi` ├® `a.emps` (a tabela `SigCdEmp` tem `cemps` como PK, mas `SigCdCmi` armazena s├│ `emps`). Isso causava erro SQL ÔåÆ `MsgErro` modal ÔåÆ VFP9 bloqueado. Corrigidas as duas ocorr├¬ncias: `Buscar` (linha 65) e `CarregarPorCodigo` (linha 102).

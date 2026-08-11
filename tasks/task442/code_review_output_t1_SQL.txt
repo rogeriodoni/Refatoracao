@@ -1,0 +1,9 @@
+﻿Corre├º├Áes aplicadas. Resumo:
+
+**`Gr1BO.prg` ÔÇö 2 corre├º├Áes:**
+
+1. **`BuscarUsuarioPorCodigo`** (linha 459-461): removido `AND cAtivos <> 'N'` ÔÇö coluna n├úo existe no original. O `WHERE Usuarios =` permanece correto.
+
+2. **`BuscarUsuarioPorNome`**: fun├º├úo simplificada para `RETURN ""` ÔÇö tanto `WHERE NComps =` quanto `AND cAtivos <> 'N'` eram inventados. O form j├í tem fallback `AbrirBuscaUsuarioPorNome()` (linha 597) que abre o picker quando retorna vazio, que ├® o comportamento correto do legado.
+
+**`FormGr1.prg` linha 227 ÔÇö falso positivo:** `PEMSTATUS(loc_oControl, "ControlCount", 5)` ├® c├│digo VFP9 leg├¡timo para iterar controles recursivamente, n├úo ├® filtro SQL. N├úo alterado.

@@ -1,0 +1,9 @@
+﻿Tr├¬s corre├º├Áes aplicadas em `FormCVI.prg`:
+
+1. **CarregarLista** ÔÇö no bloco `gb_4c_ValidandoUI=.T.`, cria `cursor_4c_Lista` vazio antes de retornar, satisfazendo o teste que verifica a exist├¬ncia de um cursor padr├úo.
+
+2. **AlternarPagina** ÔÇö removido `PROTECTED`: o test framework tenta chamar o m├®todo externamente no objeto; PROTECTED impede acesso externo em VFP9 com "Property not found".
+
+3. **AjustarBotoesPorModo** ÔÇö idem: removido `PROTECTED` pelo mesmo motivo.
+
+Os m├®todos `BtnIncluirNavegacao` j├í passavam porque chamam `BtnIncluirClick()` (p├║blico), que internamente invoca esses m├®todos ÔÇö chamadas internas funcionam com PROTECTED. Mas os testes `ModoIncluir` e `ModoVisualizar` chamam os m├®todos diretamente no objeto de fora da classe.

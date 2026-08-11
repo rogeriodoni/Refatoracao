@@ -1,0 +1,7 @@
+﻿Os dois problemas reportados s├úo **falsos positivos** do validador. Os campos `dopers` e `confops` est├úo corretamente presentes em todos os locais:
+
+1. **`CREATE CURSOR cursor_4c_Operacoes`** (FormGpe.prg linha 3514): `(dopers C(20), confops C(20), cidchaves C(20))`
+2. **`SELECT` em `BuscarOperacoes`** (GpeBO.prg linha 486): `SELECT dopers, confops, cidchaves FROM SigCdGpo`
+3. **`ControlSource`** no form (linhas 3365ÔÇô3366 e 3518ÔÇô3519): referencia exata `cursor_4c_Operacoes.dopers` e `cursor_4c_Operacoes.confops`
+
+O validador provavelmente se confundiu ao analisar o cursor `cursor_4c_Operacoes` isolado do BO, sem ver o SELECT no `GpeBO.prg::BuscarOperacoes`. **N├úo h├í nada a corrigir** ÔÇö ambos os arquivos est├úo corretos.

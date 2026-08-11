@@ -1,0 +1,13 @@
+﻿Todas as corre├º├Áes est├úo corretas. Resumo do que foi corrigido:
+
+**Formint.prg ÔÇö 3 corre├º├Áes:**
+
+1. **`CarregarGradeTratamento` (linha 2720-2724)**: `FROM SigIvTrB` ÔåÆ `FROM SigIvTrT` (tabela correta do tratamento). Corrigidos tamb├®m os nomes de colunas que n├úo existem em SigIvTrB: `a.Datas`ÔåÆ`a.Datatrans AS Datas`, `a.BarraNovos`ÔåÆ`a.Barra2s AS BarraNovos`, `a.Faltas`ÔåÆ`a.Falta AS Faltas`. Os aliases mant├¬m compatibilidade com todos os ControlSources e REPLACEs existentes.
+
+2. **`BtnSairCntClick` (linha 3520)**: `UPDATE SigIvTrB` ÔåÆ `UPDATE SigIvTrT` ÔÇö SigIvTrB n├úo possui colunas Ocorrencia/Obs/Obs2s.
+
+3. **`BtnBaixaAutoClick` (linha 3792)**: `UPDATE SigIvTrB` ÔåÆ `UPDATE SigIvTrT` ÔÇö mesma raz├úo.
+
+**intBO.prg ÔÇö 1 corre├º├úo:**
+
+4. **`CarregarCambio`**: Removido JOIN desnecess├írio com SigCdMoe; `b.SMoedas` (coluna inexistente) ÔåÆ `a.CMoes` (coluna real de SigCdCot); `a.Cotacaos` ÔåÆ `a.Valos` (coluna real de SigCdCot); `TratarNulo(Cotacaos)` ÔåÆ `TratarNulo(Valos)`.

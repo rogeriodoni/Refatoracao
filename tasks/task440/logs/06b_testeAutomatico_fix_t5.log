@@ -1,0 +1,21 @@
+[2026-08-08 01:25:28] [INFO] === CLAUDE CLI INVOKER ===
+[2026-08-08 01:25:28] [INFO] Prompt File: C:\4c\tasks\task440\runtime_fix_prompt_06b_testeAutomatico_t5.md
+[2026-08-08 01:25:28] [INFO] Output File: C:\4c\tasks\task440\06b_testeAutomatico_fix_output_t5.txt
+[2026-08-08 01:25:28] [INFO] Model: sonnet
+[2026-08-08 01:25:28] [INFO] Timeout: 3600 segundos
+[2026-08-08 01:25:28] [INFO] Max Output Tokens: 128000
+[2026-08-08 01:25:28] [INFO] Context Files: 0 arquivo(s)
+[2026-08-08 01:25:28] [INFO] Invocando Claude CLI...
+[2026-08-08 01:25:28] [INFO] Prompt carregado: 114638 caracteres
+[2026-08-08 01:25:28] [INFO] Executando: claude --model sonnet --dangerously-skip-permissions --add-dir C:\4c
+[2026-08-08 01:25:28] [INFO] Tamanho total do prompt: 114638 caracteres
+[2026-08-08 01:25:28] [INFO] Invocando Claude CLI (tentativa 1/7)...
+[2026-08-08 01:47:11] [INFO] Claude CLI finalizado em 1302.7453869 segundos
+[2026-08-08 01:47:11] [INFO] Exit Code: 0
+[2026-08-08 01:47:11] [INFO] Output salvo em: C:\4c\tasks\task440\06b_testeAutomatico_fix_output_t5.txt
+[2026-08-08 01:47:11] [INFO] Output size: 813 bytes
+[2026-08-08 01:47:11] [INFO] SUCESSO: Claude CLI executado com sucesso
+[2026-08-08 01:47:11] [INFO] Preview do output:
+[2026-08-08 01:47:11] [INFO] Every `CREATEOBJECT("FormBuscaAuxiliar"` call is now inside a `IF !(TYPE("gb_4c_ModoTeste") = "L" AND gb_4c_ModoTeste)` guard. The fix is complete.
+
+**Summary**: The T4/T5 timeouts were caused by `CREATEOBJECT("FormBuscaAuxiliar", ...)` being called outside the `gb_4c_ModoTeste` guard in 5 methods ÔÇö even though the subsequent `Show()` was guarded. Since `FormBuscaAuxiliar` is `WindowType=1`, VFP9 can block during `CREATEOBJECT` itself if `Init()` triggers display logic. The fix wraps the ent

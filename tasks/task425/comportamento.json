@@ -1,0 +1,182 @@
+{
+  "resumo": {
+    "totalMetodos": 10,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 5,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fAcessoContab"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDFPG",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "Local lcBusca\n\nIf .Not.IsEmpty(ThisForm.Pagina.Dados.get_cd_grupo.Value)\n\tThisForm.poDataMgr.LocateCursor('CrSigCdPag','grupos',ThisForm.Pagina.Dados.get_cd_grupo.Value)\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "LocateCursor",
+        "controlesReferenciados": "get_cd_grupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFPG",
+      "evento": "Init",
+      "linhas": 13,
+      "codigoOriginal": "LPARAMETERS lcacesso\n\nWith ThisForm\n\t.poDatamgr = CreateObject('fSqlConector')\n\tWith .poDatamgr\n\t\t.AddCursor('SigCdPag','grupos','crSigCdPag','',ThisForm.pagina.lista.grade)\n\t\t.pfSqlTabela(1).pColuna('grupos','','','Grupos',80,.t.)\n\t\t.AddCursor('SigCdGcr','Codigos','crSigCdGcr','','')\t\t\n\tEndWith\n\t= DoDefault()\n\t.LockScreen = .f.\nEndWith\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFPG",
+      "evento": "Click",
+      "linhas": 14,
+      "codigoOriginal": "LParameters Opcao\n\nIf !dodefault( OPCAO )\n\tThisForm.mAtivapagina1\n\tReturn\nEndif\n\nDo Case \n\tCase Inlist( ThisForm.pcEscolha, 'INSERIR', 'PROCURAR' )\n\t\tThisForm.Pagina.Dados.Get_cd_grupo.SetFocus\n\tCase Inlist( ThisForm.pcEscolha, 'EXCLUIR', 'CONSULTAR' )\n\t\tThisForm.Pagina.Dados.Grupo_Salva.Salva.SetFocus\nEndCase\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_cd_grupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFPG",
+      "evento": "Click",
+      "linhas": 17,
+      "codigoOriginal": "If Inlist( ThisForm.pcEscolha, 'INSERIR' )\n\n\tIf IsEmpty( CrSigCdPag.Grupos )\n\t\tMessagebox( 'Grupo não pode ficar em branco!', 48, '' ) \n\t\tThisForm.Pagina.Dados.Get_cd_grupo.SetFocus\n\t\tReturn\n\tEndif\n\tIf ThisForm.poDataMgr.ChkRegister('SigCdPag','grupos',ThisForm.Pagina.Dados.Get_Cd_grupo.Value)\n\t\t=Messagebox( 'Grupo já cadastrado!', 48, '' )\n\t\tThisForm.Pagina.Dados.Get_Cd_Grupo.SetFocus\n\t\tReturn\n\tEndif\n\nEndif\n=DoDefault()\nThisForm.mAtivapagina1\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChkRegister",
+        "controlesReferenciados": "Get_cd_grupo,ChkRegister('SigCdPag'",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFPG",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "=DoDefault()\nIf ThisForm.plCancelar\n\tThisForm.mAtivapagina1\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFPG.Pagina.Dados.get_ds_grupo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(thisform.pcEscolha $ 'INSERIR/ALTERAR' And IsEmpty(This.Parent.get_cd_grupo.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_grupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFPG.Pagina.Dados.get_ds_grupo",
+      "evento": "Valid",
+      "linhas": 10,
+      "codigoOriginal": "If !IsEmpty(this.value)\n\tfAcessoContab(Usuar,'D',this.value,thisform.pagina.dados.get_cd_grupo,thisform.pagina.dados.get_ds_grupo)\nElse\n\tthisform.pagina.dados.get_cd_grupo.value = ''\n\tthisform.pagina.dados.get_cd_grupo.refresh\nendif\nselect CrSigCdPag\nreturn(.t.)\n\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_grupo,get_ds_grupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFPG.Pagina.Dados.get_cd_grupo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return(thisform.pcEscolha $ 'INSERIR/PROCURAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFPG.Pagina.Dados.get_cd_grupo",
+      "evento": "Valid",
+      "linhas": 11,
+      "codigoOriginal": "If !IsEmpty(this.value)\n\tfAcessoContab(Usuar,'C',this.value,this,thisform.pagina.dados.get_ds_grupo)\nElse\n\tthisform.pagina.dados.get_ds_grupo.value = ''\n\tthisform.pagina.dados.get_ds_grupo.refresh\nendif\nselect CrSigCdPag\nreturn(.t.)\n\n\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_ds_grupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFPG.Pagina.Dados.op_con",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return(thisform.pcEscolha $ 'INSERIR/ALTERAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

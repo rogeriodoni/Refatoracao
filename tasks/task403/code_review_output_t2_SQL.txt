@@ -1,0 +1,7 @@
+﻿Corre├º├úo aplicada. Resumo do que foi feito e por qu├¬:
+
+**CEMPS (linha 1888 ÔÇö corrigido):** O m├®todo `EmpColLostFocus` continha um SQLEXEC inventado pela LLM que validava a empresa contra `SigCdEmp WHERE Cemps = ...`. O original n├úo tinha essa valida├º├úo p├│s-digita├º├úo ÔÇö usava `fAcessoEmpresa()` (lookup). Na migra├º├úo, o lookup j├í est├í implementado em `AbrirLookupEmpresa()` via `FormBuscaAuxiliar`. O m├®todo agora est├í vazio (o BINDEVENT existente vira no-op inofensivo).
+
+**MARCAS (n├úo alterado ÔÇö falso positivo):** Encontrado em `EmnBO.prg:627` como `SCAN FOR !DELETED() AND CsCopia.marcas = 1 AND CsCopia.existes = 0`. Isso ├® um filtro VFP sobre cursor local, n├úo uma condi├º├úo SQL WHERE. A coluna `marcas` existe no cursor CsCopia (declarada no UNION ALL do `ProcessarCopia`) e ├® usada corretamente para respeitar a sele├º├úo do usu├írio via checkbox. Remover `marcas = 1` copiaria todos os itens independente da sele├º├úo ÔÇö alteraria a l├│gica de neg├│cio.
+
+**CRSIGCDM (n├úo encontrado ÔÇö falso positivo):** N├úo existe em nenhum dos dois arquivos. O detector provavelmente confundiu ocorr├¬ncias de `CrSigCdMin` (com `in`) com o token `CRSIGCDM`.

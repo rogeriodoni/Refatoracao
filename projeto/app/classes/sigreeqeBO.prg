@@ -534,7 +534,7 @@ DEFINE CLASS sigreeqeBO AS RelatorioBase
 
                 *-- Situacao tributaria e codigo de barras (string)
                 m.SitTribs = IIF(EMPTY(m.SitTricms), "00", m.SitTricms)
-                loc_cCBars = STR(m.CBars, 14)
+                loc_cCBars = m.CBars
 
                 *-- Inserir no cursor de resultado
                 IF loc_nAgrupa = 2

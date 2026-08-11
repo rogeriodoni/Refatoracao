@@ -1,0 +1,268 @@
+{
+  "resumo": {
+    "totalMetodos": 15,
+    "metodosComSQL": 4,
+    "metodosComValidacao": 10,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fUniqueIds", "fAcessoEmpresa", "fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDICM",
+      "evento": "Procedure",
+      "linhas": 20,
+      "codigoOriginal": "Local lcEmp, lcTab, lcCar\n\nlcEmp = ThisForm.Pagina.Dados.getEmpresa.Value\nlcTab = ThisForm.Pagina.Dados.getTabDes.Value\nlcCar = ThisForm.Pagina.Dados.getCargo.Value\n\nSelect crSigCdCmi\nSet Near On\nDo Case\n\tCase Not Empty(lcEmp) And Not Empty(lcTab) And Not Empty(lcCar)\n\t\t Locate For Emps = lcEmp And TabDes = lcTab And Cargos = lcCar\n\n\tCase Not Empty(lcEmp) And Not Empty(lcTab)\n\t\t Locate For Emps = lcEmp And TabDes = lcTab\n\n\tCase Not Empty(lcEmp)\n\t\t Locate For Emps = lcEmp\nEndCase\nSet Near Off\n* F... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDICM",
+      "evento": "Init",
+      "linhas": 22,
+      "codigoOriginal": "Lparameters lcAcesso\n\nlcQryComi = 'Select * From SigCdCmi'\n\nWith ThisForm\n\t.poDatamgr = CreateObject('fSqlConector', .Name)\n\tWith .poDatamgr\n\t\t.AddCursor('SigCdCmi', 'cIdChaves', 'crSigCdCmi', '', ThisForm.Pagina.Lista.Grade, lcQryComi)\n\t\t.pfSqlTabela(1).pColuna('Emps',   '', '', 'Emp',          031, .t.)\n\t\t.pfSqlTabela(1).pColuna('TabDes', '', '', 'Tb.Desconto',  080, .t.)\n\t\t.pfSqlTabela(1).pColuna('Cargos', '', '', 'Cargo',        080, .t.)\n\t\t.pfSqlTabela(1).pColuna('FPags',  '', '', 'Condição... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDICM",
+      "evento": "Click",
+      "linhas": 51,
+      "codigoOriginal": "Lparameters Opcao\n\nIf Not DoDefault(Opcao)\n\tThisForm.mAtivapagina1\n\tReturn 0\nEndIf\n\nSelect crSigCdCmi\n\nWith ThisForm.Pagina.Dados\n\t.getDEmpresa.Value = ''\n\t.getDCargo.Value   = ''\n\t.getDTabDes.Value  = ''\n\n\tIf (ThisForm.pcEscolha <> 'INSERIR')\n\t\tIf ThisForm.poDataMgr.CursorQuery('SigCdEmp', 'crTmp', 'Cemps', .getEmpresa.Value)\n\t\t\tGo Top In crTmp\n\t\t\t.getDEmpresa.Value = Iif(Eof('crTmp'), '', crTmp.Razas)\n\t\t\tUse In crTmp\n\t\tEndIf\n\n\t\tIf ThisForm.poDataMgr.CursorQuery('SigCdCrg', 'crTmp', 'Ccargs', .... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "OpTdz'",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDICM",
+      "evento": "Click",
+      "linhas": 84,
+      "codigoOriginal": "Private pDtI, pDtF\n\nWith ThisForm.Pagina.Dados\n\tIf (ThisForm.pcEscolha = 'INSERIR')\n\t\tpDtI = crSigCdCmi.DtInis\n\t\tpDtF = crSigCdCmi.DtFins\n\n\t\tlcSQLCmd = [Select Emps, Cargos, TabDes, DtInis, DtFins ] + ;\n\t\t\t\t\t [From SigCdCmi ] + ;\n\t\t\t\t\t[Where Emps = ']   + crSigCdCmi.Emps   + [' And ] + ;\n\t\t\t\t\t\t  [Cargos = '] + crSigCdCmi.Cargos + [' And ] + ;\n\t\t\t\t\t\t  [FPags  = '] + crSigCdCmi.FPags  + [' And ] + ;\n\t\t\t\t\t\t  [TabDes = '] + crSigCdCmi.TabDes + [' And ] + ;\n\t\t\t\t\t\t  [DtInis = ?pDtI And ] + ;\n\t\t\t\t\t\t  [... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "SQLExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDICM",
+      "evento": "Click",
+      "linhas": 7,
+      "codigoOriginal": "=DoDefault()\n\nIf ThisForm.plCancelar\n\tThisForm.mAtivapagina1\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDICM.Pagina.Dados.getEmpresa",
+      "evento": "Valid",
+      "linhas": 2,
+      "codigoOriginal": "=fAcessoEmpresa(Usuar, 'C', This.Value, This, Thisform.Pagina.Dados.getDEmpresa)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDICM.Pagina.Dados.getDEmpresa",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.Pagina.Dados.getEmpresa.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDICM.Pagina.Dados.getDEmpresa",
+      "evento": "Valid",
+      "linhas": 2,
+      "codigoOriginal": "=fAcessoEmpresa(Usuar, 'D', This.Value, Thisform.Pagina.Dados.getEmpresa, This)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDICM.Pagina.Dados.getCargo",
+      "evento": "Valid",
+      "linhas": 21,
+      "codigoOriginal": "Local loLista\n\nWith ThisForm.Pagina.Dados\n\tIf Not Empty(This.Value)\n\t\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdCrg', ;\n\t\t\t\t\t\t\t   'crListaRemota', 'CCargs', This.Value, 'Seleção', .t.)\n\n\t\tIf Not loLista.plAchouRegistro\n\t\t\tloLista.mAddColuna('CCargs', '', 'Código')\n\t\t\tloLista.mAddColuna('DCargs', '', 'Descrição')\n\t\t\tloLista.Show()\n\t\tEndIf\n\t\t\n\t\t.getCargo.Value  = crListaRemota.CCargs\n\t\t.getDCargo.Value = crListaRemota.DCargs\n\t\tUse In crListaRemota\n\tEndIf \n\t.getCargo.R... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDICM.Pagina.Dados.getFPags",
+      "evento": "Valid",
+      "linhas": 18,
+      "codigoOriginal": "Local loLista\n\nWith ThisForm.Pagina.Dados\n\tIf Not Empty(This.Value)\n\t\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigOpFp', ;\n\t\t\t\t\t\t\t   'crListaRemota', 'FPags', This.Value, 'Seleção', .t.)\n\n\t\tIf Not loLista.plAchouRegistro\n\t\t\tloLista.mAddColuna('FPags', '', 'Condição')\n\t\t\tloLista.Show()\n\t\tEndIf\n\t\t\n\t\t.getFPags.Value  = crListaRemota.FPags\n\t\tUse In crListaRemota\n\tEndIf \n\t.getFPags.Refresh\nEndWith\n* Fim ************************************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDICM.Pagina.Dados.getDCargo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.Pagina.Dados.getCargo.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDICM.Pagina.Dados.getDCargo",
+      "evento": "Valid",
+      "linhas": 22,
+      "codigoOriginal": "Local loLista\n\nWith ThisForm.Pagina.Dados\n\tIf Not Empty(This.Value)\n\t\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdCrg', ;\n\t\t\t\t\t\t\t   'crListaRemota', 'DCargs', This.Value, 'Seleção', .t.)\n\n\t\tIf Not loLista.plAchouRegistro\n\t\t\tloLista.mAddColuna('DCargs', '', 'Descrição')\n\t\t\tloLista.mAddColuna('CCargs', '', 'Código')\n\t\t\tloLista.Show()\n\t\tEndIf\n\t\t\n\t\t.getCargo.Value  = crListaRemota.CCargs\n\t\t.getDCargo.Value = crListaRemota.DCargs\n\t\tUse In crListaRemota\n\tEndIf \n\t.getCargo.R... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDICM.Pagina.Dados.getTabDes",
+      "evento": "Valid",
+      "linhas": 22,
+      "codigoOriginal": "Local loLista\n\nWith ThisForm.Pagina.Dados\n\tIf Not Empty(This.Value)\n\t\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigOpTdz', ;\n\t\t\t\t\t\t\t   'crListaRemota', 'Codigos', This.Value, 'Seleção', .t.)\n\n\t\tIf Not loLista.plAchouRegistro\n\t\t\tloLista.mAddColuna('Codigos', '', 'Código')\n\t\t\tloLista.mAddColuna('Descrs',  '', 'Descrição')\n\t\t\tloLista.Show()\n\t\tEndIf\n\t\t\n\t\t.getTabDes.Value  = crListaRemota.Codigos\n\t\t.getDTabDes.Value = crListaRemota.Descrs\n\t\tUse In crListaRemota\n\tEndif\n\t.getTa... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "OpTdz'",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDICM.Pagina.Dados.getDTabDes",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.Pagina.Dados.getTabDes.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDICM.Pagina.Dados.getDTabDes",
+      "evento": "Valid",
+      "linhas": 22,
+      "codigoOriginal": "Local loLista\n\nWith ThisForm.Pagina.Dados\n\tIf Not Empty(This.Value)\n\t\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigOpTdz', ;\n\t\t\t\t\t\t\t   'crListaRemota', 'Descrs', This.Value, 'Seleção', .t.)\n\n\t\tIf Not loLista.plAchouRegistro\n\t\t\tloLista.mAddColuna('Descrs',  '', 'Descrição')\n\t\t\tloLista.mAddColuna('Codigos', '', 'Código')\n\t\t\tloLista.Show()\n\t\tEndIf\n\t\t\n\t\t.getTabDes.Value  = crListaRemota.Codigos\n\t\t.getDTabDes.Value = crListaRemota.Descrs\n\t\tUse In crListaRemota\n\tEndif\n\t.getTab... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "OpTdz'",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDICM.Init",
+      "queryOriginal": "lcQryComi = 'Select * From SigCdCmi'",
+      "tabelas": "SigCdCmi",
+      "colunas": "",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdCmi"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

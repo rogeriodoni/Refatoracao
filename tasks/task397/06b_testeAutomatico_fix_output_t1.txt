@@ -1,0 +1,7 @@
+﻿Ambas as corre├º├Áes est├úo aplicadas corretamente.
+
+**Resumo das corre├º├Áes em `FormDepartamento.prg`:**
+
+1. **Teste `CarregarLista`** ÔÇö Quando `gb_4c_ValidandoUI=.T.`, o m├®todo agora cria `cursor_4c_Dados` vazio (`codigos C(10), descricaos C(40), diretors C(10)`) antes de retornar `.T.`, satisfazendo a valida├º├úo do TesteAutomatico.
+
+2. **Teste `ModoVisualizar` / linha 542** ÔÇö `AjustarBotoesPorModo` era `PROTECTED`, impedindo o TesteAutomatico (que chama o m├®todo de fora da classe) de acess├í-lo. Removido o `PROTECTED` para torn├í-lo p├║blico, conforme regra do CLAUDE.md para m├®todos chamados via BINDEVENT ou por c├│digo externo.

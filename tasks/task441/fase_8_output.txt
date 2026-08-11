@@ -1,0 +1,18 @@
+﻿O arquivo est├í completo e bem estruturado. A fase 8 foi conclu├¡da com sucesso. Aqui est├í o resumo do que foi adicionado:
+
+**M├®todos adicionados (Fase 8/8):**
+
+| M├®todo | Fun├º├úo |
+|---|---|
+| `BtnBuscarClick()` | Recarrega grupos do SQL Server no grid (com confirma├º├úo se h├í edi├º├Áes pendentes) |
+| `BtnEncerrarClick()` | Fecha o di├ílogo e re-habilita o form pai |
+| `BtnSalvarClick()` | Delega ao `CmdConfirmarClick()` (validar + salvar) |
+| `BtnCancelarClick()` | Fecha sem salvar, re-habilita form pai |
+| `FormParaBO()` | Transfere `this_cDopes`, `this_lTipoggp`, `this_cEscolha`, `this_lGravaDados` para o BO |
+| `BOParaForm()` | Sincroniza flags de estado do BO de volta ao form |
+| `HabilitarCampos()` | Habilita/desabilita `cmd_4c_Inserir` e `cmd_4c_Excluir` conforme modo |
+| `LimparCampos()` | ZAP no `cursor_4c_Operacao` + refresh do grid |
+| `CarregarLista()` | Wrapper sobre `CarregarDados()` com retorno de sucesso |
+| `AjustarBotoesPorModo()` | Chama `HabilitarCampos()` com base em `this_cEscolha` |
+
+Como este ├® um form OPERACIONAL modal (n├úo um CRUD padr├úo), os m├®todos `FormParaBO`/`BOParaForm` foram adaptados para sincronizar os identificadores de contexto (Dopes, TipoGgp, Escolha) em vez de campos de formul├írio individuais ÔÇö os dados reais residem no `cursor_4c_Operacao` gerenciado diretamente.

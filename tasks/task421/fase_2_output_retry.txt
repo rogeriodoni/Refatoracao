@@ -1,0 +1,7 @@
+﻿Fase 2 complete. Added three CRUD methods to `FopBO.prg` before `ENDDEFINE`:
+
+- **`Inserir()`** (line 541) ÔÇö single-record INSERT into SigPrFnc, auto-generates CidChaves via `GerarCidChaves()` when empty, validates required fields (iFors/Reffs/MoeVs), calls `RegistrarAuditoria("INCLUSAO")` on success.
+- **`Atualizar()`** (line 613) ÔÇö single-record UPDATE by CidChaves, same validations, calls `RegistrarAuditoria("ALTERACAO")` on success.
+- **`ExecutarExclusao()`** (line 676, PROTECTED per CLAUDE.md pattern) ÔÇö single-record DELETE by CidChaves, calls `RegistrarAuditoria("EXCLUSAO")` before delete.
+
+All use `EscaparSQL`/`FormatarNumeroSQL`/`FormatarDataSQL` helpers, TRY/CATCH with `LineNo`+`Procedure` in error messages, no `RETURN` inside TRY. `CarregarDoCursor()` and `ObterChavePrimaria()` were already present from Fase 1.

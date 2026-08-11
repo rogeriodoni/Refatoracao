@@ -1,0 +1,17 @@
+﻿FASE 9 est├í completa e verificada. Resumo da confirma├º├úo:
+
+**`ConfigurarPgConfig()` ÔÇö linha 578ÔÇô1496** ÔÇö m├®todo completo com todos os 38 controles do pgConfig:
+- 16 OptionGroups (numopers, ncontroles, fontnums, utilizas, subniveis, prods, desutils, iniagenda, qualquer, consulta, montagem, chkmercs, oputiliza, filpagas, filbaixas, audits)
+- TextBox `txt_4c_Limdia`
+- Grid `grd_4c_GradeOpe` com 2 colunas (dopers/confops) + headers em CHR()
+- Todos os Labels correspondentes
+
+**Integra├º├úo verificada:**
+- `ConfigurarPaginaDados()` linha 548 chama `THIS.ConfigurarPgConfig(loc_oPagina.pgf_4c_Dados.Page1)` Ô£ô
+- `GpeBO.BuscarOperacoes()` existe na linha 469 de GpeBO.prg Ô£ô
+- `BOParaForm()` carrega RecordSource + ControlSource + Headers do grid ap├│s BuscarOperacoes Ô£ô
+- `HabilitarCampos()` habilita/desabilita `grd_4c_GradeOpe.ReadOnly` Ô£ô
+- `LimparCampos()` cria `cursor_4c_Operacoes` vazio e reseta RecordSource/ControlSource/Headers Ô£ô
+- BINDEVENTs para os lookup fields de pgCompls (txt_4c_Subncrs, txt_4c_Locals, txt_4c_Codsegs) j├í est├úo em `ConfigurarPaginaDados()` Ô£ô
+
+N├úo h├í pend├¬ncias em FASE 9 ÔÇö o form FormGpe.prg est├í com a migra├º├úo do pgConfig completa.

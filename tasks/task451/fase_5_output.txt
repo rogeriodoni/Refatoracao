@@ -1,0 +1,18 @@
+﻿All edits are correct. Here's a summary of what was done in Phase 5/8:
+
+**ImpBO.prg** ÔÇö 4 bug fixes + 1 new method:
+- Lines 112, 224, 287: renamed `this_nNTpImpres` ÔåÆ `this_nTpImpres` (3 remaining occurrences after Phase 3 fix)
+- Added `CarregarTiposEtiqueta()` ÔÇö loads SigCdTpe into a writable cursor `crSigCdTpe` (SQLEXECÔåÆtemp, CREATE CURSOR, APPEND FROM DBF, APPEND BLANK)
+
+**FormImp.prg** ÔÇö 4 bug fixes + 5 structural additions:
+- `BtnSalvarClick`: `VerificarImpressoraDuplicada` ÔåÆ `VerificarImpressoraExistente`
+- `FormParaBO`: `.this_lChqf` ÔåÆ `.this_lChkChqf` (1 site)
+- `BOParaForm`: `.this_lChqf` ÔåÆ `.this_lChkChqf` (2 sites)
+- `InicializarForm`: added `CarregarTiposEtiqueta()` call before `ConfigurarPageFrame()`
+- `ConfigurarPaginaDados`: added `THIS.ConfigurarPg1DadosPrincipais()` call before `TornarControlesVisiveis`
+- Added `ConfigurarPg1DadosPrincipais()` (22 controls: 5 labels + 5 textboxes + 3 checkboxes + 2 optiongroups + 2 combos + 1 line separator + their pair labels)
+- Added `ChkChqfChanged()` PUBLIC handler (enables/disables pg2 Cheques tab)
+- Added `EdtGuiGotFocus()` PUBLIC handler (printer code reference messagebox)
+- `Destroy()`: added `IF USED("crSigCdTpe") / USE IN crSigCdTpe / ENDIF`
+
+Phase 6 will add the 10 remaining controls: 6 editboxes (`edt_4c_Expds/Expas/Fontes/Fonte2s/Barcmds/Fontemp1s`), 4 spinners/textboxes (`spn_4c_AjVerts/AjHorzs/AjDens/AjVelos`), 1 shape, their labels, and the pg2 Cheques fields.

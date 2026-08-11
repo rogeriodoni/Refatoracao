@@ -1,0 +1,5 @@
+﻿O arquivo est├í correto. O `ShowWindow = 0` agora ├® o ├║nico valor (sem o override `= 1`). O guard em `Init()` fica como est├í ÔÇö ├® defensivo e garante que `WindowType` tamb├®m seja 0 em modo teste.
+
+**Causa raiz**: `ShowWindow = 1` no n├¡vel de classe (provavelmente copiado do SCX legado) fazia o VFP9 tratar o form como SDI top-level, o que junto com `WindowType = 1` causava o `CREATEOBJECT()` entrar automaticamente em loop modal de eventos, travando 300s at├® timeout. O `Init()` j├í tentava corrigir com `THIS.ShowWindow = 0`, mas `ShowWindow` ├® read-only em runtime ÔÇö a atribui├º├úo era silenciosamente ignorada.
+
+**Fix**: Remover o `ShowWindow = 1` da defini├º├úo da classe, mantendo apenas `ShowWindow = 0` (padr├úo do sistema). Todos os outros forms usam `ShowWindow = 0` impl├¡cito via `FormBase`.

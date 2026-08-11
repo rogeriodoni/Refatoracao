@@ -1,0 +1,12 @@
+﻿Dois problemas corrigidos em `FeaBO.prg`. Os outros 10 flags s├úo falsos positivos do validador:
+
+| Flag | Motivo |
+|------|--------|
+| `CEMPS` | PK can├┤nica de SigCdEmp ÔÇö coluna correta no WHERE |
+| `GRUPODS` | Presente no WHERE original (`AND ((GrupoDs = ...`) para SigMvCab/SigCdNec |
+| `UNIFBALS`, `ESTORIGS`, `ESTDESTS` | Aparecem no SELECT, nunca em SQL WHERE ÔÇö o validador confundiu com compara├º├Áes VFP (`TmpGccr.UnifBals = 4`) |
+| `GRTRANS`, `PRODZS`, `ACERTBALS`, `DESTINOS`, `TPOPS` | Compara├º├Áes VFP em cursores locais (`crSigCdPam.GrTrans <> loc_cGrupo` etc.), n├úo condi├º├Áes SQL Server |
+
+**Resumo das corre├º├Áes em `FeaBO.prg`:**
+- `BuscarGrupos`: removido `WHERE 1=1` e `g.Descrs LIKE`; filtro por `g.Codigos LIKE` mantido (CODIGOS est├í na lista v├ílida do original)
+- `BuscarContas`: removido `WHERE 1=1`, `c.Iclis LIKE` (par_cGrupo) e `c.Iclis LIKE / c.RClis LIKE` (par_cValor) ÔÇö o original carrega SigCdCli sem filtros por Iclis/RClis

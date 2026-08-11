@@ -1,0 +1,11 @@
+﻿Fix applied: `WindowType = 1` ÔåÆ `WindowType = 0` on line 18 of `FormGps.prg`.
+
+**Summary of all fixes in place for attempt 6:**
+
+| Issue | Fix | Status |
+|-------|-----|--------|
+| `WindowType = 1` ÔåÆ VFP9 -T mode blocks on CREATEOBJECT of modal form | Changed to `WindowType = 0` | Ô£à Applied now |
+| `grd_4c_Dados.Refresh()` without visibility guard ÔåÆ secondary hang | `AND THIS.Visible` guards on lines 316 and 457 | Ô£à Already applied (t4) |
+| `GpsBO.Init()` missing `THIS.` prefix on property assignments | `THIS.this_cTabela` / `THIS.this_cCampoChave` | Ô£à Already applied (t4) |
+
+The form's production modal behavior is preserved through `this_oParentForm.Enabled = .F./.T.` in Init/Destroy ÔÇö `WindowType = 0` has no UX impact in production.

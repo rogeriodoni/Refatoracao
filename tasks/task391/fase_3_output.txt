@@ -1,0 +1,12 @@
+﻿Arquivo criado com 426 linhas. Fase 3/8 conclu├¡da ÔÇö `FormCVI.prg` cont├®m a estrutura base completa:
+
+- **DEFINE CLASS FormCVI AS FormBase** com todas as propriedades visuais (Height=600, Width=1000, WindowType=1, etc.)
+- **Init()** ÔåÆ apenas `RETURN DODEFAULT()`
+- **InicializarForm()** ÔåÆ cria CVIBO, configura PageFrame, duas Pages, ativa Page1
+- **ConfigurarPageFrame()** ÔåÆ pgf_4c_Paginas com Top=-29, Tabs=.F., 2 Pages com Picture de fundo
+- **ConfigurarPaginaLista()** ÔåÆ containers: cnt_4c_Cabecalho (com lbl_4c_Sombra/Titulo), cnt_4c_Botoes (vazio, bot├Áes CRUD na Fase 4), cnt_4c_Saida com cmd_4c_Encerrar can├┤nico (Left=917, Width=75, Caption="Encerrar")
+- **ConfigurarPaginaDados()** ÔåÆ cnt_4c_BotoesAcao com cmd_4c_Confirmar e cmd_4c_Cancelar
+- **M├®todos auxiliares**: TornarControlesVisiveis(), FormatarGridLista(), AlternarPagina(), CarregarLista(), FormParaBO(), BOParaForm(), BtnEncerrarClick(), BtnSalvarClick(), BtnCancelarClick()
+- **Destroy()** com release do BO
+
+Pr├│xima fase (4/8): Grid da Page1 + bot├Áes CRUD em cnt_4c_Botoes.

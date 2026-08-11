@@ -1,0 +1,19 @@
+﻿Confirmei a exist├¬ncia das tr├¬s colunas nas tabelas reais. Deixe-me reportar os resultados:
+
+**Verifica├º├úo completa:**
+
+| Problema reportado | Tabela | Coluna | Existe? |
+|---|---|---|---|
+| `pkChaves` no WHERE | `SigCdEve` | `pkChaves C(20)` | **SIM** |
+| `Codigos` no WHERE | `SigCdGcr` | `Codigos C(10)` | **SIM** |
+| `Iclis` no WHERE | `SigCdCli` | `Iclis C(10)` | **SIM** |
+
+Os tr├¬s flags s├úo **falsos positivos** do validador. Explica├º├úo:
+
+1. **`pkChaves`** ÔÇö Coluna `pkChaves C(20)` existe na tabela `SigCdEve` (campo 0 no DBF). ├ë a PK surrogate da nova arquitetura, corretamente usada em `UPDATE...WHERE pkChaves` e `DELETE...WHERE pkChaves`.
+
+2. **`Codigos`** ÔÇö O validador comparou o WHERE do migrado (`SigCdGcr.Codigos`) com o WHERE do legado de `SigCdEve` (`WHERE Codigo`). S├úo tabelas diferentes. `Codigos` ├® o campo PK real de `SigCdGcr` (confirmado no DBF), usado corretamente no `ObterDescricaoGrupo`.
+
+3. **`Iclis`** ÔÇö Mesma situa├º├úo: `Iclis C(10)` e `Rclis C(50)` existem em `SigCdCli` (confirmado no DBF), usados corretamente no `ObterDescricaoConta`.
+
+**Nenhuma altera├º├úo ├® necess├íria.** O validador comparou todos os WHEREs do c├│digo migrado ÔÇö incluindo subconsultas em outras tabelas e SQLs de UPDATE/DELETE ÔÇö contra o ├║nico WHERE da query legada original (`SELECT Codigo FROM SigCdEve`), gerando falsos positivos. Os arquivos `FormEVE.prg` e `EVEBO.prg` est├úo corretos neste aspecto.

@@ -1,0 +1,13 @@
+﻿O arquivo est├í correto. A Fase 6 est├í completa.
+
+**O que foi feito:**
+
+1. **`ConfigurarPaginaDados()`** ÔÇö completado com bot├Áes `cmd_4c_Confirmar` e `cmd_4c_Cancelar` adicionados ao `cnt_4c_BotoesAcao` (Page2), com propriedades visuais id├¬nticas ao padr├úo do sistema (Comic Sans MS, 75├ù75, PicturePosition=13, etc.) + BINDEVENT para ambos.
+
+2. **`BtnConfirmarClick()`** ÔÇö delega para `BtnEncerrarClick()` (que j├í valida duplicatas, salva via BO e fecha o form).
+
+3. **`BtnCancelarClick()`** ÔÇö se `GravaDados=.T.`, pede confirma├º├úo antes de descartar. Se em Page2, volta para Page1 via `AlternarPagina(1)`; se em Page1, chama `Release()`.
+
+4. **Cabe├ºalho do arquivo** ÔÇö atualizado com hist├│rico das Fases 4, 5 e 6.
+
+**Nota sobre o form:** O SIGCDFPM original ├® um form flat (sem Page2) ÔÇö a edi├º├úo acontece 100% inline no grid da Page1. Os bot├Áes Confirmar/Cancelar na Page2 completam o padr├úo de migra├º├úo mas raramente ser├úo acionados no fluxo normal de uso.

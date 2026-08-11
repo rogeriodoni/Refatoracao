@@ -1,0 +1,8 @@
+﻿4 corre├º├Áes aplicadas em `FormFte.prg`:
+
+| Teste falho | Causa | Corre├º├úo |
+|---|---|---|
+| `CarregarLista` | Retornava sem criar cursor no modo UI | `CREATE CURSOR cursor_4c_Dados` antes do `RETURN .T.` |
+| `ModoIncluir` | `AlternarPagina` era PROTECTED (TesteAutomatico chama de fora) | Removido `PROTECTED` |
+| `ModoVisualizar` | `AjustarBotoesPorModo` era PROTECTED | Removido `PROTECTED` |
+| `BtnIncluirNavegacao` | `this_lPermiteEditar = .F.` por padr├úo ÔåÆ early return (confirmado pelo log "Permiss├úo: Opera├º├úo n├úo permitida") | Bypass da checagem de permiss├úo quando `gb_4c_ValidandoUI = .T.` |

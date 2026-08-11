@@ -1,0 +1,17 @@
+﻿Fase 6 conclu├¡da. O arquivo `FormICD.prg` foi atualizado com:
+
+**Adicionado:**
+- `TxtTipoDblClick()` ÔÇö handler de duplo clique para `txt_4c_Tipo`, delega para `AbrirLookupTipo()`
+- `TxtDescDblClick()` ÔÇö handler de duplo clique para `txt_4c_Desc`, replica o comportamento do `When: Empty(GetTipo.Value)` antes de abrir o lookup
+- `RegistrarEventos` atualizado com 2 novos BINDEVENTs: `DblClick` em `txt_4c_Tipo` e `txt_4c_Desc`
+
+**Status dos lookups (completo):**
+
+| Campo | KeyPress (F4/Enter/Tab) | DblClick |
+|-------|------------------------|----------|
+| `txt_4c_Tipo` | `TxtTipoKeyPress` ÔåÆ `ValidarTipo` ÔåÆ `AbrirLookupTipo` | `TxtTipoDblClick` ÔåÆ `AbrirLookupTipo` |
+| `txt_4c_Desc` | `TxtDescKeyPress` ÔåÆ `ValidarDesc` ÔåÆ `AbrirLookupDesc` | `TxtDescDblClick` ÔåÆ `AbrirLookupDesc` |
+| `txt_4c_NovoTipo` | ÔÇö (sem lookup no original) | ÔÇö |
+| `txt_4c_NovaDesc` | ÔÇö (sem lookup no original) | ÔÇö |
+
+O comportamento do `GetDesc.When: Empty(GetTipo.Value)` est├í preservado em ambos os handlers de `txt_4c_Desc`: quando Tipo j├í est├í preenchido, DblClick e KeyPress retornam sem abrir lookup.

@@ -1,0 +1,16 @@
+﻿116 opening vs 116 closing ÔÇö perfectly balanced. Phase 5 is complete.
+
+The file grew from 1024 to 1789 lines. Here's what was added:
+
+**`ConfigurarSubPage1(par_oPagina)`** ÔÇö adds 36 controls to `cnt_4c_Page1` covering the identification section (top=118 to top=266, above the address separator at top=287):
+- `chk_4c_ChkEsc` (Escrit├│rio checkbox, top-right)
+- Row 1: `lbl_Label1`, `txt_4c_Codigo`, `lbl_Label24`, `txt_4c_Numero`, `obj_4c_OpcaoCPFCGC` (2-button OptionGroup CPF/CNPJ), `txt_4c_Cgc`, `lbl_Label23`, `txt_4c_IES`, `lbl_Label26`, `cbo_4c_FWCOMBO1` (Situa├º├úo combobox)
+- Row 2: `txt_4c_Razsoc`, `txt_4c_IMS`, `txt_4c_Empr` (Nome Reduzido)
+- Row 3: `txt_4c_Nome` (Nome Fantasia), `txt_4c_CNAE`, `txt_4c_Grupo` (Grupo Empresarial)
+- Row 4: `txt_4c_Resp`, `txt_4c_Postofiscal`, `txt_4c_Class` (Classifica├º├úo)
+- Row 5: `txt_4c_Cargo`, `txt_4c_EAN13`, `txt_4c_CEstoque`, `cmd_4c_CmdCtaCtg`
+- Row 6: `txt_4c__GRUPOC`, `txt_4c__CONTAC`, `txt_4c_CONTARLS`, `txt_4c_CodEmpresa`, `chk_4c_ChkAnaVends`, `txt_4c_CodRepres`
+
+**5 lookup handler methods** (all PUBLIC): `KeyPressGrupoEmp`, `KeyPressClassEmp`, `KeyPressGrupoCC`, `KeyPressContaC`, `KeyPressContarls` ÔÇö all trigger `FormBuscaAuxiliar` on F4/F5 (keycode 115) with correct table/column names. `CmdCtaCtgClick` stub for the Contas button.
+
+Phase 6 (address fields: CEP, Logradouro, Complemento, Cidade, UF, Pa├¡s, telefones, e-mail) comes next.

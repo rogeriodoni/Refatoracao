@@ -1,0 +1,13 @@
+﻿Tudo correto. As 6 corre├º├Áes foram aplicadas com sucesso.
+
+---
+
+**Resumo das corre├º├Áes:**
+
+**BINDEVENT-PARAMS (6 itens)** ÔÇö todos corrigidos:
+- Mudan├ºa de assinatura inline `PROCEDURE Foo(p1, p2)` para `PROCEDURE Foo` + `LPARAMETERS p1, p2` (forma expl├¡cita requerida pelo VFP9 em contexto BINDEVENT)
+- Guards adicionados em cada handler para evitar disparo em teclas incorretas:
+  - **Lookup handlers** (`EmpresaLostFocus`, `ModeloLostFocus`): `IF par_nKeyCode > 0 AND par_nKeyCode <> 13 / RETURN` ÔÇö permite chamadas diretas (via `EmpresaKeyPress`/`ModeloKeyPress` onde par_nKeyCode=0) e Enter (13), bloqueia qualquer outra tecla
+  - **Valida├º├úo/formata├º├úo** (`NcaixaLostFocus`, `NumUsuLostFocus`, `CoosLostFocus`, `CROLostFocus`): `IF !INLIST(par_nKeyCode, 9, 13) / RETURN` ÔÇö s├│ dispara em Tab (9) ou Enter (13)
+
+**LAYOUT-POSITION (4 itens)** ÔÇö falso positivo do review tool: o detector comparou `Buttons(1).Top=3` (posi├º├úo relativa dentro do OptionGroup) com a posi├º├úo absoluta SCX do OptionGroup (`Top=429/451`). O c├│digo atual tem os OptionGroups em `Top=458/480` ÔÇö diferen├ºa de 29px da posi├º├úo original, dentro da toler├óncia de 30px, e alinhados corretamente com seus labels (`Top=461/483`). N├úo alterado.

@@ -1,0 +1,3 @@
+﻿The fix is already in place. The `TornarControlesVisiveis` method at line 1182 already includes `"CNT_4C_CABECALHO"` in the `INLIST` filter ÔÇö the container itself is not forced to `Visible = .T.` (due to `LOOP`), while its children are still recursed correctly (recursion happens before `LOOP`).
+
+The code as written is correct: no changes needed. The review was generated against an earlier version of the file before this fix was applied.

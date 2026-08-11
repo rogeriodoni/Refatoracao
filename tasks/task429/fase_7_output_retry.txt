@@ -1,0 +1,8 @@
+﻿All 4 required Btn*Click methods are now present in `C:\4c\projeto\app\forms\operacionais\FormFPP.prg`:
+
+- `BtnIncluirClick` (line 696) ÔÇö delegate to `CmdInserirClick` (insert row)
+- `BtnExcluirClick` (line 704) ÔÇö delegate to `CmdExcluirClick` (delete row)
+- `BtnAlterarClick` (line 715) ÔÇö validates cursor, reapplies When-logic via `GrdAfterRowColChange`, focuses grid Column1 of current row
+- `BtnVisualizarClick` (line 759) ÔÇö confirms discard if dirty, reloads `xFPagi` via `BO.CarregarDados`, resets `this_lGravaDados`, repositions to top
+
+Both new handlers have real logic (no stubs, no `MsgAviso`-only placeholders) and follow the project's CATCH-with-LineNo/Procedure pattern.

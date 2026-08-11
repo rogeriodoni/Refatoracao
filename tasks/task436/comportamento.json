@@ -1,0 +1,312 @@
+{
+  "resumo": {
+    "totalMetodos": 16,
+    "metodosComSQL": 7,
+    "metodosComValidacao": 7,
+    "totalQueries": 5,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fChecaAcesso", "fConfigGeral", "fAcessoContab", "fAcessoContas", "fUniqueIds", "From Dbf"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDGCP",
+      "evento": "Procedure",
+      "linhas": 21,
+      "codigoOriginal": "LParameters plHabilita\n\nLocal lnI\n\nIf Type('plHabilita') # 'L'\n\tplHabilita = .F.\nEndif\n\nWith Thisform.ParentForm.Pagina.Lista\n\tFor lnI=1 to .Grupo_Op.ButtonCount\n\t\tIf .Grupo_Op.Buttons(lnI).BaseClass = 'Commandbutton' And .Grupo_Op.Buttons(lnI).Visible\n\t\t\t.Grupo_Op.Buttons(lnI).Enabled = plHabilita\n\t\tEndIf\n\tEndFor\n\t.cmdFPOper.Enabled = plHabilita\n\t.cmdMultiSubN.Enabled = plHabilita\n\t.Grupo_Saida.Sair.Enabled = plHabilita\nEndWith\n\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGCP",
+      "evento": "Init",
+      "linhas": 61,
+      "codigoOriginal": "LParameters poForm, pnDataSes, pcEscolha\n\nLocal lcOperacao\n\nSet DataSession to pnDataSes\n\nThisform.ParentForm = poForm\nThisform.PcEscolha  = pcEscolha\nThisform.ParentForm.Enabled  = .F.\nlcOperacao = crSigCdOpe.Dopes\n\nWith Thisform\n\t.Caption = 'Grupos / Contas Permitidas ' + AllTrim( Proper( crSigCdOpe.Dopes ) )\n\t.Top     = Thisform.ParentForm.Top + Thisform.ParentForm.Pagina.Lista.Grade.Top + 50\n\t.Left    = Thisform.ParentForm.Left + ;\n\t\t\t   Thisform.ParentForm.Pagina.Lista.Grade.Left + ;\n\t\t\t   ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso",
+        "metodosFormChamados": "Columns,mCtrlBotoes,Value = Iif",
+        "controlesReferenciados": "Opt_Permite",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGCP",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGCP.GradeSubN",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "LPARAMETERS nColIndex\n\nThisForm.Get_dConta.Refresh\nThisForm.Get_Dgru.Refresh\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_dConta,Get_Dgru",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGCP.GradeSubN.Column1.Text1",
+      "evento": "LostFocus",
+      "linhas": 3,
+      "codigoOriginal": "If IsEmpty(This.Value)\n\tThisform.cmdSair.SetFocus\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGCP.GradeSubN.Column1.Text1",
+      "evento": "Valid",
+      "linhas": 10,
+      "codigoOriginal": "If Not Empty( This.Value )\n\t=fAcessoContab(Usuar,'C',This.Value,This)\n\tlcSql = [Select Descrs From SigCdGcr Where Codigos = ']+This.Value+[' ]\n\tSigCdOpe.Podatamgr.Sqlexecute(lcSql,'LocalGccr')\n\tReplace Dgrus With LocalGccr.Descrs in TmpGcOpe\nEndif\nIf This.Value <> ThisForm.peantvalue\n\tThisForm.lhouveins = .t.\nEndIf\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGCP.GradeSubN.Column1.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.peantvalue = This.Value",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGCP.GradeSubN.Column2.Text1",
+      "evento": "Valid",
+      "linhas": 16,
+      "codigoOriginal": "grupo = ThisForm.GradeSubN.Column1.Text1.Value\nIf !IsEmpty(This.value)\n\tIf !fAcessoContas(Usuar,grupo,'C',This.value,This)\n\t\tMessagebox('Acesso Negado !!',0+48,'')\n\t\tThis.Value=' '\n\t\tThis.Refresh\n\t\tReturn 0 \n\tEndIf\n\tlcSql = [Select Rclis From SigCdCli Where Iclis = ']+This.Value+[']\n\tSigCdOpe.Podatamgr.Sqlexecute(lcSql,'LocalCli')\n\tReplace Rclis With LocalCli.Rclis in TmpGcOpe\nEndIf\nIf This.Value <> ThisForm.peantvalue\n\tThisForm.lHouveins = .t.\nEndif\nReturn .t.",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGCP.GradeSubN.Column2.Text1",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "ThisForm.peantvalue = This.Value\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGCP.GradeSubN.Column3.Text1",
+      "evento": "Valid",
+      "linhas": 5,
+      "codigoOriginal": "If Not InList(This.value,'O','D','A')\n\tMessageBox('Opção Incorreta!!!',0+32,'')\n\tReturn .f.\nEndIf\nReturn(.t.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDGCP.Get_Dgru",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDGCP.Get_DConta",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDGCP.Opt_Permite",
+      "evento": "InteractiveChange",
+      "linhas": 11,
+      "codigoOriginal": "Local AntValue\n\nAntValue = TmpGcOpe.blqCts\nUpdate TmpGcOpe Set BlqCts = This.Value\nGo Bott in TmpGcOpe\nThisForm.GradeSubN.Refresh\n\nIf TmpGcOpe.blqCts <> AntValue\n\tThisForm.lHouveins = .t.\nEndif\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGCP.cmdExcluir",
+      "evento": "Click",
+      "linhas": 9,
+      "codigoOriginal": "Select TmpGcOpe\nIf Not Eof()\n\tThisform.lHouveExcl = .T.\n\tDelete\n\tSkip\n\tSkip - 1\nEndif\n\nThisform.GradeSubN.Refresh",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGCP.cmdSair",
+      "evento": "Click",
+      "linhas": 46,
+      "codigoOriginal": "If Thisform.cmdInserir.Visible Or Thisform.cmdExcluir.Visible\n\tIf ( Thisform.lHouveExcl Or Thisform.lHouveIns )\n\t\n\t\tSelect TmpGcOpe\n\t\tDelete For Grupos = '  ' or Contas = '  '\n\t\tReplace all dopes     With CrSigCdOpe.Dopes,;\n\t\t\t\t    CidChaves With fUniqueIds()\n\n\t\tSelect Grupos, Contas, sum(1) From TmpGcOpe Group by 1,2 having sum(1) > 1 Into Cursor SecondKey\n\t\tSelect SecondKey\n\t\tIf Reccount() > 0\n\t\t\tMessageBox('Existem Grupos/Contas em Duplicidade. Favor Acertar!!!',0+16,'Atenção')\n\t\t\tReturn .f.\n... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fUniqueIds,From Dbf",
+        "metodosFormChamados": "mCtrlBotoes",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDGCP.cmdInserir",
+      "evento": "Click",
+      "linhas": 11,
+      "codigoOriginal": "Thisform.lHouveIns = .T.\n\nSelect TmpGcOpe\nLocate for Grupos = ' '\nIf Eof()\n\tInsert Into TmpGcOpe (Dopes, CidChaves, BlqCts ) Values (crSigCdOpe.Dopes,fUniqueIds(), ThisForm.Opt_Permite.Value )\nEndIf\n\nSelect TmpGcOpe\nThisform.GradeSubN.Column1.SetFocus\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Opt_Permite",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDGCP.GradeSubN.Column1.Text1.Valid",
+      "queryOriginal": "\tlcSql = [Select Descrs From SigCdGcr Where Codigos = ']+This.Value+[' ] \tSigCdOpe.Podatamgr.Sqlexecute(lcSql,'LocalGccr')",
+      "tabelas": "SigCdGcr",
+      "colunas": "Descrs,Codigos,Value+[,SqlexecutelcSql,LocalGccr",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDGCP.GradeSubN.Column2.Text1.Valid",
+      "queryOriginal": "\tlcSql = [Select Rclis From SigCdCli Where Iclis = ']+This.Value+['] \tSigCdOpe.Podatamgr.Sqlexecute(lcSql,'LocalCli')",
+      "tabelas": "SigCdCli",
+      "colunas": "Rclis,Iclis,Value+[],SqlexecutelcSql,LocalCli",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDGCP.Opt_Permite.InteractiveChange",
+      "queryOriginal": "Update TmpGcOpe Set BlqCts = This.Value",
+      "tabelas": "TmpGcOpe",
+      "colunas": "BlqCts",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDGCP.cmdSair.Click",
+      "queryOriginal": "\t\tSelect Grupos, Contas, sum(1) From TmpGcOpe Group by 1,2 having sum(1) > 1 Into Cursor SecondKey",
+      "tabelas": "TmpGcOpe",
+      "colunas": "Grupos,Contas",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDGCP.cmdInserir.Click",
+      "queryOriginal": "\tInsert Into TmpGcOpe (Dopes, CidChaves, BlqCts ) Values (crSigCdOpe.Dopes,fUniqueIds(), ThisForm.Opt_Permite.Value )",
+      "tabelas": "TmpGcOpe",
+      "colunas": "Dopes,CidChaves,BlqCts",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdGcr", "SigCdCli", "TmpGcOpe"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

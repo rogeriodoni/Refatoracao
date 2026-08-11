@@ -1,0 +1,396 @@
+{
+  "resumo": {
+    "totalMetodos": 23,
+    "metodosComSQL": 5,
+    "metodosComValidacao": 17,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fGerUniqueKey", "fUniqueIds", "fwBuscaInt", "fwBuscaExt", "fwBuscaSel"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDFAP",
+      "evento": "Init",
+      "linhas": 53,
+      "codigoOriginal": "Lparameters _Tipo\n\nThisForm.Tipo = Alltrim(Iif(Type('_Tipo') = 'C', _Tipo, 'F'))\n\nlcQryFape = [Select * From SigCdFea Where Emps = '] + _Empr + [' And Tipos = '] + ThisForm.Tipo + [']\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tWith .poDataMgr\n\t\t\t.AddCursor('SigCdFea', 'cIdChaves', 'crSigCdFea', '', ThisForm.Pagina.Lista.Grade, lcQryFape)\n\t\t\t.pfSqlTabela(1).pColuna('Numes',  '', '', 'Código', \t     052, .t.)\n\t\t\t.pfSqlTabela(1).pColuna... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Tipo = Alltrim,CursorQuery,SqlExecute,Name = Alltrim,SetAll",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDFAP",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "=fConfigGeral()\n\n=DoDefault()\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFAP",
+      "evento": "Click",
+      "linhas": 66,
+      "codigoOriginal": "Lparameters Opcao\n\nLocal Codigos, llFechado\n\nIf (Type('m.Opcao')='N')\n\tThis.Value = m.Opcao \nEndIf\n\nIf DoDefault(This.Value)\n\tThisForm.LockScreen = .t.\n\n\tWith This.Parent.Parent.Dados\n\t\tThisForm.poDataMgr.CursorQuery('SigCdGcr', 'LocalGccr', 'Codigos', .getCdGrupo.Value, 'Descrs')\n\t\tThisForm.poDataMgr.CursorQuery('SigCdCli',  'LocalCli',  'IClis',   .getCdCOnta.Value, 'RClis')\n\n\t\t.getDsGrupo.Value = Iif(Eof('LocalGccr'), '', LocalGccr.Descrs)\n\t\t.getDsConta.Value = Iif(Eof('LocalCli'),  '', Local... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fGerUniqueKey,fUniqueIds",
+        "metodosFormChamados": "CursorQuery,pcEscolha='INSERIR', Date",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFAP",
+      "evento": "Click",
+      "linhas": 26,
+      "codigoOriginal": "If Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')\n\tDo Case\n\t\tCase Empty(ThisForm.Pagina.Dados.getDatas.Value)\n\t\t\t=MessageBox('Código Inválido!!!', 48, '')\n\t\t\tThisForm.Pagina.Dados.getDatas.SetFocus\n\t\t\tReturn 0\n\n\t\tCase Empty(ThisForm.Pagina.Dados.getCdGrupo.Value) And (ThisForm.Tipo = [F]) And ;\n\t\t\t Empty(ThisForm.Pagina.Dados.Container4.Get_Prdz.Value)\n\t\t\t=MessageBox('Grupo Inválido!!!', 48, '')\n\t\t\tThisForm.Pagina.Dados.getCdGrupo.SetFocus\n\t\t\tReturn 0\n\n\t\tCase Empty(ThisForm.Pagina.Dados.getCdC... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value) And",
+        "controlesReferenciados": "Get_Prdz",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFAP",
+      "evento": "Click",
+      "linhas": 11,
+      "codigoOriginal": "Local lnCodigo\n\nlnCodigo = crSigCdFea.Numes\n\n=DoDefault()\n\nIf ThisForm.plCancelar\n\tThisForm.mAtivapagina1\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFAP.Pagina.Dados.getCodigos",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (ThisForm.pcEscolha = 'PROCURAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFAP.Pagina.Dados.getDsGrupo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDFAP.Pagina.Dados.getCdGrupo",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "Local loBrowse\n\nIf Not Empty(This.Value)\n    Set Near On\n    If Not Seek(This.Value, 'TmpGccr', 'Codigos')\n\t\txbrox = CreateObject('fwBuscaInt','TmpGccr','Codigos',This.Value,'Grupos',.t.)\n\t\txBrox.mAddColuna('codigos', '', 'Código', .t.)\n\t\txBrox.mAddColuna('Descrs', '', 'Descrição', .t.)\n\t\txBrox.Show()\n\tEndIf\n\tSet Near Off\n\tThis.Parent.getCdGrupo.Value = Iif(LastKey()==27,'',Evaluate('TmpGccr.Codigos'))\n\tThis.Parent.getDsGrupo.Value = Iif(LastKey()==27,'',Evaluate('TmpGccr.Descrs'))\nElse\n\tThis.Pa... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFAP.Pagina.Dados.getCdGrupo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFAP.Pagina.Dados.getDsConta",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDFAP.Pagina.Dados.getCdConta",
+      "evento": "Valid",
+      "linhas": 21,
+      "codigoOriginal": "Local loBrowse\n\nIf Not Empty(This.Value)\n\tSet Near On\n\tIf Not Seek(This.Value, 'TmpCli', 'Iclis')\n\t\txbrox = CreateObject('fwBuscaInt','TmpCli','Iclis',This.Value,'Contas',.t.)\n\t\txBrox.mAddColuna('iclis', '', 'Código', .t.)\n\t\txBrox.mAddColuna('rclis', '', 'Descrição', .t.)\n\t\txBrox.Show()\n\t\t\n\tEndIf\n\tSet Near Off\n\tThis.Parent.getCdConta.Value = Iif(LastKey()==27,'',Evaluate('TmpCli.Iclis'))\n\tThis.Parent.getDsConta.Value = Iif(LastKey()==27,'',Evaluate('TmpCli.Rclis'))\nElse\n\tThis.Parent.getDsConta.V... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFAP.Pagina.Dados.getCdConta",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR') And Not Empty(This.Parent.getCdGrupo.Value)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFAP.Pagina.Dados.getDatas",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFAP.Pagina.Dados.Container1.get_pesob",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "Return Empty(This.Parent.Parent.Container2.get_Totccb.Value) Or ;\n\t   Empty(This.Parent.Parent.Container2.get_Totscb.Value)\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Totccb,get_Totscb",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFAP.Pagina.Dados.Container1.get_ifor",
+      "evento": "Valid",
+      "linhas": 26,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdCli', ;\n\t\t\t\t\t\t   'crListaRemota', 'IClis', This.Value, 'Seleção', 500)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('IClis',  '', 'Código')\n\t\tloLista.mAddColuna('RClis',  '', 'Descrição')\n\t\tloLista.mAddColuna('Grupos', '', 'Grupo')\n\t\tloLista.mAddColuna('Inativas ', .f., .f., .f., .f., .f., .t.)\n\t\tloLista.gridProc.SetAll('DynamicForeColor', [Iif(crListaRemota.Inativas == 1, Rg... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_ifor,get_dfor",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFAP.Pagina.Dados.Container1.get_ifor",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "Return Empty(This.Parent.Parent.Container2.get_Totccb.Value) Or ;\n\t   Empty(This.Parent.Parent.Container2.get_Totscb.Value)\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Totccb,get_Totscb",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFAP.Pagina.Dados.Container1.get_tpmat",
+      "evento": "Valid",
+      "linhas": 16,
+      "codigoOriginal": "If Not Empty(This.Value)\n\tThisForm.poDataMgr.CursorQuery('SigOpOpt', 'TmpOpt', 'Situas', 3, 'Cods, Descs')\n\tSelect TmpOpt\n\tIndex On Cods Tag Cods\n\n\tIf Not Seek(This.Value)\n\t\tloBrowse = CreateObject('fwBuscaSel', 'TmpOpt', 'Cods', This.Value, 'Cadastro de Tipos de Operação')\n\t\tloBrowse.AddColuna('Cods',  '', 'Código', .t., 'Cods')\n\t\tloBrowse.AddColuna('Descs', '', 'Descrição')\n\t\tloBrowse.Show\n\t\tThis.Value = Iif(Lastkey()=27, '', TmpOpt.Cods)\n\tEndIf\n\tUse In TmpOpt\nEndIf\n* Fim *********************... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "Opt'",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFAP.Pagina.Dados.Container1.get_tpmat",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "Return Empty(This.Parent.Parent.Container2.get_Totccb.Value) Or ;\n\t   Empty( This.Parent.Parent.Container2.get_Totscb.Value)\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Totccb,get_Totscb",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFAP.Pagina.Dados.Container1.get_dfor",
+      "evento": "Valid",
+      "linhas": 26,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdCli', ;\n\t\t\t\t\t\t   'crListaRemota', 'RClis', This.Value, 'Seleção', 500)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('RClis',  '', 'Descrição')\n\t\tloLista.mAddColuna('IClis',  '', 'Código')\n\t\tloLista.mAddColuna('Grupos', '', 'Grupo')\n\t\tloLista.mAddColuna('Inativas ', .f., .f., .f., .f., .f., .t.)\n\t\tloLista.gridProc.SetAll('DynamicForeColor', [Iif(crListaRemota.Inativas == 1, Rg... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_ifor,get_dfor",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFAP.Pagina.Dados.Container1.get_dfor",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(This.Parent.get_ifor.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_ifor",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFAP.Pagina.Dados.Container2.get_Totccb",
+      "evento": "Valid",
+      "linhas": 9,
+      "codigoOriginal": "Select crSigCdFea\nReplace Baixas With .f. In crSigCdFea\n\nIf Not Empty(This.Parent.Parent.Container2.get_Totccb.Value) Or ;\n   Not Empty(This.Parent.Parent.Container2.get_Totscb.Value)\n\tReplace Baixas With .t. In crSigCdFea\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Totccb,get_Totscb",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFAP.Pagina.Dados.Container2.get_totscb",
+      "evento": "Valid",
+      "linhas": 9,
+      "codigoOriginal": "Select crSigCdFea\nReplace Baixas With .f. In crSigCdFea\n\nIf Not Empty(This.Parent.Parent.Container2.get_Totccb.Value) Or ;\n   Not Empty(This.Parent.Parent.Container2.get_Totscb.Value)\n\tReplace Baixas With .t. In crSigCdFea\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Totccb,get_Totscb",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFAP.Pagina.Dados.Container4.Get_Prdz",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.Pagina.Dados.GetcdGrupo.Value) And Empty(ThisForm.Pagina.Dados.GetcdConta.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDFAP.Init",
+      "queryOriginal": "lcQryFape = [Select * From SigCdFea Where Emps = '] + _Empr + [' And Tipos = '] + ThisForm.Tipo + [']",
+      "tabelas": "SigCdFea",
+      "colunas": "Emps,Tipos",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdFea"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

@@ -1,0 +1,242 @@
+﻿{
+    "taskId":  "task453",
+    "arquivoOriginal":  "",
+    "tipoArquivo":  "SCX",
+    "comentario_tipoArquivo":  "SCX=Form, FRX=Report, VCX=ClassLib",
+    "status":  "PENDING",
+    "statusComentario":  "PENDING | IN_PROGRESS | COMPLETED | FAILED | BLOCKED",
+    "criadoEm":  "2026-08-10T08:19:27",
+    "atualizadoEm":  "2026-08-10T16:25:04",
+    "etapas":  {
+                   "01_moverArquivos":  {
+                                            "status":  "COMPLETED",
+                                            "inicio":  "2026-08-10T08:19:27",
+                                            "fim":  "2026-08-10T08:19:27",
+                                            "tentativas":  1,
+                                            "erro":  null,
+                                            "sctFile":  "C:\\4c\\tasks\\task453\\sigcdint.sct",
+                                            "baseName":  "sigcdint",
+                                            "scxFile":  "C:\\4c\\tasks\\task453\\sigcdint.scx"
+                                        },
+                   "02_extractCode":  {
+                                          "status":  "COMPLETED",
+                                          "inicio":  "2026-08-10T08:19:27",
+                                          "fim":  "2026-08-10T08:19:28",
+                                          "tentativas":  1,
+                                          "arquivoGerado":  "SIGCDCOR_codigo_fonte.txt",
+                                          "erro":  null,
+                                          "baseNameNormalizado":  "sigcdint",
+                                          "txtFile":  "C:\\4c\\tasks\\task453\\sigcdint_form_codigo_fonte.txt"
+                                      },
+                   "02b_analisarTarefa":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-08-10T08:19:28",
+                                              "fim":  "2026-08-10T08:19:28",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "analise.json",
+                                              "erro":  null,
+                                              "comentario":  "NOVO - Analise inteligente do codigo fonte",
+                                              "analiseFile":  "C:\\4c\\tasks\\task453\\analise.json"
+                                          },
+                   "03_gerarMetaPrompt":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-08-10T08:19:29",
+                                              "fim":  "2026-08-10T08:19:37",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "meta_prompt.md",
+                                              "erro":  null,
+                                              "formType":  "CRUD",
+                                              "phaseBFile":  "C:\\4c\\tasks\\task453\\meta_prompt_phaseB.md",
+                                              "metaPromptFile":  "C:\\4c\\tasks\\task453\\meta_prompt.md",
+                                              "boClass":  "intBO",
+                                              "formClass":  "Formint",
+                                              "phaseAFile":  "C:\\4c\\tasks\\task453\\meta_prompt_phaseA.md"
+                                          },
+                   "04_gerarMapeamento":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-08-10T08:19:37",
+                                              "fim":  "2026-08-10T08:19:38",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "mapeamento.json",
+                                              "erro":  null,
+                                              "jsonFile":  "C:\\4c\\tasks\\task453\\mapeamento.json"
+                                          },
+                   "04b_gerarEsqueletos":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-08-10T08:19:38",
+                                               "fim":  "2026-08-10T08:19:38",
+                                               "tentativas":  1,
+                                               "arquivosGerados":  [
+
+                                                                   ],
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Geracao de codigo base ~70% completo",
+                                               "esqueletosDir":  "C:\\4c\\tasks\\task453\\esqueletos",
+                                               "arquivos":  [
+                                                                "Formint_esqueleto.prg",
+                                                                "intBO_esqueleto.prg"
+                                                            ]
+                                           },
+                   "05_migracao":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-08-10T08:19:38",
+                                       "fim":  "2026-08-10T09:48:31",
+                                       "tentativas":  1,
+                                       "maxTentativas":  3,
+                                       "arquivosGerados":  [
+
+                                                           ],
+                                       "comentario":  "FormXXX.prg, XXXBO.prg",
+                                       "erro":  null,
+                                       "boExists":  true,
+                                       "boFile":  "C:\\4c\\projeto\\app\\classes\\intBO.prg",
+                                       "formExists":  true,
+                                       "tamanhoKB":  178.21,
+                                       "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\Formint.prg",
+                                       "complexidade":  "COMPLEXO",
+                                       "linhas":  6419
+                                   },
+                   "05b_corrigirAutomatico":  {
+                                                  "status":  "COMPLETED",
+                                                  "inicio":  "2026-08-10T09:48:31",
+                                                  "fim":  "2026-08-10T09:49:02",
+                                                  "tentativas":  1,
+                                                  "correcoesAplicadas":  0,
+                                                  "erro":  null,
+                                                  "comentario":  "NOVO - Correcao automatica de anti-padroes",
+                                                  "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\Formint.prg",
+                                                  "boFile":  "C:\\4c\\projeto\\app\\classes\\intBO.prg"
+                                              },
+                   "05c_validarCompilacao":  {
+                                                 "status":  "COMPLETED",
+                                                 "inicio":  "2026-08-10T09:49:02",
+                                                 "fim":  "2026-08-10T09:50:52",
+                                                 "tentativas":  1,
+                                                 "errosCompilacao":  [
+
+                                                                     ],
+                                                 "erro":  null,
+                                                 "comentario":  "NOVO - Valida compilacao dos .prg antes de testar",
+                                                 "tentativasUsadas":  1,
+                                                 "sucesso":  true,
+                                                 "corrigidoPorClaude":  true,
+                                                 "arquivosValidados":  2
+                                             },
+                   "06_testForm":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-08-10T11:07:13",
+                                       "fim":  "2026-08-10T11:07:17",
+                                       "tentativas":  1,
+                                       "maxTentativas":  5,
+                                       "errosEncontrados":  [
+
+                                                            ],
+                                       "erro":  null,
+                                       "tentativasUsadas":  1
+                                   },
+                   "06b_testeAutomatico":  {
+                                               "status":  "FAILED",
+                                               "inicio":  "2026-08-10T11:07:17",
+                                               "fim":  "2026-08-10T16:25:04",
+                                               "tentativas":  1,
+                                               "total":  0,
+                                               "passou":  0,
+                                               "falhou":  0,
+                                               "percentual":  0,
+                                               "erro":  "Testes automaticos falharam apos 10 tentativa(s): TIMEOUT: VFP9 travou durante teste automatico (300s). Possivel erro de runtime (Property not found, dialog modal).",
+                                               "comentario":  "NOVO - Testes CRUD automaticos"
+                                           },
+                   "07_validarUI":  {
+                                        "status":  "PENDING",
+                                        "inicio":  null,
+                                        "fim":  null,
+                                        "tentativas":  0,
+                                        "maxTentativas":  5,
+                                        "problemas":  {
+                                                          "erros":  0,
+                                                          "avisos":  0,
+                                                          "diferencas":  0,
+                                                          "total":  0
+                                                      },
+                                        "limiteProblemas":  10,
+                                        "erro":  null
+                                    },
+                   "08_gerarTestManual":  {
+                                              "status":  "PENDING",
+                                              "inicio":  null,
+                                              "fim":  null,
+                                              "tentativas":  0,
+                                              "arquivoGerado":  null,
+                                              "erro":  null
+                                          },
+                   "02c_analisarComportamento":  {
+                                                     "inicio":  "2026-08-10T08:19:28",
+                                                     "tentativas":  1,
+                                                     "erro":  null,
+                                                     "fim":  "2026-08-10T08:19:29",
+                                                     "comportamentoFile":  "C:\\4c\\tasks\\task453\\comportamento.json",
+                                                     "status":  "COMPLETED"
+                                                 },
+                   "02d_extrairLayout":  {
+                                             "inicio":  "2026-08-10T08:19:29",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-08-10T08:19:29"
+                                         },
+                   "05b2_atualizarMapeamento":  {
+                                                    "inicio":  "2026-08-10T09:49:02",
+                                                    "status":  "COMPLETED",
+                                                    "tentativas":  1,
+                                                    "erro":  null,
+                                                    "fim":  "2026-08-10T09:49:02",
+                                                    "destFile":  "C:\\4c\\projeto\\app\\utils\\mapeamentos\\Formint_mapeamento.json",
+                                                    "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\Formint.prg",
+                                                    "mapeamentoFile":  "C:\\4c\\tasks\\task453\\mapeamento.json"
+                                                },
+                   "05d_validarCompletude":  {
+                                                 "inicio":  "2026-08-10T09:50:52",
+                                                 "status":  "COMPLETED",
+                                                 "tentativas":  1,
+                                                 "erro":  null,
+                                                 "fim":  "2026-08-10T09:50:52",
+                                                 "sucesso":  true,
+                                                 "arquivosComProblema":  0
+                                             },
+                   "05e_codeReview":  {
+                                          "inicio":  "2026-08-10T09:50:52",
+                                          "status":  "COMPLETED",
+                                          "erro":  null,
+                                          "fim":  "2026-08-10T11:06:15",
+                                          "passes":  10,
+                                          "problemas":  "[SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027CIDCHAVES\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: EMPS, CODIGOS, CPROS, CBARS, LNDIF, ETIQS, TIPOS, OCORRENCIA, AUTOS, CODBARRAS; [LAYOUT-POSITION] Controle \u0027GGrupo\u0027 (parent: SIGCDINT.Pagina.Lista): Top original=124 vs migrado \u0027txt_4c_GGrupoInicial\u0027 Top=311 (diff=187px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label5\u0027 (parent: SIGCDINT.Pagina.Tratamento.Cnt_Custo2): Top original=92 vs migrado \u0027lbl_4c_Label5\u0027 Top=149 (diff=57px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label5\u0027 (parent: SIGCDINT.Pagina.Tratamento.Cnt_Custo2): Left original=231 vs migrado \u0027lbl_4c_Label5\u0027 Left=171 (diff=60px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label3\u0027 (parent: SIGCDINT.Pagina.Tratamento.Cnt_Custo2): Top original=43 vs migrado \u0027lbl_4c_label33\u0027 Top=7 (diff=36px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label3\u0027 (parent: SIGCDINT.Pagina.Tratamento.Cnt_Custo2): Left original=245 vs migrado \u0027lbl_4c_label33\u0027 Left=16 (diff=229px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label4\u0027 (parent: SIGCDINT.Pagina.Tratamento.Cnt_Custo2): Left original=270 vs migrado \u0027lbl_4c_label46\u0027 Left=27 (diff=243px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label2\u0027 (parent: SIGCDINT.Pagina.Tratamento.Cnt_Custo2): Top original=68 vs migrado \u0027lbl_4c_Label2\u0027 Top=176 (diff=108px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label2\u0027 (parent: SIGCDINT.Pagina.Tratamento.Cnt_Custo2): Left original=301 vs migrado \u0027lbl_4c_Label2\u0027 Left=19 (diff=282px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Cancela\u0027 (parent: SIGCDINT.Pagina.Tratamento.CntTratOcor): Top original=43 vs migrado \u0027cmd_4c_BNCancela\u0027 Top=5 (diff=38px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Cancela\u0027 (parent: SIGCDINT.Pagina.Tratamento.CntTratOcor): Left original=507 vs migrado \u0027cmd_4c_BNCancela\u0027 Left=570 (diff=63px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label2\u0027 (parent: SIGCDINT.Pagina.Tratamento.CntTratOcor): Top original=17 vs migrado \u0027lbl_4c_Label2\u0027 Top=176 (diff=159px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label2\u0027 (parent: SIGCDINT.Pagina.Tratamento.CntTratOcor): Left original=383 vs migrado \u0027lbl_4c_Label2\u0027 Left=19 (diff=364px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label5\u0027 (parent: SIGCDINT.Pagina.Tratamento.CntTratOcor): Top original=46 vs migrado \u0027lbl_4c_Label5\u0027 Top=149 (diff=103px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label5\u0027 (parent: SIGCDINT.Pagina.Tratamento.CntTratOcor): Left original=294 vs migrado \u0027lbl_4c_Label5\u0027 Left=171 (diff=123px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label4\u0027 (parent: SIGCDINT.Pagina.Tratamento.CntTratOcor): Top original=68 vs migrado \u0027lbl_4c_label46\u0027 Top=22 (diff=46px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label4\u0027 (parent: SIGCDINT.Pagina.Tratamento.CntTratOcor): Left original=317 vs migrado \u0027lbl_4c_label46\u0027 Left=27 (diff=290px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Cancela\u0027 (parent: SIGCDINT.Pagina.Tratamento.CntBaixaAuto): Top original=45 vs migrado \u0027cmd_4c_BNCancela\u0027 Top=5 (diff=40px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label5\u0027 (parent: SIGCDINT.Pagina.Tratamento.CntBaixaAuto): Top original=48 vs migrado \u0027lbl_4c_Label5\u0027 Top=149 (diff=101px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label5\u0027 (parent: SIGCDINT.Pagina.Tratamento.CntBaixaAuto): Left original=294 vs migrado \u0027lbl_4c_Label5\u0027 Left=171 (diff=123px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label2\u0027 (parent: SIGCDINT.Pagina.Tratamento.CntBaixaAuto): Top original=18 vs migrado \u0027lbl_4c_Label2\u0027 Top=176 (diff=158px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label2\u0027 (parent: SIGCDINT.Pagina.Tratamento.CntBaixaAuto): Left original=359 vs migrado \u0027lbl_4c_Label2\u0027 Left=19 (diff=340px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label4\u0027 (parent: SIGCDINT.Pagina.Tratamento.CntBaixaAuto): Top original=70 vs migrado \u0027lbl_4c_label46\u0027 Top=22 (diff=48px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label4\u0027 (parent: SIGCDINT.Pagina.Tratamento.CntBaixaAuto): Left original=444 vs migrado \u0027lbl_4c_label46\u0027 Left=27 (diff=417px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label1\u0027 (parent: SIGCDINT.Pagina.Tratamento.CntBaixaAuto): Top original=71 vs migrado \u0027lbl_4c_Label1\u0027 Top=115 (diff=44px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label1\u0027 (parent: SIGCDINT.Pagina.Tratamento.CntBaixaAuto): Left original=310 vs migrado \u0027lbl_4c_Label1\u0027 Left=266 (diff=44px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label5\u0027 (parent: SIGCDINT.Pagina.Tratamento.Cnt_Inserir): Top original=74 vs migrado \u0027lbl_4c_Label5\u0027 Top=149 (diff=75px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label5\u0027 (parent: SIGCDINT.Pagina.Tratamento.Cnt_Inserir): Left original=263 vs migrado \u0027lbl_4c_Label5\u0027 Left=171 (diff=92px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label3\u0027 (parent: SIGCDINT.Pagina.Tratamento.Cnt_Inserir): Top original=50 vs migrado \u0027lbl_4c_label33\u0027 Top=7 (diff=43px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label3\u0027 (parent: SIGCDINT.Pagina.Tratamento.Cnt_Inserir): Left original=273 vs migrado \u0027lbl_4c_label33\u0027 Left=16 (diff=257px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label4\u0027 (parent: SIGCDINT.Pagina.Tratamento.Cnt_Inserir): Left original=289 vs migrado \u0027lbl_4c_label46\u0027 Left=27 (diff=262px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Cancela\u0027 (parent: SIGCDINT.Pagina.Tratamento.Cnt_CCusto1): Left original=831 vs migrado \u0027cmd_4c_BNCancela\u0027 Left=570 (diff=261px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Sair\u0027 (parent: SIGCDINT.Pagina.Tratamento.Cnt_CCusto1): Left original=906 vs migrado \u0027cmd_4c_BNSair\u0027 Left=645 (diff=261px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Procurar\u0027 (parent: SIGCDINT.Pagina.Tratamento.Cnt_CCusto1): Top original=12 vs migrado \u0027cnt_4c__Procurar\u0027 Top=239 (diff=227px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Procurar\u0027 (parent: SIGCDINT.Pagina.Tratamento.Cnt_CCusto1): Left original=163 vs migrado \u0027cnt_4c__Procurar\u0027 Left=17 (diff=146px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label4\u0027 (parent: SIGCDINT.Pagina.Tratamento.Cnt_CCusto1): Top original=126 vs migrado \u0027lbl_4c_label46\u0027 Top=22 (diff=104px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label3\u0027 (parent: SIGCDINT.Pagina.Tratamento.Cnt_CCusto1): Top original=151 vs migrado \u0027lbl_4c_label33\u0027 Top=7 (diff=144px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label7\u0027 (parent: SIGCDINT.Pagina.Tratamento.Cnt_CCusto1): Top original=174 vs migrado \u0027lbl_4c_label72\u0027 Top=123 (diff=51px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label7\u0027 (parent: SIGCDINT.Pagina.Tratamento.Cnt_CCusto1): Left original=201 vs migrado \u0027lbl_4c_label72\u0027 Left=344 (diff=143px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label1\u0027 (parent: SIGCDINT.Pagina.Tratamento.Cnt_CCusto1.Cnt_Total): Top original=9 vs migrado \u0027lbl_4c_Label1\u0027 Top=115 (diff=106px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label1\u0027 (parent: SIGCDINT.Pagina.Tratamento.Cnt_CCusto1.Cnt_Total): Left original=49 vs migrado \u0027lbl_4c_Label1\u0027 Left=266 (diff=217px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label2\u0027 (parent: SIGCDINT.Pagina.Tratamento.Cnt_CCusto1.Cnt_Total): Top original=32 vs migrado \u0027lbl_4c_Label2\u0027 Top=176 (diff=144px, tolerancia=30px)",
+                                          "tentativas":  5,
+                                          "problemasRestantes":  42
+                                      },
+                   "05f_validarSQLSchema":  {
+                                                "inicio":  "2026-08-10T11:06:15",
+                                                "tentativas":  1,
+                                                "erro":  null,
+                                                "fim":  "2026-08-10T11:07:13",
+                                                "status":  "FIXED",
+                                                "retries":  1,
+                                                "boFile":  "C:\\4c\\projeto\\app\\classes\\intBO.prg",
+                                                "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\Formint.prg"
+                                            }
+               },
+    "metricas":  {
+                     "tempoTotalSegundos":  0,
+                     "tempoExtracao":  0,
+                     "tempoAnalise":  0,
+                     "tempoEsqueletos":  0,
+                     "tempoMigracao":  0,
+                     "tempoCorrecao":  0,
+                     "tempoCompilacao":  0,
+                     "tempoTesteAuto":  0,
+                     "tempoValidacao":  0,
+                     "linhasCodigoOriginal":  0,
+                     "linhasCodigoGerado":  0,
+                     "correcoesAutomaticas":  0,
+                     "testesAutomaticos":  0
+                 }
+}

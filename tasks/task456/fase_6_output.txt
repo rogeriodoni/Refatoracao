@@ -1,0 +1,8 @@
+﻿Every `RETURN` is after `ENDTRY` ÔÇö no RETURN inside TRY blocks. Phase 6 is complete.
+
+**Phase 6/8 done.** Here's what was added to `Formlch.prg` (now 3431 lines):
+
+- **`RegistrarKeyPressLookups()`** ÔÇö PROTECTED method called at end of `ConfigurarPaginaDados()`, registers `KeyPress` BINDEVENT for all 25 editable lookup fields on Page2
+- **25 `KeyPress*()` handlers** ÔÇö PUBLIC methods (required for BINDEVENT), each fires F4=115 or F5=116 ÔåÆ calls appropriate lookup
+- **3 generic PROTECTED helpers**: `AbrirLookupGrupo()` (SigCdGcr), `AbrirLookupConta()` (SigCdCli by iclis), `AbrirLookupCpf()` (SigCdCli by cpfs)
+- **6 specific lookup methods**: `AbrirLookupOper()` (SigCdOpt), `AbrirLookupMoeda()` (SigCdMoe), `AbrirLookupEmpresa()` (SigCdEmp), `AbrirLookupContaIclis()` (SigCdCli full), `AbrirLookupClasemp()` (SigCdGre using SCATTER MEMVAR to safely handle the `class` reserved-word field), `AbrirLookupAlinea()` (SigCdAli)

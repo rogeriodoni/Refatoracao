@@ -1,0 +1,7 @@
+﻿Tr├¬s corre├º├Áes aplicadas em `HORBO.prg`:
+
+1. **`MontarGradeMesAno` ÔÇö SELECT DISTINCT**: `DTOS(NVL(datas, CTOD("")))` ÔåÆ `DTOS(TTOD(datas))`. A coluna `datas` de SigCdThs ├® `DATETIME` no SQL Server; `DTOS()` aceita apenas `DATE` ÔÇö `TTOD()` converte antes. Esse era o crash que causava o MsgErro modal e o timeout de 300s.
+
+2. **`MontarGradeMesAno` ÔÇö SCAN/INSERT**: `m.cursor_4c_MesAnoTemp.Mes` ÔåÆ `cursor_4c_MesAnoTemp.Mes`. O prefixo `m.` ├® para memvars, n├úo para alias de cursor ÔÇö fora de contexto SELECT-SQL causaria "Variable not found".
+
+3. **`MontarCalendario` ÔÇö INDEX ON**: `DTOS(NVL(datas, CTOD("")))` ÔåÆ `DTOS(TTOD(datas))`. Mesmo problema: indexar cursor vindo de SQLEXEC com `datas` datetime exige convers├úo `TTOD()` antes de `DTOS()`.

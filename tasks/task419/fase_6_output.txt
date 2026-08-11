@@ -1,0 +1,16 @@
+﻿A fase 6 est├í **completa**. Aqui o resumo do que foi encontrado e corrigido:
+
+**Estado da migra├º├úo (FormFNF.prg):**
+
+As fases anteriores (1-5) j├í haviam implementado todos os campos da Page2, incluindo o container `cnt_4c_BotoesAcao` com Confirmar/Cancelar. N├úo havia lookups F4/F5 no original (nenhum `fwbuscaext`, `fwBuscaSel` ou `sigacess` no c├│digo fonte).
+
+**Corre├º├úo aplicada nesta fase:**
+
+O `FormParaBO()` mapeava `OptionGroup.Value = 2 (Nao)` ÔåÆ `this_nNfixos = 0`, mas o original armazenava **1=Sim / 2=Nao** via `ControlSource` direto (o VFP grava o ├¡ndice do bot├úo selecionado). Corrigido para `IIF(Value = 1, 1, 2)` ÔÇö evita altera├º├úo silenciosa de registros existentes com `nfixos=2` ao salvar.
+
+**Implementa├º├úo completa ÔÇö checklist Fase 6:**
+- `cnt_4c_BotoesAcao` (Confirmar + Cancelar) Ô£ô
+- Todos os 6 campos (Impressora, Ordem, CodOp, CodAbertura, Descri├º├úo, Fixo) Ô£ô
+- `ImpInteractiveChange()` ÔÇö equivalente ao `When` event de `fwget1` (SWEDA/NSWEDA) Ô£ô
+- `FormParaBO` / `BOParaForm` / `LimparCampos` / `HabilitarCampos` ÔÇö todos os campos mapeados Ô£ô
+- Sem lookups F4/F5 (original n├úo tinha) Ô£ô

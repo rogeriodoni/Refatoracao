@@ -1,0 +1,13 @@
+﻿O `FormFct.prg` j├í est├í completamente implementado. O m├®todo `ConfigurarPgFicha()` (linhas 508-912) j├í cont├®m todos os controles da p├ígina `pgFicha`, incluindo:
+
+- `txt_4c_CGrus`, `txt_4c_DGrus`, `txt_4c_SGrus`, `txt_4c_DSGru` (display-only com ControlSource)
+- `opt_4c_NChkDims`, `opt_4c_NChkTems`, `opt_4c_NChkPess` (OptionGroups com Sim/N├úo)
+- `grd_4c_Fichas` com 9 colunas, incluindo OptionGroup em Column7 (Maiusculo/Minusculo/Livre)
+- `cmd_4c_ApagarLinha`, `cmd_4c_Respostas`, `cmd_4c_CopiaFicha`
+- `cnt_4c_CopiarAcesso` com txt_4c_CpyCGrus/DGrus/SGrus/DSGru + bot├Áes Confirmar/Cancelar
+- Todos os BINDEVENTs: `ValidCCarsGrid`, `ValidCTitsGrid`, `KeyPressCTpDados`, `ValidCpyCGrus`, `ValidCpySGrus`, `ValidCSelecaos`, `ValidCTpDados`
+- Todos os handlers no Form: linhas 1436-1736
+
+Nota: o PageFrame interno est├í nomeado `pgf_4c_SubPaginas` (n├úo `pgf_4c_DadosInternos` como indica o t├¡tulo da fase), e `pgFicha` ├® a `Page1` (n├úo Page2) - por├®m funcionalmente est├í correto.
+
+A FASE 9 foi conclu├¡da em sess├úo anterior. O form est├í pronto.

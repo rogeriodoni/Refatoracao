@@ -1,0 +1,1964 @@
+{
+  "resumo": {
+    "totalMetodos": 121,
+    "metodosComSQL": 5,
+    "metodosComValidacao": 56,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fDtoSQL", "fChkFeriado", "MontaGrade", "fConfigGeral"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDHOR",
+      "evento": "Procedure",
+      "linhas": 67,
+      "codigoOriginal": "ThisForm.pcEscolha = [CONSULTAR]\n\nSelect Mes, Ano From crMesAno Into Cursor LocalMesAno\n\nIf (Reccount('LocalMesAno') < 1)\n\tFor lnObj = 1 to 42\n\t\tlcObj = Padl(lnObj, 2, '0')\n\t\tThisForm.cntCalendario.chk&lcObj..ForeColor = Rgb(0,0,0)\n\t\tThisForm.cntCalendario.chk&lcObj..Caption = [  00   000:00]\n\tNext\n\n\tWith ThisForm\n\t\t.grdMesAno.Enabled \t\t \t = .f.\n\t\t.cntCalendario.Enabled   \t = .f.\n\t\t.cntDados.Visible \t\t \t = .t.\n\t\t.cntDados.btnData.Caption    = [00/00/0000]\n\t\t.cntDados.getMes.Value\t\t = []\n\t\t.cntDa... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "chk&lcObj",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR",
+      "evento": "Procedure",
+      "linhas": 152,
+      "codigoOriginal": "Lparameters pMes, pAno, pTru\n\nPrivate pDtI, pDtF\n\nldDia = Ctod('01/' + pMes + '/' + pAno)\nlnDow = 1\n\npDtI = fDtoSQL(ldDia)\npDtF = fDtoSQL(Gomonth(ldDia, 1) - 1, '23:59:59')\n\nloObj = ThisForm.cntCalendario\n\nlcQuery = [Select * ] + ;\n\t\t    [From SigCdThs ] + ;\n\t\t   [Where Setors = '] + Padr(ThisForm.lpFases, 10) + [' And ] + ;\n\t\t   \t\t [UniPrdts = '] + Padr(ThisForm.lpUnidades, 10) + [' And ] + ;\n\t\t   \t\t [Datas BetWeen ?pDtI And ?pDtF]\n\nIf (ThisForm.poDataMgr.SqlExecute(lcQuery, 'TmpCtHr') < 1)\n\t=M... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fDtoSQL,fChkFeriado",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "ChkFeriado(ThisForm,chk&lcObj",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR",
+      "evento": "Procedure",
+      "linhas": 34,
+      "codigoOriginal": "* Apanhando os Meses/Anos Para a Grade\nZap In crMesAno\n\nlcQuery = [Select Distinct Datas ] + ;\n\t\t    [From SigCdThs ] + ;\n\t\t   [Where Setors = '] + Padr(ThisForm.lpFases, 10) + [' And ] + ;\n\t\t   \t\t [UniPrdts = '] + Padr(ThisForm.lpUnidades, 10) + [' ] + ;\n\t\t   [Order By Datas]\n\nIf (ThisForm.poDataMgr.SqlExecute(lcQuery, 'LocalCtHr1') < 1)\n\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Init - LocalCtHr1)')\n\tReturn .f.\nEndIf\n\nSelect Distinct Dtos(Nvl(Datas, Ctod(''))) as ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDHOR",
+      "evento": "Procedure",
+      "linhas": 25,
+      "codigoOriginal": "ThisForm.pcEscolha = [ALTERAR]\n\nWith ThisForm\n\t.grdMesAno.Enabled \t\t \t = .f.\n\t.cntCalendario.Enabled   \t = .t.\n\t.cntDados.Visible \t\t \t = .t.\n\t.cntDados.getMes.Enabled \t = InList(ThisForm.pcEscolha, [INSERIR], [COPIARP])\n\t.cntDados.getAno.Enabled \t = InList(ThisForm.pcEscolha, [INSERIR], [COPIARP])\n\t.cntDados.getQtds.Enabled \t = InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])\n\t.cntDados.getQtHoras.Enabled = InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])\nEndWith\n\nWith ThisForm.cmdEscolha\n\t.btnI... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.AjustaTela",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR",
+      "evento": "Procedure",
+      "linhas": 229,
+      "codigoOriginal": "Local lcHrr, loObj, lnHor, lnQth, lnQtd, lcObj, ldDat\n\nllUpd = .f.\nllTOk = .t.\n\nZap In crSigCdThs\n\nDo Case\n\tCase (ThisForm.pcEscolha = [INSERIR]) && INSERIR\n\t\tpMes = Padl(ThisForm.cntDados.getMes.Value, 2, [0])\n\t\tpAno = Padl(ThisForm.cntDados.getAno.Value, 4, [0])\n\t\t\n\t\tldDat = Ctod([01/] + pMes + [/] + pAno)\n\n\t\tpDtI = fDtoSQL(ldDat)\n\t\tpDtF = fDtoSQL(Gomonth(ldDat, 1) - 1, '23:59:59')\n\n\t\tlcQuery = [Select cIdChaves ] + ;\n\t\t\t\t    [From SigCdThs ] + ;\n\t\t\t\t   [Where Setors = '] + Padr(ThisForm.lpFas... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL,fChkFeriado",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "ChkFeriado(ThisForm",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR",
+      "evento": "Procedure",
+      "linhas": 35,
+      "codigoOriginal": "ThisForm.pcEscolha = [COPIARP]\n\nWith ThisForm\n\t.grdMesAno.Enabled \t\t \t = .f.\n\t.cntCalendario.Enabled   \t = .f.\n\t.cntDados.Visible \t\t \t = .t.\n\n\t.cntDados.btnData.Caption    = [Copiar ] + crMesAno.Mes + [/] + crMesAno.Ano\n\t.cntDados.getMes.Enabled \t = .t.\n\t.cntDados.getAno.Enabled \t = .t.\n\t.cntDados.getQtds.Enabled \t = .f.\n\t.cntDados.getQtHoras.Enabled = .f.\n\n\t.cntDados.getMes.Value \t\t = Space(02)\n\t.cntDados.getAno.Value \t\t = Space(04)\n\t.cntDados.getQtds.Value \t = 0\n\t.cntDados.getQtHoras.Value \t =... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR",
+      "evento": "Procedure",
+      "linhas": 28,
+      "codigoOriginal": "ThisForm.pcEscolha = [EXCLUIR]\n\nWith ThisForm\n\t.grdMesAno.Enabled \t\t \t = .f.\n\t.cntCalendario.Enabled   \t = .f.\n\t.cntDados.Visible \t\t \t = .t.\n\n\t.cntDados.btnData.Caption = [Excluir]\n\t.cntDados.getMes.Enabled \t = .f.\n\t.cntDados.getAno.Enabled \t = .f.\n\t.cntDados.getQtds.Enabled \t = .f.\n\t.cntDados.getQtHoras.Enabled = .f.\nEndWith\n\nWith ThisForm.cmdEscolha\n\t.btnInserir.Enabled = .f.\n\t.btnAlterar.Enabled = .f.\n\t.btnExcluir.Enabled = .f.\n\t.btnCopiarP.Enabled = .f.\nEndWith\n\nWith ThisForm.cmdSalva\n\t.btnC... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR",
+      "evento": "Procedure",
+      "linhas": 35,
+      "codigoOriginal": "ThisForm.pcEscolha = [INSERIR]\n\nWith ThisForm\n\t.grdMesAno.Enabled \t\t \t = .f.\n\t.cntCalendario.Enabled   \t = .f.\n\t.cntDados.Visible \t\t \t = .t.\n\n\t.cntDados.btnData.Caption    = [Inserir]\n\t.cntDados.getMes.Enabled \t = .t.\n\t.cntDados.getAno.Enabled \t = .t.\n\t.cntDados.getQtds.Enabled \t = .f.\n\t.cntDados.getQtHoras.Enabled = .f.\n\n\t.cntDados.getMes.Value \t\t = Space(02)\n\t.cntDados.getAno.Value \t\t = Space(04)\n\t.cntDados.getQtds.Value \t = 0\n\t.cntDados.getQtHoras.Value \t = 0\n\t.cntDados.getTotHoras.Value  = 0... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR",
+      "evento": "Valid",
+      "linhas": 38,
+      "codigoOriginal": "Lparameters pCpo\n\nWith ThisForm.cntDados\n\t.Visible = .t.\n\t.btnData.Caption \t= pCpo + [/] + crMesAno.Mes + [/] + crMesAno.Ano\n\t.getMes.Value\t\t= crMesAno.Mes\n\t.getAno.Value\t\t= crMesAno.Ano\n\n\t.getMes.Enabled \t= InList(ThisForm.pcEscolha, [INSERIR], [COPIARP])\n\t.getAno.Enabled \t= InList(ThisForm.pcEscolha, [INSERIR], [COPIARP])\n\t.getQtds.Enabled \t= InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])\n\t.getQtHoras.Enabled\t= InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])\n\n\tldDat = Ctod(.btnData.Caption)... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR",
+      "evento": "Init",
+      "linhas": 80,
+      "codigoOriginal": "Lparameters pCod, pUni\n* Parâmetros : pCod - Fase/Setor (Obrigatório)\n*              pUni - Unidade Produtiva (Obrigatório)\n\nIf (Type('pCod') <> 'C') Or Empty(pCod)\n\t=Messagebox('O Parâmetro de Fase/Setor Passado Não É Valido...', 0+48, 'Parâmetros Inválidos!')\n\tReturn .f.\nEndIf\n\nIf (Type('pUni') <> 'C') Or Empty(pUni)\n\t=Messagebox('O Parâmetro de Unidade Produtiva Passado Não É Valido...', 0+48, 'Parâmetros Inválidos!')\n\tReturn .f.\nEndIf\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector',... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "MontaGrade",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDHOR",
+      "evento": "Procedure",
+      "linhas": 30,
+      "codigoOriginal": "=fConfigGeral()\n\nCreate Cursor crMesAno (Mes c(2), Ano c(4))\nSelect crMesAno\nIndex On Ano + Mes Tag Ordem\n\nCreate Cursor crCalendario (Data01 d(8), QtHoras01 n(5,2), Qtds01 n(2), Data02 d(8), QtHoras02 n(5,2), Qtds02 n(2), ;\n\t\t\t\t\t\t\tData03 d(8), QtHoras03 n(5,2), Qtds03 n(2), Data04 d(8), QtHoras04 n(5,2), Qtds04 n(2), ;\n\t\t\t\t\t\t\tData05 d(8), QtHoras05 n(5,2), Qtds05 n(2), Data06 d(8), QtHoras06 n(5,2), Qtds06 n(2), ;\n\t\t\t\t\t\t\tData07 d(8), QtHoras07 n(5,2), Qtds07 n(2), Data08 d(8), QtHoras08 n(5,2),... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntDados.getMes",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntDados.getAno",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntDados.getQtds",
+      "evento": "Valid",
+      "linhas": 27,
+      "codigoOriginal": "Local lcHrr, loObj, lnHor, lnQth, lnQtd, lcObj, ldDat\n\nloObj = ThisForm.cntCalendario\n\nWith ThisForm.cntDados\n\tldDat = Ctod(.btnData.Caption)\n\tFor lnObj = 1 to 42\n\t\tlcObj = Padl(lnObj, 2, '0')\n\n\t\tIf (crCalendario.Data&lcObj. = ldDat)\n\t\t\tlnHor = Val(Strtran(fMtoH(fHtoM(Str(.getQtHoras.Value, 5, 2)) * .getQtds.Value), ':', '.'))\n\t\t\tlnQth = .getQtHoras.Value\n\t\t\tlnQtd = .getQtds.Value\n\n\t\t\tReplace QtHoras&lcObj. With lnQth, ;\n\t\t\t\t\tQtds&lcObj.    With lnQtd In crCalendario\n\n\t\t\tloObj.chk&lcObj..ForeCol... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "chk&lcObj",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntDados.getQtds",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntDados.getQtHoras",
+      "evento": "Valid",
+      "linhas": 27,
+      "codigoOriginal": "Local lcHrr, loObj, lnHor, lnQth, lnQtd, lcObj, ldDat\n\nloObj = ThisForm.cntCalendario\n\nWith ThisForm.cntDados\n\tldDat = Ctod(.btnData.Caption)\n\tFor lnObj = 1 to 42\n\t\tlcObj = Padl(lnObj, 2, '0')\n\n\t\tIf (crCalendario.Data&lcObj. = ldDat)\n\t\t\tlnHor = Val(Strtran(fMtoH(fHtoM(Str(.getQtHoras.Value, 5, 2)) * .getQtds.Value), ':', '.'))\n\t\t\tlnQth = .getQtHoras.Value\n\t\t\tlnQtd = .getQtds.Value\n\n\t\t\tReplace QtHoras&lcObj. With lnQth, ;\n\t\t\t\t\tQtds&lcObj.    With lnQtd In crCalendario\n\n\t\t\tloObj.chk&lcObj..ForeCol... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "chk&lcObj",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntDados.getQtHoras",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntDados.btnData",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk01",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ValidaDias(Substr(Alltrim(This.Caption), 1, 2))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ValidaDias",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk01",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "lcCpo = Substr(This.Name, 4, 2)\nReturn Not Empty(crCalendario.Data&lcCpo.)\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk02",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ValidaDias(Substr(Alltrim(This.Caption), 1, 2))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ValidaDias",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk02",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "lcCpo = Substr(This.Name, 4, 2)\nReturn Not Empty(crCalendario.Data&lcCpo.)\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk03",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ValidaDias(Substr(Alltrim(This.Caption), 1, 2))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ValidaDias",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk03",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "lcCpo = Substr(This.Name, 4, 2)\nReturn Not Empty(crCalendario.Data&lcCpo.)\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk04",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ValidaDias(Substr(Alltrim(This.Caption), 1, 2))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ValidaDias",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk04",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "lcCpo = Substr(This.Name, 4, 2)\nReturn Not Empty(crCalendario.Data&lcCpo.)\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk05",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ValidaDias(Substr(Alltrim(This.Caption), 1, 2))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ValidaDias",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk05",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "lcCpo = Substr(This.Name, 4, 2)\nReturn Not Empty(crCalendario.Data&lcCpo.)\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk06",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ValidaDias(Substr(Alltrim(This.Caption), 1, 2))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ValidaDias",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk06",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "lcCpo = Substr(This.Name, 4, 2)\nReturn Not Empty(crCalendario.Data&lcCpo.)\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk08",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ValidaDias(Substr(Alltrim(This.Caption), 1, 2))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ValidaDias",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk08",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "lcCpo = Substr(This.Name, 4, 2)\nReturn Not Empty(crCalendario.Data&lcCpo.)\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk09",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ValidaDias(Substr(Alltrim(This.Caption), 1, 2))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ValidaDias",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk09",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "lcCpo = Substr(This.Name, 4, 2)\nReturn Not Empty(crCalendario.Data&lcCpo.)\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk10",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ValidaDias(Substr(Alltrim(This.Caption), 1, 2))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ValidaDias",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk10",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "lcCpo = Substr(This.Name, 4, 2)\nReturn Not Empty(crCalendario.Data&lcCpo.)\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk11",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ValidaDias(Substr(Alltrim(This.Caption), 1, 2))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ValidaDias",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk11",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "lcCpo = Substr(This.Name, 4, 2)\nReturn Not Empty(crCalendario.Data&lcCpo.)\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk12",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ValidaDias(Substr(Alltrim(This.Caption), 1, 2))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ValidaDias",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk12",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "lcCpo = Substr(This.Name, 4, 2)\nReturn Not Empty(crCalendario.Data&lcCpo.)\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk13",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ValidaDias(Substr(Alltrim(This.Caption), 1, 2))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ValidaDias",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk13",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "lcCpo = Substr(This.Name, 4, 2)\nReturn Not Empty(crCalendario.Data&lcCpo.)\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk15",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ValidaDias(Substr(Alltrim(This.Caption), 1, 2))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ValidaDias",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk15",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "lcCpo = Substr(This.Name, 4, 2)\nReturn Not Empty(crCalendario.Data&lcCpo.)\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk16",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ValidaDias(Substr(Alltrim(This.Caption), 1, 2))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ValidaDias",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk16",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "lcCpo = Substr(This.Name, 4, 2)\nReturn Not Empty(crCalendario.Data&lcCpo.)\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk17",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ValidaDias(Substr(Alltrim(This.Caption), 1, 2))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ValidaDias",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk17",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "lcCpo = Substr(This.Name, 4, 2)\nReturn Not Empty(crCalendario.Data&lcCpo.)\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk18",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ValidaDias(Substr(Alltrim(This.Caption), 1, 2))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ValidaDias",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk18",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "lcCpo = Substr(This.Name, 4, 2)\nReturn Not Empty(crCalendario.Data&lcCpo.)\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk19",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ValidaDias(Substr(Alltrim(This.Caption), 1, 2))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ValidaDias",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk19",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "lcCpo = Substr(This.Name, 4, 2)\nReturn Not Empty(crCalendario.Data&lcCpo.)\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk20",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ValidaDias(Substr(Alltrim(This.Caption), 1, 2))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ValidaDias",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk20",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "lcCpo = Substr(This.Name, 4, 2)\nReturn Not Empty(crCalendario.Data&lcCpo.)\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk22",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ValidaDias(Substr(Alltrim(This.Caption), 1, 2))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ValidaDias",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk22",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "lcCpo = Substr(This.Name, 4, 2)\nReturn Not Empty(crCalendario.Data&lcCpo.)\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk23",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ValidaDias(Substr(Alltrim(This.Caption), 1, 2))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ValidaDias",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk23",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "lcCpo = Substr(This.Name, 4, 2)\nReturn Not Empty(crCalendario.Data&lcCpo.)\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk24",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ValidaDias(Substr(Alltrim(This.Caption), 1, 2))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ValidaDias",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk24",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "lcCpo = Substr(This.Name, 4, 2)\nReturn Not Empty(crCalendario.Data&lcCpo.)\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk25",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ValidaDias(Substr(Alltrim(This.Caption), 1, 2))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ValidaDias",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk25",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "lcCpo = Substr(This.Name, 4, 2)\nReturn Not Empty(crCalendario.Data&lcCpo.)\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk26",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ValidaDias(Substr(Alltrim(This.Caption), 1, 2))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ValidaDias",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk26",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "lcCpo = Substr(This.Name, 4, 2)\nReturn Not Empty(crCalendario.Data&lcCpo.)\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk27",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ValidaDias(Substr(Alltrim(This.Caption), 1, 2))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ValidaDias",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk27",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "lcCpo = Substr(This.Name, 4, 2)\nReturn Not Empty(crCalendario.Data&lcCpo.)\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk07",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ValidaDias(Substr(Alltrim(This.Caption), 1, 2))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ValidaDias",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk07",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "lcCpo = Substr(This.Name, 4, 2)\nReturn Not Empty(crCalendario.Data&lcCpo.)\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk14",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ValidaDias(Substr(Alltrim(This.Caption), 1, 2))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ValidaDias",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk14",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "lcCpo = Substr(This.Name, 4, 2)\nReturn Not Empty(crCalendario.Data&lcCpo.)\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk21",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ValidaDias(Substr(Alltrim(This.Caption), 1, 2))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ValidaDias",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk21",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "lcCpo = Substr(This.Name, 4, 2)\nReturn Not Empty(crCalendario.Data&lcCpo.)\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk28",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ValidaDias(Substr(Alltrim(This.Caption), 1, 2))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ValidaDias",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk28",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "lcCpo = Substr(This.Name, 4, 2)\nReturn Not Empty(crCalendario.Data&lcCpo.)\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk29",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ValidaDias(Substr(Alltrim(This.Caption), 1, 2))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ValidaDias",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk29",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "lcCpo = Substr(This.Name, 4, 2)\nReturn Not Empty(crCalendario.Data&lcCpo.)\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk30",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ValidaDias(Substr(Alltrim(This.Caption), 1, 2))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ValidaDias",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk30",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "lcCpo = Substr(This.Name, 4, 2)\nReturn Not Empty(crCalendario.Data&lcCpo.)\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk31",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ValidaDias(Substr(Alltrim(This.Caption), 1, 2))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ValidaDias",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk31",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "lcCpo = Substr(This.Name, 4, 2)\nReturn Not Empty(crCalendario.Data&lcCpo.)\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk32",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ValidaDias(Substr(Alltrim(This.Caption), 1, 2))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ValidaDias",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk32",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "lcCpo = Substr(This.Name, 4, 2)\nReturn Not Empty(crCalendario.Data&lcCpo.)\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk33",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ValidaDias(Substr(Alltrim(This.Caption), 1, 2))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ValidaDias",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk33",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "lcCpo = Substr(This.Name, 4, 2)\nReturn Not Empty(crCalendario.Data&lcCpo.)\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk34",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ValidaDias(Substr(Alltrim(This.Caption), 1, 2))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ValidaDias",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk34",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "lcCpo = Substr(This.Name, 4, 2)\nReturn Not Empty(crCalendario.Data&lcCpo.)\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk35",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ValidaDias(Substr(Alltrim(This.Caption), 1, 2))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ValidaDias",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk35",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "lcCpo = Substr(This.Name, 4, 2)\nReturn Not Empty(crCalendario.Data&lcCpo.)\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk36",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ValidaDias(Substr(Alltrim(This.Caption), 1, 2))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ValidaDias",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk36",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "lcCpo = Substr(This.Name, 4, 2)\nReturn Not Empty(crCalendario.Data&lcCpo.)\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk37",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ValidaDias(Substr(Alltrim(This.Caption), 1, 2))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ValidaDias",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk37",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "lcCpo = Substr(This.Name, 4, 2)\nReturn Not Empty(crCalendario.Data&lcCpo.)\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk38",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ValidaDias(Substr(Alltrim(This.Caption), 1, 2))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ValidaDias",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk38",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "lcCpo = Substr(This.Name, 4, 2)\nReturn Not Empty(crCalendario.Data&lcCpo.)\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk39",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ValidaDias(Substr(Alltrim(This.Caption), 1, 2))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ValidaDias",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk39",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "lcCpo = Substr(This.Name, 4, 2)\nReturn Not Empty(crCalendario.Data&lcCpo.)\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk40",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ValidaDias(Substr(Alltrim(This.Caption), 1, 2))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ValidaDias",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk40",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "lcCpo = Substr(This.Name, 4, 2)\nReturn Not Empty(crCalendario.Data&lcCpo.)\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk41",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ValidaDias(Substr(Alltrim(This.Caption), 1, 2))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ValidaDias",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk41",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "lcCpo = Substr(This.Name, 4, 2)\nReturn Not Empty(crCalendario.Data&lcCpo.)\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk42",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ValidaDias(Substr(Alltrim(This.Caption), 1, 2))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ValidaDias",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.chk42",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "lcCpo = Substr(This.Name, 4, 2)\nReturn Not Empty(crCalendario.Data&lcCpo.)\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.Command1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.Command2",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.Command3",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.Command4",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.Command5",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.Command6",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cntCalendario.Command7",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cmdEscolha",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.m_Inserir",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cmdEscolha",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.m_Alterar",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cmdEscolha",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.m_Excluir",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cmdEscolha",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.m_CopiarP",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cmdSalva",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.m_Confirmar",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cmdSalva",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.cmdSalva",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.m_Cancelar",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.grdMesAno",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "Lparameters nColIndex\n\nThisForm.MontaCalendario(crMesAno.Mes, crMesAno.Ano)\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "MontaCalendario",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.grdMesAno.Column1.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDHOR.grdMesAno.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDHOR.Procedure",
+      "queryOriginal": "Select Mes, Ano From crMesAno Into Cursor LocalMesAno",
+      "tabelas": "crMesAno",
+      "colunas": "Mes,Ano",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["crMesAno"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

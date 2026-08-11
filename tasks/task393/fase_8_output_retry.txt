@@ -1,0 +1,15 @@
+﻿Fase 8/8 conclu├¡da. FormDES.prg atualizado com:
+
+**Melhorias aplicadas nesta retentativa:**
+- `BtnConfirmarClick()`: adicionado TRY/CATCH + tratamento especial do modo VISUALIZAR (fecha sem salvar)
+- `BtnCancelarClick()`: adicionado TRY/CATCH defensivo
+- Header atualizado listando todos os 26 m├®todos entregues nas 8 fases
+
+**Consolida├º├úo da Fase 8 confirmada:**
+- Todos os m├®todos obrigat├│rios presentes e completos:
+  - Navega├º├úo: `CarregarLista`, `AlternarPagina`, `AjustarBotoesPorModo`, `HabilitarCampos`, `LimparCampos`
+  - CRUD: `BtnIncluir/Visualizar/Alterar/Excluir/Buscar/Encerrar/Confirmar/Cancelar/Btncarregar`
+  - Data binding: `FormParaBO` (5 campos edit├íveis) + `BOParaForm` (todos os 8 campos + c├ílculo Pdes)
+  - Auxiliares: `TornarControlesVisiveis`, `FormatarGridLista`, `ValidarEmps`, `RecalcularPdes`, `ImportaPlan`
+- Integra├º├úo no menu.prg j├í presente (`BAR 75` + `AbrirFormDES()` linha 6857)
+- config.prg auto-carrega via `ADIR(*BO.prg)` e `ADIR(cadastros\Form*.prg)`

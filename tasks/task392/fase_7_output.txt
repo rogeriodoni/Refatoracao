@@ -1,0 +1,19 @@
+﻿O arquivo FormDCC.prg est├í **completo** ÔÇö os eventos principais j├í foram implementados nas fases anteriores. Ao analisar o arquivo:
+
+**Eventos j├í implementados:**
+- `CmdInserirClick()` ÔÇö linha 324 (equivalente a BtnIncluirClick para este form OPERACIONAL)
+- `CmdExcluirClick()` ÔÇö linha 345 (equivalente a BtnExcluirClick)
+- `CmdEncerrarClick()` ÔÇö linha 366 (fechar o dialog com valida├º├úo)
+
+**BINDEVENTs j├í configurados** em `ConfigurarPaginaLista()` (linhas 496-498):
+```foxpro
+BINDEVENT(THIS.cmd_4c_Inserir,  "Click", THIS, "CmdInserirClick")
+BINDEVENT(THIS.cmd_4c_Excluir,  "Click", THIS, "CmdExcluirClick")
+BINDEVENT(THIS.cmd_4c_Encerrar, "Click", THIS, "CmdEncerrarClick")
+```
+
+**Por que `BtnAlterarClick` e `BtnVisualizarClick` n├úo se aplicam:** O original SIGCDDCC ├® um form OPERACIONAL (dialog filho sem abas Alterar/Visualizar). O template de Fase 7 ├® gen├®rico para forms CRUD ÔÇö neste OPERACIONAL os equivalentes s├úo os 3 handlers acima.
+
+**O DCCBO.prg tamb├®m est├í completo:** `Inserir`, `Atualizar`, `ExcluirLinhaAtual`, `ValidarTodos`, `CalcularTotal`, `BuscarMotivos`, `ValidarMotivo`, `LimparDescricao`.
+
+A Fase 7/8 est├í satisfeita. O pr├│ximo passo seria verificar a integra├º├úo: adicionar `DCCBO.prg` e `FormDCC.prg` no `config.prg` e criar a entrada de menu em `menu.prg` (se ainda n├úo feito).

@@ -1,0 +1,11 @@
+﻿All 5 CRUD button Left values are correct (5, 82, 159, 236, 313) and cmd_4c_Encerrar.Left = 5. All 4 fixes are applied correctly.
+
+Summary of changes to `FormGpe.prg`:
+
+1. **TornarControlesVisiveis** (line ~4034): Added `ELSE` to prevent redundant recursive call into PageFrame's Controls (which are Page objects ÔÇö attempting `Page.Visible = .T.` on them causes a native VFP error dialog that blocks the test).
+
+2. **CRUD button positions** (lines 170, 191, 213, 235, 257): Fixed `.Left = 542` (absolute coordinate outside container bounds) ÔåÆ relative positions 5, 82, 159, 236, 313 inside `cnt_4c_Botoes`.
+
+3. **cmd_4c_Encerrar** (lines 291-292): Fixed `.Left = 917` ÔåÆ 5 and `.Width = 90` ÔåÆ 75 (canonical values per CLAUDE.md).
+
+4. **CarregarLista** (line 3113-3115): Added `IF USED / USE IN` guard before `CREATE CURSOR cursor_4c_Dados` to prevent potential conflict on repeated calls.

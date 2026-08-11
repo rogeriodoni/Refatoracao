@@ -1,0 +1,14 @@
+﻿`FormFis.prg` criado em `C:/4c/projeto/app/forms/operacionais/FormFis.prg` (463 linhas).
+
+Como o form ├® um di├ílogo de configura├º├úo simples (12 controles, sem PageFrame), implementei **tudo em Phase 3** em vez de deixar stubs:
+
+**O que foi criado:**
+- `DEFINE CLASS FormFis AS FormBase` com `Width=800, Height=273, TitleBar=0, DataSession=2` (id├¬ntico ao SCX legado, PILAR 1)
+- `Init()` ÔåÆ `DODEFAULT()` (ativa fix de data/century do FormBase para DataSession=2)
+- `InicializarForm()` ÔåÆ cria FisBO, chama `InicializarCursor()` + `CarregarDeArquivo()`, monta todos os controles
+- `ConfigurarCabecalho()` ÔåÆ `cnt_4c_Sombra` com `lbl_4c_LblSombra` (sombra preta) + `lbl_4c_LblTitulo` (texto branco)
+- `ConfigurarBotoes()` ÔåÆ `cmd_4c_Confirmar` (Left=649) + `cmd_4c_Encerrar` (Left=724) com BINDEVENT
+- `ConfigurarCampos()` ÔåÆ todos os 12 controles com `ControlSource` bindado ao cursor `CrSigFiFis`
+- `PopularComboBoxes()` ÔåÆ itens id├¬nticos ao legado (DATAREGIS, SWEDA, BEMATECH, etc.)
+- `BtnConfirmarClick()` + `BtnEncerrarClick()` (PUBLIC para BINDEVENT)
+- `Destroy()` ÔåÆ fecha `CrSigFiFis` + nula BO + `DODEFAULT()`

@@ -1,0 +1,16 @@
+﻿Corre├º├Áes aplicadas. Resumo do que foi alterado:
+
+**FreBO.prg** (reescrito):
+- Removida property `this_cChaveUnica` (surrogate key inventada)
+- `Buscar()`: removeu `cidchaves` do SELECT em modo operacional ÔåÆ `SELECT cidas, dopes, valors`
+- `CarregarPorCodigo()`: modo operacional agora usa `WHERE cidas = ... AND dopes = ...` (alinhado com o legado `Where Cidas = '...' And Dopes = '...'`)
+- `CarregarDoCursor()`: removida linha `THIS.this_cChaveUnica = TratarNulo(cidchaves, "C")`
+- `Inserir()`: modo operacional sem `cidchaves` ÔåÆ `INSERT INTO SigOpFrt (cidas, dopes, valors)`
+- `Atualizar()`: modo operacional usa `WHERE cidas = ... AND dopes = ...`
+- `ExecutarExclusao()`: modo operacional usa `WHERE cidas = ... AND dopes = ...`
+- Removido m├®todo `GerarChaveUnica()` inteiro
+
+**FormFre.prg** ÔÇö 3 handlers corrigidos:
+- `BtnVisualizarClick`: removido `IF/ELSE` com `cidchaves`, usa sempre `cidas`
+- `BtnAlterarClick`: idem
+- `BtnExcluirClick`: simplificado, `loc_cCodigo = loc_cCidade` para ambos os modos

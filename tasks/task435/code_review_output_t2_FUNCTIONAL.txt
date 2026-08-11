@@ -1,0 +1,12 @@
+﻿As tr├¬s corre├º├Áes est├úo aplicadas corretamente. Resumo do que foi feito:
+
+**Corre├º├úo 1 ÔÇö `grd_4c_Dados.ColumnCount = 3` removida (linha 607)**
+O grid tinha `ColumnCount = 5` na linha 553 e todas as 5 colunas definidas (Column1ÔÇôColumn5). A linha que resetava para `3` destru├¡a as colunas 4 (M├íquina) e 5 (Observa├º├úo), causando grade truncada.
+
+**Corre├º├úo 2 ÔÇö `AtualizarVisibilidadeCheckboxes` (linha 1586)**
+`loc_oCnt.Visible = ...` definia a visibilidade do *container inteiro* a cada itera├º├úo ÔÇö para qualquer m├íquina com menos de 24 tubos, o container ficava invis├¡vel na 1┬¬ itera├º├úo fora do range, ocultando todos os checkboxes. Corrigido para `EVALUATE("loc_oCnt." + loc_cNomeChk).Visible`.
+
+**Corre├º├úo 3 ÔÇö `LimparCampos` (linhas 1757ÔÇô1758)**
+`loc_oCnt2.Value = 0` e `loc_oCnt2.Picture = ""` afetavam o *container* em vez de cada checkbox individual. Corrigido para referenciar o objeto do checkbox via EVALUATE.
+
+Sobre os demais 10 problemas listados: **CONTAINER-VISIVEL** j├í estava resolvido (INLIST com CNT_4C_CABECALHO e CNT_4C_SALVA na linha 951). Os 5 **MADDCOLUNA-PARAMS** j├í tinham 3 par├ómetros em todos os calls. Os 5 **GRID-HEADER** s├úo falsos positivos ÔÇö confirmei no `SIGCDFUN.sct` que o legado define exatamente esses cabe├ºalhos via `pColuna`: 'C?digo', 'Data', 'Usu?rio', 'M?quina'; o validador n├úo os encontrou porque s├úo definidos por c├│digo (framework `pColuna`), n├úo pelo designer visual.

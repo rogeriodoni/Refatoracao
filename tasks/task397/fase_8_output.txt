@@ -1,0 +1,26 @@
+﻿A estrutura est├í completa. Vou confirmar o checklist de m├®todos obrigat├│rios:
+
+**M├®todos implementados no FormDepartamento.prg:**
+- `Init()` ÔÇö apenas `RETURN DODEFAULT()`
+- `InicializarForm()` ÔÇö cria BO, configura PageFrame, respeita `gb_4c_ValidandoUI`
+- `ConfigurarPageFrame()`, `ConfigurarPaginaLista()`, `ConfigurarPaginaDados()`
+- `CarregarLista()` ÔÇö vincula RecordSource + redefine headers + FormatarGridLista
+- `AlternarPagina()` ÔÇö troca entre Page1/Page2
+- `BtnIncluirClick()`, `BtnVisualizarClick()`, `BtnAlterarClick()`, `BtnExcluirClick()`
+- `BtnBuscarClick()`, `BtnEncerrarClick()`
+- `BtnSalvarClick()`, `BtnCancelarClick()`
+- `FormParaBO()`, `BOParaForm()` ÔÇö todos os campos incluindo OptionGroups e grid
+- `HabilitarCampos()`, `LimparCampos()`
+- **`AjustarBotoesPorModo()`** ÔÇö rec├®m adicionado (chama `HabilitarCampos` baseado no modo atual)
+- `DiretorKeyPress()`, `AbrirBuscaDiretor()` ÔÇö lookup F4 em SigCdUsu
+- `GruposGGAfterRowColChange()`, `ValidarCodigoGrupo()` ÔÇö lookup SigCdGpr na grade
+- `BtnAdicionarGrupoClick()`, `BtnRemoverGrupoClick()` ÔÇö gest├úo de linhas na grade GG
+- `FormatarGridLista()`, `TornarControlesVisiveis()`
+- `Destroy()`
+
+**Integra├º├úo:**
+- `config.prg` ÔÇö auto-carrega via ADIR (`*BO.prg` em classes, `Form*.prg` em cadastros)
+- `menu.prg` ÔÇö `DEFINE BAR 3 OF popCadastros`, `ON SELECTION BAR 3`, `PROCEDURE AbrirFormDepartamento()`
+- `DepartamentoBO.prg` ÔÇö todos os m├®todos CRUD (Buscar, CarregarPorCodigo, Inserir, Atualizar, ExecutarExclusao, CarregarGrupos, SalvarGrupos, valida├º├Áes)
+
+A Fase 8/8 est├í conclu├¡da. O `AjustarBotoesPorModo()` foi adicionado como wrapper de `HabilitarCampos()` baseado em `this_cModoAtual`, e todos os demais m├®todos j├í estavam implementados desde as fases anteriores.

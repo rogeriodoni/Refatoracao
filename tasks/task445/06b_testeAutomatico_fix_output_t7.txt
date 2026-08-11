@@ -1,0 +1,7 @@
+﻿All values are correct:
+- Lines 185, 202, 223, 244, 265: buttons inside `cnt_4c_Botoes` have Left = 5, 80, 155, 230, 305 (container-relative) Ô£ô
+- Line 286: `cnt_4c_Saida.Left = 917` (container absolute position on page) Ô£ô
+- Line 299: `cmd_4c_Encerrar.Left = 5` (relative to container) Ô£ô
+- Line 21: `Visible = .F.` Ô£ô
+
+The fix is complete. The root cause of every 300-second TIMEOUT was `WindowType = 1` combined with VFP9's default `Visible = .T.`: when `CREATEOBJECT('FormIBP')` was called, VFP9 auto-showed the modal form after `Init()` returned, entering a blocking event loop that never exited in headless `-T` mode. Setting `Visible = .F.` in the class definition prevents the auto-show ÔÇö the form object is created and initialized in memory but not displayed, so the test framework can call methods on it without blocking.

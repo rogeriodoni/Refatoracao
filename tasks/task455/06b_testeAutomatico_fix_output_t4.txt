@@ -1,0 +1,1 @@
+﻿Fix applied. `.Header1.Caption` assignments moved outside their respective `WITH Column` blocks ÔÇö same root cause and same fix pattern as t3 (`.Page1.xxx` inside `WITH pgf_4c_Paginas`). VFP9 cannot resolve sub-object navigation inside a WITH block, generating an uncatchable error that with `SYS(2335,0)` becomes an infinite error-2030 loop ÔåÆ 300s hang.

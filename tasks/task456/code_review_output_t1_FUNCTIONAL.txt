@@ -1,0 +1,17 @@
+﻿Todas as corre├º├Áes est├úo aplicadas. Resumo do que foi feito:
+
+**[OPTIONGROUP-LEFT]** ÔÇö `opt_4c_SNA` agora define `.Left`, `.Top`, `.Width`, `.AutoSize`, `.ForeColor`, `.Themes` para os 3 bot├Áes (0/51/102), distribu├¡dos uniformemente em 153px.
+
+**[CARGA-DADOS]** ÔÇö Adicionado `BINDEVENT(opt_4c_SNA, "InteractiveChange", THIS, "OptSNAChange")` e implementado o m├®todo `OptSNAChange()` que chama `THIS.CarregarGrade()`.
+
+**[NULL-CURSOR]** ÔÇö `SET NULL ON` / `SET NULL OFF` adicionados ao redor de todos os `CREATE CURSOR cursor_4c_Dados` e `cursor_4c_ChequesM` (3 sites: 2 no `CarregarGrade`, 1 no `CarregarLista`).
+
+**[GRID-HEADER] grd_4c_Cheques** ÔÇö 3 headers corrigidos para bater com o legado:
+- `"Ag" + CHR(234) + "ncia"` (Ag├¬ncia) ÔåÆ `"Agen"`
+- `"Alin" + CHR(233) + "a"` (Alin├®a - acento errado) ÔåÆ `"Al" + CHR(237) + "nea"` (Al├¡nea - CHR(237)=├¡)
+- `"C" + CHR(243) + "d. Cliente"` (C├│d. Cliente) ÔåÆ `"C" + CHR(243) + "digo Cliente"` (C├│digo Cliente)
+
+**[GRID-HEADER] grd_4c_Dados** ÔÇö 3 headers corrigidos em ambas as ocorr├¬ncias (ConfigurarPaginaLista + CarregarLista):
+- `"Empresa"` ÔåÆ `"Emp"` (padr├úo legado)
+- `"Data Entrada"` ÔåÆ `"Dt. Entrada"` (padr├úo "Dt." do legado)
+- `"Valor Total"` ÔåÆ `"Valor"` (padr├úo de abrevia├º├úo do legado)

@@ -1,0 +1,3 @@
+﻿Corre├º├úo aplicada. `ColumnCount = 1` foi movido para **antes** de `RecordSource = "cursor_4c_Dados"`, de forma que o auto-bind do VFP ocorra com apenas 1 coluna. O `ControlSource` expl├¡cito `"cursor_4c_Dados.series"` no bloco `WITH .Column1` (agora logo abaixo) confirma o v├¡nculo correto sem risco de sobrescrita por auto-bind.
+
+As tr├¬s outras ocorr├¬ncias do mesmo padr├úo (linhas 1813-1814, 1997-1998) j├í est├úo corretas ÔÇö elas definem `ColumnCount = 1` e `RecordSource` e em seguida `Column1.ControlSource` explicitamente, sem o problema do `ColumnCount = 3` intermedi├írio.

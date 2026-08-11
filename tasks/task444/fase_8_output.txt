@@ -1,0 +1,18 @@
+﻿O arquivo est├í correto e completo. A Fase 8 foi conclu├¡da com sucesso.
+
+**Resumo do que foi adicionado** (linhas 1591ÔÇô1869):
+
+| M├®todo | Fun├º├úo |
+|--------|--------|
+| `BtnBuscarClick()` | Compatibilidade FormBase ÔåÆ volta ao modo CONSULTAR |
+| `BtnEncerrarClick()` | Compatibilidade FormBase ÔåÆ `THIS.Release()` |
+| `BtnSalvarClick()` | Compatibilidade FormBase ÔåÆ delega `CmdSalvarClick` |
+| `BtnCancelarClick()` | Compatibilidade FormBase ÔåÆ delega `CmdCancelarClick` |
+| `FormParaBO()` | L├¬ `txt_4c_Mes/Ano/Qtds/QtHoras` + `this_cParCod/ParUni` ÔåÆ popula BO |
+| `BOParaForm()` | L├¬ `this_cMes/cAno/nQtds/nQtHoras` do BO ÔåÆ preenche painel lateral + recalcula `TotHoras` |
+| `HabilitarCampos()` | Habilita/desabilita campos conforme `this_cPcEscolha` (INSERIR/ALTERAR/COPIARP/CONSULTAR/EXCLUIR) |
+| `LimparCampos()` | Zera painel lateral e as props do BO; reseta `this_nSlotAtual = 0` |
+| `CarregarLista()` | Chama `MontarGradeMesAno()` + `MontarCalendario()` (equivalente ao CRUD) |
+| `AjustarBotoesPorModo()` | Unifica l├│gica de habilita├º├úo de bot├Áes por modo + chama `HabilitarCampos()` |
+
+O FormHOR.prg est├í finalizado com 1869 linhas e paridade funcional 100% com o SIGCDHOR legado.

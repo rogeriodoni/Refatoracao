@@ -1,0 +1,27 @@
+﻿Analisei ambos os arquivos. O FormFis e FisBO est├úo **100% completos** ÔÇö e os "4 eventos principais" da Fase 7/8 n├úo se aplicam a este form.
+
+## Por que os 4 eventos n├úo se aplicam
+
+O template gen├®rico de Fase 7/8 lista `BtnIncluirClick/Alterar/Visualizar/Excluir` para forms CRUD. Mas **SigCdFis ├® um dialog de configura├º├úo plano**, sem PageFrame, sem lista de registros, sem bot├Áes CRUD. Ele tem apenas dois bot├Áes:
+
+| Legado | Migrado | Status |
+|--------|---------|--------|
+| `Ok.Click` | `BtnConfirmarClick()` ÔåÆ `FisBO.SalvarConfiguracao()` | Ô£à Implementado |
+| `cancela.Click` | `BtnEncerrarClick()` | Ô£à Implementado |
+
+## O que est├í implementado e correto
+
+**FisBO.prg:**
+- `InicializarCursor()` ÔÇö cria `CrSigFiFis` (equivale ao `Load` + `CREATE CURSOR` do legado)
+- `CarregarDeArquivo()` ÔÇö l├¬ `SetFiscal.Ini` via `APPEND FROM ... TYPE SDF` (equivale a `fLerFiscal()`)
+- `SalvarConfiguracao()` ÔÇö grava `SetFiscal.Ini`, atualiza `BEMAFI32.INI` e `DarumaFramework.xml` (equivale ao `Ok.Click`)
+- `CarregarProcedureFiscal()` ÔÇö libera e carrega a procedure SIGFIOP* correta conforme modelo
+
+**FormFis.prg:**
+- Layout plano pixel-perfect (Width=800, Height=273, sem PageFrame, sem abas)
+- `ConfigurarCabecalho()`, `ConfigurarBotoes()`, `ConfigurarCampos()`, `PopularComboBoxes()`
+- `ConfigurarPaginaLista()` / `ConfigurarPaginaDados()` mantidos como adapters arquiteturais
+
+Adicionar stubs vazios de `BtnIncluirClick`/`Alterar`/`Visualizar`/`Excluir` violaria a regra **"PROIBIDO criar stubs"** (e esses bot├Áes n├úo existem no form).
+
+**A migra├º├úo do FormFis est├í completa. Nenhuma modifica├º├úo necess├íria nesta fase.**

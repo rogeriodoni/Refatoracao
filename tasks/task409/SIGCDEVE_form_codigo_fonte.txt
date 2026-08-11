@@ -1,0 +1,697 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGCDEVE.SCX
+* Data/Hora: 01/08/2026 19:39:06
+* Total de registros: 18
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDEVE
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGCDEVE.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGCDEVE.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGCDEVE.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGCDEVE.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getCodigo
+  Parent: SIGCDEVE.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetStatus
+  Parent: SIGCDEVE.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getNome
+  Parent: SIGCDEVE.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetEvento
+  Parent: SIGCDEVE.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say5
+  Parent: SIGCDEVE.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_estoque
+  Parent: SIGCDEVE.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getConta
+  Parent: SIGCDEVE.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDConta
+  Parent: SIGCDEVE.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getGrupo
+  Parent: SIGCDEVE.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDGrupo
+  Parent: SIGCDEVE.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDEVE
+------------------------------------------------------------
+  DataSession = 2
+  Height = 600
+  Width = 1000
+  DoCreate = .T.
+  Caption = "Cadastro de Eventos"
+  Name = "SIGCDEVE"
+  Pagina.ErasePage = .T.
+  Pagina.Lista.cntSombra.lblSombra.Name = "lblSombra"
+  Pagina.Lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  Pagina.Lista.cntSombra.Top = 1
+  Pagina.Lista.cntSombra.Left = 0
+  Pagina.Lista.cntSombra.Width = 996
+  Pagina.Lista.cntSombra.Height = 80
+  Pagina.Lista.cntSombra.ZOrderSet = 1
+  Pagina.Lista.cntSombra.Name = "cntSombra"
+  Pagina.Lista.Grade.FontName = "Tahoma"
+  Pagina.Lista.Grade.Height = 470
+  Pagina.Lista.Grade.Left = 12
+  Pagina.Lista.Grade.Top = 121
+  Pagina.Lista.Grade.Width = 940
+  Pagina.Lista.Grade.ForeColor = 90,90,90
+  Pagina.Lista.Grade.ZOrderSet = 2
+  Pagina.Lista.Grade.Name = "Grade"
+  Pagina.Lista.Grupo_op.AutoSize = .T.
+  Pagina.Lista.Grupo_op.Inserir.Top = 5
+  Pagina.Lista.Grupo_op.Inserir.Left = 5
+  Pagina.Lista.Grupo_op.Inserir.Name = "Inserir"
+  Pagina.Lista.Grupo_op.Consultar.Top = 5
+  Pagina.Lista.Grupo_op.Consultar.Left = 80
+  Pagina.Lista.Grupo_op.Consultar.Name = "Consultar"
+  Pagina.Lista.Grupo_op.Alterar.Top = 5
+  Pagina.Lista.Grupo_op.Alterar.Left = 155
+  Pagina.Lista.Grupo_op.Alterar.Name = "Alterar"
+  Pagina.Lista.Grupo_op.Excluir.Top = 5
+  Pagina.Lista.Grupo_op.Excluir.Left = 230
+  Pagina.Lista.Grupo_op.Excluir.Name = "Excluir"
+  Pagina.Lista.Grupo_op.Procurar.Top = 5
+  Pagina.Lista.Grupo_op.Procurar.Left = 305
+  Pagina.Lista.Grupo_op.Procurar.Name = "Procurar"
+  Pagina.Lista.Grupo_op.Height = 85
+  Pagina.Lista.Grupo_op.Left = 540
+  Pagina.Lista.Grupo_op.Top = -1
+  Pagina.Lista.Grupo_op.Width = 385
+  Pagina.Lista.Grupo_op.ZOrderSet = 3
+  Pagina.Lista.Grupo_op.Name = "Grupo_op"
+  Pagina.Lista.Grupo_Saida.Sair.Top = 5
+  Pagina.Lista.Grupo_Saida.Sair.Left = 5
+  Pagina.Lista.Grupo_Saida.Sair.Name = "Sair"
+  Pagina.Lista.Grupo_Saida.Left = 916
+  Pagina.Lista.Grupo_Saida.Top = -1
+  Pagina.Lista.Grupo_Saida.ZOrderSet = 4
+  Pagina.Lista.Grupo_Saida.Name = "Grupo_Saida"
+  Pagina.Lista.cntFiltros.BackStyle = 0
+  Pagina.Lista.cntFiltros.ZOrderSet = 0
+  Pagina.Lista.cntFiltros.Name = "cntFiltros"
+  Pagina.Lista.Picture = ..\framework\imagens\new_background.jpg
+  Pagina.Lista.Name = "Lista"
+  Pagina.Dados.Grupo_Salva.AutoSize = .T.
+  Pagina.Dados.Grupo_Salva.Salva.Top = 5
+  Pagina.Dados.Grupo_Salva.Salva.Left = 5
+  Pagina.Dados.Grupo_Salva.Salva.Name = "Salva"
+  Pagina.Dados.Grupo_Salva.Cancelar.Top = 5
+  Pagina.Dados.Grupo_Salva.Cancelar.Left = 81
+  Pagina.Dados.Grupo_Salva.Cancelar.Name = "Cancelar"
+  Pagina.Dados.Grupo_Salva.Left = 817
+  Pagina.Dados.Grupo_Salva.Top = 11
+  Pagina.Dados.Grupo_Salva.TabIndex = 15
+  Pagina.Dados.Grupo_Salva.ZOrderSet = 1
+  Pagina.Dados.Grupo_Salva.Name = "Grupo_Salva"
+  Pagina.Dados.Picture = ..\framework\imagens\new_background.jpg
+  Pagina.Dados.Name = "Dados"
+  Pagina.Width = 1003
+  Pagina.Name = "Pagina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDEVE.Pagina.Dados.Say1
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Código :"
+  Left = 319
+  Top = 141
+  TabIndex = 1
+  ForeColor = 90,90,90
+  ZOrderSet = 2
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDEVE.Pagina.Dados.Say2
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Nome :"
+  Left = 325
+  Top = 167
+  TabIndex = 3
+  ForeColor = 90,90,90
+  ZOrderSet = 3
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDEVE.Pagina.Dados.Say4
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Status :"
+  Height = 15
+  Left = 321
+  Top = 274
+  Width = 40
+  TabIndex = 13
+  ForeColor = 90,90,90
+  ZOrderSet = 3
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDEVE.Pagina.Dados.Say3
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Descrição :"
+  Left = 306
+  Top = 194
+  TabIndex = 5
+  ForeColor = 90,90,90
+  ZOrderSet = 3
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDEVE.Pagina.Dados.getCodigo
+------------------------------------------------------------
+  ControlSource = "crSigCdEve.Codigo"
+  Format = "K!"
+  Height = 24
+  Left = 365
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 136
+  Width = 96
+  ZOrderSet = 5
+  plprocurar = .T.
+  Name = "getCodigo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDEVE.Pagina.Dados.GetStatus
+------------------------------------------------------------
+  ControlSource = "crSigCdEve.Status"
+  Format = "K!"
+  Height = 24
+  Left = 365
+  SpecialEffect = 1
+  TabIndex = 14
+  Top = 269
+  Width = 184
+  ZOrderSet = 6
+  Name = "GetStatus"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDEVE.Pagina.Dados.getNome
+------------------------------------------------------------
+  ControlSource = "crSigCdEve.Nome"
+  Format = "K!"
+  Height = 24
+  Left = 365
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 163
+  Width = 336
+  ZOrderSet = 6
+  Name = "getNome"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDEVE.Pagina.Dados.GetEvento
+------------------------------------------------------------
+  ControlSource = "crSigCdEve.Evento"
+  Format = "K!"
+  Height = 24
+  Left = 365
+  SpecialEffect = 1
+  TabIndex = 6
+  Top = 190
+  Width = 336
+  ZOrderSet = 6
+  Name = "GetEvento"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDEVE.Pagina.Dados.Say5
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Grupo :"
+  Left = 323
+  Top = 220
+  Width = 38
+  TabIndex = 7
+  ForeColor = 90,90,90
+  ZOrderSet = 5
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDEVE.Pagina.Dados.lbl_estoque
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Conta :"
+  Left = 323
+  Top = 246
+  Width = 38
+  TabIndex = 10
+  ForeColor = 90,90,90
+  ZOrderSet = 6
+  Name = "lbl_estoque"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDEVE.Pagina.Dados.getConta
+------------------------------------------------------------
+  ControlSource = "crSigCdEve.Conta"
+  Left = 365
+  SpecialEffect = 1
+  TabIndex = 11
+  Top = 243
+  Width = 80
+  Name = "getConta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDEVE.Pagina.Dados.getDConta
+------------------------------------------------------------
+  Left = 447
+  SpecialEffect = 1
+  TabIndex = 12
+  Top = 243
+  Width = 290
+  Name = "getDConta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDEVE.Pagina.Dados.getGrupo
+------------------------------------------------------------
+  ControlSource = "crSigCdEve.Grupo"
+  Left = 365
+  SpecialEffect = 1
+  TabIndex = 8
+  Top = 217
+  Width = 80
+  Name = "getGrupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDEVE.Pagina.Dados.getDGrupo
+------------------------------------------------------------
+  Height = 23
+  Left = 447
+  SpecialEffect = 1
+  TabIndex = 9
+  Top = 217
+  Width = 290
+  Name = "getDGrupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDEVE
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE msv_procurar
+------------------------------------------------------------
+PROCEDURE msv_procurar
+Local lcBusca
+
+If Not Empty(ThisForm.Pagina.Dados.getCodigo.Value)
+	ThisForm.poDataMgr.LocateCursor([crSigCdEve], [Codigo], ThisForm.Pagina.Dados.getCodigo.Value)
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+With ThisForm
+	.poDataMgr = CreateObject([fSqlConector], .Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		With .poDataMgr
+			.AddCursor([SigCdEve], [pkChaves], [crSigCdEve], [], ThisForm.Pagina.Lista.Grade)
+			.pfSqlTabela(1).pColuna([Codigo], [], [], [Código],    080, .t.)
+			.pfSqlTabela(1).pColuna([Nome],   [], [], [Descrição], 400, .t.)
+			.pfSqlTabela(1).pColuna([Grupo],  [], [], [Grupo], 	   100, .t.)
+			.pfSqlTabela(1).pColuna([Conta],  [], [], [Conta], 	   100, .t.)
+		EndWith
+
+		=DoDefault()
+
+		.Pagina.Lista.Grade.Column1.SetFocus
+	Else
+		=Messagebox([Impossível Efetuar Conexão Com o Servidor de Banco de Dados...], 0+48, [CreateObject])
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Lista.Grupo_op.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Lista.Grupo_op.Click
+Parameters lnOpcao
+
+If Not DoDefault(lnOpcao)
+	Thisform.mAtivaPagina1
+	Return .F.
+Endif
+
+Do Case
+Case Inlist(Thisform.pcEscolha, [INSERIR], [PROCURAR])
+	Thisform.Pagina.Dados.getCodigo.SetFocus
+
+Case Inlist(Thisform.pcEscolha, [ALTERAR])
+	Thisform.Pagina.Dados.getNome.SetFocus
+
+Otherwise
+	Thisform.Pagina.Dados.Grupo_Salva.Salva.SetFocus
+EndCase
+
+This.Parent.Parent.Dados.getDGrupo.Value = []
+This.Parent.Parent.Dados.getDConta.Value = []
+
+Thisform.podatamgr.CursorQuery('SigCdGcr','crSigCdGcr', 'Codigos', crSigCdEve.Grupo,[descrs])
+Select crSigCdGcr
+If !Eof()
+	This.Parent.Parent.Dados.getDGrupo.Value = crSigCdGcr.descrs
+Endif
+
+Thisform.podatamgr.CursorQuery('SigCdCli','crSigCdCli', 'Iclis', crSigCdEve.Conta,[rclis])
+Select crSigCdCli
+If !Eof()
+	This.Parent.Parent.Dados.getDConta.Value = crSigCdCli.rclis
+Endif
+
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+If InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])
+	If Empty(ThisForm.Pagina.Dados.getCodigo.Value)
+		=Messagebox([Código Inválido!!!], 48, [Atenção!!!])
+		ThisForm.Pagina.Dados.getCodigo.SetFocus()
+		Return .f.
+	EndIf
+
+	If Empty(ThisForm.Pagina.Dados.getNome.Value)
+		=Messagebox([Descrição Inválida!!!], 48, [Atenção!!!])
+		ThisForm.Pagina.Dados.getNome.SetFocus()
+		Return .f.
+	EndIf
+	
+	If (ThisForm.pcEscolha = [INSERIR])
+		lcQuery = [Select Codigo ] + ;
+				    [From SigCdEve ] + ;
+				   [Where Codigo = '] + Padr(ThisForm.Pagina.Dados.getCodigo.Value, 10) + [']
+
+		If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalBus]) < 1)
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalBus 1)])
+			Return .f.
+		EndIf
+		Go Top In LocalBus
+		If Not Eof([LocalBus])
+			=Messagebox([Código Já Cadastrado!!!], 48, [Atenção!!!])
+			ThisForm.Pagina.Dados.getCodigo.SetFocus()
+			Return .f.
+		EndIf
+	EndIf
+EndIf
+
+If (ThisForm.pcEscolha = [INSERIR])
+	Replace pkChaves With fUniqueIds() in crSigCdEve 
+EndIf 
+
+
+=DoDefault()
+
+ThisForm.mAtivaPagina1
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+=DoDefault()
+
+If ThisForm.plCancelar
+	ThisForm.mAtivapagina1
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDEVE.Pagina.Dados.getCodigo
+* Classe: fwget (Base: textbox)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return InList(ThisForm.pcEscolha, [INSERIR], [PROCURAR])
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDEVE.Pagina.Dados.getConta
+* Classe: fwget (Base: textbox)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Grupo = This.parent.getGrupo.Value
+If !IsEmpty(This.Value)
+	If !fAcessoContas(Usuar,Grupo,'C',This.Value,This.parent.getConta,This.parent.getDConta)
+		MessageBox('Acesso Negado !!!',0+48,'')
+		This.Value = ''
+		This.Refresh
+		This.parent.getDConta.Value = ''
+		This.parent.getDConta.Refresh
+		Return 0
+	EndIf
+Else
+	This.parent.getDConta.Value = ''
+	This.parent.getDConta.Refresh
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDEVE.Pagina.Dados.getDConta
+* Classe: fwget (Base: textbox)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Grupo = This.parent.getGrupo.Value
+If !IsEmpty(This.Value)
+	If !fAcessoContas(Usuar,Grupo,'D',This.Value,This.parent.getConta,This.parent.getDConta)
+		MessageBox('Acesso Negado !!!',0+48,'')
+		This.Value = ''
+		This.Refresh
+		This.parent.getConta.Value = ''
+		This.parent.getConta.Refresh
+		Return 0
+	EndIf
+Else
+	This.parent.getConta.Value = ''
+	This.parent.getConta.Refresh
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(IsEmpty(This.parent.getConta.Value))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDEVE.Pagina.Dados.getGrupo
+* Classe: fwget (Base: textbox)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !IsEmpty(This.Value)
+	fAcessoContab(Usuar,'C',This.Value,This.parent.getGrupo,This.parent.getDGrupo)
+Else
+	This.parent.getDGrupo.Value = ''
+	This.parent.getDGrupo.Refresh
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDEVE.Pagina.Dados.getDGrupo
+* Classe: fwget (Base: textbox)
+* Registro: 17
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !IsEmpty(This.Value)
+	=fAcessoContab(Usuar,'D',This.Value,This.parent.getGrupo,This.parent.getDGrupo)
+Else
+	This.parent.getGrupo.Value = ''
+	This.parent.getGrupo.Refresh
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(IsEmpty(This.parent.getGrupo.Value))
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGCDEVE
+RESERVED3 (ClassInfo): nrecno
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 12
+================================================================================

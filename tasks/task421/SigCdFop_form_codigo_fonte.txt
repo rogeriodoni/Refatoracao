@@ -1,0 +1,1327 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigCdFop.SCX
+* Data/Hora: 05/08/2026 18:59:10
+* Total de registros: 37
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDFOP
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: ShpRepetir
+  Parent: SIGCDFOP
+  Class: shape
+  BaseClass: shape
+
+Objeto: Shape1
+  Parent: SIGCDFOP
+  Class: shape
+  BaseClass: shape
+
+Objeto: cntSombra
+  Parent: SIGCDFOP
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGCDFOP.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGCDFOP.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: shpQtde
+  Parent: SIGCDFOP
+  Class: shape
+  BaseClass: shape
+
+Objeto: Grade
+  Parent: SIGCDFOP
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGCDFOP.Grade.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDFOP.Grade.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDFOP.Grade.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDFOP.Grade.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDFOP.Grade.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDFOP.Grade.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDFOP.Grade.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDFOP.Grade.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDFOP.Grade.Column5
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDFOP.Grade.Column5
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDFOP.Grade.Column6
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDFOP.Grade.Column6
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDFOP.Grade.Column7
+  Class: header
+  BaseClass: header
+
+Objeto: Check1
+  Parent: SIGCDFOP.Grade.Column7
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: Header1
+  Parent: SIGCDFOP.Grade.Column8
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDFOP.Grade.Column8
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDFOP.Grade.Column9
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDFOP.Grade.Column9
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDFOP.Grade.Column10
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDFOP.Grade.Column10
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: cmdExcluir
+  Parent: SIGCDFOP
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cmdSair
+  Parent: SIGCDFOP
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cmdInserir
+  Parent: SIGCDFOP
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cmdRepetir
+  Parent: SIGCDFOP
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getQtde
+  Parent: SIGCDFOP
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: lblQtde
+  Parent: SIGCDFOP
+  Class: label
+  BaseClass: label
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 2
+  Left = 2
+  Width = 577
+  Height = 218
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFOP
+------------------------------------------------------------
+  DataSession = 1
+  BorderStyle = 2
+  Height = 600
+  Width = 1075
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Fornecedores do Produto"
+  ControlBox = .F.
+  MaxButton = .F.
+  MinButton = .F.
+  TitleBar = 0
+  WindowType = 1
+  WindowState = 0
+  Themes = .F.
+  houveexcl = .F.
+  houveincl = .F.
+  pcescolha = .F.
+  podatamgr = 
+  _memberdata = <VFPData><memberdata name="podatamgr" type="property" display="Podatamgr"/></VFPData>
+  Name = "SIGCDFOP"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFOP.ShpRepetir
+------------------------------------------------------------
+  Top = 10
+  Left = 637
+  Height = 22
+  Width = 0
+  BackStyle = 0
+  BorderStyle = 0
+  BorderColor = 136,189,188
+  Name = "ShpRepetir"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFOP.Shape1
+------------------------------------------------------------
+  Top = 5
+  Left = 816
+  Height = 22
+  Width = 7
+  BackStyle = 0
+  BorderStyle = 0
+  BorderColor = 136,189,188
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFOP.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 1104
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFOP.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 25
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFOP.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 24
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFOP.shpQtde
+------------------------------------------------------------
+  Top = 90
+  Left = 588
+  Height = 30
+  Width = 123
+  BackStyle = 0
+  Name = "shpQtde"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFOP.Grade
+------------------------------------------------------------
+  ColumnCount = 10
+  FontName = "Tahoma"
+  FontSize = 8
+  AllowHeaderSizing = .F.
+  AllowRowSizing = .F.
+  DeleteMark = .F.
+  Height = 462
+  Left = 8
+  Panel = 1
+  RecordMark = .F.
+  RowHeight = 17
+  ScrollBars = 2
+  TabIndex = 1
+  Top = 129
+  Width = 1060
+  GridLineColor = 238,238,238
+  ZOrderSet = 16
+  AllowCellSelection = .T.
+  Name = "Grade"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.Width = 108
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.Width = 369
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.Name = "Column2"
+  Column3.FontName = "Tahoma"
+  Column3.FontSize = 8
+  Column3.Width = 150
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.Name = "Column3"
+  Column4.FontName = "Tahoma"
+  Column4.FontSize = 8
+  Column4.ColumnOrder = 8
+  Column4.Width = 31
+  Column4.Movable = .F.
+  Column4.Resizable = .F.
+  Column4.Name = "Column4"
+  Column5.FontName = "Tahoma"
+  Column5.FontSize = 8
+  Column5.ColumnOrder = 7
+  Column5.Width = 100
+  Column5.Movable = .F.
+  Column5.Resizable = .F.
+  Column5.InputMask = "9,999,999.99"
+  Column5.Name = "Column5"
+  Column6.FontName = "Tahoma"
+  Column6.FontSize = 8
+  Column6.ColumnOrder = 9
+  Column6.Width = 80
+  Column6.Movable = .F.
+  Column6.Resizable = .F.
+  Column6.InputMask = ""
+  Column6.Name = "Column6"
+  Column7.FontName = "Tahoma"
+  Column7.FontSize = 8
+  Column7.ColumnOrder = 10
+  Column7.Width = 16
+  Column7.Sparse = .F.
+  Column7.Name = "Column7"
+  Column8.FontName = "Tahoma"
+  Column8.FontSize = 8
+  Column8.ColumnOrder = 4
+  Column8.Width = 100
+  Column8.Movable = .F.
+  Column8.Resizable = .F.
+  Column8.Name = "Column8"
+  Column9.FontName = "Tahoma"
+  Column9.FontSize = 8
+  Column9.ColumnOrder = 5
+  Column9.Width = 38
+  Column9.Movable = .F.
+  Column9.Resizable = .F.
+  Column9.Name = "Column9"
+  Column10.FontName = "Tahoma"
+  Column10.FontSize = 8
+  Column10.ColumnOrder = 6
+  Column10.Width = 38
+  Column10.Movable = .F.
+  Column10.Resizable = .F.
+  Column10.Name = "Column10"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFOP.Grade.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Código"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFOP.Grade.Column1.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Margin = 0
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFOP.Grade.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Razão Social"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFOP.Grade.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Margin = 0
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFOP.Grade.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Ref. Fornecedor"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFOP.Grade.Column3.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Margin = 0
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFOP.Grade.Column4.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Moe"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFOP.Grade.Column4.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFOP.Grade.Column5.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Preço de Custo"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFOP.Grade.Column5.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Format = "K"
+  InputMask = "9,999,999.99"
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFOP.Grade.Column6.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Validade"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFOP.Grade.Column6.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  NullDisplay = "  /  /    "
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFOP.Grade.Column7.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "S"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFOP.Grade.Column7.Check1
+------------------------------------------------------------
+  Top = 35
+  Left = 76
+  Height = 17
+  Width = 60
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = ""
+  Name = "Check1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFOP.Grade.Column8.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Grupo Venda"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFOP.Grade.Column8.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFOP.Grade.Column9.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Cor"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFOP.Grade.Column9.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFOP.Grade.Column10.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Tam"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFOP.Grade.Column10.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFOP.cmdExcluir
+------------------------------------------------------------
+  Top = 3
+  Left = 922
+  Picture = ..\framework\imagens\cadastro_excluir_60.jpg
+  Caption = "Excluir"
+  TabIndex = 7
+  Name = "cmdExcluir"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFOP.cmdSair
+------------------------------------------------------------
+  Top = 3
+  Left = 998
+  Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Cancel = .T.
+  Caption = "Encerrar"
+  TabIndex = 8
+  Name = "cmdSair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFOP.cmdInserir
+------------------------------------------------------------
+  Top = 3
+  Left = 846
+  Picture = ..\framework\imagens\cadastro_inserir_60.jpg
+  Caption = "Inserir"
+  TabIndex = 9
+  Name = "cmdInserir"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFOP.cmdRepetir
+------------------------------------------------------------
+  Top = 3
+  Left = 770
+  Picture = ..\framework\imagens\cadastro_inserir_60.jpg
+  Caption = "Repetir"
+  TabIndex = 9
+  Name = "cmdRepetir"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFOP.getQtde
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Height = 23
+  Left = 669
+  SpecialEffect = 1
+  Top = 94
+  Width = 36
+  Name = "getQtde"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFOP.lblQtde
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  BackStyle = 0
+  Caption = "Quantidade :"
+  Height = 16
+  Left = 595
+  Top = 97
+  Width = 73
+  ForeColor = 90,90,90
+  Name = "lblQtde"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDFOP
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters poForm, pnDataSes, pcEscolha, pcProduto
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+Private pPro
+
+Set DataSession to pnDataSes
+
+=DoDefault()
+
+With ThisForm
+	.ParentForm = poForm
+	.pcescolha = pcEscolha
+	.houveincl = .F.
+	.houveexcl = .F.
+	
+	*-- Rafael - 10/11/2016 - Opção para repetir o mesmo registro mais de uma vez (Rosana Joias)
+	.getQtde.Visible = .F.
+	.shpQtde.Visible = .F.
+	.lblQtde.Visible = .F.
+	.ShpRepetir.Visible = fChecaAcesso([SIGCDPRO],[REPETEFORN])
+	.cmdRepetir.Visible = fChecaAcesso([SIGCDPRO],[REPETEFORN])
+	
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+	
+	If Type('pcProduto') = [C]
+		pcPro = pcProduto
+		lcSql = [Select Dpros From SigCdPro Where Cpros = ']+pcPro+[']
+		.PodataMgr.Sqlexecute(lcSql,'LocalPro')
+		pdPro = LocalPro.Dpros
+		
+		.Grade.RecordSource = ''
+
+		If Used('CrSigPrFnc')
+			Use in CrSigPrFnc
+		Endif
+		
+		lcSql = [Select a.*, b.rClis From SigPrFnc a Inner Join SigCdCli b on b.iClis = a.IFors Where cPros = ']+pcPro+[']
+		.Podatamgr.Sqlexecute(lcSql,'CrSigPrFnc')
+	Else
+		pcPro = crSigCdPro.cPros
+		pdPro = CrSigCdPro.Dpros
+		pPro = pcPro
+
+		If (.Parentform.ProcForn) 
+			WITH ThisForm.Parentform 
+				With .poDatamgr
+		    	    .ReQuery('crSigPrFnc')
+				EndWith
+			Endwith	
+		EndIf
+	EndIf
+
+	llVis = InList(.pcEscolha,'INSERIR','ALTERAR')
+	.Caption = [Fornecedores do Produto : ] + Alltrim(pcPro) + [-] + pdPro
+	.cmdInserir.Visible = llVis
+	.cmdInserir.Enabled = llVis
+	.cmdExcluir.Visible = llVis
+	.cmdExcluir.Enabled = llVis
+	IF !llvis
+		.shape1.width = .cmdsair.width + 10
+		.shape1.left = .cmdsair.left - 5
+	ENDIF
+EndWith
+
+Update crSigPrFnc Set DtValid = Nvl(DtValid, Ctot([]))
+
+Select crSigPrFnc
+Go Top
+With ThisForm.Grade
+	.RecordSource = [crSigPrFnc]
+	.Column1.ControlSource = [crSigPrFnc.iFors]
+	.Column2.ControlSource = [crSigPrFnc.rClis]
+	.Column3.ControlSource = [crSigPrFnc.Reffs]
+	.Column4.ControlSource = [crSigPrFnc.Moevs]
+	.Column5.ControlSource = [crSigPrFnc.PVens]
+	.Column6.ControlSource = [crSigPrFnc.dtValid]
+	.Column7.ControlSource = [crSigPrFnc.Situas]
+	.Column8.ControlSource = [crSigPrFnc.Colecoes]
+	.Column9.ControlSource = [crSigPrFnc.CodCors]
+	.Column10.ControlSource= [crSigPrFnc.CodTams]
+EndWith
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFOP.Grade.Column1.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(InList(ThisForm.pcEscolha,'INSERIR','ALTERAR'))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local lCod,lFan,xObj
+
+If Not Empty(This.Value)
+	m.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigCdCli','CrClientes','iclis',This.Value,'Seleção',1000)
+	If .Not.m.loLista.plAchouRegistro
+		m.loLista.mAddColuna('iclis','','Código')
+		m.loLista.mAddColuna('rclis','','Descrição')
+		m.loLista.mAddColuna('Inativas ', .f., .f., .f., .f., .f., .t.)
+		m.loLista.gridProc.SetAll('DynamicForeColor', [Iif(crSigCdCli.Inativas == 1, Rgb(255, 0, 0), Rgb(0,0,0))], 'Column')
+		m.loLista.Show()
+	EndIf
+	Replace iFors with Evaluate('CrClientes.iclis'),;
+			rClis with Evaluate('CrClientes.rclis') in crSigPrFnc
+Else
+	Replace iFors with '',;
+			rClis with '' in crSigPrFnc
+EndIf
+ThisForm.Grade.Refresh()  
+Return(.T.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFOP.Grade.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(InList(ThisForm.pcEscolha,'INSERIR','ALTERAR') And Empty(ThisForm.Grade.Column1.text1.Value) )
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local lCod,lFan,xObj
+
+If Not Empty(This.Value)
+
+	m.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigCdCli','CrClientes','rclis',This.Value,'Seleção',1000)
+	If .Not.m.loLista.plAchouRegistro
+		m.loLista.mAddColuna('rclis','','Descrição')
+		m.loLista.mAddColuna('iclis','','Código')
+		m.loLista.mAddColuna('Inativas ', .f., .f., .f., .f., .f., .t.)
+		m.loLista.gridProc.SetAll('DynamicForeColor', [Iif(crSigCdCli.Inativas == 1, Rgb(255, 0, 0), Rgb(0,0,0))], 'Column')
+		m.loLista.Show()
+	EndIf
+
+	Replace iFors with Evaluate('CrClientes.iclis'),;
+			rClis with Evaluate('CrClientes.rclis') in crSigPrFnc
+Else
+	Replace iFors with '',;
+			rClis with '' in crSigPrFnc
+EndIf
+Thisform.Grade.Refresh()  
+Return(.T.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFOP.Grade.Column3.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(InList(ThisForm.pcEscolha,'INSERIR','ALTERAR'))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFOP.Grade.Column4.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 18
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(InList(ThisForm.pcEscolha,'INSERIR','ALTERAR'))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;
+						   'CrListaRemota', 'Cmoes', This.Value, 'Seleção', .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('CMoes', '', 'Código')
+		loLista.mAddColuna('DMoes', '', 'Descrição')
+		loLista.Show()
+	EndIf
+	
+	Replace MoeVs with CrListaRemota.CMoes in crSigPrFnc
+	Use In CrListaRemota
+Else
+	Replace MoeVs with '' in crSigPrFnc
+EndIf
+ThisForm.Grade.Refresh()  
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFOP.Grade.Column5.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 20
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(InList(ThisForm.pcEscolha,'INSERIR','ALTERAR'))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFOP.Grade.Column6.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 22
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(InList(ThisForm.pcEscolha,'INSERIR','ALTERAR'))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFOP.Grade.Column7.Check1
+* Classe: checkbox (Base: checkbox)
+* Registro: 24
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(InList(ThisForm.pcEscolha,'INSERIR','ALTERAR'))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFOP.Grade.Column8.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 26
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject([fwBuscaExt], ThisForm.poDataMgr.pnIdConn, [SigCdCol], ;
+						   [crListaRemota], [Colecoes], This.Value, [Seleção], .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna([Colecoes], [], [Código])
+		loLista.mAddColuna([Descs],    [], [Descrição])
+		loLista.Show()
+	EndIf
+	
+	This.Value = crListaRemota.Colecoes
+	Use In crListaRemota
+EndIf
+This.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFOP.Grade.Column9.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 28
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject([fwBuscaExt], ThisForm.poDataMgr.pnIdConn, [SigCdCor], ;
+						   [crListaRemota], [Cods], This.Value, [Seleção], .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna([Cods],  [], [Código])
+		loLista.mAddColuna([Descs], [], [Descrição])
+		loLista.Show()
+	EndIf
+	
+	This.Value = crListaRemota.Cods
+	Use In crListaRemota
+EndIf
+This.Refresh
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFOP.Grade.Column10.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 30
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject([fwBuscaExt], ThisForm.poDataMgr.pnIdConn, [SigCdTam], ;
+						   [crListaRemota], [Cods], This.Value, [Seleção], .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna([Cods],  [], [Código])
+		loLista.mAddColuna([Descs], [], [Descrição])
+		loLista.Show()
+	EndIf
+	
+	This.Value = crListaRemota.Cods
+	Use In crListaRemota
+EndIf
+This.Refresh
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFOP.cmdExcluir
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 31
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select crSigPrFnc
+
+If Not Eof() And ( crSigPrFnc.cPros = crSigCdPro.cPros )
+	Delete
+	Skip
+	Skip - 1
+Endif
+
+Thisform.Houveexcl = .T.
+Thisform.Grade.Refresh
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFOP.cmdSair
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 32
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If Thisform.cmdInserir.Visible Or Thisform.cmdExcluir.Visible
+	If( InList(ThisForm.pcescolha,'INSERIR','ALTERAR') ) 
+		Select crSigPrFnc
+		Go Top
+		Scan
+			If( IsEmpty(crSigPrFnc.iFors) ) 
+				MessageBox('Fornecedor deve ser informado!',48,'Atenção')
+				ThisForm.Grade.Column1.SetFocus
+				Return(.F.)  
+			EndIf
+			If( IsEmpty(crSigPrFnc.Reffs) )
+				MessageBox('A referência do fornecedor deve ser informada!',48,'Atenção')
+				Thisform.Grade.Column3.SetFocus 
+				Return(.F.)  
+			EndIf
+			If( IsEmpty(crSigPrFnc.Moevs) )
+				MessageBox('A Moeda deve ser informada!',48,'Atenção')
+				ThisForm.Grade.Column4.SetFocus
+				Return(.F.)  
+			EndIf
+			
+			*-- Rafael - 11/11/2016 - quando o Usuario tiver acesso a repetir nao valida se tem informação repetida
+			llPermiteRep = fChecaAcesso([SIGCDPRO],[REPETEFORN])
+			
+			Select a.IFors ;
+			  From crSigPrFnc a ;
+			 Where a.IFors = crSigPrFnc.IFors And ;
+				   a.Reffs = crSigPrFnc.Reffs And ;
+			 	   a.Colecoes = crSigPrFnc.Colecoes And ;
+			 	   a.cIdChaves <> crSigPrFnc.cIdChaves and;
+			 	   a.PVens = crSigPrFnc.PVens ;
+			  Into Cursor crAux
+			Select crAux
+			Go Top In crAux
+			
+			If Not Eof('crAux') And Not llPermiteRep
+				MessageBox('Fornecedor já informado para este produto!',48,'Atenção')
+				ThisForm.Grade.Column1.SetFocus
+				Return(.F.)  				
+			Endif			
+		EndScan	
+	EndIf
+EndIf
+
+Thisform.ParentForm.Enabled = .T.
+ThisForm.Release
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFOP.cmdInserir
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 33
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.houveincl = .T.
+
+Select crSigPrFnc
+Locate for cPros = crSigCdPro.cPros .and. iFors = Space(5)
+If Eof()
+	Insert Into crSigPrFnc (cPros, CidChaves) Values (crSigCdPro.cPros,fUniqueIds())
+EndIf
+
+Select crSigPrFnc
+Thisform.Grade.Column1.SetFocus
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFOP.cmdRepetir
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 34
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If Empty(crSigPrFnc.Ifors)
+	MessageBox([Selecione um Registro para ser Repetido.],0+48,[Atenção])
+	Return .F.
+EndIf 
+
+ThisForm.lblQtde.Visible = .T.
+ThisForm.getQtde.Visible = .T.
+ThisForm.shpQtde.Visible = .T.
+
+ThisForm.getQtde.Value = 0
+ThisForm.getQtde.Refresh 
+
+ThisForm.getQtde.SetFocus 
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFOP.getQtde
+* Classe: textbox (Base: textbox)
+* Registro: 35
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+lnVezes = 0 
+
+If Not Empty(This.Value)
+	lnVezes = This.Value
+
+	Select crSigPrFnc
+	m.iFors    = crSigPrFnc.iFors
+	m.rClis    = crSigPrFnc.rClis
+	m.Reffs    = crSigPrFnc.Reffs
+	m.Moevs    = crSigPrFnc.Moevs
+	m.PVens    = crSigPrFnc.PVens
+	m.dtValid  = crSigPrFnc.dtValid
+	m.Situas   = crSigPrFnc.Situas
+	m.Colecoes = crSigPrFnc.Colecoes
+	m.CodCors  = crSigPrFnc.CodCors
+	m.CodTams  = crSigPrFnc.CodTams
+	m.cPros    = crSigCdPro.cPros
+	
+	Thisform.houveincl = .T.
+		
+	For i=1 To lnVezes
+		Select crSigPrFnc
+		Append Blank 
+		
+		m.cidchaves = fUniqueIds()
+		Gather memvar 
+		Select crSigPrFnc
+	Endfor
+	This.Value = 0 
+Endif
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+ThisForm.lblQtde.Visible = .F.
+ThisForm.shpQtde.Visible = .F.
+This.Visible = .F.
+
+Select crSigPrFnc
+Thisform.Grade.Column1.SetFocus
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGCDFOP
+RESERVED3 (ClassInfo): houveexcl
+houveincl
+parentform
+pcescolha
+podatamgr
+_memberdata XML Metadata for customizable properties
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 24
+================================================================================

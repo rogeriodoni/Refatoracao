@@ -1,0 +1,12 @@
+﻿Corre├º├Áes aplicadas. Resumo da an├ílise dos 4 issues:
+
+**1 fix real aplicado ÔÇö `operacao` ÔåÆ `operacaos` (4 sites):**
+- Linha 4016: `SELECT operacao FROM SigCdOpt WHERE operacao = ...` ÔåÆ `operacaos`
+- Linha 4562: par├ómetro de chave do `FormBuscaAuxiliar` para `SigCdOpt`
+- Linha 4566: `mAddColuna("operacao", ...)` ÔåÆ `"operacaos"`
+- Linha 4572: `cursor_4c_BuscaOper.operacao` ÔåÆ `.operacaos`
+
+**3 false positives do validador ÔÇö sem altera├º├úo:**
+- **`ADICIONA`**: s├│ aparece como substring em coment├írio (`"adicionais"`) ÔÇö inexistente como coluna SQL
+- **`1`**: vem de `WHERE 1=1` no `lchBO.prg:213` ÔÇö idioma SQL v├ílido para filtros din├ómicos, n├úo ├® coluna
+- **`CEMPS`**: coluna v├ílida de `SigCdEmp` usada corretamente em `SELECT cemps, razas FROM SigCdEmp WHERE cemps = ...` (linha 4126)

@@ -1,0 +1,19 @@
+﻿Fase 3 conclu├¡da. Aqui o resumo do que foi feito:
+
+**JUSBO.prg (corre├º├úo):** Removido o modificador `PUBLIC` de 5 m├®todos ÔÇö `PUBLIC FUNCTION`/`PUBLIC PROCEDURE` dentro de `DEFINE CLASS` ├® SYNTAX ERROR (regra 9.1). M├®todos s├úo p├║blicos por default.
+
+**FormJUS.prg (criado ÔÇö Fase 3/8):**
+
+| M├®todo | Implementa├º├úo |
+|--------|--------------|
+| `Init(par_oForm, par_cRetrabalho)` | Captura params antes do DODEFAULT(): desabilita form pai, seta `this_cRetrabalho` e Caption din├ómico |
+| `InicializarForm()` | Cria JUSBO, chama ConfigurarPageFrame, carrega lista, guarda contra `gb_4c_ValidandoUI` |
+| `ConfigurarPageFrame()` | PageFrame Top=-29, Tabs=.F., 2 pages |
+| `ConfigurarPaginaLista()` | `cnt_4c_Cabecalho` com labels t├¡tulo, `cnt_4c_Botoes` vazio (Fase 4 adiciona bot├Áes), `cnt_4c_Saida` can├┤nico Left=917 |
+| `ConfigurarPaginaDados()` | `cnt_4c_BotoesAcao` vazio (Fase 5 adiciona Confirmar/Cancelar) |
+| `CarregarLista()` | Chama `JUSBO.Buscar()` com filtro `cRetrabs = this_cRetrabalho` |
+| `FormatarGridLista()` | Tahoma/8/ForeColor original |
+| `TornarControlesVisiveis()` | Recurs├úo com suporte a PageFrame |
+| `Destroy()` | Reabilita form pai (`oForm.Enabled = .T.`), limpa BO e cursores |
+
+**Pr├│xima fase (4/8):** Adicionar grid `grd_4c_Dados` com colunas Cods/Descrs e bot├Áes CRUD em `cnt_4c_Botoes`/`cnt_4c_Saida`.

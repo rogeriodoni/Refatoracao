@@ -32,7 +32,7 @@
 #  26. ELSEIF -> ELSE + IF + ENDIF (VFP9 nao suporta ELSEIF)
 #  27. Ternario ? : -> IIF() (VFP9 nao suporta operador ternario)
 #  28. LOCATE IN alias FOR -> SELECT alias + LOCATE FOR (VFP9 nao suporta LOCATE IN)
-#  29. ShowWindow/WindowType ausentes em Form -> Adicionar ShowWindow=1, WindowType=1 (form fecha imediatamente sem isso)
+#  29. ShowWindow/WindowType ausentes em Form -> Adicionar ShowWindow=0, WindowType=0 (valor 1 causa TIMEOUT em VFP9 -T mode)
 #  31. Aspas duplicadas com EscaparSQL/FormatarDataSQL -> Remover aspas extras (estas funcoes JA incluem aspas)
 #  37. ComboBox.NumberOfElements -> Remover (propriedade NAO existe em VFP9)
 #  38. Grid.Panel -> Remover (propriedade NAO existe em VFP9)
@@ -1420,7 +1420,7 @@ function Corrigir-LocateIn {
 }
 
 #------------------------------------------------------------------------------
-# 29. ShowWindow/WindowType ausentes em Form -> Adicionar (form fecha sem isso)
+# 29. ShowWindow/WindowType ausentes em Form -> Adicionar ShowWindow=0, WindowType=0 (valor 1 causa TIMEOUT em VFP9 -T mode)
 #------------------------------------------------------------------------------
 function Corrigir-ShowWindowAusente {
     param([string[]]$Linhas)
@@ -1428,7 +1428,9 @@ function Corrigir-ShowWindowAusente {
     # Verifica se eh um arquivo Form (DEFINE CLASS ... AS FormBase)
     $ehForm = $false
     $temShowWindow = $false
+    $temShowWindowOk = $false
     $temWindowType = $false
+    $temWindowTypeOk = $false
     $linhaDefineClass = -1
 
     for ($i = 0; $i -lt $Linhas.Count; $i++) {
@@ -1437,15 +1439,17 @@ function Corrigir-ShowWindowAusente {
             $ehForm = $true
             $linhaDefineClass = $i
         }
-        if ($linha -match '(?i)^\s*ShowWindow\s*=\s*1') {
+        if ($linha -match '(?i)^\s*ShowWindow\s*=\s*\d') {
             $temShowWindow = $true
+            if ($linha -match '(?i)^\s*ShowWindow\s*=\s*0\b') { $temShowWindowOk = $true }
         }
-        if ($linha -match '(?i)^\s*WindowType\s*=\s*1') {
+        if ($linha -match '(?i)^\s*WindowType\s*=\s*\d') {
             $temWindowType = $true
+            if ($linha -match '(?i)^\s*WindowType\s*=\s*0\b') { $temWindowTypeOk = $true }
         }
     }
 
-    if (-not $ehForm -or ($temShowWindow -and $temWindowType)) {
+    if (-not $ehForm -or ($temShowWindowOk -and $temWindowTypeOk)) {
         return $Linhas
     }
 
@@ -1461,12 +1465,12 @@ function Corrigir-ShowWindowAusente {
         if (-not $inserido -and $linhaTrim -match '(?i)^ControlBox\s*=\s*\.F\.') {
             $indent = if ($linha -match '^(\s+)') { $Matches[1] } else { "`t" }
             if (-not $temShowWindow) {
-                [void]$resultado.Add("${indent}ShowWindow = 1")
-                Add-Correcao -Tipo "SHOWWINDOW_AUSENTE" -Linha ($i + 1) -Original "(ausente)" -Corrigido "ShowWindow = 1" -Descricao "ShowWindow=1 adicionado (form fecha imediatamente sem isso)"
+                [void]$resultado.Add("${indent}ShowWindow = 0")
+                Add-Correcao -Tipo "SHOWWINDOW_AUSENTE" -Linha ($i + 1) -Original "(ausente)" -Corrigido "ShowWindow = 0" -Descricao "ShowWindow=0 adicionado (ShowWindow=1 causa TIMEOUT em VFP9 -T mode)"
             }
             if (-not $temWindowType) {
-                [void]$resultado.Add("${indent}WindowType = 1")
-                Add-Correcao -Tipo "WINDOWTYPE_AUSENTE" -Linha ($i + 1) -Original "(ausente)" -Corrigido "WindowType = 1" -Descricao "WindowType=1 adicionado (form deve ser modal)"
+                [void]$resultado.Add("${indent}WindowType = 0")
+                Add-Correcao -Tipo "WINDOWTYPE_AUSENTE" -Linha ($i + 1) -Original "(ausente)" -Corrigido "WindowType = 0" -Descricao "WindowType=0 adicionado (padrao modeless seguro para VFP9 -T mode)"
             }
             $inserido = $true
         }
@@ -1478,14 +1482,31 @@ function Corrigir-ShowWindowAusente {
             [void]$resultado.Add($linha)
             $indent = if ($linha -match '^(\s+)') { $Matches[1] } else { "`t" }
             if (-not $temShowWindow) {
-                [void]$resultado.Add("${indent}ShowWindow = 1")
-                Add-Correcao -Tipo "SHOWWINDOW_AUSENTE" -Linha ($i + 1) -Original "(ausente)" -Corrigido "ShowWindow = 1" -Descricao "ShowWindow=1 adicionado apos DataSession (form fecha imediatamente sem isso)"
+                [void]$resultado.Add("${indent}ShowWindow = 0")
+                Add-Correcao -Tipo "SHOWWINDOW_AUSENTE" -Linha ($i + 1) -Original "(ausente)" -Corrigido "ShowWindow = 0" -Descricao "ShowWindow=0 adicionado apos DataSession (ShowWindow=1 causa TIMEOUT em VFP9 -T mode)"
             }
             if (-not $temWindowType) {
-                [void]$resultado.Add("${indent}WindowType = 1")
-                Add-Correcao -Tipo "WINDOWTYPE_AUSENTE" -Linha ($i + 1) -Original "(ausente)" -Corrigido "WindowType = 1" -Descricao "WindowType=1 adicionado apos DataSession (form deve ser modal)"
+                [void]$resultado.Add("${indent}WindowType = 0")
+                Add-Correcao -Tipo "WINDOWTYPE_AUSENTE" -Linha ($i + 1) -Original "(ausente)" -Corrigido "WindowType = 0" -Descricao "WindowType=0 adicionado apos DataSession (padrao modeless seguro)"
             }
             $inserido = $true
+            continue
+        }
+
+        # Corrigir ShowWindow com valor errado (!=0) in-place
+        if ($linhaTrim -match '(?i)^ShowWindow\s*=\s*[1-9]\d*') {
+            $indent = if ($linha -match '^(\s+)') { $Matches[1] } else { "" }
+            $valorAtual = if ($linhaTrim -match '(?i)^ShowWindow\s*=\s*(\d+)') { $Matches[1] } else { "?" }
+            [void]$resultado.Add("${indent}ShowWindow   = 0")
+            Add-Correcao -Tipo "SHOWWINDOW_ERRADO" -Linha ($i + 1) -Original "ShowWindow = $valorAtual" -Corrigido "ShowWindow = 0" -Descricao "ShowWindow=$valorAtual corrigido para 0 (valor $valorAtual causa TIMEOUT em VFP9 -T mode)"
+            continue
+        }
+        # Corrigir WindowType com valor errado (!=0) in-place
+        if ($linhaTrim -match '(?i)^WindowType\s*=\s*[1-9]\d*') {
+            $indent = if ($linha -match '^(\s+)') { $Matches[1] } else { "" }
+            $valorAtual = if ($linhaTrim -match '(?i)^WindowType\s*=\s*(\d+)') { $Matches[1] } else { "?" }
+            [void]$resultado.Add("${indent}WindowType   = 0")
+            Add-Correcao -Tipo "WINDOWTYPE_ERRADO" -Linha ($i + 1) -Original "WindowType = $valorAtual" -Corrigido "WindowType = 0" -Descricao "WindowType=$valorAtual corrigido para 0 (valor $valorAtual causa TIMEOUT em VFP9 -T mode)"
             continue
         }
 
@@ -1500,12 +1521,12 @@ function Corrigir-ShowWindowAusente {
             if ($i -eq $linhaDefineClass) {
                 $indent = "`t"
                 if (-not $temShowWindow) {
-                    [void]$resultadoFinal.Add("${indent}ShowWindow = 1")
-                    Add-Correcao -Tipo "SHOWWINDOW_AUSENTE" -Linha ($i + 2) -Original "(ausente)" -Corrigido "ShowWindow = 1" -Descricao "ShowWindow=1 adicionado apos DEFINE CLASS (form fecha imediatamente sem isso)"
+                    [void]$resultadoFinal.Add("${indent}ShowWindow = 0")
+                    Add-Correcao -Tipo "SHOWWINDOW_AUSENTE" -Linha ($i + 2) -Original "(ausente)" -Corrigido "ShowWindow = 0" -Descricao "ShowWindow=0 adicionado apos DEFINE CLASS (ShowWindow=1 causa TIMEOUT em VFP9 -T mode)"
                 }
                 if (-not $temWindowType) {
-                    [void]$resultadoFinal.Add("${indent}WindowType = 1")
-                    Add-Correcao -Tipo "WINDOWTYPE_AUSENTE" -Linha ($i + 2) -Original "(ausente)" -Corrigido "WindowType = 1" -Descricao "WindowType=1 adicionado apos DEFINE CLASS (form deve ser modal)"
+                    [void]$resultadoFinal.Add("${indent}WindowType = 0")
+                    Add-Correcao -Tipo "WINDOWTYPE_AUSENTE" -Linha ($i + 2) -Original "(ausente)" -Corrigido "WindowType = 0" -Descricao "WindowType=0 adicionado apos DEFINE CLASS (padrao modeless seguro)"
                 }
             }
         }
@@ -2574,18 +2595,30 @@ function Corrigir-ContainerThemes {
 
     $resultado = @()
     $dentroWithContainer = $false
+    $profundidadeAtual = 0
+    $profundidadeContainer = 0
 
     for ($i = 0; $i -lt $Linhas.Count; $i++) {
-        # Detectar WITH para Container (cnt_4c_*)
-        if ($Linhas[$i] -match '(?i)WITH\s+.*\.(cnt_4c_\w+)\s*$') {
-            $dentroWithContainer = $true
+        $linhaTrim = $Linhas[$i].Trim()
+
+        if ($linhaTrim -match '(?i)^WITH\s+') {
+            $profundidadeAtual++
+            # Detectar WITH direto de Container (cnt_4c_*) — registra profundidade de entrada
+            if ($linhaTrim -match '(?i)^WITH\s+.*\.(cnt_4c_\w+)\s*$') {
+                $dentroWithContainer = $true
+                $profundidadeContainer = $profundidadeAtual
+            }
         }
-        if ($Linhas[$i] -match '(?i)^\s*ENDWITH\s*$') {
-            $dentroWithContainer = $false
+        if ($linhaTrim -match '(?i)^ENDWITH\b') {
+            # Sai do container quando voltamos ao nivel de entrada
+            if ($dentroWithContainer -and $profundidadeAtual -le $profundidadeContainer) {
+                $dentroWithContainer = $false
+            }
+            $profundidadeAtual = [Math]::Max(0, $profundidadeAtual - 1)
         }
-        # Remover .Themes dentro de WITH para Container
-        if ($dentroWithContainer -and $Linhas[$i] -match '(?i)^\s*\.Themes\s*=') {
-            Add-Correcao -Tipo "CONTAINER_THEMES" -Linha ($i + 1) -Original $Linhas[$i].Trim() -Corrigido "(removido)" -Descricao "Container nao tem .Themes em VFP9 - propriedade inexistente"
+        # Remover .Themes APENAS diretamente no WITH do Container (nao em sub-WITHs de botoes)
+        if ($dentroWithContainer -and $profundidadeAtual -eq $profundidadeContainer -and $linhaTrim -match '(?i)^\.Themes\s*=') {
+            Add-Correcao -Tipo "CONTAINER_THEMES" -Linha ($i + 1) -Original $linhaTrim -Corrigido "(removido)" -Descricao "Container nao tem .Themes em VFP9 - propriedade inexistente"
             continue
         }
         $resultado += $Linhas[$i]
@@ -4124,10 +4157,8 @@ function Corrigir-LostFocusLookupBusca {
             if ($procNome -match '(?i)Lookup' -and $handlersLookup -notcontains $procNome) {
                 $handlersLookup += $procNome
             }
-            # (c) nome contem Validar e arquivo tem FormBuscaAuxiliar
-            if ($procNome -match '(?i)Validar' -and $arquivoTemFormBusca -and $handlersLookup -notcontains $procNome) {
-                $handlersLookup += $procNome
-            }
+            # (c) nome contem Validar: apenas se corpo chama AbrirLookup/AbrirBusca (heuristica segura)
+            # NAO usar $arquivoTemFormBusca (muito amplo: pega ValidarXxx de SQL puro)
             # (d) nome termina em "LostFocus" (ex: UsuarsLostFocus)
             if ($procNome -match '(?i)LostFocus$' -and $handlersLookup -notcontains $procNome) {
                 $handlersLookup += $procNome
@@ -4135,6 +4166,12 @@ function Corrigir-LostFocusLookupBusca {
         }
         # (a) body tem CREATEOBJECT FormBuscaAuxiliar
         if ($procNome -and $l -match '(?i)CREATEOBJECT\s*\(\s*"FormBuscaAuxiliar"') {
+            if ($handlersLookup -notcontains $procNome) {
+                $handlersLookup += $procNome
+            }
+        }
+        # (c) nome contem Validar E corpo chama AbrirLookup/AbrirBusca (indica que eh picker, nao SQL puro)
+        if ($procNome -and $procNome -match '(?i)Validar' -and $l -match '(?i)(AbrirLookup|AbrirBusca)') {
             if ($handlersLookup -notcontains $procNome) {
                 $handlersLookup += $procNome
             }
@@ -4266,10 +4303,11 @@ function Corrigir-CntBotoesLeft542 {
     param([string[]]$Linhas)
 
     # Detecta AddObject("cnt_4c_Botoes", "Container") + linha posterior com .Left = <qualquer valor != 542>
-    # Requer estar dentro do WITH cnt_4c_Botoes (nao de outro container)
+    # Guarda semantica: apenas propriedades do CONTAINER (antes do primeiro .AddObject filho)
     $resultado = @()
     $dentroCntBotoes = $false
     $contadorEndWith = 0
+    $containerPropsEncerradas = $false  # true apos primeiro .AddObject dentro do WITH
 
     for ($i = 0; $i -lt $Linhas.Count; $i++) {
         $linha = $Linhas[$i]
@@ -4282,6 +4320,7 @@ function Corrigir-CntBotoesLeft542 {
         if ($linha -match '(?i)AddObject\s*\(\s*"cnt_4c_Botoes"\s*,\s*"Container"\s*\)') {
             $dentroCntBotoes = $true
             $contadorEndWith = 0
+            $containerPropsEncerradas = $false
         }
 
         if ($dentroCntBotoes -and $linha -match '(?i)^\s*WITH\b') {
@@ -4294,8 +4333,13 @@ function Corrigir-CntBotoesLeft542 {
             }
         }
 
-        # Detectar .Left = <numero != 542> dentro do WITH cnt_4c_Botoes
-        if ($dentroCntBotoes -and $linha -match '(?i)^(\s*\.Left\s*=\s*)(\d+)\s*$') {
+        # Quando vemos .AddObject dentro do WITH de cnt_4c_Botoes, as props do container terminaram
+        if ($dentroCntBotoes -and $contadorEndWith -eq 1 -and $linha -match '(?i)\.AddObject\s*\(') {
+            $containerPropsEncerradas = $true
+        }
+
+        # Detectar .Left = <numero != 542> NO PROPRIO cnt_4c_Botoes (antes de sub-AddObjects)
+        if ($dentroCntBotoes -and $contadorEndWith -eq 1 -and !$containerPropsEncerradas -and $linha -match '(?i)^(\s*\.Left\s*=\s*)(\d+)\s*$') {
             $indent = $Matches[1]
             $valor = [int]$Matches[2]
             if ($valor -ne 542) {
@@ -4737,7 +4781,8 @@ function Corrigir-CntSaidaEncerrarCanonico {
         }
 
         # Dentro do WITH cnt_4c_Saida: normalizar .Left = N e .Width = N
-        if ($dentroCntSaida) {
+        # Guarda: !$dentroEncerrar evita alterar props de cmd_4c_Encerrar (que eh filho do container)
+        if ($dentroCntSaida -and !$dentroEncerrar) {
             # .Left = <expressao qualquer> -> 917
             if ($linha -match '(?i)^(\s*\.Left\s*=\s*).+$') {
                 $indent = $Matches[1]

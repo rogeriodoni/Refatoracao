@@ -1,0 +1,18 @@
+﻿Phase 3 is complete. The file `C:\4c\projeto\app\forms\cadastros\Formemp.prg` (576 lines) has been created with:
+
+**Estrutura criada:**
+- `DEFINE CLASS Formemp AS FormBase` ÔÇö Width=1000, Height=600, Caption="Cadastro de Empresas"
+- `Init()` ÔÇö apenas `RETURN DODEFAULT()` (sem chamada duplicada a InicializarForm)
+- `InicializarForm()` ÔÇö cria empBO, chama ConfigurarPageFrame(), seta caption no header, chama CarregarLista()
+- `ConfigurarPageFrame()` ÔÇö PageFrame de 2 p├íginas (Lista/Dados), Top=-29 para esconder tabs
+- `ConfigurarPaginaLista()` ÔÇö cnt_4c_Cabecalho (com lbl_4c_Sombra/Titulo), cnt_4c_Botoes (vazio para Fase 4), cnt_4c_Saida com cmd_4c_Encerrar can├┤nico (Left=917, Width=90)
+- `ConfigurarPaginaDados()` ÔÇö opt_4c_Guia (OptionGroup 4 bot├Áes, Top=25), cnt_4c_BotoesAcao (vazio), cnt_4c_Saida, cnt_4c_Page1..4 (containers sobrepostos, apenas Page1 vis├¡vel)
+- `AlternarPagina()` / `AlternarSubPagina()` ÔÇö navega├º├úo entre as p├íginas
+- `GuiaClick()` ÔÇö handler do BINDEVENT no opt_4c_Guia, chama AlternarSubPagina
+- `CarregarLista()` ÔÇö chama empBO.Buscar("") (sem config de grid, que vem na Fase 4)
+- `TornarControlesVisiveis()` + `FormatarGridLista()` ÔÇö obrigat├│rios per FORMCOR li├º├Áes
+- `Destroy()` ÔÇö libera empBO, cursor_4c_Dados, cursor_4c_Busca, DODEFAULT()
+
+**Detalhe arquitetural importante:** depois de `TornarControlesVisiveis()`, ├® chamado `AlternarSubPagina(1)` para restaurar visibilidade correta dos sub-containers (TCV seta tudo Visible=.T., mas cnt_4c_Page2/3/4 devem come├ºar ocultos).
+
+**Pr├│xima fase:** Fase 4 ÔÇö adicionar Grid em Page1 e bot├Áes CRUD (Incluir, Visualizar, Alterar, Excluir, Buscar) no cnt_4c_Botoes + Confirmar/Cancelar no cnt_4c_BotoesAcao da Page2.

@@ -1,0 +1,19 @@
+﻿A corre├º├úo est├í correta. Aqui est├í o resumo do que foi feito e por qu├¬ os demais itens n├úo foram alterados:
+
+---
+
+**Corre├º├úo aplicada ÔÇö GRID-SQLEXEC (real):**
+
+No primeiro carregamento do grid de tratamento, o c├│digo anterior fechava `cursor_4c_TratamentoTemp` e rodava um segundo `SQLEXEC` diretamente para `cursor_4c_Tratamento`. Embora n├úo causasse destrui├º├úo de colunas nessa situa├º├úo espec├¡fica (o RecordSource ainda n├úo estava vinculado), o padr├úo ├® incorreto e pode causar problemas em edge cases. Substitu├¡do por `SELECT * FROM cursor_4c_TratamentoTemp INTO CURSOR cursor_4c_Tratamento READWRITE`, que copia os dados do temp sem segundo round-trip ao SQL Server.
+
+Ambos os caminhos agora usam o mesmo padr├úo: SQLEXEC ÔåÆ temp cursor ÔåÆ popular `cursor_4c_Tratamento` (linha 2748-2752 para recargas, linha 2756 para primeiro carregamento).
+
+---
+
+**GRID-HEADER ÔÇö falso alarme (n├úo alterado):**
+
+As legendas "C├│digo, Inicial, Final, Conta, Local Ini., Local Fin., Grupo, Gde.Grupo, Usu├írio, Encerrado" est├úo em `CarregarLista()` na linha 2382, no grid da **Page1** (`Page1.grd_4c_Dados`). O validador usou como refer├¬ncia os headers do grid de tratamento (Page3), que s├úo distintos. Alterar esses captions quebraria a lista de invent├írios.
+
+**LAYOUT-POSITION ÔÇö falso alarme (n├úo alterado):**
+
+O validador encontrou controles `lbl_4c_Label*` da Page2 e tentou associ├í-los por nome aos containers `Cnt_Custo2`, `CntTratOcor`, etc. da Page3. Os containers da Page3 usam nomes distintos (`lbl_4c_BNlbl*`, `lbl_4c_TOlbl*`, `lbl_4c_BAlbl*`, `lbl_4c_IBlbl*`) com posi├º├Áes corretas. Alterar os controles da Page2 quebraria os campos de filtro.

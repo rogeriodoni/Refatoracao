@@ -69,7 +69,7 @@ DEFINE CLASS SigReDctBO AS RelatorioBase
             SET NULL OFF
 
             INDEX ON STR(Nops,10) + cMats TAG NopMat
-            INDEX ON STR(Quebras,10) + STR(Nops,10) + STR(Ordem,10) + STR(Cbars,14) TAG Nops
+            INDEX ON STR(Quebras,10) + STR(Nops,10) + STR(Ordem,10) + Cbars TAG Nops
 
             *-- SigCdNei: etiquetas agrupadas por NOP e material
             loc_cSql = "SELECT Nops, cmats, SUM(qtds) AS Qtds, SUM(Pesos) AS Pesos, SUM(Peso2s) AS Peso2s " +;
@@ -91,7 +91,7 @@ DEFINE CLASS SigReDctBO AS RelatorioBase
                 loc_lSucesso = .F.
             ENDIF
             SELECT cursor_4c_TmpEti
-            INDEX ON STR(Nops,10) + STR(Cbars,14) TAG Nops
+            INDEX ON STR(Nops,10) + Cbars TAG Nops
 
             *-- Processar cada etiqueta (scan externo)
             SELECT cursor_4c_TmpEti

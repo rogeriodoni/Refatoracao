@@ -1,0 +1,16 @@
+﻿O arquivo est├í correto e completo. A Fase 6 adicionou com sucesso:
+
+**Controles adicionados em `ConfigurarPaginaDados()`:**
+- `lbl_4c_lbl_conta` ÔÇö label "Conta :" (Top=226 = 197+29)
+- `txt_4c_cd_conta` ÔÇö TextBox c├│digo da conta (Top=222, Left=197, Width=79, MaxLength=10)
+- `txt_4c_ds_conta` ÔÇö TextBox descri├º├úo da conta (Top=222, Left=278, Width=290, ReadOnly)
+- `lbl_4c_Label8` ÔÇö label "Tipo :" (Top=259 = 230+29)
+- `opt_4c_Tipos` ÔÇö OptionGroup com 3 bot├Áes: Disponibilidade/Investimento/Empr├®stimo (Top=257 = 228+29)
+- BINDEVENTs para conta: LostFocus ÔåÆ `ValidarContaForm`, KeyPress ÔåÆ `TeclaContaKeyPress`
+
+**M├®todos novos adicionados:**
+- `ValidarContaForm()` ÔÇö valida c├│digo via `DspBO.ValidarConta()` e preenche descri├º├úo
+- `TeclaContaKeyPress(par_nKeyCode, par_nShiftAltCtrl)` ÔÇö abre busca no F4 (keycode 115)
+- `AbrirBuscaConta()` ÔÇö usa `DspBO.BuscarContas()` + FormBuscaAuxiliar Modo 2 (cursor pr├®-existente), filtrando por grupo
+
+Os campos `txt_4c_cd_conta`, `txt_4c_ds_conta` e `opt_4c_Tipos` j├í estavam referenciados em `FormParaBO()`, `BOParaForm()`, `LimparCampos()` e `HabilitarCampos()` das fases anteriores ÔÇö agora existem de fato na Page2.

@@ -1,0 +1,581 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigCdEsp.SCX
+* Data/Hora: 01/08/2026 18:56:22
+* Total de registros: 12
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDESP
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGCDESP.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getCodigo
+  Parent: SIGCDESP.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGCDESP.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGCDESP.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGCDESP.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDescs
+  Parent: SIGCDESP.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: optProvs
+  Parent: SIGCDESP.Pagina.Dados
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: OptObrigs
+  Parent: SIGCDESP.Pagina.Dados
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDESP
+------------------------------------------------------------
+  DataSession = 2
+  Height = 600
+  Width = 1000
+  DoCreate = .T.
+  Caption = "Cadastro de Espécies"
+  Name = "SIGCDESP"
+  Pagina.ErasePage = .T.
+  Pagina.Lista.cntSombra.lblSombra.Name = "lblSombra"
+  Pagina.Lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  Pagina.Lista.cntSombra.Top = 1
+  Pagina.Lista.cntSombra.Left = -1
+  Pagina.Lista.cntSombra.Width = 1008
+  Pagina.Lista.cntSombra.Height = 80
+  Pagina.Lista.cntSombra.Name = "cntSombra"
+  Pagina.Lista.Grade.FontName = "Tahoma"
+  Pagina.Lista.Grade.Height = 470
+  Pagina.Lista.Grade.Left = 12
+  Pagina.Lista.Grade.Top = 121
+  Pagina.Lista.Grade.Width = 971
+  Pagina.Lista.Grade.ForeColor = 0,0,0
+  Pagina.Lista.Grade.GridLineColor = 238,238,238
+  Pagina.Lista.Grade.Name = "Grade"
+  Pagina.Lista.Grupo_op.AutoSize = .T.
+  Pagina.Lista.Grupo_op.Inserir.Top = 5
+  Pagina.Lista.Grupo_op.Inserir.Left = 5
+  Pagina.Lista.Grupo_op.Inserir.Name = "Inserir"
+  Pagina.Lista.Grupo_op.Consultar.Top = 5
+  Pagina.Lista.Grupo_op.Consultar.Left = 80
+  Pagina.Lista.Grupo_op.Consultar.Name = "Consultar"
+  Pagina.Lista.Grupo_op.Alterar.Top = 5
+  Pagina.Lista.Grupo_op.Alterar.Left = 155
+  Pagina.Lista.Grupo_op.Alterar.Name = "Alterar"
+  Pagina.Lista.Grupo_op.Excluir.Top = 5
+  Pagina.Lista.Grupo_op.Excluir.Left = 230
+  Pagina.Lista.Grupo_op.Excluir.Name = "Excluir"
+  Pagina.Lista.Grupo_op.procurar.Top = 5
+  Pagina.Lista.Grupo_op.procurar.Left = 305
+  Pagina.Lista.Grupo_op.procurar.Name = "procurar"
+  Pagina.Lista.Grupo_op.Height = 85
+  Pagina.Lista.Grupo_op.Left = 543
+  Pagina.Lista.Grupo_op.Top = -1
+  Pagina.Lista.Grupo_op.Width = 385
+  Pagina.Lista.Grupo_op.Name = "Grupo_op"
+  Pagina.Lista.Grupo_Saida.SAIR.Top = 5
+  Pagina.Lista.Grupo_Saida.SAIR.Left = 5
+  Pagina.Lista.Grupo_Saida.SAIR.Name = "SAIR"
+  Pagina.Lista.Grupo_Saida.Left = 918
+  Pagina.Lista.Grupo_Saida.Top = -1
+  Pagina.Lista.Grupo_Saida.Name = "Grupo_Saida"
+  Pagina.Lista.cntFiltros.Top = 95
+  Pagina.Lista.cntFiltros.Left = 803
+  Pagina.Lista.cntFiltros.Name = "cntFiltros"
+  Pagina.Lista.Picture = ..\framework\imagens\new_background.jpg
+  Pagina.Lista.Name = "Lista"
+  Pagina.Dados.Grupo_Salva.AutoSize = .T.
+  Pagina.Dados.Grupo_Salva.Salva.Top = 5
+  Pagina.Dados.Grupo_Salva.Salva.Left = 5
+  Pagina.Dados.Grupo_Salva.Salva.Name = "Salva"
+  Pagina.Dados.Grupo_Salva.Cancelar.Top = 5
+  Pagina.Dados.Grupo_Salva.Cancelar.Left = 81
+  Pagina.Dados.Grupo_Salva.Cancelar.Name = "Cancelar"
+  Pagina.Dados.Grupo_Salva.Height = 85
+  Pagina.Dados.Grupo_Salva.Left = 836
+  Pagina.Dados.Grupo_Salva.Top = -6
+  Pagina.Dados.Grupo_Salva.Width = 161
+  Pagina.Dados.Grupo_Salva.TabIndex = 7
+  Pagina.Dados.Grupo_Salva.ZOrderSet = 1
+  Pagina.Dados.Grupo_Salva.Name = "Grupo_Salva"
+  Pagina.Dados.Picture = ..\framework\imagens\new_background.jpg
+  Pagina.Dados.Name = "Dados"
+  Pagina.Width = 1003
+  Pagina.Name = "Pagina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDESP.Pagina.Dados.Say1
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Código :"
+  Height = 15
+  Left = 278
+  Top = 136
+  Width = 42
+  TabIndex = 1
+  ForeColor = 90,90,90
+  ZOrderSet = 2
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDESP.Pagina.Dados.getCodigo
+------------------------------------------------------------
+  ControlSource = "crSigCdEsp.Especies"
+  Format = "K!"
+  InputMask = ""
+  Left = 323
+  MaxLength = 6
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 133
+  Width = 52
+  ForeColor = 0,0,0
+  ZOrderSet = 3
+  plprocurar = .T.
+  Name = "getCodigo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDESP.Pagina.Dados.Say2
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Descrição :"
+  Height = 15
+  Left = 265
+  Top = 162
+  Width = 55
+  TabIndex = 3
+  ForeColor = 90,90,90
+  ZOrderSet = 4
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDESP.Pagina.Dados.Say4
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Obrigatório Dados Bancários :"
+  Height = 15
+  Left = 175
+  Top = 214
+  Width = 145
+  TabIndex = 5
+  ForeColor = 90,90,90
+  ZOrderSet = 4
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDESP.Pagina.Dados.Say3
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Integração Contábil :"
+  Height = 15
+  Left = 216
+  Top = 190
+  Width = 104
+  TabIndex = 5
+  ForeColor = 90,90,90
+  ZOrderSet = 4
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDESP.Pagina.Dados.getDescs
+------------------------------------------------------------
+  ControlSource = "crSigCdEsp.Descs"
+  Format = "K!"
+  Height = 25
+  Left = 323
+  MaxLength = 40
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 158
+  Width = 290
+  ForeColor = 0,0,0
+  ZOrderSet = 5
+  Name = "getDescs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDESP.Pagina.Dados.optProvs
+------------------------------------------------------------
+  AutoSize = .T.
+  BackStyle = 0
+  BorderStyle = 0
+  ControlSource = "crSigCdEsp.Provs"
+  Left = 319
+  Top = 185
+  TabIndex = 6
+  Name = "optProvs"
+  Option1.FontBold = .F.
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.FontUnderline = .F.
+  Option1.BackStyle = 0
+  Option1.Caption = "Com Provisão"
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontBold = .F.
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.FontUnderline = .F.
+  Option2.BackStyle = 0
+  Option2.Caption = "Sem Provisão"
+  Option2.Left = 110
+  Option2.Top = 5
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDESP.Pagina.Dados.OptObrigs
+------------------------------------------------------------
+  AutoSize = .T.
+  BackStyle = 0
+  BorderStyle = 0
+  ControlSource = "crSigCdEsp.Obrigs"
+  Left = 319
+  Top = 209
+  TabIndex = 6
+  ToolTipText = "Obriga Informar as informações dos dados bancarios nos Titulos"
+  Name = "OptObrigs"
+  Option1.FontBold = .F.
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.FontUnderline = .F.
+  Option1.BackStyle = 0
+  Option1.Caption = "Sim"
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontBold = .F.
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.FontUnderline = .F.
+  Option2.BackStyle = 0
+  Option2.Caption = "Não"
+  Option2.Left = 58
+  Option2.Top = 5
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDESP
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+With ThisForm
+	.poDataMgr = CreateObject([fSqlConector], .Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		With .poDataMgr
+			.AddCursor([SigCdEsp], [Especies], [crSigCdEsp], [], ThisForm.Pagina.Lista.Grade)
+			.pfSqlTabela(1).pColuna([Especies], [], [], [Espécie],   150, .t.)
+			.pfSqlTabela(1).pColuna([Descs],    [], [], [Descrição], 290, .t.)
+		EndWith
+
+		=DoDefault()
+
+		.Pagina.Lista.Grade.Column1.SetFocus
+	Else
+		=Messagebox([Impossível Efetuar Conexão Com o Servidor de Banco de Dados...], 0+48, [CreateObject])
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_procurar
+------------------------------------------------------------
+PROCEDURE msv_procurar
+Local lcBusca
+
+If Not Empty(ThisForm.Pagina.Dados.getCodigo.Value)
+	ThisForm.poDataMgr.LocateCursor([crSigCdEsp], [Especies], ThisForm.Pagina.Dados.getCodigo.Value)
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Lista.Grupo_op.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Lista.Grupo_op.Click
+Parameters lnOpcao
+
+If Not DoDefault(lnOpcao)
+	ThisForm.mAtivaPagina1
+	Return .f.
+EndIf
+
+Do Case
+	Case InList(ThisForm.pcEscolha, [INSERIR], [PROCURAR])
+		ThisForm.Pagina.Dados.getCodigo.SetFocus
+
+	Case InList(ThisForm.pcEscolha, [ALTERAR])
+		ThisForm.Pagina.Dados.getDescs.SetFocus
+
+	Case InList(ThisForm.pcEscolha, [CONSULTAR], [EXCLUIR])
+		ThisForm.Pagina.Dados.Grupo_salva.Salva.SetFocus
+
+		If (ThisForm.pcEscolha = [EXCLUIR])
+			lcQuery = [Select cIdChaves ] + ;
+					    [From SigMvCcr ] + ;
+					   [Where EspecieNfs = '] + crSigCdEsp.Especies + [']
+
+			If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalBus]) < 1)
+				=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalBus)])
+				Return .f.
+			EndIf
+			Select LocalBus
+			Go Top In LocalBus
+			If Not Eof([LocalBus])
+				=MessageBox([A Espécie Está Em Uso Nos Títulos e Não Pode Ser Excluída!!!], 0+16, [Atenção!!!])
+				ThisForm.mAtivaPagina1
+				Return .f.
+			EndIf
+
+			lcQuery = [Select Dopes ] + ;
+					    [From SigCdOpe ] + ;
+					   [Where Especies = '] + crSigCdEsp.Especies + [']
+
+			If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalBus]) < 1)
+				=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalBus)])
+				Return .f.
+			EndIf
+			Select LocalBus
+			Go Top In LocalBus
+			If Not Eof([LocalBus])
+				=MessageBox([A Espécie Está Em Uso Na Operação "] + Alltrim(LocalBus.Dopes) + [" e Não Pode Ser Excluída!!!], 0+16, [Atenção!!!])
+				ThisForm.mAtivaPagina1
+				Return .f.
+			EndIf
+		EndIf
+EndCase
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+If InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])
+	If Empty(crSigCdEsp.Especies)
+		=MessageBox([Código Inválido!!!], 0+64, [Atenção!!!])
+		ThisForm.Pagina.Dados.getCodigo.SetFocus
+		Return .f.
+	EndIf
+
+	If Empty(crSigCdEsp.Descs)
+		=MessageBox([Descrição Inválida!!!], 0+64, [Atenção!!!])
+		ThisForm.Pagina.Dados.getDescs.SetFocus
+		Return .f.
+	EndIf
+
+	If Empty(crSigCdEsp.Provs)
+		=MessageBox([Integração Contábil Inválida!!!], 0+64, [Atenção!!!])
+		ThisForm.Pagina.Dados.optProvs.option1.SetFocus 
+		Return .f.
+	EndIf
+
+	If (ThisForm.pcEscolha = [INSERIR]) And ThisForm.poDataMgr.ChkRegister([SigCdEsp], [Especies], crSigCdEsp.Especies) 
+		=MessageBox([Código Já Cadastrado!!!], 0+64, [Atenção!!!])
+		ThisForm.Pagina.Dados.getCodigo.SetFocus
+		Return .f.
+	EndIf
+EndIf
+
+=DoDefault()
+
+Select crSigCdEsp
+
+ThisForm.mAtivaPagina1
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+=DoDefault()
+
+Select crSigCdEsp
+
+If ThisForm.plCancelar
+	ThisForm.mAtivaPagina1
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDESP.Pagina.Dados.getCodigo
+* Classe: fwget (Base: textbox)
+* Registro: 5
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return InList(ThisForm.pcEscolha, [INSERIR], [PROCURAR])
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDESP.Pagina.Dados.getDescs
+* Classe: fwget (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDESP.Pagina.Dados.optProvs
+* Classe: fwoption (Base: optiongroup)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDESP.Pagina.Dados.OptObrigs
+* Classe: fwoption (Base: optiongroup)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGCDESP
+RESERVED3 (ClassInfo): nrecno
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 9
+================================================================================

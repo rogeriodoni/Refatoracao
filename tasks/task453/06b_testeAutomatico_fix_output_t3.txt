@@ -1,0 +1,13 @@
+﻿All three fixes are correctly in place. Here's a summary of what was applied and why:
+
+---
+
+**Fix 1 ÔÇö `TornarControlesVisiveis` (line 2895)**: Separated `GRD_4C_DADOS` from the container INLIST into its own hard `LOOP` with no recursion.
+
+The original code recursed into grid children even for `GRD_4C_DADOS`. On Page3, that grid has `Sparse = .F.` on Column8 with `When`/`Valid` BINDEVENTs attached. Activating Column8's Text1 via `Visible=.T.` triggered the `Valid` event ÔåÆ `GrdColOcorValid` ÔåÆ `AbrirLookupOcorrencia` ÔåÆ `FormBuscaAuxiliar.Show()` ÔåÆ indefinite block in headless VFP.
+
+**Fix 2 ÔÇö `AbrirLookupOcorrencia` (line 4126)**: Added `gb_4c_ModoTeste` guard before `Show()`. In test mode, skips the modal entirely and returns `.F.`.
+
+**Fix 3 ÔÇö `AbrirLookupOcorrenciaBaixaAuto` (line 4179)**: Same `gb_4c_ModoTeste` guard before `Show()`.
+
+Fix 1 is the structural root cause fix (prevents the event chain from starting). Fixes 2 and 3 are defensive ÔÇö if any other code path in the form reaches those lookups during tests, they will not block.

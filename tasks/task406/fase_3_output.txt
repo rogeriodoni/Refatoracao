@@ -1,0 +1,14 @@
+﻿Arquivo criado corretamente com 411 linhas. **Fase 3/8 conclu├¡da.**
+
+`C:\4c\projeto\app\forms\cadastros\FormENR.prg` criado com:
+
+- **DEFINE CLASS FormENR AS FormBase** com propriedades visuais (600x1000, DataSession=2, sem titlebar)
+- **Init()** ÔÇö apenas `RETURN DODEFAULT()` com TRY/CATCH
+- **InicializarForm()** ÔÇö cria ENRBO, chama ConfigurarPageFrame(), guarda `gb_4c_ValidandoUI`, ativa Page1
+- **ConfigurarPageFrame()** ÔÇö PageFrame Top=-29, 2 pages com `fundo_cad_1003.jpg`; aten├º├úo ao `ColumnCount` e `RecordSource` fora do WITH (padr├úo correto)
+- **ConfigurarPaginaLista()** ÔÇö cria `cnt_4c_Cabecalho` (com lbl_4c_Sombra + lbl_4c_Titulo) + `cnt_4c_Botoes` vazio (Left=542, fase 4 adicionar├í bot├Áes) + `cnt_4c_Saida` com `cmd_4c_Encerrar` + BINDEVENT
+- **ConfigurarPaginaDados()** ÔÇö cria `cnt_4c_Salva` com `cmd_4c_Confirmar` e `cmd_4c_Cancelar` + BINDEVENTs
+- **TornarControlesVisiveis()** ÔÇö implementa├º├úo recursiva completa (percorre Pages e Controls)
+- **AlternarPagina(), CarregarLista(), BtnEncerrarClick(), BtnSalvarClick(), BtnCancelarClick(), Destroy()** ÔÇö todos implementados
+
+Config.prg n├úo precisa edi├º├úo ÔÇö o ADIR() carrega automaticamente todos os `*BO.prg` e `Form*.prg` das pastas corretas.

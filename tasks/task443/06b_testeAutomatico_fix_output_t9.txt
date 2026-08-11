@@ -1,0 +1,9 @@
+﻿A corre├º├úo est├í aplicada. Resumo:
+
+**Bug corrigido**: `FormGrupo.prg` linha 52 ÔÇö `CREATEOBJECT("GrpBO")` ÔåÆ `CREATEOBJECT("GrupoBO")`
+
+**Causa do timeout de 300s**: VFP9 n├úo encontrava a classe `GrpBO` nos procedures carregados, ent├úo tentava localizar `GrpBO.prg` via dialog nativo "Abrir Arquivo". Esse dialog nativo do Windows **n├úo ├® suprimido** pelo `SYS(2335, 0)`, causando bloqueio indefinido at├® o pipeline matar o processo em 300s.
+
+**Por que os agentes anteriores (t1-t8) falharam**: Os primeiros (t1-t7) identificaram o problema mas n├úo salvaram o arquivo. O t8 identificou o problema, descreveu a corre├º├úo (`GrpBO` ÔåÆ `GrupoBO`) mas aplicou **ao contr├írio** (`GrupoBO` ÔåÆ `GrpBO`), reintroduzindo o bug.
+
+**`GrupoBO.prg` n├úo precisou de altera├º├úo** ÔÇö j├í cont├®m o guard `gb_4c_ModoTeste` em `InicializarDados` que pula o `SQLEXEC` em modo teste.

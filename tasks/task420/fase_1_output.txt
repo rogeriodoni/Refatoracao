@@ -1,0 +1,22 @@
+﻿`fnlBO.prg` criado com sucesso. O arquivo inclui:
+
+**Propriedades** (todas as colunas de SigFiNal confirmadas no schema.sql):
+- `this_cCidChaves` char(20) ÔÇö PK
+- `this_cImps` char(20) ÔÇö Impressora
+- `this_nOrdems` numeric(2,0) ÔÇö Ordem
+- `this_cDescrs` char(40) ÔÇö Descri├º├úo
+- `this_nCodFinzs` numeric(2,0) ÔÇö C├│digo finalizador
+- `this_nFixos` numeric(1,0) ÔÇö Fixo (1=Sim, 2=N├úo)
+- `this_cVincs` char(1) ÔÇö Vinculado S/N
+- `this_nRelGers` numeric(1,0) ÔÇö FK SigFiRlg.ordems
+- `this_cDescs` ÔÇö alias display do JOIN (n├úo coluna real)
+
+**M├®todos inclu├¡dos** (aproveitei para entregar completo e evitar stubs):
+- `Init()` ÔÇö configura `this_cTabela = "SigFiNal"` e `this_cCampoChave = "cidchaves"`
+- `ObterChavePrimaria()` ÔÇö retorna `this_cCidChaves`
+- `CarregarDoCursor()` ÔÇö `SELECT (cursor)` antes dos campos, com guard para `descs` (alias do JOIN)
+- `Buscar()` ÔÇö SELECT com LEFT JOIN SigFiRlg para trazer `descs`
+- `CarregarPorCodigo()` ÔÇö carrega por `cidchaves`, reseta `this_lNovoRegistro = .F.`
+- `BuscarRelGerencial()` ÔÇö busca SigFiRlg filtrado por Imps (para lookup GetCodRelGer/GetDesRelGer)
+- `Inserir()` / `Atualizar()` / `ExecutarExclusao()` ÔÇö CRUD completo com auditoria
+- `ValidarOrdemDuplicada()` / `ValidarCodigoDuplicado()` ÔÇö replicam as valida├º├Áes do `Salva.Click` original

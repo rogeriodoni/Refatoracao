@@ -1,0 +1,21 @@
+﻿O FormICN.prg j├í est├í **completo**. N├úo h├í nada a fazer na Fase 5/8.
+
+## Por que n├úo existe Phase 5 para este form
+
+O SIGCDICN ├® um form OPERACIONAL **flat** ÔÇö sem PageFrame CRUD, sem Page2, sem campos de entrada de dados. A estrutura original tem apenas:
+- `cntSombra` (cabe├ºalho cinza)
+- `Grid1` (2 colunas: Programa + ├ìcone)
+- `Botao_okcancel` (Ok + Encerrar)
+
+O `analise.json` confirma: `"campos": []`, `"lookups": []`, `"labels": []` ÔÇö nenhum campo de Page2 existe.
+
+## Estado atual (j├í completo ap├│s Fases 1-4)
+
+| Arquivo | Status | O que tem |
+|---|---|---|
+| `ICNBO.prg` | Ô£à Completo | CarregarProgramas, CarregarIcones, SalvarAlteracoes, Inserir, Atualizar, LimparArquivosTemp |
+| `FormICN.prg` | Ô£à Completo | ConfigurarCabecalho, ConfigurarGrid, ConfigurarBotoesAcao, CarregarDados, GrdDadosDblClick, GrdDadosKeyPress, BtnOkClick, BtnEncerrarClick, TornarControlesVisiveis, Destroy |
+
+O pipeline gerou Fases 5-8 como template gen├®rico, mas este form j├í atingiu **paridade funcional 100%** com o legado em 4 fases. N├úo h├í `ConfigurarPaginaDados()` a criar porque o SIGCDICN original n├úo tem painel de dados.
+
+As Fases 6, 7 e 8 tamb├®m n├úo ser├úo necess├írias pelo mesmo motivo. A migra├º├úo do FormICN est├í encerrada.

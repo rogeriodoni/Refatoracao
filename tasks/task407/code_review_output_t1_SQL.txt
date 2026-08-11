@@ -1,0 +1,7 @@
+﻿Ambas as corre├º├Áes est├úo aplicadas corretamente.
+
+**Resumo das corre├º├Áes:**
+
+- **epdBO.prg linha 81** `[SQL-ASPAS]`: Substitu├¡da a concatena├º├úo direta `'" + loc_cOpI + "' AND '" + loc_cOpF + "'"` por `EscaparSQL(loc_cOpI) + " AND " + EscaparSQL(loc_cOpF)` ÔÇö `EscaparSQL()` j├í retorna com aspas e faz escape de aspas internas nos valores.
+
+- **Formepd.prg linha 2071** `[GRID-SQL]`: Adicionado alias expl├¡cito `AS nops` no SELECT para `cursor_4c_Operacoes`, tornando inequ├¡voco que o cursor ter├í a coluna `nops` referenciada no `ControlSource = "cursor_4c_Operacoes.nops"`.

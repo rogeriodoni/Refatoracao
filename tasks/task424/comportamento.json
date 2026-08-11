@@ -1,0 +1,209 @@
+{
+  "resumo": {
+    "totalMetodos": 10,
+    "metodosComSQL": 4,
+    "metodosComValidacao": 5,
+    "totalQueries": 4,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fChecaAcesso", "From Dbf", "fwBuscaInt", "For Empty", "fUniqueIds", "Fpags", "nParcs", "Sum"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDFPD",
+      "evento": "Procedure",
+      "linhas": 20,
+      "codigoOriginal": "LParameters plHabilita\n\nLocal lnI\n\nIf Type('plHabilita') # 'L'\n\tplHabilita = .F.\nEndif\n\nWith Thisform.ParentForm.Pagina.Lista\n\tFor lnI=1 to .Grupo_Op.ButtonCount\n\t\tIf .Grupo_Op.Buttons(lnI).BaseClass = 'Commandbutton' And .Grupo_Op.Buttons(lnI).Visible\n\t\t\t.Grupo_Op.Buttons(lnI).Enabled = plHabilita\n\t\tEndIf\n\tEndFor\n\t.cmdFPOper.Enabled = plHabilita\n\t.Grupo_Saida.Sair.Enabled = plHabilita\nEndWith\n\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFPD",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFPD",
+      "evento": "Init",
+      "linhas": 70,
+      "codigoOriginal": "LParameters poForm, pnDataSes\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nSet Datasession To pnDataSes\n\nWith ThisForm\n\tWith .poDatamgr\n\t\t.AddCursor('SigOpFpD','CidChaves','crSigOpFpD')\n\tEndWith\nEndWith\n\nlcSql = [Select * From SigOpFpD Where TabDs = ']+CrSigOpTdz.Codigos+[']\nThisForm.Podatamgr.SqlExecute(lcSql,'LocalFpagD')\n\nlcSql = [Select Fpags,Descrs From SigOpFp ]\nThisForm.Podatamgr.SqlExecute(lcSql,'LocalFpag')\n\nSelect Loc... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso,From Dbf",
+        "metodosFormChamados": "SqlExecute,Columns,mCtrlBotoes",
+        "controlesReferenciados": "OpTdz",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFPD.GradeFPagto.Column1.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return ( Empty(CrSigOpFpD.Fpags) )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFPD.GradeFPagto.Column1.Text1",
+      "evento": "Valid",
+      "linhas": 12,
+      "codigoOriginal": "Local lcFpags, lnRecNo, loBrowse\n\nIf Not IsEmpty(This.Value)\n\tIf Not Seek(This.Value,'LocalFpag','Fpags')\n\t\tloBrowse = CreateObject('fwBuscaInt','LocalFPag','FPags',This.Value,'Cadastro de Condição de Pagamento',.t.)\n\t\tloBrowse.mAddColuna('FPags','','Código',.t.)\n\t\tloBrowse.mAddColuna('Descrs','','Descrição',.f.)\n\t\tloBrowse.Show\t\t\n\tEndif\n\tThis.Value = LocalFPag.FPags\n\tThis.Refresh\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFPD.GradeFPagto.Column1.Text1",
+      "evento": "LostFocus",
+      "linhas": 3,
+      "codigoOriginal": "If IsEmpty(This.Value)\n\tThisform.cmdSair.SetFocus\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFPD.GradeFPagto.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return ( Not Empty(CrSigOpFpD.Fpags) And This.Value = 0 )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFPD.cmdInserir",
+      "evento": "Click",
+      "linhas": 6,
+      "codigoOriginal": "ThisForm.Inseriu = .t.\nSelect crSigOpFpD\nAppend Blank  \nReplace TabDs With CrSigOpTdz.Codigos\nThisform.GradeFPagto.Column1.SetFocus\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "OpTdz",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFPD.cmdExcluir",
+      "evento": "Click",
+      "linhas": 9,
+      "codigoOriginal": "ThisForm.Excluiu = .t.\nSelect crSigOpFpD\nIf Not Eof()\n\tDelete\n\tSkip\n\tSkip - 1\nEndif\n\nThisform.GradeFPagto.Refresh",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFPD.cmdSair",
+      "evento": "Click",
+      "linhas": 46,
+      "codigoOriginal": "Local m.lnErro1\n\nIf Thisform.cmdInserir.Visible And (ThisForm.Inseriu Or Thisform.Excluiu )\n\tSelect crSigOpFpD\n\tLocate For .f.\n\tDelete For Empty(Fpags)\n\tDelete For Empty(nParcs)\n\tUpdate CrSigOpFpD set CidChaves = fUniqueIds()\n\n\tSelect Fpags,nParcs,Sum(1) as TT From CrSigOpFpD Group by 1,2 having Sum(1) > 1;\n\tInto Cursor CsSelecao ReadWrite\n\tIf Reccount('CsSelecao') > 0\n\t\tMessageBox('Dados em Duplicidade!!!',0+16,'')\n\t\tReturn .f.\n\tEndif\n\n\tm.lnErro1 = ThisForm.poDatamgr.pnIdConn\n\n\tWith ThisForm\n\n\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "For Empty,fUniqueIds,Fpags,nParcs,Sum",
+        "metodosFormChamados": "Visible And,mCtrlBotoes",
+        "controlesReferenciados": "OpTdz",
+        "retornaFalso": true
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDFPD.Init",
+      "queryOriginal": "lcSql = [Select * From SigOpFpD Where TabDs = ']+CrSigOpTdz.Codigos+['] ThisForm.Podatamgr.SqlExecute(lcSql,'LocalFpagD')",
+      "tabelas": "SigOpFpD",
+      "colunas": "TabDs,Codigos+[],SqlExecutelcSql,LocalFpagD",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDFPD.Init",
+      "queryOriginal": "lcSql = [Select Fpags,Descrs From SigOpFp ]",
+      "tabelas": "SigOpFp",
+      "colunas": "Fpags,Descrs",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDFPD.cmdSair.Click",
+      "queryOriginal": "\tUpdate CrSigOpFpD set CidChaves = fUniqueIds()",
+      "tabelas": "CrSigOpFpD",
+      "colunas": "CidChaves",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDFPD.cmdSair.Click",
+      "queryOriginal": "\tSelect Fpags,nParcs,Sum(1) as TT From CrSigOpFpD Group by 1,2 having Sum(1) > 1; \tInto Cursor CsSelecao ReadWrite",
+      "tabelas": "CrSigOpFpD",
+      "colunas": "Fpags,nParcs",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigOpFpD", "CrSigOpFpD"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

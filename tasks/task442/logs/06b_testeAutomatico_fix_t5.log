@@ -1,0 +1,25 @@
+[2026-08-08 10:04:56] [INFO] === CLAUDE CLI INVOKER ===
+[2026-08-08 10:04:56] [INFO] Prompt File: C:\4c\tasks\task442\runtime_fix_prompt_06b_testeAutomatico_t5.md
+[2026-08-08 10:04:56] [INFO] Output File: C:\4c\tasks\task442\06b_testeAutomatico_fix_output_t5.txt
+[2026-08-08 10:04:56] [INFO] Model: sonnet
+[2026-08-08 10:04:56] [INFO] Timeout: 3600 segundos
+[2026-08-08 10:04:56] [INFO] Max Output Tokens: 128000
+[2026-08-08 10:04:56] [INFO] Context Files: 0 arquivo(s)
+[2026-08-08 10:04:56] [INFO] Invocando Claude CLI...
+[2026-08-08 10:04:56] [INFO] Prompt carregado: 78744 caracteres
+[2026-08-08 10:04:56] [INFO] Executando: claude --model sonnet --dangerously-skip-permissions --add-dir C:\4c
+[2026-08-08 10:04:56] [INFO] Tamanho total do prompt: 78744 caracteres
+[2026-08-08 10:04:56] [INFO] Invocando Claude CLI (tentativa 1/7)...
+[2026-08-08 10:15:00] [INFO] Claude CLI finalizado em 603.9236461 segundos
+[2026-08-08 10:15:00] [INFO] Exit Code: 0
+[2026-08-08 10:15:00] [INFO] Output salvo em: C:\4c\tasks\task442\06b_testeAutomatico_fix_output_t5.txt
+[2026-08-08 10:15:00] [INFO] Output size: 775 bytes
+[2026-08-08 10:15:00] [INFO] SUCESSO: Claude CLI executado com sucesso
+[2026-08-08 10:15:00] [INFO] Preview do output:
+[2026-08-08 10:15:00] [INFO] Sem .fxp para deletar. As corre+º+Áes s+úo:
+
+**Causa raiz**: `WindowType = 1` (modal) no n+¡vel da classe faz VFP9 entrar no loop de evento modal **durante** `CREATEOBJECT()`, **antes** de `Init()` poder corrigi-lo. O guard no `Init()` chegava tarde demais ÔÇö o bloqueio de 300s ocorria antes de Init() executar.
+
+**Corre+º+Áes aplicadas em `FormGr1.prg`**:
+1. `WindowType = 1` ÔåÆ `WindowType = 0` ÔÇö remove o loop modal no n+¡vel da classe
+2. `ShowWindow = 0` / `ShowWindow = 1` (duplicata)

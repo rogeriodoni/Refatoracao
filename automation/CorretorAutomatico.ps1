@@ -1458,7 +1458,7 @@ function Corrigir-ShowWindowAusente {
         if ($linha -match '(?i)^\s*ShowWindow\s*=\s*1') {
             $temShowWindow = $true
         }
-        if ($linha -match '(?i)^\s*WindowType\s*=\s*1') {
+        if ($linha -match '(?i)^\s*WindowType\s*=\s*\d') {
             $temWindowType = $true
         }
     }

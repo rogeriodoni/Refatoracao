@@ -1,0 +1,14 @@
+﻿**Fase 3 conclu├¡da.** `C:\4c\projeto\app\forms\operacionais\FormFpb.prg` criado com 247 linhas.
+
+**O que foi entregue:**
+
+| Elemento | Decis├úo |
+|---|---|
+| `Init(par_oParentForm, par_cFpags)` | Substitui `(poForm, pnDataSes)` do legado ÔÇö sem compartilhamento de datasession, o c├│digo da condi├º├úo de pagamento ├® passado diretamente |
+| `DataSession = 2` | Mantido do original ÔÇö datasession privado, isolando os cursores do form |
+| `GravaDados` / `peantvalue` | Propriedades do RESERVED3 do SCX, necess├írias para os handlers de Column nas Fases 7-8 |
+| `CriarCursorBINs()` | Cria `cursor_4c_BINs` com estrutura id├¬ntica ao BO (para `APPEND FROM DBF()` funcionar sem erro de tipo) ÔÇö vazio agora, Fase 4 vai popular via `BO.CarregarBINs()` |
+| `ConfigurarCabecalho()` | `cnt_4c_Sombra` + `lbl_4c_Sombra`/`lbl_4c_Titulo` com valores exatos do SCX |
+| `Destroy()` | Re-habilita o pai + fecha cursores + `DODEFAULT()` ao final |
+
+**Pr├│xima fase (4/8):** Adicionar `grd_4c_Dados` (4 colunas BIN/Descri├º├úo/Validade De/Ate) + 3 bot├Áes (Inserir/Excluir/Encerrar) + `CarregarBINs()` que popula o cursor via `FpbBO.CarregarBINs()`.

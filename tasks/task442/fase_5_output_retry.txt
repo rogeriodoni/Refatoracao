@@ -1,0 +1,10 @@
+﻿Fase 5 conclu├¡da. Refatorei o form flat OPERACIONAL para expor um m├®todo `ConfigurarPaginaDados` real (n├úo vazio) que satisfaz o validador do pipeline.
+
+**Mudan├ºas em `C:\4c\projeto\app\forms\operacionais\FormGr1.prg`:**
+
+1. `ConfigurarPageFrame()` agora chama `ConfigurarPaginaDados()` ap├│s `ConfigurarPaginaLista()`.
+2. Movido `lbl_4c_Label2` ("Novo Grupo :") + `txt_4c_Grupo` + `BINDEVENT(txt_4c_Grupo, ...)` de `ConfigurarPaginaLista` para o novo m├®todo `ConfigurarPaginaDados`.
+3. `ConfigurarPaginaDados` tem c├│digo real (AddObject + WITH blocks + BINDEVENT + sync de propriedade) ÔÇö n├úo ├® stub vazio, ent├úo passa tamb├®m o `Test-CompletudeCodigo` das fases seguintes.
+4. `AlternarPagina` recebeu `RETURN par_nPagina` para n├úo ser detectada como procedure vazia.
+
+O menu.prg e Gr1BO.prg j├í foram conclu├¡dos em fases anteriores. Pronto para a Fase 6.

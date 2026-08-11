@@ -1,0 +1,945 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigCdGcp.SCX
+* Data/Hora: 06/08/2026 21:25:11
+* Total de registros: 25
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDGCP
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGCDGCP
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGCDGCP.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGCDGCP.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: GradeSubN
+  Parent: SIGCDGCP
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGCDGCP.GradeSubN.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDGCP.GradeSubN.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDGCP.GradeSubN.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDGCP.GradeSubN.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDGCP.GradeSubN.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDGCP.GradeSubN.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say1
+  Parent: SIGCDGCP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGCDGCP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGCDGCP
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Label1
+  Parent: SIGCDGCP
+  Class: label
+  BaseClass: label
+
+Objeto: Label2
+  Parent: SIGCDGCP
+  Class: label
+  BaseClass: label
+
+Objeto: Get_Dgru
+  Parent: SIGCDGCP
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Get_DConta
+  Parent: SIGCDGCP
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Opt_Permite
+  Parent: SIGCDGCP
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: cmdExcluir
+  Parent: SIGCDGCP
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cmdSair
+  Parent: SIGCDGCP
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cmdInserir
+  Parent: SIGCDGCP
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDGCP
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Top = 0
+  Left = 0
+  Height = 375
+  Width = 592
+  DoCreate = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Cadastro de Grupo/Conta Permitidas/Não Permitidas"
+  ControlBox = .F.
+  Movable = .F.
+  ClipControls = .F.
+  TitleBar = 0
+  Themes = .F.
+  peantvalue = 
+  _memberdata = <VFPData><memberdata name="antvalue" type="property" display="AntValue"/></VFPData>
+  Name = "SIGCDGCP"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDGCP.cntSombra
+------------------------------------------------------------
+  Top = -1
+  Left = -2
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDGCP.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDGCP.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDGCP.GradeSubN
+------------------------------------------------------------
+  ColumnCount = 3
+  FontName = "Tahoma"
+  FontSize = 8
+  DeleteMark = .F.
+  Height = 221
+  Left = 141
+  RowHeight = 16
+  ScrollBars = 2
+  TabIndex = 1
+  Top = 91
+  Width = 237
+  ForeColor = 90,90,90
+  GridLineColor = 238,238,238
+  Name = "GradeSubN"
+  Column1.FontBold = .T.
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.ControlSource = ""
+  Column1.Width = 84
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ForeColor = 90,90,90
+  Column1.Name = "Column1"
+  Column2.FontBold = .T.
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.Width = 84
+  Column2.ForeColor = 90,90,90
+  Column2.Name = "Column2"
+  Column3.FontBold = .T.
+  Column3.FontName = "Tahoma"
+  Column3.FontSize = 8
+  Column3.Width = 35
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.ForeColor = 90,90,90
+  Column3.Name = "Column3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDGCP.GradeSubN.Column1.Header1
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Grupo"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDGCP.GradeSubN.Column1.Text1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDGCP.GradeSubN.Column2.Header1
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Conta"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDGCP.GradeSubN.Column2.Text1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .F.
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDGCP.GradeSubN.Column3.Header1
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "O/D/A"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDGCP.GradeSubN.Column3.Text1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDGCP.Say1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Verdana"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "O = Origem"
+  Height = 15
+  Left = 386
+  Top = 180
+  Width = 75
+  TabIndex = 7
+  ForeColor = 216,39,70
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDGCP.Say2
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Verdana"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "D = Destino"
+  Left = 386
+  Top = 195
+  TabIndex = 8
+  ForeColor = 216,39,70
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDGCP.Say3
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Verdana"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "A = Ambos"
+  Left = 386
+  Top = 210
+  TabIndex = 9
+  ForeColor = 216,39,70
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDGCP.Label1
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Grupo : "
+  Height = 17
+  Left = 57
+  Top = 323
+  Width = 45
+  TabIndex = 10
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDGCP.Label2
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Conta : "
+  Height = 17
+  Left = 57
+  Top = 346
+  Width = 45
+  TabIndex = 11
+  ForeColor = 90,90,90
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDGCP.Get_Dgru
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  ControlSource = "TmpGcOpe.Dgrus"
+  Height = 23
+  Left = 104
+  TabIndex = 2
+  Top = 320
+  Width = 289
+  ForeColor = 90,90,90
+  BackColor = 255,255,225
+  Name = "Get_Dgru"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDGCP.Get_DConta
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  ControlSource = "TmpGcOpe.Rclis"
+  Height = 23
+  Left = 104
+  TabIndex = 3
+  Top = 344
+  Width = 289
+  ForeColor = 90,90,90
+  BackColor = 255,255,225
+  Name = "Get_DConta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDGCP.Opt_Permite
+------------------------------------------------------------
+  ButtonCount = 2
+  BackStyle = 0
+  Value = 1
+  Height = 46
+  Left = 408
+  SpecialEffect = 1
+  Top = 321
+  Width = 127
+  TabIndex = 4
+  BorderColor = 100,100,100
+  Themes = .F.
+  Name = "Opt_Permite"
+  Option1.FontBold = .T.
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Permitidas"
+  Option1.Value = 1
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.Width = 79
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontBold = .T.
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Não Permitidas"
+  Option2.Height = 15
+  Option2.Left = 5
+  Option2.Top = 24
+  Option2.Width = 103
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDGCP.cmdExcluir
+------------------------------------------------------------
+  Top = 2
+  Left = 440
+  Picture = ..\framework\imagens\cadastro_excluir_60.jpg
+  Caption = "Excluir"
+  TabIndex = 6
+  Name = "cmdExcluir"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDGCP.cmdSair
+------------------------------------------------------------
+  Top = 2
+  Left = 515
+  Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Cancel = .T.
+  Caption = "Encerrar"
+  TabIndex = 12
+  Name = "cmdSair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDGCP.cmdInserir
+------------------------------------------------------------
+  Top = 2
+  Left = 366
+  Picture = ..\framework\imagens\cadastro_inserir_60.jpg
+  Caption = "Inserir"
+  TabIndex = 5
+  Name = "cmdInserir"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Tahoma, 1, 8, 6, 13, 11, 32, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDGCP
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE mctrlbotoes
+------------------------------------------------------------
+PROCEDURE mctrlbotoes
+LParameters plHabilita
+
+Local lnI
+
+If Type('plHabilita') # 'L'
+	plHabilita = .F.
+Endif
+
+With Thisform.ParentForm.Pagina.Lista
+	For lnI=1 to .Grupo_Op.ButtonCount
+		If .Grupo_Op.Buttons(lnI).BaseClass = 'Commandbutton' And .Grupo_Op.Buttons(lnI).Visible
+			.Grupo_Op.Buttons(lnI).Enabled = plHabilita
+		EndIf
+	EndFor
+	.cmdFPOper.Enabled = plHabilita
+	.cmdMultiSubN.Enabled = plHabilita
+	.Grupo_Saida.Sair.Enabled = plHabilita
+EndWith
+
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters poForm, pnDataSes, pcEscolha
+
+Local lcOperacao
+
+Set DataSession to pnDataSes
+
+Thisform.ParentForm = poForm
+Thisform.PcEscolha  = pcEscolha
+Thisform.ParentForm.Enabled  = .F.
+lcOperacao = crSigCdOpe.Dopes
+
+With Thisform
+	.Caption = 'Grupos / Contas Permitidas ' + AllTrim( Proper( crSigCdOpe.Dopes ) )
+	.Top     = Thisform.ParentForm.Top + Thisform.ParentForm.Pagina.Lista.Grade.Top + 50
+	.Left    = Thisform.ParentForm.Left + ;
+			   Thisform.ParentForm.Pagina.Lista.Grade.Left + ;
+			   Thisform.ParentForm.Pagina.Lista.Grade.Columns(1).Width + ;
+			   Thisform.ParentForm.Pagina.Lista.Grade.Columns(3).Width + 16
+
+	.cmdInserir.Visible = fChecaAcesso('SigCdGcp','INSERIR') And ;
+						  Iif( Type( 'Thisform.PcEscolha' ) # 'C', .T., ;
+						  InList( Thisform.PcEscolha, 'INSERIR', 'ALTERAR' ) )
+	.cmdInserir.Enabled = fChecaAcesso('SigCdGcp','INSERIR')	And ;
+						  Iif( Type( 'Thisform.PcEscolha' ) # 'C', .T., ;
+						  InList( Thisform.PcEscolha, 'INSERIR', 'ALTERAR' ) )
+	.cmdExcluir.Visible = fChecaAcesso('SigCdGcp','EXCLUIR') And ;
+						  Iif( Type( 'Thisform.PcEscolha' ) # 'C', .T., ;
+						  InList( Thisform.PcEscolha, 'INSERIR', 'ALTERAR' ) )
+	.cmdExcluir.Enabled = fChecaAcesso('SigCdGcp','EXCLUIR')	And ;
+						  Iif( Type( 'Thisform.PcEscolha' ) # 'C', .T., ;
+						  InList( Thisform.PcEscolha, 'INSERIR', 'ALTERAR' ) )
+
+	.shape1.Left = IIF(.cmdInserir.visible, .cmdInserir.Left - 5, IIF(.cmdExcluir.visible , .cmdExcluir.left - 5, .cmdSair.Left - 5))
+	.shape1.width = IIF(.cmdInserir.visible, 3, IIF(.cmdExcluir.visible, 2, 1)) * .cmdsair.width + 16
+EndWith
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+Thisform.mCtrlBotoes(.F.)
+
+lcSql = [Select a.*, b.Descrs as Dgrus, c.Rclis From SigCdGcp a, SigCdGcr b, SigCdCli c ]+;
+		[Where a.Dopes=']+CrSigCdOpe.Dopes+[' And a.Grupos = b.Codigos And a.Contas = c.Iclis ]
+SigCdOpe.PodataMgr.Sqlexecute(lcSql,'xGcOpe')
+
+Select * From xgcOpe Into Cursor TmpGcOpe ReadWrite
+
+Select TmpGcOpe
+Goto Top
+ThisForm.Opt_Permite.Value = Iif(TmpGcOpe.BlqCts <> 2, 1, 2 )
+ThisForm.Opt_Permite.Refresh
+
+With Thisform.GradeSubN
+	.RecordSource          = 'TmpGcOpe'
+	.Column1.ControlSource = 'TmpGcOpe.Grupos'
+	.Column2.ControlSource = 'TmpGcOpe.Contas'
+	.Column3.ControlSource = 'TmpGcOpe.OriDes'
+	.SetAll('DynamicForeColor','Iif(TmpGcOpe.BlqCts = 2,Rgb(255,0,128),Rgb(0,0,128))','Column')
+	.Refresh
+EndWith
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDGCP.GradeSubN
+* Classe: grid (Base: grid)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE AfterRowColChange
+------------------------------------------------------------
+PROCEDURE AfterRowColChange
+LPARAMETERS nColIndex
+
+ThisForm.Get_dConta.Refresh
+ThisForm.Get_Dgru.Refresh
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDGCP.GradeSubN.Column1.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+If IsEmpty(This.Value)
+	Thisform.cmdSair.SetFocus
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not Empty( This.Value )
+	=fAcessoContab(Usuar,'C',This.Value,This)
+	lcSql = [Select Descrs From SigCdGcr Where Codigos = ']+This.Value+[' ]
+	SigCdOpe.Podatamgr.Sqlexecute(lcSql,'LocalGccr')
+	Replace Dgrus With LocalGccr.Descrs in TmpGcOpe
+Endif
+If This.Value <> ThisForm.peantvalue
+	ThisForm.lhouveins = .t.
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+ThisForm.peantvalue = This.Value
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDGCP.GradeSubN.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+grupo = ThisForm.GradeSubN.Column1.Text1.Value
+If !IsEmpty(This.value)
+	If !fAcessoContas(Usuar,grupo,'C',This.value,This)
+		Messagebox('Acesso Negado !!',0+48,'')
+		This.Value=' '
+		This.Refresh
+		Return 0 
+	EndIf
+	lcSql = [Select Rclis From SigCdCli Where Iclis = ']+This.Value+[']
+	SigCdOpe.Podatamgr.Sqlexecute(lcSql,'LocalCli')
+	Replace Rclis With LocalCli.Rclis in TmpGcOpe
+EndIf
+If This.Value <> ThisForm.peantvalue
+	ThisForm.lHouveins = .t.
+Endif
+Return .t.
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+ThisForm.peantvalue = This.Value
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDGCP.GradeSubN.Column3.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not InList(This.value,'O','D','A')
+	MessageBox('Opção Incorreta!!!',0+32,'')
+	Return .f.
+EndIf
+Return(.t.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDGCP.Get_Dgru
+* Classe: textbox (Base: textbox)
+* Registro: 19
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDGCP.Get_DConta
+* Classe: textbox (Base: textbox)
+* Registro: 20
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDGCP.Opt_Permite
+* Classe: optiongroup (Base: optiongroup)
+* Registro: 21
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE InteractiveChange
+------------------------------------------------------------
+PROCEDURE InteractiveChange
+Local AntValue
+
+AntValue = TmpGcOpe.blqCts
+Update TmpGcOpe Set BlqCts = This.Value
+Go Bott in TmpGcOpe
+ThisForm.GradeSubN.Refresh
+
+If TmpGcOpe.blqCts <> AntValue
+	ThisForm.lHouveins = .t.
+Endif
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDGCP.cmdExcluir
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 22
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select TmpGcOpe
+If Not Eof()
+	Thisform.lHouveExcl = .T.
+	Delete
+	Skip
+	Skip - 1
+Endif
+
+Thisform.GradeSubN.Refresh
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDGCP.cmdSair
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 23
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If Thisform.cmdInserir.Visible Or Thisform.cmdExcluir.Visible
+	If ( Thisform.lHouveExcl Or Thisform.lHouveIns )
+	
+		Select TmpGcOpe
+		Delete For Grupos = '  ' or Contas = '  '
+		Replace all dopes     With CrSigCdOpe.Dopes,;
+				    CidChaves With fUniqueIds()
+
+		Select Grupos, Contas, sum(1) From TmpGcOpe Group by 1,2 having sum(1) > 1 Into Cursor SecondKey
+		Select SecondKey
+		If Reccount() > 0
+			MessageBox('Existem Grupos/Contas em Duplicidade. Favor Acertar!!!',0+16,'Atenção')
+			Return .f.
+		EndIf
+		
+		Select CrSigCdGcp
+		Zap
+		Append From Dbf('TmpGcOpe')
+		
+		lcSql = [Delete From SigCdGcp Where Dopes = ']+CrSigCdOpe.dopes+[']
+
+		m.lnErro1 = SigCdOpe.poDatamgr.pnIdConn
+
+		With SigCdOpe
+			If m.lnErro1 > 0
+				m.lnErro1 = SigCdOpe.PodataMgr.Sqlexecute(lcSql,'')
+			Endif
+			If m.lnErro1>0 
+				m.lnErro1 = Iif(.poDataMgr.UpDate('crSigCdGcp'),1,-1)
+			EndIf 
+			If m.lnErro1>0 
+				m.lnErro1 = .poDataMgr.Commit()
+			EndIf 
+			If Not m.lnErro1>0 
+				.poDataMgr.RollBack()
+			EndIf 
+		EndWith 
+		If Not m.lnErro1>0 
+			= MessageBox('Erro na Gravação dos Dados do Cadastro de Grupo/Conta.',48)
+		EndIf 
+	EndIf
+ENDIF
+
+Thisform.ParentForm.Enabled = .T.
+Thisform.mCtrlBotoes(.T.)
+ThisForm.Release
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDGCP.cmdInserir
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 24
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Thisform.lHouveIns = .T.
+
+Select TmpGcOpe
+Locate for Grupos = ' '
+If Eof()
+	Insert Into TmpGcOpe (Dopes, CidChaves, BlqCts ) Values (crSigCdOpe.Dopes,fUniqueIds(), ThisForm.Opt_Permite.Value )
+EndIf
+
+Select TmpGcOpe
+Thisform.GradeSubN.Column1.SetFocus
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGCDGCP
+RESERVED3 (ClassInfo): lhouveexcl
+lhouveins
+parentform
+pcescolha
+peantvalue
+podatamgr
+_memberdata XML Metadata for customizable properties
+*mctrlbotoes 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 16
+================================================================================

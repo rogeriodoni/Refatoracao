@@ -1,0 +1,20 @@
+﻿`EvtBO.prg` completo. Fase 2/8 conclu├¡da.
+
+**O que foi adicionado:**
+
+| M├®todo | Descri├º├úo |
+|---|---|
+| `ObterChavePrimaria()` | Retorna `this_cCodigo` para auditoria |
+| `CarregarDoCursor()` | Carrega cIdChaves + Cods + Descs do cursor |
+| `ValidarDados()` | Valida: c├│digo vazio ÔåÆ duplicado ÔåÆ descri├º├úo vazia (replica l├│gica do legado) |
+| `VerificarCodigoExistente()` | SELECT COUNT(*) WHERE Cods = PADR(valor, 3) |
+| `Inserir()` | INSERT com cIdChaves gerado via `SYS(2015)` (equivalente ao `fUniqueIds` do legado) |
+| `Atualizar()` | UPDATE SET Descs WHERE Cods |
+| `ExecutarExclusao()` | DELETE WHERE Cods |
+| `Buscar()` | SELECT Cods, Descs ORDER BY Cods ÔåÆ cursor_4c_Dados |
+| `CarregarPorCodigo()` | SELECT por Cods ÔåÆ CarregarDoCursor + reseta this_lNovoRegistro |
+
+**Decis├Áes de design:**
+- `Cods` ├® padded a 3 chars com `PADR()` em todas as queries (replica `PADR(valor, 3)` do legado)
+- `cIdChaves` ├® gerado no INSERT e salvo em `this_cIdChaves` (n├úo ├® exposto como chave de busca)
+- Nenhum `RETURN` dentro de TRY/CATCH ÔÇö regra #1 do CLAUDE.md

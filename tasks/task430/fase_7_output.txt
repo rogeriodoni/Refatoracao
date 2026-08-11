@@ -1,0 +1,10 @@
+﻿Os 4 eventos principais j├í est├úo implementados no arquivo. A Fase 7 j├í foi conclu├¡da em uma fase anterior. Verificando o arquivo:
+
+- **BtnIncluirClick()** ÔÇö linha 684: chama `NovoRegistro()`, seta `this_cModoAtual = "INCLUIR"` antes de `HabilitarCampos()` (regra Problema 19), foca em `txt_4c_Codigo`
+- **BtnAlterarClick()** ÔÇö linha 724: l├¬ do cursor, `CarregarPorCodigo()` + `EditarRegistro()`, foca em `txt_4c_Descricao`
+- **BtnVisualizarClick()** ÔÇö linha 697: l├¬ do cursor, `CarregarPorCodigo()`, modo somente leitura
+- **BtnExcluirClick()** ÔÇö linha 752: l├¬ do cursor, `CarregarPorCodigo()`, navega para Page2 com Confirmar em foco
+
+Todos os eventos seguem as regras cr├¡ticas: `PUBLIC` (sem PROTECTED) para funcionar com BINDEVENT, valida├º├úo fora do TRY, sem RETURN dentro de TRY/CATCH.
+
+O FormFpr.prg est├í completo (883 linhas). A pr├│xima fase seria a Fase 8 ÔÇö integra├º├úo com `config.prg` e `menu.prg`. Deseja que eu execute a Fase 8 agora?

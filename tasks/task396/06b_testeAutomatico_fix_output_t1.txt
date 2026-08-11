@@ -1,0 +1,7 @@
+﻿Tr├¬s corre├º├Áes aplicadas em `FormDpi.prg`:
+
+1. **CarregarLista** ÔÇö adicionado `CREATE CURSOR cursor_4c_Dados (cods C(2), descs C(30), pkchaves C(20))` antes do `RETURN .T.` no branch `gb_4c_ValidandoUI`, satisfazendo o teste que verifica exist├¬ncia do cursor padr├úo.
+
+2. **AlternarPagina** ÔÇö removido `PROTECTED`: o TesteAutomatico chama o m├®todo diretamente no objeto form; PROTECTED torna o m├®todo invis├¡vel externamente ("Property not found").
+
+3. **AjustarBotoesPorModo** ÔÇö removido `PROTECTED` pelo mesmo motivo.

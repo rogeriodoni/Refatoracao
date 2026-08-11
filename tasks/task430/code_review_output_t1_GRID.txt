@@ -1,0 +1,6 @@
+﻿Corre├º├úo aplicada. O que foi mudado:
+
+- Removida a linha `ColumnCount = 3` (valor incorreto que causava auto-bind com 3 colunas)
+- `ColumnCount = 2` movido para **antes** de `RecordSource`
+
+Assim o VFP auto-bind respeita 2 colunas, e as defini├º├Áes expl├¡citas de `.ControlSource` nas linhas seguintes (Column1 ÔåÆ `Cods`, Column2 ÔåÆ `Descs`) sobrep├Áem corretamente o auto-bind. O `CarregarLista()` (linhas 546-549) j├í estava correto ÔÇö `ColumnCount` antes de `RecordSource`, seguido de `ControlSource`.

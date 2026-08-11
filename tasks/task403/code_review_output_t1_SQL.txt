@@ -1,0 +1,21 @@
+﻿Os tr├¬s alertas s├úo **falsos positivos** do verificador autom├ítico. Veja a an├ílise:
+
+---
+
+**1. `CRSIGCDM`** ÔÇö N├úo existe como nome de coluna em nenhum lugar. O verificador confundiu o alias de cursor `CrSigCdMin` (nome de cursor VFP local) com um nome de coluna SQL. Zero inst├óncias reais.
+
+**2. `MARCAS`** ÔÇö A ├║nica ocorr├¬ncia ├® `EmnBO.prg:627`:
+```foxpro
+SCAN FOR !DELETED() AND CsCopia.marcas = 1 AND CsCopia.existes = 0
+```
+Isso ├® um filtro VFP em cursor local (`SCAN FOR`), **n├úo uma cl├íusula SQL WHERE**. A coluna `marcas` ├® criada pelo pr├│prio UNION ALL que constr├│i o cursor `CsCopia` (`SELECT CAST(1 AS int) AS marcas...`). Completamente correto.
+
+**3. `CEMPS`** ÔÇö A ├║nica ocorr├¬ncia ├® `FormEmn.prg:1884`:
+```foxpro
+"SELECT Cemps FROM SigCdEmp WHERE Cemps = " + EscaparSQL(loc_cEmps)
+```
+`Cemps` ├® a **PK real de `SigCdEmp`** (conforme mem├│ria `feedback_sigcdemp_cemps_razas.md`). O WHERE ├® uma query de valida├º├úo em outra tabela, completamente independente das queries da tabela `SigCdMin`. O verificador comparou contra a lista de colunas do WHERE de `SigCdMin` e acusou como "inventado", mas s├úo tabelas diferentes.
+
+---
+
+**Nenhuma corre├º├úo necess├íria.** Os tr├¬s alertas s├úo falsos positivos causados pelo verificador confundir alias de cursores VFP com nomes de colunas SQL, filtros `SCAN FOR` com `WHERE SQL`, e colunas de tabelas distintas com as colunas da tabela principal. O c├│digo de `FormEmn.prg` e `EmnBO.prg` est├í correto nesses tr├¬s pontos.

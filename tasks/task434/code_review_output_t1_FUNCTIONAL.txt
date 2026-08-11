@@ -1,0 +1,10 @@
+﻿Todas as 4 corre├º├Áes aplicadas com sucesso. Verifica├º├úo final:
+
+| Problema | Fix | Linha |
+|----------|-----|-------|
+| `[CONTAINER-VISIVEL]` CNT_4C_SOMBRA for├ºado a Visible=.T. | `INLIST` guard no `TornarControlesVisiveis` | 1798 |
+| `[GRID-HEADER]` Valor/Moeda/Acr├®scimo n├úo existem no legado | Reduzido `grd_4c_Lista.ColumnCount` 5ÔåÆ2, removidas colunas 3-5 | 288, 1339, 1961 |
+| `[GRID-HEADER]` "Seq?encia" (CHR(252)=├╝, errado) | Substitu├¡do por `"Sequencia"` (igual ao legado) | 1311 |
+| `[LAYOUT-POSITION]` lbl_4c_Label11 Top/Left errado | **Falso-positivo do validador**: o validator confundiu `Label1` do SCX com `lbl_4c_Label11` por substring match. `lbl_4c_Label11` = "Perda do Metal" est├í corretamente em Top=119 (90+29 offset), Left=442. O `lbl_4c_Label1` (C├│digo) est├í corretamente em Top=41 (12+29), Left=121. Nenhuma mudan├ºa necess├íria. |
+
+Os grids aninhados (`grd_4c_Grade` com 5 colunas e `grd_4c_Custo` com 4 colunas) foram mantidos intactos ÔÇö seus headers (Grupo, Descri├º├úo, Coeficiente, Produto, Ordem, Sequencia) **s├úo** id├¬nticos ao legado.

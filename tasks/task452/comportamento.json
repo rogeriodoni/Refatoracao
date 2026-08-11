@@ -1,0 +1,365 @@
+{
+  "resumo": {
+    "totalMetodos": 18,
+    "metodosComSQL": 9,
+    "metodosComValidacao": 7,
+    "totalQueries": 8,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fUniqueIds", "fAcessoEmpresa"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDINF",
+      "evento": "Init",
+      "linhas": 36,
+      "codigoOriginal": "LPARAMETERS lcacesso\n\nWith ThisForm\n\t.poDatamgr = CreateObject('fSqlConector',Thisform.Name)\n\t\n\tIf Not .poDatamgr.pnIdconn > 0\n\t\tMessagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),'Erro')\n\t\tReturn(.F.)\n\tEndif\n\t\n\tlcInfos = Space(1)\n\tlcSqlEmInf = [Select * From SigEmInf Where Infos = ?lcInfos]\n\n\t\n\tWith .poDatamgr\n\t\t.AddCursor('SigPrInf','Infos','crSigPrInf','',ThisForm.pagina.lista.grade)\n\t\t.pfSqlTabela(1).pColuna('Infos','','','Codigo',60,.t.)\n\t\t.pfSqlTabela(1).pColuna... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDINF",
+      "evento": "Procedure",
+      "linhas": 7,
+      "codigoOriginal": "Local lcBusca\n\nIf !Empty(ThisForm.Pagina.Dados.get_formas.Value)\n\tThisForm.poDataMgr.LocateCursor('crSigCdFrm','formas',ThisForm.Pagina.Dados.Get_formas.Value)\nEndIf\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "LocateCursor",
+        "controlesReferenciados": "get_formas",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDINF",
+      "evento": "Procedure",
+      "linhas": 31,
+      "codigoOriginal": "llOk = .t.\n\nlcInfos = crSigPrInf.Infos\nIf (ThisForm.poDataMgr.SQLExecute([Delete From SigPrInf Where Infos = ?lcInfos], '') < 1)\n\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (msv_excluir - 1)')\n\tllOk = .f.\nEndIf\n\nIf llOk\n\tIf (ThisForm.poDataMgr.SQLExecute([Delete From SigEmInf Where Infos = ?lcInfos], '') < 1)\n\t\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (msv_excluir - 2)')\n\t\tllOk = .f.\n\tEndIf\nEndIf\n\nIf llOk And Not Thisform.poDataMgr.Update... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SQLExecute,Update,Commit,Rollback",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDINF",
+      "evento": "Procedure",
+      "linhas": 21,
+      "codigoOriginal": "llOk = .t.\n\nlcInfos = crSigPrInf.Infos\nIf (ThisForm.poDataMgr.SQLExecute([Delete From SigPrInf Where Infos = ?lcInfos], '') < 1)\n\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (msv_excluir - 1)')\n\tllOk = .f.\nEndIf\n\nIf llOk\n\tIf (ThisForm.poDataMgr.SQLExecute([Delete From SigEmInf Where Infos = ?lcInfos], '') < 1)\n\t\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (msv_excluir - 2)')\n\t\tllOk = .f.\n\tEndIf\nEndIf\n\nIf llOk\n\tThisForm.poDataMgr.Commit()\nElse... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SQLExecute,Commit,Rollback",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDINF",
+      "evento": "Procedure",
+      "linhas": 18,
+      "codigoOriginal": "llOk = .t.\n\nIf llOk And Not Thisform.poDataMgr.Update('crSigPrInf')\n\t=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update - crSigPrInf)')\n\tllOk = .F.\nEndif\n\nIf llOk And Not Thisform.poDataMgr.Update('crSigEmInf')\n\t=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update - crSigEmInf)')\n\tllOk = .F.\nEndIf\n\nIf llOk\n\tThisForm.poDataMgr.Commit()\nElse\n\tThisform.poDataMgr.Rollback()\n\tReturn .F.\nEndif",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Update,Commit,Rollback",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDINF",
+      "evento": "Click",
+      "linhas": 41,
+      "codigoOriginal": "LPArameters Opcao\n\nSelect CrSigPrInf\nIf !dodefault( Opcao )\n\tThisForm.mAtivapagina1\n\tReturn\nEndif\n\nSelect xEmInf\nZap\n\nlcSql = [Select a.* From SigEmInf a Where a.Infos = ']+CrSigPrInf.Infos+[']\n=ThisForm.PodataMgr.SqlExecute(lcsql,'TmpInfos')\n\nSelect TmpInfos\nScan\n\tSelect xEmInf\n\tAppend Blank\n\treplace Infos with TmpInfos.Infos,;\n\t\t\tEmps with TmpInfos.Emps,;\n\t\t\tPercEmps with TmpInfos.PercEmps\nEndScan\n\nSelect xEmInf\nIf Reccount() = 0\n\tAppend Blank\nEndIf\n\nThisForm.Pagina.Dados.Grade.Refresh\n\nSelect... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "Get_Info,Get_Descr",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDINF",
+      "evento": "Click",
+      "linhas": 34,
+      "codigoOriginal": "If Inlist( thisform.pcEscolha, 'INSERIR')\n\tIf Empty( CrSigPrInf.Infos)\n\t\tMessagebox( 'Código Inválido.', 48 , '' )\n\t\tThisForm.Pagina.Dados.Get_Info.SetFocus\n\t\tReturn\n\tEndif\n\tif ThisForm.poDataMgr.ChkRegister('SigPrInf','Infos',ThisForm.Pagina.Dados.Get_Info.Value)\n\t\tMessagebox( 'Código já cadastrada.', 48,'' )\n\t\tThisForm.Pagina.Dados.Get_Info.SetFocus\n\t\tReturn\n\tEndif\nEndIf\n\nIf InList(ThisForm.pcescolha,'INSERIR','ALTERAR')\n\tlcInfos = CrSigPrInf.Infos\n\t\n\tSelect CrSigEmInf\n\tZap\n\n\tSelect xEmInf\n\tSc... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "ChkRegister",
+        "controlesReferenciados": "Get_Info,ChkRegister('SigPrInf'",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDINF",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "DoDefault()\nif thisform.plCancelar\n\tthisform.mAtivapagina1\nendif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDINF.Pagina.Dados.Get_Info",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "If not Inlist(thisform.pcEscolha,'INSERIR','PROCURAR')\n\treturn(.f.)\nendif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDINF.Pagina.Dados.inserir",
+      "evento": "Click",
+      "linhas": 9,
+      "codigoOriginal": "ThisForm.LockScreen = .t.\nSelect xEmInf\nLocate For Emps=' '\nIf Eof()\n\tInsert into xEmInf(Infos) Values (crSigPrInf.Infos)\nEndIf\nThisform.Pagina.Dados.Grade.Column1.SetFocus\nThisForm.LockScreen = .f.\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDINF.Pagina.Dados.inserir",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDINF.Pagina.Dados.excluir",
+      "evento": "Click",
+      "linhas": 10,
+      "codigoOriginal": "Select xEmInf\nIf Eof() Or Bof()\n\tReturn\nEndIf\nThisForm.LockScreen = .t.\nDelete\nThisForm.pagina.Dados.Grade.Refresh\nThisForm.Pagina.Dados.Grade.Column1.SetFocus\nThisForm.LockScreen = .f.\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDINF.Pagina.Dados.excluir",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDINF.Pagina.Dados.Grade",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "If Not Eof()\n\tSkip\n\tSkip -1\nEndIf\n* Fim *********************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDINF.Pagina.Dados.Grade.Column1.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDINF.Pagina.Dados.Grade.Column1.Text1",
+      "evento": "Valid",
+      "linhas": 2,
+      "codigoOriginal": "=fAcessoEmpresa(Usuar, 'C', This.Value, This, '')\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDINF.Pagina.Dados.Grade.Column1.Text1",
+      "evento": "LostFocus",
+      "linhas": 11,
+      "codigoOriginal": "Select Emps from xEmInf into cursor Duplica group by Emps having sum(1) > 1 \nSelect Duplica\nIf Reccount() > 0\n\t=MessageBox('Empresa já lançada!!!',0+32,'')\n\tSelect xEmInf\n\treplace Emps with ' '\n\tThisForm.Pagina.Dados.Grade.Column1.SetFocus\nEndIf\nSelect xEmInf\n\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDINF.Pagina.Dados.Grade.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDINF.Init",
+      "queryOriginal": "\tlcSqlEmInf = [Select * From SigEmInf Where Infos = ?lcInfos]",
+      "tabelas": "SigEmInf",
+      "colunas": "Infos",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDINF.Procedure",
+      "queryOriginal": "If (ThisForm.poDataMgr.SQLExecute([Delete From SigPrInf Where Infos = ?lcInfos], '') < 1)",
+      "tabelas": "SigPrInf",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDINF.Procedure",
+      "queryOriginal": "\tIf (ThisForm.poDataMgr.SQLExecute([Delete From SigEmInf Where Infos = ?lcInfos], '') < 1)",
+      "tabelas": "SigEmInf",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDINF.Procedure",
+      "queryOriginal": "If (ThisForm.poDataMgr.SQLExecute([Delete From SigPrInf Where Infos = ?lcInfos], '') < 1)",
+      "tabelas": "SigPrInf",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDINF.Procedure",
+      "queryOriginal": "\tIf (ThisForm.poDataMgr.SQLExecute([Delete From SigEmInf Where Infos = ?lcInfos], '') < 1)",
+      "tabelas": "SigEmInf",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDINF.Click",
+      "queryOriginal": "lcSql = [Select a.* From SigEmInf a Where a.Infos = ']+CrSigPrInf.Infos+['] =ThisForm.PodataMgr.SqlExecute(lcsql,'TmpInfos')",
+      "tabelas": "SigEmInf",
+      "colunas": "Infos,Infos+[],SqlExecutelcsql,TmpInfos",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDINF.Pagina.Dados.inserir.Click",
+      "queryOriginal": "\tInsert into xEmInf(Infos) Values (crSigPrInf.Infos)",
+      "tabelas": "xEmInf",
+      "colunas": "Infos",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDINF.Pagina.Dados.Grade.Column1.Text1.LostFocus",
+      "queryOriginal": "Select Emps from xEmInf into cursor Duplica group by Emps having sum(1) > 1",
+      "tabelas": "xEmInf",
+      "colunas": "Emps",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigEmInf", "SigPrInf", "xEmInf"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

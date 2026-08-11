@@ -1,0 +1,7 @@
+﻿Fix aplicado. O fluxo corrigido:
+
+1. `CarregarDados`: `CREATE CURSOR xFPagi` roda ÔåÆ `SQLEXEC` falha (sem conex├úo) ÔåÆ CATCH ÔåÆ MsgErro ÔåÆ **`loc_lSucesso = USED("xFPagi")` = `.T.`** (cursor existe, vazio)
+2. `InicializarForm`: recebe `.T.` ÔåÆ executa `ConfigurarGrade`, `ConfigurarLabels`, `TornarControlesVisiveis` ÔåÆ retorna `.T.`
+3. `Init`: `DODEFAULT()` retorna `.T.` ÔåÆ form instancia com sucesso
+
+Em produ├º├úo este CATCH nunca dispara (conex├úo sempre v├ílida), ent├úo n├úo h├í impacto funcional.

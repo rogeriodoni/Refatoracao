@@ -1,0 +1,7 @@
+﻿3 corre├º├Áes aplicadas em `FormEVE.prg`:
+
+1. **CarregarLista** ÔÇö removido o early return `IF gb_4c_ValidandoUI / RETURN .T.`. Agora chama sempre `Buscar("")`, que cria `cursor_4c_Dados` vazio quando n├úo h├í conex├úo.
+
+2. **AlternarPagina** ÔÇö removido `PROTECTED`. O `TesteAutomatico` chamava `oForm.AlternarPagina(N)` de fora da classe, o que VFP9 rejeita com "Property not found" em membros protegidos.
+
+3. **AjustarBotoesPorModo** ÔÇö mesmo problema: removido `PROTECTED` para o teste `ModoVisualizar` que chama o m├®todo externamente.

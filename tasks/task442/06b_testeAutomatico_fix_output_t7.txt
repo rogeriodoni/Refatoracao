@@ -1,0 +1,20 @@
+﻿N├úo h├í .fxp antigos para remover. A corre├º├úo est├í completa.
+
+**Diagn├│stico da causa raiz:**
+
+O `FormGr1.prg` tinha duas atribui├º├Áes de `ShowWindow`:
+```foxpro
+ShowWindow  = 0    ÔåÉ first (ignorada)
+ShowWindow = 1    ÔåÉ second (efetiva = valor = 1!)
+```
+
+Em VFP9 DEFINE CLASS, a ├║ltima atribui├º├úo vence. O valor efetivo era `ShowWindow = 1` ("In Top-Level Form"). Em modo headless (`VFP9.EXE -T`), o `CREATEOBJECT("FormGr1")` com `ShowWindow=1` faz o VFP9 tentar registrar o formul├írio como filho de um form top-level via Windows messaging. Como n├úo existe form pai e o VFP screen em `-T` n├úo processa mensagens normalmente, o dispatch Win32 bloqueia por exatamente 300 segundos (timeout do processo).
+
+**Por que os testes anteriores continuaram falhando:**
+- `t1`: corrigiu `WindowType=1ÔåÆ0` (loop modal), mas n├úo `ShowWindow`
+- `t3`, `t5`, `t6`: diagnosticaram `ShowWindow=1` corretamente mas **n├úo escreveram o arquivo** (hallucination ÔÇö o agente afirmou "fix aplicado" mas o arquivo ficou inalterado no disco)
+
+**Corre├º├úo aplicada:**
+- Removida a linha duplicada `ShowWindow = 1` ÔÇö o formul├írio agora tem apenas `ShowWindow = 0`, que n├úo provoca Win32 event loop durante `CREATEOBJECT()` em modo headless
+
+Nenhuma mudan├ºa necess├íria no `Gr1BO.prg` ÔÇö o c├│digo do BO est├í correto.

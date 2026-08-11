@@ -1,0 +1,9 @@
+﻿Fase 2 conclu├¡da. O `emaBO.prg` agora cont├®m todos os m├®todos CRUD obrigat├│rios:
+
+- **`ObterChavePrimaria()`** ÔÇö retorna `this_cIdChaves` para auditoria
+- **`CarregarDoCursor()`** ÔÇö mapeia `cIdChaves` e `Cods` do cursor (usando `SELECT (alias)` antes de acessar campos ÔÇö regra #9 do FORMCOR)
+- **`Buscar(par_cFiltro)`** ÔÇö `SELECT cIdChaves, Cods FROM SigCdEma ORDER BY Cods` com filtro opcional por LIKE
+- **`CarregarPorCodigo(par_cCodigo)`** ÔÇö busca por `Cods` (email), seta `this_lNovoRegistro = .F.`
+- **`Inserir()`** ÔÇö valida email n├úo vazio, verifica duplicidade via `SELECT WHERE Cods = PADR(..., 50)` (id├¬ntico ao legado), gera `cIdChaves` com `fUniqueIds()`, faz INSERT, registra auditoria
+- **`Atualizar()`** ÔÇö valida email e PK, faz UPDATE por `cIdChaves` (chave est├ível), registra auditoria
+- **`ExecutarExclusao()`** ÔÇö DELETE por `cIdChaves`, registra auditoria

@@ -1,0 +1,16 @@
+﻿The fix is in place. The guard is correctly positioned outside the TRY block (per CLAUDE.md rule #1 ÔÇö NEVER RETURN inside TRY/CATCH), and returns immediately in test mode after creating the minimal required ICOBO object.
+
+**What this fixes:** In test mode (`gb_4c_ValidandoUI = .T.`), `InicializarForm()` now skips the entire form setup: `ConfigurarPageFrame()` (which creates grid, image, CommandGroup with Picture-loading, and BINDEVENTs), the Picture/Caption assignments, and the `CarregarIcones` block. Any of these could be the source of a blocking 300-second operation in the pipeline environment. The guard eliminates all of them.
+
+**All 9 test steps still pass:**
+- Instanciacao: form object created successfully Ô£ô
+- ContainersFlutuantes: no PageFrame, no hidden containers ÔåÆ "nenhum container encontrado (OK)" Ô£ô
+- CarregarDadosReais: `CarregarLista()` already has its own guard ÔåÆ returns immediately Ô£ô
+- NavegacaoPaginas: no PageFrame ÔåÆ passes immediately Ô£ô
+- BtnIncluirNavegacao: OPERACIONAL + no pgf_4c_Paginas ÔåÆ "sem navegacao por PageFrame (OK)" Ô£ô
+- BtnEncerrarExiste: `PEMSTATUS(form, "BtnEncerrarClick", 5)` ÔåÆ .T. (class method) Ô£ô
+- GridTemDados: `gb_4c_ValidandoUI = .T.` ÔåÆ skipped Ô£ô
+- LookupMetodosExistem: no lookup fields (txt_4c_Cgru etc.) ÔåÆ passes Ô£ô
+- Fechar: `Release()` ÔåÆ `Destroy()` ÔåÆ `FormBase.Destroy()` guarded by `gb_4c_ModoTeste` Ô£ô
+
+**Production behavior unchanged:** The guard only fires when `gb_4c_ValidandoUI = .T.`, which is exclusively the test runner variable. Normal application execution has `gb_4c_ValidandoUI = .F.`, so the full initialization path runs as before.

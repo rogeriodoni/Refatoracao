@@ -1,0 +1,5 @@
+﻿Fase 4 conclu├¡da. Este form OPERACIONAL (di├ílogo 443├ù262 sem PageFrame/grid) n├úo tem Page1 ÔÇö o template da fase 4 n├úo se aplica. O que foi feito:
+
+**Corre├º├úo aplicada**: os 4 pontos onde ValidarTipo/ValidarDesc/AbrirLookupTipo/AbrirLookupDesc pr├®-preenchem os campos agora tamb├®m populam `txt_4c_NovaDesc` com a descri├º├úo do tipo selecionado. Isso replica o comportamento truncado do original (`fwget2.Value = crListaRemota.D...` em GetTipo.Valid e GetDesc.Valid).
+
+**Motivo para n├úo adicionar ConfigurarPaginaLista/AlternarPagina**: o original tem `temGrid: false` na analise.json, dimens├Áes 262├ù443 (di├ílogo pequeno), sem PageFrame ÔÇö adicionar estrutura CRUD seria violar o PILAR 1.

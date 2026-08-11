@@ -1,0 +1,722 @@
+{
+  "resumo": {
+    "totalMetodos": 39,
+    "metodosComSQL": 14,
+    "metodosComValidacao": 18,
+    "totalQueries": 11,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fChecaAcesso", "For Descrs = Padr", "For Empty", "fConfigGeral", "for descrs = SPACE", "fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDEND",
+      "evento": "Procedure",
+      "linhas": 54,
+      "codigoOriginal": "With ThisForm\n\t* Ajustando os Botões\n\n\tIf (.pcEscolha = 'CONSULTAR')\n\t\t.cmdEscolha.Visible \t\t   = .f.\n\t\t.cmdSalva.btnConfirmar.Visible = .f.\n\t\t.cmdSalva.btnCancelar.Visible  = .f.\n\tElse\n\t\tllIns = fChecaAcesso('SIGCDEND', 'INSERIR')\n\t\tllAlt = fChecaAcesso('SIGCDEND', 'ALTERAR')\n\t\tllExc = fChecaAcesso('SIGCDEND', 'EXCLUIR')\n\t\tllCop = fChecaAcesso('SIGCDEND', 'COPIARP')\n\n\t\t.cmdEscolha.Visible = llIns Or llAlt Or llExc Or llCop\n\t\t\n\t\tIf llIns Or llAlt Or llExc Or llCop\n\t\t\tlnRet = (8 + Iif(llIns, 34, ... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDEND",
+      "evento": "Procedure",
+      "linhas": 103,
+      "codigoOriginal": "Lparameters pChk\nLocal lcDes, llMar\n\nlcDes = crGrade.Descrs\nlnCod = crGrade.Codigos\n\nWith ThisForm\n\tIf Not Used('crSigCdCeE')\n\t\tIf (.poDataMgr.Requery('crCursorCliEE') < 1)\n\t\t\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (AtualizaTela - Requery - crCursorCliEE)')\n\t\t\tReturn 0\n\t\tEndIf\n\n\tEndIf \n\t\n\tUpdate crCursorCliEE Set Refers = [] Where IsNull(Refers)\n\n\tWith .grdLocais\n\t\t.RecordSource \t   = ''\n\n\t\tSelect crGrade\n\t\tZap In crGrade\n\t\tLocate For .f.\n\n\t\t.ColumnCount  \t   = 2\n... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "IClis, fGerUniqueKey",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDEND",
+      "evento": "Procedure",
+      "linhas": 60,
+      "codigoOriginal": "Lparameters pEna\n\nWith ThisForm\n\t.getCeps.Enabled     = pEna\n\t.getPaises.Enabled   = pEna\n\t.getEndes.Enabled    = pEna\n\t.getNums.Enabled     = pEna\n\t.getCompls.Enabled   = pEna\n\t.getBairs.Enabled    = pEna\n\t.getCidas.Enabled    = pEna\n\t.getEstas.Enabled    = pEna\n\t.getDdds.Enabled     = pEna\n\t.getTel1s.Enabled    = pEna\n\t.getTel2s.Enabled    = pEna\n\t.getContatos.Enabled = pEna\n\t.getRefers.Enabled   = pEna\n\n\t.cmdSalva.btnConfirmar.Enabled = pEna\n\t.cmdSalva.btnCancelar.Enabled  = pEna\n\n\tIf (Reccou... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDEND",
+      "evento": "Procedure",
+      "linhas": 10,
+      "codigoOriginal": "ThisForm.pcEscolha = 'ALTERAR'\nThisForm.TipoCep  = [1]\nThisForm.TipoPais = .f.\n\nThisForm.EnabledObjects(.t.)\n\nThisForm.grdLocais.Column2.SetFocus\nThisForm.grdLocais.Refresh\n* Fim ********************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "EnabledObjects",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDEND",
+      "evento": "Procedure",
+      "linhas": 17,
+      "codigoOriginal": "Local lcDes \n\nlcDes = crGrade.Descrs\n\nThisForm.EntraInserindo = .f.\n\nThisForm.AtualizaTela\n\nSelect crGrade\nGo Top\nLocate For Descrs = lcDes\n\nThisForm.Refresh\n\n* Fim ********************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDEND",
+      "evento": "Procedure",
+      "linhas": 105,
+      "codigoOriginal": "Local lcDes\nprivate lcCep, lcEnd, lcBai, lcCod\n \nlcDes = crGrade.Descrs\nlcCep = thisform.getCeps.Value\nlcEnd = thisform.getEndes.value  \nlcBai = thisform.getBairs.value\nlcCod = crCursorCliEE.codigos\n\nIf (ThisForm.pcEscolha = 'INSERIR')\n\tThisForm.EntraInserindo = .f.\n\t\n\tlcQuery = [Select Descrs ] + ;\n\t\t\t    [From SigCdCeE ] + ;\n\t\t\t   [Where IClis = '] + ThisForm.IClis + [' And ] + ;\n\t\t\t   \t\t [Descrs = '] + lcDes + [']\n\n\tIf (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crDuplicados') < 1)\n\t\t=MessageBox... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute,Update",
+        "controlesReferenciados": "chkendds",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDEND",
+      "evento": "Procedure",
+      "linhas": 61,
+      "codigoOriginal": "Select crGrade\nLocate For Descrs = Padr('PRINCIPAL', 50)\nIf Eof('crGrade')\n\tlcQuery = [Select Ceps, Paises, Endes, Nums, Compls, Bairs, Cidas, Estas, Ddds, Tel1s, Tel2s, Contato ] + ;\n\t\t\t    [From SigCdCli ] + ;\n\t\t\t   [Where IClis = '] + ThisForm.IClis + [']\n\n\tIf (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigCdCeECli') < 1)\n\t\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (m_CopiarP - crSigCdCeECli)')\n\t\tReturn 0\n\tEndIf\n\tSelect crSigCdCeECli\n\tGo Top\n\tIf Eof('crSigCdCeECli'... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "For Descrs = Padr,For Empty",
+        "metodosFormChamados": "SqlExecute,IClis, fGerUniqueKey",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDEND",
+      "evento": "Procedure",
+      "linhas": 49,
+      "codigoOriginal": "Local llMar, lcDescr\n\nThisForm.pcEscolha = 'EXCLUIR'\n\nlcDescr = crGrade.Descrs\n\nDelete From crCursorCliEE Where Descrs = lcDescr\nDelete In crGrade\n\nIf Used('crSigCdCeE')\n\tDelete From crSigCdCeE Where Descrs = lcDescr\n\t\nEndIf \n\nllMar = .f.\nSelect crCursorCliEE\nScan\n\tIf crCursorCliEE.Atuals\n\t\tllMar = .t.\n\tEndIf\nEndScan\n\nIf Not llMar And (Reccount('crCursorCliEE') > 0)\n\t=MessageBox('Atenção!!! Não Existe Nenhum Endereço Marcado Para Entrega!!!' + Chr(13) + ;\n\t\t\t\t'O Primeiro Endereço Disponível Será... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDEND",
+      "evento": "Procedure",
+      "linhas": 17,
+      "codigoOriginal": "ThisForm.pcEscolha = 'INSERIR'\nThisForm.TipoCep  = [1]\nThisForm.TipoPais = .f.\n\nSelect crGrade\nZap In crGrade\n\nInsert Into crGrade (Atuals) Values (.f.)\nInsert Into crCursorCliEE (Iclis, Codigos, Atuals) Values (ThisForm.IClis, fGerUniqueKey('SIGCDCEE'), .f.)\n\nGo Bottom In crCursorCliEE\n\nThisForm.EnabledObjects(.t.)\n\nThisForm.grdLocais.Column2.SetFocus\nThisForm.grdLocais.Refresh\n* Fim ********************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "IClis, fGerUniqueKey,EnabledObjects",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDEND",
+      "evento": "Init",
+      "linhas": 172,
+      "codigoOriginal": "Lparameters pGru, pCon, pDes, pEsc, pCnx, pCod\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\n\n* Parâmetros : pGru - Grupo de Conta (Obrigatório)\n*              pCon - Código da Conta (Obrigatório)\n*              pDes - Nome da Conta (Default = Brancos)\n*              pEsc - Tipo de Opção : 'CONSULTAR', 'INSERIR', 'ALTERAR' (Default = 'CONSULTAR') \n*              pCnx - Conexão a Ser Utilizada (Obrigatório)\n*\t\t\t   pCod - Código d... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "IClis = Padr,Codigos = Iif,pcEscolha <> 'CONSULTAR') Or,pcEscolha = 'CONSULTAR') And Not Empty",
+        "controlesReferenciados": "ChkEndds,ChkEndrs",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDEND",
+      "evento": "Procedure",
+      "linhas": 9,
+      "codigoOriginal": "=fConfigGeral()\n\nCreate Cursor crGrade (Atuals l(1), Descrs c(50), Codigos n(10,0))\n\n= DoDefault()\n\n* Fim *********************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDEND",
+      "evento": "Procedure",
+      "linhas": 40,
+      "codigoOriginal": "If Used('crCursorCliEE')\n\tIf Used('crSigCdCeE')\n\t\tLocal iclis,codigos,atuals,descrs,ceps,paises,endes,nums,compls, ;\n\t\t\t\tbairs,cidas,estas,ddds,tel1s,tel2s,contatos,refers\n\t\n\t\tSelect crCursorCliEE\n\t\tLocate \n\n\t\tScan \n\t\t\tScatter Memo Memvar\n\t\t\t\n\t\t\tIf Not Empty(m.codigos) And Not Empty(m.iclis)\n\t\t\t\tSelect crSigCdCeE\n\t\t\t\tLocate For codigos==m.codigos\n\t\t\t\t\n\t\t\t\tIf Eof('crSigCdCeE')\n\t\t\t\t\tInsert Into crSigCdCeE From Memvar\n\n\t\t\t\tElse\n\t\t\t\t\tSelect crSigCdCeE\n\t\t\t\t\tGather Memo Memvar\n\t\t\t\t\n\t\t\t\tEndIf \n\n\t\t\tEndI... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "for descrs = SPACE",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDEND.getEstas",
+      "evento": "Valid",
+      "linhas": 18,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdUfs', ;\n\t\t\t\t\t\t   'crListaRemota', 'Estados', This.Value, 'Seleção', .T.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Estados', '', 'UF')\n\t\tloLista.mAddColuna('Descrs',  '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value = crListaRemota.Estados\n\tUse In crListaRemota\nElse\n\tThis.Value = ''\nEndIf\n* Fim ************************************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDEND.getCeps",
+      "evento": "LostFocus",
+      "linhas": 81,
+      "codigoOriginal": "If( This.Value == This.peAntValue )\n\tReturn\nEndif\n\nIf Not Empty(Strtran(This.Value, '-', '')) And Not ThisForm.TipoPais And (ThisForm.CepObris = 1)\n\tIf Empty(ThisForm.getPaises.Value)\n\t\tThisForm.getPaises.Value = [BRASIL]\n\t\tThisForm.getPaises.Refresh\n\tEndIf\n\n\tloCep = CreateObject('fwCep', This.Value, 'CEPS', .f.)\n\tloCep.Show\n\n\tIf Not loCep.plAchouRegistro\n\t\tloCep.Release\n\t\tReturn .f.\n\tEndIf\n\n\tlcCep = loCep.Ceps\n\tlcEnd = loCep.Nomes\n\tlcNum = loCep.Nums\n\tlcTpC = loCep.TipoCeps\n\tlcTpN = loCep.TipoN... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "TipoPais And,SqlExecute",
+        "controlesReferenciados": "chkendrs",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDEND.grdLocais",
+      "evento": "Procedure",
+      "linhas": 22,
+      "codigoOriginal": "Lparameters nColIndex\n\nSelect crCursorCliEE\nGo Top\nLocate For Codigos = crGrade.Codigos\n\nWith ThisForm\n\t.getCeps.Refresh\n\t.getPaises.Refresh\n\t.getEndes.Refresh\n\t.getNums.Refresh\n\t.getCompls.Refresh\n\t.getBairs.Refresh\n\t.getCidas.Refresh\n\t.getEstas.Refresh\n\t.getDdds.Refresh\n\t.getTel1s.Refresh\n\t.getTel2s.Refresh\n\t.getContatos.Refresh\n\t.getRefers.Refresh\nEndWith\n* Fim ********************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDEND.grdLocais.Column1.Check1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDEND.grdLocais.Column1.Check1",
+      "evento": "KeyPress",
+      "linhas": 56,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nLocal Atuals, llMar\n\nIf InList(nKeyCode, 13, 32)\n\tm.Atuals = (Not crGrade.Atuals)\n\n\tSelect crGrade\n\tlnCnt = Recno('crGrade')\n\tUpdate crGrade Set Atuals = .f.\n\tGo lnCnt\n\n\tGather Memvar Fields Atuals\n\tThisForm.grdLocais.Refresh\n\n\tSelect crCursorCliEE\n\tUpdate crCursorCliEE Set Atuals = .f.\n\tGo Top\n\tLocate For Descrs = crGrade.Descrs\n\tIf Not Eof('crCursorCliEE')\n\t\tGather Memvar Fields Atuals\n\tEndIf\n\t\n\tNoDefault\n\n\tIf (ThisForm.pcEscolha <> 'CONSULTAR')\n\t\tllMar = .... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDEND.grdLocais.Column1.Check1",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.grdLocais.Column2.SetFocus",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDEND.grdLocais.Column1.Check1",
+      "evento": "Procedure",
+      "linhas": 54,
+      "codigoOriginal": "LParameters nButton, nShift, nXCoord, nYCoord\n\nLocal Atuals\n\nm.Atuals = (Not crGrade.Atuals)\n\nSelect crGrade\nlnCnt = Recno('crGrade')\nUpdate crGrade Set Atuals = .f.\nGo lnCnt\n\nGather Memvar Fields Atuals\nThisForm.grdLocais.Refresh\n\nSelect crCursorCliEE\nUpdate crCursorCliEE Set Atuals = .f.\nGo Top\nLocate For Descrs = crGrade.Descrs\nIf Not Eof('crCursorCliEE')\n\tGather Memvar Fields Atuals\nEndIf\n\nNoDefault\n\nIf (ThisForm.pcEscolha <> 'CONSULTAR')\n\tllMar = .f.\n\tSelect crCursorCliEE\n\tScan\n\t\tIf crCurso... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDEND.grdLocais.Column1.Check1",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "LParameters nButton, nShift, nXCoord, nYCoord\n\nNoDefault\n* Fim ********************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDEND.grdLocais.Column1.Check1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDEND.grdLocais.Column2.Text1",
+      "evento": "LostFocus",
+      "linhas": 4,
+      "codigoOriginal": "If InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR') And Not Empty(This.Value)\n\tThisForm.getPaises.SetFocus\nEndIf\n* Fim ********************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDEND.grdLocais.Column2.Text1",
+      "evento": "Valid",
+      "linhas": 4,
+      "codigoOriginal": "If Not Empty(This.Value) And InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')\n\tThisForm.EnabledObjects(.t.)\nEndIf\n* Fim ********************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "EnabledObjects",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDEND.grdLocais.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (ThisForm.pcEscolha = 'INSERIR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDEND.getBairs",
+      "evento": "LostFocus",
+      "linhas": 25,
+      "codigoOriginal": "****Mena - checa se Cep restrito - 22/03/2012 ***************************\nLOCAL lcCam, lcSql\nIf Not Empty(Strtran(This.Value, '-', '')) and thisform.chkendrs=1\n\tlcCam = this.Value\n\tlcSql = [Select * From Sigcdenr Where bairs = ']+lcCam+[']\n\tIf Thisform.Podatamgr.SqlExecute(lcSql,'crEndR') < 1\n\t\t=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (CrEndR)')\n\t\tthis.Value = '' \n\tELSE\n\t\tIF RECCOUNT('crEndR') > 0\n\t\t\tMessageBox('Bairro Restrito',0+48,'Administração de Endereços')\n\t\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "chkendrs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDEND.getCidas",
+      "evento": "LostFocus",
+      "linhas": 56,
+      "codigoOriginal": "If Not Empty(This.Value) And Not ThisForm.TipoPais And (ThisForm.CepObris = 1) And Empty(Strtran(ThisForm.getCeps.Value, '-', ''))\n\tIf Not Empty(Strtran(This.Value, '-', ''))\n\t\tloCep = CreateObject('fwCep', This.Value, 'CIDADES', .f.)\n\t\tloCep.Show\n\n\t\tIf Not loCep.plAchouRegistro\n\t\t\tloCep.Release\n\t\t\tReturn .f.\n\t\tEndIf\n\n\t\tlcCep = loCep.Ceps\n\t\tlcEnd = loCep.Nomes\n\t\tlcNum = loCep.Nums\n\t\tlcTpC = loCep.TipoCeps\n\t\tlcTpN = loCep.TipoNomes\n\t\tlcBai = loCep.Bairros\n\t\tlcCid = loCep.Cidades\n\t\tlcUfs = loCep.E... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "TipoPais And",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDEND.getCidas",
+      "evento": "When",
+      "linhas": 12,
+      "codigoOriginal": "Local llRet, lcCep\n\nlcCep = ThisForm.getCeps.Value\n\nllRet = InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')\n\nIf llRet And Not ThisForm.TipoPais And (ThisForm.CepObris = 1)\n\tllRet = Iif(Empty(Strtran(lcCep, '-', '')), .t., (ThisForm.TipoCep = '0'))\nEndIf\n\nReturn(llRet)\n* Fim ********************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "TipoPais And",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDEND.getEndes",
+      "evento": "LostFocus",
+      "linhas": 81,
+      "codigoOriginal": "If Not Empty(This.Value) And Not ThisForm.TipoPais And (ThisForm.CepObris = 1) And Empty(Strtran(ThisForm.getCeps.Value, '-', ''))\n\tIf Not Empty(Strtran(This.Value, '-', ''))\n\t\tloCep = CreateObject('fwCep', This.Value, 'NOMES', .f.)\n\t\tloCep.Show\n\n\t\tIf Not loCep.plAchouRegistro\n\t\t\tloCep.Release\n\t\t\tReturn .f.\n\t\tEndIf\n\n\t\tlcCep = loCep.Ceps\n\t\tlcEnd = loCep.Nomes\n\t\tlcNum = loCep.Nums\n\t\tlcTpC = loCep.TipoCeps\n\t\tlcTpN = loCep.TipoNomes\n\t\tlcBai = loCep.Bairros\n\t\tlcCid = loCep.Cidades\n\t\tlcUfs = loCep.Est... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "TipoPais And,SqlExecute",
+        "controlesReferenciados": "chkendrs",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDEND.getEndes",
+      "evento": "When",
+      "linhas": 12,
+      "codigoOriginal": "Local llRet, lcCep\n\nlcCep = ThisForm.getCeps.Value\n\nllRet = InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')\n\nIf llRet And Not ThisForm.TipoPais And (ThisForm.CepObris = 1)\n\tllRet = Iif(Empty(Strtran(lcCep, '-', '')), .t., (ThisForm.TipoCep = '0'))\nEndIf\n\nReturn(llRet)\n* Fim ********************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "TipoPais And",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDEND.getPaises",
+      "evento": "GotFocus",
+      "linhas": 4,
+      "codigoOriginal": "If Empty(This.Value)\n\tThis.Value = [BRASIL]\nEndIf\n* Fim ********************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDEND.getPaises",
+      "evento": "LostFocus",
+      "linhas": 9,
+      "codigoOriginal": "If (Alltrim(This.Value) = [BRASIL])\n\tThisForm.TipoPais = .f.\nElse\n\tThisForm.TipoPais = .t.\n\n\tThisForm.getEstas.Value = [EX]\n\tThisForm.getEstas.Refresh\nEndIf\n* Fim ********************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDEND.cmdEscolha",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.m_Inserir",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDEND.cmdEscolha",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.m_Alterar",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDEND.cmdEscolha",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.m_Excluir",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDEND.cmdEscolha",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.m_CopiarP",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDEND.cmdSalva",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.m_Confirmar",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDEND.cmdSalva",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDEND.cmdSalva",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.m_Cancelar",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDEND.getContatos",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "*",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDEND.Procedure",
+      "queryOriginal": "\tUpdate crCursorCliEE Set Refers = [] Where IsNull(Refers)",
+      "tabelas": "crCursorCliEE",
+      "colunas": "Refers",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDEND.Procedure",
+      "queryOriginal": "Delete From crCursorCliEE Where Descrs = lcDescr",
+      "tabelas": "crCursorCliEE",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDEND.Procedure",
+      "queryOriginal": "\tDelete From crSigCdCeE Where Descrs = lcDescr",
+      "tabelas": "crSigCdCeE",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDEND.Procedure",
+      "queryOriginal": "Insert Into crGrade (Atuals) Values (.f.)",
+      "tabelas": "crGrade",
+      "colunas": "Atuals",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDEND.Procedure",
+      "queryOriginal": "Insert Into crCursorCliEE (Iclis, Codigos, Atuals) Values (ThisForm.IClis, fGerUniqueKey('SIGCDCEE'), .f.)",
+      "tabelas": "crCursorCliEE",
+      "colunas": "Iclis,Codigos,Atuals",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDEND.Procedure",
+      "queryOriginal": "\t\t\t\t\tInsert Into crSigCdCeE From Memvar",
+      "tabelas": "crSigCdCeE",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDEND.grdLocais.Column1.Check1.KeyPress",
+      "queryOriginal": "\tUpdate crGrade Set Atuals = .f.",
+      "tabelas": "crGrade",
+      "colunas": "Atuals",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDEND.grdLocais.Column1.Check1.KeyPress",
+      "queryOriginal": "\tUpdate crCursorCliEE Set Atuals = .f.",
+      "tabelas": "crCursorCliEE",
+      "colunas": "Atuals",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDEND.grdLocais.Column1.Check1.Procedure",
+      "queryOriginal": "Update crGrade Set Atuals = .f.",
+      "tabelas": "crGrade",
+      "colunas": "Atuals",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDEND.grdLocais.Column1.Check1.Procedure",
+      "queryOriginal": "Update crCursorCliEE Set Atuals = .f.",
+      "tabelas": "crCursorCliEE",
+      "colunas": "Atuals",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDEND.getBairs.LostFocus",
+      "queryOriginal": "\tlcSql = [Select * From Sigcdenr Where bairs = ']+lcCam+['] \tIf Thisform.Podatamgr.SqlExecute(lcSql,'crEndR') < 1",
+      "tabelas": "Sigcdenr",
+      "colunas": "bairs,SqlExecutelcSql,crEndR",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["crCursorCliEE", "crSigCdCeE", "crGrade", "Sigcdenr"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

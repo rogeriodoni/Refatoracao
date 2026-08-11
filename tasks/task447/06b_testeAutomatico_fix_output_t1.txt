@@ -1,0 +1,3 @@
+﻿Fix applied. The `WITH THIS.pgf_4c_Paginas / .Page1` pattern is a known VFP9 limitation ÔÇö pages inside a `WITH PageFrame` block cannot be accessed via `.Page1`/`.Page2` shorthand, generating "Unknown member PAGE1". Since `ConfigurarPageFrame()` has no TRY/CATCH, the exception propagated to `InicializarForm()`'s CATCH, which showed a `MsgErro` modal dialog, blocking VFP9 for the full 300 seconds.
+
+The fix replaces the WITH block with direct `THIS.pgf_4c_Paginas.Page1.xxx` assignments, which VFP9 resolves correctly. `ICMBO.prg` had no issues.

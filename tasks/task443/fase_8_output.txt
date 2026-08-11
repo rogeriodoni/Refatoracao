@@ -1,0 +1,17 @@
+﻿O arquivo est├í correto e completo. FASE 8 conclu├¡da com sucesso.
+
+**M├®todos adicionados (linhas 867ÔÇô1006):**
+
+| M├®todo | Fun├º├úo |
+|--------|--------|
+| `CarregarLista()` | Recarrega cursor_4c_Ope do SQL Server via `InicializarDados`, depois faz `Refresh()` no grid |
+| `FormParaBO()` | Mapeia `txt_4c_GdeGrps.Value` ÔåÆ `this_oBusinessObject.this_cGdeGrps` |
+| `BOParaForm()` | Sentido inverso: `this_cGdeGrps` ÔåÆ `txt_4c_GdeGrps.Value` |
+| `HabilitarCampos(par_lHabilitar)` | Liga/desliga txt_4c_GdeGrps, cmd_4c_Carregar, Inserir, Excluir, Confirmar e Column1.ReadOnly |
+| `LimparCampos()` | Zera txt_4c_GdeGrps, limpa this_cGdeGrps, reseta this_lGravaDados e esvazia cursor local via ZAP |
+| `AjustarBotoesPorModo()` | Verifica `this_oParentForm.this_cModoAtual`; habilita controles s├│ em INCLUIR/ALTERAR (replica l├│gica `When` do legado) |
+| `BtnBuscarClick()` | Reload com confirma├º├úo pr├®via se h├í altera├º├Áes pendentes |
+| `BtnEncerrarClick()` | Fecha com confirma├º├úo se h├í altera├º├Áes pendentes |
+| `BtnSalvarClick()` | Alias can├┤nico ÔåÆ delega para `BtnConfirmarClick()` |
+
+O FormGrupo.prg est├í finalizado com 1006 linhas, paridade funcional 100% com o legado SIGCDGRP.

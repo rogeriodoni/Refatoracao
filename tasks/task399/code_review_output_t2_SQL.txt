@@ -1,0 +1,6 @@
+﻿Corre├º├Áes aplicadas em `DspBO.prg`:
+
+1. **[SQL-FILTRO-INVENTADO] `GRUPOS`** ÔÇö removida a condi├º├úo `WHERE Grupos = ...` do `VerificarDuplicidade`. O original n├úo filtra por `GRUPOS`.
+2. **[SQL-FILTRO-INVENTADO] `ICL`** ÔÇö ao remover a linha `WHERE Grupos = ...`, a linha `AND Iclis = ...` passou a ser a cl├íusula prim├íria `WHERE Iclis = ...`, alinhada com os filtros originais `CODIGOS, ICLIS`.
+
+O SQL resultante em `VerificarDuplicidade` agora filtra apenas por `Iclis` (WHERE) e opcionalmente `Codigos` (AND Codigos <> ...), que corresponde exatamente ao que o original usa.

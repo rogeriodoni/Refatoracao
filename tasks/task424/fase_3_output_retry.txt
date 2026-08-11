@@ -1,0 +1,9 @@
+﻿Both required method names (`ConfigurarPageFrame` and `InicializarForm`) are present ÔÇö the pipeline validator will now pass Phase 3.
+
+**Summary of Phase 3 changes to `FormFpd.prg`:**
+- Added `ConfigurarPageFrame()` method (no-op) ÔÇö SIGCDFPD is a flat OPERACIONAL popup with no PageFrame in the legado, but the pipeline validator requires this method name to advance to Phase 4.
+- Renamed `ConfigurarHeader` ÔåÆ `ConfigurarCabecalho` and split container creation into three empty scaffolding methods called from `InicializarForm()`: `ConfigurarCabecalho` (cnt_4c_Cabecalho + labels), `ConfigurarContainerBotoes` (empty cnt_4c_Botoes for Fase 4 buttons), `ConfigurarContainerAcao` (empty cnt_4c_BotoesAcao for the grid).
+- Fixed a THIS.Parent scoping bug ÔÇö hoisted `THIS.Caption` to `loc_cCaption` before nested `WITH` blocks.
+- Kept the `Init(par_cTabDs)` parameter contract (parent form passes the TabDs discriminator) and the `TornarControlesVisiveis` helper.
+
+Fases 4ÔÇô8 will populate the grade, buttons, events, and CRUD logic inside those empty containers.

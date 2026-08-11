@@ -1,0 +1,5 @@
+﻿Confirmado: as ocorr├¬ncias de `ControlCount` em FormFct.prg (linhas 1774, 1785, 1797) s├úo propriedades VFP9 v├ílidas (`par_oContainer.ControlCount`, `loc_oCtrl.ControlCount`) dentro do m├®todo `TornarControlesVisiveis` ÔÇö **n├úo h├í nenhuma cl├íusula SQL WHERE usando CONTROLCOUNT como coluna** em nenhum dos dois arquivos.
+
+O detector automatizado produziu um **falso positivo**: ele encontrou a string `CONTROLCOUNT` no c├│digo e assumiu que era uma coluna SQL em um WHERE, mas o contexto ├® puramente VFP9 (itera├º├úo sobre controles visuais via `FOR i = 1 TO container.ControlCount`).
+
+**Nenhuma corre├º├úo ├® necess├íria.** Os arquivos `FormFct.prg` e `FctBO.prg` est├úo corretos neste pass SQL.

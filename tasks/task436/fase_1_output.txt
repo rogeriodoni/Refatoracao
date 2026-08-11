@@ -1,0 +1,7 @@
+﻿Fase 1/8 conclu├¡da. `C:\4c\projeto\app\classes\GcpBO.prg` criado com:
+
+- **6 propriedades de dados** mapeando as colunas exatas de `SigCdGcp` (confirmadas no schema.sql): `this_cCidChaves`, `this_cContas`, `this_cDopes`, `this_cGrupos`, `this_cOriDes`, `this_nBlqCts`
+- **2 propriedades desnormalizadas** de joins: `this_cDgrus` (SigCdGcr.Descrs) e `this_cRclis` (SigCdCli.Rclis)
+- **2 propriedades de contexto de cole├º├úo**: `this_cDopesAtual` e `this_nBlqCtsAtual` ÔÇö este BO gerencia um conjunto de registros (todos os grupos/contas de uma opera├º├úo), n├úo um registro ├║nico
+- **Init()** com padr├úo can├┤nico: `DODEFAULT()` + setar `this_cTabela`/`this_cCampoChave`
+- **ObterChavePrimaria()** para o sistema de auditoria

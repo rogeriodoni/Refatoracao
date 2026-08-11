@@ -1,0 +1,16 @@
+﻿Fase 6/8 conclu├¡da. Resumo do que foi adicionado/corrigido no `FormFpd.prg`:
+
+**Adi├º├Áes da Fase 6:**
+
+1. **`InicializarForm()`** ÔÇö desabilita o form pai ao abrir (`this_oParentForm.Enabled = .F.`), replicando o comportamento legado `Thisform.ParentForm.Enabled = .F.`
+
+2. **`CarregarLista()`** ÔÇö atualiza o caption do form e dos labels do cabe├ºalho incluindo o c├│digo TabDs (ex: `"Cond.Pagto Por Tab.Desconto - T001"`), igual ao legado `Caption = Caption + AllTrim(CrSigOpTdz.Codigos)`
+
+3. **BINDEVENT KeyPress na grade** ÔÇö `ConfigurarGrade()` agora registra `GradeKeyPress` para capturar F4
+
+4. **M├®todo `GradeKeyPress(par_nKeyCode, par_nShiftAltCtrl)`** ÔÇö novo m├®todo PUBLIC que abre o picker de Fpags ao pressionar F4 (keycode=28) quando a Column1 est├í ativa e edit├ível
+
+5. **`GradeAfterRowColChange()` corrigido** ÔÇö agora controla o ReadOnly de **ambas** as colunas por estado da linha, espelhando os eventos `When` do legado:
+   - Column1: ReadOnly=.T. quando fpags j├í tem valor (s├│ edit├ível em linha nova vazia)
+   - Column2: ReadOnly=.T. quando fpags vazio OU nParcs j├í preenchido
+   - Ap├│s sair da Column1: valida fpags e recalcula ambos os ReadOnly

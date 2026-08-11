@@ -1,0 +1,3 @@
+﻿Tudo correto. Os 145 padr├Áes `IF ... : stmt : ENDIF` foram expandidos para a forma multi-linha v├ílida no VFP9. O arquivo passou de 4661 para 4951 linhas (290 linhas adicionais = 145 ├ù 2 linhas extras por expans├úo, correto).
+
+**Causa do erro:** VFP9 n├úo suporta o separador `:` para combinar m├║ltiplos comandos em uma ├║nica linha dentro de blocos `DEFINE CLASS...ENDDEFINE` em arquivos `.PRG`. O compilador rejeitava todos os 145 `IF <cond> : <stmt> : ENDIF` com "Command contains unrecognized phrase/keyword". **Fix:** Cada linha foi expandida para a forma can├┤nica VFP9 com `IF / stmt / ENDIF` em linhas separadas.

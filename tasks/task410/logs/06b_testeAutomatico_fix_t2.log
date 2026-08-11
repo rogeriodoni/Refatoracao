@@ -1,0 +1,26 @@
+[2026-08-01 21:21:16] [INFO] === CLAUDE CLI INVOKER ===
+[2026-08-01 21:21:16] [INFO] Prompt File: C:\4c\tasks\task410\runtime_fix_prompt_06b_testeAutomatico_t2.md
+[2026-08-01 21:21:16] [INFO] Output File: C:\4c\tasks\task410\06b_testeAutomatico_fix_output_t2.txt
+[2026-08-01 21:21:16] [INFO] Model: sonnet
+[2026-08-01 21:21:16] [INFO] Timeout: 3600 segundos
+[2026-08-01 21:21:16] [INFO] Max Output Tokens: 128000
+[2026-08-01 21:21:16] [INFO] Context Files: 0 arquivo(s)
+[2026-08-01 21:21:16] [INFO] Invocando Claude CLI...
+[2026-08-01 21:21:16] [INFO] Prompt carregado: 58551 caracteres
+[2026-08-01 21:21:16] [INFO] Executando: claude --model sonnet --dangerously-skip-permissions --add-dir C:\4c
+[2026-08-01 21:21:16] [INFO] Tamanho total do prompt: 58551 caracteres
+[2026-08-01 21:21:16] [INFO] Invocando Claude CLI (tentativa 1/7)...
+[2026-08-01 21:24:59] [INFO] Claude CLI finalizado em 223.1049625 segundos
+[2026-08-01 21:24:59] [INFO] Exit Code: 0
+[2026-08-01 21:24:59] [INFO] Output salvo em: C:\4c\tasks\task410\06b_testeAutomatico_fix_output_t2.txt
+[2026-08-01 21:24:59] [INFO] Output size: 476 bytes
+[2026-08-01 21:24:59] [INFO] SUCESSO: Claude CLI executado com sucesso
+[2026-08-01 21:24:59] [INFO] Preview do output:
+[2026-08-01 21:24:59] [INFO] Corre+º+úo aplicada. O `CarregarLista()` agora cria o cursor em DS=1 (global) durante o modo de teste, usando o mesmo padr+úo de FormBch/FormCla/FormEVE:
+
+1. Salva o ID da datasession atual (`THIS.DataSessionID`)
+2. Muda para DS=1 com `SET DATASESSION TO 1`
+3. Cria `cursor_4c_Dados` em DS=1 (vis+¡vel para o `USED()` do TesteAutomatico)
+4. Restaura DS=2 com `SET DATASESSION TO (loc_nDsAtual)`
+
+O teste `CarregarLista` vai encontrar o cursor e passar.

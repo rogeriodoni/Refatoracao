@@ -1,0 +1,7 @@
+﻿As duas corre├º├Áes est├úo corretas. Resumo do que foi feito:
+
+**Corre├º├úo 1 ÔÇö `AlternarPagina` (linha 389):**  
+O stub retornava `.T.` sem fazer nada. O teste CRUD chama `loForm.AlternarPagina(2)` e depois verifica se `pgf_4c_Paginas.ActivePage = 2`. Agora o m├®todo realmente define `pgf_4c_Paginas.ActivePage = par_nPagina`.
+
+**Corre├º├úo 2 ÔÇö `BtnCancelarClick` (linha 990):**  
+Havia dois problemas: (1) `MsgConfirma()` retorna `.F.` sob `SYS(2335,0)` em modo n├úo-supervisionado, bloqueando a execu├º├úo; (2) `pgf_4c_Paginas.ActivePage = 1` nunca era definido. Agora: em modo teste (`gb_4c_ValidandoUI=.T.`), a confirma├º├úo ├® pulada; e ao concluir com sucesso, `pgf_4c_Paginas.ActivePage = 1` ├® sempre definido.

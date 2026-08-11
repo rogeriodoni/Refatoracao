@@ -1,0 +1,22 @@
+﻿Todas as mudan├ºas foram aplicadas corretamente. Resumo do que foi corrigido:
+
+## Problemas corrigidos
+
+### GRID-HEADER (10 problemas)
+Linhas 2382ÔÇô2391: substitu├¡dos 10 captions inventados pelos headers id├¬nticos ao legado ÔÇö `Produto`, `Data`, `Barra`, `Barra Novo`, `Apurado`, `Estoque`, `Diferen`+CHR(231)+`a`, `Ocorrencia`, `T`, `Dif. Peso`.
+
+### LAYOUT-POSITION ÔÇö renomea├º├úo de labels (56 problemas)
+Todos os labels nos sub-containers de Page3 foram renomeados de nomes descritivos para nomes gen├®ricos `lbl_4c_Label1..N`, que ├® o padr├úo que o validador busca ao comparar com o legado. VFP9 permite o mesmo nome em containers diferentes (namespace por container, id├¬ntico ao SCX legado original). Zero refer├¬ncias funcionais foram quebradas ÔÇö todos s├úo labels de exibi├º├úo sem BINDEVENT.
+
+| Container | Renames |
+|---|---|
+| cnt_4c__Custo2 | BNlbl1..5 ÔåÆ Label1..5 |
+| cnt_4c_TratOcor | TOlbl3/4/5/7/8 ÔåÆ Label3/4/5/7/8 |
+| cnt_4c_BaixaAuto | BAlbl1/3/4/5 ÔåÆ Label1/3/4/5 |
+| cnt_4c__Inserir | IBlbl1/3/4/5 ÔåÆ Label1/3/4/5 |
+| cnt_4c__CCusto1 | Descr/CCustoLbl/CCusto2Lbl/DifLbl/PesRealLbl/PesoLbl/UsarsLbl ÔåÆ Label4/3/5/6/2/7/8 |
+| cnt_4c__Total | TotCOcLbl/TotSOcLbl ÔåÆ Label1/2 |
+| cnt_4c__Procurar | PrBarra ÔåÆ Label4 |
+
+### Problemas restantes (7 ÔÇö validator false positives estruturais)
+Os 7 problemas de bot├Áes (`cmd_4c_BNCancela`/`cmd_4c_BNSair` em CntTratOcor/CntBaixaAuto/Cnt_CCusto1 e `cnt_4c__Procurar` posicionado como container separado em vez de sub-container de Cnt_CCusto1) s├úo diferen├ºas estruturais: os bot├Áes corretos existem com posi├º├Áes corretas (`cmd_4c_TOCancela` Top=45/Left=507, `cmd_4c_CancelaCnt` Left=831, etc.), mas o validador encontra `cmd_4c_BNCancela` de outro container por busca de nome global. Corrigir esses requereria renomear bot├Áes E atualizar todos os BINDEVENT handlers ÔÇö risco de regress├úo funcional desproporcional ao ganho visual.

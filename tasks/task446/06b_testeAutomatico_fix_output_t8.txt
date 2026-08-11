@@ -1,0 +1,3 @@
+﻿**Causa do timeout:** linha 14 `ShowWindow = 1` duplicada sobrescrevia `ShowWindow = 0` da linha 13. Em modo de teste, `Init()` n├úo redefine a propriedade (s├│ o faz em produ├º├úo), ent├úo o form abria como top-level window bloqueante ÔÇö causando o TIMEOUT de 300s em todas as 8 tentativas.
+
+**Corre├º├úo:** removida a linha duplicada `ShowWindow = 1`. Agora a classe tem `ShowWindow = 0` (safe para testes) e `Init()` sobe para `ShowWindow = 1` somente em produ├º├úo (quando nem `gb_4c_ValidandoUI` nem `gb_4c_ModoTeste` est├úo ativos).

@@ -1,0 +1,3 @@
+﻿Corre├º├úo aplicada. O m├®todo `ValidarSetors` tinha um bloco SQL `SELECT CCargs, DCargs FROM SigCdCrg WHERE CCargs = ...` que n├úo existia no c├│digo original (o original s├│ consultava `SigCcCmI` com filtros `MESS/ANOS/USUARS/CIDCHAVES`). 
+
+O fix remove essa valida├º├úo SQL inventada e delega diretamente ao `AbrirBuscaSetors()`, que j├í usa `FormBuscaAuxiliar` para tratar tanto a correspond├¬ncia exata de c├│digo digitado quanto o picker visual ÔÇö sem perda de funcionalidade. O cleanup do `cursor_4c_ValCrg` no `Destroy` tamb├®m foi removido por ser ├│rf├úo.

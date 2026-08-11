@@ -1,0 +1,8 @@
+﻿Corre├º├úo aplicada. Resumo do que foi feito:
+
+**Problema real corrigido:**
+- `FormFti.prg` linha 1980-1981: Removido `OR descs LIKE ...` do filtro de busca em `BtnBuscarClick`. O original s├│ filtrava por `cods`; `descs` no WHERE era filtro inventado pela LLM.
+
+**Falsos positivos confirmados (nenhuma altera├º├úo necess├íria):**
+- **`CONTROLCOUNT`**: ├ë `loc_oObjeto.ControlCount > 0` em `TornarControlesVisiveis` (linha 1834) ÔÇö verifica├º├úo de propriedade VFP9, n├úo coluna SQL.
+- **`2`**: S├úo literais num├®ricos VFP9 (`par_nPagina > 2`, `.Value = 2`, etc.) ÔÇö n├úo aparecem em nenhuma cl├íusula WHERE SQL do c├│digo migrado.

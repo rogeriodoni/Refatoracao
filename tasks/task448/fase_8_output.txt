@@ -1,0 +1,17 @@
+﻿Tudo correto. Fase 8 conclu├¡da:
+
+**FormICN.prg** (816 linhas, completo):
+- `CarregarLista()` ÔÇö alias para `CarregarDados()`
+- `FormParaBO()` ÔÇö sincroniza BO com o registro corrente do cursor
+- `BOParaForm()` ÔÇö faz `Refresh()` no grid
+- `HabilitarCampos(par_cModo)` ÔÇö garante grid + bot├Áes habilitados (form operacional sem modos CRUD)
+- `LimparCampos()` ÔÇö recarrega dados do banco
+- `AjustarBotoesPorModo(par_cModo)` ÔÇö garante Ok/Encerrar vis├¡veis e habilitados
+- `BtnBuscarClick()` ÔÇö recarrega lista + foco no grid (sem bot├úo Buscar dedicado neste form)
+- `BtnSalvarClick()` ÔÇö delega para `BtnOkClick()`
+- `BtnCancelarClick()` ÔÇö delega para `BtnEncerrarClick()`
+
+**menu.prg** integrado:
+- `DEFINE BAR 114/115 OF popMovimentos` ÔÇö separador + "├ìcones de Acesso"
+- `ON SELECTION BAR 115` ÔåÆ `AbrirFormICN`
+- `PROCEDURE AbrirFormICN()` com padr├úo can├┤nico (VARTYPE + MostrarErro no CATCH)

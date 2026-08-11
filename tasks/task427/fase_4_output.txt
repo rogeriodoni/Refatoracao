@@ -1,0 +1,17 @@
+﻿O arquivo est├í completo e correto. A Fase 4 est├í implementada:
+
+**O que foi adicionado em `FormFpN.prg`:**
+
+1. **`ConfigurarPaginaLista()`** ÔÇö Grid `grd_4c_GradeOpe` com propriedades exatas do original (Top=35 relativo ├á Page1, Left=236, Width=313, Height=274), Column1/Fpags (Width=80) e Column2/Descrs (Width=200, ReadOnly), headers com ForeColor azul (36,84,155), BINDEVENT em Column1.Text1 para lookup.
+
+2. **BINDEVENTs em `InicializarForm()`** ÔÇö Os 4 bot├Áes (Inserir, Excluir, Confirmar, Cancelar) vinculados aos handlers ap├│s `ConfigurarPaginaLista()`.
+
+3. **`CarregarDados()` atualizado** ÔÇö Ap├│s o BO recriar o cursor, pina `ColumnCount=2`, seta `RecordSource`, `ControlSource` para ambas colunas, e reaplica os `Header1.Caption` (necess├írio pois VFP reseta captions ao mudar ControlSource).
+
+4. **`AlternarPagina()`** ÔÇö Stub de compatibilidade (form tem apenas 1 p├ígina).
+
+5. **Handlers de bot├úo** ÔÇö `CmdInserirClick` (GO BOTTOM + SetFocus Column1), `CmdExcluirClick` (Refresh ap├│s excluir), `CmdConfirmarClick` (Salvar se GravaDados, sempre fecha ÔÇö UX original), `CmdCancelarClick` (Release).
+
+6. **`ValidarFpagsTxt()`** ÔÇö KeyPress com guarda ENTER/TAB/F4, valida via `BO.ValidarLookupFpags()`, abre picker se n├úo encontrado.
+
+7. **`AbrirLookupFpags()`** ÔÇö `FormBuscaAuxiliar` em `SigOpFp` com colunas `Fpags` e `descrs`, atualiza cursor com sele├º├úo.

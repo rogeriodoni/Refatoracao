@@ -1,0 +1,10 @@
+﻿O arquivo `FormFAPF.prg` j├í cont├®m todos os 4 eventos solicitados na Fase 7. Vou confirmar isso verificando cada um:
+
+- **BtnIncluirClick** ÔÇö linha 552-557: chama `NovoRegistro()`, `BOParaForm()`, `HabilitarCampos(.T.)`, `AlternarPagina(2)` Ô£ô
+- **BtnVisualizarClick** ÔÇö linha 562-571: guard registro vazio, `CarregarDoCursor`, `BOParaForm()`, `HabilitarCampos(.F.)`, `AlternarPagina(2)` Ô£ô
+- **BtnAlterarClick** ÔÇö linha 576-586: guard registro vazio, `EditarRegistro()`, `CarregarDoCursor`, `BOParaForm()`, `HabilitarCampos(.T.)`, `AlternarPagina(2)` Ô£ô
+- **BtnExcluirClick** ÔÇö linha 591-616: guard vazio, `MsgConfirma`, `Excluir()`, feedback de sucesso/erro, `CarregarLista()` Ô£ô
+
+O original `SIGCDFAPF.SCX` ├® um form skeleton vazio (Width=375, Height=250, sem controles nem m├®todos ÔÇö 0 m├®todos/eventos com c├│digo), ent├úo a implementa├º├úo segue o padr├úo OPERACIONAL can├┤nico do sistema novo.
+
+**A Fase 7 j├í est├í completa.** O arquivo `FormFAPF.prg` est├í pronto ÔÇö todos os eventos principais est├úo implementados corretamente e a Fase 8 (├║ltima) pode ser executada.

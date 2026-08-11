@@ -1,0 +1,14 @@
+﻿Fase 4/8 conclu├¡da. O arquivo `FormCst.prg` foi atualizado com:
+
+**`ConfigurarPaginaLista()`** - agora completo com:
+- 5 bot├Áes CRUD no `cnt_4c_Botoes` (Incluir, Visualizar, Alterar, Excluir, Buscar) com ├¡cones, posi├º├Áes e propriedades can├┤nicas
+- Bot├úo Encerrar no `cnt_4c_Saida` (padr├úo can├┤nico Left=917, Width=75)
+- Grid `grd_4c_Lista` com 4 colunas ÔÇö `ColumnCount=4` setado fora do WITH (regra #36)
+- BINDEVENT para todos os 6 bot├Áes (m├®todos PUBLIC)
+
+**`CarregarLista()`** - agora completo com:
+- `RecordSource = "crSigCdCnt"` setado fora de WITH ap├│s `Buscar()`
+- `ControlSource` + larguras + `Header1.Caption` setados em bloco WITH p├│s-RecordSource (regra #32/#48)
+- `FormatarGridLista()` + `Refresh()` ao final
+
+**`AlternarPagina()`** - novo m├®todo que alterna entre Page1/Page2 e recarrega a lista ao voltar para Page1.

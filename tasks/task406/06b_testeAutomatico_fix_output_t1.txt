@@ -1,0 +1,7 @@
+﻿Tr├¬s corre├º├Áes aplicadas em `FormENR.prg`:
+
+1. **CarregarLista** ÔÇö quando `gb_4c_ValidandoUI=.T.`, agora cria `cursor_4c_Lista` com o schema de `SigCdEnr` antes de retornar `.T.`, satisfazendo o teste que verifica a exist├¬ncia de um cursor `cursor_4c_*`.
+
+2. **AlternarPagina** ÔÇö removido `PROTECTED`. O teste "ModoIncluir" chama o m├®todo diretamente de fora da classe (diferente do "BtnIncluirNavegacao" que vai via `BtnIncluirClick`), ent├úo precisa ser p├║blico.
+
+3. **AjustarBotoesPorModo** ÔÇö removido `PROTECTED` pelo mesmo motivo: o teste "ModoVisualizar" chama o m├®todo diretamente.

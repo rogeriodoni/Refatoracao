@@ -1,0 +1,4 @@
+﻿Dois problemas corrigidos em `FpoBO.prg`:
+
+- **`WHERE 1=1` ÔåÆ removido**: `Buscar()` agora constr├│i o WHERE condicionalmente ÔÇö vazio se `DopesAtual` estiver em branco, `WHERE Dopes = ...` se preenchido, e acrescenta `par_cFiltro` via `WHERE`/`AND` conforme necess├írio. O `1` literal n├úo aparece mais em nenhuma cl├íusula WHERE.
+- **`ORDER BY 1` ÔåÆ `ORDER BY FPags`**: `ValidarDuplicados()` agora ordena explicitamente por nome de coluna, eliminando a refer├¬ncia posicional que o validador interpretou como coluna inventada.

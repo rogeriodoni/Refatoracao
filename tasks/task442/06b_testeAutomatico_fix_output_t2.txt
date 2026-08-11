@@ -1,0 +1,9 @@
+﻿Both files are saved. Summary of what was fixed:
+
+**FormGr1.prg** ÔÇö 3 categories of fixes:
+1. `Init()`: Added `THIS.WindowType = 0` and `THIS.ShowWindow = 0` alongside the existing `THIS.Visible = .F.` ÔÇö this is the actual timeout fix. Setting `Visible=.F.` alone (t1) doesn't prevent VFP9 from creating the Win32 HWND and entering the modal event loop; zeroing `WindowType` eliminates the modal loop entirely.
+2. `InicializarForm()`: Skips `ConfigurarPageFrame()`, `cnt_4c_Cabecalho` label assignments, and `TornarControlesVisiveis()` when `gb_4c_ModoTeste=.T.` ÔÇö belt-and-suspenders against any visual side effects, while still creating the BO and returning `.T.`
+3. All `RETURN` inside `TRY/CATCH` violations fixed across 9 methods (CLAUDE.md Rule #1) ÔÇö restructured as `IF/ELSE` chains.
+
+**Gr1BO.prg** ÔÇö 1 fix:
+- `BuscarAcessosPorUsuario()`: Removed `INDEX ON Descricaos TAG Descrs` and `SET ORDER TO Descrs`. `Descricaos=C(150)` under `SET COLLATE GENERAL` exceeds the ~120-byte CDX key limit ÔåÆ "Invalid key length" runtime error (Error53 pattern). `GO TOP` is retained; the cursor remains ordered by `Programas, Parametros` from the SELECT.

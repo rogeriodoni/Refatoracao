@@ -1,0 +1,14 @@
+﻿O ├║nico problema detectado (`[CONTAINER-VISIVEL]`) j├í est├í corretamente implementado no arquivo atual.
+
+A linha 1057 j├í cont├®m o filtro completo:
+
+```foxpro
+IF INLIST(loc_cNome, "CNT_4C_COPIA", "CNT_4C_CABECALHO", "CNT_4C_BOTOESACAO")
+    IF PEMSTATUS(loc_oObjeto, "ControlCount", 5)
+        THIS.TornarControlesVisiveis(loc_oObjeto)
+    ENDIF
+    LOOP
+ENDIF
+```
+
+`CNT_4C_CABECALHO` e `CNT_4C_BOTOESACAO` j├í est├úo no INLIST. O m├®todo recursiona nos filhos desses containers (para tornar seus sub-controles vis├¡veis) mas faz LOOP sem alterar o `Visible` do container em si, respeitando o estado gerenciado pelo `ConfigurarPaginaLista` e `HabilitarCampos`. Nenhuma corre├º├úo ├® necess├íria.

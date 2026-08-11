@@ -1,0 +1,10 @@
+﻿O arquivo est├í correto. A Fase 2/8 est├í conclu├¡da.
+
+**FBIBO.prg agora cont├®m todos os m├®todos CRUD:**
+
+- **`Buscar(par_cFiltro)`** ÔÇö SELECT completo de SigFiMpf com filtro opcional por cImpFabs/emps/cncaixas, ordena por cImpFabs, retorna `cursor_4c_Dados`
+- **`CarregarPorCodigo(par_cCodigo)`** ÔÇö SELECT por `cidchaves` (PK), limpa cursor tempor├írio, seta `this_lNovoRegistro = .F.`
+- **`CarregarDoCursor(par_cAliasCursor)`** ÔÇö `SELECT (alias)` can├┤nico seguido de mapeamento de todos os 32 campos: strings com `TratarNulo`, datas com `TratarNulo`, booleanos com `(NVL(campo,0)=1)`, num├®ricos com `NVL`
+- **`Inserir()`** ÔÇö gera `cidchaves = SYS(2015)+SYS(2015)` se vazio, INSERT com 31 colunas, datas nulas tratadas com `IIF(EMPTY(...),"NULL",...)`, bits com `"1"/"0"`, chama `RegistrarAuditoria("INSERT")`
+- **`Atualizar()`** ÔÇö UPDATE com WHERE `cidchaves`, mesma l├│gica de tipos, chama `RegistrarAuditoria("UPDATE")`
+- **`ExecutarExclusao()`** ÔÇö verifica depend├¬ncias em SigMvCab, SigExMvc e SigFiRX (exatamente como o legado), exibe aviso em caso de movimento, DELETE por `cidchaves`, chama `RegistrarAuditoria("DELETE")`

@@ -1,0 +1,13 @@
+﻿All fixes applied. Here's what was done and why:
+
+**Root cause (t4):** VFP9 runs with `-T` headless flag + `SYS(2335, 0)`. Even in this mode, a form with `WindowType = 1` (modal) and `Visible = .T.` (default) auto-shows as a modal dialog after `CREATEOBJECT()` completes. With no GUI thread to dismiss it, VFP9 blocks for exactly 300 seconds until the test infrastructure kills the process. The t3 early-return guard made `Init()` fast, but didn't prevent the modal auto-show.
+
+**Fix applied to `FormICO.prg` `InicializarForm()` (line 41):**
+```foxpro
+THIS.Visible = .F.   && evita auto-show modal (WindowType=1) em -T headless
+```
+Set before creating the BO and returning `.T.`, so the form object is created successfully but never auto-shows. All 9 test steps proceed without any GUI blocking.
+
+**Secondary bugs fixed in `ICOBO.prg` (production correctness):**
+- `Inserir()`, `Atualizar()`, `ExecutarExclusao()`: the empty-name validation set `loc_lResultado = .F.` but fell through to `SQLEXEC` ÔÇö restructured to `IF/ELSE` (can't `RETURN` inside `TRY` per CLAUDE.md rule #1)
+- `VerificarUsoIcone()`: added `gnConnHandle <= 0` guard before the `TRY` block so calls from production with no connection fail-fast instead of hitting SQLEXEC with an invalid handle

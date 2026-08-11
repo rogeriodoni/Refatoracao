@@ -1,0 +1,45 @@
+﻿Ap├│s ler os dois arquivos completos, analisei cada um dos tr├¬s alertas. Todos s├úo **falsos positivos** ÔÇö o c├│digo est├í correto. Segue o relat├│rio de verifica├º├úo:
+
+---
+
+## Verifica├º├úo: 3 Alertas SQL-FILTRO-INVENTADO
+
+### 1. `CIDCHAVES` ÔÇö Falso positivo
+
+Aparece em **`ICDBO.prg:303`** no m├®todo `Atualizar()`:
+```foxpro
+"WHERE cidchaves = " + EscaparSQL(ALLTRIM(THIS.this_cCidChaves))
+```
+Isso ├® um `UPDATE SigPrTri SET ... WHERE cidchaves = ?` ÔÇö atualiza├º├úo por PK. O original usa `ThisForm.poDatamgr.UpDate("cnSigPrTri")`, que internamente tamb├®m filtra pela PK. Remover esse WHERE destruiria todos os registros da tabela (UPDATE sem WHERE = full-table update). **Correto. N├úo alterar.**
+
+---
+
+### 2. `CONTROLCOUNT` ÔÇö Falso positivo
+
+Aparece em **`FormICD.prg:358`**:
+```foxpro
+IF PEMSTATUS(loc_oControl, "ControlCount", 5) AND loc_oControl.ControlCount > 0
+```
+`ControlCount` ├® uma **propriedade de objeto VFP9**, n├úo uma coluna SQL. O validador est├í fazendo busca textual case-insensitive e confundiu o nome da propriedade com um identificador SQL. **Nenhuma rela├º├úo com SQL. N├úo alterar.**
+
+---
+
+### 3. `DESCS` ÔÇö Falso positivo
+
+Aparece em **`FormICD.prg:504`** no m├®todo `ValidarDesc()`:
+```foxpro
+loc_cSQL = "SELECT TOP 1 Tipos, Descs FROM SigPrTri " + ;
+           "WHERE descs = " + EscaparSQL(loc_cDesc)
+```
+O SCX legado tinha dois campos de entrada: GetTipo (busca por c├│digo) e GetDesc (busca por descri├º├úo), com a condi├º├úo `When: Empty(GetTipo.Value) = .T.` no campo Desc ÔÇö o pr├│prio c├│digo migrado documenta isso na linha 483. A coluna `Descs` **existe em `SigPrTri`** (aparece em todos os SELECTs do BO). O `ValidarDesc` ├® a migra├º├úo correta do comportamento de lookup por descri├º├úo do legado. Conforme a regra "NAO remover campos, funcionalidades ou lookups", este m├®todo deve ser mantido. **Correto. N├úo alterar.**
+
+---
+
+## Conclus├úo
+
+Nenhum dos tr├¬s arquivos requer modifica├º├úo. Os tr├¬s alertas s├úo falsos positivos do validador:
+- O validador n├úo distingue SQL de c├│digo VFP9 (caso do `ControlCount`)
+- O validador n├úo distingue `SELECT WHERE` de `UPDATE WHERE` (caso do `cidchaves`)
+- O validador n├úo verificou o SCX completo com ambos os campos de lookup (caso do `descs`)
+
+O c├│digo de `FormICD.prg` e `ICDBO.prg` est├í correto e n├úo precisa de altera├º├Áes neste pass.

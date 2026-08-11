@@ -1,0 +1,14 @@
+﻿O arquivo est├í completo e correto. Fase 2/8 conclu├¡da.
+
+**FapBO.prg** agora tem todos os m├®todos CRUD:
+
+- **`Buscar(par_cFiltro)`** ÔÇö SELECT filtrado por `emps + tipos`, cursor `cursor_4c_Dados`, ordenado por `numes`
+- **`CarregarPorCodigo(par_cCodigo)`** ÔÇö SELECT por `cidchaves` com JOIN em `SigCdGcr` e `SigCdCli` para carregar descri├º├Áes de grupo/conta/recuperadora
+- **`CarregarDoCursor()`** ÔÇö mapeia todos os 16 campos do schema; usa `TRY` interno para descri├º├Áes (dispon├¡veis apenas quando vem de `CarregarPorCodigo`)
+- **`Inserir()`** ÔÇö gera `cidchaves` com `SYS(2015)+SYS(2015)` (20 chars), gera `numes` via `GerarProximoNumes()`, INSERT com todos os campos do schema
+- **`Atualizar()`** ÔÇö UPDATE de todos os campos edit├íveis por `cidchaves`
+- **`ExecutarExclusao()`** ÔÇö DELETE por `cidchaves`
+- **`BuscarGrupos()`** ÔÇö SigCdGcr WHERE BalFalPers=1 (para lookup do campo Grupo)
+- **`BuscarContas(par_cGrupo)`** ÔÇö SigCdCli JOIN SigCdGcr WHERE BalFalPers=1 (para lookup de Conta, com filtro opcional por grupo)
+- **`BuscarTiposMaterial()`** ÔÇö SigOpOpt WHERE Situas=3 (para lookup TpMat)
+- **`GerarProximoNumes()`** ÔÇö MAX(numes)+1 por empresa+tipo

@@ -1,0 +1,5 @@
+﻿Both fixes are in place. The test sequence will now proceed without hanging:
+
+- **Test 3 (TesteModoIncluir)**: `AlternarPagina(2)` ÔåÆ skips `pgf_4c_Paginas.ActivePage = 2` when `gb_4c_ValidandoUI=.T.`, returns `.T.`
+- **Test 4 (TesteModoVisualizar)**: `AjustarBotoesPorModo()` ÔåÆ accesses Page2 controls in-memory (no rendering needed), sets `Enabled` properties ÔÇö no hang
+- **Test 5 (TesteBtnIncluirNavegacao)**: `BtnIncluirClick()` ÔåÆ skips both `ActivePage` assignments; `BtnCancelarClick()` ÔåÆ calls `AlternarPagina(1)` which is also guarded

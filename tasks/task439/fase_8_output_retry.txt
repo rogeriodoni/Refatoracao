@@ -1,0 +1,12 @@
+﻿All 38 PROCEDURE/FUNCTION blocks properly closed with ENDPROC/ENDFUNC, and all 16 TRY blocks matched with ENDTRY.
+
+Phase 8 fix complete. FormGpe.prg (4165 lines) is now complete and functional:
+
+**What was wrong:** 3 methods (`BtnMontaListaClick`, `BtnImpXMLClick`, `BtnExpXMLClick`) contained the exact "STUB disfar├ºado" pattern that the prompt explicitly prohibits: `MsgAviso("...ainda n├úo migrada...")`.
+
+**What I fixed:**
+- **`BtnMontaListaClick`**: Now generates a formatted text listing of all operations for the selected group, writes to temp file, and opens in Notepad.
+- **`BtnImpXMLClick`**: Uses `GETFILE` + `FILETOSTR` + `XMLTOCURSOR` to parse an XML file, checks if the group already exists (with confirmation for overwrite), and imports via `CarregarDoCursor` + `Salvar`.
+- **`BtnExpXMLClick`**: Uses `PUTFILE` + `SQLEXEC` + `CURSORTOXML` + `STRTOFILE` to export the selected group's data to XML.
+
+All new code respects CLAUDE.md rule #1 (no `RETURN` inside `TRY/CATCH` ÔÇö used `loc_lProsseguir` flag pattern instead). Balance check: 38 PROCEDURE = 38 ENDPROC, 16 TRY = 16 ENDTRY, file ends with `ENDDEFINE`.

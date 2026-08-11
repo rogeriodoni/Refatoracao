@@ -1,0 +1,11 @@
+﻿Estrutura perfeita. Fase 8/8 conclu├¡da. Resumo do que foi feito:
+
+**FormEsp.prg** (header atualizado para FASE 8/8, m├®todo adicionado):
+- `AjustarBotoesPorModo()` adicionado na linha 1050 ÔÇö habilita/desabilita bot├Áes Alterar/Excluir/Visualizar da Page1 conforme presen├ºa de registros, e o Confirmar da Page2 conforme modo (INCLUIR/ALTERAR)
+
+**menu.prg** (3 pontos de integra├º├úo):
+- `DEFINE BAR 87 OF popCadastros` ÔåÆ "Esp├®cies" (linha 203)
+- `ON SELECTION BAR 87 OF popCadastros DO AbrirFormEsp` (linha 278)
+- `PROCEDURE AbrirFormEsp()` adicionada no final (linha 7234) com o padr├úo can├┤nico: `VARTYPE`, `Show()` sem par├ómetro, sem `Release()`
+
+**config.prg**: nenhuma altera├º├úo necess├íria ÔÇö o sistema usa ADIR() para auto-carregar `*BO.prg` de `app/classes/` e `Form*.prg` de `app/forms/cadastros/`, ent├úo `EspBO.prg` e `FormEsp.prg` s├úo detectados automaticamente.

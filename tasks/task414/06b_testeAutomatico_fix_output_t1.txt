@@ -1,0 +1,1 @@
+﻿Corrigido. O problema estava na ordem de execu├º├úo em `InicializarForm`: as linhas 66-67 tentavam acessar `cnt_4c_Cabecalho` antes de `ConfigurarPaginaLista()` ser chamado ÔÇö que ├® onde esse container ├® criado com `AddObject`. Movi as duas atribui├º├Áes de caption para depois de `ConfigurarPaginaLista()`.

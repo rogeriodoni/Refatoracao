@@ -1,0 +1,21 @@
+[2026-08-08 09:45:04] [INFO] === CLAUDE CLI INVOKER ===
+[2026-08-08 09:45:04] [INFO] Prompt File: C:\4c\tasks\task442\runtime_fix_prompt_06b_testeAutomatico_t3.md
+[2026-08-08 09:45:04] [INFO] Output File: C:\4c\tasks\task442\06b_testeAutomatico_fix_output_t3.txt
+[2026-08-08 09:45:04] [INFO] Model: sonnet
+[2026-08-08 09:45:04] [INFO] Timeout: 3600 segundos
+[2026-08-08 09:45:04] [INFO] Max Output Tokens: 128000
+[2026-08-08 09:45:04] [INFO] Context Files: 0 arquivo(s)
+[2026-08-08 09:45:04] [INFO] Invocando Claude CLI...
+[2026-08-08 09:45:04] [INFO] Prompt carregado: 75857 caracteres
+[2026-08-08 09:45:04] [INFO] Executando: claude --model sonnet --dangerously-skip-permissions --add-dir C:\4c
+[2026-08-08 09:45:04] [INFO] Tamanho total do prompt: 75857 caracteres
+[2026-08-08 09:45:04] [INFO] Invocando Claude CLI (tentativa 1/7)...
+[2026-08-08 09:51:57] [INFO] Claude CLI finalizado em 413.4761867 segundos
+[2026-08-08 09:51:57] [INFO] Exit Code: 0
+[2026-08-08 09:51:57] [INFO] Output salvo em: C:\4c\tasks\task442\06b_testeAutomatico_fix_output_t3.txt
+[2026-08-08 09:51:57] [INFO] Output size: 444 bytes
+[2026-08-08 09:51:57] [INFO] SUCESSO: Claude CLI executado com sucesso
+[2026-08-08 09:51:57] [INFO] Preview do output:
+[2026-08-08 09:51:57] [INFO] `ShowWindow = 1` ÔåÆ `ShowWindow = 0`. Isso restaura o comportamento do SCX original e elimina o Win32 event loop aut+¦nomo que bloqueava o `CREATEOBJECT()` por 300s.
+
+O Init() mant+®m seu guard de modo teste (WindowType=0 + Visible=.F.) como prote+º+úo extra, mas agora +® redundante ÔÇö com ShowWindow=0, o loop modal s+¦ inicia quando `Show()` for chamado explicitamente, o que o TesteAutomatico n+úo faz.

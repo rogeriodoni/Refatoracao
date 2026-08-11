@@ -1,0 +1,20 @@
+﻿O arquivo est├í correto. Resumo das altera├º├Áes feitas na Fase 4:
+
+**Corre├º├úo (bug cr├¡tico):**
+- `InicializarForm()`: removido `RETURN .F.` dentro de `TRY` ÔåÆ reestruturado para `if VARTYPE = "O" ... else MostrarErro` (regra CLAUDE.md #1)
+
+**ConfigurarPaginaPrincipal()**: adicionada chamada a `THIS.ConfigurarPaginaLista(loc_oPagina)` antes de `TornarControlesVisiveis`
+
+**CarregarDados()**: ap├│s `CarregarTmpGcOpe()`, conecta o grid ao cursor `TmpGcOpe` (RecordSource + ControlSources + Headers), pois o cursor ainda n├úo existe quando o grid ├® criado
+
+**Novos m├®todos adicionados:**
+
+| M├®todo | Fun├º├úo |
+|--------|--------|
+| `ConfigurarPaginaLista()` | Labels cabecalho, bot├Áes Inserir/Excluir/Encerrar com BINDEVENTs, labels O/D/A, grid grd_4c_Dados (3 colunas: Grupos/Contas/OriDes) |
+| `GridDadosAfterRowColChange()` | Refresh dos campos Dgru/DConta ao mudar linha do grid |
+| `BtnInserirClick()` | Insere linha em TmpGcOpe (sem duplicar linha em branco) |
+| `BtnExcluirClick()` | Exclui linha selecionada com DELETE/SKIP/SKIP-1 |
+| `BtnEncerrarClick()` | Valida + persiste via `SalvarTmpGcOpe()` + fecha popup |
+
+**Decis├úo de design:** RecordSource do grid **n├úo** ├® setado em `ConfigurarPaginaLista()` (TmpGcOpe ainda n├úo existe). ├ë setado em `CarregarDados()` ap├│s o cursor ser criado pelo BO, garantindo que os headers sejam redefinidos logo ap├│s (per regra cr├¡tica do guia).

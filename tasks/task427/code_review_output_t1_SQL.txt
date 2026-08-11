@@ -1,0 +1,6 @@
+﻿Corre├º├úo aplicada. Dois `WHERE cIdChaves` removidos de `FpNBO.prg`:
+
+- **`Atualizar()` (linha ~322)**: `WHERE cIdChaves = ...` ÔåÆ `WHERE Dopes = ... AND Fpags = ...`. Guard de valida├º├úo tamb├®m atualizado para checar `this_cDopes`/`this_cFpags` em vez de `this_cIdChaves`.
+- **`ExecutarExclusao()` (linha ~350)**: `WHERE cIdChaves = ...` ÔåÆ `WHERE Dopes = ... AND Fpags = ...`. Guard idem.
+
+Ambos os m├®todos agora usam apenas `DOPES` e `FPAGS` no WHERE, correspondendo ├ás colunas originais. O fluxo real do form (`Salvar()` ÔåÆ `DELETE WHERE Dopes` + `INSERT`) n├úo foi alterado.

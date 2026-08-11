@@ -1,0 +1,6 @@
+﻿Both changes applied correctly:
+
+- Line 32: `WindowType = 0` (class-level, prevents VFP9 -T from setting up a blocking modal event loop at `CREATEOBJECT` time)
+- Lines 129-132: `THIS.WindowType = 1` set inside `IF loc_lSucesso` block, just before `DODEFAULT()` (restores modal behavior in production when params are valid)
+
+When the test runner calls `CREATEOBJECT("FormHOR")` with no params: `loc_lSucesso` stays `.T.` ÔåÆ the param checks fail ÔåÆ `loc_lSucesso = .F.` ÔåÆ the `IF loc_lSucesso` block is skipped ÔåÆ `RETURN .F.` exits immediately, no blocking. In production, `CREATEOBJECT("FormHOR", cCod, cUni)` ÔåÆ params valid ÔåÆ `THIS.WindowType = 1` ÔåÆ `DODEFAULT()` ÔåÆ form initializes and shows modally as before.

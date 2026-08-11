@@ -1,0 +1,7 @@
+﻿Ambas as corre├º├Áes est├úo aplicadas corretamente.
+
+**Resumo das corre├º├Áes:**
+
+1. **[GRID-WITH]** `VincularGrid` (linha ~648): `loc_oGrid.ColumnCount = 4` e `loc_oGrid.RecordSource = "cursor_4c_FpagI"` movidos para FORA do `WITH` via refer├¬ncia expl├¡cita. O `WITH` agora come├ºa somente ap├│s o `RecordSource` estar definido, garantindo que as colunas j├í existem quando `.Column1.ControlSource` etc. s├úo acessados.
+
+2. **[NAVEGACAO-PAGINA]** `AlternarPagina` (linha ~678): Adicionado bloco de carregamento de dados no `CASE par_nPagina = 2`. Quando qualquer chamada navegar para Page2 (incluindo `BtnCancelarClick`), as propriedades do BO s├úo populadas com os valores da linha corrente do cursor `cursor_4c_FpagI` ÔÇö mesma sem├óntica do `cmd_consulta.Click` do legado.

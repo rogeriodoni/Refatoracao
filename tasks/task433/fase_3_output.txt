@@ -1,0 +1,13 @@
+﻿**Fase 3 conclu├¡da.** `FormFTF.prg` criado em `C:\4c\projeto\app\forms\cadastros\` com 234 linhas.
+
+**O que foi criado:**
+- `DEFINE CLASS FormFTF AS FormBase` com propriedades visuais completas (Height=600, Width=1000, Caption="Finalizadoras (Tef)")
+- `Init()` ÔÇö apenas `RETURN DODEFAULT()`, sem duplicar InicializarForm
+- `InicializarForm()` ÔÇö instancia FTFBO, chama ConfigurarPageFrame, respeita `gb_4c_ValidandoUI`, sem RETURN dentro de TRY
+- `ConfigurarPageFrame()` ÔÇö `pgf_4c_Paginas` com `Top=-29`, `Tabs=.F.`, 2 pages
+- `ConfigurarPaginaLista()` ÔÇö containers `cnt_4c_Cabecalho` (com lbl_4c_Sombra/Titulo), `cnt_4c_Botoes` (Left=542), `cnt_4c_Saida` (Left=917 can├┤nico)
+- `ConfigurarPaginaDados()` ÔÇö container `cnt_4c_BotoesAcao`
+- `TornarControlesVisiveis()` ÔÇö recursivo com suporte a PageFrames
+- `Destroy()` ÔÇö limpa BO e chama DODEFAULT
+
+**Pr├│xima fase (4):** Grid + bot├Áes CRUD na Page1 (Incluir, Visualizar, Alterar, Excluir, Buscar, cmd_4c_Encerrar).

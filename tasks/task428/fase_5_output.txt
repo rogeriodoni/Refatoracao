@@ -1,0 +1,15 @@
+﻿O arquivo est├í correto. Fase 5 conclu├¡da com sucesso.
+
+**O que foi alterado em `FormFpo.prg`:**
+
+- `ConfigurarPaginaDados()` (linha 328): Substitu├¡do o stub vazio por implementa├º├úo completa com:
+  - `cnt_4c_Cabecalho` com `lbl_4c_Sombra` + `lbl_4c_Titulo` (mesmo estilo do Page1, Top=31 compensando PageFrame.Top=-29)
+  - `cnt_4c_BotoesAcao` com `cmd_4c_Confirmar` (├¡cone `cadastro_salvar_60.jpg`) e `cmd_4c_Cancelar` (├¡cone `cadastro_cancelar_60.jpg`)
+  - `BINDEVENT` para ambos os bot├Áes
+  - `TornarControlesVisiveis` ao final
+
+- `BtnConfirmarClick()` (linha 811): Chama `SalvarLote` e fecha o form ÔÇö mesma l├│gica do `BtnEncerrarClick` (form operacional onde Page2 ├® rota alternativa de confirma├º├úo)
+
+- `BtnCancelarClick()` (linha 830): Retorna para Page1 via `AlternarPagina(1)` sem salvar
+
+> Nota: Este form OPERACIONAL n├úo possui campos de dados textuais em Page2 (toda edi├º├úo ├® inline na grade). A Page2 funciona como p├ígina de confirma├º├úo com cabe├ºalho + bot├Áes. Fases 6-8 cobrir├úo os demais m├®todos restantes (integra├º├úo menu/config).
