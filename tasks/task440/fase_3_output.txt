@@ -1,0 +1,15 @@
+﻿O `RETURN .F.` na linha 264 est├í **fora** do TRY (├® uma guarda de par├ómetro inv├ílido antes do TRY come├ºar), ent├úo est├í correto.
+
+**Fase 3/8 entregue ÔÇö `Formgpr.prg` criado em `projeto/app/forms/cadastros/`:**
+
+**O que foi criado (331 linhas):**
+- `DEFINE CLASS Formgpr AS FormBase` com todas as propriedades visuais do original (Width=1000, Height=600, Caption="Cadastro de Grande Grupo", DataSession=2)
+- `Init()` ÔåÆ apenas `RETURN DODEFAULT()`
+- `InicializarForm()` ÔåÆ cria gprBO, chama Configurar*, guard `gb_4c_ValidandoUI`, ActivePage=1
+- `ConfigurarPageFrame()` ÔåÆ PageFrame.Top=-29 (can├┤nico), 2 p├íginas com Picture fundo_cad_1003.jpg
+- `ConfigurarPaginaLista()` ÔåÆ `cnt_4c_Cabecalho` (com lbl_4c_Sombra + lbl_4c_Titulo), `cnt_4c_Botoes` (shell vazio, Top=29, Left=512), `cnt_4c_Saida` can├┤nico (Left=917, cmd_4c_Encerrar com BINDEVENT)
+- `ConfigurarPaginaDados()` ÔåÆ `cnt_4c_Salva` (shell vazio, Top=38, Left=816)
+- `CarregarLista()` ÔåÆ guard `gb_4c_ValidandoUI` fora do TRY, chama `Buscar("")` do BO
+- `AlternarPagina()`, `BtnEncerrarClick()`, `TornarControlesVisiveis()`, `Destroy()`
+
+**Pr├│xima fase (4/8):** Grid + bot├Áes CRUD em `cnt_4c_Botoes` e bot├Áes Salvar/Cancelar em `cnt_4c_Salva`.

@@ -1,0 +1,9 @@
+﻿Fase 2 conclu├¡da. O FreBO.prg est├í completo com todos os m├®todos CRUD:
+
+- **Buscar(par_cFiltro)** ÔÇö SELECT de `SigCdFrt` (modo global) ou `SigOpFrt WHERE dopes=...` (modo operacional), com filtro LIKE opcional em `cidas`
+- **CarregarPorCodigo(par_cCodigo)** ÔÇö SELECT por `cidas` (global) ou `cidchaves` (operacional); reseta `this_lNovoRegistro = .F.`
+- **CarregarDoCursor(par_cAliasCursor)** ÔÇö padr├úo can├┤nico `SELECT (alias)` antes de acessar campos; mapeia `cidchaves` apenas no modo operacional
+- **Inserir()** [PROTECTED] ÔÇö INSERT em `SigCdFrt` (global) ou `SigOpFrt` (operacional) com gera├º├úo de `cidchaves` via `GerarChaveUnica()` + `RegistrarAuditoria("INSERT")`
+- **Atualizar()** [PROTECTED] ÔÇö UPDATE por `cidas` (global) ou `cidchaves` (operacional) + `RegistrarAuditoria("UPDATE")`
+- **ExecutarExclusao()** [PROTECTED] ÔÇö DELETE por `cidas` ou `cidchaves` + `RegistrarAuditoria("DELETE")`
+- **GerarChaveUnica()** [PROTECTED] ÔÇö usa `NEWID()` do SQL Server truncado para 20 chars (limite de `cidchaves CHAR(20)`)

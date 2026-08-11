@@ -1,0 +1,24 @@
+﻿Arquivo criado e verificado com sucesso. Eis o resumo da Fase 3:
+
+---
+
+**Fase 3/8 conclu├¡da ÔÇö `C:\4c\projeto\app\forms\cadastros\FormGcp.prg` criado.**
+
+**O que foi criado:**
+
+| M├®todo | Fun├º├úo |
+|--------|--------|
+| `Init(par_oParentForm, par_cDopes, par_cEscolha)` | Armazena params, desabilita form pai, chama `DODEFAULT()` |
+| `InicializarForm()` | Cria GcpBO, configura PageFrame+containers, carrega dados |
+| `ConfigurarPageFrame()` | PageFrame Top=-29, Tabs=.F., 2 pages, Page1 com `new_background.jpg` |
+| `ConfigurarPaginaPrincipal()` | 4 containers vazios na Page1 (Cabecalho, Botoes, Saida, BotoesAcao) |
+| `CarregarDados()` | Chama `GcpBO.CarregarTmpGcOpe(cDopes, 1)` |
+| `AlternarPagina()` | Alterna ActivePage do PageFrame |
+| `TornarControlesVisiveis()` | Recurs├úo padr├úo incluindo Pages de PageFrames |
+| `ControlarBotoesPai()` | Equivalente ao `mCtrlBotoes()` do legado ÔÇö habilita/desabilita o form pai |
+| `Destroy()` | Reabilita form pai + libera BO + `DODEFAULT()` |
+
+**Adapta├º├Áes chave vs. legado:**
+- Par├ómetro `pnDataSes` substitu├¡do por `par_cDopes` (no novo sistema, `SQLEXEC` usa `gnConnHandle` global, sem necessidade de mudar datasession)
+- Posicionamento `cnt_4c_Saida.Left = THIS.Width - 90 = 502` (can├┤nico adaptado ao form de 592px)
+- `cnt_4c_BotoesAcao` cobre a ├írea inferior (Top=349) onde ir├úo Label1/2, Get_Dgru, Get_DConta e Opt_Permite nas Fases 5-6

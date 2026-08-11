@@ -1,0 +1,1 @@
+﻿Fixed. The root cause: VFP9 initializes untyped parameters as `.F.` (logical) when the caller passes no arguments. `NVL(.F., "")` returned `.F.` unchanged (not NULL), then `ALLTRIM(.F.)` triggered error 11. The fix uses `VARTYPE` to safely default to `""` when `par_cFpags` isn't a character string.

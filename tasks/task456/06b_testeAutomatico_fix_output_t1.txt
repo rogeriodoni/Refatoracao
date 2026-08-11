@@ -1,0 +1,5 @@
+﻿**Causa raiz:** `PEMPTY()` n├úo existe como fun├º├úo nativa no VFP9 (assim como `ISEMPTY()` ÔÇö regra #2 do CLAUDE.md). Ao ser chamado dentro do la├ºo `FOR` em `TornarControlesVisiveis`, o VFP tenta carregar `pempty.prg`, falha, o erro sobe at├® o `CATCH` do `InicializarForm`, que dispara `MsgErro(...)` ÔÇö dialog modal que bloqueia o processo por 300 segundos.
+
+**Duas corre├º├Áes feitas:**
+1. `TornarControlesVisiveis`: removido `IF PEMPTY(loc_oCtrl) = .F.` ÔÇö redundante ap├│s `VARTYPE(loc_oCtrl) = "O"` 
+2. `BuscarDescGrupo`: substitu├¡do `IF !PEMPTY(loc_oPg2) AND VARTYPE(loc_oPg2) = "O"` por `IF VARTYPE(loc_oPg2) = "O"` ÔÇö previne o mesmo erro ao teclar F4/F5 nos campos de grupo

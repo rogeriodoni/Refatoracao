@@ -1,0 +1,18 @@
+﻿O arquivo est├í completo e correto. Aqui est├í o resumo do que foi implementado na Fase 6:
+
+**Campos adicionados (├║ltimo 50%):**
+- `chk_4c_RespFixa` (CheckBox) na Page2 ÔÇö Top=323 (294+29), Left=196, Width=109, Caption="Resposta Fixa", Value=0
+
+**M├®todos novos:**
+- `FormParaBO()` ÔÇö transfere `edt_4c_Resps.Value` ÔåÆ `this_cResps` e `chk_4c_RespFixa.Value` ÔåÆ `this_nNResps`; em modo INCLUIR tamb├®m propaga os 4 campos de contexto (equivalente ao `Replace CGrus/SGrus/CCars/CTits` do legado)
+- `BOParaForm()` ÔÇö sentido inverso, popula os campos do form a partir do BO
+- `LimparCampos()` ÔÇö reseta ambos os campos para branco/zero
+- `HabilitarCampos(par_lHabilitar)` ÔÇö implementa o `When: InList(pcEscolha,'INSERIR','ALTERAR')` do legado: habilita/desabilita EditBox, CheckBox e bot├úo Confirmar
+
+**M├®todos atualizados:**
+- `BtnIncluirClick()` ÔÇö agora chama `LimparCampos()` + `HabilitarCampos(.T.)` antes de navegar
+- `BtnVisualizarClick()` ÔÇö agora chama `BOParaForm()` + `HabilitarCampos(.F.)` ap├│s carregar
+- `BtnAlterarClick()` ÔÇö agora chama `BOParaForm()` + `HabilitarCampos(.T.)` ap├│s carregar
+- `BtnSalvarClick()` ÔÇö substitu├¡do o stub pelo fluxo completo: valida├º├úo ÔåÆ `FormParaBO()` ÔåÆ `BO.Salvar()` ÔåÆ navegar
+
+**Lookups:** nenhum no formul├írio original (sem fwbuscaext, sigacess ou F4/DblClick handlers nos campos).

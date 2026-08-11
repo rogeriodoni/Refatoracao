@@ -1,0 +1,19 @@
+﻿O arquivo tem 604 linhas e termina corretamente com `ENDDEFINE`. A Fase 2/8 est├í completa.
+
+**Resumo do que foi adicionado ao `intBO.prg`:**
+
+| M├®todo | Tipo | Fun├º├úo |
+|--------|------|--------|
+| `ObterChavePrimaria()` | PROTECTED | Retorna `this_cCIdChaves` para auditoria |
+| `Buscar(par_cFiltro)` | PUBLIC | SELECT de invent├írios da empresa atual, com filtro opcional por c├│digo |
+| `CarregarPorCodigo(par_cCidchaves)` | PUBLIC | Carrega um invent├írio espec├¡fico pela PK (UUID) |
+| `CarregarPorNumero(par_nCodigos, par_cEmps)` | PUBLIC | Carrega pelo n├║mero sequencial + empresa |
+| `CarregarDoCursor(par_cAliasCursor)` | PROTECTED | Mapeia todos os 37 campos do cursor para propriedades do BO |
+| `GerarProximoCodigo(par_cEmps)` | PROTECTED | `MAX(codigos)+1` por empresa |
+| `Inserir()` | PROTECTED | INSERT completo em SIGCDBAL com NEWID() para UUID |
+| `Atualizar()` | PROTECTED | UPDATE completo em SIGCDBAL |
+| `ExecutarExclusao()` | PROTECTED | DELETE em cascata (SigIvTrB ÔåÆ SigIvTrH ÔåÆ SigIvTrE ÔåÆ SIGCDBAL) |
+| `AtualizarEncerramento(par_lEncerrar, par_dDatafim)` | PUBLIC | Marca invent├írio como encerrado |
+| `AtualizarTratamento(par_lTratar)` | PUBLIC | Marca invent├írio como tratado |
+| `CarregarCambio(par_nValor, par_cMoeda)` | PROTECTED | Substitui `fCarregarCambio()` do legado (n├úo portada) |
+| `ValidarGrupo(par_cGrupos)` | PUBLIC | Valida grupo de estoque em SigCdGcr |

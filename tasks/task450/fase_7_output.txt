@@ -1,0 +1,12 @@
+﻿A Fase 7 j├í est├í **completamente implementada**. Todos os 4 eventos solicitados existem no arquivo desde as fases anteriores:
+
+| Evento | Linha | Status |
+|--------|-------|--------|
+| `BtnIncluirClick()` | 913 | Implementado ÔÇö chama `NovoRegistro()`, `LimparCampos()`, seta modo antes de `HabilitarCampos()` |
+| `BtnVisualizarClick()` | 930 | Implementado ÔÇö l├¬ `cidchaves` do cursor, chama `CarregarPorCodigo()`, `BOParaForm()`, desabilita campos |
+| `BtnAlterarClick()` | 955 | Implementado ÔÇö chama `CarregarPorCodigo()` + `EditarRegistro()`, `BOParaForm()`, habilita campos |
+| `BtnExcluirClick()` | 981 | Implementado ÔÇö confirma via `MsgConfirma()`, chama `Excluir()`, recarrega lista |
+
+O `IctBO.prg` tamb├®m est├í correto ÔÇö `cidchaves` ├® a PK composta real na `SigPrTri` (linha 12 e 38), e o SELECT em `Buscar()` a inclui na proje├º├úo (linha 150), ent├úo as refer├¬ncias `cursor_4c_Dados.cidchaves` nos eventos s├úo v├ílidas.
+
+Nenhuma edi├º├úo necess├íria ÔÇö a Fase 7 est├í pronta. Voc├¬ pode prosseguir para a Fase 8.

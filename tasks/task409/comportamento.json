@@ -1,0 +1,214 @@
+{
+  "resumo": {
+    "totalMetodos": 12,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 10,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fUniqueIds", "fAcessoContas", "fAcessoContab"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDEVE",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "Local lcBusca\n\nIf Not Empty(ThisForm.Pagina.Dados.getCodigo.Value)\n\tThisForm.poDataMgr.LocateCursor([crSigCdEve], [Codigo], ThisForm.Pagina.Dados.getCodigo.Value)\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "LocateCursor",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDEVE",
+      "evento": "Init",
+      "linhas": 21,
+      "codigoOriginal": "With ThisForm\n\t.poDataMgr = CreateObject([fSqlConector], .Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tWith .poDataMgr\n\t\t\t.AddCursor([SigCdEve], [pkChaves], [crSigCdEve], [], ThisForm.Pagina.Lista.Grade)\n\t\t\t.pfSqlTabela(1).pColuna([Codigo], [], [], [Código],    080, .t.)\n\t\t\t.pfSqlTabela(1).pColuna([Nome],   [], [], [Descrição], 400, .t.)\n\t\t\t.pfSqlTabela(1).pColuna([Grupo],  [], [], [Grupo], \t   100, .t.)\n\t\t\t.pfSqlTabela(1).pColuna([Conta],  [], [], [Conta], \t   100, .t.)\n\t\tEndWith\n\n\t\t=DoDefault()\n\n\t\t.... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDEVE",
+      "evento": "Click",
+      "linhas": 35,
+      "codigoOriginal": "Parameters lnOpcao\n\nIf Not DoDefault(lnOpcao)\n\tThisform.mAtivaPagina1\n\tReturn .F.\nEndif\n\nDo Case\nCase Inlist(Thisform.pcEscolha, [INSERIR], [PROCURAR])\n\tThisform.Pagina.Dados.getCodigo.SetFocus\n\nCase Inlist(Thisform.pcEscolha, [ALTERAR])\n\tThisform.Pagina.Dados.getNome.SetFocus\n\nOtherwise\n\tThisform.Pagina.Dados.Grupo_Salva.Salva.SetFocus\nEndCase\n\nThis.Parent.Parent.Dados.getDGrupo.Value = []\nThis.Parent.Parent.Dados.getDConta.Value = []\n\nThisform.podatamgr.CursorQuery('SigCdGcr','crSigCdGcr', 'Co... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDEVE",
+      "evento": "Click",
+      "linhas": 40,
+      "codigoOriginal": "If InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])\n\tIf Empty(ThisForm.Pagina.Dados.getCodigo.Value)\n\t\t=Messagebox([Código Inválido!!!], 48, [Atenção!!!])\n\t\tThisForm.Pagina.Dados.getCodigo.SetFocus()\n\t\tReturn .f.\n\tEndIf\n\n\tIf Empty(ThisForm.Pagina.Dados.getNome.Value)\n\t\t=Messagebox([Descrição Inválida!!!], 48, [Atenção!!!])\n\t\tThisForm.Pagina.Dados.getNome.SetFocus()\n\t\tReturn .f.\n\tEndIf\n\t\n\tIf (ThisForm.pcEscolha = [INSERIR])\n\t\tlcQuery = [Select Codigo ] + ;\n\t\t\t\t    [From SigCdEve ] + ;\n\t\t\t\t   [Whe... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "SetFocus,SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDEVE",
+      "evento": "Click",
+      "linhas": 6,
+      "codigoOriginal": "=DoDefault()\n\nIf ThisForm.plCancelar\n\tThisForm.mAtivapagina1\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDEVE.Pagina.Dados.getCodigo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, [INSERIR], [PROCURAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDEVE.Pagina.Dados.getConta",
+      "evento": "Valid",
+      "linhas": 14,
+      "codigoOriginal": "Grupo = This.parent.getGrupo.Value\nIf !IsEmpty(This.Value)\n\tIf !fAcessoContas(Usuar,Grupo,'C',This.Value,This.parent.getConta,This.parent.getDConta)\n\t\tMessageBox('Acesso Negado !!!',0+48,'')\n\t\tThis.Value = ''\n\t\tThis.Refresh\n\t\tThis.parent.getDConta.Value = ''\n\t\tThis.parent.getDConta.Refresh\n\t\tReturn 0\n\tEndIf\nElse\n\tThis.parent.getDConta.Value = ''\n\tThis.parent.getDConta.Refresh\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDEVE.Pagina.Dados.getDConta",
+      "evento": "Valid",
+      "linhas": 14,
+      "codigoOriginal": "Grupo = This.parent.getGrupo.Value\nIf !IsEmpty(This.Value)\n\tIf !fAcessoContas(Usuar,Grupo,'D',This.Value,This.parent.getConta,This.parent.getDConta)\n\t\tMessageBox('Acesso Negado !!!',0+48,'')\n\t\tThis.Value = ''\n\t\tThis.Refresh\n\t\tThis.parent.getConta.Value = ''\n\t\tThis.parent.getConta.Refresh\n\t\tReturn 0\n\tEndIf\nElse\n\tThis.parent.getConta.Value = ''\n\tThis.parent.getConta.Refresh\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDEVE.Pagina.Dados.getDConta",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(IsEmpty(This.parent.getConta.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDEVE.Pagina.Dados.getGrupo",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "If !IsEmpty(This.Value)\n\tfAcessoContab(Usuar,'C',This.Value,This.parent.getGrupo,This.parent.getDGrupo)\nElse\n\tThis.parent.getDGrupo.Value = ''\n\tThis.parent.getDGrupo.Refresh\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDEVE.Pagina.Dados.getDGrupo",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "If !IsEmpty(This.Value)\n\t=fAcessoContab(Usuar,'D',This.Value,This.parent.getGrupo,This.parent.getDGrupo)\nElse\n\tThis.parent.getGrupo.Value = ''\n\tThis.parent.getGrupo.Refresh\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDEVE.Pagina.Dados.getDGrupo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(IsEmpty(This.parent.getGrupo.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

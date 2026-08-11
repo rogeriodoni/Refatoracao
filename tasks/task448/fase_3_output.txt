@@ -1,0 +1,18 @@
+﻿**FormICN.prg** criado em `C:\4c\projeto\app\forms\operacionais\FormICN.prg` com implementa├º├úo completa da Fase 3 (e na pr├ítica do form inteiro, j├í que ├® um OPERACIONAL simples).
+
+**O que foi entregue:**
+
+| M├®todo | Conte├║do |
+|---|---|
+| `Init()` | `RETURN DODEFAULT()` |
+| `InicializarForm()` | Cria ICNBO, define Caption via `PROMPT()`, chama toda a cadeia de configura├º├úo |
+| `ConfigurarCabecalho()` | `cnt_4c_Cabecalho` com `lbl_4c_Sombra` (sombra preta) e `lbl_4c_Titulo` (branco) ÔÇö r├®plica exata do `cntSombra` legado |
+| `ConfigurarGrid()` | `grd_4c_Dados` com 2 colunas (Programa/├ìcone), fontes Courier New/Arial, `BINDEVENT` para DblClick e KeyPress |
+| `ConfigurarBotoesAcao()` | `cmg_4c_BotoesAcao` com 2 bot├Áes Ok/Encerrar, ├¡cones `cadastro_salvar_60.jpg`/`cadastro_sair_60.jpg`, `BINDEVENT` para clicks |
+| `CarregarDados()` | Chama `ICNBO.InicializarDados()`, vincula `RecordSource`/`ControlSource` ao cursor filtrado |
+| `GrdDadosDblClick()` | Abre `FormSIGPRCIC(THIS, pkChaves)` + refresh do grid ap├│s retorno |
+| `GrdDadosKeyPress()` | ENTER (13) ÔåÆ `GrdDadosDblClick()` |
+| `BtnOkClick()` | `ICNBO.SalvarAlteracoes()` ÔåÆ `Release()` |
+| `BtnEncerrarClick()` | `MsgConfirma()` ÔåÆ `Release()` sem salvar |
+| `TornarControlesVisiveis()` | Recursivo sem filtros (form n├úo tem containers flutuantes) |
+| `Destroy()` | `LimparArquivosTemp()` + `DODEFAULT()` |

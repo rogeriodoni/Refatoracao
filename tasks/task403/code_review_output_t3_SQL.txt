@@ -1,0 +1,22 @@
+﻿Ap├│s ler completamente ambos os arquivos (FormEmn.prg - 2315 linhas - e EmnBO.prg), posso confirmar que os dois alertas s├úo **falsos positivos do validador**.
+
+**An├ílise de CRSIGCDM:**
+N├úo existe nenhuma ocorr├¬ncia de `CRSIGCDM` em nenhum arquivo. O validador provavelmente confundiu `CrSigCdMin` (nome do cursor em cl├íusula FROM) com um nome de coluna.
+
+**An├ílise de MARCAS:**
+A coluna `marcas` aparece apenas em:
+1. `SELECT CAST(1 AS int) AS marcas` ÔÇö como **alias de SELECT**, n├úo como filtro WHERE
+2. `SCAN FOR !DELETED() AND CsCopia.marcas = 1` ÔÇö como **filtro VFP local** (SCAN FOR), n├úo SQL Server WHERE
+
+Isso espelha exatamente o c├│digo original legado:
+```foxpro
+Select 1 As marcas,0 As existes,...
+Update CsCopia Set Marcas = 0 Where existes = 0  && <-- VFP local tamb├®m
+```
+
+**Conclus├úo:** N├úo h├í filtros SQL inventados. Os dois problemas reportados s├úo falsos positivos do validador SQL. O c├│digo migrado est├í correto:
+- As cl├íusulas SQL Server WHERE em `ProcessarCopia` usam apenas `a.emps` e opcionalmente `a.cpros`, ambas colunas reais de `SigCdMin`
+- `marcas` e `existes` s├úo aliases de SELECT do UNION ALL, refletindo fielmente o legado
+- O SCAN FOR com `CsCopia.marcas` ├® filtragem VFP local sobre cursor em mem├│ria (n├úo SQL Server)
+
+Nenhuma altera├º├úo ├® necess├íria nos arquivos.

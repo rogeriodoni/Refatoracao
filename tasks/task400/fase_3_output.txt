@@ -1,0 +1,16 @@
+﻿Os tr├¬s `RETURN` est├úo todos **fora** dos blocos TRY/CATCH ÔÇö correto. O arquivo est├í limpo.
+
+**Fase 3/8 conclu├¡da.** `FormDup.prg` criado em `C:\4c\projeto\app\forms\cadastros\FormDup.prg` (313 linhas) com:
+
+- `DEFINE CLASS FormDup AS FormBase` ÔÇö propriedades visuais completas (1000├ù600, Caption com CHR())
+- `Init()` ÔÇö apenas `DODEFAULT()` dentro de TRY/CATCH, sem chamar `InicializarForm()` diretamente
+- `InicializarForm()` ÔÇö cria DupBO, chama `ConfigurarPageFrame()`, guarda `gb_4c_ValidandoUI`
+- `ConfigurarPageFrame()` ÔÇö PageFrame `Top=-29`, `Tabs=.F.`, 2 pages com `Picture`
+- `ConfigurarPaginaLista()` ÔÇö `cnt_4c_Cabecalho` (sombra+t├¡tulo), `cnt_4c_Botoes` (Left=542), `cnt_4c_Saida` (Left=917, can├┤nico)
+- `ConfigurarPaginaDados()` ÔÇö `cnt_4c_BotoesAcao` (Top=33)
+- `CarregarLista()` ÔÇö guard `gb_4c_ValidandoUI` **fora** do TRY, chama `DupBO.Buscar("")`
+- `TornarControlesVisiveis()` ÔÇö com guard para o container flutuante de c├│pia (ser├í `cnt_4c_CopiaFl`, adicionado na Fase 4)
+- `FormatarGridLista()` ÔÇö `Verdana` tamanho 8
+- `Destroy()` ÔÇö cleanup do BO + `DODEFAULT()`
+
+Pr├│xima fase (4/8) adicionar├í o grid, bot├Áes CRUD (Incluir/Alterar/Excluir/Visualizar/Buscar/Encerrar/Confirmar/Cancelar), bot├úo Copiar e o container flutuante `cnt_4c_CopiaFl`.

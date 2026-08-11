@@ -1,0 +1,21 @@
+﻿O arquivo .fxp n├úo existe, ent├úo VFP9 compilar├í automaticamente na pr├│xima execu├º├úo.
+
+**Causa raiz identificada e corrigida:**
+
+O arquivo `FormGps.prg` tinha **duas declara├º├Áes** de `WindowType`:
+```
+WindowType = 0   ÔåÉ linha 18 (adicionada por fix anterior)
+WindowType = 1   ÔåÉ linha 19 (original, que prevalecia)
+```
+
+Em VFP9 com flag `-T` (command-line), quando `CREATEOBJECT("FormGps")` ├® chamado por `TesteAutomatico`:
+1. `Init()` ÔåÆ `DODEFAULT()` ÔåÆ `FormBase.Init()` ÔåÆ `InicializarForm()`
+2. `InicializarForm()` configura o Grid com `RecordSource = "cursor_4c_Operacao"`
+3. Ao fazer o setup do Grid em um form `WindowType=1` (modal dialog) no modo `-T`, VFP9 cria a janela do form e entra no modal message loop
+4. O teste n├úo tem mecanismo para fechar o dialog ÔåÆ VFP trava por exatamente 300 segundos
+
+**Por que os fixes t1-t5 falharam:** Cada tentativa anterior descreveu a mudan├ºa corretamente, mas aplicou a edi├º├úo na **linha 18** (que j├í era `WindowType = 0`) em vez da linha 19 (o `WindowType = 1` problem├ítico).
+
+**Fix aplicado:** Removida a linha `WindowType = 1` (linha 19), ficando apenas `WindowType = 0`. O comportamento modal em produ├º├úo ├® mantido porque:
+- O form pai desabilita a si mesmo via `this_oParentForm.Enabled = .F.` no Init
+- O form pai chama `Show(1)` explicitamente para exibi├º├úo modal

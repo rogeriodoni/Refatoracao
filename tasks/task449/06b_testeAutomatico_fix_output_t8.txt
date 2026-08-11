@@ -1,0 +1,17 @@
+﻿A corre├º├úo est├í aplicada. Vou confirmar a an├ílise:
+
+**Causa raiz identificada**: `ShowWindow = 1` no `DEFINE CLASS` faz VFP9 processar o form como janela top-level *antes* de `Init()` rodar. Em modo headless `-T`, isso causa hang de 300s porque n├úo h├í Windows Shell para registrar a janela.
+
+**Por que os 7 fixes anteriores falharam**: Todos tentaram corrigir `ShowWindow` dentro de `Init()` (ex: `THIS.ShowWindow = 2`), mas esse assignment ├® tarde demais ÔÇö VFP9 j├í registrou o form como top-level na defini├º├úo da classe.
+
+**Por que FormHOR funciona**: FormHOR tem `ShowWindow = 1` seguido de `ShowWindow = 0` no DEFINE CLASS ÔÇö o ├║ltimo vence, resultando em ShowWindow=0 efetivo. Init() ent├úo sobrescreve para ShowWindow=2 (necess├írio porque ShowWindow=0 MDI-child tamb├®m trava em VFP9 -T).
+
+**Fix aplicado** em `FormICO.prg`:
+```foxpro
+ShowWindow = 1
+ShowWindow = 0   ÔåÉ adicionado (├║ltimo vence ÔåÆ ShowWindow efetivo = 0)
+```
+
+Isso replica exatamente o padr├úo comprovado do FormHOR. O `Init()` j├í estava correto: em modo teste define `ShowWindow = 2` + `Visible = .F.` antes do `DODEFAULT()`.
+
+Nenhuma mudan├ºa no `ICOBO.prg` ÔÇö ele j├í tem todos os guards necess├írios (`gb_4c_ModoTeste` em `CarregarIcones`, `gnConnHandle` check).

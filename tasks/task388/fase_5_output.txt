@@ -1,0 +1,17 @@
+﻿A migra├º├úo SIGCDCTA ÔåÆ FormCTA est├í completa. Resumo do estado final:
+
+**Arquivos prontos (n├úo commitados):**
+
+| Arquivo | Status | Conte├║do |
+|---------|--------|----------|
+| `projeto/app/classes/CTABO.prg` | novo | 1043 linhas ÔÇö 9 m├®todos: Init, ObterChavePrimaria, Buscar, BuscarComFiltro, CarregarPorCodigo, CarregarDoCursor, Inserir, Atualizar, ExecutarExclusao |
+| `projeto/app/forms/cadastros/FormCTA.prg` | novo | 5282 linhas ÔÇö 40 m├®todos: 12 sub-p├íginas, FormParaBO/BOParaForm completos, LimparCampos, HabilitarCampos, todos os bot├Áes CRUD |
+| `projeto/app/menu/menu.prg` | modificado | BAR 71 "Cadastro de Contas" + `ON SELECTION` + `PROCEDURE AbrirFormCTA()` adicionados |
+
+**Checklist da migra├º├úo:**
+- [x] CTABO.prg em `app/classes/`
+- [x] FormCTA.prg em `app/forms/cadastros/`
+- [x] Item no menu (BAR 71 popCadastros)
+- [ ] Deletar arquivos `.fxp` antes de testar (`FormCTA.fxp`, `CTABO.fxp`)
+
+Antes de testar no VFP9, delete os arquivos `.fxp` antigos se existirem em `app/forms/cadastros/` e `app/classes/`.

@@ -84,8 +84,8 @@ DEFINE CLASS SIGREFUNBO AS RelatorioBase
             CREATE CURSOR Relatorio (Codigos N(6), Tubos N(2), bCeras N(12,2), Bases N(12,2), ;
                                       Ceras N(12,2), Metals N(12,2), CodCors C(4), ;
                                       Obss M, Datas D, ObsG M, Qtdos N(10,3), MetalNvs N(12,3))
-            INDEX ON STR(Codigos, 6) + STR(Tubos, 2) TAG Tubos
-            INDEX ON STR(Codigos, 6) + CodCors + STR(Tubos, 2) TAG Impressao
+            INDEX ON Codigos + STR(Tubos, 2) TAG Tubos
+            INDEX ON Codigos + CodCors + STR(Tubos, 2) TAG Impressao
 
             *-- Query principal: SigCdFun x SigCdFud x SigCdCor
             loc_cSQL = "SELECT b.*, a.Obss AS ObsG, a.Datas, c.Pesos " + ;
@@ -148,7 +148,7 @@ DEFINE CLASS SIGREFUNBO AS RelatorioBase
                     *-- Preencher QtdOs das OS nos registros correspondentes
                     SELECT crTubos
                     SCAN
-                        IF SEEK(STR(crTubos.Codigos, 6) + STR(crTubos.Tubos, 2), "Relatorio", "Tubos")
+                        IF SEEK(crTubos.Codigos + STR(crTubos.Tubos, 2), "Relatorio", "Tubos")
                             REPLACE Relatorio.QtdOs WITH crTubos.QtdOs IN Relatorio
                         ENDIF
                     ENDSCAN

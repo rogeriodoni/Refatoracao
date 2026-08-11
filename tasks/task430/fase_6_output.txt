@@ -1,0 +1,19 @@
+﻿Fase 6 completa. Aqui o resumo do que foi feito:
+
+**FormFpr.prg ÔÇö adi├º├Áes:**
+
+- `lbl_4c_Descricao` (Say2: Top=214, Left=361, Width=55) + `txt_4c_Descricao` (getDescs: Top=210, Left=422, Width=150) em `ConfigurarPaginaDados()`
+- 13 novos m├®todos completos e funcionais:
+  - `FormParaBO()` / `BOParaForm()` / `LimparCampos()` ÔÇö binding bidirecional
+  - `HabilitarCampos()` ÔÇö regras do legado: C├│digo s├│ edit├ível em INCLUIR/BUSCAR; Descri├º├úo em INCLUIR/ALTERAR/BUSCAR
+  - `AjustarBotoesPorModo()` ÔÇö desabilita Confirmar em VISUALIZAR
+  - `BtnIncluirClick()` / `BtnVisualizarClick()` / `BtnAlterarClick()` / `BtnExcluirClick()` / `BtnBuscarClick()` / `BtnEncerrarClick()` ÔÇö todos PUBLIC para BINDEVENT
+  - `BtnSalvarClick()` ÔÇö lida com todos os 5 modos (VISUALIZAR/BUSCAR/EXCLUIR/INCLUIR/ALTERAR); modo BUSCAR constr├│i filtro LIKE e atualiza cursor sem recarregar tudo
+  - `BtnCancelarClick()` ÔÇö volta para lista com todos os registros
+
+**menu.prg ÔÇö adi├º├Áes:**
+- `DEFINE BAR 98 OF popCadastros` com prompt "Modelos de Produtos"
+- `ON SELECTION BAR 98 OF popCadastros DO AbrirFormFpr`
+- Procedimento `AbrirFormFpr()` no padr├úo can├┤nico (VARTYPE, Show sem par├ómetro, sem Release)
+
+Config.prg n├úo precisou edi├º├úo ÔÇö usa ADIR() autom├ítico que j├í carrega `FprBO.prg` e `FormFpr.prg`.

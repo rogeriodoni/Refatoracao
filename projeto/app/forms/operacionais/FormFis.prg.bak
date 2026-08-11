@@ -1,0 +1,1084 @@
+*============================================================================
+* FormFis.prg - Cadastro da Impressora Fiscal
+* Migracao de: SigCdFis.SCX  |  Tipo: OPERACIONAL (dialogo plano)
+* Herda: FormBase  |  Sem PageFrame - layout plano identico ao legado
+*============================================================================
+
+DEFINE CLASS FormFis AS FormBase
+
+    *--------------------------------------------------------------------------
+    * Propriedades visuais identicas ao SCX legado (PILAR 1)
+    *--------------------------------------------------------------------------
+    Width       = 800
+    Height      = 273
+    AutoCenter  = .T.
+    TitleBar    = 0
+    ShowWindow = 1
+    ControlBox  = .F.
+    MaxButton   = .F.
+    MinButton   = .F.
+    WindowType  = 1
+    DataSession = 2
+    BorderStyle = 2
+    ShowTips    = .T.
+    Caption     = "Cadastro da Impressora Fiscal"
+
+    *--------------------------------------------------------------------------
+    * Business Object
+    *--------------------------------------------------------------------------
+    this_oBusinessObject = .NULL.
+
+    *==========================================================================
+    * Init
+    * DODEFAULT() -> FormBase.Init() -> InicializarForm()
+    * FormBase.Init() tambem corrige SET DATE/CENTURY para DataSession=2
+    *==========================================================================
+    PROCEDURE Init()
+        RETURN DODEFAULT()
+    ENDPROC
+
+    *==========================================================================
+    * InicializarForm
+    * Cria BO, inicializa cursor, monta controles visuais e vincula eventos.
+    *==========================================================================
+    PROTECTED PROCEDURE InicializarForm()
+        LOCAL loc_lSucesso
+
+        loc_lSucesso = .F.
+
+        TRY
+            THIS.this_oBusinessObject = CREATEOBJECT("FisBO")
+
+            IF VARTYPE(THIS.this_oBusinessObject) != "O"
+                MsgErro("Erro ao criar FisBO." + CHR(13) + ;
+                        "VARTYPE retornou: " + VARTYPE(THIS.this_oBusinessObject), ;
+                        "Erro em FormFis.InicializarForm")
+            ELSE
+                IF FILE(gc_4c_CaminhoIcones + "new_background.jpg")
+                    THIS.Picture = gc_4c_CaminhoIcones + "new_background.jpg"
+                ENDIF
+
+                THIS.this_oBusinessObject.InicializarCursor()
+                THIS.this_oBusinessObject.CarregarDeArquivo()
+
+                THIS.ConfigurarPageFrame()
+                THIS.ConfigurarPaginaLista()
+                THIS.TornarControlesVisiveis(THIS)
+
+                THIS.AlternarPagina(1)
+
+                loc_lSucesso = .T.
+            ENDIF
+
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                    "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                    "Procedure: " + loc_oErro.Procedure, ;
+                    "Erro em FormFis.InicializarForm")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *==========================================================================
+    * ConfigurarPageFrame
+    * SigCdFis (SCX legado, Width=800 Height=273) eh dialog PLANO sem PageFrame.
+    * PILAR 1 (UX pixel-perfect): manter layout flat identico ao legado ao inves
+    * de introduzir abas artificialmente. Esta rotina organiza as tres regioes
+    * visuais do form (cabecalho, campos de configuracao, botoes de acao)
+    * delegando para os helpers dedicados, preservando o papel arquitetural de
+    * "ConfigurarPageFrame" como ponto de entrada da montagem visual.
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarPageFrame()
+        THIS.ConfigurarCabecalho()
+        THIS.ConfigurarBotoes()
+        THIS.ConfigurarCampos()
+    ENDPROC
+
+    *==========================================================================
+    * ConfigurarCabecalho
+    * Container cinza escuro com titulos sobrepostos (cntSombra do legado)
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarCabecalho()
+        THIS.AddObject("cnt_4c_Sombra", "Container")
+        WITH THIS.cnt_4c_Sombra
+            .Top         = 0
+            .Left        = -1
+            .Width       = THIS.Width
+            .Height      = 80
+            .BorderWidth = 0
+            .BackStyle   = 1
+            .BackColor   = RGB(100,100,100)
+            .Visible     = .T.
+        ENDWITH
+
+        THIS.cnt_4c_Sombra.AddObject("lbl_4c_LblSombra", "Label")
+        WITH THIS.cnt_4c_Sombra.lbl_4c_LblSombra
+            .FontBold      = .T.
+            .FontName      = "Tahoma"
+            .FontSize      = 18
+            .FontUnderline = .F.
+            .WordWrap      = .T.
+            .Alignment     = 0
+            .AutoSize      = .F.
+            .BackStyle     = 0
+            .Height        = 40
+            .Left          = 10
+            .Top           = 18
+            .Width         = 769
+            .ForeColor     = RGB(0,0,0)
+            .Caption       = "Cadastro da Impressora Fiscal"
+        ENDWITH
+
+        THIS.cnt_4c_Sombra.AddObject("lbl_4c_LblTitulo", "Label")
+        WITH THIS.cnt_4c_Sombra.lbl_4c_LblTitulo
+            .FontBold      = .T.
+            .FontName      = "Tahoma"
+            .FontSize      = 18
+            .WordWrap      = .T.
+            .Alignment     = 0
+            .AutoSize      = .F.
+            .BackStyle     = 0
+            .Height        = 46
+            .Left          = 10
+            .Top           = 17
+            .Width         = 769
+            .ForeColor     = RGB(255,255,255)
+            .Caption       = "Cadastro da Impressora Fiscal"
+        ENDWITH
+    ENDPROC
+
+    *==========================================================================
+    * ConfigurarBotoes
+    * Botoes Confirmar e Encerrar standalone (Ok e cancela do legado)
+    * Standalone com Picture requer Themes=.T. + DisabledPicture
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarBotoes()
+        THIS.AddObject("cmd_4c_Confirmar", "CommandButton")
+        WITH THIS.cmd_4c_Confirmar
+            .Top             = 3
+            .Left            = 649
+            .Width           = 75
+            .Height          = 75
+            .Caption         = "Confirmar"
+            .Picture         = gc_4c_CaminhoIcones + "cadastro_salvar_60.jpg"
+            .DisabledPicture = gc_4c_CaminhoIcones + "cadastro_salvar_60.jpg"
+            .Themes          = .T.
+            .FontName        = "Tahoma"
+            .FontBold        = .T.
+            .FontItalic      = .T.
+            .FontSize        = 8
+            .ForeColor       = RGB(90,90,90)
+            .BackColor       = RGB(255,255,255)
+            .SpecialEffect   = 0
+            .PicturePosition = 13
+            .MousePointer    = 15
+            .WordWrap        = .T.
+            .AutoSize        = .F.
+        ENDWITH
+        BINDEVENT(THIS.cmd_4c_Confirmar, "Click", THIS, "BtnConfirmarClick")
+
+        THIS.AddObject("cmd_4c_Encerrar", "CommandButton")
+        WITH THIS.cmd_4c_Encerrar
+            .Top             = 3
+            .Left            = 724
+            .Width           = 75
+            .Height          = 75
+            .Caption         = "Encerrar"
+            .Picture         = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
+            .DisabledPicture = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
+            .Themes          = .T.
+            .FontName        = "Tahoma"
+            .FontBold        = .T.
+            .FontItalic      = .T.
+            .FontSize        = 8
+            .ForeColor       = RGB(90,90,90)
+            .BackColor       = RGB(255,255,255)
+            .SpecialEffect   = 0
+            .PicturePosition = 13
+            .MousePointer    = 15
+            .WordWrap        = .T.
+            .AutoSize        = .F.
+            .Cancel          = .T.
+        ENDWITH
+        BINDEVENT(THIS.cmd_4c_Encerrar, "Click", THIS, "BtnEncerrarClick")
+    ENDPROC
+
+    *==========================================================================
+    * ConfigurarCampos
+    * Labels, Spinner, ComboBoxes, TextBox e CheckBoxes - identicos ao legado
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarCampos()
+        *-- Porta de Comunicacao
+        THIS.AddObject("lbl_4c_Label1", "Label")
+        WITH THIS.lbl_4c_Label1
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90,90,90)
+            .BackStyle = 0
+            .AutoSize  = .F.
+            .Left      = 79
+            .Top       = 101
+            .Width     = 120
+            .Height    = 18
+            .Caption   = "Porta de Comunica" + CHR(231) + CHR(227) + "o : "
+        ENDWITH
+
+        THIS.AddObject("obj_4c_Spinner1", "Spinner")
+        WITH THIS.obj_4c_Spinner1
+            .FontName          = "Tahoma"
+            .FontSize          = 8
+            .ForeColor         = RGB(90,90,90)
+            .Height            = 25
+            .Left              = 202
+            .Top               = 96
+            .Width             = 48
+            .KeyboardHighValue = 10
+            .KeyboardLowValue  = 1
+            .SpinnerHighValue  = 10
+            .SpinnerLowValue   = 1
+            .ToolTipText       = "Escolher COM9 para setar USB"
+            .Value             = 1
+            .ControlSource     = "CrSigFiFis.Portas"
+        ENDWITH
+
+        *-- HandShaking
+        THIS.AddObject("lbl_4c_Label2", "Label")
+        WITH THIS.lbl_4c_Label2
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90,90,90)
+            .BackStyle = 0
+            .AutoSize  = .F.
+            .Left      = 124
+            .Top       = 128
+            .Width     = 75
+            .Height    = 18
+            .Caption   = "HandShaking : "
+        ENDWITH
+
+        THIS.AddObject("cbo_4c_CmbHand", "ComboBox")
+        WITH THIS.cbo_4c_CmbHand
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .ForeColor     = RGB(90,90,90)
+            .RowSourceType = 0
+            .Height        = 24
+            .Left          = 202
+            .Top           = 123
+            .Width         = 141
+            .ControlSource = "CrSigFiFis.Hands"
+        ENDWITH
+
+        *-- Settings (ex: 9600,n,8,1)
+        THIS.AddObject("lbl_4c_Label3", "Label")
+        WITH THIS.lbl_4c_Label3
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90,90,90)
+            .BackStyle = 0
+            .AutoSize  = .F.
+            .Left      = 147
+            .Top       = 153
+            .Width     = 52
+            .Height    = 18
+            .Caption   = "Settings : "
+        ENDWITH
+
+        THIS.AddObject("txt_4c_Set", "TextBox")
+        WITH THIS.txt_4c_Set
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .ForeColor     = RGB(90,90,90)
+            .Left          = 202
+            .Top           = 149
+            .Width         = 141
+            .Height        = 23
+            .Value         = ""
+            .ControlSource = "CrSigFiFis.Settings"
+        ENDWITH
+
+        *-- DTRenable
+        THIS.AddObject("lbl_4c_Label4", "Label")
+        WITH THIS.lbl_4c_Label4
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90,90,90)
+            .BackStyle = 0
+            .AutoSize  = .F.
+            .Left      = 134
+            .Top       = 192
+            .Width     = 65
+            .Height    = 18
+            .Caption   = "DTRenable : "
+        ENDWITH
+
+        THIS.AddObject("chk_4c_ChkDtr", "CheckBox")
+        WITH THIS.chk_4c_ChkDtr
+            .Top           = 191
+            .Left          = 202
+            .AutoSize      = .T.
+            .Alignment     = 0
+            .BackStyle     = 0
+            .Caption       = ""
+            .Value         = 0
+            .ControlSource = "CrSigFiFis.Dtrs"
+        ENDWITH
+
+        *-- RTSenable
+        THIS.AddObject("lbl_4c_Label5", "Label")
+        WITH THIS.lbl_4c_Label5
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90,90,90)
+            .BackStyle = 0
+            .AutoSize  = .F.
+            .Left      = 135
+            .Top       = 212
+            .Width     = 64
+            .Height    = 18
+            .Caption   = "RTSenable : "
+        ENDWITH
+
+        THIS.AddObject("chk_4c_ChkRts", "CheckBox")
+        WITH THIS.chk_4c_ChkRts
+            .Top           = 211
+            .Left          = 202
+            .AutoSize      = .T.
+            .Alignment     = 0
+            .BackStyle     = 0
+            .Caption       = ""
+            .Value         = 0
+            .ControlSource = "CrSigFiFis.Rtss"
+        ENDWITH
+
+        *-- Impressora
+        THIS.AddObject("lbl_4c_Label6", "Label")
+        WITH THIS.lbl_4c_Label6
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90,90,90)
+            .BackStyle = 0
+            .AutoSize  = .F.
+            .Left      = 132
+            .Top       = 236
+            .Width     = 67
+            .Height    = 18
+            .Caption   = "Impressora : "
+        ENDWITH
+
+        THIS.AddObject("cbo_4c_CmbImp", "ComboBox")
+        WITH THIS.cbo_4c_CmbImp
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .ForeColor     = RGB(90,90,90)
+            .RowSourceType = 0
+            .Height        = 24
+            .Left          = 202
+            .Top           = 231
+            .Width         = 141
+            .ControlSource = "CrSigFiFis.Imps"
+        ENDWITH
+
+        THIS.PopularComboBoxes()
+    ENDPROC
+
+    *==========================================================================
+    * PopularComboBoxes
+    * Preenche itens dos ComboBoxes - identico ao legado
+    *==========================================================================
+    PROTECTED PROCEDURE PopularComboBoxes()
+        WITH THIS.cbo_4c_CmbHand
+            .Clear
+            .AddItem("0-None    ")
+            .AddItem("1-Xon Xoff")
+            .AddItem("2-RTS     ")
+            .AddItem("Em Branco ")
+        ENDWITH
+
+        WITH THIS.cbo_4c_CmbImp
+            .Clear
+            .AddItem("DATAREGIS   ")
+            .AddItem("SWEDA       ")
+            .AddItem("BEMATECH    ")
+            .AddItem("BEMA8501    ")
+            .AddItem("NDATAREGIS  ")
+            .AddItem("DARUMA      ")
+            .AddItem("S/IMPRESSORA")
+            .AddItem("NSWEDA      ")
+            .AddItem("EPSON       ")
+            .AddItem("Em Branco   ")
+        ENDWITH
+    ENDPROC
+
+    *==========================================================================
+    * ConfigurarPaginaLista
+    * SigCdFis eh dialog plano de configuracao (registro unico em SetFiscal.Ini)
+    * ??? nao ha Page1/Grid/lista de registros. Esta rotina mantem o papel
+    * arquitetural de "visualizar registro corrente" resincronizando a UI com o
+    * cursor CrSigFiFis (equivalente a "carregar lista" para 1 registro).
+    * Rebinda ControlSources apos qualquer refresh do cursor.
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarPaginaLista()
+        LOCAL loc_lSucesso
+
+        loc_lSucesso = .F.
+
+        TRY
+            IF !USED("CrSigFiFis")
+                THIS.this_oBusinessObject.InicializarCursor()
+                THIS.this_oBusinessObject.CarregarDeArquivo()
+            ENDIF
+
+            SELECT CrSigFiFis
+            GO TOP
+
+            IF EOF()
+                APPEND BLANK
+            ENDIF
+
+            *-- Rebinda ControlSources ao cursor atual
+            THIS.obj_4c_Spinner1.ControlSource = "CrSigFiFis.Portas"
+            THIS.cbo_4c_CmbHand.ControlSource  = "CrSigFiFis.Hands"
+            THIS.txt_4c_Set.ControlSource      = "CrSigFiFis.Settings"
+            THIS.chk_4c_ChkDtr.ControlSource   = "CrSigFiFis.Dtrs"
+            THIS.chk_4c_ChkRts.ControlSource   = "CrSigFiFis.Rtss"
+            THIS.cbo_4c_CmbImp.ControlSource   = "CrSigFiFis.Imps"
+
+            *-- Forca refresh dos controles vinculados
+            THIS.obj_4c_Spinner1.Refresh()
+            THIS.cbo_4c_CmbHand.Refresh()
+            THIS.txt_4c_Set.Refresh()
+            THIS.chk_4c_ChkDtr.Refresh()
+            THIS.chk_4c_ChkRts.Refresh()
+            THIS.cbo_4c_CmbImp.Refresh()
+
+            loc_lSucesso = .T.
+
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                    "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                    "Procedure: " + loc_oErro.Procedure, ;
+                    "Erro em FormFis.ConfigurarPaginaLista")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *==========================================================================
+    * ConfigurarPaginaDados
+    * SigCdFis eh dialog PLANO sem PageFrame ??? nao ha Page2/Dados fisica.
+    * Esta rotina mantem o papel arquitetural de "configurar area de edicao de
+    * dados" delegando para os helpers ja construidos em ConfigurarCampos
+    * (Spinner Portas, ComboBox HandShaking, TextBox Settings, CheckBox DTR/RTS
+    * e ComboBox Impressora). Rebinda tambem os ControlSources para garantir
+    * sincronia com o cursor CrSigFiFis apos qualquer refresh.
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarPaginaDados()
+        LOCAL loc_lSucesso
+
+        loc_lSucesso = .F.
+
+        TRY
+            IF !USED("CrSigFiFis")
+                THIS.this_oBusinessObject.InicializarCursor()
+                THIS.this_oBusinessObject.CarregarDeArquivo()
+            ENDIF
+
+            SELECT CrSigFiFis
+            GO TOP
+
+            IF EOF()
+                APPEND BLANK
+            ENDIF
+
+            *-- Todos os campos: Porta, HandShaking, Settings, DTR, RTS, Impressora
+            IF PEMSTATUS(THIS, "obj_4c_Spinner1", 5)
+                THIS.obj_4c_Spinner1.ControlSource = "CrSigFiFis.Portas"
+                THIS.obj_4c_Spinner1.Refresh()
+            ENDIF
+
+            IF PEMSTATUS(THIS, "cbo_4c_CmbHand", 5)
+                THIS.cbo_4c_CmbHand.ControlSource = "CrSigFiFis.Hands"
+                THIS.cbo_4c_CmbHand.Refresh()
+            ENDIF
+
+            IF PEMSTATUS(THIS, "txt_4c_Set", 5)
+                THIS.txt_4c_Set.ControlSource = "CrSigFiFis.Settings"
+                THIS.txt_4c_Set.Refresh()
+            ENDIF
+
+            IF PEMSTATUS(THIS, "chk_4c_ChkDtr", 5)
+                THIS.chk_4c_ChkDtr.ControlSource = "CrSigFiFis.Dtrs"
+                THIS.chk_4c_ChkDtr.Refresh()
+            ENDIF
+
+            IF PEMSTATUS(THIS, "chk_4c_ChkRts", 5)
+                THIS.chk_4c_ChkRts.ControlSource = "CrSigFiFis.Rtss"
+                THIS.chk_4c_ChkRts.Refresh()
+            ENDIF
+
+            IF PEMSTATUS(THIS, "cbo_4c_CmbImp", 5)
+                THIS.cbo_4c_CmbImp.ControlSource = "CrSigFiFis.Imps"
+                THIS.cbo_4c_CmbImp.Refresh()
+            ENDIF
+
+            loc_lSucesso = .T.
+
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                    "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                    "Procedure: " + loc_oErro.Procedure, ;
+                    "Erro em FormFis.ConfigurarPaginaDados")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *==========================================================================
+    * AlternarPagina
+    * SigCdFis eh dialog plano ??? possui apenas a "pagina 1" (configuracao).
+    * Rotina mantida para consistencia arquitetural: valida o parametro,
+    * garante que o cursor esta posicionado corretamente e transfere foco para
+    * o controle inicial (Spinner de Porta de Comunicacao).
+    *==========================================================================
+    PROTECTED PROCEDURE AlternarPagina(par_nPagina)
+        LOCAL loc_nPagina
+
+        loc_nPagina = IIF(VARTYPE(par_nPagina) = "N", par_nPagina, 1)
+
+        *-- Dialog plano: apenas pagina 1 existe; qualquer outro valor eh normalizado
+        IF loc_nPagina <> 1
+            loc_nPagina = 1
+        ENDIF
+
+        TRY
+            IF USED("CrSigFiFis")
+                SELECT CrSigFiFis
+                GO TOP
+            ENDIF
+
+            IF PEMSTATUS(THIS, "obj_4c_Spinner1", 5)
+                THIS.obj_4c_Spinner1.SetFocus()
+            ENDIF
+
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                    "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                    "Procedure: " + loc_oErro.Procedure, ;
+                    "Erro em FormFis.AlternarPagina")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    * TornarControlesVisiveis
+    * Torna todos os controles visiveis recursivamente
+    *==========================================================================
+    PROTECTED PROCEDURE TornarControlesVisiveis(par_oContainer)
+        LOCAL loc_nI, loc_oObjeto
+
+        FOR loc_nI = 1 TO par_oContainer.ControlCount
+            loc_oObjeto = par_oContainer.Controls(loc_nI)
+
+            IF VARTYPE(loc_oObjeto) = "O"
+                IF PEMSTATUS(loc_oObjeto, "Visible", 5)
+                    loc_oObjeto.Visible = .T.
+                ENDIF
+
+                IF UPPER(loc_oObjeto.BaseClass) = "PAGEFRAME"
+                    LOCAL loc_nP
+                    FOR loc_nP = 1 TO loc_oObjeto.PageCount
+                        THIS.TornarControlesVisiveis(loc_oObjeto.Pages(loc_nP))
+                    ENDFOR
+                ENDIF
+
+                IF PEMSTATUS(loc_oObjeto, "ControlCount", 5)
+                    IF loc_oObjeto.ControlCount > 0
+                        THIS.TornarControlesVisiveis(loc_oObjeto)
+                    ENDIF
+                ENDIF
+            ENDIF
+        ENDFOR
+    ENDPROC
+
+    *==========================================================================
+    * BtnConfirmarClick (PUBLIC - necessario para BINDEVENT)
+    * Persiste configuracoes via BO e fecha o formulario
+    *==========================================================================
+    PROCEDURE BtnConfirmarClick()
+        IF THIS.this_oBusinessObject.SalvarConfiguracao()
+            THIS.Release()
+        ENDIF
+    ENDPROC
+
+    *==========================================================================
+    * BtnEncerrarClick (PUBLIC - necessario para BINDEVENT)
+    * Fecha o formulario sem salvar
+    *==========================================================================
+    PROCEDURE BtnEncerrarClick()
+        THIS.Release()
+    ENDPROC
+
+    *==========================================================================
+    * BtnIncluirClick (PUBLIC)
+    * SigCdFis eh dialog de configuracao (registro unico em SetFiscal.Ini) ??? nao
+    * ha lista de registros para "incluir". Semantica adaptada: cria nova
+    * configuracao com defaults (Portas=1, Settings="9600,n,8,1", "Em Branco"),
+    * descartando qualquer valor previamente carregado. Equivalente arquitetural
+    * ao "novo registro" de forms CRUD.
+    *==========================================================================
+    PROCEDURE BtnIncluirClick()
+        LOCAL loc_lConfirma
+
+        TRY
+            loc_lConfirma = MsgConfirma("Reinicializar configura" + CHR(231) + CHR(227) + "o da impressora fiscal com valores padr" + CHR(227) + "o?" + CHR(13) + ;
+                                        "As altera" + CHR(231) + CHR(245) + "es n" + CHR(227) + "o salvas ser" + CHR(227) + "o descartadas.", ;
+                                        "Nova Configura" + CHR(231) + CHR(227) + "o")
+
+            IF loc_lConfirma
+                IF !USED("CrSigFiFis")
+                    THIS.this_oBusinessObject.InicializarCursor()
+                ENDIF
+
+                SELECT CrSigFiFis
+                ZAP
+                APPEND BLANK
+
+                REPLACE CrSigFiFis.Portas   WITH 1
+                REPLACE CrSigFiFis.Hands    WITH "Em Branco   "
+                REPLACE CrSigFiFis.Settings WITH "9600,n,8,1"
+                REPLACE CrSigFiFis.Dtrs     WITH .F.
+                REPLACE CrSigFiFis.Rtss     WITH .F.
+                REPLACE CrSigFiFis.Imps     WITH "Em Branco   "
+                REPLACE CrSigFiFis.Termicas WITH .F.
+
+                THIS.this_oBusinessObject.CarregarDoCursor("CrSigFiFis")
+
+                THIS.ConfigurarPaginaLista()
+
+                IF PEMSTATUS(THIS, "obj_4c_Spinner1", 5)
+                    THIS.obj_4c_Spinner1.SetFocus()
+                ENDIF
+            ENDIF
+
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                    "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                    "Procedure: " + loc_oErro.Procedure, ;
+                    "Erro em FormFis.BtnIncluirClick")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    * BtnAlterarClick (PUBLIC)
+    * SigCdFis eh dialog plano de configuracao ??? controles ja sao editaveis
+    * por padrao (nao ha modos INCLUIR/ALTERAR/VISUALIZAR separados). Semantica
+    * adaptada: recarrega SetFiscal.Ini do disco, descartando alteracoes em
+    * memoria e reposicionando o cursor CrSigFiFis nos valores gravados.
+    * Equivalente arquitetural ao "editar registro existente" de forms CRUD.
+    *==========================================================================
+    PROCEDURE BtnAlterarClick()
+        TRY
+            IF THIS.this_oBusinessObject.CarregarDeArquivo()
+                THIS.ConfigurarPaginaLista()
+
+                IF PEMSTATUS(THIS, "obj_4c_Spinner1", 5)
+                    THIS.obj_4c_Spinner1.SetFocus()
+                ENDIF
+            ELSE
+                MsgAviso("N" + CHR(227) + "o foi poss" + CHR(237) + "vel recarregar a configura" + CHR(231) + CHR(227) + "o do arquivo:" + CHR(13) + ;
+                         THIS.this_oBusinessObject.this_cArqFiscal, ;
+                         "Aten" + CHR(231) + CHR(227) + "o")
+            ENDIF
+
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                    "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                    "Procedure: " + loc_oErro.Procedure, ;
+                    "Erro em FormFis.BtnAlterarClick")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    * BtnVisualizarClick (PUBLIC)
+    * SigCdFis eh dialog de configuracao ??? nao ha modo "somente leitura" no
+    * legado. Semantica adaptada: exibe resumo da configuracao corrente (path
+    * dos arquivos .Ini/.xml + valores em memoria) sem alterar cursor nem UI.
+    * Util para inspecao rapida do estado atual sem risco de edicao acidental.
+    *==========================================================================
+    PROCEDURE BtnVisualizarClick()
+        LOCAL loc_cMsg, loc_cImpr, loc_cHand
+
+        TRY
+            IF !USED("CrSigFiFis")
+                THIS.this_oBusinessObject.InicializarCursor()
+                THIS.this_oBusinessObject.CarregarDeArquivo()
+            ENDIF
+
+            SELECT CrSigFiFis
+            GO TOP
+
+            IF EOF()
+                MsgAviso("Nenhuma configura" + CHR(231) + CHR(227) + "o carregada.", ;
+                         "Visualizar Configura" + CHR(231) + CHR(227) + "o")
+            ELSE
+                loc_cImpr = ALLTRIM(NVL(CrSigFiFis.Imps, ""))
+                IF EMPTY(loc_cImpr)
+                    loc_cImpr = "(n" + CHR(227) + "o definida)"
+                ENDIF
+
+                loc_cHand = ALLTRIM(NVL(CrSigFiFis.Hands, ""))
+                IF EMPTY(loc_cHand)
+                    loc_cHand = "(n" + CHR(227) + "o definido)"
+                ENDIF
+
+                loc_cMsg = "Configura" + CHR(231) + CHR(227) + "o atual da impressora fiscal:" + CHR(13) + CHR(13) + ;
+                           "Arquivo   : " + THIS.this_oBusinessObject.this_cArqFiscal + CHR(13) + ;
+                           "Porta     : COM" + ALLTRIM(TRANSFORM(NVL(CrSigFiFis.Portas, 1))) + CHR(13) + ;
+                           "HandShake : " + loc_cHand + CHR(13) + ;
+                           "Settings  : " + ALLTRIM(NVL(CrSigFiFis.Settings, "")) + CHR(13) + ;
+                           "DTRenable : " + IIF(NVL(CrSigFiFis.Dtrs, .F.), "Sim", "N" + CHR(227) + "o") + CHR(13) + ;
+                           "RTSenable : " + IIF(NVL(CrSigFiFis.Rtss, .F.), "Sim", "N" + CHR(227) + "o") + CHR(13) + ;
+                           "Impressora: " + loc_cImpr
+
+                MsgInfo(loc_cMsg, "Visualizar Configura" + CHR(231) + CHR(227) + "o")
+            ENDIF
+
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                    "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                    "Procedure: " + loc_oErro.Procedure, ;
+                    "Erro em FormFis.BtnVisualizarClick")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    * BtnExcluirClick (PUBLIC)
+    * SigCdFis nao possui tabela SQL ??? "excluir" no contexto do dialog eh
+    * equivalente a limpar a configuracao corrente (todos os campos em branco/
+    * zero) e persistir o estado vazio no SetFiscal.Ini. Mantida confirmacao
+    * dupla porque a acao eh destrutiva do arquivo de configuracao existente.
+    *==========================================================================
+    PROCEDURE BtnExcluirClick()
+        LOCAL loc_lConfirma
+
+        TRY
+            loc_lConfirma = MsgConfirma("Excluir a configura" + CHR(231) + CHR(227) + "o da impressora fiscal?" + CHR(13) + ;
+                                        "O arquivo " + THIS.this_oBusinessObject.this_cArqFiscal + " ser" + CHR(225) + " reinicializado em branco.", ;
+                                        "Excluir Configura" + CHR(231) + CHR(227) + "o")
+
+            IF loc_lConfirma
+                IF !USED("CrSigFiFis")
+                    THIS.this_oBusinessObject.InicializarCursor()
+                ENDIF
+
+                SELECT CrSigFiFis
+                ZAP
+                APPEND BLANK
+
+                REPLACE CrSigFiFis.Portas   WITH 1
+                REPLACE CrSigFiFis.Hands    WITH ""
+                REPLACE CrSigFiFis.Settings WITH ""
+                REPLACE CrSigFiFis.Dtrs     WITH .F.
+                REPLACE CrSigFiFis.Rtss     WITH .F.
+                REPLACE CrSigFiFis.Imps     WITH ""
+                REPLACE CrSigFiFis.Termicas WITH .F.
+
+                THIS.this_oBusinessObject.CarregarDoCursor("CrSigFiFis")
+
+                SELECT CrSigFiFis
+                GO TOP
+                COPY TO (THIS.this_oBusinessObject.this_cArqFiscal) TYPE SDF
+
+                *-- Recarrega defaults para exibir estado limpo consistente
+                THIS.this_oBusinessObject.CarregarDeArquivo()
+                THIS.ConfigurarPaginaLista()
+
+                MsgInfo("Configura" + CHR(231) + CHR(227) + "o exclu" + CHR(237) + "da.", ;
+                        "Excluir Configura" + CHR(231) + CHR(227) + "o")
+            ENDIF
+
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                    "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                    "Procedure: " + loc_oErro.Procedure, ;
+                    "Erro em FormFis.BtnExcluirClick")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    * FormParaBO
+    * Transfere valores do cursor CrSigFiFis para as propriedades do BO.
+    * Os controles tem ControlSource apontando para o cursor, portanto
+    * o cursor ja reflete o que o usuario editou; sincronizamos as props.
+    *==========================================================================
+    PROCEDURE FormParaBO()
+        LOCAL loc_oErro
+
+        TRY
+            IF USED("CrSigFiFis")
+                SELECT CrSigFiFis
+                GO TOP
+
+                THIS.this_oBusinessObject.this_nPorta      = NVL(CrSigFiFis.Portas,   1)
+                THIS.this_oBusinessObject.this_cHandshaking = ALLTRIM(NVL(CrSigFiFis.Hands,    ""))
+                THIS.this_oBusinessObject.this_cSettings    = ALLTRIM(NVL(CrSigFiFis.Settings, ""))
+                THIS.this_oBusinessObject.this_lDtr         = NVL(CrSigFiFis.Dtrs,     .F.)
+                THIS.this_oBusinessObject.this_lRts         = NVL(CrSigFiFis.Rtss,     .F.)
+                THIS.this_oBusinessObject.this_cImpressora  = ALLTRIM(NVL(CrSigFiFis.Imps,     ""))
+                THIS.this_oBusinessObject.this_lTermica     = NVL(CrSigFiFis.Termicas, .F.)
+            ENDIF
+
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                    "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                    "Procedure: " + loc_oErro.Procedure, ;
+                    "Erro em FormFis.FormParaBO")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    * BOParaForm
+    * Transfere propriedades do BO para o cursor CrSigFiFis e atualiza controles.
+    *==========================================================================
+    PROCEDURE BOParaForm()
+        LOCAL loc_oErro
+
+        TRY
+            IF !USED("CrSigFiFis")
+                THIS.this_oBusinessObject.InicializarCursor()
+            ENDIF
+
+            SELECT CrSigFiFis
+            GO TOP
+
+            IF EOF()
+                APPEND BLANK
+            ENDIF
+
+            REPLACE CrSigFiFis.Portas   WITH THIS.this_oBusinessObject.this_nPorta
+            REPLACE CrSigFiFis.Hands    WITH THIS.this_oBusinessObject.this_cHandshaking
+            REPLACE CrSigFiFis.Settings WITH THIS.this_oBusinessObject.this_cSettings
+            REPLACE CrSigFiFis.Dtrs     WITH THIS.this_oBusinessObject.this_lDtr
+            REPLACE CrSigFiFis.Rtss     WITH THIS.this_oBusinessObject.this_lRts
+            REPLACE CrSigFiFis.Imps     WITH THIS.this_oBusinessObject.this_cImpressora
+            REPLACE CrSigFiFis.Termicas WITH THIS.this_oBusinessObject.this_lTermica
+
+            IF PEMSTATUS(THIS, "obj_4c_Spinner1", 5)
+                THIS.obj_4c_Spinner1.Refresh()
+            ENDIF
+            IF PEMSTATUS(THIS, "cbo_4c_CmbHand", 5)
+                THIS.cbo_4c_CmbHand.Refresh()
+            ENDIF
+            IF PEMSTATUS(THIS, "txt_4c_Set", 5)
+                THIS.txt_4c_Set.Refresh()
+            ENDIF
+            IF PEMSTATUS(THIS, "chk_4c_ChkDtr", 5)
+                THIS.chk_4c_ChkDtr.Refresh()
+            ENDIF
+            IF PEMSTATUS(THIS, "chk_4c_ChkRts", 5)
+                THIS.chk_4c_ChkRts.Refresh()
+            ENDIF
+            IF PEMSTATUS(THIS, "cbo_4c_CmbImp", 5)
+                THIS.cbo_4c_CmbImp.Refresh()
+            ENDIF
+
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                    "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                    "Procedure: " + loc_oErro.Procedure, ;
+                    "Erro em FormFis.BOParaForm")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    * HabilitarCampos
+    * Habilita ou desabilita todos os controles editaveis do formulario.
+    * par_lHabilitar: .T. habilita (default), .F. desabilita
+    *==========================================================================
+    PROCEDURE HabilitarCampos(par_lHabilitar)
+        LOCAL loc_lHabilitar, loc_oErro
+
+        loc_lHabilitar = IIF(VARTYPE(par_lHabilitar) = "L", par_lHabilitar, .T.)
+
+        TRY
+            IF PEMSTATUS(THIS, "obj_4c_Spinner1", 5)
+                THIS.obj_4c_Spinner1.Enabled = loc_lHabilitar
+            ENDIF
+            IF PEMSTATUS(THIS, "cbo_4c_CmbHand", 5)
+                THIS.cbo_4c_CmbHand.Enabled = loc_lHabilitar
+            ENDIF
+            IF PEMSTATUS(THIS, "txt_4c_Set", 5)
+                THIS.txt_4c_Set.Enabled = loc_lHabilitar
+            ENDIF
+            IF PEMSTATUS(THIS, "chk_4c_ChkDtr", 5)
+                THIS.chk_4c_ChkDtr.Enabled = loc_lHabilitar
+            ENDIF
+            IF PEMSTATUS(THIS, "chk_4c_ChkRts", 5)
+                THIS.chk_4c_ChkRts.Enabled = loc_lHabilitar
+            ENDIF
+            IF PEMSTATUS(THIS, "cbo_4c_CmbImp", 5)
+                THIS.cbo_4c_CmbImp.Enabled = loc_lHabilitar
+            ENDIF
+            IF PEMSTATUS(THIS, "cmd_4c_Confirmar", 5)
+                THIS.cmd_4c_Confirmar.Enabled = loc_lHabilitar
+            ENDIF
+
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                    "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                    "Procedure: " + loc_oErro.Procedure, ;
+                    "Erro em FormFis.HabilitarCampos")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    * LimparCampos
+    * Redefine cursor e controles para valores default (Porta=1, outros vazios).
+    *==========================================================================
+    PROCEDURE LimparCampos()
+        LOCAL loc_oErro
+
+        TRY
+            IF !USED("CrSigFiFis")
+                THIS.this_oBusinessObject.InicializarCursor()
+            ENDIF
+
+            SELECT CrSigFiFis
+            GO TOP
+
+            IF EOF()
+                APPEND BLANK
+            ENDIF
+
+            REPLACE CrSigFiFis.Portas   WITH 1
+            REPLACE CrSigFiFis.Hands    WITH "Em Branco   "
+            REPLACE CrSigFiFis.Settings WITH ""
+            REPLACE CrSigFiFis.Dtrs     WITH .F.
+            REPLACE CrSigFiFis.Rtss     WITH .F.
+            REPLACE CrSigFiFis.Imps     WITH "Em Branco   "
+            REPLACE CrSigFiFis.Termicas WITH .F.
+
+            IF PEMSTATUS(THIS, "obj_4c_Spinner1", 5)
+                THIS.obj_4c_Spinner1.Refresh()
+            ENDIF
+            IF PEMSTATUS(THIS, "cbo_4c_CmbHand", 5)
+                THIS.cbo_4c_CmbHand.Refresh()
+            ENDIF
+            IF PEMSTATUS(THIS, "txt_4c_Set", 5)
+                THIS.txt_4c_Set.Refresh()
+            ENDIF
+            IF PEMSTATUS(THIS, "chk_4c_ChkDtr", 5)
+                THIS.chk_4c_ChkDtr.Refresh()
+            ENDIF
+            IF PEMSTATUS(THIS, "chk_4c_ChkRts", 5)
+                THIS.chk_4c_ChkRts.Refresh()
+            ENDIF
+            IF PEMSTATUS(THIS, "cbo_4c_CmbImp", 5)
+                THIS.cbo_4c_CmbImp.Refresh()
+            ENDIF
+
+            IF PEMSTATUS(THIS, "obj_4c_Spinner1", 5)
+                THIS.obj_4c_Spinner1.SetFocus()
+            ENDIF
+
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                    "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                    "Procedure: " + loc_oErro.Procedure, ;
+                    "Erro em FormFis.LimparCampos")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    * CarregarLista
+    * Dialog plano sem grid: recarrega SetFiscal.Ini e sincroniza controles.
+    * Equivalente arquitetural ao "recarregar lista de registros" de forms CRUD.
+    *==========================================================================
+    PROCEDURE CarregarLista()
+        LOCAL loc_lSucesso, loc_oErro
+
+        loc_lSucesso = .F.
+
+        TRY
+            IF THIS.this_oBusinessObject.CarregarDeArquivo()
+                THIS.ConfigurarPaginaLista()
+                loc_lSucesso = .T.
+            ENDIF
+
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                    "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                    "Procedure: " + loc_oErro.Procedure, ;
+                    "Erro em FormFis.CarregarLista")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *==========================================================================
+    * AjustarBotoesPorModo
+    * Dialog plano sem modos INCLUIR/ALTERAR/VISUALIZAR.
+    * Garante que Confirmar e Encerrar estejam habilitados (estado permanente).
+    *==========================================================================
+    PROCEDURE AjustarBotoesPorModo()
+        LOCAL loc_oErro
+
+        TRY
+            IF PEMSTATUS(THIS, "cmd_4c_Confirmar", 5)
+                THIS.cmd_4c_Confirmar.Enabled = .T.
+            ENDIF
+            IF PEMSTATUS(THIS, "cmd_4c_Encerrar", 5)
+                THIS.cmd_4c_Encerrar.Enabled = .T.
+            ENDIF
+
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                    "Linha: " + TRANSFORM(loc_oErro.LineNo) + CHR(13) + ;
+                    "Procedure: " + loc_oErro.Procedure, ;
+                    "Erro em FormFis.AjustarBotoesPorModo")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    * BtnBuscarClick (PUBLIC)
+    * Dialog plano sem lista de registros: recarrega configuracao do disco.
+    * Semantica adaptada do "Buscar" CRUD: sincroniza com o estado salvo.
+    *==========================================================================
+    PROCEDURE BtnBuscarClick()
+        THIS.BtnAlterarClick()
+    ENDPROC
+
+    *==========================================================================
+    * BtnSalvarClick (PUBLIC)
+    * Alias arquitetural para BtnConfirmarClick - persiste configuracao.
+    *==========================================================================
+    PROCEDURE BtnSalvarClick()
+        THIS.BtnConfirmarClick()
+    ENDPROC
+
+    *==========================================================================
+    * BtnCancelarClick (PUBLIC)
+    * Alias arquitetural para BtnEncerrarClick - fecha sem salvar.
+    *==========================================================================
+    PROCEDURE BtnCancelarClick()
+        THIS.BtnEncerrarClick()
+    ENDPROC
+
+    *==========================================================================
+    * Destroy
+    * Libera cursor CrSigFiFis e referencia ao BO
+    *==========================================================================
+    PROCEDURE Destroy()
+        IF USED("CrSigFiFis")
+            USE IN CrSigFiFis
+        ENDIF
+
+        IF VARTYPE(THIS.this_oBusinessObject) = "O"
+            THIS.this_oBusinessObject = .NULL.
+        ENDIF
+
+        DODEFAULT()
+    ENDPROC
+
+ENDDEFINE

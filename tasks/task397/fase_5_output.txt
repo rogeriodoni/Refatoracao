@@ -1,0 +1,22 @@
+﻿The file is clean and complete ÔÇö 1439 lines, ends with `ENDDEFINE`. Phase 6 is done.
+
+**Summary of what was added:**
+
+**`ConfigurarPaginaDados()` ÔÇö new controls:**
+- `lbl_4c_SubclaEnc` + `opt_4c_SubclaEnc` (Optiongroup1 / nchksubs, Top=238, default Value=1/Sim)
+- `lbl_4c_Tipo` + `opt_4c_Tipo` (Optiongroup2 / nchktipos, Top=257, default Value=1/Sim)
+- `lbl_4c_Autos` + `opt_4c_Autos` (optAutos / autos, Top=276, default Value=2/N├úo ÔÇö inverted convention)
+- `lbl_4c_UtiLacto` + `opt_4c_UtiLacto` (Optiongroup3 / UI-only, Top=296, default Value=2/N├úo ÔÇö inverted)
+- `lbl_4c_GdeGrupo` + `grd_4c_GruposGG` (GradeGG, Top=323, 2 cols, Column2.ReadOnly=.T.)
+- `cmd_4c_AdicionarGrupo` + `cmd_4c_RemoverGrupo` (icon-only, Themes=.T.)
+- BINDEVENT for AfterRowColChange, AdicionarGrupo, RemoverGrupo
+
+**New methods:**
+- `GruposGGAfterRowColChange` ÔÇö triggers `ValidarCodigoGrupo()` when user tabs to col 2
+- `BtnAdicionarGrupoClick` ÔÇö mode-guarded, appends blank row and focuses Column1
+- `BtnRemoverGrupoClick` ÔÇö mode-guarded, DELETEs current row
+- `ValidarCodigoGrupo` ÔÇö FormBuscaAuxiliar lookup to SigCdGpr, populates CodGrupo + descs
+
+**Updated methods:**
+- `LimparCampos()` ÔÇö now sets RecordSource/ControlSource on the grid before Refresh (needed in INCLUIR flow)
+- `HabilitarCampos()` ÔÇö removed `Enabled=.F.` on icon-only buttons (VFP9 makes their icon disappear); mode guard moved to click handlers

@@ -1,0 +1,22 @@
+﻿Phase 5/8 is complete. The file now has 1780 lines with 33 methods + ENDDEFINE (34 terminators ÔÇö checks out).
+
+**What was delivered in Phase 5:**
+
+- `ConfigurarPaginaDados()` ÔÇö full rewrite with all Page2 controls:
+  - `cnt_4c_BotoesAcao` (Confirmar + Cancelar, wired via BINDEVENT)
+  - Labels for all fields (Refer├¬ncia, Funcion├írio, Cargo, Hor├írios, In├¡cio, Intervalo, Fim, Dias)
+  - `cbo_4c_CboMes` (month combo with Portuguese month names via CHR())
+  - `cbo_4c_CboAno` (year combo, dynamic ┬▒5 years around current year)
+  - `txt_4c_CodCli` / `txt_4c_DesCli` ÔÇö employee lookup (F4/LostFocus)
+  - `txt_4c_CodCgo` ÔÇö cargo lookup (F4/LostFocus)
+  - `txt_4c_Hora01ÔÇô04` ÔÇö time fields with `InputMask="99:99"`
+  - `shp_4c_DiasBox` ÔÇö decorative border around checkboxes (added before chks for correct z-order)
+  - `chk_4c_ChkDom` through `chk_4c_ChkSab` ÔÇö 7 day checkboxes
+
+- Updated `BtnIncluirClick/BtnVisualizarClick/BtnAlterarClick` ÔÇö now call BOParaForm/LimparCampos/HabilitarCampos
+- `BtnCancelarClick` ÔÇö now calls `CancelarEdicao()` on BO before navigating back
+- `BOParaForm()`, `FormParaBO()`, `LimparCampos()`, `HabilitarCampos()`
+- `BtnSalvarClick()` ÔÇö calls `FormParaBO()` then `BO.Salvar()` (which validates internally)
+- 9 lookup methods for 3 fields (Cargo, Funcion├írio-por-c├│digo, Funcion├írio-por-nome)
+
+**Remaining phases:** Fase 6 (cnt_4c_CopiaMes floating panel), Fase 7 (config.prg), Fase 8 (menu.prg).

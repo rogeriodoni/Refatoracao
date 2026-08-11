@@ -1,0 +1,15 @@
+﻿Arquivo criado com 288 linhas. Fase 3/8 conclu├¡da.
+
+**FormEvt.prg** foi criado em `C:/4c/projeto/app/forms/cadastros/` com a estrutura base completa:
+
+- **DEFINE CLASS FormEvt AS FormBase** ÔÇö propriedades visuais exatas do SCX (Height=600, Width=1000, Caption="Cadastro de Eventos", DataSession=2)
+- **Init()** ÔÇö apenas wraps DODEFAULT() com TRY/CATCH
+- **InicializarForm()** ÔÇö cria EvtBO, chama ConfigurarPageFrame, propaga Caption para labels, chama CarregarLista (guardado por `gb_4c_ValidandoUI`)
+- **ConfigurarPageFrame()** ÔÇö PageFrame Top=-29, Tabs=.F., 2 pages com picture `fundo_cad_1003.jpg`
+- **ConfigurarPaginaLista()** ÔÇö containers `cnt_4c_Cabecalho` (com lbl_4c_Sombra/Titulo), `cnt_4c_Botoes` (Left=544, Top=28) e `cnt_4c_Saida` (can├┤nico Left=917)
+- **ConfigurarPaginaDados()** ÔÇö container `cnt_4c_BotoesAcao` (Left=817, Top=40 = 11+29)
+- **CarregarLista()** ÔÇö chama `this_oBusinessObject.Buscar("")`, com RETURN fora do TRY
+- **TornarControlesVisiveis()** ÔÇö recursivo, trata PageFrame e Containers
+- **Destroy()** ÔÇö libera BO, chama DODEFAULT()
+
+Pr├│xima fase (4/8): adicionar grid e bot├Áes CRUD na Page1.

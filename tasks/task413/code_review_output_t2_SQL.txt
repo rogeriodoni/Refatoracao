@@ -1,0 +1,21 @@
+﻿O `SigCdFAPP` n├úo est├í no `schema.sql` e o SCX original estava completamente vazio ÔÇö sem DataEnvironment, sem tabelas, sem c├│digo. O table name foi inferido por conven├º├úo `SigCd*` pelo migrador.
+
+**Situa├º├úo confirmada:**
+- `SIGCDFAPP.SCX` = formul├írio vazio (4 registros: apenas `Dataenvironment` e `Form1` b├ísico, sem objetos, campos ou m├®todos)
+- `docs/schema.sql` = n├úo cont├®m `SigCdFAPP` nem qualquer tabela `SigCdFA*`
+- Nenhuma refer├¬ncia ao nome da tabela em c├│digo legado porque n├úo havia c├│digo
+
+**O que o BO j├í tem:** existe um bloco de aviso (`!!! ATENCAO !!!`) nas primeiras linhas do `FAPPBO.prg` documentando exatamente isso ÔÇö tabela inferida, n├úo confirmada, com instru├º├Áes para verificar no SQL Server.
+
+**N├úo h├í corre├º├úo poss├¡vel sem acesso ao banco.** As op├º├Áes s├úo:
+
+1. **Se a tabela existe no SQL Server** (apenas ausente do schema.sql), o c├│digo atual est├í correto ÔÇö basta confirmar com:
+   ```sql
+   SELECT COLUMN_NAME, DATA_TYPE, CHARACTER_MAXIMUM_LENGTH 
+   FROM INFORMATION_SCHEMA.COLUMNS 
+   WHERE TABLE_NAME = 'SigCdFAPP'
+   ```
+
+2. **Se a tabela N├âO existe**, o SIGCDFAPP provavelmente era um form planejado mas nunca implementado, e todas as refer├¬ncias a `SigCdFAPP` no BO precisariam ser substitu├¡das pela tabela real.
+
+O code review est├í correto em sinalizar o problema, mas o BO j├í o documenta adequadamente. Nenhuma altera├º├úo de c├│digo ├® poss├¡vel ou segura sem antes verificar o SQL Server.

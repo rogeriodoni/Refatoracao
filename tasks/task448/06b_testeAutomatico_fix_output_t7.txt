@@ -1,0 +1,3 @@
+﻿Corre├º├úo aplicada. A linha `ShowWindow = 1` duplicada foi removida. Agora a classe fica com `ShowWindow = 0` (n├úo-bloqueante em modo unattended), e o `Init()` restaura para `ShowWindow = 1` + `WindowType = 1` apenas em produ├º├úo (quando `gb_4c_ValidandoUI` e `gb_4c_ModoTeste` n├úo est├úo ativos).
+
+**Causa raiz**: propriedade `ShowWindow` declarada duas vezes no bloco de propriedades da classe ÔÇö a segunda (`ShowWindow = 1`) sobrescrevia a primeira (`ShowWindow = 0`), fazendo o form tentar criar uma janela top-level em modo VFP9 `-T` (sem GUI), causando TIMEOUT de 300s em todas as tentativas.

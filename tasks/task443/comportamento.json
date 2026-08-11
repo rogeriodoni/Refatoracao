@@ -1,0 +1,250 @@
+{
+  "resumo": {
+    "totalMetodos": 13,
+    "metodosComSQL": 5,
+    "metodosComValidacao": 6,
+    "totalQueries": 3,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fwBuscaExt", "From xOpe Where Empty"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDGRP",
+      "evento": "Init",
+      "linhas": 60,
+      "codigoOriginal": "LParameters poForm, pnDataSes\n\nSet DataSession to pnDataSes\n\nThisform.ParentForm          = poForm\nThisform.ParentForm.Enabled  = .F.\n\nThisform.GravaDados = .f.\n\nWith Thisform\n\t.Caption = 'Grupos de Produtos ' + AllTrim(crSigCdOpe.Dopes)\nEndWith\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nlcOperacao = crSigCdOpe.Dopes\n\nWith Thisform\n\t.poDatamgr = CreateObject('fSqlConector')\n\n\tIf Not .poDatamgr.pnIdconn>0\n\t\tMessagebox('Impossi... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Sqlexecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGRP",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "=fConfigGeral()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGRP.GradeOpe.Column1.Text1",
+      "evento": "Valid",
+      "linhas": 18,
+      "codigoOriginal": "Local lcFpags, lnRecNo, loBrowse\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdGrp', ;\n\t\t\t\t\t\t   'CrListaRemota', 'Cgrus', This.Value, 'Grupo de Produto', .t.)\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Cgrus', '', 'Grupo',.t.)\n\t\tloLista.mAddColuna('Dgrus', '', 'Descrição',.t.)\n\t\tloLista.Show()\n\tEndIf\n\tThis.Value = CrListaRemota.Cgrus\n\tReplace Dgrus with CrListaRemota.Dgrus In xOpe\n\tUse In CrListaRemota\nElse\n\tThis.Value = ''\nEndIf\nTh... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGRP.GradeOpe.Column1.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Thisform.AntValue = This.Value",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGRP.GradeOpe.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDGRP.getGdeGrps",
+      "evento": "Valid",
+      "linhas": 19,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject([fwBuscaExt], ThisForm.poDataMgr.pnIdConn, [SigCdGpr], ;\n\t\t\t\t\t\t   [crListaRemota], [Codigos], This.Value, [Seleção], .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna([Codigos], [], [Código])\n\t\tloLista.mAddColuna([Descs],   [], [Descrição])\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value = Iif(Lastkey()=27, [], crListaRemota.Codigos)\n\tUse In crListaRemota\nEndIf\nThis.Refresh\n* Fim ******************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGRP.getGdeGrps",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.ParentForm.pcEscolha, [INSERIR], [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGRP.cmdInserir",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "Insert Into xOpe (Cgrus) Values ( Space(20))\nSelect xOpe\nThisForm.GravaDados = .t.\nThisform.GradeOpe.Column1.SetFocus\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGRP.cmdExcluir",
+      "evento": "Click",
+      "linhas": 13,
+      "codigoOriginal": "Select xOpe\nIf Not Eof()\n\tSelect xOpe\n\tDelete \n\tSkip\n\tIf Eof()\n\t\tGo Bott\n\tEndif\nEndIf\nThisform.GradeOpe.SetFocus\nThisForm.GravaDados = .t.\n\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGRP.cmdSair",
+      "evento": "Click",
+      "linhas": 43,
+      "codigoOriginal": "If ThisForm.GravaDados\n\n\tSelect Cgrus, Sum(1) as Qt From xOpe Group by 1 Into Cursor Selecao where cgrus <> ' ' having Sum(1) > 1\n\tIf Reccount('Selecao') > 0\n\t\tMessageBox('Existem lancamentos de Grupos Em Duplicidade!!!',0+16,'')\n\t\tReturn .f.\n\tEndIf\n\t\n\tSelect CrSigOpGpo\n\tZap\n\t\n\tSelect xOpe\n\tScan\n\t\tIf Not Empty(Cgrus)\n\t\t\tInsert Into crSigOpGpo (Dopes, Cgrus, cIdChaves) ;\n\t\t\t\t\t\t\tValues (crSigCdOpe.Dopes, xOpe.Cgrus, fUniqueIds())\n\t\tEndif\n\tEndScan\n\t\n\tm.lnErro1 = ThisForm.poDatamgr.pnIdConn\n\n\tWith T... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDGRP.Cancela",
+      "evento": "Click",
+      "linhas": 3,
+      "codigoOriginal": "Thisform.parentform.enabled = .T.\nThisform.release\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGRP.btnCarregar",
+      "evento": "Click",
+      "linhas": 42,
+      "codigoOriginal": "Select xOpe\n\nlcGde = ThisForm.getGdeGrps.Value\n\nIf Empty(lcGde)\n\t=MessageBox([Preencha o Grande Grupo Antes de Processar!], 0+16, [Atenção!])\n\tThisForm.Pagina.Dados.getGdeGrps.SetFocus\n\tReturn .f.\nEndIf\n\nThisForm.GravaDados = .t.\n\nlcQuery = [Select CGrus, DGrus ] + ;\n\t\t    [From SigCdGrp ] + ;\n\t\t    [Where Mercs = '] + lcGde + [']\n\nIf (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalGru]) < 1)\n\t=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalGru)])\n\tReturn 0\nEndIf\nGo To... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "From xOpe Where Empty",
+        "metodosFormChamados": "SqlExecute,Refresh,SetFocus",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDGRP.btnCarregar",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.ParentForm.pcEscolha, [INSERIR], [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDGRP.cmdInserir.Click",
+      "queryOriginal": "Insert Into xOpe (Cgrus) Values ( Space(20))",
+      "tabelas": "xOpe",
+      "colunas": "Cgrus",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDGRP.cmdSair.Click",
+      "queryOriginal": "\tSelect Cgrus, Sum(1) as Qt From xOpe Group by 1 Into Cursor Selecao where cgrus <> ' ' having Sum(1) > 1",
+      "tabelas": "xOpe",
+      "colunas": "Cgrus,having,Sum1",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDGRP.cmdSair.Click",
+      "queryOriginal": "\t\t\tInsert Into crSigOpGpo (Dopes, Cgrus, cIdChaves) ; \t\t\t\t\t\t\tValues (crSigCdOpe.Dopes, xOpe.Cgrus, fUniqueIds())",
+      "tabelas": "crSigOpGpo",
+      "colunas": "Dopes,Cgrus,cIdChaves",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["xOpe", "crSigOpGpo"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

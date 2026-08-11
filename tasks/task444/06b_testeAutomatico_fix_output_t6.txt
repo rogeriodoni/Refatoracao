@@ -1,0 +1,12 @@
+﻿The edit is correct. `THIS.Visible = .F.` is now the first statement inside the test mode guard, before `DODEFAULT()` is called ÔÇö VFP9 will not attempt to render or embed the form in the non-existent MDI window.
+
+**Root cause summary for this attempt (t6):**
+
+After t5's guards were in place, the CREATEOBJECT path in test mode was:
+1. `Load()` ÔåÆ early `RETURN` (guard works) Ô£ô
+2. `Init()` ÔåÆ sets `THIS.Visible = .F.` **ÔåÉ missing**, sets params, calls `DODEFAULT()` Ô£ô
+3. `FormBase.Init()` ÔåÆ `InicializarForm()` ÔåÆ early `RETURN .T.` (guarded) Ô£ô
+4. `DODEFAULT()` returns `.T.`, CREATEOBJECT completes
+5. VFP9 auto-sets `Visible = .T.` and tries to embed form in MDI main window (`ShowWindow = 0`) ÔåÆ **no MDI window in headless -T mode ÔåÆ hangs 300s**
+
+With `THIS.Visible = .F.` set before `DODEFAULT()`, VFP9 respects the explicit `.F.` and never tries to show the form.

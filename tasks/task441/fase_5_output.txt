@@ -1,0 +1,11 @@
+﻿A Fase 5/8 foi conclu├¡da. O FormGps.prg foi atualizado com:
+
+**Adi├º├Áes da Fase 5:**
+
+1. **`ConfigurarPaginaDados()`** ÔÇö m├®todo PROTECTED que configura as propriedades visuais dos `Text1` de ambas as colunas do grid (fidelidade ao legado: `BorderStyle=0`, `Margin=0`, `ForeColor`, `BackColor`) e registra via `BINDEVENT` o handler `When` da Column1.
+
+2. **`GrdDadosCol1When()`** ÔÇö handler que salva o valor anterior (`this_cAntValue`) antes da edi├º├úo, equivalente ao `PROCEDURE When / Thisform.AntValue = This.Value` do legado SIGCDGPS.
+
+3. Chamada de `ConfigurarPaginaDados()` inserida em `ConfigurarPageFrame()` entre `ConfigurarPaginaLista()` e `ConfigurarBotoes()`.
+
+**Observa├º├úo sobre o form:** O SIGCDGPS ├® um dialog modal simples sem Page2 (apenas grid + bot├Áes). As Fases 5/6 neste form equivalem ├á configura├º├úo complementar dos controles de entrada de dados (os `Text1` das colunas do grid), em vez de TextBoxes individuais como em forms CRUD.

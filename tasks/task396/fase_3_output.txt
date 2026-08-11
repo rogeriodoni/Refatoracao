@@ -1,0 +1,12 @@
+﻿Fase 3 entregue. `FormDpi.prg` criado em `C:\4c\projeto\app\forms\cadastros\` com:
+
+- **DEFINE CLASS FormDpi AS FormBase** ÔÇö propriedades visuais completas (Height=600, Width=1000, Caption="Cadastro de Departamentos do Site")
+- **Init()** ÔÇö apenas `RETURN DODEFAULT()` (via TRY/CATCH)
+- **InicializarForm()** ÔÇö cria DpiBO, chama ConfigurarPageFrame, guard `gb_4c_ValidandoUI`, ActivePage=1
+- **ConfigurarPageFrame()** ÔÇö PageFrame com Top=-29, Tabs=.F., Page1+Page2 com Picture fundo_cad_1003.jpg
+- **ConfigurarPaginaLista()** ÔÇö `cnt_4c_Cabecalho` (com lbl_4c_Sombra + lbl_4c_Titulo), `cnt_4c_Botoes` vazio (Fase 4), `cnt_4c_Saida` com cmd_4c_Encerrar can├┤nico (Left=917, Width=75)
+- **ConfigurarPaginaDados()** ÔÇö `cnt_4c_BotoesAcao` vazio (Fase 5-6)
+- **CarregarLista()** ÔÇö chama BO.Buscar, sem bind de grid (grid ainda n├úo existe)
+- **BtnEncerrarClick()** ÔÇö `THIS.Release()`
+- **TornarControlesVisiveis()** ÔÇö recurs├úo completa com suporte a PageFrame
+- **Destroy()** ÔÇö libera BO + DODEFAULT()

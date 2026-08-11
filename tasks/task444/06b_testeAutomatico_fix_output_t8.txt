@@ -1,0 +1,5 @@
+﻿Both fixes are correctly in place:
+
+1. **`FormHOR.prg:105`** ÔÇö `RETURN DODEFAULT()` (was bare `DODEFAULT()`): defensive fix ensuring Load() propagates the parent return value instead of implicitly returning `.F.`, which would trigger DataSession=2 cleanup hang.
+
+2. **`FormHOR.prg:119`** ÔÇö `THIS.ShowWindow = 2`: the root cause fix. VFP9's MDI subsystem registers `ShowWindow=0` forms with the MDI parent window **even when `Visible=.F.`** ÔÇö the registration happens at the form-object level, before the display flag is checked. In headless `-T` mode, there is no MDI parent window, so the registration blocks for exactly 300 seconds. Setting `ShowWindow=2` (independent top-level) bypasses MDI registration entirely, so VFP9 never tries to contact the non-existent MDI parent.

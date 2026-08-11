@@ -1,0 +1,12 @@
+﻿O arquivo est├í completo e correto. A Fase 2/8 est├í conclu├¡da.
+
+**Fase 2 entregue ÔÇö `gprBO.prg` completo com todos os m├®todos CRUD:**
+
+- **`ValidarDados()`** ÔÇö valida c├│digo n├úo vazio, unicidade no INSERT, descri├º├úo n├úo vazia, e prioridade = 0 ou 1 (replicando o `Get_prioridade.Valid` do legado)
+- **`VerificarCodigoExistente()`** ÔÇö COUNT(*) em SigCdGpr pelo PK
+- **`CarregarDoCursor()`** ÔÇö mapeia todas as 17 colunas do cursor para as propriedades `this_*`, usando `SELECT (par_cAliasCursor)` antes de acessar campos
+- **`Inserir()`** ÔÇö INSERT com 16 colunas (todas exceto `ids`, que pode ser IDENTITY)
+- **`Atualizar()`** ÔÇö UPDATE de 15 colunas excluindo o PK `codigos`
+- **`ExecutarExclusao()`** ÔÇö DELETE direto por PK
+- **`Buscar()`** ÔÇö SELECT `codigos, descs, linhas` com padr├úo ZAP+APPEND para preservar colunas do Grid
+- **`CarregarPorCodigo()`** ÔÇö SELECT completo de todas as colunas, reseta `this_lNovoRegistro = .F.`

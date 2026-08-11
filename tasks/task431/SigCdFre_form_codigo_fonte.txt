@@ -1,0 +1,456 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigCdFre.SCX
+* Data/Hora: 06/08/2026 05:44:09
+* Total de registros: 9
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDFRE
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: btnAguarde
+  Parent: SIGCDFRE.Pagina.Lista
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: get_Frete
+  Parent: SIGCDFRE.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say7
+  Parent: SIGCDFRE.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetCidade
+  Parent: SIGCDFRE.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGCDFRE.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 118
+  Left = 63
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFRE
+------------------------------------------------------------
+  Height = 600
+  Width = 1000
+  DoCreate = .T.
+  Caption = "Cadastro de Fretes x Cidades"
+  oform = .NULL.
+  pdopes = 
+  Name = "SIGCDFRE"
+  Pagina.ErasePage = .T.
+  Pagina.Lista.cntSombra.lblSombra.Name = "lblSombra"
+  Pagina.Lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  Pagina.Lista.cntSombra.Top = 1
+  Pagina.Lista.cntSombra.Left = -1
+  Pagina.Lista.cntSombra.Width = 1008
+  Pagina.Lista.cntSombra.Height = 80
+  Pagina.Lista.cntSombra.Name = "cntSombra"
+  Pagina.Lista.Grade.FontName = "Tahoma"
+  Pagina.Lista.Grade.Height = 470
+  Pagina.Lista.Grade.Left = 12
+  Pagina.Lista.Grade.Top = 121
+  Pagina.Lista.Grade.Width = 971
+  Pagina.Lista.Grade.ForeColor = 0,0,0
+  Pagina.Lista.Grade.GridLineColor = 238,238,238
+  Pagina.Lista.Grade.Name = "Grade"
+  Pagina.Lista.Grupo_op.AutoSize = .T.
+  Pagina.Lista.Grupo_op.Inserir.Top = 5
+  Pagina.Lista.Grupo_op.Inserir.Left = 5
+  Pagina.Lista.Grupo_op.Inserir.Name = "Inserir"
+  Pagina.Lista.Grupo_op.Consultar.Top = 5
+  Pagina.Lista.Grupo_op.Consultar.Left = 80
+  Pagina.Lista.Grupo_op.Consultar.Name = "Consultar"
+  Pagina.Lista.Grupo_op.Alterar.Top = 5
+  Pagina.Lista.Grupo_op.Alterar.Left = 155
+  Pagina.Lista.Grupo_op.Alterar.Name = "Alterar"
+  Pagina.Lista.Grupo_op.Excluir.Top = 5
+  Pagina.Lista.Grupo_op.Excluir.Left = 230
+  Pagina.Lista.Grupo_op.Excluir.Name = "Excluir"
+  Pagina.Lista.Grupo_op.procurar.Top = 5
+  Pagina.Lista.Grupo_op.procurar.Left = 305
+  Pagina.Lista.Grupo_op.procurar.Name = "procurar"
+  Pagina.Lista.Grupo_op.Height = 85
+  Pagina.Lista.Grupo_op.Left = 543
+  Pagina.Lista.Grupo_op.Top = -1
+  Pagina.Lista.Grupo_op.Width = 385
+  Pagina.Lista.Grupo_op.Name = "Grupo_op"
+  Pagina.Lista.Grupo_Saida.SAIR.Top = 5
+  Pagina.Lista.Grupo_Saida.SAIR.Left = 5
+  Pagina.Lista.Grupo_Saida.SAIR.Name = "SAIR"
+  Pagina.Lista.Grupo_Saida.Left = 918
+  Pagina.Lista.Grupo_Saida.Top = -1
+  Pagina.Lista.Grupo_Saida.Name = "Grupo_Saida"
+  Pagina.Lista.cntFiltros.Top = 95
+  Pagina.Lista.cntFiltros.Left = 863
+  Pagina.Lista.cntFiltros.Name = "cntFiltros"
+  Pagina.Lista.Picture = ..\framework\imagens\new_background.jpg
+  Pagina.Lista.Name = "Lista"
+  Pagina.Dados.Grupo_Salva.AutoSize = .T.
+  Pagina.Dados.Grupo_Salva.Salva.Top = 5
+  Pagina.Dados.Grupo_Salva.Salva.Left = 5
+  Pagina.Dados.Grupo_Salva.Salva.Name = "Salva"
+  Pagina.Dados.Grupo_Salva.Cancelar.Top = 5
+  Pagina.Dados.Grupo_Salva.Cancelar.Left = 81
+  Pagina.Dados.Grupo_Salva.Cancelar.Name = "Cancelar"
+  Pagina.Dados.Grupo_Salva.Height = 85
+  Pagina.Dados.Grupo_Salva.Left = 836
+  Pagina.Dados.Grupo_Salva.Top = -5
+  Pagina.Dados.Grupo_Salva.Width = 161
+  Pagina.Dados.Grupo_Salva.TabIndex = 5
+  Pagina.Dados.Grupo_Salva.ZOrderSet = 1
+  Pagina.Dados.Grupo_Salva.Name = "Grupo_Salva"
+  Pagina.Dados.Picture = ..\framework\imagens\new_background.jpg
+  Pagina.Dados.Name = "Dados"
+  Pagina.Width = 1003
+  Pagina.Name = "Pagina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFRE.Pagina.Lista.btnAguarde
+------------------------------------------------------------
+  Top = 266
+  Left = 338
+  Height = 72
+  Width = 322
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 9
+  Caption = "Aguarde!  Atualizando  Tabela de Cidades . . ."
+  TabIndex = 18
+  Visible = .F.
+  SpecialEffect = 1
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "btnAguarde"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFRE.Pagina.Dados.get_Frete
+------------------------------------------------------------
+  ControlSource = "CrSigCdFrt.Valors"
+  Height = 25
+  InputMask = "999,999.99"
+  Left = 359
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 171
+  Width = 100
+  ForeColor = 0,0,0
+  ZOrderSet = 7
+  Name = "get_Frete"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFRE.Pagina.Dados.Say7
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Cidade :"
+  Left = 314
+  Top = 148
+  TabIndex = 1
+  ForeColor = 90,90,90
+  ZOrderSet = 14
+  Name = "Say7"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFRE.Pagina.Dados.GetCidade
+------------------------------------------------------------
+  ControlSource = "crSigCdFrt.cidas"
+  Format = "K!"
+  InputMask = ""
+  Left = 359
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 145
+  Width = 220
+  ForeColor = 0,0,0
+  Name = "GetCidade"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFRE.Pagina.Dados.Say2
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Valor do Frete :"
+  Height = 15
+  Left = 279
+  Top = 176
+  Width = 77
+  TabIndex = 3
+  ForeColor = 90,90,90
+  ZOrderSet = 4
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDFRE
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LPARAMETERS pForm, pOperacao
+
+ThisForm.oForm = pForm
+ThisForm.pDopes = Iif(Type('pOperacao')=[C],pOperacao,[ ])
+pDopFrt = ThisForm.pDopes
+If Type('ThisForm.oForm') = [O]
+	ThisForm.oForm.Enabled = .f.
+EndIf
+
+ThisForm.Caption = 'Frete por Cidade '+ThisForm.pDopes
+
+With ThisForm
+	ThisForm.Refresh
+	ThisForm.Draw
+	ThisForm.Show
+	.poDatamgr = CreateObject('fSqlConector')
+	With .poDatamgr
+		If Empty(ThisForm.pDopes)
+			.AddCursor('SigCdFrt','Cidas','CrSigCdFrt',' ',ThisForm.pagina.lista.grade)
+		Else
+			lcSql = [Select * From SigOpFrt Where Dopes = ']+ThisForm.pDopes+[']
+			.AddCursor('SigOpFrt','CidChaves','CrSigCdFrt',' ',ThisForm.pagina.lista.grade,lcSql)
+		Endif
+		.pfSqlTabela(1).pColuna('Cidas','','','Cidade',250,.t.)
+		.pfSqlTabela(1).pColuna('Valors','','','Valor do Frete',100,.f.)
+	EndWith
+	.poDataMg2 = CreateObject('fSqlConector', 'cep',.t. )
+	If (.poDataMg2.pnIdconn > 0)
+		ThisForm.pagina.lista.BtnAguarde.Visible = .t.	
+		ThisForm.Draw
+		Thisform.Pagina.Lista.BtnAguarde.Refresh
+		lcSql = [Select distinct Cidades From Cep ]
+		ThisForm.Podatamg2.Sqlexecute(lcsql,'TmpCep')
+	ELSE
+		Create Cursor TmpCep (Cidades c(30), Estados c(2))
+	EndIf
+	Index On Cidades Tag Cidades
+	ThisForm.pagina.lista.BtnAguarde.Visible = .f.
+	= DoDefault()
+	.LockScreen = .f.
+EndWith
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_procurar
+------------------------------------------------------------
+PROCEDURE msv_procurar
+lcCida = ThisForm.Pagina.Dados.GetCidade.Value
+Select CrSigCdFrt
+Locate For Cidas = lcCida
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+If Type('ThisForm.oForm') = [O]
+	ThisForm.oForm.Enabled = .t.
+Endif
+DoDefault()
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Lista.Grupo_op.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Lista.Grupo_op.Click
+LPARAMETERS opcao
+
+If !dodefault( opcao )
+	ThisForm.mAtivapagina1
+	Return
+Endif
+
+If Inlist(thisform.pcEscolha,'INSERIR','PROCURAR')
+	ThisForm.Pagina.Dados.GetCidade.SetFocus
+Else
+	If Inlist(thisform.pcEscolha,'ALTERAR')
+		ThisForm.Pagina.Dados.Get_Frete.SetFocus
+	Else
+		Thisform.Pagina.Dados.Grupo_salva.Salva.setfocus
+	EndIf
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+If Inlist( Thisform.pcEscolha,'INSERIR')
+	If IsEmpty( Thisform.Pagina.Dados.getCidade.value )
+		=messagebox('Cidade Inválida!!!',0+64,'Atenção!')
+		Thisform.Pagina.Dados.GetCidade.setfocus
+		Return
+	EndIf
+EndIf
+If Inlist( Thisform.pcEscolha,'INSERIR','ALTERAR')
+	If Thisform.Pagina.Dados.get_Frete.Value <= 0 And Empty(ThisForm.pDopes)
+		=messagebox('Valor do Frete Inválido.',0+64,'Atenção!')
+		Thisform.Pagina.Dados.Get_Frete.setfocus
+		Return
+	EndIf
+	
+	If Empty(ThisForm.pDopes)
+		lcSql = [Select * From SigCdFrt Where Cidas = ']+ThisForm.Pagina.Dados.GetCidade.Value+[']
+	Else
+		lcSql = [Select * From SigOpFrt Where Cidas = ']+ThisForm.Pagina.Dados.GetCidade.Value+[' And Dopes = ']+ThisForm.pDopes+[' ]
+	Endif
+	If ThisForm.Podatamgr.Sqlexecute(lcsql,'TmpFrete') > 0 And ;
+		Reccount('TmpFrete') > 0 And Inlist( Thisform.pcEscolha,'INSERIR')
+		Messagebox( 'Cidade já Cadastrada.', 48, '' )
+		ThisForm.Pagina.Dados.GetCidade.SetFocus
+		Return
+	Endif
+
+	If Not Empty(ThisForm.pDopes)
+		Replace Dopes     With ThisForm.pDopes,;
+				CidChaves With Iif(Empty(CidChaves),fUniqueIds(),CidChaves) in CrSigCdFrt
+	EndIf
+
+Endif
+
+=DoDefault()
+
+ThisForm.mAtivapagina1
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+=DoDefault()
+If ThisForm.plCancelar
+	ThisForm.mAtivapagina1
+Endif
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFRE.Pagina.Dados.get_Frete
+* Classe: fwget (Base: textbox)
+* Registro: 5
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+llRet = InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')
+Return(llRet)
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFRE.Pagina.Dados.GetCidade
+* Classe: fwget (Base: textbox)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not Empty(This.Value) And Reccount('TmpCep') > 0
+	loBrowse = CreateObject('fwBuscaSel', 'TmpCep', 'Cidades', This.Value, 'Cadastro de Cidades')
+	loBrowse.AddColuna('Cidades','', 'Cidade', .t., 'Cidades')
+	loBrowse.Show
+	This.Value = TmpCep.Cidades
+EndIf
+*!*	Return (Not Empty(This.Value))
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+llRet = InList(ThisForm.pcEscolha, 'INSERIR', 'PROCURAR')
+Return(llRet)
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGCDFRE
+RESERVED3 (ClassInfo): oform
+pdopes
+podatamg2
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 9
+================================================================================

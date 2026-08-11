@@ -1,0 +1,14 @@
+﻿Fase 1 conclu├¡da. O arquivo `C:\4c\projeto\app\classes\dmoBO.prg` foi criado com:
+
+**Propriedades declaradas (5 grupos):**
+1. **Campos de SigMvCab** ÔÇö `this_cEmps`, `this_cDopes`, `this_nNumes`, `this_cEmpDopNums`, `this_cMascNum`, datas (`Datas`, `Datars`, `DtAlts`, `DtBaixas`, `Datatrans`), contas (`Grupoos/Contaos` origem, `Grupods/Contads` destino, `GrVends/Vends` respons├ível), `this_lChkSubn`, `this_cUsuars`, `this_cCIdChaves`, `this_cEmpGopNums`
+2. **Descri├º├Áes** ÔÇö campos n├úo-persistidos para exibi├º├úo das contas de origem/destino/vendedor (via lookup SigCdCli)
+3. **Estado operacional** ÔÇö `this_lEditaOrigem`, `this_dDtIni/Fim`, `this_nCItem`, totais de qtde/peso, `this_cSigkey`
+4. **SigCdPam** ÔÇö `this_cDopesAtual` (Desmontas), `this_cMascNums`, `this_lDesmontas`
+5. **SigCdOpe** ÔÇö flags de visibilidade/fixidez (Origems, Destinos, Vendes, FixGOrigs etc.) + valores padr├úo (GruOrigs, ConOrigs, GruDests, ConDests, GrVendsOpe)
+
+**M├®todos implementados:**
+- `Init()` ÔÇö `DODEFAULT()` + `this_cTabela = "SigMvCab"` + `this_cCampoChave = "EmpDopNums"` + inicializa per├¡odo com DATE()
+- `ObterChavePrimaria()` ÔÇö retorna `this_cEmpDopNums`
+
+Pr├│xima fase (2/8): CarregarDoCursor, Buscar, CarregarPorCodigo, NovoRegistro, EditarRegistro no mesmo arquivo.

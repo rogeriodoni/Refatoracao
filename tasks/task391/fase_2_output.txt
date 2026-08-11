@@ -1,0 +1,22 @@
+﻿O arquivo est├í correto e completo. Fase 2/8 conclu├¡da.
+
+**CVIBO.prg agora tem 564 linhas com todos os m├®todos CRUD:**
+
+| M├®todo | Tipo | Fun├º├úo |
+|--------|------|--------|
+| `ObterChavePrimaria()` | PUBLIC | Retorna `cIdChaves` para auditoria |
+| `Buscar(par_cFiltro)` | PUBLIC | SELECT ÔåÆ cursor `crSigCcCmV` |
+| `CarregarPorCodigo(par_cChave)` | PUBLIC | SELECT por PK, popula BO |
+| `CarregarDoCursor(par_cAlias)` | PUBLIC | `SELECT (alias)` + mapeia 10 campos |
+| `ValidarDados()` | PUBLIC | 12 valida├º├Áes: obrigat├│rios + regras I/R/S + SigCcCmI |
+| `Inserir()` | PROTECTED | INSERT com `fUniqueIds()` |
+| `Atualizar()` | PROTECTED | UPDATE por `cIdChaves` |
+| `ExecutarExclusao()` | PROTECTED | DELETE por `cIdChaves` |
+| `CopiarPeriodo(...)` | PUBLIC | C├│pia de per├¡odo com conex├úo secund├íria `SigCcCMV_FOPAGV` + fwprogressbar |
+
+**Pontos cr├¡ticos aplicados:**
+- Nenhum `RETURN` dentro de TRY/CATCH
+- `CarregarDoCursor` usa `SELECT (par_cAlias)` antes de acessar campos
+- `CopiarPeriodo` captura valores do registro (`loc_cUsar`, etc.) antes de mudar ├írea de trabalho dentro do SCAN
+- Limpeza de cursores e `SQLDISCONNECT` sempre FORA do TRY/CATCH
+- CATCH com `MsgErro` em todos os m├®todos

@@ -1,0 +1,16 @@
+﻿O arquivo est├í completo e correto. A Fase 4/8 foi conclu├¡da com sucesso.
+
+**Resumo das adi├º├Áes:**
+
+- **`ConfigurarPaginaLista()`**: Expandida para criar `grd_4c_Dados` (4 colunas: Parcelas/ValMins/ValMaxs/Emp com posi├º├Áes e propriedades exatas do SCX) e 3 bot├Áes (`cmd_4c_Inserir`, `cmd_4c_Excluir`, `cmd_4c_Encerrar`) no `cnt_4c_Botoes`, com BINDEVENTs para todos os cliques e para o `AfterRowColChange` do grid.
+
+- **`CarregarDados()`**: Atualizada para chamar `VincularGrid()` ap├│s o BO carregar os dados.
+
+- **7 novos m├®todos** adicionados:
+  - `VincularGrid()` ÔÇö define `RecordSource` + `ControlSource` das 4 colunas + redefine headers (que o VFP9 reseta ao mudar RecordSource)
+  - `AlternarPagina(par_nPagina)` ÔÇö troca entre Page1/Page2
+  - `BtnInserirClick()` ÔÇö INSERT INTO cursor + `GravaDados=.T.`
+  - `BtnExcluirClick()` ÔÇö DELETE no registro corrente + `GravaDados=.T.`
+  - `BtnEncerrarClick()` ÔÇö valida, salva via `BO.SalvarAlteracoes`, fecha
+  - `ValidarParcelas()` ÔÇö SELECT com GROUP BY/HAVING para detectar nParcs duplicados
+  - `GrdDadosAfterRowColChange(par_nColIndex)` ÔÇö valida duplicata de parcelas ao sair da Col1, atualiza `ReadOnly` din├ómico das colunas (equivalente ao `When` original), seta `GravaDados`

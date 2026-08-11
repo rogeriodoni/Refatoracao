@@ -1,0 +1,20 @@
+﻿Fase 5/8 conclu├¡da. O arquivo `FormDES.prg` foi atualizado com:
+
+**Controles adicionados ao `ConfigurarPaginaDados()` (primeira metade dos campos):**
+
+| Controle | Tipo | Legado | Top (c/ +29) |
+|---|---|---|---|
+| `lbl_4c_Label7` | Label | Say7 "C├│digo :" | 155 |
+| `txt_4c_Codigo` | TextBox | getcodigo (readonly) | 150 |
+| `lbl_4c_Label1` | Label | Say1 "Empresa :" | 182 |
+| `txt_4c_Emps` | TextBox | getEmps (s├│ INCLUIR, MaxLength=3) | 177 |
+| `lbl_4c_Label5` | Label | Say5 "Data Inicial :" | 209 |
+| `txt_4c_Dtini` | TextBox | getDtini (s├│ INCLUIR, date mask) | 204 |
+| `lbl_4c_Label6` | Label | Say6 "Data Final :" | 236 |
+| `txt_4c_Dtfin` | TextBox | GetDtfin (s├│ INCLUIR, date mask) | 231 |
+
+**Adicionados tamb├®m:**
+- `BINDEVENT` para `txt_4c_Emps.LostFocus` ÔåÆ `ValidarEmps()`
+- M├®todo `ValidarEmps()`: substitui `fAcessoEmpresa()` (n├úo portada) ÔÇö valida se o c├│digo de empresa existe em `SigCdEmp`, limpa o campo se n├úo encontrado
+
+A Fase 6 adicionar├í os campos restantes: `txt_4c_Valmeta`, `txt_4c_Valcota`, `txt_4c_Valdes` e `txt_4c_Pdes`.

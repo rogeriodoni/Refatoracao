@@ -1,0 +1,527 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGCDFNF.SCX
+* Data/Hora: 05/08/2026 17:21:04
+* Total de registros: 16
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDFNF
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGCDFNF.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGCDFNF.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGCDFNF.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say5
+  Parent: SIGCDFNF.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGCDFNF.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Opernf
+  Parent: SIGCDFNF.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_descr
+  Parent: SIGCDFNF.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Opc_fixo
+  Parent: SIGCDFNF.Pagina.Dados
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_ordem
+  Parent: SIGCDFNF.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: fwget1
+  Parent: SIGCDFNF.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say6
+  Parent: SIGCDFNF.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Cmb_Imp
+  Parent: SIGCDFNF.Pagina.Dados
+  Class: fwcombo
+  BaseClass: combobox
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFNF
+------------------------------------------------------------
+  DataSession = 2
+  DoCreate = .T.
+  Caption = "Finalizadoras não Fiscal"
+  Name = "SIGCDFNF"
+  Pagina.ErasePage = .T.
+  Pagina.Lista.cntSombra.lblSombra.Name = "lblSombra"
+  Pagina.Lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  Pagina.Lista.cntSombra.Name = "cntSombra"
+  Pagina.Lista.Grade.FontName = "Tahoma"
+  Pagina.Lista.Grade.FontSize = 8
+  Pagina.Lista.Grade.RowHeight = 16
+  Pagina.Lista.Grade.ForeColor = 90,90,90
+  Pagina.Lista.Grade.Name = "Grade"
+  Pagina.Lista.Grupo_op.Inserir.Top = 5
+  Pagina.Lista.Grupo_op.Inserir.Left = 32
+  Pagina.Lista.Grupo_op.Inserir.Name = "Inserir"
+  Pagina.Lista.Grupo_op.Consultar.Top = 5
+  Pagina.Lista.Grupo_op.Consultar.Left = 108
+  Pagina.Lista.Grupo_op.Consultar.Name = "Consultar"
+  Pagina.Lista.Grupo_op.Alterar.Top = 5
+  Pagina.Lista.Grupo_op.Alterar.Left = 184
+  Pagina.Lista.Grupo_op.Alterar.Name = "Alterar"
+  Pagina.Lista.Grupo_op.Excluir.Top = 5
+  Pagina.Lista.Grupo_op.Excluir.Left = 260
+  Pagina.Lista.Grupo_op.Excluir.Name = "Excluir"
+  Pagina.Lista.Grupo_op.Procurar.Top = 5
+  Pagina.Lista.Grupo_op.Procurar.Left = 336
+  Pagina.Lista.Grupo_op.Procurar.Name = "Procurar"
+  Pagina.Lista.Grupo_op.Height = 85
+  Pagina.Lista.Grupo_op.Left = 312
+  Pagina.Lista.Grupo_op.Top = -1
+  Pagina.Lista.Grupo_op.Width = 417
+  Pagina.Lista.Grupo_op.Name = "Grupo_op"
+  Pagina.Lista.Grupo_Saida.Sair.Top = 5
+  Pagina.Lista.Grupo_Saida.Sair.Left = 5
+  Pagina.Lista.Grupo_Saida.Sair.Name = "Sair"
+  Pagina.Lista.Grupo_Saida.Left = 719
+  Pagina.Lista.Grupo_Saida.Top = -1
+  Pagina.Lista.Grupo_Saida.Name = "Grupo_Saida"
+  Pagina.Lista.cntFiltros.Name = "cntFiltros"
+  Pagina.Lista.Name = "Lista"
+  Pagina.Dados.Grupo_Salva.Salva.Top = 5
+  Pagina.Dados.Grupo_Salva.Salva.Left = 5
+  Pagina.Dados.Grupo_Salva.Salva.Name = "Salva"
+  Pagina.Dados.Grupo_Salva.Cancelar.Top = 5
+  Pagina.Dados.Grupo_Salva.Cancelar.Left = 88
+  Pagina.Dados.Grupo_Salva.Cancelar.Name = "Cancelar"
+  Pagina.Dados.Grupo_Salva.TabIndex = 13
+  Pagina.Dados.Grupo_Salva.ZOrderSet = 1
+  Pagina.Dados.Grupo_Salva.Name = "Grupo_Salva"
+  Pagina.Dados.Name = "Dados"
+  Pagina.Name = "Pagina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFNF.Pagina.Dados.Say1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Caption = "Ordem : "
+  Left = 150
+  Top = 158
+  TabIndex = 8
+  ForeColor = 36,84,155
+  ZOrderSet = 2
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFNF.Pagina.Dados.Say4
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Caption = "Cod.Operação : "
+  Left = 107
+  Top = 183
+  TabIndex = 12
+  ForeColor = 36,84,155
+  ZOrderSet = 2
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFNF.Pagina.Dados.Say2
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Caption = "Descrição : "
+  Left = 133
+  Top = 208
+  TabIndex = 11
+  ForeColor = 36,84,155
+  ZOrderSet = 3
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFNF.Pagina.Dados.Say5
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Caption = "Cod.Abertura : "
+  Left = 254
+  Top = 183
+  TabIndex = 7
+  ForeColor = 36,84,155
+  ZOrderSet = 2
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFNF.Pagina.Dados.Say3
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Caption = "Fixo : "
+  Left = 166
+  Top = 236
+  TabIndex = 10
+  ForeColor = 36,84,155
+  ZOrderSet = 6
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFNF.Pagina.Dados.Get_Opernf
+------------------------------------------------------------
+  ControlSource = "crSigFiNtb.Opernf"
+  Left = 203
+  MaxLength = 2
+  TabIndex = 3
+  Top = 180
+  Width = 24
+  ZOrderSet = 6
+  plprocurar = .T.
+  Name = "Get_Opernf"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFNF.Pagina.Dados.Get_descr
+------------------------------------------------------------
+  Value = V           
+  ControlSource = "crSigFiNtb.descrs"
+  Left = 203
+  TabIndex = 5
+  Top = 205
+  Width = 360
+  ZOrderSet = 7
+  Name = "Get_descr"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFNF.Pagina.Dados.Opc_fixo
+------------------------------------------------------------
+  AutoSize = .T.
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 2
+  ControlSource = "crSigFiNtb.nfixos"
+  Left = 199
+  Top = 231
+  TabIndex = 6
+  ZOrderSet = 7
+  Name = "Opc_fixo"
+  Option1.FontName = "Verdana"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Sim"
+  Option1.Value = 0
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 36,84,155
+  Option1.Name = "Option1"
+  Option2.FontName = "Verdana"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Não"
+  Option2.Value = 1
+  Option2.Left = 47
+  Option2.Top = 5
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 36,84,155
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFNF.Pagina.Dados.Get_ordem
+------------------------------------------------------------
+  ControlSource = "crSigFiNtb.ordems"
+  InputMask = "99"
+  Left = 203
+  TabIndex = 2
+  Top = 155
+  Width = 24
+  ZOrderSet = 6
+  plprocurar = .T.
+  Name = "Get_ordem"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFNF.Pagina.Dados.fwget1
+------------------------------------------------------------
+  ControlSource = "crSigFiNtb.Opernf2"
+  Left = 346
+  MaxLength = 2
+  TabIndex = 4
+  Top = 180
+  Width = 24
+  ZOrderSet = 6
+  plprocurar = .T.
+  Name = "fwget1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFNF.Pagina.Dados.Say6
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  Caption = "Impressora : "
+  Left = 123
+  Top = 133
+  TabIndex = 9
+  ForeColor = 36,84,155
+  Name = "Say6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFNF.Pagina.Dados.Cmb_Imp
+------------------------------------------------------------
+  RowSourceType = 0
+  RowSource = ""
+  Value = 
+  ControlSource = "crSigFiNtb.imps"
+  Height = 24
+  Left = 203
+  TabIndex = 1
+  Top = 129
+  Width = 105
+  Name = "Cmb_Imp"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDFNF
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LPARAMETERS lcacesso
+
+With ThisForm
+	.poDatamgr = CreateObject('fSqlConector')
+	With .poDatamgr
+		.AddCursor('SigFiNtb','CidChaves','crSigFiNtb','',ThisForm.pagina.lista.grade)
+		.pfSqlTabela(1).pColuna('Imps','','','Impressora',160,.t.)
+		.pfSqlTabela(1).pColuna('ordems','','','Ordem',80,.t.)
+		.pfSqlTabela(1).pColuna('descrs','','','Descrição',337,.t.)
+		.pfSqlTabela(1).pColuna("Iif(CrSigFiNtb.nfixos=1, 'SIM', 'NÃO')",'','','Fixo',50,.t.)
+		.AddCursor('SigCdOpe','Dopes','crSigCdOpe','','')
+	EndWith
+	.poDataMgr.Requery('crSigCdOpe')
+	= DoDefault()
+	.LockScreen = .f.
+	With ThisForm.Pagina.Dados.Cmb_Imp
+		.Clear
+		.AddItem( 'DATAREGIS   ' )
+		.AddItem( 'SWEDA       ' )
+		.AddItem( 'BEMATECH    ' )
+		.AddItem( 'BEMA8501    ' )
+		.AddItem( 'NDATAREGIS  ' )
+		.AddItem( 'EPSON       ' )
+		.AddItem( 'DARUMA      ' )
+		.AddItem( 'NSWEDA      ' )
+		.AddItem( 'Em Branco   ' )
+	EndWith
+EndWith
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_procurar
+------------------------------------------------------------
+PROCEDURE msv_procurar
+Local lcBusca
+
+If .Not.IsEmpty(ThisForm.Pagina.Dados.Get_ordem.Value)
+	ThisForm.poDataMgr.LocateCursor('crSigFiNtb','ordems',ThisForm.Pagina.Dados.Get_ordem.Value)
+Endif
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Lista.Grupo_op.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Lista.Grupo_op.Click
+lparameters opcao
+
+If Type( 'Opcao' ) = 'N'
+	This.Value = Opcao
+Endif
+If This.Value = 4
+	Select crSigCdOpe
+	Scan
+		If crSigCdOpe.TrnFis = CrSigFiNtb.Ordems
+			Messagebox('Codigo de Operação sendo utilizada, Impossível Exclusão !!',0+48,'')
+			return
+			exit
+		Endif
+	EndScan
+Endif
+select CrSigFiNtb
+If !dodefault( Opcao )
+	ThisForm.mAtivapagina1
+	Return
+Endif
+
+Do Case
+	Case Inlist( thisform.pcEscolha, 'INSERIR', 'PROCURAR' )
+		ThisForm.Pagina.Dados.cmb_Imp.SetFocus
+	Case thisform.pcEscolha = 'ALTERAR'
+		ThisForm.Pagina.Dados.cmb_Imp.SetFocus
+	Case Inlist( thisform.pcEscolha, 'CONSULTAR', 'EXCLUIR' )
+		ThisForm.Pagina.Dados.Grupo_Salva.Salva.SetFocus
+Endcase
+Select CrSigFiNtb
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+If Inlist( thisform.pcEscolha, 'INSERIR','ALTERAR')
+	If ThisForm.pcEscolha = 'INSERIR'
+		Select CrSigFiNtb
+		Replace cidchaves with fUniqueIds()
+	Endif
+	lcImp = ThisForm.Pagina.Dados.Cmb_Imp.Value
+	lnOrd = Thisform.Pagina.Dados.get_ordem.Value
+	lcOpc = Thisform.Pagina.Dados.Get_opernf.Value
+	lcSql = [Select * From SigFiNtb Where Imps=']+lcImp+[' And Ordems = ]+Str(lnOrd,2)+[ ] +;
+			[And Not Cidchaves = ']+CrSigFiNtb.CidChaves+[']
+	If ThisForm.PodataMgr.SqlExecute(lcSql,'CrTrib') > 0 And (Reccount('CrTrib') > 0)
+		Messagebox( 'Impressora / Ordem já cadastrada !', 48, '' )
+		Thisform.pagina.dados.get_ordem.setfocus
+		Return
+	Endif
+
+EndIf
+
+=DoDefault()
+
+ThisForm.Refresh
+Thisform.mAtivapagina1
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+DoDefault()
+
+ThisForm.Refresh
+
+if thisform.plCancelar
+	thisform.mAtivapagina1
+endif
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFNF.Pagina.Dados.fwget1
+* Classe: fwget (Base: textbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (InList(crSigFiNtb.imps,'SWEDA','NSWEDA' ) )
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 6
+================================================================================

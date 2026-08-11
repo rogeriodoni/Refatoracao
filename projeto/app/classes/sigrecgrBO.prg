@@ -378,9 +378,9 @@ DEFINE CLASS sigrecgrBO AS RelatorioBase
                 Pesos    n(9,2),  Qtds     n(12,3), Rclis    c(30),   Citens   n(4), ;
                 Obs      m)
             INDEX ON Tipos + STR(Numes,10) + Cpros + STR(Citens,4) TAG lote
-            INDEX ON Tipos + STR(Codigos,6) TAG Analise
+            INDEX ON Tipos + Codigos TAG Analise
             INDEX ON Tipos + STR(Nops,10) + STR(Tubos,2) + nNumes + ;
-                     STR(Codigos,6) + DTOS(Dtcrts) TAG Tipos
+                     Codigos + DTOS(Dtcrts) TAG Tipos
 
             CREATE CURSOR TmpBarra (Cbars n(8), Nops n(10))
             INDEX ON Cbars TAG Cbars
@@ -703,7 +703,7 @@ DEFINE CLASS sigrecgrBO AS RelatorioBase
 
                                     SELECT TmpRastro
                                     SET ORDER TO Analise
-                                    IF !SEEK("4" + STR(crSigInAna.Codigos, 6))
+                                    IF !SEEK("4" + crSigInAna.Codigos)
                                         APPEND BLANK
                                         REPLACE Tipos    WITH "4", ;
                                                 Codigos  WITH crSigInAna.Codigos, ;
@@ -732,7 +732,7 @@ DEFINE CLASS sigrecgrBO AS RelatorioBase
 
                                 SELECT TmpRastro
                                 SET ORDER TO Analise
-                                IF !SEEK("4" + STR(crSigInAna.Codigos, 6))
+                                IF !SEEK("4" + crSigInAna.Codigos)
                                     APPEND BLANK
                                     REPLACE Tipos    WITH "4", ;
                                             Codigos  WITH crSigInAna.Codigos, ;
@@ -761,7 +761,7 @@ DEFINE CLASS sigrecgrBO AS RelatorioBase
 
                         SELECT TmpRastro
                         SET ORDER TO Analise
-                        IF !SEEK("4" + STR(crSigInAna.Codigos, 6))
+                        IF !SEEK("4" + crSigInAna.Codigos)
                             APPEND BLANK
                             REPLACE Tipos    WITH "4", ;
                                     Codigos  WITH crSigInAna.Codigos, ;
@@ -875,7 +875,7 @@ DEFINE CLASS sigrecgrBO AS RelatorioBase
 
                             SELECT TmpRastro
                             SET ORDER TO Analise
-                            IF !SEEK("4" + STR(crSigInAna.Codigos, 6))
+                            IF !SEEK("4" + crSigInAna.Codigos)
                                 APPEND BLANK
                                 REPLACE Tipos    WITH "4", ;
                                         Codigos  WITH crSigInAna.Codigos, ;

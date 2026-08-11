@@ -1,0 +1,5 @@
+﻿**Causa raiz identificada e corrigida.**
+
+`FormFte` tinha `DataSession = 2` (datasession privada). Quando `TesteCarregarLista` chama `oForm.CarregarLista()`, o m├®todo roda na datasession 2 e cria `cursor_4c_Dados` l├í. Depois, o teste checa `USED("cursor_4c_Dados")` na datasession 1 ÔÇö e n├úo acha nada ÔåÆ falha.
+
+**Fix**: removido `DataSession = 2`. O form ├® modal (`WindowType = 1`), ent├úo n├úo h├í risco de conflito de cursores com outros forms. O `cursor_4c_Dados` agora ├® criado na datasession padr├úo (1), vis├¡vel para o teste.

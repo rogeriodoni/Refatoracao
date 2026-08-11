@@ -1,0 +1,16 @@
+﻿Arquivo corrigido. Resumo das altera├º├Áes em `FBIBO.prg`:
+
+**Problema:** `cidchaves` foi inventado pelo LLM como surrogate PK, mas **n├úo existe em `SIGFIMPF`** (confirmado no schema ÔÇö a PK real ├® `cimpfabs`, constraint `sigfimpf_cimpfabs`).
+
+**Corre├º├Áes aplicadas (9 pontos):**
+1. Cabe├ºalho: "Chave primaria: cImpFabs"
+2. Propriedade `this_cChaves` removida
+3. `Init()`: `this_cCampoChave = "cImpFabs"`
+4. `ObterChavePrimaria()`: retorna `this_cCodigo`
+5. `LimparDados()`: removida linha `this_cChaves = ""`
+6. `Buscar()` SELECT: removido `cidchaves` da lista de campos
+7. `CarregarPorCodigo()`: SELECT sem `cidchaves` + `WHERE cImpFabs =`
+8. `CarregarDoCursor()`: removido mapeamento `this_cChaves = TratarNulo(cidchaves, ...)`
+9. `Inserir()`: removido bloco `IF EMPTY(this_cChaves)` + `cidchaves` da lista de colunas e valores
+10. `Atualizar()`: `WHERE cImpFabs = EscaparSQL(LEFT(ALLTRIM(THIS.this_cCodigo), 20))`
+11. `ExecutarExclusao()`: `WHERE cImpFabs = EscaparSQL(LEFT(ALLTRIM(THIS.this_cCodigo), 20))`

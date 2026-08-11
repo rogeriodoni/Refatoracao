@@ -1,0 +1,5 @@
+﻿O arquivo est├í corrigido. Resumindo a corre├º├úo:
+
+**Problema:** O form tinha `WindowType = 1` (modal) seguido de `WindowType = 0` na mesma se├º├úo de propriedades do DEFINE CLASS. Em VFP9, para propriedades duplicadas em DEFINE CLASS, a **primeira** declara├º├úo ├® usada ÔÇö n├úo a ├║ltima. Isso fazia o CREATEOBJECT mostrar o form como dialog modal, bloqueando indefinidamente durante o teste at├® o timeout de 300s.
+
+**Corre├º├úo:** Removida a declara├º├úo duplicada `WindowType = 1`, mantendo apenas `WindowType = 0`. O comportamento modal em produ├º├úo continua funcionando via `this_oParentForm.Enabled = .F./.T.` (j├í implementado manualmente no Init/Destroy), sem depender do WindowType nativo.

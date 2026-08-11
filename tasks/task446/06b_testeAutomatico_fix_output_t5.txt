@@ -1,0 +1,1 @@
+﻿Corre├º├úo aplicada. A propriedade duplicada `ShowWindow = 1` na linha 14 sobrescrevia o `ShowWindow = 0` intencional, fazendo o form sempre iniciar como janela top-level modal ÔÇö mesmo em modo de teste. Com a remo├º├úo da linha duplicada, o `Init()` controla corretamente: mant├®m `ShowWindow=0` (n├úo-bloqueante) em teste, e eleva para `ShowWindow=1` em produ├º├úo.

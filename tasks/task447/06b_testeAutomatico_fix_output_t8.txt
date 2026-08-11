@@ -1,0 +1,3 @@
+﻿**Causa raiz:** Em `ICMBO.Buscar()` (linha 65) e `ICMBO.CarregarPorCodigo()` (linha 102), o JOIN com `SigCdEmp` usava `a.cemps` (coluna inexistente em `SigCdCmi`) em vez de `a.emps`. O SQL Server retornava "Invalid column name 'cemps'", o `MsgErro()` abria um dialog modal, e o VFP9 em modo unattended travava aguardando confirma├º├úo do usu├írio ÔÇö esgotando os 300s de timeout.
+
+**Fix:** Ambas as ocorr├¬ncias de `b.cemps = a.cemps` corrigidas para `b.cemps = a.emps` em `ICMBO.prg`.

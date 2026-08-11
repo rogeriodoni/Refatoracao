@@ -1,0 +1,18 @@
+﻿A corre├º├úo foi aplicada. Aqui est├í o resumo da an├ílise completa:
+
+## Corre├º├úo aplicada
+
+**[CONTAINER-VISIVEL] ÔÇö corrigido** (`Formepd.prg:1134-1160`)  
+Adicionada vari├ível `loc_lExcluido` que agora guarda **tanto** a atribui├º├úo `Visible=.T.` **quanto a recurs├úo** para containers exclu├¡dos (`CNT_4C_CABECALHO` e `GRD_4C_GRADEOPERACAO`). Antes, a recurs├úo ainda entrava no `GRD_4C_GRADEOPERACAO` (oculto por padr├úo) e for├ºava `Column1.Visible=.T.`.
+
+---
+
+## Problemas analisados como falsos positivos (n├úo alterar)
+
+**[GRID-HEADER] ├ù14** ÔÇö O legado usa `fwgrade` (classe de framework) na p├ígina Lista. Essa classe configura colunas dinamicamente em runtime; o SCX n├úo cont├®m captions de headers. O checker n├úo encontrou os headers porque eles n├úo existem no bin├írio SCX ÔÇö n├úo porque foram inventados. Os captions atuais s├úo corretos.
+
+**[LAYOUT-POSITION] ├ù2** ÔÇö O checker fez match incorreto entre o controle legado `"Operacao"` (que ├® um CommandButton `Top=6, Left=616`) e o migrado `grd_4c_GradeOperacao` (um Grid). O SCX confirma:
+- `GradeOpera├º├úo` legado: `Top=68, Left=266` ÔåÆ com offset de p├ígina `+29` = `Top=97, Left=266` Ô£ô (id├¬ntico ao migrado)
+- `cmd_4c_Operacao` no migrado: `Top=35, Left=616` Ô£ô (correspond├¬ncia correta do bot├úo legado)
+
+As posi├º├Áes no c├│digo migrado est├úo **corretas**. Alterar conforme o checker quebraria o layout.

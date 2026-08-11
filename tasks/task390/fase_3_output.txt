@@ -1,0 +1,13 @@
+﻿Ambos os `RETURN` est├úo em linhas 49 e 97 ÔÇö ambos **ap├│s** o bloco `ENDTRY`, confirmando conformidade com a Regra #1 do CLAUDE.md.
+
+**Fase 3/8 conclu├¡da.** O arquivo `C:\4c\projeto\app\forms\cadastros\FormCVE.prg` foi criado com:
+
+- **`DEFINE CLASS FormCVE AS FormBase`** com propriedades visuais (Width=1000, Height=600, WindowType=1, sem acentos em Caption)
+- **`Init()`** ÔÇö apenas `DODEFAULT()`, sem chamada duplicada a `InicializarForm`
+- **`InicializarForm()`** ÔÇö cria CVEBO, seta Caption com CHR(245), verifica `gb_4c_ValidandoUI`, chama `ConfigurarPageFrame()`
+- **`ConfigurarPageFrame()`** ÔÇö PageFrame Top=-29, Tabs=.F., 2 Pages com Picture de fundo
+- **`ConfigurarPaginaLista()`** ÔÇö `cnt_4c_Cabecalho` (com lbl_4c_Sombra + lbl_4c_Titulo), `cnt_4c_Botoes` (vazio, para Fase 4), `cnt_4c_Saida` (can├┤nico Left=917 Width=90), `cnt_4c_Copia` (Visible=.F. ÔÇö container flutuante de c├│pia de per├¡odo)
+- **`ConfigurarPaginaDados()`** ÔÇö `cnt_4c_BotoesAcao` (vazio, para Fase 4)
+- **`TornarControlesVisiveis()`** ÔÇö com guarda para `CNT_4C_COPIA` permanecer oculto
+- **`FormatarGridLista()`** ÔÇö SetAll Tahoma/8
+- **`Destroy()`** ÔÇö libera BO e cursor `crSigCcCmI`

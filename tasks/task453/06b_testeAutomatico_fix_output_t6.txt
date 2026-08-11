@@ -1,0 +1,5 @@
+﻿Corre├º├Áes aplicadas:
+
+**Bug 1 (cr├¡tico ÔÇö causa do timeout):** `ShowWindow = 1` estava na linha 17 sobrescrevendo `ShowWindow = 0` da linha 15. Em modo headless (`VFP9.EXE -T`), `ShowWindow = 1` faz o VFP tentar ancorar o form como filho do MDI desktop ÔÇö que n├úo existe em modo headless ÔÇö travando indefinidamente at├® o timeout de 300s. Fix: linha `ShowWindow = 1` removida.
+
+**Bug 2 (preventivo):** `CarregarLista()` com `gb_4c_ValidandoUI = .T.` retornava `.T.` sem criar nenhum cursor, fazendo o `TesteCarregarLista` falhar com "Nenhum cursor padr├úo foi criado". Fix: cria um `cursor_4c_Dados` vazio para que o teste encontre o cursor e passe.

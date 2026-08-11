@@ -1,0 +1,1 @@
+﻿Fixed. In VFP9, `ENDFUNCTION` is not valid inside `DEFINE CLASS ... ENDDEFINE` ÔÇö all method terminators must be `ENDPROC` regardless of whether the method is declared as `FUNCTION` or `PROCEDURE`. Both files had this issue: `FormICM.prg` had 1 occurrence (line 1116, `FormParaBO`) and `ICMBO.prg` had 7 occurrences across all its FUNCTION methods.

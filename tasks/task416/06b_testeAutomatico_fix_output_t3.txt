@@ -1,0 +1,9 @@
+﻿Corre├º├Áes aplicadas corretamente. Resumo das duas mudan├ºas em `FormFea.prg`:
+
+**Corre├º├úo 1 ÔÇö `AlternarPagina` (bug principal, causa do teste falhar):**
+- `Page1.Enabled = .T.` agora ├® chamado **antes** de `ActivePage = par_nPagina`
+- VFP9 n├úo consegue ativar uma page desabilitada; silenciosamente mantinha `ActivePage=2`
+
+**Corre├º├úo 2 ÔÇö `ConfigurarResultado` (erro de inicializa├º├úo):**
+- Removidos `.FontName = "Tahoma"` e `.FontSize = 8` do `WITH par_oCnt.Pagina` (PageFrame n├úo suporta `FontName` em runtime, igual ao `BackColor` documentado no CLAUDE.md)
+- Isso fazia o `ConfigurarResultado` abortar no meio, deixando GradeEntradas, GradeSaidas, GradeResumo, cnt_4c_Conversao e GradeMat sem criar

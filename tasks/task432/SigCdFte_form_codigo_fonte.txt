@@ -1,0 +1,332 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigCdFte.SCX
+* Data/Hora: 06/08/2026 06:30:01
+* Total de registros: 6
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDFTE
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getResps
+  Parent: SIGCDFTE.Pagina.dados
+  Class: fwmemo
+  BaseClass: editbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: chkRespFixa
+  Parent: SIGCDFTE.Pagina.dados
+  Class: checkbox
+  BaseClass: checkbox
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 0
+  Height = 0
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFTE
+------------------------------------------------------------
+  DataSession = 2
+  DoCreate = .T.
+  Caption = "Cadastro de Fichas Técnicas"
+  Name = "SIGCDFTE"
+  Pagina.ErasePage = .T.
+  Pagina.lista.cntSombra.lblSombra.Name = "lblSombra"
+  Pagina.lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  Pagina.lista.cntSombra.Name = "cntSombra"
+  Pagina.lista.grade.FontName = "Tahoma"
+  Pagina.lista.grade.FontSize = 8
+  Pagina.lista.grade.RowHeight = 16
+  Pagina.lista.grade.ForeColor = 90,90,90
+  Pagina.lista.grade.Name = "grade"
+  Pagina.lista.grupo_op.AutoSize = .T.
+  Pagina.lista.grupo_op.inserir.Top = 5
+  Pagina.lista.grupo_op.inserir.Left = 5
+  Pagina.lista.grupo_op.inserir.Name = "inserir"
+  Pagina.lista.grupo_op.consultar.Top = 5
+  Pagina.lista.grupo_op.consultar.Left = 80
+  Pagina.lista.grupo_op.consultar.Name = "consultar"
+  Pagina.lista.grupo_op.alterar.Top = 5
+  Pagina.lista.grupo_op.alterar.Left = 155
+  Pagina.lista.grupo_op.alterar.Name = "alterar"
+  Pagina.lista.grupo_op.excluir.Top = 5
+  Pagina.lista.grupo_op.excluir.Left = 230
+  Pagina.lista.grupo_op.excluir.Name = "excluir"
+  Pagina.lista.grupo_op.procurar.Top = 5
+  Pagina.lista.grupo_op.procurar.Left = 305
+  Pagina.lista.grupo_op.procurar.Name = "procurar"
+  Pagina.lista.grupo_op.Height = 85
+  Pagina.lista.grupo_op.Left = 344
+  Pagina.lista.grupo_op.Top = -1
+  Pagina.lista.grupo_op.Width = 385
+  Pagina.lista.grupo_op.Name = "grupo_op"
+  Pagina.lista.grupo_saida.sair.Top = 5
+  Pagina.lista.grupo_saida.sair.Left = 5
+  Pagina.lista.grupo_saida.sair.Name = "sair"
+  Pagina.lista.grupo_saida.Left = 719
+  Pagina.lista.grupo_saida.Top = -1
+  Pagina.lista.grupo_saida.Name = "grupo_saida"
+  Pagina.lista.cntFiltros.Name = "cntFiltros"
+  Pagina.lista.Name = "lista"
+  Pagina.dados.grupo_salva.AutoSize = .T.
+  Pagina.dados.grupo_salva.salva.Top = 5
+  Pagina.dados.grupo_salva.salva.Left = 5
+  Pagina.dados.grupo_salva.salva.Name = "salva"
+  Pagina.dados.grupo_salva.cancelar.Top = 5
+  Pagina.dados.grupo_salva.cancelar.Left = 80
+  Pagina.dados.grupo_salva.cancelar.Name = "cancelar"
+  Pagina.dados.grupo_salva.ZOrderSet = 1
+  Pagina.dados.grupo_salva.Name = "grupo_salva"
+  Pagina.dados.Name = "dados"
+  Pagina.Name = "Pagina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFTE.Pagina.dados.getResps
+------------------------------------------------------------
+  Height = 72
+  Left = 196
+  TabIndex = 1
+  Top = 217
+  Width = 408
+  ControlSource = "crSigCdFtr.Resps"
+  Name = "getResps"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFTE.Pagina.dados.chkRespFixa
+------------------------------------------------------------
+  Top = 294
+  Left = 196
+  Height = 19
+  Width = 109
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Resposta Fixa"
+  ControlSource = "crSigCdFtr.nResps"
+  TabIndex = 2
+  ForeColor = 90,90,90
+  Name = "chkRespFixa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDFTE
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE mativapagina1
+------------------------------------------------------------
+PROCEDURE mativapagina1
+pKey = ThisForm.Grupos + ThisForm.Cargos + ThisForm.Titulos + ThisForm.SubGrp 
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Lparameters pGru, pSgr, pCar, pTit, pEsc, pTipo
+
+Private pKey
+
+ThisForm.Grupos  = Padr(pGru, Iif(pTipo = 0, 3, 20 ))
+ThisForm.SubGrp  = Padr(pSgr, 06)
+ThisForm.Cargos  = Padr(pCar, 20)
+ThisForm.Titulos = Padr(pTit, 20)
+
+pKey = ThisForm.Grupos + ThisForm.Cargos + ThisForm.Titulos + ThisForm.SubGrp 
+
+lcQryCFTeR = [Select * From SigCdFtr Where GruCarTits = ?pKey Order By cIdChaves]
+
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		With .poDataMgr
+			.AddCursor('SigCdFtr', 'cIdChaves', 'crSigCdFtr', '', ThisForm.Pagina.Lista.Grade, lcQryCFTeR)
+			.pfSqlTabela(1).pColuna('Resps', '', '', 'Respostas', ThisForm.Pagina.Lista.Grade.Width - 65)
+			.pfSqlTabela(1).pColuna('nResps','', '', 'Fixa', 31 )
+		EndWith
+
+		ThisForm.Pagina.Lista.Grade.Column2.ControlSource = [Iif(crSigCdFtr.nResps = 1, 'Sim', 'Não')] 
+
+		.plAcInserir = InList(pEsc, [INSERIR], [ALTERAR])
+		.plAcAlterar = InList(pEsc, [INSERIR], [ALTERAR])
+		.plAcExcluir = InList(pEsc, [INSERIR], [ALTERAR])
+
+		=DoDefault()
+
+		.Caption = [Ficha Técnica - ] + Alltrim(.Cargos) + [ - ] + Alltrim(.Titulos)
+
+		.Pagina.Lista.Grade.Column1.SetFocus
+	Else
+		=Messagebox('Impossível Efetuar Conexão Com o Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.lista.grupo_op.Click
+------------------------------------------------------------
+PROCEDURE Pagina.lista.grupo_op.Click
+LParameters lnOpcao
+
+If (Type('lnOpcao') = 'N')
+	This.Value = lnOpcao
+EndIf
+
+Select crSigCdFtr
+
+If Not DoDefault(lnOpcao)
+	ThisForm.mAtivaPagina1
+	Return 0
+EndIf
+
+loDad = ThisForm.Pagina.Dados
+
+If (ThisForm.pcEscolha = 'INSERIR')
+	Replace CGrus 		With ThisForm.Grupos, ;
+			SGrus 		With ThisForm.SubGrp, ;
+			CCars 		With ThisForm.Cargos, ;
+			CTits 		With ThisForm.Titulos, ;
+			GruCarTits 	With ThisForm.Grupos + ThisForm.Cargos + ThisForm.Titulos + ThisForm.SubGrp, ;
+			cIdChaves 	With fUniqueIds() In crSigCdFtr
+EndIf
+
+If Inlist(ThisForm.pcEscolha, 'CONSULTAR', 'EXCLUIR')
+	loDad.Grupo_Salva.Salva.Setfocus
+Else
+	loDad.getResps.Setfocus	
+EndIf
+
+loDad.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.dados.grupo_salva.salva.Click
+------------------------------------------------------------
+PROCEDURE Pagina.dados.grupo_salva.salva.Click
+=DoDefault()
+
+ThisForm.mAtivaPagina1
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.dados.grupo_salva.cancelar.Click
+------------------------------------------------------------
+PROCEDURE Pagina.dados.grupo_salva.cancelar.Click
+=DoDefault()
+
+If ThisForm.plCancelar
+	ThisForm.mAtivaPagina1
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFTE.Pagina.dados.getResps
+* Classe: fwmemo (Base: editbox)
+* Registro: 4
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return( InList(ThisForm.pcEscolha,'INSERIR','ALTERAR'))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFTE.Pagina.dados.chkRespFixa
+* Classe: checkbox (Base: checkbox)
+* Registro: 5
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return( InList(ThisForm.pcEscolha,'INSERIR','ALTERAR'))
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGCDFTE
+RESERVED3 (ClassInfo): cargos
+grupos
+subgrp
+titulos
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 8
+================================================================================

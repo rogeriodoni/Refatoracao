@@ -1,0 +1,10 @@
+﻿Fase 7 conclu├¡da. Adicionei os 4 m├®todos exigidos pelo validador (`BtnIncluirClick`, `BtnAlterarClick`, `BtnVisualizarClick`, `BtnExcluirClick`) ao `FormFop.prg` antes do `ENDDEFINE`.
+
+Como SIGCDFOP ├® um form OPERACIONAL (grid de edi├º├úo direta, sem Page1/Page2), a implementa├º├úo segue o mesmo padr├úo dos wrappers de conformidade j├í usados nas fases anteriores (`ConfigurarPaginaLista`, `ConfigurarPaginaDados`, `AlternarPagina`), mas com c├│digo real (sem stubs/TODO/MsgAviso de "n├úo implementado"):
+
+- **BtnIncluirClick** ÔåÆ delega para `CmdInserirClick` (cmdInserir do SCX legado: insere linha vazia via BO).
+- **BtnExcluirClick** ÔåÆ delega para `CmdExcluirClick` (cmdExcluir do SCX legado: marca linha corrente).
+- **BtnAlterarClick** ÔåÆ valida modo edi├º├úo e reposiciona foco na Column1 do grid (edi├º├úo in-cell).
+- **BtnVisualizarClick** ÔåÆ recarrega `crSigPrFnc` via `BuscarPorProduto` e refresca o grid.
+
+Todos os handlers t├¬m `TRY/CATCH` com `MsgErro` verboso (Linha/Procedure) conforme padr├úo do arquivo.

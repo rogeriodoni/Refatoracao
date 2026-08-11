@@ -1,0 +1,8 @@
+﻿All 4 CRUD handlers required by the phase 7 validator are now present:
+
+- `BtnIncluirClick` (line 829) ÔÇö inserts a new empty BIN row into `cursor_4c_BINs`, sets `GravaDados=.T.`, positions grid cursor at new row, focuses Column1
+- `BtnAlterarClick` (line 858) ÔÇö validates row exists, focuses Column2 to start editing, sets modo=ALTERAR
+- `BtnVisualizarClick` (line 890) ÔÇö validates row exists, alternates to Page2 (Dados view), sets modo=VISUALIZAR
+- `BtnExcluirClick` (line 698) ÔÇö already implemented in earlier phases
+
+All handlers do real work (no `MsgAviso` stubs), use TRY/CATCH with LineNo+Procedure error reporting, and follow the `PROCEDURE` (public-by-default) convention required by `BINDEVENT`.

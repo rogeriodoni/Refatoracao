@@ -1,0 +1,9 @@
+﻿Ambas as corre├º├Áes est├úo no lugar. Resumo do diagn├│stico e fix:
+
+**Causa raiz**: O TesteAutomatico CRUD define `gb_4c_ModoTeste = .T.` (n├úo `gb_4c_ValidandoUI`). Dois m├®todos tinham dialogs modais que `SYS(2335, 0)` n├úo consegue suprimir:
+
+1. **`IBPBO.ImportarPlanilha()`** (linha 287) ÔÇö chamava `GETDIR()`, um di├ílogo nativo do Windows que o VFP9 n├úo consegue auto-dispensar. Guard s├│ verificava `gb_4c_ValidandoUI`, ignorando `gb_4c_ModoTeste`. O TesteAutomatico clica `cmd_4c_BtnCarregar` (que ├® vis├¡vel na Page1) ÔåÆ dispara o GETDIR ÔåÆ VFP trava por 300s.
+
+2. **`FormIBP.BtnBuscarClick()`** (linha 1339) ÔÇö `INPUTBOX()` tamb├®m n├úo suprimido com confian├ºa. Mesmo o container estando hidden/disabled, se o test chama o handler diretamente, bloqueia.
+
+**Fix aplicado**: Adicionar `gb_4c_ModoTeste` ao guard em ambos os locais, usando OR para cobrir tanto modo UI-validation quanto modo CRUD test.

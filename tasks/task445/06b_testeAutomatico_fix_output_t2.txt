@@ -1,0 +1,8 @@
+﻿All fixes are confirmed. Summary of changes applied:
+
+**IBPBO.prg** (1 edit ÔÇö primary TIMEOUT fix):
+- `ImportarPlanilha()`: added `gb_4c_ValidandoUI` guard at the very start (lines 287-289), before `GETDIR()` is reached. `GETDIR()` opens a Windows Shell dialog that `SYS(2335,0)` does NOT suppress, causing the 300s TCP timeout in unattended test mode.
+
+**FormIBP.prg** (6 edits ÔÇö cosmetic fixes t1 failed to apply):
+- `cmd_4c_Encerrar` inside `cnt_4c_Saida`: `Left = 5`, `Width = 75` (canonical per CLAUDE.md Rule #10)
+- `cmd_4c_Incluir.Left = 5`, `cmd_4c_Visualizar.Left = 80`, `cmd_4c_Alterar.Left = 155`, `cmd_4c_Excluir.Left = 230`, `cmd_4c_Buscar.Left = 305` (container-relative, not absolute 542)

@@ -1,0 +1,15 @@
+﻿Corre├º├Áes aplicadas nos dois arquivos:
+
+**emaBO.prg** ÔÇö 8 mudan├ºas:
+- Removida property `this_cIdChaves` (coluna inexistente no schema)
+- Adicionada `this_cCodsOriginal` para rastrear o valor antes da edi├º├úo (necess├írio para UPDATE WHERE)
+- `this_cCampoChave` ÔåÆ `"Cods"` (PK real da tabela)
+- `ObterChavePrimaria()` ÔåÆ retorna `this_cCods`
+- `CarregarDoCursor()` ÔåÆ remove `this_cIdChaves`, popula `this_cCodsOriginal`
+- `Buscar()` / `CarregarPorCodigo()` ÔåÆ `SELECT Cods FROM SigCdEma` (removido `cIdChaves` inexistente)
+- `Inserir()` ÔåÆ `INSERT INTO SigCdEma (Cods) VALUES (...)` (removida coluna e gera├º├úo de UUID)
+- `Atualizar()` ÔåÆ `WHERE Cods = EscaparSQL(this_cCodsOriginal)` | removido guard `this_cIdChaves`
+- `ExecutarExclusao()` ÔåÆ `WHERE Cods = EscaparSQL(this_cCods)`
+
+**Formema.prg** ÔÇö 1 mudan├ºa:
+- `CREATE CURSOR cursor_4c_Dados (cIdChaves C(36), Cods C(50))` ÔåÆ `(Cods C(50))`

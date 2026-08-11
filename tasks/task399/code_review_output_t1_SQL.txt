@@ -1,0 +1,17 @@
+﻿Nenhuma ocorr├¬ncia residual. Resumo das corre├º├Áes aplicadas:
+
+**DspBO.prg:**
+- `this_cCidChaves` ÔåÆ `this_cCodigos` em toda parte (propriedade + todas as refs)
+- `this_cContas` ÔåÆ `this_cIclis` em toda parte
+- `this_cCampoChave = "CidChaves"` ÔåÆ `"Codigos"`
+- SELECT: `a.CidChaves` ÔåÆ `a.Codigos`, `a.Contas` ÔåÆ `a.Iclis`
+- JOIN: `c.Iclis = a.Contas AND c.Grupos = a.Grupos` ÔåÆ `c.Iclis = a.Iclis` (removido filtro inventado `c.Grupos`)
+- INSERT/UPDATE/DELETE: nomes de colunas SQL corrigidos (`Codigos`, `Iclis`)
+- `VerificarDuplicidade`: `AND Contas =` ÔåÆ `AND Iclis =`, `AND CidChaves <>` ÔåÆ `AND Codigos <>`
+- `ValidarConta`: removido `AND Grupos = ...` sobre SigCdCli
+- `BuscarContas`: removido `WHERE Grupos = ...` sobre SigCdCli
+
+**FormDsp.prg:**
+- `cursor_4c_Dados.CidChaves` ÔåÆ `cursor_4c_Dados.Codigos` (3 locais)
+- `cursor_4c_Dados.Contas` ÔåÆ `cursor_4c_Dados.Iclis` (ControlSource do grid)
+- `this_oBusinessObject.this_cContas` ÔåÆ `this_cIclis` (FormParaBO/BOParaForm)

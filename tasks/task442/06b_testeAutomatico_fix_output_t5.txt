@@ -1,0 +1,8 @@
+﻿Sem .fxp para deletar. As corre├º├Áes s├úo:
+
+**Causa raiz**: `WindowType = 1` (modal) no n├¡vel da classe faz VFP9 entrar no loop de evento modal **durante** `CREATEOBJECT()`, **antes** de `Init()` poder corrigi-lo. O guard no `Init()` chegava tarde demais ÔÇö o bloqueio de 300s ocorria antes de Init() executar.
+
+**Corre├º├Áes aplicadas em `FormGr1.prg`**:
+1. `WindowType = 1` ÔåÆ `WindowType = 0` ÔÇö remove o loop modal no n├¡vel da classe
+2. `ShowWindow = 0` / `ShowWindow = 1` (duplicata) ÔåÆ mantido apenas `ShowWindow = 0` ÔÇö corrige a linha duplicada que tornava ShowWindow=1 (agravava o problema)
+3. `Init()` simplificado para `RETURN DODEFAULT()` ÔÇö o guard de teste era ineficaz e o coment├írio era enganoso

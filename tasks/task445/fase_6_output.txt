@@ -1,0 +1,20 @@
+﻿Fase 6 conclu├¡da. Aqui est├í o resumo do que foi adicionado ao `FormIBP.prg`:
+
+**Campos adicionados em `ConfigurarPaginaDados()` (7 campos, 2 colunas):**
+- **Coluna 2 (al├¡quotas)** ÔÇö ao lado dos campos existentes, Top 138ÔÇô213:
+  - `txt_4c_NacFederal` (Aliq Nac Fed, InputMask="99.99")
+  - `txt_4c_ImpFederal` (Aliq Imp Fed, InputMask="99.99")
+  - `txt_4c_Estadual` (Aliq Estadual, InputMask="99.99")
+  - `txt_4c_Municipal` (Aliq Municipal, InputMask="99.99")
+- **Coluna 1 continua├º├úo** ÔÇö abaixo de datfin, Top 345ÔÇô395:
+  - `txt_4c_Chave` (MaxLength=10, read-only em ALTERAR)
+  - `txt_4c_Versao` (MaxLength=10, read-only em ALTERAR)
+  - `txt_4c_Fonte` (MaxLength=10)
+
+**M├®todos atualizados com todos os 14 campos:**
+- `FormParaBO()` ÔÇö 7 assignments adicionados
+- `BOParaForm()` ÔÇö 7 assignments adicionados
+- `LimparCampos()` ÔÇö 7 clears adicionados (num├®ricos = 0, char = "")
+- `HabilitarCampos()` ÔÇö 7 enables adicionados (chave/versao somente em INCLUIR)
+
+Sem lookups ÔÇö o SIGCDIBP original n├úo usa fwbuscaext, fwBuscaSel ou sigacess.

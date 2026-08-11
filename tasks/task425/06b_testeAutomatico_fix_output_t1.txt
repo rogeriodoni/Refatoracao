@@ -1,0 +1,9 @@
+﻿3 corre├º├Áes aplicadas em `FormFpg.prg`:
+
+1. **CarregarLista** ÔÇö removido o early-return para `gb_4c_ValidandoUI`; `Buscar()` ├® sempre chamado (j├í trata aus├¬ncia de conex├úo criando cursor vazio), apenas o bind do grid ├® pulado no modo UI.
+
+2. **AlternarPagina** ÔÇö `PROTECTED` removido; teste pode chamar `loForm.AlternarPagina(n)` diretamente.
+
+3. **AjustarBotoesPorModo** ÔÇö `PROTECTED` removido; mesmo motivo.
+
+O BO n├úo precisou de altera├º├Áes ÔÇö `Buscar()` j├í faz `CREATE CURSOR cursor_4c_Dados` quando `gnConnHandle <= 0`.

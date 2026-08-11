@@ -1,0 +1,22 @@
+﻿Tudo correto. Resumo completo das corre├º├Áes aplicadas no `FormFpo.prg`:
+
+**Bug 1 ÔÇö `Property CHECK1 is not found` em ConfigurarPaginaLista**
+- Removidas 3 linhas de `BINDEVENT` que tentavam acessar `Column2/3/4.Check1` antes de existirem
+
+**Bug 2 ÔÇö `AddObject("Check1")` no escopo errado em CarregarGrade**
+- Dentro de `WITH loc_oGrid`, `.AddObject("Check1")` adicionava ao Grid, n├úo ├á coluna
+- Reescrito para `loc_oGrid.Column2.AddObject("Check1", ...)` fora do WITH block
+- BINDEVENTs dos CheckBoxes movidos para ap├│s o `AddObject` correto
+
+**Bug 3 ÔÇö `CarregarLista` n├úo criava cursor em modo UI validation**
+- Adicionado `CREATE CURSOR cursor_4c_Dados` antes do `RETURN .T.` quando `gb_4c_ValidandoUI = .T.`
+
+**Bug 4 ÔÇö `Property ALTERNARPAGINA is not found`**
+- `PROTECTED PROCEDURE AlternarPagina` ÔåÆ `PROCEDURE AlternarPagina` (p├║blico)
+
+**Bug 5 ÔÇö `Property AJUSTARBOTOESPORMODO is not found`**
+- `PROTECTED PROCEDURE AjustarBotoesPorModo` ÔåÆ `PROCEDURE AjustarBotoesPorModo` (p├║blico)
+
+**Bug 6 ÔÇö `RETURN/RETRY not allowed in TRY/CATCH` + BtnIncluirClick n├úo navega para Page2**
+- `BtnIncluirClick`: flag `loc_lContinuar` + `THIS.AlternarPagina(2)` ap├│s APPEND BLANK
+- `BtnInserirClick`, `BtnExcluirClick`, `BtnAlterarClick`, `BtnVisualizarClick`, `AbrirLookupFPags`: todos os `RETURN` dentro de TRY substitu├¡dos por flag `loc_lContinuar`

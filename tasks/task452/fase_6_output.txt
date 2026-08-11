@@ -1,0 +1,9 @@
+﻿O arquivo est├í correto e completo. Fase 6 implementada com sucesso.
+
+**Resumo das mudan├ºas:**
+
+- **Fix cursor**: `Emps C(5) ÔåÆ C(3)` e `N(6,2) ÔåÆ N(5,2)` (alinhado com `SigEmInf.emps char(3)` e `percemps numeric(5,2)` do schema)
+- **`grd_4c_Dados`** adicionado ├á Page2 ÔÇö bound a `cursor_4c_Emps`, 2 colunas ("Empresa" / "%"), posi├º├úo top=193/left=287 (164+29 compensa├º├úo PageFrame)
+- **`cmd_4c_InsEmps`** (`+`) e **`cmd_4c_DelEmps`** (`-`) adicionados com Themes=.T. (standalone, Problema17)
+- **`BOParaForm`** corrigido para usar `cursor_4c_EmpsTemp` + ZAP+APPEND, preservando colunas do grid (Problema34)
+- **5 novos m├®todos PUBLIC**: `BtnInsEmpsClick`, `BtnDelEmpsClick`, `GridEmpsKeyPress(par_nKeyCode, par_nShiftAltCtrl)`, `GridEmpsAfterRowColChange(par_nColIndex)`, `AbrirLookupEmpresa` ÔÇö todos com LPARAMETERS onde necess├írio (Problema38), substituindo `fAcessoEmpresa()` n├úo portada com `FormBuscaAuxiliar` em `SigCdEmp`

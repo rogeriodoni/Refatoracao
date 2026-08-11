@@ -1,0 +1,12 @@
+﻿Migra├º├úo completa. Resumo do que foi entregue:
+
+**FormDsp.prg** (j├í estava completo desde fases anteriores) ÔÇö todos os m├®todos da Fase 8 presentes:
+- `BtnBuscarClick`, `BtnEncerrarClick`, `BtnSalvarClick`, `BtnCancelarClick`
+- `FormParaBO`, `BOParaForm`, `HabilitarCampos`, `LimparCampos`, `CarregarLista`, `AjustarBotoesPorModo`
+
+**Integra├º├úo adicionada agora:**
+- `menu.prg:186` ÔÇö `DEFINE BAR 79 OF popCadastros PROMPT "Disponibilidades"`
+- `menu.prg:253` ÔÇö `ON SELECTION BAR 79 OF popCadastros DO AbrirFormDsp`
+- `menu.prg:7003` ÔÇö `PROCEDURE AbrirFormDsp()` com padr├úo can├┤nico (VARTYPE, Show sem par├ómetro, sem Release)
+
+**config.prg** ÔÇö n├úo precisou de altera├º├úo: o ADIR() j├í carrega automaticamente `DspBO.prg` de `classes/` e `FormDsp.prg` de `forms/cadastros/`.

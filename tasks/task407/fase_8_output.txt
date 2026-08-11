@@ -1,0 +1,14 @@
+﻿Migra├º├úo Fase 8/8 conclu├¡da. Resumo do estado final:
+
+**Formepd.prg** (2256 linhas) ÔÇö arquivo completo com todos os m├®todos:
+- `CarregarLista()`, `AlternarPagina()` ÔÇö navega├º├úo
+- `BtnIncluirClick()`, `BtnVisualizarClick()`, `BtnAlterarClick()`, `BtnExcluirClick()`, `BtnBuscarClick()`, `BtnEncerrarClick()` ÔÇö eventos Page1
+- `BtnSalvarClick()`, `BtnCancelarClick()`, `BtnOperacaoClick()`, `BtnBoletoClick()`, `BtnDocumentoClick()` ÔÇö eventos Page2
+- `FormParaBO()`, `BOParaForm()` ÔÇö data binding completo (Numps, Datas, GrupoOs/ContaOs, GrupoDs/ContaDs, GrVends/Vends + lookups de nome via SigCdCli)
+- `HabilitarCampos()`, `LimparCampos()`, `AjustarBotoesPorModo()` ÔÇö auxiliares
+- `ValidarDados()` ÔÇö valida├º├úo dos campos obrigat├│rios
+- 9 lookups com F4 para grupos (SigCdGcr) e contas (SigCdCli) em Origem/Destino/Respons├ível
+
+**Integra├º├úo:**
+- `config.prg` ÔÇö carrega automaticamente via ADIR() (`*BO.prg` e `Form*.prg`) ÔÇö sem altera├º├úo necess├íria
+- `menu.prg` ÔÇö adicionados BAR 86, ON SELECTION 86 e `AbrirFormepd()` em popCadastros

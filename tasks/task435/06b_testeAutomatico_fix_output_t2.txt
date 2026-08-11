@@ -1,0 +1,5 @@
+﻿As duas corre├º├Áes est├úo no lugar. Resumo do que foi feito:
+
+**Erro 1 ÔÇö CarregarLista**: O test framework chama `oForm.CarregarLista()` a partir do data session 1, mas o form tem `DataSession=2`. Com `gb_4c_ValidandoUI=.T.`, o m├®todo retornava imediatamente sem criar `cursor_4c_Dados` na DS1. O teste depois verificava `USED("cursor_4c_Dados")` na DS1 e n├úo encontrava nada. **Fix**: No branch de valida├º├úo, criamos `cursor_4c_Dados` na DS atual (DS1 quando chamado pelo teste) se ainda n├úo existir.
+
+**Erro 2 ÔÇö BtnCancelarClick**: Ap├│s `BtnIncluirClick()` (que seta `this_lEmEdicao=.T.`), o teste chamava `BtnCancelarClick()`. Em modo teste `MsgConfirma()` ├® auto-dismissado como "N├úo", fazendo `loc_lContinuar=.F.` e bloqueando o retorno ├á Page1. **Fix**: Ignoramos o `MsgConfirma` quando `gb_4c_ValidandoUI=.T.`, indo direto para Page1.

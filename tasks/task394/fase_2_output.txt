@@ -1,0 +1,16 @@
+﻿DICBO.prg completo. Fase 2/8 conclu├¡da.
+
+**Resumo do que foi adicionado ao DICBO.prg:**
+
+| M├®todo | Visibilidade | Fun├º├úo |
+|--------|-------------|--------|
+| `Buscar(par_cFiltro)` | PUBLIC | SELECT com filtro opcional em Expressao/Idioma/Traducao, ordenado por Expressao |
+| `CarregarPorCodigo(par_cIdChaves)` | PUBLIC | SELECT por PK `cidchaves`, reseta `this_lNovoRegistro = .F.` |
+| `CarregarDoCursor(par_cAlias)` | PUBLIC | Usa `SELECT (alias)` + mapeia todos os 6 campos |
+| `ValidarDados()` | PUBLIC | Valida Expressao, Idioma e Traducao como obrigat├│rios |
+| `VerificarDuplicidade()` | PROTECTED | `COUNT(*)` por `Expressao + Idioma` (rejeita duplicatas no INSERT) |
+| `Inserir()` | PROTECTED | INSERT com `fUniqueIds()`, `GETDATE()` e verifica├º├úo de duplicidade |
+| `Atualizar()` | PROTECTED | UPDATE apenas de `traducao` e `usuars` (Expressao+Idioma s├úo imut├íveis no legado) |
+| `ExecutarExclusao()` | PROTECTED | DELETE por `cidchaves` |
+
+**Nota sobre o UPDATE**: O legado s├│ permite alterar `Traducao` no modo ALTERAR (`GetTraducao.When = INSERIR OR ALTERAR`, mas `GetExpressao.When = INSERIR` e `GetIdioma.When = INSERIR`). Logo, Expressao e Idioma s├úo imut├íveis ap├│s inser├º├úo, refletindo corretamente o comportamento original.

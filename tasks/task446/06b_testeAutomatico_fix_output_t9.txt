@@ -1,0 +1,1 @@
+﻿Bug corrigido: a linha duplicada `ShowWindow = 1` (linha 14) foi removida. O `ShowWindow` na defini├º├úo da classe permanece `0`, e o `Init()` j├í tem o guard correto que s├│ seta `ShowWindow = 1` em produ├º├úo (quando `gb_4c_ModoTeste` e `gb_4c_ValidandoUI` n├úo est├úo ativos). Em modo teste o VFP9 -T recebia um form top-level bloqueante que travava os 300s.

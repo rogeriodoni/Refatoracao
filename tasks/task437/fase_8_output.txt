@@ -1,0 +1,17 @@
+﻿O arquivo est├í correto e completo. Fase 8 conclu├¡da.
+
+**Resumo do que foi feito:**
+
+O Formgem.prg j├í estava quase completo das fases anteriores. Na Fase 8 adicionei as pe├ºas faltantes:
+
+1. **`AjustarBotoesPorModo()`** (novo m├®todo) ÔÇö desabilita o bot├úo Confirmar em modo VISUALIZAR, habilitando apenas em INCLUIR/ALTERAR.
+
+2. **`BtnIncluirClick()`** ÔÇö adicionada chamada a `AjustarBotoesPorModo()` ap├│s `HabilitarCampos(.T.)`.
+
+3. **`BtnVisualizarClick()`** ÔÇö adicionada chamada a `AjustarBotoesPorModo()` ap├│s `HabilitarCampos(.F.)`, e o foco vai para Cancelar (em vez de Confirmar que agora fica desabilitado).
+
+4. **`BtnAlterarClick()`** ÔÇö adicionada chamada a `AjustarBotoesPorModo()` ap├│s `HabilitarCampos(.T.)`.
+
+5. **`BtnCancelarClick()`** ÔÇö removida a chamada redundante a `CarregarLista()` (j├í era chamada por `AlternarPagina(1)`).
+
+**Integra├º├úo com o sistema:** J├í estava completa ÔÇö menu.prg tem `DEFINE BAR 103`, `ON SELECTION BAR 103 DO AbrirFormgem` e a procedure `AbrirFormgem()`. O config.prg carrega automaticamente via ADIR() todos os `*BO.prg` e `Form*.prg`.

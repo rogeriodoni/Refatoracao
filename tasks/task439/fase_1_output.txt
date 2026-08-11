@@ -1,0 +1,13 @@
+﻿61 propriedades declaradas ÔÇö exatamente o total de colunas do schema `SigCdGpe`. A Fase 1 est├í conclu├¡da.
+
+**Arquivo criado:** `C:\4c\projeto\app\classes\GpeBO.prg`
+
+**O que foi feito:**
+- Declaradas todas as **61 propriedades** mapeando 1:1 com as colunas do schema `SigCdGpe` (confirmado via `docs/schema.sql`)
+- `this_c*` para campos `char` (dgopes, subncrs, locals, codsegs, carqicones, dopes, tproads)
+- `this_n*` para todos os campos `numeric` (OptionGroups 1/2/3 e CheckBoxes 0/1 ÔÇö tipo num├®rico evita perda de dados em campos com valor 2 como padr├úo)
+- `Init()` configurando `this_cTabela = "SigCdGpe"` e `this_cCampoChave = "dgopes"` (nomes corretos do BusinessBase)
+- `ObterChavePrimaria()` retornando `this_cDgopes` para o sistema de auditoria
+- Propriedades organizadas por categoria (Identifica├º├úo, Numera├º├úo, Auditoria, Situa├º├Áes, Filtros, etc.)
+
+A pr├│xima fase (Fase 2/8) completar├í os m├®todos `CarregarDoCursor()`, `Buscar()`, `CarregarPorCodigo()`, `Inserir()`, `Atualizar()` e `ExecutarExclusao()`, incluindo o tratamento do cursor filho `crSigCdGpo`.

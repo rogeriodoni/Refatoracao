@@ -1,0 +1,12 @@
+﻿**Fase 1/8 conclu├¡da.** Arquivo `C:\4c\projeto\app\classes\intBO.prg` criado com 72 linhas contendo:
+
+- **35 propriedades** mapeadas diretamente das colunas do schema `SIGCDBAL` (char, numeric, datetime, bit, memo)
+- **Init()** configurando `this_cTabela = "SIGCDBAL"` e `this_cCampoChave = "cidchaves"` (a PK real ├® `cidchaves char(20)`, n├úo `codigos` ÔÇö confirmado no schema.sql)
+- Sem stubs, sem TODOs ÔÇö apenas o que a fase pede
+
+**Notas importantes para as pr├│ximas fases:**
+- PK = `cidchaves` (char 20), mas o campo de ordena├º├úo/exibi├º├úo ├® `codigos` (numeric 4,0)
+- A tabela se chama `SIGCDBAL` (mai├║sculo no schema), n├úo `SigCdBal`
+- `encerras` e `tratas` s├úo `bit` ÔåÆ mapeados como `this_lEncerras` / `this_lTratas` (logical)
+- `trtporpeso` ├® `numeric(1,0)` ÔåÆ controla se coluna 10 do grid (Dif. Peso) fica vis├¡vel
+- Form ├® OPERACIONAL complexo com 3 abas (Lista / Dados/Filtro / Tratamento)

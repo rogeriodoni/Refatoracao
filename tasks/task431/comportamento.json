@@ -1,0 +1,166 @@
+{
+  "resumo": {
+    "totalMetodos": 9,
+    "metodosComSQL": 3,
+    "metodosComValidacao": 3,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fwBuscaSel"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDFRE",
+      "evento": "Init",
+      "linhas": 41,
+      "codigoOriginal": "LPARAMETERS pForm, pOperacao\n\nThisForm.oForm = pForm\nThisForm.pDopes = Iif(Type('pOperacao')=[C],pOperacao,[ ])\npDopFrt = ThisForm.pDopes\nIf Type('ThisForm.oForm') = [O]\n\tThisForm.oForm.Enabled = .f.\nEndIf\n\nThisForm.Caption = 'Frete por Cidade '+ThisForm.pDopes\n\nWith ThisForm\n\tThisForm.Refresh\n\tThisForm.Draw\n\tThisForm.Show\n\t.poDatamgr = CreateObject('fSqlConector')\n\tWith .poDatamgr\n\t\tIf Empty(ThisForm.pDopes)\n\t\t\t.AddCursor('SigCdFrt','Cidas','CrSigCdFrt',' ',ThisForm.pagina.lista.grade)\n\t\tElse\n\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "pDopes = Iif,Sqlexecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFRE",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "lcCida = ThisForm.Pagina.Dados.GetCidade.Value\nSelect CrSigCdFrt\nLocate For Cidas = lcCida\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFRE",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "If Type('ThisForm.oForm') = [O]\n\tThisForm.oForm.Enabled = .t.\nEndif\nDoDefault()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFRE",
+      "evento": "Click",
+      "linhas": 17,
+      "codigoOriginal": "LPARAMETERS opcao\n\nIf !dodefault( opcao )\n\tThisForm.mAtivapagina1\n\tReturn\nEndif\n\nIf Inlist(thisform.pcEscolha,'INSERIR','PROCURAR')\n\tThisForm.Pagina.Dados.GetCidade.SetFocus\nElse\n\tIf Inlist(thisform.pcEscolha,'ALTERAR')\n\t\tThisForm.Pagina.Dados.Get_Frete.SetFocus\n\tElse\n\t\tThisform.Pagina.Dados.Grupo_salva.Salva.setfocus\n\tEndIf\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Frete",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFRE",
+      "evento": "Click",
+      "linhas": 36,
+      "codigoOriginal": "If Inlist( Thisform.pcEscolha,'INSERIR')\n\tIf IsEmpty( Thisform.Pagina.Dados.getCidade.value )\n\t\t=messagebox('Cidade Inválida!!!',0+64,'Atenção!')\n\t\tThisform.Pagina.Dados.GetCidade.setfocus\n\t\tReturn\n\tEndIf\nEndIf\nIf Inlist( Thisform.pcEscolha,'INSERIR','ALTERAR')\n\tIf Thisform.Pagina.Dados.get_Frete.Value <= 0 And Empty(ThisForm.pDopes)\n\t\t=messagebox('Valor do Frete Inválido.',0+64,'Atenção!')\n\t\tThisform.Pagina.Dados.Get_Frete.setfocus\n\t\tReturn\n\tEndIf\n\t\n\tIf Empty(ThisForm.pDopes)\n\t\tlcSql = [Select ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Sqlexecute",
+        "controlesReferenciados": "get_Frete",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFRE",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "=DoDefault()\nIf ThisForm.plCancelar\n\tThisForm.mAtivapagina1\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFRE.Pagina.Dados.get_Frete",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "llRet = InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')\nReturn(llRet)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFRE.Pagina.Dados.GetCidade",
+      "evento": "Valid",
+      "linhas": 8,
+      "codigoOriginal": "If Not Empty(This.Value) And Reccount('TmpCep') > 0\n\tloBrowse = CreateObject('fwBuscaSel', 'TmpCep', 'Cidades', This.Value, 'Cadastro de Cidades')\n\tloBrowse.AddColuna('Cidades','', 'Cidade', .t., 'Cidades')\n\tloBrowse.Show\n\tThis.Value = TmpCep.Cidades\nEndIf\n*!*\tReturn (Not Empty(This.Value))\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFRE.Pagina.Dados.GetCidade",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "llRet = InList(ThisForm.pcEscolha, 'INSERIR', 'PROCURAR')\nReturn(llRet)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

@@ -1,0 +1,5 @@
+﻿Corre├º├úo aplicada. Resumo do que foi feito:
+
+**[CONTAINER-VISIVEL]** ÔÇö `TornarControlesVisiveis` agora tem guard `INLIST(UPPER(loc_oObjeto.Name), "CNT_4C_CABECALHO", "CNT_4C_BOTOESACAO")` que impede o m├®todo de for├ºar `.Visible = .T.` nesses dois containers, mas **continua recursando** nos filhos deles (via o bloco `IF PEMSTATUS(..., "ControlCount", 5)` que segue). Os filhos j├í t├¬m `.Visible = .T.` expl├¡cito nos respectivos WITH blocks, ent├úo n├úo h├í regress├úo.
+
+**[MADDCOLUNA-PARAMS]** ÔÇö Ap├│s inspe├º├úo completa do arquivo (grep + leitura), todas as 6 chamadas a `mAddColuna` j├í possuem exatamente 3 par├ómetros `(campo, mascara, titulo)`. Os alertas do checker s├úo falsos positivos ÔÇö nenhuma altera├º├úo necess├íria.

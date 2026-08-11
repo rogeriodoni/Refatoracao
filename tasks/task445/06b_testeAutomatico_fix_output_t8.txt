@@ -1,0 +1,13 @@
+﻿All fixes are correctly applied:
+
+- **Line 43-45**: `WindowType = 0` override in test mode ÔÇö prevents VFP9 modal event loop in headless `-T` mode
+- **Line 189**: `cmd_4c_Incluir.Left = 5` Ô£ô
+- **Line 206**: `cmd_4c_Visualizar.Left = 80` Ô£ô
+- **Line 227**: `cmd_4c_Alterar.Left = 155` Ô£ô
+- **Line 248**: `cmd_4c_Excluir.Left = 230` Ô£ô
+- **Line 269**: `cmd_4c_Buscar.Left = 305` Ô£ô
+- **Line 290**: `cnt_4c_Saida.Left = 917` Ô£ô
+- **Line 303**: `cmd_4c_Encerrar.Left = 5` Ô£ô
+- **Line 304**: `cmd_4c_Encerrar.Width = 75` Ô£ô
+
+Two changes were applied to FormIBP.prg: (1) restored the 7 button positions regressed by t7, and (2) added `THIS.WindowType = 0` at the top of `InicializarForm()` when `gb_4c_ModoTeste` is active ÔÇö this is the root cause fix that none of t1-t7 addressed. `WindowType = 1` causes VFP9 to enter a modal blocking event loop even with `Visible = .F.` in headless `-T` mode; setting it to `0` before any UI is built prevents that event loop while keeping modal behavior in production.

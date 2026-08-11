@@ -1,0 +1,22 @@
+﻿Both edits are in place and correct. Here's a summary of what was done:
+
+**Edit 1** ÔÇö Added `THIS.ConfigurarPgpgEstoque()` call at line 836 inside `ConfigurarPaginaDados()`, after `THIS.ConfigurarPgpgDescrs()` and before the Z-ORDER block.
+
+**Edit 2** ÔÇö Inserted two new methods after the `ENDPROC` of `ConfigurarPgpgDescrs` (now at lines 13252ÔÇô14309):
+
+`PROTECTED PROCEDURE ConfigurarPgpgEstoque()` ÔÇö Adds **46 new controls** to `pgf_4c_Paginas.Page2.pgf_4c_Divisoes.Page4`:
+- 3 section header labels (Estoque / Fiscal / Posi├º├úo Patrimonial)
+- 3 shapes (Shape2 separator, Shape3 bounding rect, Shape5 separator)
+- `lbl_4c_TipoEstos` + `cbo_4c_TipoEstos` (ComboBox with BINDEVENT ÔåÆ TipoEstosChanged)
+- `lbl_4c_Invents` + `obj_4c_Invents` (Sim/N├úo)
+- 5 Custo Fiscal/Gerencial column labels (Nacional/Importado/Origem 2)
+- 6 avaluation ComboBoxes: `cbo_4c_Avalests/Avalestis/Avalest2s` (fiscal) + `cbo_4c_Avalestngs/Avalestigs/Avalest2gs` (gerencial)
+- 4 CheckBoxes: `chk_4c_FrtSegFs/FrtSegGs/Despacfs/Despacgs`
+- `lbl_4c_GradeSubItens` + 5 grade CheckBoxes: `chk_4c_Tams/Embs/Pesos/Cors/Entregas`
+- `lbl_4c_ObrigGrd` + `obj_4c_ChkObrigGrd` (4-button: Cor/Tam/Ambos/Nenhum)
+- `lbl_4c_CalcTotal` + `obj_4c_ChkUni1s` (3-button)
+- `lbl_4c_Encoms` + `obj_4c_Encoms` (3-button: Sim/N├úo/Verifica)
+- 2 fiscal labels, `obj_4c_CjIcms` (3-button), `lbl_4c_CodServs` + `txt_4c_Codservs`
+- 2 patrimonial labels, `obj_4c_PatriCustos` + `obj_4c_PatriReals` (5-button each)
+
+`PROCEDURE TipoEstosChanged()` ÔÇö PUBLIC handler that enforces Tamanho/Cor logic when the TipoEstos combo changes.

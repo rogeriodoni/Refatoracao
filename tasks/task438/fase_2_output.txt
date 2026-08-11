@@ -1,0 +1,15 @@
+﻿FASE 2/8 conclu├¡da. O arquivo `gpdBO.prg` foi expandido de 244 para 865 linhas com todos os m├®todos CRUD adicionados:
+
+**M├®todos adicionados:**
+
+| M├®todo | Visibilidade | Fun├º├úo |
+|--------|-------------|--------|
+| `Buscar(par_cFiltro)` | public | SELECT cgrus/dgrus/mercs/idecpros com filtro opcional, popula `cursor_4c_Dados` |
+| `CarregarPorCodigo(par_cCodigo)` | public | SELECT * por PK, chama CarregarDoCursor |
+| `CarregarDoCursor(par_cAliasCursor)` | PROTECTED | SELECT (alias) + mapeamento dos ~170 campos para this_* |
+| `ObterChavePrimaria()` | PROTECTED | Retorna `ALLTRIM(THIS.this_cCgrus)` |
+| `Inserir()` | PROTECTED | INSERT INTO SigCdGrp completo + `RegistrarAuditoria("INSERT")` |
+| `Atualizar()` | PROTECTED | UPDATE SigCdGrp SET todos os campos + `RegistrarAuditoria("UPDATE")` |
+| `ExecutarExclusao()` | PROTECTED | DELETE WHERE cgrus + `RegistrarAuditoria("DELETE")` |
+
+**Regras respeitadas:** sem `RETURN` dentro de TRY/CATCH (flag `loc_lResultado`), `SELECT (par_cAliasCursor)` antes de acessar campos, sem `PUBLIC` keyword em DEFINE CLASS, `THIS.CarregarDoCursor()` e `THIS.RegistrarAuditoria()` com THIS., CATCH nunca silencioso, `STR(...,1)` para convers├úo l├│gicoÔåÆnum├®rico, `datatrans` usa `GETDATE()` no INSERT.

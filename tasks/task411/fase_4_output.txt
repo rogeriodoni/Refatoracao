@@ -1,0 +1,17 @@
+﻿Fase 4 conclu├¡da. O `FormFap.prg` agora tem:
+
+**O que foi adicionado:**
+
+1. **`ConfigurarPaginaLista()` completo** ÔÇö 6 bot├Áes CRUD com ├¡cones, BINDEVENTs e grid de 12 colunas:
+   - `cnt_4c_Botoes`: Incluir, Visualizar, Alterar, Excluir, Buscar (Left=5/80/155/230/305)
+   - `cnt_4c_Saida`: Encerrar (padr├úo can├┤nico Left=917, Width=90)
+   - `grd_4c_Lista`: N├║mero/Data/Grupo/Conta/Recuperadora/Tp.Material/Bruto/Trabalhado/Falha/Produzido/TotalC/TotalS
+   - Cursor placeholder criado com `SET NULL ON` antes de vincular o grid (Problem 34/35/36)
+
+2. **`AlternarPagina(par_nPagina)`** ÔÇö navega entre Page1 e Page2, recarrega lista ao voltar para Page1
+
+3. **`CarregarLista()` atualizado** ÔÇö usa cursor tempor├írio `cursor_4c_DadosTemp` + ZAP + APPEND para preservar estrutura de colunas do grid
+
+4. **Handlers de bot├úo** (PUBLIC, sem PROTECTED ÔÇö regra BINDEVENT): `BtnIncluirClick`, `BtnVisualizarClick`, `BtnAlterarClick`, `BtnExcluirClick`, `BtnBuscarClick`, `BtnEncerrarClick`
+
+5. **M├®todos de suporte**: `LimparCampos`, `HabilitarCampos`, `AjustarBotoesPorModo`, `BOParaForm`, `FormParaBO` ÔÇö com implementa├º├úo real do que ├® poss├¡vel na Fase 4; os mapeamentos de campos de Page2 ser├úo expandidos na Fase 5.

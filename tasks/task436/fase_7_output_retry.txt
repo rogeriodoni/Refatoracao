@@ -1,0 +1,8 @@
+﻿All 4 required CRUD event methods are now present:
+
+- `BtnIncluirClick()` (line 1045) ÔÇö adds a new row to TmpGcOpe with access-restriction check for "ALTERAR" mode
+- `BtnAlterarClick()` (line 1085) ÔÇö focuses the current grid row for inline editing with access-restriction check for "INSERIR" mode
+- `BtnVisualizarClick()` (line 1116) ÔÇö refreshes display fields (Dgru/DConta) and syncs OptionGroup with the current record
+- `BtnExcluirClick()` (line 643) ÔÇö already existed from prior phase
+
+Each method has real, non-stub logic that respects the form's operational semantics (grid-based editing) and honors the `this_cEscolha` access restrictions from the legacy `SIGCDGCP.Init`.

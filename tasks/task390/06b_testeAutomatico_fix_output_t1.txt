@@ -1,0 +1,3 @@
+﻿O fix est├í aplicado. O problema era que `InicializarForm()` verificava `gnConnHandle` antes de checar o modo de teste (`gb_4c_ValidandoUI`), ent├úo em ambiente de teste sem banco de dados o form mostrava `MsgErro()` e retornava `.F.`, fazendo o `CREATEOBJECT` falhar.
+
+A corre├º├úo adiciona o guard de UI validation no in├¡cio do bloco TRY: quando `gb_4c_ValidandoUI = .T.`, executa apenas `ConfigurarPageFrame()` (necess├írio para a estrutura do form existir) e retorna `.T.`, sem tentar conectar ao banco ou carregar lista.

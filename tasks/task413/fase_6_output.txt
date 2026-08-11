@@ -1,0 +1,9 @@
+﻿Fase 6 conclu├¡da. As tr├¬s mudan├ºas feitas em `FormFAPP.prg`:
+
+1. **`ConfigurarPaginaDados()`** ÔÇö adicionados `lbl_4c_Descs` (Top=163, Left=30) e `txt_4c_Descs` (Top=160, Left=135, Width=350, MaxLength=60) antes do `TornarControlesVisiveis`.
+
+2. **`FormParaBO()`** ÔÇö agora transfere `this_cDescs = ALLTRIM(txt_4c_Descs.Value)` al├®m de `this_cCods`.
+
+3. **`BOParaForm()`** ÔÇö agora preenche `txt_4c_Descs.Value` al├®m de `txt_4c_Cods`.
+
+O `HabilitarCampos()` j├í referenciava `txt_4c_Descs` (Fase 5 antecipou), ent├úo nenhuma altera├º├úo adicional ├® necess├íria ali. O form est├í completo com os dois campos (`cods` + `descs`) e sem lookups ÔÇö coerente com o SCX original que estava vazio.

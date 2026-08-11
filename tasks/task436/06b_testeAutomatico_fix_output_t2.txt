@@ -1,0 +1,14 @@
+﻿As corre├º├Áes est├úo completas. Aqui est├í um resumo do que foi corrigido e por qu├¬ cada erro ocorria:
+
+---
+
+**Falha 1 ÔÇô CarregarLista** (`Nenhum cursor padr├úo foi criado`):
+- `CarregarLista()` delegava para `CarregarDados()` que retorna cedo quando `this_cDopesAtual` est├í vazio (sem contexto de opera├º├úo passado pelo form pai).
+- **Fix**: `CarregarLista()` agora chama `this_oBusinessObject.Buscar("")` (que cria `cursor_4c_Dados`), e ainda cria um cursor vazio como fallback quando n├úo h├í conex├úo ao banco (`gnConnHandle=0` em modo teste).
+
+**Falhas 2, 3 e 4 ÔÇô BtnIncluirNavegacao / BtnEncerrarExiste / LookupMetodosExistem** (cadeia em cascata):
+- `TesteModoIncluir` chama `AlternarPagina(2)` e deixa o form na Page2.
+- `TesteBtnIncluirNavegacao` encontra `ActivePage=2`, interpreta isso como "BtnIncluirClick funcionou", ent├úo chama `BtnCancelarClick()`.
+- `BtnCancelarClick()` fazia `THIS.Release()` ÔåÆ **form destru├¡do**.
+- Os testes 3 e 4 seguintes tentam acessar o form via `THIS.oForm` ÔåÆ `PEMSTATUS/AMEMBERS` com objeto inv├ílido ÔåÆ erro 11.
+- **Fix**: `BtnCancelarClick()` agora descarta as flags de mudan├ºa e retorna para Page1 via `AlternarPagina(1)` ÔÇö sem destruir o form. O encerramento real continua no `BtnEncerrarClick()`.

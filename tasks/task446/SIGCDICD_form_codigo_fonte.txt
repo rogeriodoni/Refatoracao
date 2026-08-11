@@ -1,0 +1,513 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGCDICD.SCX
+* Data/Hora: 09/08/2026 01:28:55
+* Total de registros: 17
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDICD
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: Container1
+  Parent: SIGCDICD
+  Class: container
+  BaseClass: container
+
+Objeto: Say1
+  Parent: SIGCDICD.Container1
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetTipo
+  Parent: SIGCDICD.Container1
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetDesc
+  Parent: SIGCDICD.Container1
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGCDICD.Container1
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: fwget1
+  Parent: SIGCDICD.Container1
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: fwget2
+  Parent: SIGCDICD.Container1
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Shape1
+  Parent: SIGCDICD
+  Class: shape
+  BaseClass: shape
+
+Objeto: cntSombra
+  Parent: SIGCDICD
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGCDICD.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGCDICD.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Command2
+  Parent: SIGCDICD
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Command1
+  Parent: SIGCDICD
+  Class: commandbutton
+  BaseClass: commandbutton
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 0
+  Height = 0
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDICD
+------------------------------------------------------------
+  Height = 262
+  Width = 443
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  BorderStyle = 2
+  Caption = "Duplicação dos Tipo de Tributação"
+  ControlBox = .F.
+  Closable = .F.
+  FontName = "Verdana"
+  FontSize = 8
+  MaxButton = .F.
+  TitleBar = 0
+  WindowType = 1
+  ForeColor = 36,84,155
+  Themes = .F.
+  Name = "SIGCDICD"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDICD.Container1
+------------------------------------------------------------
+  Top = 132
+  Left = 84
+  Width = 279
+  Height = 59
+  SpecialEffect = 0
+  BackColor = 255,255,255
+  Name = "Container1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDICD.Container1.Say1
+------------------------------------------------------------
+  Caption = "Tipo :"
+  Left = 9
+  Top = 8
+  TabIndex = 5
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDICD.Container1.GetTipo
+------------------------------------------------------------
+  ControlSource = ""
+  Height = 23
+  InputMask = ""
+  Left = 46
+  MaxLength = 4
+  TabIndex = 1
+  Top = 4
+  Width = 40
+  Name = "GetTipo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDICD.Container1.GetDesc
+------------------------------------------------------------
+  ControlSource = ""
+  Height = 23
+  Left = 90
+  MaxLength = 20
+  TabIndex = 2
+  Top = 4
+  Width = 184
+  Name = "GetDesc"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDICD.Container1.Say2
+------------------------------------------------------------
+  Caption = "Novo :"
+  Left = 6
+  Top = 34
+  TabIndex = 6
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDICD.Container1.fwget1
+------------------------------------------------------------
+  ControlSource = ""
+  Height = 23
+  Left = 46
+  MaxLength = 4
+  TabIndex = 3
+  Top = 30
+  Width = 40
+  Name = "fwget1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDICD.Container1.fwget2
+------------------------------------------------------------
+  ControlSource = ""
+  Height = 23
+  Left = 90
+  MaxLength = 20
+  TabIndex = 4
+  Top = 30
+  Width = 184
+  Name = "fwget2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDICD.Shape1
+------------------------------------------------------------
+  Top = 79
+  Left = 103
+  Height = 110
+  Width = 173
+  BackStyle = 0
+  BorderStyle = 0
+  SpecialEffect = 1
+  BorderColor = 136,189,188
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDICD.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDICD.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDICD.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDICD.Command2
+------------------------------------------------------------
+  Top = 2
+  Left = 367
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Picture = ..\framework\imagens\simbolosl_erro_26.jpg
+  Cancel = .T.
+  Caption = "Encerrar"
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "Command2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDICD.Command1
+------------------------------------------------------------
+  Top = 2
+  Left = 294
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Picture = ..\framework\imagens\geral_chaves_26.jpg
+  Caption = "Duplicar"
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "Command1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDICD
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Parameters pcParentForm
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+ThisForm.poDatamgr = pcParentForm.poDataMgr
+
+lcTipo = Space(4)
+
+lcSqlTri = [Select * From SigPrTri Where Tipos = ?lcTipo ]
+
+With ThisForm
+	With .poDataMgr
+		.AddCursor('SigPrTri', 'cIdChaves', 'cnSigPrTri', '', .f., lcSqlTri)
+	EndWith
+EndWith
+* Fim **************************************************************************************
+
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDICD.Container1.GetTipo
+* Classe: fwget (Base: textbox)
+* Registro: 6
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigPrTri', ;
+						   'crListaRemota', 'Tipos', This.Value, 'Seleção', .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Tipos', '', 'Tipo',.t.)
+		loLista.mAddColuna('Descs', '', 'Tipo',.t.)
+		loLista.Show()
+	EndIf
+	
+	ThisForm.Container1.GetTipo.Value = crListaRemota.Tipos
+	ThisForm.Container1.GetDesc.Value = crListaRemota.Descs
+	ThisForm.Container1.fwget2.Value = crListaRemota.Descs
+
+	Use In crListaRemota
+Else
+	This.Value = ''
+EndIf
+This.Refresh
+* Fim **************************************************************************************
+
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDICD.Container1.GetDesc
+* Classe: fwget (Base: textbox)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(ThisForm.Container1.GetTipo.Value)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigPrTri', ;
+						   'crListaRemota', 'Descs', This.Value, 'Seleção', .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Descs', '', 'Tipo',.t.)
+		loLista.mAddColuna('Tipos', '', 'Tipo',.t.)
+		loLista.Show()
+	EndIf
+	
+	ThisForm.Container1.GetTipo.Value = crListaRemota.Tipos
+	ThisForm.Container1.GetDesc.Value = crListaRemota.Descs
+	ThisForm.Container1.fwget2.Value = crListaRemota.Descs
+
+	Use In crListaRemota
+Else
+	This.Value = ''
+EndIf
+This.Refresh
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDICD.Command2
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Release Windows
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDICD.Command1
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+With ThisForm.Container1
+
+	ThisForm.poDatamgr.SqlExecute([Select * From SigPrTri Where Tipos = ']+ThisForm.Container1.fwget1.Value+['],"CsSigPrTri")
+	Select csSigPrTri
+	If ! Eof()
+		MessageBox("Novo Tipo Ja Cadastrado",16,"")
+		Return
+	EndIf
+	
+	lcTipo = .GetTipo.Value
+	ThisForm.poDatamgr.Requery("cnSigPrTri")
+	
+	Replace all Tipos     With .fwget1.Value,;
+	            Descs     With .fwget2.Value,;
+	            cIdChaves With fUniqueIds()
+	
+	ThisForm.poDatamgr.UpDate("cnSigPrTri")
+	ThisForm.poDatamgr.Commit()
+	
+EndWith 
+
+Release Windows
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGCDICD
+RESERVED3 (ClassInfo): podatamgr
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 6
+================================================================================

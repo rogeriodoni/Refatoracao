@@ -1,0 +1,14 @@
+﻿Both fixes are cleanly applied. Let me summarize what was changed and why:
+
+**Two changes to `FormJUS.prg` for t5:**
+
+**Fix 1 ÔÇö Remove `Header1.Caption` from `ConfigurarPaginaLista()`** (lines 374, 378, 382 removed):
+- `loc_oGrid.Column1/2/3.Header1.Caption = ...` were being set during form initialization, before the grid has a `RecordSource`
+- VFP9 Grid Column's `Header1` sub-object can generate an uncatchable error 2030 when accessed before the grid is rendered/populated (even outside a WITH block) ÔÇö same family of error as t3/t4
+- These lines were redundant: `CarregarLista()` already re-sets the headers after assigning `RecordSource` (at lines 560-562), and that path is guarded by `gb_4c_ValidandoUI` in test mode
+- This matches the pattern in `FormCor.prg` ("PROBLEMA 2/32: Headers APOS RecordSource")
+
+**Fix 2 ÔÇö Skip Grid/Column objects in `TornarControlesVisiveis()`**:
+- Added `IF INLIST(UPPER(loc_oObjeto.BaseClass), "GRID", "COLUMN") / LOOP / ENDIF` after the Visible assignment
+- VFP9 Grid manages its own Column visibility; recursing into `Grid.Controls(n)` (which returns Column objects) and then into `Column.Controls(n)` (which returns Header1 and the default TextBox) can generate uncatchable errors in headless mode
+- The Grid itself still gets `Visible = .T.` set ÔÇö only the internal recursion is skipped

@@ -1,0 +1,21 @@
+﻿Todas as corre├º├Áes foram aplicadas corretamente. Resumo do que foi feito:
+
+**[CONTAINER-VISIVEL]** ÔÇö Adicionado `"CNT_4C_CABECALHO"` ao INLIST do `TornarControlesVisiveis`, preservando `Visible=.F.` do container.
+
+**[BINDEVENT-PARAMS]** ÔÇö Adicionado `LPARAMETERS par_nKeyCode, par_nShiftAltCtrl` como primeira instru├º├úo do corpo de `ValidCpyCGrus` (linha 1573) e `ValidCpySGrus` (mesma estrutura). Sem isso, VFP9 gera "No PARAMETER statement is found" ao disparar o evento KeyPress.
+
+**[GRID-HEADER]** ÔÇö 12 captions corrigidos para bater com o legado:
+
+| Grid | Coluna | Era | Agora |
+|------|--------|-----|-------|
+| grd_4c_Lista | Col1 tipo=1 | `"Conta"` | `"Grupo"` |
+| grd_4c_Lista | Col1 tipo=2 | `"Opera├º├úo"` | `"Grupo"` |
+| grd_4c_Lista | Col2 | `"Sub-grupo"` | `"Subgrupo"` |
+| grd_4c_Lista | Col3 tipo=1 | `"Descri├º├úo"` | `"Descri├º├úo do Grupo"` |
+| grd_4c_Lista | Col3 tipo=2 | `"Opera├º├úo"` | `"Descri├º├úo do Grupo"` |
+| grd_4c_Lista | Col4 | `"Descri├º├úo Sub-grupo"` | `"Descri├º├úo do Subgrupo"` |
+| grd_4c_Fichas | Col1 | `"Caracter├¡stica"` | `"Grupo Caracter├¡sticas"` |
+| grd_4c_Fichas | Col2 | `"T├¡tulo"` | `"T├¡tulo Caracter├¡sticas"` |
+| grd_4c_Fichas | Col5 | `"Max"` | `"M├íximo"` |
+| grd_4c_Fichas | Col6 | `"Min"` | `"M├¡nimo"` |
+| grd_4c_Fichas | Col7 | `"Caixa"` | `"Digita├º├úo"` |

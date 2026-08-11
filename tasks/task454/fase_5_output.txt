@@ -1,0 +1,9 @@
+﻿All three pieces are in place. The integration is complete:
+
+- **Lines 257-259**: `DEFINE BAR 113` (separator) + `DEFINE BAR 114` ("Jornadas de Trabalho") in popCadastros
+- **Line 359**: `ON SELECTION BAR 114 OF popCadastros DO AbrirFormJrn`
+- **Lines 8202-8227**: `PROCEDURE AbrirFormJrn()` at end of file
+
+Config.prg doesn't need changes ÔÇö it already auto-loads all `*BO.prg` from classes/ and all `Form*.prg` from forms/cadastros/ via ADIR(), so JrnBO.prg and FormJrn.prg load automatically.
+
+**Fase 8/8 conclu├¡da.** A migra├º├úo de SIGCDJRN est├í completa: JrnBO.prg (fases 1-2), FormJrn.prg (fases 3-7 com painel cnt_4c_CopiaMes inclu├¡do), e integra├º├úo no menu (fase 8).

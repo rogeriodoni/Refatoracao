@@ -1,0 +1,5 @@
+﻿Fix aplicado com sucesso. O bug era o mismatch de nome de classe na linha 52 do `FormGrupo.prg`: `CREATEOBJECT("GrpBO")` ÔåÆ `CREATEOBJECT("GrupoBO")`.
+
+**Causa do timeout**: A classe no arquivo `GrupoBO.prg` se chama `GrupoBO`, mas o form tentava criar `GrpBO`. VFP9 n├úo encontra a classe nos procedures carregados, tenta abrir o arquivo `GrpBO.prg` (inexistente), e em alguns cen├írios de execu├º├úo abre um dialog de erro interno que o `SYS(2335, 0)` n├úo suprime ÔÇö bloqueando por exatamente 300 segundos at├® o pipeline matar o processo.
+
+**Por que 7 tentativas anteriores falharam**: Os fix outputs t1-t7 descreveram a corre├º├úo textualmente mas nenhum chamou a ferramenta Write/Edit para gravar o arquivo. O arquivo em disco ficou inalterado.

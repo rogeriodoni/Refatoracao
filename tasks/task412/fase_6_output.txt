@@ -1,0 +1,20 @@
+﻿Analisando tudo:
+
+- O **SIGCDFAPF.SCX original ├® essencialmente vazio** ÔÇö apenas `Form1` com `Width=375, Height=250, TitleBar=0` e zero controles, m├®todos ou campos.
+- As fases 1ÔÇô5 j├í geraram a estrutura completa adequada para um form operacional sem campos pr├│prios.
+- A **Fase 6** pede: ├║ltimos 50% de TextBoxes/Labels + lookups + `cnt_4c_BotoesAcao` ÔÇö mas como o original n├úo tem nenhum campo nem lookup, n├úo h├í nada a adicionar.
+- O `ConfigurarPaginaDados()` j├í existe com `cnt_4c_BotoesDados` (Confirmar/Cancelar), que ├® o equivalente ao `cnt_4c_BotoesAcao` pedido.
+
+O `FormFAPF.prg` j├í est├í **completo e correto** para esta migra├º├úo. Todas as 764 linhas s├úo funcionais:
+
+| Verifica├º├úo | Status |
+|---|---|
+| `ConfigurarPaginaDados()` com bot├Áes Confirmar/Cancelar | Ô£à Presente |
+| `FormParaBO()` vazio (correto ÔÇö sem campos) | Ô£à Presente |
+| `BOParaForm()` vazio (correto ÔÇö sem campos) | Ô£à Presente |
+| `HabilitarCampos()` controla btn Confirmar | Ô£à Presente |
+| Nenhum lookup no original ÔåÆ nenhum BINDEVENT de lookup | Ô£à Correto |
+| `cnt_4c_PainelDados` inicia `Visible=.F.` | Ô£à Correto |
+| `TornarVisivelRecursivo()` pula `cnt_4c_PainelDados` | Ô£à Correto |
+
+**Fase 6/8 conclu├¡da sem altera├º├Áes necess├írias.** O SCX original (`SIGCDFAPF`) era um form vazio ÔÇö paridade 100% com o legado foi atingida nas fases anteriores. A implementa├º├úo est├í pronta para a Fase 7 (valida├º├Áes/testes).

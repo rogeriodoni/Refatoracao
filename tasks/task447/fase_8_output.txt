@@ -1,0 +1,8 @@
+﻿Fase 8 conclu├¡da. O FormICM.prg est├í completo com todos os m├®todos implementados.
+
+**O que foi feito:**
+- Adicionado `AjustarBotoesPorModo()` (linha 1306) ÔÇö habilita/desabilita os bot├Áes CRUD da Page1 conforme o modo atual (LISTA vs INCLUIR/ALTERAR/VISUALIZAR)
+- Chamadas inseridas em: `BtnIncluirClick`, `BtnVisualizarClick`, `BtnAlterarClick`, `BtnSalvarClick`, `BtnCancelarClick` ÔÇö sempre ap├│s alterar `this_cModoAtual`
+- Corrigido `menu.prg`: `Show(1)` ÔåÆ `Show()` sem par├ómetro (regra Problema 3)
+
+A integra├º├úo j├í estava correta: `ADIR()` no `config.prg` carrega automaticamente `ICMBO.prg` (em `classes/`) e `FormICM.prg` (em `forms/cadastros/`), e o `menu.prg` j├í tinha o `DEFINE BAR` e `AbrirFormICM()` configurados.

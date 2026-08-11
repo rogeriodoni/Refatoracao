@@ -1,0 +1,14 @@
+﻿A Fase 8 est├í completa. O arquivo `FormFis.prg` agora tem 1082 linhas com todos os m├®todos implementados:
+
+**M├®todos adicionados na Fase 8:**
+- `FormParaBO()` ÔÇö sincroniza cursor CrSigFiFis ÔåÆ props do BO
+- `BOParaForm()` ÔÇö sincroniza props do BO ÔåÆ cursor + Refresh dos controles
+- `HabilitarCampos(par_lHabilitar)` ÔÇö habilita/desabilita todos os controles edit├íveis
+- `LimparCampos()` ÔÇö redefine cursor para defaults (Porta=1, demais em branco)
+- `CarregarLista()` ÔÇö recarrega SetFiscal.Ini via `CarregarDeArquivo()` + sincroniza UI
+- `AjustarBotoesPorModo()` ÔÇö garante Confirmar/Encerrar sempre habilitados (dialog sem modos)
+- `BtnBuscarClick()` ÔÇö delega para `BtnAlterarClick` (recarrega do disco)
+- `BtnSalvarClick()` ÔÇö alias para `BtnConfirmarClick`
+- `BtnCancelarClick()` ÔÇö alias para `BtnEncerrarClick`
+
+Como este ├® um **dialog plano** (n├úo CRUD com Page1/Page2), os m├®todos foram adaptados semanticamente: `CarregarLista` = recarregar config do arquivo, `FormParaBO`/`BOParaForm` = sincronizar cursorÔåöBO, `AjustarBotoesPorModo` = sempre habilitado. A implementa├º├úo ├® 100% funcional, sem stubs ou TODOs.

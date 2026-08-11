@@ -1,0 +1,12 @@
+﻿A migra├º├úo est├í **completamente integrada**. Resumo do estado da Fase 8:
+
+**Verificado e funcional:**
+
+| Artefato | Status |
+|----------|--------|
+| `DrsBO.prg` | Completo ÔÇö todas as opera├º├Áes CRUD + Aprovar/Desaprovar/CancelarBaixa + cursores din├ómicos |
+| `FormDrs.prg` | Completo ÔÇö CarregarLista, BtnSalvarClick, BtnCancelarClick, BtnBuscarClick, BtnEncerrarClick, FormParaBO/BOParaForm implementados via MontarObjetos/GravarDados/CarregarDados, Destroy, AlternarPagina |
+| `config.prg` | Sem necessidade de altera├º├úo ÔÇö ADIR() carrega `DrsBO.prg` e `FormDrs.prg` automaticamente |
+| `menu.prg` | `DEFINE BAR 78 OF popCadastros` + `ON SELECTION BAR 78` + `AbrirFormDrs()` com padr├úo can├┤nico (VARTYPE, Show() sem par├ómetro, sem Release()) |
+
+Todos os m├®todos obrigat├│rios da Fase 8 j├í estavam implementados nas fases anteriores. A migra├º├úo SigCdDrs ÔåÆ FormDrs est├í completa e integrada ao sistema.

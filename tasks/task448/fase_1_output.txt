@@ -1,0 +1,10 @@
+﻿**Fase 1/8 conclu├¡da.** Arquivo criado: `C:\4c\projeto\app\classes\ICNBO.prg`
+
+**Propriedades declaradas:**
+- `this_cTabela = "sigcdprg"` / `this_cCampoChave = "pkchaves"` ÔÇö configura├º├úo da tabela (pkchaves char(25) PK)
+- `this_cCursorProg = "cursor_4c_Prog"` ÔÇö cursor principal do grid (programas + barrapict)
+- `this_cCursorIcones = "cursor_4c_Icones"` ÔÇö cursor dos ├¡cones do sistema (SIGSYICO)
+- `this_cDirTmp = ""` ÔÇö diret├│rio temp para arquivos `.ico` extra├¡dos de `marqicones`
+- `this_lSalvo = .F.` ÔÇö flag de confirma├º├úo (OK clicado e salvo)
+
+**Decis├úo de design:** Este BO opera em modo bulk-cursor (n├úo tem `this_c*` por campo), porque o form salva todas as linhas do cursor em um loop SCAN ÔÇö n├úo h├í "registro corrente" no sentido CRUD. As pr├│ximas fases adicionar├úo `CarregarProgramas()`, `CarregarIcones()`, `Salvar()` e `LimparArquivosTemp()`.

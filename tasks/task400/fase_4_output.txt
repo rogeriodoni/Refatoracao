@@ -1,0 +1,21 @@
+﻿Tudo correto ÔÇö os `RETURN` de valida├º├úo (linhas 849, 863) est├úo fora de TRY/CATCH. A Fase 4 est├í completa.
+
+**Resumo do que foi implementado:**
+
+- **`ConfigurarPaginaLista()`** ÔÇö completa com:
+  - 5 bot├Áes CRUD em `cnt_4c_Botoes` (Incluir/Visualizar/Alterar/Excluir/Buscar) com ├¡cones e propriedades can├┤nicas
+  - `cmd_4c_Encerrar` em `cnt_4c_Saida` (padr├úo can├┤nico Left=917)
+  - `cmd_4c_Copia` (Top=33 = 4+29, Left=474 ÔÇö original preservado)
+  - `grd_4c_Lista` vinculado a `cursor_4c_Dados` / coluna `series`
+  - `cnt_4c_CopiaFl` (painel flutuante, Visible=.F., nome guardado em TornarControlesVisiveis)
+  - 10 BINDEVENTs para todos os bot├Áes
+
+- **`ConfigurarPaginaDados()`** ÔÇö bot├Áes Confirmar/Cancelar adicionados em `cnt_4c_BotoesAcao` (├¡cones corretos: `cadastro_salvar_60.jpg` / `cadastro_cancelar_60.jpg`)
+
+- **`CarregarLista()`** ÔÇö vincula `RecordSource="cursor_4c_Dados"`, redefine header ap├│s RecordSource
+
+- **`AlternarPagina(par_nPagina)`** ÔÇö alterna entre Page1/Page2, recarrega lista ao voltar
+
+- **10 handlers de bot├úo** ÔÇö BtnIncluirClick, BtnVisualizarClick, BtnAlterarClick, BtnExcluirClick, BtnBuscarClick, BtnEncerrarClick, BtnSalvarClick, BtnCancelarClick, BtnCopiarClick, BtnOKCopiarClick, BtnCancelarCopiarClick, ValidarSerieDestino
+
+Fases 5-6 completar├úo `FormParaBO()`/`BOParaForm()` com os campos de Page2.

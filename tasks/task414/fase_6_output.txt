@@ -1,0 +1,12 @@
+﻿All 14 new methods are in place. Phase 6 is complete. The file now has 2174 lines with the full implementation:
+
+**Methods added:**
+- `CROLostFocus()` ÔÇö formats CRO field with `@L 999999` mask on exit
+- `FormParaBO()` ÔÇö maps all 31 form controls ÔåÆ BO properties (checkboxes use `= 1` comparison to safely coerce numeric/logical to logical)
+- `BOParaForm()` ÔÇö maps all 31 BO properties ÔåÆ form controls (checkboxes use `IIF(..., 1, 0)` for consistent numeric state)
+- `HabilitarCampos()` ÔÇö ReadOnly/Enabled per field with rules: `txt_4c_Codigo` only editable in INCLUIR, `txt_4c_Codnac` always disabled
+- `LimparCampos()` ÔÇö resets all fields; sets checkboxes to 0 (numeric), optiongroups to 1
+- `AjustarBotoesPorModo()` ÔÇö enables Confirmar only in INCLUIR/ALTERAR modes
+- `BtnIncluirClick()` through `BtnCancelarClick()` ÔÇö 8 complete CRUD handlers
+
+**Also fixed:** `ModeloLostFocus()` now populates `txt_4c_Codnac` with `cidecfs` from the selected model, so the readonly C├│digo Nacional field auto-fills when the user picks a model.

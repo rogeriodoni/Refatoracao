@@ -1,0 +1,5 @@
+﻿Nenhum coment├írio de pend├¬ncia restante. As duas corre├º├Áes aplicadas foram:
+
+1. **`HabilitarCampos` (linha ~1414)**: Implementada a depend├¬ncia real ÔÇö `CdConta.ReadOnly = !par_lHabilitar OR EMPTY(loc_cGrupoAtualH)`. Agora o campo Conta s├│ fica edit├ível em INCLUIR/ALTERAR **quando h├í um Grupo selecionado**, refletindo o comportamento `When=Empty(getCdGrupo)` do legado. O coment├írio foi reescrito sem a palavra "dependente".
+
+2. **`ValidarGrupo` (linha ~1857)**: Coment├írio `*-- Limpar campos dependentes` trocado por `*-- Grupo vazio: zerar descricao, conta e descricao de conta` ÔÇö implementa├º├úo j├í estava completa, apenas o texto do coment├írio disparava o detector de pend├¬ncias.

@@ -1,0 +1,21 @@
+[2026-08-11 00:45:35] [INFO] === CLAUDE CLI INVOKER ===
+[2026-08-11 00:45:35] [INFO] Prompt File: C:\4c\tasks\task455\runtime_fix_prompt_06b_testeAutomatico_t1.md
+[2026-08-11 00:45:35] [INFO] Output File: C:\4c\tasks\task455\06b_testeAutomatico_fix_output_t1.txt
+[2026-08-11 00:45:35] [INFO] Model: sonnet
+[2026-08-11 00:45:35] [INFO] Timeout: 3600 segundos
+[2026-08-11 00:45:35] [INFO] Max Output Tokens: 128000
+[2026-08-11 00:45:35] [INFO] Context Files: 0 arquivo(s)
+[2026-08-11 00:45:35] [INFO] Invocando Claude CLI...
+[2026-08-11 00:45:35] [INFO] Prompt carregado: 54853 caracteres
+[2026-08-11 00:45:35] [INFO] Executando: claude --model sonnet --dangerously-skip-permissions --add-dir C:\4c
+[2026-08-11 00:45:35] [INFO] Tamanho total do prompt: 54853 caracteres
+[2026-08-11 00:45:35] [INFO] Invocando Claude CLI (tentativa 1/7)...
+[2026-08-11 01:33:17] [INFO] Claude CLI finalizado em 2861.7960423 segundos
+[2026-08-11 01:33:17] [INFO] Exit Code: 0
+[2026-08-11 01:33:17] [INFO] Output salvo em: C:\4c\tasks\task455\06b_testeAutomatico_fix_output_t1.txt
+[2026-08-11 01:33:17] [INFO] Output size: 1203 bytes
+[2026-08-11 01:33:17] [INFO] SUCESSO: Claude CLI executado com sucesso
+[2026-08-11 01:33:17] [INFO] Preview do output:
+[2026-08-11 01:33:17] [INFO] The file is correct. Here's a summary of what was fixed in `FormJUS.prg`:
+
+**Root cause of the 300-second TIMEOUT**: `FormJUS.Init()` at line 46 had an AND non-short-circuit bug: `IF VARTYPE(par_cRetrabalho) = "C" AND !EMPTY(ALLTRIM(par_cRetrabalho))`. When TesteAutomatico calls `CREATEOBJECT("FormJUS")` with no parameters, `par_cRetrabalho` is `.F.` (type logical). VFP9 evaluates BOTH sides of AND, calling `ALLTRIM(.F.)` which throws error 9 "Data type mismatch". Since this was outside any TR

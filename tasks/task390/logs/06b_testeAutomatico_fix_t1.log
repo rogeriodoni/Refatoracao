@@ -1,0 +1,21 @@
+[2026-07-31 22:28:31] [INFO] === CLAUDE CLI INVOKER ===
+[2026-07-31 22:28:31] [INFO] Prompt File: C:\4c\tasks\task390\runtime_fix_prompt_06b_testeAutomatico_t1.md
+[2026-07-31 22:28:31] [INFO] Output File: C:\4c\tasks\task390\06b_testeAutomatico_fix_output_t1.txt
+[2026-07-31 22:28:31] [INFO] Model: sonnet
+[2026-07-31 22:28:31] [INFO] Timeout: 3600 segundos
+[2026-07-31 22:28:31] [INFO] Max Output Tokens: 128000
+[2026-07-31 22:28:31] [INFO] Context Files: 0 arquivo(s)
+[2026-07-31 22:28:32] [INFO] Invocando Claude CLI...
+[2026-07-31 22:28:32] [INFO] Prompt carregado: 110776 caracteres
+[2026-07-31 22:28:32] [INFO] Executando: claude --model sonnet --dangerously-skip-permissions --add-dir C:\4c
+[2026-07-31 22:28:32] [INFO] Tamanho total do prompt: 110776 caracteres
+[2026-07-31 22:28:32] [INFO] Invocando Claude CLI (tentativa 1/7)...
+[2026-07-31 22:29:05] [INFO] Claude CLI finalizado em 33.8191257 segundos
+[2026-07-31 22:29:05] [INFO] Exit Code: 0
+[2026-07-31 22:29:05] [INFO] Output salvo em: C:\4c\tasks\task390\06b_testeAutomatico_fix_output_t1.txt
+[2026-07-31 22:29:05] [INFO] Output size: 551 bytes
+[2026-07-31 22:29:05] [INFO] SUCESSO: Claude CLI executado com sucesso
+[2026-07-31 22:29:05] [INFO] Preview do output:
+[2026-07-31 22:29:05] [INFO] O fix est+í aplicado. O problema era que `InicializarForm()` verificava `gnConnHandle` antes de checar o modo de teste (`gb_4c_ValidandoUI`), ent+úo em ambiente de teste sem banco de dados o form mostrava `MsgErro()` e retornava `.F.`, fazendo o `CREATEOBJECT` falhar.
+
+A corre+º+úo adiciona o guard de UI validation no in+¡cio do bloco TRY: quando `gb_4c_ValidandoUI = .T.`, executa apenas `ConfigurarPageFrame()` (necess+írio para a estrutura do form existir) e retorna `.T.`, sem tentar conectar

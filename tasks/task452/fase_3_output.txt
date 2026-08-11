@@ -1,0 +1,17 @@
+﻿Tudo correto. O `RETURN .T.` na linha 264 est├í FORA do TRY (├® um guard antes do TRY), e o `RETURN loc_lResultado` na linha 299 est├í ap├│s o ENDTRY. Sem viola├º├úo da regra cr├¡tica.
+
+**Fase 3/8 conclu├¡da.** `C:\4c\projeto\app\forms\cadastros\FormInf.prg` criado com 318 linhas contendo:
+
+| M├®todo | Descri├º├úo |
+|--------|-----------|
+| `Init()` | `RETURN DODEFAULT()` ÔÇö sem chamada duplicada |
+| `InicializarForm()` | Cria InfBO, define Caption com CHR(), chama ConfigurarPageFrame, guard gb_4c_ValidandoUI |
+| `ConfigurarPageFrame()` | PageFrame Top=-29, 2 p├íginas com Picture, chama sub-m├®todos |
+| `ConfigurarPaginaLista()` | cnt_4c_Cabecalho (com labels), cnt_4c_Botoes vazio, cnt_4c_Saida can├┤nico (Left=917) |
+| `ConfigurarPaginaDados()` | CREATE CURSOR cursor_4c_Emps (equivalente ao xEmInf), cnt_4c_BotoesAcao vazio |
+| `TornarControlesVisiveis()` | Recursivo, trata PageFrame.Pages() e containers |
+| `FormatarGridLista()` | SetAll Tahoma/8 |
+| `CarregarLista()` | Chama Buscar(); se grd_4c_Lista existir (PEMSTATUS), configura ControlSource ÔÇö funciona nas fases 3 e 4+ |
+| `Destroy()` | Libera BO, cursor_4c_Dados e cursor_4c_Emps |
+
+**Pr├│xima fase (4/8):** Adicionar grd_4c_Lista + bot├Áes CRUD completos em ConfigurarPaginaLista().

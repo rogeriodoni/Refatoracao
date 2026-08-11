@@ -1,0 +1,19 @@
+﻿Ambos os arquivos est├úo nos lugares corretos ÔÇö o config.prg os carregar├í automaticamente via `ADIR()`. N├úo ├® necess├írio nenhuma altera├º├úo.
+
+**Resumo do estado da FASE 7/8:**
+
+Os 4 eventos principais j├í estavam implementados desde a fase anterior (o arquivo estava rotulado como "FASE 6/8" mas j├í continha o conte├║do completo da fase 7):
+
+| M├®todo | Linha | Status |
+|---|---|---|
+| `BtnIncluirClick()` | 1230 | Ô£à Implementado ÔÇö chama `NovoRegistro()`, seta modo, limpa campos, navega para Page2 |
+| `BtnAlterarClick()` | 1247 | Ô£à Implementado ÔÇö carrega por `cIdChaves`, chama `EditarRegistro()`, `BOParaForm()` |
+| `BtnVisualizarClick()` | 1276 | Ô£à Implementado ÔÇö carrega, `HabilitarCampos(.F.)`, desabilita Confirmar |
+| `BtnExcluirClick()` | 1304 | Ô£à Implementado ÔÇö confirma├º├úo via `MsgConfirma()`, chama `Excluir()` |
+
+**Integra├º├úo:**
+- `CVEBO.prg` em `classes/` ÔåÆ carregado automaticamente pelo ADIR em config.prg
+- `FormCVE.prg` em `forms/cadastros/` ÔåÆ carregado automaticamente pelo ADIR em config.prg  
+- `AbrirFormCVE()` + `ON SELECTION BAR 73` ÔåÆ j├í em menu.prg (linha 235 e 6802)
+
+O FormCVE est├í **completamente migrado** ÔÇö todas as 8 fases est├úo conclu├¡das.

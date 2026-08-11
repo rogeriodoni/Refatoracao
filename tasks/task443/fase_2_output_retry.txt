@@ -1,0 +1,12 @@
+﻿Fase 2 completa. Adicionei ao `GrupoBO.prg`:
+
+**Propriedades novas** (linha 27-28):
+- `this_cCgrus` (SigOpGpo.Cgrus char(3))
+- `this_cIdChaves` (SigOpGpo.cIdChaves char(30) - PK)
+
+**Metodos CRUD** (antes de `LiberarCursores`):
+- `CarregarDoCursor(par_cAliasCursor)` ÔÇö mapeia Dopes/Cgrus/cIdChaves do cursor com `SELECT (loc_cAlias)` + `TYPE(loc_cAlias + ".Col") != "U"` para checagem defensiva
+- `Inserir()` ÔÇö INSERT em SigOpGpo (Dopes, Cgrus, cIdChaves) usando `EscaparSQL()`, gera `cIdChaves` via `SYS(2015)` se vazia, chama `RegistrarAuditoria("INSERIR")`
+- `Atualizar()` ÔÇö UPDATE por PK cIdChaves, chama `RegistrarAuditoria("ATUALIZAR")`
+
+**Ja existentes** preservados: `ObterChavePrimaria()` retornando `this_cDopes`, `Confirmar()` (bulk DELETE+INSERT que ja chamava `RegistrarAuditoria`), e cleanup em `LiberarCursores()` estendido para os novos cursores auxiliares (`cursor_4c_InsUnit`, `cursor_4c_UpdUnit`).

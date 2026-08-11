@@ -1,0 +1,262 @@
+{
+  "resumo": {
+    "totalMetodos": 15,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 7,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fCriptografar", "fDecriptografar", "File", "FCOUNT", "fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDFBI",
+      "evento": "Init",
+      "linhas": 22,
+      "codigoOriginal": "With ThisForm\n\t.poDataMgr = CreateObject([fSqlConector], .Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\n\t\tWith .poDatamgr\n\t\t\t.AddCursor('SigFiMpf','cidchaves','crSigFiMpF','',ThisForm.Pagina.Lista.Grade)\n\t\t\t.pfSqlTabela(1).pColuna([cImpFabs], [], [], [Código], 150, .t.)\n\t\t\t.pfSqlTabela(1).pColuna([emps], \t[], [], [Empresa], 080, .t.)\n\t\t\t.pfSqlTabela(1).pColuna([fCriptografar(crSigFiMpF.cImpFabs)], [], [], [Fabricação], 150, .t.)\n\t\t\t.pfSqlTabela(1).pColuna([cncaixas], [], [], [Caixa], 150, .t.)\n\t\tEndWit... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDFBI",
+      "evento": "Click",
+      "linhas": 38,
+      "codigoOriginal": "lparameters opcao\nselect crSigFiMpf\nThisForm.Pagina.Lista.grade.RecordSource=\"\"\nIf !dodefault( Opcao )\n\tThisForm.mAtivapagina1\n\tReturn\nEndif\n\nDo Case\n\tCase Inlist( thisform.pcEscolha, 'INSERIR', 'PROCURAR' )\n\t\tIf ThisForm.pcEscolha = 'INSERIR'\n\t\t\tReplace CrSigFiMpf.Emps With _Empr In crSigFiMpf\n\t\tEndif\n\t\tThisform.Pagina.Dados.Get_codigo.Enabled=.t.\n\t\tThisform.Pagina.Dados.Get_codigo.value = ''\n\t\tThisForm.Pagina.Dados.Get_codigo.SetFocus\n\tCase Inlist( thisform.pcEscolha, 'ALTERAR','CONSULTAR', 'E... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fCriptografar",
+        "metodosFormChamados": "Value = Val",
+        "controlesReferenciados": "Get_codigo,get_ncaixa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFBI",
+      "evento": "Click",
+      "linhas": 289,
+      "codigoOriginal": "if Inlist( thisform.pcEscolha, 'INSERIR', 'ALTERAR')\n\tif Inlist( thisform.pcEscolha, 'INSERIR')\n\t\n*!*\t\t\tlcImpFabs=fDecriptografar(thisform.pagina.dados.get_codigo.value)\n*!*\t\t\tif ThisForm.poDatamgr.ChkRegister( 'SigFiMpf', 'cImpFabs', lcImpFabs )\n*!*\t\t\t\tmessagebox('Código já cadastrado ! ',0+48,'')\n*!*\t\t\t\tthisform.pagina.dados.get_codigo.setfocus\n*!*\t\t\t\treturn\n*!*\t\t\tEndIf\n\t\t\n\t\tif empty(thisform.pagina.dados.get_codigo.value)\n\t\t\tmessagebox('Código Inválido',0+48,'')\n\t\t\tthisform.pagina.dados.get_c... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fDecriptografar,File,FCOUNT",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "get_codigo,Get_Emp",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDFBI",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "DoDefault()\n\nif thisform.plCancelar\n\tthisform.mAtivapagina1\nendif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFBI.Pagina.Dados.GetModelo",
+      "evento": "Valid",
+      "linhas": 26,
+      "codigoOriginal": "LOCAL xBrox\n\nIf !IsEmpty( This.Value )\n\txBrox = CreateObject('fwBuscaExt',Thisform.poDatamgr.pnIdconn,'SigFiMpM','crSigFiMpM','cModelos',This.Value,'Modelos',.t.,'cModelos')\n\n\tIf  Not xBrox.plAchouRegistro\n\t\txBrox.mAddColuna('cModelos', '', 'Modelo', .t.)\n\t\txBrox.mAddColuna('cMarcas', '', 'Marca', .t.)\n\t\txBrox.mAddColuna('cversbs', Replicate('x', 15), 'Versão S.B.', .t.)\n\t\txBrox.mAddColuna('cidecfs', Replicate('x', 15), 'Cod.Nac.ECF', .t.)\n\t\txBrox.mAddColuna('cmfadis', Replicate('x', 12), 'MF Ad... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFBI.Pagina.Dados.Get_codigo",
+      "evento": "When",
+      "linhas": 7,
+      "codigoOriginal": "LOCAL RET\nret=.t.\nDODEFAULT()\nIF thisform.pcEscolha='ALTERAR'\n\tRET=.F.\nENDIF\nRETURN(RET)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFBI.Pagina.Dados.Get_ncaixa",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "IF LEN(ALLTRIM(This.Value)) < 3\n\tMESSAGEBOX('Obrigatorio Preenchimento de 3 digitos',0+48,'Erro')\n\tRETURN 0\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFBI.Pagina.Dados.Get_Emp",
+      "evento": "Valid",
+      "linhas": 12,
+      "codigoOriginal": "LOCAL xBrox\n\nIf !IsEmpty( This.Value )\n\txBrox = CreateObject('fwBuscaExt',Thisform.poDatamgr.pnIdconn,'SigCdEmp','crSigCdEmp','cEmps',This.Value,'Empresas',.t.,'cEmps')\n\n\tIf  Not xBrox.plAchouRegistro\n\t\txBrox.mAddColuna('CEmps', 'XXXXXX', 'Código', .t.)\n\t\txBrox.mAddColuna('Razas', '', 'Descrição', .t.)\n\t\txBrox.Show()\n\t\tThis.Value = Iif( LastKey() # 27, Evaluate('crSigCdEmp.CEmps'), '' )\n\tEndIf \nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFBI.Pagina.Dados.GetNumUsu",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "This.Value = Transform(Val(This.Value), '@L 99')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFBI.Pagina.Dados.GetNumUsu",
+      "evento": "GotFocus",
+      "linhas": 5,
+      "codigoOriginal": "IF Empty(This.parent.GetModelo.Value)\n\tMESSAGEBOX('Obrigatorio Preenchimento',0+48,'Erro')\n\tThis.parent.GetModelo.SetFocus\n\tRETURN 0\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFBI.Pagina.Dados.GetCoos",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "This.Value = Transform(Val(This.Value), '@L 999999')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFBI.Pagina.Dados.GetCRO",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "This.Value = Transform(This.Value, '@L 999999')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFBI.Pagina.Dados.getcodnac",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDFBI.Pagina.Dados.getcodnac",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "This.Value = Transform(Val(This.Value), '@L 999999')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFBI.Pagina.Dados.Chk_Bompara",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

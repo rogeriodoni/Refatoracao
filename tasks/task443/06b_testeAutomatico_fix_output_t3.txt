@@ -1,0 +1,3 @@
+﻿Corre├º├úo aplicada: `CREATEOBJECT("GrpBO")` ÔåÆ `CREATEOBJECT("GrupoBO")`.
+
+**Causa raiz:** O form tentava instanciar a classe `"GrpBO"` que n├úo existe ÔÇö VFP9 tentava carregar `GrpBO.prg`, lan├ºava erro "File does not exist", o CATCH capturava e chamava `MsgErro()` (que usa `MESSAGEBOX()` Win32), que n├úo ├® suprimido pelo `SYS(2335, 0)`, bloqueando o processo pelos 300s de timeout. O BO correto ├® `GrupoBO` conforme definido em `GrupoBO.prg`.

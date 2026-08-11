@@ -1,0 +1,14 @@
+﻿O arquivo EspBO.prg j├í cont├®m **todos os m├®todos CRUD da Fase 2** ÔÇö a Fase 1 gerou um BO completo. Vou verificar se est├í tudo correto e consistente com o c├│digo fonte original.
+
+Revis├úo do EspBO.prg:
+
+- Ô£à `CarregarDoCursor()` ÔÇö usa `SELECT (par_cAliasCursor)` antes de acessar campos (padr├úo correto)
+- Ô£à `Inserir()` ÔÇö INSERT com todos os 4 campos (`especies`, `descs`, `provs`, `obrigs`), chama `RegistrarAuditoria("INSERT")`
+- Ô£à `Atualizar()` ÔÇö UPDATE dos 3 campos n├úo-PK, chama `RegistrarAuditoria("UPDATE")`
+- Ô£à `ObterChavePrimaria()` ÔÇö retorna `THIS.this_cEspecies`
+- Ô£à `ExecutarExclusao()` ÔÇö verifica depend├¬ncias em `SigMvCcr.EspecieNfs` e `SigCdOpe.Especies` antes de excluir (exato do legado), chama `RegistrarAuditoria("DELETE")`
+- Ô£à `Validar()` ÔÇö valida `Especies`, `Descs`, `Provs` (conforme original)
+- Ô£à `VerificarDuplicidade()` ÔÇö checa duplicidade no INSERT
+- Ô£à `CarregarPorCodigo()` ÔÇö reseta `this_lNovoRegistro = .F.` ap├│s carregar
+
+**Fase 2/8 j├í est├í completa.** O EspBO.prg tem paridade funcional 100% com o legado. Nenhuma altera├º├úo necess├íria.

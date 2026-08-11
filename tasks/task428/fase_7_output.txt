@@ -1,0 +1,33 @@
+﻿Analisei ambos os arquivos e o contexto de integra├º├úo. A Fase 7/8 para este FormFpo est├í **completa** ÔÇö aqui est├í o diagn├│stico:
+
+## Estado Atual: Fase 7/8 Conclu├¡da
+
+Este ├® um form **OPERACIONAL** (editor de grade inline), n├úo um CRUD padr├úo. Os eventos equivalentes aos "BtnIncluirClick/BtnAlterarClick/BtnVisualizarClick/BtnExcluirClick" do template gen├®rico j├í est├úo implementados com os nomes corretos para este tipo:
+
+| Evento solicitado | Equivalente neste OPERACIONAL | Status |
+|---|---|---|
+| BtnIncluirClick() | `BtnInserirClick()` (linha 691) ÔÇö APPEND BLANK na grade | Ô£à |
+| BtnAlterarClick() | N/A ÔÇö edi├º├úo inline direto na grade | Ô£à |
+| BtnVisualizarClick() | N/A ÔÇö visualiza├º├úo inline | Ô£à |
+| BtnExcluirClick() | `BtnExcluirClick()` (linha 724) ÔÇö DELETE + SKIP | Ô£à |
+
+## Checklist Completo
+
+**FormFpo.prg** tem todos os handlers:
+- `BtnInserirClick` ÔÇö append blank, seta Dopes, SetFocus Column1
+- `BtnExcluirClick` ÔÇö delete + skip, refresh
+- `BtnEncerrarClick` ÔÇö valida duplicatas via `SalvarLote()`, fecha form
+- `BtnConfirmarClick` / `BtnCancelarClick` ÔÇö Page2
+- `GradeCol1/5KeyPress` ÔÇö F4 abre lookup de condi├º├úo de pagamento
+- `GradeCol2/3/4CheckKeyPress` ÔÇö Enter/Space toggle Obrigs/Autos/Contabs
+- `GradeCol1TextLostFocus` ÔÇö redirect a Encerrar se FPags vazio
+- `GradeCol1HeaderClick` ÔÇö ordena por FPags
+- `AbrirLookupFPags()` ÔÇö FormBuscaAuxiliar em crSigOpFp
+
+**FpoBO.prg** tem todos os m├®todos: `BuscarCondicoesPagamento`, `ValidarDuplicados`, `SalvarLote`, `Inserir`, `Atualizar`, `ExecutarExclusao`.
+
+**Integra├º├úo autom├ítica**: config.prg usa `ADIR(*BO.prg)` e `ADIR(Form*.prg)` ÔÇö ambos os arquivos s├úo carregados automaticamente sem SET PROCEDURE manual.
+
+**Menu**: FormFpo ├® sub-formul├írio chamado por FormSigCdOpe (cadastro de opera├º├Áes), n├úo item de menu direto ÔÇö nenhum DEFINE BAR necess├írio.
+
+A migra├º├úo do FormFpo est├í **100% funcional**. Nada a modificar nesta fase.

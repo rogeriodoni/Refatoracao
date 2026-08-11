@@ -1,0 +1,15 @@
+﻿O arquivo est├í completo e correto. Fase 2/8 conclu├¡da.
+
+**O que foi adicionado ao `IBPBO.prg`:**
+
+| M├®todo | Visibilidade | Fun├º├úo |
+|--------|-------------|--------|
+| `Buscar(par_cFiltro)` | PUBLIC | SELECT com filtro opcional ÔåÆ `cursor_4c_Dados` |
+| `CarregarPorCodigo(par_cCidChaves)` | PUBLIC | SELECT por PK; seta `this_lNovoRegistro = .F.` |
+| `CarregarDoCursor(par_cAliasCursor)` | PUBLIC | `SELECT (alias)` + mapeia todos os 15 campos |
+| `Inserir()` | PROTECTED | INSERT com `NEWID()` via SQL Server (fallback `fUniqueIds()`) + auditoria |
+| `Atualizar()` | PROTECTED | UPDATE completo por `cidchaves` + auditoria |
+| `ExecutarExclusao()` | PROTECTED | DELETE por `cidchaves` + auditoria |
+| `ImportarPlanilha()` | PUBLIC | Porta o `importaplan` original: GETDIR ÔåÆ ADIR ÔåÆ CSV loop ÔåÆ UPSERT via SQLEXEC |
+
+Pontos cr├¡ticos respeitados: nenhum `RETURN` dentro de `TRY/CATCH`; `GETDIR`/`ADIR` ficam fora do TRY para permitir early-exit limpo; `CarregarDoCursor` usa `SELECT (par_cAliasCursor)` antes de acessar campos.

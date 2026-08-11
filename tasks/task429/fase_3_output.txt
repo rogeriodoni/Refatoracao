@@ -1,0 +1,12 @@
+﻿Fase 3/8 conclu├¡da. O arquivo `C:\4c\projeto\app\forms\operacionais\FormFPP.prg` foi criado com:
+
+- **DEFINE CLASS FormFPP AS FormBase** com todas as propriedades visuais do original (Width=670, Height=420, TitleBar=0, ControlBox=.F., Movable=.F., DataSession=2)
+- **Propriedades** declaradas: `this_oFormPai`, `this_cFpags`, `this_lGravaDados`, `this_nPeAntValue`
+- **Init(par_oFormPai, par_cFpags)** ÔÇö valida par├ómetros, cria FPPBO, chama DODEFAULT() (sem RETURN dentro de TRY, regra #1)
+- **InicializarForm()** ÔÇö desabilita form pai, monta cabecalho e bot├Áes, carrega dados via `FPPBO.CarregarDados`
+- **ConfigurarCabecalho()** ÔÇö cnt_4c_Cabecalho com lbl_4c_Sombra (preto) + lbl_4c_Titulo (branco), AutoSize=.F., sem RGB inventado
+- **ConfigurarBotoes()** ÔÇö cmd_4c_Inserir, cmd_4c_Excluir, cmd_4c_Encerrar com posi├º├Áes do original (Left=435/515/590) e ├¡cones 60.jpg
+- **TornarControlesVisiveis()** ÔÇö recursiva com suporte a containers aninhados
+- **Destroy()** ÔÇö fecha xFPagi, reabilita form pai, chama DODEFAULT()
+
+**Pr├│xima fase (4/8)**: adicionar `ConfigurarGrade()` com o grid de 5 colunas + labels Label1 e Say2.

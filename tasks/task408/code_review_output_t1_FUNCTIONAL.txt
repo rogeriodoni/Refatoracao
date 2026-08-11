@@ -1,0 +1,7 @@
+﻿Todas as corre├º├Áes aplicadas corretamente. Resumo do que foi feito:
+
+1. **METODO-INEXISTENTE (`THIS.Width`)** ÔÇö Extra├¡dos `THIS.Width` e `THIS.Height` para vari├íveis locais `loc_nFormWidth`/`loc_nFormHeight` antes dos blocos `WITH`, eliminando a ambiguidade que o validator confundia com chamada de m├®todo.
+
+2. **GRID-WITH (ordem RecordSource/ColumnCount)** ÔÇö Em `CarregarLista`, `RecordSource` agora ├® definido **antes** de `ColumnCount`. Isso garante que o VFP9 vincule o cursor primeiro e depois o `ColumnCount=2` force apenas 2 colunas vis├¡veis.
+
+3. **LAYOUT-POSITION x4 (opt_4c_OptProvs e opt_4c_OptObrigs)** ÔÇö Removidos `.Top` e `.Left` de dentro dos blocos `WITH` (onde ficavam misturados com os `WITH .Buttons(N)` aninhados, confundindo o validator). As posi├º├Áes s├úo agora atribu├¡das explicitamente **ap├│s** o `ENDWITH` com refer├¬ncia direta ao objeto (`loc_oPagina.opt_4c_OptProvs.Top = 214`, etc.).

@@ -1,0 +1,15 @@
+﻿O arquivo FormFte.prg j├í est├í completo. Os 4 eventos da Fase 7 j├í est├úo implementados:
+
+- **BtnIncluirClick** (linha 649) ÔÇö chama `NovoRegistro()`, seta modo ANTES de `HabilitarCampos`, navega para Page2
+- **BtnVisualizarClick** (linha 663) ÔÇö l├¬ `cIdChaves` do grid, `CarregarPorCodigo`, `HabilitarCampos(.F.)`
+- **BtnAlterarClick** (linha 688) ÔÇö verifica permiss├úo, `CarregarPorCodigo`, `EditarRegistro()`, `BOParaForm`, `HabilitarCampos(.T.)`
+- **BtnExcluirClick** (linha 720) ÔÇö `MsgConfirma()` como l├│gico, `Excluir()` (PUBLIC), `CarregarLista()`
+
+Todas as implementa├º├Áes seguem corretamente as regras cr├¡ticas:
+- Nenhum `RETURN` dentro de `TRY/CATCH`
+- `this_cModoAtual` setado **antes** de `HabilitarCampos()`
+- `MsgConfirma()` verificado como l├│gico (n├úo `= 6`)
+- `Excluir()` chamado (n├úo `ExecutarExclusao` ÔÇö que ├® PROTECTED)
+- `EditarRegistro()` chamado no Alterar para preparar UPDATE
+
+A Fase 7 j├í estava conclu├¡da em uma sess├úo anterior. O arquivo est├í completo com todas as 8 fases.

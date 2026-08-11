@@ -1,0 +1,17 @@
+﻿O arquivo est├í correto. Fase 5 conclu├¡da com sucesso.
+
+**O que foi adicionado em `FormInf.prg`:**
+
+- **`ConfigurarPaginaDados()` expandida** com:
+  - Cursor `cursor_4c_Emps` com estrutura simplificada `(Emps C(5), PercEmps N(6,2))` ÔÇö compat├¡vel com `CarregarEmpresas()` e `SalvarEmpresas()` do BO
+  - Bot├Áes `cmd_4c_Confirmar` e `cmd_4c_Cancelar` no container `cnt_4c_BotoesAcao` com ├¡cones can├┤nicos
+  - Label `lbl_4c_Codigo` (Say8: "C├│digo :", Top=144)
+  - TextBox `txt_4c_Info` (Get_Info: Width=20, MaxLength=1, Top=140) ÔÇö edit├ível s├│ no INCLUIR
+  - Label `lbl_4c_Descricao` (Say7: "Descri├º├úo :", Top=168)
+  - TextBox `txt_4c_Descr` (Get_Descr: Width=115, MaxLength=15, Top=165)
+  - Label `lbl_4c_Empresas` (Say27: "Empresas :", Top=195, FontBold=.T.)
+  - BINDEVENTs para Confirmar/Cancelar
+
+- **Novos m├®todos:** `BtnSalvarClick`, `BtnCancelarClick`, `FormParaBO`, `BOParaForm`, `HabilitarCampos`, `LimparCampos`
+
+**Phase 6 adicionar├í:** grid `grd_4c_Emps` (Grade: Top=193, Left=287, Width=161, Height=330, 2 colunas) + bot├Áes inline `cmd_4c_InsEmps`/`cmd_4c_DelEmps` + BINDEVENTs do grid (LostFocus de Column1 para valida├º├úo de empresa duplicada).

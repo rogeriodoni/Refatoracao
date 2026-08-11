@@ -1,0 +1,9 @@
+﻿Tudo correto. As 3 altera├º├Áes foram aplicadas com sucesso:
+
+1. **`ConfigurarPaginaDados()` adicionado** (linha ~1415) ÔÇö m├®todo protegido que zera todos os campos do painel lateral (`cmd_4c_BtnData.Caption`, `txt_4c_Mes/Ano/Qtds/QtHoras/TotHoras`) e desabilita edi├º├úo, com TRY/CATCH completo.
+
+2. **Chamada em `InicializarForm`** (linha 769) ÔÇö logo ap├│s todos os BINDEVENTs e antes da carga de dados, garante que o painel come├ºa no estado limpo.
+
+3. **Chamada em `AjustarTela`** (linha 854) ÔÇö substitui o bloco `WITH THIS.cnt_4c_Dados ... ENDWITH` repetido, eliminando duplica├º├úo. O loop de reset dos 42 bot├Áes do calend├írio permanece onde estava.
+
+Fase 5/8 conclu├¡da. O form permanece funcional; a Fase 6/8 pode seguir para integra├º├úo com menu/config.

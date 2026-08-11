@@ -1,0 +1,26 @@
+﻿Tudo certo. Fase 2 conclu├¡da com sucesso.
+
+**DepartamentoBO.prg** agora cont├®m 13 m├®todos CRUD completos:
+
+| M├®todo | Visibilidade | Fun├º├úo |
+|--------|-------------|--------|
+| `Init()` | PUBLIC | Configura tabela e campo chave |
+| `ObterChavePrimaria()` | PUBLIC | Retorna `codigos` para auditoria |
+| `Buscar(par_cFiltro)` | PUBLIC | SELECT com filtro opcional ÔåÆ `cursor_4c_Dados` |
+| `CarregarPorCodigo(par_cCodigo)` | PUBLIC | SELECT por PK + seta `this_lNovoRegistro=.F.` |
+| `CarregarDoCursor()` | PROTECTED | Mapeia campos do cursor para propriedades |
+| `Inserir()` | PROTECTED | INSERT SigCdDpt + `SalvarGrupos()` |
+| `Atualizar()` | PROTECTED | UPDATE SigCdDpt + `SalvarGrupos()` |
+| `ExecutarExclusao()` | PROTECTED | DELETE sigdptgg + DELETE SigCdDpt |
+| `CarregarGrupos(par_cCodigo)` | PUBLIC | Carrega sigdptgg+join SigCdGpr ÔåÆ `cursor_4c_DptGg` |
+| `SalvarGrupos(par_cCodigo)` | PROTECTED | DELETE+reINSERT sigdptgg do cursor |
+| `ValidarGruposDuplicados()` | PUBLIC | Verifica grupos repetidos no cursor |
+| `ValidarAutomatico(par_cCodIgnorar)` | PUBLIC | Verifica se j├í existe outro `autos=1` |
+| `ValidarDepartamentoEmUso(par_cCodigo)` | PUBLIC | Verifica SigCdUsu.deptos |
+| `ValidarCodigoExistente(par_cCodigo)` | PUBLIC | Verifica duplicidade de PK no INSERT |
+
+**Notas importantes:**
+- `UtiLacto` n├úo existe no schema SQL Server (s├│ 6 colunas em SigCdDpt) ÔÇö mantida como propriedade `this_nUtilizaLanc` no BO mas omitida do SQL
+- `sigdptgg.pkchave` ├® char(20) ÔåÆ gerado via `LEFT(REPLACE(CONVERT(VARCHAR(36),NEWID()),'-',''),20)` dentro do SQL Server
+- `sigdptgg.codgrupo` ├® char(3) ÔåÆ dados truncados com `LEFT(..., 3)` no `SalvarGrupos`
+- `cursor_4c_DptGg` criado com `SET NULL ON` para aceitar NULLs de campos NOT NULL na carga via JOIN

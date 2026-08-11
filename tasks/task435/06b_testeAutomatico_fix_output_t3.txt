@@ -1,0 +1,3 @@
+﻿`DataSession = 2` removido. Agora o form opera na sess├úo padr├úo (sess├úo 1), assim como FormCor e os demais forms CRUD que passam no teste. O `cursor_4c_Dados` criado em `InicializarForm()` e em `CarregarLista()` ficar├í vis├¡vel para o test framework quando ele chamar `USED("cursor_4c_Dados")` na sess├úo 1.
+
+**Root cause**: `DataSession = 2` criava uma sess├úo de dados privada para o form. Todos os cursores criados dentro dos m├®todos do form (incluindo `cursor_4c_Dados`) ficavam nessa sess├úo privada. O test framework (`TesteCarregarLista`) verificava `USED("cursor_4c_Dados")` na sua pr├│pria sess├úo (sess├úo 1) e n├úo encontrava o cursor ÔåÆ falha. Os demais forms CRUD (FormCor, FormMoe, etc.) n├úo t├¬m `DataSession = 2` e por isso passam no mesmo teste.

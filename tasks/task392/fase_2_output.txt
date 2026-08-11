@@ -1,0 +1,18 @@
+﻿DCCBO.prg est├í completo. Fase 2/8 conclu├¡da com 9 m├®todos adicionados:
+
+| M├®todo | Equivalente legado |
+|---|---|
+| `CarregarDoCursor(par_cAlias)` | Mapeamento de cursor ÔåÆ propriedades |
+| `ObterChavePrimaria()` | Retorna `this_cCidchaves` |
+| `InserirLinha()` | `cmdInserir.Click` ÔÇö INSERT INTO xEestDsc |
+| `ExcluirLinhaAtual()` | `cmdExcluir.Click` ÔÇö DELETE + SKIP/SKIP -1 |
+| `ValidarTodos()` | `cmdSair.Click` ÔÇö SCAN validando Valos<>0 AND EMPTY(MotDscs) |
+| `CalcularTotal()` | `Column3.LostFocus` ÔÇö SUM(Valos) ÔåÆ `this_nTotal` |
+| `BuscarMotivos(...)` | `Column1.Text1.Valid` ÔÇö 2 SQLEXEC + filtros VFP local + ├¡ndice |
+| `ValidarMotivo(par_cCodigos)` | SEEK em cursor_4c_TmpMdsc + REPLACE Descs |
+| `LimparDescricao()` | ELSE quando motivo vazio |
+
+**Pontos t├®cnicos relevantes para Fase 3 (Form):**
+- `BuscarMotivos` recebe `(par_cContaDs, par_dDatas, par_cDopes, par_cEmpresa)` ÔÇö o form deve passar esses valores do contexto da transa├º├úo pai antes de abrir o picker
+- `cursor_4c_TmpMdsc` persiste entre chamadas (usado em `ValidarMotivo` e picker `fwBuscaSel` ÔåÆ `FormBuscaAuxiliar`)
+- `CalcularTotal()` deve ser chamado ap├│s LostFocus da Column3 para atualizar `txt_4c_Total.Value`

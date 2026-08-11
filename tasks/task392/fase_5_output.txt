@@ -1,0 +1,11 @@
+﻿A Fase 5 foi aplicada com sucesso. As altera├º├Áes feitas ao `FormDCC.prg`:
+
+1. **`GrdValorWhen()`** ÔÇö `When` handler da Column3 (Valor): retorna `.T.` apenas quando `xEestDsc.MotDscs` n├úo est├í vazio, replicando `Return (Not Empty(Column1.Text1.Value))` do original.
+
+2. **`GrdObsWhen()`** ÔÇö `When` handler da Column4 (Observa├º├úo): mesma l├│gica.
+
+3. **BINDEVENTs** adicionados em `ConfigurarPaginaLista` para ligar Column3.Text1 e Column4.Text1 aos handlers `When`.
+
+4. **`TornarControlesVisiveis(par_oContainer)`** ÔÇö m├®todo recursivo padr├úo que percorre Pages e Controls, adicionado como PROTECTED.
+
+5. **Chamada `THIS.TornarControlesVisiveis(THIS)`** inserida em `InicializarForm` ap├│s `AtualizarTotal()`, antes de `THIS.Visible = .T.`.

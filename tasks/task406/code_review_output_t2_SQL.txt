@@ -1,0 +1,28 @@
+﻿Ap├│s verifica├º├úo completa, ambos os problemas s├úo **falsos positivos** do scanner autom├ítico. Nenhuma altera├º├úo de c├│digo ├® necess├íria.
+
+---
+
+## An├ílise da Verifica├º├úo
+
+### [SQL-FILTRO-INVENTADO] PKCHAVES
+
+O scanner detectou `WHERE pkchaves = ...` em 3 locais do BO:
+- `CarregarPorCodigo` ÔåÆ `WHERE pkchaves = EscaparSQL(...)`
+- `Atualizar` ÔåÆ `UPDATE ... WHERE pkchaves = ...`
+- `ExecutarExclusao` ÔåÆ `DELETE ... WHERE pkchaves = ...`
+
+**Conclus├úo: coluna REAL, uso CORRETO.**
+
+`pkchaves` ├® a PK da tabela SigCdEnr (confirmado pela declara├º├úo `THIS.this_cCampoChave = "pkchaves"` e pelo padr├úo id├¬ntico em ACEBO.prg, acgBO.prg, etc.). O c├│digo original usava `WHERE ceps=? AND endes=? AND bairs=?` por ser uma consulta de *lookup* ÔÇö mas no contexto de CRUD (UPDATE/DELETE), filtrar pela PK ├® obrigat├│rio. **Remover `WHERE pkchaves` do UPDATE/DELETE destruiria todos os registros da tabela.**
+
+### [SQL-FILTRO-INVENTADO] TOTAL
+
+O scanner encontrou `cursor_4c_DupCheck.total > 0` e classificou como "WHERE com coluna TOTAL". 
+
+**Conclus├úo: n├úo h├í nenhum `WHERE total` no c├│digo.**
+
+O `total` ├® o alias de `COUNT(*) AS total` na cl├íusula SELECT. O IF que checa `cursor_4c_DupCheck.total > 0` ├® uma condi├º├úo VFP9 em mem├│ria sobre o cursor j├í retornado, n├úo um filtro SQL. A cl├íusula WHERE desse SELECT usa corretamente `ceps`, `endes` e `bairs` ÔÇö exatamente as colunas do original.
+
+---
+
+**Nenhuma altera├º├úo necess├íria.** Ambos os flags foram gerados por correspond├¬ncia superficial de strings pelo scanner, sem considerar o contexto sem├óntico do c├│digo.

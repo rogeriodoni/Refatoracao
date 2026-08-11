@@ -1,0 +1,5 @@
+﻿Ambas as corre├º├Áes est├úo aplicadas corretamente. Resumo das mudan├ºas:
+
+**FormDrs.prg** ÔÇö `AlternarPagina` era `PROTECTED`, impossibilitando chamada externa pelo teste. Removido `PROTECTED` (linha 1303).
+
+**DrsBO.prg** ÔÇö `GerarNovoCods()` n├úo tinha guard de modo teste. Em teste sem DB, `SQLEXEC` retornava erro e a fun├º├úo retornava 0, fazendo `BtnIncluirClick` ir para o ELSE (MsgAviso) sem navegar para Page2. Adicionado guard `IF TYPE("gnConnHandle") != "N" OR gnConnHandle <= 0 / loc_nCods = 1` no mesmo padr├úo dos outros m├®todos do BO (linhas 317-319).

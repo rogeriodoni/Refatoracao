@@ -1,0 +1,13 @@
+﻿**Fase 1/8 conclu├¡da.** `C:\4c\projeto\app\classes\DrsBO.prg` criado com:
+
+**Propriedades declaradas:**
+- `this_cTits / this_nCods` ÔÇö PK l├│gica do registro (Tits+Cods)
+- `this_lChkApro / this_lChkSubn` ÔÇö flags do workflow aprova├º├úo/baixa
+- `this_cEmps / this_cDopes / this_cNumes / this_cAprova / this_cDatas / this_cBaixa` ÔÇö campos fixos do rodap├® (armazenados como key-value em SigSyCrs com Campos='Emps', etc.)
+- `this_cCursorRs / this_cCursorLista / this_cCursorCit / this_cCursorLocal` ÔÇö nomes dos cursores de trabalho
+
+**Init():** configura `this_cTabela = "SigSyCrs"` e `this_cCampoChave = "cIdChaves"` (PK f├¡sica de cada row individual).
+
+**ObterChavePrimaria():** retorna `(Tits, Cods)` para o log de auditoria.
+
+**Decis├úo arquitetural importante:** este form ├® um *key-value store* din├ómico ÔÇö um "registro l├│gico" (Tits, Cods) gera N rows em SigSyCrs, uma por campo configurado em SigSyCit. Os m├®todos de Inserir/Atualizar (Fase 2) far├úo DELETE WHERE (Tits, Cods) + INSERT das rows do cursor `crGrvCadRs`.

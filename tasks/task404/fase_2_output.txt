@@ -1,0 +1,9 @@
+﻿Phase 2 is now complete. The `empBO.prg` file is fully correct at 994 lines with all CRUD methods. Here's a summary of the three bugs that were fixed:
+
+**Bug 1** ÔÇö Duplicate `empofs` in `loc_cCols` (would cause SQL "Column specified more than once"): removed the duplicate from the legacy defaults section.
+
+**Bug 2** ÔÇö 14 NOT NULL columns missing from `loc_cCols` (`dirftpls`, `dirftpts`, `contfins`, `ddd1s`, `ddd2s`, `ramal1s`, `ramal2s`, `desopers`, `ctacreest`, `ctadebest`, `dctacreest`, `dctadebest`, `nchkdatas`, `intconts`): added them to the legacy defaults group.
+
+**Bug 3** ÔÇö The hardcoded default values string had 35 wrong values; replaced with the correct 44-value string matching all 44 legacy default columns in order.
+
+The `Inserir()` method now inserts 192+ mapped columns plus 44 legacy defaults, all NOT NULL columns are covered, and the value count matches the column count exactly. Ready for Phase 3 (creating `Formemp.prg`).

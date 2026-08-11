@@ -1,0 +1,186 @@
+{
+  "resumo": {
+    "totalMetodos": 9,
+    "metodosComSQL": 3,
+    "metodosComValidacao": 7,
+    "totalQueries": 3,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "File"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDICN",
+      "evento": "Init",
+      "linhas": 105,
+      "codigoOriginal": "Local lnErro1,lcMcrSql1,lcDirTmp1,lcArqIcone1,lnTamIcone1\n\nWith ThisForm\n\t.poDatamgr1 = CreateObject('fSqlConector',.Name)\n\t.Caption = Prompt() && 'Faixa p/ Cor'\n\tm.lnErro1 = .poDatamgr1.pnIdconn\n\t\t\n\t.cntSombra.lblSombra.Caption = .Caption\n\t.cntSombra.lblTitulo.Caption = .Caption\n\t\n\tIf m.lnErro1>0 \n\t\t.Grid1.Visible = .f.\n\t\t.Botão_okcancel.Visible = .f.\n\t\t.Refresh()\n\t\t.Show()\n\t\t.Draw()\n\t\t.LockScreen = .t.\n\t\tm.lcMcrSql1 = [select a.descricaos,a.programas,a.barrapict,a.barraforms,a.pkChaves from si... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDICN",
+      "evento": "Procedure",
+      "linhas": 3,
+      "codigoOriginal": "=fConfigGeral()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDICN",
+      "evento": "Procedure",
+      "linhas": 25,
+      "codigoOriginal": "Local lcDirTmp1,lcArqIcone1\n\nWith ThisForm\n\tIf Used('crSigSyIco1')\n\t\t.Grid1.Visible = .f.\n\t\t.Botão_okcancel.Visible = .f.\n\n\t\tm.lcDirTmp1 = Addbs(Sys(2023))\n\n\t\tSelect ('crSigSyIco1')\n\t\tSet Order To ('') In ('crSigSyIco1')\n\t\tLocate \n\t\t\n\t\tScan\n\t\t\tm.lcArqIcone1 = Alltrim(crSigSyIco1.ctmpicones)\n\t\t\tIf (Not IsEmpty(m.lcArqIcone1) And File(m.lcArqIcone1))\n\t\t\t\tDelete File (m.lcArqIcone1)\n\t\t\tEndIf \n\t\tEndScan \n\tEndIf \n\t.poDatamgr1.Release\nEndWith \n= DoDefault()\n\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "File",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDICN.Grid1.Column1.Text1",
+      "evento": "Click",
+      "linhas": 7,
+      "codigoOriginal": "If (Used('crSigSyIco1') And Reccount('crSigSyIco1')>0)\n\tDO FORM SIGPRCIC TO GCTESTE With ThisForm,crProg2.pkChaves\nElse\n\tMessageBox('Nenhum Registro de Icone Encontrado.',48,'')\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDICN.Grid1.Column1.Text1",
+      "evento": "KeyPress",
+      "linhas": 10,
+      "codigoOriginal": "LPARAMETERS nKeyCode, nShiftAltCtrl\n\nIF NKeyCode = 13 && chama a próxima tela para escolher o ícone\n\tIf (Used('crSigSyIco1') And Reccount('crSigSyIco1')>0)\n\t\tDO FORM SIGPRCIC TO GCTESTE With ThisForm,crProg2.pkChaves\n\tElse\n\t\tMessageBox('Nenhum Registro de Icone Encontrado.',48,'')\n\tEndIf\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDICN.Grid1.Column2.Text1",
+      "evento": "Click",
+      "linhas": 7,
+      "codigoOriginal": "If (Used('crSigSyIco1') And Reccount('crSigSyIco1')>0)\n\tDO FORM SIGPRCIC TO GCTESTE With ThisForm,crProg2.pkChaves\nElse\n\tMessageBox('Nenhum Registro de Icone Encontrado.',48,'')\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDICN.Grid1.Column2.Text1",
+      "evento": "KeyPress",
+      "linhas": 9,
+      "codigoOriginal": "LPARAMETERS nKeyCode, nShiftAltCtrl\nIF NKeyCode = 13 && chama a próxima tela para escolher o ícone\n\tIf (Used('crSigSyIco1') And Reccount('crSigSyIco1')>0)\n\t\tDO FORM SIGPRCIC TO GCTESTE With ThisForm,crProg2.pkChaves\n\tElse\n\t\tMessageBox('Nenhum Registro de Icone Encontrado.',48,'')\n\tEndIf \nEndIf \n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDICN.Botão_okcancel",
+      "evento": "Click",
+      "linhas": 35,
+      "codigoOriginal": "Local lnErro1,lcMcrSql1, lcBar\nWith ThisForm\n\tm.lnErro1 = .poDataMgr1.pnIdConn\n\n\tIf Used('crProg1')\n\t\t.Grid1.Visible = .f.\n\t\t.Botão_okcancel.Visible = .f.\n\n\t\tSelect ('crProg1')\n\t\tSet Order To ('') In ('crProg1')\n\t\tLocate \n\t\t\n\t\tScan While m.lnErro1>0\n\t\t\t*** mena - 10/11/2014 - substitui aspa simples por aspa dupla para não dar erro no update ***\n\t\t\tlcBar = STRTRAN(Alltrim(crProg1.barraforms),['],[\"])\t\n\t\t\tm.lcMcrsql1 = ([update sigcdprg set barrapict=']+Alltrim(crProg1.barrapict)+[',barraforms=']+... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDICN.Botão_okcancel",
+      "evento": "Click",
+      "linhas": 6,
+      "codigoOriginal": "If MessageBox('Confirma o cancelamento',4+32+256,'Cancelamento')=6\n\tThisForm.poDatamgr1.RollBack()\n\tThisform.Release\nEndIf \n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "RollBack",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDICN.Init",
+      "queryOriginal": "\t\tm.lcMcrSql1 = [select a.descricaos,a.programas,a.barrapict,a.barraforms,a.pkChaves from si... [TRUNCADO]",
+      "tabelas": "",
+      "colunas": "descricaos,programas,barrapict,barraforms,pkChaves",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDICN.Botão_okcancel.Click",
+      "queryOriginal": "\t\t\t*** mena - 10/11/2014 - substitui aspa simples por aspa dupla para não dar erro no update ***",
+      "tabelas": "***",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDICN.Botão_okcancel.Click",
+      "queryOriginal": "\t\t\tm.lcMcrsql1 = ([update sigcdprg set barrapict=']+Alltrim(crProg1.barrapict)+[',barraforms=']+... [TRUNCADO]",
+      "tabelas": "sigcdprg",
+      "colunas": "barrapict,barraforms",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["***", "sigcdprg"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

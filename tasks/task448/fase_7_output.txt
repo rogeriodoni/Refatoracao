@@ -1,0 +1,19 @@
+﻿Analisando o arquivo existente, o FormICN.prg j├í est├í **completamente implementado**. Esta ├® uma forma OPERACIONAL, n├úo CRUD, ent├úo os "eventos principais" da Fase 7 j├í foram implementados nas fases anteriores com os nomes corretos para este tipo de form:
+
+| Evento CRUD gen├®rico | Equivalente OPERACIONAL j├í implementado |
+|---|---|
+| `BtnIncluirClick()` | N/A ÔÇö n├úo existe "inserir" neste form |
+| `BtnAlterarClick()` | `GrdDadosDblClick()` ÔÇö abre FormSIGPRCIC para editar ├¡cone |
+| `BtnVisualizarClick()` | `GrdDadosKeyPress()` ÔÇö ENTER tamb├®m abre FormSIGPRCIC |
+| `BtnExcluirClick()` | N/A ÔÇö n├úo existe "excluir" neste form |
+
+O form original SIGCDICN tem apenas:
+1. **Grid DblClick/ENTER** ÔåÆ abre `FormSIGPRCIC` para troca de ├¡cone ÔÇö Ô£à `GrdDadosDblClick()` + `GrdDadosKeyPress()`  
+2. **Bot├úo Ok** ÔåÆ persiste altera├º├Áes ÔÇö Ô£à `BtnOkClick()`  
+3. **Bot├úo Encerrar** ÔåÆ cancela com confirma├º├úo ÔÇö Ô£à `BtnEncerrarClick()`  
+4. **Carregar dados** ÔåÆ `CarregarDados()` vincula cursor ao grid ÔÇö Ô£à  
+5. **Destroy** ÔåÆ limpa arquivos `.ico` tempor├írios ÔÇö Ô£à  
+
+Adicionar `BtnIncluirClick()`, `BtnAlterarClick()`, `BtnVisualizarClick()`, `BtnExcluirClick()` seria inventar funcionalidade que n├úo existe no legado ÔÇö viola├º├úo do PILAR 1 e da regra de paridade funcional.
+
+**A Fase 7 est├í completa**. O FormICN.prg j├í possui implementa├º├úo 100% fiel ao SIGCDICN original. Pode avan├ºar para a Fase 8 (integra├º├úo: config.prg + menu.prg).

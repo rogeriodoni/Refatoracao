@@ -1,0 +1,12 @@
+﻿Arquivo `C:\4c\projeto\app\forms\operacionais\FormFAPF.prg` criado com 254 linhas. A Fase 3 entrega:
+
+- **`DEFINE CLASS FormFAPF AS FormBase`** com propriedades visuais (Width=718, Height=400, TitleBar=0 do original, WindowType=1 modal)
+- **`Init()`** ÔåÆ `DODEFAULT()` (padr├úo can├┤nico ÔÇö n├úo chama InicializarForm diretamente)
+- **`InicializarForm()`** ÔÇö cria BO, verifica `gb_4c_ValidandoUI`/`gnConnHandle`, chama ConfigurarPageFrame + ConfigurarPaginaLista + TornarControlesVisiveis + ConfigurarBINDEVENTs
+- **`ConfigurarPageFrame()`** ÔÇö cria `cnt_4c_Sombra` (container cinza 100,100,100 com `lbl_4c_LblSombra` sombra preta + `lbl_4c_LblTitulo` texto branco, AutoSize=.F.)
+- **`ConfigurarPaginaLista()`** ÔÇö chama `ConfigurarBotoesAcao()` (ponto de extens├úo para fases 4-6)
+- **`ConfigurarBotoesAcao()`** ÔÇö cria `cnt_4c_Saida` com `cmd_4c_Encerrar` (padr├úo can├┤nico: Width=75, Height=75, Caption="Encerrar", Themes=.F., Comic Sans MS)
+- **`TornarControlesVisiveis()`** ÔÇö itera `THIS.Controls` com PEMSTATUS guard
+- **`ConfigurarBINDEVENTs()`** ÔÇö bind Encerrar ÔåÆ `BtnEncerrarClick()`
+- **`BtnEncerrarClick()`** ÔÇö `THIS.Release()`
+- **`Destroy()`** ÔÇö limpa BO + `DODEFAULT()` (garante FormBase.Destroy restaura menu)

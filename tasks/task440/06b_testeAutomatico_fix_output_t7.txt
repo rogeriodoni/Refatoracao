@@ -1,0 +1,13 @@
+﻿**T7 fix complete.** Here's what was changed:
+
+**`Formgpr.prg` ÔÇö 4 guards added:**
+- `InicializarForm`: guarded `MostrarErro("Erro ao criar gprBO"...)` inside the `VARTYPE != "O"` branch
+- `InicializarForm` CATCH: guarded the 3-line `MostrarErro(...)` call
+- `CarregarLista` CATCH: guarded
+- `AlternarPagina` CATCH: guarded
+
+**`gprBO.prg` ÔÇö 13 guards added + 1 bug fix:**
+- `Init` CATCH: fixed wrong arg (`loException` ÔåÆ `loException.Message`) AND added guard
+- All remaining `MostrarErro` sites in `VerificarCodigoExistente`, `CarregarDoCursor`, `Inserir`, `Atualizar`, `ExecutarExclusao`, `Buscar`, `CarregarPorCodigo` ÔÇö all guarded
+
+**Root cause**: `MostrarErro()` opens `FormErro.prg` as a `WindowType=1` custom modal form, which `SYS(2335,0)` does NOT suppress. Any exception caught by an unguarded CATCH during the test flow (initialization, list loading, page switching) would open `FormErro` and block for 300 seconds. The fixes ensure all `MostrarErro` calls are skipped when `gb_4c_ModoTeste = .T.`.

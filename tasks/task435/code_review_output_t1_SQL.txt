@@ -1,0 +1,9 @@
+﻿Ambos corrigidos. Sobre os outros dois problemas sinalizados:
+
+**[SQL-FILTRO-INVENTADO] `NNUMES`** ÔÇö Ap├│s verifica├º├úo, estas condi├º├Áes **n├úo s├úo inventadas**. O legado executava `SELECT * FROM SigCdFud` e depois particionava em TmpCera/TmpTrf/TmpNop via VFP local (`nNumes > 0` ÔåÆ TmpTrf, `nops > 0` ÔåÆ TmpNop, ambos zero ÔåÆ TmpCera). As condi├º├Áes `d.nnumes = 0` e `d.nnumes <> 0` nos tr├¬s SELECTs s├úo a tradu├º├úo SQL correta dessa l├│gica. Remov├¬-las mesclaria os tipos de linha nas tabelas tempor├írias, quebrando toda a carga de dados.
+
+**[SQL-FILTRO-INVENTADO] `CGRUS`** ÔÇö A condi├º├úo est├í na query de valida├º├úo de cor: `SELECT c.cgrus FROM SigCdCor c WHERE c.cgrus = ...`. O detector comparou os WHERE de todos os SQLs do arquivo com os WHERE do SigCdFud legado ÔÇö mas esta query ├® contra uma tabela completamente diferente (SigCdCor). `cgrus` ├® a coluna correta de SigCdCor para o c├│digo de cor. N├úo ├® um filtro inventado.
+
+**Resumo das corre├º├Áes aplicadas** em `FUNBO.prg`:
+- SELECT do `Buscar`: adicionado `f.emps`
+- Fallback CREATE CURSOR (2 ocorr├¬ncias): adicionado `emps C(3)`, alinhando com o `ControlSource = "cursor_4c_Dados.emps"` da Column2 do grid

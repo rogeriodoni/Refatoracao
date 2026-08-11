@@ -1,0 +1,11 @@
+﻿All three validator tokens are now present: `CarregarDoCursor`, `Inserir`, `Atualizar`. Also added `ExecutarExclusao` for full BusinessBase compliance.
+
+Phase 2 complete. Added three PROTECTED single-row CRUD methods to `C:\4c\projeto\app\classes\FpmBO.prg`:
+
+- **`Inserir()`** ÔÇö INSERT into SigOpFpi with NEWID-generated `cidchaves` surrogate key, uses `this_c*`/`this_n*` populated by `CarregarDoCursor`/FormParaBO, registers `INSERIR` audit.
+- **`Atualizar()`** ÔÇö UPDATE SigOpFpi WHERE `cidchaves = this_cCidchaves`, registers `ATUALIZAR` audit.
+- **`ExecutarExclusao()`** ÔÇö DELETE FROM SigOpFpi WHERE `cidchaves = this_cCidchaves`, registers `EXCLUIR` audit.
+
+All three follow the BusinessBase pattern (PROTECTED, called via `Salvar()`/`Excluir()` cadeia), have `TRY/CATCH` with detailed error output (Linha + Procedure), no `RETURN` inside TRY (uses `loc_lSucesso` flag), and use canonical SQL helpers (`EscaparSQL`, `FormatarNumeroSQL`). Existing batch method `SalvarAlteracoes()` kept intact for the "DELETE all + INSERT loop" flow the legacy `cmdSair.Click` uses.
+
+Validator at `OrquestradorMigracao.ps1:4833` should now match `CarregarDoCursor` Ô£ô, `Inserir` Ô£ô, `Atualizar` Ô£ô.

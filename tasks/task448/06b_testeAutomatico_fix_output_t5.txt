@@ -1,0 +1,13 @@
+﻿All three fixes are in place. Here's a summary of what was done and why:
+
+**Root cause:** `FormICN` had `ShowWindow = 1` + `WindowType = 1` in the class definition. In VFP9 `-T` mode (the unattended test pipeline), a form with `ShowWindow = 1` (child of the VFP9 main window) blocks VFP9 at object creation time because there is no main window in text mode ÔÇö causing the consistent 300-second timeout. This is documented as CorretorAutomatico pattern #29.
+
+**Fix applied to `FormICN.prg`:**
+- Changed `ShowWindow = 1` ÔåÆ `ShowWindow = 0` (safe for -T mode)  
+- Changed `WindowType = 1` ÔåÆ `WindowType = 0` (safe for -T mode)
+- Added body to `Init()`: restores `WindowType = 1` / `ShowWindow = 1` only when NOT in test mode ÔÇö preserving the modal UX in production, matching the proven pattern from `FormICD.prg`
+
+**Defensive guards also added:**
+- `ICNBO.Inserir()` ÔÇö guard before SQLEXEC (outside TRY, per CLAUDE.md Rule #1)
+- `ICNBO.Atualizar()` ÔÇö same guard
+- `BusinessBase.RegistrarAuditoria()` ÔÇö guard before SQLEXEC (outside TRY)

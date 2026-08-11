@@ -1,0 +1,595 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigCdFpd.SCX
+* Data/Hora: 05/08/2026 22:30:23
+* Total de registros: 15
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDFPD
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGCDFPD
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGCDFPD.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGCDFPD.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: GradeFPagto
+  Parent: SIGCDFPD
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGCDFPD.GradeFPagto.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDFPD.GradeFPagto.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDFPD.GradeFPagto.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDFPD.GradeFPagto.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: cmdInserir
+  Parent: SIGCDFPD
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cmdExcluir
+  Parent: SIGCDFPD
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cmdSair
+  Parent: SIGCDFPD
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 104
+  Left = 290
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFPD
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Top = 0
+  Left = 0
+  Height = 347
+  Width = 561
+  DoCreate = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Cond.Pagto Por Tab.Desconto"
+  ControlBox = .F.
+  FontName = "Verdana"
+  FontSize = 8
+  MaxButton = .F.
+  Movable = .F.
+  ClipControls = .F.
+  TitleBar = 0
+  ForeColor = 36,84,155
+  excluiu = .F.
+  inseriu = .F.
+  Name = "SIGCDFPD"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFPD.cntSombra
+------------------------------------------------------------
+  Top = -1
+  Left = -2
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFPD.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFPD.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFPD.GradeFPagto
+------------------------------------------------------------
+  ColumnCount = 2
+  FontName = "Tahoma"
+  FontSize = 8
+  AllowHeaderSizing = .F.
+  AllowRowSizing = .F.
+  DeleteMark = .F.
+  Height = 221
+  Left = 192
+  RecordMark = .T.
+  RowHeight = 16
+  ScrollBars = 2
+  TabIndex = 1
+  Top = 112
+  Width = 176
+  ForeColor = 90,90,90
+  GridLineColor = 238,238,238
+  Name = "GradeFPagto"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.ControlSource = ""
+  Column1.Width = 94
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ForeColor = 90,90,90
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.Width = 50
+  Column2.ForeColor = 90,90,90
+  Column2.Name = "Column2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFPD.GradeFPagto.Column1.Header1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Condição Pagto"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFPD.GradeFPagto.Column1.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFPD.GradeFPagto.Column2.Header1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Parcela"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFPD.GradeFPagto.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFPD.cmdInserir
+------------------------------------------------------------
+  Top = 2
+  Left = 334
+  Picture = ..\framework\imagens\cadastro_inserir_60.jpg
+  Caption = "Inserir"
+  TabIndex = 1
+  Name = "cmdInserir"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFPD.cmdExcluir
+------------------------------------------------------------
+  Top = 2
+  Left = 409
+  Picture = ..\framework\imagens\cadastro_excluir_60.jpg
+  Caption = "Excluir"
+  TabIndex = 2
+  Name = "cmdExcluir"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFPD.cmdSair
+------------------------------------------------------------
+  Top = 2
+  Left = 484
+  Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Cancel = .T.
+  Caption = "Encerrar"
+  TabIndex = 4
+  Name = "cmdSair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Tahoma, 1, 8, 6, 13, 11, 32, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDFPD
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE mctrlbotoes
+------------------------------------------------------------
+PROCEDURE mctrlbotoes
+LParameters plHabilita
+
+Local lnI
+
+If Type('plHabilita') # 'L'
+	plHabilita = .F.
+Endif
+
+With Thisform.ParentForm.Pagina.Lista
+	For lnI=1 to .Grupo_Op.ButtonCount
+		If .Grupo_Op.Buttons(lnI).BaseClass = 'Commandbutton' And .Grupo_Op.Buttons(lnI).Visible
+			.Grupo_Op.Buttons(lnI).Enabled = plHabilita
+		EndIf
+	EndFor
+	.cmdFPOper.Enabled = plHabilita
+	.Grupo_Saida.Sair.Enabled = plHabilita
+EndWith
+
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters poForm, pnDataSes
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+Set Datasession To pnDataSes
+
+With ThisForm
+	With .poDatamgr
+		.AddCursor('SigOpFpD','CidChaves','crSigOpFpD')
+	EndWith
+EndWith
+
+lcSql = [Select * From SigOpFpD Where TabDs = ']+CrSigOpTdz.Codigos+[']
+ThisForm.Podatamgr.SqlExecute(lcSql,'LocalFpagD')
+
+lcSql = [Select Fpags,Descrs From SigOpFp ]
+ThisForm.Podatamgr.SqlExecute(lcSql,'LocalFpag')
+
+Select Localfpag
+Index On fpags tag fpags
+
+Select CrSigOpFpD
+Zap
+Append From Dbf('LocalFpagD')
+
+With ThisForm.GradeFPagto
+	.ColumnCount = 2
+	.RecordSource = 'crSigOpFpD'
+	.DeleteMark = .f.
+	.ReadOnly = .f.
+	.RowHeight = 18
+	.Scrollbars = 2
+	.AllowHeaderSizing = .f.
+	.AllowRowSizing = .f.
+
+	.Column1.ControlSource = 'crSigOpFpD.Fpags'
+	.Column1.FontName = 'Courier New'
+	.Column1.Movable = .f.
+	.Column1.Resizable = .f.
+	.Column1.ReadOnly = .f.
+
+	.Column2.ControlSource = 'crSigOpFpD.nParcs'
+	.Column2.FontName = 'Courier New'
+	.Column2.Movable = .f.
+	.Column2.Resizable = .f.
+	.Column2.ReadOnly = .f.
+	.Refresh
+EndWith
+
+Thisform.ParentForm          = poForm
+Thisform.ParentForm.Enabled  = .F.
+
+With Thisform
+	.Caption = .Caption + AllTrim(CrSigOpTdz.Codigos)
+	.Top     = Thisform.ParentForm.Top + Thisform.ParentForm.Pagina.Lista.Grade.Top + 50
+	.Left    = Thisform.ParentForm.Left + ;
+			   Thisform.ParentForm.Pagina.Lista.Grade.Left + ;
+			   Thisform.ParentForm.Pagina.Lista.Grade.Columns(1).Width + ;
+			   Thisform.ParentForm.Pagina.Lista.Grade.Columns(3).Width + 16
+	.cmdInserir.Visible = fChecaAcesso('SIGCDFPD','INSERIR')			   
+	.cmdInserir.Enabled = .cmdInserir.Visible
+	.cmdExcluir.Visible = fChecaAcesso('SIGCDFPD','EXCLUIR')			   
+	.cmdExcluir.Enabled = .cmdExcluir.Visible
+EndWith
+
+Thisform.mCtrlBotoes(.F.)
+Select crSigOpFpD
+Goto Top
+ThisForm.GradeFPagto.Column1.SetFocus
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFPD.GradeFPagto.Column1.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return ( Empty(CrSigOpFpD.Fpags) )
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local lcFpags, lnRecNo, loBrowse
+
+If Not IsEmpty(This.Value)
+	If Not Seek(This.Value,'LocalFpag','Fpags')
+		loBrowse = CreateObject('fwBuscaInt','LocalFPag','FPags',This.Value,'Cadastro de Condição de Pagamento',.t.)
+		loBrowse.mAddColuna('FPags','','Código',.t.)
+		loBrowse.mAddColuna('Descrs','','Descrição',.f.)
+		loBrowse.Show		
+	Endif
+	This.Value = LocalFPag.FPags
+	This.Refresh
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+If IsEmpty(This.Value)
+	Thisform.cmdSair.SetFocus
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFPD.GradeFPagto.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return ( Not Empty(CrSigOpFpD.Fpags) And This.Value = 0 )
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFPD.cmdInserir
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.Inseriu = .t.
+Select crSigOpFpD
+Append Blank  
+Replace TabDs With CrSigOpTdz.Codigos
+Thisform.GradeFPagto.Column1.SetFocus
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFPD.cmdExcluir
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.Excluiu = .t.
+Select crSigOpFpD
+If Not Eof()
+	Delete
+	Skip
+	Skip - 1
+Endif
+
+Thisform.GradeFPagto.Refresh
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFPD.cmdSair
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Local m.lnErro1
+
+If Thisform.cmdInserir.Visible And (ThisForm.Inseriu Or Thisform.Excluiu )
+	Select crSigOpFpD
+	Locate For .f.
+	Delete For Empty(Fpags)
+	Delete For Empty(nParcs)
+	Update CrSigOpFpD set CidChaves = fUniqueIds()
+
+	Select Fpags,nParcs,Sum(1) as TT From CrSigOpFpD Group by 1,2 having Sum(1) > 1;
+	Into Cursor CsSelecao ReadWrite
+	If Reccount('CsSelecao') > 0
+		MessageBox('Dados em Duplicidade!!!',0+16,'')
+		Return .f.
+	Endif
+
+	m.lnErro1 = ThisForm.poDatamgr.pnIdConn
+
+	With ThisForm
+
+		lcSql = [Delete From SigOpFpD Where TabDs = ']+CrSigOpTdz.Codigos+[']
+		If .Podatamgr.SqlExecute(lcSql,'') < 1
+			MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão (1)')
+			.poDataMgr.RollBack()
+			Return(.F.)
+		EndIf
+
+		If m.lnErro1>0 
+			m.lnErro1 = Iif(.poDataMgr.UpDate('crSigOpFpD'),1,-1)
+		EndIf 
+		If m.lnErro1>0 
+			m.lnErro1 = .poDataMgr.Commit()
+		EndIf 
+		If Not m.lnErro1>0 
+			.poDataMgr.RollBack()
+		EndIf 
+	EndWith 
+	If Not m.lnErro1>0 
+		= MessageBox('Erro na Gravação dos Dados!!!',48)
+	EndIf 
+
+EndIf
+
+Thisform.ParentForm.Enabled = .T.
+Thisform.mCtrlBotoes(.T.)
+ThisForm.Release
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGCDFPD
+RESERVED3 (ClassInfo): excluiu
+inseriu
+parentform
+podatamgr
+*mctrlbotoes 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 10
+================================================================================

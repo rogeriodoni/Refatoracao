@@ -1,0 +1,5 @@
+﻿Corre├º├úo aplicada. O bug era um mismatch de nome de classe:
+
+- **Causa do timeout**: `CREATEOBJECT("GrpBO")` em `FormGrupo.Init()` (linha 52), mas a classe no arquivo `GrupoBO.prg` se chama `GrupoBO`. Quando VFP9 n├úo encontra a classe ou o arquivo, em alguns cen├írios tenta abrir um dialog de "Browse for file" que o `SYS(2335, 0)` suprime da tela mas n├úo cancela internamente ÔÇö VFP9 fica bloqueado at├® o timeout de 300s matar o processo.
+
+- **Fix**: `CREATEOBJECT("GrpBO")` ÔåÆ `CREATEOBJECT("GrupoBO")`. Com o nome correto, o BO ├® criado com sucesso, `InicializarDados` cria o `cursor_4c_Ope` em modo teste, e a cadeia `DODEFAULT()` ÔåÆ `FormBase.Init()` ÔåÆ `InicializarForm()` completa normalmente.

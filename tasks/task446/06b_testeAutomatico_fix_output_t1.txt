@@ -1,0 +1,5 @@
+﻿Two fixes applied:
+
+**FormICD.prg `Init()`** ÔÇö added guard to set `WindowType = 0` and `ShowWindow = 0` when `gb_4c_ModoTeste = .T.`. The combination of `WindowType = 1` (modal) + `ShowWindow = 1` (top-level window) causes VFP9 -T headless mode to block trying to create/display a GUI window that has no desktop to attach to, producing the exact 300-second OS-level timeout.
+
+**ICDBO.prg `DuplicarTipo()`** ÔÇö restructured flat `IF ... loc_lSucesso = .F. / IF ... loc_lSucesso = .F.` chain into `IF / ELSEIF / ELSE` so validation failures stop execution before reaching `fUniqueIds()` and `SQLEXEC`. Per CLAUDE.md rule #1, no `RETURN` inside TRY/CATCH.

@@ -1,0 +1,12 @@
+﻿Tudo correto. Fase 8 conclu├¡da. O FormICD.prg agora tem 680+ linhas com todos os m├®todos de contrato do pipeline adicionados, e o menu tem a entrada BAR 113 em `popMovimentos` com o procedimento `AbrirFormICD` ao final de `menu.prg`.
+
+**Resumo das adi├º├Áes na Fase 8:**
+- `FormParaBO()` ÔÇö popula BO com os 4 campos do form
+- `BOParaForm()` ÔÇö popula form com propriedades do BO
+- `HabilitarCampos(par_lHabilitar)` ÔÇö habilita/desabilita os 4 TextBoxes e o bot├úo Duplicar
+- `LimparCampos()` ÔÇö zera os 4 campos
+- `CarregarLista()`, `AjustarBotoesPorModo()` ÔÇö stubs de contrato (OPERACIONAL n├úo tem lista/modos CRUD)
+- `BtnEncerrarClick()`, `BtnCancelarClick()` ÔÇö delegam para `CmdEncerrarClick()`
+- `BtnSalvarClick()` ÔÇö delega para `CmdDuplicarClick()` (a├º├úo principal do form)
+- `BtnBuscarClick()` ÔÇö stub (n├úo h├í bot├úo Buscar neste di├ílogo)
+- Menu: BAR 112 (separador) + BAR 113 "Duplica├º├úo dos Tipo de Tributa├º├úo" + `AbrirFormICD()`

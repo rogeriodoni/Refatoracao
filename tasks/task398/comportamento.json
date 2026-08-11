@@ -1,0 +1,600 @@
+{
+  "resumo": {
+    "totalMetodos": 34,
+    "metodosComSQL": 16,
+    "metodosComValidacao": 11,
+    "totalQueries": 5,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fChecaAcesso", "For Campos = Padr", "Fontmetric", "fCarregaGrade", "fConfigGeral", "fGerUniqueKey", "fCanUniqueKey"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDDRS",
+      "evento": "Procedure",
+      "linhas": 22,
+      "codigoOriginal": "Local lcCpo, llAcPend, llAcApro, llAcTodo\nllAcTodo = fChecaAcesso(ThisForm.Tits,'TODOS')\nllAcPend = Iif(llAcTodo,.t.,fChecaAcesso(ThisForm.Tits,'PENDENTE'))\nllAcApro = Iif(llAcTodo,.t.,fChecaAcesso(ThisForm.Tits,'APROVADO'))\n\nSelect crSigSyCrs\nScan\n\tIf (llAcPend And ! ChkApro) or (llAcApro And ChkApro) or llAcTodo\n\t\tSelect crSigSyCit\n\t\tScan\n\t\t\tIf (crSigSyCit.Listas = 1) && Se o Campo Aparece na Lista\n\t\t\t\tIf Seek(Str(crSigSyCrs.Cods, 6) + crSigSyCit.Campos, 'LocalCadRs', 'CodCampos')\n\t\t\t\t\tlcCpo =... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fChecaAcesso",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkApro",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDDRS",
+      "evento": "Procedure",
+      "linhas": 16,
+      "codigoOriginal": "Local lcVal, lcObj\n\nlcQuery = [Select Cods, Campos, Resps ] + ;\n\t\t    [From SigSyCrs ] + ;\n\t\t   [Where Tits = '] + ThisForm.Tits + [' ] + ;\n\t\t   [Order By Cods, Campos]\n\nIf (ThisForm.poDataMgr.SqlExecute(lcQuery, 'LocalCadRs') < 1)\n\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (LocalCadRs)')\n\tReturn .f.\nEndIf\nSelect LocalCadRs\nIndex On Str(Cods, 6) + Campos Tag CodCampos\n\nReturn .t.\n* Fim **********************************************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDDRS",
+      "evento": "Procedure",
+      "linhas": 50,
+      "codigoOriginal": "Select crSigSyCit\nScan\n\tSelect LocalCadRs\n\tGo Top\n\tLocate For Campos = crSigSyCit.Campos And Cods = crSigSyCrs.Cods\n\n\tlcVal = Nvl(LocalCadRs.Resps, [])\n\n\tlcObj = [memFicha] + Alltrim(Str(crSigSyCit.Ordems))\n\n\tIf (crSigSyCit.Tipos=[M])\n\t\tlcVal = Alltrim(lcVal)\n\tElse\n\t\tIf (crSigSyCit.Tipos=[D])\n\t\t\tlcVal = Ctod(Alltrim(lcVal))\n\t\tElse\n\t\t\tlcVal = Val(Alltrim(lcVal))\n\t\tEndIf\n\tEndIf\n\n\tThisForm.poWindowCad.&lcObj..Value = lcVal\n\tThisForm.poWindowCad.&lcObj..Refresh\nEndScan\n\nSelect LocalCadRs\nGo Top\nLoca... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "For Campos = Padr",
+        "metodosFormChamados": "Value = Nvl",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDDRS",
+      "evento": "Procedure",
+      "linhas": 19,
+      "codigoOriginal": "ThisForm.poWindowCad = CreateObject('frmScrolls')\n\nThisForm.poWindowCad.Visible = .t.\nThisForm.poWindowCad.Show\n\nThisForm.poWindowCad.Top  \t= ThisForm.Pagina.Top    + 900\nThisForm.poWindowCad.Left \t= ThisForm.Pagina.Left   + 010\nThisForm.poWindowCad.Height = ThisForm.Pagina.Height - 160\nThisForm.poWindowCad.Width  = ThisForm.Pagina.Width  - 040\nThisForm.poWindowCad.Name\t= [frmWindowCad]\nThisForm.poWindowCad.AddProperty('pcObj(1,1)')\nThisForm.poWindowCad.AddProperty('pcGet(1,3)')\n\nActivate Window... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "poWindowCad = CreateObject,AddProperty,RemoveObject",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDDRS",
+      "evento": "Procedure",
+      "linhas": 80,
+      "codigoOriginal": "* Rotina Para Remover os Campos Criados no Formulário de Scroll\nLocal lcObj\n\nIf ThisForm.CriouForm\n\tSelect crSigSyCit\n\tScan\n\t\t* Destruindo o Label\n\t\tlcObj = [lblFicha] + Alltrim(Str(crSigSyCit.Ordems))\n\t\tIf (Type('ThisForm.poWindowCad.&lcObj.')='O')\n\t\t\tThisForm.poWindowCad.RemoveObject(lcObj)\n\t\tEndIf\n\n\t\t* Destruindo o Memo\n\t\tlcObj = [memFicha] + Alltrim(Str(crSigSyCit.Ordems))\n\t\tIf (Type('ThisForm.poWindowCad.&lcObj.')='O')\n\t\t\tThisForm.poWindowCad.RemoveObject(lcObj)\n\t\tEndIf\n\tEndScan\n\n\tlcObj = [... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "RemoveObject",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDDRS",
+      "evento": "Procedure",
+      "linhas": 87,
+      "codigoOriginal": "* Rotina Para Gravação dos Dados da Ficha Técnica no Cursor Para Atualizar a Base\nIf ThisForm.CriouForm And Used('crGrvCadRs')\n\tZap In crGrvCadRs\n\n\tlnCod = ThisForm.Pagina.Dados.getCods.Value\n\n\tSelect crSigSyCit\n\tScan\n\t\tlcObj = [memFicha] + Alltrim(Str(crSigSyCit.Ordems))\n\n\t\tlcVal     = ThisForm.poWindowCad.&lcObj..Value\n\t\tIf Type('ThisForm.poWindowCad.&lcObj..InputMask') <> 'U'\n\t\t\tlcPicture = ThisForm.poWindowCad.&lcObj..InputMask\n\t\t\tlcPicture = Strtran(lcPicture,',','')\n\t\tElse\n\t\t\tlcPicture = '... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CriouForm And Used,Tits, [Emps], lnCod, fUniqueIds,Tits, [Dopes], lnCod, fUniqueIds,Tits, [Numes], lnCod, fUniqueIds,Tits, [Baixa], lnCod, fUniqueIds,Tits, [Aprova], lnCod, fUniqueIds,Tits, [Datas], lnCod, fUniqueIds",
+        "controlesReferenciados": "ChkSubn",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDDRS",
+      "evento": "Procedure",
+      "linhas": 295,
+      "codigoOriginal": "Local lnTop, lnLef, lnWid\n\nlnTop = 1\nlnLef = 6\nlnWid = ThisForm.poWindowCad.Width - 30\n\nDeclare ThisForm.poWindowCad.pcObj[1]\nThisForm.poWindowCad.pcObj[1] = .f.\n\nIf ThisForm.CriouForm\n\tSelect crSigSyCit\n\tScan\n\t\t* Adicionando o Label\n\t\tlcObj = [lblFicha] + Alltrim(Str(crSigSyCit.Ordems))\n\t\tThisForm.poWindowCad.AddObject(lcObj, [Say])\n\n\t\tThisForm.poWindowCad.&lcObj..Visible   = .t.\n\t\tThisForm.poWindowCad.&lcObj..Top\t   = lnTop\n\t\tThisForm.poWindowCad.&lcObj..Left\t   = lnLef + 4\n\t\tThisForm.poWindow... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "Fontmetric",
+        "metodosFormChamados": "AddObject,Caption   = Proper,ForeColor = Rgb,pcGet[Alen,MaxLength = Len,pcCadeado    = Iif,pcObj[Alen,Width = Iif",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDDRS",
+      "evento": "Procedure",
+      "linhas": 7,
+      "codigoOriginal": "* Rotina Para Exibir o Formulário de Ficha Técnica\nIf ThisForm.CriouForm\n\tThisForm.poWindowCad.Top = ThisForm.Pagina.Top + 80\n\tThisForm.poWindowCad.ZOrder(0)\n\tThisForm.poWindowCad.Refresh\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ZOrder",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDDRS",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "* Rotina Para Ocultar o Formulário de Scroll\nIf ThisForm.CriouForm\n\tThisForm.poWindowCad.Top = ThisForm.Pagina.Top + 500\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDDRS",
+      "evento": "Procedure",
+      "linhas": 27,
+      "codigoOriginal": "Private pTru, pNot\n\nThisForm.Draw\n\nWith ThisForm.Pagina.Lista\n\tpTru = .t.\n\tpNot = .t.\n\n\tIf (.optFiltro.Value = 1)\n\t\tpTru = .t.\n\t\tpNot = .f.\n\tElse\n\t\tIf (.optFiltro.Value = 2)\n\t\t\tpTru = .f.\n\t\t\tpNot = .f.\n\t\tEndIf\n\tEndIf\nEndWith\n\nThisForm.poDatamgr.Requery('crSigSyCrs')\nSelect crSigSyCrs\nGo Top\n\nThisForm.LockScreen = .T.\n=fCarregaGrade(ThisForm.Pagina.Lista.Grade)\nThisForm.LockScreen = .F.\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fCarregaGrade",
+        "metodosFormChamados": "Requery",
+        "controlesReferenciados": "optFiltro",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDDRS",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "Select LocalCadRs\nLocate For Cods = ThisForm.Pagina.Dados.GetCods.Value",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDDRS",
+      "evento": "Procedure",
+      "linhas": 35,
+      "codigoOriginal": "Local llTaOk\n\nllTaOk = .t.\n\nIf llTaOk\n\tlcQuery = [Delete From SigSyCrs ] + ;\n\t\t\t   [Where Tits = '] + ThisForm.Tits + [' And ] + ;\n\t\t\t   \t\t [Cods = ] + Alltrim(Str(ThisForm.Pagina.Dados.getCods.Value))\n\n\tIf (ThisForm.poDataMgr.SqlExecute(lcQuery, '') < 1)\n\t\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (mSv_Inserir - SigSyCrs)')\n\t\tllTaOk = .f.\n\tEndIf\nEndIf\n\nIf llTaOk\n\tIf Not ThisForm.poDataMgr.Update('crGrvCadRs')\n\t\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'F... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute,Update,Commit,RollBack",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDDRS",
+      "evento": "Procedure",
+      "linhas": 28,
+      "codigoOriginal": "Local llTaOk\n\nllTaOk = .t.\n\nIf llTaOk\n\tlcQuery = [Delete From SigSyCrs ] + ;\n\t\t\t   [Where Tits = '] + ThisForm.Tits + [' And ] + ;\n\t\t\t   \t\t [Cods = ] + Alltrim(Str(ThisForm.Pagina.Dados.getCods.Value))\n\n\tIf (ThisForm.poDataMgr.SqlExecute(lcQuery, '') < 1)\n\t\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (mSv_Excluir - SigSyCrs)')\n\t\tllTaOk = .f.\n\tEndIf\nEndIf\n\nIf llTaOk\n\tIf (ThisForm.poDataMgr.Commit() < 1)\n\t\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Co... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute,Commit,RollBack",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDDRS",
+      "evento": "Procedure",
+      "linhas": 35,
+      "codigoOriginal": "Local llTaOk\n\nllTaOk = .t.\n\nIf llTaOk\n\tlcQuery = [Delete From SigSyCrs ] + ;\n\t\t\t   [Where Tits = '] + ThisForm.Tits + [' And ] + ;\n\t\t\t   \t\t [Cods = ] + Alltrim(Str(ThisForm.Pagina.Dados.getCods.Value))\n\n\tIf (ThisForm.poDataMgr.SqlExecute(lcQuery, '') < 1)\n\t\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (mSv_Alterar - SigSyCrs)')\n\t\tllTaOk = .f.\n\tEndIf\nEndIf\n\nIf llTaOk\n\tIf Not ThisForm.poDataMgr.Update('crGrvCadRs')\n\t\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'F... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute,Update,Commit,RollBack",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDDRS",
+      "evento": "Procedure",
+      "linhas": 30,
+      "codigoOriginal": "Local lnCod\nPrivate pTru, pNot\n\nWith ThisForm.Pagina.Lista\n\tpTru = .t.\n\tpNot = .t.\n\n\tIf (.optFiltro.Value = 1)\n\t\tpTru = .t.\n\t\tpNot = .f.\n\tElse\n\t\tIf (.optFiltro.Value = 2)\n\t\t\tpTru = .f.\n\t\t\tpNot = .f.\n\t\tEndIf\n\tEndIf\nEndWith\n\nlnCod = ThisForm.Pagina.Dados.getCods.Value\n\n=DoDefault()\n\nThisForm.ApanhaRespostas\n\nThisForm.AlimentaLista\n\nSelect crSigSyCrs\nLocate For Cods = lnCod\nThisForm.Pagina.Lista.Grade.Refresh\n* Fim ************************************************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "optFiltro",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDDRS",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "=fConfigGeral()\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDDRS",
+      "evento": "Init",
+      "linhas": 76,
+      "codigoOriginal": "Lparameters pPrg\n\nPrivate pTru, pNot\nPublic  laObjs[1]\n\nThisForm.Tits = Padr(pPrg, 20)\n\nDeclare ThisForm.pcObj[1]\n\nWith ThisForm\n\t.CriouForm = .f.\n\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tpTru = .t.\n\tpNot = .t.\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tIf Not ThisForm.ApanhaRespostas()\n\t\t\tReturn .f.\n\t\tEndIf\n\n\t\tThisForm.poDataMgr.CursorQuery('SigSyCit', 'crSigSyCit', 'Tits', ThisForm.Tits)\n\t\tSelect crSigSyCit\n\t\tIndex On Str(Ordems, 2) Tag Ordems\n\t\tlcQryCadRs = [Select Distinct ChkSubn,... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso",
+        "metodosFormChamados": "Tits = Padr,ApanhaRespostas,CursorQuery",
+        "controlesReferenciados": "ChkSubn,ChkApro",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDDRS",
+      "evento": "Activate",
+      "linhas": 4,
+      "codigoOriginal": "ThisForm.OcultarForm()\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "OcultarForm",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDDRS",
+      "evento": "Procedure",
+      "linhas": 21,
+      "codigoOriginal": "LPARAMETERS nColIndex\n\nIf ! crSigSyCrs.ChkSubn\n\tThisForm.Pagina.Lista.Commandgroup1.Command1.Enabled = .T.\n\tIf crSigSyCrs.ChkApro\n\t\tThisForm.Pagina.Lista.Commandgroup1.Command1.Caption = 'Desaprova'\n\t\tThisForm.Pagina.Lista.Grupo_op.alterar.Enabled = .f.\n\t\tThisForm.Pagina.Lista.Grupo_op.Excluir.Enabled = .f.\n\tElse\n\t\tThisForm.Pagina.Lista.Commandgroup1.Command1.Caption = 'Aprova'\n\t\tThisForm.Pagina.Lista.Grupo_op.alterar.Enabled = .t.\n\t\tThisForm.Pagina.Lista.Grupo_op.Excluir.Enabled = .t.\n\tEndIf\n\tT... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkSubn,ChkApro",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDDRS",
+      "evento": "Click",
+      "linhas": 45,
+      "codigoOriginal": "LParameters lnOpcao\n\nloDad = ThisForm.Pagina.Dados\n\nIf (Type('lnOpcao') = 'N')\n\tThis.Value = lnOpcao\nEndIf\n\nSelect crSigSyCrs\n\nIf Not DoDefault(lnOpcao)\n\tIf ! (ThisForm.pcEscolha = 'LISTAR')\n\t\tThisForm.mAtivaPagina1\n\tEndif\n\tReturn 0\nEndIf\n\nIf (ThisForm.pcEscolha = 'LISTAR')\n\tReturn\nEndif\n\nIf (ThisForm.pcEscolha = 'INSERIR')\n\tReplace Cods With fGerUniqueKey(ThisForm.Tits + _Empr) In crSigSyCrs\nEndIf\n\nIf Inlist(ThisForm.pcEscolha, 'CONSULTAR', 'EXCLUIR')\n\tloDad.Grupo_Salva.Salva.Setfocus\nElse\n\tloD... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fGerUniqueKey",
+        "metodosFormChamados": "MontaObjetos",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDDRS",
+      "evento": "Activate",
+      "linhas": 3,
+      "codigoOriginal": "ThisForm.OcultarForm()\nThisForm.DesmontaObjetos\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "OcultarForm",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDDRS",
+      "evento": "Click",
+      "linhas": 80,
+      "codigoOriginal": "Local loDad, llTaOk, lcQuery\n\nloDad = ThisForm.Pagina.Dados\n\nThisForm.Mostrarform()\n\nIf InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')\n\n\tFor nPos = 1 To Alen(ThisForm.poWindowCad.pcGet,1)\n\t\tIf ThisForm.poWindowCad.pcGet[nPos,2] = 1\n\t\t\tlcGets = ThisForm.poWindowCad.pcGet[nPos,1]\n\t\t\tIf Empty(ThisForm.poWindowCad.&lcGets..Value)\n\t\t\t\tMessageBox('Campo de Preenchimento Obrigatório, não Preenchido!!!', 48, '')\n\t\t\t\tThisForm.Mostrarform()\n\t\t\t\tThisForm.poWindowCad.&lcGets..SetFocus \n\t\t\t\tReturn 0\n\t\t\tEnd... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Mostrarform,CursorQuery,GravaDados,OcultarForm,RollBack",
+        "controlesReferenciados": "ChkApro",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDDRS",
+      "evento": "Click",
+      "linhas": 18,
+      "codigoOriginal": "=DoDefault()\n\nThisForm.Mostrarform()\n\nIf ThisForm.plCancelar\n\tIf ThisForm.pcEscolha = 'INSERIR'\n\t\t=fCanUniqueKey(ThisForm.Pagina.Dados.getCods.Value, ThisForm.Tits + _Empr)\n\tEndif\n\t\n\tThisForm.OcultarForm()\n\n\tThisForm.DesmontaObjetos\n\n\tThisForm.mAtivaPagina1\nElse\n\tThisForm.MostrarForm()\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fCanUniqueKey",
+        "metodosFormChamados": "Mostrarform,OcultarForm",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDDRS",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.MostrarForm()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "MostrarForm",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDDRS",
+      "evento": "Activate",
+      "linhas": 4,
+      "codigoOriginal": "=DoDefault()\n\nThisForm.MostrarForm()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "MostrarForm",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDDRS.Pagina.lista.optFiltro",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDDRS.Pagina.lista.optFiltro",
+      "evento": "InteractiveChange",
+      "linhas": 4,
+      "codigoOriginal": "ThisForm.SqlDados\nThisForm.AlimentaLista\nThisForm.Pagina.Lista.Grade.SetFocus\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDDRS.Pagina.lista.Commandgroup1",
+      "evento": "Click",
+      "linhas": 85,
+      "codigoOriginal": "Private llOk, lnCod\nllOK = .t.\nIf ! crSigSyCrs.ChkApro\n\tIf MessageBox('Confirma Aprovação?',33,'') = 1\n\n\t\tThisForm.Aprova = Usuar\n\t\t\t\n\t\tThisForm.pcTime = Time() \n\n\t\tZap In crGrvCadRs\n\n\t\tlnCod = crSigSyCrs.Cods\n\n\t\tlcVal = ThisForm.Aprova\n\t\tIf Not Empty(lcVal)\n\t\t\tInsert Into crGrvCadRs (Tits, Campos, Cods, cIdChaves, Resps, Pergs, chkApro) ;\n\t\t\t\t\t\t\tValues (ThisForm.Tits, [Aprova], lnCod, fUniqueIds(), lcVal, [Aprovado], .T.)\n\t\tEndIf\n\t\tInsert into LocalCadRs (Cods, Campos, Resps) Values (lnCod,'Apr... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "pcTime = Time,Tits, [Aprova], lnCod, fUniqueIds,Tits, [Datas], lnCod, fUniqueIds,SqlExecute,Update,Commit",
+        "controlesReferenciados": "ChkApro",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDDRS.Pagina.lista.Commandgroup1",
+      "evento": "Click",
+      "linhas": 56,
+      "codigoOriginal": "If ! crSigSyCrs.ChkSubn\n\tIf ! crSigSyCrs.ChkApro \n\t\tMessageBox('Baixa não Aprovada !!!',16,'')\n\t\tReturn\n\tEndIf\n\n\tDO Form SigOpCbx With ThisForm,crSigSyCrs.Cods To pcBaixado\n\n\tIf pcBaixado = 'B'\n\t\tSelect crSigSyCrs\n\t\tReplace crSigSyCrs.ChkSubn With .t.\n\t\tThisForm.Pagina.Lista.Grade.Refresh\n\t\tThisForm.Pagina.Lista.Grupo_op.alterar.Enabled = .f.\n\t\tThisForm.Pagina.Lista.Grupo_op.Excluir.Enabled = .f.\n\t\tThis.Parent.Command1.Enabled = .f.\n\t\tThis.Caption = 'Canc Baixa'\n\tEndIf\n\t\nElse\n\n\tIf MessageBox('Co... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute,Commit",
+        "controlesReferenciados": "ChkSubn,ChkApro",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDDRS.Pagina.dados.Shape1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.MostrarForm()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "MostrarForm",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDDRS.Pagina.dados.Shape2",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.MostrarForm()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "MostrarForm",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDDRS.Pagina.dados.getCods",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha,'PROCURAR'))\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDDRS.Pagina.dados.getCods",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "*ThisForm.MostrarForm()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDDRS.Pagina.dados.Label1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.MostrarForm()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "MostrarForm",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDDRS.Procedure",
+      "queryOriginal": "\tlcQuery = [Delete From SigSyCrs ] + ; \t\t\t   [Where Tits = '] + ThisForm.Tits + [' And ] + ; \t\t\t   \t\t [Cods = ] + Alltrim(Str(ThisForm.Pagina.Dados.getCods.Value))",
+      "tabelas": "SigSyCrs",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDDRS.Procedure",
+      "queryOriginal": "\tlcQuery = [Delete From SigSyCrs ] + ; \t\t\t   [Where Tits = '] + ThisForm.Tits + [' And ] + ; \t\t\t   \t\t [Cods = ] + Alltrim(Str(ThisForm.Pagina.Dados.getCods.Value))",
+      "tabelas": "SigSyCrs",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDDRS.Procedure",
+      "queryOriginal": "\tlcQuery = [Delete From SigSyCrs ] + ; \t\t\t   [Where Tits = '] + ThisForm.Tits + [' And ] + ; \t\t\t   \t\t [Cods = ] + Alltrim(Str(ThisForm.Pagina.Dados.getCods.Value))",
+      "tabelas": "SigSyCrs",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDDRS.Pagina.lista.Commandgroup1.Click",
+      "queryOriginal": "\t\t\tInsert Into crGrvCadRs (Tits, Campos, Cods, cIdChaves, Resps, Pergs, chkApro) ; \t\t\t\t\t\t\tValues (ThisForm.Tits, [Aprova], lnCod, fUniqueIds(), lcVal, [Aprovado], .T.)",
+      "tabelas": "crGrvCadRs",
+      "colunas": "Tits,Campos,Cods,cIdChaves,Resps,Pergs,chkApro",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDDRS.Pagina.lista.Commandgroup1.Click",
+      "queryOriginal": "\t\tInsert into LocalCadRs (Cods, Campos, Resps) Values (lnCod,'Apr... [TRUNCADO]",
+      "tabelas": "LocalCadRs",
+      "colunas": "Cods,Campos,Resps",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigSyCrs", "crGrvCadRs", "LocalCadRs"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

@@ -1,0 +1,22 @@
+﻿Fase 2/8 conclu├¡da. O `InfBO.prg` agora est├í completo com todos os m├®todos CRUD:
+
+**M├®todos adicionados:**
+
+| M├®todo | Visibilidade | Fun├º├úo |
+|--------|-------------|--------|
+| `ObterChavePrimaria()` | public | Retorna `this_cInfos` para auditoria |
+| `Buscar(par_cFiltro)` | public | SELECT SigPrInf ÔåÆ `cursor_4c_Dados` |
+| `CarregarPorCodigo(par_cInfos)` | public | SELECT por PK, seta `this_lNovoRegistro=.F.` |
+| `CarregarDoCursor(par_cAlias)` | public | Mapeia cursor ÔåÆ propriedades (usa SELECT alias + campos sem prefixo) |
+| `VerificarCodigoDuplicado(par_cInfos)` | public | COUNT(*) para checar duplicata antes de inserir |
+| `Inserir()` | protected | INSERT INTO SigPrInf |
+| `Atualizar()` | protected | UPDATE SigPrInf |
+| `ExecutarExclusao()` | protected | DELETE SigEmInf + SigPrInf em transa├º├úo at├┤mica |
+| `CarregarEmpresas(par_cInfos, par_cCursor)` | public | SELECT SigEmInf ÔåÆ cursor local do Form |
+| `SalvarEmpresas(par_cInfos, par_cCursor)` | public | DELETE-all + re-INSERT do cursor local, com NEWID() para pkChave |
+
+**Decis├Áes de design:**
+- `ExecutarExclusao` usa `BEGIN/COMMIT/ROLLBACK TRANSACTION` pois exclui duas tabelas atomicamente
+- `SalvarEmpresas` usa a mesma estrat├®gia (delete-all + re-insert) que o legado fazia com `crSigEmInf`
+- `NEWID()` substitui `fUniqueIds()` para gera├º├úo de pkChave no SQL Server
+- Nenhum `RETURN` dentro de blocos `TRY/CATCH`

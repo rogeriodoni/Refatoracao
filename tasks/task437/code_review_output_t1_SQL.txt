@@ -1,0 +1,9 @@
+﻿Corre├º├Áes aplicadas em ambos os arquivos:
+
+**gemBO.prg** ÔÇö `CarregarPorCodigo`: `WHERE cidchaves = ...` ÔåÆ `WHERE gruclass = ...`
+
+**Formgem.prg** ÔÇö nos 3 handlers (Visualizar/Alterar/Excluir):
+- vari├ível `loc_cCidChaves` ÔåÆ `loc_cGruClass`
+- `cursor_4c_Dados.cidchaves` ÔåÆ `cursor_4c_Dados.gruclass`
+
+O alinhamento com o original agora est├í correto: o legado usava `SEEK(..., 'gruclass')` para identificar o registro selecionado, e a vers├úo migrada passa a usar `WHERE gruclass = ...` no SQL, que ├® semanticamente equivalente.

@@ -1,0 +1,150 @@
+{
+  "resumo": {
+    "totalMetodos": 8,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 2,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fUniqueIds"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDDIC",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "Local lcBusca\n\nIf .Not.IsEmpty(ThisForm.Pagina.Dados.GetExpressao.Value)\n\tThisForm.poDataMgr.LocateCursor('crSigCdDic','Expressao',ThisForm.Pagina.Dados.GetExpressao.Value)\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "LocateCursor",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDDIC",
+      "evento": "Init",
+      "linhas": 14,
+      "codigoOriginal": "LPARAMETERS lcacesso\n\nWith ThisForm\n\t.poDatamgr = CreateObject('fSqlConector')\n\tWith .poDatamgr\n\t\t.AddCursor('SigCdDic','cIdChaves','crSigCdDic','',ThisForm.pagina.lista.grade)\n\t\t.pfSqlTabela(1).pColuna('Idioma','','','Idioma',70,.t.)\n\t\t.pfSqlTabela(1).pColuna('Expressao','','','Expressão',280,.t.)\n\t\t.pfSqlTabela(1).pColuna('Traducao','','','Tradução',280,.t.)\n\tEndWith\n\t= DoDefault()\n\t.LockScreen = .f.\nEndWith\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDDIC",
+      "evento": "Click",
+      "linhas": 19,
+      "codigoOriginal": "parameters lcOpcao\n\nIf !dodefault( lcopcao )\n\tThisForm.mAtivapagina1\n\tReturn\nEndif\n\ndo case\ncase Thisform.pcEscolha='INSERIR' or ;\n\tThisform.pcEscolha='PROCURAR'\n\tThisform.Pagina.Dados.GetExpressao.setfocus\ncase Thisform.pcEscolha='ALTERAR'\n\tThisform.pagina.dados.GetTraducao.setfocus\ncase Thisform.pcEscolha='CONSULTAR' or ;\n\tThisform.pcEscolha='EXCLUIR'\n\tThisform.pagina.dados.grupo_salva.salva.setfocus\nendcase\n\t\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDDIC",
+      "evento": "Click",
+      "linhas": 34,
+      "codigoOriginal": "if inlist(thisform.pcEscolha,'INSERIR','ALTERAR')\n    if IsEmpty(thisform.Pagina.Dados.GetExpressao.value)\n\t\tMessagebox('Expressão Inválida !!',0+48,'')\n\t\tThisform.Pagina.Dados.GetExpressao.setfocus\n\t\tReturn \t\n\tendif\t\n    if IsEmpty(thisform.Pagina.Dados.GetIdioma.value)\n\t\tMessagebox('Idioma Inválido !!',0+48,'')\n\t\tThisform.Pagina.Dados.getiDescs.setfocus\n\t\tReturn \t\n\tendif\t\n    if IsEmpty(thisform.Pagina.Dados.GetTraducao.value)\n\t\tMessagebox('Tradução Inválida !!',0+48,'')\n\t\tThisform.Pagina.Dado... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDDIC",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "DoDefault()\nif thisform.plCancelar\n\tthisform.mAtivapagina1\nendif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDDIC.Pagina.Dados.GetIdioma",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "return(InList(thisform.pcEscolha,'INSERIR'))\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDDIC.Pagina.Dados.GetExpressao",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha,'INSERIR','PROCURAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDDIC.Pagina.Dados.GetTraducao",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

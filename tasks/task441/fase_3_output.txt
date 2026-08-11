@@ -1,0 +1,18 @@
+﻿O arquivo est├í completo e correto. Resumo do que foi criado na Fase 3:
+
+**`C:\4c\projeto\app\forms\operacionais\FormGps.prg`** ÔÇö 630 linhas, forma plana (sem PageFrame, j├í que o original SIGCDGPS ├® um di├ílogo flat):
+
+| M├®todo | Descri├º├úo |
+|--------|-----------|
+| `Init(par_oParentForm, par_cDopes, par_lTipoggp, par_cEscolha)` | Armazena params, desabilita form pai, cria GpsBO, chama DODEFAULT() |
+| `InicializarForm()` | SET DATE BRITISH, Picture, Caption, cria todos controles, carrega dados |
+| `ConfigurarCabecalho()` | Container cinza escuro com lbl_4c_Sombra + lbl_4c_Titulo (espelho do cntSombra legado) |
+| `ConfigurarGrade()` | Grid 2 colunas (Cgrus/Dgrus), cursor_4c_Operacao, Column2 ReadOnly, BINDEVENT KeyPress |
+| `ConfigurarBotoes()` | 4 bot├Áes (Inserir/Excluir/Confirmar/Cancelar) com BINDEVENT, Inserir/Excluir desabilitados se n├úo INSERIR/ALTERAR |
+| `CarregarDados()` | Usa GpsBO.CarregarGrupos() ÔåÆ APPEND FROM DBF() no cursor de trabalho |
+| `GrdDadosCol1KeyPress()` | Guard ENTER/TAB/F4, busca exata em SigCdGrp, fallback para AbrirLookupGrupo |
+| `AbrirLookupGrupo()` | FormBuscaAuxiliar para SigCdGrp com colunas cgrus + dgrus |
+| `CmdInserirClick()`, `CmdExcluirClick()` | Manipulam cursor_4c_Operacao com l├│gica id├¬ntica ao legado |
+| `CmdConfirmarClick()` | ValidarDuplicados ÔåÆ SalvarGrupos (transa├º├úo SQL via BO), re-habilita pai |
+| `CmdCancelarClick()` | Re-habilita pai e Release() |
+| `Destroy()` | Fecha todos os cursores, re-habilita pai (seguran├ºa), DODEFAULT() |

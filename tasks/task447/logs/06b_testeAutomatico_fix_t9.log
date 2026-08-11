@@ -1,0 +1,21 @@
+[2026-08-09 06:08:18] [INFO] === CLAUDE CLI INVOKER ===
+[2026-08-09 06:08:18] [INFO] Prompt File: C:\4c\tasks\task447\runtime_fix_prompt_06b_testeAutomatico_t9.md
+[2026-08-09 06:08:18] [INFO] Output File: C:\4c\tasks\task447\06b_testeAutomatico_fix_output_t9.txt
+[2026-08-09 06:08:18] [INFO] Model: sonnet
+[2026-08-09 06:08:18] [INFO] Timeout: 3600 segundos
+[2026-08-09 06:08:18] [INFO] Max Output Tokens: 128000
+[2026-08-09 06:08:18] [INFO] Context Files: 0 arquivo(s)
+[2026-08-09 06:08:18] [INFO] Invocando Claude CLI...
+[2026-08-09 06:08:18] [INFO] Prompt carregado: 84282 caracteres
+[2026-08-09 06:08:18] [INFO] Executando: claude --model sonnet --dangerously-skip-permissions --add-dir C:\4c
+[2026-08-09 06:08:18] [INFO] Tamanho total do prompt: 84282 caracteres
+[2026-08-09 06:08:18] [INFO] Invocando Claude CLI (tentativa 1/7)...
+[2026-08-09 06:19:21] [INFO] Claude CLI finalizado em 662.7522187 segundos
+[2026-08-09 06:19:21] [INFO] Exit Code: 0
+[2026-08-09 06:19:21] [INFO] Output salvo em: C:\4c\tasks\task447\06b_testeAutomatico_fix_output_t9.txt
+[2026-08-09 06:19:21] [INFO] Output size: 505 bytes
+[2026-08-09 06:19:21] [INFO] SUCESSO: Claude CLI executado com sucesso
+[2026-08-09 06:19:21] [INFO] Preview do output:
+[2026-08-09 06:19:21] [INFO] Corrigido. O bug estava em `ICMBO.prg` nas linhas 65 e 102: o JOIN usava `a.cemps` (coluna inexistente em `SigCdCmi`) em vez de `a.emps` (nome correto da FK). Isso fazia o SQL Server retornar "Invalid column name 'cemps'", o `MsgErro()` abria um dialog modal que o VFP9 em modo unattended n+úo conseguia fechar automaticamente, causando o timeout de 300s.
+
+**Fix**: `LEFT JOIN SigCdEmp b ON b.cemps = a.cemps` ÔåÆ `b.cemps = a.emps` em ambos os m+®todos `Buscar()` e `CarregarPorCodigo()`.

@@ -1,0 +1,5 @@
+﻿Corre├º├úo aplicada. O problema era `.Check1.Value = 0` (num├®rico) numa coluna com `ControlSource = "crGrade.Atuals"` que ├® campo `L` (l├│gico). O VFP9 dispara "Data type mismatch" ao resolver o binding, derrubando o `InicializarForm()` e fazendo `CREATEOBJECT` retornar n├úo-objeto.
+
+**Causa-raiz**: `crGrade.Atuals` foi declarado como `L` no `CREATE CURSOR`, ent├úo o `Check1.Value` deve ser `.F.` (l├│gico), n├úo `0` (num├®rico).
+
+**Erros colaterais** ("Connection handle is invalid" em `CarregarConfigGrupo` e `CarregarEnderecos`): s├úo esperados no ambiente de teste sem conex├úo SQL ÔÇö os CATCH blocks registram e continuam, n├úo impedem a instancia├º├úo. Com a corre├º├úo do CheckBox, o form deve instanciar normalmente.

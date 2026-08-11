@@ -1,0 +1,8 @@
+﻿Fase 7/8 conclu├¡da. Adicionei os 4 m├®todos de compatibilidade ao final do FormHOR.prg:
+
+- **`BtnIncluirClick()`** ÔåÆ delega para `CmdInserirClick()` (j├í implementado nas fases anteriores)
+- **`BtnAlterarClick()`** ÔåÆ delega para `CmdAlterarClick()`
+- **`BtnVisualizarClick()`** ÔåÆ chama `AjustarTela()` + recarrega calend├írio (equivale ao modo CONSULTAR do SIGCDHOR, que n├úo tem bot├úo Visualizar dedicado)
+- **`BtnExcluirClick()`** ÔåÆ delega para `CmdExcluirClick()`
+
+Nota: este form OPERACIONAL j├í tinha toda a l├│gica implementada sob nomes `CmdXxxClick` (alinhados ao original SIGCDHOR). Os novos m├®todos `BtnXxxClick` adicionam compatibilidade com chamadas externas que usem a conven├º├úo de nomes dos forms CRUD do sistema novo.

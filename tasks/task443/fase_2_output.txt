@@ -1,0 +1,15 @@
+﻿Fase 2 conclu├¡da. O `GrupoBO.prg` agora tem implementa├º├úo completa com 9 m├®todos adicionados:
+
+| M├®todo | Equivalente no legado | Fun├º├úo |
+|---|---|---|
+| `InicializarDados(par_cDopes)` | `SIGCDGRP.Init` | Cria `cursor_4c_Ope` e carrega dados do SQL Server via JOIN SigOpGpo+SigCdGrp |
+| `InserirLinhaGrid()` | `cmdInserir.Click` | Insere linha em branco em `cursor_4c_Ope` |
+| `ExcluirLinhaGrid()` | `cmdExcluir.Click` | Marca registro corrente como deletado, avan├ºa cursor |
+| `ValidarGrupo(par_cCgrus)` | `Column1.Text1.Valid` | Busca Cgrus em SigCdGrp, preenche Dgrus no cursor |
+| `ValidarGrandeGrupo(par_cCodigos)` | `getGdeGrps.Valid` | Valida Codigos em SigCdGpr, armazena em `this_cGdeGrps` |
+| `CarregarGrandeGrupo(par_cGdeGrps)` | `btnCarregar.Click` | Carrega todos os grupos de SigCdGrp WHERE Mercs=GdeGrps, faz merge no cursor |
+| `ValidarDuplicidade()` (PROTECTED) | in├¡cio do `cmdSair.Click` | VFP local SQL com HAVING SUM(1)>1 |
+| `Confirmar()` | `cmdSair.Click` | DELETE FROM SigOpGpo + INSERT para cada linha n├úo-vazia; usa `SYS(2015)` para cIdChaves |
+| `LiberarCursores()` | form.Destroy | Libera todos os cursores tempor├írios |
+
+Pontos de aten├º├úo seguidos: sem RETURN dentro de TRY/CATCH, SQLEXEC em cursor tempor├írio + ZAP/APPEND FROM DBF, SET NULL ON antes do CREATE CURSOR, EscaparSQL() em todos os strings, CHR() para acentos, ALLTRIM() (nunca STR()) em colunas char.

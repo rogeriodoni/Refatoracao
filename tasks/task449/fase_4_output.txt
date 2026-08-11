@@ -1,0 +1,17 @@
+﻿Arquivo atualizado e verificado. A Fase 4 est├í completa. Resumo do que foi adicionado a `FormICO.prg`:
+
+**ConfigurarPaginaLista()** ÔÇö cria os 3 controles do layout flat OPERACIONAL:
+- `grd_4c_Dados` (Grid) ÔÇö replica fiel ao Grid1 legado: top=85, left=30, 414├ù526, ReadOnly=.T., SetAll fonts (Courier New/Verdana/9pt/8pt), ForeColor azul RGB(36,84,155) no Header
+- `img_4c_Icone` (Image) ÔÇö preview top=220 left=456 305├ù247, Stretch=1, come├ºa Visible=.F.
+- `obj_4c_Commandgroup1` (CommandGroup) ÔÇö 3 bot├Áes (Incluir/Excluir/Encerrar) nos Lefts exatos do original (5/81/157), Comic Sans MS, com BINDEVENTs para os 3 Buttons(N)
+
+**BINDEVENTs de grade** ÔÇö `Scrolled`, `BeforeRowColChange`, `AfterRowColChange` ÔåÆ `AtualizarPreview()`
+
+**InicializarForm()** ÔÇö ap├│s `CarregarIcones()`, conecta `grd_4c_Dados.RecordSource = "crTmpcdico"`, seta ControlSource, Caption do header e chama `AtualizarPreview()` + `SetFocus()`
+
+**Handlers completos**:
+- `AtualizarPreview()` ÔÇö l├¬ `ctmpicones` do cursor e atualiza img_4c_Icone
+- `BtnIncluirClick()` ÔÇö `GETPICT` ÔåÆ SEEK cursor ÔåÆ APPEND BLANK (novo) ou posiciona (existente) ÔåÆ REPLACE campos ÔåÆ STRTOFILE ÔåÆ BO.Inserir/Atualizar ÔåÆ Refresh
+- `BtnExcluirClick()` ÔÇö MsgConfirma ÔåÆ VerificarUsoIcone(SigCdPrg.barrapict) ÔåÆ BO.Excluir ÔåÆ DELETE FROM cursor ÔåÆ navega para pr├│ximo registro
+- `BtnEncerrarClick()` ÔÇö `THIS.Release()`
+- `AlternarPagina()` ÔÇö stub vazio (form flat, sem PageFrame)

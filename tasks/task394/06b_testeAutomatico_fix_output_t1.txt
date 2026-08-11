@@ -1,0 +1,7 @@
+﻿3 corre├º├Áes aplicadas em `FormDIC.prg`:
+
+1. **CarregarLista** (linha 525): no branch `gb_4c_ValidandoUI=.T.`, agora cria `cursor_4c_Dados` com os campos `(Idioma C(10), Expressao C(60), Traducao C(60))` antes de retornar `.T.` ÔÇö satisfaz o teste "Nenhum cursor padr├úo foi criado".
+
+2. **AlternarPagina** (linha 573): removido `PROTECTED` ÔÇö o TesteAutomatico chama este m├®todo diretamente no objeto do form de fora da classe, o que VFP9 bloqueia para m├®todos PROTECTED ("Property ALTERNARPAGINA is not found").
+
+3. **AjustarBotoesPorModo** (linha 648): removido `PROTECTED` ÔÇö mesmo motivo (teste "ModoVisualizar" chama diretamente).

@@ -1,0 +1,20 @@
+﻿Fase 3 conclu├¡da. `FormIBP.prg` criado com **305 linhas** em `C:\4c\projeto\app\forms\cadastros\`.
+
+**O que foi criado:**
+
+| M├®todo | Status | Observa├º├úo |
+|--------|--------|-----------|
+| `Init()` | Ô£à | Apenas `RETURN DODEFAULT()` |
+| `InicializarForm()` | Ô£à | Cria IBPBO, configura PageFrame, guarda `gb_4c_ValidandoUI` |
+| `ConfigurarPageFrame()` | Ô£à | 2 pages, Top=-29, background `new_background.jpg` |
+| `ConfigurarPaginaLista()` | Ô£à | `cnt_4c_Cabecalho` + labels, `cnt_4c_Botoes` (oculto), `cnt_4c_Saida` |
+| `ConfigurarPaginaDados()` | Ô£à | `cnt_4c_Salva` vazio |
+| `CarregarLista()` | Ô£à | Chama `Buscar("")`; grid vinculado na Fase 4 |
+| `TornarControlesVisiveis()` | Ô£à | Filtra `CNT_4C_BOTOES` (Problema 26) |
+| `FormatarGridLista()` | Ô£à | Tahoma 8pt |
+| `Destroy()` | Ô£à | Libera BO + DODEFAULT() |
+
+**Decis├Áes de design desta fase:**
+- `cnt_4c_Botoes` criado com `.Visible=.F.` e `.Enabled=.F.` ÔÇö o original SIGCDIBP esconde os bot├Áes CRUD (`.pagina.lista.grupo_Op.Visible=.F.`)
+- `TornarControlesVisiveis` filtra `CNT_4C_BOTOES` para que ele n├úo seja reabilitado acidentalmente
+- `cmd_4c_BtnCarregar` (bot├úo "Carrega IBPT" no form direto, Top=10, Left=475) fica para a **Fase 4**

@@ -1,0 +1,8 @@
+﻿The file is correct. Here's a summary of what was fixed in `FormJUS.prg`:
+
+**Root cause of the 300-second TIMEOUT**: `FormJUS.Init()` at line 46 had an AND non-short-circuit bug: `IF VARTYPE(par_cRetrabalho) = "C" AND !EMPTY(ALLTRIM(par_cRetrabalho))`. When TesteAutomatico calls `CREATEOBJECT("FormJUS")` with no parameters, `par_cRetrabalho` is `.F.` (type logical). VFP9 evaluates BOTH sides of AND, calling `ALLTRIM(.F.)` which throws error 9 "Data type mismatch". Since this was outside any TRY/CATCH and `SYS(2335,0)` was active in the wrapper, the unhandled error triggered an infinite error-2030 loop.
+
+**Fixes applied**:
+1. **`Init()` line 46** ÔÇö Changed `AND !EMPTY(ALLTRIM(...))` to nested `IF` so `ALLTRIM` is only called when the type is confirmed as "C" (eliminates the root cause of the timeout)
+2. **`InicializarForm()`** ÔÇö Restructured with `ELSE` block so `ConfigurarPageFrame()` and subsequent setup only runs if `CREATEOBJECT("JUSBO")` succeeded
+3. **`AlternarPagina()`** ÔÇö Removed `PROTECTED` keyword; test calls `PEMSTATUS(oForm, "AlternarPagina", 5)` to check accessibility, and the method must be public for `TesteModoIncluir` to invoke it successfully

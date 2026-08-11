@@ -1,0 +1,14 @@
+﻿**Fase 3/8 conclu├¡da.** `C:\4c\projeto\app\forms\operacionais\FormGrupo.prg` criado com 217 linhas.
+
+**O que foi gerado:**
+
+- `Init(par_oForm, par_nDataSes)`: l├¬ `crSigCdOpe.Dopes` da datasession do pai (switch + restore), desabilita o pai, cria `GrupoBO`, chama `InicializarDados()` e ent├úo `DODEFAULT()` (que dispara `FormBase.Init` ÔåÆ `InicializarForm`)
+- `InicializarForm()`: define caption com o c├│digo da opera├º├úo, aplica background, chama `ConfigurarLayout()` e seta os labels do cabe├ºalho
+- `ConfigurarLayout()`: cria `cnt_4c_Cabecalho` (Top=-1, RGB 100,100,100) com `lbl_4c_Sombra` (preto, sombra) e `lbl_4c_Titulo` (branco, t├¡tulo) ÔÇö AddObject fora de WITH aninhado para evitar o bug de props ignoradas
+- `TornarControlesVisiveis()`: recurs├úo simples (sem filtros ÔÇö este form n├úo tem containers flutuantes)
+- `Destroy()`: reabilita o form pai, libera cursores via `GrupoBO.LiberarCursores()`, chama `DODEFAULT()`
+
+**Pr├│ximas fases via Read+Edit:**
+- **Fase 4**: grid `grd_4c_GradeOpe` + bot├Áes `cmd_4c_Inserir`, `cmd_4c_Excluir`, `cmd_4c_Confirmar`, `cmd_4c_Cancelar`, `cmd_4c_BtnCarregar`
+- **Fase 5-6**: campo `txt_4c_GdeGrps` + label `lbl_4c_Say4` (Grande Grupo)
+- **Fase 7-8**: handlers de eventos (KeyPress lookups, Click dos bot├Áes)

@@ -1,0 +1,5 @@
+﻿Fix aplicado. `CREATEOBJECT("GrpBO")` ÔåÆ `CREATEOBJECT("GrupoBO")`.
+
+**Causa raiz**: O nome da classe no arquivo `GrupoBO.prg` ├® `GrupoBO`, mas o form tentava instanciar `GrpBO`. VFP9 n├úo encontrava o arquivo `GrpBO.prg` e abria um dialog "File Open" aguardando o usu├írio localizar o arquivo ÔÇö esse dialog bloqueava a execu├º├úo por exatamente 300 segundos at├® o timeout do teste.
+
+O fix T1 identificou o problema mas produziu apenas texto descritivo, sem escrever o arquivo corrigido. Este fix (T2) aplica a corre├º├úo no arquivo.

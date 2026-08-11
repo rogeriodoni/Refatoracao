@@ -1,0 +1,9 @@
+﻿A corre├º├úo foi aplicada. O problema e a solu├º├úo:
+
+**Causa raiz (Erro103 / tentativa 9):** O fix t8 anterior adicionou atribui├º├Áes `Header1.Caption` ao bloco de modo-teste em `ConfigurarPaginaLista()` e ao branch teste em `CarregarLista()`, reintroduzindo o bug que o fix t5 havia corrigido. Em VFP9 headless (`-T`), o grid nunca ├® renderizado ÔÇö mesmo com `RecordSource` definido, acessar `Column.Header1` gera erro 2030 n├úo-captur├ível que coloca o VFP9 em loop interno de erro por exatamente 300 segundos at├® ser morto.
+
+**Corre├º├úo aplicada:**
+1. **`ConfigurarPaginaLista()` bloco teste:** Removidas as 3 linhas `loc_oGrid.ColumnN.Header1.Caption = ...` ÔÇö `RecordSource` e `ControlSource` continuam (necess├írios para o cursor bind), mas `Header1` nunca ├® tocado em modo headless.
+2. **`CarregarLista()` branch teste:** Mesmo tratamento ÔÇö `Header1.Caption` removido, demais bindings mantidos.
+
+As linhas 586-588 no branch `ELSE` (modo real, n├úo-teste) foram mantidas intactas ÔÇö elas s├│ executam quando `gb_4c_ModoTeste = .F.` e o form est├í vis├¡vel com grid renderizado.

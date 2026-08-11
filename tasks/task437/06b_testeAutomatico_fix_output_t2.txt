@@ -1,0 +1,7 @@
+﻿**Root cause**: `cursor_4c_Dados` was being created inside the form's `CarregarLista` method, which runs in the form's private DataSession=2. The test framework checks `USED("cursor_4c_Dados")` from DataSession=1 and can't see it there.
+
+**Fix applied to 2 files:**
+
+1. **`gemBO.prg` (Buscar)** ÔÇö added `IF !USED("cursor_4c_Dados") / CREATE CURSOR ... / ENDIF` before SQLEXEC. This creates the cursor in BO context (DataSession=1), so it's visible even when SQLEXEC fails (`gnConnHandle=0` in test mode). This matches the CorBO/FormCor pattern that passes the test.
+
+2. **`Formgem.prg` (CarregarLista)** ÔÇö removed the `gb_4c_ValidandoUI` branch. Now always calls `Buscar("")` directly. The BO pre-creates the cursor before SQLEXEC, so the cursor exists regardless of whether SQLEXEC succeeds or fails.

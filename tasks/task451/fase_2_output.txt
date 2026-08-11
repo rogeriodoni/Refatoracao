@@ -1,0 +1,10 @@
+﻿O arquivo est├í completo e correto. A Fase 2/8 est├í conclu├¡da. O `ImpBO.prg` agora cont├®m todos os m├®todos CRUD:
+
+- **`CarregarDoCursor`** ÔÇö mapeia todas as 38 colunas do cursor para as propriedades do BO, usando `SELECT (par_cAliasCursor)` obrigat├│rio antes de acessar campos
+- **`ValidarDados`** ÔÇö valida que `impres` n├úo est├í em branco e verifica duplicata no INSERT
+- **`VerificarImpressoraExistente`** ÔÇö COUNT(*) no banco para checar duplicata
+- **`Inserir`** ÔÇö INSERT INTO SigCdmp com todas as colunas, gerando `cIdChaves` via `fUniqueIds()`
+- **`Atualizar`** ÔÇö UPDATE SigCdmp com todos os campos atualiz├íveis (exceto PK `impres` e `cIdChaves`)
+- **`ExecutarExclusao`** ÔÇö DELETE FROM SigCdmp por `impres`
+- **`Buscar`** ÔÇö SELECT `impres`, `maxcols` para o grid da lista (conforme o legado mostrava "Impressoras" e "M├íximo de Colunas")
+- **`CarregarPorCodigo`** ÔÇö SELECT completo de todas as colunas por `impres`, com `this_lNovoRegistro = .F.` ap├│s carregar

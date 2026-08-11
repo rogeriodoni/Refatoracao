@@ -1,0 +1,1064 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigCdFpo.SCX
+* Data/Hora: 06/08/2026 02:24:59
+* Total de registros: 24
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDFPO
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGCDFPO
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGCDFPO.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGCDFPO.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: GradeFPagto
+  Parent: SIGCDFPO
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGCDFPO.GradeFPagto.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDFPO.GradeFPagto.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDFPO.GradeFPagto.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Check1
+  Parent: SIGCDFPO.GradeFPagto.Column2
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: Header1
+  Parent: SIGCDFPO.GradeFPagto.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Check1
+  Parent: SIGCDFPO.GradeFPagto.Column3
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: Header1
+  Parent: SIGCDFPO.GradeFPagto.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Check1
+  Parent: SIGCDFPO.GradeFPagto.Column4
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: Header1
+  Parent: SIGCDFPO.GradeFPagto.Column5
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDFPO.GradeFPagto.Column5
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say1
+  Parent: SIGCDFPO
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGCDFPO
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGCDFPO
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cmdExcluir
+  Parent: SIGCDFPO
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cmdSair
+  Parent: SIGCDFPO
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cmdInserir
+  Parent: SIGCDFPO
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 104
+  Left = 290
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFPO
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Top = 0
+  Left = 0
+  Height = 335
+  Width = 532
+  DoCreate = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Condição de Pagamento Por Operação"
+  ControlBox = .F.
+  MaxButton = .F.
+  Movable = .F.
+  ClipControls = .F.
+  TitleBar = 0
+  Name = "SIGCDFPO"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFPO.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = -2
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFPO.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFPO.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFPO.GradeFPagto
+------------------------------------------------------------
+  ColumnCount = 5
+  FontName = "Tahoma"
+  FontSize = 8
+  AllowHeaderSizing = .F.
+  AllowRowSizing = .F.
+  DeleteMark = .F.
+  Height = 221
+  Left = 137
+  RecordMark = .T.
+  RowHeight = 16
+  ScrollBars = 2
+  TabIndex = 1
+  Top = 91
+  Width = 276
+  ForeColor = 90,90,90
+  GridLineColor = 238,238,238
+  Name = "GradeFPagto"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.ControlSource = ""
+  Column1.Width = 94
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ForeColor = 90,90,90
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.Alignment = 3
+  Column2.Width = 15
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.Sparse = .T.
+  Column2.Visible = .T.
+  Column2.ForeColor = 90,90,90
+  Column2.BackColor = 216,39,70
+  Column2.Name = "Column2"
+  Column3.FontName = "Tahoma"
+  Column3.FontSize = 8
+  Column3.Width = 15
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.Sparse = .T.
+  Column3.ForeColor = 90,90,90
+  Column3.BackColor = 0,0,128
+  Column3.Name = "Column3"
+  Column4.FontName = "Tahoma"
+  Column4.FontSize = 8
+  Column4.Width = 15
+  Column4.Movable = .F.
+  Column4.Resizable = .F.
+  Column4.Sparse = .T.
+  Column4.ForeColor = 90,90,90
+  Column4.BackColor = 0,128,255
+  Column4.Name = "Column4"
+  Column5.FontName = "Tahoma"
+  Column5.FontSize = 8
+  Column5.Width = 100
+  Column5.Movable = .F.
+  Column5.Resizable = .F.
+  Column5.ForeColor = 90,90,90
+  Column5.Name = "Column5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFPO.GradeFPagto.Column1.Header1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Condição Pagto"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFPO.GradeFPagto.Column1.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFPO.GradeFPagto.Column2.Header1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "O"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFPO.GradeFPagto.Column2.Check1
+------------------------------------------------------------
+  Top = 24
+  Left = 7
+  Height = 17
+  Width = 60
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = ""
+  Visible = .T.
+  ForeColor = 90,90,90
+  BackColor = 216,39,70
+  Name = "Check1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFPO.GradeFPagto.Column3.Header1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "A"
+  ForeColor = 0,0,128
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFPO.GradeFPagto.Column3.Check1
+------------------------------------------------------------
+  Top = 24
+  Left = 5
+  Height = 17
+  Width = 60
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = ""
+  ForeColor = 90,90,90
+  BackColor = 0,0,128
+  Name = "Check1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFPO.GradeFPagto.Column4.Header1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "C"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFPO.GradeFPagto.Column4.Check1
+------------------------------------------------------------
+  Top = 31
+  Left = 11
+  Height = 17
+  Width = 60
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = "Check1"
+  ForeColor = 90,90,90
+  BackColor = 0,128,255
+  Name = "Check1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFPO.GradeFPagto.Column5.Header1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Substituir"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFPO.GradeFPagto.Column5.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFPO.Say1
+------------------------------------------------------------
+  FontBold = .T.
+  FontSize = 8
+  Caption = "O = Obrigatório"
+  Left = 107
+  Top = 314
+  TabIndex = 2
+  ForeColor = 216,39,70
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFPO.Say2
+------------------------------------------------------------
+  FontBold = .T.
+  FontSize = 8
+  Caption = "A = Só Auto"
+  Left = 219
+  Top = 313
+  TabIndex = 4
+  ForeColor = 0,0,128
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFPO.Say3
+------------------------------------------------------------
+  FontBold = .T.
+  FontSize = 8
+  Caption = "C = NÃO Contabilizar"
+  Height = 15
+  Left = 307
+  Top = 313
+  Width = 117
+  TabIndex = 5
+  ForeColor = 0,128,255
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFPO.cmdExcluir
+------------------------------------------------------------
+  Top = 4
+  Left = 381
+  Picture = ..\framework\imagens\cadastro_excluir_60.jpg
+  Caption = "Excluir"
+  TabIndex = 3
+  Name = "cmdExcluir"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFPO.cmdSair
+------------------------------------------------------------
+  Top = 4
+  Left = 456
+  Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Cancel = .T.
+  Caption = "Encerrar"
+  TabIndex = 6
+  Name = "cmdSair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFPO.cmdInserir
+------------------------------------------------------------
+  Top = 4
+  Left = 309
+  Picture = ..\framework\imagens\cadastro_inserir_60.jpg
+  Caption = "Inserir"
+  TabIndex = 7
+  Name = "cmdInserir"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Tahoma, 1, 8, 6, 13, 11, 32, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDFPO
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE mctrlbotoes
+------------------------------------------------------------
+PROCEDURE mctrlbotoes
+LParameters plHabilita
+
+Local lnI
+
+If Type('plHabilita') # 'L'
+	plHabilita = .F.
+Endif
+
+With Thisform.ParentForm.Pagina.Lista
+	For lnI=1 to .Grupo_Op.ButtonCount
+		If .Grupo_Op.Buttons(lnI).BaseClass = 'Commandbutton' And .Grupo_Op.Buttons(lnI).Visible
+			.Grupo_Op.Buttons(lnI).Enabled = plHabilita
+		EndIf
+	EndFor
+	.cmdFPOper.Enabled = plHabilita
+	.Grupo_Saida.Sair.Enabled = plHabilita
+EndWith
+
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters poForm, pnDataSes
+
+Set Datasession To pnDataSes
+
+ThisForm.ParentForm = poForm
+
+With ThisForm.ParentForm
+	With .poDatamgr
+		.AddCursor('SigOpFpo','CidChaves','crSigOpFpo','fpags',.f.,[Select * From SigOpFpo Where Dopes = ?crSigCdOpe.Dopes Order by Dopes])
+        .ReQuery('crSigOpFpo')
+		.AddCursor('SigOpFp','fpags','crSigOpFp','fpags',.f.)
+		.Requery('crSigOpFp')
+		Select crSigOpFp
+		Go Top
+	EndWith
+EndWith
+
+With ThisForm.GradeFPagto
+	.ColumnCount = 5
+	.RecordSource = 'crSigOpFpO'
+	.DeleteMark = .f.
+	.ReadOnly = .f.
+	.RowHeight = 18
+	.Scrollbars = 2
+	.AllowHeaderSizing = .f.
+	.AllowRowSizing = .f.
+
+	.Column1.ControlSource = 'crSigOpFpO.Fpags'
+	.Column1.FontName = 'Courier New'
+	.Column1.Movable = .f.
+	.Column1.Resizable = .f.
+	.Column1.ReadOnly = .f.
+
+	.Column2.ControlSource = 'crSigOpFpO.Obrigs'
+	.Column2.FontName = 'Courier New'
+	.Column2.Movable = .f.
+	.Column2.Resizable = .f.
+	.Column2.ReadOnly = .t.
+	.Column2.Sparse = .f.
+	.Column2.Check1.AutoSize = .t.
+
+	.Column3.ControlSource = 'crSigOpFpO.Autos'
+	.Column3.FontName = 'Courier New'
+	.Column3.Movable = .f.
+	.Column3.Resizable = .f.
+	.Column3.ReadOnly = .t.
+	.Column3.Sparse = .f.
+	.Column3.Check1.AutoSize = .t.
+
+	.Column4.ControlSource = 'crSigOpFpO.Contabs'
+	.Column4.FontName = 'Courier New'
+	.Column4.Movable = .f.
+	.Column4.Resizable = .f.
+	.Column4.ReadOnly = .t.
+	.Column4.Sparse = .f.
+	.Column4.Check1.AutoSize = .t.
+
+	.Column5.ControlSource = 'crSigOpFpO.Fpagss'
+	.Column5.FontName = 'Courier New'
+	.Column5.Movable = .f.
+	.Column5.Resizable = .f.
+	.Column5.ReadOnly = .f.
+
+	.Refresh
+EndWith
+
+Thisform.ParentForm          = poForm
+Thisform.ParentForm.Enabled  = .F.
+
+With Thisform
+	.Caption = 'Cond.Pagto Para ' + AllTrim(crSigCdOpe.Dopes)
+	.Top     = Thisform.ParentForm.Top + Thisform.ParentForm.Pagina.Lista.Grade.Top + 50
+	.Left    = Thisform.ParentForm.Left + ;
+			   Thisform.ParentForm.Pagina.Lista.Grade.Left + ;
+			   Thisform.ParentForm.Pagina.Lista.Grade.Columns(1).Width + ;
+			   Thisform.ParentForm.Pagina.Lista.Grade.Columns(3).Width + 16
+	.cmdInserir.Visible = fChecaAcesso('SIGCDFPO','INSERIR')			   
+	.cmdInserir.Enabled = .cmdInserir.Visible
+	.cmdExcluir.Visible = fChecaAcesso('SIGCDFPO','EXCLUIR')			   
+	.cmdExcluir.Enabled = .cmdExcluir.Visible
+EndWith
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+Thisform.mCtrlBotoes(.F.)
+Select crSigOpFpO
+Goto Top
+ThisForm.GradeFPagto.Column1.SetFocus
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFPO.GradeFPagto.Column1.Header1
+* Classe: header (Base: header)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select crSigOpFpo
+Index On FPags Tag FPags
+Set Order To FPags In crSigOpFpo
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFPO.GradeFPagto.Column1.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+If IsEmpty(This.Value)
+	Thisform.cmdSair.SetFocus
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local lcFpags, lnRecNo, loBrowse
+
+If Not IsEmpty(This.Value)
+	loBrowse = CreateObject('fwBuscaInt','crSigOpFp','FPags',This.Value,'Cadastro de Condição de Pagamento',.t.)
+	loBrowse.mAddColuna('FPags','','Código',.t.)
+	loBrowse.mAddColuna('Fparcs','99','Parc',.f.)
+	loBrowse.Show		
+	This.Value = Iif( Lastkey() == 27, '', crSigOpFp.FPags )
+	This.Refresh
+	
+	lcFPags = This.Value
+	If Not IsEmpty(lcFPags)
+		If CrSigOpFp.Situas = [S] And Not (CrSigCdOpe.Caixas=1 And CrSigCdOpe.Copers=1)
+			MessageBox('Condição de Pagamento não permitida para esta Operação!!!',0+16,'')
+			This.Value = ' '
+			Return .f.
+		Endif
+		Select crSigOpFpO
+		If Not Eof() Or Bof()
+			SELECT crSigOpFpo
+			lnRecNo = RecNo()
+		Else 
+			lnRecNo = 0
+		ENDIF
+*!*			Set Step On 
+*!*			SELECT crSigOpFpo
+*!*			LOCATE FOR Dopes = crSigCdOpe.Dopes .and. FPags = lcFpags
+*!*			If ! EOF()
+*!*				Skip
+*!*				If crSigOpFpO.Dopes + crSigOpFpO.FPags = crSigCdOpe.Dopes + lcFpags 
+*!*					This.Value = ''
+*!*					This.Refresh
+*!*					Delete
+*!*					Skip
+*!*					Skip -1
+*!*					MessageBox('Condição de Pagamento já Digitada ... ',48,'')
+*!*				EndIf
+*!*			Endif
+		Select crSigOpFpO
+		If lnRecNo # 0
+			Goto (lnRecNo)
+		Else
+			Goto Bottom
+		EndIf
+		This.Refresh
+	EndIf
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return( IsEmpty( crSigOpFpO.Fpags ) )
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFPO.GradeFPagto.Column2.Check1
+* Classe: checkbox (Base: checkbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+NoDefault
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LParameters nKeyCode, nShiftAltCtrl
+
+Local Obrigs
+
+If InList(nKeyCode, 13, 32)
+	m.Obrigs = Iif(crSigOpFpo.Obrigs=1, 0, 1)
+
+	Select crSigOpFpo
+	Gather Memvar Fields Obrigs
+	ThisForm.GradeFPagto.Refresh
+
+	NoDefault
+EndIf
+* Fim ********************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE MouseDown
+------------------------------------------------------------
+PROCEDURE MouseDown
+LParameters nButton, nShift, nXCoord, nYCoord
+
+Local Obrigs
+
+m.Obrigs = Iif(crSigOpFpo.Obrigs=1, 0, 1)
+
+Select crSigOpFpo
+Gather Memvar Fields Obrigs
+ThisForm.GradeFPagto.Refresh
+
+NoDefault
+* Fim ********************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE MouseUp
+------------------------------------------------------------
+PROCEDURE MouseUp
+LParameters nButton, nShift, nXCoord, nYCoord
+
+NoDefault
+* Fim ********************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFPO.GradeFPagto.Column3.Check1
+* Classe: checkbox (Base: checkbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+NoDefault
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LParameters nKeyCode, nShiftAltCtrl
+
+Local Autos
+
+If InList(nKeyCode, 13, 32)
+	m.Autos = Iif(crSigOpFpo.Autos=1, 0, 1)
+
+	Select crSigOpFpo
+	Gather Memvar Fields Autos
+	ThisForm.GradeFPagto.Refresh
+
+	NoDefault
+EndIf
+* Fim ********************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE MouseDown
+------------------------------------------------------------
+PROCEDURE MouseDown
+LParameters nButton, nShift, nXCoord, nYCoord
+
+Local Autos
+
+m.Autos = Iif(crSigOpFpo.Autos=1, 0, 1)
+
+Select crSigOpFpo
+Gather Memvar Fields Autos
+ThisForm.GradeFPagto.Refresh
+
+NoDefault
+* Fim ********************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE MouseUp
+------------------------------------------------------------
+PROCEDURE MouseUp
+LParameters nButton, nShift, nXCoord, nYCoord
+
+NoDefault
+* Fim ********************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFPO.GradeFPagto.Column4.Check1
+* Classe: checkbox (Base: checkbox)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+NoDefault
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LParameters nKeyCode, nShiftAltCtrl
+
+Local Autos
+
+If InList(nKeyCode, 13, 32)
+	m.Contabs = Iif(crSigOpFpo.Contabs=1, 0, 1)
+
+	Select crSigOpFpo
+	Gather Memvar Fields Contabs
+	ThisForm.GradeFPagto.Refresh
+
+	NoDefault
+EndIf
+* Fim ********************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE MouseDown
+------------------------------------------------------------
+PROCEDURE MouseDown
+LParameters nButton, nShift, nXCoord, nYCoord
+
+Local Autos
+
+m.Contabs = Iif(crSigOpFpo.Contabs=1, 0, 1)
+
+Select crSigOpFpo
+Gather Memvar Fields Contabs
+ThisForm.GradeFPagto.Refresh
+
+NoDefault
+* Fim ********************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE MouseUp
+------------------------------------------------------------
+PROCEDURE MouseUp
+LParameters nButton, nShift, nXCoord, nYCoord
+
+NoDefault
+* Fim ********************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFPO.GradeFPagto.Column5.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 17
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local lcFpags, lnRecNo, loBrowse
+
+If Not IsEmpty(This.Value)
+	Select a.* From CrSigOpFp a Into Cursor CsFpagto
+	Select CsFpagto
+	Index on Fpags tag Fpags
+	loBrowse = CreateObject('fwBuscaInt','CsFpagto','FPags',This.Value,'Cadastro de Condição de Pagamento',.t.)
+	loBrowse.mAddColuna('FPags','','Código',.t.)
+	loBrowse.mAddColuna('Fparcs','99','Parc',.f.)
+	loBrowse.Show		
+	This.Value = Iif( Lastkey() == 27, '', CsFpagto.FPags )
+	This.Refresh
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFPO.cmdExcluir
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 21
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select crSigOpFpO
+If Not Eof()
+	Delete
+	Skip
+	Skip - 1
+Endif
+
+Thisform.GradeFPagto.Refresh
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFPO.cmdSair
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 22
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Local m.lnErro1
+
+Select FPags, sum(1) as TT From crSigOpFpo Where Dopes = crSigCdOpe.Dopes GROUP by 1 Into cursor Totais
+Select Totais
+Scan
+	If TT > 1
+		MessageBox('Condição de Pagamento '+Alltrim(Totais.FPags)+' Digitada em Duplicidade!!!!',0+16,'Atenção')
+		Return .f.
+	EndIf
+EndScan
+
+If Thisform.cmdInserir.Visible
+	Select crSigOpFpo
+	Scan
+		If IsEmpty(crSigOpFpo.FPags)
+			Delete
+		Else
+			If IsEmpty(crSigOpFpo.CidChaves)
+				Replace CidChaves With fUniqueIds()
+			EndIf
+		EndIf
+	EndScan
+ENDIF
+
+m.lnErro1 = ThisForm.ParentForm.poDatamgr.pnIdConn
+
+With ThisForm.ParentForm
+	If m.lnErro1>0 
+		m.lnErro1 = Iif(.poDataMgr.UpDate('crSigOpFpo'),1,-1)
+	EndIf 
+	If m.lnErro1>0 
+		m.lnErro1 = .poDataMgr.Commit()
+	EndIf 
+	If Not m.lnErro1>0 
+		.poDataMgr.RollBack()
+	EndIf 
+EndWith 
+If Not m.lnErro1>0 
+	= MessageBox('Erro na Gravação dos Dados do Cadastro de Operações.',48)
+EndIf 
+Thisform.ParentForm.Enabled = .T.
+Thisform.mCtrlBotoes(.T.)
+ThisForm.Release
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFPO.cmdInserir
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 23
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select crSigOpFpO
+Append Blank  
+Replace Dopes With crSigCdOpe.Dopes
+Thisform.GradeFPagto.Column1.SetFocus
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGCDFPO
+RESERVED3 (ClassInfo): parentform
+podatamgr
+*mctrlbotoes 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 23
+================================================================================

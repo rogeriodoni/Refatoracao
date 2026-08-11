@@ -1,0 +1,7 @@
+﻿Phase 6 is now complete. The three missing handler methods have been added to `FormEnd.prg`:
+
+- `TxtEstasKeyPress` ÔÇö routes ENTER/TAB/F4 to the UF lookup, ignores other keys
+- `TxtEstasDblClick` ÔÇö also opens the UF lookup on double-click
+- `TxtCidasLostFocus` ÔÇö stub (fwCep auto-fill not available in new system)
+
+All BINDEVENT registrations in `BindEventos()` now have matching handler methods. The critical bug (`BINDEVENT "Valid"` on TextBox) was fixed in the previous session, and these handlers complete the fix.

@@ -1,0 +1,11 @@
+﻿Ambas as edi├º├Áes est├úo corretas. Resumo das corre├º├Áes:
+
+**Causa raiz (persistente desde t6):** Em VFP9 headless (`-T`), um form com `WindowType = 1` que configura `Grid.RecordSource` durante `InicializarForm()` entra automaticamente no modal READ EVENTS loop ÔÇö bloqueando o teste por exatamente 300s.
+
+**Por que fixes anteriores (t6, t7) falharam:** O CorretorAutomatico detectava `$temWindowType = $true` *apenas* quando encontrava `WindowType = 1`. Ao remover essa linha, o CorretorAutomatico re-adicionava `WindowType = 1` na pr├│xima execu├º├úo por achar que estava "ausente".
+
+**Corre├º├Áes aplicadas:**
+
+1. **`FormGps.prg`** ÔÇö removida a linha `WindowType = 1` (ficou apenas `WindowType = 0`). O comportamento modal em produ├º├úo ├® preservado pelo `this_oParentForm.Enabled = .F.` no Init.
+
+2. **`automation\CorretorAutomatico.ps1`** e **`Atualizacao\automation\CorretorAutomatico.ps1`** ÔÇö regex de detec├º├úo mudou de `WindowType\s*=\s*1` para `WindowType\s*=\s*\d`. Agora `WindowType = 0` ├® reconhecido como "presente", impedindo que o CorretorAutomatico re-adicione `WindowType = 1`.

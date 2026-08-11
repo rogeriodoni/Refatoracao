@@ -1,0 +1,410 @@
+{
+  "resumo": {
+    "totalMetodos": 23,
+    "metodosComSQL": 13,
+    "metodosComValidacao": 5,
+    "totalQueries": 3,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fChecaAcesso", "fConfigGeral", "fwBuscaInt", "FPags", "sum", "fUniqueIds"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDFPO",
+      "evento": "Procedure",
+      "linhas": 20,
+      "codigoOriginal": "LParameters plHabilita\n\nLocal lnI\n\nIf Type('plHabilita') # 'L'\n\tplHabilita = .F.\nEndif\n\nWith Thisform.ParentForm.Pagina.Lista\n\tFor lnI=1 to .Grupo_Op.ButtonCount\n\t\tIf .Grupo_Op.Buttons(lnI).BaseClass = 'Commandbutton' And .Grupo_Op.Buttons(lnI).Visible\n\t\t\t.Grupo_Op.Buttons(lnI).Enabled = plHabilita\n\t\tEndIf\n\tEndFor\n\t.cmdFPOper.Enabled = plHabilita\n\t.Grupo_Saida.Sair.Enabled = plHabilita\nEndWith\n\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFPO",
+      "evento": "Init",
+      "linhas": 89,
+      "codigoOriginal": "LParameters poForm, pnDataSes\n\nSet Datasession To pnDataSes\n\nThisForm.ParentForm = poForm\n\nWith ThisForm.ParentForm\n\tWith .poDatamgr\n\t\t.AddCursor('SigOpFpo','CidChaves','crSigOpFpo','fpags',.f.,[Select * From SigOpFpo Where Dopes = ?crSigCdOpe.Dopes Order by Dopes])\n        .ReQuery('crSigOpFpo')\n\t\t.AddCursor('SigOpFp','fpags','crSigOpFp','fpags',.f.)\n\t\t.Requery('crSigOpFp')\n\t\tSelect crSigOpFp\n\t\tGo Top\n\tEndWith\nEndWith\n\nWith ThisForm.GradeFPagto\n\t.ColumnCount = 5\n\t.RecordSource = 'crSigOpFpO'\n\t.... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso",
+        "metodosFormChamados": "Columns,mCtrlBotoes",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFPO",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=fConfigGeral()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFPO.GradeFPagto.Column1.Header1",
+      "evento": "Click",
+      "linhas": 3,
+      "codigoOriginal": "Select crSigOpFpo\nIndex On FPags Tag FPags\nSet Order To FPags In crSigOpFpo",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFPO.GradeFPagto.Column1.Text1",
+      "evento": "LostFocus",
+      "linhas": 3,
+      "codigoOriginal": "If IsEmpty(This.Value)\n\tThisform.cmdSair.SetFocus\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFPO.GradeFPagto.Column1.Text1",
+      "evento": "Valid",
+      "linhas": 47,
+      "codigoOriginal": "Local lcFpags, lnRecNo, loBrowse\n\nIf Not IsEmpty(This.Value)\n\tloBrowse = CreateObject('fwBuscaInt','crSigOpFp','FPags',This.Value,'Cadastro de Condição de Pagamento',.t.)\n\tloBrowse.mAddColuna('FPags','','Código',.t.)\n\tloBrowse.mAddColuna('Fparcs','99','Parc',.f.)\n\tloBrowse.Show\t\t\n\tThis.Value = Iif( Lastkey() == 27, '', crSigOpFp.FPags )\n\tThis.Refresh\n\t\n\tlcFPags = This.Value\n\tIf Not IsEmpty(lcFPags)\n\t\tIf CrSigOpFp.Situas = [S] And Not (CrSigCdOpe.Caixas=1 And CrSigCdOpe.Copers=1)\n\t\t\tMessageBox('C... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDFPO.GradeFPagto.Column1.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return( IsEmpty( crSigOpFpO.Fpags ) )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFPO.GradeFPagto.Column2.Check1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFPO.GradeFPagto.Column2.Check1",
+      "evento": "KeyPress",
+      "linhas": 15,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nLocal Obrigs\n\nIf InList(nKeyCode, 13, 32)\n\tm.Obrigs = Iif(crSigOpFpo.Obrigs=1, 0, 1)\n\n\tSelect crSigOpFpo\n\tGather Memvar Fields Obrigs\n\tThisForm.GradeFPagto.Refresh\n\n\tNoDefault\nEndIf\n* Fim ********************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFPO.GradeFPagto.Column2.Check1",
+      "evento": "Procedure",
+      "linhas": 13,
+      "codigoOriginal": "LParameters nButton, nShift, nXCoord, nYCoord\n\nLocal Obrigs\n\nm.Obrigs = Iif(crSigOpFpo.Obrigs=1, 0, 1)\n\nSelect crSigOpFpo\nGather Memvar Fields Obrigs\nThisForm.GradeFPagto.Refresh\n\nNoDefault\n* Fim ********************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFPO.GradeFPagto.Column2.Check1",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "LParameters nButton, nShift, nXCoord, nYCoord\n\nNoDefault\n* Fim ********************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFPO.GradeFPagto.Column3.Check1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFPO.GradeFPagto.Column3.Check1",
+      "evento": "KeyPress",
+      "linhas": 15,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nLocal Autos\n\nIf InList(nKeyCode, 13, 32)\n\tm.Autos = Iif(crSigOpFpo.Autos=1, 0, 1)\n\n\tSelect crSigOpFpo\n\tGather Memvar Fields Autos\n\tThisForm.GradeFPagto.Refresh\n\n\tNoDefault\nEndIf\n* Fim ********************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFPO.GradeFPagto.Column3.Check1",
+      "evento": "Procedure",
+      "linhas": 13,
+      "codigoOriginal": "LParameters nButton, nShift, nXCoord, nYCoord\n\nLocal Autos\n\nm.Autos = Iif(crSigOpFpo.Autos=1, 0, 1)\n\nSelect crSigOpFpo\nGather Memvar Fields Autos\nThisForm.GradeFPagto.Refresh\n\nNoDefault\n* Fim ********************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFPO.GradeFPagto.Column3.Check1",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "LParameters nButton, nShift, nXCoord, nYCoord\n\nNoDefault\n* Fim ********************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFPO.GradeFPagto.Column4.Check1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFPO.GradeFPagto.Column4.Check1",
+      "evento": "KeyPress",
+      "linhas": 15,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nLocal Autos\n\nIf InList(nKeyCode, 13, 32)\n\tm.Contabs = Iif(crSigOpFpo.Contabs=1, 0, 1)\n\n\tSelect crSigOpFpo\n\tGather Memvar Fields Contabs\n\tThisForm.GradeFPagto.Refresh\n\n\tNoDefault\nEndIf\n* Fim ********************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFPO.GradeFPagto.Column4.Check1",
+      "evento": "Procedure",
+      "linhas": 13,
+      "codigoOriginal": "LParameters nButton, nShift, nXCoord, nYCoord\n\nLocal Autos\n\nm.Contabs = Iif(crSigOpFpo.Contabs=1, 0, 1)\n\nSelect crSigOpFpo\nGather Memvar Fields Contabs\nThisForm.GradeFPagto.Refresh\n\nNoDefault\n* Fim ********************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFPO.GradeFPagto.Column4.Check1",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "LParameters nButton, nShift, nXCoord, nYCoord\n\nNoDefault\n* Fim ********************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFPO.GradeFPagto.Column5.Text1",
+      "evento": "Valid",
+      "linhas": 14,
+      "codigoOriginal": "Local lcFpags, lnRecNo, loBrowse\n\nIf Not IsEmpty(This.Value)\n\tSelect a.* From CrSigOpFp a Into Cursor CsFpagto\n\tSelect CsFpagto\n\tIndex on Fpags tag Fpags\n\tloBrowse = CreateObject('fwBuscaInt','CsFpagto','FPags',This.Value,'Cadastro de Condição de Pagamento',.t.)\n\tloBrowse.mAddColuna('FPags','','Código',.t.)\n\tloBrowse.mAddColuna('Fparcs','99','Parc',.f.)\n\tloBrowse.Show\t\t\n\tThis.Value = Iif( Lastkey() == 27, '', CsFpagto.FPags )\n\tThis.Refresh\nEndIf\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFPO.cmdExcluir",
+      "evento": "Click",
+      "linhas": 8,
+      "codigoOriginal": "Select crSigOpFpO\nIf Not Eof()\n\tDelete\n\tSkip\n\tSkip - 1\nEndif\n\nThisform.GradeFPagto.Refresh",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFPO.cmdSair",
+      "evento": "Click",
+      "linhas": 43,
+      "codigoOriginal": "Local m.lnErro1\n\nSelect FPags, sum(1) as TT From crSigOpFpo Where Dopes = crSigCdOpe.Dopes GROUP by 1 Into cursor Totais\nSelect Totais\nScan\n\tIf TT > 1\n\t\tMessageBox('Condição de Pagamento '+Alltrim(Totais.FPags)+' Digitada em Duplicidade!!!!',0+16,'Atenção')\n\t\tReturn .f.\n\tEndIf\nEndScan\n\nIf Thisform.cmdInserir.Visible\n\tSelect crSigOpFpo\n\tScan\n\t\tIf IsEmpty(crSigOpFpo.FPags)\n\t\t\tDelete\n\t\tElse\n\t\t\tIf IsEmpty(crSigOpFpo.CidChaves)\n\t\t\t\tReplace CidChaves With fUniqueIds()\n\t\t\tEndIf\n\t\tEndIf\n\tEndScan\nENDIF\n\n... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "FPags, sum,fUniqueIds",
+        "metodosFormChamados": "mCtrlBotoes",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDFPO.cmdInserir",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "Select crSigOpFpO\nAppend Blank  \nReplace Dopes With crSigCdOpe.Dopes\nThisform.GradeFPagto.Column1.SetFocus\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDFPO.Init",
+      "queryOriginal": "\t\t.AddCursor('SigOpFpo','CidChaves','crSigOpFpo','fpags',.f.,[Select * From SigOpFpo Where Dopes = ?crSigCdOpe.Dopes Order by Dopes])",
+      "tabelas": "SigOpFpo",
+      "colunas": "Dopes,Dopes]",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDFPO.GradeFPagto.Column5.Text1.Valid",
+      "queryOriginal": "\tSelect a.* From CrSigOpFp a Into Cursor CsFpagto",
+      "tabelas": "CrSigOpFp",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDFPO.cmdSair.Click",
+      "queryOriginal": "Select FPags, sum(1) as TT From crSigOpFpo Where Dopes = crSigCdOpe.Dopes GROUP by 1 Into cursor Totais",
+      "tabelas": "crSigOpFpo",
+      "colunas": "FPags,Dopes,Totais",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigOpFpo", "CrSigOpFp", "crSigOpFpo"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

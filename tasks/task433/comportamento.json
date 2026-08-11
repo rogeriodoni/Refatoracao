@@ -1,0 +1,102 @@
+{
+  "resumo": {
+    "totalMetodos": 5,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 1,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": []
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDFTF",
+      "evento": "Init",
+      "linhas": 12,
+      "codigoOriginal": "LPARAMETERS lcacesso\n\nWith ThisForm\n\t.poDatamgr = CreateObject('fSqlConector')\n\tWith .poDatamgr\n\t\t.AddCursor('SigFiNz','nordems','crSigFiNz','',ThisForm.pagina.lista.grade)\n\t\t.pfSqlTabela(1).pColuna('nordems','','','Ordem',80,.t.)\n\t\t.pfSqlTabela(1).pColuna('cdescrs','','','Descrição',337,.t.)\n\tEndWith\n\t= DoDefault()\n\t.LockScreen = .f.\nEndWith",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFTF",
+      "evento": "Click",
+      "linhas": 17,
+      "codigoOriginal": "lparameters opcao\nselect CrSigFiNZ\nIf !dodefault( Opcao )\n\tThisForm.mAtivapagina1\n\tReturn\nEndif\n\nDo Case\n\tCase Inlist( thisform.pcEscolha, 'INSERIR', 'PROCURAR' )\n\t\tThisForm.Pagina.Dados.Get_Ordem.SetFocus\n\tCase thisform.pcEscolha = 'ALTERAR'\n\t\tThisForm.Pagina.Dados.Get_Descr.SetFocus\n\tCase Inlist( thisform.pcEscolha, 'CONSULTAR', 'EXCLUIR' )\n\t\tThisForm.Pagina.Dados.Grupo_Salva.Salva.SetFocus\nEndcase\nSelect CrSigFiNZ\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Ordem,Get_Descr",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFTF",
+      "evento": "Click",
+      "linhas": 22,
+      "codigoOriginal": "if Inlist( thisform.pcEscolha, 'INSERIR')\n\tIf ThisForm.poDataMgr.ChkRegister('SigFiNz','nordems',thisform.pagina.dados.get_ordem.value)\n\t\tmessagebox('Ordem já cadastrada ! ',0+48,'')\n\t\tthisform.pagina.dados.get_ordem.setfocus\n\t\tReturn\n\tEndif\nendif\nif Inlist( thisform.pcEscolha, 'INSERIR', 'ALTERAR')\n\n\tif IsEmpty(thisform.pagina.dados.get_descr.value)\n\t\tmessagebox('Descrição Inválida',0+48,'')\n\t\tthisform.pagina.dados.get_descr.setfocus\n\t\treturn\n\tendif\n\t\nEndif\n\n=DoDefault()\n\nThisForm.Refresh\nThisf... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChkRegister",
+        "controlesReferenciados": "get_ordem,ChkRegister('SigFiNz',get_descr",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFTF",
+      "evento": "Click",
+      "linhas": 7,
+      "codigoOriginal": "DoDefault()\n\nThisForm.Refresh\n\nif thisform.plCancelar\n\tthisform.mAtivapagina1\nendif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFTF.Pagina.Dados.Get_ordem",
+      "evento": "When",
+      "linhas": 7,
+      "codigoOriginal": "LOCAL RET\n\nRET=dodefault()\nIF thisform.pcEscolha='ALTERAR'\n\tRET=.F.\nENDIF\nRETURN(RET)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

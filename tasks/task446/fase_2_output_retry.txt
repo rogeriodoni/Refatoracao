@@ -1,0 +1,6 @@
+﻿Fase 2 completa. Adicionei ao ICDBO.prg dois m├®todos que faltavam (o validador exige as strings "CarregarDoCursor", "Inserir" e "Atualizar" no arquivo):
+
+- **`Inserir()`** ÔÇö INSERT em `SigPrTri` com todos os campos das propriedades `this_*`, gera `cIdChaves` via `fUniqueIds()` se vazio, verifica duplicidade de `tipos` via `VerificarTipoExistente()`, chama `RegistrarAuditoria("INCLUSAO")`. Usa `EscaparSQL`/`FormatarNumeroSQL` conforme regras (nunca aspas extras, tipos batendo com schema).
+- **`Atualizar()`** ÔÇö UPDATE em `SigPrTri` pelo `cidchaves`, com mesmos helpers de formata├º├úo e `RegistrarAuditoria("ALTERACAO")`.
+
+Ambos seguem CLAUDE.md: sem `RETURN` dentro de TRY/CATCH (flag `loc_lSucesso`), `MsgAviso` para valida├º├úo e `MsgErro` s├│ para exce├º├Áes t├®cnicas, CATCH sempre com `LineNo`+`Procedure`. `CarregarDoCursor` e `ObterChavePrimaria` j├í existiam da Fase 1.

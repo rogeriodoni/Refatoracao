@@ -1,0 +1,32 @@
+﻿Ap├│s an├ílise completa, tenho o diagn├│stico definitivo.
+
+## Resultado da Verifica├º├úo: Falso Positivo Confirmado
+
+O flag `SQL-FILTRO-INVENTADO` foi **verificado e n├úo requer corre├º├úo**. Eis a an├ílise:
+
+### WHERE CidChaves no c├│digo migrado
+
+As ocorr├¬ncias de `WHERE CidChaves = ...` est├úo em **3 m├®todos do BO**:
+
+| M├®todo | WHERE usado | Status |
+|--------|-------------|--------|
+| `CarregarPorCodigo()` | `WHERE a.CidChaves = ...` | Dead code ÔÇö nunca chamado pelo form |
+| `Atualizar()` | `WHERE CidChaves = ...` | Dead code ÔÇö `FormParaBO` existe mas nunca ├® chamado |
+| `ExecutarExclusao()` | `WHERE CidChaves = ...` | Dead code ÔÇö form usa `SalvarTmpGcOpe` |
+
+### Por que n├úo ├® um filtro inventado
+
+1. **CidChaves ├ë a PK real de SigCdGcp** ÔÇö aparece no INSERT original: `Insert Into TmpGcOpe (Dopes, **CidChaves**, BlqCts)`. N├úo ├® coluna inventada.
+
+2. **S├úo m├®todos padr├úo do BusinessBase** ÔÇö `Atualizar(WHERE PK)` e `ExecutarExclusao(WHERE PK)` s├úo o contrato can├┤nico da arquitetura. Usar a PK ├® correto.
+
+3. **O fluxo OPERACIONAL real nunca executa essas queries** ÔÇö o form ├® OPERACIONAL puro:
+   - Carga: `GcpBO.CarregarTmpGcOpe()` ÔåÆ `WHERE a.Dopes = ...` Ô£ô
+   - Salva: `GcpBO.SalvarTmpGcOpe()` ÔåÆ `DELETE WHERE Dopes = ...` + re-insert Ô£ô
+   - `BtnEncerrarClick` chama `SalvarTmpGcOpe`, n├úo `Salvar()`/`Excluir()`
+
+4. **Toda a SQL que realmente executa** usa condi├º├Áes que existem no original: `WHERE a.Dopes`, `WHERE Codigos`, `WHERE Iclis`.
+
+### Conclus├úo
+
+Nenhuma altera├º├úo necess├íria. O flag foi gerado pelo detector de pattern que encontrou `WHERE CidChaves` sem verificar se esses m├®todos s├úo chamados. Os m├®todos com `WHERE CidChaves` s├úo c├│digo BusinessBase correto e inerte no contexto deste form OPERACIONAL.

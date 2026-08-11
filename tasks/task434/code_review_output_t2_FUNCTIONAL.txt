@@ -1,0 +1,7 @@
+﻿Corre├º├úo aplicada. Resumo das 3 issues:
+
+**[CONTAINER-VISIVEL] ÔÇö CORRIGIDO**: `TornarControlesVisiveis` agora usa `loc_lExcluido = INLIST(UPPER(loc_oObjeto.Name), "CNT_4C_SOMBRA")` para guardar o teste em vari├ível e bloqueia tanto o `.Visible = .T.` quanto a recurs├úo nos filhos quando o container est├í na lista de exclus├úo. Antes, a recurs├úo entrava no container mesmo exclu├¡do do assignment, tornando filhos vis├¡veis com parent oculto.
+
+**[LAYOUT-POSITION] lbl_4c_Label11 Top=119 ÔÇö N├âO ALTERADO (falso positivo)**: O review tool confundiu `Label1` (controle no SCX com Top=12, Left=121 ÔåÆ `lbl_4c_Label1` corretamente em Top=41, Left=121) com `lbl_4c_Label11` (que ├® o `Label11` ÔÇö "Perda do Metal", Top=90+29=119, Left=442 ÔÇö posi├º├úo correta). Alterar causaria sobreposi├º├úo com `lbl_4c_Label1`.
+
+**[LAYOUT-POSITION] lbl_4c_Label11 Left=442 ÔÇö N├âO ALTERADO (mesmo falso positivo)**: Mesma raiz. O Left=442 ├® correto para "Perda do Metal" que fica na metade direita da p├ígina.

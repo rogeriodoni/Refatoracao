@@ -1,0 +1,20 @@
+﻿**Falso positivo confirmado.** Nenhuma corre├º├úo ├® necess├íria.
+
+**An├ílise da flag [SQL-FILTRO-INVENTADO] para CIDCHAVES:**
+
+O metadata do code review ("WHERE original usa: LNI, DOPES, COPERS, TOTA") pertence a **outra form** ÔÇö as colunas `LNI`, `COPERS` e `TOTA` n├úo existem na tabela `SigOpFpo`. O sistema de review misturou metadados de forms diferentes.
+
+**Verificando os WHERE do c├│digo migrado:**
+
+| M├®todo | WHERE migrado | WHERE original |
+|--------|--------------|----------------|
+| `CarregarGrade` (Form, linha 562) | `WHERE Dopes = ...` | `Where Dopes = ?crSigCdOpe.Dopes` Ô£ô |
+| `Buscar` (FpoBO) | `WHERE Dopes = ...` | idem Ô£ô |
+| `SalvarLote` (FpoBO) | `DELETE ... WHERE Dopes = ...` | DataMgr.UpDate interno Ô£ô |
+| `CarregarPorCodigo` (FpoBO) | `WHERE CidChaves = ...` | Lookup por PK ÔÇö leg├¡timo Ô£ô |
+| `Atualizar` (FpoBO) | `WHERE CidChaves = ...` | UPDATE por PK ÔÇö leg├¡timo Ô£ô |
+| `ExecutarExclusao` (FpoBO) | `WHERE CidChaves = ...` | DELETE por PK ÔÇö leg├¡timo Ô£ô |
+
+**Conclus├úo:** `CidChaves` no WHERE aparece **apenas em opera├º├Áes de PK** (UPDATE/DELETE/SELECT individual), que ├® o padr├úo correto da arquitetura 4c. O original usava `DataMgr.UpDate` que trata isso internamente. Nenhuma query de "carga principal" (`CarregarGrade`, `Buscar`) tem `CidChaves` indevidamente adicionado ao WHERE ÔÇö todas usam apenas `Dopes`, igual ao original.
+
+Os arquivos `FormFpo.prg` e `FpoBO.prg` est├úo corretos. Nenhuma altera├º├úo necess├íria neste pass.

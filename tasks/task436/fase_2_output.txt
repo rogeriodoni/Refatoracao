@@ -1,0 +1,19 @@
+﻿Arquivo completo e correto. A Fase 2/8 foi conclu├¡da.
+
+**O que foi adicionado ao GcpBO.prg:**
+
+| M├®todo | Tipo | Fun├º├úo |
+|--------|------|--------|
+| `GerarCidChaves()` | PROTECTED | Gera chave ├║nica 20 chars (substitui `fUniqueIds`) |
+| `CarregarDoCursor()` | PROTECTED | Mapeia cursor ÔåÆ propriedades (todas as 6 colunas) |
+| `Buscar()` | PUBLIC | SELECT com JOIN SigCdGcr + SigCdCli para descri├º├Áes |
+| `CarregarPorCodigo()` | PUBLIC | SELECT por CidChaves + reset `this_lNovoRegistro` |
+| `Inserir()` | PROTECTED | INSERT em SigCdGcp + auditoria |
+| `Atualizar()` | PROTECTED | UPDATE em SigCdGcp + auditoria |
+| `ExecutarExclusao()` | PROTECTED | DELETE por CidChaves + auditoria |
+| `CarregarTmpGcOpe()` | PUBLIC | Cria cursor local TmpGcOpe com dados da opera├º├úo |
+| `ValidarDuplicatas()` | PUBLIC | VFP SELECT GROUP BY/HAVING para checar duplicidade |
+| `SalvarTmpGcOpe()` | PUBLIC | DELETE antigos + INSERT novos em transa├º├úo at├┤mica |
+| `ValidarGrupo()` | PUBLIC | Valida c├│digo em SigCdGcr, retorna Descrs |
+| `ValidarConta()` | PUBLIC | Valida c├│digo em SigCdCli, retorna Rclis |
+| `Destroy()` | PUBLIC | Fecha cursor_4c_Dados e TmpGcOpe no encerramento |

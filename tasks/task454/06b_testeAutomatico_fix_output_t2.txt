@@ -1,0 +1,10 @@
+﻿The FormJrn.prg fix is applied. The duplicate `ShowWindow = 0` is removed and `WindowType` is now `1` (modal), matching the standard cadastro pattern.
+
+For `JrnBO.prg`, `SQLEXEC(0, ...)` returns `-1` immediately ÔÇö it doesn't hang ÔÇö so the primary TIMEOUT cause was entirely the `WindowType = 0` (modeless top-level form auto-showing in headless VFP9 `-T` mode). The JrnBO SQLEXEC calls are safe as-is.
+
+**Fix applied to `FormJrn.prg`:**
+- Removed duplicate/conflicting `ShowWindow = 0` declaration
+- Changed `WindowType = 0` ÔåÆ `WindowType = 1` (modal, matching all other cadastro forms like FormCor)
+- Net result: `ShowWindow = 1`, `WindowType = 1` ÔÇö standard cadastro pattern
+
+This eliminates the TIMEOUT: modal forms (WindowType=1) created with `CREATEOBJECT` in VFP9 `-T` headless mode do not auto-show and block on window events. The CRUD test should now complete within normal time.

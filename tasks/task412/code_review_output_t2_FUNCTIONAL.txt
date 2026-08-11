@@ -1,0 +1,17 @@
+﻿O c├│digo j├í est├í correto. A linha 228 j├í possui `CNT_4C_SOMBRA` no filtro INLIST:
+
+```foxpro
+IF INLIST(UPPER(loc_oCtrl.Name), "CNT_4C_PAINELDADOS", "CNT_4C_SOMBRA")
+    IF PEMSTATUS(loc_oCtrl, "ControlCount", 5) AND ;
+       loc_oCtrl.ControlCount > 0
+        THIS.TornarVisivelRecursivo(loc_oCtrl)
+    ENDIF
+    LOOP
+ENDIF
+```
+
+O comportamento atual ├® exatamente o can├┤nico conforme o feedback de mem├│ria `feedback_tcv_skip_recursao.md`:
+- **Recursa nos filhos primeiro** (labels dentro do sombra ficam vis├¡veis)
+- **LOOP** pula o `Visible = .T.` no container pai (que tem visibilidade gerenciada externamente)
+
+O problema reportado pelo code review ├® um **falso positivo** ÔÇö `CNT_4C_SOMBRA` j├í est├í na lista de exce├º├Áes. Nenhuma altera├º├úo necess├íria no `FormFAPF.prg`.

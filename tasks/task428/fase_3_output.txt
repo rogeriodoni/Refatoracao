@@ -1,0 +1,15 @@
+﻿Fase 3 conclu├¡da. O arquivo `C:\4c\projeto\app\forms\cadastros\FormFpo.prg` foi criado com a estrutura base:
+
+**O que foi criado:**
+- `DEFINE CLASS FormFpo AS FormBase` ÔÇö heran├ºa correta, propriedades visuais (Width=1000, Height=600, Caption vazio, WindowType=1 modal)
+- `this_cDopes = ""` ÔÇö propriedade para receber o c├│digo da opera├º├úo pai antes do `Show()`
+- `Init()` ÔÇö apenas `RETURN DODEFAULT()` (sem duplicar InicializarForm)
+- `InicializarForm()` ÔÇö cria FpoBO, chama ConfigurarPageFrame, guard `gb_4c_ValidandoUI`
+- `ConfigurarPageFrame()` ÔÇö PageFrame com `Top=-29`, `Tabs=.F.`, Page1/Page2
+- `ConfigurarPaginaLista()` ÔÇö `cnt_4c_Cabecalho` (RGB 53,53,53) com `lbl_4c_Sombra`/`lbl_4c_Titulo` (Width=769, AutoSize=.F.), `cnt_4c_Botoes` (Left=700)
+- `ConfigurarPaginaDados()` ÔÇö `cnt_4c_BotoesAcao` vazio (Left=842)
+- `Destroy()` ÔÇö fecha cursores `cursor_4c_Dados` e `crSigOpFp`, chama `DODEFAULT()`
+- `TornarControlesVisiveis()` ÔÇö recursivo com suporte a PageFrames
+- `FormatarGridLista()` ÔÇö preparado para Fase 4
+
+Pr├│xima fase (4/8): grid + bot├Áes CRUD na Page1.

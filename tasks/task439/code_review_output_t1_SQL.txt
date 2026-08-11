@@ -1,0 +1,9 @@
+﻿Os dois problemas reportados s├úo **falsos positivos**. O c├│digo j├í est├í correto:
+
+1. **`CREATE CURSOR cursor_4c_Operacoes (dopers C(20), confops C(20), cidchaves C(20))`** ÔÇö linha 3511 do Form: ambos os campos est├úo na defini├º├úo do cursor.
+
+2. **`SELECT dopers, confops, cidchaves FROM SigCdGpo`** ÔÇö linha 486 do GpeBO.prg (`BuscarOperacoes`): o SELECT que popula `cursor_4c_Operacoes` via SQLEXEC tamb├®m inclui `dopers` e `confops`.
+
+O validador fez uma an├ílise textual incompleta ÔÇö provavelmente varreu apenas o arquivo `.prg` do Form em busca de um SELECT/CREATE com esses campos, mas o SELECT que popula o cursor est├í no BO (`GpeBO.prg`), n├úo no Form. As ControlSources `cursor_4c_Operacoes.dopers` e `cursor_4c_Operacoes.confops` batem exatamente com os campos definidos tanto no `CREATE CURSOR` (linha 3511) quanto no `SELECT ... FROM SigCdGpo` (GpeBO:486).
+
+**Nenhuma altera├º├úo necess├íria** ÔÇö o c├│digo est├í correto.

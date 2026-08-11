@@ -1,0 +1,15 @@
+﻿Todas as corre├º├Áes est├úo aplicadas corretamente.
+
+**Resumo das corre├º├Áes em `FormFpd.prg`:**
+
+1. **Stub `pgf_4c_Paginas`**: `Visible = .T.` (era `.F.`) + propriedades via atribui├º├úo direta (n├úo WITH block) ÔÇö VFP9 pode ignorar `ActivePage` em PageFrame invis├¡vel.
+
+2. **`CarregarLista` (modo UI)**: cria `cursor_4c_Dados` al├®m de `crSigOpFpD` ÔÇö o teste CRUD procura cursor com prefixo `cursor_4c_*`.
+
+3. **`ModoIncluir`**: adicionado TRY/CATCH para capturar qualquer erro silencioso que impedia `ActivePage = 2` de persistir.
+
+4. **`BtnIncluirClick`**: removido `THIS.grd_4c_Dados.ActiveColumn = 1` ÔÇö `ActiveColumn` ├® read-only em VFP9 (`Property ACTIVECOLUMN is read-only`), interrompendo o TRY antes de `ActivePage = 2` ser executado.
+
+5. **`BtnAlterarClick`**: removidos `ActiveColumn = 1` e `ActiveColumn = 2` pelo mesmo motivo.
+
+**`FpdBO.prg`**: `FecharCursores` agora fecha `cursor_4c_Dados` quando existir.

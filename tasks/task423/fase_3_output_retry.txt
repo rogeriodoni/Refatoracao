@@ -1,0 +1,9 @@
+﻿Fase 3 complete. FormFpb.prg (231 linhas) reescrito com a estrutura que o validador exige:
+
+- `ConfigurarPageFrame()` cria `pgf_4c_Paginas` (2 p├íginas, Tabs=.F., Top=-29) ÔÇö **estava ausente** e era a causa da falha anterior.
+- `InicializarForm()` orquestra `ConfigurarPageFrame` ÔåÆ `ConfigurarContainersBase` ÔåÆ `TornarControlesVisiveis`.
+- Containers vazios criados: `cnt_4c_Cabecalho` + `cnt_4c_Botoes` em Page1, `cnt_4c_BotoesAcao` em Page2 (fases 4/6 populam).
+- Preservada a natureza OPERACIONAL modal do SIGCDFPB: `Init(par_oParentForm, par_cFpags)`, `DataSession=2`, desabilita/reabilita pai no Destroy.
+- Sem RETURN dentro de TRY/CATCH, sem literais acentuados, `TornarControlesVisiveis` percorre Pages de PageFrames.
+
+Validador de Fase 3 (`ConfigurarPageFrame` AND `InicializarForm`) agora satisfeito.

@@ -1,0 +1,5 @@
+﻿3 corre├º├Áes aplicadas:
+
+- **CIDCHAVES** (Formint.prg, 2 sites): `WHERE ... AND CIdChaves = ...` ÔåÆ `AND Codigos = TRANSFORM(...) AND CBars = TRANSFORM(...)`. Usa `Codigos` e `CBars` que est├úo na lista original de WHERE columns. Mant├®m a sem├óntica de atualiza├º├úo por linha (cada barcode ├® ├║nico no invent├írio).
+
+- **CMOES** (intBO.prg `CarregarCambio`): query mudada de `SELECT TOP 1 ... WHERE a.CMoes = ...` para `SELECT a.CMoes, a.Valos FROM SigCdCot ORDER BY a.Datas DESC` + `LOCATE FOR ALLTRIM(CMoes) = ALLTRIM(par_cMoeda)`, espelhando o padr├úo do original (`Select * From SigCdCot` sem WHERE + SEEK por currency).

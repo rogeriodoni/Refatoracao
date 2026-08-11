@@ -1,0 +1,163 @@
+{
+  "resumo": {
+    "totalMetodos": 8,
+    "metodosComSQL": 3,
+    "metodosComValidacao": 1,
+    "totalQueries": 2,
+    "colunasInvalidas": 0,
+    "funcoesExternas": []
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDJUS",
+      "evento": "Procedure",
+      "linhas": 3,
+      "codigoOriginal": "ThisForm.oForm.Enabled = .t.\nDoDefault()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDJUS",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "lcCod = ThisForm.Pagina.Dados.Get_codigo.Value\nSelect CrSigPrJst\nLocate For Cods  = lcCod\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_codigo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDJUS",
+      "evento": "Init",
+      "linhas": 22,
+      "codigoOriginal": "LPARAMETERS pForm, pRetrab\n\nThisForm.oForm = pForm\nThisForm.pRetrab = pRetrab\nThisForm.oForm.Enabled = .f.\n\nThisForm.Caption = 'Cadastro de Justificativas do Retrabalho ' + Proper(ThisForm.pRetrab)\n\nWith ThisForm\n\tThisForm.Refresh\n\tThisForm.Draw\n\tThisForm.Show\n\t.poDatamgr = CreateObject('fSqlConector')\n\tWith .poDatamgr\n\t\tlcSql = [Select * From SigPrJst Where cRetrabs = ']+ThisForm.pRetrab+[']\n\t\t.AddCursor('SigPrJst','CidChaves','CrSigPrJst',' ',ThisForm.pagina.lista.grade,lcSql)\n\t\t.pfSqlTabela(1... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDJUS",
+      "evento": "Click",
+      "linhas": 17,
+      "codigoOriginal": "LPARAMETERS opcao\n\nIf !dodefault( opcao )\n\tThisForm.mAtivapagina1\n\tReturn\nEndif\n\nIf Inlist(thisform.pcEscolha,'INSERIR','PROCURAR')\n\tThisForm.Pagina.Dados.Get_codigo.SetFocus\nElse\n\tIf Inlist(thisform.pcEscolha,'ALTERAR')\n\t\tThisForm.Pagina.Dados.Get_Descr.SetFocus\n\tElse\n\t\tThisform.Pagina.Dados.Grupo_salva.Salva.setfocus\n\tEndIf\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_codigo,Get_Descr",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDJUS",
+      "evento": "Click",
+      "linhas": 22,
+      "codigoOriginal": "If Inlist( Thisform.pcEscolha,'INSERIR')\n\tIf IsEmpty( Thisform.Pagina.Dados.Get_codigo.Value)\n\t\t=messagebox('Código Invalido!!!',0+64,'Atenção!')\n\t\tThisform.Pagina.Dados.Get_codigo.setfocus\n\t\tReturn\n\tEndIf\nEndIf\nIf Inlist( Thisform.pcEscolha,'INSERIR','ALTERAR')\n\tlcCod = ThisForm.Pagina.Dados.Get_codigo.value\n\tlcSql = [Select * From SigPrJst Where Cods = ']+lcCod+[' ]\n\tIf ThisForm.Podatamgr.Sqlexecute(lcsql,'TmpJust') > 0 And ;\n\t\tReccount('TmpJust') > 0 And Inlist( Thisform.pcEscolha,'INSERIR')\n... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Sqlexecute",
+        "controlesReferenciados": "Get_codigo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDJUS",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "=DoDefault()\nIf ThisForm.plCancelar\n\tThisForm.mAtivapagina1\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDJUS.Pagina.Dados.get_Descr",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "llRet = InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')\nReturn(llRet)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDJUS.Pagina.Dados.Get_codigo",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "llRet = InList(ThisForm.pcEscolha, 'INSERIR', 'PROCURAR')\nReturn(llRet)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDJUS.Init",
+      "queryOriginal": "\t\tlcSql = [Select * From SigPrJst Where cRetrabs = ']+ThisForm.pRetrab+['] \t\t.AddCursor('SigPrJst','CidChaves','CrSigPrJst',' ',ThisForm.pagina.lista.grade,lcSql)",
+      "tabelas": "SigPrJst",
+      "colunas": "cRetrabs,pRetrab+[],AddCursorSigPrJst,CidChaves,CrSigPrJst,grade,lcSql",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDJUS.Click",
+      "queryOriginal": "\tlcSql = [Select * From SigPrJst Where Cods = ']+lcCod+[' ] \tIf ThisForm.Podatamgr.Sqlexecute(lcsql,'TmpJust') > 0 And ; \t\tReccount('TmpJust') > 0 And Inlist( Thisform.pcEscolha,'INSERIR')",
+      "tabelas": "SigPrJst",
+      "colunas": "Cods,Sqlexecutelcsql,TmpJust,Inlist,pcEscolha,INSERIR",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigPrJst"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

@@ -1,0 +1,19 @@
+﻿All three fixes are written to disk correctly. Summary of what was done and why:
+
+---
+
+**3 files fixed:**
+
+**1. `FormIct.prg`** ÔÇö 6 button position fixes:
+- `cmd_4c_Incluir.Left`: 542 ÔåÆ **5** (+ added `.Themes = .F.` that was missing)
+- `cmd_4c_Visualizar.Left`: 542 ÔåÆ **84**
+- `cmd_4c_Alterar.Left`: 542 ÔåÆ **163**
+- `cmd_4c_Excluir.Left`: 542 ÔåÆ **242**
+- `cmd_4c_Buscar.Left`: 542 ÔåÆ **321**
+- `cmd_4c_Encerrar.Left/Width`: 917/90 ÔåÆ **5/75**
+
+**2. `CorretorAutomatico.ps1`** ÔÇö Fixed `Corrigir-CntBotoesLeft542` bug:  
+Added `$contadorEndWith -eq 1` guard so the pattern only corrects the **container's own** `.Left` (at WITH depth 1), not the **buttons'** `.Left` values (at depth 2). Previously it changed every `.Left` inside the entire `cnt_4c_Botoes` block back to 542, reverting every fix from t1ÔÇôt4.
+
+**3. `TesteAutomatico.prg`** ÔÇö Added `SYS(2335, 0)` before any test code:  
+This is the most likely cause of the 300-second TIMEOUT. In VFP9 headless (`-T`) mode, native system dialogs (file-not-found, "file already exists", etc.) block the process indefinitely waiting for user input that never arrives. `SYS(2335, 0)` tells VFP to suppress those dialogs and use defaults instead. The test already suppressed custom dialogs via `gb_4c_ModoTeste`, but native VFP dialogs were not guarded.

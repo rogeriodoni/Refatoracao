@@ -1,0 +1,12 @@
+﻿Arquivo correto. Fase 4 conclu├¡da com sucesso.
+
+**O que foi adicionado em `FormInf.prg`:**
+
+- **5 bot├Áes CRUD** em `cnt_4c_Botoes` (Incluir/Visualizar/Alterar/Excluir/Buscar) ÔÇö Font "Comic Sans MS", PicturePosition=13, ├¡cones corretos
+- **cmd_4c_Encerrar** em `cnt_4c_Saida` ÔÇö padr├úo can├┤nico Width/Height=75, Caption="Encerrar"
+- **grd_4c_Lista** ÔÇö RecordSource/ColumnCount definidos fora do WITH (Problema 36), Verdana 8, GridLines=3, Top=117 (88+29 compensa├º├úo)
+- **7 BINDEVENTs** ÔÇö 5 bot├Áes + Encerrar + DblClick no grid (todos apontando para m├®todos PUBLIC)
+- **AlternarPagina()** PROTECTED ÔÇö guarda tipo, ativa p├ígina, recarrega lista ao voltar para Page1
+- **6 Btn\*Click** PUBLIC ÔÇö l├│gica real: Excluir com MsgConfirma+BO.Excluir(), Buscar via FormBuscaAuxiliar, navega├º├úo com modo correto definido antes de HabilitarCampos()
+
+Pr├│xima fase (5/8) ser├í ConfigurarPaginaDados() com campos, labels e grid de empresas na Page2.

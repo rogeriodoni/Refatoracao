@@ -1,0 +1,3 @@
+﻿Corrigido. O bug estava em `ICMBO.prg` nas linhas 65 e 102: o JOIN usava `a.cemps` (coluna inexistente em `SigCdCmi`) em vez de `a.emps` (nome correto da FK). Isso fazia o SQL Server retornar "Invalid column name 'cemps'", o `MsgErro()` abria um dialog modal que o VFP9 em modo unattended n├úo conseguia fechar automaticamente, causando o timeout de 300s.
+
+**Fix**: `LEFT JOIN SigCdEmp b ON b.cemps = a.cemps` ÔåÆ `b.cemps = a.emps` em ambos os m├®todos `Buscar()` e `CarregarPorCodigo()`.

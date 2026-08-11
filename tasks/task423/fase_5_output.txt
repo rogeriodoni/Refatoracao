@@ -1,0 +1,11 @@
+﻿O arquivo est├í correto. Fase 5/8 implementada com sucesso.
+
+**O que foi adicionado:**
+
+1. **Propriedade `this_lRedirigindo = .F.`** ÔÇö guard anti-recurs├úo para o redirect When.
+
+2. **`ConfigurarPaginaDados()`** ÔÇö chamada em InicializarForm() ap├│s ConfigurarPaginaLista(). Adiciona o `cnt_4c_Cabecalho` com `lbl_4c_Sombra`/`lbl_4c_Titulo` na Page2 (espelhando o cabe├ºalho da Page1) e vincula `BeforeRowColChange` ao grid.
+
+3. **`GrdDadosBeforeRowColChange(par_nColIndex)`** ÔÇö salva `peantvalue` antes de trocar de coluna, replicando o comportamento `When` dos originais Column2/3/4.Text1.When.
+
+4. **`GrdDadosAfterRowColChange()` atualizado** ÔÇö al├®m de marcar `GravaDados = .T.`, agora implementa o redirect When: se o cursor chegou em coluna 2/3/4 com `codbins` vazio, redireciona para Column1 (com guard `this_lRedirigindo` para evitar recurs├úo).

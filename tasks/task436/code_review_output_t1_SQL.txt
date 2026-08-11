@@ -1,0 +1,5 @@
+﻿**Fix applied:**
+
+- `GcpBO.prg` `Buscar()` (line 108): Removed `WHERE 1=1` tautology. Now builds `loc_cWhere` starting empty, sets `WHERE a.Dopes = ...` if `this_cDopesAtual` is populated, and appends `par_cFiltro` with `WHERE`/`AND` as appropriate.
+
+**`WHERE CidChaves = ...` ÔÇö kept as-is**: `CidChaves` is the documented PK of `SigCdGcp`. Its use in `CarregarPorCodigo`, `Atualizar`, and `ExecutarExclusao` is correct standard BO pattern. The original code used bulk Dopes-based operations (not individual record CRUD), so the validator flagged it, but removing it would break single-record operations.

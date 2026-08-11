@@ -1,0 +1,771 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigCdGr1.SCX
+* Data/Hora: 08/08/2026 07:54:22
+* Total de registros: 18
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDGR1
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGCDGR1
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGCDGR1.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGCDGR1.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: Shape1
+  Parent: SIGCDGR1
+  Class: shape
+  BaseClass: shape
+
+Objeto: Commandgroup2
+  Parent: SIGCDGR1
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: Label1
+  Parent: SIGCDGR1
+  Class: label
+  BaseClass: label
+
+Objeto: Label2
+  Parent: SIGCDGR1
+  Class: label
+  BaseClass: label
+
+Objeto: GetDescri
+  Parent: SIGCDGR1
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetCodigo
+  Parent: SIGCDGR1
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetGrupo
+  Parent: SIGCDGR1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Grid1
+  Parent: SIGCDGR1
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGCDGR1.Grid1.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDGR1.Grid1.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Commandgroup1
+  Parent: SIGCDGR1
+  Class: commandgroup
+  BaseClass: commandgroup
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 0
+  Height = 0
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDGR1
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 532
+  Width = 680
+  DoCreate = .T.
+  AutoCenter = .T.
+  Caption = "Geração de Grupos"
+  ControlBox = .F.
+  ClipControls = .T.
+  TitleBar = 0
+  WindowType = 1
+  Name = "SIGCDGR1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDGR1.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = -2
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDGR1.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDGR1.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDGR1.Shape1
+------------------------------------------------------------
+  Top = 83
+  Left = 3
+  Height = 389
+  Width = 673
+  BackStyle = 0
+  SpecialEffect = 0
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDGR1.Commandgroup2
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 1
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 0
+  Height = 85
+  Left = 449
+  Top = -2
+  Width = 85
+  TabIndex = 4
+  Name = "Commandgroup2"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.Picture = ..\framework\imagens\cadastro_cancelar_60.jpg
+  Command1.Caption = "\<Remove"
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "Command2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDGR1.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  Caption = "Usuário :"
+  Height = 16
+  Left = 23
+  Top = 91
+  Width = 55
+  TabIndex = 6
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDGR1.Label2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  Caption = "Novo Grupo :"
+  Height = 16
+  Left = 484
+  Top = 92
+  Width = 82
+  TabIndex = 7
+  ForeColor = 90,90,90
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDGR1.GetDescri
+------------------------------------------------------------
+  Height = 22
+  Left = 157
+  MaxLength = 30
+  TabIndex = 2
+  Top = 89
+  Width = 248
+  ForeColor = 90,90,90
+  ZOrderSet = 13
+  Name = "GetDescri"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDGR1.GetCodigo
+------------------------------------------------------------
+  Height = 22
+  Left = 76
+  MaxLength = 10
+  TabIndex = 1
+  Top = 89
+  Width = 80
+  ForeColor = 90,90,90
+  ZOrderSet = 14
+  Name = "GetCodigo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDGR1.GetGrupo
+------------------------------------------------------------
+  Comment = ""
+  Height = 23
+  Left = 566
+  MaxLength = 10
+  TabIndex = 3
+  Top = 89
+  Width = 102
+  ForeColor = 90,90,90
+  Name = "GetGrupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDGR1.Grid1
+------------------------------------------------------------
+  ColumnCount = 1
+  DeleteMark = .F.
+  Height = 344
+  Left = 9
+  Panel = 1
+  ReadOnly = .T.
+  ScrollBars = 2
+  TabIndex = 8
+  Top = 118
+  Width = 661
+  GridLineColor = 238,238,238
+  Name = "Grid1"
+  Column1.Width = 628
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .T.
+  Column1.Name = "Column1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDGR1.Grid1.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Alignment = 2
+  Caption = "Acessos"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDGR1.Grid1.Column1.Text1
+------------------------------------------------------------
+  FontName = "Courier New"
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDGR1.Commandgroup1
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 85
+  Left = 524
+  Top = -2
+  Width = 160
+  TabIndex = 5
+  Name = "Commandgroup1"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.Picture = ..\framework\imagens\cadastro_salvar_60.jpg
+  Command1.Caption = "\<Salvar"
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "Command1"
+  Command2.Top = 5
+  Command2.Left = 80
+  Command2.Height = 75
+  Command2.Width = 75
+  Command2.FontBold = .T.
+  Command2.FontItalic = .T.
+  Command2.FontName = "Comic Sans MS"
+  Command2.FontSize = 8
+  Command2.Picture = ..\framework\imagens\cadastro_sair_32.jpg
+  Command2.Cancel = .T.
+  Command2.Caption = "<Esc>Sair"
+  Command2.ForeColor = 90,90,90
+  Command2.BackColor = 255,255,255
+  Command2.Themes = .F.
+  Command2.Name = "Command2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+  Courier New, 0, 9, 7, 15, 12, 9, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDGR1
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+WITH Thisform
+	.poDatamgr = CreateObject('fSqlConector',ThisForm.Name)
+
+	If Not .poDatamgr.pnIdconn>0
+		Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),'Erro')
+		Return(.f.)
+	Endif
+
+	With .poDatamgr
+		.AddCursor('SigCdAcU','pkChaves','crSigCdAcU','pkChaves',.f.)
+		.AddCursor('SigCdGrA','Grupos','crSigCdGrA','Grupos',.f.)
+		.AddCursor('SigCdAcB','pkChaves','crSigCdAcB','cIdChaves',.f.)
+	EndWith
+Endwith	
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDGR1.Commandgroup2
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Command2.Click
+------------------------------------------------------------
+PROCEDURE Command2.Click
+Select crSigCdAcUs
+lnReg = Recno()
+Delete
+Go Top
+Count for ! Deleted() to lnRegs
+Go lnReg
+
+ThisForm.Grid1.Column1.SetFocus
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDGR1.GetDescri
+* Classe: fwget (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(Empty(This.Parent.GetCodigo.Value))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+
+Private lcSpace
+
+If !Empty(This.Value)
+	m.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigCdUsu','CrUsuarios','NComps',This.Value,'Usuarios',.T.,.f.,[Not cAtivos='N'])
+	If !(m.loLista.plAchouRegistro)
+		m.loLista.mAddColuna('NComps','','Nome')
+		m.loLista.mAddColuna('Usuarios','XXXXXXXXXX','Código')
+		m.loLista.Show()
+	EndIf
+	If LastKey() <> 27 And Used('CrUsuarios')
+		This.Value                  = Evaluate('CrUsuarios.NComps')
+		This.Parent.GetCodigo.Value = Evaluate('CrUsuarios.Usuarios')
+	Else
+		This.Value                  = ''
+		This.Parent.GetCodigo.Value = ''
+	EndIf
+EndIf
+This.Refresh
+This.Parent.GetCodigo.Refresh
+lcSpace = Space(100)
+
+Thisform.Grid1.RecordSource = ''
+
+If ! Empty(This.Value)
+
+	lcQuery = [Select Distinct a.Programas, a.Parametros, ?lcSpace As Descricaos ] + ;
+			  [From SigCdAcU a ] + ;
+			  [Left Outer Join SigCdAcG b On a.Grupos = b.Grupos ] + ;
+			  [Where Not a.Programas = Space(10) And ] + ;
+			  [(a.Usuarios = '] + This.Parent.GetCodigo.Value + [' Or b.Usuarios = '] + This.Parent.GetCodigo.Value + [') ] + ;
+			  [Order By a.Programas, a.Parametros]
+
+	ThisForm.poDatamgr.SqlExecute(lcQuery,[crSigCdAcUs])
+	
+	Select crSigCdAcUs
+
+	Replace all Descricaos With Alltrim(crSigCdAcUs.Programas) + ' / ' + crSigCdAcUs.Parametros
+
+	Scan
+		lcQuery = [Select descricaos From SigCdPrg Where programas = '] + crSigCdAcUs.Programas + [' And ]+;
+		     	     								    [Parametros = '] + crSigCdAcUs.Parametros + [' ]
+		ThisForm.poDatamgr.SqlExecute(lcQuery,[crSigCdPrg])
+		If ! Eof()
+			Select crSigCdAcUs 
+			Replace descricaos With crSigCdPrg.Descricaos
+		EndIf
+	EndScan
+
+	lcQuery = [select a.grupos,a.usuarios,a.descricaos,a.barraforms,a.barraordem,a.programas,a.parametros,a.selbarras from SigCdAcB a]+;
+               [ left join SigCdPrg b on b.programas+b.parametros=a.programas+a.parametros]+;
+               [ where a.usuarios='] + This.Value + [']+;
+               [ union all select a.grupos,a.usuarios,a.descricaos,a.barraforms,a.barraordem,a.programas,a.parametros,a.selbarras from SigCdAcB a]+;
+               [ left join SigCdPrg b on b.programas+b.parametros=a.programas+a.parametros]+;
+               [ where a.grupos in (select c.grupos from SigCdAcG c where c.usuarios='] + This.Value + [') order by 1,2]
+
+	ThisForm.poDatamgr.SqlExecute(lcQuery,[crTmpBarra])
+	
+	Select crSigCdAcUs
+	Index On descricaos Tag Descrs
+	Set Order To Descrs
+	Go Top
+	
+	Thisform.Grid1.RecordSource = 'crSigCdAcUs'
+	Thisform.Grid1.Column1.ControlSource = 'crSigCdAcUs.Descricaos'
+
+EndIf		     	     								    
+
+Return(.T.)
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDGR1.GetCodigo
+* Classe: fwget (Base: textbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.T.)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+
+Private lcSpace
+
+If Empty(This.Value)
+	This.Parent.GetDescri.Value = ''
+Else
+	m.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigCdUsu','CrUsuarios','Usuarios',This.Value,'Usuários',.T.,.f.,[Not cAtivos='N'])
+	If !(m.loLista.plAchouRegistro)
+		m.loLista.mAddColuna('Usuarios','XXXXXXXXXX','Código')
+		m.loLista.mAddColuna('NComps','','Nome')
+		m.loLista.Show()
+	EndIf
+	If LastKey() <> 27 And Used('CrUsuarios')
+		This.Value                  = Evaluate('CrUsuarios.Usuarios')
+		This.Parent.GetDescri.Value = Evaluate('CrUsuarios.NComps')
+	Else
+		This.Value                  = ''
+		This.Parent.GetDescri.Value = ''
+	EndIf
+EndIf
+This.Refresh
+This.Parent.GetDescri.Refresh
+lcSpace = Space(100)
+
+Thisform.Grid1.RecordSource = ''
+
+If ! Empty(This.Value)
+
+	lcQuery = [Select Distinct a.Programas, a.Parametros, ?lcSpace As Descricaos ] + ;
+			  [From SigCdAcU a ] + ;
+			  [Left Outer Join SigCdAcG b On a.Grupos = b.Grupos ] + ;
+			  [Where Not a.Programas = Space(10) And ] + ;
+			  [(a.Usuarios = '] + This.Value + [' Or b.Usuarios = '] + This.Value + [') ] + ;
+			  [Order By a.Programas, a.Parametros]
+
+	ThisForm.poDatamgr.SqlExecute(lcQuery,[crSigCdAcUs])
+	
+	Select crSigCdAcUs
+
+	Replace all Descricaos With Alltrim(crSigCdAcUs.Programas) + ' / ' + crSigCdAcUs.Parametros
+
+	Scan
+		lcQuery = [Select descricaos From SigCdPrg Where programas = '] + crSigCdAcUs.Programas + [' And ]+;
+		     	     								    [Parametros = '] + crSigCdAcUs.Parametros + [' ]
+		ThisForm.poDatamgr.SqlExecute(lcQuery,[crSigCdPrg])
+		If ! Eof()
+			Select crSigCdAcUs 
+			Replace descricaos With crSigCdPrg.Descricaos
+		EndIf
+	EndScan
+
+	lcQuery = [select a.grupos,a.usuarios,a.descricaos,a.barraforms,a.barraordem,a.programas,a.parametros,a.selbarras from SigCdAcB a]+;
+               [ left join SigCdPrg b on b.programas+b.parametros=a.programas+a.parametros]+;
+               [ where a.usuarios='] + This.Value + [']+;
+               [ union all select a.grupos,a.usuarios,a.descricaos,a.barraforms,a.barraordem,a.programas,a.parametros,a.selbarras from SigCdAcB a]+;
+               [ left join SigCdPrg b on b.programas+b.parametros=a.programas+a.parametros]+;
+               [ where a.grupos in (select c.grupos from SigCdAcG c where c.usuarios='] + This.Value + [') order by 1,2]
+
+	ThisForm.poDatamgr.SqlExecute(lcQuery,[crTmpBarra])
+	
+	Select crSigCdAcUs
+	Index On descricaos Tag Descrs
+	Set Order To Descrs
+	Go Top
+	
+	Thisform.Grid1.RecordSource = 'crSigCdAcUs'
+	Thisform.Grid1.Column1.ControlSource = 'crSigCdAcUs.Descricaos'
+
+EndIf		     	     								    
+
+Return(.T.)
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE GotFocus
+------------------------------------------------------------
+PROCEDURE GotFocus
+Clear Typeahead
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDGR1.GetGrupo
+* Classe: textbox (Base: textbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+ThisForm.poDatamgr.SqlExecute([Select * from SigCdGrA Where Grupos = ']+This.Value+['],'csSigCdGrA')
+
+Select csSigCdGrA
+If ! Eof()
+	MessageBox('Grupo Ja Cadastrado !!!',16,'')
+	Return .f.
+Endif
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDGR1.Commandgroup1
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 17
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Command1.Click
+------------------------------------------------------------
+PROCEDURE Command1.Click
+
+Local grupos, usuarios, descricaos, barraforms, barraordem, programas, parametros, selbarras, cidchaves, lnErro1
+
+m.lnErro1 = ThisForm.poDataMgr.pnIdConn
+
+If Empty(ThisForm.GetCodigo.Value)
+	MessageBox('Usuario Invalido !!!',16, '')
+	Return
+Endif
+If Empty(ThisForm.GetGrupo.Value)
+	MessageBox('Grupo Invalido !!!',16, '')
+	Return
+Endif
+
+Zap In crSigCdGrA
+Append Blank In crSigCdGrA
+Replace Grupos With ThisForm.GetGrupo.Value In crSigCdGrA
+Replace nComps With ThisForm.GetGrupo.Value In crSigCdGrA
+=fGravarLog('I', 'SIGCDGR1', '', 'Grupo : ' + ThisForm.GetGrupo.Value, Usuar)
+
+Zap In crSigCdAcU
+
+Select crSigCdAcUs
+Scan
+	Select crSigCdAcU
+	Append Blank
+	Replace Programas  With crSigCdAcUs.Programas
+	Replace Parametros With crSigCdAcUs.Parametros
+	Replace Grupos     With ThisForm.GetGrupo.Value
+	Replace pkChaves  With Sys(2015)+Sys(2015)
+	=fGravarLog('I', 'SIGCDGR1', crSigCdAcUs.Parametros, 'Grupo : ' + Alltrim(ThisForm.GetGrupo.Value) + ' Prog : ' + Alltrim(crSigCdAcUs.Descricaos), Usuar)
+EndScan
+
+Zap In crSigCdAcB
+
+Select crTmpBarra
+
+Scan
+	Select crTmpBarra
+	Scatter Memo Memvar
+
+	m.grupos = ThisForm.GetGrupo.Value
+	m.usuarios = ''
+	m.pkchaves = fUniqueIds()
+	
+	Insert Into crSigCdAcB From Memvar
+EndScan
+
+If m.lnErro1>0 
+	m.lnErro1 = Iif(ThisForm.poDatamgr.UpDate('crSigCdGrA'), 1, -1)
+EndIf 
+If m.lnErro1>0 
+	m.lnErro1 = Iif(ThisForm.poDatamgr.UpDate('crSigCdAcU'), 1, -1)
+EndIf 
+If m.lnErro1>0 
+	m.lnErro1 = Iif(ThisForm.poDatamgr.UpDate('crSigCdAcB'), 1, -1)
+EndIf 
+If m.lnErro1>0 
+	m.lnErro1 = ThisForm.poDatamgr.Commit()
+EndIf 
+If Not m.lnErro1>0 
+	ThisForm.poDatamgr.RollBack()
+	= MessageBox('Erro Na Gravação dos Dados, Favor Tentar Novamente.', 0 + 16, '')
+Else
+	Release Windows
+EndIf 
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Command2.Click
+------------------------------------------------------------
+PROCEDURE Command2.Click
+Release Windows
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGCDGR1
+RESERVED3 (ClassInfo): podatamgr
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 11
+================================================================================

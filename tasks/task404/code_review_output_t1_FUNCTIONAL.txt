@@ -1,0 +1,9 @@
+﻿Todas as corre├º├Áes foram aplicadas corretamente. Resumo do que foi feito:
+
+1. **TornarControlesVisiveis** ÔÇö Reestruturado para recursar nos filhos PRIMEIRO e s├│ depois verificar o INLIST. Containers `CNT_4C_CABECALHO`, `CNT_4C_PAGE3`, `CNT_4C_PAGE4` recebem LOOP (n├úo ficam `Visible=.T.`) mas seus filhos j├í foram processados antes.
+
+2. **OptionGroups** ÔÇö Adicionado `.AutoSize = .F.` em todos os Buttons de 7 OptionGroups (`obj_4c_OpcaoCPFCGC`, `obj_4c_Opc_comis`, `obj_4c_OPT_ALTTRANS`, `obj_4c_OPTCALCCUSTOS`, `obj_4c_Optiongroup1`, `obj_4c_Optiongroup2`, `obj_4c_Op_blqdt`). O `Buttons(2).Value = 1` do `OpcaoCPFCGC` foi corrigido para `0`.
+
+3. **chk_4c_ChkAnaVends** ÔÇö Movido de `ConfigurarSubPage1` (Top=266, Left=646) para `ConfigurarSubPage3` (Top=577, Left=56, posi├º├úo original). Refer├¬ncias atualizadas em `FormParaBO`, `BOParaForm` e `LimparCampos` de `loc_oP1` para `loc_oP3`.
+
+4. **lbl_4c_Label5b** ÔÇö Corrigido de Top=473, Left=300 para Top=295, Left=508 (posi├º├úo original em PgDados.Page2).

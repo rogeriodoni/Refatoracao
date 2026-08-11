@@ -1,0 +1,8 @@
+﻿Fase 7 completa. O `Formdmo.prg` agora cont├®m os 4 eventos principais exigidos:
+
+- `BtnIncluirClick()` ÔÇö linha 1548 (limpa campos, pr├®-carrega defaults, vai para Page2 modo INSERIR)
+- `BtnVisualizarClick()` ÔÇö linha 1620 (novo alias can├┤nico que delega a `BtnConsultarClick`, mantendo a l├│gica de carga em modo somente leitura)
+- `BtnAlterarClick()` ÔÇö linha 1627 (valida sele├º├úo, bloqueia se `ChkSubnÔëá0`, carrega registro + itens, Page2 modo ALTERAR)
+- `BtnExcluirClick()` ÔÇö linha 1665 (valida sele├º├úo, confirma via `MsgConfirma()`, chama `Excluir()` no BO, recarrega lista)
+
+A tentativa anterior falhou porque o arquivo tinha `BtnConsultarClick` mas o validador da fase procura pelo nome can├┤nico `BtnVisualizarClick`. Adicionei o wrapper preservando a implementa├º├úo existente.

@@ -1,0 +1,3 @@
+﻿`ShowWindow = 1` ÔåÆ `ShowWindow = 0`. Isso restaura o comportamento do SCX original e elimina o Win32 event loop aut├┤nomo que bloqueava o `CREATEOBJECT()` por 300s.
+
+O Init() mant├®m seu guard de modo teste (WindowType=0 + Visible=.F.) como prote├º├úo extra, mas agora ├® redundante ÔÇö com ShowWindow=0, o loop modal s├│ inicia quando `Show()` for chamado explicitamente, o que o TesteAutomatico n├úo faz.

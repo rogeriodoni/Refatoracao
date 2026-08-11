@@ -1,0 +1,16 @@
+﻿O arquivo est├í completo e correto. Todos os 27 m├®todos foram implementados, terminando com `ENDDEFINE` na linha 1115.
+
+**Fase 8 conclu├¡da.** Os seguintes m├®todos foram adicionados ao `FormFpb.prg`:
+
+| M├®todo | Finalidade |
+|--------|-----------|
+| `CarregarLista()` | Alias para `CarregarDados()` (compatibilidade CRUD) |
+| `FormParaBO()` | Mapeia linha corrente do cursor para propriedades do BO (todos os 6 campos) |
+| `BOParaForm()` | Refresh do grid ap├│s opera├º├úo via BO |
+| `HabilitarCampos(par_lHabilitar)` | Habilita/desabilita bot├Áes Inserir e Excluir |
+| `LimparCampos()` | Zera cursor_4c_BINs e reseta GravaDados |
+| `AjustarBotoesPorModo()` | Bot├Áes Inserir/Excluir habilitados em LISTA/INCLUIR, desabilitados nos demais modos |
+| `BtnBuscarClick()` | Re-carrega BINs do banco com confirma├º├úo se h├í altera├º├Áes pendentes |
+| `BtnSalvarClick()` | Salva altera├º├Áes imediatamente sem fechar o form |
+
+**Nota de integra├º├úo**: Este ├® um sub-form modal (popup) chamado pelo form pai `FormFpp`, n├úo diretamente pelo menu. O `FpbBO.prg` ├® carregado automaticamente pelo `config.prg` via `ADIR()` (padr├úo `*BO.prg`). N├úo requer entrada em `menu.prg`.

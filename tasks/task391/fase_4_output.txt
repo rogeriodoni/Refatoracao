@@ -1,0 +1,18 @@
+﻿Arquivo correto e completo (1355 linhas). Fase 4/8 conclu├¡da.
+
+**O que foi adicionado em `ConfigurarPaginaLista()`:**
+- 5 bot├Áes CRUD em `cnt_4c_Botoes`: Incluir (L=5), Visualizar (L=80), Alterar (L=155), Excluir (L=230), Buscar (L=305)
+- Container `cnt_4c_Filtro` com `txt_4c_Mess` e `txt_4c_Anos` (filtro por per├¡odo, Top=149)
+- Bot├úo `cmd_4c_Copia` (Top=121, Left=347)
+- 3 shapes + labels de legenda (Individual/Respons├ível/Setor com cores do original)
+- Container `cnt_4c_Copia` (floating, inicialmente oculto) com campos de per├¡odo origem/destino e bot├Áes Confirmar/Encerrar
+- Grid `grd_4c_Lista` (Top=184, 8 colunas: Usuars/Mess/Anos/Indivs/Setors/Supervs/Adics/Minimos)
+- BINDEVENTs para todos os bot├Áes e campos de filtro
+
+**Novos m├®todos adicionados:**
+- `BtnIncluirClick`, `BtnVisualizarClick`, `BtnAlterarClick`, `BtnExcluirClick`, `BtnBuscarClick`
+- `BtnCopiaClick`, `BtnCopiaOkClick`, `BtnCopiaCancelarClick` (opera├º├úo de c├│pia de per├¡odo)
+- `FiltroLostFocus` (pad MM/YYYY + recarrega lista)
+- `GradeAfterRowColChange` (handler com par├ómetro obrigat├│rio)
+- `LimparCampos`, `HabilitarCampos`, `AjustarBotoesPorModo`
+- `FormParaBO` e `BOParaForm` agora com mapeamento completo dos 9 campos da entidade

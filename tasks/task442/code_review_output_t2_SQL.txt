@@ -1,0 +1,7 @@
+﻿**Falso positivo confirmado.** N├úo h├í nenhuma a├º├úo necess├íria.
+
+As duas ocorr├¬ncias de `ControlCount` em `FormGr1.prg` (linhas 215 e 230) est├úo dentro do m├®todo `TornarControlesVisiveis` ÔÇö s├úo refer├¬ncias ├á **propriedade VFP9** `.ControlCount` de containers (conta quantos controles filhos um container tem), usada no loop de itera├º├úo de controles.
+
+N├úo existe nenhuma cl├íusula SQL `WHERE ... CONTROLCOUNT ...` em nenhum dos dois arquivos (`FormGr1.prg` e `Gr1BO.prg`). O validador confundiu o nome da propriedade VFP9 com uma coluna SQL em um WHERE.
+
+**Nenhuma altera├º├úo necess├íria nos arquivos.** O c├│digo SQL migrado est├í correto ÔÇö os WHEREs usam `Usuarios`, `Programas`, `Grupos` e `Parametros`, exatamente como o legado.

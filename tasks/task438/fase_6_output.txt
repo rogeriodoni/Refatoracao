@@ -1,0 +1,12 @@
+﻿All integration is complete. Here's a summary of everything done in this session:
+
+**`AdicionarChkLogalt()` call fix** ÔÇö Added `THIS.AdicionarChkLogalt()` call inside `ConfigurarAbaCadastro()` before `TornarControlesVisiveis()`, so `chk_4c_Logalt` is actually created (it was defined but never called).
+
+**`menu.prg` integration** (3 changes):
+- Added `DEFINE BAR 104 OF popCadastros` with prompt "Grupo de Produto"  
+- Added `ON SELECTION BAR 104 OF popCadastros DO AbrirFormgpd`
+- Added `PROCEDURE AbrirFormgpd()` at end of file
+
+**`config.prg`** ÔÇö No changes needed; ADIR-based dynamic loading already picks up `gpdBO.prg` (in `app/classes/`) and `Formgpd.prg` (in `app/forms/cadastros/`) automatically.
+
+The migration of `SIGCDGPD.SCX` ÔåÆ `FormGpd` is now complete across all 8 phases.

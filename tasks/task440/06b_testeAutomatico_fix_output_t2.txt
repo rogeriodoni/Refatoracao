@@ -1,0 +1,7 @@
+﻿All three fixes are confirmed:
+
+1. `InteractiveChange` BINDEVENT removed ÔÇö only `KeyPress` remains for `txt_4c_MatPrincs` (line 828)
+2. `IF PCOUNT() = 0 / RETURN / ENDIF` added at top of `AbrirLookupMatPrincs` (line 1436)
+3. `IF THIS.Visible` guard wraps `SetFocus()` in `ValidarPrioridade` (line 1522)
+
+**Root cause of tentativa 2 timeout**: The `InteractiveChange` binding on `txt_4c_MatPrincs` fired with `PCOUNT()=0` during VFP9's internal rendering when `ActivePage` was set. The existing guard (`IF PCOUNT() >= 1...`) was skipped when PCOUNT()=0, falling through to `CREATEOBJECT("FormBuscaAuxiliar")` + `loc_oBusca.Show()` ÔÇö a modal `WindowType=1` form that blocks for 300s in server mode (`-T`).

@@ -1,0 +1,7 @@
+﻿Corre├º├úo aplicada. Resumo do que foi feito e por qu├¬:
+
+**[CONTAINER-VISIVEL] ÔÇö corrigido:** `TornarControlesVisiveis()` agora protege `CNT_4C_CABECALHO` e `CNT_4C_BOTOESACAO` al├®m do j├í existente `CNT_4C_COPIAFL`. Todos esses containers t├¬m `Visible=.F.` em algum momento durante a inicializa├º├úo e n├úo devem ser for├ºados para `.T.` pelo loop recursivo ÔÇö o c├│digo de controle de modo CRUD gerencia a visibilidade deles. O padr├úo aplicado ├® o mesmo: skipa o `.Visible = .T.` mas ainda recursiona nos filhos.
+
+**[LAYOUT-POSITION] ÔÇö 8 ocorr├¬ncias ÔÇö falsos positivos:** O validator fez matching incorreto de controles:
+- `Copia` (legado, Top=4, Left=474) ÔåÆ o controle migrado correto ├® `cmd_4c_Copia` (Top=5, Left=474 ÔÇö dentro da toler├óncia de 30px), mas o validator comparou com `cnt_4c_CopiaFl` que ├® o painel flutuante (objeto completamente diferente)
+- `Text1`/`Text3`/`Text4` ÔåÆ matching fuzzy por nome parcial ("Text1" ÔåÆ "txt_4c_Text19", "Text3" ÔåÆ "txt_4c_Text38", "Text4" ÔåÆ "txt_4c_Text42") ÔÇö esses s├úo campos de se├º├Áes distintas do formul├írio, n├úo os mesmos controles

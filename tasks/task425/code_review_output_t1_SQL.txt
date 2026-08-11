@@ -1,0 +1,12 @@
+﻿Corre├º├Áes aplicadas. Resumo das 5 mudan├ºas feitas:
+
+**FpgBO.prg** ÔÇö `BuscarGrupoGcr`:
+- `SELECT codigos, descrs FROM SigCdGcr WHERE codigos = ...` ÔåÆ `SELECT grupos, descrs FROM SigCdGcr WHERE grupos = ...`
+- `SELECT codigos, descrs FROM SigCdGcr WHERE UPPER(RTRIM(descrs))...` ÔåÆ `SELECT grupos, descrs FROM SigCdGcr ...`
+- `SELECT codigos, descrs FROM SigCdGcr ORDER BY codigos` ÔåÆ `SELECT grupos, descrs FROM SigCdGcr ORDER BY grupos`
+
+**FormFpg.prg**:
+- `cursor_4c_GcrDVal.codigos` ÔåÆ `cursor_4c_GcrDVal.grupos` (ValidarDsGrupo, linha 1159)
+- `FormBuscaAuxiliar(..., "Codigos", ...)` + `mAddColuna("Codigos"...)` + `cursor_4c_BuscaGcr.Codigos` ÔåÆ tudo para `Grupos` (AbrirLookupGrupoGcr)
+
+`SigCdGcr` usa `grupos` como coluna chave (igual a outras tabelas `Sig*Cd*`), o `codigos` era inven├º├úo da LLM baseada no nome da classe/propriedade.

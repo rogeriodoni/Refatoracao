@@ -1,0 +1,7 @@
+﻿Both changes are confirmed:
+
+**`FormGps.prg` line 17**: `ShowWindow = 1` ÔåÆ `ShowWindow = 0`
+- The original SIGCDGPS.SCX had no ShowWindow property (defaulting to 0 = MDI child). In headless VFP9 (`-T`), `ShowWindow=1` triggers floating top-level window initialization that requires a Windows message pump ÔÇö causing the 300-second hang. `ShowWindow=0` skips that Windows HWND setup. `WindowType=0` (modeless) was already correct, so CREATEOBJECT returns immediately.
+
+**`CorretorAutomatico.ps1` line 1440**: regex `=\s*1` ÔåÆ `=\s*\d`  
+- Now detects `ShowWindow = 0` as "present", so `$temShowWindow = $true`. Combined with `$temWindowType = $true` (line 1443, already using `\d`), the condition `($temShowWindow -and $temWindowType)` returns early with no changes ÔÇö the corrector will no longer re-inject `ShowWindow = 1` between test runs.

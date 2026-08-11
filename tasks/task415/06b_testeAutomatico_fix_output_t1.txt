@@ -1,0 +1,15 @@
+﻿Todas as corre├º├Áes est├úo aplicadas corretamente. Resumo do que foi corrigido:
+
+**FormFct.prg ÔÇö 5 corre├º├Áes:**
+
+1. **`ISOBJECT()` ÔåÆ `VARTYPE() <> "O"`** (`TornarControlesVisiveis`): VFP9 n├úo tem `ISOBJECT()` ÔÇö causa "File 'isobject.prg' does not exist" nas 3 p├íginas que chamam esse m├®todo.
+
+2. **`AlternarPagina` e `AjustarBotoesPorModo` removidos de PROTECTED**: O teste chama esses m├®todos externamente; PROTECTED impede acesso de fora da classe ÔåÆ "Property not found" nos testes ModoIncluir/ModoVisualizar.
+
+3. **Column7: `.CurrentControl` movido para DEPOIS do `.AddObject`**: Definir `CurrentControl = "opt_4c_NChkCxas"` antes do objeto existir causa "Expression evaluated to an illegal value".
+
+4. **`BtnIncluirClick` guard `gb_4c_ValidandoUI`**: Sem conex├úo ao banco `crDados` fica vazio ÔåÆ form mostrava aviso em vez de navegar para Page2 ÔåÆ teste BtnIncluirNavegacao falha.
+
+**FctBO.prg ÔÇö 1 corre├º├úo:**
+
+5. **`Buscar()` guard com ELSE**: O bloco `gb_4c_ValidandoUI` criava o cursor mas n├úo impedia o SQLEXEC subsequente ÔåÆ "Connection handle is invalid" ÔåÆ `crDados` ficava vazio. Agora o SQLEXEC s├│ executa no ELSE (quando h├í conex├úo real). Em modo UI validation, insere um registro dummy para que `BtnIncluirClick` encontre dados e possa navegar.

@@ -1,0 +1,1734 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigCdDrs.SCX
+* Data/Hora: 01/08/2026 04:57:53
+* Total de registros: 10
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDDRS
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: optFiltro
+  Parent: SIGCDDRS.Pagina.lista
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Commandgroup1
+  Parent: SIGCDDRS.Pagina.lista
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: Shape1
+  Parent: SIGCDDRS.Pagina.dados
+  Class: shape
+  BaseClass: shape
+
+Objeto: Shape2
+  Parent: SIGCDDRS.Pagina.dados
+  Class: shape
+  BaseClass: shape
+
+Objeto: getCods
+  Parent: SIGCDDRS.Pagina.dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Label1
+  Parent: SIGCDDRS.Pagina.dados
+  Class: label
+  BaseClass: label
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 0
+  Height = 0
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDRS
+------------------------------------------------------------
+  DataSession = 2
+  DoCreate = .T.
+  Caption = (Prompt())
+  placalterar = .T.
+  placexcluir = .T.
+  placinserir = .T.
+  Name = "SIGCDDRS"
+  Pagina.ErasePage = .T.
+  Pagina.lista.cntSombra.lblSombra.Name = "lblSombra"
+  Pagina.lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  Pagina.lista.cntSombra.Name = "cntSombra"
+  Pagina.lista.grade.Height = 451
+  Pagina.lista.grade.Left = 29
+  Pagina.lista.grade.Top = 142
+  Pagina.lista.grade.Width = 736
+  Pagina.lista.grade.ZOrderSet = 1
+  Pagina.lista.grade.Name = "grade"
+  Pagina.lista.grupo_op.AutoSize = .F.
+  Pagina.lista.grupo_op.inserir.Top = 5
+  Pagina.lista.grupo_op.inserir.Left = 5
+  Pagina.lista.grupo_op.inserir.Name = "inserir"
+  Pagina.lista.grupo_op.consultar.Top = 5
+  Pagina.lista.grupo_op.consultar.Left = 80
+  Pagina.lista.grupo_op.consultar.Name = "consultar"
+  Pagina.lista.grupo_op.alterar.Top = 5
+  Pagina.lista.grupo_op.alterar.Left = 155
+  Pagina.lista.grupo_op.alterar.Name = "alterar"
+  Pagina.lista.grupo_op.excluir.Top = 5
+  Pagina.lista.grupo_op.excluir.Left = 230
+  Pagina.lista.grupo_op.excluir.Name = "excluir"
+  Pagina.lista.grupo_op.procurar.Top = 5
+  Pagina.lista.grupo_op.procurar.Left = 305
+  Pagina.lista.grupo_op.procurar.Name = "procurar"
+  Pagina.lista.grupo_op.Left = 342
+  Pagina.lista.grupo_op.Top = -1
+  Pagina.lista.grupo_op.ZOrderSet = 4
+  Pagina.lista.grupo_op.Name = "grupo_op"
+  Pagina.lista.grupo_saida.AutoSize = .T.
+  Pagina.lista.grupo_saida.sair.Top = 5
+  Pagina.lista.grupo_saida.sair.Left = 5
+  Pagina.lista.grupo_saida.sair.Name = "sair"
+  Pagina.lista.grupo_saida.Left = 717
+  Pagina.lista.grupo_saida.Top = -1
+  Pagina.lista.grupo_saida.ZOrderSet = 6
+  Pagina.lista.grupo_saida.Name = "grupo_saida"
+  Pagina.lista.cntFiltros.Top = 53
+  Pagina.lista.cntFiltros.Left = 202
+  Pagina.lista.cntFiltros.ZOrderSet = 0
+  Pagina.lista.cntFiltros.Name = "cntFiltros"
+  Pagina.lista.Picture = ..\framework\imagens\fundo_cadastro.jpg
+  Pagina.lista.Name = "lista"
+  Pagina.dados.grupo_salva.salva.Top = 5
+  Pagina.dados.grupo_salva.salva.Left = 5
+  Pagina.dados.grupo_salva.salva.Name = "salva"
+  Pagina.dados.grupo_salva.cancelar.Top = 5
+  Pagina.dados.grupo_salva.cancelar.Left = 80
+  Pagina.dados.grupo_salva.cancelar.Name = "cancelar"
+  Pagina.dados.grupo_salva.TabIndex = 7
+  Pagina.dados.grupo_salva.ZOrderSet = 2
+  Pagina.dados.grupo_salva.Name = "grupo_salva"
+  Pagina.dados.Picture = ..\framework\imagens\fundo_cadastro.jpg
+  Pagina.dados.Name = "dados"
+  Pagina.ActivePage = 1
+  Pagina.Name = "Pagina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDRS.Pagina.lista.optFiltro
+------------------------------------------------------------
+  AutoSize = .F.
+  ButtonCount = 3
+  Height = 56
+  Left = 35
+  Top = 87
+  Width = 74
+  TabIndex = 3
+  ZOrderSet = 5
+  Name = "optFiltro"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.Caption = "Todas"
+  Option1.Height = 17
+  Option1.Left = 3
+  Option1.Style = 0
+  Option1.Top = 5
+  Option1.Width = 69
+  Option1.AutoSize = .F.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.Caption = "Pendentes"
+  Option2.Height = 17
+  Option2.Left = 3
+  Option2.Style = 0
+  Option2.Top = 19
+  Option2.Width = 69
+  Option2.AutoSize = .F.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+  Option3.FontName = "Tahoma"
+  Option3.FontSize = 8
+  Option3.BackStyle = 0
+  Option3.Caption = "Baixadas"
+  Option3.Height = 17
+  Option3.Left = 3
+  Option3.Style = 0
+  Option3.Top = 33
+  Option3.Width = 69
+  Option3.AutoSize = .F.
+  Option3.ForeColor = 90,90,90
+  Option3.Name = "Option3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDRS.Pagina.lista.Commandgroup1
+------------------------------------------------------------
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 45
+  Left = 115
+  Top = 91
+  Width = 221
+  ZOrderSet = 7
+  Name = "Commandgroup1"
+  Command1.Top = 5
+  Command1.Left = 4
+  Command1.Height = 40
+  Command1.Width = 105
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.Picture = ..\framework\imagens\cadastro_salvar_32.jpg
+  Command1.Caption = "Aprova"
+  Command1.PicturePosition = 1
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Name = "Command1"
+  Command2.Top = 5
+  Command2.Left = 111
+  Command2.Height = 40
+  Command2.Width = 105
+  Command2.FontBold = .T.
+  Command2.FontItalic = .T.
+  Command2.FontName = "Comic Sans MS"
+  Command2.FontSize = 8
+  Command2.Picture = ..\framework\imagens\cadastro_cancelar_60.jpg
+  Command2.Caption = "Baixa"
+  Command2.PicturePosition = 1
+  Command2.ForeColor = 90,90,90
+  Command2.BackColor = 255,255,255
+  Command2.Name = "Command2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDRS.Pagina.dados.Shape1
+------------------------------------------------------------
+  Top = 167
+  Left = 65
+  Height = 309
+  Width = 670
+  BackStyle = 0
+  SpecialEffect = 0
+  ZOrderSet = 0
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDRS.Pagina.dados.Shape2
+------------------------------------------------------------
+  Top = 128
+  Left = 65
+  Height = 34
+  Width = 670
+  BackStyle = 0
+  SpecialEffect = 0
+  ZOrderSet = 1
+  Name = "Shape2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDRS.Pagina.dados.getCods
+------------------------------------------------------------
+  ControlSource = "crSigSyCrs.Cods"
+  Enabled = .F.
+  Left = 152
+  TabIndex = 2
+  Top = 134
+  Width = 52
+  DisabledBackColor = 255,255,255
+  ZOrderSet = 3
+  plprocurar = .T.
+  Name = "getCods"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDRS.Pagina.dados.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  BackStyle = 0
+  Caption = "Código :"
+  Height = 16
+  Left = 102
+  Top = 137
+  Width = 53
+  TabIndex = 1
+  ForeColor = 90,90,90
+  ZOrderSet = 4
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDDRS
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE alimentalista
+------------------------------------------------------------
+PROCEDURE alimentalista
+Local lcCpo, llAcPend, llAcApro, llAcTodo
+llAcTodo = fChecaAcesso(ThisForm.Tits,'TODOS')
+llAcPend = Iif(llAcTodo,.t.,fChecaAcesso(ThisForm.Tits,'PENDENTE'))
+llAcApro = Iif(llAcTodo,.t.,fChecaAcesso(ThisForm.Tits,'APROVADO'))
+
+Select crSigSyCrs
+Scan
+	If (llAcPend And ! ChkApro) or (llAcApro And ChkApro) or llAcTodo
+		Select crSigSyCit
+		Scan
+			If (crSigSyCit.Listas = 1) && Se o Campo Aparece na Lista
+				If Seek(Str(crSigSyCrs.Cods, 6) + crSigSyCit.Campos, 'LocalCadRs', 'CodCampos')
+					lcCpo = Alltrim(crSigSyCit.Campos)
+					Replace &lcCpo. With Iif(crSigSyCit.Tipos=[N],Val(LocalCadRs.Resps),LocalCadRs.Resps) In crSigSyCrs
+				EndIf
+			EndIf
+		EndScan
+	Else
+		Delete
+	EndIf 
+EndScan
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE apanharespostas
+------------------------------------------------------------
+PROCEDURE apanharespostas
+Local lcVal, lcObj
+
+lcQuery = [Select Cods, Campos, Resps ] + ;
+		    [From SigSyCrs ] + ;
+		   [Where Tits = '] + ThisForm.Tits + [' ] + ;
+		   [Order By Cods, Campos]
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'LocalCadRs') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (LocalCadRs)')
+	Return .f.
+EndIf
+Select LocalCadRs
+Index On Str(Cods, 6) + Campos Tag CodCampos
+
+Return .t.
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE carregadados
+------------------------------------------------------------
+PROCEDURE carregadados
+Select crSigSyCit
+Scan
+	Select LocalCadRs
+	Go Top
+	Locate For Campos = crSigSyCit.Campos And Cods = crSigSyCrs.Cods
+
+	lcVal = Nvl(LocalCadRs.Resps, [])
+
+	lcObj = [memFicha] + Alltrim(Str(crSigSyCit.Ordems))
+
+	If (crSigSyCit.Tipos=[M])
+		lcVal = Alltrim(lcVal)
+	Else
+		If (crSigSyCit.Tipos=[D])
+			lcVal = Ctod(Alltrim(lcVal))
+		Else
+			lcVal = Val(Alltrim(lcVal))
+		EndIf
+	EndIf
+
+	ThisForm.poWindowCad.&lcObj..Value = lcVal
+	ThisForm.poWindowCad.&lcObj..Refresh
+EndScan
+
+Select LocalCadRs
+Go Top
+Locate For Campos = Padr([Emps], 10) And Cods = crSigSyCrs.Cods
+ThisForm.poWindowCad.memFichaEmps.Value = Nvl(LocalCadRs.Resps, [])
+
+Select LocalCadRs
+Go Top
+Locate For Campos = Padr([Dopes], 10) And Cods = crSigSyCrs.Cods
+ThisForm.poWindowCad.memFichaDopes.Value = Nvl(LocalCadRs.Resps, [])
+
+Select LocalCadRs
+Go Top
+Locate For Campos = Padr([Numes], 10) And Cods = crSigSyCrs.Cods
+ThisForm.poWindowCad.memFichaNumes.Value = Nvl(LocalCadRs.Resps, [])
+
+Select LocalCadRs
+Go Top
+Locate For Campos = Padr([Aprova], 10) And Cods = crSigSyCrs.Cods
+ThisForm.poWindowCad.memFichaAprova.Value = Nvl(LocalCadRs.Resps, [])
+
+Select LocalCadRs
+Go Top
+Locate For Campos = Padr([Datas], 10) And Cods = crSigSyCrs.Cods
+ThisForm.poWindowCad.memFichaDatas.Value = Nvl(LocalCadRs.Resps, [])
+
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE criarform
+------------------------------------------------------------
+PROCEDURE criarform
+ThisForm.poWindowCad = CreateObject('frmScrolls')
+
+ThisForm.poWindowCad.Visible = .t.
+ThisForm.poWindowCad.Show
+
+ThisForm.poWindowCad.Top  	= ThisForm.Pagina.Top    + 900
+ThisForm.poWindowCad.Left 	= ThisForm.Pagina.Left   + 010
+ThisForm.poWindowCad.Height = ThisForm.Pagina.Height - 160
+ThisForm.poWindowCad.Width  = ThisForm.Pagina.Width  - 040
+ThisForm.poWindowCad.Name	= [frmWindowCad]
+ThisForm.poWindowCad.AddProperty('pcObj(1,1)')
+ThisForm.poWindowCad.AddProperty('pcGet(1,3)')
+
+Activate Window ([frmWindowCad]) In Window (This.Name)
+
+ThisForm.poWindowCad.RemoveObject([Label1])
+
+ThisForm.CriouForm = .t.
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE desmontaobjetos
+------------------------------------------------------------
+PROCEDURE desmontaobjetos
+* Rotina Para Remover os Campos Criados no Formulário de Scroll
+Local lcObj
+
+If ThisForm.CriouForm
+	Select crSigSyCit
+	Scan
+		* Destruindo o Label
+		lcObj = [lblFicha] + Alltrim(Str(crSigSyCit.Ordems))
+		If (Type('ThisForm.poWindowCad.&lcObj.')='O')
+			ThisForm.poWindowCad.RemoveObject(lcObj)
+		EndIf
+
+		* Destruindo o Memo
+		lcObj = [memFicha] + Alltrim(Str(crSigSyCit.Ordems))
+		If (Type('ThisForm.poWindowCad.&lcObj.')='O')
+			ThisForm.poWindowCad.RemoveObject(lcObj)
+		EndIf
+	EndScan
+
+	lcObj = [shpFichaFim]
+	If (Type('ThisForm.poWindowCad.&lcObj.')='O')
+		ThisForm.poWindowCad.RemoveObject(lcObj)
+	EndIf
+
+	lcObj = [lblFichaEmps]
+	If (Type('ThisForm.poWindowCad.&lcObj.')='O')
+		ThisForm.poWindowCad.RemoveObject(lcObj)
+	EndIf
+
+	lcObj = [lblFichaDopes]
+	If (Type('ThisForm.poWindowCad.&lcObj.')='O')
+		ThisForm.poWindowCad.RemoveObject(lcObj)
+	EndIf
+
+	lcObj = [lblFichaNumes]
+	If (Type('ThisForm.poWindowCad.&lcObj.')='O')
+		ThisForm.poWindowCad.RemoveObject(lcObj)
+	EndIf
+
+	lcObj = [lblFichaAprova]
+	If (Type('ThisForm.poWindowCad.&lcObj.')='O')
+		ThisForm.poWindowCad.RemoveObject(lcObj)
+	EndIf
+
+	lcObj = [lblFichaDatas]
+	If (Type('ThisForm.poWindowCad.&lcObj.')='O')
+		ThisForm.poWindowCad.RemoveObject(lcObj)
+	EndIf
+
+	lcObj = [memFichaEmps]
+	If (Type('ThisForm.poWindowCad.&lcObj.')='O')
+		ThisForm.poWindowCad.RemoveObject(lcObj)
+	EndIf
+
+	lcObj = [memFichaDopes]
+	If (Type('ThisForm.poWindowCad.&lcObj.')='O')
+		ThisForm.poWindowCad.RemoveObject(lcObj)
+	EndIf
+
+	lcObj = [memFichaNumes]
+	If (Type('ThisForm.poWindowCad.&lcObj.')='O')
+		ThisForm.poWindowCad.RemoveObject(lcObj)
+	EndIf
+
+	lcObj = [memFichaAprova]
+	If (Type('ThisForm.poWindowCad.&lcObj.')='O')
+		ThisForm.poWindowCad.RemoveObject(lcObj)
+	EndIf
+
+	lcObj = [memFichaDatas]
+	If (Type('ThisForm.poWindowCad.&lcObj.')='O')
+		ThisForm.poWindowCad.RemoveObject(lcObj)
+	EndIf
+
+	lcObj = [shpFichaFim2]
+	If (Type('ThisForm.poWindowCad.&lcObj.')='O')
+		ThisForm.poWindowCad.RemoveObject(lcObj)
+	EndIf
+EndIf
+* Fim *********************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE gravadados
+------------------------------------------------------------
+PROCEDURE gravadados
+* Rotina Para Gravação dos Dados da Ficha Técnica no Cursor Para Atualizar a Base
+If ThisForm.CriouForm And Used('crGrvCadRs')
+	Zap In crGrvCadRs
+
+	lnCod = ThisForm.Pagina.Dados.getCods.Value
+
+	Select crSigSyCit
+	Scan
+		lcObj = [memFicha] + Alltrim(Str(crSigSyCit.Ordems))
+
+		lcVal     = ThisForm.poWindowCad.&lcObj..Value
+		If Type('ThisForm.poWindowCad.&lcObj..InputMask') <> 'U'
+			lcPicture = ThisForm.poWindowCad.&lcObj..InputMask
+			lcPicture = Strtran(lcPicture,',','')
+		Else
+			lcPicture = ''
+		EndIf
+		
+		If (crSigSyCit.Tipos=[M])
+			lcVal = Alltrim(lcVal)
+		Else
+			If (crSigSyCit.Tipos=[D])
+				lcVal = Dtoc(lcVal)
+			Else
+				lcVal = Alltrim(Iif(Empty(lcPicture),Str(lcVal),Transform(lcVal,lcPicture)))
+			EndIf
+		EndIf
+
+		If Not Empty(lcVal)
+			Insert Into crGrvCadRs (Tits, Campos, Cods, cIdChaves, Resps, Pergs) ;
+							Values (ThisForm.Tits, crSigSyCit.Campos, lnCod, fUniqueIds(), lcVal, crSigSyCit.Descs)
+		EndIf
+	EndScan
+
+	llGrv = .t.
+	
+	lcVal = ThisForm.poWindowCad.memFichaEmps.Value
+	If Not Empty(lcVal)
+		Insert Into crGrvCadRs (Tits, Campos, Cods, cIdChaves, Resps, Pergs) ;
+						Values (ThisForm.Tits, [Emps], lnCod, fUniqueIds(), lcVal, [Empresa])
+	Else
+		llGrv = .f.
+	EndIf
+
+	lcVal = ThisForm.poWindowCad.memFichaDopes.Value
+	If Not Empty(lcVal)
+		Insert Into crGrvCadRs (Tits, Campos, Cods, cIdChaves, Resps, Pergs) ;
+						Values (ThisForm.Tits, [Dopes], lnCod, fUniqueIds(), lcVal, [Operação])
+	Else
+		llGrv = .f.
+	EndIf
+
+	lcVal = ThisForm.poWindowCad.memFichaNumes.Value
+	If Not Empty(lcVal)
+		Insert Into crGrvCadRs (Tits, Campos, Cods, cIdChaves, Resps, Pergs) ;
+						Values (ThisForm.Tits, [Numes], lnCod, fUniqueIds(), lcVal, [Código])
+	Else
+		llGrv = .f.
+	EndIf
+
+	lcVal = ThisForm.poWindowCad.memFichaNumes.Value
+	If Not Empty(lcVal)
+		Insert Into crGrvCadRs (Tits, Campos, Cods, cIdChaves, Resps, Pergs) ;
+						Values (ThisForm.Tits, [Baixa], lnCod, fUniqueIds(), Usuar, [Baixa])
+	Else
+		llGrv = .f.
+	EndIf
+
+	lcVal = ThisForm.poWindowCad.memFichaAprova.Value
+	If Not Empty(lcVal)
+		Insert Into crGrvCadRs (Tits, Campos, Cods, cIdChaves, Resps, Pergs) ;
+						Values (ThisForm.Tits, [Aprova], lnCod, fUniqueIds(), lcVal, [Aprovado])
+	EndIf
+
+	lcVal = ThisForm.poWindowCad.memFichaDatas.Value
+	If Not Empty(lcVal)
+		Insert Into crGrvCadRs (Tits, Campos, Cods, cIdChaves, Resps, Pergs) ;
+						Values (ThisForm.Tits, [Datas], lnCod, fUniqueIds(), lcVal, [Data])
+	EndIf
+
+	Replace All ChkSubn With llGrv In crGrvCadRs
+
+	Return .t.
+Else
+	Return .f.
+EndIf
+* Fim *********************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE montaobjetos
+------------------------------------------------------------
+PROCEDURE montaobjetos
+Local lnTop, lnLef, lnWid
+
+lnTop = 1
+lnLef = 6
+lnWid = ThisForm.poWindowCad.Width - 30
+
+Declare ThisForm.poWindowCad.pcObj[1]
+ThisForm.poWindowCad.pcObj[1] = .f.
+
+If ThisForm.CriouForm
+	Select crSigSyCit
+	Scan
+		* Adicionando o Label
+		lcObj = [lblFicha] + Alltrim(Str(crSigSyCit.Ordems))
+		ThisForm.poWindowCad.AddObject(lcObj, [Say])
+
+		ThisForm.poWindowCad.&lcObj..Visible   = .t.
+		ThisForm.poWindowCad.&lcObj..Top	   = lnTop
+		ThisForm.poWindowCad.&lcObj..Left	   = lnLef + 4
+		ThisForm.poWindowCad.&lcObj..Caption   = Proper(crSigSyCit.Descs)
+		ThisForm.poWindowCad.&lcObj..FontBold  = .t.
+		ThisForm.poWindowCad.&lcObj..FontSize  = 8
+		ThisForm.poWindowCad.&lcObj..ForeColor = Rgb(0,0,128)
+		ThisForm.poWindowCad.&lcObj..AutoSize  = .t.
+
+		lnTop = lnTop + 12
+
+		* Adicionando o Memo
+		lnHei = Iif(crSigSyCit.Linhas = 1 Or (crSigSyCit.Tipos=[M]), 23, ((crSigSyCit.Linhas - 1) * 16) + 23)
+
+		lcObj = [memFicha] + Alltrim(Str(crSigSyCit.Ordems))
+		
+		If ! Empty(ThisForm.poWindowCad.pcGet[1,1])
+			Declare ThisForm.poWindowCad.pcGet[Alen(ThisForm.poWindowCad.pcGet,1)+1,3]
+		Endif
+		
+		ThisForm.poWindowCad.pcGet[Alen(ThisForm.poWindowCad.pcGet,1),1] = lcObj
+		ThisForm.poWindowCad.pcGet[Alen(ThisForm.poWindowCad.pcGet,1),2] = crSigSyCit.Obrigatorios
+		ThisForm.poWindowCad.pcGet[Alen(ThisForm.poWindowCad.pcGet,1),3] = crSigSyCit.Campos
+		
+		If (crSigSyCit.Tipos=[M])
+			If Empty(crSigSyCit.Files)
+				ThisForm.poWindowCad.AddObject(lcObj, [fweditboxs])
+				ThisForm.poWindowCad.&lcObj..plScroll      = .T.
+				ThisForm.poWindowCad.&lcObj..pcOper       = ThisForm.pcEscolha
+				If Empty(crSigSyCit.Pictures)
+					ThisForm.poWindowCad.&lcObj..Width     = lnWid
+				Else
+					lnWids = Fontmetric(7,ThisForm.poWindowCad.&lcObj..FontName,ThisForm.poWindowCad.&lcObj..FontSize)*Len(Alltrim(crSigSyCit.Pictures))
+					ThisForm.poWindowCad.&lcObj..Width     = lnWids
+					ThisForm.poWindowCad.&lcObj..MaxLength = Len(Alltrim(crSigSyCit.Pictures))
+				Endif
+			Else
+				ThisForm.poWindowCad.AddObject(lcObj, [LocEdit])
+				ThisForm.poWindowCad.&lcObj..pcFiles      = crSigSyCit.Files
+				ThisForm.poWindowCad.&lcObj..pcListas     = crSigSyCit.Fields
+				ThisForm.poWindowCad.&lcObj..pcFields     = Substr(crSigSyCit.Fields,At('.',crSigSyCit.Fields)+1)
+				ThisForm.poWindowCad.&lcObj..pcChaves     = crSigSyCit.Chaves
+				ThisForm.poWindowCad.&lcObj..pccIdChaves  = crSigSyCit.cIdChaves
+				ThisForm.poWindowCad.&lcObj..pcCampoOAs   = crSigSyCit.CampoOAs
+				ThisForm.poWindowCad.&lcObj..pcCampoDAs   = crSigSyCit.CampoDAs
+				ThisForm.poWindowCad.&lcObj..pcAssociados = crSigSyCit.Associados
+				ThisForm.poWindowCad.&lcObj..pcCadeado    = Iif(crSigSyCit.Cadeado = 1,.f.,.t.)
+				ThisForm.poWindowCad.&lcObj..lcVinculado  = crSigSyCit.Vinculados
+				ThisForm.poWindowCad.&lcObj..llObriga     = crSigSyCit.Obrigatorios
+				ThisForm.poWindowCad.&lcObj..plScroll     = .T.
+				ThisForm.poWindowCad.&lcObj..pcOper       = ThisForm.pcEscolha
+				If ! Empty(ThisForm.poWindowCad.pcObj[1])
+					Declare ThisForm.poWindowCad.pcObj[Alen(ThisForm.poWindowCad.pcObj)+1]
+				Endif
+				ThisForm.poWindowCad.pcObj[Alen(ThisForm.poWindowCad.pcObj)] = lcObj
+			EndIf
+			If Empty(crSigSyCit.Pictures)
+				ThisForm.poWindowCad.&lcObj..Width     = lnWid
+			Else
+				lnWids = Fontmetric(7,ThisForm.poWindowCad.&lcObj..FontName,ThisForm.poWindowCad.&lcObj..FontSize)*Len(Alltrim(crSigSyCit.Pictures))
+				ThisForm.poWindowCad.&lcObj..Width     = lnWids
+				ThisForm.poWindowCad.&lcObj..MaxLength = Len(Alltrim(crSigSyCit.Pictures))
+			Endif
+		Else
+			ThisForm.poWindowCad.AddObject(lcObj, [fwgets])
+			ThisForm.poWindowCad.&lcObj..plScroll     = .T.
+			ThisForm.poWindowCad.&lcObj..pcOper       = ThisForm.pcEscolha
+			If (crSigSyCit.Tipos=[D])
+				ThisForm.poWindowCad.&lcObj..Width = 80
+				ThisForm.poWindowCad.&lcObj..InputMask = [99/99/9999]
+			Else
+				ThisForm.poWindowCad.&lcObj..Width = Iif(Empty(crSigSyCit.Pictures),Fontmetric(6,ThisForm.poWindowCad.&lcObj..FontName,ThisForm.poWindowCad.&lcObj..FontSize)*Len(Alltrim(crSigSyCit.Pictures)),94)
+				ThisForm.poWindowCad.&lcObj..InputMask = Iif(Empty(crSigSyCit.Pictures),[999999999.99],Alltrim(crSigSyCit.Pictures))
+*				If ! Empty(crSigSyCit.Pictures)
+*					lnWids = Fontmetric(7,ThisForm.poWindowCad.&lcObj..FontName,ThisForm.poWindowCad.&lcObj..FontSize)*Len(Alltrim(crSigSyCit.Pictures))
+*					ThisForm.poWindowCad.&lcObj..Width     = lnWids
+*				Endif
+			EndIf
+		EndIf
+		ThisForm.poWindowCad.&lcObj..Visible  = .t.
+		ThisForm.poWindowCad.&lcObj..Top	  = lnTop
+		ThisForm.poWindowCad.&lcObj..Left	  = lnLef
+		ThisForm.poWindowCad.&lcObj..Height   = lnHei
+		ThisForm.poWindowCad.&lcObj..ReadOnly = Not InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')
+
+		ThisForm.poWindowCad.&lcObj..DisabledBackColor = Rgb(255,255,255)
+		ThisForm.poWindowCad.&lcObj..DisabledForeColor = Rgb(0,0,128)
+
+		lnTop = lnTop + lnHei + 2
+	EndScan
+
+	* Adicionando uma linha separadora de campos
+	lcObj = [shpFichaFim]
+	ThisForm.poWindowCad.AddObject(lcObj, [Shape])
+
+	ThisForm.poWindowCad.&lcObj..Visible   	   = .t.
+	ThisForm.poWindowCad.&lcObj..Top	       = lnTop
+	ThisForm.poWindowCad.&lcObj..Left	       = 1
+	ThisForm.poWindowCad.&lcObj..Width	       = lnWid + 9
+	ThisForm.poWindowCad.&lcObj..Height    	   = 2
+	ThisForm.poWindowCad.&lcObj..SpecialEffect = 0
+
+	lnTop = lnTop + 2
+
+	* Adicionando o Label da Empresa
+	lcObj = [lblFichaEmps]
+	ThisForm.poWindowCad.AddObject(lcObj, [Say])
+
+	ThisForm.poWindowCad.&lcObj..Visible   = .t.
+	ThisForm.poWindowCad.&lcObj..Top	   = lnTop
+	ThisForm.poWindowCad.&lcObj..Left	   = lnLef + 4
+	ThisForm.poWindowCad.&lcObj..Caption   = [Emp]
+	ThisForm.poWindowCad.&lcObj..FontBold  = .t.
+	ThisForm.poWindowCad.&lcObj..FontSize  = 8
+	ThisForm.poWindowCad.&lcObj..ForeColor = Rgb(0,0,128)
+	ThisForm.poWindowCad.&lcObj..AutoSize  = .t.
+
+	* Adicionando o Label da Operação
+	lcObj = [lblFichaDopes]
+	ThisForm.poWindowCad.AddObject(lcObj, [Say])
+
+	ThisForm.poWindowCad.&lcObj..Visible   = .t.
+	ThisForm.poWindowCad.&lcObj..Top	   = lnTop
+	ThisForm.poWindowCad.&lcObj..Left	   = lnLef + 4 + 35
+	ThisForm.poWindowCad.&lcObj..Caption   = [Operação]
+	ThisForm.poWindowCad.&lcObj..FontBold  = .t.
+	ThisForm.poWindowCad.&lcObj..FontSize  = 8
+	ThisForm.poWindowCad.&lcObj..ForeColor = Rgb(0,0,128)
+	ThisForm.poWindowCad.&lcObj..AutoSize  = .t.
+
+	* Adicionando o Label do Número
+	lcObj = [lblFichaNumes]
+	ThisForm.poWindowCad.AddObject(lcObj, [Say])
+
+	ThisForm.poWindowCad.&lcObj..Visible   = .t.
+	ThisForm.poWindowCad.&lcObj..Top	   = lnTop
+	ThisForm.poWindowCad.&lcObj..Left	   = lnLef + 4 + 189
+	ThisForm.poWindowCad.&lcObj..Caption   = [Número]
+	ThisForm.poWindowCad.&lcObj..FontBold  = .t.
+	ThisForm.poWindowCad.&lcObj..FontSize  = 8
+	ThisForm.poWindowCad.&lcObj..ForeColor = Rgb(0,0,128)
+	ThisForm.poWindowCad.&lcObj..AutoSize  = .t.
+
+	* Adicionando o Label do Aprovador
+	lcObj = [lblFichaAprova]
+	ThisForm.poWindowCad.AddObject(lcObj, [Say])
+
+	ThisForm.poWindowCad.&lcObj..Visible   = .t.
+	ThisForm.poWindowCad.&lcObj..Top	   = lnTop
+	ThisForm.poWindowCad.&lcObj..Left	   = lnLef + 4 + 245
+	ThisForm.poWindowCad.&lcObj..Caption   = [Aprovado]
+	ThisForm.poWindowCad.&lcObj..FontBold  = .t.
+	ThisForm.poWindowCad.&lcObj..FontSize  = 8
+	ThisForm.poWindowCad.&lcObj..ForeColor = Rgb(0,0,128)
+	ThisForm.poWindowCad.&lcObj..AutoSize  = .t.
+
+	* Adicionando o Label da Data de Aprovacao
+	lcObj = [lblFichaDatas]
+	ThisForm.poWindowCad.AddObject(lcObj, [Say])
+
+	ThisForm.poWindowCad.&lcObj..Visible   = .t.
+	ThisForm.poWindowCad.&lcObj..Top	   = lnTop
+	ThisForm.poWindowCad.&lcObj..Left	   = lnLef + 4 + 327
+	ThisForm.poWindowCad.&lcObj..Caption   = [Data]
+	ThisForm.poWindowCad.&lcObj..FontBold  = .t.
+	ThisForm.poWindowCad.&lcObj..FontSize  = 8
+	ThisForm.poWindowCad.&lcObj..ForeColor = Rgb(0,0,128)
+	ThisForm.poWindowCad.&lcObj..AutoSize  = .t.
+
+	lnTop = lnTop + 12
+
+	* Adicionando o Memo da Empresa
+	lnHei = 23
+
+	lcObj = [memFichaEmps]
+	ThisForm.poWindowCad.AddObject(lcObj, [fweditboxs], ;
+								   ThisForm.poDataMgr.pnIdConn, [SigCdEmp], [CEmps], .f., ;
+								   [Emp], .f., .f., ThisForm.pcEscolha, 3)
+
+	ThisForm.poWindowCad.&lcObj..Visible   = .t.
+	ThisForm.poWindowCad.&lcObj..Top	   = lnTop
+	ThisForm.poWindowCad.&lcObj..Left	   = lnLef
+	ThisForm.poWindowCad.&lcObj..Width	   = 33
+	ThisForm.poWindowCad.&lcObj..Height    = lnHei
+	ThisForm.poWindowCad.&lcObj..ReadOnly  = Not InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')
+	ThisForm.poWindowCad.&lcObj..Maxlength = 3
+	ThisForm.poWindowCad.&lcObj..Margin    = 1
+	ThisForm.poWindowCad.&lcObj..plScroll  = .T.
+	ThisForm.poWindowCad.&lcObj..pcOper       = ThisForm.pcEscolha
+
+	* Adicionando o Memo da Operação
+	lcObj = [memFichaDopes]
+	ThisForm.poWindowCad.AddObject(lcObj, [fweditboxs], ;
+								   ThisForm.poDataMgr.pnIdConn, [SigCdOpe], [Dopes], .f., ;
+								   [Operação], .f., .f., ThisForm.pcEscolha, 20)
+
+	ThisForm.poWindowCad.&lcObj..Visible   = .t.
+	ThisForm.poWindowCad.&lcObj..Top	   = lnTop
+	ThisForm.poWindowCad.&lcObj..Left	   = lnLef + 35
+	ThisForm.poWindowCad.&lcObj..Width	   = 152
+	ThisForm.poWindowCad.&lcObj..Height    = lnHei
+	ThisForm.poWindowCad.&lcObj..ReadOnly  = Not InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')
+	ThisForm.poWindowCad.&lcObj..Maxlength = 20
+	ThisForm.poWindowCad.&lcObj..Margin    = 1
+	ThisForm.poWindowCad.&lcObj..plScroll  = .T.
+	ThisForm.poWindowCad.&lcObj..pcOper       = ThisForm.pcEscolha
+
+	* Adicionando o Memo do Número
+	lcObj = [memFichaNumes]
+	ThisForm.poWindowCad.AddObject(lcObj, [fweditboxs])
+
+	ThisForm.poWindowCad.&lcObj..Visible   = .t.
+	ThisForm.poWindowCad.&lcObj..Top	   = lnTop
+	ThisForm.poWindowCad.&lcObj..Left	   = lnLef + 189
+	ThisForm.poWindowCad.&lcObj..Width	   = 54
+	ThisForm.poWindowCad.&lcObj..Height    = lnHei
+	ThisForm.poWindowCad.&lcObj..ReadOnly  = Not InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')
+	ThisForm.poWindowCad.&lcObj..Maxlength = 6
+	ThisForm.poWindowCad.&lcObj..Margin    = 1
+	ThisForm.poWindowCad.&lcObj..plScroll  = .T.
+	ThisForm.poWindowCad.&lcObj..pcOper       = ThisForm.pcEscolha
+
+	* Adicionando o Memo do Aprovador
+	lcObj = [memFichaAprova]
+	ThisForm.poWindowCad.AddObject(lcObj, [fweditboxs])
+
+	ThisForm.poWindowCad.&lcObj..Visible   = .t.
+	ThisForm.poWindowCad.&lcObj..Top	   = lnTop
+	ThisForm.poWindowCad.&lcObj..Left	   = lnLef + 245
+	ThisForm.poWindowCad.&lcObj..Width	   = 80
+	ThisForm.poWindowCad.&lcObj..Height    = lnHei
+	ThisForm.poWindowCad.&lcObj..DisabledBackColor  = Rgb(255,255,255)
+	ThisForm.poWindowCad.&lcObj..ReadOnly  = .T.
+	ThisForm.poWindowCad.&lcObj..Maxlength = 10
+	ThisForm.poWindowCad.&lcObj..Margin    = 1
+	ThisForm.poWindowCad.&lcObj..plScroll  = .T.
+	ThisForm.poWindowCad.&lcObj..pcOper       = ThisForm.pcEscolha
+
+	* Adicionando o Memo da Data de Aprovacao
+	lcObj = [memFichaDatas]
+	ThisForm.poWindowCad.AddObject(lcObj, [fweditboxs])
+
+	ThisForm.poWindowCad.&lcObj..Visible   = .t.
+	ThisForm.poWindowCad.&lcObj..Top	   = lnTop
+	ThisForm.poWindowCad.&lcObj..Left	   = lnLef + 327
+	ThisForm.poWindowCad.&lcObj..Width	   = 122
+	ThisForm.poWindowCad.&lcObj..Height    = lnHei
+	ThisForm.poWindowCad.&lcObj..ReadOnly  = .T.
+	ThisForm.poWindowCad.&lcObj..DisabledBackColor  = Rgb(255,255,255)
+	ThisForm.poWindowCad.&lcObj..Maxlength = 20
+	ThisForm.poWindowCad.&lcObj..Margin    = 1
+	ThisForm.poWindowCad.&lcObj..plScroll  = .T.
+	ThisForm.poWindowCad.&lcObj..pcOper       = ThisForm.pcEscolha
+
+	lnTop = lnTop + lnHei + 2
+
+	* Adicionando uma linha separadora de campos
+	lcObj = [shpFichaFim2]
+	ThisForm.poWindowCad.AddObject(lcObj, [Shape])
+
+	ThisForm.poWindowCad.&lcObj..Visible   	   = .t.
+	ThisForm.poWindowCad.&lcObj..Top	       = lnTop
+	ThisForm.poWindowCad.&lcObj..Left	       = 1
+	ThisForm.poWindowCad.&lcObj..Width	       = lnWid + 9
+	ThisForm.poWindowCad.&lcObj..Height    	   = 2
+	ThisForm.poWindowCad.&lcObj..SpecialEffect = 0
+EndIf
+
+For nPos = 1 To Alen(ThisForm.poWindowCad.pcGet,1)
+	lcObj = ThisForm.poWindowCad.pcGet[nPos,1]
+	lcGet = 'ThisForm.poWindowCad.'+lcObj+'.lcVinculado'
+	If Type(lcGet) = 'C' And ! Empty(ThisForm.poWindowCad.&lcObj..lcVinculado)
+		lnItem = Ascan(ThisForm.poWindowCad.pcGet,ThisForm.poWindowCad.&lcObj..lcVinculado)
+		lnItem = Iif(Mod(lnItem,3) = 0,lnItem/3,Int(lnItem/3)+1)
+		ThisForm.poWindowCad.&lcObj..pcVinculado = ThisForm.poWindowCad.pcGet[lnItem,1]
+	EndIf
+EndFor
+
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE mostrarform
+------------------------------------------------------------
+PROCEDURE mostrarform
+* Rotina Para Exibir o Formulário de Ficha Técnica
+If ThisForm.CriouForm
+	ThisForm.poWindowCad.Top = ThisForm.Pagina.Top + 80
+	ThisForm.poWindowCad.ZOrder(0)
+	ThisForm.poWindowCad.Refresh
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE ocultarform
+------------------------------------------------------------
+PROCEDURE ocultarform
+* Rotina Para Ocultar o Formulário de Scroll
+If ThisForm.CriouForm
+	ThisForm.poWindowCad.Top = ThisForm.Pagina.Top + 500
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE sqldados
+------------------------------------------------------------
+PROCEDURE sqldados
+Private pTru, pNot
+
+ThisForm.Draw
+
+With ThisForm.Pagina.Lista
+	pTru = .t.
+	pNot = .t.
+
+	If (.optFiltro.Value = 1)
+		pTru = .t.
+		pNot = .f.
+	Else
+		If (.optFiltro.Value = 2)
+			pTru = .f.
+			pNot = .f.
+		EndIf
+	EndIf
+EndWith
+
+ThisForm.poDatamgr.Requery('crSigSyCrs')
+Select crSigSyCrs
+Go Top
+
+ThisForm.LockScreen = .T.
+=fCarregaGrade(ThisForm.Pagina.Lista.Grade)
+ThisForm.LockScreen = .F.
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_procurar
+------------------------------------------------------------
+PROCEDURE msv_procurar
+Select LocalCadRs
+Locate For Cods = ThisForm.Pagina.Dados.GetCods.Value
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_inserir
+------------------------------------------------------------
+PROCEDURE msv_inserir
+Local llTaOk
+
+llTaOk = .t.
+
+If llTaOk
+	lcQuery = [Delete From SigSyCrs ] + ;
+			   [Where Tits = '] + ThisForm.Tits + [' And ] + ;
+			   		 [Cods = ] + Alltrim(Str(ThisForm.Pagina.Dados.getCods.Value))
+
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, '') < 1)
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (mSv_Inserir - SigSyCrs)')
+		llTaOk = .f.
+	EndIf
+EndIf
+
+If llTaOk
+	If Not ThisForm.poDataMgr.Update('crGrvCadRs')
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (mSv_Inserir - crGrvCadRs)')
+		llTaOk = .f.
+	EndIf
+EndIf
+
+If llTaOk
+	If (ThisForm.poDataMgr.Commit() < 1)
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (mSv_Inserir - Commit)')
+		llTaOk = .f.
+	EndIf
+EndIf
+
+If Not llTaOk
+	ThisForm.poDataMgr.RollBack()
+EndIf
+
+NoDefault
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_excluir
+------------------------------------------------------------
+PROCEDURE msv_excluir
+Local llTaOk
+
+llTaOk = .t.
+
+If llTaOk
+	lcQuery = [Delete From SigSyCrs ] + ;
+			   [Where Tits = '] + ThisForm.Tits + [' And ] + ;
+			   		 [Cods = ] + Alltrim(Str(ThisForm.Pagina.Dados.getCods.Value))
+
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, '') < 1)
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (mSv_Excluir - SigSyCrs)')
+		llTaOk = .f.
+	EndIf
+EndIf
+
+If llTaOk
+	If (ThisForm.poDataMgr.Commit() < 1)
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (mSv_Excluir - Commit)')
+		llTaOk = .f.
+	EndIf
+EndIf
+
+If Not llTaOk
+	ThisForm.poDataMgr.RollBack()
+EndIf
+
+NoDefault
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_alterar
+------------------------------------------------------------
+PROCEDURE msv_alterar
+Local llTaOk
+
+llTaOk = .t.
+
+If llTaOk
+	lcQuery = [Delete From SigSyCrs ] + ;
+			   [Where Tits = '] + ThisForm.Tits + [' And ] + ;
+			   		 [Cods = ] + Alltrim(Str(ThisForm.Pagina.Dados.getCods.Value))
+
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, '') < 1)
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (mSv_Alterar - SigSyCrs)')
+		llTaOk = .f.
+	EndIf
+EndIf
+
+If llTaOk
+	If Not ThisForm.poDataMgr.Update('crGrvCadRs')
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (mSv_Alterar - crGrvCadRs)')
+		llTaOk = .f.
+	EndIf
+EndIf
+
+If llTaOk
+	If (ThisForm.poDataMgr.Commit() < 1)
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (mSv_Alterar - Commit)')
+		llTaOk = .f.
+	EndIf
+EndIf
+
+If Not llTaOk
+	ThisForm.poDataMgr.RollBack()
+EndIf
+
+NoDefault
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE mativapagina1
+------------------------------------------------------------
+PROCEDURE mativapagina1
+Local lnCod
+Private pTru, pNot
+
+With ThisForm.Pagina.Lista
+	pTru = .t.
+	pNot = .t.
+
+	If (.optFiltro.Value = 1)
+		pTru = .t.
+		pNot = .f.
+	Else
+		If (.optFiltro.Value = 2)
+			pTru = .f.
+			pNot = .f.
+		EndIf
+	EndIf
+EndWith
+
+lnCod = ThisForm.Pagina.Dados.getCods.Value
+
+=DoDefault()
+
+ThisForm.ApanhaRespostas
+
+ThisForm.AlimentaLista
+
+Select crSigSyCrs
+Locate For Cods = lnCod
+ThisForm.Pagina.Lista.Grade.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Lparameters pPrg
+
+Private pTru, pNot
+Public  laObjs[1]
+
+ThisForm.Tits = Padr(pPrg, 20)
+
+Declare ThisForm.pcObj[1]
+
+With ThisForm
+	.CriouForm = .f.
+
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+
+	pTru = .t.
+	pNot = .t.
+
+	If (.poDataMgr.pnIdconn > 0)
+		If Not ThisForm.ApanhaRespostas()
+			Return .f.
+		EndIf
+
+		ThisForm.poDataMgr.CursorQuery('SigSyCit', 'crSigSyCit', 'Tits', ThisForm.Tits)
+		Select crSigSyCit
+		Index On Str(Ordems, 2) Tag Ordems
+		lcQryCadRs = [Select Distinct ChkSubn, ChkApro, Cods]
+		Scan
+			If (crSigSyCit.Listas = 1) && Se o Campo Aparece na Lista
+				lcQryCadRs = lcQryCadRs + [, ]+Iif(crSigSyCit.Tipos = [N],[],[']) + ;
+							 Iif(crSigSyCit.Tipos = [M], Space(50), Iif(crSigSyCit.Tipos = [N], [9999999999.99] , Space(12))) + ;
+							 Iif(crSigSyCit.Tipos = [N],[],['])+[ as ] + Alltrim(crSigSyCit.Campos)
+			EndIf
+		EndScan
+		lcQryCadRs = lcQryCadRs + ;
+					  [ From SigSyCrs ] + ;
+					  [Where Tits = '] + ThisForm.Tits + [' And ] + ;
+					  	   [(ChkSubn = ?pTru Or ChkSubn = ?pNot) ] + ;
+					  [Order By Cods]
+
+		With .poDataMgr
+			.AddCursor('SigSyCrs', 'Cods', 'crSigSyCrs', '', ThisForm.Pagina.Lista.Grade, lcQryCadRs)
+			.pfSqlTabela(1).pColuna('Cods', '', '', 'Código', 52, .t.)
+			Select crSigSyCit
+			Scan
+				If (crSigSyCit.Listas = 1) && Se o Campo Aparece na Lista
+					.pfSqlTabela(1).pColuna(Alltrim(crSigSyCit.Campos), '', Alltrim(crSigSyCit.Pictures), Alltrim(crSigSyCit.Descs), ;
+									  Iif(crSigSyCit.Tipos = [D], 80, Iif(crSigSyCit.Tipos = [N], 100, ;
+									  Iif(!Empty(crSigSyCit.Pictures),Fontmetric(6,'Courier New',9)*Len(Alltrim(crSigSyCit.Pictures)),400))), .t.)
+				EndIf
+			EndScan
+
+			* Adicionando um Cursor Apenas Para Gravação
+			.AddCursor('SigSyCrs', 'cIdChaves', 'crGrvCadRs')
+		EndWith
+
+		=DoDefault(ThisForm.Tits)
+		
+		.SqlDados
+
+		.AlimentaLista
+
+		.CriarForm
+
+		.Pagina.Lista.Grade.SetAll('DynamicForeColor','Iif(crSigSyCrs.ChkSubn, RGB(0,0,255), Iif(crSigSyCrs.ChkApro, RGB(0,128,0), RGB(0,0,0)))','Column')
+
+		.Pagina.Lista.Grade.Column1.SetFocus
+	Else
+		=Messagebox('Impossível Efetuar Conexão Com o Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+
+	ThisForm.Pagina.Lista.Commandgroup1.Command1.Visible = fChecaAcesso(ThisForm.Tits,'APROVACAO')
+	ThisForm.Pagina.Lista.Commandgroup1.Command2.Visible = fChecaAcesso(ThisForm.Tits,'BAIXA')
+
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Activate
+------------------------------------------------------------
+PROCEDURE Activate
+ThisForm.OcultarForm()
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.lista.grade.AfterRowColChange
+------------------------------------------------------------
+PROCEDURE Pagina.lista.grade.AfterRowColChange
+LPARAMETERS nColIndex
+
+If ! crSigSyCrs.ChkSubn
+	ThisForm.Pagina.Lista.Commandgroup1.Command1.Enabled = .T.
+	If crSigSyCrs.ChkApro
+		ThisForm.Pagina.Lista.Commandgroup1.Command1.Caption = 'Desaprova'
+		ThisForm.Pagina.Lista.Grupo_op.alterar.Enabled = .f.
+		ThisForm.Pagina.Lista.Grupo_op.Excluir.Enabled = .f.
+	Else
+		ThisForm.Pagina.Lista.Commandgroup1.Command1.Caption = 'Aprova'
+		ThisForm.Pagina.Lista.Grupo_op.alterar.Enabled = .t.
+		ThisForm.Pagina.Lista.Grupo_op.Excluir.Enabled = .t.
+	EndIf
+	ThisForm.Pagina.Lista.Commandgroup1.Command2.Enabled = .T.
+Else
+	ThisForm.Pagina.Lista.Commandgroup1.Command1.Caption = 'Aprova'
+	ThisForm.Pagina.Lista.Commandgroup1.Command1.Enabled = .F.
+	ThisForm.Pagina.Lista.Grupo_op.alterar.Enabled = .f.
+	ThisForm.Pagina.Lista.Grupo_op.Excluir.Enabled = .f.
+	ThisForm.Pagina.Lista.Commandgroup1.Command2.Caption = 'Canc Baixa'
+Endif
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.lista.grupo_op.Click
+------------------------------------------------------------
+PROCEDURE Pagina.lista.grupo_op.Click
+LParameters lnOpcao
+
+loDad = ThisForm.Pagina.Dados
+
+If (Type('lnOpcao') = 'N')
+	This.Value = lnOpcao
+EndIf
+
+Select crSigSyCrs
+
+If Not DoDefault(lnOpcao)
+	If ! (ThisForm.pcEscolha = 'LISTAR')
+		ThisForm.mAtivaPagina1
+	Endif
+	Return 0
+EndIf
+
+If (ThisForm.pcEscolha = 'LISTAR')
+	Return
+Endif
+
+If (ThisForm.pcEscolha = 'INSERIR')
+	Replace Cods With fGerUniqueKey(ThisForm.Tits + _Empr) In crSigSyCrs
+EndIf
+
+If Inlist(ThisForm.pcEscolha, 'CONSULTAR', 'EXCLUIR')
+	loDad.Grupo_Salva.Salva.Setfocus
+Else
+	loDad.getCods.Setfocus
+EndIf
+
+loDad.getCods.Enabled = .f.
+
+loDad.Refresh
+
+If Not ThisForm.MontaObjetos()
+	Return .f.
+EndIf
+
+If Inlist(ThisForm.pcEscolha, 'PROCURAR')
+	loDad.getCods.Enabled = .t.
+EndIf 
+
+ThisForm.CarregaDados
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.lista.Activate
+------------------------------------------------------------
+PROCEDURE Pagina.lista.Activate
+ThisForm.OcultarForm()
+ThisForm.DesmontaObjetos
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.dados.grupo_salva.salva.Click
+------------------------------------------------------------
+PROCEDURE Pagina.dados.grupo_salva.salva.Click
+Local loDad, llTaOk, lcQuery
+
+loDad = ThisForm.Pagina.Dados
+
+ThisForm.Mostrarform()
+
+If InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')
+
+	For nPos = 1 To Alen(ThisForm.poWindowCad.pcGet,1)
+		If ThisForm.poWindowCad.pcGet[nPos,2] = 1
+			lcGets = ThisForm.poWindowCad.pcGet[nPos,1]
+			If Empty(ThisForm.poWindowCad.&lcGets..Value)
+				MessageBox('Campo de Preenchimento Obrigatório, não Preenchido!!!', 48, '')
+				ThisForm.Mostrarform()
+				ThisForm.poWindowCad.&lcGets..SetFocus 
+				Return 0
+			EndIf
+		EndIf
+	Next
+				
+	If Not Empty(ThisForm.poWindowCad.memFichaNumes.Value)
+		llNum = .t.
+		For I = 1 to Len(Alltrim(ThisForm.poWindowCad.memFichaNumes.Value))
+			If Not IsDigit(Substr(Alltrim(ThisForm.poWindowCad.memFichaNumes.Value), I, 1))
+				llNum = .f.
+			EndIf
+		Next
+		If Not llNum
+			=MessageBox('O Número da Operação Digitado Não é Válido!!!', 48, '')
+			loDad.Grupo_Salva.Salva.SetFocus 
+			ThisForm.MostrarForm()
+			Return 0
+		EndIf
+	EndIf
+	
+	If (Empty(ThisForm.poWindowCad.memFichaEmps.Value)  And ;
+		Not Empty(ThisForm.poWindowCad.memFichaDopes.Value) And Not Empty(ThisForm.poWindowCad.memFichaNumes.Value))
+		=MessageBox('É Necessário Preencher a Empresa Ao Informar a Operação e o Número!!!', 48, '')
+		loDad.Grupo_Salva.Salva.SetFocus 
+		ThisForm.MostrarForm()
+		Return 0
+	EndIf
+
+	If (Not Empty(ThisForm.poWindowCad.memFichaEmps.Value)  And ;
+		Not Empty(ThisForm.poWindowCad.memFichaDopes.Value) And ;
+		Not Empty(ThisForm.poWindowCad.memFichaNumes.Value))
+
+		If ! crSigSyCrs.ChkApro
+			MessageBox('Baixa não Aprovada !!!',16,'')
+			Return 0
+		Endif
+
+		lcEdn = Padr(ThisForm.poWindowCad.memFichaEmps.Value,  03) + ;
+				Padr(ThisForm.poWindowCad.memFichaDopes.Value, 20) + ;
+				Padl(Alltrim(ThisForm.poWindowCad.memFichaNumes.Value), 6)
+
+		ThisForm.poDataMgr.CursorQuery('SigMvCab', 'LocalEest', 'EmpDopNums', lcEdn, 'EmpDopNums')
+		If Eof('LocalEest')
+			=MessageBox('A Operação Com o Número Digitado Não Foi Encontrada na Empresa!!!', 48, '')
+			loDad.Grupo_Salva.Salva.SetFocus 
+			ThisForm.MostrarForm()
+			Return 0
+		EndIf
+	EndIf
+EndIf
+
+llTaOk = ThisForm.GravaDados()
+
+If llTaOk
+	=DoDefault()
+	ThisForm.OcultarForm()
+	ThisForm.DesmontaObjetos
+Else
+	ThisForm.MostrarForm()
+	ThisForm.poDataMgr.RollBack()
+	Return 0
+EndIf
+
+ThisForm.mAtivaPagina1
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.dados.grupo_salva.cancelar.Click
+------------------------------------------------------------
+PROCEDURE Pagina.dados.grupo_salva.cancelar.Click
+=DoDefault()
+
+ThisForm.Mostrarform()
+
+If ThisForm.plCancelar
+	If ThisForm.pcEscolha = 'INSERIR'
+		=fCanUniqueKey(ThisForm.Pagina.Dados.getCods.Value, ThisForm.Tits + _Empr)
+	Endif
+	
+	ThisForm.OcultarForm()
+
+	ThisForm.DesmontaObjetos
+
+	ThisForm.mAtivaPagina1
+Else
+	ThisForm.MostrarForm()
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.dados.Click
+------------------------------------------------------------
+PROCEDURE Pagina.dados.Click
+ThisForm.MostrarForm()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.dados.Activate
+------------------------------------------------------------
+PROCEDURE Pagina.dados.Activate
+=DoDefault()
+
+ThisForm.MostrarForm()
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDDRS.Pagina.lista.optFiltro
+* Classe: fwoption (Base: optiongroup)
+* Registro: 4
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+NoDefault
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE InteractiveChange
+------------------------------------------------------------
+PROCEDURE InteractiveChange
+ThisForm.SqlDados
+ThisForm.AlimentaLista
+ThisForm.Pagina.Lista.Grade.SetFocus
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDDRS.Pagina.lista.Commandgroup1
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 5
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Command1.Click
+------------------------------------------------------------
+PROCEDURE Command1.Click
+Private llOk, lnCod
+llOK = .t.
+If ! crSigSyCrs.ChkApro
+	If MessageBox('Confirma Aprovação?',33,'') = 1
+
+		ThisForm.Aprova = Usuar
+			
+		ThisForm.pcTime = Time() 
+
+		Zap In crGrvCadRs
+
+		lnCod = crSigSyCrs.Cods
+
+		lcVal = ThisForm.Aprova
+		If Not Empty(lcVal)
+			Insert Into crGrvCadRs (Tits, Campos, Cods, cIdChaves, Resps, Pergs, chkApro) ;
+							Values (ThisForm.Tits, [Aprova], lnCod, fUniqueIds(), lcVal, [Aprovado], .T.)
+		EndIf
+		Insert into LocalCadRs (Cods, Campos, Resps) Values (lnCod,'Aprova',lcVal)
+
+		lcVal = Ttoc(Datetime())
+		If Not Empty(lcVal)
+			Insert Into crGrvCadRs (Tits, Campos, Cods, cIdChaves, Resps, Pergs, chkApro) ;
+							Values (ThisForm.Tits, [Datas], lnCod, fUniqueIds(), lcVal, [Data], .T.)
+		EndIf
+		Insert into LocalCadRs (Cods, Campos, Resps) Values (lnCod,'Datas',lcVal)
+
+		ThisForm.poDatamgr.SqlExecute([UpDate SigSyCrs Set ChkApro = ?llOk Where Cods = ?lnCod])
+		
+		If Not ThisForm.poDataMgr.Update('crGrvCadRs')
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (mSv_Alterar - crGrvCadRs)')
+		EndIf
+
+		ThisForm.poDataMgr.Commit()
+
+		Replace crSigSyCrs.ChkApro With .t.
+		ThisForm.Pagina.Lista.Grade.Refresh
+		
+		   
+   		This.Caption = 'Desaprova'
+
+		ThisForm.Pagina.Lista.Grupo_op.alterar.Enabled = .f.
+		ThisForm.Pagina.Lista.Grupo_op.Excluir.Enabled = .f.
+
+	EndIf
+	
+Else
+
+	If MessageBox('Confirma Desaprovação?',33,'') = 1
+
+		ThisForm.Aprova = Usuar
+
+		ThisForm.pcTime = Time() 
+
+		lnCod = crSigSyCrs.Cods
+		llOk  = .F.
+		
+		ThisForm.poDatamgr.SqlExecute([Delete From SigSyCrs Where Cods = ?lnCod And Campos = 'Datas' And Tits = ']+ThisForm.Tits+['])
+		ThisForm.poDatamgr.SqlExecute([Delete From SigSyCrs Where Cods = ?lnCod And Campos = 'Aprova' And Tits = ']+ThisForm.Tits+['])
+		ThisForm.poDatamgr.SqlExecute([UpDate SigSyCrs Set ChkApro = ?llOk Where Cods = ?lnCod])
+			
+		ThisForm.poDataMgr.Commit()
+		
+		Select crSigSyCrs
+		Replace crSigSyCrs.ChkApro With .f.
+		ThisForm.Pagina.Lista.Grade.Refresh
+		
+		Select LocalCadRs 
+
+		Locate for Cods = lnCod And Campos = 'Datas'
+		Delete
+		
+		Locate for Cods = lnCod And Campos = 'Aprova'
+		Delete
+
+		This.Caption = 'Aprova'
+
+		ThisForm.Pagina.Lista.Grupo_op.alterar.Enabled = .t.
+		ThisForm.Pagina.Lista.Grupo_op.Excluir.Enabled = .t.
+
+	EndIf
+	
+Endif
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Command2.Click
+------------------------------------------------------------
+PROCEDURE Command2.Click
+If ! crSigSyCrs.ChkSubn
+	If ! crSigSyCrs.ChkApro 
+		MessageBox('Baixa não Aprovada !!!',16,'')
+		Return
+	EndIf
+
+	DO Form SigOpCbx With ThisForm,crSigSyCrs.Cods To pcBaixado
+
+	If pcBaixado = 'B'
+		Select crSigSyCrs
+		Replace crSigSyCrs.ChkSubn With .t.
+		ThisForm.Pagina.Lista.Grade.Refresh
+		ThisForm.Pagina.Lista.Grupo_op.alterar.Enabled = .f.
+		ThisForm.Pagina.Lista.Grupo_op.Excluir.Enabled = .f.
+		This.Parent.Command1.Enabled = .f.
+		This.Caption = 'Canc Baixa'
+	EndIf
+	
+Else
+
+	If MessageBox('Confirma Cancelamento da Baixa',33,'') = 1
+	
+		lnCod = crSigSyCrs.Cods
+		llOk  = .F.
+		
+		ThisForm.poDatamgr.SqlExecute([Delete From SigSyCrs Where Cods = ?lnCod And Campos = 'Emps' And Tits = ']+ThisForm.Tits+['])
+		ThisForm.poDatamgr.SqlExecute([Delete From SigSyCrs Where Cods = ?lnCod And Campos = 'Dopes' And Tits = ']+ThisForm.Tits+['])
+		ThisForm.poDatamgr.SqlExecute([Delete From SigSyCrs Where Cods = ?lnCod And Campos = 'Numes' And Tits = ']+ThisForm.Tits+['])
+		ThisForm.poDatamgr.SqlExecute([Delete From SigSyCrs Where Cods = ?lnCod And Campos = 'Baixa' And Tits = ']+ThisForm.Tits+['])
+		ThisForm.poDatamgr.SqlExecute([UpDate SigSyCrs Set ChkSubn = ?llOk Where Cods = ?lnCod])
+			
+		ThisForm.poDataMgr.Commit()
+		
+		Select crSigSyCrs
+		Replace crSigSyCrs.ChkSubn With .f.
+		ThisForm.Pagina.Lista.Grade.Refresh
+		
+		Select LocalCadRs 
+
+		Locate for Cods = lnCod And Campos = 'Emps'
+		Delete
+		
+		Locate for Cods = lnCod And Campos = 'Dopes'
+		Delete
+
+		Locate for Cods = lnCod And Campos = 'Numes'
+		Delete
+
+		Locate for Cods = lnCod And Campos = 'Baixa'
+		Delete
+
+		This.Caption = 'Baixa'
+
+	Endif
+
+Endif
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDDRS.Pagina.dados.Shape1
+* Classe: shape (Base: shape)
+* Registro: 6
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.MostrarForm()
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDDRS.Pagina.dados.Shape2
+* Classe: shape (Base: shape)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.MostrarForm()
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDDRS.Pagina.dados.getCods
+* Classe: fwget (Base: textbox)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(InList(ThisForm.pcEscolha,'PROCURAR'))
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE GotFocus
+------------------------------------------------------------
+PROCEDURE GotFocus
+*ThisForm.MostrarForm()
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDDRS.Pagina.dados.Label1
+* Classe: label (Base: label)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.MostrarForm()
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGCDDRS
+RESERVED3 (ClassInfo): aprova
+criouform
+pctime
+powindowcad
+tits
+^pcobj[1,1] 
+*alimentalista 
+*apanharespostas 
+*carregadados 
+*criarform 
+*desmontaobjetos 
+*gravadados 
+*montaobjetos 
+*mostrarform 
+*ocultarform 
+*sqldados 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 34
+================================================================================

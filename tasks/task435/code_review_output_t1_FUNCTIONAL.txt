@@ -1,0 +1,25 @@
+﻿Todas as corre├º├Áes aplicadas. Resumo do que foi feito em **FormFUN.prg** e **FUNBO.prg**:
+
+---
+
+### Corre├º├Áes aplicadas
+
+**FormFUN.prg:**
+
+1. **[CONTAINER-VISIVEL]** `TornarControlesVisiveis` ÔÇö adicionado `CNT_4C_CABECALHO` e `CNT_4C_SALVA` ao `INLIST` (linha ~954). O m├®todo agora recursa nos filhos sem for├ºar `Visible=.T.` nesses containers.
+
+2. **[GRID-HEADER] + [NULL-CURSOR] `cursor_4c_Dados`** ÔÇö `grd_4c_Dados` alterado de 6 para **5 colunas** conforme legado (SCX linha 3312-3316), com captions corretos:  
+   `C├│digo ÔåÆ codigos` | `Data ÔåÆ datas` | `Usu├írio ÔåÆ usuars` | `M├íquina ÔåÆ codmaqfs` | `Observa├º├úo ÔåÆ obss`  
+   Headers inventados removidos: "N┬░ Fundi├º├úo", "Empresa", "Tubos". Bloco de rebind em `CarregarLista` sincronizado.
+
+3. **[GRID-WITH] `grd_4c_Gradenop`** ÔÇö `RecordSource = "TmpNop"` movido para fora do `WITH`. Colunas 1ÔÇô5 reescritas em blocos `WITH` separados ap├│s `ENDWITH` principal.
+
+4. **[GRID-WITH] `grd_4c_GradeTrf`** ÔÇö idem: `RecordSource = "TmpTrf"` fora do `WITH`; colunas 1ÔÇô2 em blocos separados.
+
+5. **[NULL-CURSOR] `cursor_4c_TmpTot`** ÔÇö `SET NULL ON` / `SET NULL OFF` adicionados em volta do `CREATE CURSOR` no `BtnTotalClick`.
+
+**FUNBO.prg:**
+
+6. **[NULL-CURSOR] `cursor_4c_Dados`** ÔÇö `SET NULL ON` / `SET NULL OFF` adicionados em ambos os fallbacks `CREATE CURSOR` dentro de `Buscar()` (bloco `ELSE` e bloco `CATCH`).
+
+> **[MADDCOLUNA-PARAMS]**: Grep no arquivo completo encontrou apenas 6 chamadas (linhas 2902, 2903, 2999, 3000, 3106, 3107), todas j├í com 3 par├ómetros corretos ÔÇö sem corre├º├úo necess├íria.

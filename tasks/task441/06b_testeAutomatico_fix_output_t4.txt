@@ -1,0 +1,8 @@
+﻿All four fixes applied:
+
+1. **`FormGps.prg` line 18** ÔÇö removed duplicate `WindowType = 0` (kept only `WindowType = 1`)
+2. **`FormGps.prg` `CarregarDados()`** ÔÇö `grd_4c_Dados.Refresh()` now guarded with `AND THIS.Visible`, preventing the VFP9 hang when called during `CREATEOBJECT` (before `Show()`)
+3. **`FormGps.prg` `AlternarPagina()`** ÔÇö same `AND THIS.Visible` guard added
+4. **`GpsBO.prg` `Init()`** ÔÇö `THIS.` prefix added to both property assignments (`this_cTabela`, `this_cCampoChave`), fixing silent variable scoping bug where they were creating private vars instead of object properties
+
+The root cause of the 300-second timeout: `InicializarForm()` called `CarregarDados()` during `CREATEOBJECT` (before `Show()`), which triggered `Grid.Refresh()` on a non-visible modal form (`WindowType=1`, `DataSession=2`). VFP9 hangs for exactly 300 seconds in this condition. The `AND THIS.Visible` guard makes `Refresh()` a no-op during the test's `CREATEOBJECT`-only flow.

@@ -1,0 +1,7 @@
+﻿Corre├º├úo aplicada em `HORBO.prg:833-836`.
+
+**O que foi alterado:**
+
+- **UPDATE WHERE** trocado de `WHERE cidchaves = EscaparSQL(loc_cCidChaves)` (condi├º├úo inventada, n├úo presente no original) para `WHERE setors = ... AND uniprdts = ... AND datas BETWEEN ...` ÔÇö exatamente o padr├úo de filtro usado por todas as outras queries do form original (SETORS, UNIPRDTS, DATAS).
+
+- **Condi├º├úo do fallback INSERT** simplificada de `IF loc_nRet < 1 OR loc_nAffected = 0 OR EMPTY(loc_cCidChaves)` para `IF loc_nRet < 1 OR loc_nAffected = 0` ÔÇö a cl├íusula `EMPTY(loc_cCidChaves)` s├│ fazia sentido quando o WHERE do UPDATE era por cidchaves; agora o UPDATE opera pelo natural key e o guard interno `IF EMPTY(loc_cCidChaves)` ainda protege o INSERT caso a chave n├úo esteja preenchida.

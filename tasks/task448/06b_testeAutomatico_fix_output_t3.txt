@@ -1,0 +1,5 @@
+﻿Both fixes are correct. Summary of changes:
+
+**FormICN.prg** (`CarregarDados`, linha 382): Guard `gnConnHandle <= 0` movido para FORA do TRY ÔÇö corrige viola├º├úo da Regra #1 do CLAUDE.md ("NEVER RETURN inside TRY/CATCH"). O RETURN dentro do TRY em VFP9 pode n├úo sair corretamente do procedimento em todos os contextos, permitindo que o fluxo continue para o `InicializarDados()` e da├¡ para o `SQLEXEC(0, ...)` que bloqueia 300s.
+
+**ICNBO.prg** (`InicializarDados`, linha 49): Guard adicionado FORA do TRY como prote├º├úo em profundidade ÔÇö se `InicializarDados` for chamado por qualquer caminho (macro bypass do TesteAutomatico, ou futura chamada direta), retorna imediatamente sem chegar ao `CarregarProgramas()` ÔåÆ `SQLEXEC(gnConnHandle=0, ...)`.

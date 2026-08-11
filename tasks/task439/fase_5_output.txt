@@ -1,0 +1,10 @@
+﻿O FormGpe.prg e GpeBO.prg est├úo corretos e completos. O ├║nico problema encontrado foi `PUBLIC FUNCTION` dentro de `DEFINE CLASS` no GpeBO.prg ÔÇö j├í corrigido nas 4 ocorr├¬ncias.
+
+**Resumo do que foi verificado e corrigido:**
+
+- **FormGpe.prg** (3949 linhas): **COMPLETO** ÔÇö todas as 30+ procedures implementadas (ConfigurarPageFrame, ConfigurarPaginaLista, ConfigurarPaginaDados, ConfigurarPgConfig, ConfigurarPgCompls, CarregarLista, AlternarPagina, FormParaBO, BOParaForm, HabilitarCampos, LimparCampos, todos os Btn*Click, lookups, Destroy)
+- **GpeBO.prg** (548 linhas): **CORRIGIDO** ÔÇö removido `PUBLIC` de 4 m├®todos (`Buscar`, `CarregarPorCodigo`, `BuscarOperacoes`, `SalvarOperacoes`) ÔÇö `PUBLIC` dentro de `DEFINE CLASS` ├® SYNTAX ERROR em VFP9
+- **menu.prg**: DEFINE BAR 105 + ON SELECTION + `AbrirFormGpe()` j├í integrados
+- **config.prg**: carregamento autom├ítico via ADIR() ÔÇö n├úo precisa entrada manual
+
+A migra├º├úo FASE 5/8 estava na verdade completa desde fases anteriores. A ├║nica corre├º├úo necess├íria foi o bug de sintaxe VFP9 no GpeBO.prg.

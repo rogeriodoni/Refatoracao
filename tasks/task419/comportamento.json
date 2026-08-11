@@ -1,0 +1,124 @@
+{
+  "resumo": {
+    "totalMetodos": 6,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 3,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fUniqueIds"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDFNF",
+      "evento": "Init",
+      "linhas": 28,
+      "codigoOriginal": "LPARAMETERS lcacesso\n\nWith ThisForm\n\t.poDatamgr = CreateObject('fSqlConector')\n\tWith .poDatamgr\n\t\t.AddCursor('SigFiNtb','CidChaves','crSigFiNtb','',ThisForm.pagina.lista.grade)\n\t\t.pfSqlTabela(1).pColuna('Imps','','','Impressora',160,.t.)\n\t\t.pfSqlTabela(1).pColuna('ordems','','','Ordem',80,.t.)\n\t\t.pfSqlTabela(1).pColuna('descrs','','','Descrição',337,.t.)\n\t\t.pfSqlTabela(1).pColuna(\"Iif(CrSigFiNtb.nfixos=1, 'SIM', 'NÃO')\",'','','Fixo',50,.t.)\n\t\t.AddCursor('SigCdOpe','Dopes','crSigCdOpe','','')\n\tEn... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Cmb_Imp",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFNF",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "Local lcBusca\n\nIf .Not.IsEmpty(ThisForm.Pagina.Dados.Get_ordem.Value)\n\tThisForm.poDataMgr.LocateCursor('crSigFiNtb','ordems',ThisForm.Pagina.Dados.Get_ordem.Value)\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "LocateCursor",
+        "controlesReferenciados": "Get_ordem",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFNF",
+      "evento": "Click",
+      "linhas": 31,
+      "codigoOriginal": "lparameters opcao\n\nIf Type( 'Opcao' ) = 'N'\n\tThis.Value = Opcao\nEndif\nIf This.Value = 4\n\tSelect crSigCdOpe\n\tScan\n\t\tIf crSigCdOpe.TrnFis = CrSigFiNtb.Ordems\n\t\t\tMessagebox('Codigo de Operação sendo utilizada, Impossível Exclusão !!',0+48,'')\n\t\t\treturn\n\t\t\texit\n\t\tEndif\n\tEndScan\nEndif\nselect CrSigFiNtb\nIf !dodefault( Opcao )\n\tThisForm.mAtivapagina1\n\tReturn\nEndif\n\nDo Case\n\tCase Inlist( thisform.pcEscolha, 'INSERIR', 'PROCURAR' )\n\t\tThisForm.Pagina.Dados.cmb_Imp.SetFocus\n\tCase thisform.pcEscolha = 'ALTE... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "cmb_Imp",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFNF",
+      "evento": "Click",
+      "linhas": 23,
+      "codigoOriginal": "If Inlist( thisform.pcEscolha, 'INSERIR','ALTERAR')\n\tIf ThisForm.pcEscolha = 'INSERIR'\n\t\tSelect CrSigFiNtb\n\t\tReplace cidchaves with fUniqueIds()\n\tEndif\n\tlcImp = ThisForm.Pagina.Dados.Cmb_Imp.Value\n\tlnOrd = Thisform.Pagina.Dados.get_ordem.Value\n\tlcOpc = Thisform.Pagina.Dados.Get_opernf.Value\n\tlcSql = [Select * From SigFiNtb Where Imps=']+lcImp+[' And Ordems = ]+Str(lnOrd,2)+[ ] +;\n\t\t\t[And Not Cidchaves = ']+CrSigFiNtb.CidChaves+[']\n\tIf ThisForm.PodataMgr.SqlExecute(lcSql,'CrTrib') > 0 And (Reccou... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "Cmb_Imp,get_ordem,Get_opernf",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFNF",
+      "evento": "Click",
+      "linhas": 7,
+      "codigoOriginal": "DoDefault()\n\nThisForm.Refresh\n\nif thisform.plCancelar\n\tthisform.mAtivapagina1\nendif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFNF.Pagina.Dados.fwget1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (InList(crSigFiNtb.imps,'SWEDA','NSWEDA' ) )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDFNF.Click",
+      "queryOriginal": "\tlcSql = [Select * From SigFiNtb Where Imps=']+lcImp+[' And Ordems = ]+Str(lnOrd,2)+[ ] +; \t\t\t[And Not Cidchaves = ']+CrSigFiNtb.CidChaves+['] \tIf ThisForm.PodataMgr.SqlExecute(lcSql,'CrTrib') > 0 And (Reccou... [TRUNCADO]",
+      "tabelas": "SigFiNtb",
+      "colunas": "Imps,Ordems,Cidchaves,CidChaves+[],SqlExecutelcSql,CrTrib",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigFiNtb"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

@@ -1,0 +1,18 @@
+﻿The procedure is correctly terminated at line 5203 and flows into `ConfigurarAbaConfiguracao`. The implementation is complete.
+
+Summary of all changes made to `Formgpd.prg`:
+
+1. **Added `THIS.ConfigurarPgPage1()` call** inside `ConfigurarAbaIndustria()` just before `THIS.TornarControlesVisiveis(loc_oPg)`.
+
+2. **Created `PROTECTED PROCEDURE ConfigurarPgPage1()`** with 25 new controls for the Ind├║stria page (Page5):
+   - 12 Labels: lbl_4c_Say16, lbl_4c_Say15, lbl_4c_Say17, lbl_4c_Say22, lbl_4c_Say18, lbl_4c_Say5, lbl_4c_Say13, lbl_4c_Say7, lbl_4c_Say9, lbl_4c_SecAutocat, lbl_4c_Sepline1, lbl_4c_Say2, lbl_4c_Say6, lbl_4c_Say3
+   - 8 OptionGroups: obj_4c_Fwoption1 (tpmovs), obj_4c_Opt_semiacab (semiacabs, 5 buttons), obj_4c_Fwoption2 (impops, 3 buttons), obj_4c_Fwoption5 (nagmts), obj_4c_Fwoption4 (impcps, 3 buttons), obj_4c_Fwoption6 (geratubs), obj_4c_OptGravPeso (pesmts), obj_4c_Opt_ServProd (servprds)
+   - 3 TextBoxes: txt_4c_Premios (premios), txt_4c_Base (bases), txt_4c_Descricao (dcats)
+
+3. **Updated `FormParaBO()`** Page5 section: saves 11 new fields to the BO.
+
+4. **Updated `BOParaForm()`** Page5 section: populates 11 new controls from the BO.
+
+5. **Updated `LimparCampos()`** Page5 section: clears/resets all 11 new controls to defaults.
+
+6. **Updated `HabilitarCampos()`** Page5 section: expanded the array from 4 to 7 text controls, plus added 8 PEMSTATUS blocks for all OptionGroups.

@@ -1,0 +1,19 @@
+﻿O arquivo est├í correto e completo. A Fase 5 foi implementada com sucesso. Aqui est├í o que foi adicionado:
+
+**`ConfigurarPaginaDados()` expandido com:**
+- `cmd_4c_Confirmar` + `cmd_4c_Cancelar` dentro de `cnt_4c_BotoesAcao` (com todos os ├¡cones can├┤nicos)
+- BINDEVENTs para ambos os bot├Áes
+- **Primeiros 50% dos campos** (posi├º├Áes originais + compensa├º├úo +29):
+  - `lbl_4c_Label6` + `cbo_4c_Cmb_Imp` ÔÇö Impressora (ComboBox com Style=2, lista fixa)
+  - `lbl_4c_Label32` + `txt_4c_Finalz` ÔÇö C├│digo (ncodfinzs, InputMask="99")
+  - `lbl_4c_Label1` + `txt_4c_Ordem` ÔÇö Ordem Finalizadora (InputMask="99")
+  - `lbl_4c_Label2` + `txt_4c_Descr` ÔÇö Descri├º├úo (MaxLength=40)
+
+**Novos m├®todos adicionados:**
+- `CarregarComboImpressora()` ÔÇö popula o ComboBox com a lista fixa id├¬ntica ao legado
+- `BtnSalvarClick()` ÔÇö valida├º├Áes completas (Impressora obrigat├│ria, Ordem obrigat├│ria, duplicidade) + gera├º├úo de `cidchaves`/`ncodfinzs` + `Salvar()`
+- `BtnCancelarClick()` ÔÇö retorna para a lista
+- `HabilitarCampos()` ÔÇö com guards `PEMSTATUS()` para campos da Fase 6 ainda n├úo existentes
+- `LimparCampos()` ÔÇö idem
+- `AjustarBotoesPorModo()` ÔÇö Confirmar desabilitado em VISUALIZAR
+- `FormParaBO()` + `BOParaForm()` ÔÇö binding completo para todos os campos (Fase 5 + guarded para Fase 6)

@@ -1,0 +1,7 @@
+﻿Corre├º├úo aplicada. O diagn├│stico e a solu├º├úo:
+
+**Causa raiz:** Em VFP9, um form com `WindowType = 1` (modal) + `ShowWindow = 1` (child) inicia automaticamente o loop `READ` ap├│s `CREATEOBJECT()` retornar `.T.`, **mesmo com `Visible = .F.`** ÔÇö porque o loop modal ├® ativado pelo tipo da janela, n├úo pela visibilidade. Sem GUI thread para fechar o form, VFP bloqueia 300 segundos at├® o timeout do processo.
+
+**Por que os fixes t1-t4 falharam:** Todos focaram em `Visible = .F.` e guards em `CarregarLista`/`CarregarIcones` (corretos para outros problemas), mas nenhum desativou o `WindowType` antes do retorno do Init.
+
+**Fix aplicado:** `THIS.WindowType = 0` antes de `THIS.Visible = .F.` no guard de teste. Isso desativa o modal antes que CREATEOBJECT possa iniciar o READ loop. Em produ├º├úo, o form continua modal (WindowType=1 ├® propriedade da classe, n├úo alterada).

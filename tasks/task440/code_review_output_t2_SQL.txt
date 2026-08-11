@@ -1,0 +1,51 @@
+﻿An├ílise completa dos 3 problemas reportados. Todos s├úo **falsos positivos** do tool de review autom├ítico:
+
+---
+
+## Resultado da Verifica├º├úo
+
+### [SQL-FILTRO-INVENTADO] CONTROLCOUNT
+**Localiza├º├úo**: linhas 1176 e 1192 do Formgpr.prg
+
+```foxpro
+FOR loc_nI = 1 TO par_oContainer.ControlCount
+...
+IF PEMSTATUS(loc_oObjeto, "ControlCount", 5) AND loc_oObjeto.ControlCount > 0
+```
+
+**Diagn├│stico**: `ControlCount` ├® uma **propriedade VFP de objeto** (n├║mero de controles num container), n├úo uma coluna SQL. N├úo h├í nenhum `WHERE ControlCount` em nenhum SQL. O review tool fez match de string equivocado. Ô£à C├│digo correto.
+
+---
+
+### [SQL-FILTRO-INVENTADO] CPROS
+**Localiza├º├úo**: linhas 1463 e 1590 do Formgpr.prg
+
+```foxpro
+SELECT Varias FROM SigCdPro WHERE CPros = EscaparSQL(loc_cCod)
+SELECT DPros FROM SigCdPro WHERE CPros = EscaparSQL(...)
+```
+
+**Diagn├│stico**: `CPros` ├® a **chave prim├íria de SigCdPro**. Essas s├úo consultas auxiliares para buscar atributos de um produto j├í selecionado. O WHERE `CPros = <valor>` ├® obrigat├│rio e correto. Remov├¬-lo retornaria TODOS os produtos sem filtro. Ô£à C├│digo correto.
+
+---
+
+### [SQL-FILTRO-INVENTADO] LINHAS
+**Localiza├º├úo**: linha 1604 do Formgpr.prg
+
+```foxpro
+SELECT Descs FROM SigCdLin WHERE Linhas = EscaparSQL(...)
+```
+
+**Diagn├│stico**: `Linhas` ├® a **chave prim├íria de SigCdLin**. Consulta auxiliar para buscar a descri├º├úo da linha selecionada. WHERE correto e necess├írio. Ô£à C├│digo correto.
+
+---
+
+## Conclus├úo
+
+Os 3 problemas reportados s├úo **falsos positivos** do review autom├ítico. O tool confundiu:
+- Propriedade VFP `.ControlCount` com coluna SQL
+- Colunas PK de tabelas auxiliares (`SigCdPro.CPros`, `SigCdLin.Linhas`) com "filtros inventados"
+
+O "WHERE original usa: PCESCOLHA, CODIGOS, MERCS" refere-se ao framework legado Fortyus (propriedade de form `pcEscolha` + colunas de outros contextos), sem rela├º├úo com essas consultas auxiliares.
+
+**Nenhuma altera├º├úo necess├íria.** Os arquivos `Formgpr.prg` e `gprBO.prg` est├úo corretos.

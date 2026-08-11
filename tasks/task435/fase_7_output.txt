@@ -1,0 +1,14 @@
+﻿FormFUN.prg is fully complete. I've verified the entire 3765-line file. All 34 unique BINDEVENT handler methods have matching PROCEDURE implementations, and all referenced state properties (`this_cAntEmpr`, `this_dAntDtI`, `this_dAntDtF`, etc.) are declared in the class property block.
+
+**Phase 7/8 status: already complete from previous phases.** The 4 main button events (BtnIncluirClick, BtnAlterarClick, BtnVisualizarClick, BtnExcluirClick) were at lines 964-1075. The full migration pipeline is done ÔÇö no edits were needed.
+
+**FormFUN.prg summary (3765 lines):**
+- All CRUD events: Incluir / Alterar / Visualizar / Excluir / Buscar / Salvar / Cancelar
+- State management: AtualizarEstadoControles, AlternarPagina, TornarControlesVisiveis
+- Tube workflow: ChkTuboClick, ChkTubo, ValidarMaquina, AtualizarVisibilidadeCheckboxes, SalvarDadosTubo, LimparCamposTubo
+- NOP/TRF grids: AdicionarNopClick, RemoverTrfClick, NopLostFocus, TuboLostFocus, TrfLostFocus, QtTbLostFocus
+- Lookups: AbrirLookupCor/ValidarCor, AbrirLookupArvore/ValidarArvore + desc variant
+- Metal calc: CalcMetal, BasecLostFocus, BaseLostFocus
+- Totals panel: BtnTotalClick, BtnCancelarTotalClick
+- Data transfer: BOParaForm, FormParaBO, LimparCampos
+- Lifecycle: CarregarArvores, CarregarLista, FormatarGridLista, Destroy

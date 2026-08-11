@@ -1,0 +1,10 @@
+﻿Balanced: 40 PROCEDURE / 40 ENDPROC.
+
+Fase 8 complete. Added 4 missing methods to `FormFct.prg` (before ENDDEFINE):
+
+- **`FormParaBO()`** ÔÇö Consolidates positioning of `crFichaCab`/`crFichaTec` cursors (ControlSource already does two-way binding; controls are cursor-bound).
+- **`BOParaForm()`** ÔÇö Refreshes bound OptionGroups (`opt_4c_NChkDims/Tems/Pess/Imps`), CheckBox (`chk_4c_NFixFigs`) and the detail grid (`grd_4c_Fichas`).
+- **`LimparCampos()`** ÔÇö ZAPs `crFichaCab`/`crFichaTec`, closes floating `cnt_4c_CopiarAcesso` panel, clears `img_4c_FigTec`.
+- **`AjustarBotoesPorModo(par_cModo)`** ÔÇö Sets `cmd_4c_ApagarLinha`/`cmd_4c_CopiaFicha`/`cmd_4c_Figura` visibility based on mode (only ALTERAR shows edit buttons), sets grid `ReadOnly` for VISUALIZAR/EXCLUIR, and delegates to `HabilitarCampos()`.
+
+All methods use `TRY/CATCH TO loc_oErro` with `MsgErro`, declare `LOCAL loc_lResultado` (initialized `.F.`), and `RETURN` outside the TRY block per the "NEVER RETURN inside TRY/CATCH" rule. Existing methods (BtnBuscarClick, BtnEncerrarClick, BtnCancelarClick, HabilitarCampos, CarregarLista) already implemented in prior phases ÔÇö kept as-is. The file remains balanced (40 PROCEDURE / 40 ENDPROC, 1971 lines).

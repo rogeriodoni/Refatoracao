@@ -1,0 +1,20 @@
+﻿Arquivo completo e correto. Fase 2 conclu├¡da.
+
+**O que foi adicionado ao ICOBO.prg:**
+
+| M├®todo | Responsabilidade |
+|--------|-----------------|
+| `ObterChavePrimaria()` | Retorna `this_cCarqIcones` (PK da tabela SigSyIco) |
+| `CarregarDoCursor(alias)` | Mapeia carqicones, marqicones e ctmpicones do cursor para propriedades do BO |
+| `CarregarIcones(dirTemp)` | SQLEXEC de SigSyIco ÔåÆ cursor tempor├írio ÔåÆ SCAN para extrair bin├írios via STRTOFILE para arquivos `.ico` no diret├│rio temp ÔåÆ popula crTmpcdico com ├¡ndice carqicones |
+| `Inserir()` | INSERT parameterizado `?loc_cNome, ?loc_mConteudo` + auditoria |
+| `Atualizar()` | UPDATE parameterizado do marqicones + auditoria |
+| `ExecutarExclusao()` (PROTECTED) | DELETE do SQL Server + auditoria; chamado via `Excluir()` herdado do BusinessBase |
+| `VerificarUsoIcone(nome)` | `SELECT COUNT(*) FROM SigCdPrg WHERE barrapict = ?` ÔÇö replica o `ChkRegister('SigCdPrg','barrapict',...)` do legado |
+
+**Pontos t├®cnicos importantes:**
+- Binary/MEMO passado via `?varname` no SQLEXEC (VFP9 ODBC trata MEMO como LONGVARBINARY)
+- CREATE CURSOR com `SET NULL ON/OFF` para receber dados NULLABLE do SQL Server
+- `SELECT crTmpcdico` antes de `APPEND BLANK` garante work area correta (regra de APPEND FROM)
+- Vari├íveis do SCAN declaradas antes do loop (evita redeclara├º├úo por itera├º├úo)
+- CATCH nunca silencioso ÔÇö todos exibem Message + LineNo + Procedure

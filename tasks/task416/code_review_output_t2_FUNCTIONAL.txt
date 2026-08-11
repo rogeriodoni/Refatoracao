@@ -1,0 +1,17 @@
+﻿As duas corre├º├Áes foram aplicadas com sucesso. Resumo do que foi feito:
+
+**Corre├º├Áes aplicadas em `FormFea.prg`:**
+
+1. **Headers do `grd_4c_Lista`** (linha 1005-1009): Corrigidos 3 captions para corresponder ao legado via `fCarregaGrade/pColuna`:
+   - `"C├│d."` ÔåÆ `"C├│digo"` (abrevia├º├úo inventada ÔåÆ nome completo do legado)
+   - `"Data Encerramento"` ÔåÆ `"Data Final"` (nome inventado ÔåÆ nome legado)
+   - `"Data In├¡cio"` ÔåÆ `"Data Inicial"` (nome incompleto ÔåÆ nome legado)
+
+2. **`AjustarBotoesPorModo()`** (linha 1258): Removida atribui├º├úo `loc_lResultado = .F.` ÔÇö vari├ível n├úo declarada como `LOCAL` neste m├®todo e nunca utilizada, o que criava vari├ível PRIVATE desnecess├íria com risco de shadow em callers.
+
+**Problemas verificados como falsos positivos (sem altera├º├úo necess├íria):**
+- `TornarControlesVisiveis()`: INLIST em linha 917 j├í protege `CNT_4C_RESULTADO` e `CNT_4C_CONVERSAO` (ambos com `Visible=.F.`)
+- `ProcessarBalanco`: Definido na linha 1881
+- `ImprimirBalanco`: Definido na linha 5233
+- `GRID-WITH`: Falso positivo ÔÇö `txt_4c_Data` ├® TextBox, n├úo Grid
+- `LAYOUT-POSITION`: Erros de mapeamento do validador (compara controles de contextos diferentes)

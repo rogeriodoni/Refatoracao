@@ -1,0 +1,14 @@
+﻿Corre├º├Áes aplicadas em EVEBO.prg. Resumo do que foi feito e por qu├¬:
+
+**PKCHAVES (corrigido):** `pkChaves` n├úo existe em `SigCdEve` ÔÇö o original s├│ seleciona `Codigo` da tabela. Removido de:
+- Declara├º├úo de propriedade
+- `this_cCampoChave = "Codigo"` (era `"pkChaves"`)
+- `ObterChavePrimaria()` ÔåÆ agora retorna `this_cCodigo`
+- `CarregarDoCursor()` ÔåÆ removida linha `this_cPkChaves = TratarNulo(pkChaves...)`
+- `Inserir()` ÔåÆ removida gera├º├úo do SYS(2015) e `pkChaves` do INSERT
+- `Atualizar()` ÔåÆ `WHERE Codigo = ...` (era `WHERE pkChaves = ...`)
+- `ExecutarExclusao()` ÔåÆ `WHERE Codigo = ...`
+- `Buscar()` ÔåÆ removido `pkChaves` do CREATE CURSOR e do SELECT
+- `CarregarPorCodigo()` ÔåÆ removido `pkChaves` do SELECT
+
+**CODIGOS e ICLIS (falsos positivos ÔÇö n├úo alterados):** `WHERE Codigos = ...` opera em `SigCdGcr` (PK real da tabela) e `WHERE Iclis = ...` opera em `SigCdCli` (PK real). O validador comparou incorretamente com o WHERE de `SigCdEve`. Ambos os `mAddColuna()` no form confirmam que as colunas existem no cursor retornado.

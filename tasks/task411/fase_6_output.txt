@@ -1,0 +1,11 @@
+﻿O arquivo est├í correto. Todos os m├®todos t├¬m `ENDPROC` e o arquivo termina com `ENDDEFINE`. 
+
+**Fase 6 conclu├¡da.** O FormFap.prg foi atualizado com:
+
+- **5 pares de BINDEVENTs** adicionados em `ConfigurarPaginaDados()` para KeyPress e DblClick nos campos: `txt_4c_CdGrupo`, `txt_4c_CdConta`, `txt_4c_ifor`, `txt_4c_tpmat`, `txt_4c_dfor`
+
+- **15 novos m├®todos** antes do `Destroy`:
+  - Handlers PUBLIC: `CdGrupoKeyPress`, `CdGrupoDblClick`, `CdContaKeyPress`, `CdContaDblClick`, `IforKeyPress`, `IforDblClick`, `TpmatKeyPress`, `TpmatDblClick`, `DforKeyPress`, `DforDblClick`
+  - Pickers completos: `AbrirLookupGrupo`, `AbrirLookupConta`, `AbrirLookupIfor`, `AbrirLookupTpmat`, `AbrirLookupDfor`
+
+Cada `AbrirLookupXxx()` tem implementa├º├úo completa: guard de modo, SQLEXEC, `FormBuscaAuxiliar` com `mAddColuna`, `Show()`, verifica├º├úo de `this_lSelecionou`, preenchimento de campos e cleanup de cursores.

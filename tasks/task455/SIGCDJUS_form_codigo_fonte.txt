@@ -1,0 +1,356 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGCDJUS.SCX
+* Data/Hora: 11/08/2026 00:07:22
+* Total de registros: 8
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDJUS
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_Descr
+  Parent: SIGCDJUS.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say7
+  Parent: SIGCDJUS.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_codigo
+  Parent: SIGCDJUS.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGCDJUS.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 118
+  Left = 63
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDJUS
+------------------------------------------------------------
+  DoCreate = .T.
+  Caption = "Cadastro de Justificativas"
+  oform = .NULL.
+  pretrab = 
+  _memberdata = <VFPData><memberdata name="oform" type="property" display="oForm"/><memberdata name="pdopes" type="property" display="pDopes"/></VFPData>
+  Name = "SIGCDJUS"
+  Pagina.ErasePage = .T.
+  Pagina.Lista.cntSombra.lblSombra.Name = "lblSombra"
+  Pagina.Lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  Pagina.Lista.cntSombra.Name = "cntSombra"
+  Pagina.Lista.Grade.FontName = "Tahoma"
+  Pagina.Lista.Grade.ForeColor = 90,90,90
+  Pagina.Lista.Grade.Name = "Grade"
+  Pagina.Lista.Grupo_op.Inserir.Top = 5
+  Pagina.Lista.Grupo_op.Inserir.Left = 5
+  Pagina.Lista.Grupo_op.Inserir.Name = "Inserir"
+  Pagina.Lista.Grupo_op.Consultar.Top = 5
+  Pagina.Lista.Grupo_op.Consultar.Left = 80
+  Pagina.Lista.Grupo_op.Consultar.Name = "Consultar"
+  Pagina.Lista.Grupo_op.Alterar.Top = 5
+  Pagina.Lista.Grupo_op.Alterar.Left = 155
+  Pagina.Lista.Grupo_op.Alterar.Name = "Alterar"
+  Pagina.Lista.Grupo_op.Excluir.Top = 5
+  Pagina.Lista.Grupo_op.Excluir.Left = 230
+  Pagina.Lista.Grupo_op.Excluir.Name = "Excluir"
+  Pagina.Lista.Grupo_op.procurar.Top = 5
+  Pagina.Lista.Grupo_op.procurar.Left = 305
+  Pagina.Lista.Grupo_op.procurar.Name = "procurar"
+  Pagina.Lista.Grupo_op.Left = 307
+  Pagina.Lista.Grupo_op.Top = -1
+  Pagina.Lista.Grupo_op.Name = "Grupo_op"
+  Pagina.Lista.Grupo_Saida.SAIR.Top = 5
+  Pagina.Lista.Grupo_Saida.SAIR.Left = 5
+  Pagina.Lista.Grupo_Saida.SAIR.Name = "SAIR"
+  Pagina.Lista.Grupo_Saida.Left = 708
+  Pagina.Lista.Grupo_Saida.Top = -1
+  Pagina.Lista.Grupo_Saida.Name = "Grupo_Saida"
+  Pagina.Lista.cntFiltros.Top = 49
+  Pagina.Lista.cntFiltros.Left = 155
+  Pagina.Lista.cntFiltros.Name = "cntFiltros"
+  Pagina.Lista.Name = "Lista"
+  Pagina.Dados.Grupo_Salva.Salva.Top = 5
+  Pagina.Dados.Grupo_Salva.Salva.Left = 5
+  Pagina.Dados.Grupo_Salva.Salva.Name = "Salva"
+  Pagina.Dados.Grupo_Salva.Cancelar.Top = 5
+  Pagina.Dados.Grupo_Salva.Cancelar.Left = 80
+  Pagina.Dados.Grupo_Salva.Cancelar.Name = "Cancelar"
+  Pagina.Dados.Grupo_Salva.Left = 619
+  Pagina.Dados.Grupo_Salva.Top = 13
+  Pagina.Dados.Grupo_Salva.ZOrderSet = 1
+  Pagina.Dados.Grupo_Salva.Name = "Grupo_Salva"
+  Pagina.Dados.Name = "Dados"
+  Pagina.Name = "Pagina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDJUS.Pagina.Dados.get_Descr
+------------------------------------------------------------
+  ControlSource = "CrSigPrJst.Descrs"
+  Height = 25
+  Left = 215
+  MaxLength = 30
+  TabIndex = 2
+  Top = 112
+  Width = 220
+  ForeColor = 0,0,0
+  ZOrderSet = 7
+  Name = "get_Descr"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDJUS.Pagina.Dados.Say7
+------------------------------------------------------------
+  Caption = "Código : "
+  Left = 161
+  Top = 89
+  TabIndex = 5
+  ZOrderSet = 14
+  Name = "Say7"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDJUS.Pagina.Dados.Get_codigo
+------------------------------------------------------------
+  ControlSource = "CrSigPrJst.Cods"
+  Format = "K!"
+  Height = 23
+  InputMask = ""
+  Left = 215
+  MaxLength = 3
+  TabIndex = 1
+  Top = 86
+  Width = 31
+  ForeColor = 0,0,0
+  Name = "Get_codigo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDJUS.Pagina.Dados.Say2
+------------------------------------------------------------
+  Caption = "Descrição : "
+  Height = 15
+  Left = 148
+  Top = 117
+  Width = 58
+  TabIndex = 3
+  ZOrderSet = 4
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDJUS
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.oForm.Enabled = .t.
+DoDefault()
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_procurar
+------------------------------------------------------------
+PROCEDURE msv_procurar
+lcCod = ThisForm.Pagina.Dados.Get_codigo.Value
+Select CrSigPrJst
+Locate For Cods  = lcCod
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LPARAMETERS pForm, pRetrab
+
+ThisForm.oForm = pForm
+ThisForm.pRetrab = pRetrab
+ThisForm.oForm.Enabled = .f.
+
+ThisForm.Caption = 'Cadastro de Justificativas do Retrabalho ' + Proper(ThisForm.pRetrab)
+
+With ThisForm
+	ThisForm.Refresh
+	ThisForm.Draw
+	ThisForm.Show
+	.poDatamgr = CreateObject('fSqlConector')
+	With .poDatamgr
+		lcSql = [Select * From SigPrJst Where cRetrabs = ']+ThisForm.pRetrab+[']
+		.AddCursor('SigPrJst','CidChaves','CrSigPrJst',' ',ThisForm.pagina.lista.grade,lcSql)
+		.pfSqlTabela(1).pColuna('Cods','','','Código',80,.t.)
+		.pfSqlTabela(1).pColuna('Descrs','','','Descrição',300,.f.)
+	EndWith
+	= DoDefault()
+	.LockScreen = .f.
+EndWith
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Lista.Grupo_op.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Lista.Grupo_op.Click
+LPARAMETERS opcao
+
+If !dodefault( opcao )
+	ThisForm.mAtivapagina1
+	Return
+Endif
+
+If Inlist(thisform.pcEscolha,'INSERIR','PROCURAR')
+	ThisForm.Pagina.Dados.Get_codigo.SetFocus
+Else
+	If Inlist(thisform.pcEscolha,'ALTERAR')
+		ThisForm.Pagina.Dados.Get_Descr.SetFocus
+	Else
+		Thisform.Pagina.Dados.Grupo_salva.Salva.setfocus
+	EndIf
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+If Inlist( Thisform.pcEscolha,'INSERIR')
+	If IsEmpty( Thisform.Pagina.Dados.Get_codigo.Value)
+		=messagebox('Código Invalido!!!',0+64,'Atenção!')
+		Thisform.Pagina.Dados.Get_codigo.setfocus
+		Return
+	EndIf
+EndIf
+If Inlist( Thisform.pcEscolha,'INSERIR','ALTERAR')
+	lcCod = ThisForm.Pagina.Dados.Get_codigo.value
+	lcSql = [Select * From SigPrJst Where Cods = ']+lcCod+[' ]
+	If ThisForm.Podatamgr.Sqlexecute(lcsql,'TmpJust') > 0 And ;
+		Reccount('TmpJust') > 0 And Inlist( Thisform.pcEscolha,'INSERIR')
+		Messagebox( 'Justificativa já cadastrada para o Retrabalho '+TmpJust.cRetrabs, 48, '' )
+		ThisForm.Pagina.Dados.Get_codigo.SetFocus
+		Return
+	Endif
+	Replace cRetrabs  With ThisForm.pRetrab,;
+			CidChaves With Iif(Empty(CidChaves),fUniqueIds(),CidChaves) in CrSigPrJst
+Endif
+=DoDefault()
+ThisForm.mAtivapagina1
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+=DoDefault()
+If ThisForm.plCancelar
+	ThisForm.mAtivapagina1
+Endif
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDJUS.Pagina.Dados.get_Descr
+* Classe: fwget (Base: textbox)
+* Registro: 4
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+llRet = InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')
+Return(llRet)
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDJUS.Pagina.Dados.Get_codigo
+* Classe: fwget (Base: textbox)
+* Registro: 6
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+llRet = InList(ThisForm.pcEscolha, 'INSERIR', 'PROCURAR')
+Return(llRet)
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGCDJUS
+RESERVED3 (ClassInfo): oform
+podatamg2
+pretrab
+_memberdata XML Metadata for customizable properties
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 8
+================================================================================

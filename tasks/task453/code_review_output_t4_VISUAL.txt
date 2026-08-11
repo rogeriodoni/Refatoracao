@@ -1,0 +1,46 @@
+﻿A an├ílise est├í completa. Aqui est├í minha conclus├úo fundamentada com rastreamento de cada problema:
+
+---
+
+## Resultado da An├ílise: Todos os 41 problemas s├úo falsos positivos do validador
+
+O validador cometeu um erro sistem├ítico de **correspond├¬ncia por nome sem respeitar hierarquia de container**. Ele procurou controles pelo nome gen├®rico (ex: `Label5` ÔåÆ qualquer `lbl_4c_Label5` no form inteiro), ignorando em qual container cada um reside.
+
+### Exemplos verificados no c├│digo:
+
+**Cnt_Custo2 ÔÇö Label5 (original Top=92, Left=231):**
+- Controle REAL no container correto: `lbl_4c_label52` em `cnt_4c__Custo2` ÔåÆ `Top=92, Left=231` Ô£à (posi├º├úo id├¬ntica ao original)
+- Controle que o validador achou: `lbl_4c_Label5` em `cnt_4c__CCusto1` ÔåÆ Top=149, Left=171 (outro container, caption "C. Custo2 :", alinhado ao seu campo `txt_4c_CCusto2`)
+
+**CntTratOcor ÔÇö Label5 (original Top=46, Left=294):**
+- Controle REAL: `lbl_4c_label53` em `cnt_4c_TratOcor` ÔåÆ `Top=46, Left=294` Ô£à
+- Validador achou: `lbl_4c_Label5` em `cnt_4c__CCusto1` (container errado)
+
+**CntTratOcor ÔÇö Label4 (original Top=68, Left=317):**
+- Controle REAL: `lbl_4c_label43` em `cnt_4c_TratOcor` ÔåÆ `Top=68, Left=317` Ô£à
+- Validador achou: `lbl_4c_label46` em `cnt_4c__Procurar` (container errado)
+
+**Cnt_CCusto1 ÔÇö Label7 (original Top=174, Left=201):**
+- Controle REAL: `lbl_4c_Label7` em `cnt_4c__CCusto1` ÔåÆ `Top=174, Left=201` Ô£à
+- Validador achou: `lbl_4c_label72` em `cnt_4c_TratOcor` ÔÇö `Top=123` (container errado)
+
+**CntTratOcor ÔÇö Cancela (original Top=43):**
+- Controle REAL: `cmd_4c_TOCancela` em `cnt_4c_TratOcor` ÔåÆ `Top=45` Ô£à (diff=2px, dentro da toler├óncia)
+- Validador achou: `cmd_4c_BNCancela` em `cnt_4c__Custo2` ÔåÆ `Top=5` (container errado, apenas cont├®m "Cancela" no nome)
+
+### Padr├úo do erro do validador
+
+O validador usa matching por **substring do nome** (`Label5` ÔåÆ `lbl_4c_Label5`, `Label4` ÔåÆ `lbl_4c_label4*`, `Cancela` ÔåÆ `cmd_4c_*Cancela*`) no escopo **global do form**, n├úo dentro do container pai correto. As labels gen├®ricas (`Label1`ÔÇô`Label7`) usam sufixos num├®ricos (`lbl_4c_label52`, `lbl_4c_label43`, etc.) para evitar conflito de nomes entre containers irm├úos ÔÇö estrat├®gia correta em VFP9.
+
+### Verifica├º├úo de alinhamento de bot├Áes (conforme INSTRUCOES)
+
+Todos os grupos horizontais de bot├Áes t├¬m `Top` consistente:
+- `cnt_4c_Botoes` (Page1): todos Top=5 Ô£à
+- `cnt_4c_BotoesAcao` (Page2): todos Top=5 Ô£à
+- `cnt_4c__CCusto1` buttons: todos Top=5 Ô£à
+- `cnt_4c__Custo2`: BNCancela+BNSair Top=5 Ô£à
+- `cnt_4c_TratOcor`: TOCancela+BtnTratOcor Top=45 Ô£à
+- `cnt_4c_BaixaAuto`: BACancela+OkBaixaAuto Top=45 Ô£à
+- `cnt_4c__Inserir`: CntInsere+CntSairIns Top=21 Ô£à
+
+Nenhuma altera├º├úo foi feita no arquivo. Aplicar as "corre├º├Áes" listadas moveria controles para fora do alinhamento com seus respectivos campos ÔÇö quebraria o layout ao inv├®s de consert├í-lo.

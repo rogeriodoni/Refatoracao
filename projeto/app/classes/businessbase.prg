@@ -266,6 +266,9 @@ DEFINE CLASS BusinessBase AS Custom
                    EscaparSQL(loc_cChave) + ", " + ;
                    EscaparSQL(IIF(TYPE("gc_4c_UsuarioLogado") = "C", gc_4c_UsuarioLogado, "SISTEMA")) + ", GETDATE())"
 
+        IF TYPE("gnConnHandle") != "N" OR gnConnHandle <= 0
+            RETURN .F.
+        ENDIF
         SQLEXEC(gnConnHandle, loc_cSQL)
         RETURN .T.
     ENDPROC

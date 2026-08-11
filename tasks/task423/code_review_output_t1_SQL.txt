@@ -1,0 +1,15 @@
+﻿Encontrei o contexto completo. No original do SCX, linha 336:
+
+```foxpro
+Replace cidChaves WITH fUniqueIds()
+```
+
+Isso confirma que **`cidchaves` ├® uma coluna REAL na tabela `SigOpFpb`** ÔÇö ela existe no banco de dados como PK gerada pelo framework via `fUniqueIds()`. O framework's `podatamgr.Update()` usa `cidchaves` internamente como PK para sincronizar o cursor com o banco.
+
+**Conclus├úo ap├│s verifica├º├úo**: O flag `SQL-FILTRO-INVENTADO` ├® **falso positivo**.
+
+- A coluna `cidchaves` existe em `SigOpFpb` (provado pelo `Replace cidChaves WITH fUniqueIds()` no SCX original, linha 336)
+- O `WHERE cidchaves = ...` no `Atualizar` e `ExecutarExclusao` ├® a tradu├º├úo arquitetural correta do `podatamgr.Update()` legado ÔÇö o data manager usava `cidchaves` como PK internamente para sincronizar registros
+- Remover o `WHERE cidchaves = ...` quebraria a funcionalidade: UPDATE/DELETE afetariam TODAS as linhas
+
+**Nenhuma altera├º├úo necess├íria.** O c├│digo migrado est├í correto ÔÇö `cidchaves` ├® PK real, validada pelo original.

@@ -1,0 +1,18 @@
+﻿O arquivo est├í completo e correto. A Fase 6 foi implementada com sucesso.
+
+**O que foi adicionado:**
+
+**Em `ConfigurarPaginaDados()`** (campos restantes):
+- `lbl_4c_Label3` + `opt_4c_Opc_fixo` ÔÇö "Fixo: Sim/N├úo" (OptionGroup com 2 bot├Áes, default=N├úo)
+- `lbl_4c_Label4` + `txt_4c_Vincs` ÔÇö "Vinculado (S/N)" com valida├º├úo LostFocus
+- `lbl_4c_Label5` + `txt_4c_CodRelGer` + `txt_4c_DesRelGer` ÔÇö "Relat├│rio Gerencial" com lookup em SigFiRlg
+- BINDEVENTs: `LostFocus` e `KeyPress` (F4) para os campos de lookup
+
+**Novos m├®todos:**
+- `ValidarVincs()` ÔÇö valida S/N ao sair do campo
+- `CodRelGerKeyPress` / `DesRelGerKeyPress` ÔÇö abrem picker via F4
+- `CodRelGerLostFocus` ÔÇö busca SigFiRlg por Ordems, abre picker se n├úo encontrado
+- `DesRelGerLostFocus` ÔÇö busca SigFiRlg por Descrs (s├│ quando CodRelGer=0, replicando o `When` original)
+- `AbrirLookupRelGerPorCodigo` / `AbrirLookupRelGerPorDescricao` ÔÇö pickers completos usando FormBuscaAuxiliar (Modo 2 com cursor local)
+- `AtualizarEstadoDesRelGer` ÔÇö desabilita `txt_4c_DesRelGer` quando `txt_4c_CodRelGer` tem valor (replicando o `When` original)
+- `BOParaForm` atualizado para chamar `AtualizarEstadoDesRelGer` ap├│s carregar registro

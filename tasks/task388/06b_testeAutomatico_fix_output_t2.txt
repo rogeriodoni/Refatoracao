@@ -1,0 +1,6 @@
+﻿Dois fixes aplicados em `FormCTA.prg`:
+
+- **Linha 4282** (`MostrarSubPagina`): `loc_oPagina.Controls(loc_aNomes[loc_nIdx])` ÔåÆ `loc_oPagina.(loc_aNomes[loc_nIdx])`
+- **Linha 5205** (`HabilitarCampos`): `loc_oPg2.Controls(loc_aSubPags[loc_i])` ÔåÆ `loc_oPg2.(loc_aSubPags[loc_i])`
+
+**Causa raiz**: Em VFP9, `Controls(string)` n├úo ├® suportado para acesso por nome em Page objects ÔÇö gera "Function argument value, type, or count is invalid". A sintaxe correta para acesso din├ómico por nome em VFP9 ├® `object.(cNome)`.

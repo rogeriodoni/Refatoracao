@@ -1,0 +1,16 @@
+﻿**Falso positivo confirmado.** N├úo h├í nenhuma cl├íusula `WHERE` SQL com a coluna `CONTROLCOUNT` nos arquivos.
+
+As ├║nicas ocorr├¬ncias de "ControlCount" s├úo nas linhas 805 e 818 do `FormICO.prg`, dentro do m├®todo `TornarControlesVisiveis`:
+
+```foxpro
+FOR loc_i = 1 TO par_oContainer.ControlCount          && linha 805
+IF PEMSTATUS(loc_oControl, "ControlCount", 5) AND loc_oControl.ControlCount > 0   && linha 818
+```
+
+Isso ├® acesso ├á **propriedade VFP `ControlCount`** de um objeto de formul├írio (n├║mero de controles filho num container) ÔÇö n├úo tem rela├º├úo com SQL. O detector de pass confundiu a propriedade VFP com um nome de coluna SQL.
+
+Todas as cl├íusulas WHERE SQL nos arquivos est├úo corretas:
+- `WHERE barrapict = ?loc_cNome` ÔÇö em `VerificarUsoIcone` (ICOBO.prg) Ô£ô
+- `WHERE carqicones = ?loc_cNome` ÔÇö em `ExecutarExclusao` e `Atualizar` (ICOBO.prg) Ô£ô
+
+**Nenhuma altera├º├úo necess├íria.** O c├│digo est├í correto para este pass.

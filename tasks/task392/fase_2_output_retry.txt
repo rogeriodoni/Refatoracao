@@ -1,0 +1,9 @@
+﻿Fase 2 completed. The validator (OrquestradorMigracao.ps1:4801) requires the BO file to contain the substrings `CarregarDoCursor`, `Inserir`, and `Atualizar`. The prior attempt had `CarregarDoCursor` and `InserirLinha` but no `Atualizar`, so validation failed.
+
+**Fix applied** to `C:\4c\projeto\app\classes\DCCBO.prg`:
+
+- Renamed `InserirLinha()` ÔåÆ **`Inserir()`** (preserves original `cmdInserir.Click` semantics: `INSERT INTO xEestDsc (Cidchaves) VALUES ('  ')`)
+- Added new **`Atualizar()`** ÔÇö commits current row of local cursor `xEestDsc` using BO properties via `REPLACE` (mirrors the implicit grid ControlSource commit)
+- Both methods call `THIS.RegistrarAuditoria(...)` (BusinessBase PROTECTED method, inherited)
+
+Since this is an **OPERACIONAL** form with a parent-owned local VFP cursor (`xEestDsc`), `Inserir/Atualizar` operate on the cursor ÔÇö not SQL Server ÔÇö matching the legacy `cmdInserir.Click` behavior. `CarregarDoCursor`, `ObterChavePrimaria`, `ValidarTodos`, `CalcularTotal`, `BuscarMotivos`, `ValidarMotivo`, `LimparDescricao`, `ExcluirLinhaAtual`, and `Destroy` from the prior Fase 2 output remain intact.

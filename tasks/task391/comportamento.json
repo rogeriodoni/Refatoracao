@@ -1,0 +1,444 @@
+{
+  "resumo": {
+    "totalMetodos": 26,
+    "metodosComSQL": 7,
+    "metodosComValidacao": 11,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fCarregaGrade", "fConfigGeral", "fChecaAcesso", "fUniqueIds", "fwBuscaSel", "fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDCVI",
+      "evento": "Procedure",
+      "linhas": 20,
+      "codigoOriginal": "Private pMsI, pMsF, pAnI, pAnF\n\npMsI = Padl(Alltrim(ThisForm.Pagina.Lista.cntFiltro.getMess.Value), 2, '0')\npMsF = Iif(pMsI=[00], [12], pMsI)\npAnI = Padl(Alltrim(ThisForm.Pagina.Lista.cntFiltro.getAnos.Value), 4, '0')\npAnF = Iif(pAnI=[0000], [9999], pAnI)\n\nIf Not InList(Lastkey(), 5, 19, 27, 15)\n\tThisForm.LockScreen = .t.\n\n\tThisForm.poDataMgr.Requery('crSigCcCmV')\n\tGo Bottom In crSigCcCmV\n\n\t=fCarregaGrade(ThisForm.Pagina.Lista.Grade)\n\n\tThisForm.LockScreen = .f.\n\n\tThisForm.Pagina.Refresh\nEndIf\n* ... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fCarregaGrade",
+        "metodosFormChamados": "Requery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCVI",
+      "evento": "Procedure",
+      "linhas": 7,
+      "codigoOriginal": "loDad = ThisForm.Pagina.Dados\n\nSelect crSigCcCmV\nIf Not Empty(loDad.getUsuars.Value)\n\tLocate For Usuars = loDad.getUsuars.Value\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCVI",
+      "evento": "Procedure",
+      "linhas": 9,
+      "codigoOriginal": "Private pMsI, pMsF, pAnI, pAnF\n\npMsI = Padl(Alltrim(ThisForm.Pagina.Lista.cntFiltro.getMess.Value), 2, '0')\npMsF = Iif(pMsI=[00], [12], pMsI)\npAnI = Padl(Alltrim(ThisForm.Pagina.Lista.cntFiltro.getAnos.Value), 4, '0')\npAnF = Iif(pAnI=[0000], [9999], pAnI)\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCVI",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "=fConfigGeral()\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCVI",
+      "evento": "Init",
+      "linhas": 48,
+      "codigoOriginal": "Private pMsI, pMsF, pAnI, pAnF\nSet Step On \nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\t.poDataFP2 = CreateObject('fSqlConector', 'SigCcCMV_FOPAGV')\n\n\tpMsI = Substr(Dtos(Date()), 5, 2)\n\tpMsF = Substr(Dtos(Date()), 5, 2)\n\tpAnI = Substr(Dtos(Date()), 1, 4)\n\tpAnF = Substr(Dtos(Date()), 1, 4)\n\n\tlcQuery = [Select * From SigCcCmV Where Mess BetWeen ?pMsI And ?pMsF And Anos BetWeen ?pAnI And ?pAnF]\n\t\n\tIf (.poDataMgr.pnIdconn > 0) And (.poDataFP2.pnIdconn > 0)\n\t\tWith .poData... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso",
+        "metodosFormChamados": "SetAll",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDCVI",
+      "evento": "Click",
+      "linhas": 28,
+      "codigoOriginal": "LParameters lnOpcao\n\nIf (Type('lnOpcao') = 'N')\n\tThis.Value = lnOpcao\nEndIf\n\nSelect crSigCcCmV\n\nIf Not DoDefault(lnOpcao)\n\tThisForm.mAtivaPagina1\n\tReturn 0\nEndIf\n\nloDad = ThisForm.Pagina.Dados\n\nDo Case\n\tCase Inlist(ThisForm.pcEscolha, 'PROCURAR', 'INSERIR')\n\t\tloDad.getUsuars.Setfocus\t\n\n\tCase (ThisForm.pcEscolha = 'ALTERAR')\n\t\tloDad.getIndivs.Setfocus\t\n\n\tCase Inlist(ThisForm.pcEscolha, 'CONSULTAR', 'EXCLUIR')\n\t\tloDad.Grupo_Salva.Salva.Setfocus\nEndCase\n\nloDad.Refresh\n* Fim ************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCVI",
+      "evento": "Click",
+      "linhas": 141,
+      "codigoOriginal": "loDad = ThisForm.Pagina.Dados\n\nIf Empty(crSigCcCmv.cIdChaves)\n\tReplace cIdChaves With fUniqueIds() In crSigCcCmv\nEndIf\n\nIf InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')\n\t* Checando Campos Obrigatórios a Todos os Cargos\n\tIf Empty(loDad.getUsuars.Value)\n\t\t=MessageBox('Obrigatório Informar o Usuário!!!', 48, '')\n\t\tloDad.getUsuars.SetFocus\n\t\tReturn 0\n\tEndIf\n\n\tIf Empty(loDad.getMess.Value)\n\t\t=MessageBox('Obrigatório Informar o Mes de Referência!!!', 48, '')\n\t\tloDad.getMess.SetFocus\n\t\tReturn 0\n\tEnd... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "CursorQuery,SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCVI",
+      "evento": "Click",
+      "linhas": 6,
+      "codigoOriginal": "=DoDefault()\n\nIf ThisForm.plCancelar\n\tThisForm.mAtivaPagina1\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCVI.pagina.lista.cntFiltro.getMess",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCVI.pagina.lista.cntFiltro.getMess",
+      "evento": "LostFocus",
+      "linhas": 4,
+      "codigoOriginal": "This.Value = Padl(Alltrim(This.Value), 2, '0')\nThis.Refresh\nThisForm.Pagina.Lista.cntFiltro.getAnos.SetFocus\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCVI.pagina.lista.cntFiltro.getAnos",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCVI.pagina.lista.cntFiltro.getAnos",
+      "evento": "LostFocus",
+      "linhas": 4,
+      "codigoOriginal": "This.Value = Padl(Alltrim(This.Value), 4, '0')\nThis.Refresh\nThisForm.PreparaDados\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCVI.pagina.lista.cmdCopia",
+      "evento": "Click",
+      "linhas": 22,
+      "codigoOriginal": "With ThisForm.Pagina.Lista\n\t.Grade.Enabled       = .f.\n\t.Grupo_Saida.Enabled = .f.\n\t.Grupo_op.Enabled    = .f.\n\t.cmdCopia.Enabled    = .f.\nEndWith \n\t\nThisForm.Pagina.Dados.Enabled = .f.\n\nWith This.Parent.cntCopia\n\t.Visible           = .t.\n\t.cmdOk.Enabled     = .t.\n\t.cmdCancel.Enabled = .t.\n\t.getOMess.Enabled  = .t.\n\t.getDMess.Enabled  = .t.\n\t.getOAnos.Enabled  = .t.\n\t.getDAnos.Enabled  = .t.\n\t.ZOrder\n\t.Refresh\n\t.getOMess.SetFocus\nEndWith\n* Fim ****************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCVI.pagina.lista.cntCopia.cmdOk",
+      "evento": "Click",
+      "linhas": 217,
+      "codigoOriginal": "Local lcThisRec, lcNewPros, lcLocPros, lCreated\n\nlcOMess = Padl(Alltrim(This.Parent.getOMess.Value), 2, '0')\nlcDMess = Padl(Alltrim(This.Parent.getDMess.Value), 2, '0')\nlcOAnos = Padl(Alltrim(This.Parent.getOAnos.Value), 4, '0')\nlcDAnos = Padl(Alltrim(This.Parent.getDAnos.Value), 4, '0')\nlcChave = crSigCcCmV.cIdChaves\n\nIf Empty(lcOMess)\n\t=MessageBox('Obrigatório Informar o Mes de Referência da Origem!!!', 48, '')\n\tThis.Parent.getOMess.SetFocus\n\tReturn 0\nEndIf\n\nIf Not (Int(Val(lcOMess)) > 0)\n\t=Me... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCVI.pagina.lista.cntCopia.cmdCancel",
+      "evento": "Click",
+      "linhas": 22,
+      "codigoOriginal": "With ThisForm.Pagina.Lista\n\t.Grade.Enabled \t\t = .t.\n\t.Grupo_Saida.Enabled = .t.\n\t.Grupo_op.Enabled    = .t.\n\t.cmdCopia.Enabled    = .t.\nEndWith\n\t\nThisForm.Pagina.Dados.Enabled = .t.\n\nWith This.Parent \n\t.Visible = .f.\n\t.cmdOk.Enabled = .f.\n\t.cmdCancel.Enabled = .f.\n\t.getOMess.Enabled = .f.\n\t.getDMess.Enabled = .f.\n\t.getOAnos.Enabled = .f.\n\t.getDAnos.Enabled = .f.\n\t.Refresh\nEndWith\nThisForm.Refresh\nThisForm.Pagina.Lista.Grade.SetFocus\n* Fim *********************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCVI.pagina.lista.cntCopia.getOMess",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCVI.pagina.lista.cntCopia.getOMess",
+      "evento": "Valid",
+      "linhas": 4,
+      "codigoOriginal": "If Not Empty(This.Value)\n\tThis.Value = Padl(Alltrim(This.Value), 2, '0')\nEndIf\n* Fim *********************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCVI.pagina.lista.cntCopia.getDMess",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCVI.pagina.lista.cntCopia.getDMess",
+      "evento": "Valid",
+      "linhas": 4,
+      "codigoOriginal": "If Not Empty(This.Value)\n\tThis.Value = Padl(Alltrim(This.Value), 2, '0')\nEndIf\n* Fim *********************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCVI.pagina.lista.cntCopia.getOAnos",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCVI.pagina.lista.cntCopia.getOAnos",
+      "evento": "Valid",
+      "linhas": 4,
+      "codigoOriginal": "If Not Empty(This.Value)\n\tThis.Value = Padl(Alltrim(This.Value), 4, '0')\nEndIf\n* Fim *********************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCVI.pagina.lista.cntCopia.getDAnos",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCVI.pagina.lista.cntCopia.getDAnos",
+      "evento": "Valid",
+      "linhas": 4,
+      "codigoOriginal": "If Not Empty(This.Value)\n\tThis.Value = Padl(Alltrim(This.Value), 4, '0')\nEndIf\n* Fim *********************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCVI.pagina.dados.getSupervs",
+      "evento": "Valid",
+      "linhas": 32,
+      "codigoOriginal": "If Not Empty(This.Value)\n\tlcQuery = [Select Distinct a.Usuars, b.NComps ] + ;\n\t\t\t    [From SigCcCmV a, SigCdUsu b ] + ;\n\t\t\t   [Where a.Indivs  = 'R' And ] + ;\n\t\t\t   \t\t [a.Supervs = Space(10) And ] + ;\n\t\t\t   \t\t [a.Setors  = Space(10) And ] + ;\n\t\t\t   \t\t [a.Usuars  = b.Usuarios ] + ;\n\t\t\t   [Order By a.Usuars]\n\n\tIf (ThisForm.poDataMgr.SqlExecute(lcQuery, 'LocalSupervs') < 1)\n\t\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (LocalSupervs)')\n\t\tReturn 0\n\tEndIf\n\tSelect LocalSuper... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCVI.pagina.dados.getSetors",
+      "evento": "Valid",
+      "linhas": 19,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdSet', ;\n\t\t\t\t\t\t   'crListaRemota', 'Setores', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Setores', '', 'Setor')\n\t\tloLista.mAddColuna('Descrs',  '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value = Iif(Lastkey()=27, '', crListaRemota.Setores)\n\tUse In crListaRemota\nElse\n\tThis.Value = ''\nEndIf\nThis.Refresh\n* Fim *********************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCVI.pagina.dados.getUsuars",
+      "evento": "Valid",
+      "linhas": 49,
+      "codigoOriginal": "Local loLista, loDad\n\nloDad = ThisForm.Pagina.Dados\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdUsu', ;\n\t\t\t\t\t\t   'crListaRemota', 'Usuarios', This.Value, 'Seleção', .t.,.f.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Usuarios', '', 'Usuário')\n\t\tloLista.mAddColuna('NComps',   '', 'Nome')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value = crListaRemota.Usuarios\n\tUse In crListaRemota\nEndIf\nThis.Refresh\n\nIf (Not Empty(This.Value) And Empty(loDa... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDCVI.Init",
+      "queryOriginal": "\tlcQuery = [Select * From SigCcCmV Where Mess BetWeen ?pMsI And ?pMsF And Anos BetWeen ?pAnI And ?pAnF]",
+      "tabelas": "SigCcCmV",
+      "colunas": "Mess,Anos",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCcCmV"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

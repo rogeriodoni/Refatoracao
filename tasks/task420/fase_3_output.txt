@@ -1,0 +1,16 @@
+﻿**Fase 3/8 conclu├¡da.** `C:\4c\projeto\app\forms\cadastros\Formfnl.prg` criado com 281 linhas.
+
+O arquivo cont├®m:
+
+| M├®todo | Status | Notas |
+|--------|--------|-------|
+| `Init()` | Ô£à | Apenas `RETURN DODEFAULT()` ÔÇö regra cr├¡tica |
+| `InicializarForm()` | Ô£à | Cria fnlBO, chama ConfigurarPageFrame, propaga Caption com CHR(231)+CHR(245) |
+| `ConfigurarPageFrame()` | Ô£à | PageFrame Top=-29, Tabs=.F., 2 p├íginas com Picture |
+| `ConfigurarPaginaLista()` | Ô£à | cnt_4c_Cabecalho (labels Sombra/Titulo), cnt_4c_Botoes (Left=542), cnt_4c_Saida (Left=917) ÔÇö todos com compensa├º├úo +29 |
+| `ConfigurarPaginaDados()` | Ô£à | cnt_4c_BotoesAcao (Top=33, Left=842) |
+| `CarregarLista()` | Ô£à | Chama `fnlBO.Buscar("")` com guard `gb_4c_ValidandoUI` |
+| `TornarControlesVisiveis()` | Ô£à | Recurs├úo completa com suporte a PageFrames |
+| `Destroy()` | Ô£à | Libera BO e chama DODEFAULT() |
+
+**Pr├│ximas fases:** Fase 4 adicionar├í `grd_4c_Lista` + bot├Áes CRUD em `cnt_4c_Botoes`/`cnt_4c_Saida`; Fases 5-6 adicionar├úo os campos em `ConfigurarPaginaDados()`.

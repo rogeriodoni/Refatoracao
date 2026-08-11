@@ -1,0 +1,8 @@
+﻿O arquivo j├í est├í corrigido. O m├®todo `TornarControlesVisiveis` nas linhas 1787-1799 j├í cont├®m o INLIST com ambos os containers:
+
+- `"CNT_4C_CABECALHO"` ÔÇö preserva Visible sem for├ºar `.T.`, mas processa filhos recursivamente
+- `"CNT_4C_COPIARACESSO"` ÔÇö mesma prote├º├úo
+
+O fluxo est├í correto: o INLIST faz o LOOP antes de `loc_oCtrl.Visible = .T.`, ent├úo nem `cnt_4c_Cabecalho` nem `cnt_4c_CopiarAcesso` ter├úo seu estado for├ºado. A recurs├úo pr├®via (linhas 1795-1797) ainda processa os filhos internos, garantindo que controles dentro desses containers fiquem vis├¡veis quando os containers forem exibidos.
+
+O ├║nico problema detectado no pass j├í est├í resolvido no arquivo atual ÔÇö nenhuma altera├º├úo necess├íria.

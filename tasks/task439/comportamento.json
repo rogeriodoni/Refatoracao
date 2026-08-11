@@ -1,0 +1,556 @@
+{
+  "resumo": {
+    "totalMetodos": 33,
+    "metodosComSQL": 11,
+    "metodosComValidacao": 15,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["File", "fGerUniqueKey", "fCanUniqueKey", "fAcessoMovmto", "fwBuscaExt", "fwBuscaSel"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDGPE",
+      "evento": "Init",
+      "linhas": 25,
+      "codigoOriginal": "LParameters lcAcesso\n\nWith Thisform\n\t.poDatamgr = CreateObject('fSqlConector',ThisForm.Name)\n\n\tIf Not (.poDatamgr.pnIdconn > 0)\n\t\tMessagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),'Erro')\n\t\tReturn(.f.)\n\tEndif\n\n\tWith .poDatamgr\n\t\t.AddCursor('SigCdGpe','DGOpes','crSigCdGpe','DGOpes',ThisForm.pagina.lista.grade)\n\t\t.pfSqlTabela(1).pColuna('DgOpes','','','Grupo Operacional',150,.t.)\n\t\t.AddCursor('SigCdGpo','CidChaves','crSigCdGpo','DGOpes',.F.)\n\t\t.AddCursor('SigCdPrg','pk... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGPE",
+      "evento": "Procedure",
+      "linhas": 25,
+      "codigoOriginal": "Local m.lnErro1\n\nm.lnErro1 = ThisForm.poDatamgr.pnIdConn\n\nWith ThisForm\n\tIf m.lnErro1>0 \n\t\tm.lnErro1 = Iif(.poDataMgr.UpDate('crSigCdGpe'),1,-1)\n\tEndIf \n\tIf m.lnErro1>0 \n\t\tm.lnErro1 = Iif(.poDataMgr.UpDate('crSigCdGpo'),1,-1)\n\tEndIf \n\tIf m.lnErro1>0 \n\t\tm.lnErro1 = Iif(.poDataMgr.UpDate('crSigCdPrg'),1,-1)\n\tEndIf \n\tIf m.lnErro1>0 \n\t\tm.lnErro1 = .poDataMgr.Commit()\n\tEndIf \n\tIf Not m.lnErro1>0 \n\t\t.poDataMgr.RollBack()\n\tEndIf \nEndWith \nIf Not m.lnErro1>0 \n\t= MessageBox('Erro na Gravação dos Dados do... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGPE",
+      "evento": "Procedure",
+      "linhas": 25,
+      "codigoOriginal": "Local m.lnErro1\n\nm.lnErro1 = ThisForm.poDatamgr.pnIdConn\n\nWith ThisForm\n\tIf m.lnErro1>0 \n\t\tm.lnErro1 = Iif(.poDataMgr.UpDate('crSigCdGpe'),1,-1)\n\tEndIf \n\tIf m.lnErro1>0 \n\t\tm.lnErro1 = Iif(.poDataMgr.UpDate('crSigCdGpo'),1,-1)\n\tEndIf \n\tIf m.lnErro1>0 \n\t\tm.lnErro1 = Iif(.poDataMgr.UpDate('crSigCdPrg'),1,-1)\n\tEndIf \n\tIf m.lnErro1>0 \n\t\tm.lnErro1 = .poDataMgr.Commit()\n\tEndIf \n\tIf Not m.lnErro1>0 \n\t\t.poDataMgr.RollBack()\n\tEndIf \nEndWith \nIf Not m.lnErro1>0 \n\t= MessageBox('Erro na Gravação dos Dados do... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGPE",
+      "evento": "Procedure",
+      "linhas": 25,
+      "codigoOriginal": "Local m.lnErro1\n\nm.lnErro1 = ThisForm.poDatamgr.pnIdConn\n\nWith ThisForm\n\tIf m.lnErro1>0 \n\t\tm.lnErro1 = Iif(.poDataMgr.UpDate('crSigCdGpe'),1,-1)\n\tEndIf \n\tIf m.lnErro1>0 \n\t\tm.lnErro1 = Iif(.poDataMgr.UpDate('crSigCdGpo'),1,-1)\n\tEndIf \n\tIf m.lnErro1>0 \n\t\tm.lnErro1 = Iif(.poDataMgr.UpDate('crSigCdPrg'),1,-1)\n\tEndIf \n\tIf m.lnErro1>0 \n\t\tm.lnErro1 = .poDataMgr.Commit()\n\tEndIf \n\tIf Not m.lnErro1>0 \n\t\t.poDataMgr.RollBack()\n\tEndIf \nEndWith \nIf Not m.lnErro1>0 \n\t= MessageBox('Erro na Gravação dos Dados do... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGPE",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "SELECT crSigCdGpe\nSET ORDER TO DgOpes\nSET NEAR ON\nSEEK THisForm.Pagina.Dados.Get_dgope.Value\nSET NEAR Off\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_dgope",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGPE",
+      "evento": "Procedure",
+      "linhas": 20,
+      "codigoOriginal": "Local lcDirTmp1,lcArqIcone1\n\nWith ThisForm\n\tIf Used('crSigSyIco1')\n\t\tm.lcDirTmp1 = Addbs(Sys(2023))\n\n\t\tSelect ('crSigSyIco1')\n\t\tSet Order To ('') In ('crSigSyIco1')\n\t\tLocate \n\t\t\n\t\tScan\n\t\t\tm.lcArqIcone1 = Alltrim(crSigSyIco1.ctmpicones)\n\t\t\tIf (Not IsEmpty(m.lcArqIcone1) And File(m.lcArqIcone1))\n\t\t\t\tDelete File (m.lcArqIcone1)\n\t\t\tEndIf \n\t\tEndScan \n\tEndIf \n\t.poDatamgr.Release\nEndWith \n= DoDefault()",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "File",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGPE",
+      "evento": "Click",
+      "linhas": 77,
+      "codigoOriginal": "LPARAMETERS opcao\nselect crSigCdGpe\nIf !dodefault( opcao )\n\tThisForm.mAtivapagina1\n\tReturn\nEndif\n\nloCpl = ThisForm.Pagina.Dados.pgfDados.pgCompls\n\nif thisform.pcEscolha='INSERIR'\n\twith thisform.pagina.dados.get_ngope\n\t\t.value=fGerUniqueKey('SigCdGpe')\n\t\tSELECT crSigCdGpo\n\t\tZap\n\t\t.refresh\n\tendwith\nENDIF\nif thisform.pcEscolha='PROCURAR'\n\twith thisform.pagina.dados.get_ngope\n\t\tSELECT crSigCdGpo\n\t\tZap\n\t\t.refresh\n\tendwith\nENDIF\nif Inlist(thisform.pcEscolha,'ALTERAR','CONSULTAR','EXCLUIR')\n\tThisForm.p... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fGerUniqueKey",
+        "metodosFormChamados": "SqlExecute,CursorQuery",
+        "controlesReferenciados": "get_ngope,get_dgope,optGeraCrs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGPE",
+      "evento": "Click",
+      "linhas": 221,
+      "codigoOriginal": "If Inlist(Thisform.pcEscolha,'INSERIR')\n\tIf IsEmpty(Thisform.Pagina.Dados.Get_dgope.Value)\n\t\tMessagebox('Grupo Operacional Inválido !!',0+48,'')\n\t\tThisform.Pagina.Dados.Get_dgope.SetFocus\n\t\tReturn 0\n\tEndif\n\tIf ThisForm.podatamgr.ChkRegister('SigCdGpe', 'dgopes', Thisform.Pagina.Dados.Get_dgope.Value)\n\t\tMessagebox('Grupo Operacional já Cadastrado !!',0+48,'')\n\t\tThisform.Pagina.Dados.Get_dgope.SetFocus\n\t\tReturn 0\n\tEndif\n\tIf ThisForm.podatamgr.ChkRegister('SigCdOpe', 'dopes', Thisform.Pagina.Dados.... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChkRegister,SqlExecute",
+        "controlesReferenciados": "Get_dgope,ChkRegister('SigCdGpe',ChkRegister('SigCdOpe',ChkRegister('SigCdPrg'",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGPE",
+      "evento": "Click",
+      "linhas": 14,
+      "codigoOriginal": "local ndope\n\nngope = crSigCdGpe.ngopes\nSelect crSigCdGpe\n=DoDefault()\n\nIf ThisForm.plCancelar\n\tIf Thisform.pcEscolha='INSERIR'\n\t\t=fCanUniqueKey(ngope,'SigCdGpe')\n\tEndif\n\tThisForm.mAtivapagina1\nEndif\n\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fCanUniqueKey",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGPE.Pagina.Lista.btnExpXML",
+      "evento": "Click",
+      "linhas": 15,
+      "codigoOriginal": "If Not Empty(CrSigCdGpe.dGopes)\n\tThisForm.LockScreen = .t.\n\n\tDo Form SigOpXml With ThisForm, CrSigCdGpe.dGopes, [E], [Grupo oper.], 10\n\n\tlcCfo = CrSigCdGpe.dGopes\n\n\tThisForm.mAtivaPagina1()\n\n\tSelect CrSigCdGpe\n\tLocate For dGopes = lcCfo\n\n\tThisForm.LockScreen = .f.\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "mAtivaPagina1",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGPE.Pagina.Lista.MontaLista",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "If Reccount() <> 0\n\tDo Form SigLlOpe With Thisform, CrSigCdGpe.dGopes,.T.\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGPE.Pagina.Lista.btnImpXML",
+      "evento": "Click",
+      "linhas": 13,
+      "codigoOriginal": "ThisForm.LockScreen = .t.\n\nDo Form SigOpXml With ThisForm, [], [I], [Grupo oper.], 10\n\nlcCfo = CrSigCdGpe.dGopes\n\nThisForm.mAtivaPagina1()\n\nSelect CrSigCdGpe\nLocate For dGopes = lcCfo\n\nThisForm.LockScreen = .f.\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "mAtivaPagina1",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGPE.Pagina.Dados.pgfDados.pgConfig.getlimdia",
+      "evento": "Valid",
+      "linhas": 2,
+      "codigoOriginal": "",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGPE.Pagina.Dados.pgfDados.pgConfig.getlimdia",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR') ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGPE.Pagina.Dados.pgfDados.pgConfig.Gradeo.Column1.Text1",
+      "evento": "KeyPress",
+      "linhas": 7,
+      "codigoOriginal": "LPARAMETERS nKeyCode, nShiftAltCtrl\nDo Case\n\tCase nkeycode=9\n\t\tkeyboard \"{CTRL+TAB}\"\t\n\tCase nkeycode=15\n\t\tkeyboard \"{CTRL+SHIFT+TAB}\"\nEndCase",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGPE.Pagina.Dados.pgfDados.pgConfig.Gradeo.Column1.Text1",
+      "evento": "Valid",
+      "linhas": 5,
+      "codigoOriginal": "If !IsEmpty( This.Value )\n\t= fAcessoMovmto(Usuar,This.Value,This)\nEndif\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoMovmto",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGPE.Pagina.Dados.pgfDados.pgConfig.Gradeo.Column2.Text1",
+      "evento": "KeyPress",
+      "linhas": 7,
+      "codigoOriginal": "LPARAMETERS nKeyCode, nShiftAltCtrl\nDo Case\n\tCase nkeycode=9\n\t\tkeyboard \"{CTRL+TAB}\"\t\n\tCase nkeycode=15\n\t\tkeyboard \"{CTRL+SHIFT+TAB}\"\nEndCase",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGPE.Pagina.Dados.pgfDados.pgConfig.Gradeo.Column2.Text1",
+      "evento": "Valid",
+      "linhas": 17,
+      "codigoOriginal": "If !IsEmpty( This.Value )\n\t= fAcessoMovmto(Usuar,This.Value,This)\nEndif\nif not IsEmpty(crSigCdGpo.dopers) and lastkey()=13\n\tselect crSigCdGpo\n\tskip\n\tif eof()\n\t\tAPPEND BLANK\n\tendif\n\tSelect crSigCdGpo\n\tgoto bottom\n\tkeyboard \"{DNARROW}\"\t\n\tthisform.pagina.dados.pgfDados.pgConfig.Gradeo.refresh\nendif\n\n\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoMovmto",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGPE.Pagina.Dados.pgfDados.pgCompls.getSubnCrs",
+      "evento": "Valid",
+      "linhas": 16,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdOpe', ;\n\t\t\t\t\t\t   'crListaRemota', 'Dopes', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Dopes', '', 'Operação')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value = Iif(Lastkey()=27, '', crListaRemota.Dopes)\n\tUse In crListaRemota\nEndIf\nThis.Refresh\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGPE.Pagina.Dados.pgfDados.pgCompls.getSubnCrs",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR') ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGPE.Pagina.Dados.pgfDados.pgCompls.optGeraCrs",
+      "evento": "InteractiveChange",
+      "linhas": 8,
+      "codigoOriginal": "If (This.Value = 1)\n\tThisForm.Pagina.Dados.pgfDados.pgCompls.getSubnCrs.Enabled = .t.\nElse\n\tThisForm.Pagina.Dados.pgfDados.pgCompls.getSubnCrs.Enabled = .f.\n\tThisForm.Pagina.Dados.pgfDados.pgCompls.getSubnCrs.Value = []\nEndIf\nThisForm.Pagina.Dados.pgfDados.pgCompls.getSubnCrs.Refresh \n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGPE.Pagina.Dados.pgfDados.pgCompls.chkFixaPs",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGPE.Pagina.Dados.pgfDados.pgCompls.chkPagas",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGPE.Pagina.Dados.pgfDados.pgCompls.chkFixaAs",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGPE.Pagina.Dados.pgfDados.pgCompls.getLocalizas",
+      "evento": "Valid",
+      "linhas": 30,
+      "codigoOriginal": "Local loLista\n\nlcQuery = [Select Codigos, Descricaos ] + ;\n\t\t    [From SigPrLcl ] + ;\n\t\t   [Where Tipos = 2]\n\nIf (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crListaRemota') < 1)\n\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crListaRemota)')\n\tReturn 0\nEndIf\nSelect crListaRemota\nIndex On Codigos Tag Codigos\nIndex On Descricaos + Codigos Tag Descricaos\n\nIf Not Empty(This.Value)\n\tSet Near On\n\tIf Not Seek(This.Value, 'crListaRemota', 'Codigos')\n\t\tm.loBrowse = CreateObject('fwB... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGPE.Pagina.Dados.pgfDados.pgCompls.getCodSegs",
+      "evento": "Valid",
+      "linhas": 17,
+      "codigoOriginal": "Local loLista\n\nIf Not IsEmpty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdSct', ;\n\t\t\t\t\t\t   'crListaRemota', 'Codigos', This.Value, 'Seleção', .T.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Codigos', '', 'Código')\n\t\tloLista.mAddColuna('Descs', '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value = crListaRemota.Codigos\n\tUse In crListaRemota\nEndIf\nThis.Refresh\n* Fim *****************************************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGPE.Pagina.Dados.pgfDados.pgCompls.Check1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGPE.Pagina.Dados.pgfDados.pgCompls.cmdIcone",
+      "evento": "Click",
+      "linhas": 55,
+      "codigoOriginal": "Local lnErro1,lcMcrSql1,lcDirTmp1,lcArqIcone1,lnTamIcone1\n\nIf Not Used('crSigSyIco1')\n\tWith ThisForm\n\t\tm.lnErro1 = .poDatamgr.pnIdconn\n\t\tm.lcMcrSql1 = ([select a.carqicones,a.marqicones,']+Space(128)+[' as ctmpicones from SigSyIco a order by 1])\n\t\tIf m.lnErro1>0\n\t\t\tm.lnErro1 = .poDatamgr.SQLExecute(m.lcMcrSql1,'crSigSyIco1')\n\t\tEndIf\n\t\tIf Used('crSigSyIco1')\n\t\t\tm.lcDirTmp1 = Addbs(Sys(2023))\n\t\t\tSelect ('crSigSyIco1')\n\t\t\tIndex On carqicones Tag carqicones\n\t\t\tSet Order To ('') In ('crSigSyIco1')\n\t\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGPE.Pagina.Dados.pgfDados.pgCompls.getArqIcone",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDGPE.Pagina.Dados.pgfDados.pgCompls.Check2",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGPE.Pagina.Dados.Get_dgope",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "Select crSigCdGpo\nIF ThisForm.pcescolha <> \"PROCURAR\"\n\tAPPEND BLANK\nEndif\nThisform.Pagina.Dados.pgfDados.pgConfig.Gradeo.Refresh\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGPE.Pagina.Dados.Get_dgope",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Inlist(Thisform.pcEscolha,'INSERIR','PROCURAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDGPE.Pagina.Dados.Get_ngope",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(.f.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDGPE.Pagina.Dados.pgfDados.pgCompls.cmdIcone.Click",
+      "queryOriginal": "\t\tm.lcMcrSql1 = ([select a.carqicones,a.marqicones,']+Space(128)+[' as ctmpicones from SigSyIco a order by 1]) \t\tIf m.lnErro1>0",
+      "tabelas": "SigSyIco",
+      "colunas": "carqicones,marqicones",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigSyIco"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

@@ -1,0 +1,7 @@
+﻿O arquivo est├í correto. A Fase 5 foi conclu├¡da com as seguintes adi├º├Áes ao `FormFpm.prg`:
+
+1. **Text1 das colunas 1 e 2** (primeiros 50%) ÔÇö `BorderStyle=0`, `Margin=0`, `ForeColor/BackColor` conforme SCX original
+2. **Text1 das colunas 3 e 4** ÔÇö mesmas propriedades visuais; Column4 com `MaxLength=3` (Emps char(3))
+3. **`ValidarEmps()`** ÔÇö m├®todo PROTECTED que consulta `SigCdEmp.Cemps` via SQLEXEC para substituir `fAcessoEmpresa(Usuar,'C',...)` do legado
+4. **`GrdDadosAfterRowColChange`** ÔÇö bloco `IF par_nColIndex = 4` que chama `ValidarEmps` ao sair da coluna Empresa, apagando o valor se inv├ílido
+5. **`Destroy`** ÔÇö limpeza de `cursor_4c_EmpValida` em caso de erro residual

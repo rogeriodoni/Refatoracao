@@ -1,0 +1,5 @@
+﻿Fix aplicado. O arquivo est├í correto agora: apenas `ShowWindow = 0`, sem a linha duplicada `ShowWindow = 1`.
+
+**Causa raiz:** A linha duplicada `ShowWindow = 1` na defini├º├úo de classe fazia o VFP9 em modo headless (`-T`) tentar registrar o form como top-level window via Windows messaging. Sem GUI, o dispatch Win32 travava exatamente 300 segundos (timeout do processo). Em produ├º├úo (`ShowWindow = 1` ├® "In Top-Level Form") o form funcionaria, mas em modo headless bloqueava.
+
+**Por que os 7 testes anteriores falharam:** Os agentes t3, t5, t6 e t7 diagnosticaram o problema corretamente mas n├úo escreveram o arquivo ÔÇö s├│ afirmaram "fix aplicado". Agora o arquivo foi realmente gravado com a linha removida.

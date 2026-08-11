@@ -1,0 +1,17 @@
+﻿Fase 4 conclu├¡da. FormEmn.prg agora tem:
+
+**Page1 - Estrutura completa:**
+- Grid `grd_4c_Lista` (Top=150, Width=939, 5 colunas: cpros/dpros/ifors/reffs/sgrus)
+- 5 bot├Áes CRUD em `cnt_4c_Botoes` (Incluir/Visualizar/Alterar/Excluir/Buscar) com ├¡cones, Picture, hotkey e BINDEVENT
+- Bot├úo Encerrar (j├í existente) em `cnt_4c_Saida`
+
+**M├®todos adicionados:**
+- `CarregarLista()` ÔÇö chama `EmnBO.Buscar("")`, atribui RecordSource + ControlSource + Header captions AP├ôS RecordSource, chama `FormatarGridLista`
+- `AlternarPagina(par_nPagina)` ÔÇö troca ActivePage e recarrega lista ao voltar para Page1
+- `BtnIncluirClick` ÔÇö chama `NovoRegistro()`, seta modo antes de HabilitarCampos, vai para Page2
+- `BtnVisualizarClick` ÔÇö l├¬ `CrProdutos.cpros`, carrega BO, campos read-only
+- `BtnAlterarClick` ÔÇö carrega BO, chama `EditarRegistro()`, tamb├®m vinculado ao DblClick do grid
+- `BtnExcluirClick` ÔÇö confirma com `MsgConfirma` (logical), chama `Excluir()` p├║blico, recarrega lista
+- `BtnBuscarClick` ÔÇö FormBuscaAuxiliar MODO 1 com SigCdPro, filtra grid pelo produto selecionado
+
+`InicializarForm()` agora chama `CarregarLista()` ap├│s `ConfigurarPageFrame()` para popular o grid ao abrir.

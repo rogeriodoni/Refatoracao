@@ -1,0 +1,147 @@
+{
+  "resumo": {
+    "totalMetodos": 7,
+    "metodosComSQL": 3,
+    "metodosComValidacao": 6,
+    "totalQueries": 2,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["FILETOSTR", "for cArqIcones = LOWER"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDICO",
+      "evento": "Init",
+      "linhas": 83,
+      "codigoOriginal": "LPARAMETERS lcacesso\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\nWith ThisForm\n\t.LockScreen = .T.\n\tThisForm.grid1.RecordSource=''\t\t&&Conexao com a tabela de Dados\n\t\n\t.poDatamgr = CreateObject('fSqlConector',.name)\t&&Criacao do Objeto de conexao\n\tm.lnErro1 = .poDatamgr.pnIdconn\t\t\t\t\t\t&&Status da Conexao\n\t\n\tlcQuery = [select carqicones,marqicones,']+Space(128)+[' as ctmpicones from SigSyIco order by 1]  &&Tras Dados da Tabela\n\tWith... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDICO.Grid1",
+      "evento": "Procedure",
+      "linhas": 12,
+      "codigoOriginal": "LPARAMETERS nDirection\nLocal lcarquivo\n\nlcarquivo = Alltrim(crTmpcdIco.ctmpicones)\n\nIf Not IsEmpty(lcarquivo)\n\tThisForm.Icone.picture = lcarquivo\n\tThisForm.Icone.visible = .t.\nelse\n\tThisForm.Icone.Visible = .f.\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDICO.Grid1",
+      "evento": "Procedure",
+      "linhas": 12,
+      "codigoOriginal": "LPARAMETERS nColIndex\nLocal lcarquivo\n\nlcarquivo = Alltrim(crTmpcdIco.ctmpicones)\n\nIf Not IsEmpty(lcarquivo)\n\tThisForm.Icone.picture = lcarquivo\n\tThisForm.Icone.visible = .t.\nelse\n\tThisForm.Icone.Visible = .f.\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDICO.Grid1",
+      "evento": "Procedure",
+      "linhas": 12,
+      "codigoOriginal": "LPARAMETERS nColIndex\nLocal lcarquivo\n\nlcarquivo = Alltrim(crTmpcdIco.ctmpicones)\n\nIf Not IsEmpty(lcarquivo)\n\tThisForm.Icone.picture = lcarquivo\n\tThisForm.Icone.visible = .t.\nelse\n\tThisForm.Icone.Visible = .f.\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDICO.Commandgroup1",
+      "evento": "Click",
+      "linhas": 52,
+      "codigoOriginal": "m.lcArqIcone = GetPict('ico;gif;jpg;bmp;pic','','OK')\n\n**Obs: Os icones devem esta em Minusculo e com Underline\n\nIf Not Empty(m.lcArqIcone) And File(m.lcArqIcone)\t\t\t\t\t\t\t&&Caso seja Selecionado uma Imagem\n\tThisForm.LockScreen = .t.\n\n\tm.lcDirTmp1 = Addbs(Sys(2023))\t\t\t\t\t\t\t\t&&Cria Diretorio Temporario\n\tm.lcArqIcone1 = (m.lcDirTmp1+'ArqIcone'+Sys(2015)+'.ico')\t\t&&Caminho para Acessar os Arquivos\n\n\tIf Not Seek(JustFname(LOWER(m.lcArqIcone)),'crTmpcdIco','carqicones')  &&Caso nao seja encontrado no Ban... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "FILETOSTR,for cArqIcones = LOWER",
+        "metodosFormChamados": "Update,Commit,RollBack",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDICO.Commandgroup1",
+      "evento": "Click",
+      "linhas": 36,
+      "codigoOriginal": "If MessageBox(\"Tem certeza que deseja Excluir?\",4+32,\"Excluir\")=6 &&Confirma\n\tThisForm.LockScreen = .t.\n\tm.registro=Alltrim(crTmpcdico.carqicones)\n\t\n\tIf ThisForm.poDataMgr.ChkRegister('SigCdPrg','barrapict',m.registro)\n\t\tMessagebox( 'Existem ítens cadastros que estão utilizando esse Registro!', 48, 'Exclusão não permetida' )\n\t\tThisForm.LockScreen = .f.\n\t\tReturn\n\tEndif\n\n\tDelete from crTmpcdico where carqicones=m.registro\n\t\n    m.lnErro1 = ThisForm.podatamgr.pnIdconn\n\n\tIf m.lnErro1>0 \n\t\tm.lnErro1 ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChkRegister,Update,Commit,RollBack",
+        "controlesReferenciados": "ChkRegister('SigCdPrg'",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDICO.Commandgroup1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDICO.Init",
+      "queryOriginal": "\tlcQuery = [select carqicones,marqicones,']+Space(128)+[' as ctmpicones from SigSyIco order by 1]  &&Tras Dados da Tabela \tWith... [TRUNCADO]",
+      "tabelas": "SigSyIco",
+      "colunas": "carqicones,marqicones",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDICO.Commandgroup1.Click",
+      "queryOriginal": "\tDelete from crTmpcdico where carqicones=m.registro",
+      "tabelas": "crTmpcdico",
+      "colunas": "",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigSyIco", "crTmpcdico"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

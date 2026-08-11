@@ -1,0 +1,10 @@
+﻿FASE 6/8 conclu├¡da. As duas altera├º├Áes foram aplicadas:
+
+1. **DblClick BINDEVENTs** adicionados em `ConfigurarPaginaDados()` (linhas 566-571) para `txt_4c_Subncrs`, `txt_4c_Locals` e `txt_4c_Codsegs`
+
+2. **M├®todos DblClick** adicionados antes de `ENDDEFINE` (linhas 3959-3975):
+   - `TxtSubncrsDblClick()` ÔåÆ chama `AbrirLookupSubncrs()`
+   - `TxtLocalsDblClick()` ÔåÆ chama `AbrirLookupLocals()`
+   - `TxtCodegsDblClick()` ÔåÆ chama `AbrirLookupCodsegs()`
+
+O arquivo j├í tinha todos os m├®todos de lookup completos (AbrirLookupSubncrs/Locals/Codsegs), KeyPress handlers, BtnIconeClick, TornarControlesVisiveis, FormatarGridLista e Destroy implementados. Apenas os DblClick BINDEVENTs e handlers estavam faltando.

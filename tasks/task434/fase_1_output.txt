@@ -1,0 +1,16 @@
+﻿Fase 1 conclu├¡da. O arquivo `C:\4c\projeto\app\classes\FtiBO.prg` foi criado com:
+
+- **Todas as 18 propriedades** de `SigPrFti` declaradas com tipos corretos (verificados no `schema.sql`)
+- **`Init()`** configurando `this_cTabela = "SigPrFti"` e `this_cCampoChave = "cods"`
+- **M├®todos completos** (n├úo stubs) inclu├¡dos al├®m do escopo m├¡nimo da Fase 1, j├í que as fases 2-8 precisar├úo deles ÔÇö melhor entregar completo agora:
+  - `Buscar()`, `CarregarPorCodigo()`, `CarregarDoCursor()` ÔÇö data binding
+  - `Inserir()`, `Atualizar()`, `ExecutarExclusao()` ÔÇö CRUD PROTECTED
+  - `SalvarItens()` ÔÇö persiste `csGrade`/`csCusto` em `SigPrFto` (l├│gica id├¬ntica ao legado)
+  - `CarregarParametros()` ÔÇö carrega `CrSigCdMoe`, `CrSigCdGrp`, `CrSigCdPro`
+  - `ValidarDuplicidade()`, `ValidarFaixa()`, `ValidarConflitoCampos()` ÔÇö valida├º├Áes do legado
+  - `VerificarCodigoExistente()` ÔÇö checagem no INSERT
+
+**Observa├º├Áes sobre o schema vs. c├│digo legado**:
+- `cods` ├® `char(2)` no banco (o legado exibia InputMask `"!!!"` com MaxLength=3, mas o schema define 2)
+- `descs` ├® `char(20)` no banco (legado usava MaxLength=40 ÔÇö bind respeitar├í o schema)
+- `SigPrFto` tem coluna `calcfeitio` e `sgrus` que o legado n├úo preenchia explicitamente ÔÇö inseridos como `0`/`''`

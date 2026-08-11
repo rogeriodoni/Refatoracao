@@ -1,0 +1,29 @@
+[2026-08-08 10:39:24] [INFO] === CLAUDE CLI INVOKER ===
+[2026-08-08 10:39:24] [INFO] Prompt File: C:\4c\tasks\task442\runtime_fix_prompt_06b_testeAutomatico_t7.md
+[2026-08-08 10:39:24] [INFO] Output File: C:\4c\tasks\task442\06b_testeAutomatico_fix_output_t7.txt
+[2026-08-08 10:39:24] [INFO] Model: sonnet
+[2026-08-08 10:39:24] [INFO] Timeout: 3600 segundos
+[2026-08-08 10:39:24] [INFO] Max Output Tokens: 128000
+[2026-08-08 10:39:24] [INFO] Context Files: 0 arquivo(s)
+[2026-08-08 10:39:24] [INFO] Invocando Claude CLI...
+[2026-08-08 10:39:24] [INFO] Prompt carregado: 78326 caracteres
+[2026-08-08 10:39:24] [INFO] Executando: claude --model sonnet --dangerously-skip-permissions --add-dir C:\4c
+[2026-08-08 10:39:24] [INFO] Tamanho total do prompt: 78326 caracteres
+[2026-08-08 10:39:24] [INFO] Invocando Claude CLI (tentativa 1/7)...
+[2026-08-08 10:57:51] [INFO] Claude CLI finalizado em 1106.3650386 segundos
+[2026-08-08 10:57:51] [INFO] Exit Code: 0
+[2026-08-08 10:57:51] [INFO] Output salvo em: C:\4c\tasks\task442\06b_testeAutomatico_fix_output_t7.txt
+[2026-08-08 10:57:51] [INFO] Output size: 1431 bytes
+[2026-08-08 10:57:51] [INFO] SUCESSO: Claude CLI executado com sucesso
+[2026-08-08 10:57:51] [INFO] Preview do output:
+[2026-08-08 10:57:51] [INFO] N+úo h+í .fxp antigos para remover. A corre+º+úo est+í completa.
+
+**Diagn+¦stico da causa raiz:**
+
+O `FormGr1.prg` tinha duas atribui+º+Áes de `ShowWindow`:
+```foxpro
+ShowWindow  = 0    ÔåÉ first (ignorada)
+ShowWindow = 1    ÔåÉ second (efetiva = valor = 1!)
+```
+
+Em VFP9 DEFINE CLASS, a +¦ltima atribui+º+úo vence. O valor efetivo era `ShowWindow = 1` ("In Top-Level Form"). Em modo headless (`VFP9.EXE -T`), o `CREATEOBJECT("FormGr1")` com `ShowWindow=1` faz o VFP9 tentar registrar o for

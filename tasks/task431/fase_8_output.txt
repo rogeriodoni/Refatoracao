@@ -1,0 +1,11 @@
+﻿Tudo integrado corretamente. A migra├º├úo da task431 (FormFre) est├í completa:
+
+**Resumo do que foi entregue:**
+
+- **FreBO.prg** (`projeto/app/classes/FreBO.prg`) ÔÇö BO completo com suporte a modo global (SigCdFrt) e operacional (SigOpFrt), incluindo Buscar, CarregarPorCodigo, Inserir, Atualizar, ExecutarExclusao e GerarChaveUnica.
+
+- **FormFre.prg** (`projeto/app/forms/cadastros/FormFre.prg`) ÔÇö Form completo com PageFrame 2 p├íginas, grid, 7 bot├Áes CRUD, lookups de cidade via TmpCep (fwBuscaSel ÔåÆ FormBuscaAuxiliar Modo 2), valida├º├Áes do legado (cidade obrigat├│ria no INCLUIR, frete > 0 em modo global), CarregarTmpCep com indicador "Aguarde", suporte a form pai desabilitado (modo operacional), e todos os m├®todos auxiliares.
+
+- **menu.prg** ÔÇö BAR 99 em popCadastros + ON SELECTION + PROCEDURE AbrirFormFre() com padr├úo can├┤nico (VARTYPE, Show() sem par├ómetro, sem Release()).
+
+- **config.prg** ÔÇö Nenhuma altera├º├úo necess├íria; ADIR() detecta automaticamente FreBO.prg e FormFre.prg.

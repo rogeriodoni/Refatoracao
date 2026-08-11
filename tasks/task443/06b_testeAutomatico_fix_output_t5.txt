@@ -1,0 +1,11 @@
+﻿Ambas as corre├º├Áes est├úo no lugar. Dois bugs corrigidos:
+
+**Bug 1 ÔÇö `FormGrupo.prg` linha 52** (causa do timeout):
+- `CREATEOBJECT("GrpBO")` ÔåÆ `CREATEOBJECT("GrupoBO")`
+- A classe se chama `GrupoBO` (definida em `GrupoBO.prg`), n├úo `GrpBO`. VFP9 buscava `GrpBO.prg`, n├úo encontrava e abria um dialog nativo "File Open" que bloqueava VFP9 por 300 segundos (esse dialog nativo n├úo ├® suprimido por `SYS(2335, 0)`).
+
+**Bug 2 ÔÇö `GrupoBO.prg` m├®todo `InicializarDados`** (preven├º├úo ap├│s fix 1):
+- Adicionado guard `IF TYPE("gb_4c_ModoTeste") = "L" AND gb_4c_ModoTeste` antes do `SQLEXEC`
+- Em modo teste com `gnConnHandle=0`, o `SQLEXEC` ├® pulado (o cursor `cursor_4c_Ope` j├í foi criado vazio com `CREATE CURSOR`), seguindo o padr├úo obrigat├│rio do TesteAutomatico.
+
+Os quatro agentes anteriores (t1-t4) identificaram o bug mas n├úo escreveram os arquivos. O fix foi aplicado agora com Edit tool.

@@ -1,0 +1,21 @@
+[2026-08-09 07:23:38] [INFO] === CLAUDE CLI INVOKER ===
+[2026-08-09 07:23:38] [INFO] Prompt File: C:\4c\tasks\task448\runtime_fix_prompt_06b_testeAutomatico_t2.md
+[2026-08-09 07:23:38] [INFO] Output File: C:\4c\tasks\task448\06b_testeAutomatico_fix_output_t2.txt
+[2026-08-09 07:23:38] [INFO] Model: sonnet
+[2026-08-09 07:23:38] [INFO] Timeout: 3600 segundos
+[2026-08-09 07:23:38] [INFO] Max Output Tokens: 128000
+[2026-08-09 07:23:38] [INFO] Context Files: 0 arquivo(s)
+[2026-08-09 07:23:39] [INFO] Invocando Claude CLI...
+[2026-08-09 07:23:39] [INFO] Prompt carregado: 65018 caracteres
+[2026-08-09 07:23:39] [INFO] Executando: claude --model sonnet --dangerously-skip-permissions --add-dir C:\4c
+[2026-08-09 07:23:39] [INFO] Tamanho total do prompt: 65018 caracteres
+[2026-08-09 07:23:39] [INFO] Invocando Claude CLI (tentativa 1/7)...
+[2026-08-09 07:34:35] [INFO] Claude CLI finalizado em 656.0334441 segundos
+[2026-08-09 07:34:35] [INFO] Exit Code: 0
+[2026-08-09 07:34:35] [INFO] Output salvo em: C:\4c\tasks\task448\06b_testeAutomatico_fix_output_t2.txt
+[2026-08-09 07:34:35] [INFO] Output size: 856 bytes
+[2026-08-09 07:34:35] [INFO] SUCESSO: Claude CLI executado com sucesso
+[2026-08-09 07:34:35] [INFO] Preview do output:
+[2026-08-09 07:34:35] [INFO] **Diagn+¦stico e corre+º+úo:**
+
+**Causa raiz**: `TesteCarregarDadosReais()` do TesteAutomatico detecta `CarregarDados` como m+®todo candidato e o chama via macro (que bypassa o modificador `PROTECTED`). Dentro de `CarregarDados()` ÔåÆ `CarregarProgramas()` ÔåÆ `SQLEXEC(gnConnHandle=0, ...)`. Em VFP9, `SQLEXEC(0, ...)` com handle inv+ílido n+úo retorna -1 imediatamente ÔÇö tenta estabelecer uma conex+úo ODBC ao SQL Server configurado, bloqueando pelo TCP timeout do Windows (**exatamente 300 seg

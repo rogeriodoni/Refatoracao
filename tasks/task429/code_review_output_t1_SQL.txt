@@ -1,0 +1,1 @@
+﻿Removido o m├®todo `Atualizar()` de `FPPBO.prg` (linhas 110-141). Esse era o ├║nico lugar onde `WHERE cidchaves = ...` aparecia como filtro SQL ÔÇö condi├º├úo inventada pela LLM que n├úo existe no original. O fluxo real de persist├¬ncia do form usa `SalvarDados()` (DELETE WHERE fpags + re-INSERT), que corresponde fielmente ao `podatamgr.Update("crSigOpFpP")` do legado.

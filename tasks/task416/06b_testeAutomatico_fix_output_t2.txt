@@ -1,0 +1,10 @@
+﻿Todas as corre├º├Áes est├úo aplicadas corretamente. Resumo das tr├¬s altera├º├Áes em `FormFea.prg`:
+
+**Fix 1 ÔÇö BtnCancelarClick (linha 1753ÔÇô1771):**  
+O `SQLEXEC(gnConnHandle, "IF @@TRANCOUNT > 0 ROLLBACK")` agora fica em um TRY/CATCH interno. Erros "invalid connection" s├úo silenciados; outros erros s├úo reportados. O `AlternarPagina(1)` sempre ├® chamado, resolvendo o teste "BtnCancelarClick nao retornou para Page1".
+
+**Fix 2 ÔÇö CarregarLista (linha 1027ÔÇô1033):**  
+Ap├│s o bloco TRY/CATCH, cria `cursor_4c_Dados` vazio se ele n├úo existir. Sem conex├úo ao banco, `Buscar("")` lan├ºa exce├º├úo capturada no BO mas n├úo cria o cursor; o guard garante que o cursor sempre exista ap├│s `CarregarLista()`, resolvendo o teste "Nenhum cursor padr├úo foi criado".
+
+**Fix 3 ÔÇö ConfigurarResultado / Buttons(2) (linha 4132ÔÇô4139):**  
+Removidas as linhas `.FontName = "Tahoma"` e `.FontSize = 8` do `WITH .Buttons(2)` do OptionGroup `op_ordem`. Em VFP9, OptionButton dentro de OptionGroup n├úo aceita FontName diretamente ÔÇö a fonte herda do container.

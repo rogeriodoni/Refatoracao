@@ -1,0 +1,15 @@
+﻿Fase 2 conclu├¡da. O `FpoBO.prg` agora cont├®m todos os m├®todos CRUD completos:
+
+| M├®todo | Visibilidade | Fun├º├úo |
+|--------|-------------|--------|
+| `CarregarDoCursor()` | PROTECTED | Mapeia cursor ÔåÆ propriedades BO (todos os 8 campos) |
+| `CarregarPorCodigo()` | PUBLIC (default) | SELECT por CidChaves (PK) |
+| `Buscar()` | PUBLIC | SELECT filtrado por `this_cDopesAtual` + filtro opcional |
+| `BuscarCondicoesPagamento()` | PUBLIC | Carrega SigOpFp ÔåÆ `crSigOpFp` (lookup do grid) |
+| `ValidarDuplicados()` | PUBLIC | Detecta FPags duplicados via cursor ordenado + SCAN |
+| `SalvarLote()` | PUBLIC | DELETE+INSERT at├┤mico (BEGIN/COMMIT TRANSACTION) com gera├º├úo de CidChaves via `fUniqueIds()` |
+| `Inserir()` | PROTECTED | INSERT unit├írio chamado por `SalvarLote` e `BusinessBase.Salvar` |
+| `Atualizar()` | PROTECTED | UPDATE por CidChaves |
+| `ExecutarExclusao()` | PROTECTED | DELETE por CidChaves |
+
+**Regras cr├¡ticas respeitadas**: sem `RETURN` dentro de TRY/CATCH (flags `loc_lTransacaoAberta`/`loc_lErroInsert` controlam o fluxo em `SalvarLote`); sem `PUBLIC PROCEDURE` em `DEFINE CLASS`; `CATCH` sempre com `MsgErro`; acentos via `CHR()`.

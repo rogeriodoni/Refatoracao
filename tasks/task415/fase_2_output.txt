@@ -1,0 +1,13 @@
+﻿`FormFct.prg` written ÔÇö 676 lines. FASE 3/8 complete.
+
+Key implementation decisions:
+- **Nested `WITH .Buttons(N)` inside Column7's `WITH .opt_4c_NChkCxas`** ÔÇö per feedback rule on OptionGroup buttons
+- **`Maiusculo`/`Minusculo` without CHR() accents** ÔÇö matches legacy SCX captions
+- **`cmd_4c_Incluir.Enabled = .F.`** ÔÇö groups come from master tables, not created here
+- **`CarregarFiltroGrupos()` called only in ALTERAR mode** ÔÇö loads crSigCdGrpFilter for copy container SEEK
+- **`ColumnCount = 9` set before the WITH block** on grd_4c_Fichas ÔÇö columns must exist before inner WITH blocks
+- **`SetAll("DynamicBackColor", ...)` on grd_4c_Lista** ÔÇö highlights rows with existing ficha in yellow
+- **Inner PageFrame (`pgf_4c_SubPaginas`) at `Top=152`, `Tabs=.T.`** inside Page2 of outer frame
+- **Field names `CCars`/`DCars` for SigCrRaP and `CTits`/`DTits` for SigPrCpP** ÔÇö assumptions from naming pattern; verify against schema.sql when testing
+
+Next steps (FASES 4ÔÇô8): update `config.prg` to auto-load FctBO, add menu entry in `menu.prg`, delete `.fxp` files before first test run, and validate against the legacy SCX for any missed fields.

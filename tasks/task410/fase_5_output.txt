@@ -1,0 +1,12 @@
+﻿Fase 5 conclu├¡da. O arquivo `FormEvt.prg` agora cont├®m:
+
+**Adicionado em `ConfigurarPaginaDados()`:**
+- `cmd_4c_Confirmar` (bot├úo Salvar com ├¡cone `cadastro_salvar_60.jpg`) + BINDEVENT ÔåÆ `BtnSalvarClick`
+- `cmd_4c_Cancelar` (├¡cone `cadastro_cancelar_60.jpg`) + BINDEVENT ÔåÆ `BtnCancelarClick`
+- `lbl_4c_Codigo` ÔÇö coordenadas do original: Top=170 (141+29), Left=397, ForeColor=RGB(90,90,90)
+- `txt_4c_Codigo` ÔÇö Top=166, Left=443, Width=96, MaxLength=3, InputMask="!!!" (original `Format="K!"`)
+
+**Novos m├®todos:**
+- `BtnSalvarClick()` ÔÇö valida modo, chama `FormParaBO()` + `Salvar()` + volta para lista
+- `BtnCancelarClick()` ÔÇö chama `AlternarPagina(1)`
+- `FormParaBO()` ÔÇö mapeia `txt_4c_Codigo` ÔåÆ `this_cCodigo` (Fase 6 completar├í com `txt_4c_Descricao`)

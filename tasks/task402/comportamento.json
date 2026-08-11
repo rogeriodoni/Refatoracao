@@ -1,0 +1,118 @@
+{
+  "resumo": {
+    "totalMetodos": 6,
+    "metodosComSQL": 0,
+    "metodosComValidacao": 2,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": []
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDEMB",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "Local lcBusca\n\nIf !IsEmpty(ThisForm.Pagina.Dados.getcods.Value)\n\tThisForm.poDataMgr.LocateCursor('crSigCdEmb','cods',ThisForm.Pagina.Dados.Getcods.Value)\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "LocateCursor",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDEMB",
+      "evento": "Init",
+      "linhas": 14,
+      "codigoOriginal": "LPARAMETERS lcacesso\n\nWith ThisForm\n\t.poDatamgr = CreateObject('fSqlConector')\n\tWith .poDatamgr\n\t\t.AddCursor('SigCdEmb','Cods','crSigCdEmb','',ThisForm.pagina.lista.grade)\n\t\t.pfSqlTabela(1).pColuna('Cods','','','Código',75,.t.)\n\t\t.pfSqlTabela(1).pColuna('descs','','','Descrição',297,.t.)\n\t\t.pfSqlTabela(1).pColuna('Pesos','','','Peso',107,.t.)\n\tEndWith\n\t= DoDefault()\n\t.LockScreen = .f.\nEndWith\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDEMB",
+      "evento": "Click",
+      "linhas": 20,
+      "codigoOriginal": "LParameters opcao\n\nIf !dodefault( Opcao )\n\tThisForm.mAtivapagina1\n\tReturn\nEndif\n\nDo Case\n\tCase Inlist( ThisForm.pcEscolha, 'INSERIR', 'PROCURAR' )\n\t\tIf ThisForm.pcEscolha = \"INSERIR\"\n\t\t\tReplace Multis with 1\n\t\tEndif\n\t\tThisForm.Pagina.Dados.Refresh\n\t\tThisForm.Pagina.Dados.GetCods.SetFocus\n\tCase ThisForm.pcEscolha = 'ALTERAR'\n\t\tThisForm.Pagina.Dados.GetDescs.SetFocus\n\tCase Inlist( ThisForm.pcEscolha, 'EXCLUIR', 'CONSULTAR' )\n\t\tThisForm.Pagina.Dados.Grupo_Salva.Salva.SetFocus\nEndcase\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDEMB",
+      "evento": "Click",
+      "linhas": 16,
+      "codigoOriginal": "If ThisForm.pcEscolha = 'INSERIR'\n\tIf IsEmpty( crSigCdEmb.Cods )\n\t\tMessagebox( 'Código não pode ficar em branco!', 48, '' ) \n\t\tThisForm.Pagina.Dados.GetCods.SetFocus\n\t\tReturn\n\tEndif\n\tIf ThisForm.poDataMgr.ChkRegister('SigCdEmb','Cods',ThisForm.Pagina.Dados.GetCods.Value)\n\t\tMessagebox( 'Código já Cadastrado!', 48, '' ) \n\t\tThisForm.Pagina.Dados.GetCods.SetFocus\n\t\tReturn\n\tEndif\nEndif\n\n=DoDefault()\nThisForm.mAtivapagina1\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChkRegister",
+        "controlesReferenciados": "ChkRegister('SigCdEmb'",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDEMB",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "=DoDefault()\nIf ThisForm.plCancelar\n\tThisForm.mAtivapagina1\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDEMB.Pagina.Dados.getcods",
+      "evento": "When",
+      "linhas": 7,
+      "codigoOriginal": "local saida\nsaida = .t.\nif inlist(thisform.Pagina.Lista.Grupo_op.value,2,3)\n\tsaida = .f.\nendif\nreturn saida\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

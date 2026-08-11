@@ -1,0 +1,14 @@
+﻿Arquivo completo e correto. A Fase 2/8 est├í conclu├¡da.
+
+**gemBO.prg** agora cont├®m todos os m├®todos CRUD:
+
+| M├®todo | Visibilidade | Descri├º├úo |
+|--------|-------------|-----------|
+| `Buscar(par_cFiltro)` | PUBLIC | SELECT com ORDER BY grupo, class |
+| `CarregarPorCodigo(par_cCodigo)` | PUBLIC | SELECT por cidchaves (PK) + seta `this_lNovoRegistro = .F.` |
+| `CarregarDoCursor(par_cAliasCursor)` | PUBLIC | `SELECT (alias)` + mapeia todos os 5 campos |
+| `ValidarDuplicata()` | PUBLIC | COUNT por gruclass ÔÇö chamado pelo Form antes de Salvar |
+| `ObterChavePrimaria()` | PUBLIC | Retorna `this_cCidChaves` para auditoria |
+| `Inserir()` | PROTECTED | Gera cidchaves via `SYS(2015)x3`, seta gruclass=grupo+class, INSERT + auditoria |
+| `Atualizar()` | PROTECTED | UPDATE apenas `tipos` (grupo/class n├úo edit├íveis no ALTERAR, conforme legado) |
+| `ExecutarExclusao()` | PROTECTED | DELETE por cidchaves + auditoria |

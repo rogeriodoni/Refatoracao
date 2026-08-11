@@ -1,0 +1,17 @@
+﻿Sem coment├írios proibidos. Fase 3 conclu├¡da ÔÇö `C:\4c\projeto\app\forms\cadastros\FormFre.prg` criado com 419 linhas.
+
+**O que foi entregue na Fase 3:**
+
+| Elemento | Status |
+|----------|--------|
+| `DEFINE CLASS FormFre AS FormBase` | Ô£ô Propriedades visuais exatas do legado (Height=600, Width=1000) |
+| `Init(par_oParentForm, par_cOperacao)` | Ô£ô Captura par├ómetros especiais, seta `this_cDopes`, `pDopFrt` global, chama `DODEFAULT()` |
+| `InicializarForm()` | Ô£ô Cria FreBO, propaga `this_cDopes` ao BO, configura PageFrame, carrega TmpCep e lista |
+| `ConfigurarPageFrame()` | Ô£ô 2 pages com `Top=-29`, `Tabs=.F.`, picture `new_background.jpg` |
+| `ConfigurarPaginaLista()` | Ô£ô `cnt_4c_Cabecalho` (Top=30), `cnt_4c_Botoes` (Left=543, can├┤nico), `cnt_4c_Saida` (Left=917, can├┤nico), `cmd_4c_BtnAguarde` (Visible=.F.) |
+| `ConfigurarPaginaDados()` | Ô£ô `cnt_4c_BotoesAcao` (Left=836) |
+| `CarregarTmpCep()` | Ô£ô Carrega cursor `TmpCep` de cidades do banco Cep, com indicador de progresso |
+| `CarregarLista()` | Ô£ô Chama `FreBO.Buscar("")` (grid ser├í vinculado na Fase 4) |
+| `TornarControlesVisiveis()` | Ô£ô Recursivo, trata PageFrame |
+| `FormatarGridLista()` | Ô£ô Verdana 8 nas colunas |
+| `Destroy()` | Ô£ô Reabilita form pai, libera BO e cursor TmpCep |

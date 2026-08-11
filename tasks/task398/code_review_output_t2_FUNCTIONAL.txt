@@ -1,0 +1,3 @@
+﻿Agora h├í apenas **uma defini├º├úo** de `GravarDados()` ÔÇö `PROTECTED FUNCTION` na linha 1603, com duas chamadas corretas via `THIS.GravarDados()`.
+
+**O problema era:** duplica├º├úo de m├®todo ÔÇö a defini├º├úo p├║blica (obsoleta) na linha 1159 tornava o c├│digo amb├¡guo para o revisor autom├ítico, que detectou as chamadas mas n├úo identificou corretamente a defini├º├úo PROTECTED. A primeira defini├º├úo foi removida; a segunda (can├┤nica, PROTECTED, com l├│gica correta de `InicializarCursores()` + propaga├º├úo de ChkSubn ao BO) ├® a ├║nica que permanece.

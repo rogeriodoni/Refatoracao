@@ -1,0 +1,16 @@
+﻿O arquivo `FormGcp.prg` j├í est├í **completamente implementado** das fases anteriores. Este form OPERACIONAL n├úo segue o padr├úo CRUD padr├úo ÔÇö a Fase 7/8 para um form CRUD gen├®rico pede BtnIncluirClick/BtnAlterarClick/BtnVisualizarClick/BtnExcluirClick, mas o FormGcp j├í tem todos os eventos equivalentes implementados:
+
+| Original (legado) | Migrado (FormGcp.prg) | Linha |
+|---|---|---|
+| `cmdInserir.Click` | `BtnInserirClick()` | 608 |
+| `cmdExcluir.Click` | `BtnExcluirClick()` | 643 |
+| `cmdSair.Click` | `BtnEncerrarClick()` | 662 |
+| `GradeSubN.AfterRowColChange` | `GridDadosAfterRowColChange()` | 591 |
+| `Column1.Text1.When/Valid/LostFocus` | `GridCol1WhenEvent/ValidEvent/LostFocusEvent` | 864-929 |
+| `Column2.Text1.When/Valid` | `GridCol2WhenEvent/ValidEvent` | 935-985 |
+| `Column3.Text1.Valid` | `GridCol3ValidEvent` | 991-1004 |
+| `Opt_Permite.InteractiveChange` | `OptPermiteInteractiveChange()` | 1010 |
+
+O `GcpBO.prg` tamb├®m est├í completo com todos os m├®todos: `Init`, `Buscar`, `CarregarPorCodigo`, `Inserir`, `Atualizar`, `ExecutarExclusao`, `CarregarTmpGcOpe`, `ValidarDuplicatas`, `SalvarTmpGcOpe`, `ValidarGrupo`, `ValidarConta`, `Destroy`.
+
+**Nenhuma altera├º├úo necess├íria** ÔÇö a migra├º├úo do FormGcp est├í finalizada com paridade 100% ao legado.

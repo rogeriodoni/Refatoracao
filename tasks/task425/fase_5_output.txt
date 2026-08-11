@@ -1,0 +1,14 @@
+﻿O arquivo est├í correto. Fase 5 conclu├¡da com sucesso.
+
+**O que foi adicionado em `ConfigurarPaginaDados()`:**
+- `lbl_4c_Lbl_cadastro` ÔÇö label "Cadastro de Contas a Pagar" (Top=191, Left=255, FontBold, BackStyle=0)
+- `lbl_4c_Lbl_grupo` ÔÇö label "Grupo :" (Top=214, Left=207, Width=38)
+- `txt_4c__cd_grupo` ÔÇö TextBox do c├│digo do grupo (Top=209, Left=254, Width=79, MaxLength=10)
+
+**M├®todos atualizados:**
+- `HabilitarCampos`: `txt_4c__cd_grupo.ReadOnly = .T.` em ALTERAR/VISUALIZAR (grupos ├® PK)
+- `LimparCampos`: limpa `txt_4c__cd_grupo.Value = ""`
+- `FormParaBO`: transfere `txt_4c__cd_grupo ÔåÆ this_cGrupos`
+- `BOParaForm`: transfere `this_cGrupos ÔåÆ txt_4c__cd_grupo`
+
+Fase 6 adicionar├í os 3 restantes: `txt_4c__ds_grupo`, `lbl_4c_Label11` e `obj_4c_Op_con`, mais os BINDEVENTs de lookup (substituto de `fAcessoContab`).

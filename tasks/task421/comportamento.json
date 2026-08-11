@@ -1,0 +1,412 @@
+{
+  "resumo": {
+    "totalMetodos": 24,
+    "metodosComSQL": 6,
+    "metodosComValidacao": 10,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fChecaAcesso", "fwBuscaExt", "fUniqueIds"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDFOP",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "=fConfigGeral()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFOP",
+      "evento": "Init",
+      "linhas": 83,
+      "codigoOriginal": "LParameters poForm, pnDataSes, pcEscolha, pcProduto\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nPrivate pPro\n\nSet DataSession to pnDataSes\n\n=DoDefault()\n\nWith ThisForm\n\t.ParentForm = poForm\n\t.pcescolha = pcEscolha\n\t.houveincl = .F.\n\t.houveexcl = .F.\n\t\n\t*-- Rafael - 10/11/2016 - Opção para repetir o mesmo registro mais de uma vez (Rosana Joias)\n\t.getQtde.Visible = .F.\n\t.shpQtde.Visible = .F.\n\t.lblQtde.Visible = .F.\n\t.ShpRepetir... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFOP.Grade.Column1.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFOP.Grade.Column1.Text1",
+      "evento": "Valid",
+      "linhas": 19,
+      "codigoOriginal": "Local lCod,lFan,xObj\n\nIf Not Empty(This.Value)\n\tm.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigCdCli','CrClientes','iclis',This.Value,'Seleção',1000)\n\tIf .Not.m.loLista.plAchouRegistro\n\t\tm.loLista.mAddColuna('iclis','','Código')\n\t\tm.loLista.mAddColuna('rclis','','Descrição')\n\t\tm.loLista.mAddColuna('Inativas ', .f., .f., .f., .f., .f., .t.)\n\t\tm.loLista.gridProc.SetAll('DynamicForeColor', [Iif(crSigCdCli.Inativas == 1, Rgb(255, 0, 0), Rgb(0,0,0))], 'Column')\n\t\tm.loLista.Show... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "Refresh",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFOP.Grade.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha,'INSERIR','ALTERAR') And Empty(ThisForm.Grade.Column1.text1.Value) )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFOP.Grade.Column2.Text1",
+      "evento": "Valid",
+      "linhas": 21,
+      "codigoOriginal": "Local lCod,lFan,xObj\n\nIf Not Empty(This.Value)\n\n\tm.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigCdCli','CrClientes','rclis',This.Value,'Seleção',1000)\n\tIf .Not.m.loLista.plAchouRegistro\n\t\tm.loLista.mAddColuna('rclis','','Descrição')\n\t\tm.loLista.mAddColuna('iclis','','Código')\n\t\tm.loLista.mAddColuna('Inativas ', .f., .f., .f., .f., .f., .t.)\n\t\tm.loLista.gridProc.SetAll('DynamicForeColor', [Iif(crSigCdCli.Inativas == 1, Rgb(255, 0, 0), Rgb(0,0,0))], 'Column')\n\t\tm.loLista.Sho... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "Refresh",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFOP.Grade.Column3.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFOP.Grade.Column4.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFOP.Grade.Column4.Text1",
+      "evento": "Valid",
+      "linhas": 18,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;\n\t\t\t\t\t\t   'CrListaRemota', 'Cmoes', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('CMoes', '', 'Código')\n\t\tloLista.mAddColuna('DMoes', '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tReplace MoeVs with CrListaRemota.CMoes in crSigPrFnc\n\tUse In CrListaRemota\nElse\n\tReplace MoeVs with '' in crSigPrFnc\nEndIf\nThisForm.Grade.Refresh()  ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "Refresh",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFOP.Grade.Column5.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFOP.Grade.Column6.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFOP.Grade.Column7.Check1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFOP.Grade.Column8.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFOP.Grade.Column8.Text1",
+      "evento": "Valid",
+      "linhas": 17,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject([fwBuscaExt], ThisForm.poDataMgr.pnIdConn, [SigCdCol], ;\n\t\t\t\t\t\t   [crListaRemota], [Colecoes], This.Value, [Seleção], .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna([Colecoes], [], [Código])\n\t\tloLista.mAddColuna([Descs],    [], [Descrição])\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value = crListaRemota.Colecoes\n\tUse In crListaRemota\nEndIf\nThis.Refresh\n* Fim *************************************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFOP.Grade.Column9.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFOP.Grade.Column9.Text1",
+      "evento": "Valid",
+      "linhas": 18,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject([fwBuscaExt], ThisForm.poDataMgr.pnIdConn, [SigCdCor], ;\n\t\t\t\t\t\t   [crListaRemota], [Cods], This.Value, [Seleção], .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna([Cods],  [], [Código])\n\t\tloLista.mAddColuna([Descs], [], [Descrição])\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value = crListaRemota.Cods\n\tUse In crListaRemota\nEndIf\nThis.Refresh\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFOP.Grade.Column10.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFOP.Grade.Column10.Text1",
+      "evento": "Valid",
+      "linhas": 18,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject([fwBuscaExt], ThisForm.poDataMgr.pnIdConn, [SigCdTam], ;\n\t\t\t\t\t\t   [crListaRemota], [Cods], This.Value, [Seleção], .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna([Cods],  [], [Código])\n\t\tloLista.mAddColuna([Descs], [], [Descrição])\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value = crListaRemota.Cods\n\tUse In crListaRemota\nEndIf\nThis.Refresh\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFOP.cmdExcluir",
+      "evento": "Click",
+      "linhas": 10,
+      "codigoOriginal": "Select crSigPrFnc\n\nIf Not Eof() And ( crSigPrFnc.cPros = crSigCdPro.cPros )\n\tDelete\n\tSkip\n\tSkip - 1\nEndif\n\nThisform.Houveexcl = .T.\nThisform.Grade.Refresh",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFOP.cmdSair",
+      "evento": "Click",
+      "linhas": 46,
+      "codigoOriginal": "If Thisform.cmdInserir.Visible Or Thisform.cmdExcluir.Visible\n\tIf( InList(ThisForm.pcescolha,'INSERIR','ALTERAR') ) \n\t\tSelect crSigPrFnc\n\t\tGo Top\n\t\tScan\n\t\t\tIf( IsEmpty(crSigPrFnc.iFors) ) \n\t\t\t\tMessageBox('Fornecedor deve ser informado!',48,'Atenção')\n\t\t\t\tThisForm.Grade.Column1.SetFocus\n\t\t\t\tReturn(.F.)  \n\t\t\tEndIf\n\t\t\tIf( IsEmpty(crSigPrFnc.Reffs) )\n\t\t\t\tMessageBox('A referência do fornecedor deve ser informada!',48,'Atenção')\n\t\t\t\tThisform.Grade.Column3.SetFocus \n\t\t\t\tReturn(.F.)  \n\t\t\tEndIf\n\t\t\tIf( Is... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFOP.cmdInserir",
+      "evento": "Click",
+      "linhas": 11,
+      "codigoOriginal": "ThisForm.houveincl = .T.\n\nSelect crSigPrFnc\nLocate for cPros = crSigCdPro.cPros .and. iFors = Space(5)\nIf Eof()\n\tInsert Into crSigPrFnc (cPros, CidChaves) Values (crSigCdPro.cPros,fUniqueIds())\nEndIf\n\nSelect crSigPrFnc\nThisform.Grade.Column1.SetFocus\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFOP.cmdRepetir",
+      "evento": "Click",
+      "linhas": 13,
+      "codigoOriginal": "If Empty(crSigPrFnc.Ifors)\n\tMessageBox([Selecione um Registro para ser Repetido.],0+48,[Atenção])\n\tReturn .F.\nEndIf \n\nThisForm.lblQtde.Visible = .T.\nThisForm.getQtde.Visible = .T.\nThisForm.shpQtde.Visible = .T.\n\nThisForm.getQtde.Value = 0\nThisForm.getQtde.Refresh \n\nThisForm.getQtde.SetFocus ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDFOP.getQtde",
+      "evento": "Valid",
+      "linhas": 31,
+      "codigoOriginal": "lnVezes = 0 \n\nIf Not Empty(This.Value)\n\tlnVezes = This.Value\n\n\tSelect crSigPrFnc\n\tm.iFors    = crSigPrFnc.iFors\n\tm.rClis    = crSigPrFnc.rClis\n\tm.Reffs    = crSigPrFnc.Reffs\n\tm.Moevs    = crSigPrFnc.Moevs\n\tm.PVens    = crSigPrFnc.PVens\n\tm.dtValid  = crSigPrFnc.dtValid\n\tm.Situas   = crSigPrFnc.Situas\n\tm.Colecoes = crSigPrFnc.Colecoes\n\tm.CodCors  = crSigPrFnc.CodCors\n\tm.CodTams  = crSigPrFnc.CodTams\n\tm.cPros    = crSigCdPro.cPros\n\t\n\tThisform.houveincl = .T.\n\t\t\n\tFor i=1 To lnVezes\n\t\tSelect crSigPrF... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFOP.getQtde",
+      "evento": "LostFocus",
+      "linhas": 7,
+      "codigoOriginal": "ThisForm.lblQtde.Visible = .F.\nThisForm.shpQtde.Visible = .F.\nThis.Visible = .F.\n\nSelect crSigPrFnc\nThisform.Grade.Column1.SetFocus\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDFOP.cmdInserir.Click",
+      "queryOriginal": "\tInsert Into crSigPrFnc (cPros, CidChaves) Values (crSigCdPro.cPros,fUniqueIds())",
+      "tabelas": "crSigPrFnc",
+      "colunas": "cPros,CidChaves",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["crSigPrFnc"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

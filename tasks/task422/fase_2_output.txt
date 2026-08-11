@@ -1,0 +1,11 @@
+﻿Fase 2/8 conclu├¡da. O `FornecedorBO.prg` agora tem todos os m├®todos CRUD completos:
+
+- **ObterChavePrimaria()** ÔÇö retorna `this_cFormas` para auditoria
+- **CarregarDoCursor()** ÔÇö usa `SELECT (par_cAliasCursor)` antes de acessar campos (padr├úo correto)
+- **ValidarDados()** ÔÇö valida campo obrigat├│rio + verifica duplicata no INSERT (l├│gica do legado via `ChkRegister`)
+- **VerificarFormaExistente()** ÔÇö `COUNT(*)` para checar duplicata antes de inserir
+- **Inserir()** ÔÇö `INSERT INTO SigCdFrm (formas, infos)` + auditoria
+- **Atualizar()** ÔÇö `UPDATE SigCdFrm SET infos = ... WHERE formas = ...` + auditoria (PK n├úo alter├ível)
+- **ExecutarExclusao()** ÔÇö `DELETE FROM SigCdFrm WHERE formas = ...` + auditoria
+- **Buscar()** ÔÇö `SELECT` com `LEFT JOIN SigPrInf` para exibir descri├º├úo, com padr├úo ZAP+APPEND para reuso do cursor do grid
+- **CarregarPorCodigo()** ÔÇö SELECT por PK + `this_lNovoRegistro = .F.` para evitar viola├º├úo de PK no Alterar

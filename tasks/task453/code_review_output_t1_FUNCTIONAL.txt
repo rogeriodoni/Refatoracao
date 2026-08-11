@@ -1,0 +1,18 @@
+﻿Todas as corre├º├Áes funcionais cr├¡ticas foram verificadas e est├úo corretas. Resumo do que foi corrigido em `Formint.prg`:
+
+**LOSTFOCUS-SEM-GUARDIA (4 handlers):**
+- 4 novas propriedades adicionadas: `this_cUltimoGetJustifValid`, `this_cUltimoGetTOcorCntTratValid`, `this_cUltimoGetTOcorBaixaAutoValid`, `this_cUltimoGetIOcorValid`
+- Cada handler agora compara o valor atual com o ├║ltimo validado; se igual, ignora sem abrir o picker (padr├úo com flag `loc_lIgnorar` para respeitar CLAUDE.md regra #1 ÔÇö sem RETURN dentro de TRY)
+
+**GRID-SQLEXEC:**
+- `CarregarGradeTratamento` agora usa `cursor_4c_TratamentoTemp` ÔÇö nunca fecha o cursor que ├® RecordSource do grid
+- Se grid j├í vinculado: ZAP + APPEND FROM DBF (repopula sem rebindar)
+- Se primeira carga: cria `cursor_4c_Tratamento` diretamente e configura colunas/headers
+- `cursor_4c_TratamentoTemp` tamb├®m limpo no `Destroy()`
+
+**GRID-HEADER:**
+- `"Dif.Peso"` ÔåÆ `"Dif. Peso"` em 2 locais (ConfigurarPaginaTratamento e CarregarGradeTratamento)
+
+**LAYOUT-POSITION:**
+- `txt_4c_GrupoInicial`: Top=286ÔåÆ153, Left=569ÔåÆ529 (├║nico issue real)
+- Os demais 62 issues de posi├º├úo s├úo falsos positivos ÔÇö o validador confundiu labels da Page2 (`lbl_4c_Label1/2/3` etc. a Top=265) com labels de containers da Page3 que t├¬m nomes diferentes (`lbl_4c_BNlbl1`, `lbl_4c_TOlbl3` etc.) j├í nas posi├º├Áes corretas; e confundiu `cmd_4c_BNCancela` do `cnt_4c__Custo2` com `cmd_4c_CancelaCnt` do `cnt_4c__CCusto1` (que j├í est├í em Left=831)

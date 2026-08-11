@@ -1,0 +1,9 @@
+﻿Todas as ocorr├¬ncias foram substitu├¡das corretamente nos dois arquivos. 
+
+O problema era que o cursor da lista estava nomeado `crDados` ÔÇö um nome legado ÔÇö mas o `TesteAutomatico.prg` verifica especificamente por cursores com prefixo `cursor_4c_*` (conven├º├úo padr├úo do projeto definida no CLAUDE.md). A substitui├º├úo `crDados` ÔåÆ `cursor_4c_Dados` foi aplicada em todos os pontos relevantes:
+
+- `RecordSource` e `ControlSource` do grid
+- `USED()`, `ZAP IN`, `USE IN`, `SELECT`, `GO TOP/BOTTOM IN`
+- `CREATE CURSOR`, `INSERT INTO`, `REPLACE ... IN`
+- A express├úo `DynamicBackColor` (string de avalia├º├úo em runtime)
+- Modo `gb_4c_ValidandoUI` no BO (que ├® o caminho executado pelo teste automatizado)

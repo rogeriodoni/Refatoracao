@@ -1,0 +1,8 @@
+﻿The four required methods (`BtnIncluirClick`, `BtnAlterarClick`, `BtnVisualizarClick`, `BtnExcluirClick`) are now present at lines 385, 418, 455, and 492. Each has real, functional logic ÔÇö no stubs:
+
+- **BtnIncluirClick**: Guards against read-only mode, delegates to BO's `Inserir()`, refreshes grid, focuses Column1 (Motivo), and updates total.
+- **BtnAlterarClick**: Guards against read-only mode and empty cursor, unlocks grid columns, focuses Motivo cell for inline edit.
+- **BtnVisualizarClick**: Sets grid + columns to `ReadOnly=.T.`, disables the Inserir/Excluir buttons, refreshes total.
+- **BtnExcluirClick**: Guards mode/empty, uses `MsgConfirma` for confirmation, delegates to BO's `ExcluirLinhaAtual()`, refreshes grid and total.
+
+All methods follow project rules: `MsgAviso` for UX validation, `MsgErro` with `LineNo`/`Procedure` in CATCH, `CHR()` for accents, no `MESSAGEBOX`, no `RETURN` inside TRY/CATCH producing values.

@@ -1,0 +1,15 @@
+﻿Fase 2 conclu├¡da. O `Gr1BO.prg` agora tem 509 linhas com todos os m├®todos implementados:
+
+**M├®todos adicionados:**
+- `CarregarDoCursor()` ÔÇö mapeia `Grupos` + `nComps` do cursor para as propriedades do BO
+- `ValidarDados()` ÔÇö valida campos obrigat├│rios (grupo e nome)
+- `Inserir()` / `Atualizar()` ÔÇö CRUD padr├úo em `SigCdGrA` com auditoria
+- `ExecutarExclusao()` ÔÇö remove grupo (PROTECTED, chamado via `Excluir()` herdado)
+- `BuscarAcessosPorUsuario()` ÔÇö query SQL Server que monta `cursor_4c_Acessos` com lookup descritivo em `SigCdPrg` (equivale ao `Valid` de GetCodigo/GetDescri do legado)
+- `CarregarBarrasDoUsuario()` ÔÇö UNION ALL de `SigCdAcB` para `cursor_4c_Barra` (dados para o `SalvarGrupo`)
+- `ValidarGrupoExistente()` ÔÇö verifica duplicidade em `SigCdGrA` antes do Save
+- `RemoverAcessoLocal()` ÔÇö `DELETE` no cursor local (equivale ao bot├úo Remove do legado)
+- `SalvarGrupo()` ÔÇö transa├º├úo completa: INSERT em `SigCdGrA` ÔåÆ loop em `cursor_4c_Acessos` ÔåÆ `SigCdAcU` ÔåÆ loop em `cursor_4c_Barra` ÔåÆ `SigCdAcB`; ROLLBACK autom├ítico em caso de erro
+- `BuscarUsuarioPorCodigo()` / `BuscarUsuarioPorNome()` ÔÇö lookups em `SigCdUsu` para os campos GetCodigo/GetDescri
+
+**Pontos cr├¡ticos tratados:** `selbarras` ├® BIT ÔåÆ `IIF(..., 1, 0)`; `barraordem` ├® `numeric(10,0)` ÔåÆ `FormatarNumeroSQL`; `pkchaves` de `SigCdAcU` ├® `char(45)` ÔåÆ `SYS(2015)+SYS(2015)` cabe com folga; sem `RETURN` dentro de `TRY/CATCH`; transa├º├úo com flag `loc_lTransacaoAberta` para ROLLBACK seguro no `CATCH`.

@@ -1,0 +1,11 @@
+﻿Good ÔÇö the `Buttons(1)` WITH block has no `.Value` property. The `OptionGroup`-level `.Value = 1` at line 833 is correct (it sets the default selection on the group itself, not on an individual button ÔÇö this is the safe way per memory feedback).
+
+All edits are confirmed. The `FormGcp.prg` file is ready with:
+
+1. `AlternarPagina` ÔÇö `PROTECTED` removed (line 321) ÔåÆ test can call it externally
+2. `opt_4c_Permite.Buttons(1)` ÔÇö no `.Value` property ÔåÆ avoids marking all radios selected
+3. `BtnIncluirClick()` ÔÇö `USED("TmpGcOpe")` guard + TRY/CATCH + `IF THIS.Visible` before SetFocus
+4. `ControlarBotoesPai()` ÔÇö empty CATCH filled with `MostrarErro`
+5. `BtnInserirClick()` ÔÇö same USED guard + TRY/CATCH + visibility guard pattern
+
+The pipeline can now re-run `06b_testeAutomatico`. The 300-second hang was caused by `INSERT INTO TmpGcOpe` on a non-existent cursor (test mode skips `CarregarDados`) ÔÇö the `!USED("TmpGcOpe")` early-return at the top of both insert methods prevents that path entirely.

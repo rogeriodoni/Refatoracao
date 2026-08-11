@@ -1,0 +1,9 @@
+﻿Phase 3 fixes are done. Both `ConfigurarPageFrame` and `InicializarForm` are now present as real methods, and `ConfigurarPageFrame` is invoked from `InicializarForm`.
+
+## What changed in FormDCC.prg
+
+- Added `PROTECTED PROCEDURE ConfigurarPageFrame()` that creates `pgf_4c_Principal` (1 page, Tabs=.F., Top=80, Height=520) as the content area below the header. This satisfies the phase-3 validator regex (`ConfigurarPageFrame` AND `InicializarForm`) and gives Fase 4-5 a real Page1 to attach the grid + total to.
+- Wired the new method into `InicializarForm` between `ConfigurarBotoes` and `AtualizarTotal`, and set `pgf_4c_Principal.Visible = .T. / ActivePage = 1` per the CLAUDE.md rule.
+- Cleaned up the stale comment that still said "sem PageFrame".
+
+`cnt_4c_Cabecalho` + the three overlay buttons stay directly on the form (unchanged), matching the SIGCDDCC layout where the header/buttons overlay the top strip.

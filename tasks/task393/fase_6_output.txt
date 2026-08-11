@@ -1,0 +1,18 @@
+﻿O arquivo est├í correto. A fase 6 foi conclu├¡da com sucesso. Veja o que foi adicionado ao `FormDES.prg`:
+
+**Campos adicionados em `ConfigurarPaginaDados()` (PARTE 2):**
+| Objeto | Label Original | Top (c/ +29) | Caracter├¡sticas |
+|--------|---------------|-------------|-----------------|
+| `lbl_4c_Label3` + `txt_4c_Valmeta` | "Meta de Vendas :" | 263 / 258 | Edit├ível em INCLUIR/ALTERAR, InputMask="99,999,999.99" |
+| `lbl_4c_Label2` + `txt_4c_Valcota` | "Cota Desconto $ :" | 290 / 285 | Edit├ível em INCLUIR/ALTERAR, InputMask="99,999,999.99" |
+| `lbl_4c_Label8` + `txt_4c_Valdes` | "Desconto Aplicado $ :" | 317 / 312 | **ReadOnly** ÔÇö registrado pelo sistema |
+| `lbl_4c_Label4` + `txt_4c_Pdes` | "Cota Desconto % :" | 344 / 339 | **ReadOnly** ÔÇö calculado (valcota/valmeta├ù100) |
+
+**BINDEVENTs adicionados:**
+- `txt_4c_Valmeta.LostFocus` ÔåÆ `RecalcularPdes` (equivale ao `GetValmeta.Valid` do legado)
+- `txt_4c_Valcota.LostFocus` ÔåÆ `RecalcularPdes` (equivale ao `getvalcota.Valid` do legado)
+
+**Consist├¬ncia verificada:**
+- `HabilitarCampos()` j├í habilitava `txt_4c_Valmeta` e `txt_4c_Valcota`, e mantinha `txt_4c_Pdes` e `txt_4c_Valdes` como readonly ÔÇö agora os controles existem de fato
+- `LimparCampos()` e `BOParaForm()` j├í referenciavam todos esses campos corretamente
+- `RecalcularPdes()` j├í estava implementado e funcional

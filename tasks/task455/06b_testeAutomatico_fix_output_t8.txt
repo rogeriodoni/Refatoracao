@@ -1,0 +1,7 @@
+﻿All three changes are correct. Here's what was applied (t8 fix):
+
+**Change 1 ÔÇö `ConfigurarPaginaLista()`** (lines 381ÔÇô393): After the column `WITH` blocks and before `TornarControlesVisiveis`, added a `gb_4c_ModoTeste` guard that pre-creates `cursor_4c_Dados` and fully binds the grid's `RecordSource`/`ControlSource`/`Header1.Caption`. This prevents VFP9 from ever encountering a grid with `ColumnCount=3` but no `RecordSource` during the test lifecycle.
+
+**Change 2 ÔÇö `CarregarLista()`** (lines 560ÔÇô572): Replaced the bare `loc_lResultado = .T.` in the test-mode branch with the full cursor creation and grid binding sequence, plus `FormatarGridLista()`. Now `TesteCarregarLista` (test #2) will find `cursor_4c_Dados` properly created and `USED()` will return `.T.`.
+
+**Change 3 ÔÇö `AlternarPagina()`** (lines 658ÔÇô669): Wrapped `ActivePage = par_nPagina` and the `CarregarLista()` call in `TRY/CATCH TO loException / MostrarErro / ENDTRY`. Any VFP9 internal error on `ActivePage` assignment is now caught and logged rather than causing the unattended-mode retry loop that produces the 300-second kill.

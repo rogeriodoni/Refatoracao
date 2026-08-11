@@ -1,0 +1,10 @@
+﻿Both guards are in place correctly ÔÇö outside the TRY blocks, per CLAUDE.md Rule #1. The fix chain is now complete and defense-in-depth:
+
+| Method | Guard location |
+|--------|----------------|
+| `FormICN.CarregarDados()` | Before TRY (outer entry point) |
+| `ICNBO.InicializarDados()` | Before TRY (BO entry point) |
+| `ICNBO.CarregarProgramas()` | Before TRY (defense-in-depth) |
+| `ICNBO.CarregarIcones()` | Before TRY (defense-in-depth) |
+
+Any code path ÔÇö including macro-bypass of PROTECTED from `TesteCarregarDadosReais` ÔÇö that reaches these methods with `gnConnHandle=0` now exits immediately without touching SQLEXEC, preventing the 300-second TCP hang.

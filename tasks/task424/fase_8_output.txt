@@ -1,0 +1,16 @@
+﻿O arquivo est├í completo e correto. Fase 8 conclu├¡da com sucesso.
+
+**Resumo do que foi adicionado** (linhas 794ÔÇô976):
+
+| M├®todo | Descri├º├úo |
+|---|---|
+| `FormParaBO()` | L├¬ linha atual de `crSigOpFpD` ÔåÆ propriedades do BO |
+| `BOParaForm()` | Escreve propriedades do BO ÔåÆ linha atual de `crSigOpFpD` |
+| `HabilitarCampos(par_lHabilitar)` | Controla `ReadOnly` da grade (respeitando l├│gica de Column1/Column2 por estado) |
+| `LimparCampos()` | `ZAP IN crSigOpFpD` + reseta flags `this_lInseriu`/`this_lExcluiu` |
+| `AjustarBotoesPorModo()` | Habilita `cmd_4c_Excluir` apenas quando h├í registro selecionado |
+| `BtnBuscarClick()` | Recarrega grade do servidor; pede confirma├º├úo se h├í altera├º├Áes pendentes |
+| `BtnSalvarClick()` | Salva via `SalvarGrid()` sem fechar; recarrega grade em seguida |
+| `BtnCancelarClick()` | Confirma descarte, chama `LimparCampos()` + `CarregarLista()` |
+
+**Integra├º├úo**: N├úo foi necess├íria ÔÇö `config.prg` usa `ADIR()` para auto-carregar `*BO.prg` e `Form*.prg`, ambos j├í est├úo nas pastas corretas (`classes\` e `forms\cadastros\`). FormFpd ├® um popup-subform chamado com par├ómetro `par_cTabDs` pelo form pai, por isso **n├úo entra no menu principal**.

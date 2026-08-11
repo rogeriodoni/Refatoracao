@@ -1,0 +1,25 @@
+[2026-07-31 21:19:46] [INFO] === CLAUDE CLI INVOKER ===
+[2026-07-31 21:19:46] [INFO] Prompt File: C:\4c\tasks\task389\runtime_fix_prompt_06b_testeAutomatico_t1.md
+[2026-07-31 21:19:46] [INFO] Output File: C:\4c\tasks\task389\06b_testeAutomatico_fix_output_t1.txt
+[2026-07-31 21:19:46] [INFO] Model: sonnet
+[2026-07-31 21:19:46] [INFO] Timeout: 3600 segundos
+[2026-07-31 21:19:46] [INFO] Max Output Tokens: 128000
+[2026-07-31 21:19:46] [INFO] Context Files: 0 arquivo(s)
+[2026-07-31 21:19:46] [INFO] Invocando Claude CLI...
+[2026-07-31 21:19:46] [INFO] Prompt carregado: 56719 caracteres
+[2026-07-31 21:19:46] [INFO] Executando: claude --model sonnet --dangerously-skip-permissions --add-dir C:\4c
+[2026-07-31 21:19:46] [INFO] Tamanho total do prompt: 56719 caracteres
+[2026-07-31 21:19:46] [INFO] Invocando Claude CLI (tentativa 1/7)...
+[2026-07-31 21:22:44] [INFO] Claude CLI finalizado em 177.4659716 segundos
+[2026-07-31 21:22:44] [INFO] Exit Code: 0
+[2026-07-31 21:22:44] [INFO] Output salvo em: C:\4c\tasks\task389\06b_testeAutomatico_fix_output_t1.txt
+[2026-07-31 21:22:44] [INFO] Output size: 828 bytes
+[2026-07-31 21:22:44] [INFO] SUCESSO: Claude CLI executado com sucesso
+[2026-07-31 21:22:44] [INFO] Preview do output:
+[2026-07-31 21:22:44] [INFO] Confirmado ÔÇö o guard do `InicializarForm` permanece (correto), o guard do `CarregarLista` foi removido, e nenhum dos dois m+®todos +® mais PROTECTED.
+
+**Resumo das corre+º+Áes:**
+
+1. **`CarregarLista`** ÔÇö removido o early-return `gb_4c_ValidandoUI`: o `CtgBO.Buscar("")` j+í cria `cursor_4c_Dados` vazio quando n+úo h+í conex+úo, ent+úo o teste agora encontra o cursor esperado.
+
+2. **`AlternarPagina`** ÔÇö removido `PROTECTED`: o `TesteAutomatico` chama este m+®todo diretamente no objeto

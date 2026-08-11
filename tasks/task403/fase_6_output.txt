@@ -1,0 +1,36 @@
+﻿Phase 6 is complete. `FormEmn.prg` now has 2313 lines with all procedures implemented.
+
+Here's what Edit 2 added before `ENDDEFINE`:
+
+**Core CRUD flow** (8 procedures):
+- `BtnSalvarClick` ÔÇö validates at least one empresa-filled row, calls `FormParaBO()` ÔåÆ `BO.Salvar()`, returns to Page1
+- `BtnCancelarClick` ÔÇö calls `AlternarPagina(1)`
+- `FormParaBO` ÔÇö syncs `txt_4c_Produto` ÔåÆ `BO.this_cCPros`
+- `BOParaForm` ÔÇö populates all Page2 fields from BO properties, calls `CarregarGrade()`
+- `HabilitarCampos(par_lHabilitar)` ÔÇö produto fields editable only in INCLUIR; grid/excluir/confirmar follow par_lHabilitar
+- `LimparCampos` ÔÇö zeros all fields, calls `CriarCursorGridVazio("")` + `ConfigurarRecordSourceGrid()`
+
+**Grid management** (4 procedures):
+- `CarregarGrade` ÔÇö clears RecordSource, calls `BuscarItens()`, falls back to `CriarCursorGridVazio()`, then `ConfigurarRecordSourceGrid()`
+- `ConfigurarRecordSourceGrid` ÔÇö sets RecordSource="CrSigCdMin", re-sets all 8 ControlSources **after** RecordSource (Problem 48), resets headers, applies `lTemTam`/`lTemCor` ReadOnly on Column3/4
+- `CriarCursorGridVazio` ÔÇö `SET NULL ON` + `CREATE CURSOR CrSigCdMin` (21 fields) + INSERT one blank row + `SET NULL OFF`
+- `AdicionarLinhaGrid` ÔÇö INSERT blank row, GO BOTTOM, `ActivateCell(RECCOUNT, 1)`
+
+**Product header lookup** (6 procedures):
+- `CarregarDadosProduto` ÔÇö SQL SELECT SigCdPro+SigCdCli+SigCdGrp, populates header fields + BO props, calls `BuscarFlags()` ÔåÆ `CriarCursorGridVazio()` ÔåÆ `ConfigurarRecordSourceGrid()`
+- `AbrirLookupProdutoCodigo` / `ProdutoCodKeyPress` (F4=63) / `ProdutoCodDblClick`
+- `AbrirLookupProdutoDescricao` / `ProdutoDescKeyPress` / `ProdutoDescDblClick`
+
+**Grid column lookups** (12 lookup methods + 10 KeyPress/DblClick handlers):
+- Empresa: `AbrirLookupEmpresa` (SigCdEmp/Cemps/Razas), `EmpColKeyPress` (F4), `EmpColLostFocus` (validates via SQLEXEC)
+- Tamanho: `AbrirLookupTamanho` (SigCdTam/cods/descs), `TamanhoColKeyPress`, `TamanhoColDblClick`
+- Cor: `AbrirLookupCor` (SigCdCor/cods/descs), `CorColKeyPress`, `CorColDblClick`
+- Grupo: `AbrirLookupGrupo` (SigCdGcr/Codigos/Descrs), `GrupoColKeyPress`, `GrupoColDblClick`
+- Conta: `AbrirLookupConta` (SigCdCli/iclis/rclis), `ContaColKeyPress`, `ContaColDblClick`
+- Local: `AbrirLookupLocal` (SigPrLcl/Codigos/Descricaos, filtro `Tipos=3`), `LocalColKeyPress`, `LocalColDblClick`, `LocalColLostFocus` (auto-adiciona nova linha quando emps+locals preenchidos)
+
+**Validation & events** (5 procedures):
+- `QtdeColLostFocus` ÔÇö rejeita qmins < 0
+- `QIdealColLostFocus` ÔÇö rejeita qideal < 0
+- `GradeIAfterRowColChange` ÔÇö `LPARAMETERS par_nColIndex`; mant├®m Column3/4 ReadOnly conforme flags; sincroniza `obj_4c_OptRetiras.Value` com `CrSigCdMin.retiras`; habilita `cmd_4c_BtnExcluir` se empresa preenchida e n├úo em VISUALIZAR
+- `BtnExcluirLinhaClick` ÔÇö guards antes do TRY; DELETE + PACK + `ConfigurarRecordSourceGrid()`

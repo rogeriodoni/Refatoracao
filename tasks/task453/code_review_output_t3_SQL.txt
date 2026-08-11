@@ -1,0 +1,11 @@
+﻿Ambas as flags s├úo **falsos positivos** do validador autom├ítico. Veja a an├ílise:
+
+**FLAG 1 ÔÇö `CIdChaves` no WHERE do UPDATE (linhas 3566, 3863)**
+
+O validador comparou colunas do WHERE de SELECTs do c├│digo legado. Mas no c├│digo migrado, `CIdChaves` aparece no WHERE de **statements UPDATE**, n├úo SELECT. `SigIvTrT` tem `cidchaves` como **chave prim├íria** (`CONSTRAINT [sigivtrt_cidchaves] PRIMARY KEY CLUSTERED`). Usar a PK no WHERE do UPDATE ├® a forma correta de identificar a linha ÔÇö o legado fazia isso implicitamente via `ThisForm.poDataMgr.Update('Tratamento')`.
+
+**FLAG 2 ÔÇö `CMoes` no WHERE de `SigCdCot` (intBO.prg linha 547)**
+
+Confirmado no schema: `SigCdCot` tem a coluna `[cmoes] [char](3) NOT NULL` (e at├® um ├¡ndice `CREATE NONCLUSTERED INDEX [cmoes] ON [dbo].[SigCdCot]`). O legado fazia `SELECT * FROM SigCdCot` sem filtro e depois usava SEEK ÔÇö o migrado otimizou com WHERE direto, que ├® v├ílido.
+
+**Nenhuma corre├º├úo necess├íria.** Ambos os problemas reportados s├úo falsos positivos ÔÇö as colunas existem no schema real e o uso est├í semanticamente correto. Nenhum arquivo ser├í alterado.

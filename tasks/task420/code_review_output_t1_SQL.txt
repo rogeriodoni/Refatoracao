@@ -1,0 +1,16 @@
+﻿Todas as refer├¬ncias a `cidchaves` foram removidas. Resumo das corre├º├Áes aplicadas:
+
+**fnlBO.prg:**
+- Removida a propriedade `this_cCidChaves`
+- `ObterChavePrimaria()` agora retorna `ALLTRIM(this_cImps) + STR(this_nOrdems, 2, 0)`
+- `CarregarDoCursor`: removida leitura da coluna `cidchaves`
+- `Buscar` + `CarregarPorCodigo`: `a.cidchaves` removido do SELECT
+- `CarregarPorCodigo(par_cCidChaves)` ÔåÆ `CarregarPorCodigo(par_cImps, par_nOrdems)` com WHERE `a.imps = ... AND a.ordems = ...`
+- `Inserir`: removidos `cidchaves` da lista de colunas e do VALUES
+- `Atualizar`: WHERE mudou para `imps = ... AND ordems = ...`
+- `ExecutarExclusao`: WHERE mudou para `imps = ... AND ordems = ...`
+- M├®todo `GerarNovaCidChaves()` removido
+
+**Formfnl.prg:**
+- `BtnVisualizarClick`, `BtnAlterarClick`, `BtnExcluirClick`: leitura de `crSigFiNal.cidchaves` substitu├¡da por `crSigFiNal.imps` + `crSigFiNal.ordems`; chamadas a `CarregarPorCodigo` atualizadas
+- `BtnSalvarClick`: bloco de gera├º├úo de `cidchaves` removido

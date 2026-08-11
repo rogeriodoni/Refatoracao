@@ -1,0 +1,21 @@
+﻿Fase 4 completa. Resumo do que foi adicionado ao `FormDES.prg`:
+
+**Page1 ÔÇö ConfigurarPaginaLista():**
+- 5 bot├Áes CRUD em `cnt_4c_Botoes`: Incluir (L=5), Visualizar (L=80), Alterar (L=155), Excluir (L=230), Buscar (L=305)
+- `cnt_4c_Saida` + `cmd_4c_Encerrar` (padr├úo can├┤nico Left=917)
+- `cmd_4c_Btncarregar` (Left=467, `Visible=.F.` ÔÇö oculto conforme legado, exclu├¡do do `TornarControlesVisiveis`)
+- `grd_4c_Lista` (Top=160, Left=12, Width=890, Height=460, 6 colunas)
+- BINDEVENTs para todos os 7 bot├Áes da Page1
+
+**Page2 ÔÇö ConfigurarPaginaDados():**
+- Bot├Áes Confirmar e Cancelar em `cnt_4c_Salva`
+- BINDEVENTs para ambos
+
+**Novos handlers e m├®todos (todos PUBLIC para BINDEVENT):**
+- `BtnEncerrarClick` / `BtnIncluirClick` / `BtnVisualizarClick` / `BtnAlterarClick` / `BtnExcluirClick` / `BtnBuscarClick` / `BtnBtncarregarClick` / `BtnConfirmarClick` / `BtnCancelarClick`
+- `AjustarBotoesPorModo` / `HabilitarCampos` / `LimparCampos`
+- `FormParaBO` / `BOParaForm` (com PEMSTATUS guards para campos ainda n├úo existentes)
+- `RecalcularPdes` (para os Valid events de valmeta/valcota, fase 5)
+- `ImportaPlan` (importa├º├úo Excel via `ImpExcelDriver` com TRY/CATCH)
+
+**Corre├º├Áes de regras aplicadas:** sem `RETURN` dentro de TRY, `TornarControlesVisiveis` guarda `cmd_4c_Btncarregar`, `CarregarLista` define ControlSource e Caption **ap├│s** RecordSource.

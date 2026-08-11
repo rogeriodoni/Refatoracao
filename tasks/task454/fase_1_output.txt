@@ -1,0 +1,18 @@
+﻿`C:\4c\projeto\app\classes\JrnBO.prg` criado com sucesso (Fase 1/8 conclu├¡da).
+
+**O que foi implementado:**
+
+| M├®todo | Descri├º├úo |
+|--------|-----------|
+| `Init()` | Configura `this_cTabela = "SigCdJrn"` e `this_cCampoChave = "pkchave"` |
+| `CarregarDoCursor()` | Usa `SELECT (alias)` + `TratarNulo` para todos os campos |
+| `ParsearDias()` | Converte string `dias` (7 chars 'X'/' ') para flags `this_lDom/Seg/Ter...` |
+| `ConstruirDias()` | Reconstr├│i string `dias` a partir das flags l├│gicas ao salvar |
+| `CalcularPkChave()` | `refers + STRTRAN(cargos," ","0") + STRTRAN(iclis," ","0")` ÔÇö l├│gica exata do legado |
+| `Buscar()` | SELECT com JOIN SigCdCli + 14 colunas computadas de `dias` |
+| `CarregarPorCodigo()` | SELECT por `pkchave` |
+| `Inserir()` / `Atualizar()` | Inserir: todos os campos. Alterar: apenas `refers/dias/hora*/dtalts/usualts` (conforme l├│gica original) |
+| `ExecutarExclusao()` | DELETE por `pkchave` |
+| `CopiarParaMes()` | Reproduz a l├│gica do bot├úo "Copia M├¬s" do legado |
+| `BuscarMesesDisponiveis()` | SELECT para popular o combo no painel de c├│pia |
+| `ValidarDados()` | Valida refer├¬ncia, funcion├írio/cargo e os 4 hor├írios obrigat├│rios |

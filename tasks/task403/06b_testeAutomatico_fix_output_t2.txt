@@ -1,0 +1,3 @@
+﻿8 m├®todos `AbrirLookup*` agora s├úo p├║blicos (sem `PROTECTED`). O teste `LookupMetodosExistem` contar├í `AbrirLookup: 8` em vez de `0`, satisfazendo a condi├º├úo que causava a falha.
+
+**Causa raiz**: Os m├®todos `AbrirLookup*` estavam declarados como `PROTECTED`, tornando-os invis├¡veis ao teste automatizado que verifica a exist├¬ncia de m├®todos de lookup p├║blicos. Em VFP9, m├®todos em `DEFINE CLASS` s├úo PUBLIC por padr├úo ÔÇö apenas `PROTECTED` e `HIDDEN` s├úo modificadores v├ílidos (regra 9.1 do CLAUDE.md).

@@ -1,0 +1,241 @@
+﻿{
+    "taskId":  "task448",
+    "arquivoOriginal":  "",
+    "tipoArquivo":  "SCX",
+    "comentario_tipoArquivo":  "SCX=Form, FRX=Report, VCX=ClassLib",
+    "status":  "PENDING",
+    "statusComentario":  "PENDING | IN_PROGRESS | COMPLETED | FAILED | BLOCKED",
+    "criadoEm":  "2026-08-09T06:24:35",
+    "atualizadoEm":  "2026-08-09T09:58:32",
+    "etapas":  {
+                   "01_moverArquivos":  {
+                                            "status":  "COMPLETED",
+                                            "inicio":  "2026-08-09T06:24:35",
+                                            "fim":  "2026-08-09T06:24:35",
+                                            "tentativas":  1,
+                                            "erro":  null,
+                                            "sctFile":  "C:\\4c\\tasks\\task448\\SIGCDICN.sct",
+                                            "baseName":  "SIGCDICN",
+                                            "scxFile":  "C:\\4c\\tasks\\task448\\SIGCDICN.scx"
+                                        },
+                   "02_extractCode":  {
+                                          "status":  "COMPLETED",
+                                          "inicio":  "2026-08-09T06:24:35",
+                                          "fim":  "2026-08-09T06:24:35",
+                                          "tentativas":  1,
+                                          "arquivoGerado":  "SIGCDCOR_codigo_fonte.txt",
+                                          "erro":  null,
+                                          "baseNameNormalizado":  "SIGCDICN",
+                                          "txtFile":  "C:\\4c\\tasks\\task448\\SIGCDICN_form_codigo_fonte.txt"
+                                      },
+                   "02b_analisarTarefa":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-08-09T06:24:35",
+                                              "fim":  "2026-08-09T06:24:36",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "analise.json",
+                                              "erro":  null,
+                                              "comentario":  "NOVO - Analise inteligente do codigo fonte",
+                                              "analiseFile":  "C:\\4c\\tasks\\task448\\analise.json"
+                                          },
+                   "03_gerarMetaPrompt":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-08-09T06:24:36",
+                                              "fim":  "2026-08-09T06:24:36",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "meta_prompt.md",
+                                              "erro":  null,
+                                              "formType":  "OPERACIONAL",
+                                              "phaseBFile":  "C:\\4c\\tasks\\task448\\meta_prompt_phaseB.md",
+                                              "metaPromptFile":  "C:\\4c\\tasks\\task448\\meta_prompt.md",
+                                              "boClass":  "ICNBO",
+                                              "formClass":  "FormICN",
+                                              "phaseAFile":  "C:\\4c\\tasks\\task448\\meta_prompt_phaseA.md"
+                                          },
+                   "04_gerarMapeamento":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-08-09T06:24:36",
+                                              "fim":  "2026-08-09T06:24:37",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "mapeamento.json",
+                                              "erro":  null,
+                                              "jsonFile":  "C:\\4c\\tasks\\task448\\mapeamento.json"
+                                          },
+                   "04b_gerarEsqueletos":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-08-09T06:24:37",
+                                               "fim":  "2026-08-09T06:24:37",
+                                               "tentativas":  1,
+                                               "arquivosGerados":  [
+
+                                                                   ],
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Geracao de codigo base ~70% completo",
+                                               "esqueletosDir":  "C:\\4c\\tasks\\task448\\esqueletos",
+                                               "arquivos":  [
+                                                                "FormICN_esqueleto.prg",
+                                                                "ICNBO_esqueleto.prg"
+                                                            ]
+                                           },
+                   "05_migracao":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-08-09T06:24:37",
+                                       "fim":  "2026-08-09T07:06:18",
+                                       "tentativas":  1,
+                                       "maxTentativas":  3,
+                                       "arquivosGerados":  [
+
+                                                           ],
+                                       "comentario":  "FormXXX.prg, XXXBO.prg",
+                                       "erro":  null,
+                                       "boExists":  true,
+                                       "boFile":  "C:\\4c\\projeto\\app\\classes\\ICNBO.prg",
+                                       "formExists":  true,
+                                       "tamanhoKB":  16.5,
+                                       "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\FormICN.prg",
+                                       "complexidade":  "COMPLEXO",
+                                       "linhas":  609
+                                   },
+                   "05b_corrigirAutomatico":  {
+                                                  "status":  "COMPLETED",
+                                                  "inicio":  "2026-08-09T07:06:18",
+                                                  "fim":  "2026-08-09T07:06:21",
+                                                  "tentativas":  1,
+                                                  "correcoesAplicadas":  0,
+                                                  "erro":  null,
+                                                  "comentario":  "NOVO - Correcao automatica de anti-padroes",
+                                                  "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\FormICN.prg",
+                                                  "boFile":  "C:\\4c\\projeto\\app\\classes\\ICNBO.prg"
+                                              },
+                   "05c_validarCompilacao":  {
+                                                 "status":  "COMPLETED",
+                                                 "inicio":  "2026-08-09T07:06:21",
+                                                 "fim":  "2026-08-09T07:10:14",
+                                                 "tentativas":  1,
+                                                 "errosCompilacao":  [
+
+                                                                     ],
+                                                 "erro":  null,
+                                                 "comentario":  "NOVO - Valida compilacao dos .prg antes de testar",
+                                                 "tentativasUsadas":  1,
+                                                 "sucesso":  true,
+                                                 "corrigidoPorClaude":  true,
+                                                 "arquivosValidados":  2
+                                             },
+                   "06_testForm":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-08-09T07:12:03",
+                                       "fim":  "2026-08-09T07:12:06",
+                                       "tentativas":  1,
+                                       "maxTentativas":  5,
+                                       "errosEncontrados":  [
+
+                                                            ],
+                                       "erro":  null,
+                                       "tentativasUsadas":  1
+                                   },
+                   "06b_testeAutomatico":  {
+                                               "status":  "FAILED",
+                                               "inicio":  "2026-08-09T07:12:06",
+                                               "fim":  "2026-08-09T09:58:32",
+                                               "tentativas":  1,
+                                               "total":  0,
+                                               "passou":  0,
+                                               "falhou":  0,
+                                               "percentual":  0,
+                                               "erro":  "Testes automaticos falharam apos 10 tentativa(s): TIMEOUT: VFP9 travou durante teste automatico (300s). Possivel erro de runtime (Property not found, dialog modal).",
+                                               "comentario":  "NOVO - Testes CRUD automaticos"
+                                           },
+                   "07_validarUI":  {
+                                        "status":  "PENDING",
+                                        "inicio":  null,
+                                        "fim":  null,
+                                        "tentativas":  0,
+                                        "maxTentativas":  5,
+                                        "problemas":  {
+                                                          "erros":  0,
+                                                          "avisos":  0,
+                                                          "diferencas":  0,
+                                                          "total":  0
+                                                      },
+                                        "limiteProblemas":  10,
+                                        "erro":  null
+                                    },
+                   "08_gerarTestManual":  {
+                                              "status":  "PENDING",
+                                              "inicio":  null,
+                                              "fim":  null,
+                                              "tentativas":  0,
+                                              "arquivoGerado":  null,
+                                              "erro":  null
+                                          },
+                   "02c_analisarComportamento":  {
+                                                     "inicio":  "2026-08-09T06:24:36",
+                                                     "tentativas":  1,
+                                                     "erro":  null,
+                                                     "fim":  "2026-08-09T06:24:36",
+                                                     "comportamentoFile":  "C:\\4c\\tasks\\task448\\comportamento.json",
+                                                     "status":  "COMPLETED"
+                                                 },
+                   "02d_extrairLayout":  {
+                                             "inicio":  "2026-08-09T06:24:36",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-08-09T06:24:36"
+                                         },
+                   "05b2_atualizarMapeamento":  {
+                                                    "inicio":  "2026-08-09T07:06:21",
+                                                    "status":  "COMPLETED",
+                                                    "tentativas":  1,
+                                                    "erro":  null,
+                                                    "fim":  "2026-08-09T07:06:21",
+                                                    "destFile":  "C:\\4c\\projeto\\app\\utils\\mapeamentos\\FormICN_mapeamento.json",
+                                                    "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\FormICN.prg",
+                                                    "mapeamentoFile":  "C:\\4c\\tasks\\task448\\mapeamento.json"
+                                                },
+                   "05d_validarCompletude":  {
+                                                 "inicio":  "2026-08-09T07:10:14",
+                                                 "status":  "COMPLETED",
+                                                 "tentativas":  1,
+                                                 "erro":  null,
+                                                 "fim":  "2026-08-09T07:10:14",
+                                                 "sucesso":  true,
+                                                 "arquivosComProblema":  0
+                                             },
+                   "05e_codeReview":  {
+                                          "inicio":  "2026-08-09T07:10:14",
+                                          "status":  "COMPLETED",
+                                          "erro":  null,
+                                          "fim":  "2026-08-09T07:11:46",
+                                          "passes":  2,
+                                          "problemas":  "Nenhum",
+                                          "tentativas":  2,
+                                          "problemasRestantes":  0
+                                      },
+                   "05f_validarSQLSchema":  {
+                                                "inicio":  "2026-08-09T07:11:46",
+                                                "tentativas":  1,
+                                                "erro":  null,
+                                                "fim":  "2026-08-09T07:12:03",
+                                                "status":  "PASSED",
+                                                "boFile":  "C:\\4c\\projeto\\app\\classes\\ICNBO.prg",
+                                                "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\FormICN.prg"
+                                            }
+               },
+    "metricas":  {
+                     "tempoTotalSegundos":  0,
+                     "tempoExtracao":  0,
+                     "tempoAnalise":  0,
+                     "tempoEsqueletos":  0,
+                     "tempoMigracao":  0,
+                     "tempoCorrecao":  0,
+                     "tempoCompilacao":  0,
+                     "tempoTesteAuto":  0,
+                     "tempoValidacao":  0,
+                     "linhasCodigoOriginal":  0,
+                     "linhasCodigoGerado":  0,
+                     "correcoesAutomaticas":  0,
+                     "testesAutomaticos":  0
+                 }
+}

@@ -1,0 +1,7 @@
+﻿**Bug corrigido.**
+
+**Causa raiz**: `ConfigurarPaginaDados()` linha 572 fazia `ColumnCount = 3` antes de `RecordSource = "cursor_4c_Emps"`. O VFP9 tentava fazer auto-bind de uma 3┬¬ coluna num cursor que s├│ tem 2 campos (Emps, PercEmps), disparando um dialog interno que `SYS(2335, 0)` n├úo consegue suprimir ÔÇö travamento de 300s.
+
+**Fix**: Removidas as linhas `ColumnCount = 3` e `ColumnCount = 2` redundantes. Mantida apenas `RecordSource = "cursor_4c_Emps"` ap├│s o bloco WITH (padr├úo can├┤nico Problema36 ÔÇö RecordSource setado AP├ôS configurar as colunas).
+
+Os 6 LLMs anteriores identificaram corretamente a causa mas n├úo salvaram o arquivo. Desta vez o Edit foi aplicado e verificado.

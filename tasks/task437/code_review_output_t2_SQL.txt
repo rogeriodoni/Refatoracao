@@ -1,0 +1,12 @@
+﻿Corre├º├úo aplicada em `gemBO.prg`. As mudan├ºas foram:
+
+- **Removida** propriedade `this_cCidChaves` (coluna inventada, n├úo existe em `SigCdGre`)
+- **`this_cCampoChave`**: `"cidchaves"` ÔåÆ `"gruclass"` (chave natural da tabela)
+- **`Buscar` / `CarregarPorCodigo`**: removido `cidchaves` do SELECT list
+- **`CarregarDoCursor`**: removida linha `THIS.this_cCidChaves = TratarNulo(cidchaves, "C")`
+- **`ObterChavePrimaria`**: retorna `this_cGruClass` (era `this_cCidChaves`)
+- **`Inserir`**: removida gera├º├úo de cidchaves + removida da lista de colunas/valores do INSERT
+- **`Atualizar` WHERE**: `cidchaves = ...` ÔåÆ `gruclass = EscaparSQL(THIS.this_cGruClass)`
+- **`ExecutarExclusao` WHERE**: `cidchaves = ...` ÔåÆ `gruclass = EscaparSQL(THIS.this_cGruClass)`
+
+O form (`Formgem.prg`) j├í usa `cursor_4c_Dados.gruclass` corretamente ÔÇö nenhuma altera├º├úo necess├íria nele.

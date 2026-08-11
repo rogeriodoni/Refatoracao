@@ -1,0 +1,3 @@
+﻿The fix is in place. The Init() method at lines 37-44 now has `THIS.ShowWindow = 2` before `THIS.Visible = .F.`, exactly matching the FormHOR pattern.
+
+The fix is confirmed applied. `FormICO.prg:37-41` now sets `THIS.ShowWindow = 2` before `THIS.Visible = .F.` in the test mode guard, which prevents VFP9 -T headless from attempting Windows Shell registration of a top-level window during `CREATEOBJECT("FormICO")` ÔÇö the root cause of the 300-second hang.

@@ -1,0 +1,13 @@
+﻿Confirmado ÔÇö o config.prg usa ADIR() para carregar automaticamente `gprBO.prg` (via `*BO.prg`) e `Formgpr.prg` (via `Form*.prg`). Nenhuma altera├º├úo manual necess├íria.
+
+**Resumo do que foi feito na Fase 8:**
+
+O arquivo `Formgpr.prg` j├í continha todos os m├®todos implementados das fases anteriores. Foram corrigidos os seguintes bugs encontrados:
+
+1. **`BOParaForm()` ÔÇö SQL com aspas duplas**: dois queries (`SigCdPro` e `SigCdLin`) tinham `"... = '" + EscaparSQL(...) + "'"` ÔÇö `EscaparSQL()` j├í retorna com aspas, ent├úo resultaria em `''valor''`. Corrigido para `"... = " + EscaparSQL(...)`.
+
+2. **`FormParaBO()` e `BOParaForm()` ÔÇö mapeamento incorreto de campo**: `opt_4c_AlteEtiq` ("Permite Alterar Dados da Etiqueta") estava mapeado para `this_nDigbars` quando deveria ser `this_nAltetiqs` (campo correto pelo coment├írio no BO: "Permite Alterar Dados Etiqueta").
+
+**Integra├º├úo com o sistema:**
+- `menu.prg`: adicionado `DEFINE BAR 106 OF popCadastros "Grande Grupo"` + `ON SELECTION BAR 106` + `PROCEDURE AbrirFormgpr()`
+- `config.prg`: n├úo requer altera├º├úo ÔÇö ADIR() carrega automaticamente `gprBO.prg` e `Formgpr.prg`

@@ -1,0 +1,5 @@
+﻿Corre├º├úo aplicada: `.Check1.Value = 0` ÔåÆ `.Check1.Value = .F.`
+
+O campo `crGrade.Atuals` ├® do tipo `L` (LOGICAL), ent├úo o `Value` do CheckBox deve ser l├│gico (`.F.`/`.T.`), n├úo num├®rico (`0`/`1`). Quando o VFP9 tentava fazer o bind com o ControlSource apontando para um campo l├│gico, o `Value` num├®rico causava o "Data type mismatch" que abortava o `InicializarForm()`, fazendo `loc_lSucesso` ficar `.F.` e o `CREATEOBJECT` retornar non-object.
+
+Os outros dois erros (`Connection handle is invalid` em `CarregarConfigGrupo` e `CarregarEnderecos`) s├úo esperados no ambiente de teste sem conex├úo com o SQL Server ÔÇö eles s├úo capturados pelo TRY/CATCH e n├úo causam falha de instancia├º├úo.

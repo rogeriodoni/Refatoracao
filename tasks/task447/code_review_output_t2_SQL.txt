@@ -1,0 +1,29 @@
+﻿An├ílise completa feita. O validator sinalizou um falso positivo. Aqui est├í o diagn├│stico:
+
+## Resultado da An├ílise: Falso Positivo
+
+**`cidchaves` ├® a PRIMARY KEY real de `SigCdCmi`** ÔÇö confirmado pelo schema:
+
+```sql
+CREATE TABLE [dbo].[SigCdCmi](
+    [cargos] [char](10) NOT NULL,
+    [emps]   [char](3)  NOT NULL,
+    [cidchaves] [char](20) NOT NULL,
+    ...
+    CONSTRAINT [sigcdcmi_cidchaves] PRIMARY KEY CLUSTERED ([cidchaves] ASC)
+)
+```
+
+**Uso de `cidchaves` no c├│digo migrado ├® 100% correto:**
+
+| Local | Uso | Status |
+|-------|-----|--------|
+| `Buscar("")` | Sem filter fixo ÔÇö usa `loc_cWhere` din├ómico | Ô£à Correto |
+| `CarregarPorCodigo()` | `WHERE cidchaves = <PK>` ÔÇö lookup por PK real | Ô£à Correto |
+| `Atualizar()` | `WHERE cidchaves = <PK>` ÔÇö update por PK real | Ô£à Correto |
+| `ExecutarExclusao()` | `WHERE cidchaves = <PK>` ÔÇö delete por PK real | Ô£à Correto |
+| `Inserir()` - dup check | `WHERE emps AND cargos AND fpags AND tabdes AND dtinis AND dtfins` | Ô£à Correto (usa chave de neg├│cio) |
+
+O validator comparou o `SELECT` original (que listava apenas `Emps, Cargos, TabDes, DtInis, DtFins` ÔÇö sem `cidchaves`) com o c├│digo migrado e interpretou o uso de `cidchaves` em WHERE como "condi├º├úo inventada". Mas o original era VFP9/DBF sem PK expl├¡cita ÔÇö o SQL Server tem `cidchaves` como PK real desde o in├¡cio.
+
+**Nenhuma altera├º├úo necess├íria.** O c├│digo passa neste pass sem mudan├ºas.

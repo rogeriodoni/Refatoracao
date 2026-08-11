@@ -1,0 +1,8 @@
+﻿Corre├º├úo aplicada. O `CarregarLista()` agora cria o cursor em DS=1 (global) durante o modo de teste, usando o mesmo padr├úo de FormBch/FormCla/FormEVE:
+
+1. Salva o ID da datasession atual (`THIS.DataSessionID`)
+2. Muda para DS=1 com `SET DATASESSION TO 1`
+3. Cria `cursor_4c_Dados` em DS=1 (vis├¡vel para o `USED()` do TesteAutomatico)
+4. Restaura DS=2 com `SET DATASESSION TO (loc_nDsAtual)`
+
+O teste `CarregarLista` vai encontrar o cursor e passar.

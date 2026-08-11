@@ -1,0 +1,15 @@
+﻿All three fixes are confirmed:
+1. `ShowWindow = 1` removed (only `ShowWindow = 0` remains on line 15)
+2. `AlternarPagina` is now `PROCEDURE` (was PROTECTED)
+3. `AjustarBotoesPorModo` is now `PROCEDURE` (was PROTECTED)
+
+**Root cause identified**: Formint.prg declared `ShowWindow = 0` and then immediately overrode it with `ShowWindow = 1` in the same class property block. VFP9's last-wins rule made the effective value `1`. In headless mode (`-T`), `ShowWindow = 1` causes VFP to try positioning the form as a child of the active MDI window ÔÇö which doesn't exist headlessly ÔÇö blocking indefinitely. This is why ALL 5 timeout runs had **zero output**: VFP hung before executing even the first `?` statement in TesteAutomatico.
+
+The CorretorAutomatico pattern #29 detects this and adds `ShowWindow=0` when absent, but it failed to catch the case where `ShowWindow=0` already existed (so it skipped the file) while `ShowWindow=1` was overriding it below.
+
+**Three fixes applied to `Formint.prg`**:
+- Removed the duplicate `ShowWindow = 1` line (the earlier `ShowWindow = 0` is correct)
+- Removed `PROTECTED` from `AlternarPagina` ÔÇö TesteModoIncluir calls it externally via `oForm.AlternarPagina(2)`
+- Removed `PROTECTED` from `AjustarBotoesPorModo` ÔÇö TesteModoVisualizar calls it externally
+
+The previous fixes (t2-t4) from prior attempts ÔÇö the `GRD_4C_DADOS` exclusion in `TornarControlesVisiveis`, `gb_4c_ModoTeste` guards in lookup methods, and `MsgErro` replacements ÔÇö are all still intact and correct.

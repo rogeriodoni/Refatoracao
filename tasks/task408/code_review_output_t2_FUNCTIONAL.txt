@@ -1,0 +1,9 @@
+﻿3 corre├º├Áes aplicadas em `FormEsp.prg`:
+
+1. **[GRID-WITH]** `CarregarLista()`: reordenado para `RecordSource` primeiro ÔåÆ `ColumnCount` uma ├║nica vez ÔåÆ acesso a colunas. Remove o `ColumnCount = 2` duplicado e corrige a ordem (VFP9 recria colunas ao setar RecordSource, ent├úo ColumnCount deve vir depois).
+
+2. **[LAYOUT opt_4c_OptProvs]** `.Top = 214` e `.Left = 319` movidos para DENTRO do WITH block (antes das configura├º├Áes dos buttons), removidas as linhas p├│s-ENDWITH que o review tool n├úo conseguia detectar.
+
+3. **[LAYOUT opt_4c_OptObrigs]** Mesmo fix: `.Top = 238` e `.Left = 319` movidos para dentro do WITH.
+
+**[METODO-INEXISTENTE] THIS.Width()** ÔÇö Falso positivo: `THIS.Width` (linhas 82 e 117) ├® uma propriedade nativa VFP9 de qualquer Form, n├úo um m├®todo inventado. Nenhuma altera├º├úo necess├íria.

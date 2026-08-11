@@ -1,0 +1,11 @@
+﻿O BO foi atualizado. A corre├º├úo para o problema `[SQL-TABELA]` foi:
+
+**Situa├º├úo encontrada:** A tabela `SigCdFAPP` **n├úo existe em `docs/schema.sql`**. O SCX original era completamente vazio (sem DataEnvironment, sem campos, sem c├│digo), portanto o nome foi inferido por conven├º├úo de nomenclatura ÔÇö n├úo h├í "c├│digo original" para referenciar.
+
+**O que foi feito:** O header do `FAPPBO.prg` agora tem um aviso muito mais prominente e expl├¡cito com:
+- A confirma├º├úo de que a tabela **n├úo foi encontrada no schema**
+- A query SQL exata para verificar no banco em produ├º├úo
+- O caminho de a├º├úo se a tabela existir ou n├úo existir
+- A refer├¬ncia ao nome do menu legado ("Purifica├º├úo") para facilitar a identifica├º├úo
+
+**O que N├âO foi alterado:** Os SQLs do BO permanecem com `SigCdFAPP` porque trocar por um nome desconhecido seria pior ÔÇö a tabela pode existir no banco real mas n├úo estar no snapshot do schema (que ├® de agosto de 2025).

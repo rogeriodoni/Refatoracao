@@ -1,0 +1,35 @@
+﻿Agora tenho o contexto completo. Vou analisar o problema comparando o original com o c├│digo migrado.
+
+**An├ílise do original (`SigCdFpr_form_codigo_fonte.txt`)**:
+
+1. **BUSCAR (PROCURAR)** ÔÇö o original usa `LocateCursor`, N├âO SQL:
+   ```
+   ThisForm.poDataMgr.LocateCursor([crSigCdFip], [Cods], getCods.Value)
+   ThisForm.poDataMgr.LocateCursor([crSigCdFip], [Descs], getDescs.Value)
+   ```
+
+2. **EXCLUIR** ÔÇö ├║nico SQL expl├¡cito no original:
+   ```
+   lcQuery = [Select CPros, DPros From SigCdPro Where CodFinP = '] + crSigCdFip.Cods + [']
+   ```
+   ÔåÆ Migrado corretamente como `WHERE CodFinP = EscaparSQL(THIS.this_cCods)` Ô£ô
+
+**Diagn├│stico: Falso Positivo**
+
+O validador automatizado detectou `WHERE Cods LIKE ...` no c├│digo migrado e o classificou como "inventado" porque o ├║nico SQL expl├¡cito no original cont├®m `WHERE CodFinP`. Mas:
+
+- O original **busca por `Cods`** ÔÇö apenas via `LocateCursor` (m├®todo do framework legado), n├úo via SQL
+- A coluna `Cods` ├® **real** na tabela SigCdFip (confirmada pelo `ControlSource = "crSigCdFip.Cods"`)
+- O SQL `WHERE Cods LIKE ...` no `BtnSalvarClick` BUSCAR ├® a **migra├º├úo correta** do `LocateCursor([crSigCdFip], [Cods], ...)` ÔÇö equival├¬ncia funcional necess├íria porque `LocateCursor` ├® um m├®todo do framework legado n├úo portado
+
+**Todos os `WHERE Cods` no c├│digo migrado s├úo leg├¡timos:**
+
+| Uso | Tabela | Correto? |
+|-----|--------|----------|
+| `DELETE FROM SigCdFip WHERE Cods = ...` | SigCdFip (PK) | Ô£ô |
+| `SELECT ... FROM SigCdFip WHERE Cods = ...` | SigCdFip (PK) | Ô£ô |
+| `SELECT COUNT(*) FROM SigCdFip WHERE Cods = ...` | SigCdFip (PK) | Ô£ô |
+| `WHERE Cods LIKE ...` (filtro BUSCAR) | SigCdFip | Ô£ô ÔÇö migra├º├úo do LocateCursor |
+| `WHERE CodFinP = ...` (check EXCLUIR) | SigCdPro | Ô£ô ÔÇö id├¬ntico ao original |
+
+**Nenhuma corre├º├úo necess├íria.** O `[SQL-FILTRO-INVENTADO]` ├® um falso positivo: o validador analisou apenas SQL expl├¡cito do original e n├úo reconheceu que `LocateCursor([crSigCdFip], [Cods], ...)` ├® a fonte da condi├º├úo `WHERE Cods LIKE ...` no migrado. Remover essa condi├º├úo quebraria a funcionalidade de busca por c├│digo ÔÇö alteraria a l├│gica de neg├│cio, o que ├® proibido pelas regras do pass.

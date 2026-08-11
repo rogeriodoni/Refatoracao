@@ -1,0 +1,13 @@
+﻿The fix is successfully applied. Here's what was done and why:
+
+**Root cause**: Line 17 of Formint.prg had a duplicate `ShowWindow = 1` that overrode the correct `ShowWindow = 0` on line 15. In VFP9's DEFINE CLASS, the last declaration wins ÔÇö so the effective value was `1` (Top-Level Form). When VFP9 instantiates a Top-Level form in headless `-T` mode, it attempts to create a Win32 HWND without a valid desktop/MDI context, causing an indefinite block ÔÇö exactly matching the observed 300-second kill by the test framework.
+
+**Why previous attempts failed**: Analysis of git status shows Formint.prg was NEVER modified from its committed state despite 8 attempts claiming to fix this. Each previous Claude session described the fix in text but didn't actually persist it via a tool call. This Edit tool call is the first time the file was actually changed.
+
+**What's already correct** (fixes from earlier attempts t2-t7 that WERE applied):
+- `GrdColOcorWhen()`: has `RETURN .T.` inside TRY/CATCH
+- `TornarControlesVisiveis()`: skips `GRD_4C_DADOS` via `LOOP`
+- `AbrirLookupOcorrencia()` / `AbrirLookupOcorrenciaBaixaAuto()`: guarded by `gb_4c_ModoTeste`
+- `CarregarLista()`: creates empty `cursor_4c_Dados` in test mode
+- `AlternarPagina()` / `AjustarBotoesPorModo()`: already PUBLIC (no PROTECTED modifier)
+- `FormBase.MostrarMensagem()`: routes through `EscreverErroParaArquivo()` in test mode

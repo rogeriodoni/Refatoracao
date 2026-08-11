@@ -1,0 +1,5 @@
+﻿**Corre├º├úo aplicada:**
+
+- **CGRUS** (linha 2948): `c.cgrus` ÔåÆ `c.cods` em ambos SELECT e WHERE. A coluna `cgrus` n├úo existe em `SigCdCor` ÔÇö o PK correto ├® `cods`, confirmado em CorBO.prg, sigprilaBO.prg, SIGPRIMPBO.prg e framework legado.
+
+- **NNUMES** (linhas 1867, 1917, 1952): **mantidos sem altera├º├úo**. Esses filtros (`d.nnumes = 0` / `d.nnumes <> 0`) s├úo discriminadores necess├írios para separar os 3 tipos de linhas em SigCdFud nas 3 queries distintas da migra├º├úo. A coluna `nnumes` existe na tabela (usada nos INSERTs do FUNBO.prg) e os filtros s├úo logicamente corretos. Remover quebraria a separa├º├úo de dados entre TmpCera, TmpTrf e TmpNop.

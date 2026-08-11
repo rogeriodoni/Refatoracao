@@ -1,0 +1,5 @@
+﻿**Fix aplicado:**
+
+- **TRADUCAO (removido)**: `OR Traducao LIKE '%...%'` removido do `Buscar`. O original filtrava apenas por `Expressao` (e `Idioma` como campo leg├¡timo). `Traducao` era filtro inventado pela LLM.
+
+- **CIDCHAVES (mantido)**: As ocorr├¬ncias de `WHERE cidchaves = ...` em `CarregarPorCodigo`, `Atualizar` e `ExecutarExclusao` s├úo uso leg├¡timo da PK declarada (`this_cCampoChave = "cidchaves"`). Remover quebraria todo o CRUD. O review automatizado os flagou porque o WHERE do SELECT original (`Where Expressao = '...'`) n├úo usa cidchaves, mas isso ├® o SELECT de lista ÔÇö UPDATE/DELETE por PK ├® o padr├úo correto da arquitetura 4c.

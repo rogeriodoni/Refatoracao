@@ -1,0 +1,9 @@
+﻿Estrutura final correta. Fase 7 completa: os 4 eventos principais foram adicionados ao FormGr1.prg com funcionalidade real (sem stubs, sem MsgAviso "sera implementado"), delegando para os metodos do BO ja implementados nas fases anteriores.
+
+**Resumo da implementacao (linhas 709-880):**
+- `BtnIncluirClick` ÔÇö valida usuario+grupo, checa que grupo NAO existe, chama `SalvarGrupo()` com sucesso + Release
+- `BtnAlterarClick` ÔÇö valida usuario+grupo, checa que grupo JA existe, confirma regravacao, chama `SalvarGrupo()` (DELETE+INSERT idempotente)
+- `BtnVisualizarClick` ÔÇö recarrega grid via `CarregarAcessos()` do usuario selecionado e move foco pro grid
+- `BtnExcluirClick` ÔÇö remove acesso corrente do cursor local via `RemoverAcessoLocal()` do BO, apos MsgConfirma
+
+Todos os 6 metodos do BO referenciados existem (`SalvarGrupo`, `ValidarGrupoExistente`, `RemoverAcessoLocal`, `BuscarAcessosPorUsuario`, `BuscarUsuarioPorCodigo`, `BuscarUsuarioPorNome`) ÔÇö verificado em `Gr1BO.prg`.

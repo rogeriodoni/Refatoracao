@@ -1,0 +1,16 @@
+﻿Tudo certo. A FASE 10 est├í completa. Aqui est├í o resumo do que foi feito:
+
+**Refatora├º├úo realizada em `FormFti.prg`:**
+
+1. **Removido** o bloco inline do `grd_4c_Custo` de `ConfigurarPaginaDados()` (era ~66 linhas entre as linhas 571-636)
+
+2. **Criado** o m├®todo `ConfigurarPgPage2()` (linhas 1249-1318) com:
+   - Acesso via `THIS.pgf_4c_Paginas.Page2.pgf_4c_Configuracao.Page2`
+   - Grid `grd_4c_Custo` com 4 colunas: C├│digo (Cpros), Descri├º├úo (Dpros), Coeficiente (Coefs), Sequ├¬ncia (Seqs)
+   - Column2.ReadOnly = .T. (coluna preenchida automaticamente pelo Valid do Col1)
+   - 5 BINDEVENTs: Col1.When, Col1.Valid, Col3.When, Col3.LostFocus, Col4.When
+   - BINDEVENT Activate da Page2 ÔåÆ `ConfigPage2Activate` (atualiza caption "Coeficiente"/"( % )")
+
+3. **Adicionada** chamada `THIS.ConfigurarPgPage2()` em `ConfigurarPaginaDados()` entre `ConfigurarPgPage1()` e `TornarControlesVisiveis()` (linha 1164)
+
+O padr├úo agora ├® sim├®trico: Page1 do `pgf_4c_Configuracao` ÔåÆ `ConfigurarPgPage1()`, Page2 ÔåÆ `ConfigurarPgPage2()`.

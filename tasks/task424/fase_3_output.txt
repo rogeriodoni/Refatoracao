@@ -1,0 +1,11 @@
+﻿Arquivo criado em `C:/4c/projeto/app/forms/cadastros/FormFpd.prg`. Fase 3 conclu├¡da.
+
+**O que foi criado:**
+- `DEFINE CLASS FormFpd AS FormBase` com propriedades visuais exatas do original (Width=561, Height=347, FontName=Verdana, ForeColor=RGB(36,84,155), etc.)
+- `Init(par_cTabDs)` ÔÇö recebe o c├│digo da tabela de desconto e o seta em `this_cTabDs` **antes** do `DODEFAULT()`, garantindo que `InicializarForm()` tenha acesso ao valor
+- `InicializarForm()` ÔÇö cria FpdBO, configura background e chama `ConfigurarHeader()`
+- `ConfigurarHeader()` ÔÇö cnt_4c_Sombra com lbl_4c_Sombra (sombra preta) e lbl_4c_Titulo (texto branco), ambos com `AutoSize=.F.` e captions via `THIS.Caption`
+- `Destroy()` ÔÇö chama `FecharCursores()` no BO antes de `DODEFAULT()`
+
+**Pr├│ximas fases adicionar├úo ao `InicializarForm()`:**
+- Fase 4: `ConfigurarGrade()` (grd_4c_Dados com 2 colunas) + `ConfigurarBotoes()` (cmd_4c_Inserir, cmd_4c_Excluir, cmd_4c_Encerrar) + carregamento de dados via `CarregarLookupFpag()` + `CarregarDadosGrid()`

@@ -1,0 +1,30 @@
+[2026-08-08 06:43:40] [INFO] === CLAUDE CLI INVOKER ===
+[2026-08-08 06:43:40] [INFO] Prompt File: C:\4c\tasks\task441\runtime_fix_prompt_06b_testeAutomatico_t6.md
+[2026-08-08 06:43:40] [INFO] Output File: C:\4c\tasks\task441\06b_testeAutomatico_fix_output_t6.txt
+[2026-08-08 06:43:40] [INFO] Model: sonnet
+[2026-08-08 06:43:40] [INFO] Timeout: 3600 segundos
+[2026-08-08 06:43:40] [INFO] Max Output Tokens: 128000
+[2026-08-08 06:43:40] [INFO] Context Files: 0 arquivo(s)
+[2026-08-08 06:43:40] [INFO] Invocando Claude CLI...
+[2026-08-08 06:43:40] [INFO] Prompt carregado: 70863 caracteres
+[2026-08-08 06:43:40] [INFO] Executando: claude --model sonnet --dangerously-skip-permissions --add-dir C:\4c
+[2026-08-08 06:43:40] [INFO] Tamanho total do prompt: 70863 caracteres
+[2026-08-08 06:43:40] [INFO] Invocando Claude CLI (tentativa 1/7)...
+[2026-08-08 06:57:33] [INFO] Claude CLI finalizado em 832.8372781 segundos
+[2026-08-08 06:57:33] [INFO] Exit Code: 0
+[2026-08-08 06:57:33] [INFO] Output salvo em: C:\4c\tasks\task441\06b_testeAutomatico_fix_output_t6.txt
+[2026-08-08 06:57:33] [INFO] Output size: 1450 bytes
+[2026-08-08 06:57:33] [INFO] SUCESSO: Claude CLI executado com sucesso
+[2026-08-08 06:57:33] [INFO] Preview do output:
+[2026-08-08 06:57:33] [INFO] O arquivo .fxp n+˙o existe, ent+˙o VFP9 compilar+Ì automaticamente na pr+¶xima execu+∫+˙o.
+
+**Causa raiz identificada e corrigida:**
+
+O arquivo `FormGps.prg` tinha **duas declara+∫+¡es** de `WindowType`:
+```
+WindowType = 0   ‘Â… linha 18 (adicionada por fix anterior)
+WindowType = 1   ‘Â… linha 19 (original, que prevalecia)
+```
+
+Em VFP9 com flag `-T` (command-line), quando `CREATEOBJECT("FormGps")` +Æ chamado por `TesteAutomatico`:
+1. `Init()` ‘Â∆ `DODEFAULT()` ‘Â∆ `FormBase.Init()` ‘Â

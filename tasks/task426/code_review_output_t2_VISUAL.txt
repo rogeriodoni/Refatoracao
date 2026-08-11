@@ -1,0 +1,7 @@
+﻿Corre├º├úo aplicada. Em `BtnCancelarClick`, quando o usu├írio confirma o descarte e est├í na Page2, agora o m├®todo:
+
+1. `CarregarDados()` ÔÇö recarrega o cursor do BD, descartando as edi├º├Áes em mem├│ria que o usu├írio quis cancelar
+2. `AlternarPagina(1)` ÔÇö volta para o grid na Page1
+3. `AjustarBotoesPorModo()` ÔÇö garante que os bot├Áes Inserir/Excluir/Encerrar fiquem no estado correto para o modo LISTA
+
+Sem isso, o grid na Page1 continuaria exibindo os dados editados mesmo ap├│s o usu├írio clicar em "Cancelar sem salvar".

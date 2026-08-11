@@ -1,0 +1,10 @@
+﻿Todas as 4 corre├º├Áes foram aplicadas corretamente:
+
+| # | Propriedade | Antes | Depois |
+|---|-------------|-------|--------|
+| 1 | `Top` | ausente (herdado ÔåÆ 203 via AutoCenter) | `Top = 0` no DEFINE CLASS |
+| 2 | `Left` | ausente (herdado ÔåÆ 661 via AutoCenter) | `Left = 0` no DEFINE CLASS |
+| 3 | `Picture` | ausente (vazio) | `Picture = "..\framework\imagens\new_background.jpg"` no DEFINE CLASS |
+| 4 | `Caption` | `"Grupos / Contas Permitidas"` em runtime | `THIS.Caption = "Cadastro de Grupo/Conta Permitidas/N" + CHR(227) + "o Permitidas"` no in├¡cio do Init() |
+
+A causa raiz do Top/Left estava no `AutoCenter = .T.` herdado do FormBase: quando o validador faz `CREATEOBJECT("FormGcp")` sem par├ómetros, o Init() aplicava o auto-centering posicionando o form em (661, 203) baseado nas dimens├Áes da tela. Como o SCX original n├úo tinha AutoCenter (default=.F.), foi corrigido para `.F.` com posi├º├úo expl├¡cita `0, 0`.

@@ -1,0 +1,3 @@
+﻿The fix is in place. `FormEnd.Destroy()` now replicates the original SCX's `Release` logic: before closing cursors, it iterates `crCursorCliEE` with `SCATTER MEMO MEMVAR` and syncs each record into `crSigCdCeE` (INSERT if new, GATHER if existing), then removes blank-description rows. The rest of the form was already complete and correct ÔÇö the Caption `"Endere" + CHR(231) + "os"` = "Endere├ºos" is correct (only the cedilla `├º` is needed, no `├Á`).
+
+**FASE 3/8 conclu├¡da.** `FormEnd.prg` est├í completo com a corre├º├úo cr├¡tica no `Destroy()`: sincroniza├º├úo `crCursorCliEE ÔåÆ crSigCdCeE` (replica o `Release` do SCX legado) adicionada antes do fechamento dos cursores.

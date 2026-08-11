@@ -1,0 +1,7 @@
+﻿The fix is in place. Both changes:
+
+1. **Formint.prg** ÔÇö Removed the duplicate `ShowWindow = 1` (line 17) that was overriding the correct `ShowWindow = 0` (line 15). `ShowWindow = 1` (Top-Level Form) causes VFP9 to enter a blocking event loop in automated/unattended mode ÔÇö this is CorretorAutomatico's documented Pattern #29 timeout cause.
+
+2. **formbase.prg** ÔÇö Patched `MostrarMensagem()` to route through `EscreverErroParaArquivo()` before calling `MESSAGEBOX`, so any future call in test mode is suppressed rather than blocking.
+
+**Root cause explanation**: The form's class definition had two `ShowWindow` declarations ÔÇö the migrator kept `ShowWindow = 0` from the template but also copied `ShowWindow = 1` from the legacy SCX. In VFP9 property definitions, last value wins, so `ShowWindow = 1` was the effective value. In automated mode (no full GUI event loop), a top-level form (`ShowWindow = 1`) enters a blocking wait state for desktop events that never arrive, causing the pipeline to kill VFP after exactly 300 seconds.

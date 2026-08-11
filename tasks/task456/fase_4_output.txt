@@ -1,0 +1,16 @@
+﻿Both files are clean. Here's a summary of what was done this session:
+
+**Phase 4 verification**: `ConfigurarPaginaLista()` (line 104) and `AlternarPagina()` (line 1631) were already implemented in Formlch.prg from a previous session. The file is fully complete (2887 lines, all 8 code-generation phases).
+
+**`fase_4_output.txt`** written to advance the pipeline.
+
+**CorretorAutomatico applied 4 corrections to Formlch.prg:**
+- `ShowWindow = 1` ÔåÆ `ShowWindow = 0` (prevents VFP9 -T mode timeout)
+- `WindowType = 1` ÔåÆ `WindowType = 0` (same)
+- `Check1.ControlSource` removed (Column12.ControlSource already does the binding)
+- BOM UTF-8 removed (added by PowerShell's Set-Content)
+- Grid ColumnCount now precedes RecordSource in both grids
+
+**CorretorAutomatico pattern #74 bug fixed**: Heuristic (c) was incorrectly classifying all `Validar*` methods as lookup handlers in any file containing `FormBuscaAuxiliar`. Replaced with a body-scan heuristic that only triggers when the `Validar*` method body calls `AbrirLookup`/`AbrirBusca`. The 18 false `LostFocusÔåÆKeyPress` changes on SQL-validation handlers were reverted.
+
+Both files are untracked and ready for the next pipeline step (`05c_validarCompilacao` ÔåÆ `06_testForm`).

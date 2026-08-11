@@ -1,0 +1,17 @@
+﻿O arquivo est├í correto e completo. A Fase 4 foi implementada com sucesso em `FormDsp.prg`.
+
+**O que foi adicionado:**
+
+- **`ConfigurarPaginaLista()`** agora ├® completa com:
+  - 5 bot├Áes CRUD em `cnt_4c_Botoes` (Incluir, Visualizar, Alterar, Excluir, Buscar) ÔÇö posi├º├Áes can├┤nicas (Left: 5/80/155/230/305), ├¡cones corretos, `FontName="Comic Sans MS"`, `Themes=.F.`
+  - `cmd_4c_Encerrar` em `cnt_4c_Saida` (Left=917 can├┤nico)
+  - `grd_4c_Lista` com 5 colunas (Grupos/DsGrupos/Contas/DsConta/Tipos), propriedades visuais completas (`FontName="Verdana"`, `GridLines=3`, etc.)
+  - BINDEVENTs para todos os 6 bot├Áes
+
+- **`CarregarLista()`** agora vincula o grid ao cursor ap├│s cada `Buscar()`: RecordSource ÔåÆ ControlSources ÔåÆ Header1.Captions (padr├úo correto p├│s-RecordSource)
+
+- **6 handlers de bot├úo** (todos PUBLIC per regra BINDEVENT):
+  - `BtnIncluirClick` / `BtnVisualizarClick` / `BtnAlterarClick` ÔÇö carregam modo e navegam para Page2
+  - `BtnExcluirClick` ÔÇö confirma e exclui com `MsgConfirma` (retorna LOGICAL)
+  - `BtnBuscarClick` ÔÇö recarrega a lista
+  - `BtnEncerrarClick` ÔÇö fecha o formul├írio

@@ -1,0 +1,9 @@
+﻿Corre├º├Áes aplicadas em `FopBO.prg`:
+
+**CIDCHAVES (removido):**
+- `loc_cCidChaves` removido da declara├º├úo `LOCAL`
+- `loc_cCidChaves = ALLTRIM(CidChaves)` removido  
+- `AND ALLTRIM(a.CidChaves) != m.loc_cCidChaves` removido do WHERE
+- `IF loc_nDupli > 0` ÔåÆ `IF loc_nDupli > 1` (ajuste necess├írio: sem a auto-exclus├úo, o registro corrente ├® contado ÔÇö `> 1` equivale logicamente a `COUNT excluindo self > 0`)
+
+**CONTROLCOUNT (falso positivo ÔÇö sem altera├º├úo):** `loc_oControl.ControlCount` em `FormFop.prg:408` ├® propriedade VFP de objeto container, n├úo coluna SQL. O validador confundiu sintaxe VFP com SQL.

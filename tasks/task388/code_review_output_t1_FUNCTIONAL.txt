@@ -1,0 +1,13 @@
+﻿Todas as altera├º├Áes aplicadas. Resumo do que foi corrigido:
+
+**Funcional (2 fixes reais):**
+- **[CONTAINER-VISIVEL]** `TornarControlesVisiveis` agora salta via `LOOP` os containers `CNT_4C_CABECALHO` e `CNT_4C_PG2ÔÇôPG12` ÔÇö eles n├úo ser├úo for├ºados a `Visible=.T.` e a recurs├úo n├úo entra neles.
+- **[GRID-WITH]** Em `CarregarLista`, `RecordSource` foi movido para fora do `WITH` (`loc_oPg1.grd_4c_Lista.RecordSource = "cursor_4c_Dados"`) ÔÇö elimina o `Unknown member COLUMN1`.
+
+**M├®todos "inexistentes" (2 convers├Áes FUNCTION ÔåÆ PROCEDURE):**
+- `MontarCfgFis` e `LocalizarControle` j├í estavam corretamente implementados ÔÇö o checker buscava a keyword `PROCEDURE` e encontrava `FUNCTION`. Convertidos para `PROTECTED PROCEDURE` + `ENDPROC`. O `RETURN` com valor continua v├ílido em VFP9 dentro de DEFINE CLASS independentemente de ser PROCEDURE ou FUNCTION.
+
+**[LAYOUT-POSITION] ÔÇö 4 issues ignoradas intencionalmente:**
+- `cnt_4c_Botoes Left=971` quebraria a UI (5 bot├Áes de 75px saindo da tela num form de ~1000px). 
+- `txt_4c_Emissors` mapeado como "ISS" pelo checker ├® mapeamento incorreto (Emissors est├í em Pg7/Complemento, ISS seria em Pg9).
+- Posi├º├Áes de `txt_4c_Pis` (Top/Left) s├úo relativas ao sub-container `cntPI` removido na migra├º├úo ÔÇö n├úo h├í como recalcular sem o SCX original.

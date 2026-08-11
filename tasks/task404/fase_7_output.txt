@@ -1,0 +1,9 @@
+﻿The file already had all 4 button events implemented ÔÇö the previous context session completed more than the summary indicated. The only gap was the missing protection in `BtnExcluirClick` against deleting the current company, which I've now added.
+
+**What was done:**
+- `BtnIncluirClick` (line 808): calls `NovoRegistro()`, clears/enables fields, navigates to Page2 ÔÇö already present Ô£ô
+- `BtnVisualizarClick` (line 821): loads record, sets read-only mode ÔÇö already present Ô£ô  
+- `BtnAlterarClick` (line 842): loads record, calls `EditarRegistro()`, enables fields ÔÇö already present Ô£ô
+- `BtnExcluirClick` (line 864): **fixed** ÔÇö added guard `IF loc_cCodigo == ALLTRIM(go_4c_Sistema.cCodEmpresa)` ÔåÆ shows `"N├úo ├® poss├¡vel excluir a empresa corrente."` before allowing deletion (mirrors the legacy `_Empr` check)
+
+Phase 7/8 is complete. The form is fully functional with all CRUD events and the correct protection against self-deletion.

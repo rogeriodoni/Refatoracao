@@ -1,0 +1,20 @@
+﻿Fase 8 conclu├¡da. O arquivo final tem 1252 linhas com todos os m├®todos implementados.
+
+**Resumo do que foi feito:**
+
+**FormFpo.prg** (8 m├®todos adicionados antes do `ENDDEFINE`):
+- `CarregarLista()` ÔÇö wrapper para `CarregarGrade()`, respeita `gb_4c_ValidandoUI`
+- `BtnBuscarClick()` ÔÇö recarrega a grade via `CarregarGrade()`
+- `BtnSalvarClick()` ÔÇö alias can├┤nico para `BtnConfirmarClick()`
+- `FormParaBO()` ÔÇö transfere linha atual do cursor para propriedades do BO
+- `BOParaForm()` ÔÇö aplica propriedades do BO no registro atual do cursor + refresh
+- `HabilitarCampos(par_lHabilitar)` ÔÇö habilita/desabilita grade e bot├Áes Inserir/Excluir
+- `LimparCampos()` ÔÇö ZAP do `cursor_4c_Dados` + refresh da grade
+- `AjustarBotoesPorModo()` ÔÇö habilita todos os bot├Áes (form operacional n├úo tem restri├º├Áes por modo)
+
+**menu.prg** (3 adi├º├Áes):
+- `DEFINE BAR 97 OF popCadastros` para "Condi├º├Áes de Pagamento por Opera├º├úo"
+- `ON SELECTION BAR 97 OF popCadastros DO AbrirFormFpo`
+- `PROCEDURE AbrirFormFpo()` ao final do arquivo
+
+**config.prg** ÔÇö sem altera├º├Áes necess├írias: o ADIR din├ómico j├í carrega `FpoBO.prg` (em `app/classes/`) e `FormFpo.prg` (em `app/forms/cadastros/`) automaticamente.

@@ -1,0 +1,8 @@
+﻿All 4 required CRUD event handlers are now present in `FormGrupo.prg`:
+
+- **BtnIncluirClick** (line 434) ÔÇö delegates to `InserirLinhaGrid()` and posiciona foco na coluna Cgrus
+- **BtnAlterarClick** (line 456) ÔÇö habilita edi├º├úo no grid + campo Grande Grupo, valida cursor n├úo vazio
+- **BtnVisualizarClick** (line 495) ÔÇö bloqueia edi├º├úo, mant├®m navega├º├úo
+- **BtnExcluirClick** (line 422) ÔÇö j├í existia da fase anterior
+
+Cada m├®todo tem l├│gica real (sem stubs/TODOs), TRY/CATCH com `MsgErro` incluindo LineNo+Procedure, valida estado do `cursor_4c_Ope` antes de agir, e respeita o padr├úo OPERACIONAL do form (edi├º├úo in-grid, n├úo Page1/Page2).

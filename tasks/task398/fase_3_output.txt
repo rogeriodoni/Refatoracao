@@ -1,0 +1,8 @@
+﻿Tudo correto. Resumo do que foi feito:
+
+**Status da migra├º├úo SIGCDDRS:**
+
+- `DrsBO.prg` ÔÇö j├í completo (Fases 1+2) com modelo chave-valor, workflow de aprova├º├úo/baixa, todas as opera├º├Áes SQL.
+- `FormDrs.prg` ÔÇö j├í completo (Fases 3ÔÇô8) com grid din├ómico baseado em SigSyCit, campos de cabe├ºalho fixos (Emps/Dopes/Numes/Aprova/Datas), bot├Áes Aprovar/Desaprovar/Baixar/Canc Baixa, e container din├ómico de campos.
+- `config.prg` ÔÇö **nenhuma altera├º├úo necess├íria**: ADIR() j├í carrega automaticamente `*BO.prg` e `Form*.prg` das pastas corretas.
+- `menu.prg` ÔÇö **integra├º├úo adicionada agora**: BAR 78 em `popCadastros` com prompt "Fichas T├®cnicas" + `ON SELECTION` + `PROCEDURE AbrirFormDrs()`.

@@ -1,0 +1,3 @@
+﻿Fix applied. `spn_4c_AjVerts` and `spn_4c_AjHorzs` are TextBox controls (not Spinners), so `Value=0` is safe for them.
+
+**Summary of t6 fix**: `LimparCampos()` was setting `spn_4c_AjDens.Value = 0` (SpinnerLowValue=10) and `spn_4c_AjVelos.Value = 0` (SpinnerLowValue=1). VFP9 triggers a validation dialog when a Spinner's Value is set below its minimum, which blocks indefinitely in headless mode. Fixed by setting both to their respective SpinnerLowValue minimums (10 and 1).

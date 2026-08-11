@@ -1,0 +1,5 @@
+﻿O fix est├í correto. Dois problemas corrigidos em `FormGrupo.prg`:
+
+1. **Bug prim├írio (causa do timeout)**: `CREATEOBJECT("GrpBO")` ÔåÆ `CREATEOBJECT("GrupoBO")`. A classe se chama `GrupoBO`, n├úo `GrpBO`. VFP9 buscava `GrpBO.prg`, n├úo achava, abria dialog "File Open" que bloqueava 300 segundos.
+
+2. **Guard para chamada sem par├ómetros** (test harness): `Init()` agora verifica `VARTYPE(par_oForm) = "O"` antes de acessar `.Enabled`, e `VARTYPE(par_nDataSes) = "N" AND par_nDataSes > 0` antes do `SET DATASESSION TO`. Quando chamado pelo TesteAutomatico sem par├ómetros, o form inicializa com `loc_cDopes = ""` e cria um cursor vazio, permitindo que os testes estruturais passem.

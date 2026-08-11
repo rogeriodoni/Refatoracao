@@ -1,0 +1,11 @@
+﻿**Falso positivo confirmado ÔÇö nenhuma corre├º├úo necess├íria.**
+
+Ambas as ocorr├¬ncias (linhas 1165 e 1571) j├í est├úo corretamente implementadas:
+
+- **Linha 1165** ÔåÆ na linha 1169, `THIS.AtualizarBindingGrid(loc_oGrid)` ├® chamado imediatamente, e esse m├®todo (linhas 1208ÔÇô1279) redefine explicitamente `.ControlSource` de **todas as 14 colunas** + redeclara `Header1.Caption` de cada uma.
+
+- **Linha 1571** ÔåÆ mesma sequ├¬ncia: linha 1573 chama `THIS.AtualizarBindingGrid(loc_oGrid)` imediatamente ap├│s.
+
+O detector autom├ítico gerou falso positivo porque procurou por atribui├º├Áes inline de `.ControlSource` nas linhas imediatamente seguintes, mas n├úo rastreou a chamada de m├®todo que faz exatamente isso. O coment├írio no c├│digo (`*-- Redefine ControlSource + Headers apos RecordSource (Problema 48)`) inclusive documenta explicitamente que o problema j├í foi tratado.
+
+O arquivo **n├úo precisa de altera├º├úo** para este pass.

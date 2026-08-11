@@ -1,0 +1,5 @@
+﻿Root cause: `SigCdCmi` has a column `emps`, but both JOIN conditions referenced `a.cemps` (which doesn't exist). SQL Server rejected the query, `MsgErro()` opened a modal dialog, and VFP9 hung indefinitely waiting for user input.
+
+Fixed in two places in `ICMBO.prg`:
+- `Buscar()` line 65: `b.cemps = a.cemps` ÔåÆ `b.cemps = a.emps`
+- `CarregarPorCodigo()` line 102: same correction

@@ -1,0 +1,7 @@
+﻿**1 fix aplicado** em `FormCTA.prg`:
+
+- **[CONTAINER-VISIVEL] CORRIGIDO**: `TornarControlesVisiveis` agora recursa nos filhos dos containers da lista ANTES do `LOOP`. Containers como `cnt_4c_Pg2`ÔÇô`cnt_4c_Pg12` continuam com `Visible=.F.`, mas seus controles internos recebem `Visible=.T.` ÔÇö assim quando `MostrarSubPagina` exibe o container, todos os campos j├í est├úo vis├¡veis.
+
+**4 LAYOUT-POSITION ignorados** (falsos positivos):
+- `cnt_4c_Botoes` Left=542: legado `Botoes` (Left=971) era o grupo SA├ìDA ÔåÆ mapeia para `cnt_4c_Saida` (Left=917 can├┤nico). Os bot├Áes CRUD em Left=542 est├úo corretos (CLAUDE.md regra 10 prevalece).
+- `txt_4c_Emissors` Top=165 e `txt_4c_Pis` Top=125/Left=376: coordenadas legadas eram *relativas a containers internos aninhados* (`cntIS`, `cntPI`); no novo sistema flat s├úo relativas ao container da sub-p├ígina ÔÇö compara├º├úo inv├ílida.

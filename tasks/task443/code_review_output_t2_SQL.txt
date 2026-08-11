@@ -1,0 +1,7 @@
+﻿Corre├º├úo aplicada. O bloco inventado foi removido:
+
+- **Removido**: query `SELECT TOP 1 Codigos, Descs FROM SigCdGpr WHERE Codigos = ...` (n├úo existe no original)
+- **Removido**: bloco `IF loc_nRet > 0 ... RETURN` que retornava silenciosamente sem abrir picker
+- **Removido**: cleanup de `cursor_4c_BuscaGde` (cursor que n├úo existe mais)
+- **Removido**: vari├íveis locais `loc_cSQL`, `loc_nRet` que ficaram ├│rf├ús
+- **Mantido**: `AbrirBuscaGdeGrps()` ÔÇö o legado usava `fwBuscaExt` que abria o picker diretamente, e `FormBuscaAuxiliar` j├í recebe o valor digitado como pr├®-filtro (par. 5)

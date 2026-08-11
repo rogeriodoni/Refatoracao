@@ -1,0 +1,8 @@
+﻿Fix aplicado corretamente. Resumo do que foi feito e por qu├¬ os demais n├úo precisaram de altera├º├úo:
+
+**[CONTAINER-VISIVEL] ÔÇö CORRIGIDO** (linha 4024-4029): O `LOOP` anterior pulava a recurs├úo nos filhos de `CNT_4C_CABECALHO`, deixando-os potencialmente ocultos. Agora `TornarControlesVisiveis` ├® chamado recursivamente nos filhos antes do `LOOP` que impede for├ºar `Visible=.T.` no container pai.
+
+**[GRID-HEADER x4] ÔÇö Falsos positivos confirmados ap├│s verifica├º├úo do legado**:
+- `"Grupo Operacional"` **est├í no legado** via `.pColuna('DgOpes','','','Grupo Operacional',150,.t.)` no `SigCdGpe.SCT` ÔÇö o checker n├úo detectou porque ├® um framework call, n├úo um `Header1.Caption` nativo no SCX binary
+- `"N┬░"` ├® coluna extra (ngopes) adicionada pela migra├º├úo; o legado mostrava s├│ `dgopes` na lista, mas remover a coluna ngopes violaria a instru├º├úo "NAO remover campos, funcionalidades"
+- Os headers do grid de opera├º├Áes (`grd_4c_GradeOpe`) j├í est├úo corretos nas linhas 1496/1501: `"Opera├º├Áes Poss├¡veis"` e `"Opera├º├úo Confer├¬ncia"`

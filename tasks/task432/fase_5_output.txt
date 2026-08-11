@@ -1,0 +1,15 @@
+﻿Fase 5 conclu├¡da. O arquivo `FormFte.prg` foi atualizado com:
+
+**O que foi adicionado:**
+1. **`InicializarForm()`** ÔÇö chamada a `THIS.ConfigurarPaginaDados()` inserida ap├│s `ConfigurarPaginaLista()` (linha 117)
+
+2. **`ConfigurarPaginaDados()`** ÔÇö m├®todo novo com:
+   - Bot├úo **Confirmar** (├¡cone `cadastro_salvar_60.jpg`, Left=5) ÔåÆ `BINDEVENT ÔåÆ BtnSalvarClick`
+   - Bot├úo **Cancelar** (├¡cone `cadastro_cancelar_60.jpg`, Left=80) ÔåÆ `BINDEVENT ÔåÆ BtnCancelarClick`
+   - Label **`lbl_4c_Resps`** ÔÇö "Resposta:", Top=246, Left=10, Width=183
+   - EditBox **`edt_4c_Resps`** ÔÇö mapeia `getResps` original (fwmemo): Top=246 (217+29), Left=196, Width=408, Height=72
+   - `TornarControlesVisiveis(loc_oPg2)` ao final
+
+3. **`BtnSalvarClick`/`BtnCancelarClick`** ÔÇö navega├º├úo funcional (voltam ├á Page1) para que os bot├Áes respondam ao clique; implementa├º├úo completa de save/valida├º├úo vem na Fase 7.
+
+**Fase 6** adicionar├í o CheckBox `chkRespFixa` (segunda metade dos campos de Page2).

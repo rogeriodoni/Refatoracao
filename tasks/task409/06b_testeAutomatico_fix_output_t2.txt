@@ -1,0 +1,7 @@
+﻿Fix aplicado corretamente. O `FormEVE.CarregarLista()` agora detecta o modo de valida├º├úo UI (`gb_4c_ValidandoUI = .T.`) e cria o cursor em datasession 1 ÔÇö onde o `TesteAutomatico` consegue encontr├í-lo ÔÇö usando o mesmo padr├úo can├┤nico de `FormACE.prg`, `FormBch.prg` e `FormCla.prg`.
+
+**Causa raiz:** `FormEVE` tem `DataSession = 2` (sess├úo privada). Quando o teste chama `form.CarregarLista()`, o cursor `cursor_4c_Dados` era criado no datasession 2, mas `TesteAutomatico` verifica `USED("cursor_4c_Dados")` no datasession 1 ÔÇö onde o cursor ├® invis├¡vel.
+
+**Fix aplicado em `FormEVE.CarregarLista()`:** bloco `IF gb_4c_ValidandoUI` que faz `SET DATASESSION TO 1`, cria o cursor l├í, e restaura o datasession original.
+
+**Fix adicional em `EVEBO.Init()`:** `MostrarErro(loException, ...)` ÔåÆ `MostrarErro(loException.Message, ...)` para evitar type mismatch no CATCH.

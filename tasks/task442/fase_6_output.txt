@@ -1,0 +1,8 @@
+﻿Fase 6 conclu├¡da. As adi├º├Áes feitas ao `FormGr1.prg`:
+
+1. **`TxtCodigoGotFocus`** ÔÇö novo m├®todo com `CLEAR TYPEAHEAD`, equivale ao `GetCodigo.GotFocus` do legado
+2. **BINDEVENT GotFocus** em `txt_4c_Codigo` registrado em `ConfigurarPaginaLista()`
+3. **Gerenciamento de `ReadOnly` em `txt_4c_Descri`** ÔÇö replica o comportamento do `GetDescri.When` do legado:
+   - Quando `txt_4c_Codigo` ├® limpo ÔåÆ `txt_4c_Descri.ReadOnly = .F.` (campo liberado para busca por nome)
+   - Quando usu├írio ├® encontrado/selecionado (por c├│digo ou nome) ÔåÆ `txt_4c_Descri.ReadOnly = .T.` (campo bloqueado ap├│s sele├º├úo)
+   - Implementado em `TxtCodigoKeyPress`, `TxtDescriKeyPress`, `AbrirBuscaUsuarioPorCodigo` e `AbrirBuscaUsuarioPorNome`

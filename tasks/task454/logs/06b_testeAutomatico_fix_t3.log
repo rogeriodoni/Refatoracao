@@ -1,0 +1,25 @@
+[2026-08-10 18:41:07] [INFO] === CLAUDE CLI INVOKER ===
+[2026-08-10 18:41:07] [INFO] Prompt File: C:\4c\tasks\task454\runtime_fix_prompt_06b_testeAutomatico_t3.md
+[2026-08-10 18:41:07] [INFO] Output File: C:\4c\tasks\task454\06b_testeAutomatico_fix_output_t3.txt
+[2026-08-10 18:41:07] [INFO] Model: sonnet
+[2026-08-10 18:41:07] [INFO] Timeout: 3600 segundos
+[2026-08-10 18:41:07] [INFO] Max Output Tokens: 128000
+[2026-08-10 18:41:07] [INFO] Context Files: 0 arquivo(s)
+[2026-08-10 18:41:07] [INFO] Invocando Claude CLI...
+[2026-08-10 18:41:07] [INFO] Prompt carregado: 121830 caracteres
+[2026-08-10 18:41:07] [INFO] Executando: claude --model sonnet --dangerously-skip-permissions --add-dir C:\4c
+[2026-08-10 18:41:07] [INFO] Tamanho total do prompt: 121830 caracteres
+[2026-08-10 18:41:07] [INFO] Invocando Claude CLI (tentativa 1/7)...
+[2026-08-10 19:00:47] [INFO] Claude CLI finalizado em 1180.5742763 segundos
+[2026-08-10 19:00:47] [INFO] Exit Code: 0
+[2026-08-10 19:00:47] [INFO] Output salvo em: C:\4c\tasks\task454\06b_testeAutomatico_fix_output_t3.txt
+[2026-08-10 19:00:47] [INFO] Output size: 1076 bytes
+[2026-08-10 19:00:47] [INFO] SUCESSO: Claude CLI executado com sucesso
+[2026-08-10 19:00:47] [INFO] Preview do output:
+[2026-08-10 19:00:47] [INFO] All three methods now have the key guard and test mode guard. The fix is applied:
+
+- **ValidarCodCgo** (line 1699): SQLEXEC only fires on Enter (13) or Tab (9), skips entirely in `gb_4c_ModoTeste`
+- **ValidarCodCli** (line 1781): same guards  
+- **ValidarDesCli** (line 1866): same guards
+
+**Root cause**: These three KeyPress handlers executed `SQLEXEC(gnConnHandle, ...)` on *every* keystroke with no key guard. During the automated test, VFP9's internal focus/navigation events fire syntheti

@@ -1,0 +1,11 @@
+﻿Tudo conforme. Fase 3 conclu├¡da: `FormGr1.prg` criado em `C:\4c\projeto\app\forms\operacionais\FormGr1.prg`.
+
+**O que foi entregue:**
+- Form flat OPERACIONAL (sem PageFrame ÔÇö o SIGCDGR1 original ├® de tela ├║nica, sem navega├º├úo List/Data)
+- `Init()` ÔåÆ `RETURN DODEFAULT()` correto (FormBase.Init() chama InicializarForm + corrige DataSession=2 via SET DATE BRITISH)
+- `InicializarForm()` com TRY/CATCH verboso, cria Gr1BO, chama ConfigurarCabecalho + TornarControlesVisiveis
+- `ConfigurarCabecalho()` com AddObjects separados (evita nested WITH silencioso), labels sombra/t├¡tulo com CHR(), bot├Áes Remove e Salvar/Sair em CommandGroups direto no form sobre o header
+- `TornarControlesVisiveis()` com recurs├úo para PageFrames e containers
+- `Destroy()` fecha cursores `cursor_4c_Acessos` e `cursor_4c_Barra`, nulifica BO, chama `DODEFAULT()` por ├║ltimo
+
+**Pr├│ximas fases** adicionar├úo via Edit: Fase 4 (ConfigurarGrade + grid), Fases 5-6 (ConfigurarControles + labels/textboxes), Fases 7-8 (BINDEVENTs e handlers de evento).

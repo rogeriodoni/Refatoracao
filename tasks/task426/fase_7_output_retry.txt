@@ -1,0 +1,9 @@
+﻿All 4 handlers are in place, no TODO/stub markers, ENDDEFINE closes the class properly.
+
+**Fase 7/8 complete.** Added 3 CRUD-style event handlers to the FormFpm.prg OPERACIONAL sub-form (the 4th, `BtnExcluirClick`, was already present from Fase 5):
+
+- **`BtnIncluirClick`** (line 962) ÔÇö delegates to existing `BtnInserirClick` (adds new grid row with current `fpags`).
+- **`BtnAlterarClick`** (line 973) ÔÇö switches to Page1, applies the same per-column ReadOnly policy used in `GrdDadosAfterRowColChange` (Col1 editable when `ValMaxs=0`; Col2 editable when `nParcs>0`; Col3/Col4 editable when `nParcs=0`), focuses first editable cell.
+- **`BtnVisualizarClick`** (line 1020) ÔÇö confirms discard if `GravaDados`, reloads via `BuscarPorCondicao`, locks all 4 columns ReadOnly.
+
+Both new handlers use `TRY/CATCH` with `MsgErro` including `Message + LineNo + Procedure` (per CLAUDE.md rule #9), clear `this_lRedirigindo` in CATCH, and reuse existing methods (`BtnInserirClick`, `AlternarPagina`, `CarregarDados`) instead of duplicating logic.

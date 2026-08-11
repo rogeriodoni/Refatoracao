@@ -1,0 +1,16 @@
+﻿Fase 2 conclu├¡da. O `FisBO.prg` agora tem 8 m├®todos adicionais completos:
+
+| M├®todo | Equivalente legado |
+|---|---|
+| `InicializarCursor()` | `PROCEDURE Load` ÔÇö cria CrSigFiFis |
+| `CarregarDeArquivo()` | `fLerFiscal()` ÔÇö l├¬ SetFiscal.Ini via SDF, aplica defaults |
+| `CarregarDoCursor(alias)` | mapeamento direto: `SELECT (alias)` + campos sem prefixo |
+| `SalvarConfiguracao()` | `Ok.Click` ÔÇö grava SDF + BEMAFI32.INI + DarumaFramework.xml |
+| `CarregarProcedureFiscal(imp)` | DO CASE com `SET PROCEDURE TO SIGFIOPx ADDITIVE` |
+| `ObterChavePrimaria()` | retorna `""` (sem tabela SQL) |
+| `Inserir()` / `Atualizar()` | delegam para `SalvarConfiguracao()` |
+
+Observa├º├Áes relevantes para as fases seguintes:
+- O Form deve chamar `InicializarCursor()` + `CarregarDeArquivo()` no Init, **antes** de ligar os controles ao cursor CrSigFiFis
+- O bot├úo Confirmar chama `this_oBusinessObject.SalvarConfiguracao()` e depois fecha o form
+- `fConfigGeral()` do legado (Load event) n├úo foi portada ÔÇö o Form pode ignor├í-la ou chamar equivalente se existir

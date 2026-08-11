@@ -1,0 +1,10 @@
+﻿Fase 5 conclu├¡da. As altera├º├Áes feitas ao `FormICO.prg`:
+
+1. **`ConfigurarPageFrame()`** ÔÇö adicionada chamada a `THIS.ConfigurarPaginaDados()` ap├│s `ConfigurarPaginaLista()`
+
+2. **`AtualizarPreview()`** ÔÇö agora tamb├®m l├¬ `carqicones` e atualiza `lbl_4c_NomeIcone.Caption` com guard `PEMSTATUS` (seguro mesmo antes de ConfigurarPaginaDados rodar)
+
+3. **`ConfigurarPaginaDados()`** ÔÇö m├®todo novo com tr├¬s labels no painel direito (x=456, entre cabe├ºalho y=79 e imagem y=220):
+   - `lbl_4c_Instrucao` (y=95): "Selecione um ├¡cone da lista:"
+   - `lbl_4c_NomeIcone` (y=120, WordWrap): exibe o nome do arquivo do ├¡cone selecionado, atualizado em tempo real pelo `AtualizarPreview()`
+   - `lbl_4c_Preview` (y=200): r├│tulo "Pr├®via:" acima da imagem

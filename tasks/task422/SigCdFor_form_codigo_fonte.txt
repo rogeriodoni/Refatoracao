@@ -1,0 +1,345 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigCdFor.SCX
+* Data/Hora: 05/08/2026 20:47:44
+* Total de registros: 8
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDFOR
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_formas
+  Parent: SIGCDFOR.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say8
+  Parent: SIGCDFOR.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say7
+  Parent: SIGCDFOR.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_INFO
+  Parent: SIGCDFOR.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFOR
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  DoCreate = .T.
+  Caption = "Cadastro de Formas de Pagamento"
+  Name = "SIGCDFOR"
+  Pagina.ErasePage = .T.
+  Pagina.Lista.cntSombra.lblSombra.Name = "lblSombra"
+  Pagina.Lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  Pagina.Lista.cntSombra.Name = "cntSombra"
+  Pagina.Lista.Grade.FontName = "Tahoma"
+  Pagina.Lista.Grade.FontSize = 8
+  Pagina.Lista.Grade.RowHeight = 16
+  Pagina.Lista.Grade.ForeColor = 90,90,90
+  Pagina.Lista.Grade.Name = "Grade"
+  Pagina.Lista.Grupo_op.AutoSize = .T.
+  Pagina.Lista.Grupo_op.Inserir.Top = 5
+  Pagina.Lista.Grupo_op.Inserir.Left = 5
+  Pagina.Lista.Grupo_op.Inserir.Name = "Inserir"
+  Pagina.Lista.Grupo_op.Consultar.Top = 5
+  Pagina.Lista.Grupo_op.Consultar.Left = 80
+  Pagina.Lista.Grupo_op.Consultar.Name = "Consultar"
+  Pagina.Lista.Grupo_op.Alterar.Top = 5
+  Pagina.Lista.Grupo_op.Alterar.Left = 155
+  Pagina.Lista.Grupo_op.Alterar.Name = "Alterar"
+  Pagina.Lista.Grupo_op.Excluir.Top = 5
+  Pagina.Lista.Grupo_op.Excluir.Left = 230
+  Pagina.Lista.Grupo_op.Excluir.Name = "Excluir"
+  Pagina.Lista.Grupo_op.procurar.Top = 5
+  Pagina.Lista.Grupo_op.procurar.Left = 305
+  Pagina.Lista.Grupo_op.procurar.Name = "procurar"
+  Pagina.Lista.Grupo_op.Height = 85
+  Pagina.Lista.Grupo_op.Left = 344
+  Pagina.Lista.Grupo_op.Top = -1
+  Pagina.Lista.Grupo_op.Width = 385
+  Pagina.Lista.Grupo_op.Name = "Grupo_op"
+  Pagina.Lista.Grupo_Saida.Sair.Top = 5
+  Pagina.Lista.Grupo_Saida.Sair.Left = 5
+  Pagina.Lista.Grupo_Saida.Sair.Name = "Sair"
+  Pagina.Lista.Grupo_Saida.Left = 719
+  Pagina.Lista.Grupo_Saida.Top = -1
+  Pagina.Lista.Grupo_Saida.Name = "Grupo_Saida"
+  Pagina.Lista.cntFiltros.Name = "cntFiltros"
+  Pagina.Lista.Name = "Lista"
+  Pagina.Dados.Grupo_Salva.AutoSize = .T.
+  Pagina.Dados.Grupo_Salva.Salva.Top = 5
+  Pagina.Dados.Grupo_Salva.Salva.Left = 5
+  Pagina.Dados.Grupo_Salva.Salva.Name = "Salva"
+  Pagina.Dados.Grupo_Salva.Cancelar.Top = 5
+  Pagina.Dados.Grupo_Salva.Cancelar.Left = 81
+  Pagina.Dados.Grupo_Salva.Cancelar.Name = "Cancelar"
+  Pagina.Dados.Grupo_Salva.TabIndex = 3
+  Pagina.Dados.Grupo_Salva.Name = "Grupo_Salva"
+  Pagina.Dados.Name = "Dados"
+  Pagina.Name = "Pagina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFOR.Pagina.Dados.Get_formas
+------------------------------------------------------------
+  FontItalic = .F.
+  FontName = "Tahoma"
+  ControlSource = "crSigCdFrm.formas"
+  Left = 311
+  TabIndex = 1
+  Top = 169
+  Width = 94
+  ForeColor = 0,0,0
+  ZOrderSet = 2
+  plprocurar = .T.
+  Name = "Get_formas"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFOR.Pagina.Dados.Say8
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Forma de Pagamento : "
+  Left = 196
+  Top = 173
+  Visible = .T.
+  TabIndex = 4
+  ForeColor = 90,90,90
+  ZOrderSet = 3
+  Name = "Say8"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFOR.Pagina.Dados.Say7
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Inf. Complementar : "
+  Left = 208
+  Top = 197
+  TabIndex = 5
+  ForeColor = 90,90,90
+  ZOrderSet = 10
+  Name = "Say7"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFOR.Pagina.Dados.Get_INFO
+------------------------------------------------------------
+  FontName = "Tahoma"
+  ControlSource = "crSigCdFrm.infos"
+  Format = ""
+  InputMask = ""
+  Left = 311
+  TabIndex = 2
+  ToolTipText = "<C>Cheque <T>Cartão Crédito <N>Carne <O>Outras  <R>Conta Corrente"
+  Top = 194
+  Width = 24
+  ForeColor = 0,0,0
+  ZOrderSet = 19
+  Name = "Get_INFO"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDFOR
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE msv_procurar
+------------------------------------------------------------
+PROCEDURE msv_procurar
+Local lcBusca
+
+If !Empty(ThisForm.Pagina.Dados.get_formas.Value)
+	ThisForm.poDataMgr.LocateCursor('crSigCdFrm','formas',ThisForm.Pagina.Dados.Get_formas.Value)
+EndIf
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LPARAMETERS lcacesso
+
+With ThisForm
+	.poDatamgr = CreateObject('fSqlConector')
+	With .poDatamgr
+		.AddCursor('SigCdFrm','formas','crSigCdFrm','',ThisForm.pagina.lista.grade)
+		.pfSqlTabela(1).pColuna('Formas','','','Formas',94,.t.)
+	EndWith
+	= DoDefault()
+	.LockScreen = .f.
+EndWith
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Lista.Grupo_op.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Lista.Grupo_op.Click
+LPArameters Opcao
+
+If !dodefault( Opcao )
+	ThisForm.mAtivapagina1
+	Return
+Endif
+
+Select CrSigCdFrm
+Do Case
+	Case Inlist( thisform.pcEscolha, 'INSERIR', 'PROCURAR' )
+		ThisForm.Pagina.Dados.Get_Formas.SetFocus
+	Case Inlist( thisform.pcEscolha, 'ALTERAR','EXCLUIR', 'CONSULTAR' )
+		ThisForm.Pagina.Dados.Get_InFO.SetFocus
+Endcase
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+If Inlist( thisform.pcEscolha, 'INSERIR')
+	If Empty( CrSigCdFrm.Formas )
+		Messagebox( 'Forma de Pagamento Inválida.', 48 , '' )
+		ThisForm.Pagina.Dados.Get_Formas.SetFocus
+		Return
+	Endif
+	if ThisForm.poDataMgr.ChkRegister('SigCdFrm','Formas',ThisForm.Pagina.Dados.Get_Formas.Value)
+		Messagebox( 'Forma de Pagamento já cadastrada.', 48,'' )
+		ThisForm.Pagina.Dados.Get_Formas.SetFocus
+		Return
+	Endif
+Endif
+
+=DoDefault()
+Thisform.mAtivapagina1
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+DoDefault()
+if thisform.plCancelar
+	thisform.mAtivapagina1
+endif
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFOR.Pagina.Dados.Get_formas
+* Classe: fwget (Base: textbox)
+* Registro: 4
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+If not Inlist(thisform.pcEscolha,'INSERIR','PROCURAR')
+	return(.f.)
+endif
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFOR.Pagina.Dados.Get_INFO
+* Classe: fwget (Base: textbox)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loBrowse
+If .Not.Empty(This.Value)
+	m.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigPrInf','CrSigPrInf','Infos',This.Value,'Inf.Complementares',.T.)
+	If .Not.m.loLista.plAchouRegistro
+		m.loLista.mAddColuna('Infos','X','Código')
+		m.loLista.mAddColuna('descrs','XXXXXXXXXXXXXXXXXXXX','Descrição')
+		m.loLista.Show()
+	EndIf
+	If LastKey() <> 27 And Used('CrSigPrInf')
+		This.Value = Evaluate('CrSigPrInf.Infos')
+	Else
+		This.Value = ''
+	EndIf
+ 	This.Refresh
+EndIf
+Return(.T.)
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 7
+================================================================================

@@ -1,0 +1,22 @@
+﻿O arquivo est├í correto. Fase 5 completa com sucesso.
+
+**O que foi adicionado em `FormCtg.prg`:**
+
+1. **`ConfigurarPaginaDados()`** ÔÇö substitu├¡da completamente:
+   - `cnt_4c_BotoesAcao` com posi├º├úo correta do original (`Left=817, Top=40`)
+   - Bot├úo `cmd_4c_Confirmar` (cadastro_salvar_60.jpg) e `cmd_4c_Cancelar`
+   - `lbl_4c_Codigo` ("C├│digo :") com posi├º├Áes do legado + compensa├º├úo +29px
+   - `txt_4c_Codigo` com `InputMask="!!!"`, `MaxLength=3`, `SpecialEffect=1`
+   - BINDEVENTs para `BtnSalvarClick` e `BtnCancelarClick`
+
+2. **`BtnSalvarClick()`** ÔÇö implementa├º├úo completa fiel ao legado:
+   - Valida C├│digo (obrigat├│rio)
+   - Valida Descri├º├úo (obrigat├│rio, com guard `PEMSTATUS` ÔÇö ser├í ativado na Fase 6)
+   - Verifica duplicidade via `SQLEXEC` em modo INCLUIR (reproduz l├│gica do `Grupo_Salva.Salva.Click`)
+   - Chama `FormParaBO()` ÔåÆ `Salvar()` ÔåÆ navega para lista
+
+3. **`BtnCancelarClick()`** ÔÇö navega de volta para Page1
+
+4. **`HabilitarCampos()`** ÔÇö implementada: `txt_4c_Codigo` s├│ habilitado em INCLUIR (fiel ao legado `getCods.When`)
+
+5. **`LimparCampos()`, `BOParaForm()`, `FormParaBO()`** ÔÇö implementadas com guards `PEMSTATUS` para ambos os campos (o segundo campo ser├í ativado automaticamente na Fase 6 quando `txt_4c_Descricao` for criado)

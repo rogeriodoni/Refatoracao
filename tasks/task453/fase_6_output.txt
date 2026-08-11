@@ -1,0 +1,17 @@
+﻿Formint.prg is structurally complete and clean. Here's a summary of what was done in this session:
+
+**CorretorAutomatico ÔÇö 35 corrections applied:**
+- `RETURN_NO_TRY`: 2 RETURN inside TRY converted to flag variable (BtnSairCntClick)
+- `BINDEVENT_VALID_TO_LOSTFOCUS`: 6 standalone textbox lookup bindings corrected (GetJustifValid, GetTOcorCntTratValid, GetTOcorBaixaAutoValid, GetIBarraValid, GetIOcorValid, GetBuscaValid)
+- `ELSEIF ÔåÆ ELSE+IF`: 2 occurrences (BtnBaixaAutoClick, BtnTratamentoClick)
+- `SHOWWINDOW/WINDOWTYPE` ÔåÆ 0: operacional form was incorrectly set to modal (=1)
+- `CARREGAR_LISTA_PROTECTED`: CarregarLista() made public
+- Various canonical fixes: grid, toolbar container, sa├¡da button, encoding
+
+**Manual fixes applied post-CorretorAutomatico:**
+1. **BtnSairCntClick** ÔÇö Added `loc_lValido` guard: validation SCAN now EXIT on first failure, second SCAN and `UPDATE SigCdBal` only run if validation passed. The RETURN_NO_TRY correction had removed early exits without adding proper flow control.
+2. **Column8.Text1 BINDEVENT** ÔÇö Fixed wrong event: `"KeyPress"` ÔåÆ `"LostFocus"` for `GrdColOcorLostFocus`
+
+**Final structural verification:** 54 methods = 54 ENDPROCs, 161 WITH = 161 ENDWITH, 5 SCAN = 5 ENDSCAN, 35 TRY = 35 ENDTRY. File is 3848 lines.
+
+The form is ready for **Phase 06_testForm** (runtime testing). Delete `.fxp` files (none exist) and open the form via `DO Formint.prg` in the running application.

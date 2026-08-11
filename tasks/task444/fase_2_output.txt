@@ -1,0 +1,9 @@
+﻿Fase 2 conclu├¡da. O HORBO.prg agora tem os 4 m├®todos adicionados:
+
+**M├®todos adicionados:**
+- `CarregarDoCursor(par_cAliasCursor)` ÔÇö carrega `this_cMes`/`this_cAno` do cursor `crMesAno` (padr├úo BusinessBase, usado quando o form seleciona uma linha do grid)
+- `ValidarDados()` (PROTECTED) ÔÇö valida M├¬s, Ano, Setors e UniPrdts antes de salvar
+- `Inserir()` ÔÇö delega para `InserirPeriodo(this_cMes, this_cAno)` + chama `RegistrarAuditoria("I")`
+- `Atualizar()` ÔÇö delega para `AlterarPeriodo()` (que usa crCalendario) + chama `RegistrarAuditoria("U")`
+
+**Bug corrigido (linha 824):** `ALLTRIM((par_cCursor + ".cidchaves"))` era ineficaz (retornava a string literal, n├úo o valor do campo) ÔÇö corrigido para `ALLTRIM(EVALUATE(par_cCursor + ".cidchaves"))`.

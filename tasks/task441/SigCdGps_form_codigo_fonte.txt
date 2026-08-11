@@ -1,0 +1,601 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigCdGps.SCX
+* Data/Hora: 08/08/2026 04:15:33
+* Total de registros: 16
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDGPS
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGCDGPS
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGCDGPS.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGCDGPS.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: GradeOpe
+  Parent: SIGCDGPS
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGCDGPS.GradeOpe.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDGPS.GradeOpe.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDGPS.GradeOpe.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDGPS.GradeOpe.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: cmdInserir
+  Parent: SIGCDGPS
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cmdExcluir
+  Parent: SIGCDGPS
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cmdSair
+  Parent: SIGCDGPS
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Cancela
+  Parent: SIGCDGPS
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDGPS
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 461
+  Width = 800
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Grupos de Produtos - Subnível"
+  ControlBox = .F.
+  Movable = .F.
+  ClipControls = .F.
+  TitleBar = 0
+  tipoggp = .F.
+  escolha = .F.
+  Name = "SIGCDGPS"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDGPS.cntSombra
+------------------------------------------------------------
+  Top = -2
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDGPS.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDGPS.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDGPS.GradeOpe
+------------------------------------------------------------
+  ColumnCount = 2
+  FontName = "Tahoma"
+  DeleteMark = .F.
+  Height = 364
+  Left = 236
+  ScrollBars = 2
+  TabIndex = 1
+  Top = 87
+  Width = 264
+  GridLineColor = 238,238,238
+  Name = "GradeOpe"
+  Column1.FontName = "Tahoma"
+  Column1.Width = 50
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.BackColor = 255,255,255
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.Width = 180
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.Name = "Column2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDGPS.GradeOpe.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Grupo"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDGPS.GradeOpe.Column1.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDGPS.GradeOpe.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Descrição"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDGPS.GradeOpe.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDGPS.cmdInserir
+------------------------------------------------------------
+  Top = 2
+  Left = 500
+  Height = 75
+  Width = 75
+  Picture = ..\framework\imagens\cadastro_inserir_60.jpg
+  Caption = "\<Inserir"
+  TabIndex = 4
+  Name = "cmdInserir"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDGPS.cmdExcluir
+------------------------------------------------------------
+  Top = 2
+  Left = 575
+  Height = 75
+  Width = 75
+  Picture = ..\framework\imagens\cadastro_excluir_60.jpg
+  Caption = "\<Excluir"
+  TabIndex = 2
+  Name = "cmdExcluir"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDGPS.cmdSair
+------------------------------------------------------------
+  Top = 2
+  Left = 650
+  Picture = ..\framework\imagens\cadastro_salvar_60.jpg
+  Caption = "\<Confirmar"
+  TabIndex = 7
+  Name = "cmdSair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDGPS.Cancela
+------------------------------------------------------------
+  Top = 2
+  Left = 725
+  Picture = ..\framework\imagens\cadastro_cancelar_60.jpg
+  Cancel = .T.
+  Caption = "Cancelar"
+  TabIndex = 8
+  Name = "Cancela"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDGPS
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters poForm, pnDataSes, pTpGgp, pEscolha
+
+Set DataSession to pnDataSes
+
+Thisform.ParentForm          = poForm
+Thisform.ParentForm.Enabled  = .F.
+
+Thisform.Escolha = pEscolha
+
+Thisform.GravaDados = .f.
+Thisform.Tipoggp = pTpGgp
+
+ThisForm.cmdInserir.Enabled  = InList(Thisform.Escolha,'INSERIR','ALTERAR')
+ThisForm.cmdExcluir.Enabled  = InList(Thisform.Escolha,'INSERIR','ALTERAR')
+
+
+With Thisform
+	.Caption = 'Grupos de Produtos ' + AllTrim(crSigCdOpe.Dopes)
+EndWith
+
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+lcOperacao = crSigCdOpe.Dopes
+
+With Thisform
+	.poDatamgr = CreateObject('fSqlConector')
+
+	If Not .poDatamgr.pnIdconn>0
+		Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),'Erro')
+		Return(.f.)
+	Endif
+
+	With .poDatamgr
+		.AddCursor('SigCdGps','cIdChaves','CrSigCdGps','')
+		.AddCursor('SigCdGgp','pkChave','CrSigCdGgp','')
+	EndWith
+Endwith	
+
+Create Cursor xOpe ( Dopes c(20), Cgrus c(3), Dgrus c(30) )
+Index on Dopes Tag Dopes
+Set Order to
+
+With Thisform.GradeOpe
+	.RecordSource          = 'xOpe'
+	.Column1.ControlSource = 'xOpe.Cgrus'
+	.Column2.ControlSource = 'xOpe.Dgrus'
+	.Refresh
+EndWith
+
+lcSql = [Select a.*, b.Dgrus ] + ;
+		[From ]+Iif(Thisform.Tipoggp,[SigCdGgp],[SigCdGps])+[ a, SigCdGrp b ] + ;
+		[Where a.Dopes = ']+CrSigCdOpe.Dopes+[' And a.Cgrus = b.Cgrus ]
+
+ThisForm.Podatamgr.Sqlexecute(lcSql,'CsSelecao')
+
+Select CsSelecao
+Scan
+	Scatter Memvar
+	Select xOpe
+	Append Blank
+	Gather Memvar
+EndScan
+
+Select xOpe
+Set Order to
+Go Top
+
+ThisForm.GradeOpe.Refresh
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDGPS.GradeOpe.Column1.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Thisform.AntValue = This.Value
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local lcFpags, lnRecNo, loBrowse
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigCdGrp', ;
+						   'CrListaRemota', 'Cgrus', This.Value, 'Grupo de Produto', .t.)
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Cgrus', '', 'Grupo',.t.)
+		loLista.mAddColuna('Dgrus', '', 'Descrição',.t.)
+		loLista.Show()
+	EndIf
+	This.Value = CrListaRemota.Cgrus
+	Replace Dgrus with CrListaRemota.Dgrus In xOpe
+	Use In CrListaRemota
+Else
+	This.Value = ''
+EndIf
+This.Refresh
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDGPS.GradeOpe.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDGPS.cmdInserir
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Insert Into xOpe (Cgrus) Values ( Space(20))
+Select xOpe
+ThisForm.GravaDados = .t.
+Thisform.GradeOpe.Column1.SetFocus
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDGPS.cmdExcluir
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select xOpe
+If Not Eof()
+	Select xOpe
+	Delete 
+	Skip
+	If Eof()
+		Go Bott
+	Endif
+EndIf
+Thisform.GradeOpe.SetFocus
+ThisForm.GravaDados = .t.
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDGPS.cmdSair
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If ThisForm.GravaDados
+
+	Select Cgrus, Sum(1) as Qt From xOpe Group by 1 Into Cursor Selecao where cgrus <> ' ' having Sum(1) > 1
+	If Reccount('Selecao') > 0
+		MessageBox('Existem lancamentos de Grupos Em Duplicidade!!!',0+16,'')
+		Return .f.
+	EndIf
+	
+	Select CrSigCdGgp
+	Zap
+	Select CrSigCdGps
+	Zap
+	
+	Select xOpe
+	Scan
+		If Not Empty(Cgrus)
+			If ThisForm.Tipoggp
+				Insert Into CrSigCdGgp (Dopes, Cgrus, pkchave) ;
+							Values (crSigCdOpe.Dopes, xOpe.Cgrus, fUniqueIds())
+			Else
+				Insert Into CrSigCdGps (Dopes, Cgrus, cIdChaves) ;
+							Values (crSigCdOpe.Dopes, xOpe.Cgrus, fUniqueIds())
+			EndIf 
+		Endif
+	EndScan
+	
+	m.lnErro1 = ThisForm.poDatamgr.pnIdConn
+
+	With ThisForm
+
+		lcSql = [Delete From ]+Iif(ThisForm.Tipoggp,[SigCdGgp],[SigCdGps])+[ Where dopes = ']+CrSigCdOpe.dopes+[']
+		m.lnErro1 = ( .PodataMgr.SqlExecute(lcSql,'') )
+
+		If m.lnErro1>0 
+			If ThisForm.Tipoggp
+				m.lnErro1 = Iif(.poDataMgr.UpDate('crSigCdGgp'),1,-1)
+			Else
+				m.lnErro1 = Iif(.poDataMgr.UpDate('crSigCdGps'),1,-1)
+			EndIf 
+		EndIf 
+		If m.lnErro1>0 
+			m.lnErro1 = .poDataMgr.Commit()
+		EndIf 
+		If Not m.lnErro1>0 
+			.poDataMgr.RollBack()
+		EndIf 
+	EndWith 
+	If Not m.lnErro1>0 
+		= MessageBox('Erro na Gravação dos Dados!!!',48)
+	EndIf 
+EndIf
+Thisform.ParentForm.Enabled = .T.
+ThisForm.Release
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDGPS.Cancela
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Thisform.parentform.enabled = .T.
+Thisform.release
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGCDGPS
+RESERVED3 (ClassInfo): antvalue
+gravadados
+parentform
+podatamgr
+tipoggp
+escolha
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 9
+================================================================================

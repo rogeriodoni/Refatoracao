@@ -1,0 +1,19 @@
+﻿Analisado. O flag `[SQL-FILTRO-INVENTADO]` ├® um **falso positivo**. Veja o racioc├¡nio:
+
+**SQL original:**
+```
+Select * From SigCdFtr Where GruCarTits = ?pKey Order By cIdChaves
+```
+
+**No `FteBO.prg`:**
+
+| Fun├º├úo | WHERE usado | Status |
+|--------|-------------|--------|
+| `Buscar()` (linha 56) | `WHERE GruCarTits = ...` | Ô£à Correto ÔÇö espelho exato do original |
+| `CarregarPorCodigo()` (linha 96) | `WHERE cIdChaves = ...` | Ô£à PK lookup ÔÇö padr├úo CRUD da nova arquitetura |
+| `Atualizar()` (linha 222) | `WHERE cIdChaves = ...` | Ô£à UPDATE por PK ÔÇö obrigat├│rio |
+| `ExecutarExclusao()` (linha 247) | `WHERE cIdChaves = ...` | Ô£à DELETE por PK ÔÇö obrigat├│rio |
+
+O `WHERE cIdChaves = ...` **n├úo ├® um filtro inventado** na query Buscar ÔÇö est├í em fun├º├Áes separadas que fazem lookup/update/delete por chave prim├íria. O `cIdChaves` inclusive aparece no `SELECT` do original (`Order By cIdChaves` prova que a coluna existe).
+
+A query equivalente ao original (`Buscar`) j├í usa corretamente `WHERE GruCarTits = ...`. Nenhuma altera├º├úo ├® necess├íria ÔÇö o c├│digo est├í correto.

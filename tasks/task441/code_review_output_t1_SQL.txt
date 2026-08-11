@@ -1,0 +1,21 @@
+﻿O problema reportado ├® um **falso positivo** do analisador autom├ítico.
+
+Todos os `WHERE` SQL em ambos os arquivos usam apenas `Dopes` e `Cgrus`, exatamente como o c├│digo original:
+
+| Arquivo | Linha | WHERE SQL |
+|---------|-------|-----------|
+| GpsBO.prg | 124 | `WHERE Dopes = ...` (ExecutarExclusao) |
+| GpsBO.prg | 155 | `WHERE a.Dopes = ...` (CarregarGrupos) |
+| GpsBO.prg | 184 | `WHERE NOT EMPTY(ALLTRIM(Cgrus))` (ValidarDuplicados ÔÇö equivale ao legado `where cgrus <> ' '`) |
+| GpsBO.prg | 226 | `WHERE Dopes = ...` (SalvarGrupos) |
+| FormGps.prg | 754 | `WHERE RTRIM(cgrus) = ...` (GrdDadosCol1KeyPress) |
+
+O `ControlCount` que o analisador flagou est├í nas **linhas 467 e 473 do FormGps.prg**, dentro do m├®todo `TornarControlesVisiveis` ÔÇö ├® uma propriedade VFP de containers usada num loop para iterar controles filhos, sem nenhuma rela├º├úo com SQL:
+
+```foxpro
+FOR loc_i = 1 TO par_oContainer.ControlCount
+    ...
+    IF PEMSTATUS(loc_oCtrl, "ControlCount", 5) AND loc_oCtrl.ControlCount > 0
+```
+
+**Nenhuma corre├º├úo ├® necess├íria.** O c├│digo SQL est├í correto e nenhuma condi├º├úo inventada existe nos WHEREs. O passo SQL deste code review est├í aprovado.

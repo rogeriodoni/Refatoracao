@@ -1,0 +1,11 @@
+﻿Arquivo completo e correto. Fase 4/8 conclu├¡da.
+
+**O que foi adicionado em FormFpg.prg:**
+
+- **5 bot├Áes CRUD** em `cnt_4c_Botoes` (Incluir, Visualizar, Alterar, Excluir, Buscar) com posi├º├Áes exatas do legado (Left=5/80/155/230/305), ├¡cones, `FontName="Comic Sans MS"`, `Themes=.F.`
+- **Bot├úo Encerrar** em `cnt_4c_Saida` ÔÇö padr├úo can├┤nico (Left=917, Width=75, Caption="Encerrar")
+- **Bot├Áes Confirmar + Cancelar** em `cnt_4c_Salva` na Page2 com ├¡cones corretos (`cadastro_salvar_60.jpg`)
+- **Grid `grd_4c_Lista`** (Top=121, Left=12, Width=940, Height=470) com 3 colunas: Grupo(80px), Descri├º├úo(560px), Tipo(80px)
+- **`CarregarLista()`** atualizado: RecordSource + ColumnCount fora do WITH (Problema 36), Headers redefinidos ap├│s RecordSource (Problema 32), `FormatarGridLista()` chamado
+- **8 handlers CRUD** todos PUBLIC: `BtnIncluirClick`, `BtnVisualizarClick`, `BtnAlterarClick`, `BtnExcluirClick`, `BtnBuscarClick`, `BtnEncerrarClick`, `BtnSalvarClick`, `BtnCancelarClick`
+- **M├®todos de suporte base**: `HabilitarCampos`, `LimparCampos`, `FormParaBO`, `BOParaForm` ÔÇö implementa├º├Áes funcionais que ser├úo estendidas nas fases seguintes com os controles da Page2

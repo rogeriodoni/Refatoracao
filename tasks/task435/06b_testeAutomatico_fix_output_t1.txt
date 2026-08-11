@@ -1,0 +1,5 @@
+﻿Dois bugs corrigidos em `FormFUN.prg`:
+
+1. **Causa raiz do erro**: `cursor_4c_Dados` n├úo existia quando `ConfigurarPaginaLista()` fazia `RecordSource = "cursor_4c_Dados"`. Solu├º├úo: criar o cursor vazio em `InicializarForm` logo ap├│s os cursores `TmpCera/TmpTrf/TmpNop`, antes de configurar as p├íginas.
+
+2. **Bug secund├írio**: `ColumnCount = 3` ap├│s configurar 5 colunas destru├¡a Column4 e Column5. Corrigido para `ColumnCount = 5`.

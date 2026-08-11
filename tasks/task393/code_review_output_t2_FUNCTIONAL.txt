@@ -1,0 +1,13 @@
+﻿O problema reportado ├® um **falso positivo**. O m├®todo `ImportaPlan` est├í definido e completo:
+
+- **Linha 1426**: `PROTECTED FUNCTION ImportaPlan()` ÔÇö defini├º├úo completa
+- **Linha 1497**: `RETURN loc_lResultado` ÔÇö fora do TRY/CATCH (regra #1 respeitada)
+- **Linha 1498**: `ENDFUNC` ÔÇö m├®todo fechado corretamente
+- **Linha 1500**: `ENDDEFINE` ÔÇö classe fechada
+
+O checker do pass analisou apenas os "TRECHOS RELEVANTES" fornecidos, que cortavam em linha 1486 (dentro do corpo do SCAN), antes do `ENDFUNC`. Por isso concluiu erroneamente que o m├®todo estava ausente.
+
+**Nenhuma altera├º├úo necess├íria.** O c├│digo est├í correto:
+- `THIS.ImportaPlan()` chama um m├®todo `PROTECTED FUNCTION` dentro da mesma classe ÔÇö v├ílido em VFP9
+- A l├│gica de importa├º├úo ├® real (n├úo placeholder), usando `ImpExcelDriver` com tratamento de erro completo
+- Estrutura IF/ELSE/ENDIF correta (apesar da indenta├º├úo irregular nas linhas 1445-1448)

@@ -1,0 +1,15 @@
+﻿O arquivo est├í correto e completo. A Fase 2/8 est├í conclu├¡da.
+
+**CstBO.prg completo com todos os m├®todos CRUD:**
+
+- **Init()** ÔÇö configura `this_cTabela = "SigCdCnt"` e `this_cCampoChave = "Codigos"` com TRY/CATCH
+- **ObterChavePrimaria()** ÔÇö retorna `this_cCodigo` para auditoria
+- **CarregarDoCursor()** ÔÇö usa `SELECT (par_cAliasCursor)` antes de acessar campos (regra cr├¡tica)
+- **ValidarDados()** ÔÇö valida c├│digo, duplicidade (no INSERT), descri├º├úo e moeda obrigat├│rios
+- **VerificarCodigoExistente()** ÔÇö COUNT no banco para checar duplicidade na PK
+- **Inserir()** ÔÇö INSERT em SigCdCnt com `RegistrarAuditoria("INSERT")`
+- **Atualizar()** ÔÇö UPDATE em SigCdCnt com `RegistrarAuditoria("UPDATE")`
+- **ExecutarExclusao()** ÔÇö valida os 6 campos `const*t*s` em SigOpTdt antes do DELETE
+- **Buscar()** ÔÇö SELECT com cursor nomeado `crSigCdCnt` (igual ao legado) + padr├úo ZAP/APPEND
+- **CarregarPorCodigo()** ÔÇö SELECT com LEFT JOIN em SigCdMoe para carregar `descmoes`, reseta `this_lNovoRegistro = .F.`
+- **CarregarDescMoeda()** ÔÇö busca `dmoes` de SigCdMoe pelo c├│digo da moeda (usado ap├│s lookup)

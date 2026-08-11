@@ -1,0 +1,761 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigCdDsp.SCX
+* Data/Hora: 01/08/2026 06:24:23
+* Total de registros: 12
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDDSP
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_grupo
+  Parent: SIGCDDSP.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_conta
+  Parent: SIGCDDSP.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_ds_grupo
+  Parent: SIGCDDSP.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_cd_conta
+  Parent: SIGCDDSP.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_ds_conta
+  Parent: SIGCDDSP.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_cd_grupo
+  Parent: SIGCDDSP.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say8
+  Parent: SIGCDDSP.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: ObjUniDop
+  Parent: SIGCDDSP.Pagina.Dados
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 26
+  Left = 31
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDSP
+------------------------------------------------------------
+  DataSession = 2
+  DoCreate = .T.
+  Caption = "Cadastro de Disponibilidades"
+  Name = "SIGCDDSP"
+  Pagina.ErasePage = .T.
+  Pagina.Lista.cntSombra.lblSombra.Name = "lblSombra"
+  Pagina.Lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  Pagina.Lista.cntSombra.Name = "cntSombra"
+  Pagina.Lista.Grade.FontName = "Tahoma"
+  Pagina.Lista.Grade.FontSize = 8
+  Pagina.Lista.Grade.RowHeight = 16
+  Pagina.Lista.Grade.ForeColor = 90,90,90
+  Pagina.Lista.Grade.Name = "Grade"
+  Pagina.Lista.Grupo_op.AutoSize = .F.
+  Pagina.Lista.Grupo_op.Inserir.Top = 5
+  Pagina.Lista.Grupo_op.Inserir.Left = 5
+  Pagina.Lista.Grupo_op.Inserir.Name = "Inserir"
+  Pagina.Lista.Grupo_op.Consultar.Top = 5
+  Pagina.Lista.Grupo_op.Consultar.Left = 80
+  Pagina.Lista.Grupo_op.Consultar.Name = "Consultar"
+  Pagina.Lista.Grupo_op.Alterar.Top = 5
+  Pagina.Lista.Grupo_op.Alterar.Left = 155
+  Pagina.Lista.Grupo_op.Alterar.Name = "Alterar"
+  Pagina.Lista.Grupo_op.Excluir.Top = 5
+  Pagina.Lista.Grupo_op.Excluir.Left = 230
+  Pagina.Lista.Grupo_op.Excluir.Name = "Excluir"
+  Pagina.Lista.Grupo_op.Procurar.Top = 5
+  Pagina.Lista.Grupo_op.Procurar.Left = 305
+  Pagina.Lista.Grupo_op.Procurar.Name = "Procurar"
+  Pagina.Lista.Grupo_op.Height = 85
+  Pagina.Lista.Grupo_op.Left = 344
+  Pagina.Lista.Grupo_op.Top = -1
+  Pagina.Lista.Grupo_op.Width = 385
+  Pagina.Lista.Grupo_op.Name = "Grupo_op"
+  Pagina.Lista.Grupo_Saida.Sair.Top = 5
+  Pagina.Lista.Grupo_Saida.Sair.Left = 5
+  Pagina.Lista.Grupo_Saida.Sair.Name = "Sair"
+  Pagina.Lista.Grupo_Saida.Left = 719
+  Pagina.Lista.Grupo_Saida.Top = -1
+  Pagina.Lista.Grupo_Saida.Name = "Grupo_Saida"
+  Pagina.Lista.cntFiltros.Name = "cntFiltros"
+  Pagina.Lista.Name = "Lista"
+  Pagina.Dados.Grupo_Salva.AutoSize = .T.
+  Pagina.Dados.Grupo_Salva.Salva.Top = 5
+  Pagina.Dados.Grupo_Salva.Salva.Left = 5
+  Pagina.Dados.Grupo_Salva.Salva.Name = "Salva"
+  Pagina.Dados.Grupo_Salva.Cancelar.Top = 5
+  Pagina.Dados.Grupo_Salva.Cancelar.Left = 80
+  Pagina.Dados.Grupo_Salva.Cancelar.Name = "Cancelar"
+  Pagina.Dados.Grupo_Salva.TabIndex = 9
+  Pagina.Dados.Grupo_Salva.Name = "Grupo_Salva"
+  Pagina.Dados.Name = "Dados"
+  Pagina.Name = "Pagina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDSP.Pagina.Dados.lbl_grupo
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = "Grupo :"
+  Left = 148
+  Top = 172
+  Width = 38
+  TabIndex = 1
+  ForeColor = 90,90,90
+  ZOrderSet = 10
+  Name = "lbl_grupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDSP.Pagina.Dados.lbl_conta
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = "Conta :"
+  Left = 148
+  Top = 197
+  Width = 38
+  TabIndex = 4
+  ForeColor = 90,90,90
+  ZOrderSet = 11
+  Name = "lbl_conta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDSP.Pagina.Dados.get_ds_grupo
+------------------------------------------------------------
+  ControlSource = ""
+  Format = "K!"
+  Height = 23
+  InputMask = ""
+  Left = 278
+  MaxLength = 20
+  ReadOnly = .F.
+  TabIndex = 3
+  ToolTipText = "Passe o Cheque na Leitora"
+  Top = 168
+  Width = 150
+  ZOrderSet = 24
+  Name = "get_ds_grupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDSP.Pagina.Dados.get_cd_conta
+------------------------------------------------------------
+  ControlSource = "crSigCdDis.contas"
+  Format = "K!"
+  Height = 23
+  InputMask = ""
+  Left = 197
+  MaxLength = 10
+  TabIndex = 5
+  Top = 193
+  Width = 79
+  ZOrderSet = 25
+  Name = "get_cd_conta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDSP.Pagina.Dados.get_ds_conta
+------------------------------------------------------------
+  ControlSource = ""
+  Format = "K!"
+  Height = 23
+  InputMask = ""
+  Left = 278
+  MaxLength = 40
+  ReadOnly = .F.
+  TabIndex = 6
+  ToolTipText = "Passe o Cheque na Leitora"
+  Top = 193
+  Width = 290
+  ZOrderSet = 26
+  Name = "get_ds_conta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDSP.Pagina.Dados.get_cd_grupo
+------------------------------------------------------------
+  Comment = ""
+  ControlSource = "crSigCdDis.grupos"
+  Format = "K!"
+  Height = 23
+  InputMask = ""
+  Left = 197
+  MaxLength = 10
+  TabIndex = 2
+  Top = 168
+  Width = 79
+  ZOrderSet = 23
+  Name = "get_cd_grupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDSP.Pagina.Dados.Say8
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Tipo :"
+  Height = 15
+  Left = 157
+  Top = 230
+  Width = 29
+  TabIndex = 7
+  ForeColor = 90,90,90
+  ZOrderSet = 27
+  Name = "Say8"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDDSP.Pagina.Dados.ObjUniDop
+------------------------------------------------------------
+  AutoSize = .F.
+  ButtonCount = 3
+  BackStyle = 0
+  Value = 0
+  ControlSource = "crSigCdDis.Tipos"
+  Height = 19
+  Left = 191
+  SpecialEffect = 1
+  Top = 228
+  Width = 308
+  TabIndex = 8
+  BorderColor = 136,189,188
+  ZOrderSet = 72
+  Name = "ObjUniDop"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.Alignment = 0
+  Option1.BackStyle = 0
+  Option1.Caption = "Disponibilidade"
+  Option1.Value = 0
+  Option1.Left = 5
+  Option1.Top = 2
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Investimento"
+  Option2.Left = 116
+  Option2.Top = 2
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+  Option3.FontName = "Tahoma"
+  Option3.FontSize = 8
+  Option3.BackStyle = 0
+  Option3.Caption = "Empréstimo"
+  Option3.Height = 15
+  Option3.Left = 216
+  Option3.Top = 2
+  Option3.Width = 73
+  Option3.AutoSize = .T.
+  Option3.ForeColor = 90,90,90
+  Option3.Name = "Option3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDDSP
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE msv_procurar
+------------------------------------------------------------
+PROCEDURE msv_procurar
+IF ! EMPTY(ThisForm.Pagina.Dados.get_cd_conta.Value)
+	SELECT crSigCdDis
+	SET order to contas
+	SET NEAR on
+	SEEK ALLTRIM(ThisForm.Pagina.Dados.get_cd_conta.Value)
+	SET NEAR off
+	ThisFOrm.Busca=2
+ENDIF
+IF ! EMPTY(ThisForm.Pagina.Dados.get_cd_grupo.Value)
+	SELECT crSigCdDis
+	SET order to Grupos
+	SET NEAR on
+	SEEK ALLTRIM(ThisForm.Pagina.Dados.get_cd_grupo.Value)
+	SET NEAR off
+	ThisFOrm.Busca=1
+ENDIF
+ThisForm.Pagina.Lista.Grade.Refresh
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE mativapagina1
+------------------------------------------------------------
+PROCEDURE mativapagina1
+=DoDefault()
+
+lcCol = Padr(ThisForm.Busca,1)
+ThisForm.Pagina.Lista.Grade.SetFocus
+ThisForm.Pagina.Lista.Grade.Column&lcCol..SetFocus
+ThisForm.Pagina.Lista.Grade.Refresh
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters lcAcesso
+
+ThisFOrm.Busca=1
+
+WITH Thisform
+	.poDatamgr = CreateObject('fSqlConector',ThisForm.Name)
+
+	If Not .poDatamgr.pnIdconn>0
+		Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),'Erro')
+		Return(.f.)
+	Endif
+
+	With .poDatamgr
+		.AddCursor('SigCdDis','CidChaves','crSigCdDis','Grupos',ThisForm.pagina.lista.grade)
+		.pfSqlTabela(1).pColuna('Grupos','','','Grupo',80,.t.)
+		.pfSqlTabela(1).pColuna('Contas','','','Conta',80,.t.)
+	EndWith
+Endwith	
+
+=DoDefault()
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Lista.Grupo_op.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Lista.Grupo_op.Click
+LPARAMETERS opcao
+
+If !dodefault( OPCAO )
+	ThisForm.mAtivapagina1
+	Return
+Endif
+
+* inicializa os campos para inserção e procura
+do case
+case thisform.pcEscolha $ 'INSERIR/PROCURAR'
+	with thisform.pagina.dados
+		.get_ds_grupo.value = ''
+		.get_ds_conta.value = ''
+		.get_ds_grupo.refresh
+		.get_ds_conta.refresh
+	endwith
+case thisform.pcEscolha $ 'ALTERAR/CONSULTAR/EXCLUIR'
+	if ThisForm.podatamgr.CursorQuery('SigCdGcr','crSigCdGcr', 'Codigos', crSigCdDis.grupos)
+		with thisform.pagina.dados.get_ds_grupo
+			.value = evaluate('crSigCdGcr.descrs')
+			.refresh
+		endwith
+	ENDIF
+	DECLARE laCCli[2,2]
+	laCCli[1,1]="Grupos"
+	laCCli[1,2]=padr(crSigCdDis.grupos,10)
+	laCCli[2,1]="IClis"
+	laCCli[2,2]=crSigCdDis.contas
+	if ThisForm.podatamgr.CursorQuery('SigCdCli','crSigCdCli', @LaCCli)
+		with thisform.pagina.dados.get_ds_conta
+			.value = evaluate('crSigCdCli.RClis')
+			.refresh
+		endwith
+	endif
+endcase
+
+* posiciona o cursor no primeiro campo de acordo com a opção
+do case
+case thisform.pcEscolha $ 'ALTERAR'
+	thisform.pagina.dados.get_cd_conta.setfocus
+case thisform.pcEscolha $ 'INSERIR/PROCURAR' 
+	thisform.pagina.dados.get_cd_grupo.setfocus
+case thisform.pcEscolha $ 'CONSULTAR/EXCLUIR'
+	thisform.pagina.dados.grupo_salva.salva.setfocus
+endcase
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+local lcCdGrupo,lcDsGrupo,lcCdConta,lcDsConta,lnRegistro
+
+* inicializa as variáveis de campos
+lcCdGrupo = thisform.pagina.dados.get_cd_grupo.value
+lcDsGrupo = thisform.pagina.dados.get_ds_grupo.value
+lcCdConta = thisform.pagina.dados.get_cd_conta.value
+lcDsConta = thisform.pagina.dados.get_ds_conta.value
+
+if thisform.pcEscolha $ 'INSERIR/ALTERAR'
+	* consiste o campo grupo
+	if IsEmpty(lcCdGrupo) or not ThisForm.podatamgr.ChkRegister('SigCdGcr', 'Codigos', lcCdGrupo)
+		messagebox('Grupo inválido !',16,'')
+		thisform.pagina.dados.get_cd_grupo.setfocus
+		return(.f.)
+	endif
+	
+	* consiste o campo conta
+	if IsEmpty(lcCdConta) or not ThisForm.podatamgr.ChkRegister('SigCdCli', 'IClis', lcCdConta)
+		messagebox('Conta inválida !',16,'')
+		thisform.pagina.dados.get_cd_conta.setfocus
+		return(.f.)
+	ENDIF
+	
+	IF ThisForm.pcEscolha = "INSERIR"
+		SELECT crSigCdDis
+		Replace CidChaves WITH fUniqueIds()
+	Endif
+endif
+
+	
+* consiste a existência de um código já cadastrado
+do case
+case thisform.pcEscolha = 'INSERIR'
+
+	DECLARE laCCli[2,2]
+	laCCli[1,1]="Grupos"
+	laCCli[1,2]=padr(lcCdGrupo,10)
+	laCCli[2,1]="Contas"
+	laCCli[2,2]=lcCdConta
+	if ThisForm.podatamgr.ChkRegister('SigCdDis', @laCCli)
+		messagebox('Disponibilidade já está cadastrada !',16,'')
+		thisform.pagina.dados.get_cd_grupo.setfocus
+		return(.f.)
+	endif
+case thisform.pcEscolha = 'ALTERAR'
+
+	SELECT crSigCdDis
+	lnRegistro = recno()
+	DECLARE laCCli[2,2]
+	laCCli[1,1]="Grupos"
+	laCCli[1,2]=padr(lcCdGrupo,10)
+	laCCli[2,1]="Contas"
+	laCCli[2,2]=lcCdConta
+	if ThisForm.podatamgr.ChkRegister('SigCdDis', @laCCli)
+		SELECT crSigCdDis
+		if lnRegistro <> recno()
+			messagebox('Disponibilidade já está cadastrada !',16,'')
+			thisform.pagina.dados.get_cd_conta.setfocus
+			go lnRegistro
+			return(.f.)
+		endif
+	else
+		go lnRegistro
+	endif
+endcase
+
+DoDefault()
+Thisform.mAtivapagina1
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+DoDefault()
+if thisform.plCancelar
+	thisform.mAtivapagina1
+endif
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDDSP.Pagina.Dados.get_ds_grupo
+* Classe: fwget (Base: textbox)
+* Registro: 6
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+return(thisform.pcEscolha $ 'INSERIR'.and.Empty(ThisForm.Pagina.Dados.Get_cd_grupo.Value))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If thisform.pcEscolha='INSERIR' or ;
+	thisform.pcEscolha='ALTERAR'
+	If !IsEmpty(this.value)
+		fAcessoContab(Usuar,'D',this.value,thisform.pagina.dados.get_cd_grupo,this)
+	Else
+		thisform.pagina.dados.get_cd_grupo.value = ''
+		thisform.pagina.dados.get_cd_grupo.refresh
+	endif
+	select crSigCdDis
+	return(.t.)
+Endif
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDDSP.Pagina.Dados.get_cd_conta
+* Classe: fwget (Base: textbox)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+return(thisform.pcEscolha $ 'INSERIR/ALTERAR/PROCURAR')
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If thisform.pcEscolha='INSERIR' or ;
+	thisform.pcEscolha='ALTERAR'
+	grupo = thisform.pagina.dados.get_cd_grupo.value
+	If !IsEmpty(this.value)
+		If !fAcessoContas(Usuar,grupo,'C',this.value,This,thisform.pagina.dados.get_ds_conta)
+			Messagebox('Acesso Negado !!',0+48,'')
+			This.Value=''
+			This.Refresh
+			thisform.pagina.dados.get_ds_conta.Value = ''
+			thisform.pagina.dados.get_ds_conta.Refresh
+			select crSigCdDis
+			return 0 
+		Endif
+	Else
+		thisform.pagina.dados.get_ds_conta.Value = ''
+		thisform.pagina.dados.get_ds_conta.Refresh
+		select crSigCdDis
+		return(.t.)
+	endif
+Endif
+
+*!*	local lcChave
+*!*	local lcod,lfan,xobj
+
+*!*	if thisform.pcEscolha='INSERIR' or ;
+*!*		thisform.pcEscolha='ALTERAR'
+*!*		if IsEmpty(thisform.pagina.dados.get_cd_conta.value)
+*!*			thisform.pagina.dados.get_ds_conta.value = ''
+*!*			thisform.pagina.dados.get_ds_conta.refresh
+*!*			return(.t.)
+*!*		endif
+
+*!*		lcChave = padr(thisform.pagina.dados.get_cd_grupo.value,10)+thisform.pagina.dados.get_cd_conta.value
+*!*		if seek(lcChave,'SigCdCli','GrCodigo')
+*!*			thisform.pagina.dados.get_ds_conta.value = evaluate('SigCdCli.RClis')
+*!*			thisform.pagina.dados.get_ds_conta.refresh
+*!*			return(.t.)
+*!*		endif
+
+*!*		select SigCdCli
+*!*		set order to GrCodigo
+*!*		set key to thisform.pagina.dados.get_cd_grupo.value into SigCdCli
+
+*!*		store '' to lcod, lfan
+*!*		xobj = createobject('fBrowse','SigCdCli','GrCodigo','Seleção','',lcChave,;
+*!*			'Iclis','lfan','Código','',;
+*!*			'Rclis','lcod','Descrição','')
+*!*		xobj.show
+*!*		select SigCdDis
+
+*!*		thisform.pagina.dados.get_cd_conta.value = iif(lastkey()=27,'',evaluate('SigCdCli.Iclis'))
+*!*		thisform.pagina.dados.get_ds_conta.value = iif(lastkey()=27,'',evaluate('SigCdCli.Rclis'))
+*!*		thisform.pagina.dados.get_cd_conta.refresh
+*!*		thisform.pagina.dados.get_ds_conta.refresh
+*!*	endif
+*!*	return(.t.)
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDDSP.Pagina.Dados.get_ds_conta
+* Classe: fwget (Base: textbox)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+return(thisform.pcEscolha $ 'INSERIR/ALTERAR'.and.Empty(ThisForm.Pagina.Dados.get_cd_Conta.Value))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If thisform.pcEscolha='INSERIR' or ;
+	thisform.pcEscolha='ALTERAR'
+	grupo = thisform.pagina.dados.get_cd_grupo.value
+	If !IsEmpty(this.value)
+		If !fAcessoContas(Usuar,grupo,'D',this.value,thisform.pagina.dados.get_cd_conta,this)
+			Messagebox('Acesso Negado !!',0+48,'')
+			This.Value=''
+			This.Refresh
+			thisform.pagina.dados.get_cd_conta.Value = ''
+			thisform.pagina.dados.get_cd_conta.Refresh
+			select crSigCdDis
+			return 0 
+		Endif
+	Else
+		thisform.pagina.dados.get_cd_conta.Value = ''
+		thisform.pagina.dados.get_cd_conta.Refresh
+		select crSigCdDis
+		return(.t.)
+	endif
+Endif
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDDSP.Pagina.Dados.get_cd_grupo
+* Classe: fwget (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+return(thisform.pcEscolha $ 'INSERIR/PROCURAR')
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If thisform.pcEscolha='INSERIR' or ;
+	thisform.pcEscolha='ALTERAR'
+	If !IsEmpty(this.value)
+		fAcessoContab(Usuar,'C',this.value,This,thisform.pagina.dados.get_ds_grupo)
+	Else
+		thisform.pagina.dados.get_ds_grupo.value = ''
+		thisform.pagina.dados.get_ds_grupo.refresh
+	endif
+	select crSigCdDis
+	return(.t.)
+Endif
+
+*!*	local lcod,lfan,xobj
+
+*!*	if thisform.pcEscolha='INSERIR' or ;
+*!*		thisform.pcEscolha='ALTERAR'
+*!*		if IsEmpty(thisform.pagina.dados.get_cd_grupo.value)
+*!*			thisform.pagina.dados.get_ds_grupo.value = ''
+*!*			thisform.pagina.dados.get_ds_grupo.refresh
+*!*			return(.t.)
+*!*		endif
+
+*!*		if seek(thisform.pagina.dados.get_cd_grupo.value,'SigCdGcr','codigos')
+*!*			thisform.pagina.dados.get_ds_grupo.value = evaluate('SigCdGcr.descrs')
+*!*			thisform.pagina.dados.get_ds_grupo.refresh
+*!*			return(.t.)
+*!*		endif
+
+*!*		store '' to lcod,lfan
+*!*		xobj = createobject('fBrowse','SigCdGcr','codigos','Seleção','',thisform.pagina.dados.get_cd_grupo.value,;
+*!*				'codigos','lfan','Código','',;
+*!*				'descrs','lcod','Descrição','')
+*!*		xobj.show
+
+*!*		thisform.pagina.dados.get_cd_grupo.value = iif(lastkey()=27,'',evaluate('SigCdGcr.codigos'))
+*!*		thisform.pagina.dados.get_ds_grupo.value = iif(lastkey()=27,'',evaluate('SigCdGcr.descrs'))
+*!*		thisform.pagina.dados.get_cd_grupo.refresh
+*!*		thisform.pagina.dados.get_ds_grupo.refresh
+*!*	endif
+*!*	return(.t.)
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGCDDSP
+RESERVED3 (ClassInfo): busca
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 14
+================================================================================

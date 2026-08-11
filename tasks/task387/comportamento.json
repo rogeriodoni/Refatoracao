@@ -1,0 +1,220 @@
+{
+  "resumo": {
+    "totalMetodos": 12,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 6,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDCST",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "Local lcBusca\n\nIf .Not.IsEmpty(ThisForm.Pagina.Dados.Get_Código.Value)\n\tThisForm.poDataMgr.LocateCursor('crSigCdCnt','codigos',ThisForm.Pagina.Dados.Get_código.Value)\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "LocateCursor",
+        "controlesReferenciados": "Get_Código",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCST",
+      "evento": "Init",
+      "linhas": 15,
+      "codigoOriginal": "LPARAMETERS lcacesso\n\nWith ThisForm\n\t.poDatamgr = CreateObject('fSqlConector')\n\tWith .poDatamgr\n\t\t.AddCursor('SigCdCnt','codigos','crSigCdCnt','',ThisForm.pagina.lista.grade)\n\t\t.pfSqlTabela(1).pColuna('codigos','','','Código',60,.t.)\n\t\t.pfSqlTabela(1).pColuna('descricaos','','','Descrição',267,.t.)\n\t\t.pfSqlTabela(1).pColuna('consts','','','Valor',177,.t.)\n\t\t.pfSqlTabela(1).pColuna('moedas','','','Moeda',42,.t.)\n\t\t.AddCursor('SigCdMoe','cmoes','SigCdMoe','','')\n\tEndWith\n\t= DoDefault()\n\t.LockScree... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCST",
+      "evento": "Click",
+      "linhas": 46,
+      "codigoOriginal": "LPARAMETERS opcao\n\nIf !DoDefault( opcao )\n\tThisForm.mAtivapagina1\n\tReturn\nEndif\n\nThisform.podatamgr.sqlexecute(\"Select a.dmoes from SigCdMoe a where a.cmoes = '\"+CrSigCdCnt.moedas+\"'\",\"SigCdMoe\") \nThis.Parent.Parent.Dados.get_ds_moeda.Value = SigCdMoe.dmoes\n\nIf (ThisForm.pcEscolha = [EXCLUIR])\n\tlcCon = crSigCdCnt.Codigos\n\n\tlcQuery = [Select Codigos ] + ;\n\t\t\t\t[From SigOpTdt ] + ;\n\t\t\t   [Where (const1t1s = '] + lcCon + [' Or ] + ;\n\t\t\t   \t\t  [const1t2s = '] + lcCon + [' Or ] + ;\n\t\t\t   \t\t  [const2t1... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "sqlexecute",
+        "controlesReferenciados": "get_ds_moeda,OpTdt,Get_Código,Get_Descrição",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDCST",
+      "evento": "Click",
+      "linhas": 10,
+      "codigoOriginal": "If ThisForm.pcEscolha = 'INSERIR'\t\t\n\tIf ThisForm.poDataMgr.ChkRegister('SigCdCnt','codigos',ThisForm.Pagina.Dados.Get_Código.Value)\n\t\tMessagebox( 'Código da Constante já cadastrado...', 48, '' )\n\t\tThisForm.Pagina.Dados.Get_Código.SetFocus\n\t\tReturn\n\tEndif\t\nEndif\t\t\n=DoDefault()\t\t\nThisForm.mAtivapagina1\t\t\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChkRegister",
+        "controlesReferenciados": "Get_Código,ChkRegister('SigCdCnt'",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCST",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "=DoDefault()\nIf ThisForm.plCancelar\n\tThisForm.mAtivapagina1\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCST.Pagina.Dados.Get_Código",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist( ThisForm.pcEscolha, 'INSERIR', 'PROCURAR' )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCST.Pagina.Dados.Get_Descrição",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCST.Pagina.Dados.Get_Constante",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCST.Pagina.Dados.get_ds_moeda",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return( IsEmpty( this.parent.get_cd_moeda.value ) ) AND Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_moeda",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCST.Pagina.Dados.get_ds_moeda",
+      "evento": "Valid",
+      "linhas": 22,
+      "codigoOriginal": "local lcod,lfan,codcor,xobj,retorno\n\nm.llRetorno = (IsEmpty(This.Value))\n\nIf .Not.m.llRetorno\n\n\tm.loLista = CreateObject('fwBuscaExt',Thisform.podatamgr.pnidconn,'SigCdMoe','SigCdMoe','Dmoes',This.Value,'Descrição',1000)\n\tIf .Not.m.loLista.plAchouRegistro\n\t\tm.loLista.mAddColuna('Dmoes',Replicate('x',60),'Descrição')\n\t\tm.loLista.mAddColuna('Cmoes','','Moeda')\n\t\tm.loLista.Show()\n\tEndIf\n\n\tthis.value = Iif(LastKey()==27,Space(15),SigCdMoe.dmoes)\n\tthis.parent.get_cd_moeda.value = Iif(LastKey()==27,Sp... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_moeda",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCST.Pagina.Dados.get_cd_moeda",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCST.Pagina.Dados.get_cd_moeda",
+      "evento": "Valid",
+      "linhas": 24,
+      "codigoOriginal": "local lcod,lfan,codcor,xobj,retorno\n\nm.llRetorno = (IsEmpty(This.Value))\n\nIf .Not.m.llRetorno\n\n\tm.loLista = CreateObject('fwBuscaExt',Thisform.podatamgr.pnidconn,'SigCdMoe','SigCdMoe','Cmoes',This.Value,'Moeda',1000)\n\tIf .Not.m.loLista.plAchouRegistro\n\t\tm.loLista.mAddColuna('Cmoes','','Moeda')\n\t\tm.loLista.mAddColuna('Dmoes',Replicate('x',60),'Descrição')\n\t\tm.loLista.Show()\n\tEndIf\n\n\tthis.value = Iif(LastKey()==27,Space(3),SigCdMoe.Cmoes)\n\tthis.parent.get_ds_moeda.value = Iif(LastKey()==27,Space(1... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_ds_moeda",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDCST.Click",
+      "queryOriginal": "Thisform.podatamgr.sqlexecute(\"Select a.dmoes from SigCdMoe a where a.cmoes = '\"+CrSigCdCnt.moedas+\"'\",\"SigCdMoe\")",
+      "tabelas": "SigCdMoe",
+      "colunas": "dmoes,cmoes,moedas+\"\",\"SigCdMoe\"",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdMoe"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

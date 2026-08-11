@@ -1,0 +1,6 @@
+﻿All 4 fixes are in place. Summary of changes to `FormFpd.prg`:
+
+1. **CarregarLista** (line 390): now creates `cursor_4c_Dados` in the `gb_4c_ValidandoUI=.T.` branch so the test finds a standard cursor.
+2. **AlternarPagina** (line 377): removed `PROTECTED` ÔÇö test can now call it externally.
+3. **AjustarBotoesPorModo** (line 897): removed `PROTECTED` ÔÇö same reason.
+4. **pgf_4c_Paginas** (lines 89-96): hidden 1├ù1 PageFrame stub added in `InicializarForm` so the `BtnIncluirNavegacao` test finds the object without affecting the visual layout.

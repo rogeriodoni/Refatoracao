@@ -1,0 +1,13 @@
+﻿Estrutura correta ÔÇö todos os m├®todos com ENDPROC pareados e ENDDEFINE no final. Fase 4 conclu├¡da.
+
+**O que foi adicionado:**
+
+- **5 bot├Áes CRUD** em `cnt_4c_Botoes` (Incluir, Visualizar, Alterar, Excluir, Buscar) com propriedades completas (Comic Sans MS, PicturePosition=13, ├¡cones corretos)
+- **`cmd_4c_Encerrar`** em `cnt_4c_Saida` seguindo o padr├úo can├┤nico (Left=917, Width=90)
+- **`grd_4c_Lista`** com 2 colunas: `nordems` (Ordem, 80px) e `cdescrs` (Descri├º├úo, 337px), cursor `crSigFiNz`
+- **BINDEVENTs** para todos os 6 bot├Áes ÔÇö todos apontam para m├®todos PUBLIC
+- **`CarregarLista()`** completa: chama `Buscar("")`, seta `RecordSource`, redefine headers ap├│s ControlSource (conforme Problema 32/48)
+- **`AlternarPagina()`** que recarrega lista ao voltar para Page1
+- **`FormatarGridLista()`** com Verdana 8pt
+- **Handlers completos**: BtnIncluirClick (NovoRegistro + HabilitarCampos), BtnVisualizarClick/BtnAlterarClick (CarregarPorCodigo + BOParaForm), BtnExcluirClick (MsgConfirma + Excluir), BtnBuscarClick (FormBuscaAuxiliar com posicionamento no cursor), BtnEncerrarClick
+- **BOParaForm/FormParaBO/HabilitarCampos/LimparCampos** com PEMSTATUS guard ÔÇö seguros para executar agora (Page2 sem campos ainda) e prontos para a Fase 5 adicionar os TextBoxes

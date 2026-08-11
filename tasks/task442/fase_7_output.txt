@@ -1,0 +1,9 @@
+﻿**Fase 7/8 completa.** Para este form OPERACIONAL flat (sem PageFrame CRUD), os "eventos principais" s├úo os tr├¬s handlers de CommandGroup j├í implementados nas fases anteriores:
+
+| Evento original (legado) | Equivalente migrado | Status |
+|---|---|---|
+| `Commandgroup1.Command1.Click` (Salvar) | `CmgSalvarClick()` | Ô£à Fase anterior |
+| `Commandgroup2.Command2.Click` (Remove) | `CmgRemoveClick()` | Ô£à Fase anterior |
+| `Commandgroup1.Command2.Click` (Sair) | `CmgSairClick()` | Ô£à Fase anterior |
+
+A ├║nica adi├º├úo desta fase foi o `THIS.grd_4c_Dados.SetFocus()` em `CmgRemoveClick` (linha 655), que replica o comportamento original `ThisForm.Grid1.Column1.SetFocus` ap├│s deletar um acesso. Os bot├Áes `BtnIncluirClick/BtnAlterar/BtnVisualizar/BtnExcluir` do template CRUD n├úo se aplicam a este form operacional.

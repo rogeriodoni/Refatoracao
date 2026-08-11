@@ -1,0 +1,20 @@
+﻿O arquivo est├í correto. Fase 4 conclu├¡da com sucesso.
+
+**O que foi adicionado:**
+
+- **`ConfigurarPaginaLista()`** (PROTECTED) ÔÇö popula Page1 com:
+  - Labels `lbl_4c_Sombra` / `lbl_4c_Titulo` no `cnt_4c_Cabecalho` (escuro, t├¡tulo "Cadastro de BIN")
+  - 3 bot├Áes em `cnt_4c_Botoes`: `cmd_4c_Inserir` (L=0), `cmd_4c_Excluir` (L=75), `cmd_4c_Encerrar` (L=150, Cancel=.T.) ÔÇö ├¡cones e fontes exatos do SCX original
+  - `lbl_4c_CondicaoPag` mostrando `[ XXXX ]` com o c├│digo da condi├º├úo de pagamento
+  - `grd_4c_Dados` com 4 colunas (widths 58/185/80/109), headers configurados em PT-BR via CHR()
+  - BINDEVENT nos 3 bot├Áes e no AfterRowColChange do grid
+
+- **`AlternarPagina(par_nPagina)`** (PROTECTED) ÔÇö troca entre Page1/Page2
+
+- **`CarregarDados()`** (PROTECTED) ÔÇö chama `FpbBO.CarregarBINs()`, seta RecordSource + ControlSources, e reconecta headers (padr├úo FormCor li├º├úo #2)
+
+- **`BtnInserirClick/ExcluirClick/EncerrarClick`** (PUBLIC) ÔÇö l├│gica fiel ao original: Inserir faz `INSERT INTO cursor_4c_BINs (fpags)`, Excluir faz `DELETE+SKIP`, Encerrar chama `SalvarBINs()` se `GravaDados=.T.` e s├│ libera o form se n├úo h├í duplicidade
+
+- **`GrdDadosAfterRowColChange(par_nColIndex)`** (PUBLIC) ÔÇö sinaliza `GravaDados=.T.` ao editar qualquer c├®lula
+
+- **`InicializarForm()`** atualizado para chamar as novas fases 3 e 4 na sequ├¬ncia correta

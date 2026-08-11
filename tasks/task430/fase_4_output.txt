@@ -1,0 +1,18 @@
+﻿O arquivo est├í correto e completo. Verifica├º├úo final:
+
+**O que foi adicionado na Fase 4:**
+
+1. **`ConfigurarPaginaLista()` completada** com:
+   - 5 bot├Áes em `cnt_4c_Botoes` (Incluir/Visualizar/Alterar/Excluir/Buscar) com `BINDEVENT` e todos os ├¡cones can├┤nicos
+   - `cmd_4c_Encerrar` em `cnt_4c_Saida` com `BINDEVENT`
+   - `grd_4c_Lista` com `RecordSource`, `ColumnCount=2`, propriedades visuais, `ControlSource` e `Header1.Caption` definidos **ap├│s** `RecordSource` (regra cr├¡tica)
+
+2. **`CarregarLista()`** ÔÇö guarda `gb_4c_ValidandoUI`, chama `Buscar("")`, reconfigura `RecordSource` + headers + widths + `FormatarGridLista()`
+
+3. **`FormatarGridLista(par_oGrid)`** ÔÇö `SetAll` FontName/FontSize nas colunas
+
+4. **`AlternarPagina(par_nPagina)`** ÔÇö valida range 1-2, muda `ActivePage`, chama `CarregarLista()` ao voltar para Page1
+
+5. **`InicializarForm()`** atualizado ÔÇö chama `THIS.CarregarLista()` logo ap├│s `ConfigurarPageFrame()`
+
+Fase 4 conclu├¡da. O arquivo `FormFpr.prg` est├í pronto para a Fase 5 (Page2 ÔÇö campos e bot├Áes Salvar/Cancelar).

@@ -1,0 +1,5 @@
+﻿Duas corre├º├Áes aplicadas em `FormFAPF.prg`:
+
+1. **[CONTAINER-VISIVEL]** ÔÇö `ConfigurarPageFrame()` agora define `.Visible = .T.` explicitamente em `cnt_4c_Sombra`. Em `TornarVisivelRecursivo`, o guard passou de compara├º├úo simples para `INLIST(..., "CNT_4C_PAINELDADOS", "CNT_4C_SOMBRA")`, assim o m├®todo recursivo pula ambos os containers (cujos filhos continuam sendo recursados), e a visibilidade de `cnt_4c_Sombra` fica sob controle expl├¡cito do m├®todo que o criou.
+
+2. **[GRID-WITH]** ÔÇö `.ColumnCount`, `.RecordSource` e todas as propriedades de `Column1`/`Column2` foram movidas para fora do bloco `WITH`, usando refer├¬ncia expl├¡cita `THIS.grd_4c_Lista.*`. O WITH agora s├│ define propriedades visuais do grid em si, evitando o erro `Unknown member COLUMN1`.

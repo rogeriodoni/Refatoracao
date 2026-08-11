@@ -1,0 +1,576 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigCdFpN.SCX
+* Data/Hora: 06/08/2026 01:42:21
+* Total de registros: 16
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDTBD
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGCDTBD
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGCDTBD.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGCDTBD.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: GradeOpe
+  Parent: SIGCDTBD
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGCDTBD.GradeOpe.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDTBD.GradeOpe.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDTBD.GradeOpe.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDTBD.GradeOpe.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: cmdInserir
+  Parent: SIGCDTBD
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cmdExcluir
+  Parent: SIGCDTBD
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cmdSair
+  Parent: SIGCDTBD
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Cancela
+  Parent: SIGCDTBD
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTBD
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 400
+  Width = 800
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Tabelas de Desconto"
+  ControlBox = .F.
+  Movable = .F.
+  ClipControls = .F.
+  TitleBar = 0
+  Name = "SIGCDTBD"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTBD.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = -1
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTBD.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTBD.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTBD.GradeOpe
+------------------------------------------------------------
+  ColumnCount = 2
+  FontName = "Tahoma"
+  FontSize = 8
+  DeleteMark = .F.
+  Height = 274
+  Left = 236
+  RowHeight = 16
+  ScrollBars = 2
+  TabIndex = 1
+  Top = 115
+  Width = 313
+  ForeColor = 90,90,90
+  GridLineColor = 238,238,238
+  Name = "GradeOpe"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.Width = 80
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ForeColor = 90,90,90
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.Width = 200
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ForeColor = 90,90,90
+  Column2.Name = "Column2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTBD.GradeOpe.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Condição"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTBD.GradeOpe.Column1.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTBD.GradeOpe.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Descrição"
+  ForeColor = 36,84,155
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTBD.GradeOpe.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTBD.cmdInserir
+------------------------------------------------------------
+  Top = 4
+  Left = 500
+  Picture = ..\framework\imagens\cadastro_inserir_60.jpg
+  Caption = "\<Inserir"
+  TabIndex = 4
+  Name = "cmdInserir"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTBD.cmdExcluir
+------------------------------------------------------------
+  Top = 4
+  Left = 575
+  Picture = ..\framework\imagens\cadastro_excluir_60.jpg
+  Caption = "\<Excluir"
+  TabIndex = 2
+  Name = "cmdExcluir"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTBD.cmdSair
+------------------------------------------------------------
+  Top = 4
+  Left = 650
+  Picture = ..\framework\imagens\cadastro_salvar_60.jpg
+  Caption = "\<Confirmar"
+  TabIndex = 7
+  Name = "cmdSair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTBD.Cancela
+------------------------------------------------------------
+  Top = 4
+  Left = 725
+  Picture = ..\framework\imagens\cadastro_cancelar_60.jpg
+  Cancel = .T.
+  Caption = "Cancelar"
+  TabIndex = 8
+  Name = "Cancela"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDTBD
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters poForm, pnDataSes
+
+Set DataSession to pnDataSes
+
+Thisform.ParentForm          = poForm
+Thisform.ParentForm.Enabled  = .F.
+
+Thisform.GravaDados = .f.
+
+With Thisform
+	.Caption = 'Condições de Pagamento ' + AllTrim(crSigCdOpe.Dopes)
+EndWith
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+lcOperacao = crSigCdOpe.Dopes
+
+With Thisform
+	.poDatamgr = CreateObject('fSqlConector')
+
+	If Not .poDatamgr.pnIdconn>0
+		Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),'Erro')
+		Return(.f.)
+	Endif
+
+	With .poDatamgr
+		.AddCursor('SigCdFpN','cIdChaves','CrSigCdFpN','')
+	EndWith
+Endwith	
+
+Create Cursor xOpe ( Dopes c(20), fpags c(12), descrs c(30) )
+Index on Dopes Tag Dopes
+Set Order to
+
+With Thisform.GradeOpe
+	.RecordSource          = 'xOpe'
+	.Column1.ControlSource = 'xOpe.fpags'
+	.Column2.ControlSource = 'xOpe.descrs'
+	.Refresh
+EndWith
+
+lcSql = [Select a.*, b.descrs From SigCdFpN a, SigOpfp b Where a.Dopes = ']+CrSigCdOpe.Dopes+[' And a.fpags = b.fpags ]
+ThisForm.Podatamgr.Sqlexecute(lcSql,'CsSelecao')
+
+Select CsSelecao
+Scan
+	Scatter Memvar
+	Select xOpe
+	Append Blank
+	Gather Memvar
+EndScan
+
+Select xOpe
+Set Order to
+Go Top
+
+ThisForm.GradeOpe.Refresh
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDTBD.GradeOpe.Column1.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local lcFpags, lnRecNo, loBrowse
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigOpFp', ;
+						   'CrListaRemota', 'Fpags', This.Value, 'Seleção', .t.)
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Fpags', '', 'Condição de Pagamento',.t.)
+		loLista.mAddColuna('descrs', '',  'Descrição',.t.)
+		loLista.Show()
+	EndIf
+	This.Value = CrListaRemota.Fpags
+	Replace Descrs with CrListaRemota.descrs In xOpe
+	Use In CrListaRemota
+Else
+	This.Value = ''
+EndIf
+This.Refresh
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Thisform.AntValue = This.Value
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDTBD.GradeOpe.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDTBD.cmdInserir
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Insert Into xOpe (fpags) Values ( Space(12))
+Select xOpe
+ThisForm.GravaDados = .t.
+Thisform.GradeOpe.Column1.SetFocus
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDTBD.cmdExcluir
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select xOpe
+If Not Eof()
+	Select xOpe
+	Delete 
+	Skip
+	If Eof()
+		Go Bott
+	Endif
+EndIf
+Thisform.GradeOpe.SetFocus
+ThisForm.GravaDados = .t.
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDTBD.cmdSair
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If ThisForm.GravaDados
+
+	Select Fpags, Sum(1) as Qt From xOpe Group by 1 Into Cursor Selecao where Fpags <> ' ' having Sum(1) > 1
+	If Reccount('Selecao') > 0
+		MessageBox('Existem lancamentos de Condições Em Duplicidade!!!',0+16,'')
+		Return .f.
+	EndIf
+	
+	Select CrSigCdFpN
+	Zap
+	
+	Select xOpe
+	Scan
+		If Not Empty(Fpags)
+			Insert Into CrSigCdFpN (Dopes, Fpags, cIdChaves) ;
+							Values (crSigCdOpe.Dopes, xOpe.Fpags, fUniqueIds())
+		Endif
+	EndScan
+	
+	m.lnErro1 = ThisForm.poDatamgr.pnIdConn
+
+	With ThisForm
+
+		lcSql = [Delete From SigCdFpN Where dopes = ']+CrSigCdOpe.dopes+[']
+		m.lnErro1 = ( .PodataMgr.SqlExecute(lcSql,'') )
+
+		If m.lnErro1>0 
+			m.lnErro1 = Iif(.poDataMgr.UpDate('CrSigCdFpN'),1,-1)
+		EndIf 
+		If m.lnErro1>0 
+			m.lnErro1 = .poDataMgr.Commit()
+		EndIf 
+		If Not m.lnErro1>0 
+			.poDataMgr.RollBack()
+		EndIf 
+	EndWith 
+	If Not m.lnErro1>0 
+		= MessageBox('Erro na Gravação dos Dados!!!',48)
+	EndIf 
+EndIf
+Thisform.ParentForm.Enabled = .T.
+ThisForm.Release
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDTBD.Cancela
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Thisform.parentform.enabled = .T.
+Thisform.release
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGCDTBD
+RESERVED3 (ClassInfo): antvalue
+gravadados
+parentform
+podatamgr
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 9
+================================================================================

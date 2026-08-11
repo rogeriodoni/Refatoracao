@@ -1,0 +1,12 @@
+﻿File is complete and correct at 1941 lines. Phase 6/8 is done.
+
+**Summary of what was applied:**
+
+- **Edit 2 (line 1163)**: `SetAll("DynamicBackColor", ...)` added to `CarregarLista` after `FormatarGridLista` ÔÇö colors grid rows yellow (S), light blue (R), white (I), matching the original.
+
+- **Edit 3 (lines 1676ÔÇô1939)**: 10 fully-implemented methods added before `ENDDEFINE`:
+  - `UsuarsLookupKeyPress` / `UsuarsLookupDblClick` ÔåÆ `AbrirLookupUsuars` (FormBuscaAuxiliar MODO 1 on SigCdUsu, calls `PreencherUltimoPeriodoUsuario` on selection)
+  - `PreencherUltimoPeriodoUsuario` (SQLEXEC TOP 1 ORDER BY Anos DESC/Mess DESC, GOMONTH +1, fills 7 fields; only when Mess/Anos/Indivs are blank)
+  - `SetorsLookupKeyPress` / `SetorsLookupDblClick` ÔåÆ `AbrirLookupSetors` (FormBuscaAuxiliar MODO 1 on SigCdSet/Setores/Descrs)
+  - `SupervsLookupKeyPress` / `SupervsLookupDblClick` ÔåÆ `AbrirLookupSupervs` (dynamic SQLEXEC DISTINCT SigCcCmV JOIN SigCdUsu WHERE Indivs='R', FormBuscaAuxiliar MODO 2 with pre-built cursor)
+  - All methods: ReadOnly guard BEFORE TRY, proper MsgErro in every CATCH, cursor cleanup in both success and error paths.

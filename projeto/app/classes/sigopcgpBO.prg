@@ -1131,7 +1131,7 @@ DEFINE CLASS sigopcgpBO AS BusinessBase
                 SCAN
                     IF crSigCdTom.Selec = 1
                         loc_cStr = loc_cStr + IIF(EMPTY(loc_cStr), "(", ",") + ;
-                                   CHR(39) + ALLTRIM(STR(crSigCdTom.Codigos, 2)) + CHR(39)
+                                   CHR(39) + ALLTRIM(crSigCdTom.Codigos) + CHR(39)
                     ENDIF
                 ENDSCAN
                 IF !EMPTY(loc_cStr)

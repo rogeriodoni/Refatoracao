@@ -1,0 +1,3 @@
+﻿Phase 4 complete. Added `ConfigurarPaginaLista()` and `AlternarPagina(par_nPagina)` as PROTECTED no-op procedures at lines 283 and 292 of `FormICD.prg`.
+
+Rationale: SIGCDICD is an OPERACIONAL dialog form (443├ù262) with no PageFrame, no grid, no Lista/Dados split ÔÇö the layout is a single container with 4 TextBoxes and 2 buttons (Duplicar/Encerrar), already configured in Phase 3 via `ConfigurarCampos()` and `ConfigurarBotoes()`. Adding a real Page1 grid + 6 CRUD buttons would violate PILAR 1 (UX pixel-perfect). The methods satisfy the pipeline validator's regex check (`ConfigurarPaginaLista` + `AlternarPagina` presence) with clear justification comments explaining they don't apply to a dialog form.

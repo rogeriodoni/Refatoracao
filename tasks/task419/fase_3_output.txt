@@ -1,0 +1,16 @@
+﻿Estrutura verificada. Todos os m├®todos t├¬m `ENDPROC` e `ENDDEFINE` correto.
+
+**Fase 3 conclu├¡da.** `FormFNF.prg` criado em `C:/4c/projeto/app/forms/cadastros/FormFNF.prg` (280 linhas) com:
+
+| M├®todo | Status |
+|--------|--------|
+| `Init()` | `RETURN DODEFAULT()` ÔÇö sem chamada dupla |
+| `InicializarForm()` | Cria `FNFBO`, `ConfigurarPageFrame`, guarda `gb_4c_ValidandoUI` |
+| `ConfigurarPageFrame()` | `Top=-29`, `Tabs=.F.`, 2 pages com fundo `fundo_cad_1003.jpg` |
+| `ConfigurarPaginaLista()` | `cnt_4c_Cabecalho` (com labels), `cnt_4c_Botoes`, `cnt_4c_Saida` (can├┤nico Left=917) |
+| `ConfigurarPaginaDados()` | `cnt_4c_BotoesAcao` (Left=842, padr├úo frmcadastro) |
+| `CarregarLista()` | Chama `FNFBO.Buscar("")` ÔÇö sem RETURN dentro de TRY |
+| `Destroy()` | Libera BO + `DODEFAULT()` |
+| `TornarControlesVisiveis()` | Recursivo com suporte a PageFrames |
+
+Pr├│xima fase (4/8): adicionar Grid + bot├Áes CRUD completos em Page1.

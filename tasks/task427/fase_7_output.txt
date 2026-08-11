@@ -1,0 +1,23 @@
+﻿Analisando o arquivo existente, o FormFpN.prg j├í est├í **completamente implementado**. Todos os eventos principais j├í foram adicionados em fases anteriores:
+
+| Evento CRUD (template) | Equivalente neste form OPERACIONAL | Status |
+|---|---|---|
+| `BtnIncluirClick` | `CmdInserirClick()` linha 512 | Ô£à Implementado |
+| `BtnExcluirClick` | `CmdExcluirClick()` linha 537 | Ô£à Implementado |
+| `BtnVisualizarClick` / `BtnAlterarClick` | `CmdConfirmarClick()` linha 557 | Ô£à Implementado |
+| ÔÇö | `CmdCancelarClick()` linha 581 | Ô£à Implementado |
+
+O template da Fase 7 foi gerado para forms CRUD padr├úo (com `BtnIncluirClick/BtnAlterarClick/BtnVisualizarClick/BtnExcluirClick`). FormFpN ├® **OPERACIONAL** ÔÇö ele usa handlers pr├│prios vinculados via `BINDEVENT` na linha 80-83 do `InicializarForm`.
+
+**Resumo do que j├í est├í no arquivo:**
+- `CmdInserirClick` ÔÇö insere linha em branco no grid, posiciona no fundo, foca Column1
+- `CmdExcluirClick` ÔÇö chama `ExcluirLinhaAtual()` do BO, atualiza grid
+- `CmdConfirmarClick` ÔÇö chama `Salvar(this_cDopes)` se `this_lGravaDados = .T.`, fecha se sucesso
+- `CmdCancelarClick` ÔÇö fecha sem salvar (`THIS.Release()`)
+- `ValidarFpagsTxt` ÔÇö handler KeyPress do grid (ENTER/TAB/F4 ÔåÆ lookup SigOpFp)
+- `AbrirLookupFpags` ÔÇö picker FormBuscaAuxiliar para SigOpFp
+- `Destroy` ÔÇö reabilita form pai, chama `DODEFAULT()`
+
+O FpNBO.prg tamb├®m est├í completo com `InserirLinhaVazia`, `ExcluirLinhaAtual`, `ValidarDuplicatas`, `ValidarLookupFpags` e `Salvar`.
+
+**A Fase 7 j├í est├í conclu├¡da.** Nenhuma modifica├º├úo necess├íria no `FormFpN.prg`. O arquivo pode avan├ºar direto para a Fase 8 (integra├º├úo: config.prg + menu.prg).

@@ -1,0 +1,7 @@
+﻿Duas corre├º├Áes aplicadas em `FormCVE.prg`:
+
+1. **SETORS removido do NOT EXISTS** (linha 1492-1493): A condi├º├úo `AND d.Setors = SigCcCmI.Setors` foi removida. O `ValidarDuplicidadeEmSigCcCmI` confirma que a chave natural ├® (usuars, mess, anos), n├úo inclui setors. O NOT EXISTS agora alinha com essa l├│gica.
+
+2. **USUARIOS ÔåÆ Usuars** (linhas 1779, 1780, 1785): Corrigido em SELECT, WHERE e acesso ao cursor. A FK em SigCcCmI ├® `Usuars`, portanto a PK em SigCdUsu segue a mesma conven├º├úo Fortyus.
+
+3. **CCARGS** ÔÇö falso positivo confirmado. ├ë a PK leg├¡tima de SigCdCrg usada no lookup de valida├º├úo de cargo; n├úo h├í altera├º├úo.

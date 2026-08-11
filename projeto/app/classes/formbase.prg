@@ -262,6 +262,10 @@ DEFINE CLASS FormBase AS Form
         lcTitulo = IIF(VARTYPE(pcTitulo) = "C", pcTitulo, "Aten" + CHR(231) + CHR(227) + "o")
         lnIcone = IIF(VARTYPE(pnIcone) = "N", pnIcone, 64)
 
+        IF EscreverErroParaArquivo(pcMensagem, lcTitulo)
+            RETURN
+        ENDIF
+
         MESSAGEBOX(pcMensagem, lnIcone, lcTitulo)
     ENDPROC
 
@@ -340,19 +344,23 @@ DEFINE CLASS FormBase AS Form
             THIS.this_oBusinessObject = .NULL.
         ENDIF
 
-        TRY
-            *-- SET SYSMENU TO DEFAULT restaura os pads default do VFP (Edit/View/
-            *-- Tools/Program/Window/Help) que podem ter sido removidos por
-            *-- REPORT FORM PREVIEW ou por form modal com SET SYSMENU TO/OFF.
-            *-- Sem isso, CriarMenuPrincipal recria apenas os 6 pads da app,
-            *-- deixando menu com "menos telas" que o startup. Padrao proven:
-            *-- Formsigtosen.prg:1074 (Erro63 refinamento 2026-07-24).
-            SET SYSMENU TO DEFAULT
-            RELEASE POPUP popArquivo, popCadastros, popMovimentos, popRelatorios, popFerramentas, popAjuda
-            CriarMenuPrincipal()
-        CATCH
-            *-- CriarMenuPrincipal nao carregada no escopo (teste, form auxiliar) - silencioso
-        ENDTRY
+        *-- Em modo de teste nao ha HWND nem menu system inicializado; SET SYSMENU TO DEFAULT
+        *-- bloqueia em VFP9 -T sem GUI. Pular toda a restauracao do menu em testes.
+        IF !(TYPE("gb_4c_ModoTeste") = "L" AND gb_4c_ModoTeste)
+            TRY
+                *-- SET SYSMENU TO DEFAULT restaura os pads default do VFP (Edit/View/
+                *-- Tools/Program/Window/Help) que podem ter sido removidos por
+                *-- REPORT FORM PREVIEW ou por form modal com SET SYSMENU TO/OFF.
+                *-- Sem isso, CriarMenuPrincipal recria apenas os 6 pads da app,
+                *-- deixando menu com "menos telas" que o startup. Padrao proven:
+                *-- Formsigtosen.prg:1074 (Erro63 refinamento 2026-07-24).
+                SET SYSMENU TO DEFAULT
+                RELEASE POPUP popArquivo, popCadastros, popMovimentos, popRelatorios, popFerramentas, popAjuda
+                CriarMenuPrincipal()
+            CATCH
+                *-- CriarMenuPrincipal nao carregada no escopo (form auxiliar) - silencioso
+            ENDTRY
+        ENDIF
     ENDPROC
 
 ENDDEFINE

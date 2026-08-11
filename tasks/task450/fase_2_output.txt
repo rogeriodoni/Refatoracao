@@ -1,0 +1,10 @@
+﻿Fase 2 conclu├¡da. O `IctBO.prg` agora est├í completo com todos os m├®todos CRUD:
+
+- **`GerarCidChaves()`** ÔÇö computa a PK composta de 20 chars: `Tipos(4) + CFOPs(10) + Movs(1) + Origems(2) + "/" + Destinos(2)`
+- **`CarregarDoCursor()`** ÔÇö mapeia todos os 11 campos + detecta os 3 campos de JOIN via `FCOUNT() > 11`
+- **`ValidarDados()`** ÔÇö valida Tipos, CFOPs e Movs (E/S obrigat├│rio)
+- **`Buscar(par_cFiltro)`** ÔÇö SELECT com LEFT JOIN em SigCdUfs (x2) e SigCdCfo, padr├úo ZAP+APPEND para preservar colunas do Grid
+- **`CarregarPorCodigo(par_cCidChaves)`** ÔÇö SELECT completo com JOINs + `this_lNovoRegistro = .F.`
+- **`Inserir()`** ÔÇö gera `cidchaves` via `GerarCidChaves()` antes do INSERT
+- **`Atualizar()`** ÔÇö UPDATE apenas dos campos edit├íveis em modo ALTERAR (Descs, Aliquotas, Bases, Reduzidas, aliqicmsts); os campos da chave composta (Tipos, CFOPs, Movs, Origems, Destinos) s├úo somente-leitura em ALTERAR, espelhando o comportamento do legado
+- **`ExecutarExclusao()`** ÔÇö DELETE por cidchaves com auditoria

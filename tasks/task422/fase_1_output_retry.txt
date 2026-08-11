@@ -1,0 +1,9 @@
+﻿Phase 1 complete. Created `C:\4c\projeto\app\classes\FornecedorBO.prg` with:
+
+- **Class**: `FornecedorBO AS BusinessBase` (matches task-required name; previous attempt used `ForBO` which failed validation)
+- **Properties** (SigCdFrm schema): `this_cFormas` (PK char(12)) + `this_cInfos` (char(1), FK SigPrInf)
+- **Init()**: sets `this_cTabela = "SigCdFrm"` and `this_cCampoChave = "formas"` (correct BusinessBase property names per CLAUDE.md, not the wrong `this_cNomeTabela`/`this_cChavePrimaria`)
+- **RETURN outside TRY/CATCH** via `loc_lSucesso` flag (CLAUDE.md rule #1)
+- **No stubs, no TODOs** ÔÇö CRUD methods (CarregarDoCursor/Inserir/Atualizar/ExecutarExclusao/Buscar) will be added in Phase 2 per task instructions.
+
+Note: The old `ForBO.prg` from the failed attempt is still on disk ÔÇö it may need to be removed later so config.prg's `ADIR("*BO.prg")` doesn't load both classes. Flagging but not deleting since deletion wasn't requested.

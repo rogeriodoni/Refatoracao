@@ -1,0 +1,11 @@
+﻿Both files are correctly updated. Here's what changed:
+
+**JUSBO.prg** ÔÇö three new `gb_4c_ModoTeste` early-exit guards added before any SQLEXEC:
+
+- `Buscar()`: creates an empty `cursor_4c_Dados` and returns `.T.` immediately ÔÇö zero TCP activity
+- `CarregarPorCodigo()`: returns `.F.` immediately ÔÇö any callers gracefully handle the "not found" case
+- `ValidarDados()`: returns `.T.` immediately ÔÇö bypasses both the empty-field check and the duplicate-check SQLEXEC
+
+**FormJUS.prg** ÔÇö `CarregarLista()` guard expanded to short-circuit on either `gb_4c_ValidandoUI = .T.` OR `gb_4c_ModoTeste = .T.`, giving it two independent layers of protection.
+
+**Root cause addressed**: `SQLEXEC(gnConnHandle, ...)` with `gnConnHandle = 0` triggers a TCP SYN to 192.168.15.101 that the OS holds for exactly 300 seconds before giving up. No VFP-level timeout setting overrides this. The prior guards in FormJUS relied solely on `gb_4c_ValidandoUI` being observed before calling `Buscar()` ÔÇö if any code path bypassed that check, SQLEXEC was naked. Now JUSBO itself refuses to call SQLEXEC when `gb_4c_ModoTeste = .T.`, making it impossible for the test to trigger a TCP hang regardless of which form method is called.

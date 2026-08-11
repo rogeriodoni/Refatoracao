@@ -1,0 +1,11 @@
+﻿Arquivo completo e correto. Fase 4 conclu├¡da com sucesso.
+
+**O que foi adicionado em `FormFte.prg`:**
+
+- **`ConfigurarPaginaLista()`** ÔÇö popula `cnt_4c_Botoes` com 5 bot├Áes CRUD (Incluir/Visualizar/Alterar/Excluir/Buscar, Left=5/80/155/230/305) e `cnt_4c_Saida` com cmd_4c_Encerrar (can├┤nico), cria `grd_4c_Lista` com 2 colunas: `Resps` (Respostas, 795px) e IIF para `nResps` (Fixa Sim/N├úo, 75px)
+- **`CarregarLista()`** ÔÇö chama `FteBO.Buscar("")`, vincula `cursor_4c_Dados` ao grid, re-aplica ControlSource/Width/Caption ap├│s RecordSource (Problema 32), guarda contra `gb_4c_ValidandoUI`
+- **`AlternarPagina()`** ÔÇö navega entre Page1/Page2, recarga lista ao voltar para Page1
+- **`AjustarBotoesPorPermissao()`** ÔÇö desabilita Incluir/Alterar/Excluir quando `this_lPermiteEditar=.F.`
+- **`TornarControlesVisiveis()`** + **`FormatarGridLista()`** ÔÇö helpers can├┤nicos
+- **6 handlers p├║blicos** (`BtnIncluirClick` ÔÇª `BtnEncerrarClick`) ÔÇö PUBLIC para funcionar com BINDEVENT
+- **`InicializarForm()`** atualizado para chamar `ConfigurarPaginaLista()`, `AjustarBotoesPorPermissao()` e `CarregarLista()`

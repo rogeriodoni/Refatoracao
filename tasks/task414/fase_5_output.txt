@@ -1,0 +1,24 @@
+﻿O arquivo est├í correto e completo. A Fase 5 foi implementada com sucesso.
+
+**O que foi adicionado:**
+
+**Coluna esquerda (14 campos):**
+- `txt_4c_Codigo` ÔÇö NFAB (N┬░ Fabrica├º├úo, chave de neg├│cio)
+- `txt_4c_Ncaixa` ÔÇö NSEQ (N┬░ do Caixa, 3 d├¡gitos obrigat├│rios)
+- `txt_4c_Interv` ÔÇö Contador Reinicio de Opera├º├úo
+- `txt_4c_Emp` ÔÇö Empresa (lookup em SigCdEmp via F4/LostFocus)
+- `txt_4c_GTInicial` ÔÇö GT Inicial
+- `txt_4c_Gtatual` ÔÇö GT Atual
+- `txt_4c_Modelo` ÔÇö Modelo ECF (lookup em SigFiMpM com cModelos/cMarcas/cversbs/cidecfs)
+- `txt_4c_NumUsu` ÔÇö N├║mero do Usu├írio (valida Modelo preenchido no GotFocus; formata @L 99 no LostFocus)
+- `txt_4c_TipoECF` ÔÇö Tipo do ECF
+- `txt_4c_VerSB` ÔÇö Vers├úo Software B├ísico
+- `txt_4c_DataSB` ÔÇö Data Software B├ísico (campo Date)
+- `txt_4c_HoraSB` ÔÇö Hora Software B├ísico (m├íscara `99:99:99`)
+- `txt_4c_CmdRFD` ÔÇö Comando de Gera├º├úo RFD
+- `txt_4c_Coos` ÔÇö COO Inicial (formata @L 999999 no LostFocus)
+
+**Coluna direita (1┬░ campo da Fase 5):**
+- `txt_4c_DtCad` ÔÇö Data do Cadastro do ECF (campo Date)
+
+**Handlers adicionados:** `NcaixaLostFocus`, `EmpresaLostFocus`, `EmpresaKeyPress`, `ModeloLostFocus`, `ModeloKeyPress`, `NumUsuGotFocus`, `NumUsuLostFocus`, `CoosLostFocus` ÔÇö todos com l├│gica completa fiel ao legado.

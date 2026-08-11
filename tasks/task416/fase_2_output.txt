@@ -1,0 +1,15 @@
+﻿Arquivo completo e correto. Fase 2/8 conclu├¡da.
+
+**FeaBO.prg agora cont├®m todos os m├®todos CRUD:**
+
+| M├®todo | Visibilidade | Fun├º├úo |
+|--------|-------------|--------|
+| `Buscar(par_cFiltro)` | PUBLIC | SELECT de SigCdFcx filtrado por empresa + per├¡odo (data start/end com 23:59:59) |
+| `CarregarPorCodigo(par_cCodigo)` | PUBLIC | SELECT por CidChaves (PK), reseta `this_lNovoRegistro = .F.` |
+| `CarregarDoCursor(par_cAliasCursor)` | PUBLIC | Mapeia 15 colunas; datetime via `TTOD()` para evitar type mismatch |
+| `Inserir()` | PROTECTED | INSERT com chave NEWID() gerada via SQL Server + fallback; chama `RegistrarAuditoria("INSERT")` |
+| `Atualizar()` | PROTECTED | UPDATE das 11 colunas mut├íveis por CidChaves; chama `RegistrarAuditoria("UPDATE")` |
+| `ExecutarExclusao()` | PROTECTED | DELETE em cascata: SigMvItn ÔåÆ SigMvCab ÔåÆ SigCdFcx; chama `RegistrarAuditoria("DELETE")` |
+| `PreencherFiltro(...)` | PUBLIC | Seta `this_cEmpFiltro`, `this_dDtInicial`, `this_dDtFinal` antes de `Buscar()` |
+| `BuscarGrupos(par_cValor)` | PUBLIC | SELECT de SigCdGcr para lookup de grupos |
+| `BuscarContas(par_cGrupo, par_cValor)` | PUBLIC | SELECT de SigCdCli para lookup de contas com filtro Inativas |

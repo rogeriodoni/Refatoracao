@@ -1,0 +1,10 @@
+﻿The fix is correct. The two changes made to `FormImp.prg`:
+
+1. **Line 1860**: `PROTECTED PROCEDURE AlternarPagina` ÔåÆ `PROCEDURE AlternarPagina` (now PUBLIC)
+2. **Line 2284**: `PROTECTED PROCEDURE AjustarBotoesPorModo` ÔåÆ `PROCEDURE AjustarBotoesPorModo` (now PUBLIC)
+
+**Root cause**: `TesteModoIncluir` calls `THIS.oForm.AlternarPagina(2)` from OUTSIDE the form object. In FormCor and virtually all other CRUD forms, `AlternarPagina` is PUBLIC ÔÇö allowing this external call. In FormImp, it was incorrectly declared as `PROTECTED`, which in VFP9 headless mode (`-T` flag) causes an indefinite hang rather than a catchable exception, resulting in the 300-second timeout.
+
+Similarly, `TesteModoVisualizar` calls `THIS.oForm.AjustarBotoesPorModo()` from outside ÔÇö also PROTECTED in FormImp but PUBLIC in FormCor.
+
+`ImpBO.prg` requires no changes ÔÇö all its guards were already correct from prior fixes.

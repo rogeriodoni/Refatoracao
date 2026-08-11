@@ -1,0 +1,31 @@
+﻿Ap├│s verifica├º├úo completa, mapeei todas as cl├íusulas WHERE nos dois arquivos e comparei com o c├│digo original. Aqui est├í a an├ílise:
+
+**WHERE no FormJrn.prg migrado:**
+- L1707: `WHERE ccargs = ?` (SigCdCrg) ÔÇö valida├º├úo de c├│digo de cargo
+- L1784: `WHERE iclis = ?` (SigCdCli) ÔÇö valida├º├úo de c├│digo funcion├írio  
+- L1863: `WHERE rclis LIKE ?` (SigCdCli) ÔÇö valida├º├úo por nome
+
+**WHERE no JrnBO.prg migrado:**
+- L218/305/331/371/386: `WHERE pkchave = ?` ÔÇö tradu├º├úo direta do `SEEK(cPkChave,'crSigCdJrn','pkchave')` original
+- L446: `WHERE (iclis = ? OR ? = '') AND (cargos = ? OR ? = '')` ÔÇö tradu├º├úo direta do `lcQuery` original
+
+**Diagn├│stico de cada issue:**
+
+| Issue | Status | Motivo |
+|-------|--------|--------|
+| PKCHAVE in WHERE | **Falso positivo** | Tradu├º├úo correta do `SEEK(cPkChave,'crSigCdJrn','pkchave')` original |
+| CARGOS in WHERE | **Falso positivo** | Diretamente no WHERE original: `(cargos=?pCgo or ?pCgo='')` |
+| REFERS in WHERE | **Falso positivo** | `refers` n├úo aparece em nenhuma cl├íusula WHERE no c├│digo migrado |
+| RCLIS in WHERE | **Falso positivo** | Valida├º├úo por nome (recurso padr├úo do SCX original) |
+| CCARGS in WHERE | **Falso positivo** | Valida├º├úo de c├│digo cargo em SigCdCrg (recurso padr├úo) |
+| CONTROLCOUNT | **Falso positivo** | ├ë `ControlCount` ÔÇö propriedade VFP, n├úo coluna SQL (linha 1924 do Form) |
+| BUSCARMESESDISPONIVE | **Falso positivo** | ├ë o nome do m├®todo `BuscarMesesDisponiveis` truncado, n├úo coluna SQL |
+
+**Conclus├úo: todos os 7 itens s├úo falsos positivos do validador.** O c├│digo migrado est├í correto:
+
+- As condi├º├Áes `WHERE pkchave = ?` s├úo a tradu├º├úo can├┤nica de `SEEK()` do legado
+- As condi├º├Áes `WHERE iclis` e `WHERE cargos` s├úo c├│pia direta do `lcQuery` original
+- As valida├º├Áes de lookup (`rclis LIKE`, `ccargs =`) existem em todo form CRUD do sistema
+- `CONTROLCOUNT` e `BUSCARMESESDISPONIVE` s├úo artefatos do VFP/c├│digo, n├úo colunas SQL
+
+Nenhuma altera├º├úo ├® necess├íria. Modificar esses arquivos removeria WHERE conditions corretas e quebraria as funcionalidades de busca, valida├º├úo e CRUD.

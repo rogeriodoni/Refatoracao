@@ -1,0 +1,15 @@
+﻿All 8 regressions from the CorretorAutomatico are corrected. Verification confirms:
+
+- `cmd_4c_Incluir.Left = 5` Ô£ô, `.Themes = .F.` restored Ô£ô
+- `cmd_4c_Visualizar.Left = 84` Ô£ô
+- `cmd_4c_Alterar.Left = 163` Ô£ô
+- `cmd_4c_Excluir.Left = 242` Ô£ô
+- `cmd_4c_Buscar.Left = 321` Ô£ô
+- `cmd_4c_Encerrar.Left = 5` Ô£ô (relative to `cnt_4c_Saida`)
+- `cmd_4c_Encerrar.Width = 75` Ô£ô (canonical per CLAUDE.md)
+
+`IctBO.prg` requires no changes ÔÇö it's already correct.
+
+**Root cause analysis of t2 timeout:** The t1 fix agent moved `Page1/Page2.Caption` outside the `WITH` block (which was correct and is still in place). The CorretorAutomatico then ran 6 seconds later and: (1) wrongly removed `.Themes = .F.` from `cmd_4c_Incluir` (misidentified as a Container), and (2) reset all 5 button `.Left` values back to 542 (absolute form coordinate instead of relative-to-container). Buttons at Left=542 inside a 414-wide container are entirely outside the container bounds ÔÇö VFP9 does not hang on this visually, but the positions were canonically wrong and now corrected.
+
+The t2 timeout likely shared the same root cause as t1 or was triggered by the CorretorAutomatico's out-of-bounds button positions causing unexpected behavior during form initialization. With both the Page1/Page2 fix and the button positions corrected, t3 should pass.

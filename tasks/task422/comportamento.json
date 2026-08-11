@@ -1,0 +1,134 @@
+{
+  "resumo": {
+    "totalMetodos": 7,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 3,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDFOR",
+      "evento": "Procedure",
+      "linhas": 7,
+      "codigoOriginal": "Local lcBusca\n\nIf !Empty(ThisForm.Pagina.Dados.get_formas.Value)\n\tThisForm.poDataMgr.LocateCursor('crSigCdFrm','formas',ThisForm.Pagina.Dados.Get_formas.Value)\nEndIf\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "LocateCursor",
+        "controlesReferenciados": "get_formas",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFOR",
+      "evento": "Init",
+      "linhas": 12,
+      "codigoOriginal": "LPARAMETERS lcacesso\n\nWith ThisForm\n\t.poDatamgr = CreateObject('fSqlConector')\n\tWith .poDatamgr\n\t\t.AddCursor('SigCdFrm','formas','crSigCdFrm','',ThisForm.pagina.lista.grade)\n\t\t.pfSqlTabela(1).pColuna('Formas','','','Formas',94,.t.)\n\tEndWith\n\t= DoDefault()\n\t.LockScreen = .f.\nEndWith\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFOR",
+      "evento": "Click",
+      "linhas": 16,
+      "codigoOriginal": "LPArameters Opcao\n\nIf !dodefault( Opcao )\n\tThisForm.mAtivapagina1\n\tReturn\nEndif\n\nSelect CrSigCdFrm\nDo Case\n\tCase Inlist( thisform.pcEscolha, 'INSERIR', 'PROCURAR' )\n\t\tThisForm.Pagina.Dados.Get_Formas.SetFocus\n\tCase Inlist( thisform.pcEscolha, 'ALTERAR','EXCLUIR', 'CONSULTAR' )\n\t\tThisForm.Pagina.Dados.Get_InFO.SetFocus\nEndcase\n\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Formas,Get_InFO",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFOR",
+      "evento": "Click",
+      "linhas": 15,
+      "codigoOriginal": "If Inlist( thisform.pcEscolha, 'INSERIR')\n\tIf Empty( CrSigCdFrm.Formas )\n\t\tMessagebox( 'Forma de Pagamento Inválida.', 48 , '' )\n\t\tThisForm.Pagina.Dados.Get_Formas.SetFocus\n\t\tReturn\n\tEndif\n\tif ThisForm.poDataMgr.ChkRegister('SigCdFrm','Formas',ThisForm.Pagina.Dados.Get_Formas.Value)\n\t\tMessagebox( 'Forma de Pagamento já cadastrada.', 48,'' )\n\t\tThisForm.Pagina.Dados.Get_Formas.SetFocus\n\t\tReturn\n\tEndif\nEndif\n\n=DoDefault()\nThisform.mAtivapagina1",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChkRegister",
+        "controlesReferenciados": "Get_Formas,ChkRegister('SigCdFrm'",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFOR",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "DoDefault()\nif thisform.plCancelar\n\tthisform.mAtivapagina1\nendif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFOR.Pagina.Dados.Get_formas",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "If not Inlist(thisform.pcEscolha,'INSERIR','PROCURAR')\n\treturn(.f.)\nendif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFOR.Pagina.Dados.Get_INFO",
+      "evento": "Valid",
+      "linhas": 16,
+      "codigoOriginal": "Local loBrowse\nIf .Not.Empty(This.Value)\n\tm.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigPrInf','CrSigPrInf','Infos',This.Value,'Inf.Complementares',.T.)\n\tIf .Not.m.loLista.plAchouRegistro\n\t\tm.loLista.mAddColuna('Infos','X','Código')\n\t\tm.loLista.mAddColuna('descrs','XXXXXXXXXXXXXXXXXXXX','Descrição')\n\t\tm.loLista.Show()\n\tEndIf\n\tIf LastKey() <> 27 And Used('CrSigPrInf')\n\t\tThis.Value = Evaluate('CrSigPrInf.Infos')\n\tElse\n\t\tThis.Value = ''\n\tEndIf\n \tThis.Refresh\nEndIf\nReturn(.T.... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

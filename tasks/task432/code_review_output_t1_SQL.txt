@@ -1,0 +1,32 @@
+﻿Ap├│s verifica├º├úo detalhada, esta ├® uma **falsa positiva** do code review. Veja a an├ílise:
+
+---
+
+## Verifica├º├úo: SQL-FILTRO-INVENTADO (`cIdChaves` em WHERE)
+
+**O que o c├│digo original tinha:**
+```sql
+Select * From SigCdFtr Where GruCarTits = ?pKey Order By cIdChaves
+```
+
+**Onde `WHERE cIdChaves` aparece no c├│digo migrado:**
+
+| Fun├º├úo | Uso | Status |
+|--------|-----|--------|
+| `Buscar()` | `WHERE GruCarTits = ...` | Ô£à Correto ÔÇö bate com original |
+| `CarregarPorCodigo()` | `WHERE cIdChaves = ...` | Ô£à Busca por PK ÔÇö arquitetura CRUD |
+| `Atualizar()` | `WHERE cIdChaves = ...` | Ô£à UPDATE por PK ÔÇö obrigat├│rio |
+| `ExecutarExclusao()` | `WHERE cIdChaves = ...` | Ô£à DELETE por PK ÔÇö obrigat├│rio |
+
+**Por que N├âO ├® um filtro inventado:**
+
+1. `cIdChaves` ├® confirmado como PK real pela linha `THIS.this_cCampoChave = "cIdChaves"` no `Init()`
+2. O original `Order By cIdChaves` confirma que a coluna **existe** na tabela
+3. `CarregarPorCodigo`, `Atualizar` e `ExecutarExclusao` s├úo fun├º├Áes CRUD da **nova arquitetura** ÔÇö o form legado era flat e n├úo tinha essas fun├º├Áes separadas
+4. Remover `WHERE cIdChaves` do `UPDATE`/`DELETE` seria **catastr├│fico** ÔÇö afetaria todos os registros da tabela
+
+**A fun├º├úo `Buscar()` (equivalente direto do SQL original) est├í correta:** usa `WHERE GruCarTits = EscaparSQL(loc_cChave)`, que bate exatamente com `Where GruCarTits = ?pKey`.
+
+---
+
+**Nenhuma altera├º├úo necess├íria.** O code review detectou uso leg├¡timo de `cIdChaves` como chave prim├íria em opera├º├Áes CRUD padr├úo e interpretou incorretamente como filtro inventado. Fazer a corre├º├úo sugerida (remover o WHERE) quebraria completamente o sistema.

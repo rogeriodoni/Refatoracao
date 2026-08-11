@@ -1,0 +1,42 @@
+﻿An├ílise completa dos 4 flags. Todos s├úo **falsos positivos** ap├│s verifica├º├úo contra o c├│digo original:
+
+---
+
+**Flag 1 ÔÇö ADICIONA** (lchBO.prg:198):
+```foxpro
+* par_cFiltro: condicoes WHERE adicionais (ex: "AND a.dtents >= '2024-01-01'")
+```
+├ë um **coment├írio** VFP9, n├úo SQL. O validador extraiu "ADICIONA" da palavra "adicionais". Nenhum WHERE SQL aqui.
+
+---
+
+**Flag 2 ÔÇö 1** (lchBO.prg:213):
+```foxpro
+" WHERE 1=1"
+```
+T├®cnica padr├úo SQL para permitir `par_cFiltro` ser acrescentado dinamicamente (`" " + par_cFiltro`). O `1=1` n├úo ├® coluna ÔÇö ├® express├úo booleana literal. O c├│digo original tinha `lcQuerylchm = [Select * From SigChLcq where dtents between ...]` e aqui o padr├úo `WHERE 1=1` ├® a migra├º├úo correta.
+
+---
+
+**Flag 3 ÔÇö OPERACAOS** (Formlch.prg:4048):
+```foxpro
+"SELECT operacaos FROM SigCdOpt WHERE operacaos = " + EscaparSQL(loc_cOper)
+```
+No c├│digo legado, valida├º├úo era feita por `If !Seek( This.Value )` em cursor `crSigCdOpt` pr├®-carregado. A migra├º├úo converteu corretamente para SQL. O `WHERE operacaos =` **├® a query inteira** ÔÇö remov├¬-lo tornaria `SELECT operacaos FROM SigCdOpt` (todas as opera├º├Áes), e a valida├º├úo nunca falharia.
+
+---
+
+**Flag 4 ÔÇö CEMPS** (Formlch.prg:4158):
+```foxpro
+"SELECT cemps, razas FROM SigCdEmp WHERE cemps = " + EscaparSQL(loc_cEmps)
+```
+Original: `lcQueryEmp = [Select * From SigCdEmp]` (sem WHERE) + `=Seek(crSigChLcq.Emps,'crSigCdEmp','CEmps')`. A migra├º├úo converteu o SEEK para SQL direto. O `WHERE cemps =` ├® o cerne da query de valida├º├úo ÔÇö n├úo ├® um filtro inventado sobre query existente.
+
+---
+
+**Conclus├úo**: Nenhuma das 4 ocorr├¬ncias ├® uma condi├º├úo WHERE inventada sobre uma query original existente. S├úo:
+- 1 coment├írio (falso positivo por coincid├¬ncia de texto)
+- 1 t├®cnica SQL padr├úo (WHERE 1=1)
+- 2 queries de valida├º├úo novas que substituem corretamente `SEEK` do legado
+
+**Nenhuma altera├º├úo ser├í feita** ÔÇö qualquer "corre├º├úo" quebraria funcionalidade. O c├│digo nos dois arquivos est├í correto.

@@ -1,0 +1,17 @@
+﻿All corrections applied. FASE 7 and FASE 8 are complete. Here's a summary of what was done:
+
+**FASE 7 ÔÇö Integra├º├úo (menu.prg):**
+- Added `DEFINE BAR 84 OF popCadastros PROMPT "Empresas"` with message "Cadastro de Empresas (SigCdEmp)"
+- Added `ON SELECTION BAR 84 OF popCadastros DO AbrirFormemp`
+- Added `PROCEDURE AbrirFormemp()` with full VARTYPE guard + detailed error handling
+
+Note: config.prg doesn't need changes ÔÇö it uses `ADIR("*BO.prg")` and `ADIR("Form*.prg")` for dynamic loading, so `empBO.prg` and `Formemp.prg` are picked up automatically.
+
+**FASE 8 ÔÇö Corre├º├Áes e Finaliza├º├úo:**
+- `CmdCtaCtgClick` ÔÇö replaced placeholder with functional behavior: reads current company code and shows informative message (SigCtCtg form not migrated yet)
+- `KeyPressRegiao` ÔÇö fixed: `SigCdReg.codigo` ÔåÆ `SigCdReg.Regiaos` + `descricao` ÔåÆ `descs` (per original code)
+- `KeyPressTpTrans` ÔÇö fixed: `SigCdTtp.codigo` ÔåÆ `SigPrTrn.Codigos`/`Descrs` (original uses `SigPrTrn`)
+- `KeyPressMctotal` ÔÇö fixed: `SigCdMoe.Codigos/Descs` ÔåÆ `SigCdMoe.Cmoes/DMoes` (per original code)
+- `KeyPressCfoInt` ÔÇö fixed: `SigCdCfp.Codigos/Descs` ÔåÆ `SigCdCfo.Codigos/descricaos` (original uses `SigCdCfo`)
+- `KeyPressGrupoContabil` ÔÇö removed non-existent `grcdesc` column from SIGSYACC
+- `KeyPressContaContabil` ÔÇö removed non-existent `cddesc` column from SIGSYACC, simplified LOCAL declaration

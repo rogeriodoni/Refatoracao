@@ -1,0 +1,13 @@
+﻿Tudo verificado e completo. A Fase 8 est├í finalizada:
+
+**FormFTF.prg** ÔÇö todos os m├®todos exigidos implementados:
+- `AjustarBotoesPorModo()` ÔÇö adicionado agora (habilita bot├Áes conforme sele├º├úo na Page1, desabilita Confirmar em VISUALIZAR, posiciona foco conforme modo)
+- `BtnBuscarClick()`, `BtnEncerrarClick()`, `BtnSalvarClick()`, `BtnCancelarClick()` ÔÇö j├í presentes
+- `FormParaBO()`, `BOParaForm()`, `HabilitarCampos()`, `LimparCampos()`, `CarregarLista()` ÔÇö j├í presentes com todos os campos (this_nOrdem / this_cDescricao)
+
+**menu.prg** ÔÇö integra├º├úo completa:
+- `DEFINE BAR 100 OF popCadastros` com prompt "Finalizadoras (Tef)"
+- `ON SELECTION BAR 100 OF popCadastros DO AbrirFormFTF`
+- `PROCEDURE AbrirFormFTF()` com padr├úo can├┤nico (VARTYPE, Show() sem par├ómetro, sem Release())
+
+**config.prg** ÔÇö n├úo precisou de altera├º├úo: usa ADIR() para auto-descobrir `*BO.prg` e `Form*.prg`, carregando FTFBO.prg e FormFTF.prg automaticamente.

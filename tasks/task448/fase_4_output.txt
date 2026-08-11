@@ -1,0 +1,18 @@
+﻿Analisando o FormICN.prg e ICNBO.prg existentes: **a Fase 4 j├í est├í completa nas fases 1-3.**
+
+**Por que?** O template da Fase 4 foi gerado para forms CRUD (que usam PageFrame + Page1=Lista + Page2=Dados + 6 bot├Áes CRUD). Mas SIGCDICN ├® um form **flat OPERACIONAL** ÔÇö sem PageFrame, sem estrutura Lista/Dados. O c├│digo j├í implementado nas fases anteriores cobriu tudo corretamente:
+
+| O que Fase 4 pede | Equivalente j├í implementado |
+|---|---|
+| `ConfigurarPaginaLista()` com Grid | `ConfigurarGrid()` Ô£à ÔÇö grd_4c_Dados, 2 colunas, DblClick/ENTER |
+| `cnt_4c_Botoes` com 6 bot├Áes CRUD | `ConfigurarBotoesAcao()` Ô£à ÔÇö cmg_4c_BotoesAcao com Ok e Encerrar (o legado tamb├®m tem apenas 2) |
+| `AlternarPagina()` | N├úo se aplica ÔÇö form flat sem PageFrame Ô£à |
+
+**Verifica├º├Áes adicionais ÔÇö tudo correto:**
+- `HeaderHeight = 15` est├í em `WITH loc_oGrid` (no Grid, n├úo em Column) ÔÇö correto
+- `this_cCursorProgFiltrado` declarado no ICNBO e usado em `CarregarDados()` ÔÇö correto
+- BINDEVENT em m├®todos PUBLIC (`GrdDadosDblClick`, `GrdDadosKeyPress`) ÔÇö correto
+- `Destroy()` chama `DODEFAULT()` como ├║ltima linha ÔÇö correto
+- Transa├º├úo manual em `SalvarAlteracoes()` com ROLLBACK em caso de erro ÔÇö correto
+
+**FormICN.prg est├í completo.** Nenhuma altera├º├úo necess├íria para a Fase 4. Pode seguir para a Fase 5/8.

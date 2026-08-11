@@ -1,0 +1,18 @@
+﻿16 guards confirmed. The 6 new additions (t5) combined with 10 existing (t3+t4):
+
+| Line | Method | What it guards | New? |
+|------|--------|----------------|------|
+| 1156 | `CarregarLista` | Early return before TRY ÔÇö definitively blocks SQL regardless of `gb_4c_ValidandoUI` | **NEW** |
+| 1197 | `AlternarPagina` | Skips `THIS.CarregarLista()` when in test mode | **NEW** |
+| 1476 | `BtnVisualizarClick` | Skip `CarregarPorCodigo` SQLEXEC | **NEW** |
+| 1506 | `BtnAlterarClick` | Skip `CarregarPorCodigo` SQLEXEC | **NEW** |
+| 1537 | `BtnExcluirClick` | Skip `CarregarPorCodigo`/`Excluir` SQLEXEC | **NEW** |
+| 1650 | `BtnCopiarMesClick` | Skip `CarregarPorCodigo`/`BuscarMesesDisponiveis` SQLEXEC | **NEW** |
+| 1567 | `BtnBuscarClick` | Skip INPUTBOX+Buscar | existing |
+| 1692/1731/1766 | Cargo lookup chain | Skip FormBuscaAuxiliar | existing |
+| 1778/1819/1857 | Funcionario lookup chain | Skip FormBuscaAuxiliar | existing |
+| 1869/1910/1949 | FuncionarioPorNome lookup chain | Skip FormBuscaAuxiliar | existing |
+
+The most impactful new guard is `CarregarLista` line 1156: it's a `RETURN .T.` placed **before** the TRY block (respecting CLAUDE.md Rule #1), making it unconditional ÔÇö regardless of whether `gb_4c_ValidandoUI` is `.T.` or `.F.`, no SQL runs in test mode. This is the definitive fix for any path that calls `CarregarLista`, including `BtnCancelarClick ÔåÆ AlternarPagina(1) ÔåÆ CarregarLista`.
+
+JrnBO.prg requires no changes ÔÇö its SQL methods are only reachable through FormJrn handlers that are now all guarded.

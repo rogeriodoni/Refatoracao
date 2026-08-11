@@ -1,0 +1,9 @@
+﻿All 7 guards are in place. Here's what was added (t4 fix):
+
+**`BtnBuscarClick`** ÔÇö guard before `INPUTBOX()`. `INPUTBOX()` is not suppressed by `SYS(2335,0)` and would block indefinitely.
+
+**`TeclaLookupCodCgo/Cli/DesCli`** ÔÇö guard before F4/F5 dispatch to `AbrirLookup*`. VFP9 can synthesize synthetic KeyPress events during automated focus changes; without the guard, an F4(115)/F5(116) synthetic event would cascade to the lookup.
+
+**`AbrirLookupCargo/Funcionario/FuncionarioPorNome`** ÔÇö guard at entry. `CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle=0, ...)` triggers `SQLEXEC(0, ...)` inside FormBuscaAuxiliar's Init, which attempts a TCP connection to the unreachable SQL Server and blocks for exactly 300 seconds (Windows SYN timeout).
+
+The double-layer defense (guard in both `TeclaLookup*` and `AbrirLookup*`) ensures that even if a lookup is triggered by a path other than the keyboard handlers (e.g., called from inside `ValidarCodCgo`'s ELSE branch ÔÇö which already has its own guard ÔÇö or any future call site), it will exit immediately in test mode.

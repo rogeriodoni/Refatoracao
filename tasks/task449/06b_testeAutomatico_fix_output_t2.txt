@@ -1,0 +1,7 @@
+﻿Both edits are correct. Two fixes applied:
+
+**ICOBO.prg `CarregarIcones()` (lines 63ÔÇô68)** ÔÇö Added two guards before the TRY block:
+- `gb_4c_ModoTeste` check: returns immediately in test mode, no SQLEXEC reached
+- `gnConnHandle <= 0` check: returns immediately when no valid connection, preventing the 300-second TCP timeout regardless of how the method is invoked
+
+**FormICO.prg `InicializarForm()` (lines 44ÔÇô81)** ÔÇö Changed `IF VARTYPE != "O"` fall-through to `IF/ELSE`. When ICOBO creation fails, the ELSE block is skipped entirely: `loc_lSucesso` stays `.F.`, `LockScreen` is never locked (no dangling state), and none of the subsequent code (including any path to `CarregarIcones`) executes. Previously, the failure branch set `loc_lSucesso = .F.` but continued executing, eventually overwriting it with `.T.` at line 81.

@@ -1,0 +1,10 @@
+﻿Fase 6 conclu├¡da. As mudan├ºas feitas foram:
+
+**FormICO.prg (linha 69):** Adicionado `THIS.grd_4c_Dados.Visible = .T.` ap├│s configurar o `RecordSource` ÔÇö reproduz o `.Visible = .t.` que o legado fazia explicitamente no `Init` do Grid1 ap├│s `.RecordSource = 'crTmpcdIco'`.
+
+**menu.prg:**
+- BAR 11 (separador) e BAR 12 (`"Cadastro de ├ìcones"`) adicionados ao `popFerramentas`
+- `ON SELECTION BAR 12` ligado a `AbrirFormICO`
+- `PROCEDURE AbrirFormICO()` adicionado no final do arquivo (seguindo o padr├úo can├┤nico de outros formul├írios: `VARTYPE = "O"`, `Show()` sem par├ómetro, sem `Release()`, `MostrarErro()` com Linha + Procedure no CATCH)
+
+O form operacional FormICO est├í completo ÔÇö n├úo havia lookups nem campos de entrada restantes porque o SIGCDICO original usa apenas grid + preview + bot├Áes.

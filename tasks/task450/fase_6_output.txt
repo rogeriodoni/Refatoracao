@@ -1,0 +1,19 @@
+﻿O arquivo est├í correto e completo. A Fase 6 foi conclu├¡da com sucesso.
+
+**O que foi adicionado:**
+
+1. **BINDEVENTs em `ConfigurarPaginaDados()`** ÔÇö 14 novos bindings para os campos de lookup (CFOP, DCFOP, Origem, DOrigem, Destino, DDestino) via F4/DblClick + LostFocus para valida├º├úo de Movs.
+
+2. **`HabilitarCampos()` atualizado** ÔÇö Os campos de descri├º├úo (DCFOP, DOrigem, DDestino) agora ficam edit├íveis em modo INCLUIR (replicando o `When = INSERIR` do legado).
+
+3. **12 handlers de evento** (pares KeyPress/DblClick PUBLIC para cada campo com lookup) ÔÇö todos delegam para o `AbrirLookupXxx()` correspondente.
+
+4. **6 m├®todos `AbrirLookupXxx()` completamente implementados:**
+   - `AbrirLookupCFOP()` ÔÇö busca por c├│digo em `SigCdCfo`, preenche CFOP + DCFOP
+   - `AbrirLookupDCFOP()` ÔÇö busca por descri├º├úo em `SigCdCfo`, com guardia `Empty(CFOP)`
+   - `AbrirLookupOrigem()` ÔÇö busca por UF em `SigCdUfs`, preenche Origem + DOrigem
+   - `AbrirLookupDOrigem()` ÔÇö busca por nome em `SigCdUfs`, com guardia `Empty(Origem)`
+   - `AbrirLookupDestino()` ÔÇö igual ao Origem mas para Destino
+   - `AbrirLookupDDestino()` ÔÇö igual ao DOrigem mas para Destino
+
+5. **`ValidarMovs()`** ÔÇö valida que o campo Movs aceita apenas "E" ou "S", exibe aviso e limpa o campo se inv├ílido (replicando `GetMovs.Valid` do legado).

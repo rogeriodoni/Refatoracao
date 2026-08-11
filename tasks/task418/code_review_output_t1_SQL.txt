@@ -1,0 +1,10 @@
+﻿O c├│digo legado confirma a l├│gica:
+
+```
+*** mena - 27/02/2015 - se porta = 9 considera USB ***
+lcNewCon = Strtran(lcConfig, 'Porta' + lcComs, IIF(lcPor='9', 'Porta=USB', 'Porta=COM' + lcPor), -1, 1, 1)
+```
+
+**O alerta ├® falso positivo.** A condi├º├úo `IF loc_cPor = "9"` (porta 9 = USB) existe explicitamente no legado original com coment├írio datado de 2015. A migra├º├úo est├í correta ÔÇö o `IIF(lcPor='9', ...)` do legado foi corretamente expandido em `IF/ELSE` no BO migrado.
+
+Nenhuma corre├º├úo necess├íria. O pass SQL n├úo encontrou problemas reais em `FormFis.prg` nem em `FisBO.prg`.

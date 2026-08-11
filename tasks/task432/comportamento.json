@@ -1,0 +1,156 @@
+{
+  "resumo": {
+    "totalMetodos": 8,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 1,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fUniqueIds"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDFTE",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "pKey = ThisForm.Grupos + ThisForm.Cargos + ThisForm.Titulos + ThisForm.SubGrp \n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFTE",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "=fConfigGeral()\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFTE",
+      "evento": "Init",
+      "linhas": 40,
+      "codigoOriginal": "Lparameters pGru, pSgr, pCar, pTit, pEsc, pTipo\n\nPrivate pKey\n\nThisForm.Grupos  = Padr(pGru, Iif(pTipo = 0, 3, 20 ))\nThisForm.SubGrp  = Padr(pSgr, 06)\nThisForm.Cargos  = Padr(pCar, 20)\nThisForm.Titulos = Padr(pTit, 20)\n\npKey = ThisForm.Grupos + ThisForm.Cargos + ThisForm.Titulos + ThisForm.SubGrp \n\nlcQryCFTeR = [Select * From SigCdFtr Where GruCarTits = ?pKey Order By cIdChaves]\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tWith .poData... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Grupos  = Padr,SubGrp  = Padr,Cargos  = Padr,Titulos = Padr",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDFTE",
+      "evento": "Click",
+      "linhas": 32,
+      "codigoOriginal": "LParameters lnOpcao\n\nIf (Type('lnOpcao') = 'N')\n\tThis.Value = lnOpcao\nEndIf\n\nSelect crSigCdFtr\n\nIf Not DoDefault(lnOpcao)\n\tThisForm.mAtivaPagina1\n\tReturn 0\nEndIf\n\nloDad = ThisForm.Pagina.Dados\n\nIf (ThisForm.pcEscolha = 'INSERIR')\n\tReplace CGrus \t\tWith ThisForm.Grupos, ;\n\t\t\tSGrus \t\tWith ThisForm.SubGrp, ;\n\t\t\tCCars \t\tWith ThisForm.Cargos, ;\n\t\t\tCTits \t\tWith ThisForm.Titulos, ;\n\t\t\tGruCarTits \tWith ThisForm.Grupos + ThisForm.Cargos + ThisForm.Titulos + ThisForm.SubGrp, ;\n\t\t\tcIdChaves \tWith fUniqueIds... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFTE",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "=DoDefault()\n\nThisForm.mAtivaPagina1\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFTE",
+      "evento": "Click",
+      "linhas": 6,
+      "codigoOriginal": "=DoDefault()\n\nIf ThisForm.plCancelar\n\tThisForm.mAtivaPagina1\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFTE.Pagina.dados.getResps",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return( InList(ThisForm.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFTE.Pagina.dados.chkRespFixa",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return( InList(ThisForm.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDFTE.Init",
+      "queryOriginal": "lcQryCFTeR = [Select * From SigCdFtr Where GruCarTits = ?pKey Order By cIdChaves]",
+      "tabelas": "SigCdFtr",
+      "colunas": "GruCarTits,cIdChaves]",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdFtr"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

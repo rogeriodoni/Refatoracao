@@ -1,0 +1,16 @@
+﻿Fase 2 conclu├¡da. O `FNFBO.prg` agora tem todos os m├®todos CRUD completos:
+
+**M├®todos adicionados:**
+- `Buscar(par_cFiltro)` ÔÇö SELECT com ORDER BY imps, ordems ÔåÆ `cursor_4c_Dados`
+- `CarregarPorCodigo(par_cCidchaves)` ÔÇö SELECT por PK + `this_lNovoRegistro = .F.`
+- `CarregarDoCursor(par_cAliasCursor)` ÔÇö mapeia todos os 7 campos via `SELECT (alias)` (sem `alias.campo`)
+- `ValidarUnicidade()` ÔÇö verifica duplicata Impressora+Ordem (l├│gica do `Salva.Click` original)
+- `Inserir()` ÔÇö gera PK via `SELECT LEFT(NEWID(), 20)` (substituindo `fUniqueIds()` n├úo portado), INSERT + auditoria
+- `Atualizar()` ÔÇö UPDATE + auditoria
+- `ExecutarExclusao()` ÔÇö verifica `SigCdOpe.trnfis` antes de deletar (l├│gica do `Grupo_op.Click Value=4` original) + DELETE + auditoria
+
+**Regras cr├¡ticas respeitadas:**
+- Sem `RETURN` dentro de TRY/CATCH ÔÇö valida├º├Áes movidas para antes do bloco TRY
+- `SELECT (par_cAliasCursor)` antes de acessar campos em `CarregarDoCursor`
+- `RegistrarAuditoria()` em INSERT/UPDATE/DELETE
+- Todos os cursores fechados com `USE IN` no CATCH tamb├®m

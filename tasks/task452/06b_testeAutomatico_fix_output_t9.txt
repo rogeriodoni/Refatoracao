@@ -1,0 +1,5 @@
+﻿Both fixes applied:
+
+1. **Line 572** `ColumnCount = 3` ÔåÆ `ColumnCount = 2` ÔÇö `cursor_4c_Emps` has only 2 fields (`Emps`, `PercEmps`). Setting ColumnCount=3 created an unbound Column3 that triggered a native VFP9 "Select Field" dialog (not suppressed by `SYS(2335,0)`), causing the 300-second hang.
+
+2. **Line 703** `PROTECTED PROCEDURE AlternarPagina` ÔåÆ `PROCEDURE AlternarPagina` ÔÇö `TesteAutomatico` calls `oForm.AlternarPagina(2)` from outside the class; the `PROTECTED` keyword blocked it with error 1448.

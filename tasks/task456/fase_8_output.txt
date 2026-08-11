@@ -1,0 +1,16 @@
+﻿A migra├º├úo SIGCDLCH est├í **completamente finalizada**. Resumo do estado atual:
+
+**`Formlch.prg`** (3431 linhas) ÔÇö todos os m├®todos Phase 8 presentes:
+- `CarregarLista()` com guard `gb_4c_ValidandoUI` Ô£ô
+- `AjustarBotoesPorModo()` Ô£ô
+- `HabilitarCampos(par_lHabilitar)` Ô£ô
+- `LimparCampos()` Ô£ô
+- `FormParaBO()` / `BOParaForm()` ÔÇö cobrindo TODOS os campos Ô£ô
+- `BtnSalvarClick()` / `BtnCancelarClick()` Ô£ô
+- `BtnBuscarClick()` / `BtnEncerrarClick()` Ô£ô
+
+**`lchBO.prg`** (530 linhas) ÔÇö BO completo com `Buscar`, `CarregarPorCodigo`, `BuscarCheques`, `Inserir`, `Atualizar`, `ExecutarExclusao` Ô£ô
+
+**`menu.prg`** ÔÇö entrada BAR 116 em `popCadastros` + `PROCEDURE AbrirFormlch` Ô£ô
+
+**Carregamento autom├ítico**: `config.prg` usa ADIR para carregar `*BO.prg` e `Form*.prg` ÔÇö nenhuma configura├º├úo manual necess├íria.

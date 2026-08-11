@@ -1,0 +1,11 @@
+﻿Migra├º├úo completa. Aqui est├í o resumo do que foi feito nesta Fase 8/8:
+
+**Bug corrigido:**
+- `FormCVI.prg:1326` ÔÇö `this_cModoAtual` ÔåÆ `THIS.this_cModoAtual` (sem `THIS.` causaria "Variable not found" em runtime)
+
+**Integra├º├úo com menu.prg:**
+- `DEFINE BAR 74 OF popCadastros` ÔÇö "Comiss├Áes Individuais"
+- `ON SELECTION BAR 74 OF popCadastros DO AbrirFormCVI`
+- Procedimento `AbrirFormCVI()` adicionado com padr├úo can├┤nico (VARTYPE, Show() sem par├ómetro, sem Release())
+
+**N├úo foi necess├írio editar config.prg** ÔÇö o sistema usa `ADIR()` autom├ítico que carrega todos os `*BO.prg` de `classes\` e `Form*.prg` de `forms\cadastros\`, ent├úo `CVIBO.prg` e `FormCVI.prg` s├úo carregados automaticamente.

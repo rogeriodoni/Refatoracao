@@ -1,0 +1,10 @@
+﻿Tudo correto. Resumo das 6 corre├º├Áes aplicadas em `FormCVE.prg`:
+
+| Erro | Causa | Fix |
+|------|-------|-----|
+| `Property FONTNAME is not found` | PageFrame n├úo tem `FontName`/`FontSize` | Removidas as duas propriedades do WITH do PageFrame |
+| `CarregarLista`: sem cursor `cursor_4c_*` | Em modo valida├º├úo nenhum cursor era criado | Cria `cursor_4c_Lista` vazio no branch de valida├º├úo |
+| `Property ALTERNARPAGINA is not found` | `AlternarPagina` era PROTECTED ÔÇö teste chama direto no objeto | Removido `PROTECTED` |
+| `Property AJUSTARBOTOESPORMODO is not found` | `AjustarBotoesPorModo` era PROTECTED | Removido `PROTECTED` |
+| `BtnIncluirClick` n├úo navega para Page2 | `this_oBusinessObject.NovoRegistro()` falha com NULL BO | Guard `IF VARTYPE(...) = "O"` adicionado |
+| `LimparCampos` idem | Mesma causa | Guard adicionado |

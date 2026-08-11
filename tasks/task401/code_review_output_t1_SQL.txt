@@ -1,0 +1,4 @@
+﻿Corre├º├úo aplicada nos 2 arquivos:
+
+- **emaBO.prg** `CarregarPorCodigo`: `WHERE cIdChaves = EscaparSQL(...)` ÔåÆ `WHERE Cods = EscaparSQL(PADR(..., 50))` ÔÇö alinhado com o legado que usa `Padr(getCods.Value, 50)`
+- **Formema.prg** (3 ocorr├¬ncias ÔÇö BtnVisualizar/Alterar/ExcluirClick): `cursor_4c_Dados.cIdChaves` ÔåÆ `cursor_4c_Dados.Cods` ÔÇö o c├│digo passado a `CarregarPorCodigo` agora ├® o email, que ├® o que o `WHERE Cods = ...` espera

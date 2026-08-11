@@ -1,0 +1,5 @@
+﻿Corre├º├úo aplicada. O `DataSession = 2` foi removido do `FormFpg.prg`.
+
+**Causa raiz**: O form tinha `DataSession = 2` (private datasession). Em VFP9, todos os m├®todos de um form com `DataSession = 2` executam na datasession privada do form (session N) ÔÇö mesmo quando o form n├úo est├í vis├¡vel. Isso faz com que `cursor_4c_Dados`, criado por `FpgBO.Buscar("")` dentro de `CarregarLista()`, fique isolado em session N. O TesteAutomatico roda em session 1 e verifica `USED("cursor_4c_Dados")` em session 1 ÔÇö n├úo encontra o cursor.
+
+**Fix**: Remover `DataSession = 2`. O form passa a usar session 1 (shared), onde o cursor criado em `Buscar("")` fica vis├¡vel para o tester. A exibi├º├úo correta de datas n├úo ├® afetada porque config.prg j├í configura `SET DATE TO BRITISH + SET CENTURY ON` em session 1, e FormBase.Init() via DODEFAULT() tamb├®m aplica esses SETs.

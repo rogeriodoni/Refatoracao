@@ -1,0 +1,12 @@
+﻿Fase 3 conclu├¡da. O `FormFop.prg` foi criado em `C:\4c\projeto\app\forms\operacionais\FormFop.prg` com 400 linhas.
+
+**O que foi entregue (Fase 3/8):**
+- `DEFINE CLASS FormFop AS FormBase` com todas as propriedades do form OPERACIONAL (Width=1000, TitleBar=0, WindowType=1, ControlBox=.F., DataSession=1)
+- `Init()` com `LPARAMETERS` recebendo os 4 par├ómetros do legado (oParentForm, nDataSes, cEscolha, cProduto)
+- `InicializarForm()` ÔÇö cria o BO, busca descri├º├úo do produto via SQL, chama ConfigurarCabecalho/ConfigurarBotoes, carrega crSigPrFnc via `FopBO.BuscarPorProduto()`; sem `RETURN` dentro de TRY
+- `ConfigurarCabecalho()` ÔÇö cntSombra/Cabecalho: Top=0, Height=80, BackColor=RGB(100,100,100), dois Labels Sombra/Titulo com Width=660 (n├úo sobrep├Áe os bot├Áes)
+- `ConfigurarBotoes()` ÔÇö 4 bot├Áes (Repetir/680, Inserir/760, Excluir/840, Encerrar/920) + 2 shapes decorativos; Repetir/Inserir/Excluir respeitam `this_lModoEdicao`
+- `TornarControlesVisiveis()` ÔÇö com lista de LOOP para controles de visibilidade controlada por modo (Repetir, Inserir, Excluir, lblQtde, txtQtde, shpQtde)
+- `Destroy()` ÔÇö fecha crSigPrFnc + crFopProdDesc + chama `DODEFAULT()`
+
+**Pr├│ximas fases:** Fase 4 adiciona o grid (grd_4c_Dados com 10 colunas e CheckBox na Column7) e faz o bind do RecordSource com crSigPrFnc.

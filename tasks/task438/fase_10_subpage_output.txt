@@ -1,0 +1,11 @@
+﻿All edits verified. FASE 10 is complete. Here's what was added to `Formgpd.prg`:
+
+**Call wired in** (`ConfigurarPaginaDados`, line 830): `THIS.ConfigurarPgpgCadastro()` inserted before `TornarControlesVisiveis`.
+
+**Destroy extended** (line 2984): Array increased from 20ÔåÆ21, `cursor_4c_Prazos` added at position 21.
+
+**FormParaBO / BOParaForm / LimparCampos** (lines 1198, 1468, 1792): All three now handle `obj_4c_OptTipoJoals` (Tipo de Produto option group). BOParaForm also calls `CarregarSigCdPsgCad`. LimparCampos also ZAPs both grids.
+
+**New `PROTECTED PROCEDURE ConfigurarPgpgCadastro()`** (line 8430): Adds all 11 remaining controls ÔÇö 4 suffix/label objects, `obj_4c_OptTipoJoals` (8-button OptionGroup), `grd_4c_PsgCad` (sub-groups grid with 4 columns including checkbox column), `obj_4c_CmdgCompo` (insert/delete CommandGroup), `grd_4c_Prazos` (prazos grid), `cmd_4c_InserirPrazo`, `cmd_4c_ExcluirPrazo`.
+
+**8 new handler methods** added: `CarregarSigCdPsgCad`, `PsgCadCodigoValid`, `PsgCadInserirClick`, `PsgCadExcluirClick`, `PrazoEmpresaValid`, `AbrirBuscaEmpPrazo`, `InserirPrazoClick`, `ExcluirPrazoClick`.

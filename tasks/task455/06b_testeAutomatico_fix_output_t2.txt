@@ -1,0 +1,1 @@
+﻿Fix applied. The TRY/CATCH wrapper around `DODEFAULT()` in `FormJUS.Init()` has been removed and replaced with the canonical `RETURN DODEFAULT()` pattern. This eliminates the scenario where VFP9's form destruction lifecycle fires while still inside a TRY scope, which was causing the 300-second hang in Attempt 2.

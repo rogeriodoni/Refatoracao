@@ -1,0 +1,18 @@
+﻿Tudo correto. Resumo das corre├º├Áes aplicadas:
+
+**FpmBO.prg ÔÇö CIDCHAVES removido em 7 pontos:**
+- `this_cCampoChave = "cidchaves"` ÔåÆ `"fpags"`
+- Property `this_cCidchaves` removida
+- `Init()`: atualizado para `"fpags"`
+- `ObterChavePrimaria()`: retorna `THIS.this_cFpags`
+- `BuscarPorCondicao()`: `cidchaves` removido do `CREATE CURSOR` e do `SELECT`
+- `SalvarAlteracoes()`: `cidchaves` e `NEWID()` removidos do `INSERT INTO SigOpFpi`
+- `CarregarDoCursor()`: linha `this_cCidchaves = TratarNulo(cidchaves, "C")` removida
+- `Inserir()`: `cidchaves` e `NEWID()` removidos do `INSERT INTO SigOpFpi`
+- `Atualizar()`: `WHERE cidchaves = ...` ÔåÆ `WHERE fpags = ... AND nparcs = ...`
+- `ExecutarExclusao()`: `WHERE cidchaves = ...` ÔåÆ `WHERE fpags = ... AND nparcs = ...`
+
+**FormFpm.prg ÔÇö CEMPS removido:**
+- `loc_cEmps` removido da declara├º├úo `LOCAL`
+- Bloco `IF par_nColIndex = 4 ... ValidarEmps ... ENDIF` removido de `GrdDadosAfterRowColChange`
+- M├®todo `ValidarEmps()` inteiro removido (era funcionalidade adicionada pelo migrador, n├úo presente no original)

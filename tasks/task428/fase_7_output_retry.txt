@@ -1,0 +1,7 @@
+﻿Fase 7 conclu├¡da. Adicionei os 3 m├®todos faltantes (`BtnIncluirClick`, `BtnAlterarClick`, `BtnVisualizarClick`) ao `FormFpo.prg`, preservando o `BtnExcluirClick` j├í existente. Como o form ├® OPERACIONAL (edi├º├úo inline no grid, sem Page2 de CRUD separado), as implementa├º├Áes operam sobre o cursor da grade:
+
+- **BtnIncluirClick**: `APPEND BLANK` no cursor com `Dopes` preenchido e foco em `Column1` (mesma l├│gica do `cmdInserir` legado).
+- **BtnAlterarClick**: valida sele├º├úo + flag `BlqAltExc`, seta modo `ALTERAR` e ativa c├®lula com `ActivateCell`.
+- **BtnVisualizarClick**: garante linha v├ílida (GO TOP se EOF), seta modo `VISUALIZAR` e posiciona foco.
+
+Todos os m├®todos: `TRY/CATCH` com `MsgErro`, guards de cursor vazio/EOF, sem RETURN dentro de TRY, sem stubs/TODOs.

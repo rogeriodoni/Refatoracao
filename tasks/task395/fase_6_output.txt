@@ -1,0 +1,11 @@
+﻿Phase 6 is complete. Here's a summary of what was done and what the file contains:
+
+**Bugs found and fixed in the existing Phase 5 code:**
+
+1. **`AbrirLookupGrupo`** ÔÇö Was calling `CREATEOBJECT("FormBuscaAuxiliar", "TempGccr", "Codigos", ...)` (Mode 1 signature with wrong param order). Fixed to **Mode 2** (pre-existing cursor): `CREATEOBJECT("FormBuscaAuxiliar")` + `this_cCursorDestino = "TempGccr"` + `mAddColuna` + `Show(1)` + `this_lSelecionou` check + `Release()`.
+
+2. **`AbrirLookupConta`** ÔÇö Was passing a SQL string as `par_nConn` (completely wrong), then reading nonexistent properties `this_cCodigoSelecionado`/`this_cDescricaoSelecionada`. Fixed to **Mode 1**: `CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, "SigCdCli", "cursor_4c_BuscaCli", "IClis", ...)` with `loc_cFiltro` for the GerBals condition, reads directly from `cursor_4c_BuscaCli` after `this_lSelecionou`, proper `Release()` + `USE IN cursor_4c_BuscaCli` cleanup.
+
+3. **`ValidarGrupoNoCursor`** ÔÇö `loc_oErro` used in CATCH but not declared in LOCAL. Fixed.
+
+**File is fully complete** (2383 lines, `ENDDEFINE` at line 2382) with all methods implemented ÔÇö no TODOs, no empty lookup stubs, no broken API calls.

@@ -1,0 +1,21 @@
+﻿Confirmado. Verifica├º├úo completa:
+
+**`cidchaves` ├® uma coluna REAL em `SigCdCmi`** ÔÇö schema confirma:
+```sql
+CREATE TABLE [dbo].[SigCdCmi](
+    [cidchaves] [char](20) NOT NULL,
+    ...
+    CONSTRAINT [sigcdcmi_cidchaves] PRIMARY KEY CLUSTERED ([cidchaves] ASC)
+)
+```
+
+E os usos no c├│digo migrado s├úo todos corretos:
+- **ICMBO.Buscar()**: `SELECT a.cidchaves` ÔÇö seleciona a PK corretamente
+- **ICMBO.CarregarPorCodigo()**: `WHERE a.cidchaves = ...` ÔÇö busca por PK (opera├º├úo CRUD padr├úo)
+- **ICMBO.Atualizar()**: `WHERE cidchaves = ...` ÔÇö UPDATE por PK (correto)
+- **ICMBO.ExecutarExclusao()**: `WHERE cidchaves = ...` ÔÇö DELETE por PK (correto)
+- **FormICM.BtnVisualizarClick/BtnAlterarClick/BtnExcluirClick**: l├¬ `cursor_4c_Dados.cidchaves` do cursor que inclui a coluna ÔÇö correto
+
+**O flag [SQL-FILTRO-INVENTADO] para CIDCHAVES ├® um falso positivo.** A revis├úo automatizada comparou o WHERE de busca/filtro do original (`emps, tabdes, cargos, fpags, dtinis, dtfins`) com os WHEREs do c├│digo migrado e encontrou `cidchaves` nos m├®todos de CRUD individual ÔÇö mas esses s├úo `WHERE` por PK (opera├º├úo de carga/atualiza├º├úo/exclus├úo por identificador ├║nico), que ├® arquitetura diferente do `WHERE` de filtro de lista. N├úo h├í nenhuma condi├º├úo inventada.
+
+**Nenhuma altera├º├úo ├® necess├íria** nos arquivos `FormICM.prg` ou `ICMBO.prg` para este pass.

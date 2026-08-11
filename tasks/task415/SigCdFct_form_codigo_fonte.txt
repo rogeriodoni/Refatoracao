@@ -1,0 +1,3205 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigCdFct.SCX
+* Data/Hora: 02/08/2026 01:14:35
+* Total de registros: 64
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDFCT
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say5
+  Parent: SIGCDFCT.Pagina.Lista
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: shpLegenda
+  Parent: SIGCDFCT.Pagina.Lista
+  Class: shape
+  BaseClass: shape
+
+Objeto: Header1
+  Parent: SIGCDFCT.Pagina.Lista.Grade.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDFCT.Pagina.Lista.Grade.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDFCT.Pagina.Lista.Grade.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDFCT.Pagina.Lista.Grade.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDFCT.Pagina.Lista.Grade.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDFCT.Pagina.Lista.Grade.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDFCT.Pagina.Lista.Grade.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDFCT.Pagina.Lista.Grade.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: pgfPagina
+  Parent: SIGCDFCT.Pagina.Dados
+  Class: pageframe
+  BaseClass: pageframe
+
+Objeto: cntCopiarAcesso
+  Parent: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha
+  Class: container
+  BaseClass: container
+
+Objeto: btnCopiarAcessos
+  Parent: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.cntCopiarAcesso
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: btnCancelar
+  Parent: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.cntCopiarAcesso
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Label1
+  Parent: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.cntCopiarAcesso
+  Class: label
+  BaseClass: label
+
+Objeto: lbSgrus
+  Parent: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.cntCopiarAcesso
+  Class: label
+  BaseClass: label
+
+Objeto: getDSGru
+  Parent: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.cntCopiarAcesso
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getSGrus
+  Parent: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.cntCopiarAcesso
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getCgrus
+  Parent: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.cntCopiarAcesso
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDGrus
+  Parent: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.cntCopiarAcesso
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Label1
+  Parent: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha
+  Class: label
+  BaseClass: label
+
+Objeto: lbChkTems
+  Parent: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha
+  Class: label
+  BaseClass: label
+
+Objeto: lbChkPess
+  Parent: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha
+  Class: label
+  BaseClass: label
+
+Objeto: lbChkDims
+  Parent: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha
+  Class: label
+  BaseClass: label
+
+Objeto: lbSGrus
+  Parent: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha
+  Class: label
+  BaseClass: label
+
+Objeto: grdFichas
+  Parent: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha
+  Class: fwgrade
+  BaseClass: grid
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Header1
+  Parent: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.grdFichas.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.grdFichas.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.grdFichas.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.grdFichas.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.grdFichas.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.grdFichas.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.grdFichas.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.grdFichas.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.grdFichas.Column5
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.grdFichas.Column5
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.grdFichas.Column6
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.grdFichas.Column6
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.grdFichas.Column7
+  Class: header
+  BaseClass: header
+
+Objeto: Optiongroup1
+  Parent: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.grdFichas.Column7
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: Header1
+  Parent: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.grdFichas.Column8
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.grdFichas.Column8
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.grdFichas.Column9
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.grdFichas.Column9
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: cmdApagar
+  Parent: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: cmdResps
+  Parent: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: getCgrus
+  Parent: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDGrus
+  Parent: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cmdCopia
+  Parent: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: getSGrus
+  Parent: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDSGru
+  Parent: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: optNChkDims
+  Parent: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: optNChkPess
+  Parent: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: optNChkTems
+  Parent: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: cmdBotoes
+  Parent: SIGCDFCT.Pagina.Dados.pgfPagina.pgCompl
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: ImgFigTec
+  Parent: SIGCDFCT.Pagina.Dados.pgfPagina.pgCompl
+  Class: image
+  BaseClass: image
+
+Objeto: Label4
+  Parent: SIGCDFCT.Pagina.Dados.pgfPagina.pgCompl
+  Class: label
+  BaseClass: label
+
+Objeto: cmdFigura
+  Parent: SIGCDFCT.Pagina.Dados.pgfPagina.pgCompl
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: optNChkImps
+  Parent: SIGCDFCT.Pagina.Dados.pgfPagina.pgCompl
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: chkNFixFigs
+  Parent: SIGCDFCT.Pagina.Dados.pgfPagina.pgCompl
+  Class: checkbox
+  BaseClass: checkbox
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 0
+  Height = 0
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFCT
+------------------------------------------------------------
+  Height = 600
+  Width = 1000
+  DoCreate = .T.
+  Caption = "Cadastro de Perfis"
+  pntipo = .F.
+  Name = "SIGCDFCT"
+  Pagina.ErasePage = .T.
+  Pagina.Lista.cntSombra.lblSombra.Name = "lblSombra"
+  Pagina.Lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  Pagina.Lista.cntSombra.Top = 1
+  Pagina.Lista.cntSombra.Left = -1
+  Pagina.Lista.cntSombra.Width = 1008
+  Pagina.Lista.cntSombra.Height = 80
+  Pagina.Lista.cntSombra.Name = "cntSombra"
+  Pagina.Lista.Grade.ColumnCount = 4
+  Pagina.Lista.Grade.Column1.FontName = "Tahoma"
+  Pagina.Lista.Grade.Column1.FontSize = 8
+  Pagina.Lista.Grade.Column1.Width = 100
+  Pagina.Lista.Grade.Column1.ForeColor = 90,90,90
+  Pagina.Lista.Grade.Column1.Name = "Column1"
+  Pagina.Lista.Grade.Column2.FontName = "Tahoma"
+  Pagina.Lista.Grade.Column2.FontSize = 8
+  Pagina.Lista.Grade.Column2.Width = 100
+  Pagina.Lista.Grade.Column2.ForeColor = 90,90,90
+  Pagina.Lista.Grade.Column2.Name = "Column2"
+  Pagina.Lista.Grade.Column3.FontName = "Tahoma"
+  Pagina.Lista.Grade.Column3.FontSize = 8
+  Pagina.Lista.Grade.Column3.Width = 358
+  Pagina.Lista.Grade.Column3.ForeColor = 90,90,90
+  Pagina.Lista.Grade.Column3.Name = "Column3"
+  Pagina.Lista.Grade.Column4.FontName = "Tahoma"
+  Pagina.Lista.Grade.Column4.FontSize = 8
+  Pagina.Lista.Grade.Column4.Width = 358
+  Pagina.Lista.Grade.Column4.ForeColor = 90,90,90
+  Pagina.Lista.Grade.Column4.Name = "Column4"
+  Pagina.Lista.Grade.FontName = "Tahoma"
+  Pagina.Lista.Grade.FontSize = 8
+  Pagina.Lista.Grade.Height = 470
+  Pagina.Lista.Grade.Left = 11
+  Pagina.Lista.Grade.Panel = 1
+  Pagina.Lista.Grade.RowHeight = 16
+  Pagina.Lista.Grade.Top = 123
+  Pagina.Lista.Grade.Width = 941
+  Pagina.Lista.Grade.ForeColor = 90,90,90
+  Pagina.Lista.Grade.GridLineColor = 238,238,238
+  Pagina.Lista.Grade.Name = "Grade"
+  Pagina.Lista.Grupo_Op.AutoSize = .T.
+  Pagina.Lista.Grupo_Op.Inserir.Top = 5
+  Pagina.Lista.Grupo_Op.Inserir.Left = 5
+  Pagina.Lista.Grupo_Op.Inserir.Name = "Inserir"
+  Pagina.Lista.Grupo_Op.Consultar.Top = 5
+  Pagina.Lista.Grupo_Op.Consultar.Left = 80
+  Pagina.Lista.Grupo_Op.Consultar.Name = "Consultar"
+  Pagina.Lista.Grupo_Op.Alterar.Top = 5
+  Pagina.Lista.Grupo_Op.Alterar.Left = 155
+  Pagina.Lista.Grupo_Op.Alterar.Name = "Alterar"
+  Pagina.Lista.Grupo_Op.Excluir.Top = 5
+  Pagina.Lista.Grupo_Op.Excluir.Left = 230
+  Pagina.Lista.Grupo_Op.Excluir.Name = "Excluir"
+  Pagina.Lista.Grupo_Op.Procurar.Top = 5
+  Pagina.Lista.Grupo_Op.Procurar.Left = 305
+  Pagina.Lista.Grupo_Op.Procurar.Name = "Procurar"
+  Pagina.Lista.Grupo_Op.Height = 85
+  Pagina.Lista.Grupo_Op.Left = 543
+  Pagina.Lista.Grupo_Op.Top = -1
+  Pagina.Lista.Grupo_Op.Width = 385
+  Pagina.Lista.Grupo_Op.Name = "Grupo_Op"
+  Pagina.Lista.Grupo_Saida.Sair.Top = 5
+  Pagina.Lista.Grupo_Saida.Sair.Left = 5
+  Pagina.Lista.Grupo_Saida.Sair.Name = "Sair"
+  Pagina.Lista.Grupo_Saida.Left = 918
+  Pagina.Lista.Grupo_Saida.Top = -1
+  Pagina.Lista.Grupo_Saida.Name = "Grupo_Saida"
+  Pagina.Lista.cntFiltros.Name = "cntFiltros"
+  Pagina.Lista.Picture = ..\framework\imagens\new_background.jpg
+  Pagina.Lista.Name = "Lista"
+  Pagina.Dados.Grupo_Salva.AutoSize = .T.
+  Pagina.Dados.Grupo_Salva.Salva.Top = 5
+  Pagina.Dados.Grupo_Salva.Salva.Left = 5
+  Pagina.Dados.Grupo_Salva.Salva.Name = "Salva"
+  Pagina.Dados.Grupo_Salva.Cancelar.Top = 5
+  Pagina.Dados.Grupo_Salva.Cancelar.Left = 80
+  Pagina.Dados.Grupo_Salva.Cancelar.Name = "Cancelar"
+  Pagina.Dados.Grupo_Salva.Left = 820
+  Pagina.Dados.Grupo_Salva.Top = 9
+  Pagina.Dados.Grupo_Salva.TabIndex = 2
+  Pagina.Dados.Grupo_Salva.Name = "Grupo_Salva"
+  Pagina.Dados.Picture = ..\framework\imagens\new_background.jpg
+  Pagina.Dados.Name = "Dados"
+  Pagina.Width = 1003
+  Pagina.Name = "Pagina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFCT.Pagina.Lista.Say5
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Ficha Técnica Criada"
+  Left = 719
+  Top = 97
+  Width = 100
+  TabIndex = 2
+  ForeColor = 90,90,90
+  ZOrderSet = 27
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFCT.Pagina.Lista.shpLegenda
+------------------------------------------------------------
+  Top = 94
+  Left = 696
+  Height = 20
+  Width = 20
+  BackStyle = 1
+  BorderWidth = 0
+  SpecialEffect = 0
+  BackColor = 255,255,187
+  Name = "shpLegenda"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFCT.Pagina.Lista.Grade.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Grupo"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFCT.Pagina.Lista.Grade.Column1.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFCT.Pagina.Lista.Grade.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Subgrupo"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFCT.Pagina.Lista.Grade.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFCT.Pagina.Lista.Grade.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Descrição do grupo"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFCT.Pagina.Lista.Grade.Column3.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFCT.Pagina.Lista.Grade.Column4.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Descrição do subgrupo"
+  ForeColor = 90,90,90
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFCT.Pagina.Lista.Grade.Column4.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFCT.Pagina.Dados.pgfPagina
+------------------------------------------------------------
+  ErasePage = .T.
+  PageCount = 2
+  Top = 123
+  Left = 0
+  Width = 1001
+  Height = 478
+  TabIndex = 1
+  Name = "pgfPagina"
+  Page1.FontName = "Tahoma"
+  Page1.FontSize = 8
+  Page1.Caption = "Ficha Técnica"
+  Page1.Picture = ..\framework\imagens\new_background.jpg
+  Page1.PageOrder = 1
+  Page1.BackColor = 255,255,255
+  Page1.ForeColor = 90,90,90
+  Page1.Name = "pgFicha"
+  Page2.FontName = "Tahoma"
+  Page2.FontSize = 8
+  Page2.Caption = "Complementos"
+  Page2.Picture = ..\framework\imagens\new_background.jpg
+  Page2.PageOrder = 2
+  Page2.BackColor = 255,255,255
+  Page2.ForeColor = 90,90,90
+  Page2.Name = "pgCompl"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.cntCopiarAcesso
+------------------------------------------------------------
+  Top = 389
+  Left = 8
+  Width = 409
+  Height = 58
+  BackStyle = 0
+  TabIndex = 17
+  ZOrderSet = 0
+  Name = "cntCopiarAcesso"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.cntCopiarAcesso.btnCopiarAcessos
+------------------------------------------------------------
+  Top = 10
+  Left = 316
+  Height = 40
+  Width = 40
+  FontName = "Verdana"
+  FontSize = 8
+  WordWrap = .T.
+  Picture = ..\framework\imagens\geral_duplicar_26.jpg
+  Caption = ""
+  TabIndex = 5
+  ToolTipText = "Copiar"
+  ForeColor = 36,84,155
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "btnCopiarAcessos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.cntCopiarAcesso.btnCancelar
+------------------------------------------------------------
+  Top = 10
+  Left = 356
+  Height = 40
+  Width = 40
+  FontName = "Verdana"
+  FontSize = 8
+  WordWrap = .T.
+  Picture = ..\framework\imagens\cadastro_sair_32.jpg
+  Cancel = .T.
+  Caption = ""
+  TabIndex = 6
+  ToolTipText = "Cancelar"
+  ForeColor = 36,84,155
+  BackColor = 255,255,255
+  Themes = .F.
+  Name = "btnCancelar"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.cntCopiarAcesso.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Grupo :"
+  Height = 15
+  Left = 34
+  Top = 7
+  Width = 38
+  TabIndex = 7
+  ForeColor = 90,90,90
+  ZOrderSet = 3
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.cntCopiarAcesso.lbSgrus
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Subgrupo :"
+  Height = 15
+  Left = 17
+  Top = 32
+  Width = 55
+  TabIndex = 8
+  ForeColor = 90,90,90
+  ZOrderSet = 3
+  Name = "lbSgrus"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.cntCopiarAcesso.getDSGru
+------------------------------------------------------------
+  ControlSource = ""
+  Enabled = .T.
+  Left = 158
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 30
+  Width = 150
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 0,0,128
+  ZOrderSet = 9
+  plprocurar = .F.
+  Name = "getDSGru"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.cntCopiarAcesso.getSGrus
+------------------------------------------------------------
+  ControlSource = ""
+  Enabled = .T.
+  Left = 76
+  SpecialEffect = 1
+  TabIndex = 3
+  Top = 30
+  Width = 80
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 0,0,128
+  ZOrderSet = 9
+  plprocurar = .F.
+  Name = "getSGrus"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.cntCopiarAcesso.getCgrus
+------------------------------------------------------------
+  ControlSource = ""
+  Enabled = .T.
+  Left = 76
+  SpecialEffect = 1
+  TabIndex = 1
+  Top = 5
+  Width = 80
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 0,0,128
+  ZOrderSet = 9
+  plprocurar = .F.
+  Name = "getCgrus"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.cntCopiarAcesso.getDGrus
+------------------------------------------------------------
+  ControlSource = ""
+  Enabled = .T.
+  Left = 158
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 5
+  Width = 150
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 0,0,128
+  ZOrderSet = 9
+  plprocurar = .F.
+  Name = "getDGrus"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Grupo :"
+  Height = 15
+  Left = 55
+  Top = 20
+  Width = 38
+  TabIndex = 1
+  ForeColor = 90,90,90
+  ZOrderSet = 3
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.lbChkTems
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  FontUnderline = .F.
+  BackStyle = 0
+  Caption = "Tempo de Instalação Obrigatório :"
+  Height = 15
+  Left = 562
+  Top = 35
+  Width = 166
+  TabIndex = 9
+  ForeColor = 90,90,90
+  ZOrderSet = 3
+  Name = "lbChkTems"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.lbChkPess
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  FontUnderline = .F.
+  BackStyle = 0
+  Caption = "Peso Obrigatório :"
+  Height = 15
+  Left = 639
+  Top = 54
+  Width = 89
+  TabIndex = 11
+  ForeColor = 90,90,90
+  ZOrderSet = 3
+  Name = "lbChkPess"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.lbChkDims
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  FontUnderline = .F.
+  BackStyle = 0
+  Caption = "Dimensões Obrigatórias :"
+  Height = 15
+  Left = 606
+  Top = 16
+  Width = 122
+  TabIndex = 7
+  ForeColor = 90,90,90
+  ZOrderSet = 3
+  Name = "lbChkDims"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.lbSGrus
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Subgrupo :"
+  Height = 15
+  Left = 38
+  Top = 45
+  Width = 55
+  TabIndex = 4
+  ForeColor = 90,90,90
+  ZOrderSet = 3
+  Name = "lbSGrus"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.grdFichas
+------------------------------------------------------------
+  ColumnCount = 9
+  FontName = "Tahoma"
+  FontSize = 8
+  DeleteMark = .F.
+  HeaderHeight = 18
+  Height = 309
+  Left = 12
+  Panel = 1
+  RowHeight = 16
+  TabIndex = 13
+  Top = 75
+  Width = 933
+  GridLineColor = 238,238,238
+  ZOrderSet = 6
+  Name = "grdFichas"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.Width = 200
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.Width = 200
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.Name = "Column2"
+  Column3.FontName = "Tahoma"
+  Column3.FontSize = 8
+  Column3.Width = 50
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.InputMask = "999"
+  Column3.Name = "Column3"
+  Column4.FontName = "Tahoma"
+  Column4.FontSize = 8
+  Column4.Width = 50
+  Column4.Movable = .F.
+  Column4.Resizable = .F.
+  Column4.InputMask = "99"
+  Column4.Name = "Column4"
+  Column5.FontName = "Tahoma"
+  Column5.FontSize = 8
+  Column5.Width = 50
+  Column5.Movable = .F.
+  Column5.Resizable = .F.
+  Column5.InputMask = "999"
+  Column5.Name = "Column5"
+  Column6.FontName = "Tahoma"
+  Column6.FontSize = 8
+  Column6.Width = 50
+  Column6.Movable = .F.
+  Column6.Resizable = .F.
+  Column6.Name = "Column6"
+  Column7.FontName = "Tahoma"
+  Column7.FontSize = 8
+  Column7.Width = 243
+  Column7.Movable = .F.
+  Column7.Resizable = .F.
+  Column7.Sparse = .F.
+  Column7.Name = "Column7"
+  Column8.FontName = "Tahoma"
+  Column8.FontSize = 8
+  Column8.Width = 25
+  Column8.Movable = .F.
+  Column8.Resizable = .F.
+  Column8.Name = "Column8"
+  Column9.FontName = "Tahoma"
+  Column9.FontSize = 8
+  Column9.Width = 25
+  Column9.Movable = .F.
+  Column9.Resizable = .F.
+  Column9.Name = "Column9"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.grdFichas.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Grupo Características"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.grdFichas.Column1.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.grdFichas.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Título Características"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.grdFichas.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.grdFichas.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Ordem"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.grdFichas.Column3.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  InputMask = "999"
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.grdFichas.Column4.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Linhas"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.grdFichas.Column4.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  InputMask = "99"
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.grdFichas.Column5.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Máximo"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.grdFichas.Column5.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.grdFichas.Column6.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Mínimo"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.grdFichas.Column6.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.grdFichas.Column7.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Digitação"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.grdFichas.Column7.Optiongroup1
+------------------------------------------------------------
+  ButtonCount = 3
+  BorderStyle = 0
+  Value = 1
+  Height = 46
+  Left = 16
+  Top = 26
+  Width = 71
+  Name = "Optiongroup1"
+  Option1.Caption = "Maiusculo"
+  Option1.Value = 1
+  Option1.Height = 17
+  Option1.Left = 2
+  Option1.Top = 0
+  Option1.Width = 74
+  Option1.AutoSize = .T.
+  Option1.Name = "Option1"
+  Option2.Caption = "Minusculo"
+  Option2.Height = 17
+  Option2.Left = 80
+  Option2.Top = 0
+  Option2.Width = 74
+  Option2.AutoSize = .T.
+  Option2.Name = "Option2"
+  Option3.Caption = "Livre"
+  Option3.Height = 17
+  Option3.Left = 160
+  Option3.Top = 0
+  Option3.Width = 61
+  Option3.Name = "Option3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.grdFichas.Column8.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "S"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.grdFichas.Column8.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.grdFichas.Column9.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "T"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.grdFichas.Column9.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.cmdApagar
+------------------------------------------------------------
+  AutoSize = .F.
+  ButtonCount = 1
+  BackStyle = 0
+  Value = 1
+  Height = 41
+  Left = 949
+  SpecialEffect = 1
+  Top = 235
+  Width = 41
+  TabIndex = 15
+  ZOrderSet = 7
+  Name = "cmdApagar"
+  Command1.Top = 1
+  Command1.Left = 1
+  Command1.Height = 40
+  Command1.Width = 40
+  Command1.FontName = "Verdana"
+  Command1.FontSize = 7
+  Command1.WordWrap = .T.
+  Command1.Picture = ..\framework\imagens\cadastro_excluir_26.jpg
+  Command1.Caption = ""
+  Command1.ToolTipText = "Excluir"
+  Command1.ForeColor = 36,84,155
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "btnApagar"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.cmdResps
+------------------------------------------------------------
+  AutoSize = .F.
+  ButtonCount = 1
+  BackStyle = 0
+  Value = 1
+  Height = 41
+  Left = 949
+  SpecialEffect = 1
+  Top = 194
+  Width = 41
+  TabIndex = 14
+  ZOrderSet = 7
+  Name = "cmdResps"
+  Command1.Top = 1
+  Command1.Left = 1
+  Command1.Height = 40
+  Command1.Width = 40
+  Command1.FontName = "Verdana"
+  Command1.FontSize = 7
+  Command1.WordWrap = .T.
+  Command1.Picture = ..\framework\imagens\geral_selecionar_26.jpg
+  Command1.Caption = ""
+  Command1.ToolTipText = "Respostas"
+  Command1.ForeColor = 36,84,155
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "btnResps"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.getCgrus
+------------------------------------------------------------
+  ControlSource = "crFichaCab.CGrus"
+  Enabled = .F.
+  Height = 23
+  Left = 98
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 17
+  Width = 80
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 0,0,0
+  ZOrderSet = 9
+  plprocurar = .F.
+  Name = "getCgrus"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.getDGrus
+------------------------------------------------------------
+  ControlSource = "crFichaCab.DGrus"
+  Enabled = .F.
+  Height = 23
+  Left = 180
+  SpecialEffect = 1
+  TabIndex = 3
+  Top = 17
+  Width = 290
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 0,0,0
+  ZOrderSet = 9
+  plprocurar = .F.
+  Name = "getDGrus"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.cmdCopia
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 1
+  BackStyle = 0
+  BorderStyle = 0
+  Height = 50
+  Left = 29
+  SpecialEffect = 1
+  Top = 392
+  Width = 50
+  TabIndex = 16
+  ZOrderSet = 6
+  Name = "cmdCopia"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 40
+  Command1.Width = 40
+  Command1.FontName = "Verdana"
+  Command1.FontSize = 7
+  Command1.WordWrap = .T.
+  Command1.Picture = ..\framework\imagens\geral_subnivel_26.jpg
+  Command1.Caption = ""
+  Command1.ToolTipText = "\<Copia Ficha"
+  Command1.ForeColor = 36,84,155
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "btnCopia"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.getSGrus
+------------------------------------------------------------
+  ControlSource = "crFichaCab.SGrus"
+  Enabled = .F.
+  Left = 98
+  SpecialEffect = 1
+  TabIndex = 5
+  Top = 42
+  Width = 80
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 0,0,0
+  ZOrderSet = 9
+  plprocurar = .F.
+  Name = "getSGrus"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.getDSGru
+------------------------------------------------------------
+  ControlSource = "crFichaCab.DSGru"
+  Enabled = .F.
+  Height = 23
+  Left = 180
+  SpecialEffect = 1
+  TabIndex = 6
+  Top = 42
+  Width = 290
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 0,0,0
+  ZOrderSet = 9
+  plprocurar = .F.
+  Name = "getDSGru"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.optNChkDims
+------------------------------------------------------------
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  ControlSource = "crFichaCab.nChkDims"
+  Height = 23
+  Left = 729
+  Top = 10
+  Width = 112
+  TabIndex = 8
+  Name = "optNChkDims"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Sim"
+  Option1.Value = 1
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.Width = 34
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Não"
+  Option2.Height = 15
+  Option2.Left = 55
+  Option2.Top = 5
+  Option2.Width = 37
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.optNChkPess
+------------------------------------------------------------
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  ControlSource = "crFichaCab.nChkPess"
+  Height = 23
+  Left = 729
+  Top = 49
+  Width = 112
+  TabIndex = 12
+  Name = "optNChkPess"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Sim"
+  Option1.Value = 1
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.Width = 34
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Não"
+  Option2.Height = 15
+  Option2.Left = 55
+  Option2.Top = 5
+  Option2.Width = 37
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.optNChkTems
+------------------------------------------------------------
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  ControlSource = "crFichaCab.nChkTems"
+  Height = 23
+  Left = 729
+  Top = 29
+  Width = 112
+  TabIndex = 10
+  Name = "optNChkTems"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Sim"
+  Option1.Value = 1
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.Width = 34
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Não"
+  Option2.Height = 15
+  Option2.Left = 55
+  Option2.Top = 5
+  Option2.Width = 37
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFCT.Pagina.Dados.pgfPagina.pgCompl.cmdBotoes
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 1
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 50
+  Left = 634
+  Top = 326
+  Width = 50
+  TabIndex = 4
+  Name = "cmdBotoes"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 40
+  Command1.Width = 40
+  Command1.FontName = "Verdana"
+  Command1.FontSize = 7
+  Command1.WordWrap = .T.
+  Command1.Picture = ..\framework\imagens\a_arrow1.bmp
+  Command1.Cancel = .T.
+  Command1.Caption = ""
+  Command1.TabIndex = 2
+  Command1.ToolTipText = "Ficha Tecnica"
+  Command1.ForeColor = 36,84,155
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "btnDados"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFCT.Pagina.Dados.pgfPagina.pgCompl.ImgFigTec
+------------------------------------------------------------
+  Stretch = 1
+  Enabled = .F.
+  Height = 228
+  Left = 301
+  Top = 94
+  Width = 334
+  Name = "ImgFigTec"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFCT.Pagina.Dados.pgfPagina.pgCompl.Label4
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Imagem da Impressão :"
+  Height = 15
+  Left = 328
+  Top = 63
+  Width = 115
+  TabIndex = 5
+  ForeColor = 90,90,90
+  ZOrderSet = 3
+  Name = "Label4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFCT.Pagina.Dados.pgfPagina.pgCompl.cmdFigura
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 1
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 50
+  Left = 592
+  Top = 326
+  Width = 50
+  TabIndex = 3
+  BackColor = 255,255,255
+  Name = "cmdFigura"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 40
+  Command1.Width = 40
+  Command1.FontSize = 7
+  Command1.WordWrap = .T.
+  Command1.Picture = ..\framework\imagens\geral_picture_26.jpg
+  Command1.Caption = ""
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "btnFigura"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFCT.Pagina.Dados.pgfPagina.pgCompl.optNChkImps
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  ControlSource = "crFichaCab.nChkImps"
+  Height = 25
+  Left = 442
+  Top = 58
+  Width = 160
+  TabIndex = 1
+  Name = "optNChkImps"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Produtos"
+  Option1.Value = 1
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.Width = 61
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Ficha Técnica"
+  Option2.Height = 15
+  Option2.Left = 73
+  Option2.Top = 5
+  Option2.Width = 82
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDFCT.Pagina.Dados.pgfPagina.pgCompl.chkNFixFigs
+------------------------------------------------------------
+  Top = 50
+  Left = 617
+  Height = 40
+  Width = 40
+  Picture = ..\framework\imagens\geral_lock_on_34.jpg
+  Alignment = 0
+  Caption = ""
+  ControlSource = "crFichaCab.nFixFigs"
+  SpecialEffect = 0
+  Style = 1
+  TabIndex = 2
+  BackColor = 255,255,255
+  Name = "chkNFixFigs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Verdana, 0, 7, 5, 12, 10, 19, 2, 0
+  Arial, 0, 7, 4, 12, 9, 24, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDFCT
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE processamento
+------------------------------------------------------------
+PROCEDURE processamento
+Local loDad, loFic, loCom, lcGru, lcSGr
+
+loDad = ThisForm.pagina.dados
+loFic = ThisForm.pagina.dados.pgfPagina.pgficha
+loCom = ThisForm.pagina.dados.pgfPagina.pgcompl
+
+Zap In crFichaCab
+Zap In crFichaTec
+
+lcGru = crDados.CGrus
+lcDGr = crDados.DGrus
+lcSGr = crDados.SGrus
+lcDSr = crDados.DSGru
+
+* Apanhando os Dados Do Grupo de Produto Para o Cabeçalho da Ficha Técnica
+Do Case
+Case( ThisForm.pnTipo = 0 )
+	lcQuery = [Select a.CGrus, a.nChkDims, a.nChkPess, a.nChkTems, a.nChkImps, a.nFixFigs, a.mFicTecs ] + ;
+				[From SigCdGrp a ] + ;
+			   [Where a.CGrus = '] + lcGru + [']
+Case( ThisForm.pnTipo = 1 )
+	lcQuery = [Select a.Codigos as CGrus, 2 as nChkDims, 2 as nChkPess, 2 as nChkTems, 2 as nChkImps, 2 as nFixFigs, ] + ;
+			  [Null as mFicTecs from SigCdGcr a ] + ;
+			  [where a.Codigos = '] + lcGru + ['] 
+Case( ThisForm.pnTipo = 2 )
+	lcQuery = [Select a.Dopes as CGrus, 2 as nChkDims, 2 as nChkPess, 2 as nChkTems, 2 as nChkImps, 2 as nFixFigs, ] + ;
+			  [Null as mFicTecs from SigCdOpe a ] + ;
+			  [where a.Dopes = '] + lcGru + [']
+EndCase			   
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalGru]) < 1)
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Processamento - LocalGru)])
+	Return .f.
+EndIf
+Go Top In LocalGru
+If Eof([LocalGru])
+	=MessageBox([Ocorreu Um Erro Ao Acessar o Cadastro de Grupos de Produtos!!!] + Chr(13) + ;
+				[O Grupo "] + lcGru + [" Foi Excluído Durante o Processo. Reinicie a Operação!!!], ;
+				0+16, [Atenção!!!])
+	Return .f.
+Else
+	Insert Into crFichaCab (CGrus, DGrus, SGrus, DSGru, nChkDims, nChkPess, nChkTems, nChkImps, nFixFigs, mFicTecs) ;
+					Values (lcGru, lcDGr, lcSGr, lcDSr, LocalGru.nChkDims, LocalGru.nChkPess, LocalGru.nChkTems, ;
+							LocalGru.nChkImps, LocalGru.nFixFigs, LocalGru.mFicTecs)
+EndIf
+
+* Apanhando os Dados da Ficha Técnica
+lcQuery = [Select a.* ] + ;
+			[From SigCdFtc a ] + ;
+		   [Where a.CGrus = '] + lcGru + [' And ] + ;
+		   		 [a.SGrus = '] + lcSGr + [' ] + ;
+		   [Order By a.COrds]
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalCFTec]) < 1)
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Processamento - LocalCFTec)])
+	Return .f.
+EndIf
+
+lnOrd = 1
+Select LocalCFTec
+Scan
+	* Inserindo os Dados da Ficha Técnica na Grade
+	Insert Into crFichaTec (COrds, CGrus, SGrus, CCars, CTits, CLins, Maxs, Mins, nChkCxas, cSelecaos, cTpDados) ;
+					Values (lnOrd, lcGru, lcSGr, LocalCFTec.CCars, LocalCFTec.CTits, ;
+							LocalCFTec.CLins, LocalCFTec.Maxs, LocalCFTec.Mins, LocalCFTec.nChkCxas,;
+							LocalCFTec.cSelecaos, LocalCFTec.cTpDados)
+
+	lnOrd = lnOrd + 1
+EndScan
+
+* Inserindo Uma Linha Em Branco Na Grade da Ficha Técnica
+If (ThisForm.pcEscolha = [ALTERAR])
+	Insert Into crFichaTec (COrds, CGrus, SGrus) Values (lnOrd, lcGru, lcSGr)
+EndIf
+
+* Ajustando o Botão de Exclusão de Linhas da Grade de Ficha Técnica
+loFic.cmdApagar.Visible = (ThisForm.pcEscolha = [ALTERAR])
+
+* Ajustando o Botão de Gravação/Exclusão na Página da Ficha Técnica
+*!*	lnWid = loFic.cmdBotoes.btnGravar.Width
+*!*	llGrv = InList(ThisForm.pcEscolha, [ALTERAR], [EXCLUIR])
+*!*	loFic.cmdBotoes.btnGravar.Visible = llGrv
+*!*	If llGrv && Se o Botão Gravar/Excluir Está Visível
+*!*		loFic.cmdBotoes.btnGravar.Left = 5
+*!*		loFic.cmdBotoes.btnDados.Left  = loFic.cmdBotoes.btnGravar.Left + lnWid + 1
+*!*	Else	 && Se o Botão Gravar/Excluir Não Está Visível
+*!*		loFic.cmdBotoes.btnDados.Left = 5
+*!*	EndIf
+*!*	loFic.cmdBotoes.Width = loFic.cmdBotoes.btnDados.Left + lnWid + 5
+*!*	loFic.cmdBotoes.Left  = (loFic.shpGrade.Left + loFic.shpGrade.Width) - loFic.cmdBotoes.Width
+
+* Ajustando o Botão de Captura de Imagem da Tela de Complementos
+loCom.cmdFigura.Visible = (ThisForm.pcEscolha = [ALTERAR])
+
+* Ajustando a Grade de Ficha Técnica
+loFic.grdFichas.ReadOnly = Not (ThisForm.pcEscolha = [ALTERAR])
+
+* Apresentando a Imagem Técnica na Pasta Complementos
+lcArq = Sys(2023) + [\FicTecs.Jpg]
+
+Clear Resources
+loCom.imgFigTec.Picture = []
+loCom.imgFigTec.Visible = .f.
+
+If Not Empty(crFichaCab.mFicTecs) And Not IsNull(crFichaCab.mFicTecs)
+	If (StrToFile(crFichaCab.mFicTecs, lcArq) > 0)
+		loCom.imgFigTec.Visible = .t.
+		loCom.imgFigTec.Picture = (lcArq)
+	EndIf
+EndIf
+
+* Verificando se Existem Dados Processados
+If (Reccount([crFichaTec]) < 1)
+	=MessageBox([Não Foram Encontrados Dados Para ] + Proper(ThisForm.pcEscolha) + [!!!], 0+48, [Atenção!!!])
+	loDad.grade.Column1.SetFocus
+
+	ThisForm.KeyPreview = .t.
+
+	Return .f.
+Else
+	Go Top In crFichaCab
+
+	Select crFichaTec
+	Go Top In crFichaTec
+	Go Bottom In crFichaTec
+
+	=fCarregaGrade(loFic.grdFichas)
+
+	ThisForm.KeyPreview = .f.
+	
+	loDad.Enabled = .f.
+	loFic.Enabled = .t.
+	With loFic
+		.lbChkDims.Visible = (ThisForm.pnTipo = 0)
+		.OptNChkDims.Visible = (ThisForm.pnTipo = 0)    
+		.lbChkTems.Visible = (ThisForm.pnTipo = 0) 
+		.OptNChkTems.Visible = (ThisForm.pnTipo = 0) 
+		.lbChkPess.Visible = (ThisForm.pnTipo = 0) 
+		.OptnChkPess.Visible = (ThisForm.pnTipo = 0) 
+		.lbSGrus.Visible = (ThisForm.pnTipo = 0)
+		.getSGrus.Visible = (ThisForm.pnTipo = 0)
+		.GetdsGru.Visible = (ThisForm.pnTipo = 0)
+		.cmdResps.Visible = (ThisForm.pnTipo = 0)
+		.cntCopiarAcesso.lbSGrus.Visible  = (ThisForm.pnTipo = 0)
+		.cntCopiarAcesso.getSGrus.Visible = (ThisForm.pnTipo = 0)
+		.cntCopiarAcesso.getDsGru.Visible = (ThisForm.pnTipo = 0)
+	EndWith
+	loCom.Enabled = (ThisForm.pnTipo = 0)
+
+	ThisForm.pagina.dados.pgfPagina.ActivePage = 1
+
+	loFic.Refresh
+	loFic.grdFichas.Column1.SetFocus
+EndIf
+
+ThisForm.pagina.dados.pgfPagina.pgficha.cntCopiarAcesso.Visible = .F.
+ThisForm.pagina.dados.pgfPagina.pgficha.cmdCopia.Visible = .T.
+
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE verificaexcluir
+------------------------------------------------------------
+PROCEDURE verificaexcluir
+Local llOks
+
+llOks = .t.
+
+lcGru = crFichaCab.CGrus
+lcSgr = crFichaCab.SGrus
+
+lcQuery = [Select * ] + ;
+			[From SigCdFtc ] + ;
+		   [Where CGrus = '] + lcGru + [' And ] + ;
+		   		 [SGrus = '] + lcSGr + [']
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalCFTec]) < 1)
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (VerificaExcluir - SigCdFtc)])
+	llOks = .f.
+EndIf
+
+If llOks
+	Select LocalCfTec
+	Scan
+		Select crFichaTec
+		Locate For (Not Empty(COrds) And Not Empty(CGrus) And Not Empty(CCars) And Not Empty(CTits) And ;
+					Not (CLins < 1)) And (CCars = LocalCfTec.CCars And CTits = LocalCfTec.CTits)
+
+		If Eof([crFichaTec])
+			lcQuery = [Select Distinct a.CPros ] + ;
+						[From SigCdPft a, SigCdPro b ] + ;
+					   [Where a.CCars = '] + LocalCfTec.CCars + [' And ] + ;
+					   		 [a.CTits = '] + LocalCfTec.CTits + [' And ] + ;
+					   		 [a.CPros = b.CPros And ] + ;
+					   		 [b.CGrus = '] + lcGru + [' And ] + ;
+					   		 [b.SGrus = '] + lcSGr + [' ] + ;
+					   [Order By a.CPros]
+
+			If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalProFT]) < 1)
+				=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (VerificaExcluir - LocalProFT)])
+				llOks = .f.
+				Go Bottom In LocalCfTec
+			EndIf
+			
+			If llOks
+				Go Top In LocalProFT
+				If (Reccount([LocalProFT]) > 0)
+					If (Reccount([LocalProFT]) = 1)
+						lcMsg = [O Produto "] + LocalProFT.CPros + [" Está ]
+					Else
+						lcMsg = [Existem Produtos Que Estão ]
+					EndIf
+					lcMsg = lcMsg + [Utilizando o] + Chr(13) + ;
+							[Grupo de Características : ]  + Alltrim(LocalCfTec.CCars) + [ e o ] + ;
+							[Título de Características : ] + Alltrim(LocalCfTec.CTits) + [.]
+					
+					=MessageBox(lcMsg, 0+16, [Impossível ] + Alltrim(Proper(ThisForm.pcEscolha)) + [!!!])
+					llOks = .f.
+					Go Bottom In LocalCfTec
+				EndIf
+			EndIf
+			
+			If llOks
+				lcQuery = [Select Distinct GruCarTits ] + ;
+							[From SigCdFtr ] + ;
+						   [Where GruCarTits = '] + lcGru + lcSGr + LocalCfTec.CCars + LocalCfTec.CTits + [' ] + ;
+						   [Order By GruCarTits]
+
+				If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalCFTeR]) < 1)
+					=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (VerificaExcluir - LocalCFTeR)])
+					llOks = .f.
+					Go Bottom In LocalCfTec
+				EndIf
+			EndIf
+							
+			If llOks
+				Go Top In LocalCFTeR
+				If (Reccount([LocalCFTeR]) > 0)
+					lcMsg = [A Característica "] + Alltrim(LocalCfTec.CCars) + ;
+					        [" Com o Título "] + Alltrim(LocalCfTec.CTits) + [" ] + Chr(13) + ;
+							[Possui Respostas Cadastradas!!! Exclua as Respostas Primeiro!!!]
+					=MessageBox(lcMsg, 0+16, [Impossível ] + Alltrim(Proper(ThisForm.pcEscolha)) + [!!!])
+					llOks = .f.
+					Go Bottom In LocalCfTec
+				EndIf
+			EndIf
+		EndIf
+	EndScan
+EndIf
+
+Return llOks
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_excluir
+------------------------------------------------------------
+PROCEDURE msv_excluir
+Local llOks
+
+llOks = .t.
+
+* Apagando os Registros Anteriores de Ficha Técnica
+lcQuery = [Delete From SigCdFtc ] + ;
+		   [Where CGrus = '] + crFichaCab.CGrus + [' And ] + ;
+		   		 [SGrus = '] + crFichaCab.SGrus + [']
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, []) < 1)
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (mSv_Alterar - Delete - SigCdFtc)])
+	llOks = .f.
+EndIf
+
+If llOks
+	* Gravando Fisicamente os Registros
+	If (ThisForm.poDataMgr.Commit() < 1)
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Commit)])
+		llOks = .f.
+	EndIf
+EndIf
+
+If llOks
+	Replace TemDados With [] In crDados
+	=fGravarLog('T', 'SIGCDFCT', 'EXCLUIR', Iif(ThisForm.pnTipo=2,'Movimentação : ','Grupo : ') + CrFichaCab.Cgrus + '/' +CrFichaCab.Sgrus ,Usuar)
+Else
+	* Cancelando as Alterações Feitas
+	ThisForm.poDataMgr.RollBack()
+EndIf
+
+Return llOks
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_alterar
+------------------------------------------------------------
+PROCEDURE msv_alterar
+Local llOks
+
+llOks = .t.
+
+If llOks
+	* Checando Se Digitou Dados Válidos Na Grade de Ficha Técnica
+	If (Reccount([crSigCdFtc]) < 1)
+		=MessageBox([Não Há Nenhum Registro Válido Na Grade de Ficha Técnica!!!], 16, [Atenção!!!])
+		llOks = .f.
+	EndIf
+EndIf
+
+If llOks
+	* Checando Se Digitou Dados Duplicados Na Grade de Ficha Técnica
+	Select CCars, CTits, Sum(1) as Totas ;
+	  From crSigCdFtc ;
+	 Group By CCars, CTits ;
+	  Into Cursor csItens
+
+	Select csItens
+	Scan
+		If (csItens.Totas > 1)
+			=MessageBox([O Grupo e o Título "] + Alltrim(csItens.CCars) + [ / ] + Alltrim(csItens.CTits) + ;
+						[" Está Duplicado!!!], 48, [Atenção!!!])
+			Go Bottom In csItens
+			llOks = .f.
+		EndIf
+	EndScan
+EndIf
+
+If llOks
+	* Checando Se Digitou a Ordem de Apresentação Duplicada Na Grade de Ficha Técnica
+	Select COrds, Sum(1) as Totas ;
+	  From crSigCdFtc ;
+	 Group By COrds ;
+	  Into Cursor csItens
+
+	Select csItens
+	Scan
+		If (csItens.Totas > 1)
+			=MessageBox([A Ordem de Apresentação "] + Alltrim(Str(csItens.COrds)) + [" Está Duplicada!!!], 48, [Atenção!!!])
+			Go Bottom In csItens
+			llOks = .f.
+		EndIf
+	EndScan
+EndIf
+	
+If llOks and (ThisForm.pnTipo = 0)
+	* Apanhando os Dados do Cadastro de Grupos de Produtos Para Serem Atualizados Pela Classe
+	lcQuery = [Select * ] + ;
+				[From SigCdGrp ] + ;
+			   [Where CGrus = '] + crFichaCab.CGrus + [']
+
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalGru]) < 1)
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalGru)])
+		llOks = .f.
+	EndIf
+EndIf
+
+If llOks and (ThisForm.pnTipo = 0)
+	* Checando Se o Grupo de Produtos Não Foi Apagado Antes do término do Processo
+	Go Top In LocalGru
+	If Eof([LocalGru])
+		=MessageBox([Ocorreu Um Erro Ao Acessar o Cadastro de Grupos de Produtos!!!] + Chr(13) + ;
+					[O Grupo "] + crFichaCab.CGrus + [" Foi Excluído Durante o Processo. Reinicie a Operação!!!], ;
+					0+16, [Atenção!!!])
+		llOks = .f.
+	EndIf
+EndIf
+
+If llOks and (ThisForm.pnTipo = 0)
+	* Passando os Dados Do Cursor Temporário Para o de Atualização do Cadastro de Grupos
+	Zap In crSigCdGrp
+	Select LocalGru
+	Scatter Memvar Memo
+	Insert Into crSigCdGrp From Memvar
+
+	* Substituindo os Campos a Serem Atualizados
+	Replace nChkDims With crFichaCab.nChkDims, ;
+			nChkPess With crFichaCab.nChkPess, ;
+			nChkTems With crFichaCab.nChkTems, ;
+			nChkImps With crFichaCab.nChkImps, ;
+			nFixFigs With crFichaCab.nFixFigs, ;
+			mFicTecs With crFichaCab.mFicTecs In crSigCdGrp
+
+	* Atualizando o Registro Alterado na Base de Dados
+	If Not ThisForm.poDataMgr.Update([crSigCdGrp])
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update - crSigCdGrp)])
+		llOks = .f.
+	EndIf
+EndIf
+
+If llOks
+	* Apagando os Registros Anteriores de Ficha Técnica
+	lcQuery = [Delete From SigCdFtc ] + ;
+			   [Where CGrus = '] + crFichaCab.CGrus + [' And ] + ;
+			   		 [SGrus = '] + crFichaCab.SGrus + [']
+
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, []) < 1)
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (mSv_Alterar - Delete - SigCdFtc)])
+		llOks = .f.
+	EndIf
+EndIf
+
+If llOks
+	* Inserindo os Registros do Cursor No Banco de Dados
+	If (Reccount([crSigCdFtc]) > 0)
+		If Not ThisForm.poDataMgr.Update([crSigCdFtc])
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update - crSigCdFtc)])
+			llOks = .f.
+		EndIf
+	EndIf
+EndIf
+
+If llOks
+	* Gravando Fisicamente os Registros
+	If (ThisForm.poDataMgr.Commit() < 1)
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Commit)])
+		llOks = .f.
+	EndIf
+EndIf
+
+If llOks
+	Replace TemDados With crFichaCab.CGrus + crFichaCab.SGrus In crDados
+Else
+	* Cancelando as Alterações Feitas
+	ThisForm.poDataMgr.RollBack()
+EndIf
+
+Return llOks
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+Create Cursor crDados (CGrus c(20), DGrus c(30), SGrus c(6), DSGru c(20), TemDados c(20))
+Index On CGrus + SGrus Tag Col1
+Index On SGrus + CGrus Tag Col2
+Index On DGrus + CGrus Tag Col3
+Index On DSGru + SGrus Tag Col4
+Set Order To Col1 In crDados
+
+Create Cursor crFichaCab (CGrus c(20), DGrus c(30), SGrus c(6), DSGru c(20), nChkDims n(1), ;
+						  nChkPess n(1), nChkTems n(1), nChkImps n(1), nFixFigs n(1), mFicTecs m Null)
+
+Create Cursor crFichaTec (CGrus c(20), SGrus c(6), CCars c(20), CTits c(20), COrds n(3), ;
+						  CLins n(2), Maxs n(3), Mins n(3), nChkCxas n(1), cSelecaos c(1), cTpDados c(1))
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Lparameters pcTipo
+
+** Tipo ( = 0 - FTec Produtos, = 1 - FTec Contas, = 2 - FTec Movimentaçoes ) para manter compatibilidade
+ThisForm.pnTipo = Iif(Type([pcTipo])<>[C],0,Iif(pcTipo == 'C',1,2))
+
+Do case
+Case( ThisForm.pnTipo = 1 )
+	ThisForm.Caption = [Cadastro de Perfil de Contas]
+	ThisForm.Name    = [SIGCDFCTC]
+
+Case( ThisForm.pnTipo = 2 )
+	ThisForm.Caption = [Configuração de Movimentação]
+	ThisForm.Name    = [SIGCDFCTO]
+	
+OtherWise
+	ThisForm.Caption = [Cadastro de Ficha Técnica]
+	ThisForm.Name    = [SIGCDFCT]
+EndCase
+
+With ThisForm
+	loDad = .pagina.lista
+	loFic = .pagina.dados.pgfPagina.pgficha
+	loCom = .pagina.dados.pgfPagina.pgcompl
+	
+	loDad.Say5.Caption = Iif(ThisForm.pnTipo=0,[Ficha Técnica Criada],[Configuração Criada])
+	
+	.poDataMgr = CreateObject([fSqlConector], .Name)
+
+	lcQryFTec = [Select * from SigCdFtc where nTipos = ]+Str(ThisForm.pnTipo,1)
+	If (.poDataMgr.pnIdconn > 0)
+		With .poDataMgr
+			.AddCursor([SigCdFtc], [cIdChaves], [crSigCdFtc], '', '', lcQryFTec)
+			
+			Do Case
+			Case ( ThisForm.pnTipo = 0 )
+				.AddCursor([SigCdGrp], [CGrus],   [crSigCdGrp])
+			Case ( ThisForm.pnTipo = 1 )
+				.AddCursor([SigCdGcr], [Codigos], [crSigCdGrp])
+			Case ( ThisForm.pnTipo = 2 )
+				.AddCursor([SigCdope], [Dopes],   [crSigCdGrp])
+			EndCase				
+		EndWith 
+
+		Do Case
+		Case ( ThisForm.pnTipo = 0 ) && Produtos
+			* Apanhando os Grupos de Produto
+			lcQuery = [Select CGrus, DGrus, FTecSubs ] + ;
+						[From SigCdGrp ] + ;
+					   [Order By CGrus, DGrus]
+
+			If (.poDataMgr.SqlExecute(lcQuery, [LocalGru]) < 1)
+				=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalGru)])
+				Return .f.
+			EndIf
+
+			Select LocalGru
+			oProg = CreateObject([fwprogressbar], [Processando Grupos de Produtos...], Reccount([LocalGru]))
+			oProg.Show
+			Scan
+				oProg.SubTitulo.Caption = [Grupo : ] + LocalGru.CGrus
+				oProg.Update(.t.)
+
+				* Inserindo os Grupos de Produto na Grade
+				Insert Into crDados (CGrus, DGrus, SGrus, DSGru, TemDados) ;
+							 Values (LocalGru.CGrus, LocalGru.DGrus, [], [], [])
+
+				* Verificando Se o Grupo Já Tem Ficha Técnica Lançada
+				lcQuery = [Select Distinct CGrus ] + ;
+							[From SigCdFtc ] + ;
+						   [Where CGrus = '] + LocalGru.CGrus + [' And ] + ;
+						   		 [SGrus = Space(6) and nTipos = 0]
+
+				If (.poDataMgr.SqlExecute(lcQuery, [LocalCfTec]) < 1)
+					=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalCfTec)])
+					Return .f.
+				EndIf
+				Go Top In LocalCfTec
+				If Not Eof([LocalCfTec])
+					* Se o Grupo Já Tem Ficha Técnica Lançada Marca No Cursor Para Mostrar Na Lista
+					Replace TemDados With LocalGru.CGrus In crDados
+				EndIf
+				
+				If (LocalGru.FTecSubs = 1) && Se o Grupo Trabalha Com Subgrupos Para Ficha Técnica
+					* Apanhando os Subgrupos Dentro do Grupo de Produto
+					lcQuery = [Select CGrus, Codigos, Descricaos ] + ;
+								[From SigCdPsg ] + ;
+							   [Where CGrus = '] + LocalGru.CGrus + [' ] + ;
+							   [Order By CGrus, Codigos, Descricaos]
+
+					If (.poDataMgr.SqlExecute(lcQuery, [LocalSGru]) < 1)
+						=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalSGru)])
+						Return .f.
+					EndIf
+
+					Select LocalSGru
+					Scan
+						* Inserindo os Subgrupos de Produto na Grade
+						Insert Into crDados (CGrus, DGrus, SGrus, DSGru, TemDados) ;
+									 Values (LocalGru.CGrus, LocalGru.DGrus, LocalSGru.Codigos, LocalSGru.Descricaos, [])
+
+						* Verificando Se o Subgrupo Já Tem Ficha Técnica Lançada
+						lcQuery = [Select Distinct CGrus, SGrus ] + ;
+									[From SigCdFtc ] + ;
+								   [Where CGrus = '] + LocalGru.CGrus + [' And ] + ;
+								   		 [SGrus = '] + LocalSGru.Codigos + [' And nTipos = 0]
+
+						If (.poDataMgr.SqlExecute(lcQuery, [LocalCfTec]) < 1)
+							=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalCfTec)])
+							Return .f.
+						EndIf
+						Go Top In LocalCfTec
+						If Not Eof([LocalCfTec])
+							* Se o Subgrupo Já Tem Ficha Técnica Lançada Marca No Cursor Para Mostrar Na Lista
+							Replace TemDados With LocalGru.CGrus + LocalSGru.Codigos In crDados
+						EndIf
+					EndScan
+				EndIf
+			EndScan
+			oProg.Complete
+			
+		Case ( ThisForm.pnTipo = 1 ) && Contas
+			lcQuery = [Select Codigos, Descrs ] + ;
+						[From SigCdGcr Where FichaTecs = 1 ] + ;
+					   [Order By Codigos, Descrs]
+
+			If (.poDataMgr.SqlExecute(lcQuery, [LocalGru]) < 1)
+				=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalGru)])
+				Return .f.
+			EndIf
+
+			Select LocalGru
+			oProg = CreateObject([fwprogressbar], [Processando Grupos de Contas...], Reccount([LocalGru]))
+			oProg.Show
+			Scan
+				oProg.SubTitulo.Caption = [Grupo : ] + LocalGru.Cgrus
+				oProg.Update(.t.)
+
+				* Inserindo os Grupos de Conta na Grade
+				Insert Into crDados (CGrus, DGrus, SGrus, DSGru, TemDados) ;
+							 Values (LocalGru.Codigos, LocalGru.Descrs, [], [], [])
+
+				* Verificando Se o Grupo Já Tem Ficha Técnica Lançada
+				lcQuery = [Select Distinct CGrus ] + ;
+							[From SigCdFtc ] + ;
+						   [Where CGrus = '] + LocalGru.Codigos + [' And ] + ;
+						   		 [nTipos = 1]
+
+				If (.poDataMgr.SqlExecute(lcQuery, [LocalCfTec]) < 1)
+					=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalCfTec)])
+					Return .f.
+				EndIf
+				Go Top In LocalCfTec
+				If Not Eof([LocalCfTec])
+					* Se o Grupo Já Tem Ficha Técnica Lançada Marca No Cursor Para Mostrar Na Lista
+					Replace TemDados With LocalGru.Codigos In crDados
+				EndIf								
+			EndScan
+			oProg.Complete	
+			
+		Case ( ThisForm.pnTipo = 2 ) &&Movimentações
+			lcQuery = [Select a.Dopes, a.TitOpes ] + ;
+						[From SigCdOpe a ] + ;
+						[Left Join SigOpCdc b On a.Dopes = b.Dopes ] + ;
+						[Where b.OpeInatvs In (0,2) ] + ;
+					   [Order By a.Dopes, a.TitOpes]
+
+			If (.poDataMgr.SqlExecute(lcQuery, [LocalGru]) < 1)
+				=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalGru)])
+				Return .f.
+			EndIf
+
+			Select LocalGru
+			oProg = CreateObject([fwprogressbar], [Processando Grupos de Contas...], Reccount([LocalGru]))
+			oProg.Show
+			Scan
+				oProg.SubTitulo.Caption = [Movimentação : ] + LocalGru.Dopes
+				oProg.Update(.t.)
+
+				* Inserindo os Grupos de Conta na Grade
+				Insert Into crDados (CGrus, DGrus, SGrus, DSGru, TemDados) ;
+							 Values (LocalGru.Dopes, LocalGru.TitOpes, [], [], [])
+
+				* Verificando Se a Movimentação Já Tem Ficha Técnica Lançada
+				lcQuery = [Select Distinct cgrus ] + ;
+							[From SigCdFtc ] + ;
+						   [Where cgrus = '] + LocalGru.Dopes + [' And ] + ;
+						   		 [nTipos = 2]
+
+				If (.poDataMgr.SqlExecute(lcQuery, [LocalCfTec]) < 1)
+					=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalCfTec)])
+					Return .f.
+				EndIf
+				Go Top In LocalCfTec
+				If Not Eof([LocalCfTec])
+					* Se o Grupo Já Tem Ficha Técnica Lançada Marca No Cursor Para Mostrar Na Lista
+					Replace TemDados With LocalGru.Dopes In crDados
+				EndIf								
+			EndScan
+			oProg.Complete							
+		EndCase
+
+		Go Top In crDados
+
+		With loDad.grade
+			.RecordSource 		   = [crDados]
+			.Column1.ControlSource = [crDados.CGrus]
+			.Column2.ControlSource = [crDados.SGrus]
+			.Column3.ControlSource = [crDados.DGrus]
+			.Column4.ControlSource = [crDados.DSGru]
+			 
+			.Column1.header1.Caption = Iif(InList(ThisForm.pnTipo,0,1),[Grupos],[Movimentação])
+			.Column3.header1.Caption = Iif(InList(ThisForm.pnTipo,0,1),[Descrição do grupo],[Descrição da Movimentação])
+						
+			 *--Rafael - Nao mostra as informações do SubGrupo
+			.Column1.Width = Iif(ThisForm.pnTipo = 2,200,100)
+			.Column2.Width = Iif(ThisForm.pnTipo = 0,100,0)
+			.Column4.Width = Iif(ThisForm.pnTipo = 0,100,0)
+						
+			For I=1 To .ColumnCount
+				lcCol = Alltrim(Str(I))
+				.Column&lcCol..FontName  = [Verdana]
+				.Column&lcCol..FontSize  =  8
+				.Column&lcCol..Movable   = .f.
+				.Column&lcCol..Resizable = .f.
+				.Column&lcCol..ReadOnly  = .t.
+
+				.Column&lcCol..Text1.FontName 	 = [Verdana]
+				.Column&lcCol..Text1.FontSize 	 =  8
+				.Column&lcCol..Text1.Margin   	 =  0
+				.Column&lcCol..Text1.BorderStyle =  0
+			Next
+			.ReadOnly = .t.
+			.SetAll([DynamicBackColor], [Iif(Empty(crDados.TemDados), RGB(255,255,255), Rgb(255,255,187))], [Column])
+		EndWith 
+
+		With loFic.grdFichas
+			.RecordSource          = [crFichaTec]
+			.Column1.ControlSource = [crFichaTec.CCars]
+			.Column2.ControlSource = [crFichaTec.CTits]
+			.Column3.ControlSource = [crFichaTec.COrds]
+			.Column4.ControlSource = [crFichaTec.CLins]
+			.Column5.ControlSource = [crFichaTec.Maxs]
+			.Column6.ControlSource = [crFichaTec.Mins]
+			.Column7.ControlSource = [crFichaTec.nChkCxas]
+			.Column8.ControlSource = [crFichaTec.cSelecaos]
+			.Column9.ControlSource = [crFichaTec.cTpDados]
+			.Refresh
+		EndWith
+
+		.plAcInserir = .f.
+		=DoDefault()
+
+		loFic.Enabled = .f.
+		loCom.Enabled = .f.
+
+		.pagina.dados.pgfPagina.ActivePage = 1
+
+		loDad.grade.Column1.Header1.Click()
+		loDad.grade.Column1.SetFocus
+	Else
+		=Messagebox([Impossível Efetuar Conexão Com o Servidor de Banco de Dados...], 0+48, [CreateObject])
+		Return .f.
+	EndIf
+EndWith
+
+Do Case 
+Case( ThisForm.pnTipo = 0 )
+	lcQuery = [Select CGrus, DGrus, Mercs, Margems, 'S' as Apagar From SigCdGrp]
+Case( ThisForm.pnTipo = 1 )
+	lcQuery = [Select Codigos as cGrus, Descrs as DGrus, '   ' as Mercs, 0 as Margems, 'S' as Apagar from SigCdGcr]
+Case( ThisForm.pnTipo = 2 )
+	lcQuery = [Select Dopes as cGrus, TitOpes as DGrus, '   ' as Mercs, 0 as Margems, 'S' as Apagar from SigCdOpe]
+EndCase
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigCdGrpFilter') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigCdGrpFilter)')
+	Return 0
+EndIf
+Select crSigCdGrpFilter
+Index On CGrus Tag CGrus
+Index On DGrus Tag DGrus
+
+ThisForm.pagina.dados.pgfPagina.pgficha.cntCopiarAcesso.Visible = .F.
+
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Lista.Grupo_Op.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Lista.Grupo_Op.Click
+LPARAMETERS opcao
+Local loDad, loFic, loCom, lcGru, lcSGr
+
+If Type( 'Opcao' ) = 'N'
+	This.Value = Opcao
+Endif
+
+dodefault( Opcao )
+
+loDad = ThisForm.pagina.lista
+loFic = ThisForm.pagina.dados.pgfPagina.pgficha
+loCom = ThisForm.pagina.dados.pgfPagina.pgcompl
+
+Zap In crFichaCab
+Zap In crFichaTec
+
+lcGru = crDados.CGrus
+lcDGr = crDados.DGrus
+lcSGr = crDados.SGrus
+lcDSr = crDados.DSGru
+
+* Apanhando os Dados Do Grupo de Produto Para o Cabeçalho da Ficha Técnica
+Do Case
+Case ( ThisForm.pnTipo = 0 )
+	lcQuery = [Select a.CGrus, a.nChkDims, a.nChkPess, a.nChkTems, a.nChkImps, a.nFixFigs, a.mFicTecs ] + ;
+				[From SigCdGrp a ] + ;
+			   [Where a.CGrus = '] + lcGru + [']
+			   
+Case ( ThisForm.pnTipo = 1 )
+	lcQuery = [Select a.Codigos as CGrus, 2 as nChkDims, 2 as nChkPess, 2 as nChkTems, 2 as nChkImps, 2 as nFixFigs, ] + ;
+			  ['' as mFicTecs from SigCdGcr a ] + ; &&Null as mFicTecs 
+			  [where a.Codigos = '] + lcGru + ['] 
+			  
+Case ( ThisForm.pnTipo = 2 )
+	lcQuery = [Select a.Dopes as CGrus, 2 as nChkDims, 2 as nChkPess, 2 as nChkTems, 2 as nChkImps, 2 as nFixFigs, ] + ;
+			  ['' as mFicTecs from SigCdOpe a ] + ; 
+			  [where a.Dopes = '] + lcGru + ['] 	
+			  		  
+EndCase			   
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalGru]) < 1)
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Processamento - LocalGru)])
+	Return .f.
+EndIf
+Go Top In LocalGru
+If Eof([LocalGru])
+	=MessageBox([Ocorreu Um Erro Ao Acessar o Cadastro de Grupos de Produtos!!!] + Chr(13) + ;
+				[O Grupo "] + lcGru + [" Foi Excluído Durante o Processo. Reinicie a Operação!!!], ;
+				0+16, [Atenção!!!])
+	Return .f.
+Else
+	Insert Into crFichaCab (CGrus, DGrus, SGrus, DSGru, nChkDims, nChkPess, nChkTems, nChkImps, nFixFigs, mFicTecs) ;
+					Values (lcGru, lcDGr, lcSGr, lcDSr, LocalGru.nChkDims, LocalGru.nChkPess, LocalGru.nChkTems, ;
+							LocalGru.nChkImps, LocalGru.nFixFigs, LocalGru.mFicTecs)
+EndIf
+
+* Apanhando os Dados da Ficha Técnica
+lcQuery = [Select a.* ] + ;
+			[From SigCdFtc a ] + ;
+		   [Where a.CGrus = '] + lcGru + [' And ] + ;
+		   		 [a.SGrus = '] + lcSGr + [' ] + ;
+		   [Order By a.COrds]
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalCFTec]) < 1)
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Processamento - LocalCFTec)])
+	Return .f.
+EndIf
+
+lnOrd = 1
+Select LocalCFTec
+Scan
+	* Inserindo os Dados da Ficha Técnica na Grade
+	Insert Into crFichaTec (COrds, CGrus, SGrus, CCars, CTits, CLins, Maxs, Mins, nChkCxas, cSelecaos, cTpDados) ;
+					Values (lnOrd, lcGru, lcSGr, LocalCFTec.CCars, LocalCFTec.CTits, ;
+							LocalCFTec.CLins, LocalCFTec.Maxs, LocalCFTec.Mins, LocalCFTec.nChkCxas,;
+							LocalCFTec.cSelecaos, LocalCFTec.cTpDados)
+
+	lnOrd = lnOrd + 1
+EndScan
+
+* Inserindo Uma Linha Em Branco Na Grade da Ficha Técnica
+If (ThisForm.pcEscolha = [ALTERAR])
+	Insert Into crFichaTec (COrds, CGrus, SGrus) Values (lnOrd, lcGru, lcSGr)
+EndIf
+
+* Ajustando o Botão de Exclusão de Linhas da Grade de Ficha Técnica
+loFic.cmdApagar.Visible = (ThisForm.pcEscolha = [ALTERAR])
+
+* Ajustando o Botão de Gravação/Exclusão na Página da Ficha Técnica
+*!*	lnWid = loFic.cmdBotoes.btnGravar.Width
+*!*	llGrv = InList(ThisForm.pcEscolha, [ALTERAR], [EXCLUIR])
+*!*	loFic.cmdBotoes.btnGravar.Visible = llGrv
+*!*	If llGrv && Se o Botão Gravar/Excluir Está Visível
+*!*		loFic.cmdBotoes.btnGravar.Left = 5
+*!*		loFic.cmdBotoes.btnDados.Left  = loFic.cmdBotoes.btnGravar.Left + lnWid + 1
+*!*	Else	 && Se o Botão Gravar/Excluir Não Está Visível
+*!*		loFic.cmdBotoes.btnDados.Left = 5
+*!*	EndIf
+*!*	loFic.cmdBotoes.Width = loFic.cmdBotoes.btnDados.Left + lnWid + 5
+*!*	loFic.cmdBotoes.Left  = (loFic.shpGrade.Left + loFic.shpGrade.Width) - loFic.cmdBotoes.Width
+
+* Ajustando o Botão de Captura de Imagem da Tela de Complementos
+loCom.cmdFigura.Visible = (ThisForm.pcEscolha = [ALTERAR])
+
+* Ajustando a Grade de Ficha Técnica
+loFic.grdFichas.ReadOnly = Not (ThisForm.pcEscolha = [ALTERAR])
+
+* Apresentando a Imagem Técnica na Pasta Complementos
+lcArq = Sys(2023) + [\FicTecs.Jpg]
+
+Clear Resources
+loCom.imgFigTec.Picture = []
+loCom.imgFigTec.Visible = .f.
+
+If Not Empty(crFichaCab.mFicTecs) And Not IsNull(crFichaCab.mFicTecs)
+	If (StrToFile(crFichaCab.mFicTecs, lcArq) > 0)
+		loCom.imgFigTec.Visible = .t.
+		loCom.imgFigTec.Picture = (lcArq)
+	EndIf
+EndIf
+
+* Verificando se Existem Dados Processados
+If (Reccount([crFichaTec]) < 1)
+	=MessageBox([Não Foram Encontrados Dados Para ] + Proper(ThisForm.pcEscolha) + [!!!], 0+48, [Atenção!!!])
+	loDad.grade.Column1.SetFocus
+
+	ThisForm.KeyPreview = .t.
+
+	Return .f.
+Else
+	Go Top In crFichaCab
+
+	Select crFichaTec
+	Go Top In crFichaTec
+	Go Bottom In crFichaTec
+
+	=fCarregaGrade(loFic.grdFichas)
+
+	ThisForm.KeyPreview = .f.
+	
+	loDad.Enabled = .f.
+	loFic.Enabled = .t.
+	With loFic
+		.lbChkDims.Visible = (ThisForm.pnTipo = 0)
+		.OptNChkDims.Visible = (ThisForm.pnTipo = 0)    
+		.lbChkTems.Visible = (ThisForm.pnTipo = 0) 
+		.OptNChkTems.Visible = (ThisForm.pnTipo = 0) 
+		.lbChkPess.Visible = (ThisForm.pnTipo = 0) 
+		.OptnChkPess.Visible = (ThisForm.pnTipo = 0) 
+		.lbSGrus.Visible = (ThisForm.pnTipo = 0)
+		.getSGrus.Visible = (ThisForm.pnTipo = 0)
+		.GetdsGru.Visible = (ThisForm.pnTipo = 0)
+		.cmdResps.Visible = (ThisForm.pnTipo = 0)
+		.cntCopiarAcesso.lbSGrus.Visible  = (ThisForm.pnTipo = 0)
+		.cntCopiarAcesso.getSGrus.Visible = (ThisForm.pnTipo = 0)
+		.cntCopiarAcesso.getDsGru.Visible = (ThisForm.pnTipo = 0)
+	EndWith
+	loCom.Enabled = (ThisForm.pnTipo = 0)
+
+	ThisForm.Pagina.ActivePage = 2
+	ThisForm.pagina.dados.pgfPagina.ActivePage = 1
+
+	loFic.Refresh
+	loFic.grdFichas.Column1.SetFocus
+EndIf
+
+If ThisForm.pnTipo = 2
+	ThisForm.pagina.dados.pgfPagina.pgficha.label1.Caption = 'Movimentação :'
+	ThisForm.pagina.dados.pgfPagina.pgficha.label1.Left = 7
+	ThisForm.pagina.dados.pgfPagina.pgficha.getCgrus.Width = 150
+	ThisForm.pagina.dados.pgfPagina.pgficha.getDGrus.Left = 250
+EndIf 
+
+ThisForm.pagina.dados.pgfPagina.pgficha.cntCopiarAcesso.Visible = .F.
+ThisForm.pagina.dados.pgfPagina.pgficha.cmdCopia.Visible = .T.
+
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+Local llRet
+llRet = .t.
+
+Zap In crSigCdFtc
+
+* Inserindo os Registros de Ficha Técnica no Cursor Para Gravação
+Select crFichaTec
+Scan
+	If (Not Empty(crFichaTec.COrds) And Not Empty(crFichaTec.CGrus) And ;
+		Not Empty(crFichaTec.CCars) And Not Empty(crFichaTec.CTits) And Not (crFichaTec.CLins < 1))
+
+	 	Insert Into crSigCdFtc (COrds, CGrus, SGrus, CCars, CTits, CLins, Maxs, Mins, nChkCxas, cSelecaos, cIdChaves, nTipos, cTpDados) ;
+	 					Values (crFichaTec.COrds, crFichaTec.CGrus, crFichaTec.SGrus, crFichaTec.CCars, ;
+	 							crFichaTec.CTits, crFichaTec.CLins, crFichaTec.Maxs, crFichaTec.Mins, ;
+	 							crFichaTec.nChkCxas, crFichaTec.cSelecaos, fUniqueIds(), ThisForm.pnTipo, crFichaTec.cTpDados)
+	EndIf
+EndScan
+
+If Not ThisForm.VerificaExcluir()
+	llRet = .f.
+ENDIF
+
+If llRet
+	Do Case
+		Case (ThisForm.pcEscolha = [ALTERAR])
+			llRet = ThisForm.mSv_Alterar()
+
+		Case (ThisForm.pcEscolha = [EXCLUIR])
+			llRet = ThisForm.mSv_Excluir()
+	EndCase
+ENDIF
+
+IF llret
+	thisform.mAtivapagina1()
+ENDIF 
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+=DoDefault()
+If ThisForm.plCancelar
+	ThisForm.mAtivapagina1
+Endif
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.cntCopiarAcesso.btnCopiarAcessos
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+
+lcQuery = [Select * ] + ;
+		  [From SigCdFtc ] + ;
+		  [Where CGrus = '] + This.Parent.GetCgrus.Value + [' And ] + ;
+		  [SGrus = '] + This.Parent.GetSGrus.Value + [']
+
+
+ThisForm.poDatamgr.SqlExecute(lcQuery, [cpSigCdFtc])
+
+Select cpSigCdFtc 
+
+If ! Eof()
+
+	Select crFichaTec
+	Zap
+
+	Select cpSigCdFtc 
+	Replace All cGrus With This.Parent.Parent.getCgrus.Value
+	Replace All sGrus With This.Parent.Parent.getSGrus.Value
+
+	Scan 
+	
+		Scatter Memo MemVar
+		Select crFichaTec
+		Append Blank
+		Gather MemVar Memo
+		
+	EndScan
+	
+	This.Parent.Parent.GrdFichas.Refresh
+
+Else
+
+	MessageBox('Ficha Técnica Não Localizada !!!', 16, [])
+	
+Endif
+	
+This.Parent.Parent.CntCopiarAcesso.Visible = .F.
+This.Parent.Parent.CmdCopia.Visible = .T.
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.cntCopiarAcesso.btnCancelar
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 17
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+This.Parent.Parent.CntCopiarAcesso.Visible = .F.
+This.Parent.Parent.CmdCopia.Visible = .T.
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.cntCopiarAcesso.getDSGru
+* Classe: fwget (Base: textbox)
+* Registro: 20
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(Empty(This.Parent.GetSGrus.Value))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+Dimension laFiltro(1,2)
+
+If Not Empty(This.Value)
+	laFiltro(1,1) = 'CGrus'
+	laFiltro(1,2) = Padr(This.Parent.GetCgrus.Value, 3)
+
+	loLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigCdPsg', ;
+						   'CrListaRemota', 'Descricaos', This.Value, 'Seleção', .t., .f., @laFiltro)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Descricaos', '', 'Descrição')
+		loLista.mAddColuna('Codigos',    '', 'Código')
+		loLista.Show()
+	EndIf
+	
+	This.Parent.GetSGrus.Value = CrListaRemota.Codigos
+	This.Parent.GetDSGru.Value = CrListaRemota.Descricaos
+	Use In CrListaRemota
+Else
+	This.Parent.GetSGrus.Value = []
+	This.Parent.GetDSGru.Value = []
+EndIf
+
+This.Parent.GetSGrus.Refresh
+This.Parent.GetDSGru.Refresh
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.cntCopiarAcesso.getSGrus
+* Classe: fwget (Base: textbox)
+* Registro: 21
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+*
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+Dimension laFiltro(1,2)
+
+If Not Empty(This.Value)
+	laFiltro(1,1) = 'CGrus'
+	laFiltro(1,2) = Padr(This.Parent.GetCgrus.Value, 3)
+
+	loLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigCdPsg', ;
+						   'CrListaRemota', 'Codigos', This.Value, 'Seleção', .t., .f., @laFiltro)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Codigos',    '', 'Código')
+		loLista.mAddColuna('Descricaos', '', 'Descrição')
+		loLista.Show()
+	EndIf
+	
+	This.Parent.GetSGrus.Value = CrListaRemota.Codigos
+	This.Parent.GetDSGru.Value = CrListaRemota.Descricaos
+	Use In CrListaRemota
+Else
+	This.Parent.GetSGrus.Value = []
+	This.Parent.GetDSGru.Value = []
+EndIf
+
+This.Parent.GetSGrus.Refresh
+This.Parent.GetDSGru.Refresh
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.cntCopiarAcesso.getCgrus
+* Classe: fwget (Base: textbox)
+* Registro: 22
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+*
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Private pGru, pSGr
+Local loLista
+
+If Not Empty(This.Value)
+	If Not Seek(This.Value, 'crSigCdGrpFilter', 'CGrus')
+		xBrow = CreateObject('fwbuscasel', 'crSigCdGrpFilter', 'CGrus', This.Value, 'Cadastro de Grupos')
+		xBrow.AddColuna('CGrus', '', 'Código',    .t.)
+		xBrow.AddColuna('DGrus', '', 'Descrição', .t.)
+		xBrow.Show
+	EndIf
+	If (Lastkey() <> 27)
+		This.Parent.GetCgrus.Value = crSigCdGrpFilter.Cgrus
+		This.Parent.GetDGrus.Value = crSigCdGrpFilter.Dgrus
+	EndIf
+Else
+	This.Parent.GetCgrus.Value = []
+	This.Parent.GetDGrus.Value = []
+EndIf
+This.Parent.GetCgrus.Refresh
+This.Parent.GetDGrus.Refresh
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.cntCopiarAcesso.getDGrus
+* Classe: fwget (Base: textbox)
+* Registro: 23
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(Empty(This.Parent.GetCgrus.Value))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Private pGru, pSGr
+Local loLista
+
+If Not Empty(This.Value)
+	If Not Seek(This.Value, 'crSigCdGrpFilter', 'CGrus')
+		xBrow = CreateObject('fwbuscasel', 'crSigCdGrpFilter', 'DGrus', This.Value, 'Cadastro de Grupos')
+		xBrow.AddColuna('DGrus', '', 'Descrição', .t.)
+		xBrow.AddColuna('CGrus', '', 'Código',    .t.)
+		xBrow.Show
+	EndIf
+	If (Lastkey() <> 27)
+		This.Parent.GetCgrus.Value = crSigCdGrpFilter.Cgrus
+		This.Parent.GetDGrus.Value = crSigCdGrpFilter.Dgrus
+	EndIf
+Else
+	This.Parent.GetCgrus.Value = []
+	This.Parent.GetDGrus.Value = []
+EndIf
+This.Parent.GetCgrus.Refresh
+This.Parent.GetDGrus.Refresh
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.grdFichas.Column1.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 31
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+Dimension laFiltro(1,2)
+
+If Not Empty(This.Value)
+	laFiltro(1,1) = 'nTipos'
+	laFiltro(1,2) = ThisForm.pnTipo
+	loLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigCrRaP', ;
+						   'crListaRemota', 'Codigos', This.Value, 'Seleção', .T., .F., @laFiltro)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Codigos', '', 'Grupo Características')
+		loLista.mAddColuna('Descrs',  '', 'Descrição')
+		loLista.Show()
+	EndIf
+	
+	This.Value = crListaRemota.Codigos
+	Use In crListaRemota
+EndIf
+This.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.grdFichas.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 33
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+Dimension laFiltro(1,2)
+
+If Not Empty(This.Value)
+	laFiltro(1,1) = 'nTipos'
+	laFiltro(1,2) = ThisForm.pnTipo
+	loLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigPrCpP', ;
+						   'crListaRemota', 'Codigos', This.Value, 'Seleção', .T., .F., @laFiltro)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Codigos', '', 'Título Características')
+		loLista.mAddColuna('Descrs',  '', 'Descrição')
+		loLista.Show()
+	EndIf
+	
+	This.Value = crListaRemota.Codigos
+	Use In crListaRemota
+EndIf
+This.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.grdFichas.Column8.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 45
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If ! InList(This.Value, [ ], [S], [N])
+	MessageBox('Tipos de Seleção Validas S ou N !!!', 16, [Abrir Janela de Seleção])
+	Return(.F.)
+EndIf
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.grdFichas.Column9.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 47
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If ! InList(This.Value, [ ], [C], [D], [N])
+	MessageBox('Tipo de Dado inválido, informar [ ], [C-Caracter], [D-Data] ou [N-Numérico]!!!', 16, [])
+	Return(.F.)
+EndIf
+
+Local lnOrd
+
+If (Lastkey() = 13 Or BetWeen(Lastkey(), 48, 57) or InList(This.Value,' ','C','D','N')) And (ThisForm.pcEscolha = [ALTERAR])
+	lnOrd = Iif(crFichaTec.COrds > 0, crFichaTec.COrds + 1, 1)
+
+	Select crFichaTec
+	If (Not Eof([crFichaTec]) And Not Empty(crFichaTec.COrds) And Not Empty(crFichaTec.CGrus) And ;
+	    Not Empty(crFichaTec.CCars) And Not Empty(crFichaTec.CTits) And Not (crFichaTec.CLins < 1))
+		Skip
+	EndIf
+
+	If Eof([crFichaTec])
+		Insert Into crFichaTec (COrds, CGrus, SGrus) Values (lnOrd, crFichaCab.CGrus, crFichaCab.SGrus)
+		Go Bottom In crFichaTec
+		Keyboard [{DNARROW}]
+	EndIf
+	ThisForm.pagina.dados.pgfPagina.pgficha.grdFichas.Refresh
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.cmdApagar
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 48
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE btnApagar.When
+------------------------------------------------------------
+PROCEDURE btnApagar.When
+Return (ThisForm.pcEscolha = [ALTERAR])
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE btnApagar.Click
+------------------------------------------------------------
+PROCEDURE btnApagar.Click
+If Not Eof([crFichaTec])
+	Delete In crFichaTec
+	Go Top In crFichaTec
+	Go Bottom In crFichaTec
+	ThisForm.pagina.dados.pgfPagina.pgficha.grdFichas.Refresh
+
+	Select * ;
+	  From crFichaTec ;
+	 Where Empty(CCars) Or Empty(CTits) Or Empty(CLins) ;
+	  Into Cursor TmpVazio
+
+	If (Reccount([TmpVazio]) = 0)
+		Insert Into crFichaTec (COrds, CGrus, SGrus) Values (1, crFichaCab.CGrus, crFichaCab.SGrus)
+		Go Bottom In crFichaTec
+		Keyboard [{DnArrow}]
+	EndIf
+
+	ThisForm.pagina.dados.pgfPagina.pgficha.grdFichas.Refresh
+	ThisForm.pagina.dados.pgfPagina.pgficha.grdFichas.Column1.SetFocus 
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.cmdResps
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 49
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE btnResps.Click
+------------------------------------------------------------
+PROCEDURE btnResps.Click
+If Not Empty(crFichaTec.CGrus) And Not Empty(crFichaTec.CCars) And Not Empty(crFichaTec.CTits)
+	Do Form SigCdFte With crFichaTec.CGrus, crFichaTec.SGrus, crFichaTec.CCars, crFichaTec.CTits, ThisForm.pcEscolha, ThisForm.pnTipo
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.cmdCopia
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 52
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE btnCopia.Click
+------------------------------------------------------------
+PROCEDURE btnCopia.Click
+This.Parent.Visible = .F.
+This.Parent.Parent.cntCopiarAcesso.Visible = .T.
+This.Parent.Parent.cntCopiarAcesso.GetCgrus.SetFocus
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.optNChkDims
+* Classe: optiongroup (Base: optiongroup)
+* Registro: 55
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (ThisForm.pcEscolha = [ALTERAR])
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.optNChkPess
+* Classe: optiongroup (Base: optiongroup)
+* Registro: 56
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (ThisForm.pcEscolha = [ALTERAR])
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.optNChkTems
+* Classe: optiongroup (Base: optiongroup)
+* Registro: 57
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (ThisForm.pcEscolha = [ALTERAR])
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFCT.Pagina.Dados.pgfPagina.pgCompl.cmdBotoes
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 58
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE btnDados.Click
+------------------------------------------------------------
+PROCEDURE btnDados.Click
+* Indo Para a Página de Ficha Técnica
+With ThisForm.pagina.dados
+	.pgfPagina.ActivePage = 1
+	.pgfPagina.pgficha.grdFichas.Column1.SetFocus()
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFCT.Pagina.Dados.pgfPagina.pgCompl.cmdFigura
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 61
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE btnFigura.When
+------------------------------------------------------------
+PROCEDURE btnFigura.When
+Return (ThisForm.pcEscolha = [ALTERAR])
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE btnFigura.Click
+------------------------------------------------------------
+PROCEDURE btnFigura.Click
+Local lcAnt, lnCon
+
+If InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')
+	lcAnt = Sys(5) + Sys(2003)
+	If Directory(goSistema.DirImagens)
+		Set Default To &goSistema.DirImagens.
+	EndIf
+	lcFig = Alltrim(GetPict([Formato Jpeg:JPG;Formato Bitmap:BMP], [Nome do Arquivo:], [Selecionar]))
+	Set Default To &lcAnt.
+
+	If Not Empty(lcFig) And File(lcFig)
+		If Not fTamanhoImagem(lcFig, ThisForm.poDataMgr, .t.)
+			Return .f.
+		EndIf
+
+		If (MessageBox([Confirma a Transferência da Imagem?], 4+32+256, [Confirmação]) <> 6)
+			ThisForm.Pagina.Dados.Grupo_Salva.Cancelar.SetFocus
+			Return .f.
+		EndIf
+
+		Replace mFicTecs With FileToStr(lcFig) In crFichaCab
+
+		lcArq = Sys(2023) + [\FicTecs.Jpg]
+
+		With ThisForm.pagina.dados.pgfPagina.pgcompl
+			Clear Resources
+			.imgFigTec.Picture = []
+			.imgFigTec.Visible = .f.
+
+			* Figura no Campo Memo
+			If Not Empty(crFichaCab.mFicTecs) And Not IsNull(crFichaCab.mFicTecs)
+				If (StrToFile(crFichaCab.mFicTecs, lcArq) > 0)
+					.imgFigTec.Visible = .t.
+					.imgFigTec.Picture = (lcArq)
+				EndIf
+			EndIf
+		EndWith
+
+		If (MessageBox([Deseja Excluir a Imagem Original?], 4+32+256, [Confirmação]) = 6)
+			Delete File (lcFig)
+		EndIf
+				
+		If File(lcArq)
+			Delete File (lcArq)
+		EndIf
+	EndIf
+EndIf
+* Fim *********************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFCT.Pagina.Dados.pgfPagina.pgCompl.optNChkImps
+* Classe: optiongroup (Base: optiongroup)
+* Registro: 62
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (ThisForm.pcEscolha = [ALTERAR])
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDFCT.Pagina.Dados.pgfPagina.pgCompl.chkNFixFigs
+* Classe: checkbox (Base: checkbox)
+* Registro: 63
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (ThisForm.pcEscolha = [ALTERAR])
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGCDFCT
+RESERVED3 (ClassInfo): pntipo
+*processamento 
+*verificaexcluir 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 35
+================================================================================

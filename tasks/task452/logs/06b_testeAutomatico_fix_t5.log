@@ -1,0 +1,23 @@
+[2026-08-10 06:25:31] [INFO] === CLAUDE CLI INVOKER ===
+[2026-08-10 06:25:31] [INFO] Prompt File: C:\4c\tasks\task452\runtime_fix_prompt_06b_testeAutomatico_t5.md
+[2026-08-10 06:25:31] [INFO] Output File: C:\4c\tasks\task452\06b_testeAutomatico_fix_output_t5.txt
+[2026-08-10 06:25:31] [INFO] Model: sonnet
+[2026-08-10 06:25:31] [INFO] Timeout: 3600 segundos
+[2026-08-10 06:25:31] [INFO] Max Output Tokens: 128000
+[2026-08-10 06:25:31] [INFO] Context Files: 0 arquivo(s)
+[2026-08-10 06:25:31] [INFO] Invocando Claude CLI...
+[2026-08-10 06:25:31] [INFO] Prompt carregado: 78593 caracteres
+[2026-08-10 06:25:31] [INFO] Executando: claude --model sonnet --dangerously-skip-permissions --add-dir C:\4c
+[2026-08-10 06:25:31] [INFO] Tamanho total do prompt: 78593 caracteres
+[2026-08-10 06:25:31] [INFO] Invocando Claude CLI (tentativa 1/7)...
+[2026-08-10 06:48:47] [INFO] Claude CLI finalizado em 1395.6612265 segundos
+[2026-08-10 06:48:47] [INFO] Exit Code: 0
+[2026-08-10 06:48:47] [INFO] Output salvo em: C:\4c\tasks\task452\06b_testeAutomatico_fix_output_t5.txt
+[2026-08-10 06:48:47] [INFO] Output size: 723 bytes
+[2026-08-10 06:48:47] [INFO] SUCESSO: Claude CLI executado com sucesso
+[2026-08-10 06:48:47] [INFO] Preview do output:
+[2026-08-10 06:48:47] [INFO] Both fixes are applied to `FormInf.prg`:
+
+**Fix 1 (root cause ÔÇö 300s hang):** Removed `ColumnCount = 3` before `RecordSource = "cursor_4c_Emps"` in `ConfigurarPaginaDados()`. VFP9 was creating Column3 for a cursor that only has 2 fields, triggering an internal error dialog that `SYS(2335,0)` can't suppress, causing the consistent 300-second timeout.
+
+**Fix 2 (secondary ÔÇö Destroy cleanup):** Added `TRY/CATCH` in `Destroy()` to detach `grd_4c_Dados.RecordSource = ""` before closing `cursor

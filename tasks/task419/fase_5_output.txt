@@ -1,0 +1,14 @@
+﻿O arquivo est├í correto e completo. Aqui est├í o resumo do que foi implementado na Fase 5:
+
+**Adicionado em `ConfigurarPaginaDados()`:**
+- Bot├Áes **Confirmar** (`cmd_4c_Confirmar`, ├¡cone `cadastro_salvar_60.jpg`) e **Cancelar** com BINDEVENTs
+- **6 labels** (Say1ÔÇôSay6) com posi├º├Áes compensadas +29, fonte Verdana, ForeColor=RGB(36,84,155) ÔÇö copiados exatamente do legado
+- **ComboBox** `cbo_4c_Imps` com lista fixa de 9 impressoras id├¬ntica ao legado + BINDEVENT `InteractiveChange`
+- **TextBoxes**: `txt_4c_Ordem` (InputMask="99"), `txt_4c_Opernf` (MaxLength=2), `txt_4c_Fwget1` (MaxLength=2, ReadOnly=.T. inicial), `txt_4c_Descr`
+- **OptionGroup** `opt_4c_Opc_fixo` com Sim/N├úo (Buttons(1)=5,5 / Buttons(2)=47,5, Value=2 default)
+
+**Novo m├®todo `ImpInteractiveChange()`:** Implementa o `When = InList(imps,'SWEDA','NSWEDA')` do legado ÔÇö habilita `txt_4c_Fwget1` apenas quando Impressora ├® SWEDA ou NSWEDA, limpa o campo caso contr├írio.
+
+**Corre├º├Áes:**
+- `HabilitarCampos()`: removeu `.ReadOnly` do ComboBox (propriedade inexistente); `txt_4c_Fwget1` delega ao `ImpInteractiveChange()` quando habilitando
+- `BOParaForm()`: chama `ImpInteractiveChange()` ao final para sincronizar estado de Cod.Abertura ap├│s carregar dados

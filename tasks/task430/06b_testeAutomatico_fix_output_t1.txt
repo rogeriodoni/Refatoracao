@@ -1,0 +1,1 @@
+﻿The fix removes 4 lines from `ConfigurarPaginaLista()` that tried to set `RecordSource = "cursor_4c_Dados"` and `ColumnN.ControlSource` before the cursor existed. Those assignments are already correctly set in `CarregarLista()` (which runs after `Buscar("")` creates the cursor). Column widths and headers ÔÇö which don't require the alias ÔÇö are kept in place.

@@ -1,0 +1,12 @@
+﻿Fase 4/8 conclu├¡da. O arquivo `FormDIC.prg` foi atualizado com:
+
+**`ConfigurarPaginaLista()`** ÔÇö 5 bot├Áes CRUD em `cnt_4c_Botoes` (Incluir L=5, Visualizar L=80, Alterar L=155, Excluir L=230, Buscar L=305) + `cmd_4c_Encerrar` em `cnt_4c_Saida` + `grd_4c_Dados` (3 colunas: Idioma=70px, Express├úo=280px, Tradu├º├úo=280px) + 6 BINDEVENTs (todos handlers PUBLIC).
+
+**`CarregarLista()`** ÔÇö agora configura o grid completo: `RecordSource = "cursor_4c_Dados"`, ControlSource por coluna, widths e `Header1.Caption` redefinidos AP├ôS RecordSource (evita Problem 32), guard `gb_4c_ValidandoUI`, chama `FormatarGridLista()`.
+
+**Novos m├®todos adicionados:**
+- `FormatarGridLista()` ÔÇö Tahoma 8 em todas colunas
+- `AlternarPagina()` ÔÇö navega entre p├íginas, recarrega lista ao voltar para Page1
+- `LimparCampos()`, `HabilitarCampos()`, `AjustarBotoesPorModo()`, `BOParaForm()` ÔÇö todos com `PEMSTATUS` defensivo para campos de Page2 (que ser├úo adicionados na Fase 5)
+- `HabilitarCampos()` replica exatamente os `When` events do legado: Idioma s├│ edit├ível em INCLUIR, Expressao em INCLUIR/BUSCAR, Traducao em INCLUIR/ALTERAR
+- 6 handlers `Btn*Click()` PUBLIC (compat├¡veis com BINDEVENT): usam `cidchaves` como PK para `CarregarPorCodigo()`

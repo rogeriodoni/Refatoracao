@@ -1,0 +1,25 @@
+[2026-08-09 10:56:18] [INFO] === CLAUDE CLI INVOKER ===
+[2026-08-09 10:56:18] [INFO] Prompt File: C:\4c\tasks\task449\runtime_fix_prompt_06b_testeAutomatico_t2.md
+[2026-08-09 10:56:18] [INFO] Output File: C:\4c\tasks\task449\06b_testeAutomatico_fix_output_t2.txt
+[2026-08-09 10:56:18] [INFO] Model: sonnet
+[2026-08-09 10:56:18] [INFO] Timeout: 3600 segundos
+[2026-08-09 10:56:18] [INFO] Max Output Tokens: 128000
+[2026-08-09 10:56:18] [INFO] Context Files: 0 arquivo(s)
+[2026-08-09 10:56:18] [INFO] Invocando Claude CLI...
+[2026-08-09 10:56:18] [INFO] Prompt carregado: 55392 caracteres
+[2026-08-09 10:56:18] [INFO] Executando: claude --model sonnet --dangerously-skip-permissions --add-dir C:\4c
+[2026-08-09 10:56:18] [INFO] Tamanho total do prompt: 55392 caracteres
+[2026-08-09 10:56:18] [INFO] Invocando Claude CLI (tentativa 1/7)...
+[2026-08-09 11:27:38] [INFO] Claude CLI finalizado em 1879.6096579 segundos
+[2026-08-09 11:27:38] [INFO] Exit Code: 0
+[2026-08-09 11:27:38] [INFO] Output salvo em: C:\4c\tasks\task449\06b_testeAutomatico_fix_output_t2.txt
+[2026-08-09 11:27:38] [INFO] Output size: 857 bytes
+[2026-08-09 11:27:38] [INFO] SUCESSO: Claude CLI executado com sucesso
+[2026-08-09 11:27:38] [INFO] Preview do output:
+[2026-08-09 11:27:38] [INFO] Both edits are correct. Two fixes applied:
+
+**ICOBO.prg `CarregarIcones()` (lines 63ÔÇô68)** ÔÇö Added two guards before the TRY block:
+- `gb_4c_ModoTeste` check: returns immediately in test mode, no SQLEXEC reached
+- `gnConnHandle <= 0` check: returns immediately when no valid connection, preventing the 300-second TCP timeout regardless of how the method is invoked
+
+**FormICO.prg `InicializarForm()` (lines 44ÔÇô81)** ÔÇö Changed `IF VARTYPE != "O"` fall-through to `IF/ELSE`. When ICOBO cr

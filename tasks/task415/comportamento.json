@@ -1,0 +1,616 @@
+{
+  "resumo": {
+    "totalMetodos": 35,
+    "metodosComSQL": 11,
+    "metodosComValidacao": 21,
+    "totalQueries": 5,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["For", "fGravarLog", "fUniqueIds", "fwBuscaExt", "fwBuscaSel", "fTamanhoImagem", "FileToStr"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDFCT",
+      "evento": "Procedure",
+      "linhas": 159,
+      "codigoOriginal": "Local loDad, loFic, loCom, lcGru, lcSGr\n\nloDad = ThisForm.pagina.dados\nloFic = ThisForm.pagina.dados.pgfPagina.pgficha\nloCom = ThisForm.pagina.dados.pgfPagina.pgcompl\n\nZap In crFichaCab\nZap In crFichaTec\n\nlcGru = crDados.CGrus\nlcDGr = crDados.DGrus\nlcSGr = crDados.SGrus\nlcDSr = crDados.DSGru\n\n* Apanhando os Dados Do Grupo de Produto Para o Cabeçalho da Ficha Técnica\nDo Case\nCase( ThisForm.pnTipo = 0 )\n\tlcQuery = [Select a.CGrus, a.nChkDims, a.nChkPess, a.nChkTems, a.nChkImps, a.nFixFigs, a.mFicT... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "ChkDims,ChkPess,ChkTems,ChkImps,ChkCxas",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDFCT",
+      "evento": "Procedure",
+      "linhas": 88,
+      "codigoOriginal": "Local llOks\n\nllOks = .t.\n\nlcGru = crFichaCab.CGrus\nlcSgr = crFichaCab.SGrus\n\nlcQuery = [Select * ] + ;\n\t\t\t[From SigCdFtc ] + ;\n\t\t   [Where CGrus = '] + lcGru + [' And ] + ;\n\t\t   \t\t [SGrus = '] + lcSGr + [']\n\nIf (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalCFTec]) < 1)\n\t=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (VerificaExcluir - SigCdFtc)])\n\tllOks = .f.\nEndIf\n\nIf llOks\n\tSelect LocalCfTec\n\tScan\n\t\tSelect crFichaTec\n\t\tLocate For (Not Empty(COrds) And Not Empty(CGrus) A... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "For",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFCT",
+      "evento": "Procedure",
+      "linhas": 32,
+      "codigoOriginal": "Local llOks\n\nllOks = .t.\n\n* Apagando os Registros Anteriores de Ficha Técnica\nlcQuery = [Delete From SigCdFtc ] + ;\n\t\t   [Where CGrus = '] + crFichaCab.CGrus + [' And ] + ;\n\t\t   \t\t [SGrus = '] + crFichaCab.SGrus + [']\n\nIf (ThisForm.poDataMgr.SqlExecute(lcQuery, []) < 1)\n\t=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (mSv_Alterar - Delete - SigCdFtc)])\n\tllOks = .f.\nEndIf\n\nIf llOks\n\t* Gravando Fisicamente os Registros\n\tIf (ThisForm.poDataMgr.Commit() < 1)\n\t\t=MessageBox([Fa... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fGravarLog",
+        "metodosFormChamados": "SqlExecute,Commit,RollBack",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFCT",
+      "evento": "Procedure",
+      "linhas": 131,
+      "codigoOriginal": "Local llOks\n\nllOks = .t.\n\nIf llOks\n\t* Checando Se Digitou Dados Válidos Na Grade de Ficha Técnica\n\tIf (Reccount([crSigCdFtc]) < 1)\n\t\t=MessageBox([Não Há Nenhum Registro Válido Na Grade de Ficha Técnica!!!], 16, [Atenção!!!])\n\t\tllOks = .f.\n\tEndIf\nEndIf\n\nIf llOks\n\t* Checando Se Digitou Dados Duplicados Na Grade de Ficha Técnica\n\tSelect CCars, CTits, Sum(1) as Totas ;\n\t  From crSigCdFtc ;\n\t Group By CCars, CTits ;\n\t  Into Cursor csItens\n\n\tSelect csItens\n\tScan\n\t\tIf (csItens.Totas > 1)\n\t\t\t=MessageBox... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute,Update,Commit,RollBack",
+        "controlesReferenciados": "ChkDims,ChkPess,ChkTems,ChkImps",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFCT",
+      "evento": "Procedure",
+      "linhas": 15,
+      "codigoOriginal": "Create Cursor crDados (CGrus c(20), DGrus c(30), SGrus c(6), DSGru c(20), TemDados c(20))\nIndex On CGrus + SGrus Tag Col1\nIndex On SGrus + CGrus Tag Col2\nIndex On DGrus + CGrus Tag Col3\nIndex On DSGru + SGrus Tag Col4\nSet Order To Col1 In crDados\n\nCreate Cursor crFichaCab (CGrus c(20), DGrus c(30), SGrus c(6), DSGru c(20), nChkDims n(1), ;\n\t\t\t\t\t\t  nChkPess n(1), nChkTems n(1), nChkImps n(1), nFixFigs n(1), mFicTecs m Null)\n\nCreate Cursor crFichaTec (CGrus c(20), SGrus c(6), CCars c(20), CTits c(... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkDims,ChkPess,ChkTems,ChkImps,ChkCxas",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFCT",
+      "evento": "Init",
+      "linhas": 284,
+      "codigoOriginal": "Lparameters pcTipo\n\n** Tipo ( = 0 - FTec Produtos, = 1 - FTec Contas, = 2 - FTec Movimentaçoes ) para manter compatibilidade\nThisForm.pnTipo = Iif(Type([pcTipo])<>[C],0,Iif(pcTipo == 'C',1,2))\n\nDo case\nCase( ThisForm.pnTipo = 1 )\n\tThisForm.Caption = [Cadastro de Perfil de Contas]\n\tThisForm.Name    = [SIGCDFCTC]\n\nCase( ThisForm.pnTipo = 2 )\n\tThisForm.Caption = [Configuração de Movimentação]\n\tThisForm.Name    = [SIGCDFCTO]\n\t\nOtherWise\n\tThisForm.Caption = [Cadastro de Ficha Técnica]\n\tThisForm.Name ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "pnTipo = Iif",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDFCT",
+      "evento": "Click",
+      "linhas": 177,
+      "codigoOriginal": "LPARAMETERS opcao\nLocal loDad, loFic, loCom, lcGru, lcSGr\n\nIf Type( 'Opcao' ) = 'N'\n\tThis.Value = Opcao\nEndif\n\ndodefault( Opcao )\n\nloDad = ThisForm.pagina.lista\nloFic = ThisForm.pagina.dados.pgfPagina.pgficha\nloCom = ThisForm.pagina.dados.pgfPagina.pgcompl\n\nZap In crFichaCab\nZap In crFichaTec\n\nlcGru = crDados.CGrus\nlcDGr = crDados.DGrus\nlcSGr = crDados.SGrus\nlcDSr = crDados.DSGru\n\n* Apanhando os Dados Do Grupo de Produto Para o Cabeçalho da Ficha Técnica\nDo Case\nCase ( ThisForm.pnTipo = 0 )\n\tlcQ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "ChkDims,ChkPess,ChkTems,ChkImps,ChkCxas",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDFCT",
+      "evento": "Click",
+      "linhas": 37,
+      "codigoOriginal": "Local llRet\nllRet = .t.\n\nZap In crSigCdFtc\n\n* Inserindo os Registros de Ficha Técnica no Cursor Para Gravação\nSelect crFichaTec\nScan\n\tIf (Not Empty(crFichaTec.COrds) And Not Empty(crFichaTec.CGrus) And ;\n\t\tNot Empty(crFichaTec.CCars) And Not Empty(crFichaTec.CTits) And Not (crFichaTec.CLins < 1))\n\n\t \tInsert Into crSigCdFtc (COrds, CGrus, SGrus, CCars, CTits, CLins, Maxs, Mins, nChkCxas, cSelecaos, cIdChaves, nTipos, cTpDados) ;\n\t \t\t\t\t\tValues (crFichaTec.COrds, crFichaTec.CGrus, crFichaTec.SGrus,... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "VerificaExcluir,mSv_Alterar,mSv_Excluir,mAtivapagina1",
+        "controlesReferenciados": "ChkCxas",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFCT",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "=DoDefault()\nIf ThisForm.plCancelar\n\tThisForm.mAtivapagina1\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.cntCopiarAcesso.btnCopiarAcessos",
+      "evento": "Click",
+      "linhas": 40,
+      "codigoOriginal": "lcQuery = [Select * ] + ;\n\t\t  [From SigCdFtc ] + ;\n\t\t  [Where CGrus = '] + This.Parent.GetCgrus.Value + [' And ] + ;\n\t\t  [SGrus = '] + This.Parent.GetSGrus.Value + [']\n\n\nThisForm.poDatamgr.SqlExecute(lcQuery, [cpSigCdFtc])\n\nSelect cpSigCdFtc \n\nIf ! Eof()\n\n\tSelect crFichaTec\n\tZap\n\n\tSelect cpSigCdFtc \n\tReplace All cGrus With This.Parent.Parent.getCgrus.Value\n\tReplace All sGrus With This.Parent.Parent.getSGrus.Value\n\n\tScan \n\t\n\t\tScatter Memo MemVar\n\t\tSelect crFichaTec\n\t\tAppend Blank\n\t\tGather MemVar ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.cntCopiarAcesso.btnCancelar",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "This.Parent.Parent.CntCopiarAcesso.Visible = .F.\nThis.Parent.Parent.CmdCopia.Visible = .T.\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.cntCopiarAcesso.getDSGru",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Empty(This.Parent.GetSGrus.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.cntCopiarAcesso.getDSGru",
+      "evento": "Valid",
+      "linhas": 29,
+      "codigoOriginal": "Local loLista\n\nDimension laFiltro(1,2)\n\nIf Not Empty(This.Value)\n\tlaFiltro(1,1) = 'CGrus'\n\tlaFiltro(1,2) = Padr(This.Parent.GetCgrus.Value, 3)\n\n\tloLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigCdPsg', ;\n\t\t\t\t\t\t   'CrListaRemota', 'Descricaos', This.Value, 'Seleção', .t., .f., @laFiltro)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Descricaos', '', 'Descrição')\n\t\tloLista.mAddColuna('Codigos',    '', 'Código')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Parent.GetSGrus.Value = C... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.cntCopiarAcesso.getSGrus",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "*",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.cntCopiarAcesso.getSGrus",
+      "evento": "Valid",
+      "linhas": 29,
+      "codigoOriginal": "Local loLista\n\nDimension laFiltro(1,2)\n\nIf Not Empty(This.Value)\n\tlaFiltro(1,1) = 'CGrus'\n\tlaFiltro(1,2) = Padr(This.Parent.GetCgrus.Value, 3)\n\n\tloLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigCdPsg', ;\n\t\t\t\t\t\t   'CrListaRemota', 'Codigos', This.Value, 'Seleção', .t., .f., @laFiltro)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Codigos',    '', 'Código')\n\t\tloLista.mAddColuna('Descricaos', '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Parent.GetSGrus.Value = CrLi... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.cntCopiarAcesso.getCgrus",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "*",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.cntCopiarAcesso.getCgrus",
+      "evento": "Valid",
+      "linhas": 21,
+      "codigoOriginal": "Private pGru, pSGr\nLocal loLista\n\nIf Not Empty(This.Value)\n\tIf Not Seek(This.Value, 'crSigCdGrpFilter', 'CGrus')\n\t\txBrow = CreateObject('fwbuscasel', 'crSigCdGrpFilter', 'CGrus', This.Value, 'Cadastro de Grupos')\n\t\txBrow.AddColuna('CGrus', '', 'Código',    .t.)\n\t\txBrow.AddColuna('DGrus', '', 'Descrição', .t.)\n\t\txBrow.Show\n\tEndIf\n\tIf (Lastkey() <> 27)\n\t\tThis.Parent.GetCgrus.Value = crSigCdGrpFilter.Cgrus\n\t\tThis.Parent.GetDGrus.Value = crSigCdGrpFilter.Dgrus\n\tEndIf\nElse\n\tThis.Parent.GetCgrus.Value... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.cntCopiarAcesso.getDGrus",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Empty(This.Parent.GetCgrus.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.cntCopiarAcesso.getDGrus",
+      "evento": "Valid",
+      "linhas": 21,
+      "codigoOriginal": "Private pGru, pSGr\nLocal loLista\n\nIf Not Empty(This.Value)\n\tIf Not Seek(This.Value, 'crSigCdGrpFilter', 'CGrus')\n\t\txBrow = CreateObject('fwbuscasel', 'crSigCdGrpFilter', 'DGrus', This.Value, 'Cadastro de Grupos')\n\t\txBrow.AddColuna('DGrus', '', 'Descrição', .t.)\n\t\txBrow.AddColuna('CGrus', '', 'Código',    .t.)\n\t\txBrow.Show\n\tEndIf\n\tIf (Lastkey() <> 27)\n\t\tThis.Parent.GetCgrus.Value = crSigCdGrpFilter.Cgrus\n\t\tThis.Parent.GetDGrus.Value = crSigCdGrpFilter.Dgrus\n\tEndIf\nElse\n\tThis.Parent.GetCgrus.Value... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.grdFichas.Column1.Text1",
+      "evento": "Valid",
+      "linhas": 21,
+      "codigoOriginal": "Local loLista\n\nDimension laFiltro(1,2)\n\nIf Not Empty(This.Value)\n\tlaFiltro(1,1) = 'nTipos'\n\tlaFiltro(1,2) = ThisForm.pnTipo\n\tloLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigCrRaP', ;\n\t\t\t\t\t\t   'crListaRemota', 'Codigos', This.Value, 'Seleção', .T., .F., @laFiltro)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Codigos', '', 'Grupo Características')\n\t\tloLista.mAddColuna('Descrs',  '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value = crListaRemota.Codigos\n\tUse In c... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.grdFichas.Column2.Text1",
+      "evento": "Valid",
+      "linhas": 21,
+      "codigoOriginal": "Local loLista\n\nDimension laFiltro(1,2)\n\nIf Not Empty(This.Value)\n\tlaFiltro(1,1) = 'nTipos'\n\tlaFiltro(1,2) = ThisForm.pnTipo\n\tloLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigPrCpP', ;\n\t\t\t\t\t\t   'crListaRemota', 'Codigos', This.Value, 'Seleção', .T., .F., @laFiltro)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Codigos', '', 'Título Características')\n\t\tloLista.mAddColuna('Descrs',  '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value = crListaRemota.Codigos\n\tUse In ... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.grdFichas.Column8.Text1",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "If ! InList(This.Value, [ ], [S], [N])\n\tMessageBox('Tipos de Seleção Validas S ou N !!!', 16, [Abrir Janela de Seleção])\n\tReturn(.F.)\nEndIf\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.grdFichas.Column9.Text1",
+      "evento": "Valid",
+      "linhas": 24,
+      "codigoOriginal": "If ! InList(This.Value, [ ], [C], [D], [N])\n\tMessageBox('Tipo de Dado inválido, informar [ ], [C-Caracter], [D-Data] ou [N-Numérico]!!!', 16, [])\n\tReturn(.F.)\nEndIf\n\nLocal lnOrd\n\nIf (Lastkey() = 13 Or BetWeen(Lastkey(), 48, 57) or InList(This.Value,' ','C','D','N')) And (ThisForm.pcEscolha = [ALTERAR])\n\tlnOrd = Iif(crFichaTec.COrds > 0, crFichaTec.COrds + 1, 1)\n\n\tSelect crFichaTec\n\tIf (Not Eof([crFichaTec]) And Not Empty(crFichaTec.COrds) And Not Empty(crFichaTec.CGrus) And ;\n\t    Not Empty(crFi... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.cmdApagar",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "Return (ThisForm.pcEscolha = [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.cmdApagar",
+      "evento": "Click",
+      "linhas": 21,
+      "codigoOriginal": "If Not Eof([crFichaTec])\n\tDelete In crFichaTec\n\tGo Top In crFichaTec\n\tGo Bottom In crFichaTec\n\tThisForm.pagina.dados.pgfPagina.pgficha.grdFichas.Refresh\n\n\tSelect * ;\n\t  From crFichaTec ;\n\t Where Empty(CCars) Or Empty(CTits) Or Empty(CLins) ;\n\t  Into Cursor TmpVazio\n\n\tIf (Reccount([TmpVazio]) = 0)\n\t\tInsert Into crFichaTec (COrds, CGrus, SGrus) Values (1, crFichaCab.CGrus, crFichaCab.SGrus)\n\t\tGo Bottom In crFichaTec\n\t\tKeyboard [{DnArrow}]\n\tEndIf\n\n\tThisForm.pagina.dados.pgfPagina.pgficha.grdFichas.... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.cmdResps",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "If Not Empty(crFichaTec.CGrus) And Not Empty(crFichaTec.CCars) And Not Empty(crFichaTec.CTits)\n\tDo Form SigCdFte With crFichaTec.CGrus, crFichaTec.SGrus, crFichaTec.CCars, crFichaTec.CTits, ThisForm.pcEscolha, ThisForm.pnTipo\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.cmdCopia",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "This.Parent.Visible = .F.\nThis.Parent.Parent.cntCopiarAcesso.Visible = .T.\nThis.Parent.Parent.cntCopiarAcesso.GetCgrus.SetFocus\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.optNChkDims",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (ThisForm.pcEscolha = [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.optNChkPess",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (ThisForm.pcEscolha = [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.optNChkTems",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (ThisForm.pcEscolha = [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFCT.Pagina.Dados.pgfPagina.pgCompl.cmdBotoes",
+      "evento": "Click",
+      "linhas": 6,
+      "codigoOriginal": "* Indo Para a Página de Ficha Técnica\nWith ThisForm.pagina.dados\n\t.pgfPagina.ActivePage = 1\n\t.pgfPagina.pgficha.grdFichas.Column1.SetFocus()\nEndWith\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFCT.Pagina.Dados.pgfPagina.pgCompl.cmdFigura",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "Return (ThisForm.pcEscolha = [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFCT.Pagina.Dados.pgfPagina.pgCompl.cmdFigura",
+      "evento": "Click",
+      "linhas": 48,
+      "codigoOriginal": "Local lcAnt, lnCon\n\nIf InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')\n\tlcAnt = Sys(5) + Sys(2003)\n\tIf Directory(goSistema.DirImagens)\n\t\tSet Default To &goSistema.DirImagens.\n\tEndIf\n\tlcFig = Alltrim(GetPict([Formato Jpeg:JPG;Formato Bitmap:BMP], [Nome do Arquivo:], [Selecionar]))\n\tSet Default To &lcAnt.\n\n\tIf Not Empty(lcFig) And File(lcFig)\n\t\tIf Not fTamanhoImagem(lcFig, ThisForm.poDataMgr, .t.)\n\t\t\tReturn .f.\n\t\tEndIf\n\n\t\tIf (MessageBox([Confirma a Transferência da Imagem?], 4+32+256, [Confirmaçã... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fTamanhoImagem,FileToStr",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDFCT.Pagina.Dados.pgfPagina.pgCompl.optNChkImps",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (ThisForm.pcEscolha = [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFCT.Pagina.Dados.pgfPagina.pgCompl.chkNFixFigs",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (ThisForm.pcEscolha = [ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDFCT.Procedure",
+      "queryOriginal": "lcQuery = [Delete From SigCdFtc ] + ; \t\t   [Where CGrus = '] + crFichaCab.CGrus + [' And ] + ; \t\t   \t\t [SGrus = '] + crFichaCab.SGrus + [']",
+      "tabelas": "SigCdFtc",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDFCT.Procedure",
+      "queryOriginal": "\tSelect CCars, CTits, Sum(1) as Totas ; \t  From crSigCdFtc ; \t Group By CCars, CTits ; \t  Into Cursor csItens",
+      "tabelas": "crSigCdFtc",
+      "colunas": "CCars,CTits",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDFCT.Click",
+      "queryOriginal": "\t \tInsert Into crSigCdFtc (COrds, CGrus, SGrus, CCars, CTits, CLins, Maxs, Mins, nChkCxas, cSelecaos, cIdChaves, nTipos, cTpDados) ; \t \t\t\t\t\tValues (crFichaTec.COrds, crFichaTec.CGrus, crFichaTec.SGrus,... [TRUNCADO]",
+      "tabelas": "crSigCdFtc",
+      "colunas": "COrds,CGrus,SGrus,CCars,CTits,CLins,Maxs,Mins,nChkCxas,cSelecaos,cIdChaves,nTipos,cTpDados",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.cmdApagar.Click",
+      "queryOriginal": "\tSelect * ; \t  From crFichaTec ; \t Where Empty(CCars) Or Empty(CTits) Or Empty(CLins) ; \t  Into Cursor TmpVazio",
+      "tabelas": "crFichaTec",
+      "colunas": "TmpVazio",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDFCT.Pagina.Dados.pgfPagina.pgFicha.cmdApagar.Click",
+      "queryOriginal": "\t\tInsert Into crFichaTec (COrds, CGrus, SGrus) Values (1, crFichaCab.CGrus, crFichaCab.SGrus)",
+      "tabelas": "crFichaTec",
+      "colunas": "COrds,CGrus,SGrus",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdFtc", "crSigCdFtc", "crFichaTec"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

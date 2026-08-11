@@ -1,0 +1,11 @@
+﻿Encontrei o legado. Verificando o c├│digo original em `SigCdFis_form_codigo_fonte.txt` linha 597-599:
+
+```
+*** mena - 27/02/2015 - se porta = 9 considera USB ***
+lcPor  = Alltrim(Str(ThisForm.Spinner1.Value))
+lcNewCon = Strtran(lcConfig, 'Porta' + lcComs, IIF(lcPor='9', 'Porta=USB', 'Porta=COM' + lcPor), -1, 1, 1)
+```
+
+**O alerta ├® um FALSO POSITIVO.** A condi├º├úo `= "9"` em `FisBO.prg:214` (`IF loc_cPor = "9"`) **existe no c├│digo original legado** ÔÇö ├® a regra de neg├│cio real da Bematech: porta 9 = USB. O c├│digo migrado converteu corretamente o `IIF(lcPor='9', ...)` do legado para um `IF/ELSE` equivalente.
+
+Nenhuma altera├º├úo ├® necess├íria. Os arquivos `FormFis.prg` e `FisBO.prg` n├úo cont├¬m cl├íusulas SQL WHERE inventadas ÔÇö este form n├úo usa SQLEXEC, opera apenas com cursor VFP local (`CrSigFiFis`) e arquivos `.INI`.

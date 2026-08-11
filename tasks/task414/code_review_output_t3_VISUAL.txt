@@ -1,0 +1,10 @@
+﻿O arquivo j├í tem os valores corretos. Os `.Top = 3` e `.Left = 5` que o validador est├í detectando s├úo das propriedades de `Buttons(1)` dentro do WITH aninhado, n├úo do OptionGroup em si.
+
+Verificando os valores reais no arquivo:
+
+- `obj_4c_Optiongroup1` (linha 1338-1339): `.Top = 429`, `.Left = 625` Ô£ô (correto)
+- `obj_4c_Optiongroup2` (linha 1390-1391): `.Top = 451`, `.Left = 624` Ô£ô (correto)
+
+Os valores `Top=3` e `Left=5` reportados pelo validador s├úo os valores de `WITH .Buttons(1)` aninhado dentro do WITH do OptionGroup. O validador tem um false positive ÔÇö ele n├úo est├í parseando corretamente os WITH aninhados e est├í confundindo as propriedades do Button filho com as do OptionGroup pai.
+
+**Conclus├úo**: Nenhuma corre├º├úo necess├íria. Os 4 problemas detectados s├úo falsos positivos do validador, causados pela incapacidade de distinguir o WITH `.Buttons(1)` aninhado do WITH pai do OptionGroup. As posi├º├Áes dos dois OptionGroups j├í est├úo corretas e fi├®is ao legado original.

@@ -1,0 +1,13 @@
+﻿O arquivo est├í correto. Fase 5 conclu├¡da com sucesso.
+
+**O que foi adicionado em `ConfigurarPaginaDados()`:**
+
+1. **Bot├Áes `cmd_4c_Confirmar` e `cmd_4c_Cancelar`** dentro de `cnt_4c_BotoesAcao` ÔÇö com ├¡cones corretos (`cadastro_salvar_60.jpg` / `cadastro_cancelar_60.jpg`), BINDEVENTs para `BtnSalvarClick`/`BtnCancelarClick`, propriedades Comic Sans completas.
+
+2. **Label `lbl_4c_Codigo`** (Say7 do legado): `"C" + CHR(243) + "digo :"`, Top=118 (89+29 compensa├º├úo), Left=161, Width=58.
+
+3. **TextBox `txt_4c_Codigo`** (Get\_codigo do legado): Top=115 (86+29), Left=215, Width=31, Height=23, MaxLength=3.
+
+4. **`BOParaForm()`** atualizada: vincula `txt_4c_Codigo ÔåÉ this_oBusinessObject.this_cCodigo` (guard PEMSTATUS para seguran├ºa); stub para `txt_4c_Descr` deixado para Fase 6.
+
+**Fase 6** adicionar├í: `lbl_4c_Descricao` + `txt_4c_Descr` (Say2/get\_Descr do legado) + implementa├º├úo completa de `FormParaBO()`, `BtnSalvarClick()`, `BtnCancelarClick()`, `HabilitarCampos()`, `LimparCampos()`.

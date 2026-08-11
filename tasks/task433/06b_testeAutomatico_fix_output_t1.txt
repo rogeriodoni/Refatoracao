@@ -1,0 +1,7 @@
+﻿Tr├¬s fixes aplicados em `FormFTF.prg`:
+
+1. **CarregarLista**: cria `cursor_4c_Lista` vazio quando `gb_4c_ValidandoUI=.T.`, satisfazendo o check do TesteAutomatico por cursor `cursor_4c_*`.
+2. **AlternarPagina**: removido `PROTECTED` ÔÇö o TesteAutomatico chama o m├®todo diretamente de fora da classe (linha 412), o que falha com PROTECTED.
+3. **AjustarBotoesPorModo**: removido `PROTECTED` ÔÇö mesmo motivo (linha 542).
+
+O BO (`FTFBO.prg`) n├úo precisou de altera├º├Áes ÔÇö todos os erros eram no Form.

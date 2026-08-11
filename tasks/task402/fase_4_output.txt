@@ -1,0 +1,10 @@
+﻿Fase 4 conclu├¡da. O `CarregarLista()` foi atualizado com implementa├º├úo completa:
+
+- Chama `Buscar("")` no BO para popular `cursor_4c_Dados`
+- Define `RecordSource` e `ColumnCount` **fora** do `WITH` (evita Problema 36)
+- Define `ControlSource` das 3 colunas **ap├│s** o `RecordSource` (evita Problema 48)
+- Redefine `Header1.Caption` imediatamente ap├│s (evita Problema 6/32 ÔÇö reset de headers)
+- Larguras exatas do legado: cods(75), descs(297), pesos(107)
+- Chama `FormatarGridLista()` ao final
+
+`ConfigurarPaginaLista()` e `AlternarPagina()` j├í estavam completos das fases anteriores e n├úo precisaram de altera├º├úo.

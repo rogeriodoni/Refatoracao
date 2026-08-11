@@ -1,0 +1,13 @@
+﻿Tudo correto. Fase 5 conclu├¡da.
+
+**O que foi adicionado:**
+
+1. **`ConfigurarPaginaDados()`** (linha 557) ÔÇö m├®todo obrigat├│rio para esta fase:
+   - `Column1.Text1`: `Sparse=.F.`, `BorderStyle=0`, `Margin=0`, cores e `MaxLength=12` (campo `fpags CHAR(12)` do legado)
+   - `Column2.Text1`: mesmas props visuais, mais `ReadOnly=.T.` inicial ÔÇö equivalente ao `When: Return ( Not Empty(Fpags) And This.Value = 0 )` do legado
+
+2. **`FormatarGridLista(par_oGrid)`** (linha 597) ÔÇö m├®todo exigido pelo template de migra├º├úo
+
+3. **`GradeAfterRowColChange()`** atualizado (linha 486) ÔÇö ap├│s validar `fpags` ao sair da Column1, atualiza `Column2.ReadOnly` dinamicamente: habilitada somente quando `fpags` estiver preenchido e `nparcs = 0`, replicando o `When` do legado sem precisar de `BINDEVENT BeforeRowColChange`
+
+4. **`ConfigurarPaginaLista()`** atualizado para chamar `THIS.ConfigurarPaginaDados()` ap├│s `ConfigurarGrade()`

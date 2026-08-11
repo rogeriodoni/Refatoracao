@@ -1,0 +1,13 @@
+﻿O arquivo est├í correto. A Fase 4 est├í completa. Aqui est├í o resumo do que foi adicionado:
+
+**Fase 4 conclu├¡da ÔÇö `FormDpi.prg` atualizado com:**
+
+1. **5 bot├Áes CRUD em `cnt_4c_Botoes`** (Incluir/Visualizar/Alterar/Excluir/Buscar) com BINDEVENTs para `Btn*Click`, propriedades can├┤nicas (Comic Sans MS, Themes=.F., SpecialEffect=0, PicturePosition=13)
+
+2. **`grd_4c_Lista` na Page1** ÔÇö Top=117, Left=26, Width=890, Height=478 ÔÇö com `ColumnCount=2` definido fora do WITH (evita Problema 36), colunas com Width=80/300
+
+3. **`CarregarLista()` atualizado** ÔÇö ap├│s `Buscar("")` faz binding do grid: `RecordSource`, `ControlSource` por coluna, reconfigura `Header1.Caption` (Problema 6 ÔÇö VFP reseta headers ap├│s RecordSource), chama `FormatarGridLista()`
+
+4. **`AlternarPagina(par_nPagina)`** ÔÇö troca ActivePage e chama `CarregarLista()` ao voltar para Page1
+
+5. **`FormatarGridLista(par_oGrid)`** ÔÇö aplica Tahoma/8 em todas as colunas via `SetAll`

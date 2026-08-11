@@ -1,0 +1,7 @@
+﻿Tamb├®m preciso remover o `cursor_4c_LkpDesc` do `Destroy()` se ele n├úo ├® mais criado via SQL direto? N├úo ÔÇö o `AbrirLookupDesc()` ainda cria esse cursor via `FormBuscaAuxiliar`, ent├úo o cleanup em `Destroy()` continua correto.
+
+Corre├º├úo aplicada:
+
+- **DESCS** (linha 506-524): removido o bloco SQL `WHERE descs = ...` de `ValidarDesc()`. O m├®todo agora vai direto para `AbrirLookupDesc()`, alinhando com o comportamento do legado (apenas `WHERE Tipos = ?` era usado no original).
+- **CIDCHAVES**: sem altera├º├úo ÔÇö est├í em `UPDATE ... WHERE cidchaves = ...` (identifica├º├úo por PK), n├úo ├® filtro SELECT inventado.
+- **CONTROLCOUNT**: sem altera├º├úo ÔÇö ├® `PEMSTATUS(ctrl, "ControlCount", 5)`, checagem de propriedade VFP9, n├úo SQL.

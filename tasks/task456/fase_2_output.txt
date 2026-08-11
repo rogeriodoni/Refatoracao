@@ -1,0 +1,20 @@
+﻿All good ÔÇö bar 116 also exists in `popRelatorios` but that's a different popup, no conflict.
+
+The SIGCDLCH migration is now integrated end-to-end:
+
+**Phase 7 complete ÔÇö menu integration:**
+- `menu.prg` line 262: `DEFINE BAR 116 OF popCadastros PROMPT "Lote de Cheques"` with proper message
+- `menu.prg` line 365: `ON SELECTION BAR 116 OF popCadastros DO AbrirFormlch`
+- `menu.prg` line 8266: `PROCEDURE AbrirFormlch()` using the canonical error-handling pattern from AbrirFormBch
+
+**Auto-loading (no config.prg changes needed):**
+- `lchBO.prg` in `classes/` is picked up by `ADIR(*BO.prg)` at config line 276
+- `Formlch.prg` in `forms/cadastros/` is picked up by `ADIR(Form*.prg)` at config line 296
+
+**Summary of all completed phases:**
+- Phase 1 ÔÇö `lchBO.prg` DataAccess layer (Buscar, CarregarPorCodigo, BuscarCheques, ObterProximoLote, Inserir, Atualizar, ExecutarExclusao)
+- Phase 2 ÔÇö `lchBO.prg` BO properties and mappings (all SigChLcq fields + extended display properties)
+- Phase 3 ÔÇö `Formlch.prg` complete 2-page form (2886 lines: Page1 with filter/grid, Page2 with 15+ containers including grd_4c_Cheques with checkbox column)
+- Phase 7 ÔÇö menu.prg integration
+
+Phase 8 (runtime testing) requires launching the VFP9 application and opening Cadastros ÔåÆ Lote de Cheques from the menu.

@@ -1,0 +1,225 @@
+{
+  "resumo": {
+    "totalMetodos": 11,
+    "metodosComSQL": 6,
+    "metodosComValidacao": 6,
+    "totalQueries": 4,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fChecaAcesso", "fConfigGeral", "fwBuscaSel", "Flag", "* From LocalMdsc2 Where", "From LocalMdsc1 Where Nvl"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDDCC",
+      "evento": "Init",
+      "linhas": 34,
+      "codigoOriginal": "LParameters poForm, pnDataSes, pEmpresa\n\nSet DataSession to pnDataSes\n\nThisform.ParentForm          = poForm\nThisform.ParentForm.Enabled  = .F.\nThisForm.pcescolha = ThisForm.parentform.pcEscolha\nThisForm.Podatamgr = ThisForm.ParentForm.Podatamgr\nThisForm.pEmps     = Iif(Type('pEmpresa') = [C],pEmpresa,_Empr)\n\nWith Thisform\n\t.cmdInserir.Visible = fChecaAcesso('SigMvEtd','INSERIR')\n\t.cmdInserir.Enabled = fChecaAcesso('SigMvEtd','INSERIR') And InList(ThisForm.pcEscolha,'INSERIR','ALTERAR')\n\t.cmdExc... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso",
+        "metodosFormChamados": "pEmps     = Iif",
+        "controlesReferenciados": "Get_total",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDDCC",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "=fConfigGeral()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDDCC.GradeFPagto.Column1.Text1",
+      "evento": "Valid",
+      "linhas": 47,
+      "codigoOriginal": "If Not IsEmpty(This.Value)\n\tlcSql = [Select Nascs, DtnCons From SigCdCli Where Iclis = ']+TprMvCab.ContaDs+[']\n\tIf (ThisForm.poDataMgr.SqlExecute(lcSql, [LocalCli]) < 1)\n\t\t=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalCli)])\n\t\tReturn 0\n\tEndIf\n\tlcQuery = [Select a.*, b.Emps, c.Dopes ] + ;\n\t\t\t\t[From SigCdFs a Left Join SigCdFsI b On a.Codigos = b.Codigos ] + ;\n\t\t\t\t[Left Join SigCdFsO c On a.Codigos = c.Codigos ] + ;\n\t\t\t   [Where a.Tipos = 'D' And a.TpDescs <> 2 ] + ;... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel,Flag,* From LocalMdsc2 Where,From LocalMdsc1 Where Nvl",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "ChkDtAnivs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDDCC.GradeFPagto.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDDCC.GradeFPagto.Column3.Text1",
+      "evento": "LostFocus",
+      "linhas": 4,
+      "codigoOriginal": "Select [] as agrupar,Sum(Valos) as valos From xEestDsc group by 1 Into cursor selecao\nThisForm.Get_total.Value = Selecao.Valos\nThisForm.Get_total.Refresh\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_total",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDDCC.GradeFPagto.Column3.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (Not Empty(ThisForm.GradeFPagto.Column1.Text1.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDDCC.GradeFPagto.Column4.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (Not Empty(ThisForm.GradeFPagto.Column1.Text1.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDDCC.Get_total",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDDCC.cmdSair",
+      "evento": "Click",
+      "linhas": 10,
+      "codigoOriginal": "Select xEestDsc\nScan\n\tIf Valos <> 0 And (Empty(MotDscs) )\n\t\tMessageBox('Favor informar os dados corretamente. Todos os campos deverão estar preenchidos',0+16,'')\n\t\tReturn .f.\n\tEndif\nEndScan\nThisform.ParentForm.Enabled = .T.\nThisForm.Release\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDDCC.cmdInserir",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "Insert Into XEestDsc (Cidchaves) Values ( '  ' )\nSelect xEestDsc\nThisform.GradeFPagto.Column1.SetFocus\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDDCC.cmdExcluir",
+      "evento": "Click",
+      "linhas": 7,
+      "codigoOriginal": "Select xEestDsc\nIf Not Eof()\n\tDelete\n\tSkip\n\tSkip -1\nEndIf\nThisform.GradeFPagto.Refresh",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDDCC.GradeFPagto.Column1.Text1.Valid",
+      "queryOriginal": "\tlcSql = [Select Nascs, DtnCons From SigCdCli Where Iclis = ']+TprMvCab.ContaDs+['] \tIf (ThisForm.poDataMgr.SqlExecute(lcSql, [LocalCli]) < 1)",
+      "tabelas": "SigCdCli",
+      "colunas": "Nascs,DtnCons,Iclis,ContaDs+[],SqlExecutelcSql",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDDCC.GradeFPagto.Column1.Text1.Valid",
+      "queryOriginal": "\tlcQuery = [Select a.*, b.Emps, c.Dopes ] + ; \t\t\t\t[From SigCdFs a Left Join SigCdFsI b On a.Codigos = b.Codigos ] + ; \t\t\t\t[Left Join SigCdFsO c On a.Codigos = c.Codigos ] + ; \t\t\t   [Where a.Tipos = 'D' And a.TpDescs <> 2 ] + ;... [TRUNCADO]",
+      "tabelas": "SigCdFsI,SigCdFsO",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDDCC.GradeFPagto.Column3.Text1.LostFocus",
+      "queryOriginal": "Select [] as agrupar,Sum(Valos) as valos From xEestDsc group by 1 Into cursor selecao",
+      "tabelas": "xEestDsc",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDDCC.cmdInserir.Click",
+      "queryOriginal": "Insert Into XEestDsc (Cidchaves) Values ( '  ' )",
+      "tabelas": "XEestDsc",
+      "colunas": "Cidchaves",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdCli", "SigCdFsI", "SigCdFsO", "xEestDsc"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

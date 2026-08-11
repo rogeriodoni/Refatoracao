@@ -1,0 +1,23 @@
+﻿O `FpgBO.prg` j├í est├í **completamente implementado** desde a Fase 1. Verificando o que existe:
+
+**M├®todos presentes e corretos:**
+| M├®todo | Status |
+|--------|--------|
+| `Init()` ÔÇö configura `this_cTabela="SigCdPag"`, `this_cCampoChave="grupos"` | Ô£à |
+| `ObterChavePrimaria()` ÔÇö retorna `this_cGrupos` | Ô£à |
+| `CarregarDoCursor()` ÔÇö usa `SELECT (par_cAliasCursor)` antes de acessar campos | Ô£à |
+| `ValidarDados()` ÔÇö valida campo obrigat├│rio + duplicata | Ô£à |
+| `VerificarGrupoExistente()` ÔÇö COUNT(*) na SigCdPag | Ô£à |
+| `Inserir()` ÔÇö INSERT com `RegistrarAuditoria("INSERT")` | Ô£à |
+| `Atualizar()` ÔÇö UPDATE com `RegistrarAuditoria("UPDATE")` | Ô£à |
+| `ExecutarExclusao()` ÔÇö DELETE com `RegistrarAuditoria("DELETE")` | Ô£à |
+| `Buscar()` ÔÇö SELECT com padr├úo ZAP+APPEND para preservar Grid | Ô£à |
+| `CarregarPorCodigo()` ÔÇö com `this_lNovoRegistro = .F.` | Ô£à |
+| `BuscarGrupoGcr()` ÔÇö substituto para `fAcessoContab` (modos 'C' e 'D') | Ô£à |
+
+**Colunas de SigCdPag confirmadas pelo fonte original:**
+- `grupos` C(10) ÔÇö PK (FK para SigCdGcr.Codigos)
+- `descrs` C(20) ÔÇö descri├º├úo desnormalizada de SigCdGcr.Descrs  
+- `relprevs` N(1,0) ÔÇö tipo (1=Real, 2=Previsto)
+
+**Fase 2 j├í estava conclu├¡da** ÔÇö todos os m├®todos CRUD foram gerados na Fase 1. O arquivo est├í pronto para a Fase 3 (cria├º├úo do FormFpg.prg).

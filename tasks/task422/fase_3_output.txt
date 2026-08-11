@@ -1,0 +1,11 @@
+﻿**Fase 3/8 conclu├¡da.** `C:\4c\projeto\app\forms\cadastros\FormFornecedor.prg` criado com 647 linhas.
+
+**O que foi criado:**
+
+- **Estrutura base completa**: `DEFINE CLASS FormFornecedor AS FormBase` com todas as propriedades visuais (Height=600, Width=1000, Caption="Cadastro de Formas de Pagamento")
+- **Init()**: apenas `RETURN DODEFAULT()` (regra cr├¡tica)
+- **InicializarForm()**: cria `FornecedorBO`, configura PageFrame, carrega lista com guard `gb_4c_ValidandoUI`
+- **ConfigurarPageFrame()**: PageFrame com Top=-29, Tabs=.F., 2 pages com imagem de fundo
+- **ConfigurarPaginaLista()**: `cnt_4c_Cabecalho` (com labels Sombra/Titulo), `cnt_4c_Botoes` (vazio, Phase 4 adiciona CRUD), `cnt_4c_Saida` (com `cmd_4c_Encerrar` can├┤nico, Left=917, Width=75)
+- **ConfigurarPaginaDados()**: `cnt_4c_BotoesAcao` (vazio, Phase 4 adiciona Confirmar/Cancelar)
+- **Todos os m├®todos de comportamento** com implementa├º├Áes completas usando PEMSTATUS guards para os campos que ser├úo adicionados nas Phases 5-6: `CarregarLista`, `AlternarPagina`, `FormParaBO`, `BOParaForm`, `HabilitarCampos`, `LimparCampos`, `AjustarBotoesPorModo`, `Btn*Click`, `Destroy`

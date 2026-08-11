@@ -1,0 +1,8 @@
+﻿**Bug corrigido.**
+
+**Causa raiz**: linha 572 de `ConfigurarPaginaDados()` fazia `ColumnCount = 3` imediatamente antes de `RecordSource = "cursor_4c_Emps"`. O cursor `cursor_4c_Emps` tem apenas 2 campos (Emps, PercEmps) ÔÇö o VFP9 tentou fazer auto-bind de uma 3┬¬ coluna num campo inexistente, disparando um dialog interno de sistema que `SYS(2335, 0)` n├úo consegue suprimir ÔåÆ travamento de 300s.
+
+**Fix**: removida a linha `loc_oPagina.grd_4c_Dados.ColumnCount = 3` esp├║ria. O padr├úo can├┤nico Problema36 j├í estava correto:
+1. `RecordSource = ""` + `ColumnCount = 2` ÔåÆ cria 2 colunas imediatamente  
+2. WITH block ÔåÆ configura ControlSource/Width/Caption das colunas
+3. P├│s-WITH: apenas `RecordSource = "cursor_4c_Emps"` ÔåÆ vincula ao cursor com 2 campos

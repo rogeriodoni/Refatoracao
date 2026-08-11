@@ -1,0 +1,362 @@
+{
+  "resumo": {
+    "totalMetodos": 20,
+    "metodosComSQL": 8,
+    "metodosComValidacao": 5,
+    "totalQueries": 3,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fUniqueIds", "fAcessoEmpresa", "fDtoSQL"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDFER",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "Local lcBusca\n\nIf !IsEmpty(ThisForm.Pagina.Dados.getdatas.Value)\n\tThisForm.poDataMgr.LocateCursor('crSigCdFer','datas',ThisForm.Pagina.Dados.getdatas.Value)\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "LocateCursor",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFER",
+      "evento": "Init",
+      "linhas": 14,
+      "codigoOriginal": "LPARAMETERS lcacesso\n\nWith ThisForm\n\t.poDatamgr = CreateObject('fSqlConector')\n\tWith .poDatamgr\n\t\t.AddCursor('SigCdFer','cIdChaves','crSigCdFer','',ThisForm.pagina.lista.grade)\n\t\t.pfSqlTabela(1).pColuna('Datas','','','Datas',80,.t.)\n\t\t.pfSqlTabela(1).pColuna('Emps','','','Empresa',80,.t.)\n\t\t.pfSqlTabela(1).pColuna('Descrs','','','Descrição',220,.t.)\n\tENDWITH\n\t= DoDefault()\n\t.LockScreen = .f.\nEndWith\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFER",
+      "evento": "Procedure",
+      "linhas": 10,
+      "codigoOriginal": "= DoDefault()\n\ncreate cursor csEmpresa (Marcas N(1,0), Empresa c(3), Nome c(40))\nselect csEmpresa\nIndex on Empresa Tag Empresa\n\ncreate cursor csCopiaEmp (Empresa c(3), Nome c(40))\nselect csCopiaEmp\nIndex on Empresa Tag Empresa\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFER",
+      "evento": "Click",
+      "linhas": 38,
+      "codigoOriginal": "LPARAMETERS opcao\n\nIf !DoDefault( Opcao )\n\tThisForm.mAtivapagina1\n\tReturn\nEndif\n\nSelect csEmpresa\nZap\n\nSelect CrSigCdFer\n\n*** Mena - 13/09/2017 - foi incluido campo empresa para ser possivel incluir feriados por cidades ***\nlcSql = [Select * From SigCdEmp Where Cemps = ']+CrSigCdFer.Emps+[']\nThisForm.poDataMgr.Sqlexecute(lcSql,'CrSigCdEmp')\nthisform.pagina.dados.get_ds_empresa.Value = CrSigCdEmp.razas   \n\nDo Case\n\tCase Inlist( ThisForm.pcEscolha, 'PROCURAR', 'INSERIR' )\n\t\tThisForm.Pagina.Dados.g... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Sqlexecute",
+        "controlesReferenciados": "get_ds_empresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFER",
+      "evento": "Click",
+      "linhas": 56,
+      "codigoOriginal": "If INLIST(ThisForm.pcEscolha,'INSERIR','ALTERAR')\n   If IsEmpty(ThisForm.Pagina.Dados.getDatas.Value)\n\t  MessageBox( 'Obrigatório Informar a Data!!!', 48, '' )\n\t  ThisForm.Pagina.Dados.getDatas.SetFocus\n\t  Return\n   Endif\n   If Year(ThisForm.Pagina.Dados.getDatas.Value) < 1900\n\t  MessageBox( 'Data Invalida!!!', 48, '' )\n\t  ThisForm.Pagina.Dados.getDatas.SetFocus\n\t  Return\n   Endif\n\n\t*** mena - 22/09/2017 - checa se data+empresa já estão cadastradas ***\n\tlcDat=SUBSTR(DTOS(TTOd(thisform.Pagina.Dad... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "Sqlexecute",
+        "controlesReferenciados": "ChkFer,chktrbesc",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFER",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "=DoDefault()\nIf ThisForm.plCancelar\n\tThisForm.mAtivapagina1\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFER.Pagina.Dados.getDescrs",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Inlist(ThisForm.pcEscolha, \"INSERIR\", \"PROCURAR\", \"ALTERAR\")\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFER.Pagina.Dados.getDatas",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist(ThisForm.pcEscolha, \"INSERIR\", \"PROCURAR\")",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFER.Pagina.Dados.get_cd_empresa",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "Return(fAcessoEmpresa(Usuar,'C',This.Value,ThisForm.pagina.dados.get_cd_empresa,ThisForm.pagina.dados.get_ds_empresa))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_empresa,get_ds_empresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFER.Pagina.Dados.CntCopia.CmdOk",
+      "evento": "Click",
+      "linhas": 18,
+      "codigoOriginal": "Local llOK\nllOK = .T.\n\nSelect csEmpresa\nGo Top\nSelect * from csEmpresa Where Marcas = 1 Into Cursor csTotEmp ReadWrite\n\nSelect csTotEmp\nGo Top\n\nIf Reccount([csTotEmp])=0\n\tSelect csEmpresa\n\tZap\nEndIf \n\nThis.parent.Visible = .F.\nThis.parent.parent.cmdCopia.Enabled = .T.\nThisForm.Refresh",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFER.Pagina.Dados.CntCopia.CmdCancel",
+      "evento": "Click",
+      "linhas": 9,
+      "codigoOriginal": "If MessageBox([Deseja cancelar a Cópia do Feriado?],4+32+256,[Atenção]) = 6\n\tSelect csEmpresa \n\tZap\n\n\tThis.parent.Visible = .F.\n\tThis.parent.parent.cmdCopia.Enabled = .T.\nEndIf \n\nThisForm.Refresh",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFER.Pagina.Dados.CntCopia.grdEmpresa.Column1.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDFER.Pagina.Dados.CntCopia.grdEmpresa.Column3.Check1",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "LParameters nButton, nShift, nXCoord, nYCoord\n\nThis.KeyPress(13,0)\nNoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFER.Pagina.Dados.CntCopia.grdEmpresa.Column3.Check1",
+      "evento": "Procedure",
+      "linhas": 3,
+      "codigoOriginal": "LParameters nButton, nShift, nXCoord, nYCoord\n\nNoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFER.Pagina.Dados.CntCopia.grdEmpresa.Column3.Check1",
+      "evento": "KeyPress",
+      "linhas": 7,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nIf InList(m.nKeyCode,13,32)\n\tReplace csEmpresa.Marcas With IIf(csEmpresa.Marcas == 0,1,0)\n\tThis.parent.parent.Refresh\n\tNoDefault\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFER.Pagina.Dados.CntCopia.grdEmpresa.Column3.Check1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFER.Pagina.Dados.CntCopia.apaga",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "Select csEmpresa\nReplace All csEmpresa.Marcas with 0\nGo Top\nThis.parent.grdEmpresa.Refresh\nThisForm.Refresh",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFER.Pagina.Dados.CntCopia.SelTudo",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "Select csEmpresa\nReplace All csEmpresa.Marcas with 1\nGo Top\nThis.parent.grdEmpresa.Refresh\nThisForm.Refresh",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDFER.Pagina.Dados.cmdCopia",
+      "evento": "Click",
+      "linhas": 46,
+      "codigoOriginal": "Select csEmpresa\nZap \n\nPrivate pDt\npDt = fDtoSql(CrSigCdFer.DataS)\n\nlcSql = [select 0 as Marcas, cemps as Empresa, razas as Nome ] + ;\n\t\t[from sigcdemp ] + ;\n\t\t[where cemps Not in( Select emps From SigCdFer Where datas = ?pDt And Emps <> space(3) ) ] + ;\n\t\t[Order By cemps ]\nIf Thisform.poDataMgr.Sqlexecute(lcSql,'CrAux') < 1\n\tMessagebox( 'Favor Reiniciar o Processo.', 0+16,'Falha de Conexão (CrAux)' )\n\tReturn .F.\nEndIf \n\nSelect CrAux\nGo top \nScan \n\tScatter Memvar \n\t\n\tSelect csEmpresa\n\tAppend Bla... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "Sqlexecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDFER.Pagina.Dados.get_ds_empresa",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "Return(fAcessoEmpresa(Usuar,'D',This.Value,ThisForm.pagina.dados.get_cd_empresa,ThisForm.pagina.dados.get_ds_empresa))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_empresa,get_ds_empresa",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDFER.Click",
+      "queryOriginal": "lcSql = [Select * From SigCdEmp Where Cemps = ']+CrSigCdFer.Emps+['] ThisForm.poDataMgr.Sqlexecute(lcSql,'CrSigCdEmp')",
+      "tabelas": "SigCdEmp",
+      "colunas": "Cemps,Emps+[],SqlexecutelcSql,CrSigCdEmp",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDFER.Pagina.Dados.CntCopia.CmdOk.Click",
+      "queryOriginal": "Select * from csEmpresa Where Marcas = 1 Into Cursor csTotEmp ReadWrite",
+      "tabelas": "csEmpresa",
+      "colunas": "Marcas,csTotEmp,ReadWrite",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDFER.Pagina.Dados.cmdCopia.Click",
+      "queryOriginal": "lcSql = [select 0 as Marcas, cemps as Empresa, razas as Nome ] + ; \t\t[from sigcdemp ] + ; \t\t[where cemps Not in( Select emps From SigCdFer Where datas = ?pDt And Emps <> space(3) ) ] + ; \t\t[Order By cemps ]",
+      "tabelas": "SigCdFer",
+      "colunas": "cemps,razas,datas,space3",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdEmp", "csEmpresa", "SigCdFer"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

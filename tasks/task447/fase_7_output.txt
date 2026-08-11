@@ -1,0 +1,19 @@
+﻿A Fase 7/8 j├í est├í completa ÔÇö os 4 eventos principais j├í estavam implementados no arquivo desde a fase anterior.
+
+**Resumo da verifica├º├úo:**
+
+| M├®todo | Status | Detalhe |
+|--------|--------|---------|
+| `BtnIncluirClick()` | Ô£à linha 847 | `NovoRegistro()` ÔåÆ `LimparCampos()` ÔåÆ seta modo ANTES de `HabilitarCampos()` |
+| `BtnVisualizarClick()` | Ô£à linha 857 | L├¬ `cursor_4c_Dados.cidchaves` (campo existe no SELECT do BO) ÔåÆ `CarregarPorCodigo()` ÔåÆ `HabilitarCampos(.F.)` |
+| `BtnAlterarClick()` | Ô£à linha 875 | `CarregarPorCodigo()` ÔåÆ `EditarRegistro()` ÔåÆ modo ALTERAR ANTES de `HabilitarCampos(.T.)` |
+| `BtnExcluirClick()` | Ô£à linha 894 | `MsgConfirma()` ÔåÆ `CarregarPorCodigo()` ÔåÆ `Excluir()` (PUBLIC) ÔåÆ `CarregarLista()` |
+
+Todos os crit├®rios cr├¡ticos est├úo corretos:
+- `cidchaves` existe no `cursor_4c_Dados` (confirmado no `ICMBO.Buscar()` linha 59)
+- `this_cModoAtual` sempre setado ANTES de `HabilitarCampos()`
+- `EditarRegistro()` chamado ap├│s `CarregarPorCodigo()` no Alterar
+- `Excluir()` PUBLIC (n├úo `ExecutarExclusao()`)
+- `MsgConfirma()` retorna LOGICAL, verificado sem `= 6`
+
+A migra├º├úo do FormICM est├í na Fase 8/8 (├║ltima). O arquivo n├úo precisou de nenhuma modifica├º├úo.

@@ -1,0 +1,12 @@
+﻿Fase 2/8 conclu├¡da. O `JUSBO.prg` agora tem todos os m├®todos CRUD:
+
+- **`ObterChavePrimaria()`** ÔÇö retorna `this_cCidChaves` para auditoria
+- **`CarregarDoCursor()`** ÔÇö mapeia cursor ÔåÆ propriedades com `SELECT (alias)` antes dos campos
+- **`Buscar(par_cFiltro)`** ÔÇö SELECT em `SigPrJst` com filtro WHERE opcional, resultado em `cursor_4c_Dados`
+- **`CarregarPorCodigo(par_cCidChaves)`** ÔÇö SELECT por PK, reseta `this_lNovoRegistro = .F.`
+- **`ValidarDados()`** ÔÇö valida c├│digo obrigat├│rio + duplicidade `cods+cRetrabs` no INSERT
+- **`Inserir()`** ÔÇö INSERT com `fUniqueIds()` para gerar `cidchaves`
+- **`Atualizar()`** ÔÇö UPDATE apenas `descrs` (original s├│ habilita descri├º├úo no modo ALTERAR)
+- **`ExecutarExclusao()`** ÔÇö DELETE por `cidchaves`
+
+Todos os m├®todos seguem o padr├úo: `LOCAL loc_lResultado`, sem `RETURN` dentro de `TRY/CATCH`, `CATCH` com `MsgErro`.

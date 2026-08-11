@@ -1,0 +1,3 @@
+﻿Fix applied. The root cause of the second timeout was `IIF(loc_lSucesso, DODEFAULT(), .F.)` at line 128. VFP9 evaluates **both branches** of `IIF()` before selecting a result ÔÇö so `DODEFAULT()` was called unconditionally even when params were missing and `loc_lSucesso = .F.`. This triggered `FormBase.Init()` ÔåÆ `InicializarForm()` ÔåÆ the full form initialization ÔÇö and since `WindowType = 1` makes it modal, the form blocked `CREATEOBJECT()` for 300 seconds until the test killed it.
+
+The fix uses a proper `IF/ENDIF` block so `DODEFAULT()` is only called when both params are valid.

@@ -1,0 +1,118 @@
+{
+  "resumo": {
+    "totalMetodos": 6,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 4,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fUniqueIds"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDCTG",
+      "evento": "Init",
+      "linhas": 19,
+      "codigoOriginal": "With ThisForm\n\t.poDataMgr = CreateObject([fSqlConector], .Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tWith .poDataMgr\n\t\t\t.AddCursor([SigCdCtg], [cIdChaves], [crSigCdCtg], [], ThisForm.Pagina.Lista.Grade)\n\t\t\t.pfSqlTabela(1).pColuna([Cods],  [], [], [Código],    080, .t.)\n\t\t\t.pfSqlTabela(1).pColuna([Descs], [], [], [Descrição], 150, .t.)\n\t\tEndWith\n\n\t\t=DoDefault()\n\n\t\t.Pagina.Lista.Grade.Column1.SetFocus\n\tElse\n\t\t=Messagebox([Impossível Efetuar Conexão Com o Servidor de Banco de Dados...], 0+48, [CreateOb... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDCTG",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "Local lcBusca\n\nIf Not Empty(ThisForm.Pagina.Dados.getCods.Value)\n\tThisForm.poDataMgr.LocateCursor([crSigCdCtg], [Cods], ThisForm.Pagina.Dados.getCods.Value)\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "LocateCursor",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCTG",
+      "evento": "Click",
+      "linhas": 18,
+      "codigoOriginal": "Parameters lnOpcao\n\nIf Not DoDefault(lnOpcao)\n\tThisForm.mAtivaPagina1\n\tReturn .f.\nEndIf\n\nDo Case\n\tCase InList(ThisForm.pcEscolha, [INSERIR], [PROCURAR])\n\t\t ThisForm.Pagina.Dados.getCods.SetFocus\n\t\t \n\tCase InList(ThisForm.pcEscolha, [ALTERAR])\n\t\t ThisForm.Pagina.Dados.getDescs.SetFocus\n\n\tOtherwise\n\t\t ThisForm.Pagina.Dados.Grupo_Salva.Salva.SetFocus\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDCTG",
+      "evento": "Click",
+      "linhas": 40,
+      "codigoOriginal": "If InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])\n\tIf Empty(ThisForm.Pagina.Dados.getCods.Value)\n\t\t=Messagebox([Código Inválido!!!], 48, [Atenção!!!])\n\t\tThisForm.Pagina.Dados.getCods.SetFocus()\n\t\tReturn .f.\n\tEndIf\n\n\tIf Empty(ThisForm.Pagina.Dados.getDescs.Value)\n\t\t=Messagebox([Descrição Inválida!!!], 48, [Atenção!!!])\n\t\tThisForm.Pagina.Dados.getDescs.SetFocus()\n\t\tReturn .f.\n\tEndIf\n\t\n\tIf (ThisForm.pcEscolha = [INSERIR])\n\t\tlcQuery = [Select Cods ] + ;\n\t\t\t\t    [From SigCdCtg ] + ;\n\t\t\t\t   [Where C... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "SetFocus,SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDCTG",
+      "evento": "Click",
+      "linhas": 6,
+      "codigoOriginal": "=DoDefault()\n\nIf ThisForm.plCancelar\n\tThisForm.mAtivapagina1\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDCTG.Pagina.Dados.getCods",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, [INSERIR], [PROCURAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

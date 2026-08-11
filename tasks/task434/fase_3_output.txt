@@ -1,0 +1,15 @@
+﻿All looks correct. Phase 4 is complete. Here's what was added to `FormFti.prg`:
+
+**Lista page (Page1):**
+- `grd_4c_Lista` ÔÇö main grid, Top=162, Width=940, Height=458, 5 columns (cods/descs/valors/moedas/acrescs), ReadOnly, Verdana 8pt
+- 5 CRUD buttons in `cnt_4c_Botoes` at Left=5/80/155/230/305: Incluir, Visualizar, Alterar, Excluir, Buscar (all with `cadastro_*_60.jpg` icons, BINDEVENTs wired)
+
+**Dados page (Page2) ÔÇö Configuracao grids:**
+- `grd_4c_Grade` in pgf_4c_Configuracao.Page1 ÔÇö RecordSource=csGrade, 5 columns with ColumnOrder for visual ordering (Ordem/Grupo/Produto/Descri├º├úo/Coeficiente)
+- `grd_4c_Custo` in pgf_4c_Configuracao.Page2 ÔÇö RecordSource=csCusto, 4 columns (Cpros/Dpros/Seqs/Coefs with proper ColumnOrder)
+
+**Methods added:** `BtnIncluirClick`, `BtnVisualizarClick`, `BtnAlterarClick`, `BtnExcluirClick`, `BtnBuscarClick` (all PUBLIC, no RETURN inside TRY).
+
+**CarregarLista** now sets `grd_4c_Lista.RecordSource = "cursor_4c_Dados"` after Buscar succeeds. **CarregarItensNaGrade** calls `.Refresh()` on both Configuracao grids after populating csGrade/csCusto.
+
+Phase 5-6 (TextBoxes + OptionGroups on Page2) is next when you're ready.

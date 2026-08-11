@@ -1,0 +1,8 @@
+﻿**Fase 1/8 conclu├¡da.** Arquivo criado em `C:\4c\projeto\app\classes\FopBO.prg`.
+
+**O que foi criado:**
+
+- **12 propriedades de tabela** extra├¡das do schema SigPrFnc: `this_cCidChaves` (PK char20), `this_cCpros`, `this_cIfors`, `this_cRClis` (JOIN, n├úo persistido), `this_cReffs`, `this_cMoevs`, `this_nPvens` (numeric 10,2), `this_dDtvalid` (datetime NULL), `this_nSituas` (numeric 1,0 ÔåÆ checkbox), `this_cColecoes`, `this_cCodcors`, `this_cCodtams`
+- **4 propriedades de estado operacional**: `this_cCprosAtivo`, `this_lHouveIncl`, `this_lHouveExcl`, `this_cModoAtual`
+- **Init()** configura `this_cTabela = "SigPrFnc"` e `this_cCampoChave = "cidchaves"`, chama `DODEFAULT()`, sem RETURN dentro do TRY/CATCH
+- **ObterChavePrimaria()** retorna `this_cCidChaves` (padr├úo de auditoria)

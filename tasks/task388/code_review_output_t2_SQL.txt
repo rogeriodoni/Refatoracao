@@ -1,0 +1,19 @@
+﻿**Falso positivo confirmado.** N├úo h├í nada a corrigir.
+
+O detector identificou `ControlCount` como uma "coluna SQL inventada", mas o que existe no c├│digo s├úo refer├¬ncias ├á **propriedade VFP9 `.ControlCount`** de containers de form ÔÇö um padr├úo completamente v├ílido:
+
+```foxpro
+loc_oCnt.AddObject("lbl_4c_Hdr1", "Label")
+WITH loc_oCnt.Controls(loc_oCnt.ControlCount)  ÔåÉ acessa o ├║ltimo controle adicionado
+    .Caption = ...
+ENDWITH
+```
+
+Isso aparece nas linhas 3563, 3610, 3626, 3643, 3660, 3678, 3695, 3712, 3729 ÔÇö todas seguindo o mesmo padr├úo de "adicionar controle e configurar imediatamente via Controls(ControlCount)". N├úo h├í nenhum `CONTROLCOUNT` em nenhuma cl├íusula SQL WHERE no FormCTA.prg nem no CTABO.prg.
+
+As cl├íusulas WHERE do BO s├úo corretas e correspondem ao legado:
+- `WHERE a.Grupos = ...` 
+- `WHERE a.DtAlts BETWEEN ... AND ...`
+- `WHERE IClis = ...`
+
+**O arquivo n├úo precisa de altera├º├úo para este pass.** O problema reportado foi um falso positivo do detector que confundiu `.ControlCount` (propriedade VFP9) com uma coluna SQL.

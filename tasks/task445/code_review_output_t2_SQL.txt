@@ -1,0 +1,15 @@
+﻿**Falso positivo confirmado ÔÇö nenhuma altera├º├úo necess├íria.**
+
+Aqui est├í a an├ílise de cada ocorr├¬ncia de `CIDCHAVES` em cl├íusulas WHERE no c├│digo migrado:
+
+| Local | SQL | Veredicto |
+|---|---|---|
+| `CarregarPorCodigo` (linha 93) | `WHERE cidchaves = EscaparSQL(par_cCidChaves)` | **Correto** ÔÇö ├® o padr├úo can├┤nico de load-by-PK |
+| `Atualizar` (linha 234) | `WHERE cidchaves = EscaparSQL(THIS.this_cCidChaves)` | **Correto** ÔÇö UPDATE sem WHERE atualizaria *todos* os registros |
+| `ExecutarExclusao` (linha 259) | `WHERE cidchaves = EscaparSQL(THIS.this_cCidChaves)` | **Correto** ÔÇö DELETE sem WHERE apagaria toda a tabela |
+| `ImportarPlanilha` SELECT (linhas 343-347) | `WHERE ufs = ... AND codigo = ... AND chave = ... AND versao = ...` | **Correto** ÔÇö id├¬ntico ao original legado |
+| `ImportarPlanilha` UPDATE (linha 402) | `WHERE cidchaves = EscaparSQL(loc_lcCidChaves)` | **Correto** ÔÇö `loc_lcCidChaves` veio do SELECT anterior (linha 392); necess├írio para n├úo atualizar todos os registros |
+
+O alerta foi gerado porque o ferramenta de review compara o WHERE do SELECT de busca do legado (`where ufs/codigo/chave/versao`) com os WHERE dos demais statements do migrado. O original usava o ORM `poDataMgr.Update([crSigCdIbp])` que internamente usa a chave do cursor ÔÇö a nova arquitetura traduz isso corretamente para `WHERE cidchaves = <pk>` no SQL direto.
+
+**Nenhum c├│digo foi alterado** ÔÇö o `cidchaves` em todos os WHERE ├® correto, necess├írio e derivado da PK real da tabela `SigCdIbp`. Remover qualquer um deles causaria desastre (UPDATE/DELETE sem WHERE).

@@ -1,0 +1,5 @@
+﻿As edi├º├Áes est├úo corretas. O fix ├® m├¡nimo e cir├║rgico:
+
+**Causa raiz**: `BtnIncluirClick()` terminava com `txt_4c_Codigos.SetFocus()`. O teste chama esse m├®todo via `CREATEOBJECT` (form n├úo vis├¡vel, `WindowType=1`). Em VFP9, `SetFocus()` num controle de form modal n├úo-vis├¡vel tenta exibir o form modalmente, bloqueando execu├º├úo por 300s. `SYS(2335, 0)` suprime apenas dialogs do sistema, n├úo forms regulares.
+
+**Fix**: Dois guards `IF THIS.Visible` ÔÇö em `BtnIncluirClick()` e `BtnAlterarClick()`. Em uso real (form vis├¡vel), o comportamento ├® id├¬ntico. Em teste automatizado (form n├úo-vis├¡vel via CREATEOBJECT), o SetFocus ├® pulado e o teste continua sem travar.

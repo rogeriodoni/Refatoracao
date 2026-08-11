@@ -1,0 +1,5 @@
+﻿Todos os 8 blocos corrigidos. O problema era que `&` em VFP9 ├® o operador de substitui├º├úo de macro ÔÇö n├úo um separador de comandos. Cada assignment de propriedade precisa estar em sua pr├│pria linha dentro do bloco `WITH`.
+
+**Causa raiz:** Linhas como `.Top = 5 & .Left = 5 & .Width = 75 & .Height = 75` foram geradas com `&` como separador inline, mas o VFP9 interpreta `&` como in├¡cio de macro substitution, causando "Syntax error" em tudo que vem depois.
+
+**Fix aplicado:** 8 blocos `WITH .cmd_4c_*` expandidos ÔÇö cada propriedade em linha pr├│pria, mantendo todos os valores originais intactos.

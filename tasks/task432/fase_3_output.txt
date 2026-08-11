@@ -1,0 +1,20 @@
+﻿O arquivo `FormFte.prg` foi criado corretamente com 309 linhas. Fase 3/8 conclu├¡da.
+
+**O que foi criado em `C:\4c\projeto\app\forms\cadastros\FormFte.prg`:**
+
+- **DEFINE CLASS FormFte** com todas as propriedades necess├írias:
+  - Visuais padr├úo (`Height=600`, `Width=1000`, `DataSession=2`, etc.)
+  - Contexto parametrizado (`this_cContextGrupos/SubGrp/Cargos/Titulos`, `this_cEscolha`, `this_nTipo`, `this_lPermiteEditar`)
+
+- **Init()** com `LPARAMETERS` para os 6 par├ómetros do legado (`pGru, pSgr, pCar, pTit, pEsc, pTipo`), salvando contexto **antes** do `DODEFAULT()` para que `InicializarForm()` j├í encontre os valores.
+
+- **InicializarForm()**: cria `FteBO`, propaga contexto para o BO, monta caption din├ómico (`"Ficha T├®cnica - Cargo - Titulo"`), chama `ConfigurarPageFrame()`, propaga captions nos labels.
+
+- **ConfigurarPageFrame()**: PageFrame `Top=-29/Tabs=.F.`, Page1 e Page2 com containers:
+  - `cnt_4c_Sombra` (cabe├ºalho cinza + lbl sombra/titulo) em ambas as p├íginas
+  - `cnt_4c_Botoes` (esquerdo=542) e `cnt_4c_Saida` (esquerdo=917, can├┤nico) na Page1
+  - `cnt_4c_BotoesAcao` na Page2
+
+- **Destroy()**: limpa BO + DODEFAULT()
+
+**Pr├│ximas fases** adicionar├úo grid+bot├Áes CRUD (Fase 4), campos da Page2 EditBox/CheckBox (Fases 5-6) e eventos (Fases 7-8).

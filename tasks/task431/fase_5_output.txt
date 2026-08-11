@@ -1,0 +1,13 @@
+﻿Fase 5 conclu├¡da com sucesso. O arquivo `FormFre.prg` foi atualizado com:
+
+**`ConfigurarPaginaDados()` expandido:**
+- `cmd_4c_Confirmar` (icone `cadastro_salvar_60.jpg`, Left=5) + `cmd_4c_Cancelar` (Left=81) no `cnt_4c_BotoesAcao`
+- `lbl_4c_Cidade` (Say7: Top=177, Left=314, Caption="Cidade :")
+- `txt_4c_Cidade` (GetCidade: Top=174, Left=359, Width=220, MaxLength=30) com BINDEVENT LostFocus ÔåÆ `ValidarCidade`
+
+**3 m├®todos novos adicionados:**
+- `ValidarCidade()` ÔÇö abre FormBuscaAuxiliar Modo 2 (cursor TmpCep local) ao sair do campo, equivalente ao `GetCidade.Valid` do legado
+- `BtnSalvarClick()` ÔÇö valida Cidade obrigat├│ria (INCLUIR) + Frete>0 (modo global), chama `FormParaBO()` + `Salvar()`; valida├º├Áes FORA do TRY conforme CLAUDE.md Problema 16
+- `BtnCancelarClick()` ÔÇö retorna para lista sem salvar
+
+**Pr├│xima fase (6/8):** adicionar `lbl_4c_ValorFrete` + `txt_4c_Frete` na `ConfigurarPaginaDados()`, completando os campos da Page2.

@@ -1,0 +1,14 @@
+﻿9 procedures e 9 ENDPROC ÔÇö balanceado. Arquivo criado com 326 linhas.
+
+**Fase 3 conclu├¡da.** O arquivo `C:\4c\projeto\app\forms\cadastros\FormEmn.prg` foi criado com:
+
+- `DEFINE CLASS FormEmn AS FormBase` com propriedades visuais completas (Width=1000, Height=600, Caption="Estoque Alvo")
+- `Init()` ÔåÆ apenas `RETURN DODEFAULT()` (padr├úo correto)
+- `InicializarForm()` ÔåÆ cria EmnBO, chama ConfigurarPageFrame, verifica `gb_4c_ValidandoUI`
+- `ConfigurarPageFrame()` ÔåÆ PageFrame com `Top=-29, Tabs=.F.`, Page1 e Page2 com `new_background.jpg`
+- `ConfigurarPaginaLista()` ÔåÆ cnt_4c_Sombra (cabecalho cinza com labels Sombra/Titulo), cnt_4c_Botoes (vazio ÔÇö Fase 4), cnt_4c_Saida com cmd_4c_Encerrar can├┤nico (Left=917, Width=90)
+- `ConfigurarPaginaDados()` ÔåÆ cnt_4c_Salva posicionado (Fase 4 adiciona bot├Áes)
+- `TornarControlesVisiveis()` ÔåÆ com guarda para `cnt_4c_Copia` (container flutuante que inicia oculto)
+- `FormatarGridLista()` e `BtnEncerrarClick()` e `Destroy()` com limpeza dos cursores legados
+
+Pr├│xima fase (4/8): adicionar Grid da lista e bot├Áes CRUD em cnt_4c_Botoes.

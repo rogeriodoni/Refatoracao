@@ -1,0 +1,14 @@
+﻿Fase 1/8 conclu├¡da. `C:\4c\projeto\app\classes\FpbBO.prg` criado com:
+
+- **7 propriedades** mapeadas da tabela `SigOpFpb` (schema verificado):
+  - `this_cCidChaves` ÔÇö `cidchaves char(20)` PK
+  - `this_cCodBins` ÔÇö `codbins char(6)`
+  - `this_cDescs` ÔÇö `descs char(30)`
+  - `this_dDataIs` ÔÇö `datais datetime NULL`
+  - `this_dDataFs` ÔÇö `datafs datetime NULL`
+  - `this_cFpags` ÔÇö `fpags char(12)` FK condi├º├úo de pagamento
+  - `this_lGravaDados` ÔÇö flag de controle (mapeado de `ThisForm.GravaDados` do legado)
+
+- **`Init()`** configurando `this_cTabela = "SigOpFpb"` e `this_cCampoChave = "cidchaves"` com TRY/CATCH e MsgErro verbose
+
+- **`ObterChavePrimaria()`** retornando `cidchaves` para o sistema de auditoria

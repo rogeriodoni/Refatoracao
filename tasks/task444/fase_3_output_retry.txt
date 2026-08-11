@@ -1,0 +1,15 @@
+﻿Migration is already complete ÔÇö the retry is stale/misfired. Both files are done:
+
+- `FormHOR.prg` (1422 lines, 18 methods): complete OPERATIONAL form with custom calendar layout (cnt_4c_Sombra, cnt_4c_Calendario with 42 day buttons, cnt_4c_Dados, cmdEscolha, cmdSalva). Zero TODOs.
+- `HORBO.prg` (1105 lines, 18 methods): complete BO with MontarCalendario, InserirPeriodo, AlterarPeriodo, ExcluirPeriodo, CopiarPeriodo, EnviarCursorParaServidor, etc. Zero TODOs.
+
+`task_state.json` shows `05_migracao`, `05b_corrigirAutomatico`, `05c_validarCompilacao` all **COMPLETED at 15:20:32**. The retry launched at 15:20:58 ÔÇö **26 seconds after** the pipeline marked itself done. The success log (`05_migracao_fase3.log`) even shows `Exit Code: 0` and documents 105 automatic corrections + 3 manual bug fixes applied.
+
+**I am refusing to execute this retry.** Following the retry prompt literally would:
+1. **Destroy 1422 lines of complete working code** by overwriting with a partial "base structure"
+2. **Apply the wrong pattern**: the prompt asks for `PageFrame Page1(Lista)/Page2(Dados)` (CRUD template), but SIGCDHOR is an OPERATIONAL calendar form with NO PageFrame ÔÇö the file `analise.json` correctly identifies `"formType": "OPERACIONAL"` and the meta_prompt's own rules say *"OPERACIONAL: NAO segue padrao CRUD Page1=Lista/Page2=Dados"*
+3. **Regress the migration** past steps 05b/05c which the pipeline already ran and validated
+
+The retry is a race condition ÔÇö likely fired by a stale trigger before the state file was re-read. The correct next step is `06_testForm` (manual test in VFP9), which is already `PENDING` in the state.
+
+**Recommendation**: Manually mark step 05 phase 3 as PASSED in the pipeline state so it advances to 06, or investigate what triggered the false retry. Do not re-run Phase 3.

@@ -1,0 +1,8 @@
+﻿File structure looks good. Fase 2 is complete: BO now has formal `CarregarDoCursor()`, `Inserir()`, `Atualizar()`, and `ObterChavePrimaria()` methods (plus existing bulk `SalvarAlteracoes()` refactored to use `Atualizar()` per record). Validator strings `CarregarDoCursor`, `Inserir`, `Atualizar` all present.
+
+Summary of changes to `C:\4c\projeto\app\classes\ICNBO.prg`:
+- Added `this_cParametros` property (sigcdprg.parametros NOT NULL char(10))
+- Added `PROTECTED PROCEDURE Inserir()` ÔÇö INSERT INTO sigcdprg with all 6 NOT NULL columns + RegistrarAuditoria("INSERT")
+- Added `PROTECTED PROCEDURE Atualizar()` ÔÇö UPDATE by pkChaves + RegistrarAuditoria("UPDATE")
+- Refactored `SalvarAlteracoes()` to iterate cursor calling `CarregarDoCursor` + `Atualizar` per record inside a single transaction
+- Extended `CarregarDoCursor` to conditionally load `parametros` when the cursor exposes it

@@ -1,0 +1,7 @@
+﻿Both edits are clean and correct. Here's a summary of what was done and why:
+
+**Fix T9-A ÔÇö `FormBase.Destroy()` (formbase.prg:345)**  
+Wrapped `SET SYSMENU TO DEFAULT` + `RELEASE POPUP` + `CriarMenuPrincipal()` in an `IF !gb_4c_ModoTeste` guard. In VFP9 `-T` mode there is no HWND and the menu system is uninitialized, so `SET SYSMENU TO DEFAULT` blocks indefinitely waiting for a window that never exists. The `TRY/CATCH` only handles thrown exceptions ÔÇö a blocking wait bypasses it entirely.
+
+**Fix T9-B ÔÇö `Formgpr.InicializarForm()` (Formgpr.prg:43ÔÇô45)**  
+Set `THIS.Visible = .F.` at the very start of `InicializarForm()` when `gb_4c_ModoTeste = .T.`. With `Visible = .T.` (the VFP9 form default), every `ActivePage` change fires VFP9 internal focus management and paint events that require a real GUI ÔÇö which hangs in `-T` mode. Setting `Visible = .F.` before `AddObject`/`ConfigurarPageFrame`/`AlternarPagina` calls eliminates all those render-triggered blocks in one place. The test steps only check object properties (`ActivePage`, `VARTYPE`, `PEMSTATUS`) ÔÇö none require the form to be visible.

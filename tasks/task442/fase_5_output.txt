@@ -1,0 +1,12 @@
+﻿Integra├º├úo conclu├¡da. Resumo do que foi feito:
+
+**Fase 5 ÔÇö Diagn├│stico + Integra├º├úo:**
+
+O FormGr1.prg e Gr1BO.prg j├í estavam **completamente implementados** pelas fases anteriores (o SIGCDGR1 ├® um form OPERACIONAL flat sem Page2, ent├úo n├úo existe `ConfigurarPaginaDados()` ÔÇö todos os controles est├úo em `ConfigurarPaginaLista()`). O que faltava era apenas a integra├º├úo no menu:
+
+1. **config.prg** ÔÇö n├úo precisou de altera├º├úo: o ADIR() j├í carrega automaticamente todos os `Form*.prg` de `operacionais/` e todos os `*BO.prg` de `classes/`.
+
+2. **menu.prg** ÔÇö adicionado:
+   - `DEFINE BAR 110/111 OF popMovimentos` com "Gera├º├úo de Grupos" (separador + item)
+   - `ON SELECTION BAR 111 OF popMovimentos DO AbrirFormGr1`
+   - `PROCEDURE AbrirFormGr1()` no final do arquivo, seguindo o padr├úo can├┤nico (`VARTYPE = "O"`, `Show()` sem par├ómetro, sem `Release()`, `MostrarErro` no catch com linha+procedure)

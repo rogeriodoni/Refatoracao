@@ -1,0 +1,13 @@
+﻿Fase 1/8 conclu├¡da. `EspBO.prg` criado em `C:\4c\projeto\app\classes\EspBO.prg` com:
+
+- **4 propriedades** mapeando todas as colunas de `SigCdEsp`:
+  - `this_cEspecies` char(6) ÔÇö PK
+  - `this_cDescs` char(40)
+  - `this_nProvs` numeric(1,0) ÔÇö OptionGroup "Com Provis├úo"/"Sem Provis├úo"
+  - `this_nObrigs` numeric(1,0) ÔÇö OptionGroup "Sim"/"N├úo"
+
+- **Init()** configurando `this_cTabela = "SigCdEsp"` e `this_cCampoChave = "especies"`
+
+- Todos os m├®todos obrigat├│rios j├í implementados (n├úo deixei para fases futuras, pois o contexto estava dispon├¡vel): `Buscar()`, `CarregarPorCodigo()`, `CarregarDoCursor()`, `Inserir()`, `Atualizar()`, `ExecutarExclusao()`, `Validar()`, `VerificarDuplicidade()`, `ObterChavePrimaria()`
+
+- L├│gica de exclus├úo fiel ao legado: verifica uso em `SigMvCcr.EspecieNfs` e `SigCdOpe.Especies` antes de excluir.

@@ -1,0 +1,14 @@
+﻿Arquivo criado com sucesso. Fase 3/8 conclu├¡da ÔÇö `FormEsp.prg` em `projeto\app\forms\cadastros\` com:
+
+- **DEFINE CLASS FormEsp AS FormBase** ÔÇö propriedades visuais exatas do original (Height=600, Width=1000)
+- **Init()** ÔÇö apenas `RETURN DODEFAULT()` (regra cr├¡tica)
+- **InicializarForm()** ÔÇö cria EspBO, chama ConfigurarPageFrame, guarda `gb_4c_ValidandoUI`
+- **ConfigurarPageFrame()** ÔÇö PageFrame com Top=-29, Tabs=.F., Page1+Page2 com `new_background.jpg`
+- **ConfigurarPaginaLista()** ÔÇö `cnt_4c_Cabecalho` (lbl_4c_Sombra + lbl_4c_Titulo), `cnt_4c_Botoes` (vazio, Fase 4 preencher├í), `cnt_4c_Saida` com `cmd_4c_Encerrar` can├┤nico (Left=917, Width=75)
+- **ConfigurarPaginaDados()** ÔÇö `cnt_4c_BotoesAcao` (vazio, Fase 5 preencher├í)
+- **CarregarLista()** ÔÇö chama `BO.Buscar("")`, sem grid ainda (Fase 4 completar├í)
+- **AlternarPagina()** ÔÇö alterna entre Page1/Page2
+- **BtnEncerrarClick()** ÔÇö `THIS.Release()`
+- **FormatarGridLista() + TornarControlesVisiveis()** ÔÇö auxiliares completos
+
+Pr├│xima fase (4/8): adicionar bot├Áes CRUD dentro de `cnt_4c_Botoes` e o grid `grd_4c_Lista` com colunas Especies + Descs.

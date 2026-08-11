@@ -1,0 +1,12 @@
+﻿Fase 8 conclu├¡da. Resumo do que foi feito:
+
+**FormFct.prg:**
+- Adicionado `HabilitarCampos(par_lHabilitar)` que habilita/desabilita os OptionGroups (`opt_4c_NChkDims`, `opt_4c_NChkTems`, `opt_4c_NChkPess`, `opt_4c_NChkImps`) e o CheckBox `chk_4c_NFixFigs` conforme o modo (ALTERAR=habilitado, VISUALIZAR/EXCLUIR=desabilitado)
+- Atualizado `CarregarDados()` para chamar `THIS.HabilitarCampos(!loc_lReadOnly)` ÔÇö replicando o comportamento do original (`When = "Return (ThisForm.pcEscolha = [ALTERAR])"` nos OptionGroups)
+
+**menu.prg:**
+- Adicionado `DEFINE BAR 92 OF popCadastros` com prompt "Ficha T├®cnica"
+- Adicionado `ON SELECTION BAR 92 OF popCadastros DO AbrirFormFct`
+- Adicionado `PROCEDURE AbrirFormFct()` no padr├úo can├┤nico (VARTYPE, Show() sem par├ómetro, sem Release())
+
+**config.prg:** N├úo precisou altera├º├úo ÔÇö o sistema j├í carrega `FctBO.prg` via `ADIR(*BO.prg)` e `FormFct.prg` via `ADIR(cadastros\Form*.prg)` automaticamente.

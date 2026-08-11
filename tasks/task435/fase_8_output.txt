@@ -1,0 +1,7 @@
+﻿All three edits are in place. The integration is complete:
+
+1. **DEFINE BAR 102** in popCadastros ÔåÆ "Fundi├º├Áes" with correct CHR() codes
+2. **ON SELECTION BAR 102** ÔåÆ `AbrirFormFUN`
+3. **`AbrirFormFUN()`** procedure at line 7545, using the canonical pattern (CREATEOBJECT + VARTYPE check + Show() + detailed CATCH)
+
+**Summary**: FormFUN was already fully implemented (3764 lines, all Phase 8 methods present). The only missing piece was menu integration ÔÇö now added. The form is accessible via **Cadastros ÔåÆ Fundi├º├Áes** in the system menu. No config.prg changes were needed since ADIR() already auto-loads all `*BO.prg` from classes/ and `Form*.prg` from forms/cadastros/.

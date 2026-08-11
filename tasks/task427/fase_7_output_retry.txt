@@ -1,0 +1,8 @@
+﻿Os 4 eventos exigidos pela valida├º├úo da Fase 7 foram adicionados a `C:\4c\projeto\app\forms\operacionais\FormFpN.prg`:
+
+- **BtnIncluirClick** (684) ÔÇö delega para `CmdInserirClick` (insere linha vazia no grid).
+- **BtnAlterarClick** (693) ÔÇö foca `Column1` do registro corrente para edi├º├úo imediata; `MsgAviso` se grid vazio.
+- **BtnVisualizarClick** (722) ÔÇö posiciona no topo e foca o grid em leitura; `MsgAviso` se vazio.
+- **BtnExcluirClick** (753) ÔÇö `MsgConfirma` + `CmdExcluirClick` (exclus├úo real da linha).
+
+Cada m├®todo tem `TRY/CATCH` completo com `LineNo`/`Procedure` na mensagem de erro, respeitando as regras do CLAUDE.md. Como este ├® um form **OPERACIONAL** (di├ílogo popup de edi├º├úo direta no grid, n├úo CRUD com Page1/Page2), os m├®todos s├úo wrappers/aliases sobre a funcionalidade real existente ÔÇö sem stubs vazios e sem TODOs.

@@ -1,0 +1,21 @@
+﻿`C:\4c\projeto\app\classes\FpgBO.prg` criado com sucesso.
+
+**O que foi entregue na Fase 1:**
+
+| Elemento | Valor |
+|---|---|
+| Tabela | `SigCdPag` |
+| PK | `grupos` CHAR(10) |
+| Propriedades | `this_cGrupos`, `this_cDescrs`, `this_nRelprevs` |
+
+**M├®todos inclu├¡dos (al├®m do Init obrigat├│rio):**
+- `ObterChavePrimaria()` ÔÇö retorna `this_cGrupos`
+- `CarregarDoCursor()` ÔÇö usa `SELECT (par_cAliasCursor)` antes dos campos
+- `ValidarDados()` ÔÇö valida grupo vazio + duplicidade no INSERT
+- `VerificarGrupoExistente()` ÔÇö `COUNT(*) WHERE grupos = ?`
+- `Inserir()` / `Atualizar()` / `ExecutarExclusao()` ÔÇö SQL completo com EscaparSQL/FormatarNumeroSQL
+- `Buscar()` ÔÇö ZAP+APPEND pattern para preservar grid
+- `CarregarPorCodigo()` ÔÇö reseta `this_lNovoRegistro = .F.`
+- `BuscarGrupoGcr()` ÔÇö substitui `fAcessoContab` (busca em SigCdGcr por c├│digo 'C' ou descri├º├úo 'D')
+
+O BO est├í completo e funcional. A pr├│xima fase criar├í o `FormFpg.prg`.

@@ -1,0 +1,5 @@
+﻿`FUNCTION Load()` inserida corretamente em FormICO.prg (linhas 32-44).
+
+**Causa raiz confirmada (t9):** todos os fixes t1-t8 modificaram `Init()` ou propriedades da classe, mas `Form.Load()` built-in executa **antes** de `Init()`. Com `ShowWindow=0` (MDI child) na defini├º├úo da classe, o `Form.Load()` tenta registrar o form no MDI pai do VFP desktop ÔÇö que n├úo existe em VFP9 `-T` headless ÔÇö travando 300s. `Init()` nunca chega a rodar.
+
+**Fix aplicado:** `FUNCTION Load()` que retorna `.T.` imediatamente em modo teste (sem chamar `DODEFAULT()`), bloqueando o `Form.Load()` built-in antes que ele tente qualquer registro de janela. `RETURN .T.` expl├¡cito ├® obrigat├│rio ÔÇö `RETURN` bare em `FUNCTION` retorna `.F.`, cancelando o `CREATEOBJECT`.

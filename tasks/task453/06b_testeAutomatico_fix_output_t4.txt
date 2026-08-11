@@ -1,0 +1,5 @@
+﻿All `MostrarErro` calls are now `MsgErro`. The fix is complete.
+
+**Root cause**: `MostrarErro()` (FormErro.prg) is a custom VFP modal form ÔÇö it is NOT auto-dismissed by `SYS(2335, 0)` in unattended/headless mode. Any error path in `Formint.prg` that triggered it during the test sequence would block indefinitely until the 300-second timeout killed the process.
+
+**Fix applied**: Replaced all 14 `MostrarErro(...)` calls with `MsgErro(...)` (native `MESSAGEBOX`, auto-dismissed by `SYS(2335, 0)` in headless mode). No functional change for interactive use ÔÇö `MsgErro` still shows the error message to the user, just via a native dialog instead of the custom form.

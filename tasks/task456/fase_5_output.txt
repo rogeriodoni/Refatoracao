@@ -1,0 +1,15 @@
+﻿The SIGCDLCH migration is **100% complete** across all 8 phases. Here's the full status:
+
+| Arquivo | Linhas | Status |
+|---------|--------|--------|
+| `projeto/app/classes/lchBO.prg` | 530 | Ô£à Completo (Fases 1-2) |
+| `projeto/app/forms/cadastros/Formlch.prg` | 2888 | Ô£à Completo (Fases 3-7) |
+| `projeto/app/menu/menu.prg` | ÔÇö | Ô£à BAR 116 + `AbrirFormlch()` presentes (Fase 8) |
+
+O que foi implementado no `Formlch.prg`:
+- `ConfigurarPaginaLista()` ÔÇö grid de listagem, filtros de per├¡odo, situa├º├úo, bot├Áes CRUD + Concilia├º├úo
+- `ConfigurarPaginaDados()` ÔÇö 15 containers/se├º├Áes: cabe├ºalho, Infos financeiras, Origem, Despesa, Destino, Centro de Custo, Carteira, Processamento, Emissor, Observa├º├úo, Grade de Cheques (12 colunas), bot├Áes da leitora, Empresa, Conta Cliente, FollowUp
+- `CarregarGrade()`, `FormParaBO()`, `BOParaForm()`, `LimparCampos()`, `HabilitarCampos()`, `AjustarBotoesPorModo()`
+- 18 validadores LostFocus (`ValidarOper`, `ValidarMoeda`, `ValidarGrupo*`, `ValidarConta*`, `ValidarEmpresa`, `ValidarContaIclis`)
+- Helpers `BuscarDescGrupo()` e `BuscarDescConta()` com query em `SigCdGcr`/`SigCdCli`
+- `Destroy()` com limpeza de cursores

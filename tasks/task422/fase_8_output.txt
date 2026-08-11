@@ -1,0 +1,16 @@
+﻿Tudo correto. A migra├º├úo da **Fase 8/8** est├í completa. Resumo do que foi verificado e ajustado:
+
+**FormFornecedor.prg** ÔÇö j├í estava completo das fases anteriores com todos os m├®todos exigidos:
+- `BtnBuscarClick()`, `BtnEncerrarClick()`, `BtnSalvarClick()`, `BtnCancelarClick()`
+- `FormParaBO()`, `BOParaForm()`, `HabilitarCampos()`, `LimparCampos()`
+- `CarregarLista()`, `AjustarBotoesPorModo()`
+
+**FornecedorBO.prg** ÔÇö completo com todos os m├®todos CRUD.
+
+**config.prg** ÔÇö carrega `*BO.prg` e `Form*.prg` dinamicamente via ADIR(); nenhuma mudan├ºa necess├íria.
+
+**menu.prg** ÔÇö duas corre├º├Áes aplicadas:
+1. Linha 229: removido coment├írio `*` do `ON SELECTION BAR 6 OF popCadastros DO AbrirFormFornecedor`
+2. Linhas 7493-7516: adicionada procedure `AbrirFormFornecedor()` com padr├úo can├┤nico (`VARTYPE`, `Show()` sem par├ómetro, sem `Release()`)
+
+O formul├írio agora est├í acess├¡vel via menu Cadastros ÔåÆ Fornecedores.

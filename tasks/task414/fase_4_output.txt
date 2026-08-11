@@ -1,0 +1,18 @@
+﻿O arquivo j├í cont├®m tudo que a Fase 4 requer. Vou verificar se h├í algo faltando ou que precisa de corre├º├úo.
+
+A an├ílise do FormFBI.prg mostra que a Fase 3 j├í entregou o conte├║do completo da Fase 4:
+
+**Ô£à J├í implementado:**
+- `ConfigurarPaginaLista()` ÔÇö completa com grid de 4 colunas + cabe├ºalho + todos os bot├Áes
+- `cnt_4c_Botoes` com 5 bot├Áes (Incluir, Visualizar, Alterar, Excluir, Buscar) + `cnt_4c_Saida` (Encerrar)
+- `AlternarPagina(par_nPagina)` ÔÇö alterna entre Page1/Page2, recarrega lista ao voltar
+- `CarregarLista()` ÔÇö usa cursor `crSigFiMpF`, redefine headers ap├│s RecordSource, chama `FormatarGridLista()`
+- `FormatarGridLista()` e `TornarControlesVisiveis()` ÔÇö auxiliares implementados
+
+**Observa├º├úo importante:** a coluna 3 do grid exibe `crSigFiMpF.cImpFabs` em vez de `fCriptografar(cImpFabs)` ÔÇö decis├úo correta, pois `fCriptografar` n├úo foi portada para o novo sistema.
+
+**Estado atual do arquivo:**
+- Page1 (Lista): **100% completa** ÔÇö cabe├ºalho, bot├Áes CRUD, grid 4 colunas, Encerrar
+- Page2 (Dados): **parcial** ÔÇö apenas bot├Áes Confirmar/Cancelar, sem campos de dados ainda
+
+A Fase 4 est├í conclu├¡da. O pr├│ximo passo ├® a **Fase 5** (ConfigurarPaginaDados com todos os campos de dados: TextBoxes, Labels, CheckBoxes, OptionGroups).

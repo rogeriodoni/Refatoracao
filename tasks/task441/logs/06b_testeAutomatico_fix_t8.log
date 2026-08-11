@@ -1,0 +1,23 @@
+[2026-08-08 07:14:28] [INFO] === CLAUDE CLI INVOKER ===
+[2026-08-08 07:14:28] [INFO] Prompt File: C:\4c\tasks\task441\runtime_fix_prompt_06b_testeAutomatico_t8.md
+[2026-08-08 07:14:28] [INFO] Output File: C:\4c\tasks\task441\06b_testeAutomatico_fix_output_t8.txt
+[2026-08-08 07:14:28] [INFO] Model: sonnet
+[2026-08-08 07:14:28] [INFO] Timeout: 3600 segundos
+[2026-08-08 07:14:28] [INFO] Max Output Tokens: 128000
+[2026-08-08 07:14:28] [INFO] Context Files: 0 arquivo(s)
+[2026-08-08 07:14:28] [INFO] Invocando Claude CLI...
+[2026-08-08 07:14:28] [INFO] Prompt carregado: 70862 caracteres
+[2026-08-08 07:14:28] [INFO] Executando: claude --model sonnet --dangerously-skip-permissions --add-dir C:\4c
+[2026-08-08 07:14:28] [INFO] Tamanho total do prompt: 70862 caracteres
+[2026-08-08 07:14:28] [INFO] Invocando Claude CLI (tentativa 1/7)...
+[2026-08-08 07:22:32] [INFO] Claude CLI finalizado em 484.3185535 segundos
+[2026-08-08 07:22:32] [INFO] Exit Code: 0
+[2026-08-08 07:22:32] [INFO] Output salvo em: C:\4c\tasks\task441\06b_testeAutomatico_fix_output_t8.txt
+[2026-08-08 07:22:32] [INFO] Output size: 1178 bytes
+[2026-08-08 07:22:32] [INFO] SUCESSO: Claude CLI executado com sucesso
+[2026-08-08 07:22:32] [INFO] Preview do output:
+[2026-08-08 07:22:32] [INFO] Ambas as edi+º+Áes est+úo corretas. Resumo das corre+º+Áes:
+
+**Causa raiz (persistente desde t6):** Em VFP9 headless (`-T`), um form com `WindowType = 1` que configura `Grid.RecordSource` durante `InicializarForm()` entra automaticamente no modal READ EVENTS loop ÔÇö bloqueando o teste por exatamente 300s.
+
+**Por que fixes anteriores (t6, t7) falharam:** O CorretorAutomatico detectava `$temWindowType = $true` *apenas* quando encontrava `WindowType = 1`. Ao remover essa linha, o CorretorAutom

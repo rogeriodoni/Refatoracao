@@ -1,0 +1,17 @@
+﻿The ImprimirBalanco method is structurally correct: `RETURN` is outside the TRY/CATCH block, locale isolation is applied, menu restoration is present, and the FRX reference is correct.
+
+Phase 7 is complete. Here's what was done:
+
+**Fixes applied:**
+1. **Copied FRX/FRT**: `SIGCDFEA.frx` + `SIGCDFEA.frt` from `C:\4install\FortyusMC\Fortyus\` ÔåÆ `C:\4c\projeto\app\reports\`
+
+2. **Fixed 4 broken `SELECT x & INDEX ON` statements** (lines 2040, 2047, 2054, 2061) ÔÇö the `&` macro operator was incorrectly merging two VFP9 statements into one. Split into separate `SELECT` + `INDEX ON` lines.
+
+**Non-issues (already ported):**
+- `fDtoSQL()` ÔÇö ported in `functions.prg:1152`, returns proper DATETIME for parametrized SQL
+- `fBuscarCotacao()` ÔÇö ported in `functions.prg:1652`, queries `SigCdCot`
+- `fChecaAcesso()` ÔÇö ported stub in `functions.prg:429`, returns `.T.`
+- `fGerUniqueKey()` ÔÇö ported in `functions.prg:1726`, uses global counter array
+- `fUniqueIds()` ÔÇö ported in `functions.prg:1119`
+
+FormFea.prg is now 5345 lines. All 8 phases are complete.

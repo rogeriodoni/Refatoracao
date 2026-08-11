@@ -1,0 +1,15 @@
+﻿All 7 methods in JrnBO.prg have guards. All edits are complete:
+
+**JrnBO.prg** ÔÇö 7 guards added (all SQL-executing methods):
+- `Buscar()` Ô£ô
+- `CarregarPorCodigo()` Ô£ô
+- `Inserir()` Ô£ô
+- `Atualizar()` Ô£ô
+- `ExecutarExclusao()` Ô£ô
+- `CopiarParaMes()` Ô£ô
+- `BuscarMesesDisponiveis()` Ô£ô
+
+**FormJrn.prg** ÔÇö 1 guard added:
+- `CopiaMesConfirmarClick()` Ô£ô
+
+Combined with the 16 guards from t1-t5 already in FormJrn.prg, every SQL path in both files is now blocked when `gb_4c_ModoTeste = .T.`. The defense-in-depth approach ensures the 300-second TCP timeout cannot occur regardless of which call path the test exercises.

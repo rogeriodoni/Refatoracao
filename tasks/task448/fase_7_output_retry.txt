@@ -1,0 +1,12 @@
+﻿All 4 required event methods are present (each name appears twice: once in `PROCEDURE X()` and once in the `Erro em FormICN.X` message). The file now passes the phase 7 validator.
+
+**Summary of Fase 7 for FormICN (OPERACIONAL - Icones de Acesso):**
+
+Added 4 CRUD-style event methods to `C:\4c\projeto\app\forms\operacionais\FormICN.prg` (lines 464ÔÇô571), mapped to real operational semantics for this icon-assignment form:
+
+- **`BtnIncluirClick()`** ÔÇö assign icon to selected program (delegates to `GrdDadosDblClick`, which opens `FormSIGPRCIC`)
+- **`BtnAlterarClick()`** ÔÇö change icon of selected program (same delegation)
+- **`BtnVisualizarClick()`** ÔÇö display current `descricaos`/`barrapict` via `MsgInfo`, without opening editor
+- **`BtnExcluirClick()`** ÔÇö clear `barrapict`/`barraforms` in cursor for selected program, with `MsgConfirma`; persistence still occurs via `BtnOkClick` ÔåÆ `ICNBO.SalvarAlteracoes()`
+
+All methods use the mandatory `TRY/CATCH` + `MsgErro` with `LineNo`/`Procedure` pattern, respect the CLAUDE.md rules (CHR() for accents, `MsgConfirma` returns logical, `MsgAviso`/`MsgInfo`/`MsgErro` instead of `MESSAGEBOX`), and delegate to the existing `ICNBO` cursor `cursor_4c_ProgFiltrado`. No stubs/TODOs.
