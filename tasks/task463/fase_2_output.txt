@@ -1,0 +1,21 @@
+﻿Fase 2 conclu├¡da. O `modBO.prg` agora tem todos os m├®todos CRUD:
+
+**M├®todos adicionados:**
+
+| M├®todo | Visibilidade | Descri├º├úo |
+|--------|-------------|-----------|
+| `Buscar(par_cFiltro)` | PUBLIC | SELECT com filtro opcional por `Descs` |
+| `CarregarPorCodigo(par_cPkChave)` | PUBLIC | SELECT por `pkchave` |
+| `CarregarDoCursor(par_cAliasCursor)` | PUBLIC | Mapeia cursor ÔåÆ propriedades |
+| `GerarProximoCodigo()` | PROTECTED | MAX(CAST(Codigos AS INT))+1, equivale ao `fGerUniqueKey` |
+| `ValidarDados()` | PROTECTED | Descs obrigat├│ria + checagem de duplicata (s├│ no INSERT) |
+| `Inserir()` | PROTECTED | Gera `pkchave` via `SYS(2015)` + `Codigos` autom├ítico + INSERT |
+| `Atualizar()` | PROTECTED | UPDATE de `Descs` por `pkchave` |
+| `ExecutarExclusao()` | PROTECTED | DELETE por `pkchave` |
+
+**Regras cr├¡ticas aplicadas:**
+- Nenhum `RETURN` dentro de `TRY/CATCH`
+- `SELECT (par_cAliasCursor)` antes de acessar campos em `CarregarDoCursor`
+- `this_lNovoRegistro = .F.` ap├│s carregar registro existente
+- `CapturarErroSQL()` em todos os erros SQL
+- `CATCH` nunca silencioso

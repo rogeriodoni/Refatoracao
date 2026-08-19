@@ -1,0 +1,16 @@
+﻿**Falso positivo identificado.** Nenhuma altera├º├úo necess├íria.
+
+O problema reportado ├® um erro de matching do validador:
+
+| SCX Original | Migrado | Status |
+|---|---|---|
+| `COTACAO` em **Lista**, Top=5 | `cmd_4c_Cambio` em **Page1**, Top=34 (5+29) | Ô£ô Correto |
+| campo `cotas` em **Dados**, Top=115 | `chk_4c_Cotacao` em **Page2**, Top=144 (115+29) | Ô£ô Correto |
+
+O coment├írio na linha 323 j├í documenta explicitamente: `*-- Botao Cambio (COTACAO no legado)` com `Original: Top=5, Left=296. Com compensacao +29: Top=34`. Ou seja, o controle `COTACAO` da p├ígina Lista (Top=5) foi migrado para `cmd_4c_Cambio.Top=34` ÔÇö **j├í correto**.
+
+O validador procurou pelo nome mais similar a "COTACAO" e encontrou `chk_4c_Cotacao` (que ├® o campo `cotas` da p├ígina Dados), gerando uma compara├º├úo incorreta entre controles de p├íginas diferentes.
+
+Alterar `chk_4c_Cotacao.Top` de 144 para 34 quebraria o formul├írio (jogaria o campo de dados no meio do cabe├ºalho/bot├Áes da p├ígina Dados) e seria uma regress├úo funcional ÔÇö vedada pelas regras do pass ("NAO alterar logica de negocio").
+
+**Conclus├úo:** O FormMoe.prg est├í correto. Nenhuma edi├º├úo necess├íria para este pass.

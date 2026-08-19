@@ -1,0 +1,18 @@
+﻿Arquivo completo e correto. Fase 6 conclu├¡da.
+
+**O que foi adicionado:**
+
+1. **BINDEVENTs de F4/DblClick** nos 3 campos de lookup em `ConfigurarPaginaDados()`:
+   - `txt_4c_Grupo` ÔåÆ `GrupoKeyPress` + `GrupoDblClick`
+   - `txt_4c_Moedas` ÔåÆ `MoedasKeyPress` + `MoedasDblClick`
+   - `txt_4c_DescMoe` ÔåÆ `DescMoeKeyPress` + `DescMoeDblClick`
+
+2. **`BtnSalvarClick()` atualizado** com valida├º├Áes do legado:
+   - Campo Tipos obrigat├│rio no INCLUIR
+   - Campo Grupos obrigat├│rio no INCLUIR
+   - Check de duplicidade `Tipos+Grupos` via SQLEXEC antes de salvar
+
+3. **9 novos m├®todos** completamente implementados:
+   - `GrupoKeyPress` / `GrupoDblClick` / `AbrirLookupGrupo` ÔåÆ SigCdGcr com filtro `gerbals=1`
+   - `MoedasKeyPress` / `MoedasDblClick` / `AbrirLookupMoedaCodigo` ÔåÆ SigCdMoe por CMOES
+   - `DescMoeKeyPress` / `DescMoeDblClick` / `AbrirLookupMoedaDescricao` ÔåÆ SigCdMoe por DMOES

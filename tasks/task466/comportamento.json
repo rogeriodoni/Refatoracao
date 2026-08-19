@@ -1,0 +1,118 @@
+{
+  "resumo": {
+    "totalMetodos": 6,
+    "metodosComSQL": 3,
+    "metodosComValidacao": 2,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": []
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDMPL",
+      "evento": "Procedure",
+      "linhas": 3,
+      "codigoOriginal": "Select crSigPrCpl\nLocate for Codigos >= ThisForm.Pagina.Dados.GetCodigos.Value\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMPL",
+      "evento": "Init",
+      "linhas": 19,
+      "codigoOriginal": "With ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tWith .poDataMgr\n\t\t\t.AddCursor('SigPrCpl', 'Codigos', 'crSigPrCpl', '', ThisForm.Pagina.Lista.Grade)\n\t\t\t.pfSqlTabela(1).pColuna('Codigos', '', '', 'Código',    150, .t.)\n\t\t\t.pfSqlTabela(1).pColuna('Descrs',  '', '', 'Descrição', 290, .t.)\n\t\tEndWith\n\n\t\t=DoDefault()\n\n\t\tThisForm.Pagina.Lista.Grade.Column1.SetFocus\n\tElse\n\t\t=Messagebox('Impossível Efetuar Conexão Com o Servidor de Banco de Dados...... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDMPL",
+      "evento": "Click",
+      "linhas": 20,
+      "codigoOriginal": "Lparameters Opcao\n\nIf Not DoDefault(Opcao)\n\tThisForm.mAtivaPagina1\n\tReturn 0\nEndIf\n\nDo Case\n\tCase InList(Thisform.pcEscolha, 'INSERIR', 'PROCURAR')\n\t\tThisform.Pagina.Dados.getCodigos.Setfocus\n\n\tCase (Thisform.pcEscolha = 'ALTERAR')\n\t\tThisform.Pagina.Dados.getDescrs.Setfocus\n\n\tCase InList(Thisform.pcEscolha, 'CONSULTAR', 'EXCLUIR')\n\t\tThisform.Pagina.Dados.Grupo_Salva.Salva.Setfocus\nEndCase\n\nSelect crSigPrCpl\n* Fim ***********************************************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMPL",
+      "evento": "Click",
+      "linhas": 46,
+      "codigoOriginal": "If Inlist(ThisForm.Pagina.Lista.Grupo_op.Value, 1, 3)\n\tIf Empty(Thisform.Pagina.Dados.getCodigos.Value)\n\t\t=Messagebox('Código Inválido!!!', 0+64, '')\n\t\tThisform.Pagina.Dados.getCodigos.Setfocus\n\t\tReturn 0\n\tElse\n\t\tIf (Thisform.Pagina.Lista.Grupo_op.Value = 1)\n\t\t\tThisForm.poDataMgr.CursorQuery('SigPrCpl', 'crBusca', 'Codigos', crSigPrCpl.Codigos, 'Codigos')\n\t\t\tIf Not Eof('crBusca')\n\t\t\t\t=MessageBox('Complemento de Característica Já Cadastrado!!!', 0+64, '')\n\t\t\t\tThisform.Pagina.Dados.getCodigos.Setf... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery,SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMPL",
+      "evento": "Click",
+      "linhas": 6,
+      "codigoOriginal": "=DoDefault()\n\nIf ThisForm.plCancelar\n\tThisForm.mAtivaPagina1\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMPL.Pagina.Dados.getCodigos",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Not InList(Thisform.Pagina.Lista.Grupo_Op.Value, 2, 3)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

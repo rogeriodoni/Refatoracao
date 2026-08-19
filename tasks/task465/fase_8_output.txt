@@ -1,0 +1,15 @@
+﻿All fixes are confirmed. Phase 8/8 is complete.
+
+**Summary of changes made:**
+
+**`FormMPD.prg` ÔÇö 3 fixes:**
+1. `BtnIncluirClick()` (line 415): Added `THIS.BOParaForm()` after `LimparCampos()` so OptionGroups and CheckBoxes reset to their proper defaults (instead of showing stale values from the last viewed record).
+2. `BtnSalvarClick()` (line 1665): Removed the dead-code `IF "INSERIR" / ELSE` branch ÔÇö both paths were identical, now collapsed to a single `Salvar()` call.
+3. `HabilitarCampos()` (line 4392): Added `cmd_4c_Salvar.Enabled = par_lHabilitar` ÔÇö the Save button is now disabled in VISUALIZAR mode, preventing accidental data modification.
+
+**`menu.prg` ÔÇö integration added:**
+- BAR 125 in `popCadastros`: "Movimenta├º├Áes de Produ├º├úo"
+- `ON SELECTION BAR 125 DO AbrirFormMPD`
+- `AbrirFormMPD()` procedure (follows the canonical pattern of AbrirFormMoe)
+
+config.prg uses dynamic ADIR() loading ÔÇö `MPDBO.prg` (in classes/) and `FormMPD.prg` (in forms/cadastros/) are auto-discovered, no changes needed there.

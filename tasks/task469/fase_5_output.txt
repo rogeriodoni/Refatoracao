@@ -1,0 +1,18 @@
+﻿The file is complete and correct. Phase 5 is done ÔÇö all 5 edits applied:
+
+- **Edit 1** (done prior): Full `ConfigurarPaginaDados()` with all 9 field pairs + Confirmar/Cancelar buttons
+- **Edit 2**: `BtnIncluirClick` ÔÇö calls `LimparCampos()` + `HabilitarCampos(.T.)` before navigating to Page2
+- **Edit 3**: `BtnVisualizarClick` ÔÇö calls `BOParaForm()` + `HabilitarCampos(.F.)` after loading
+- **Edit 4**: `BtnAlterarClick` ÔÇö calls `BOParaForm()` + `HabilitarCampos(.T.)` after loading
+- **Edit 5**: 9 new methods inserted before `Destroy`:
+  - `BtnSalvarClick` ÔÇö FormParaBO + BO.Salvar + AlternarPagina(1) on success
+  - `BtnCancelarClick` ÔÇö AlternarPagina(1)
+  - `ValidarGrupo` ÔÇö Pattern B lookup on SigCdGcr filtered by gerbals=1
+  - `ValidarMoedaPorCodigo` ÔÇö Pattern B on SigCdMoe by cmoes; fills DescMoe; locks DescMoe.ReadOnly when matched
+  - `ValidarMoedaPorDescricao` ÔÇö Pattern B on SigCdMoe by dmoes; fills both Moedas+DescMoe
+  - `FormParaBO` ÔÇö all 8 fields formÔåÆBO (CheckBox uses `.Value` directly, logicalÔåÆlogical)
+  - `BOParaForm` ÔÇö all 9 fields BOÔåÆform (includes `this_cDescMoe`)
+  - `HabilitarCampos` ÔÇö tipos/grupos editable only in INCLUIR; general fields in INCLUIR+ALTERAR; DescMoe when Moedas is empty; CheckBox uses `.Enabled`
+  - `LimparCampos` ÔÇö resets all Page2 controls to defaults
+
+Phase 5/8 is complete. The form is now fully functional for CRUD operations. Next would be Phase 8 (integration: add menu entry in `menu.prg` and ensure `config.prg` auto-loads via ADIR ÔÇö which it already does for all `*BO.prg` and `Form*.prg` files).

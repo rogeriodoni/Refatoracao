@@ -1,0 +1,15 @@
+﻿Tudo integrado corretamente. A migra├º├úo do FormMtt est├í completa:
+
+**O que foi feito na Fase 8 (verifica├º├úo + integra├º├úo):**
+
+O FormMtt.prg j├í estava completo com todos os m├®todos obrigat├│rios das fases anteriores:
+- `BtnBuscarClick()`, `BtnEncerrarClick()`, `BtnSalvarClick()`, `BtnCancelarClick()`
+- `FormParaBO()`, `BOParaForm()`, `HabilitarCampos()`, `LimparCampos()`
+- `CarregarLista()`, `AjustarBotoesPorModo()`
+
+**Integra├º├úo adicionada no menu.prg:**
+- `DEFINE BAR 132 OF popCadastros` ÔåÆ "Metal/Teor" no menu Cadastros
+- `ON SELECTION BAR 132 OF popCadastros DO AbrirFormMtt`
+- Fun├º├úo `AbrirFormMtt()` com padr├úo can├┤nico (VARTYPE, Show sem par├ómetro, sem Release)
+
+**config.prg:** nenhuma altera├º├úo necess├íria ÔÇö usa ADIR() autom├ítico que carrega todos `*BO.prg` de `classes/` e `Form*.prg` de `forms/cadastros/`.

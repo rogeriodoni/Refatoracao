@@ -261,6 +261,38 @@ PROCEDURE CriarMenuPrincipal()
            MESSAGE "Cadastro de Justificativas do Retrabalho (SIGCDJUS)"
     DEFINE BAR 116 OF popCadastros PROMPT "Lote de Cheques" ;
            MESSAGE "Cadastro de Lote de Cheques (SigChLcq)"
+    DEFINE BAR 117 OF popCadastros PROMPT "Lan" + CHR(231) + "amentos" ;
+           MESSAGE "Cadastro de Lan" + CHR(231) + "amentos (SigCdLct)"
+    DEFINE BAR 118 OF popCadastros PROMPT "Dados Gerenciais Fiscais" ;
+           MESSAGE "Cadastro de Dados Gerenciais Fiscais (SIGCDLGR)"
+    DEFINE BAR 119 OF popCadastros PROMPT "Linhas de Produ" + CHR(231) + CHR(227) + "o" ;
+           MESSAGE "Cadastro de Linhas de Produ" + CHR(231) + CHR(227) + "o (SIGCDLIN)"
+    DEFINE BAR 120 OF popCadastros PROMPT "Locais" ;
+           MESSAGE "Cadastro de Locais (SigCdLoc)"
+    DEFINE BAR 121 OF popCadastros PROMPT "Listas de Precifica" + CHR(231) + CHR(227) + "o" ;
+           MESSAGE "Cadastro de Listas de Precifica" + CHR(231) + CHR(227) + "o (SIGCDLPR)"
+    DEFINE BAR 122 OF popCadastros PROMPT "Motivos de Desconto / Acr" + CHR(233) + "scimo" ;
+           MESSAGE "Cadastro de Motivos de Desconto / Acr" + CHR(233) + "scimo (SIGCDMDA)"
+    DEFINE BAR 123 OF popCadastros PROMPT "Modalidades" ;
+           MESSAGE "Cadastro de Modalidades (SigCdMod)"
+    DEFINE BAR 124 OF popCadastros PROMPT "Moedas" ;
+           MESSAGE "Cadastro de Moedas (SigCdMoe)"
+    DEFINE BAR 125 OF popCadastros PROMPT "Movimenta" + CHR(231) + CHR(245) + "es de Produ" + CHR(231) + CHR(227) + "o" ;
+           MESSAGE "Cadastro de Movimenta" + CHR(231) + CHR(245) + "es de Produ" + CHR(231) + CHR(227) + "o (SigCdPrg)"
+    DEFINE BAR 126 OF popCadastros PROMPT "Complementos de Caracter" + CHR(237) + "sticas" ;
+           MESSAGE "Cadastro de Complementos de Caracter" + CHR(237) + "sticas (SigPrCpl)"
+    DEFINE BAR 127 OF popCadastros PROMPT "Compl. Caract. de Produtos" ;
+           MESSAGE "Complementos de Caracter" + CHR(237) + "sticas de Produtos (SigPrCpP)"
+    DEFINE BAR 128 OF popCadastros PROMPT "Compl. Caract. de Contas" ;
+           MESSAGE "Complementos de Caracter" + CHR(237) + "sticas de Contas (SigPrCpP)"
+    DEFINE BAR 129 OF popCadastros PROMPT "Compl. Caract. de Movimenta" + CHR(231) + CHR(245) + "es" ;
+           MESSAGE "Complementos de Caracter" + CHR(237) + "sticas de Movimenta" + CHR(231) + CHR(245) + "es (SigPrCpP)"
+    DEFINE BAR 130 OF popCadastros PROMPT "Demonstrativos" ;
+           MESSAGE "Cadastro de Demonstrativos (SigCdMrr)"
+    DEFINE BAR 131 OF popCadastros PROMPT "Modelos de Trabalho de Produ" + CHR(231) + CHR(227) + "o" ;
+           MESSAGE "Cadastro de Modelos de Trabalho de Produ" + CHR(231) + CHR(227) + "o (SigCdMtp)"
+    DEFINE BAR 132 OF popCadastros PROMPT "Metal/Teor" ;
+           MESSAGE "Cadastro de Metal/Teor (SigCdMtl)"
 
     * Vincular acoes dos itens do menu Cadastros
     ON SELECTION BAR 1 OF popCadastros DO AbrirFormCargo
@@ -363,6 +395,22 @@ PROCEDURE CriarMenuPrincipal()
     ON SELECTION BAR 114 OF popCadastros DO AbrirFormJrn
     ON SELECTION BAR 115 OF popCadastros DO AbrirFormJUS
     ON SELECTION BAR 116 OF popCadastros DO AbrirFormlch
+    ON SELECTION BAR 117 OF popCadastros DO AbrirFormlct
+    ON SELECTION BAR 118 OF popCadastros DO AbrirFormLGR
+    ON SELECTION BAR 119 OF popCadastros DO AbrirFormLin
+    ON SELECTION BAR 120 OF popCadastros DO AbrirFormLOC
+    ON SELECTION BAR 121 OF popCadastros DO AbrirFormLpr
+    ON SELECTION BAR 122 OF popCadastros DO AbrirFormMda
+    ON SELECTION BAR 123 OF popCadastros DO AbrirFormmod
+    ON SELECTION BAR 124 OF popCadastros DO AbrirFormMoe
+    ON SELECTION BAR 125 OF popCadastros DO AbrirFormMPD
+    ON SELECTION BAR 126 OF popCadastros DO AbrirFormMPL
+    ON SELECTION BAR 127 OF popCadastros DO AbrirFormmpp
+    ON SELECTION BAR 128 OF popCadastros DO AbrirFormmppContas
+    ON SELECTION BAR 129 OF popCadastros DO AbrirFormmppMovim
+    ON SELECTION BAR 130 OF popCadastros DO AbrirFormMrc
+    ON SELECTION BAR 131 OF popCadastros DO AbrirFormMtp
+    ON SELECTION BAR 132 OF popCadastros DO AbrirFormMtt
 
     * Menu Movimentos
     ON PAD padMovimentos OF _MSYSMENU ACTIVATE POPUP popMovimentos
@@ -8281,6 +8329,430 @@ PROCEDURE AbrirFormlch()
         lcMensagem = "Erro ao abrir formul" + CHR(225) + "rio de Lote de Cheques:" + CHR(13) + CHR(13) + ;
                      "Erro: "      + loException.Message            + CHR(13) + ;
                      "Linha: "     + TRANSFORM(loException.LineNo)  + CHR(13) + ;
+                     "Procedure: " + loException.Procedure
+        MostrarErro(lcMensagem, "Erro Detalhado")
+    ENDTRY
+ENDPROC
+
+*------------------------------------------------------------------------------
+* AbrirFormlct - Abre formulario de Cadastro de Lancamentos (SigCdLct)
+*------------------------------------------------------------------------------
+PROCEDURE AbrirFormlct()
+    LOCAL loForm, loException
+
+    TRY
+        loForm = CREATEOBJECT("Formlct")
+
+        IF VARTYPE(loForm) = "O"
+            loForm.Show()
+        ELSE
+            MostrarErro("Erro ao criar formul" + CHR(225) + "rio Formlct" + CHR(13) + ;
+                "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
+        ENDIF
+
+    CATCH TO loException
+        LOCAL lcMensagem
+        lcMensagem = "Erro ao abrir formul" + CHR(225) + "rio de Lan" + CHR(231) + "amentos:" + CHR(13) + CHR(13) + ;
+                     "Erro: "      + loException.Message            + CHR(13) + ;
+                     "Linha: "     + TRANSFORM(loException.LineNo)  + CHR(13) + ;
+                     "Procedure: " + loException.Procedure
+        MostrarErro(lcMensagem, "Erro Detalhado")
+    ENDTRY
+ENDPROC
+
+*------------------------------------------------------------------------------
+* AbrirFormLGR - Abre formulario de Dados Gerenciais Fiscais (SIGCDLGR)
+*------------------------------------------------------------------------------
+PROCEDURE AbrirFormLGR()
+    LOCAL loForm, loException
+
+    TRY
+        loForm = CREATEOBJECT("FormLGR")
+
+        IF VARTYPE(loForm) = "O"
+            loForm.Show()
+        ELSE
+            MostrarErro("Erro ao criar formul" + CHR(225) + "rio FormLGR" + CHR(13) + ;
+                "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
+        ENDIF
+
+    CATCH TO loException
+        LOCAL lcMensagem
+        lcMensagem = "Erro ao abrir formul" + CHR(225) + "rio de Dados Gerenciais Fiscais:" + CHR(13) + CHR(13) + ;
+                     "Erro: "      + loException.Message            + CHR(13) + ;
+                     "Linha: "     + TRANSFORM(loException.LineNo)  + CHR(13) + ;
+                     "Procedure: " + loException.Procedure
+        MostrarErro(lcMensagem, "Erro Detalhado")
+    ENDTRY
+ENDPROC
+
+*------------------------------------------------------------------------------
+* AbrirFormLin - Abre formulario de Cadastro de Linhas de Producao (SIGCDLIN)
+*------------------------------------------------------------------------------
+PROCEDURE AbrirFormLin()
+    LOCAL loForm, loException
+
+    TRY
+        loForm = CREATEOBJECT("FormLin")
+
+        IF VARTYPE(loForm) = "O"
+            loForm.Show()
+        ELSE
+            MostrarErro("Erro ao criar formul" + CHR(225) + "rio FormLin" + CHR(13) + ;
+                "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
+        ENDIF
+
+    CATCH TO loException
+        LOCAL lcMensagem
+        lcMensagem = "Erro ao abrir formul" + CHR(225) + "rio de Linhas de Produ" + CHR(231) + CHR(227) + "o:" + CHR(13) + CHR(13) + ;
+                     "Erro: "      + loException.Message            + CHR(13) + ;
+                     "Linha: "     + TRANSFORM(loException.LineNo)  + CHR(13) + ;
+                     "Procedure: " + loException.Procedure
+        MostrarErro(lcMensagem, "Erro Detalhado")
+    ENDTRY
+ENDPROC
+
+*------------------------------------------------------------------------------
+* AbrirFormLOC - Abre formulario de cadastro de Locais
+*------------------------------------------------------------------------------
+PROCEDURE AbrirFormLOC()
+    LOCAL loForm, loException
+
+    TRY
+        loForm = CREATEOBJECT("FormLOC")
+
+        IF VARTYPE(loForm) = "O"
+            loForm.Show()
+        ELSE
+            MostrarErro("Erro ao criar formul" + CHR(225) + "rio FormLOC" + CHR(13) + ;
+                "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
+        ENDIF
+
+    CATCH TO loException
+        LOCAL lcMensagem
+        lcMensagem = "Erro ao abrir formul" + CHR(225) + "rio de Locais:" + CHR(13) + CHR(13) + ;
+                     "Erro: "      + loException.Message            + CHR(13) + ;
+                     "Linha: "     + TRANSFORM(loException.LineNo)  + CHR(13) + ;
+                     "Procedure: " + loException.Procedure
+        MostrarErro(lcMensagem, "Erro Detalhado")
+    ENDTRY
+ENDPROC
+
+*------------------------------------------------------------------------------
+* AbrirFormLpr - Abre formulario de Listas de Precificacao
+*------------------------------------------------------------------------------
+PROCEDURE AbrirFormLpr()
+    LOCAL loForm, loException
+
+    TRY
+        loForm = CREATEOBJECT("FormLpr")
+
+        IF VARTYPE(loForm) = "O"
+            loForm.Show()
+        ELSE
+            MostrarErro("Erro ao criar formulario FormLpr" + CHR(13) + ;
+                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
+        ENDIF
+
+    CATCH TO loException
+        LOCAL lcMensagem
+        lcMensagem = "Erro ao abrir Listas de Precifica" + CHR(231) + CHR(227) + "o:" + ;
+                     CHR(13) + CHR(13) + ;
+                     "Erro: "      + loException.Message + CHR(13) + ;
+                     "Linha: "     + TRANSFORM(loException.LineNo) + CHR(13) + ;
+                     "Procedure: " + loException.Procedure
+        MostrarErro(lcMensagem, "Erro Detalhado")
+    ENDTRY
+ENDPROC
+
+*------------------------------------------------------------------------------
+* AbrirFormMda - Abre formulario Cadastro de Motivos de Desconto / Acrescimo
+*------------------------------------------------------------------------------
+PROCEDURE AbrirFormMda()
+    LOCAL loForm, loException
+
+    TRY
+        loForm = CREATEOBJECT("FormMda")
+
+        IF VARTYPE(loForm) = "O"
+            loForm.Show()
+        ELSE
+            MostrarErro("Erro ao criar formulario FormMda" + CHR(13) + ;
+                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
+        ENDIF
+
+    CATCH TO loException
+        LOCAL lcMensagem
+        lcMensagem = "Erro ao abrir Motivos de Desconto / Acr" + CHR(233) + "scimo:" + ;
+                     CHR(13) + CHR(13) + ;
+                     "Erro: "      + loException.Message + CHR(13) + ;
+                     "Linha: "     + TRANSFORM(loException.LineNo) + CHR(13) + ;
+                     "Procedure: " + loException.Procedure
+        MostrarErro(lcMensagem, "Erro Detalhado")
+    ENDTRY
+ENDPROC
+
+*------------------------------------------------------------------------------
+* AbrirFormmod - Abre formulario de cadastro de Modalidades
+*------------------------------------------------------------------------------
+PROCEDURE AbrirFormmod()
+    LOCAL loForm, loException
+
+    TRY
+        loForm = CREATEOBJECT("Formmod")
+
+        IF VARTYPE(loForm) = "O"
+            loForm.Show()
+        ELSE
+            MostrarErro("Erro ao criar formulario Formmod" + CHR(13) + ;
+                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
+        ENDIF
+
+    CATCH TO loException
+        LOCAL lcMensagem
+        lcMensagem = "Erro ao abrir Modalidades:" + ;
+                     CHR(13) + CHR(13) + ;
+                     "Erro: "      + loException.Message + CHR(13) + ;
+                     "Linha: "     + TRANSFORM(loException.LineNo) + CHR(13) + ;
+                     "Procedure: " + loException.Procedure
+        MostrarErro(lcMensagem, "Erro Detalhado")
+    ENDTRY
+ENDPROC
+
+*------------------------------------------------------------------------------
+* AbrirFormMoe - Abre formulario de cadastro de Moedas
+*------------------------------------------------------------------------------
+PROCEDURE AbrirFormMoe()
+    LOCAL loForm, loException
+
+    TRY
+        loForm = CREATEOBJECT("FormMoe")
+
+        IF VARTYPE(loForm) = "O"
+            loForm.Show()
+        ELSE
+            MostrarErro("Erro ao criar formulario FormMoe" + CHR(13) + ;
+                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
+        ENDIF
+
+    CATCH TO loException
+        LOCAL lcMensagem
+        lcMensagem = "Erro ao abrir Cadastro de Moedas:" + ;
+                     CHR(13) + CHR(13) + ;
+                     "Erro: "      + loException.Message + CHR(13) + ;
+                     "Linha: "     + TRANSFORM(loException.LineNo) + CHR(13) + ;
+                     "Procedure: " + loException.Procedure
+        MostrarErro(lcMensagem, "Erro Detalhado")
+    ENDTRY
+ENDPROC
+
+*------------------------------------------------------------------------------
+* AbrirFormMrc - Abre formulario de Cadastro de Demonstrativos
+*------------------------------------------------------------------------------
+PROCEDURE AbrirFormMrc()
+    LOCAL loForm, loException
+
+    TRY
+        loForm = CREATEOBJECT("FormMrc")
+
+        IF VARTYPE(loForm) = "O"
+            loForm.Show()
+        ELSE
+            MostrarErro("Erro ao criar formulario FormMrc" + CHR(13) + ;
+                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
+        ENDIF
+
+    CATCH TO loException
+        LOCAL lcMensagem
+        lcMensagem = "Erro ao abrir Cadastro de Demonstrativos:" + ;
+                     CHR(13) + CHR(13) + ;
+                     "Erro: "      + loException.Message + CHR(13) + ;
+                     "Linha: "     + TRANSFORM(loException.LineNo) + CHR(13) + ;
+                     "Procedure: " + loException.Procedure
+        MostrarErro(lcMensagem, "Erro Detalhado")
+    ENDTRY
+ENDPROC
+
+*------------------------------------------------------------------------------
+* AbrirFormMPD - Abre formulario de Movimentacoes de Producao
+*------------------------------------------------------------------------------
+PROCEDURE AbrirFormMPD()
+    LOCAL loForm, loException
+
+    TRY
+        loForm = CREATEOBJECT("FormMPD")
+
+        IF VARTYPE(loForm) = "O"
+            loForm.Show()
+        ELSE
+            MostrarErro("Erro ao criar formulario FormMPD" + CHR(13) + ;
+                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
+        ENDIF
+
+    CATCH TO loException
+        LOCAL lcMensagem
+        lcMensagem = "Erro ao abrir Movimenta" + CHR(231) + CHR(245) + ;
+                     "es de Produ" + CHR(231) + CHR(227) + "o:" + ;
+                     CHR(13) + CHR(13) + ;
+                     "Erro: "      + loException.Message + CHR(13) + ;
+                     "Linha: "     + TRANSFORM(loException.LineNo) + CHR(13) + ;
+                     "Procedure: " + loException.Procedure
+        MostrarErro(lcMensagem, "Erro Detalhado")
+    ENDTRY
+ENDPROC
+
+*------------------------------------------------------------------------------
+* AbrirFormMPL - Abre formulario de Complementos de Caracteristicas
+*------------------------------------------------------------------------------
+PROCEDURE AbrirFormMPL()
+    LOCAL loForm, loException
+
+    TRY
+        loForm = CREATEOBJECT("FormMPL")
+
+        IF VARTYPE(loForm) = "O"
+            loForm.Show()
+        ELSE
+            MostrarErro("Erro ao criar formulario FormMPL" + CHR(13) + ;
+                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
+        ENDIF
+
+    CATCH TO loException
+        LOCAL lcMensagem
+        lcMensagem = "Erro ao abrir Complementos de Caracter" + CHR(237) + "sticas:" + ;
+                     CHR(13) + CHR(13) + ;
+                     "Erro: "      + loException.Message + CHR(13) + ;
+                     "Linha: "     + TRANSFORM(loException.LineNo) + CHR(13) + ;
+                     "Procedure: " + loException.Procedure
+        MostrarErro(lcMensagem, "Erro Detalhado")
+    ENDTRY
+ENDPROC
+
+*------------------------------------------------------------------------------
+* AbrirFormmpp - Abre formulario de Complementos de Caracteristicas de Produtos
+*------------------------------------------------------------------------------
+PROCEDURE AbrirFormmpp()
+    LOCAL loForm, loException, lcMensagem
+    loForm      = .NULL.
+    loException = .NULL.
+    lcMensagem  = ""
+    TRY
+        loForm = CREATEOBJECT("Formmpp", 0)
+        IF VARTYPE(loForm) = "O"
+            loForm.Show()
+        ELSE
+            MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Complementos de Caracter" + CHR(237) + ;
+                "sticas de Produtos" + CHR(13) + "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
+        ENDIF
+    CATCH TO loException
+        lcMensagem = "Erro ao abrir formul" + CHR(225) + "rio de Complementos de Caracter" + CHR(237) + ;
+                     "sticas de Produtos:" + CHR(13) + CHR(13) + ;
+                     "Erro: "      + loException.Message  + CHR(13) + ;
+                     "Linha: "     + TRANSFORM(loException.LineNo) + CHR(13) + ;
+                     "Procedure: " + loException.Procedure
+        MostrarErro(lcMensagem, "Erro Detalhado")
+    ENDTRY
+ENDPROC
+
+*------------------------------------------------------------------------------
+* AbrirFormmppContas - Abre formulario de Complementos de Caracteristicas de Contas
+*------------------------------------------------------------------------------
+PROCEDURE AbrirFormmppContas()
+    LOCAL loForm, loException, lcMensagem
+    loForm      = .NULL.
+    loException = .NULL.
+    lcMensagem  = ""
+    TRY
+        loForm = CREATEOBJECT("Formmpp", 1)
+        IF VARTYPE(loForm) = "O"
+            loForm.Show()
+        ELSE
+            MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Complementos de Caracter" + CHR(237) + ;
+                "sticas de Contas" + CHR(13) + "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
+        ENDIF
+    CATCH TO loException
+        lcMensagem = "Erro ao abrir formul" + CHR(225) + "rio de Complementos de Caracter" + CHR(237) + ;
+                     "sticas de Contas:" + CHR(13) + CHR(13) + ;
+                     "Erro: "      + loException.Message  + CHR(13) + ;
+                     "Linha: "     + TRANSFORM(loException.LineNo) + CHR(13) + ;
+                     "Procedure: " + loException.Procedure
+        MostrarErro(lcMensagem, "Erro Detalhado")
+    ENDTRY
+ENDPROC
+
+*------------------------------------------------------------------------------
+* AbrirFormmppMovim - Abre formulario de Complementos de Caracteristicas de Movimentacoes
+*------------------------------------------------------------------------------
+PROCEDURE AbrirFormmppMovim()
+    LOCAL loForm, loException, lcMensagem
+    loForm      = .NULL.
+    loException = .NULL.
+    lcMensagem  = ""
+    TRY
+        loForm = CREATEOBJECT("Formmpp", 2)
+        IF VARTYPE(loForm) = "O"
+            loForm.Show()
+        ELSE
+            MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Complementos de Caracter" + CHR(237) + ;
+                "sticas de Movimenta" + CHR(231) + CHR(245) + "es" + ;
+                CHR(13) + "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
+        ENDIF
+    CATCH TO loException
+        lcMensagem = "Erro ao abrir formul" + CHR(225) + "rio de Complementos de Caracter" + CHR(237) + ;
+                     "sticas de Movimenta" + CHR(231) + CHR(245) + "es:" + CHR(13) + CHR(13) + ;
+                     "Erro: "      + loException.Message  + CHR(13) + ;
+                     "Linha: "     + TRANSFORM(loException.LineNo) + CHR(13) + ;
+                     "Procedure: " + loException.Procedure
+        MostrarErro(lcMensagem, "Erro Detalhado")
+    ENDTRY
+ENDPROC
+
+*------------------------------------------------------------------------------
+* AbrirFormMtp - Abre formulario de Modelos de Trabalho de Producao
+*------------------------------------------------------------------------------
+PROCEDURE AbrirFormMtp()
+    LOCAL loForm, loException, lcMensagem
+    loForm      = .NULL.
+    loException = .NULL.
+    lcMensagem  = ""
+    TRY
+        loForm = CREATEOBJECT("FormMtp")
+        IF VARTYPE(loForm) = "O"
+            loForm.Show()
+        ELSE
+            MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Modelos de Trabalho de Produ" + CHR(231) + CHR(227) + "o" + ;
+                CHR(13) + "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
+        ENDIF
+    CATCH TO loException
+        lcMensagem = "Erro ao abrir formul" + CHR(225) + "rio de Modelos de Trabalho de Produ" + CHR(231) + CHR(227) + "o:" + ;
+                     CHR(13) + CHR(13) + ;
+                     "Erro: "      + loException.Message  + CHR(13) + ;
+                     "Linha: "     + TRANSFORM(loException.LineNo) + CHR(13) + ;
+                     "Procedure: " + loException.Procedure
+        MostrarErro(lcMensagem, "Erro Detalhado")
+    ENDTRY
+ENDPROC
+
+*------------------------------------------------------------------------------
+* AbrirFormMtt - Abre formulario de cadastro de Metal/Teor
+*------------------------------------------------------------------------------
+PROCEDURE AbrirFormMtt()
+    LOCAL loForm, loException, lcMensagem
+
+    TRY
+        loForm = CREATEOBJECT("FormMtt")
+
+        IF VARTYPE(loForm) = "O"
+            loForm.Show()
+        ELSE
+            MostrarErro("Erro ao criar formul" + CHR(225) + "rio de Metal/Teor" + ;
+                CHR(13) + "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
+        ENDIF
+    CATCH TO loException
+        lcMensagem = "Erro ao abrir formul" + CHR(225) + "rio de Metal/Teor:" + ;
+                     CHR(13) + CHR(13) + ;
+                     "Erro: "      + loException.Message  + CHR(13) + ;
+                     "Linha: "     + TRANSFORM(loException.LineNo) + CHR(13) + ;
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY

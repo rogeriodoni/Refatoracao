@@ -1,0 +1,10 @@
+﻿Integra├º├úo completa. Fase 8 conclu├¡da.
+
+**Resumo do que foi feito:**
+
+As fases 1-7 j├í haviam implementado completamente o `FormMda.prg` com todos os m├®todos exigidos pela Fase 8 (`BtnBuscarClick`, `BtnEncerrarClick`, `BtnSalvarClick`, `BtnCancelarClick`, `FormParaBO`, `BOParaForm`, `HabilitarCampos`, `LimparCampos`, `CarregarLista`, `AjustarBotoesPorModo`). A Fase 8 consistiu na **integra├º├úo ao sistema**:
+
+1. **config.prg** ÔÇö n├úo precisou altera├º├úo: o ADIR() auto-carrega `*BO.prg` de `classes/` e `Form*.prg` de `forms/cadastros/`
+2. **menu.prg linha 274** ÔÇö adicionado `DEFINE BAR 122 OF popCadastros PROMPT "Motivos de Desconto / Acr├®scimo"`
+3. **menu.prg linha 383** ÔÇö adicionado `ON SELECTION BAR 122 OF popCadastros DO AbrirFormMda`
+4. **menu.prg linha 8441** ÔÇö adicionado `PROCEDURE AbrirFormMda()` com o padr├úo can├┤nico (`VARTYPE`, `Show()` sem par├ómetro, sem `Release()`)

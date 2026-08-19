@@ -1,0 +1,1 @@
+﻿Corre├º├úo aplicada. O bug estava na linha 1195: o `AddObject` criou o CheckBox com nome `"check12"`, mas a linha 1206 tentou definir `CurrentControl = "Check1"` (nome inexistente), causando `Expression evaluated to an illegal value`. Os `BINDEVENT` subsequentes para `grd_4c_Emps.Column1.Check1` tamb├®m estariam corretos j├í que o nome agora bate.

@@ -1,0 +1,12 @@
+﻿Todas as corre├º├Áes foram aplicadas. Resumo do que foi feito:
+
+**[BUSCA-CURSOR] x3** ÔÇö Adicionado `loc_oBusca.this_cCursorDestino = "cursor_4c_Busca..."` antes de `DefinirCursor` em `ValidarGGrus` (linha 2017), `ValidarSGrus` (linha 2098) e `CompoTextValid` (linha 2496).
+
+**[BINDEVENT-PARAMS] x3** ÔÇö Convertidos `ValidarTipos`, `ValidarGGrus` e `ValidarSGrus` de params-na-assinatura para `LPARAMETERS` expl├¡cito no corpo do m├®todo (padr├úo mais seguro para handlers BINDEVENT em classes VFP9).
+
+**[NULL-CURSOR] x2** ÔÇö `SET NULL ON` / `SET NULL OFF` envolvendo `CREATE CURSOR cursor_4c_Compos` em `MdaBO.CarregarComposicoes` e em `FormMda.CompoExcluirClick`.
+
+**[GRID-HEADER] x8** ÔÇö Headers corrigidos conforme SCT legado (`SigCdMda.SCT`):
+- `grd_4c_Lista` Column1: `"C├│digo"` ÔåÆ `""` (3 ocorr├¬ncias)
+- `grd_4c_Lista` Column3: `"Tipo"` ÔåÆ `""` (3 ocorr├¬ncias)
+- `grd_4c_Emps` Column3: `"Raz├úo Social"` ÔåÆ `"Descri├º├úo"` (2 ocorr├¬ncias)

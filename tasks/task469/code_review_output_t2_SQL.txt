@@ -1,0 +1,15 @@
+﻿Tudo correto. Resumo das corre├º├Áes aplicadas:
+
+**MtpBO.prg** ÔÇö elimina├º├úo completa de `cidchaves`:
+- Propriedade `this_cIdChaves` removida; adicionadas `this_cTiposOriginal` / `this_cGruposOriginal` para tracking da chave antes de edi├º├úo
+- `ObterChavePrimaria()` retorna `tipos-grupos` (chave composta real)
+- `Buscar()` e `CarregarPorTipoGrupo()`: removido `a.cidchaves` do SELECT
+- `VerificarDuplicidade()`: trocado `SELECT cidchaves` ÔåÆ `SELECT tipos`; exclus├úo de auto-registro feita via `NOT (tipos=original AND grupos=original)` em vez de `cidchaves <>`
+- `CarregarDoCursor()`: removido mapeamento de `cidchaves`; captura de originais logo ap├│s carga
+- `Inserir()`: removido `cidchaves` do INSERT + `fUniqueIds()`; atualiza originais ap├│s sucesso
+- `Atualizar()`: `WHERE cidchaves=...` ÔåÆ `WHERE tipos=original AND grupos=original`; atualiza originais ap├│s sucesso
+- `ExecutarExclusao()`: mesmo fix de WHERE
+
+**FormMtp.prg** ÔÇö 4 procedimentos corrigidos:
+- `BtnVisualizarClick` / `BtnAlterarClick` / `BtnExcluirClick`: `loc_cChave` + `cursor_4c_Dados.cidchaves` ÔåÆ `loc_cTipos/loc_cGrupos`; chamadas trocadas de `CarregarPorCodigo()` ÔåÆ `CarregarPorTipoGrupo()`
+- `BtnBuscarClick`: removido `cidchaves` do SELECT; LOCATE trocado para `ALLTRIM(tipos)==loc_cTipos AND ALLTRIM(grupos)==loc_cGrupos`

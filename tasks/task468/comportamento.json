@@ -1,0 +1,150 @@
+{
+  "resumo": {
+    "totalMetodos": 8,
+    "metodosComSQL": 3,
+    "metodosComValidacao": 3,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": []
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDMRC",
+      "evento": "Init",
+      "linhas": 25,
+      "codigoOriginal": "LPARAMETERS _acesso\n\nWITH Thisform\n\t.poDatamgr = CreateObject('fSqlConector',Thisform.Name)\n\n\tIf Not .poDatamgr.pnIdconn>0\n\t\tMessagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),goSistema.TituloSistema)\n\t\tReturn(.f.)\n\tEndif\n\n\tWith .poDatamgr\n\t\t.AddCursor('SigCdMrr','Balancos','crSigCdMrr','Balancos',ThisForm.pagina.lista.grade)\n\t\t.pfSqlTabela(1).pColuna('Balancos','','','Demonstrativo',150,.t.)\n\t\t.pfSqlTabela(1).pColuna('Titulos','','','Titulo',290,.f.)\n\t\t.pfSqlTabela(1... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SetAll",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMRC",
+      "evento": "Procedure",
+      "linhas": 22,
+      "codigoOriginal": "Local lnErro1\n\nm.lnErro1 = ThisForm.poDatamgr.pnIdConn\n\nWith ThisForm\n\tIf m.lnErro1>0 \n\t\tm.lnErro1 = Iif(.poDataMgr.UpDate('crSigCdMrr'),1,-1)\n\tEndIf \n\tIf m.lnErro1>0 \n\t\tm.lnErro1 = Iif(.poDataMgr.UpDate('csSigCdMri'),1,-1)\n\tEndIf \n\tIf m.lnErro1>0 \n\t\tm.lnErro1 = .poDataMgr.Commit()\n\tEndIf \n\tIf Not m.lnErro1>0 \n\t\t.poDataMgr.RollBack()\n\tEndIf \nEndWith \nIf Not m.lnErro1>0 \n\t= MessageBox('Erro na Eclusão dos Dados do Cadastro de Operações.',48)\nEndIf \n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMRC",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "SELECT crSigCdMrr\nSET ORDER TO balancos\nSET NEAR ON\nSEEK Thisform.Pagina.dados.get_balanco.Value\nSET NEAR OFF\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_balanco",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMRC",
+      "evento": "Click",
+      "linhas": 16,
+      "codigoOriginal": "LParameters opcao\n\nIf !dodefault( OPCAO )\n\tThisForm.mAtivapagina1\n\tReturn\nEndif\nIf Inlist(ThisForm.pcEscolha,'INSERIR','PROCURAR')\n\tThisForm.Pagina.Dados.get_balanco.SetFocus\nEndif\nIf Thisform.pcEscolha='ALTERAR'\n\tThisform.Pagina.Dados.get_titulo.SetFocus\nEndif\nIf Inlist(ThisForm.pcEscolha,'CONSULTAR','EXCLUIR')\n\tThisForm.Pagina.Dados.Grupo_Salva.Salva.SetFocus\nEndIf\nThisForm.Pagina.Dados.Refresh",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_balanco,get_titulo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMRC",
+      "evento": "Click",
+      "linhas": 25,
+      "codigoOriginal": "If InList(ThisForm.pcEscolha,'INSERIR','ALTERAR')\n\tIf IsEmpty(Thisform.Pagina.Dados.Get_Balanco.Value)\n\t\tMessagebox( 'Demonstrativo Inválido', 48, '' )\n\t\tThisForm.Pagina.Dados.Get_Balanco.SetFocus\n\t\tReturn\n\tEndif\n\tIf Thisform.pcEscolha='INSERIR'\n\t\tIf \tThisForm.podatamgr.ChkRegister('SigCdMrr','Balancos', Thisform.Pagina.Dados.Get_Balanco.Value)\n\t\t\tMessagebox( 'Demonstrativo já Cadastrado', 48, '' )\n\t\t\tThisForm.Pagina.Dados.Get_Balanco.SetFocus\n\t\t\tReturn\n\t\tEndif\n\tEndif\nEndif\nIf InList(ThisForm.pc... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChkRegister,Requery",
+        "controlesReferenciados": "Get_Balanco,ChkRegister('SigCdMrr'",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMRC",
+      "evento": "Click",
+      "linhas": 6,
+      "codigoOriginal": "=DoDefault()\n\nIf ThisForm.plCancelar\n\tThisForm.mAtivapagina1\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMRC.Pagina.Lista.Itens",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "do form SigCdCmr with Thisform,thisform.datasessionid\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMRC.Pagina.Dados.Get_balanco",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Inlist(Thisform.pcEscolha,'INSERIR','PROCURAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

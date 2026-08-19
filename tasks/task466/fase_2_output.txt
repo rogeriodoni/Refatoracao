@@ -1,0 +1,9 @@
+﻿Fase 2/8 conclu├¡da. O `MPLBO.prg` agora tem todos os m├®todos CRUD:
+
+- **`Buscar(par_cFiltro)`** ÔÇö SELECT com ORDER BY Codigos, cria `cursor_4c_Dados`
+- **`CarregarPorCodigo(par_cCodigo)`** ÔÇö SELECT por PK, chama `CarregarDoCursor`, seta `this_lNovoRegistro = .F.`
+- **`CarregarDoCursor(par_cAliasCursor)`** ÔÇö `SELECT (alias)` + acesso direto aos campos (padr├úo can├┤nico, sem `(var).campo`)
+- **`Inserir()`** ÔÇö verifica duplicidade em `SigPrCpl` antes do INSERT, com `RegistrarAuditoria("INSERT")`
+- **`Atualizar()`** ÔÇö UPDATE de `Descrs` pela PK, com `RegistrarAuditoria("UPDATE")`
+- **`ExecutarExclusao()`** ÔÇö verifica uso em `SigClCrc.Compls` antes do DELETE (l├│gica do original preservada), com `RegistrarAuditoria("DELETE")`
+- **`ObterChavePrimaria()`** ÔÇö retorna `this_cCodigos` para o sistema de auditoria

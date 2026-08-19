@@ -1,0 +1,13 @@
+﻿A migra├º├úo Fase 8/8 est├í completa. Resumo do que foi feito:
+
+**Status da integra├º├úo:**
+- `lctBO.prg` em `app/classes/` ÔåÆ carregado automaticamente pelo config.prg via ADIR `*BO.prg`
+- `Formlct.prg` em `app/forms/cadastros/` ÔåÆ carregado automaticamente via ADIR `Form*.prg`
+- `menu.prg` j├í tinha `AbrirFormlct()` + `ON SELECTION BAR 117 OF popCadastros`
+
+**O que foi adicionado na Fase 8:**
+- `AjustarBotoesPorModo()` centraliza o ajuste de bot├Áes por modo (INCLUIR/ALTERAR/VISUALIZAR) ÔÇö antes estava duplicado inline em 3 handlers
+- Refatorados `BtnIncluirClick`, `BtnVisualizarClick` e `BtnAlterarClick` para chamar `AjustarBotoesPorModo()` em vez do c├│digo inline
+- Cabe├ºalho atualizado para `Fase 8/8: COMPLETO`
+
+**Todos os 19 m├®todos** est├úo implementados com l├│gica completa, sem stubs ou TODOs.

@@ -1,0 +1,3 @@
+﻿Feito. O fix est├í em `TesteAutomatico.prg:352-392`: antes do loop `USED()`, agora salva o datasession atual, troca para `oForm.DataSessionID` (o datasession privado do form com `DataSession=2`), verifica os cursors e o `RECCOUNT`, e restaura o datasession original.
+
+**Causa raiz**: `FormTester` ├® um `Custom` object rodando no datasession 1. Quando chama `oForm.CarregarLista()`, o VFP9 executa o m├®todo no datasession 2 (privado do form) ÔÇö onde `cursor_4c_Dados` ├® criado. Ao retornar, o test code volta ao datasession 1 e `USED("cursor_4c_Dados")` retorna `.F.` porque o cursor n├úo existe l├í.

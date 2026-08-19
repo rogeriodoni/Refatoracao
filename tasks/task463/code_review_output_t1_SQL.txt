@@ -1,0 +1,25 @@
+﻿An├ílise conclu├¡da. O flag **[SQL-FILTRO-INVENTADO]** ├® um **falso positivo** neste caso. Veja o racioc├¡nio:
+
+## Verifica├º├úo: WHERE pkchave nos arquivos migrados
+
+| M├®todo | WHERE usado | Tipo de opera├º├úo | Correto? |
+|--------|------------|-----------------|----------|
+| `Buscar()` | `WHERE Descs LIKE ...` | LIST/BUSCA | Ô£ô Igual ao original |
+| `ValidarDados()` | `WHERE Descs = ...` | VALIDA├ç├âO | Ô£ô Igual ao original |
+| `CarregarPorCodigo()` | `WHERE pkchave = ...` | CRUD individual | Ô£ô Necess├írio |
+| `Atualizar()` | `WHERE pkchave = ...` | UPDATE individual | Ô£ô Necess├írio |
+| `ExecutarExclusao()` | `WHERE pkchave = ...` | DELETE individual | Ô£ô Necess├írio |
+
+## Por que N├âO h├í bug real
+
+O c├│digo original do legado mostrado (`Select Descs From SigCdMod`) ├® apenas a query de **listagem/busca**. O legado usava o framework `poDataMgr` para opera├º├Áes CRUD individuais ÔÇö que internamente usava o pr├│prio `pkchave` como PK.
+
+A coluna `pkchave` ├® a **chave prim├íria real da tabela** (`Schema: pkchave C(20) PK` no cabe├ºalho do BO). As tr├¬s ocorr├¬ncias de `WHERE pkchave = ...` est├úo em opera├º├Áes CRUD individuais (carregar/atualizar/excluir um registro espec├¡fico), **n├úo em filtros de busca**.
+
+Remover `WHERE pkchave` de:
+- `Atualizar()` ÔåÆ `UPDATE SigCdMod SET Descs = ...` sem WHERE ÔåÆ **atualiza TODOS os registros** ÔÇö catastr├│fico
+- `ExecutarExclusao()` ÔåÆ `DELETE FROM SigCdMod` sem WHERE ÔåÆ **apaga TODOS os registros** ÔÇö catastr├│fico
+
+A busca/filtro j├í usa corretamente `WHERE Descs LIKE ...` e `WHERE Descs = ...`, exatamente como o original.
+
+**Nenhuma altera├º├úo necess├íria.** O detector [SQL-FILTRO-INVENTADO] comparou incorretamente a query de listagem do legado com as queries de CRUD individual do sistema novo ÔÇö s├úo contextos diferentes. O c├│digo est├í correto.

@@ -1,0 +1,7 @@
+﻿As tr├¬s corre├º├Áes foram aplicadas com sucesso:
+
+1. **Causa raiz** (linha 1195-1196): `"check12"` ÔåÆ `"Check1"` ÔÇö o CheckBox estava sendo adicionado com nome errado, causando `"Property CHECK1 is not found"` no BINDEVENT da linha 1226, que derrubava `InicializarForm()` e fazia `CREATEOBJECT("FormMda")` retornar `.F.`
+
+2. **`AlternarPagina`** (linha 1494): `PROTECTED` ÔåÆ PUBLIC ÔÇö o TesteAutomatico e BtnIncluirClick precisam chamar este m├®todo externamente.
+
+3. **`AjustarBotoesPorModo`** (linha 1914): `PROTECTED` ÔåÆ PUBLIC ÔÇö idem.

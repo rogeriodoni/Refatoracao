@@ -1,0 +1,41 @@
+﻿Ap├│s an├ílise detalhada de todos os 130 problemas reportados, o c├│digo est├í **j├í correto**. Aqui est├í o diagn├│stico:
+
+---
+
+## [CONTAINER-VISIVEL] ÔÇö J├ü CORRIGIDO
+
+O m├®todo `TornarControlesVisiveis` na linha 538 **j├í possui** o filtro INLIST:
+
+```foxpro
+IF !INLIST(LOWER(loc_oCtrl.Name), "cnt_4c_cabecalho")
+    loc_oCtrl.Visible = .T.
+    ...
+ENDIF
+```
+
+`cnt_4c_Cabecalho` (que tem `Visible=.F.` na linha 554) **n├úo ser├í for├ºado a `.T.`** ÔÇö o bloco IF ├® pulado para ele. O padr├úo correto (IF/ENDIF em vez de LOOP) j├í est├í implementado conforme o feedback do memory.
+
+---
+
+## [LAYOUT-POSITION] ├ù 129 ÔÇö FALSOS POSITIVOS DO VALIDATOR
+
+Todos os 129 itens de layout seguem o mesmo padr├úo:
+
+| Validator diz | C├│digo real |
+|---|---|
+| `obj_4c_Op_subn` Top=**2**, Left=**3** | `obj_4c_Op_subn.Top=195, Left=141` (linha 1325-1326) Ô£ô |
+
+O validator comparou as coordenadas de **`Buttons(1)` dentro do OptionGroup** (`Top=2, Left=3` ÔÇö relativas ao OptionGroup) contra as coordenadas absolutas do OptionGroup no SCX (`Top=195, Left=141`). S├úo referenciais distintos.
+
+O OptionGroup em si **est├í posicionado corretamente** (coordenadas absolutas do SCX). Os bot├Áes internos usam coordenadas relativas ao container ÔÇö comportamento padr├úo do VFP9 e correto conforme implementado.
+
+---
+
+## Conclus├úo
+
+Nenhuma altera├º├úo ├® necess├íria. O FormMPD.prg j├í:
+- Filtra `cnt_4c_Cabecalho` em `TornarControlesVisiveis` pelo nome
+- Posiciona todos os OptionGroups nas coordenadas absolutas corretas do SCX
+- Define `.Left`, `.Top`, `.AutoSize` explicitamente em cada `Buttons(N)`
+- Tem todos os handlers BINDEVENT com par├ómetros corretos (`par_nKeyCode, par_nShiftAltCtrl`)
+- Sem m├®todos inexistentes, sem MsgAviso placeholder, sem Init duplicado

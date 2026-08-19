@@ -1,0 +1,46 @@
+﻿Analisei completamente ambos os arquivos (LprBO.prg e FormLpr.prg, 3398 linhas). Ap├│s verifica├º├úo rigorosa, **todos os 15 problemas reportados s├úo falsos positivos** do validador autom├ítico. Aqui est├í a an├ílise detalhada:
+
+---
+
+## GRID-SQL (10 problemas) ÔÇö FALSOS POSITIVOS
+
+Os campos cpros, dpros, reffs, ean13, pcuss, moevs, pvens, vencfs, cgrus, precode s├úo usados nos ControlSources de `cursor_4c_Itens` e **existem** em:
+
+1. **CREATE CURSOR cursor_4c_Itens** (linhas 2258-2262 e 2410-2414):
+   ```
+   cpros c(14), dpros c(40), reffs c(20), ean13 n(13,0),
+   pcuss n(16,6), moevs c(3), pvens n(16,6), vencis d,
+   vencfs d, comiss n(7,4), cgrus c(3), ..., precode n(16,6)
+   ```
+
+2. **LprBO.CarregarItens() modo compra** (SELECT inclui: cidchaves, lprecos, cpros, dpros, reffs, ean13, pcuss, moevs, pvens, vencis, vencfs, comiss, cgrus, flagutabs, ordems, ccontroles, precode)
+
+3. **LprBO.CarregarItens() modo venda** (SELECT inclui todos os 9 campos da grade de venda)
+
+O validador errou ao n├úo detectar os dois caminhos de cria├º├úo do cursor (CREATE CURSOR direto na form + SQLEXEC via BO).
+
+---
+
+## SQL-FILTRO-INVENTADO (5 problemas) ÔÇö FALSOS POSITIVOS
+
+O validador compara TODOS os WHERE do arquivo migrado contra o WHERE da query principal original. Mas os WHERE flagados est├úo em **queries auxiliares leg├¡timas**, n├úo na query principal:
+
+| Coluna flagada | Onde aparece | Tabela | Correto? |
+|---|---|---|---|
+| `CEMPS` | `ValidarEmpresa()` linha 1736 | `SigCdEmp WHERE CEmps =` | Ô£ô `SigCdEmp.cemps` existe |
+| `FPAGS` | `ValidarFpg()` linha 1817 | `SigOpFp WHERE fpags =` | Ô£ô lookup leg├¡timo |
+| `VENCIS` | `CarregarLista()` linhas 2631-2633 | **`SET FILTER TO vencis >= DATE()`** ÔÇö n├úo ├® SQL WHERE, ├® filtro VFP local em `cursor_4c_Dados` que tem `vencis` | Ô£ô v├ílido |
+| `CODIGOS` | `ValidarTabd()` linha 3109 | `SigOpTdz WHERE codigos =` | Ô£ô lookup leg├¡timo |
+| `ICLIS` | `ValidarGetConta()` linha 3197 | `SigCdCli WHERE iclis =` | Ô£ô lookup leg├¡timo |
+
+A query principal do BO (`Buscar()`) usa corretamente `WHERE a.Tipos = ... AND a.Emps = ...` ÔÇö ambos TIPOS e EMPS est├úo na lista original.
+
+---
+
+## Conclus├úo
+
+Nenhuma altera├º├úo ├® necess├íria. O c├│digo est├í **correto** em todos os 15 pontos flagados:
+
+- Os campos do `cursor_4c_Itens` existem tanto no CREATE CURSOR quanto no SELECT do BO
+- Os WHERE de CEMPS/FPAGS/CODIGOS/ICLIS s├úo queries de valida├º├úo auxiliares corretas (tabelas e colunas v├ílidas)
+- O "WHERE VENCIS" ├® um `SET FILTER TO` VFP local, n├úo um SQL WHERE

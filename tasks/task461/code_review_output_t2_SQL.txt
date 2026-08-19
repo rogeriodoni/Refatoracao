@@ -1,0 +1,35 @@
+﻿An├ílise completa. Todos os 15 problemas s├úo **falsos positivos** ap├│s verifica├º├úo contra o schema real. Nenhuma altera├º├úo ├® necess├íria nos arquivos.
+
+---
+
+## Resultado da Verifica├º├úo
+
+### GRID-SQL (10 problemas) ÔÇö Todos falsos positivos
+
+O validador acusa colunas "n├úo presentes no SELECT SQL", mas o cursor `cursor_4c_Itens` ├® preenchido de **duas formas** que o validador n├úo combinou:
+
+| M├®todo | Linhas | Colunas presentes |
+|--------|--------|-------------------|
+| `CREATE CURSOR cursor_4c_Itens (...)` | 2291-2295, 2446-2450 | Todas as 10 definidas explicitamente |
+| `SQLEXEC ÔåÆ cursor_4c_Itens` no `CarregarItens()` do BO | BO compra+venda | Todas as 10 no SELECT |
+
+Schema confirma que todas existem em `SigCdLpi`:  
+`cpros char(14)`, `dpros char(65)`, `reffs char(40)`, `ean13 numeric(13,0)`, `pcuss numeric(15,6)`, `moevs char(3)`, `pvens numeric(15,6)`, `vencfs datetime`, `cgrus char(3)`, `precode numeric(11,5)` Ô£ô
+
+---
+
+### SQL-FILTRO-INVENTADO (5 problemas) ÔÇö Todos falsos positivos
+
+A lista "WHERE original usa: CPROS, CMOES, ..." refere-se ao WHERE da **query principal de listagem** do legado. Os filtros flagados s├úo **queries auxiliares de valida├º├úo**, separadas da query principal:
+
+| Coluna | Onde | Schema | Veredito |
+|--------|------|--------|----------|
+| `CEMPS` | `ValidarEmpresa()` linha 1768: `SigCdEmp WHERE CEmps = ?` | `sigcdemp.cemps char(3)` Ô£ô | Lookup leg├¡timo de empresa |
+| `FPAGS` | `ValidarFpg()` linha 1849: `SigOpFp WHERE fpags = ?` | `SigOpFp.fpags char(12)` Ô£ô | Lookup leg├¡timo de cond. pagamento |
+| `VENCIS` | **N├úo existe em SQL WHERE** ÔÇö s├│ em `SET FILTER TO vencis >= DATE()` (linhas 2668/2670), que ├® filtro VFP local, **n├úo SQL** | ÔÇö | Falso positivo do validador confundindo VFP `SET FILTER` com SQL `WHERE` |
+| `CODIGOS` | `ValidarTabd()` linha 3147: `SigOpTdz WHERE codigos = ?` | `SigOpTdz.codigos char(10)` PK Ô£ô | Lookup leg├¡timo de tabela de desconto |
+| `ICLIS` | `ValidarGetConta()` linha 3235: `SigCdCli WHERE iclis = ?` | `SIGCDCLI.iclis char(10)` Ô£ô | Lookup leg├¡timo de cliente/conta |
+
+---
+
+**Conclus├úo:** Os arquivos `FormLpr.prg` e `LprBO.prg` est├úo corretos. Nenhuma altera├º├úo necess├íria neste pass SQL.

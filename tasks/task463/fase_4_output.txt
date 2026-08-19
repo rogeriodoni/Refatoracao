@@ -1,0 +1,12 @@
+﻿Fase 4 conclu├¡da. Aqui est├í o resumo do que foi implementado em `Formmod.prg`:
+
+**Adicionado em `ConfigurarPaginaLista()`:**
+- 5 bot├Áes CRUD dentro de `cnt_4c_Botoes` (Incluir/Left=5, Visualizar/Left=80, Alterar/Left=155, Excluir/Left=230, Buscar/Left=305) com ├¡cones e BINDEVENTs corretos
+- Grid `grd_4c_Lista` (Top=117, Left=26, Width=890, Height=468) com 2 colunas (Codigos/80px, Descs/150px) ÔÇö `RecordSource` e `ColumnCount` fora do `WITH` conforme Problema 36
+
+**Novos m├®todos adicionados:**
+- `AlternarPagina(par_nPagina)` ÔÇö PROTECTED, alterna ActivePage e chama `CarregarLista()` ao voltar para Page1
+- `CarregarLista()` ÔÇö PROTECTED, chama `Buscar("")` + redefine RecordSource + redefine Headers ap├│s RecordSource (Problema 32) + formata grid
+- `BtnIncluirClick/BtnVisualizarClick/BtnAlterarClick/BtnExcluirClick/BtnBuscarClick` ÔÇö todos PUBLIC (requisito BINDEVENT), com l├│gica completa
+
+**`InicializarForm()` atualizado:** chama `CarregarLista()` com guarda `gb_4c_ValidandoUI`.

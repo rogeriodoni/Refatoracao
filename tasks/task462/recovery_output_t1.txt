@@ -1,0 +1,3 @@
+﻿Corre├º├úo aplicada. O problema era que o CheckBox do `grd_4c_Emps.Column1` foi nomeado `check12` (e um redundante `check13`), mas os 4 `BINDEVENT` nas linhas seguintes referenciavam `Column1.Check1` ÔÇö propriedade inexistente. Isso disparava erro dentro do TRY de `InicializarForm`, que retornava `.F.`, fazendo o `CREATEOBJECT("FormMda")` retornar n├úo-objeto.
+
+**Fix**: renomear o AddObject de `"check12"` ÔåÆ `"Check1"`, remover o `check13` redundante, e ajustar o `CurrentControl` para `"Check1"` ÔÇö igual ao padr├úo do `grd_4c_Opers.Column1` no mesmo form.

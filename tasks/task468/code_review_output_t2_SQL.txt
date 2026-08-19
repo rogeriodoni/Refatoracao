@@ -1,0 +1,19 @@
+﻿Analisei todos os SQLs em `FormMrc.prg` e `MrcBO.prg`. O `CONTROLCOUNT` flagado pelo pass **n├úo existe em nenhuma cl├íusula WHERE SQL** ÔÇö ele aparece apenas como **propriedade VFP9** leg├¡tima na linha 989 e 1003 do m├®todo `TornarControlesVisiveis`:
+
+```vfp
+989:  FOR loc_nI = 1 TO par_oContainer.ControlCount      <- propriedade OOP do VFP9
+1003: IF PEMSTATUS(loc_oObjeto, "ControlCount", 5) AND ...  <- idem
+```
+
+Todos os WHERE SQL nos dois arquivos usam exclusivamente `Balancos`, que ├® exatamente o que o legado usa:
+
+| M├®todo | WHERE SQL |
+|---|---|
+| `Buscar` | `WHERE Balancos LIKE ...` |
+| `CarregarPorCodigo` | `WHERE Balancos = ...` |
+| `VerificarDuplicidade` | `WHERE Balancos = ...` |
+| `Atualizar` | `WHERE Balancos = ...` |
+| `ExecutarExclusao` (SigCdMri) | `WHERE Balancos = ...` |
+| `ExecutarExclusao` (SigCdMrr) | `WHERE Balancos = ...` |
+
+**Conclus├úo: falso positivo do pipeline de review.** O scanner confundiu a string literal `"ControlCount"` dentro de `PEMSTATUS(loc_oObjeto, "ControlCount", 5)` com uma coluna SQL em cl├íusula WHERE. Nenhuma altera├º├úo ├® necess├íria ÔÇö o c├│digo est├í correto.

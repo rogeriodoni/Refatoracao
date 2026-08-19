@@ -465,8 +465,9 @@ DEFINE CLASS crfBO AS BusinessBase
             IF TYPE("gnConnHandle") != "N" OR gnConnHandle <= 0
                 loc_lSucesso = .T.
             ELSE
-                loc_cSQL = "SELECT GrPadVens FROM SigCdPam" + ;
-                           " WHERE Emps = " + EscaparSQL(go_4c_Sistema.cCodEmpresa)
+                *-- Erro106: SigCdPam eh tabela de parametros single-row (system-wide),
+                *-- nao tem coluna Emps. Legado usa `SELECT GrPadVens FROM SigCdPam` sem WHERE.
+                loc_cSQL = "SELECT GrPadVens FROM SigCdPam"
 
                 loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Params")
 

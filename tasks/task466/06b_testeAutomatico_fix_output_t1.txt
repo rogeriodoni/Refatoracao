@@ -1,0 +1,5 @@
+﻿3 corre├º├Áes aplicadas em `FormMPL.prg`:
+
+1. **CarregarLista** (linha ~530): cria `cursor_4c_Dados` vazio com as colunas corretas (`Codigos C(20), Descrs C(40)`) quando em modo UI validation, em vez de retornar `.T.` sem cursor.
+2. **AlternarPagina**: removido `PROTECTED` ÔÇö o test framework chama esse m├®todo diretamente de fora da classe e o VFP9 bloqueava com "Property not found".
+3. **AjustarBotoesPorModo**: idem ÔÇö removido `PROTECTED` pelo mesmo motivo.

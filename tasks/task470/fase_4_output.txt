@@ -1,0 +1,17 @@
+﻿Fase 4 conclu├¡da. O arquivo `FormMtt.prg` foi atualizado com:
+
+**Adicionado em `ConfigurarPaginaLista()`:**
+- 5 bot├Áes CRUD dentro de `cnt_4c_Botoes`: Incluir (Left=5), Visualizar (80), Alterar (155), Excluir (230), Buscar (305) ÔÇö todos com ├¡cones corretos, Comic Sans MS, PicturePosition=13
+- `grd_4c_Lista` com 3 colunas (tipos/codigos/descs), GridLines=3, RowHeight=16, ColumnCount=3 fora do WITH (Problem 36)
+- BINDEVENTs para todos os 6 bot├Áes (5 CRUD + Encerrar)
+
+**`CarregarLista()` completo:**
+- RecordSource fora de WITH, ControlSources ap├│s RecordSource (Problem 48)
+- Headers reconfigurados ap├│s RecordSource (Problem 6/32): "Tipo", "C├│digo", "Descri├º├úo"
+- Widths: 30/75/300
+
+**Novos m├®todos (todos PUBLIC sem PROTECTED, para funcionar com BINDEVENT):**
+- `BtnIncluirClick/VisualizarClick/AlterarClick/ExcluirClick/BuscarClick/EncerrarClick`
+
+**M├®todos auxiliares antecipados com PEMSTATUS:**
+- `BOParaForm`, `FormParaBO`, `LimparCampos`, `HabilitarCampos`, `AjustarBotoesPorModo` ÔÇö todos usam `PEMSTATUS` para tolerar aus├¬ncia dos controles de Page2 (que ser├úo adicionados na Fase 5)

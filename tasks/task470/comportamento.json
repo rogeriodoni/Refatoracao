@@ -1,0 +1,118 @@
+{
+  "resumo": {
+    "totalMetodos": 6,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 2,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fUniqueIds"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDMTT",
+      "evento": "Init",
+      "linhas": 14,
+      "codigoOriginal": "LPARAMETERS lcacesso\n\nWith ThisForm\n\t.poDatamgr = CreateObject('fSqlConector')\n\tWith .poDatamgr\n\t\t.AddCursor('SigCdMtl','cidchaves','crSigCdMtl','',ThisForm.pagina.lista.grade)\n\t\t.pfSqlTabela(1).pColuna('tipos','','','Tipo',30,.t.)\n\t\t.pfSqlTabela(1).pColuna('codigos','','','Código',75,.t.)\n\t\t.pfSqlTabela(1).pColuna('descs','','','Descrição',150,.t.)\n\tEndWith\n\t= DoDefault()\n\t.LockScreen = .f.\nEndWith\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMTT",
+      "evento": "Procedure",
+      "linhas": 10,
+      "codigoOriginal": "Local lcBusca\n\nIf .Not.IsEmpty(ThisForm.Pagina.Dados.Getcodigos.Value)\n\tThisForm.poDataMgr.LocateCursor('crSigCdMtl','codigos',ThisForm.Pagina.Dados.Getcodigos.Value)\nElse\n\tIf .Not.IsEmpty(ThisForm.Pagina.Dados.Getdescrs.Value)\n\t\tThisForm.poDataMgr.LocateCursor('crSigCdMtl','descs',ThisForm.Pagina.Dados.Getdescrs.Value)\n\tEndIf\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "LocateCursor",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMTT",
+      "evento": "Click",
+      "linhas": 18,
+      "codigoOriginal": "LParameters opcao\n\nIf !dodefault( opcao )\n\tThisForm.mAtivaPagina1\n\tReturn\nEndif\n\nDo Case\n\tCase Inlist( ThisForm.pcEscolha, 'INSERIR')\n\t\tThisForm.Pagina.Dados.Gettipos.SetFocus\n\tCase Inlist( ThisForm.pcEscolha, 'PROCURAR')\n\t\tThisForm.Pagina.Dados.Getcodigos.SetFocus\n\tCase ThisForm.pcEscolha = 'ALTERAR'\n\t\tThisForm.Pagina.Dados.GetDescrs.SetFocus\nOther\n\tThisForm.Pagina.Dados.Grupo_Salva.Salva.SetFocus\nEndcase\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMTT",
+      "evento": "Click",
+      "linhas": 25,
+      "codigoOriginal": "Local laCampos(2,2)\n\nIf ThisForm.pcEscolha = 'INSERIR'\n   If IsEmpty(ThisForm.Pagina.Dados.getCodigos.Value)\n\t  MessageBox( 'Obrigatório Informar o Código!!!', 48, '' )\n\t  ThisForm.Pagina.Dados.getCodigos.SetFocus\n\t  Return\n   Endif\n   \tm.laCampos(1,1) = 'tipos'\n\tm.laCampos(1,2) = thisform.pagina.dados.gettipos.value\n\tm.laCampos(2,1) = 'codigos'\n\tm.laCampos(2,2) = thisform.pagina.dados.getcodigos.value\n\n\tIf ThisForm.poDataMgr.ChkRegister('SigCdMtl',@m.laCampos)\n\t\tMessagebox( 'Tipo e Código já Ca... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "ChkRegister",
+        "controlesReferenciados": "ChkRegister('SigCdMtl'",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMTT",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "=DoDefault()\nIf ThisForm.plCancelar\n\tThisForm.mAtivapagina1\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMTT.Pagina.Dados.GetTipos",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "Return (Inlist(This.Value,\"M\",\"T\"))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

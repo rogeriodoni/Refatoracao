@@ -1,0 +1,14 @@
+﻿Ao ler `FormBuscaAuxiliar.prg`, confirmei que `DefinirCursor()` na linha 413 **j├í define internamente** `this_cCursorDestino = par_cCursor`. E ao reler `FormLGR.prg`, todos os 5 handlers j├í t├¬m os par├ómetros corretos. Vou confirmar cada issue:
+
+**BUSCA-CURSOR (├ù2):**
+- `ValidarSerieFab` linha 1256: `loc_oBusca.DefinirCursor("cursor_4c_Impressoras", ...)` ÔåÆ `DefinirCursor` faz `THIS.this_cCursorDestino = par_cCursor` internamente Ô£ô
+- `ValidarModelo` linha 1332: `loc_oBusca.DefinirCursor("cursor_4c_Modelos", ...)` ÔåÆ idem Ô£ô
+
+**BINDEVENT-PARAMS (├ù5):**
+- `ValidarSerieFab` linha 1220: `PROCEDURE ValidarSerieFab(par_nKeyCode, par_nShiftAltCtrl)` Ô£ô
+- `ValidarDtini` linha 1273: `PROCEDURE ValidarDtini(par_nKeyCode, par_nShiftAltCtrl)` Ô£ô
+- `ValidarDtfim` linha 1284: `PROCEDURE ValidarDtfim(par_nKeyCode, par_nShiftAltCtrl)` Ô£ô
+- `ValidarModelo` linha 1296: `PROCEDURE ValidarModelo(par_nKeyCode, par_nShiftAltCtrl)` Ô£ô
+- `ValidarTipo` linha 1348: `PROCEDURE ValidarTipo(par_nKeyCode, par_nShiftAltCtrl)` Ô£ô
+
+**Todos os 7 problemas listados j├í est├úo corrigidos no arquivo atual.** O code review foi gerado sobre uma vers├úo anterior do c├│digo; a vers├úo atual em disco j├í implementa todos os requisitos corretamente. Nenhuma altera├º├úo ├® necess├íria.

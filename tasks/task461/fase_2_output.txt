@@ -1,0 +1,16 @@
+﻿Estrutura perfeita: 14 m├®todos, todos com ENDPROC/ENDFUNC correspondentes. 
+
+**Fase 2/8 conclu├¡da.** O `LprBO.prg` agora tem implementa├º├úo completa com:
+
+- **Buscar()** ÔÇö SELECT DISTINCT SigCdLpc com filtro por Tipos ("C"=compra / " "=venda) e empresa
+- **CarregarPorCodigo()** ÔÇö SELECT SigCdLpc por PK `lprecos`, com `this_lNovoRegistro = .F.`
+- **CarregarDoCursor()** ÔÇö mapeia todos os 16 campos de SigCdLpc para propriedades do BO
+- **Inserir()** ÔÇö INSERT completo em SigCdLpc
+- **Atualizar()** ÔÇö UPDATE SigCdLpc, com auditoria
+- **ExecutarExclusao()** ÔÇö DELETE em cascata: SigCdLpi (itens) ÔåÆ SigCdLpc (cabe├ºalho)
+- **CarregarItens()** ÔÇö SELECT SigCdLpi para o cursor_4c_Itens (com colunas adaptadas ao modo compra/venda)
+- **SalvarItens()** ÔÇö DELETE+INSERT dos itens do cursor no SQL Server, sem RETURN dentro de TRY
+- **GerarCidchave()** ÔÇö gera chave ├║nica para SigCdLpi.cidchaves
+- **ChecaGrpVenda()** ÔÇö valida grupo de produto contra SigCdPam.GrPadFors (l├│gica do legado)
+- **AtualizarFlags()** ÔÇö marca `flags=1` na lista de pre├ºos
+- **AlterarVencimentos()** ÔÇö UPDATE vencfs em todos os itens da lista

@@ -1,0 +1,10 @@
+﻿Fase 6 conclu├¡da. Resumo do que foi feito:
+
+**Bug cr├¡tico corrigido** em `BtnVisualizarClick`, `BtnAlterarClick` e `BtnExcluirClick`: os m├®todos passavam `cursor_4c_Dados.Codigos` (c├│digo curto C(2)) para `CarregarPorCodigo()`, que filtra por `pkchave`. Com isso, Alterar/Visualizar/Excluir nunca encontravam o registro. Corrigido para usar `cursor_4c_Dados.pkchave`.
+
+**Integra├º├úo com o sistema** (menu.prg):
+- `DEFINE BAR 123 OF popCadastros PROMPT "Modalidades"` adicionado
+- `ON SELECTION BAR 123 OF popCadastros DO AbrirFormmod` vinculado
+- `PROCEDURE AbrirFormmod()` criado no padr├úo can├┤nico (VARTYPE, Show() sem par├ómetro, sem Release())
+
+**N├úo foram necess├írias mudan├ºas no config.prg** ÔÇö ele usa ADIR() para carregar automaticamente todos os `*BO.prg` de `classes/` e `Form*.prg` de `forms/cadastros/`, ent├úo `modBO.prg` e `Formmod.prg` j├í s├úo carregados sem interven├º├úo manual.

@@ -1,0 +1,3 @@
+﻿Corrigido. O problema era que o checkbox em `grd_4c_Emps.Column1` foi adicionado como `"check12"` (provavelmente erro de copy-paste do SCX legado) mas `CurrentControl = "Check1"` e o `BINDEVENT` tamb├®m referenciavam `"Check1"` ÔÇö VFP9 n├úo encontrava o controle e gerava "Expression evaluated to an illegal value" exatamente na linha 1206.
+
+A corre├º├úo renomeia o `AddObject` de `"check12"` para `"Check1"`, alinhando com `CurrentControl` e com os eventos `BINDEVENT` que j├í usavam `Column1.Check1`.

@@ -1,0 +1,26 @@
+﻿**Fase 6/8 ÔÇö An├ílise e Status**
+
+Ap├│s leitura completa dos arquivos, o FormMrc.prg e MrcBO.prg j├í est├úo **completamente implementados** pelas fases anteriores. N├úo h├í nada a adicionar na Fase 6 porque:
+
+**SigCdMrc ├® um form excepcionalmente simples:**
+- **Apenas 3 campos** no total (Balancos, Titulos, opt_4c_Impressao/Mapas)
+- **Nenhum lookup** no original (sem fwbuscaext, sigacess, F4/DblClick events)
+- O campo `Get_balanco` s├│ tem um `When` event de controle de editabilidade, j├í implementado via `HabilitarCampos()`
+
+**O que foi verificado como correto e completo:**
+
+| Item | Status |
+|------|--------|
+| `ConfigurarPaginaDados()` com todos os campos | Ô£à |
+| `cnt_4c_BotoesAcao` (Confirmar + Cancelar) | Ô£à |
+| `opt_4c_Impressao` (OptionGroup Plano/Mapa) | Ô£à |
+| Sem lookups (original n├úo tem nenhum) | Ô£à N/A |
+| Valida├º├úo "Demonstrativo j├í Cadastrado" via `VerificarDuplicidade()` no Inserir() | Ô£à |
+| Cascade delete SigCdMri ÔåÆ SigCdMrr em `ExecutarExclusao()` | Ô£à |
+| `BtnBuscarClick` com Pattern A can├┤nico (SQL caller + DefinirCursor + Mostrar) | Ô£à |
+| `AbrirFormMrc()` com VARTYPE, Show() sem param, sem Release() | Ô£à |
+| Auto-loading via ADIR() em config.prg (`*BO.prg` + `Form*.prg`) | Ô£à |
+| Item no menu popCadastros (BAR 130 "Demonstrativos") | Ô£à |
+| Zero TODOs/stubs/placeholders | Ô£à |
+
+A Fase 5 implementou os 3 campos integralmente (o template de 8 fases foi dimensionado para forms maiores). A Fase 6 n├úo tem adi├º├Áes a fazer ÔÇö o form est├í pronto para as fases 7/8 de integra├º├úo/valida├º├úo final.

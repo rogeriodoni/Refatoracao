@@ -1,0 +1,23 @@
+﻿O arquivo est├í correto e completo. Fase 5/8 conclu├¡da.
+
+**O que foi feito:**
+
+- **`ConfigurarPaginaDados()`** expandida com:
+  - Bot├Áes `cmd_4c_Confirmar` e `cmd_4c_Cancelar` dentro de `cnt_4c_Salva` (├¡cones corretos, propriedades can├┤nicas)
+  - **8 grupos de campos** (primeira metade) com compensa├º├úo `+29` no Top:
+    - Grupo 1: `lbl_4c_Label1` + `txt_4c_Moeda` (c├│digo, 3 chars)
+    - Grupo 1: `lbl_4c_Label2` + `txt_4c_Descricao` (descri├º├úo, 15 chars)
+    - Grupo 2: `chk_4c_Cotacao` (checkbox cota├º├úo)
+    - Grupo 3: `lbl_4c_Label3` + `txt_4c_Fmult` (fator N/S)
+    - Grupo 4: `obj_4c_SpnNordrels` + `lbl_4c_Label4` (spinner 0-5)
+    - Grupo 5: `lbl_4c_Label8` + `txt_4c_MoeEq` + `lbl_4c_Label9` + `txt_4c_Qtde`
+    - Grupo 6: `chk_4c_Tabref` (imprime tabela refer├¬ncia)
+  - BINDEVENTs para Confirmar, Cancelar e LostFocus do MoeEq
+
+- **Novos m├®todos adicionados:**
+  - `BtnSalvarClick()` ÔÇö com valida├º├Áes do original (c├│digo vazio, duplicidade, nordrels 0-5)
+  - `BtnCancelarClick()` ÔÇö volta para lista
+  - `ValidarMoeEq()` ÔÇö lookup em SigCdMoe via FormBuscaAuxiliar
+  - `FormParaBO()` / `BOParaForm()` / `LimparCampos()` ÔÇö parciais (campos Fase 5)
+
+- **M├®todos existentes atualizados:** `BtnIncluirClick`, `BtnVisualizarClick`, `BtnAlterarClick` agora chamam `LimparCampos()`/`BOParaForm()` corretamente.

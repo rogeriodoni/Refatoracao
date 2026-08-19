@@ -1,0 +1,14 @@
+﻿`Formmpp.prg` criado com sucesso. O arquivo est├í limpo ÔÇö sem stubs com coment├írios de fase.
+
+**O que foi entregue na Fase 3:**
+
+| M├®todo | Status |
+|--------|--------|
+| `DEFINE CLASS` com propriedades visuais | Ô£ô Height=600, Width=1000, WindowType=1, TitleBar=0, etc. |
+| `this_nTipo = 0` | Ô£ô Propriedade para controlar tipo (Produtos/Contas/Movimenta├º├Áes) |
+| `Init()` | Ô£ô Recebe `par_cTipo` ('C'=Contas, outro=Movimenta├º├Áes, vazio=Produtos), define Caption com CHR() antes de DODEFAULT |
+| `InicializarForm()` | Ô£ô Cria mppBO, chama ConfigurarPageFrame(), set ActivePage=1 e ModoAtual="LISTA" |
+| `ConfigurarPageFrame()` | Ô£ô PageFrame.Top=-29, Tabs=.F., 2 pages com Caption, BackColor e Picture |
+| `Destroy()` | Ô£ô Limpa BO e cursor_4c_Dados |
+
+**Fase 4** deve editar `InicializarForm()` para adicionar as chamadas a `ConfigurarPaginaLista()`, `ConfigurarPaginaDados()` e `CarregarLista()`, implementando esses m├®todos na mesma fase.

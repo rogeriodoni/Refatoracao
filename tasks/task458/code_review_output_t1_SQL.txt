@@ -1,0 +1,14 @@
+﻿An├ílise completa. Ambos os alertas do code review s├úo **falsos positivos** ÔÇö nenhuma altera├º├úo ├® necess├íria.
+
+**Avalia├º├úo dos problemas reportados:**
+
+**1. CIDCHAVES em WHERE** ÔÇö `cidchaves` ├ë a chave prim├íria real de `SigFiGfd` (declarada em `this_cCampoChave`). As tr├¬s ocorr├¬ncias em WHERE s├úo todas opera├º├Áes CRUD padr├úo e corretas:
+- `CarregarPorCodigo` (linha 151): `WHERE a.cidchaves = ...` ÔÇö carregar registro por PK Ô£ô
+- `Atualizar` (linha 324): `WHERE cidchaves = ...` ÔÇö UPDATE pelo PK Ô£ô  
+- `ExecutarExclusao` (linha 348): `WHERE cidchaves = ...` ÔÇö DELETE pelo PK Ô£ô
+
+O c├│digo original listado no pass ("WHERE original usa: CSERIFAB, CDATAS, LNMOV...") refere-se apenas ├á query de **listagem/busca** (`Buscar`), n├úo a todas as queries do BO. Remover `cidchaves` dos WHERE de UPDATE/DELETE quebraria completamente a funcionalidade.
+
+**2. CONTROLCOUNT em WHERE** ÔÇö A palavra `CONTROLCOUNT` **n├úo existe em nenhum SQL** dos arquivos LGR. ├ë uma propriedade VFP9 de runtime (n├║mero de controles num container), n├úo uma coluna SQL. O detector do code review provavelmente encontrou essa palavra nos arquivos de documenta├º├úo/patterns de migra├º├úo (`.claude/skills/vfp9-migration/`) e atribuiu incorretamente ao contexto SQL deste form.
+
+**Conclus├úo:** Os arquivos `FormLGR.prg` e `LGRBO.prg` est├úo corretos. Nenhuma altera├º├úo necess├íria para este pass SQL.

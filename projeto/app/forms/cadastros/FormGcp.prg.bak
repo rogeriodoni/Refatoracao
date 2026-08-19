@@ -25,8 +25,11 @@ DEFINE CLASS FormGcp AS FormBase
     *--------------------------------------------------------------------------
     Height      = 375
     Width       = 592
+    Top         = 0
+    Left        = 0
     Caption     = "Grupos / Contas Permitidas"
-    AutoCenter  = .T.
+    AutoCenter  = .F.
+    Picture     = "..\framework\imagens\new_background.jpg"
     ShowWindow  = 1
     WindowType  = 1
     ControlBox  = .F.
@@ -64,6 +67,9 @@ DEFINE CLASS FormGcp AS FormBase
         loc_lResultado = .F.
 
         TRY
+            *-- Caption padrao conforme SCX original
+            THIS.Caption = "Cadastro de Grupo/Conta Permitidas/N" + CHR(227) + "o Permitidas"
+
             *-- Armazenar params ANTES de DODEFAULT (InicializarForm() precisa deles)
             IF VARTYPE(par_oParentForm) = "O"
                 THIS.this_oParentForm = par_oParentForm

@@ -1,0 +1,16 @@
+﻿Fase 5 conclu├¡da com sucesso. O arquivo `FormMtt.prg` foi atualizado com:
+
+**`ConfigurarPaginaDados()` ÔÇö agora completo:**
+- Bot├Áes Confirmar (`cadastro_salvar_60.jpg`) e Cancelar com todos os atributos can├┤nicos, posi├º├Áes do legado (`Left=5/80, Top=5`)
+- BINDEVENTs para `BtnSalvarClick` e `BtnCancelarClick`
+- `lbl_4c_Label3` ÔÇö "[M]etal / [T]eor :" (Say3: Top=149, Left=296, Width=83)
+- `txt_4c_Tipos` ÔÇö campo tipo 1 char, MaxLength=1, SpecialEffect=1 (Top=146, Left=383, Width=17)
+- `lbl_4c_Label1` ÔÇö "C├│digo :" (Say1: Top=175, Left=337, Width=42)
+- BINDEVENT Valid de `txt_4c_Tipos` ÔåÆ `ValidarTipos()`
+
+**M├®todos novos:**
+- `BtnSalvarClick()` ÔÇö valida C├│digo obrigat├│rio em INCLUIR fora do TRY, chama `FormParaBO()` + `ValidarDados()` + `Salvar()` + retorna para lista
+- `BtnCancelarClick()` ÔÇö delega a `AlternarPagina(1)` (que j├í recarrega lista e reseta modo)
+- `ValidarTipos()` ÔÇö replica o Valid do legado: aceita s├│ "M" ou "T", converte para upper, bloqueia com `.F.` se inv├ílido
+
+Fase 6 deve adicionar a segunda metade: `txt_4c_Codigos` + `lbl_4c_Label2` + `txt_4c_Descs`.

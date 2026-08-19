@@ -1,0 +1,8 @@
+﻿Fase 1 conclu├¡da. `C:\4c\projeto\app\classes\MtpBO.prg` criado com:
+
+- **9 propriedades** declaradas: `this_cIdChaves` (PK), `this_cTipos`, `this_cGrupos`, `this_cDescs`, `this_nLimites`, `this_nFmaxs`, `this_nValors`, `this_cMoedas`, `this_lGanhos`
+- **1 campo de exibi├º├úo** n├úo persistido: `this_cDescMoe` (descri├º├úo da moeda, lookup SigCdMoe)
+- **Init()** configurando `this_cTabela = "SigIdPcp"` e `this_cCampoChave = "cIdChaves"` (PK gerada por fUniqueIds no legado)
+- **ObterChavePrimaria()** para auditoria
+
+**Nota sobre a PK**: O legado usa `cIdChaves` como PK interna (gerada por `fUniqueIds()`), com `tipos+grupos` sendo a chave de neg├│cio composta validada antes do INSERT. A Fase 2 implementar├í a gera├º├úo do ID equivalente em `Inserir()`.

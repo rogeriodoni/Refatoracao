@@ -1,0 +1,21 @@
+﻿`Formmod.prg` criado com 343 linhas em `C:\4c\projeto\app\forms\cadastros\Formmod.prg`.
+
+**O que foi entregue na Fase 3:**
+
+| Componente | Status |
+|---|---|
+| `DEFINE CLASS Formmod AS FormBase` | Ô£ô Height=600, Width=1000, DataSession=2 |
+| `Init()` | Ô£ô Apenas `RETURN DODEFAULT()` |
+| `InicializarForm()` | Ô£ô Cria modBO, chama ConfigurarPageFrame, define ActivePage=1 |
+| `ConfigurarPageFrame()` | Ô£ô pgf_4c_Paginas Top=-29, 2 pages, pictures fundo_cad_1003.jpg |
+| `ConfigurarPaginaLista()` | Ô£ô cnt_4c_Cabecalho (labels sombra/titulo), cnt_4c_Botoes (vazio para Fase 4), cnt_4c_Saida + cmd_4c_Encerrar + BINDEVENT |
+| `ConfigurarPaginaDados()` | Ô£ô cnt_4c_Salva + cmd_4c_Confirmar + cmd_4c_Cancelar |
+| `BtnEncerrarClick()` | Ô£ô `THIS.Release()` |
+| `TornarControlesVisiveis()` | Ô£ô Recursivo (Pages + Controls) |
+| `FormatarGridLista()` | Ô£ô Tahoma 8pt |
+| `Destroy()` | Ô£ô Libera BO, CATCH com MsgErro |
+
+**O que fica para as pr├│ximas fases via Edit:**
+- **Fase 4**: Grid grd_4c_Lista + bot├Áes CRUD (Incluir/Visualizar/Alterar/Excluir/Buscar) + `CarregarLista()` + chamada em `InicializarForm`
+- **Fase 5-6**: Labels e TextBoxes de dados (txt_4c_Codigos, txt_4c_Descricao)
+- **Fase 7-8**: BINDEVENTs dos bot├Áes Confirmar/Cancelar + handlers CRUD completos

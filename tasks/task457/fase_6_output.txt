@@ -1,0 +1,14 @@
+﻿A Fase 6/8 est├í conclu├¡da. Resumo do que foi feito:
+
+**An├ílise**: O formul├írio `SigCdLct` ├® simples ÔÇö apenas 2 campos (`cods`/`descs`) e sem lookups. As Fases 1-5 j├í haviam implementado ambos os campos completamente.
+
+**Fase 6 executou:**
+
+1. **Formlct.prg ÔÇö BtnSalvarClick corrigido**: removida a mensagem `MsgErro` duplicada no `ELSE`. O `lctBO.ValidarDados()` j├í exibe `MsgAviso` espec├¡fico ("C├│digo inv├ílido", "C├│digo j├í cadastrado", "Descri├º├úo vazia") ÔÇö o form n├úo deve sobrepor com outra mensagem gen├®rica.
+
+2. **menu.prg ÔÇö integra├º├úo completa**:
+   - `DEFINE BAR 117 OF popCadastros` com prompt "Lan├ºamentos"
+   - `ON SELECTION BAR 117 OF popCadastros DO AbrirFormlct`
+   - `PROCEDURE AbrirFormlct()` adicionado no padr├úo can├┤nico (`VARTYPE`, `Show()` sem par├ómetro, sem `Release()`)
+
+3. **config.prg** ÔÇö n├úo requer modifica├º├úo manual; o carregamento din├ómico via ADIR() j├í inclui `lctBO.prg` e `Formlct.prg` automaticamente das pastas `classes\` e `forms\cadastros\`.

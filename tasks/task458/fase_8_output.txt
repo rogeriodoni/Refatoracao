@@ -1,0 +1,13 @@
+﻿Migra├º├úo Fase 8/8 conclu├¡da. Resumo do que foi feito:
+
+**FormLGR.prg** ÔÇö j├í estava completo com todos os m├®todos da Fase 8 (1499 linhas). Todos os m├®todos estavam implementados desde as fases anteriores:
+- `BtnBuscarClick()`, `BtnEncerrarClick()`, `BtnSalvarClick()`, `BtnCancelarClick()`
+- `FormParaBO()`, `BOParaForm()` com todos os campos
+- `HabilitarCampos()`, `LimparCampos()`, `CarregarLista()`, `AjustarBotoesPorModo()`
+
+**menu.prg** ÔÇö 3 adi├º├Áes:
+1. `DEFINE BAR 118 OF popCadastros PROMPT "Dados Gerenciais Fiscais"`
+2. `ON SELECTION BAR 118 OF popCadastros DO AbrirFormLGR`
+3. `PROCEDURE AbrirFormLGR()` com padr├úo can├┤nico (VARTYPE, Show() sem param, sem Release())
+
+**config.prg** ÔÇö sem altera├º├Áes necess├írias; carregamento din├ómico via ADIR() j├í pega `LGRBO.prg` (classes/) e `FormLGR.prg` (forms/cadastros/) automaticamente.

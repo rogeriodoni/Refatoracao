@@ -1,0 +1,7 @@
+﻿Feito. Corrigi a 1 diferen├ºa visual:
+
+- **Objeto**: `SIGCDMPP` ÔåÆ `Caption` (tipo=0 Produtos)
+- **Antes**: `"Complementos de Caracter" + CHR(237) + "sticas de Produtos"`
+- **Depois**: `"Cadastro de Complementos de Caracter" + CHR(237) + "sticas de Produtos"`
+
+O prefixo "Cadastro de " estava faltando no bloco `OTHERWISE` do `Init()` (linha 57), que ├® o caso padr├úo quando o form abre sem par├ómetro.

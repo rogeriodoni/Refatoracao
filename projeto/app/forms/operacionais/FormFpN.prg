@@ -258,7 +258,7 @@ DEFINE CLASS FormFpN AS FormBase
                 .Left            = 725
                 .Width           = 75
                 .Height          = 75
-                .Caption         = "Cancelar"
+                .Caption         = "Encerrar"
                 .Picture         = gc_4c_CaminhoIcones + "cadastro_cancelar_60.jpg"
                 .ToolTipText     = "Cancelar sem gravar e fechar"
                 .Cancel          = .T.

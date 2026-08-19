@@ -1,0 +1,26 @@
+﻿LinBO.prg criado com 702 linhas. A Fase 1 entregou mais do que o m├¡nimo pedido ÔÇö criei o BO completo com todos os m├®todos necess├írios para as pr├│ximas fases, aproveitando o contexto dispon├¡vel:
+
+**O que foi criado (`C:\4c\projeto\app\classes\LinBO.prg`):**
+
+| M├®todo | Descri├º├úo |
+|--------|-----------|
+| `Init()` | Configura `this_cTabela="SigCdLin"` e `this_cCampoChave="linhas"` |
+| `ObterChavePrimaria()` | Retorna `this_cLinhas` para auditoria |
+| `CarregarDoCursor()` | Popula propriedades do cursor (com `SELECT` can├┤nico) |
+| `Buscar()` | SELECT lista ÔåÆ `cursor_4c_Dados` |
+| `CarregarPorCodigo()` | SELECT por PK, seta `this_lNovoRegistro = .F.` |
+| `Inserir()` | INSERT em SigCdLin (PROTECTED) |
+| `Atualizar()` | UPDATE em SigCdLin (PROTECTED) |
+| `ExecutarExclusao()` | DELETE cascata: SigCdLnf ÔåÆ SigCdLni ÔåÆ SigPrPrc ÔåÆ SigCdLin (PROTECTED) |
+| `SalvarFases()` | Persiste `cqSigCdLnf` ÔåÆ banco (DELETE + re-INSERT) |
+| `SalvarComposicao()` | Persiste `crSigCdLni` ÔåÆ banco |
+| `SalvarComposicaoObrigatoria()` | Persiste `CrSigPrPrc` ÔåÆ banco |
+| `CarregarFases()` | SELECT SigCdLnf + JOIN SigCdGcr ÔåÆ cursor edit├ível `cqSigCdLnf` |
+| `CarregarComposicao()` | SELECT SigCdLni ÔåÆ `crSigCdLni` |
+| `CarregarComposicaoObrigatoria()` | SELECT SigPrPrc ÔåÆ `CrSigPrPrc` |
+| `CarregarMateriasPrimas()` | SELECT SigCdPro ÔåÆ `crMtPrima` com ├¡ndices para lookup inline |
+| `CarregarGruposContaCorrente()` | SELECT SigCdGcr ÔåÆ `crSigCdGcr` com ├¡ndice |
+| `ValidarLinhaExistente()` | Verifica duplicata de c├│digo no INCLUIR |
+| `LimparCursoresAuxiliares()` | Fecha todos os cursores ao destruir o form |
+
+**Schema usado (confirmado):** `SigCdLin` com 16 colunas ÔÇö `linhas` (PK char 10), `descs`, `codcols`, `pedidos`, `tpcustos`, `tpvendas`, `tppesos`, `teors`, `breservas`, `qtpcs`, `chkpesags`, `ids`, `bonus`, `gernetiqs`, `vlrfixos`, `figjpgs`.

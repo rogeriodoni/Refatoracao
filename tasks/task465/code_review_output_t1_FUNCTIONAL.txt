@@ -1,0 +1,9 @@
+﻿Tudo correto. 3 corre├º├Áes aplicadas em `FormMPD.prg`:
+
+1. **[CONTAINER-VISIVEL]** ÔÇö `TornarControlesVisiveis` agora skipa `cnt_4c_cabecalho` com `INLIST(LOWER(...))`, preservando o `Visible=.F.` definido em `ConfigurarPaginaDados()`.
+
+2. **[GRID-WITH] x2** ÔÇö `RecordSource` movido para fora do `WITH` em `CarregarLista()` e `BtnBuscarClick()`, evitando o `Unknown member COLUMN1` caso o grid resete colunas ao receber o cursor.
+
+**Falsos positivos descartados:**
+- **[BUSCA-CURSOR]** (24 ocorr├¬ncias): `DefinirCursor()` j├í define `this_cCursorDestino` internamente (FormBuscaAuxiliar.prg:413). O Pattern A can├┤nico est├í correto.
+- **[LAYOUT-POSITION]** (78 ocorr├¬ncias): O c├│digo j├í tem os valores corretos (ex: `obj_4c_Op_subn.Left=141`, `obj_4c_Op_agregas.Left=656`). O review foi gerado contra uma vers├úo mais antiga.

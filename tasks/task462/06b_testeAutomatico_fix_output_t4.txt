@@ -1,0 +1,1 @@
+﻿Corrigido. O problema estava na linha 1195: o controle `CheckBox` do grid `grd_4c_Emps.Column1` foi adicionado com nome `"check12"`, mas na linha 1206 `CurrentControl = "Check1"` referenciava um nome inexistente ÔÇö causando `Expression evaluated to an illegal value`. Renomeado para `"Check1"` em ambos os locais (AddObject e WITH).

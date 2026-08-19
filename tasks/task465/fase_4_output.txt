@@ -1,0 +1,14 @@
+﻿**Fase 4/8 conclu├¡da.** O que foi adicionado ao `FormMPD.prg`:
+
+| M├®todo | O que faz |
+|--------|-----------|
+| `ConfigurarPaginaLista()` | Popula `cnt_4c_Botoes` com 5 bot├Áes CRUD (Incluir/Visualizar/Alterar/Excluir/Buscar), adiciona Encerrar no `cnt_4c_Saida`, cria os 3 bot├Áes extras (CadOpe/ExpXML/ImpXML) e o `grd_4c_Lista` com ColumnCount=4 |
+| `CarregarLista()` | Chama `MPDBO.Buscar("")`, define RecordSource + headers (Dopps/Ndopps/Ordes/Hists) **depois** de RecordSource (regra VFP9) |
+| `AlternarPagina(par_nPagina)` | Alterna ActivePage; reset `this_cModoAtual="LISTA"` apenas ao voltar para Page1 |
+| `BtnIncluirClick()` / `BtnVisualizarClick()` / `BtnAlterarClick()` | Carregam BO e navegam para Page2 com modo correto |
+| `BtnExcluirClick()` | `MsgConfirma()` (retorna logical) ÔåÆ `Excluir()` ÔåÆ `CarregarLista()` |
+| `BtnBuscarClick()` | `INPUTBOX` de filtro ÔåÆ `Buscar(filtro)` ÔåÆ atualiza grid |
+| `BtnEncerrarClick()` | `THIS.Release()` |
+| `FormatarGridLista()` / `TornarControlesVisiveis()` | Utilit├írios auxiliares |
+
+**Pr├│xima fase (5/8)**: `ConfigurarPaginaDados()` ÔÇö campos de edi├º├úo na Page2 + bot├Áes Salvar/Cancelar no `cnt_4c_BotoesAcao`.

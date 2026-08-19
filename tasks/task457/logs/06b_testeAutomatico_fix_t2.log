@@ -1,0 +1,21 @@
+[2026-08-18 18:26:51] [INFO] === CLAUDE CLI INVOKER ===
+[2026-08-18 18:26:51] [INFO] Prompt File: C:\4c\tasks\task457\runtime_fix_prompt_06b_testeAutomatico_t2.md
+[2026-08-18 18:26:51] [INFO] Output File: C:\4c\tasks\task457\06b_testeAutomatico_fix_output_t2.txt
+[2026-08-18 18:26:51] [INFO] Model: sonnet
+[2026-08-18 18:26:51] [INFO] Timeout: 3600 segundos
+[2026-08-18 18:26:51] [INFO] Max Output Tokens: 128000
+[2026-08-18 18:26:51] [INFO] Context Files: 0 arquivo(s)
+[2026-08-18 18:26:51] [INFO] Invocando Claude CLI...
+[2026-08-18 18:26:51] [INFO] Prompt carregado: 55886 caracteres
+[2026-08-18 18:26:51] [INFO] Executando: claude --model sonnet --dangerously-skip-permissions --add-dir C:\4c
+[2026-08-18 18:26:51] [INFO] Tamanho total do prompt: 55886 caracteres
+[2026-08-18 18:26:51] [INFO] Invocando Claude CLI (tentativa 1/7)...
+[2026-08-18 18:32:07] [INFO] Claude CLI finalizado em 315.5629779 segundos
+[2026-08-18 18:32:07] [INFO] Exit Code: 0
+[2026-08-18 18:32:07] [INFO] Output salvo em: C:\4c\tasks\task457\06b_testeAutomatico_fix_output_t2.txt
+[2026-08-18 18:32:07] [INFO] Output size: 631 bytes
+[2026-08-18 18:32:07] [INFO] SUCESSO: Claude CLI executado com sucesso
+[2026-08-18 18:32:07] [INFO] Preview do output:
+[2026-08-18 18:32:07] [INFO] Feito. O fix est+í em `TesteAutomatico.prg:352-392`: antes do loop `USED()`, agora salva o datasession atual, troca para `oForm.DataSessionID` (o datasession privado do form com `DataSession=2`), verifica os cursors e o `RECCOUNT`, e restaura o datasession original.
+
+**Causa raiz**: `FormTester` +® um `Custom` object rodando no datasession 1. Quando chama `oForm.CarregarLista()`, o VFP9 executa o m+®todo no datasession 2 (privado do form) ÔÇö onde `cursor_4c_Dados` +® criado. Ao retornar, o te

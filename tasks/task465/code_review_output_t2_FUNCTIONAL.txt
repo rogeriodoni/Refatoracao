@@ -1,0 +1,7 @@
+﻿Tudo correto. As corre├º├Áes foram aplicadas com sucesso:
+
+**[CONTAINER-VISIVEL]** ÔÇö `TornarControlesVisiveis` corrigido: a recurs├úo agora est├í **dentro** do check `INLIST`, ent├úo `cnt_4c_Cabecalho` e seus filhos s├úo completamente ignorados (n├úo se entra nele, filhos n├úo ficam `Visible=.T.`).
+
+**[BUSCA-CURSOR]** ÔÇö Falso positivo do checker: `DefinirCursor()` j├í seta `this_cCursorDestino` internamente (FormBuscaAuxiliar.prg:413). Nenhuma altera├º├úo necess├íria.
+
+**[LAYOUT-POSITION] / [OPTIONGROUP-LEFT]** ÔÇö Adicionado `.Top = 2` e `.AutoSize = .F.` a todos os 176 blocos `WITH .Buttons(N)` que estavam sem essas propriedades, em todos os 5 procedimentos de configura├º├úo (PgOperacao, PgEstoque, PgComponente, PgDocumento, PgDiversas). Grupos que j├í tinham `.Top` expl├¡cito (como `obj_4c_Opt_tipomov` com 11 bot├Áes em m├║ltiplas linhas) tiveram apenas `.AutoSize = .F.` adicionado.

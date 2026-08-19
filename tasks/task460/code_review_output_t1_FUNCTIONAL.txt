@@ -1,0 +1,5 @@
+﻿Dois handlers corrigidos em `FormLOC.prg`:
+- `ValidarConexao` (linha 838): adicionado `par_nKeyCode, par_nShiftAltCtrl`
+- `ValidarDiretorioDbfs` (linha 889): adicionado `par_nKeyCode, par_nShiftAltCtrl`
+
+Ambos os m├®todos s├úo bound via `BINDEVENT(..., "KeyPress", ...)` ÔÇö sem os par├ómetros declarados, VFP9 geraria "No PARAMETER statement is found" ao pressionar qualquer tecla nos campos `txt_4c_Conexao` e `txt_4c_Dbfs`.

@@ -1,0 +1,6 @@
+﻿Duas corre├º├Áes aplicadas em `lctBO.prg`:
+
+- **Linha 149** (`Atualizar`): `WHERE cidchaves = ...` ÔåÆ `WHERE cods = EscaparSQL(THIS.this_cCods)`
+- **Linha 174** (`ExecutarExclusao`): `WHERE cidchaves = ...` ÔåÆ `WHERE cods = EscaparSQL(THIS.this_cCods)`
+
+O filtro `cidchaves` era inventado ÔÇö o c├│digo original filtrava apenas por `cods` (chave de neg├│cio). O `cidchaves` continua sendo gravado no INSERT e carregado no `CarregarPorCodigo`, mas n├úo ├® usado como crit├®rio de UPDATE/DELETE.

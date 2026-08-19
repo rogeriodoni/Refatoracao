@@ -1,0 +1,27 @@
+﻿**Phase 8/8 ÔÇö Verifica├º├úo conclu├¡da. FormLpr.prg est├í COMPLETO.**
+
+Resumo do que encontrei:
+
+| M├®todo requerido | Status |
+|---|---|
+| `BtnBuscarClick()` | Ô£à linha 2900 |
+| `BtnEncerrarClick()` | Ô£à linha 2911 |
+| `BtnSalvarClick()` | Ô£à linha 1692 |
+| `BtnCancelarClick()` | Ô£à linha 1732 |
+| `FormParaBO()` | Ô£à implementado |
+| `BOParaForm()` | Ô£à implementado |
+| `HabilitarCampos()` | Ô£à implementado |
+| `LimparCampos()` | Ô£à implementado |
+| `CarregarLista()` | Ô£à implementado |
+| `AjustarBotoesPorModo()` | Ô×í n├úo necess├írio ÔÇö a troca de modo (CompVenda=' '/C) j├í est├í embutida em `VincularGrade()`, `HabilitarCampos()` e `TornarControlesVisiveis()` |
+| `ValidarTabd/TeclaTabd` | Ô£à linhas 3110ÔÇô3188 |
+| `ValidarGetConta/TeclaGetConta` | Ô£à linhas 3194ÔÇô3280 |
+| `ValidarGetDconta/TeclaGetDconta` | Ô£à linhas 3286ÔÇô3356 |
+| `Destroy()` | Ô£à linha 3361 |
+
+**Integra├º├úo:**
+- `LprBO.prg` ÔÇö existe com todos os 6 m├®todos BO (`Buscar`, `CarregarPorCodigo`, `CarregarItens`, `SalvarItens`, `ChecaGrpVenda`, `AtualizarFlags`)
+- `config.prg` ÔÇö ADIR() carrega automaticamente `*BO.prg` e `Form*.prg`, sem altera├º├úo necess├íria
+- `menu.prg` ÔÇö `DEFINE BAR 121` + `ON SELECTION BAR 121 DO AbrirFormLpr` + procedimento `AbrirFormLpr()` j├í presentes (linhas 272, 380, 8411)
+
+O arquivo tem 3406 linhas, sem TODOs/stubs, sem RETURN dentro de TRY/CATCH. A migra├º├úo SIGCDLPR est├í finalizada.

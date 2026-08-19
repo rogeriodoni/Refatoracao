@@ -1,0 +1,11 @@
+﻿Fase 2 conclu├¡da. O `MtpBO.prg` est├í completo com todos os m├®todos CRUD:
+
+**M├®todos adicionados:**
+- **`Buscar(par_cFiltro)`** ÔÇö SELECT com LEFT JOIN em SigCdMoe para trazer `desc_moe`, ordenado por tipos+grupos
+- **`CarregarPorCodigo(par_cIdChaves)`** ÔÇö SELECT pela PK `cidchaves`
+- **`CarregarPorTipoGrupo(par_cTipos, par_cGrupos)`** ÔÇö SELECT pela chave de neg├│cio composta
+- **`VerificarDuplicidade()`** ÔÇö checa colis├úo de tipos+grupos (excluindo o pr├│prio registro no UPDATE)
+- **`CarregarDoCursor(par_cAliasCursor)`** ÔÇö mapeia todos os 9 campos + `desc_moe`; `ganhos` (bit) convertido para l├│gico com `(NVL(ganhos,0) = 1)`
+- **`Inserir()`** ÔÇö gera `cidchaves` via `fUniqueIds()`, valida tipos+grupos obrigat├│rios, checa duplicidade, chama `RegistrarAuditoria("INSERT")`
+- **`Atualizar()`** ÔÇö UPDATE por `cidchaves`, checa duplicidade antes, chama `RegistrarAuditoria("UPDATE")`
+- **`ExecutarExclusao()`** ÔÇö DELETE por `cidchaves`, chama `RegistrarAuditoria("DELETE")`

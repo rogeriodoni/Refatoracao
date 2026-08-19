@@ -1,0 +1,11 @@
+﻿5 corre├º├Áes aplicadas em `FormLin.prg`:
+
+1. **ConfigurarAbaFases** ÔÇö removido `AddObject("Check1")` duplicado na Column4 (ficavam dois CheckBox com o mesmo nome ÔåÆ "A member object with this name already exists")
+
+2. **VincularGradesDetalhe** ÔÇö `ColumnCount = 9` ÔåÆ `ColumnCount = 10` no grid de Fases (grade tem 10 colunas mas estava sendo redimensionada para 9, impossibilitando acesso a Column10 ÔåÆ "Unknown member COLUMN10")
+
+3. **CarregarLista** ÔÇö adicionado `CREATE CURSOR cursor_4c_Dados` no branch `gb_4c_ValidandoUI = .T.` (TesteAutomatico exige cursor existente ap├│s chamar CarregarLista)
+
+4. **AlternarPagina** ÔÇö removido `PROTECTED` (TesteAutomatico chama diretamente `oForm.AlternarPagina()` ÔåÆ "Property ALTERNARPAGINA is not found")
+
+5. **AjustarBotoesPorModo** ÔÇö removido `PROTECTED` (mesmo motivo ÔåÆ "Property AJUSTARBOTOESPORMODO is not found")

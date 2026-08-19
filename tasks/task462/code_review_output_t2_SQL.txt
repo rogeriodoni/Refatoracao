@@ -1,0 +1,14 @@
+﻿Os 6 erros [GRID-SQL] s├úo **falsos positivos** do analisador est├ítico. Verifica├º├úo no BO confirma:
+
+| ControlSource | Cursor criado por | SELECT/CREATE no BO |
+|---|---|---|
+| `cursor_4c_Emps.Imps` | `CarregarEmpresas()` | `CAST(0 AS BIT) AS Imps` (linha 423) Ô£ô |
+| `cursor_4c_Emps.Emps` | `CarregarEmpresas()` | `Cemps AS Emps` (linha 423) Ô£ô |
+| `cursor_4c_Emps.Razas` | `CarregarEmpresas()` | `Razas` (linha 423) Ô£ô |
+| `cursor_4c_Opers.Imps` | `CarregarOperacoes()` | `CAST(0 AS BIT) AS Imps` (linha 464) Ô£ô |
+| `cursor_4c_Opers.Dopes` | `CarregarOperacoes()` | `a.Dopes` (linha 464) Ô£ô |
+| `cursor_4c_Compos.Compos` | `CarregarComposicoes()` | `CREATE CURSOR ... (Compos C(30))` / `SELECT Compos FROM SigCdFsc` (linhas 513-517) Ô£ô |
+
+O analisador escaneia somente o **form** em busca de SQL que crie os cursores, mas aqui os cursores s├úo criados pelos m├®todos do BO (`CarregarEmpresas`, `CarregarOperacoes`, `CarregarComposicoes`) ÔÇö chamados em `CarregarRelacionados()` linha 2146-2149. A ferramenta n├úo rastreia chamadas cross-file.
+
+**Nenhuma corre├º├úo necess├íria.** O c├│digo est├í correto ÔÇö todos os campos dos ControlSources existem nas colunas produzidas pelo SQL do BO.

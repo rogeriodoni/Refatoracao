@@ -1,0 +1,263 @@
+﻿{
+    "taskId":  "task465",
+    "arquivoOriginal":  "",
+    "tipoArquivo":  "SCX",
+    "comentario_tipoArquivo":  "SCX=Form, FRX=Report, VCX=ClassLib",
+    "status":  "COMPLETED",
+    "statusComentario":  "PENDING | IN_PROGRESS | COMPLETED | FAILED | BLOCKED",
+    "criadoEm":  "2026-08-19T03:29:50",
+    "atualizadoEm":  "2026-08-19T06:53:00",
+    "etapas":  {
+                   "01_moverArquivos":  {
+                                            "status":  "COMPLETED",
+                                            "inicio":  "2026-08-19T03:29:50",
+                                            "fim":  "2026-08-19T03:29:50",
+                                            "tentativas":  1,
+                                            "erro":  null,
+                                            "sctFile":  "C:\\4c\\tasks\\task465\\SIGCDMPD.sct",
+                                            "baseName":  "SIGCDMPD",
+                                            "scxFile":  "C:\\4c\\tasks\\task465\\SIGCDMPD.scx"
+                                        },
+                   "02_extractCode":  {
+                                          "status":  "COMPLETED",
+                                          "inicio":  "2026-08-19T03:29:50",
+                                          "fim":  "2026-08-19T03:29:51",
+                                          "tentativas":  1,
+                                          "arquivoGerado":  "SIGCDCOR_codigo_fonte.txt",
+                                          "erro":  null,
+                                          "baseNameNormalizado":  "SIGCDMPD",
+                                          "txtFile":  "C:\\4c\\tasks\\task465\\SIGCDMPD_form_codigo_fonte.txt"
+                                      },
+                   "02b_analisarTarefa":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-08-19T03:29:51",
+                                              "fim":  "2026-08-19T03:29:51",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "analise.json",
+                                              "erro":  null,
+                                              "comentario":  "NOVO - Analise inteligente do codigo fonte",
+                                              "analiseFile":  "C:\\4c\\tasks\\task465\\analise.json"
+                                          },
+                   "03_gerarMetaPrompt":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-08-19T03:29:52",
+                                              "fim":  "2026-08-19T03:30:00",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "meta_prompt.md",
+                                              "erro":  null,
+                                              "formType":  "CRUD",
+                                              "phaseBFile":  "C:\\4c\\tasks\\task465\\meta_prompt_phaseB.md",
+                                              "metaPromptFile":  "C:\\4c\\tasks\\task465\\meta_prompt.md",
+                                              "boClass":  "MPDBO",
+                                              "formClass":  "FormMPD",
+                                              "phaseAFile":  "C:\\4c\\tasks\\task465\\meta_prompt_phaseA.md"
+                                          },
+                   "04_gerarMapeamento":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-08-19T03:30:00",
+                                              "fim":  "2026-08-19T03:30:01",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "mapeamento.json",
+                                              "erro":  null,
+                                              "jsonFile":  "C:\\4c\\tasks\\task465\\mapeamento.json"
+                                          },
+                   "04b_gerarEsqueletos":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-08-19T03:30:01",
+                                               "fim":  "2026-08-19T03:30:01",
+                                               "tentativas":  1,
+                                               "arquivosGerados":  [
+
+                                                                   ],
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Geracao de codigo base ~70% completo",
+                                               "esqueletosDir":  "C:\\4c\\tasks\\task465\\esqueletos",
+                                               "arquivos":  [
+                                                                "FormMPD_esqueleto.prg",
+                                                                "MPDBO_esqueleto.prg"
+                                                            ]
+                                           },
+                   "05_migracao":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-08-19T03:30:01",
+                                       "fim":  "2026-08-19T05:50:28",
+                                       "tentativas":  1,
+                                       "maxTentativas":  3,
+                                       "arquivosGerados":  [
+
+                                                           ],
+                                       "comentario":  "FormXXX.prg, XXXBO.prg",
+                                       "erro":  null,
+                                       "boExists":  true,
+                                       "boFile":  "C:\\4c\\projeto\\app\\classes\\MPDBO.prg",
+                                       "formExists":  true,
+                                       "tamanhoKB":  280.79,
+                                       "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormMPD.prg",
+                                       "complexidade":  "COMPLEXO",
+                                       "linhas":  9855
+                                   },
+                   "05b_corrigirAutomatico":  {
+                                                  "status":  "COMPLETED",
+                                                  "inicio":  "2026-08-19T05:50:28",
+                                                  "fim":  "2026-08-19T05:51:11",
+                                                  "tentativas":  1,
+                                                  "correcoesAplicadas":  0,
+                                                  "erro":  null,
+                                                  "comentario":  "NOVO - Correcao automatica de anti-padroes",
+                                                  "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormMPD.prg",
+                                                  "boFile":  "C:\\4c\\projeto\\app\\classes\\MPDBO.prg"
+                                              },
+                   "05c_validarCompilacao":  {
+                                                 "status":  "COMPLETED",
+                                                 "inicio":  "2026-08-19T05:51:11",
+                                                 "fim":  "2026-08-19T05:51:13",
+                                                 "tentativas":  1,
+                                                 "errosCompilacao":  [
+
+                                                                     ],
+                                                 "erro":  null,
+                                                 "comentario":  "NOVO - Valida compilacao dos .prg antes de testar",
+                                                 "arquivosValidados":  2,
+                                                 "sucesso":  true
+                                             },
+                   "06_testForm":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-08-19T06:45:35",
+                                       "fim":  "2026-08-19T06:46:56",
+                                       "tentativas":  1,
+                                       "maxTentativas":  5,
+                                       "errosEncontrados":  [
+
+                                                            ],
+                                       "erro":  null,
+                                       "tentativasUsadas":  1
+                                   },
+                   "06b_testeAutomatico":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-08-19T06:46:56",
+                                               "fim":  "2026-08-19T06:52:54",
+                                               "tentativas":  1,
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Testes CRUD automaticos",
+                                               "threshold":  100,
+                                               "falhou":  0,
+                                               "passou":  9,
+                                               "total":  9,
+                                               "percentual":  100,
+                                               "tentativasUsadas":  2,
+                                               "resultFile":  "C:\\4c\\tasks\\task465\\teste_resultado.json"
+                                           },
+                   "07_validarUI":  {
+                                        "status":  "COMPLETED",
+                                        "inicio":  "2026-08-19T06:52:57",
+                                        "fim":  "2026-08-19T06:53:00",
+                                        "tentativas":  1,
+                                        "maxTentativas":  5,
+                                        "problemas":  {
+                                                          "erros":  0,
+                                                          "avisos":  0,
+                                                          "diferencas":  0,
+                                                          "total":  0
+                                                      },
+                                        "limiteProblemas":  10,
+                                        "erro":  null,
+                                        "exitCode":  0,
+                                        "htmlFile":  "C:\\4c\\projeto\\app\\utils\\relatorios\\UIFidelity_FormMPD_20260819065259.html",
+                                        "diferencas":  0,
+                                        "erros":  0,
+                                        "totalProblemas":  2252,
+                                        "avisos":  2252
+                                    },
+                   "08_gerarTestManual":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-08-19T06:53:00",
+                                              "fim":  "2026-08-19T06:53:00",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  null,
+                                              "erro":  null,
+                                              "testManualFile":  "C:\\4c\\SolicitacaoTesteManual\\task465_SIGCDMPD.md"
+                                          },
+                   "02c_analisarComportamento":  {
+                                                     "inicio":  "2026-08-19T03:29:51",
+                                                     "tentativas":  1,
+                                                     "erro":  null,
+                                                     "fim":  "2026-08-19T03:29:52",
+                                                     "comportamentoFile":  "C:\\4c\\tasks\\task465\\comportamento.json",
+                                                     "status":  "COMPLETED"
+                                                 },
+                   "02d_extrairLayout":  {
+                                             "inicio":  "2026-08-19T03:29:52",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-08-19T03:29:52"
+                                         },
+                   "05b2_atualizarMapeamento":  {
+                                                    "inicio":  "2026-08-19T05:51:11",
+                                                    "status":  "COMPLETED",
+                                                    "tentativas":  1,
+                                                    "erro":  null,
+                                                    "fim":  "2026-08-19T05:51:11",
+                                                    "destFile":  "C:\\4c\\projeto\\app\\utils\\mapeamentos\\FormMPD_mapeamento.json",
+                                                    "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormMPD.prg",
+                                                    "mapeamentoFile":  "C:\\4c\\tasks\\task465\\mapeamento.json"
+                                                },
+                   "05d_validarCompletude":  {
+                                                 "inicio":  "2026-08-19T05:51:13",
+                                                 "status":  "COMPLETED",
+                                                 "tentativas":  1,
+                                                 "erro":  null,
+                                                 "fim":  "2026-08-19T05:51:13",
+                                                 "sucesso":  true,
+                                                 "arquivosComProblema":  0
+                                             },
+                   "05e_codeReview":  {
+                                          "inicio":  "2026-08-19T05:51:13",
+                                          "status":  "COMPLETED",
+                                          "erro":  null,
+                                          "fim":  "2026-08-19T06:42:51",
+                                          "passes":  6,
+                                          "problemas":  "[CONTAINER-VISIVEL] TornarControlesVisiveis() NAO filtra containers ocultos: CNT_4C_CABECALHO. Estes containers tem Visible=.F. mas serao forcados a Visible=.T. pelo metodo recursivo.; [LAYOUT-POSITION] Controle \u0027Op_subn\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgOperacao): Top original=195 vs migrado \u0027obj_4c_Op_subn\u0027 Top=2 (diff=193px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Op_subn\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgOperacao): Left original=141 vs migrado \u0027obj_4c_Op_subn\u0027 Left=3 (diff=138px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Op_agregas\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgOperacao): Top original=33 vs migrado \u0027obj_4c_Op_agregas\u0027 Top=2 (diff=31px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Op_agregas\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgOperacao): Left original=656 vs migrado \u0027obj_4c_Op_agregas\u0027 Left=3 (diff=653px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Op_imagem\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgOperacao): Left original=108 vs migrado \u0027obj_4c_Op_imagem\u0027 Left=3 (diff=105px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Op_boleto\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgOperacao): Left original=108 vs migrado \u0027obj_4c_Op_boleto\u0027 Left=3 (diff=105px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Opt_Menu\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgOperacao): Top original=114 vs migrado \u0027obj_4c_Opt_Menu\u0027 Top=2 (diff=112px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Opt_Menu\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgOperacao): Left original=108 vs migrado \u0027obj_4c_Opt_Menu\u0027 Left=3 (diff=105px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027ObjAutos\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgOperacao): Top original=134 vs migrado \u0027obj_4c_ObjAutos\u0027 Top=2 (diff=132px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027ObjAutos\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgOperacao): Left original=108 vs migrado \u0027obj_4c_ObjAutos\u0027 Left=3 (diff=105px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Op_BxAuto\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgOperacao): Top original=283 vs migrado \u0027obj_4c_Op_BxAuto\u0027 Top=2 (diff=281px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Op_BxAuto\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgOperacao): Left original=141 vs migrado \u0027obj_4c_Op_BxAuto\u0027 Left=3 (diff=138px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Objpagamento\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgOperacao): Top original=192 vs migrado \u0027obj_4c_Objpagamento\u0027 Top=2 (diff=190px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Objpagamento\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgOperacao): Left original=656 vs migrado \u0027obj_4c_Objpagamento\u0027 Left=3 (diff=653px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027ObjBusEnv\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgOperacao): Top original=135 vs migrado \u0027obj_4c_ObjBusEnv\u0027 Top=2 (diff=133px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027ObjBusEnv\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgOperacao): Left original=656 vs migrado \u0027obj_4c_ObjBusEnv\u0027 Left=3 (diff=653px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027fwoption4\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgOperacao): Top original=232 vs migrado \u0027obj_4c_Fwoption4\u0027 Top=2 (diff=230px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027fwoption4\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgOperacao): Left original=656 vs migrado \u0027obj_4c_Fwoption4\u0027 Left=3 (diff=653px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027opt_tipomov\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgOperacao): Top original=302 vs migrado \u0027obj_4c_Opt_tipomov\u0027 Top=2 (diff=300px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027opt_tipomov\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgOperacao): Left original=665 vs migrado \u0027obj_4c_Opt_tipomov\u0027 Left=3 (diff=662px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Op_Saldo\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgOperacao): Top original=73 vs migrado \u0027obj_4c_Op_Saldo\u0027 Top=2 (diff=71px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Op_Saldo\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgOperacao): Left original=656 vs migrado \u0027obj_4c_Op_Saldo\u0027 Left=3 (diff=653px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027op_repete\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgOperacao): Top original=53 vs migrado \u0027obj_4c_Op_repete\u0027 Top=2 (diff=51px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027op_repete\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgOperacao): Left original=656 vs migrado \u0027obj_4c_Op_repete\u0027 Left=3 (diff=653px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027GetSequencia\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgOperacao): Left original=656 vs migrado \u0027obj_4c_GetSequencia\u0027 Left=3 (diff=653px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Op_inib\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgOperacao): Top original=93 vs migrado \u0027obj_4c_Op_inib\u0027 Top=2 (diff=91px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Op_inib\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgOperacao): Left original=656 vs migrado \u0027obj_4c_Op_inib\u0027 Left=3 (diff=653px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027ObjMenFalha\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgOperacao): Top original=114 vs migrado \u0027obj_4c_ObjMenFalha\u0027 Top=2 (diff=112px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027ObjMenFalha\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgOperacao): Left original=656 vs migrado \u0027obj_4c_ObjMenFalha\u0027 Left=3 (diff=653px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027ObjRetrabs\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgOperacao): Top original=155 vs migrado \u0027obj_4c_ObjRetrabs\u0027 Top=2 (diff=153px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027ObjRetrabs\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgOperacao): Left original=656 vs migrado \u0027obj_4c_ObjRetrabs\u0027 Left=3 (diff=653px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Objnaoconform\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgOperacao): Top original=174 vs migrado \u0027obj_4c_Objnaoconform\u0027 Top=2 (diff=172px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Objnaoconform\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgOperacao): Left original=656 vs migrado \u0027obj_4c_Objnaoconform\u0027 Left=3 (diff=653px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027fwoption2\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgOperacao): Top original=303 vs migrado \u0027obj_4c_Fwoption2\u0027 Top=2 (diff=301px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027fwoption2\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgOperacao): Left original=141 vs migrado \u0027obj_4c_Fwoption2\u0027 Left=3 (diff=138px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027fwoption3\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgOperacao): Top original=212 vs migrado \u0027obj_4c_Fwoption3\u0027 Top=2 (diff=210px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027fwoption3\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgOperacao): Left original=656 vs migrado \u0027obj_4c_Fwoption3\u0027 Left=3 (diff=653px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Fwoption1\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgOperacao): Top original=323 vs migrado \u0027obj_4c_Fwoption1\u0027 Top=2 (diff=321px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Fwoption1\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgOperacao): Left original=141 vs migrado \u0027obj_4c_Fwoption1\u0027 Left=3 (diff=138px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027fwoption5\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgOperacao): Top original=73 vs migrado \u0027obj_4c_Fwoption5\u0027 Top=2 (diff=71px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027fwoption5\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgOperacao): Left original=107 vs migrado \u0027obj_4c_Fwoption5\u0027 Left=3 (diff=104px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027opt_compo\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgOperacao): Top original=90 vs migrado \u0027obj_4c_Opt_compo\u0027 Top=2 (diff=88px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027opt_compo\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgOperacao): Left original=107 vs migrado \u0027obj_4c_Opt_compo\u0027 Left=3 (diff=104px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Fwoption8\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgOperacao): Top original=52 vs migrado \u0027obj_4c_Fwoption8\u0027 Top=2 (diff=50px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Fwoption8\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgOperacao): Left original=108 vs migrado \u0027obj_4c_Fwoption8\u0027 Left=3 (diff=105px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Op_EstOrig\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgEstoque): Top original=87 vs migrado \u0027obj_4c_Op_EstOrig\u0027 Top=2 (diff=85px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Op_EstOrig\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgEstoque): Left original=468 vs migrado \u0027obj_4c_Op_EstOrig\u0027 Left=3 (diff=465px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027op_destino\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgEstoque): Top original=169 vs migrado \u0027obj_4c_Op_destino\u0027 Top=2 (diff=167px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027op_destino\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgEstoque): Left original=94 vs migrado \u0027obj_4c_Op_destino\u0027 Left=3 (diff=91px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Op_EstDest\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgEstoque): Top original=208 vs migrado \u0027obj_4c_Op_EstDest\u0027 Top=2 (diff=206px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Op_EstDest\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgEstoque): Left original=468 vs migrado \u0027obj_4c_Op_EstDest\u0027 Left=3 (diff=465px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Get_Repete\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgEstoque): Top original=169 vs migrado \u0027obj_4c_Get_Repete\u0027 Top=2 (diff=167px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Get_Repete\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgEstoque): Left original=380 vs migrado \u0027obj_4c_Get_Repete\u0027 Left=3 (diff=377px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027op_origem\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgEstoque): Top original=49 vs migrado \u0027obj_4c_Op_origem\u0027 Top=2 (diff=47px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027op_origem\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgEstoque): Left original=94 vs migrado \u0027obj_4c_Op_origem\u0027 Left=3 (diff=91px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Op_vende\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgEstoque): Top original=282 vs migrado \u0027obj_4c_Op_vende\u0027 Top=2 (diff=280px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Op_vende\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgEstoque): Left original=104 vs migrado \u0027obj_4c_Op_vende\u0027 Left=3 (diff=101px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Op_ConOSub\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgEstoque): Top original=110 vs migrado \u0027obj_4c_Op_ConOSub\u0027 Top=2 (diff=108px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Op_ConOSub\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgEstoque): Left original=467 vs migrado \u0027obj_4c_Op_ConOSub\u0027 Left=3 (diff=464px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Op_ConDSub\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgEstoque): Top original=231 vs migrado \u0027obj_4c_Op_ConDSub\u0027 Top=2 (diff=229px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Op_ConDSub\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgEstoque): Left original=468 vs migrado \u0027obj_4c_Op_ConDSub\u0027 Left=3 (diff=465px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Op_BxOEst\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgEstoque): Top original=133 vs migrado \u0027obj_4c_Op_BxOEst\u0027 Top=2 (diff=131px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Op_BxOEst\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgEstoque): Left original=467 vs migrado \u0027obj_4c_Op_BxOEst\u0027 Left=3 (diff=464px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Op_BxDEst\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgEstoque): Top original=254 vs migrado \u0027obj_4c_Op_BxDEst\u0027 Top=2 (diff=252px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Op_BxDEst\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgEstoque): Left original=468 vs migrado \u0027obj_4c_Op_BxDEst\u0027 Left=3 (diff=465px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Op_grcomp\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgComponente): Left original=183 vs migrado \u0027obj_4c_Op_grcomp\u0027 Left=3 (diff=180px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Op_etiq\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgComponente): Top original=356 vs migrado \u0027obj_4c_Op_etiq\u0027 Top=2 (diff=354px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Op_etiq\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgComponente): Left original=182 vs migrado \u0027obj_4c_Op_etiq\u0027 Left=3 (diff=179px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Opc_Chkf\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgComponente): Top original=100 vs migrado \u0027obj_4c_Opc_Chkf\u0027 Top=2 (diff=98px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Opc_Chkf\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgComponente): Left original=626 vs migrado \u0027obj_4c_Opc_Chkf\u0027 Left=3 (diff=623px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Op_GrTrans\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgComponente): Top original=270 vs migrado \u0027obj_4c_Op_GrTrans\u0027 Top=2 (diff=268px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Op_GrTrans\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgComponente): Left original=182 vs migrado \u0027obj_4c_Op_GrTrans\u0027 Left=3 (diff=179px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027ObjReinop\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgComponente): Top original=378 vs migrado \u0027obj_4c_ObjReinop\u0027 Top=2 (diff=376px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027ObjReinop\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgComponente): Left original=182 vs migrado \u0027obj_4c_ObjReinop\u0027 Left=3 (diff=179px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027OptMatPrncDif\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgComponente): Top original=390 vs migrado \u0027obj_4c_OptMatPrncDif\u0027 Top=2 (diff=388px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027OptMatPrncDif\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgComponente): Left original=627 vs migrado \u0027obj_4c_OptMatPrncDif\u0027 Left=3 (diff=624px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Fwoption3\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgComponente): Top original=370 vs migrado \u0027obj_4c_Fwoption3\u0027 Top=2 (diff=368px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Fwoption3\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgComponente): Left original=626 vs migrado \u0027obj_4c_Fwoption3\u0027 Left=3 (diff=623px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027optqtdneg\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgComponente): Top original=351 vs migrado \u0027obj_4c_Optqtdneg\u0027 Top=2 (diff=349px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027optqtdneg\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgComponente): Left original=626 vs migrado \u0027obj_4c_Optqtdneg\u0027 Left=3 (diff=623px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Op_SepPedra\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgComponente): Top original=69 vs migrado \u0027obj_4c_Op_SepPedra\u0027 Top=2 (diff=67px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Op_SepPedra\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgComponente): Left original=183 vs migrado \u0027obj_4c_Op_SepPedra\u0027 Left=3 (diff=180px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Chk_TrfPeso\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgComponente): Top original=253 vs migrado \u0027obj_4c_Chk_TrfPeso\u0027 Top=2 (diff=251px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Chk_TrfPeso\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgComponente): Left original=626 vs migrado \u0027obj_4c_Chk_TrfPeso\u0027 Left=3 (diff=623px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Opc_pesobal\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgComponente): Top original=236 vs migrado \u0027obj_4c_Opc_pesobal\u0027 Top=2 (diff=234px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Opc_pesobal\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgComponente): Left original=626 vs migrado \u0027obj_4c_Opc_pesobal\u0027 Left=3 (diff=623px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Opc_env\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgComponente): Top original=195 vs migrado \u0027obj_4c_Opc_env\u0027 Top=2 (diff=193px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Opc_env\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgComponente): Left original=626 vs migrado \u0027obj_4c_Opc_env\u0027 Left=3 (diff=623px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Opc_mens\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgComponente): Top original=175 vs migrado \u0027obj_4c_Opc_mens\u0027 Top=2 (diff=173px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Opc_mens\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgComponente): Left original=626 vs migrado \u0027obj_4c_Opc_mens\u0027 Left=3 (diff=623px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Opc_PagSer\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgComponente): Top original=155 vs migrado \u0027obj_4c_Opc_PagSer\u0027 Top=2 (diff=153px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Opc_PagSer\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgComponente): Left original=626 vs migrado \u0027obj_4c_Opc_PagSer\u0027 Left=3 (diff=623px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Op_grprod\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgComponente): Left original=183 vs migrado \u0027obj_4c_Op_grprod\u0027 Left=3 (diff=180px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027op_compagru\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgComponente): Top original=49 vs migrado \u0027obj_4c_Op_compagru\u0027 Top=2 (diff=47px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027op_compagru\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgComponente): Left original=183 vs migrado \u0027obj_4c_Op_compagru\u0027 Left=3 (diff=180px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Opc_fix\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgComponente): Top original=119 vs migrado \u0027obj_4c_Opc_fix\u0027 Top=2 (diff=117px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Opc_fix\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgComponente): Left original=626 vs migrado \u0027obj_4c_Opc_fix\u0027 Left=3 (diff=623px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027ObjChkQP\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgComponente): Top original=306 vs migrado \u0027obj_4c_ObjChkQP\u0027 Top=2 (diff=304px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027ObjChkQP\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgComponente): Left original=182 vs migrado \u0027obj_4c_ObjChkQP\u0027 Left=3 (diff=179px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Fwoption1\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgComponente): Top original=215 vs migrado \u0027obj_4c_Fwoption1\u0027 Top=2 (diff=213px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Fwoption1\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgComponente): Left original=626 vs migrado \u0027obj_4c_Fwoption1\u0027 Left=3 (diff=623px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027optBxPedFins\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgComponente): Top original=142 vs migrado \u0027obj_4c_OptBxPedFins\u0027 Top=2 (diff=140px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027optBxPedFins\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgComponente): Left original=182 vs migrado \u0027obj_4c_OptBxPedFins\u0027 Left=3 (diff=179px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027opt_quebraimp\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgComponente): Top original=412 vs migrado \u0027obj_4c_Opt_quebraimp\u0027 Top=2 (diff=410px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027opt_quebraimp\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgComponente): Left original=182 vs migrado \u0027obj_4c_Opt_quebraimp\u0027 Left=3 (diff=179px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027opt_cravacera\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgComponente): Top original=250 vs migrado \u0027obj_4c_Opt_cravacera\u0027 Top=2 (diff=248px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027opt_cravacera\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgComponente): Left original=182 vs migrado \u0027obj_4c_Opt_cravacera\u0027 Left=3 (diff=179px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027opt_codlib\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgComponente): Top original=229 vs migrado \u0027obj_4c_Opt_codlib\u0027 Top=2 (diff=227px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027opt_codlib\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgComponente): Left original=182 vs migrado \u0027obj_4c_Opt_codlib\u0027 Left=3 (diff=179px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Fwoption2\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgComponente): Top original=210 vs migrado \u0027obj_4c_Fwoption2\u0027 Top=2 (diff=208px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Fwoption2\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgComponente): Left original=181 vs migrado \u0027obj_4c_Fwoption2\u0027 Left=3 (diff=178px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Optiongroup1\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgDocumento): Top original=64 vs migrado \u0027obj_4c_Optiongroup1\u0027 Top=2 (diff=62px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Optiongroup1\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgDocumento): Left original=176 vs migrado \u0027obj_4c_Optiongroup1\u0027 Left=3 (diff=173px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Optiongroup2\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgDocumento): Top original=90 vs migrado \u0027obj_4c_Optiongroup2\u0027 Top=2 (diff=88px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Optiongroup2\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgDocumento): Left original=176 vs migrado \u0027obj_4c_Optiongroup2\u0027 Left=3 (diff=173px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Optiongroup3\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgDocumento): Top original=116 vs migrado \u0027obj_4c_Optiongroup3\u0027 Top=2 (diff=114px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Optiongroup3\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgDocumento): Left original=176 vs migrado \u0027obj_4c_Optiongroup3\u0027 Left=3 (diff=173px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Fwoption4\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgDiversos): Top original=220 vs migrado \u0027obj_4c_Fwoption4\u0027 Top=2 (diff=218px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Fwoption4\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgDiversos): Left original=180 vs migrado \u0027obj_4c_Fwoption4\u0027 Left=3 (diff=177px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Fwoption3\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgDiversos): Top original=196 vs migrado \u0027obj_4c_Fwoption3\u0027 Top=2 (diff=194px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Fwoption3\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgDiversos): Left original=180 vs migrado \u0027obj_4c_Fwoption3\u0027 Left=3 (diff=177px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027fwoption2\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgDiversos): Top original=92 vs migrado \u0027obj_4c_Fwoption2\u0027 Top=2 (diff=90px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027fwoption2\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgDiversos): Left original=181 vs migrado \u0027obj_4c_Fwoption2\u0027 Left=3 (diff=178px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027fwoption1\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgDiversos): Top original=71 vs migrado \u0027obj_4c_Fwoption1\u0027 Top=2 (diff=69px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027fwoption1\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgDiversos): Left original=181 vs migrado \u0027obj_4c_Fwoption1\u0027 Left=3 (diff=178px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Fwoption5\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgDiversos): Top original=338 vs migrado \u0027obj_4c_Fwoption5\u0027 Top=2 (diff=336px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Fwoption5\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgDiversos): Left original=184 vs migrado \u0027obj_4c_Fwoption5\u0027 Left=3 (diff=181px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Optiongroup1\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgDiversos): Top original=80 vs migrado \u0027obj_4c_Optiongroup1\u0027 Top=2 (diff=78px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Optiongroup1\u0027 (parent: SIGCDMPD.Pagina.Dados.PagDados.PgDiversos): Left original=818 vs migrado \u0027obj_4c_Optiongroup1\u0027 Left=3 (diff=815px, tolerancia=30px)",
+                                          "tentativas":  5,
+                                          "problemasRestantes":  130
+                                      },
+                   "05f_validarSQLSchema":  {
+                                                "inicio":  "2026-08-19T06:42:51",
+                                                "tentativas":  1,
+                                                "erro":  null,
+                                                "fim":  "2026-08-19T06:45:35",
+                                                "status":  "FIXED",
+                                                "retries":  1,
+                                                "boFile":  "C:\\4c\\projeto\\app\\classes\\MPDBO.prg",
+                                                "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormMPD.prg"
+                                            },
+                   "06c_validarLayout":  {
+                                             "inicio":  "2026-08-19T06:52:54",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-08-19T06:52:57",
+                                             "thresholdPx":  5,
+                                             "unmatched":  9,
+                                             "errors":  9,
+                                             "matched":  240,
+                                             "warnings":  44,
+                                             "reportFile":  "C:\\4c\\tasks\\task465\\layout_vs_prg_report.json"
+                                         }
+               },
+    "metricas":  {
+                     "tempoTotalSegundos":  0,
+                     "tempoExtracao":  0,
+                     "tempoAnalise":  0,
+                     "tempoEsqueletos":  0,
+                     "tempoMigracao":  0,
+                     "tempoCorrecao":  0,
+                     "tempoCompilacao":  0,
+                     "tempoTesteAuto":  0,
+                     "tempoValidacao":  0,
+                     "linhasCodigoOriginal":  0,
+                     "linhasCodigoGerado":  0,
+                     "correcoesAutomaticas":  0,
+                     "testesAutomaticos":  0
+                 }
+}

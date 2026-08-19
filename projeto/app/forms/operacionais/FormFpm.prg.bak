@@ -55,7 +55,7 @@ DEFINE CLASS FormFpm AS FormBase
     BorderStyle  = 2
     ClipControls = .F.
     DataSession  = 2
-    Caption      = "Valor Minimo/Maximo Cond.Pagto"
+    Caption      = "Valor Minimo por Condicao de Pagamento "
     FontName     = "Tahoma"
     FontSize     = 8
 
@@ -69,7 +69,7 @@ DEFINE CLASS FormFpm AS FormBase
             THIS.this_oParentForm = par_oParentForm
             THIS.this_cFpags      = IIF(VARTYPE(par_cFpags) = "C", ALLTRIM(par_cFpags), "")
 
-            THIS.Caption = "Valor M" + CHR(237) + "nimo/M" + CHR(225) + "ximo Cond.Pagto " + ;
+            THIS.Caption = "Valor M" + CHR(237) + "nimo por Condi" + CHR(231) + CHR(227) + "o de Pagamento " + ;
                            ALLTRIM(THIS.this_cFpags)
 
             THIS.this_oBusinessObject = CREATEOBJECT("FpmBO")

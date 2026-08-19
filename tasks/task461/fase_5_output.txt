@@ -1,0 +1,29 @@
+﻿All 11 new methods are in place. FASE 6/8 is complete.
+
+**Summary of what was added in Phase 6:**
+
+**ConfigurarPaginaDados() expanded with:**
+- `grd_4c_GradeC` ÔÇö 7-column grid for compra mode (top=213, left=8, 982├ù293)
+- `grd_4c_Grade` ÔÇö 9-column grid for venda mode (top=213, left=8, 982├ù293)
+- 5 bottom action buttons: `cmd_4c_INSERE/DELETE/COPIA/Seleciona/CmdVencimento` (top=528)
+- `cnt_4c_Vencimentos` ÔÇö floating date panel (Visible=.F.)
+- 8 hidden optional controls: 4 OptionGroups, `lbl_4c_Say9`, `txt_4c_Tabd/Juros`, `cmd_4c_SelecionaC`
+- `cnt_4c_Compra` ÔÇö compra-mode container (Visible=.F.)
+- 10 new BINDEVENTs wiring all controls to handlers
+
+**New methods:**
+- `CarregarItens(par_cLprecos)` ÔÇö loads SigCdLpi + indexes cpros tag
+- `VincularGrade()` ÔÇö sets RecordSource/ControlSources/Headers based on CompVenda mode
+- `BtnINSEREClick()` ÔÇö inserts blank row into cursor_4c_Itens
+- `BtnDELETEClick()` ÔÇö marks row deleted + SET FILTER TO hide it
+- `BtnCOPIAClick()` ÔÇö duplicates current row
+- `BtnSelecionaClick()` ÔÇö opens product browser (Pattern A canonical) to add item
+- `BtnCmdVencimentoClick()` ÔÇö toggles cnt_4c_Vencimentos panel
+- `BtnSalvaVencimentoClick()` ÔÇö applies date to all vencis in cursor
+- `BtnFechaVencimentoClick()` ÔÇö closes vencimento panel
+- `BtnSelecionaCClick()` ÔÇö delegates to BtnSelecionaClick (compra mode)
+- `GradeAfterRowColChange(par_nColIndex)` ÔÇö cpros lookup on column 1 exit (no RETURN inside TRY)
+
+**Updated methods:**
+- `BtnSalvarClick()` ÔÇö now calls `SalvarItens()` after header save
+- `AlternarPagina()` ÔÇö ELSE branch for Page 2: LimparCampos + BOParaForm + CarregarItens + HabilitarCampos

@@ -1,0 +1,11 @@
+﻿All three changes are in place. The FormMoe migration is now fully complete across all 8 phases:
+
+**FASE 7 ÔÇö Integra├º├úo com menu.prg conclu├¡da:**
+
+1. **DEFINE BAR 124** adicionado em `popCadastros` (linha 278) com prompt "Moedas" e message "Cadastro de Moedas (SigCdMoe)"
+2. **ON SELECTION BAR 124** vinculado a `AbrirFormMoe` (linha 389)  
+3. **PROCEDURE AbrirFormMoe()** adicionada ao final do arquivo (linha 8501) seguindo o padr├úo can├┤nico: `CREATEOBJECT("FormMoe")` ÔåÆ `VARTYPE` check ÔåÆ `Show()` sem par├ómetro, sem `Release()`
+
+**Nota sobre config.prg:** N├úo requer altera├º├úo manual ÔÇö o `ADIR()` em `ConfigurarAmbiente()` descobre automaticamente `MoeBO.prg` (em `app/classes/`) e `FormMoe.prg` (em `app/forms/cadastros/`).
+
+A migra├º├úo completa do SigCdMoe est├í finalizada: MoeBO.prg (fases 1-2) + FormMoe.prg (fases 3-6) + integra├º├úo no menu (fase 7). O formul├írio j├í est├í acess├¡vel via **Cadastros ÔåÆ Moedas**.

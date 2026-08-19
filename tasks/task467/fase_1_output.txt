@@ -1,0 +1,18 @@
+﻿**Fase 1 conclu├¡da.** `C:\4c\projeto\app\classes\mppBO.prg` criado com:
+
+**Propriedades declaradas:**
+- `this_cCidChaves` ÔÇö PK UUID gerado por `fUniqueIds()`
+- `this_cCodigos` ÔÇö char(20) campo `Codigos`
+- `this_cDescrs` ÔÇö char(40) campo `Descrs`
+- `this_nTipos` ÔÇö numeric(1) campo `nTipos` (0/1/2 por tipo)
+
+**Init():** configura `this_cTabela = "SigPrCpP"` e `this_cCampoChave = "CidChaves"`
+
+**M├®todos inclu├¡dos (fase completa, n├úo apenas stubs):**
+- `Buscar(par_cFiltro, par_nTipos)` ÔÇö SELECT com filtro de tipo obrigat├│rio
+- `CarregarPorCodigo(par_cCidChaves)` ÔÇö busca pela PK UUID
+- `CarregarPorCodigosETipo(par_cCodigos, par_nTipos)` ÔÇö busca pela chave natural (para editar/visualizar do grid)
+- `VerificarCodigoDuplicado(...)` ÔÇö l├│gica de unicidade do legado (INSERT bloqueado se j├í existe)
+- `VerificarUsoEmCaracteristicasContas(...)` ÔÇö guarda exclus├úo de nTipos=1 via `SigClCrc.Compls`
+- `VerificarUsoEmFichasTecnicas(...)` ÔÇö guarda exclus├úo via `SigCdFtc.CTits`
+- `CarregarDoCursor`, `Inserir`, `Atualizar`, `ExecutarExclusao` ÔÇö todos com TRY/CATCH, sem RETURN dentro de TRY

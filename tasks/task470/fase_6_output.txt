@@ -1,0 +1,14 @@
+﻿Fase 6 conclu├¡da. As altera├º├Áes aplicadas ao `FormMtt.prg`:
+
+1. **`ConfigurarPaginaDados()`** ÔÇö adicionados os 3 controles restantes:
+   - `txt_4c_Codigos` (getCodigos: Top=172, Left=383, Width=30, MaxLength=10)
+   - `lbl_4c_Label2` ("Descri├º├úo :": Top=201, Left=324, Width=55)
+   - `txt_4c_Descs` (getDescrs: Top=198, Left=383, Width=150, MaxLength=60)
+
+2. **`BtnBuscarClick()`** ÔÇö refatorado para navegar para Page2 em modo BUSCAR com foco em `txt_4c_Codigos`, replicando o comportamento do `mProcurar`/`LocateCursor` do legado.
+
+3. **`BtnSalvarClick()`** ÔÇö adicionado bloco BUSCAR no topo: monta filtro SQL com `tipos`, `codigos LIKE`, `descs LIKE`, chama `Buscar(filtro)`, reposiciona para Page1 e reconfigura o grid sem chamar `CarregarLista()` (que faria novo `Buscar("")` apagando o filtro).
+
+4. **`AjustarBotoesPorModo()`** ÔÇö adicionado `"BUSCAR"` ao `INLIST` para habilitar o bot├úo Confirmar em modo busca.
+
+5. **`HabilitarCampos()`** ÔÇö adicionado `"BUSCAR"` ao `INLIST` para que `txt_4c_Codigos` fique edit├ível tamb├®m em modo busca.

@@ -1,0 +1,19 @@
+﻿Todas as corre├º├Áes foram aplicadas. Resumo do que foi feito:
+
+**5 corre├º├Áes funcionais aplicadas em `FormLpr.prg`:**
+
+1. **[CONTAINER-VISIVEL]** `TornarControlesVisiveis`: adicionado `CNT_4C_CABECALHO` e `CNT_4C_BOTOESACAO` ao INLIST de containers ocultos ÔÇö esses containers n├úo ser├úo for├ºados a Visible=.T. pelo m├®todo recursivo.
+
+2. **[BUSCA-CURSOR]** `BtnSelecionaClick`: adicionado `loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaProd"` antes do `Mostrar()` ÔÇö necess├írio para que o FormBuscaAuxiliar (DataSession=1) localize o cursor correto ao retornar para o form pai (DataSession=2).
+
+3. **[OPTIONGROUP-LEFT]** 4 OptionGroups Sim/Nao (`opt_4c_Opt_Comissao`, `opt_4c_Opt_ApliTabD`, `opt_4c_Opt_Vencimento`, `opt_4c_Opt_Formula`): adicionado `.Left=0/.Top=3/.AutoSize=.T./.ForeColor` em Buttons(1) e `.Left=44/.Top=3/.AutoSize=.T./.ForeColor` em Buttons(2) ÔÇö sem isso, ambos ficam sobrepostos em Left=0.
+
+4. **[METODO-INEXISTENTE]** `ExecutarReportForm`: implementado como `PROTECTED PROCEDURE` no FormLpr com o padr├úo can├┤nico (FILE check, guard cursor vazio, isolamento de locale SET POINT/SEPARATOR/REPORTBEHAVIOR, restaura├º├úo de menu p├│s-preview).
+
+5. **[NULL-CURSOR]** `CREATE CURSOR cursor_4c_Itens`: adicionado `SET NULL ON` antes e `SET NULL OFF` depois nas 2 ocorr├¬ncias (em `BtnINSEREClick` e `BtnSelecionaClick`) ÔÇö SQL Server retorna NULLs; sem SET NULL ON, APPEND FROM falha.
+
+**Itens descartados como falsos positivos do validador:**
+- BINDEVENT-PARAMS: todos os handlers j├í tinham os par├ómetros corretos no c├│digo
+- GRID-WITH: `loc_oGrid.ColumnCount` j├í estava fora do WITH (h├í inclusive coment├írio explicando)
+- GRID-HEADER: validator comparou os headers do grid de itens com os do grid de lista (grids diferentes)
+- LAYOUT-POSITION: `cnt_4c_ImpLista.Left=211` no c├│digo bate com o original=211; `lbl_4c_Say12` foi matched incorretamente com `Say1` de coordenadas de outra posi├º├úo no legado

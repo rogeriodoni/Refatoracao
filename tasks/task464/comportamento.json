@@ -1,0 +1,252 @@
+{
+  "resumo": {
+    "totalMetodos": 14,
+    "metodosComSQL": 4,
+    "metodosComValidacao": 7,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fChecaAcesso", "fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDMOE",
+      "evento": "Procedure",
+      "linhas": 13,
+      "codigoOriginal": "Local lcBusca\n\nIf !Empty(ThisForm.Pagina.Dados.Get_Moeda.Value)\n\tThisForm.poDataMgr.LocateCursor('CrSigCdMoe','cmoes',ThisForm.Pagina.Dados.Get_Moeda.Value)\nEndIf\n\nIf !Empty(ThisForm.Pagina.Dados.Get_Descricao.Value)\n\tThisForm.poDataMgr.LocateCursor('CrSigCdMoe','dmoes',ThisForm.Pagina.Dados.Get_Descricao.Value)\nEndIf\n\nIf !Empty(ThisForm.Pagina.Dados.Get_MoeEq.Value)\n\tThisForm.poDataMgr.LocateCursor('CrSigCdMoe','moeqs',ThisForm.Pagina.Dados.Get_MoeEq.Value)\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "LocateCursor",
+        "controlesReferenciados": "Get_Moeda,Get_Descricao,Get_MoeEq",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMOE",
+      "evento": "Init",
+      "linhas": 29,
+      "codigoOriginal": "LParameters _acesso\n\nPrivate lcMoe\n\nlcMoe      = Space(3)\nlcQueryCot = [Select * From SigCdCot Where cmoes = ?lcMoe ]\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector',.Name)\n\tWith .poDataMgr\n\t\t.AddCursor('SigCdMoe','cmoes','CrSigCdMoe','',ThisForm.Pagina.Lista.Grade)\n\t\t.pfSqlTabela(1).pColuna('cmoes','','','Moeda',120,.T.)\n\t\t.pfSqlTabela(1).pColuna('dmoes','','','Descrição',330,.T.)\n\t\t.pfSqlTabela(1).pColuna('nordrels','','','Ordem de Impressão',129,.T.)\n\t\t.AddCursor('SigCdCot','cidchave... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso",
+        "metodosFormChamados": "Requery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMOE",
+      "evento": "Click",
+      "linhas": 17,
+      "codigoOriginal": "LParameters opcao\n\nIf !DoDefault( Opcao )\n\tThisForm.mAtivaPagina1\n\tReturn\nEndIf\n\nSelect CrSigCdMoe\nDo Case\n\tCase InList(ThisForm.pcEscolha,'INSERIR','PROCURAR')\n\t\tThisForm.Pagina.Dados.Get_Moeda.SetFocus\n\tCase InList(ThisForm.pcEscolha,'ALTERAR')\n\t\tThisForm.Pagina.Dados.Get_Descricao.SetFocus\n\tCase InList(ThisForm.pcEscolha,'EXCLUIR','CONSULTAR')\n\t\tThisForm.Pagina.Dados.Grupo_Salva.Salva.SetFocus\nEndCase\nThisForm.Pagina.Dados.Refresh",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Moeda,Get_Descricao",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMOE",
+      "evento": "Click",
+      "linhas": 37,
+      "codigoOriginal": "Select CrSigCdMoe\nIf ThisForm.pcEscolha = 'INSERIR'\n\tIf Empty(CrSigCdMoe.cmoes )\n\t\tMessagebox('Moeda Inválida !!!',48,'')\n\t\tThisForm.Pagina.Dados.Get_Moeda.SetFocus\n\t\tReturn(.F.)\n\tEndIf\n\tIf ThisForm.poDataMgr.CursorQuery('SigCdMoe',,'cmoes',CrSigCdMoe.cmoes)\n\t\tMessagebox('Moeda já cadastrada !!!',48,'')\n\t\tThisForm.Pagina.Dados.Get_Moeda.SetFocus\n\t\tReturn(.F.)\n\tEndIf\n\tIf !BetWeen(This.Parent.Parent.SpnNordRels.Value,0,5)\n\t\tMessagebox('Ordem de Impressão nos Relatórios Inválido !!!',48,'')\n\t\tThis.... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery,Requery",
+        "controlesReferenciados": "Get_Moeda",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMOE",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "=DoDefault()\nIf ThisForm.plCancelar\n\tThisForm.mAtivapagina1\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMOE.Pagina.Lista.COTACAO",
+      "evento": "Click",
+      "linhas": 15,
+      "codigoOriginal": "If CrSigCdMoe.cotas\n\tlcMoe = CrSigCdMoe.cmoes\n\tZap In CrSigCdCot\n\tThisForm.poDataMgr.Requery('CrSigCdCot')\n\tSelect CrSigCdCot\n\tIndex On cmoes + Dtos(datas) + horas Tag Cotacaos\n\tIndex On cidchaves Tag CidChaves\n\tSet Order To Cotacaos\n\tGo Bottom\n\tDo Form SIGPRCOT With ThisForm,ThisForm.DataSessionId\nElse\n\tMessageBox('Moeda ' + AllTrim(CrSigCdMoe.cmoes) + ;\n\t           ' não permite alteração de cotação',0+48,'Cotação')\nEndIf\nThis.Parent.Grade.Column1.SetFocus",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Requery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMOE.Pagina.Dados.Get_Qtde",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(!Empty(This.Parent.Get_MoeEq.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_MoeEq",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMOE.Pagina.Dados.Get_moeEq",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(This.Parent.fwcheckbox_Cotacao.Value = .F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMOE.Pagina.Dados.Get_moeEq",
+      "evento": "Valid",
+      "linhas": 15,
+      "codigoOriginal": "If !Empty(This.Value)\n\tm.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigCdMoe','CrMoedas','cmoes',This.Value,'Moedas',.T.)\n\tIf !(m.loLista.plAchouRegistro)\n\t\tm.loLista.mAddColuna('cmoes','XXXXXX','Código')\n\t\tm.loLista.mAddColuna('dmoes','','Descrição')\n\t\tm.loLista.Show()\n\tEndIf\n\tIf LastKey() <> 27 And Used('CrMoedas')\n\t\tThis.Value = Evaluate('CrMoedas.cmoes')\n\tElse\n\t\tThis.Value = ''\n\tEndIf\n\tThis.Refresh\nEndIf\nReturn(.T.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMOE.Pagina.Dados.GET_FPG",
+      "evento": "Valid",
+      "linhas": 11,
+      "codigoOriginal": "If !Empty(This.Value)\n\tm.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigOpFp','CrFpag','Fpags',This.Value,'Condicoes de Pagamento',.T.)\n\tIf !(m.loLista.plAchouRegistro)\n\t\tm.loLista.mAddColuna('Fpags',' ','Código',.t.)\n\t\tm.loLista.mAddColuna('Descrs','','Descrição',.t.)\n\t\tm.loLista.Show()\n\tEndIf\n\tThis.Value = Evaluate('CrFpag.Fpags')\n\tThis.Refresh\nEndIf\nReturn(.T.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMOE.Pagina.Dados.Get_moeda",
+      "evento": "When",
+      "linhas": 7,
+      "codigoOriginal": "Local lRet\n\nlRet = DoDefault()\nIf ThisForm.pcEscolha = 'ALTERAR'\n\tlRet = .F.\nEndIf\nReturn(lRet)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMOE.Pagina.Dados.GetValAdics",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(CrSigCdMoe.disfpres = 'A')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMOE.Pagina.Dados.GetValAdics",
+      "evento": "Valid",
+      "linhas": 4,
+      "codigoOriginal": "If This.Value < 0\n\tMessageBox('Valor Inválido !!!',0+48,'')\n\tReturn 0\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMOE.Pagina.Dados.spnNordrels",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDMOE.Init",
+      "queryOriginal": "lcQueryCot = [Select * From SigCdCot Where cmoes = ?lcMoe ]",
+      "tabelas": "SigCdCot",
+      "colunas": "cmoes",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdCot"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

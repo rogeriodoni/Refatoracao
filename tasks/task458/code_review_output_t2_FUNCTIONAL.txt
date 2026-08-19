@@ -1,0 +1,6 @@
+﻿Duas corre├º├Áes aplicadas em `FormLGR.prg`:
+
+- **ValidarSerieFab** (linha ~1258): adicionado `loc_oBusca.this_cCursorDestino = "cursor_4c_Impressoras"` antes de `DefinirCursor`/`Mostrar`
+- **ValidarModelo** (linha ~1334): adicionado `loc_oBusca.this_cCursorDestino = "cursor_4c_Modelos"` antes de `DefinirCursor`/`Mostrar`
+
+Em ambos os casos o cursor j├í existe (criado pelo BO antes do `CREATEOBJECT`), e o `this_cCursorDestino` ├® obrigat├│rio no Modo 2 para que o `FormBuscaAuxiliar` saiba qual cursor exibir.

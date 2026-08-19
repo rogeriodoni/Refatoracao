@@ -1,0 +1,7 @@
+﻿**Causa raiz:** `FormMda.prg:1195` ÔÇö CheckBox adicionado com nome `"check12"` mas referenciado como `"Check1"` em:
+- Linha 1206: `CurrentControl = "Check1"`  
+- Linhas 1226-1229: `BINDEVENT(... .Column1.Check1, ...)`
+
+O VFP9 disparava "Property CHECK1 is not found" dentro do TRY/CATCH de `InicializarForm()`, que retornava `.F.`, propagando at├® Init() retornar `.F.`, fazendo CREATEOBJECT retornar n├úo-objeto.
+
+**Corre├º├úo:** Renomear `"check12"` ÔåÆ `"Check1"` para ficar consistente com todas as refer├¬ncias.

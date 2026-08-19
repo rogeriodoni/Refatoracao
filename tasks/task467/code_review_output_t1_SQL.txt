@@ -1,0 +1,14 @@
+﻿O legado confirma: `CidChaves` ├® a PK real da tabela `SigPrCpP`.
+
+**Evid├¬ncia no c├│digo original** (task467/sigcdmpp_form_codigo_fonte.txt):
+- Linha 243: `.AddCursor('SigPrCpP', 'cidchaves', 'crSigPrCpP', ...)` ÔÇö o framework usa `cidchaves` explicitamente como chave do cursor
+- Linha 332: `Replace CidChaves With fUniqueIds() In crSigPrCpP` ÔÇö o legado pr├│prio preenche a coluna CidChaves com UUID
+
+O alerta `[SQL-FILTRO-INVENTADO]` ├® um **falso positivo**. O checker listou como "WHERE original usa: NTIPOS, CODIGOS, COMPLS, CTITS" porque essas s├úo as colunas usadas em WHEREs de *filtragem/busca*, mas `CidChaves` ├® usada como PK para *carregamento por registro espec├¡fico* ÔÇö padr├úo do novo sistema que o legado implementa via `AddCursor` com o campo chave.
+
+O c├│digo migrado est├í correto:
+- `cursor_4c_Dados.CidChaves` est├í no `SELECT` do `mppBO.Buscar()`
+- `WHERE CidChaves = EscaparSQL(...)` em `CarregarPorCodigo` ├® o lookup por PK, equivalente ao `.AddCursor('SigPrCpP', 'cidchaves', ...)` do legado
+- Nenhuma condi├º├úo inventada ÔÇö zero altera├º├Áes necess├írias
+
+**Nenhum arquivo precisa ser modificado.** O pass SQL n├úo encontrou problemas reais.

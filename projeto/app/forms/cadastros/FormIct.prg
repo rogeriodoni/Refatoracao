@@ -369,7 +369,7 @@ DEFINE CLASS FormIct AS FormBase
                 .PicturePosition = 13
                 .Top             = 5
                 .Left            = 917
-                .Width           = 90
+                .Width           = 75
                 .Height          = 75
                 .FontName        = "Tahoma"
                 .FontBold        = .T.

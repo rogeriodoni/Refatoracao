@@ -1,0 +1,23 @@
+﻿O arquivo est├í correto. Fase 6 conclu├¡da com sucesso.
+
+**O que foi adicionado:**
+
+1. **Campo Descri├º├úo** em `ConfigurarPaginaDados`:
+   - `lbl_4c_Label2` ÔÇö "Descri├º├úo :" (Top=240, Left=326, Tahoma 8, alinhado ├á direita)
+   - `txt_4c_Descrs` ÔÇö TextBox (Top=236, Left=383, Width=290, MaxLength=40)
+
+2. **M├®todos auxiliares** (PROTECTED):
+   - `FormParaBO` / `BOParaForm` ÔÇö binding bidirecional dos 2 campos
+   - `LimparCampos` ÔÇö limpa Codigos e Descrs
+   - `HabilitarCampos` ÔÇö C├│digo readonly em ALTERAR/VISUALIZAR/EXCLUIR; Descrs readonly em VISUALIZAR/EXCLUIR/BUSCAR
+   - `AjustarBotoesPorModo` ÔÇö Salvar desabilitado s├│ em VISUALIZAR
+
+3. **Handlers de bot├úo** (todos PUBLIC para BINDEVENT):
+   - `BtnIncluirClick` ÔÇö NovoRegistro ÔåÆ LimparCampos ÔåÆ modo INCLUIR ÔåÆ Page2, foco em Codigos
+   - `BtnVisualizarClick` ÔÇö CarregarPorCodigo ÔåÆ modo VISUALIZAR ÔåÆ Page2, foco em Cancelar
+   - `BtnAlterarClick` ÔÇö CarregarPorCodigo ÔåÆ EditarRegistro ÔåÆ modo ALTERAR ÔåÆ Page2, foco em Descrs
+   - `BtnExcluirClick` ÔÇö CarregarPorCodigo ÔåÆ modo EXCLUIR ÔåÆ Page2, foco em Salvar
+   - `BtnBuscarClick` ÔÇö modo BUSCAR ÔåÆ Page2 (apenas Codigo edit├ível, fiel ao `msv_procurar` original)
+   - `BtnEncerrarClick` ÔÇö Release
+   - `BtnSalvarClick` ÔÇö trata todos os modos: BUSCAR (LOCATE no cursor), INCLUIR/ALTERAR (valida + Salvar()), EXCLUIR (Excluir()), sem mensagem de sucesso (fiel ao legado)
+   - `BtnCancelarClick` ÔÇö volta para lista

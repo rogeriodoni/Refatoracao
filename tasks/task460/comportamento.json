@@ -1,0 +1,166 @@
+{
+  "resumo": {
+    "totalMetodos": 9,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 4,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "For Cods = Alltrim", "fwBuscaExt", "File"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDLOC",
+      "evento": "Init",
+      "linhas": 18,
+      "codigoOriginal": "LParameters lcAcesso\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', .Name)\n\t\n\tWith .poDataMgr\n\t\t.AddCursor('SigCdLoc', 'Cods', 'crSigCdLoc', '', ThisForm.Pagina.Lista.Grade)\n\t\t.pfSqlTabela(1).pColuna('Cods',     '', '', 'Código',  080, .t.)\n\t\t.pfSqlTabela(1).pColuna('cIdConns', '', '', 'Conexão', 150, .f.)\n\t\t.pfSqlTabela(1).pColuna('Drives',   '', '', 'Caminho Para Tabelas', 400, .f.)\n\tEndWith\nEndWith\n\n=DoDefault()\n\nThisForm.Pagina.Lista.Grade.Column1.SetFocus\n* Fim ******************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDLOC",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "=fConfigGeral()\n\n=DoDefault()\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDLOC",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "Select crSigCdLoc\nIf Not Empty(ThisForm.Pagina.Dados.getCods.Value)\n\tLocate For Cods = Alltrim(ThisForm.Pagina.Dados.getCods.Value)\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "For Cods = Alltrim",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDLOC",
+      "evento": "Click",
+      "linhas": 29,
+      "codigoOriginal": "Lparameters Opcao\n\nIf (Type('Opcao') = 'N')\n\tThis.Value = Opcao\nEndIf\n\nSelect crSigCdLoc\n\nIf Not DoDefault(Opcao)\n\tThisForm.mAtivapagina1\n\tReturn 0\nEndIf\n\nDo Case\n\tCase Inlist(ThisForm.pcEscolha, 'PROCURAR', 'INSERIR')\n\t\tThisForm.Pagina.Dados.getCods.Setfocus\t\n\n\tCase (ThisForm.pcEscolha = 'ALTERAR')\n\t\tThisForm.Pagina.Dados.getConexao.Setfocus\t\n\n\tCase Inlist(ThisForm.pcEscolha, 'CONSULTAR', 'EXCLUIR')\n\t\tThisForm.Pagina.Dados.Grupo_Salva.Salva.Setfocus\nEndCase\n\nSelect crSigCdLoc\n\nThisForm.Pagina.D... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDLOC",
+      "evento": "Click",
+      "linhas": 19,
+      "codigoOriginal": "If (ThisForm.pcEscolha = 'INSERIR')\n   If Empty(ThisForm.Pagina.Dados.getCods.Value)\n\t  =MessageBox('Obrigatório Informar o Código!!!', 48, '')\n\t  ThisForm.Pagina.Dados.getCods.SetFocus\n\t  Return 0\n   EndIf\n\n   If Empty(ThisForm.Pagina.Dados.getConexao.Value)\n\t  =MessageBox('Obrigatório Informar a Conexão!!!', 48, '')\n\t  ThisForm.Pagina.Dados.getConexao.SetFocus\n\t  Return\n   Endif\nEndif\n\n=DoDefault()\n\nThisForm.mAtivapagina1\n* Fim ******************************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDLOC",
+      "evento": "Click",
+      "linhas": 7,
+      "codigoOriginal": "=DoDefault()\n\nIf ThisForm.plCancelar\n\tThisForm.mAtivapagina1\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDLOC.Pagina.Dados.getCods",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist(ThisForm.pcEscolha, 'INSERIR', 'PROCURAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDLOC.Pagina.Dados.getConexao",
+      "evento": "Valid",
+      "linhas": 19,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigConn', ;\n\t\t\t\t\t\t   'crListaRemota', 'cIdConns', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('cIdConns', '', 'Conexão')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value = crListaRemota.cIdConns\n\tUse In crListaRemota\nElse\n\tThis.Value = ''\nEndIf\nThis.Refresh\n* Fim *********************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDLOC.Pagina.Dados.getDbfs",
+      "evento": "Valid",
+      "linhas": 18,
+      "codigoOriginal": "Local lcDestino\n\nIf Not Empty(This.Value) \n\tIf Right(Alltrim(This.Value), 1) <> '\\'\n\t\tThis.Value = Alltrim(This.Value) + '\\'\n\tEndIf\n\n\tlcDestino = Alltrim(This.Value) + 'SigCdLoc.DBF'\n\t\n\tIf Not File(lcDestino)\n\t\t=Messagebox('O Diretório de Destino \"' + Alltrim(This.Value) + '\" Não É Um Diretório Válido!!!' + Chr(13) + ;\n\t\t\t\t\t'O Mesmo Pode Não Existir, Não Estar Acessível ou Não Conter o Arquivo \"SigCdLoc.DBF\"!!!', 0+48, ;\n\t\t\t\t\t'Diretório de Destino Inválido ou Inexistente')\n\t\tReturn 0\n\tEndIf \nEnd... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "File",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

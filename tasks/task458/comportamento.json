@@ -1,0 +1,451 @@
+{
+  "resumo": {
+    "totalMetodos": 26,
+    "metodosComSQL": 5,
+    "metodosComValidacao": 13,
+    "totalQueries": 2,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fwBuscaInt", "fCriptografar", "fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDLGR",
+      "evento": "Procedure",
+      "linhas": 16,
+      "codigoOriginal": "lcDatas = DATE()\n\nLcserie = ThisForm.pagina.lista.GetSerieFab.Value \nLdDtini = StrTran(DTOC(ThisForm.pagina.lista.GetDtini.Value),[/],[])\nLdDtfim = StrTran(DTOC(ThisForm.pagina.lista.GetDtfim.Value),[/],[])\n\nThisform.LockScreen = .T.\n\n=DoDefault()\n\nreplace ALL tdtdata WITH CTOD(LEFT(cDatas,2) + [/] + SUBSTR(cDatas,3,2) + [/] + Right(cDatas,4))\n\nThisform.Pagina.Lista.Grade.Refresh\n\nThisform.LockScreen = .F.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDLGR",
+      "evento": "Init",
+      "linhas": 76,
+      "codigoOriginal": "LParameters lcAcesso\n\nthisform.pagina.lista.getDtIni.Value = DATE()\nthisform.pagina.lista.getDtfim.Value = DATE()\nlcDatas = DATE()\n\nPRIVATE LcSerie , LdDtini , LdDtfim\nLcserie = \"\"\nLdDtini = \"\"\nLdDtfim = \"\"\n\nlcQuery = [select b.cmarcas, a.*, ?lcDatas As tdtData  from SigFiGfd a inner join SigFiMpm b on a.cmodelos = b.cModelos ] + ;\n          [where a.cserifab = ?Lcserie and a.cdatas between ?Lddtini and ?Lddtfim]\n\nWith Thisform\n\t.poDatamgr = CreateObject('fSqlConector',ThisForm.Name)\n\tIf Not .po... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value = DATE",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDLGR",
+      "evento": "Click",
+      "linhas": 53,
+      "codigoOriginal": "LPARAMETERS opcao\n\nIf Type( 'Opcao' ) = 'N'\n\tThis.Value = Opcao\nENDIF\n\nIF EMPTY(ThisForm.Pagina.Lista.getSerieFab.Value) .or. EMPTY(thisform.pagina.Lista.getDtini.value) .or. EMPTY(thisform.pagina.lista.getdtfim.value ) then\n   Messagebox('Impossivel Efetuar Manutenção / Consulta sem escolher Série e Datas' ,16,'')\n   return\nEndif\n\nIF Inlist( This.Value, 3, 4 )\n   IF crSigFiGfd.cIncMans <> [M] then\n      Messagebox('Registro não Incluído manualmente , Não pode ser Alterado' ,16,'')\n      thisfor... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "sqlExecute,Value   = DATE,Value   = CTOD",
+        "controlesReferenciados": "Get_codigo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDLGR",
+      "evento": "Click",
+      "linhas": 83,
+      "codigoOriginal": "IF INLIST(ThisForm.pcEscolha, [INSERIR], [ALTERAR])\n\n   IF THISFORM.PAgina.DAdos.GETcoo.Value = '000000' \n      MESSAGEBOX(\"COO Não Pode Estar em Branco\", 16, '')\n      THISFORM.PAgina.DAdos.GETcoo.SetFocus\n      return \n   Endif   \n\n   IF EMPTY(THISFORM.PAgina.DAdos.GETcnf.Value)\n      MESSAGEBOX(\"Cupon Não Fiscal Não Pode Estar em Branco\", 16, '')\n      THISFORM.PAgina.DAdos.GETcnf.SetFocus \n      return\n   Endif   \n\n   IF EMPTY(THISFORM.PAgina.DAdos.GETrg.Value)\n      MESSAGEBOX(\"Relatório Ge... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "Get_codigo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDLGR",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "=DoDefault()\nIf ThisForm.plCancelar\n\tThisForm.mAtivapagina1\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDLGR.pagina.lista.GetSerieFab",
+      "evento": "Valid",
+      "linhas": 24,
+      "codigoOriginal": "Local lCod, lFan, xObj, xBrow\nIF not IsEmpty(This.value)\n   \tLcquery = [select b.cmarcas,a.cmodelos,a.cimpfabs from SigFiMpf a inner join  SigFiMpm b on a.cmodelos=b.cmodelos]\n   \tthisform.podatamgr.sqlexecute(lcquery,[crtmpimp])\n\n    SELECT crtmpimp \n    replace ALL cimpfabs WITH fCriptografar(cimpfabs)\n\n\tLOCATE FOR cimpfabs = This.Value\n\tIf EOF()\n\t\txBrow = CreateObject('fwBuscaInt','crtmpimp','cimpfabs',This.Value,'IMPRESSORAS',.t.)\n\t\txBrow.mAddColuna('cimpfabs','','Série',.t.)\n\t\txBrow.mAddCol... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt,fCriptografar",
+        "metodosFormChamados": "sqlexecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDLGR.pagina.lista.GetSerieFab",
+      "evento": "LostFocus",
+      "linhas": 5,
+      "codigoOriginal": "IF !EMPTY(this.Value)\n   thisform.mativapagina1()\nENDIF\nTHISFORM.PAgina.LIsta.GETDtini.SetFocus   \n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "mativapagina1",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDLGR.pagina.lista.GetDtini",
+      "evento": "LostFocus",
+      "linhas": 3,
+      "codigoOriginal": "IF !EMPTY(this.Value)\n   thisform.mativapagina1()\nendif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "mativapagina1",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDLGR.pagina.lista.Getdtfim",
+      "evento": "LostFocus",
+      "linhas": 3,
+      "codigoOriginal": "IF !EMPTY(this.Value)\n   thisform.mativapagina1()\nendif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "mativapagina1",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDLGR.pagina.dados.Gettipo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "RETURN(INLIST(THISFORM.PCescolha,\"INSERIR\",\"ALTERAR\")) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDLGR.pagina.dados.Gettipo",
+      "evento": "Valid",
+      "linhas": 20,
+      "codigoOriginal": "Local lCod, lFan, xObj, xBrow\nIF not IsEmpty(This.value)\n\n    SELECT CRTIPOMOV\n\n\tLOCATE FOR codigo = This.Value\n\tIf EOF()\n\t\txBrow = CreateObject('fwBuscaInt','CRTIPOMOV','codigo',This.Value,'TIPO',.t.)\n\t\txBrow.mAddColuna('codigo','','Código',.t.)\n\t\txBrow.mAddColuna('descricao','','Descrição',.f.)\n\t\txBrow.Show\t\t\n\tENDIF\n\n\tIF LASTKEY()<>27\n\t\tThis.value = CRTIPOMOV.codigo\n\t\tThis.refresh\n\tENDIF\n\nENDIF\nRETURN(.T.)",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDLGR.pagina.dados.Getrz",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "RETURN(INLIST(THISFORM.PCescolha,\"INSERIR\",\"ALTERAR\")) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDLGR.pagina.dados.Getrz",
+      "evento": "LostFocus",
+      "linhas": 4,
+      "codigoOriginal": "IF ! EMPTY(This.Value)\n\tThis.Value = Transform(VAL(This.Value), '@L 999999')\n\tThis.Refresh\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDLGR.pagina.dados.Getdcd",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "RETURN(INLIST(THISFORM.PCescolha,\"INSERIR\",\"ALTERAR\")) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDLGR.pagina.dados.Getdcd",
+      "evento": "LostFocus",
+      "linhas": 4,
+      "codigoOriginal": "IF ! EMPTY(This.Value)\n\tThis.Value = Transform(VAL(This.Value), '@L 9999')\n\tThis.Refresh\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDLGR.pagina.dados.Getrg",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "RETURN(INLIST(THISFORM.PCescolha,\"INSERIR\",\"ALTERAR\")) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDLGR.pagina.dados.Getrg",
+      "evento": "LostFocus",
+      "linhas": 4,
+      "codigoOriginal": "IF ! EMPTY(This.Value)\n\tThis.Value = Transform(VAL(This.Value), '@L 999999')\n\tThis.Refresh\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDLGR.pagina.dados.Getcnf",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "RETURN(INLIST(THISFORM.PCescolha,\"INSERIR\",\"ALTERAR\")) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDLGR.pagina.dados.Getcnf",
+      "evento": "LostFocus",
+      "linhas": 4,
+      "codigoOriginal": "IF ! EMPTY(This.Value)\n\tThis.Value = Transform(VAL(This.Value), '@L 999999')\n\tThis.Refresh\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDLGR.pagina.dados.Getcoo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "RETURN(INLIST(THISFORM.PCescolha,\"INSERIR\",\"ALTERAR\")) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDLGR.pagina.dados.Getcoo",
+      "evento": "LostFocus",
+      "linhas": 2,
+      "codigoOriginal": "This.Value = Transform(VAL(This.Value), '@L 999999')\nThis.Refresh",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDLGR.pagina.dados.Gethrmov",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "RETURN(INLIST(THISFORM.PCescolha,\"INSERIR\",\"ALTERAR\")) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDLGR.pagina.dados.GetModelo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "RETURN(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDLGR.pagina.dados.GetModelo",
+      "evento": "Valid",
+      "linhas": 12,
+      "codigoOriginal": "LOCAL xBrox\n\nIf !IsEmpty( This.Value )\n\txBrox = CreateObject('fwBuscaExt',Thisform.poDatamgr.pnIdconn,'SigFiMpM','crSigFiMpM','cModelos',This.Value,'Modelos',.t.,'cModelos')\n\n\tIf  Not xBrox.plAchouRegistro\n\t\txBrox.mAddColuna('cModelos', '', 'Modelo', .t.)\n\t\txBrox.mAddColuna('cMarcas', '', 'Marca', .t.)\n\t\txBrox.Show()\n\t\tThis.Value = Iif( LastKey() # 27, Evaluate('crSigFiMpM.cModelos'), '' )\n\tEndIf \nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDLGR.pagina.dados.Getdtmov",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "RETURN(INLIST(THISFORM.PCescolha,\"INSERIR\",\"ALTERAR\")) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDLGR.pagina.dados.Get_codigo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "RETURN(.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDLGR.Init",
+      "queryOriginal": "lcQuery = [select b.cmarcas, a.*, ?lcDatas As tdtData  from SigFiGfd a inner join SigFiMpm b on a.cmodelos = b.cModelos ] + ; [where a.cserifab = ?Lcserie and a.cdatas between ?Lddtini and ?Lddtfim]",
+      "tabelas": "SigFiGfd,SigFiMpm",
+      "colunas": "cmarcas,?lcDatas",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDLGR.pagina.lista.GetSerieFab.Valid",
+      "queryOriginal": "\tLcquery = [select b.cmarcas,a.cmodelos,a.cimpfabs from SigFiMpf a inner join  SigFiMpm b on a.cmodelos=b.cmodelos]",
+      "tabelas": "SigFiMpf,SigFiMpm",
+      "colunas": "cmarcas,cmodelos,cimpfabs",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigFiGfd", "SigFiMpm", "SigFiMpf"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

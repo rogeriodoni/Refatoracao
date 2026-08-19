@@ -1,0 +1,5079 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigCdLpr.SCX
+* Data/Hora: 18/08/2026 21:52:09
+* Total de registros: 95
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDLPR
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: imprimir
+  Parent: SIGCDLPR.PAGINA.Lista
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: ImpLista
+  Parent: SIGCDLPR.PAGINA.Lista
+  Class: container
+  BaseClass: container
+
+Objeto: Label1
+  Parent: SIGCDLPR.PAGINA.Lista.ImpLista
+  Class: label
+  BaseClass: label
+
+Objeto: Label2
+  Parent: SIGCDLPR.PAGINA.Lista.ImpLista
+  Class: label
+  BaseClass: label
+
+Objeto: Cmd_excel
+  Parent: SIGCDLPR.PAGINA.Lista.ImpLista
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Cmd_Visual
+  Parent: SIGCDLPR.PAGINA.Lista.ImpLista
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Cmd_Imprimir
+  Parent: SIGCDLPR.PAGINA.Lista.ImpLista
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Opt_Tipo
+  Parent: SIGCDLPR.PAGINA.Lista.ImpLista
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: Say5
+  Parent: SIGCDLPR.PAGINA.Lista.ImpLista
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cmd_grupo
+  Parent: SIGCDLPR.PAGINA.Lista.ImpLista
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: Opt_foto
+  Parent: SIGCDLPR.PAGINA.Lista.ImpLista
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: bnt_Atualiza
+  Parent: SIGCDLPR.PAGINA.Lista
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: Optiongroup1
+  Parent: SIGCDLPR.PAGINA.Lista.cntFiltros
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: Say7
+  Parent: SIGCDLPR.PAGINA.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say12
+  Parent: SIGCDLPR.PAGINA.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGCDLPR.PAGINA.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGCDLPR.PAGINA.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GradeC
+  Parent: SIGCDLPR.PAGINA.Dados
+  Class: fwgrade
+  BaseClass: grid
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Header1
+  Parent: SIGCDLPR.PAGINA.Dados.GradeC.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDLPR.PAGINA.Dados.GradeC.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDLPR.PAGINA.Dados.GradeC.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDLPR.PAGINA.Dados.GradeC.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDLPR.PAGINA.Dados.GradeC.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDLPR.PAGINA.Dados.GradeC.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDLPR.PAGINA.Dados.GradeC.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDLPR.PAGINA.Dados.GradeC.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDLPR.PAGINA.Dados.GradeC.Column5
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDLPR.PAGINA.Dados.GradeC.Column5
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDLPR.PAGINA.Dados.GradeC.Column6
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDLPR.PAGINA.Dados.GradeC.Column6
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDLPR.PAGINA.Dados.GradeC.Column7
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDLPR.PAGINA.Dados.GradeC.Column7
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Grade
+  Parent: SIGCDLPR.PAGINA.Dados
+  Class: fwgrade
+  BaseClass: grid
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Header1
+  Parent: SIGCDLPR.PAGINA.Dados.Grade.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDLPR.PAGINA.Dados.Grade.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDLPR.PAGINA.Dados.Grade.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDLPR.PAGINA.Dados.Grade.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDLPR.PAGINA.Dados.Grade.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDLPR.PAGINA.Dados.Grade.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDLPR.PAGINA.Dados.Grade.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDLPR.PAGINA.Dados.Grade.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDLPR.PAGINA.Dados.Grade.Column5
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDLPR.PAGINA.Dados.Grade.Column5
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDLPR.PAGINA.Dados.Grade.Column6
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDLPR.PAGINA.Dados.Grade.Column6
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDLPR.PAGINA.Dados.Grade.Column7
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDLPR.PAGINA.Dados.Grade.Column7
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDLPR.PAGINA.Dados.Grade.Column8
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDLPR.PAGINA.Dados.Grade.Column8
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDLPR.PAGINA.Dados.Grade.Column9
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDLPR.PAGINA.Dados.Grade.Column9
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Lbl_Procura
+  Parent: SIGCDLPR.PAGINA.Dados
+  Class: label
+  BaseClass: label
+
+Objeto: Shape2
+  Parent: SIGCDLPR.PAGINA.Dados
+  Class: shape
+  BaseClass: shape
+
+Objeto: Shape1
+  Parent: SIGCDLPR.PAGINA.Dados
+  Class: shape
+  BaseClass: shape
+
+Objeto: Get_lpreco
+  Parent: SIGCDLPR.PAGINA.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_fpg
+  Parent: SIGCDLPR.PAGINA.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: txtcpros
+  Parent: SIGCDLPR.PAGINA.Dados
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Txtdpros
+  Parent: SIGCDLPR.PAGINA.Dados
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say9
+  Parent: SIGCDLPR.PAGINA.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Opt_Comissao
+  Parent: SIGCDLPR.PAGINA.Dados
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Opt_ApliTabD
+  Parent: SIGCDLPR.PAGINA.Dados
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Opt_Vencimento
+  Parent: SIGCDLPR.PAGINA.Dados
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Opt_Formula
+  Parent: SIGCDLPR.PAGINA.Dados
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Busca
+  Parent: SIGCDLPR.PAGINA.Dados
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Say1
+  Parent: SIGCDLPR.PAGINA.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGCDLPR.PAGINA.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: SelecionaC
+  Parent: SIGCDLPR.PAGINA.Dados
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Say5
+  Parent: SIGCDLPR.PAGINA.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say6
+  Parent: SIGCDLPR.PAGINA.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Tabd
+  Parent: SIGCDLPR.PAGINA.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_juros
+  Parent: SIGCDLPR.PAGINA.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getEmps
+  Parent: SIGCDLPR.PAGINA.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_codigo
+  Parent: SIGCDLPR.PAGINA.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cntVencimentos
+  Parent: SIGCDLPR.PAGINA.Dados
+  Class: container
+  BaseClass: container
+
+Objeto: Say1
+  Parent: SIGCDLPR.PAGINA.Dados.cntVencimentos
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getVencs
+  Parent: SIGCDLPR.PAGINA.Dados.cntVencimentos
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cmdSalva
+  Parent: SIGCDLPR.PAGINA.Dados.cntVencimentos
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: COPIA
+  Parent: SIGCDLPR.PAGINA.Dados
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: DELETE
+  Parent: SIGCDLPR.PAGINA.Dados
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: INSERE
+  Parent: SIGCDLPR.PAGINA.Dados
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: cmdVencimento
+  Parent: SIGCDLPR.PAGINA.Dados
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Seleciona
+  Parent: SIGCDLPR.PAGINA.Dados
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Cnt_Compra
+  Parent: SIGCDLPR.PAGINA.Dados
+  Class: container
+  BaseClass: container
+
+Objeto: GetIndice
+  Parent: SIGCDLPR.PAGINA.Dados.Cnt_Compra
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say7
+  Parent: SIGCDLPR.PAGINA.Dados.Cnt_Compra
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say5
+  Parent: SIGCDLPR.PAGINA.Dados.Cnt_Compra
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_conta
+  Parent: SIGCDLPR.PAGINA.Dados.Cnt_Compra
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_dconta
+  Parent: SIGCDLPR.PAGINA.Dados.Cnt_Compra
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say6
+  Parent: SIGCDLPR.PAGINA.Dados.Cnt_Compra
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: fweditdata_VENC
+  Parent: SIGCDLPR.PAGINA.Dados.Cnt_Compra
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: fwget1
+  Parent: SIGCDLPR.PAGINA.Dados.Cnt_Compra
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 17
+  Left = 18
+  Width = 526
+  Height = 397
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR
+------------------------------------------------------------
+  DataSession = 2
+  Height = 600
+  Width = 1000
+  DoCreate = .T.
+  Caption = "Listas de Precificação"
+  opdf = .F.
+  pcpdfcode = .F.
+  pcpdflic = .F.
+  placalterar = .T.
+  placexcluir = .T.
+  placinserir = .T.
+  placlistar = .T.
+  Name = "SIGCDLPR"
+  PAGINA.ErasePage = .T.
+  PAGINA.Lista.cntSombra.lblSombra.Name = "lblSombra"
+  PAGINA.Lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  PAGINA.Lista.cntSombra.Width = 1100
+  PAGINA.Lista.cntSombra.ZOrderSet = 1
+  PAGINA.Lista.cntSombra.Name = "cntSombra"
+  PAGINA.Lista.GRADE.Height = 422
+  PAGINA.Lista.GRADE.Left = 31
+  PAGINA.Lista.GRADE.Top = 175
+  PAGINA.Lista.GRADE.Width = 937
+  PAGINA.Lista.GRADE.ZOrderSet = 2
+  PAGINA.Lista.GRADE.Name = "GRADE"
+  PAGINA.Lista.GRUPO_OP.AutoSize = .T.
+  PAGINA.Lista.GRUPO_OP.Inserir.Top = 5
+  PAGINA.Lista.GRUPO_OP.Inserir.Left = 5
+  PAGINA.Lista.GRUPO_OP.Inserir.Name = "Inserir"
+  PAGINA.Lista.GRUPO_OP.Consultar.Top = 5
+  PAGINA.Lista.GRUPO_OP.Consultar.Left = 80
+  PAGINA.Lista.GRUPO_OP.Consultar.Name = "Consultar"
+  PAGINA.Lista.GRUPO_OP.Alterar.Top = 5
+  PAGINA.Lista.GRUPO_OP.Alterar.Left = 155
+  PAGINA.Lista.GRUPO_OP.Alterar.Name = "Alterar"
+  PAGINA.Lista.GRUPO_OP.Excluir.Top = 5
+  PAGINA.Lista.GRUPO_OP.Excluir.Left = 230
+  PAGINA.Lista.GRUPO_OP.Excluir.Name = "Excluir"
+  PAGINA.Lista.GRUPO_OP.Procurar.Top = 5
+  PAGINA.Lista.GRUPO_OP.Procurar.Left = 305
+  PAGINA.Lista.GRUPO_OP.Procurar.Name = "Procurar"
+  PAGINA.Lista.GRUPO_OP.Height = 85
+  PAGINA.Lista.GRUPO_OP.Left = 544
+  PAGINA.Lista.GRUPO_OP.Top = -1
+  PAGINA.Lista.GRUPO_OP.Width = 385
+  PAGINA.Lista.GRUPO_OP.ZOrderSet = 3
+  PAGINA.Lista.GRUPO_OP.Name = "GRUPO_OP"
+  PAGINA.Lista.GRUPO_SAIDA.Sair.Top = 5
+  PAGINA.Lista.GRUPO_SAIDA.Sair.Left = 5
+  PAGINA.Lista.GRUPO_SAIDA.Sair.Name = "Sair"
+  PAGINA.Lista.GRUPO_SAIDA.Left = 919
+  PAGINA.Lista.GRUPO_SAIDA.Top = -1
+  PAGINA.Lista.GRUPO_SAIDA.ZOrderSet = 7
+  PAGINA.Lista.GRUPO_SAIDA.Name = "GRUPO_SAIDA"
+  PAGINA.Lista.cntFiltros.Top = 84
+  PAGINA.Lista.cntFiltros.Left = 32
+  PAGINA.Lista.cntFiltros.Width = 408
+  PAGINA.Lista.cntFiltros.Height = 86
+  PAGINA.Lista.cntFiltros.BackStyle = 0
+  PAGINA.Lista.cntFiltros.Visible = .T.
+  PAGINA.Lista.cntFiltros.BorderColor = 90,90,90
+  PAGINA.Lista.cntFiltros.ZOrderSet = 0
+  PAGINA.Lista.cntFiltros.Name = "cntFiltros"
+  PAGINA.Lista.Picture = ..\framework\imagens\new_background.jpg
+  PAGINA.Lista.Name = "Lista"
+  PAGINA.Dados.GRUPO_SALVA.AutoSize = .T.
+  PAGINA.Dados.GRUPO_SALVA.Salva.Top = 5
+  PAGINA.Dados.GRUPO_SALVA.Salva.Left = 5
+  PAGINA.Dados.GRUPO_SALVA.Salva.Name = "Salva"
+  PAGINA.Dados.GRUPO_SALVA.Cancelar.Top = 5
+  PAGINA.Dados.GRUPO_SALVA.Cancelar.Left = 80
+  PAGINA.Dados.GRUPO_SALVA.Cancelar.Name = "Cancelar"
+  PAGINA.Dados.GRUPO_SALVA.Height = 85
+  PAGINA.Dados.GRUPO_SALVA.Left = 843
+  PAGINA.Dados.GRUPO_SALVA.Top = -3
+  PAGINA.Dados.GRUPO_SALVA.TabIndex = 33
+  PAGINA.Dados.GRUPO_SALVA.ZOrderSet = 23
+  PAGINA.Dados.GRUPO_SALVA.Name = "GRUPO_SALVA"
+  PAGINA.Dados.Picture = ..\framework\imagens\new_background.jpg
+  PAGINA.Dados.Name = "Dados"
+  PAGINA.ActivePage = 1
+  PAGINA.Width = 1003
+  PAGINA.Name = "PAGINA"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Lista.imprimir
+------------------------------------------------------------
+  Top = 90
+  Left = 362
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Picture = ..\framework\imagens\geral_impressora_normal_60.jpg
+  Caption = "Imprimir"
+  ToolTipText = "Imprimir"
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  ZOrderSet = 4
+  Themes = .F.
+  Name = "imprimir"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Lista.ImpLista
+------------------------------------------------------------
+  Top = 244
+  Left = 211
+  Width = 577
+  Height = 129
+  SpecialEffect = 0
+  Visible = .F.
+  BackColor = 255,255,255
+  ZOrderSet = 5
+  Name = "ImpLista"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Lista.ImpLista.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 15
+  Alignment = 1
+  BackStyle = 0
+  Caption = "Impressão de Listas"
+  Height = 26
+  Left = 25
+  Top = 9
+  Width = 203
+  TabIndex = 7
+  ForeColor = 90,90,90
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Lista.ImpLista.Label2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Tipo :"
+  Height = 15
+  Left = 30
+  Top = 45
+  Width = 29
+  TabIndex = 8
+  ForeColor = 90,90,90
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Lista.ImpLista.Cmd_excel
+------------------------------------------------------------
+  Top = 3
+  Left = 422
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  WordWrap = .T.
+  Picture = ..\framework\imagens\relatorio_excel_26.jpg
+  Caption = "\<Excel"
+  MousePointer = 15
+  TabIndex = 5
+  PicturePosition = 13
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  ZOrderSet = 2
+  RightToLeft = .T.
+  Themes = .F.
+  Name = "Cmd_excel"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Lista.ImpLista.Cmd_Visual
+------------------------------------------------------------
+  Top = 3
+  Left = 347
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  WordWrap = .T.
+  Picture = ..\framework\imagens\relatorio_video_26.jpg
+  Caption = "\<Vídeo"
+  MousePointer = 15
+  TabIndex = 3
+  PicturePosition = 13
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  ZOrderSet = 2
+  RightToLeft = .T.
+  Themes = .F.
+  Name = "Cmd_Visual"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Lista.ImpLista.Cmd_Imprimir
+------------------------------------------------------------
+  Top = 3
+  Left = 272
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  WordWrap = .T.
+  Picture = ..\framework\imagens\relatorio_impressora_26.jpg
+  Caption = "\<Impressora"
+  MousePointer = 15
+  TabIndex = 4
+  PicturePosition = 13
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  ZOrderSet = 2
+  RightToLeft = .T.
+  Themes = .F.
+  Name = "Cmd_Imprimir"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Lista.ImpLista.Opt_Tipo
+------------------------------------------------------------
+  ButtonCount = 4
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 51
+  Left = 57
+  Top = 41
+  Width = 214
+  TabIndex = 1
+  Name = "Opt_Tipo"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Normal"
+  Option1.Value = 1
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Top = 6
+  Option1.Width = 51
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Por Embalagem"
+  Option2.Height = 15
+  Option2.Left = 5
+  Option2.Top = 25
+  Option2.Width = 91
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+  Option3.FontName = "Tahoma"
+  Option3.FontSize = 8
+  Option3.BackStyle = 0
+  Option3.Caption = "Índice"
+  Option3.Height = 17
+  Option3.Left = 134
+  Option3.Top = 6
+  Option3.Width = 61
+  Option3.ForeColor = 90,90,90
+  Option3.Name = "Option3"
+  Option4.FontName = "Tahoma"
+  Option4.FontSize = 8
+  Option4.BackStyle = 0
+  Option4.Caption = "Linha"
+  Option4.Height = 17
+  Option4.Left = 134
+  Option4.Top = 25
+  Option4.Width = 61
+  Option4.ForeColor = 90,90,90
+  Option4.Name = "Option4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Lista.ImpLista.Say5
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Imagem :"
+  Left = 13
+  Top = 88
+  Width = 47
+  TabIndex = 9
+  ForeColor = 90,90,90
+  ZOrderSet = 7
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Lista.ImpLista.cmd_grupo
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 1
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 85
+  Left = 493
+  Top = -2
+  Width = 85
+  TabIndex = 6
+  Name = "cmd_grupo"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.Picture = ..\framework\imagens\relatorio_sair_60.jpg
+  Command1.Cancel = .T.
+  Command1.Caption = "Encerrar"
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "cmd_ok"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Lista.ImpLista.Opt_foto
+------------------------------------------------------------
+  AutoSize = .F.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 2
+  Height = 25
+  Left = 57
+  SpecialEffect = 0
+  Top = 84
+  Width = 97
+  TabIndex = 2
+  ZOrderSet = 13
+  Name = "Opt_foto"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Sim"
+  Option1.Value = 0
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.Width = 34
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Não"
+  Option2.Value = 1
+  Option2.Left = 51
+  Option2.Top = 5
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Lista.bnt_Atualiza
+------------------------------------------------------------
+  Top = 90
+  Left = 287
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Picture = ..\framework\imagens\geral_processar_60.jpg
+  Alignment = 0
+  Caption = "Atualizar"
+  SpecialEffect = 0
+  Style = 1
+  TabIndex = 7
+  ToolTipText = "Atualiza Preços"
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  ZOrderSet = 6
+  Themes = .F.
+  Name = "bnt_Atualiza"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Lista.cntFiltros.Optiongroup1
+------------------------------------------------------------
+  AutoSize = .F.
+  ButtonCount = 3
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 3
+  Height = 25
+  Left = 6
+  Top = 4
+  Width = 227
+  Name = "Optiongroup1"
+  Option1.FontBold = .T.
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "A Vencer"
+  Option1.Value = 0
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.Width = 68
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontBold = .T.
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Vencidas"
+  Option2.Height = 15
+  Option2.Left = 90
+  Option2.Top = 5
+  Option2.Width = 68
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+  Option3.FontBold = .T.
+  Option3.FontName = "Tahoma"
+  Option3.FontSize = 8
+  Option3.BackStyle = 0
+  Option3.Caption = "Geral"
+  Option3.Value = 1
+  Option3.Height = 15
+  Option3.Left = 174
+  Option3.Top = 5
+  Option3.Width = 48
+  Option3.AutoSize = .T.
+  Option3.ForeColor = 90,90,90
+  Option3.Name = "Option3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.Say7
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "% Juros a.m.:"
+  Height = 15
+  Left = 221
+  Top = 95
+  Visible = .F.
+  Width = 71
+  TabIndex = 12
+  ForeColor = 90,90,90
+  ZOrderSet = 0
+  Name = "Say7"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.Say12
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Cond. Pagto :"
+  Height = 15
+  Left = 37
+  Top = 68
+  Width = 69
+  TabIndex = 6
+  ForeColor = 90,90,90
+  ZOrderSet = 1
+  Name = "Say12"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.Say3
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Código :"
+  Height = 15
+  Left = 64
+  Top = 42
+  Width = 42
+  TabIndex = 3
+  ForeColor = 90,90,90
+  ZOrderSet = 2
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.Say4
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Empresa :"
+  Height = 15
+  Left = 56
+  Top = 16
+  Width = 50
+  TabIndex = 1
+  ForeColor = 90,90,90
+  ZOrderSet = 3
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.GradeC
+------------------------------------------------------------
+  ColumnCount = 7
+  FontName = "Arial"
+  FontSize = 8
+  Height = 293
+  Left = 8
+  ReadOnly = .F.
+  RowHeight = 17
+  ScrollBars = 2
+  TabIndex = 21
+  Top = 184
+  Visible = .T.
+  Width = 982
+  ZOrderSet = 4
+  Name = "GradeC"
+  Column1.FontName = "Courier New"
+  Column1.FontSize = 8
+  Column1.Width = 108
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .T.
+  Column1.Visible = .T.
+  Column1.Format = "K!"
+  Column1.Name = "Column1"
+  Column2.FontName = "Courier New"
+  Column2.FontSize = 8
+  Column2.Width = 160
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.Visible = .T.
+  Column2.Name = "Column2"
+  Column3.FontName = "Courier New"
+  Column3.FontSize = 8
+  Column3.Width = 115
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.ReadOnly = .T.
+  Column3.Visible = .T.
+  Column3.InputMask = "999,999.99"
+  Column3.Name = "Column3"
+  Column4.FontName = "Courier New"
+  Column4.FontSize = 8
+  Column4.Width = 98
+  Column4.Movable = .F.
+  Column4.Resizable = .F.
+  Column4.ReadOnly = .T.
+  Column4.Visible = .T.
+  Column4.Name = "Column4"
+  Column5.FontName = "Courier New"
+  Column5.FontSize = 8
+  Column5.Width = 85
+  Column5.Movable = .F.
+  Column5.Resizable = .F.
+  Column5.ReadOnly = .T.
+  Column5.Visible = .T.
+  Column5.InputMask = "9999999.999"
+  Column5.Name = "Column5"
+  Column6.FontName = "Courier New"
+  Column6.FontSize = 8
+  Column6.Width = 31
+  Column6.Movable = .F.
+  Column6.Resizable = .F.
+  Column6.ReadOnly = .T.
+  Column6.Visible = .T.
+  Column6.Name = "Column6"
+  Column7.FontName = "Courier New"
+  Column7.FontSize = 8
+  Column7.Width = 85
+  Column7.Movable = .F.
+  Column7.Resizable = .F.
+  Column7.ReadOnly = .F.
+  Column7.Visible = .T.
+  Column7.InputMask = "9999999.999"
+  Column7.Name = "Column7"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.GradeC.Column1.Header1
+------------------------------------------------------------
+  FontName = "Arial"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Cód. Produto"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.GradeC.Column1.Text1
+------------------------------------------------------------
+  FontName = "Courier New"
+  FontSize = 8
+  BorderStyle = 0
+  InputMask = "!!!!!!!!!!!!!!"
+  Margin = 0
+  ReadOnly = .T.
+  Visible = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.GradeC.Column2.Header1
+------------------------------------------------------------
+  FontName = "Arial"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Descrição do Produto"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.GradeC.Column2.Text1
+------------------------------------------------------------
+  FontName = "Courier New"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  Visible = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.GradeC.Column3.Header1
+------------------------------------------------------------
+  FontName = "Arial"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Ref.Fornecedor"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.GradeC.Column3.Text1
+------------------------------------------------------------
+  FontName = "Courier New"
+  FontSize = 8
+  BorderStyle = 0
+  InputMask = "999,999.99"
+  Margin = 0
+  ReadOnly = .T.
+  Visible = .T.
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.GradeC.Column4.Header1
+------------------------------------------------------------
+  FontName = "Arial"
+  FontSize = 8
+  Alignment = 2
+  Caption = "EAN"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.GradeC.Column4.Text1
+------------------------------------------------------------
+  FontName = "Courier New"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  Visible = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.GradeC.Column5.Header1
+------------------------------------------------------------
+  FontName = "Arial"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Custo Atual"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.GradeC.Column5.Text1
+------------------------------------------------------------
+  FontName = "Courier New"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  Visible = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.GradeC.Column6.Header1
+------------------------------------------------------------
+  FontName = "Arial"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Moe"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.GradeC.Column6.Text1
+------------------------------------------------------------
+  FontName = "Courier New"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  Visible = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.GradeC.Column7.Header1
+------------------------------------------------------------
+  FontName = "Arial"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Custo Novo"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.GradeC.Column7.Text1
+------------------------------------------------------------
+  FontName = "Courier New"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .F.
+  Visible = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.Grade
+------------------------------------------------------------
+  ColumnCount = 9
+  FontName = "Arial"
+  FontSize = 8
+  Height = 293
+  Left = 8
+  ReadOnly = .F.
+  RowHeight = 17
+  ScrollBars = 2
+  TabIndex = 34
+  Top = 184
+  Visible = .T.
+  Width = 982
+  ZOrderSet = 5
+  Name = "Grade"
+  Column1.FontName = "Courier New"
+  Column1.FontSize = 8
+  Column1.Width = 108
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .F.
+  Column1.Visible = .T.
+  Column1.Format = "K!"
+  Column1.Name = "Column1"
+  Column2.FontName = "Courier New"
+  Column2.FontSize = 8
+  Column2.Width = 273
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .F.
+  Column2.Visible = .T.
+  Column2.Name = "Column2"
+  Column3.FontName = "Courier New"
+  Column3.FontSize = 8
+  Column3.ColumnOrder = 4
+  Column3.Width = 100
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.ReadOnly = .F.
+  Column3.Visible = .T.
+  Column3.InputMask = "9999,999.99"
+  Column3.Name = "Column3"
+  Column4.FontName = "Courier New"
+  Column4.FontSize = 8
+  Column4.ColumnOrder = 5
+  Column4.Width = 25
+  Column4.Movable = .F.
+  Column4.Resizable = .F.
+  Column4.ReadOnly = .F.
+  Column4.Visible = .T.
+  Column4.Name = "Column4"
+  Column5.FontName = "Courier New"
+  Column5.FontSize = 8
+  Column5.ColumnOrder = 6
+  Column5.Width = 45
+  Column5.Movable = .F.
+  Column5.Resizable = .F.
+  Column5.ReadOnly = .F.
+  Column5.Visible = .T.
+  Column5.InputMask = "999.99"
+  Column5.Name = "Column5"
+  Column6.FontName = "Courier New"
+  Column6.FontSize = 8
+  Column6.ColumnOrder = 7
+  Column6.Width = 73
+  Column6.Movable = .F.
+  Column6.Resizable = .F.
+  Column6.ReadOnly = .F.
+  Column6.Visible = .T.
+  Column6.Name = "Column6"
+  Column7.FontName = "Courier New"
+  Column7.FontSize = 8
+  Column7.ColumnOrder = 8
+  Column7.Width = 73
+  Column7.Movable = .F.
+  Column7.Resizable = .F.
+  Column7.ReadOnly = .F.
+  Column7.Visible = .T.
+  Column7.Name = "Column7"
+  Column8.FontName = "Arial"
+  Column8.FontSize = 8
+  Column8.ColumnOrder = 9
+  Column8.Width = 15
+  Column8.ReadOnly = .F.
+  Column8.Visible = .T.
+  Column8.Name = "Column8"
+  Column9.FontName = "Courier New"
+  Column9.FontSize = 8
+  Column9.ColumnOrder = 3
+  Column9.Width = 100
+  Column9.Movable = .F.
+  Column9.Resizable = .F.
+  Column9.ReadOnly = .F.
+  Column9.Visible = .T.
+  Column9.InputMask = "9999,999.99"
+  Column9.Name = "Column9"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.Grade.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Cód. Produto"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.Grade.Column1.Text1
+------------------------------------------------------------
+  FontName = "Courier New"
+  FontSize = 8
+  BorderStyle = 0
+  InputMask = "!!!!!!!!!!!!!!"
+  Margin = 0
+  ReadOnly = .F.
+  Visible = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.Grade.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Descrição do Produto"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.Grade.Column2.Text1
+------------------------------------------------------------
+  FontName = "Courier New"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .F.
+  Visible = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.Grade.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Pr. Venda"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.Grade.Column3.Text1
+------------------------------------------------------------
+  FontName = "Courier New"
+  FontSize = 8
+  BorderStyle = 0
+  InputMask = "9999,999.99"
+  Margin = 0
+  ReadOnly = .F.
+  Visible = .T.
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.Grade.Column4.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Moe"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.Grade.Column4.Text1
+------------------------------------------------------------
+  FontName = "Courier New"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .F.
+  Visible = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.Grade.Column5.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Comiss."
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.Grade.Column5.Text1
+------------------------------------------------------------
+  FontName = "Courier New"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .F.
+  Visible = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.Grade.Column6.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Venc. Inicial"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.Grade.Column6.Text1
+------------------------------------------------------------
+  FontName = "Courier New"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .F.
+  Visible = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.Grade.Column7.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Venc. Final"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.Grade.Column7.Text1
+------------------------------------------------------------
+  FontName = "Courier New"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .F.
+  Visible = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.Grade.Column8.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "C"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.Grade.Column8.Text1
+------------------------------------------------------------
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .F.
+  Visible = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.Grade.Column9.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Pr. De"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.Grade.Column9.Text1
+------------------------------------------------------------
+  FontName = "Courier New"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.Lbl_Procura
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Busca :"
+  Height = 13
+  Left = 56
+  Top = 158
+  Width = 55
+  TabIndex = 22
+  ForeColor = 90,90,90
+  ZOrderSet = 6
+  Name = "Lbl_Procura"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.Shape2
+------------------------------------------------------------
+  Top = 145
+  Left = 9
+  Height = 1
+  Width = 980
+  BackStyle = 0
+  BorderColor = 90,90,90
+  ZOrderSet = 7
+  Name = "Shape2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.Shape1
+------------------------------------------------------------
+  Top = 8
+  Left = 723
+  Height = 110
+  Width = 91
+  BackStyle = 0
+  BorderStyle = 0
+  BorderColor = 136,189,188
+  ZOrderSet = 8
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.Get_lpreco
+------------------------------------------------------------
+  ControlSource = "crSigCdLpc.lprecos"
+  Format = "K!"
+  Height = 23
+  Left = 205
+  SpecialEffect = 1
+  TabIndex = 5
+  Top = 38
+  Width = 290
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 9
+  Name = "Get_lpreco"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.Get_fpg
+------------------------------------------------------------
+  ControlSource = "crSigCdLpc.fpags"
+  Left = 108
+  SpecialEffect = 1
+  TabIndex = 7
+  ToolTipText = "Digite a forma de pagamento"
+  Top = 65
+  Width = 94
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 10
+  Name = "Get_fpg"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.txtcpros
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Format = "!K"
+  Height = 22
+  Left = 108
+  MaxLength = 14
+  SpecialEffect = 1
+  TabIndex = 23
+  Top = 154
+  Width = 119
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 11
+  Name = "txtcpros"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.Txtdpros
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Format = "!K"
+  Height = 22
+  Left = 230
+  MaxLength = 40
+  SpecialEffect = 1
+  TabIndex = 24
+  Top = 154
+  Width = 342
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 12
+  Name = "Txtdpros"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.Say9
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Aplica Fórmulas :"
+  Left = 540
+  Top = 42
+  Visible = .F.
+  TabIndex = 15
+  ForeColor = 90,90,90
+  ZOrderSet = 13
+  Name = "Say9"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.Opt_Comissao
+------------------------------------------------------------
+  BorderStyle = 0
+  Value = 2
+  ControlSource = "crSigCdLpc.nComiss"
+  Height = 22
+  Left = 288
+  SpecialEffect = 0
+  Top = 63
+  Width = 94
+  TabIndex = 9
+  Visible = .F.
+  ZOrderSet = 14
+  Name = "Opt_Comissao"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.Alignment = 0
+  Option1.Caption = "Sim"
+  Option1.Value = 0
+  Option1.Left = 5
+  Option1.Top = 4
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.Caption = "Não"
+  Option2.Value = 1
+  Option2.Left = 50
+  Option2.Top = 4
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.Opt_ApliTabD
+------------------------------------------------------------
+  BorderStyle = 0
+  Value = 2
+  ControlSource = "crSigCdLpc.AplicTabDs"
+  Height = 22
+  Left = 621
+  SpecialEffect = 0
+  Top = 91
+  Width = 94
+  TabIndex = 20
+  Visible = .F.
+  ZOrderSet = 15
+  Name = "Opt_ApliTabD"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.Alignment = 0
+  Option1.Caption = "Sim"
+  Option1.Value = 0
+  Option1.Left = 5
+  Option1.Top = 4
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.Caption = "Não"
+  Option2.Value = 1
+  Option2.Left = 50
+  Option2.Top = 4
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.Opt_Vencimento
+------------------------------------------------------------
+  BorderStyle = 0
+  Value = 2
+  ControlSource = "crSigCdLpc.nVencs"
+  Height = 22
+  Left = 621
+  SpecialEffect = 0
+  Top = 63
+  Width = 94
+  TabIndex = 18
+  Visible = .F.
+  ZOrderSet = 16
+  Name = "Opt_Vencimento"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.Alignment = 0
+  Option1.Caption = "Sim"
+  Option1.Value = 0
+  Option1.Left = 5
+  Option1.Top = 4
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.Caption = "Não"
+  Option2.Value = 1
+  Option2.Left = 50
+  Option2.Top = 4
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.Opt_Formula
+------------------------------------------------------------
+  BorderStyle = 0
+  Value = 2
+  ControlSource = "crSigCdLpc.Formulas"
+  Height = 22
+  Left = 621
+  SpecialEffect = 0
+  Top = 38
+  Width = 94
+  TabIndex = 16
+  Visible = .F.
+  ZOrderSet = 17
+  Name = "Opt_Formula"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.Alignment = 0
+  Option1.Caption = "Sim"
+  Option1.Value = 0
+  Option1.Left = 5
+  Option1.Top = 4
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.Caption = "Não"
+  Option2.Value = 1
+  Option2.Left = 50
+  Option2.Top = 4
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.Busca
+------------------------------------------------------------
+  Top = 149
+  Left = 576
+  Height = 33
+  Width = 36
+  FontName = "Verdana"
+  FontSize = 8
+  Picture = ..\framework\imagens\cadastro_procurar_26.jpg
+  Caption = ""
+  TabIndex = 25
+  BackColor = 255,255,255
+  ZOrderSet = 18
+  Themes = .F.
+  Name = "Busca"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.Say1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Vencimento :"
+  Left = 559
+  Top = 66
+  Visible = .F.
+  TabIndex = 17
+  ForeColor = 90,90,90
+  ZOrderSet = 19
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.Say2
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Comissão :"
+  Left = 238
+  Top = 68
+  Visible = .F.
+  TabIndex = 8
+  ForeColor = 90,90,90
+  ZOrderSet = 20
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.SelecionaC
+------------------------------------------------------------
+  Top = 2
+  Left = 773
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  WordWrap = .T.
+  Picture = ..\framework\imagens\geral_produtos_60.jpg
+  Caption = "Selecionar Produtos"
+  TabIndex = 32
+  ToolTipText = "Selecionar Produtos"
+  Visible = .F.
+  SpecialEffect = 0
+  PicturePosition = 7
+  ColorScheme = 1
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  ZOrderSet = 21
+  Themes = .F.
+  Name = "SelecionaC"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.Say5
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Tabela de Desconto :"
+  Left = 519
+  Top = 95
+  Visible = .F.
+  TabIndex = 19
+  ForeColor = 90,90,90
+  ZOrderSet = 22
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.Say6
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Tab.Desconto:"
+  Height = 15
+  Left = 33
+  Top = 95
+  Visible = .F.
+  Width = 73
+  TabIndex = 10
+  ForeColor = 90,90,90
+  ZOrderSet = 24
+  Name = "Say6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.Get_Tabd
+------------------------------------------------------------
+  ControlSource = "crSigCdLpc.tabds"
+  Left = 108
+  SpecialEffect = 1
+  TabIndex = 11
+  ToolTipText = "Digite a forma de pagamento"
+  Top = 91
+  Visible = .F.
+  Width = 94
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 25
+  Name = "Get_Tabd"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.Get_juros
+------------------------------------------------------------
+  Alignment = 3
+  Value = 0
+  ControlSource = "crSigCdLpc.descos"
+  Height = 23
+  InputMask = "99.999"
+  Left = 294
+  SpecialEffect = 1
+  TabIndex = 13
+  ToolTipText = "Digite a forma de pagamento"
+  Top = 91
+  Visible = .F.
+  Width = 69
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 26
+  Name = "Get_juros"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.getEmps
+------------------------------------------------------------
+  ControlSource = "crSigCdLpc.Emps"
+  Height = 23
+  Left = 108
+  MaxLength = 3
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 12
+  Width = 35
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 27
+  Name = "getEmps"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.Get_codigo
+------------------------------------------------------------
+  ControlSource = "crSigCdLpc.Codigos"
+  Height = 23
+  InputMask = "999999"
+  Left = 108
+  MaxLength = 6
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 38
+  Width = 94
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 28
+  Name = "Get_codigo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.cntVencimentos
+------------------------------------------------------------
+  Top = 499
+  Left = 415
+  Width = 200
+  Height = 75
+  SpecialEffect = 0
+  TabIndex = 31
+  BackColor = 255,255,255
+  ZOrderSet = 29
+  Name = "cntVencimentos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.cntVencimentos.Say1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Vencimento Em:"
+  Left = 14
+  Top = 15
+  TabIndex = 3
+  ForeColor = 90,90,90
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.cntVencimentos.getVencs
+------------------------------------------------------------
+  Height = 23
+  Left = 14
+  SpecialEffect = 1
+  TabIndex = 1
+  Top = 34
+  Width = 80
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  Name = "getVencs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.cntVencimentos.cmdSalva
+------------------------------------------------------------
+  AutoSize = .F.
+  ButtonCount = 2
+  BorderStyle = 0
+  Value = 1
+  Height = 44
+  Left = 104
+  Top = 17
+  Width = 88
+  TabIndex = 2
+  Name = "cmdSalva"
+  Command1.Top = 0
+  Command1.Left = 2
+  Command1.Height = 42
+  Command1.Width = 43
+  Command1.Picture = ..\framework\imagens\cadastro_salvar_32.jpg
+  Command1.Caption = ""
+  Command1.ToolTipText = "Altera os Vencimentos"
+  Command1.SpecialEffect = 2
+  Command1.BackColor = 255,255,255
+  Command1.Name = "btnConfirmar"
+  Command2.Top = 0
+  Command2.Left = 45
+  Command2.Height = 42
+  Command2.Width = 43
+  Command2.Picture = ..\framework\imagens\cadastro_sair_32.jpg
+  Command2.Caption = ""
+  Command2.ToolTipText = "Cancelar a Alteração"
+  Command2.SpecialEffect = 2
+  Command2.BackColor = 255,255,255
+  Command2.Name = "btnCancelar"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.COPIA
+------------------------------------------------------------
+  Top = 499
+  Left = 178
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Picture = ..\framework\imagens\geral_duplicar_60.jpg
+  Caption = "Duplicar"
+  TabIndex = 28
+  ToolTipText = "Copia Tabela"
+  SpecialEffect = 0
+  ColorScheme = 1
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  ZOrderSet = 30
+  Name = "COPIA"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.DELETE
+------------------------------------------------------------
+  Top = 499
+  Left = 103
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Picture = ..\framework\imagens\cadastro_excluir_60.jpg
+  Caption = "Excluir"
+  TabIndex = 27
+  ToolTipText = "Apaga Item"
+  SpecialEffect = 0
+  ColorScheme = 1
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  ZOrderSet = 31
+  Name = "DELETE"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.INSERE
+------------------------------------------------------------
+  Top = 499
+  Left = 28
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Picture = ..\framework\imagens\cadastro_inserir_60.jpg
+  Caption = "Inserir"
+  TabIndex = 26
+  ToolTipText = "Insere Item"
+  SpecialEffect = 0
+  ColorScheme = 1
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  ZOrderSet = 32
+  Name = "INSERE"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.cmdVencimento
+------------------------------------------------------------
+  Top = 499
+  Left = 328
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Picture = ..\framework\imagens\geral_calendario_60.jpg
+  Caption = "Vencimento"
+  TabIndex = 30
+  ToolTipText = "Alterar Vencimentos"
+  SpecialEffect = 0
+  ColorScheme = 1
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  ZOrderSet = 33
+  Name = "cmdVencimento"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.Seleciona
+------------------------------------------------------------
+  Top = 499
+  Left = 253
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  Picture = ..\framework\imagens\geral_produtos_60.jpg
+  Caption = "Selecionar"
+  TabIndex = 29
+  ToolTipText = "Seleciona Produtos"
+  SpecialEffect = 0
+  ColorScheme = 1
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  ZOrderSet = 34
+  Name = "Seleciona"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.Cnt_Compra
+------------------------------------------------------------
+  Top = 89
+  Left = -15
+  Width = 512
+  Height = 51
+  BackStyle = 0
+  BorderWidth = 0
+  SpecialEffect = 2
+  Visible = .F.
+  TabIndex = 14
+  ZOrderSet = 35
+  Name = "Cnt_Compra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.Cnt_Compra.GetIndice
+------------------------------------------------------------
+  Height = 23
+  InputMask = "999.9999"
+  Left = 123
+  MaxLength = 8
+  SpecialEffect = 1
+  TabIndex = 5
+  ToolTipText = "Digite o Índice de Reajuste"
+  Top = 28
+  Width = 94
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 9
+  Name = "GetIndice"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.Cnt_Compra.Say7
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Índice Reajuste :"
+  Left = 37
+  Top = 32
+  Visible = .F.
+  TabIndex = 4
+  ForeColor = 90,90,90
+  ZOrderSet = 25
+  Name = "Say7"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.Cnt_Compra.Say5
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Fornecedor :"
+  Left = 57
+  Top = 5
+  Visible = .F.
+  TabIndex = 1
+  ForeColor = 90,90,90
+  ZOrderSet = 25
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.Cnt_Compra.Get_conta
+------------------------------------------------------------
+  ControlSource = "crSigCdLpc.contas"
+  Height = 23
+  Left = 123
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 2
+  Visible = .F.
+  Width = 94
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 26
+  Name = "Get_conta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.Cnt_Compra.Get_dconta
+------------------------------------------------------------
+  Left = 219
+  MaxLength = 50
+  SpecialEffect = 1
+  TabIndex = 3
+  Top = 2
+  Visible = .F.
+  Width = 290
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 27
+  Name = "Get_dconta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.Cnt_Compra.Say6
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Data Inicial :"
+  Left = 246
+  Top = 32
+  Visible = .F.
+  TabIndex = 6
+  ForeColor = 90,90,90
+  ZOrderSet = 28
+  Name = "Say6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.Cnt_Compra.fweditdata_VENC
+------------------------------------------------------------
+  StrictDateEntry = 0
+  ControlSource = "crSigCdLpc.vencis"
+  Format = "E"
+  InputMask = "99/99/9999"
+  Left = 310
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 7
+  Top = 28
+  Visible = .F.
+  Width = 80
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 29
+  NullDisplay = "  /  /"
+  Name = "fweditdata_VENC"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDLPR.PAGINA.Dados.Cnt_Compra.fwget1
+------------------------------------------------------------
+  StrictDateEntry = 0
+  ControlSource = "crSigCdLpc.vencis"
+  Format = "E"
+  InputMask = "99/99/9999"
+  Left = 400
+  MaxLength = 10
+  TabIndex = 8
+  Top = 318
+  Visible = .F.
+  Width = 80
+  ZOrderSet = 29
+  NullDisplay = "  /  /"
+  Name = "fwget1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Tahoma, 1, 8, 6, 13, 11, 32, 2, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDLPR
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE atualizamarkup
+------------------------------------------------------------
+PROCEDURE atualizamarkup
+Lparameters pPro
+
+lnMkp = 0
+
+lcQuery = [Select CustoFs, MoeCusFs, PVens, MoeVs ] + ;
+		    [From SigCdPro ] + ;
+		   [Where CPros = '] + pPro + [']
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'LocalPro') < 1)
+	ThisForm.Podatamgr.RollBack()
+	MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')
+	Return .f.
+EndIf
+Go Top In LocalPro
+
+lcQuery = [Select CMoes, MoeQs, QtdEqs ] + ;
+		    [From SigCdMoe ] + ;
+		   [Where CMoes In ('] + LocalPro.MoeCusFs + [', '] + LocalPro.MoeVs + [')]
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'LocalMoe') < 1)
+	ThisForm.Podatamgr.RollBack()
+	MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')
+	Return .f.
+EndIf
+Select LocalMoe
+Index On CMoes Tag CMoes
+
+lcMoe = LocalPro.Moecusfs
+lnQeq = 1
+If Seek(LocalPro.MoeCusFs, [LocalMoe], [CMoes]) And Not Empty(LocalMoe.MoeQs)
+	lcMoe = LocalMoe.MoeQs
+	lnQeq = Iif(LocalMoe.QtdEqs = 0, 1, LocalMoe.QtdEqs)
+EndIf
+lnMof = fBuscarCotacao(lcMoe, DateTime(), ThisForm.poDataMgr) * lnQeq
+
+lcMoe = LocalPro.Moevs
+lnQeq = 1
+If Seek(LocalPro.MoeVs, [LocalMoe], [CMoes]) And Not Empty(LocalMoe.MoeQs)
+	lcMoe = LocalMoe.Moeqs
+	lnQeq = Iif(LocalMoe.Qtdeqs=0, 1, LocalMoe.Qtdeqs)
+EndIf
+lnMov = fBuscarCotacao(lcMoe, DateTime(), ThisForm.poDataMgr) * lnQeq
+
+lnMkp = Iif(LocalPro.CustoFs = 0, 0, Round((LocalPro.PVens * lnMov) / (LocalPro.CustoFs * lnMof), 3))
+
+lcUpdate = [Update SigCdPro Set MarkupA = ] + Str(lnMkp,12,3) + [ Where Cpros = '] + pPro + [']
+If ThisForm.PodataMgr.SqlExecute(lcUpdate,'') < 1
+	ThisForm.Podatamgr.RollBack()
+	MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')
+	Return .f.
+EndIf
+
+Return .t.
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE carregaitens
+------------------------------------------------------------
+PROCEDURE carregaitens
+Local vCond, lnMarcas, lnVariacao, lnArred, lnPLiqs, lnIndice
+
+lnIndice = ThisForm.Pagina.Dados.Cnt_Compra.GetIndice.Value
+
+Wait Window 'Aguarde !!! Selecionando Produtos...' NoWait
+
+lStrQuery = [Select flagctabs,cpros,dpros,pvens,precode,moevs,situas,cgrus,colecoes,linhas,Pcuss,Moecs,Reffs,Ean13 ]+;
+			[From SigCdPro ]+;
+			[Where Ifors = ']+ThisForm.Pagina.Dados.Cnt_Compra.Get_conta.Value+[' ]+;
+			[Order By cpros ]
+If ThisForm.poDataMgr.SqlExecute(lStrQuery,'TmpPro') < 1
+	MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')
+	RETURN 0
+EndIf
+		
+SELECT CrSigCdLpi
+Zap
+
+Select TmpPro
+Scan 
+	Scatter MemVar
+	m.lprecos   = CrSigCdLpc.lprecos
+	m.flagutabs = .T.
+	m.cidchaves = fUniqueIds()
+	m.vencis    = ThisForm.Pagina.Dados.Cnt_Compra.fweditdata_VENC.Value
+	m.vencfs    = CTOT('31/12/9999')
+	m.pvens     = m.pcuss
+	m.Moevs     = m.Moecs
+	m.precode	= m.precode
+	m.pcuss     = Iif(lnIndice <> 0,m.pcuss * lnIndice,m.pcuss)
+
+	If (ThisForm.CompVenda <> [C])
+		m.pvens = fArredondamento(m.pvens, ThisForm.poDataMgr)
+	EndIf
+
+    Insert Into CrSigCdLpi From MemVar
+EndScan
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE checagrpvenda
+------------------------------------------------------------
+PROCEDURE checagrpvenda
+Lparameters pPro
+
+If (ThisForm.CompVenda <> [C])
+	lcQuery = [Select a.Colecoes, b.AltProds ] + ;
+				[From SigCdPro a, SigCdCol b ] + ;
+			   [Where a.CPros = '] + Padr(pPro, 14) + [' And ] + ;
+			   		 [a.Colecoes = b.Colecoes]
+
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, [crBusCol]) < 1)
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Grupo_Op - crBusCol)')
+		Return .f.
+	EndIf
+
+	Select crBusCol
+	Go Top In crBusCol
+	If Not Eof([crBusCol]) And Not Empty(crBusCol.Colecoes) And (crBusCol.AltProds = 1)
+		lcMsg = [Produto "] + Alltrim(pPro) + [" no Grupo de Venda "] + Alltrim(crBusCol.Colecoes) + ;
+				[". Deseja Prosseguir?]
+		If (MessageBox(lcMsg, 4+32+256, [Atenção!!!]) <> 6)
+			Return .f.
+		Else
+			=fGravarLog('T', 'SigCdLpc', Usuar, 'O Produto [' + Alltrim(pPro) + '] ' + ;
+						  'do Grupo de Venda [' + Alltrim(crBusCol.Colecoes) + '] Teve Liberação Para Alteração.')
+		EndIf
+	EndIf
+EndIf
+
+Return .t.
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE gravarlog
+------------------------------------------------------------
+PROCEDURE gravarlog
+If Used([crOriginal])
+	Select crOriginal
+	Scan
+		lcDtI = Dtoc(Ttod(fDtoSQL(crOriginal.VencIs)))
+		lcDtF = Dtoc(Ttod(fDtoSQL(crOriginal.VencFs)))
+		lcTip = []
+		
+		Select crSigCdLpi
+		Go Top In crSigCdLpi
+		Locate For CPros = crOriginal.CPros
+		If Eof([crSigCdLpi])
+			lcTip = [EXCLUIR]
+		Else
+			If ((crOriginal.PVens  <> crSigCdLpi.PVens) Or ;
+				(crOriginal.VencIs <> crSigCdLpi.VencIs) Or ;
+				(crOriginal.VencFs <> crSigCdLpi.VencFs))
+				lcTip = [ALTERAR]
+			EndIf
+		EndIf
+
+		If Not Empty(lcTip)
+			lcTra = [Lista:] 	+ Alltrim(crOriginal.LPrecos) + ;
+					[/Produto:] + Alltrim(crOriginal.CPros) + ;
+					[/Valor:]   + Alltrim(Str(crOriginal.PVens, 12, 2)) + ;
+					[/Vencto:]  + lcDtI + [-] + lcDtF
+			=fGravarLog([T], [SigCdLpc], lcTip, lcTra, Usuar)
+		EndIf
+	EndScan
+
+	Select crSigCdLpi
+	Scan
+		lcDtI = Dtoc(Ttod(fDtoSQL(crSigCdLpi.VencIs)))
+		lcDtF = Dtoc(Ttod(fDtoSQL(crSigCdLpi.VencFs)))
+		lcTip = []
+		
+		Select crOriginal
+		Go Top In crOriginal
+		Locate For CPros = crSigCdLpi.CPros
+		If Eof([crOriginal])
+			lcTip = [INCLUIR]
+			lcTra = [Lista:] 	+ Alltrim(crSigCdLpi.LPrecos) + ;
+					[/Produto:] + Alltrim(crSigCdLpi.CPros) + ;
+					[/Valor:]   + Alltrim(Str(crSigCdLpi.PVens, 12, 2)) + ;
+					[/Vencto:] + lcDtI + [-] + lcDtF
+			=fGravarLog([T], [SigCdLpc], lcTip, lcTra, Usuar)
+		EndIf
+	EndScan
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE mgettotais
+------------------------------------------------------------
+PROCEDURE mgettotais
+With ThisForm.Pagina.Lista.Grade
+	.RecordSource = ''
+	.Refresh
+EndWith
+
+If Used('CsTotais')
+	Select CrSigCdLpc
+	Set Relation Off Into CsTotais
+EndIf
+
+Select Count(1) As nTotal, lprecos From CrSigCdLpi Group By lprecos Into Cursor CsTotais
+Index On lprecos Tag LPrecos
+
+Select CrSigCdLpc
+Set Relation To CrSigCdLpc.lprecos Into CsTotais
+
+With ThisForm.Pagina.Lista.Grade
+	.RecordSource          = 'CrSigCdLpc'
+	.Column1.ControlSource = 'CrSigCdLpc.lprecos'
+	.Column2.ControlSource = 'CsTotais.nTotal'
+	.Refresh
+EndWith
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE mnovalinha
+------------------------------------------------------------
+PROCEDURE mnovalinha
+Local lnRegs, lnRegMaxs, lnRecNo, lnRecNoOld, lnLinhaAtiva
+
+lnRegMaxs = 12
+With ThisForm.Pagina.Dados.Grade
+	lnColunaAtiva = Iif( .ColumnCount > 4, .ColumnCount, 3 )
+EndWith
+
+Insert Into CrSigCdLpi (lprecos, ordems) Values (CrSigCdLpc.lprecos,Chr(255))
+
+Select CrSigCdLpi
+Count to lnRegs
+Go Top
+
+If lnRegs >= lnRegMaxs
+	lnI    = lnRegMaxs
+	lnRegs = 1
+	Go Bottom
+Else
+	lnI = 1
+EndIf
+
+With ThisForm.Pagina.Dados.Grade
+	.Column1.Text1.Refresh
+	.Column1.Refresh
+	.Refresh
+	
+	Do While lnRegs > 0
+		.ActivateCell(lnI,lnColunaAtiva)
+		If Empty(CrSigCdLpi.cpros)
+			.ActivateCell(lnI,1)
+			lnRegs = -1
+		Else
+			If lnRegs > lnRegMaxs
+				lnRegs = lnRegs - lnRegMaxs
+				.DoScroll(3)
+				lnI = lnRegMaxs
+			Else
+				lnRegs = lnRegs - 1
+				lnI = lnI + 1
+				Keyboard '{DNARROW}'
+			EndIf
+		EndIf
+	EndDo
+	.Refresh
+	.Column1.Text1.SetFocus
+EndWith
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE montarel
+------------------------------------------------------------
+PROCEDURE montarel
+LParameters lnTipo
+
+Private lcLPrecos, lcTipos
+
+lnFoto = ThisForm.PAGINA.Lista.ImpLista.Opt_foto.Value
+
+If lnTipo = 1
+	Create Cursor CsRelatorio (cpros c(14), dpros c(40), cgrus c(3), dgrus c(20), pesoms n(9,3), pvens n(16,6), precode n(16,6),;
+								moevs c(3), linhas c(10), situas n(1), indices n(9,3), dcompos c(30), OrdImg c(11))
+Else
+	Create Cursor CsRelatorio (cpros c(14), dpros c(40), cgrus c(3), dgrus c(20), pvens n(16,6), precode n(16,6), moevs c(3),;
+								situas n(1), dcompos c(30), OrdImg c(11))
+EndIf
+
+lcLPrecos = CrSigCdLpc.lprecos
+lcTipos   = ThisForm.CompVenda
+
+lcQuery = [Select * From SigCdLpi Where lPrecos = ']+lcLprecos+[' Order by Cpros ]
+
+If ThisForm.PodataMgr.SqlExecute(lcQuery,'TmplPrei') < 1
+	MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')
+	Return(.F.)
+Endif
+
+Select TmpLprei
+Index On cpros Tag CPros
+Index On dpros Tag DPros
+Set Order To
+Go Top
+
+loBarraPrei = CreateObject('fwprogressbar','Aguarde! Selecionando registros...',Reccount('tmplprei'))
+loBarraPrei.Show
+Select tmplprei
+Go Top
+Scan
+	loBarraPrei.Update(.T.)
+	Scatter MemVar
+	If Used('TmpPro')
+		Use In TmpPro
+	EndIf
+	If lnTipo = 1
+		lStrQuery = [Select a.Cpros,a.linhas,a.cgrus,a.situas,a.pesoms,b.tpvendas,c.dgrus,d.dcompos,a.figJpgs From SigCdPro a ]+;
+					[Left Join SigCdLin b On b.linhas = a.linhas ]+;
+					[Left Join SigCdGrp c On c.cgrus  = a.cgrus ]+;
+					[Left Join SigPrCpo d On d.cpros = a.cpros ]+;
+					[Where a.cpros = ']+tmplprei.cpros+[' ]
+	Else
+		lStrQuery = [Select cpros,cgrus,situas,figJpgs From SigCdPro ]+;
+					[Where cpros = ']+tmplprei.cpros+[' ]
+	EndIf
+		
+	If ThisForm.poDataMgr.SqlExecute(lStrQuery,'TmpPro') < 1
+		MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')
+		Return(.F.)
+	EndIf
+	Select TmpPro
+	Go Top
+	If !Eof()
+		m.situas  = TmpPro.situas
+		m.cgrus   = TmpPro.cgrus
+		If lnTipo = 1
+			m.dgrus   = Nvl(TmpPro.dgrus,'')
+			m.dcompos = Nvl(TmpPro.dcompos,'')
+			m.pesoms  = TmpPro.pesoms
+			m.indices = IIf(!Empty(TmpPro.linhas) And Nvl(TmpPro.tpvendas,'0') = '2',m.pesoms,1)
+			m.linhas  = TmpPro.linhas
+		EndIf
+		Insert Into CsRelatorio From MemVar
+
+		If lnFoto = 1
+			If Empty(TmpPro.FigJpgs) Or IsNull(TmpPro.FigJpgs)
+				Replace OrdImg With 'FBRANCOS' In CsRelatorio
+			Else
+				lcCodigo = Strtran(TmpPro.Cpros,'/','')
+				lcCodigo = Strtran(lccodigo,' ','')
+				lcCodigo = Strtran(lccodigo,',','')
+				lcDirectory = Sys(2023)+'\F'+Alltrim(lcCodigo)+'.Jpg'
+				Replace OrdImg With 'F' + Alltrim(lcCodigo) In CsRelatorio
+				lcFoto=Strconv(Strtran(Strtran(Strtran(TmpPro.FigJpgs,[data:image/png;base64,],[]),[data:image/jpeg;base64,],[]),[data:image/jpg;base64,],[]),14)
+				StrToFile(lcFoto, lcDirectory)
+				Clear Resources 
+			EndIf
+		EndIf
+	EndIf
+	Select tmplprei
+EndScan
+Return(.T.)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters _Compra,lcNomeFrm1
+
+Private lcLPrecos, lcTipos
+
+lcNomeFrm1 = Iif(Type('lcNomeFrm1')=='C' And Not Empty(lcNomeFrm1),lcNomeFrm1,ThisForm.Name)
+ThisForm.Name = lcNomeFrm1
+
+ThisForm.Busca = .F.
+ThisForm.CompVenda = IIF(_Compra,"C"," ")
+
+lcLPrecos = Space(30)
+lcTipos   = ThisForm.CompVenda
+llVencs   = Null
+llNVencs  = ' '
+ldDate    = Date()
+
+lcQryLPre  = [Select Distinct a.* From SigCdLpc a ]+;
+             [Inner Join SigCdLpi b On a.lPrecos = b.Lprecos ]+;
+             [Where a.Tipos = ?lcTipos And (?llNVencs is Null Or b.Vencfs >= ?ldDate) And ]+;
+		     [(?llVencs is NUll or not a.lPrecos in ]+;
+			 [(Select Distinct c.lPrecos From SigCdLpc c Inner Join SigCdLpi d ]+;
+			 [On c.lPrecos = d.Lprecos Where c.Tipos = ?lcTipos And d.Vencfs >= ?ldDate))]
+
+*lcQryLPre  = [Select *, 000000 As totals From SigCdLpc Where Tipos = ?lcTipos ]
+lcQryLPrei = [Select * From SigCdLpi Where lprecos = ?lcLPrecos Order by cpros ]
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector',.Name)
+	With .poDataMgr
+		.AddCursor('SigCdLpc' , 'lprecos'  , 'CrSigCdLpc' , '', ThisForm.Pagina.Lista.Grade,lcQryLPre)
+		.pfSqlTabela(1).pColuna('lprecos', '', ''      , 'Lista de Preços', 220, .t.)
+		.pfSqlTabela(1).pColuna('Codigos', '', '999999', 'Codigos',          50, .t.)
+		.pfSqlTabela(1).pColuna('Emps'   , '', '',       'Emps',             50, .t.)
+		.pfSqlTabela(1).pColuna('nQtdes' , '', '999999', 'No. Produtos'   ,  80, .f.)
+		IF ThisForm.CompVenda = [C]
+			.pfSqlTabela(1).pColuna('Contas' , '', ' ', 'Fornecedor'   ,  80, .F.)
+			.pfSqlTabela(1).pColuna('vencis' , '', ' ', 'Iniciar Em'   ,  80, .F.)
+		Endif
+		.AddCursor('SigCdLpi', 'cidchaves', 'CrSigCdLpi', '','',lcQryLPrei)
+
+		.AddCursor('SigCdPrc',  'cIdChaves', 'crSigCdPrc')
+		.AddCursor('SigPrCp2', 'cIdChaves', 'crSigPrCp2')
+	EndWith
+	=DoDefault()
+EndWith
+
+ThisForm.AntCPro   = Space(14)
+ThisForm.AntDPro   = Space(40)
+ThisForm.AntLPreco = Space(30)
+
+ThisForm.Pagina.Dados.Grade.Visible  = .f.
+ThisForm.Pagina.Dados.GradeC.Visible = .f.
+
+If ThisForm.poDataMgr.SqlExecute([Select * From SigCdEmb ],'CrSigCdEmb') < 1
+	MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')
+	Return(.F.)
+EndIf
+Select CrSigCdEmb
+Go Top
+
+If ThisForm.poDataMgr.SqlExecute([Select tpinstalas, ncasas, GrPadFors From SigCdPam ],'CrSigCdPam') < 1
+	MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')
+	Return(.F.)
+EndIf
+Select CrSigCdPam
+Go Top
+
+ThisForm.nOldCasas = 0
+If !Empty(CrSigCdPam.ncasas)
+	ThisForm.nOldCasas = Set('Decimals')
+	Set Decimals To CrSigCdPam.ncasas
+EndIf
+
+IF ThisForm.CompVenda = [C]
+	ThisForm.Pagina.Dados.Cnt_Compra.Visible                = .t.
+	ThisForm.Pagina.Dados.Cnt_Compra.say5.Visible           = .t.
+	ThisForm.Pagina.Dados.Cnt_Compra.say6.Visible           = .t.
+	ThisForm.Pagina.Dados.Cnt_Compra.Say7.Visible           = .t.
+	ThisForm.Pagina.Dados.Cnt_Compra.Get_conta.Visible      = .t.
+	Thisform.Pagina.Dados.Cnt_Compra.Get_dconta.Visible     = .t.
+	thisform.pagina.dados.Cnt_Compra.fweditdata_VENC.visible   = .t.
+	ThisForm.Pagina.Dados.Cnt_Compra.GetIndice.Value        = 0
+	ThisForm.Pagina.Dados.Cnt_Compra.GetIndice.Visible      = .t.
+	ThisForm.Pagina.Dados.Gradec.Visible         = .t.
+	Thisform.Pagina.Dados.SelecionaC.Visible     = .t.
+	Thisform.Pagina.Lista.Grade.SetAll('DynamicForeColor','Iif(crSigCdLpc.Flags,RGB(0,0,255),RGB(0,0,0))','Column')
+Else
+	ThisForm.Pagina.Dados.say1.Visible           = .t.
+	ThisForm.Pagina.Dados.say2.Visible           = .t.
+	ThisForm.Pagina.Dados.say4.Visible           = .t.
+	ThisForm.Pagina.Dados.say5.Visible           = .t.
+	ThisForm.Pagina.Dados.say6.Visible           = .t.
+	ThisForm.Pagina.Dados.say7.Visible           = .t.
+	ThisForm.Pagina.Dados.say9.Visible           = .t.
+	ThisForm.Pagina.Dados.opt_Comissao.Visible   = .t.
+	ThisForm.Pagina.Dados.Opt_Formula.Visible    = .t.
+	ThisForm.Pagina.Dados.Opt_Vencimento.Visible = .t.
+	ThisForm.Pagina.Dados.Opt_ApliTabd.Visible   = .t.
+	ThisForm.Pagina.Dados.Get_Tabd.Visible       = .t.
+	ThisForm.Pagina.Dados.Get_Juros.Visible      = .t.
+	ThisForm.Pagina.Dados.Grade.Visible          = .t.
+	ThisForm.Pagina.Dados.Cnt_Compra.Visible     = .f.
+EndIf
+
+ThisForm.mAtivaPagina1
+
+llVis = fChecaAcesso(Alltrim(Upper(ThisForm.Name)), [PRECOS])
+ThisForm.Pagina.Lista.bnt_Atualiza.Enabled = llVis
+
+Select CrSigCdLpc
+Count To lnRegs
+Go Bottom
+
+With ThisForm.Pagina.Lista.Grade
+	If lnRegs < 13
+		.DoScroll(2)
+		.ActivateCell(lnRegs,1)
+		.Column1.SetFocus
+	EndIf
+EndWith
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE mativapagina1
+------------------------------------------------------------
+PROCEDURE mativapagina1
+Private llVencs, llNVencs, ldDate
+
+ThisForm.LockScreen = .t.
+
+lcLPrecos = CrSigCdLpc.lprecos
+lcTipos   = ThisForm.CompVenda 
+
+With ThisForm.Pagina.Lista.cntFiltros.Optiongroup1
+	llVencs   = Iif(.Value = 1 or .Value = 3,Null,' ')
+	llNVencs  = Iif(.Value = 2 or .Value = 3,Null,' ')
+	ldDate    = Date()
+EndWith 
+
+=DoDefault()
+
+If ThisForm.Busca
+	lcGLPreco = Alltrim(ThisForm.Pagina.Dados.Get_LPreco.Value)
+	Select CrSigCdLpc
+	Set Order To LPrecos
+	Set Near On
+	If !Empty(lcGLPreco)
+		Seek lcGLPreco
+	EndIf
+	Set Near Off
+	ThisForm.Busca = .F.
+	ThisForm.Pagina.Lista.Grade.SetFocus
+	ThisForm.Pagina.Lista.Grade.Column1.SetFocus
+	ThisForm.Pagina.Lista.Grade.Refresh
+Else
+	Set Order To LPrecos
+	Go Bottom
+	ThisForm.Pagina.Lista.Grade.SetFocus
+	ThisForm.Pagina.Lista.Grade.Column1.SetFocus
+	ThisForm.Pagina.Lista.Grade.Refresh
+	ThisForm.LockScreen = .T.
+	=fCarregaGrade(ThisForm.Pagina.Lista.Grade)
+	ThisForm.LockScreen = .F.
+EndIf
+
+If ! Empty(ThisForm.PAGINA.Dados.Get_lpreco.Value)
+	Select crSigCdLpc
+	Locate for LPrecos = Alltrim(ThisForm.PAGINA.Dados.Get_lpreco.Value)
+Endif
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_alterar
+------------------------------------------------------------
+PROCEDURE msv_alterar
+ThisForm.GravarLog
+
+If Not ThisForm.poDataMgr.Update('CrSigCdLpi')
+	ThisForm.Podatamgr.RollBack()
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update - CrSigCdLpi)')
+	ThisForm.Updateok = .f.
+	Return 0
+EndIf
+=DoDefault()
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_excluir
+------------------------------------------------------------
+PROCEDURE msv_excluir
+If Not ThisForm.poDataMgr.Update('CrSigCdLpi')
+	ThisForm.Podatamgr.RollBack()
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update - CrSigCdLpi)')
+	ThisForm.Updateok = .f.
+	Return 0
+EndIf
+
+If (ThisForm.pcEscolha = [EXCLUIR])
+	lcTra = [Lista de Preços: ] + Alltrim(crSigCdLpc.LPrecos) + [ Excluída.]
+	=fGravarLog([C], [SigCdLpc], ThisForm.pcEscolha, lcTra, Usuar)
+EndIf
+
+=DoDefault()
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_inserir
+------------------------------------------------------------
+PROCEDURE msv_inserir
+If Not ThisForm.poDataMgr.Update('CrSigCdLpi')
+	ThisForm.Podatamgr.RollBack()
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update - CrSigCdLpi)')
+	ThisForm.Updateok = .f.
+	Return 0
+EndIf
+=DoDefault()
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_procurar
+------------------------------------------------------------
+PROCEDURE msv_procurar
+*ThisForm.Busca = .T.
+
+*ThisForm.LockScreen = .f.
+
+Select crSigCdLpc
+Locate for Lprecos = Alltrim(ThisForm.PAGINA.Dados.Get_lpreco.Value)
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+If !Empty(ThisForm.nOldCasas)
+	Set Decimals To (ThisForm.nOldCasas)
+EndIf
+=DoDefault()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE PAGINA.Lista.GRUPO_OP.Click
+------------------------------------------------------------
+PROCEDURE PAGINA.Lista.GRUPO_OP.Click
+LParameters Opcao
+
+Private lcLPrecos, lcTipos
+
+If Type('Opcao') = 'N'
+	This.Value = Opcao
+EndIf
+
+If !DoDefault(Opcao)
+	ThisForm.mAtivaPagina1
+	Return
+EndIf
+
+If InList(ThisForm.pcEscolha,'EXCLUIR') And CrSigCdLpc.Flags
+	MessageBox('Impossível Alterar/Excluir uma lista já atualizada!!!',0+48,'')
+	ThisForm.mativapagina1
+	Return 0
+Endif
+
+If ThisForm.pcEscolha = 'INSERIR'
+	Replace CrSigCdLpc.formulas With 2,;
+			CrSigCdLpc.ncomiss  With 2,;
+			CrSigCdLpc.nvencs   With 2,;
+			CrSigCdLpc.Codigos  with fGerUniqueKey('SigCdLpc'),;
+			CrSigCdLpc.Tipos    WITH ThisForm.CompVenda in CrSigCdLpc
+EndIf
+
+Thisform.pagina.dados.get_codigo.Refresh
+
+lcLPrecos = CrSigCdLpc.lprecos
+lcTipos   = ThisForm.CompVenda 
+
+This.Parent.Parent.Dados.Grade.RecordSource = ''
+This.Parent.Parent.Dados.GradeC.RecordSource = ''
+
+ThisForm.poDataMgr.Requery('CrSigCdLpi')
+Select CrSigCdLpi
+INDEX ON Reffs TAG Reffs
+Index On cpros Tag CPros
+Index On dpros Tag DPros
+Update CrSigCdLpi Set vencis = Nvl(vencis,{}),;
+					  vencfs = Nvl(vencfs,{})
+Set Order To
+Go Top
+
+With This.Parent.Parent.Dados.Grade
+	.RecordSource = 'CrSigCdLpi'
+	.Column1.ControlSource = 'CrSigCdLpi.cpros'
+	.Column2.ControlSource = 'CrSigCdLpi.dpros'
+	.Column3.ControlSource = 'CrSigCdLpi.pvens'
+	.Column4.ControlSource = 'CrSigCdLpi.moevs'
+	.Column5.ControlSource = 'CrSigCdLpi.comiss'
+	.Column6.ControlSource = 'CrSigCdLpi.vencis'
+	.Column7.ControlSource = 'CrSigCdLpi.vencfs'
+	.Column8.ControlSource = 'CrSigCdLpi.ccontroles'
+	.Column9.ControlSource = 'CrSigCdLpi.precode'
+	.Column8.Enabled       = (CrSigCdPam.tpinstalas = 'T')
+	.Column8.Visible       = (CrSigCdPam.tpinstalas = 'T')
+	.Refresh
+EndWith
+
+With This.Parent.Parent.Dados.GradeC
+	.RecordSource = 'CrSigCdLpi'
+	.Column1.ControlSource = 'CrSigCdLpi.cpros'
+	.Column2.ControlSource = 'CrSigCdLpi.dpros'
+	.Column3.ControlSource = 'CrSigCdLpi.Reffs'
+	.Column4.ControlSource = 'CrSigCdLpi.Ean13'
+	.Column5.ControlSource = 'CrSigCdLpi.Pvens'
+	.Column6.ControlSource = 'CrSigCdLpi.Moevs'
+	.Column7.ControlSource = 'CrSigCdLpi.Pcuss'
+	.Refresh
+EndWith
+
+With ThisForm.Pagina.Dados
+	Do Case
+
+		Case InList(ThisForm.pcEscolha,'INSERIR','PROCURAR')
+			Select CrSigCdLpc
+			.Get_LPreco.SetFocus
+
+		Case ThisForm.pcEscolha = 'ALTERAR'
+			Select CrSigCdLpi
+			Go Bottom
+			.Grade.Column1.SetFocus
+
+		Case InList( ThisForm.pcEscolha,'CONSULTAR','EXCLUIR')
+			Select CrSigCdLpi
+			Go Top
+			.Grupo_Salva.Salva.SetFocus
+
+	EndCase
+	llVisual = InList(ThisForm.pcEscolha,'INSERIR','ALTERAR')
+	.Copia.Visible     = llVisual And ThisForm.CompVenda # [C]
+	.Insere.Visible    = llVisual And ThisForm.CompVenda # [C]
+	.Delete.Visible    = llVisual And ThisForm.CompVenda # [C]
+	.Seleciona.Visible = llVisual And ThisForm.CompVenda # [C]
+	.Grade.Refresh
+
+	.cntVencimentos.Visible = .f.
+	.cntVencimentos.Enabled = .f.
+	.cmdVencimento.Visible  = (ThisForm.pcEscolha = [ALTERAR])
+	
+	If Used([crOriginal])
+		Use In crOriginal
+	EndIf
+	
+	If (ThisForm.pcEscolha = [ALTERAR])
+		Select * ;
+		  From crSigCdLpi ;
+		  Into Cursor crOriginal
+	EndIf
+EndWith
+
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE PAGINA.Dados.GRUPO_SALVA.Salva.Click
+------------------------------------------------------------
+PROCEDURE PAGINA.Dados.GRUPO_SALVA.Salva.Click
+If InList(ThisForm.pcEscolha,'INSERIR','ALTERAR') &&ThisForm.pcEscolha = 'INSERIR'
+	If Empty(ThisForm.Pagina.Dados.Get_LPreco.Value)
+		MessageBox('Lista de Preço Inválida !!!',0+48,'')
+		ThisForm.Pagina.Dados.Get_LPreco.SetFocus
+		Return(.F.)
+	ELSE
+		FOR i=1 TO LEN(ThisForm.Pagina.Dados.Get_LPreco.Value)
+			cletra = SUBSTR(ThisForm.Pagina.Dados.Get_LPreco.Value,i,1)		
+			IF cletra = [']
+				MESSAGEBOX('Código inválido.',64,'Aviso')
+				ThisForm.Pagina.Dados.Get_LPreco.SetFocus()
+				RETURN .f.
+			ENDIF
+		ENDFOR
+	ENDIF
+	
+	If ThisForm.pcEscolha=[INSERIR] and ThisForm.poDataMgr.CursorQuery('SigCdLpc',,'lprecos',This.Parent.Parent.Get_LPreco.Value)
+		MessageBox('Lista de Preço já cadastrada !!!',0+48,'')
+		ThisForm.Pagina.Dados.Get_LPreco.SetFocus
+		Return(.F.)
+	EndIf
+	
+	If (ThisForm.pcEscolha = [INSERIR]) And Not Empty(This.parent.parent.getEmps.Value)
+		lcQuery = [Select lPrecos ] + ;
+				    [From SigCdLpc ] + ;
+				   [Where Emps = '] + This.parent.parent.getEmps.Value + [']
+
+		If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalBus]) < 1)
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalBus 1)])
+			Return .f.
+		EndIf
+		Go Top In LocalBus
+		If Not Eof([LocalBus])
+			=Messagebox([Já Existe uma Lista de Preço Cadastrado para a Empresa.], 48, [Atenção!!!])
+			ThisForm.Pagina.Dados.Get_LPreco.SetFocus()
+			Return .f.
+		EndIf
+	EndIf
+EndIf
+
+Do Case
+
+	Case ThisForm.pcEscolha = 'EXCLUIR'
+		Select CrSigCdLpi
+		Go Top
+		If !Eof()
+			Delete From CrSigCdLpi
+		EndIf
+
+	Case InList(ThisForm.pcEscolha,'INSERIR','ALTERAR')
+		Select CrSigCdLpi
+		Scan
+			If Empty(CrSigCdLpi.cpros) OR ( ThisForm.CompVenda = [C] And EMPTY(CrSigCdLpi.pCuss) )
+				Delete
+			Else
+				Replace ordems    With '',;
+						lPrecos   With CrSigCdLpc.lPrecos,;
+						cidchaves With Iif(Empty(cidchaves),fUniqueIds(),cidchaves) in CrSigCdLpi
+			EndIf
+		EndScan
+		Count for ! Deleted() to lnQtdes 
+		Select crSigCdLpc
+		Replace nqtdes With lnQtdes 
+		
+EndCase
+
+If Not InList(ThisForm.pcEscolha, [EXCLUIR], [PROCURAR])
+	Select CPros ;
+	  From crSigCdLpi ;
+	  Into Cursor crBusca
+
+	If (Reccount([crBusca]) < 1)
+		=MessageBox('Nenhum Item Foi Digitado Nesta Lista. Corrija Por Favor!!!', 0+16, 'Erro!!!')
+		Return 0
+	EndIf
+EndIf
+
+* Se Alterou a Rotina e Estava com os Preços Atualizados Gravará um Log
+If (ThisForm.pcEscolha = [ALTERAR] And crSigCdLpc.Flags)
+	lcTra = [Lista de Preços: ] + Alltrim(crSigCdLpc.LPrecos) + [ Alterada Após Atualização de Preços.]
+	=fGravarLog([C], [SigCdLpc], ThisForm.pcEscolha, lcTra, Usuar)
+EndIf
+
+ThisForm.Updateok = .t.
+
+=DoDefault()
+
+If Not Thisform.Updateok 
+	Return .f.
+EndIf
+
+ThisForm.mAtivaPagina1
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE PAGINA.Dados.GRUPO_SALVA.Cancelar.Click
+------------------------------------------------------------
+PROCEDURE PAGINA.Dados.GRUPO_SALVA.Cancelar.Click
+=DoDefault()
+
+If ThisForm.plCancelar
+	ThisForm.mAtivaPagina1
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDLPR.PAGINA.Lista.imprimir
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 4
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Private lcLPrecos
+
+Select CrSigCdLpc
+
+If !Eof()
+
+	lcLPrecos = crSigCdLpc.lPrecos
+	= ThisForm.poDataMgr.ReQuery('crSigCdLpi')
+
+	With ThisForm.Pagina
+		With .Lista
+			.Grupo_Op.Enabled    = .F.
+			.Grade.Enabled       = .F.
+			.Grupo_Saida.Enabled = .F.
+			.Imprimir.Enabled    = .F.
+			.ImpLista.Visible    = .T.
+			.ImpLista.Opt_Tipo.Option1.SetFocus()
+		EndWith
+		.Dados.Enabled = .F.
+	EndWith
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDLPR.PAGINA.Lista.ImpLista.Cmd_excel
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Local lcArqExcel1
+
+*!* If This.Parent.Opt_Tipo.Value <> 2
+Select CrSigCdLpi
+Go Top
+lcArqExcel1 = PutFile([Nome da Planilha],[],[XLS])
+
+If fVerificaPasta(lcArqExcel1,2)
+	Copy To (lcArqExcel1) Type XL5
+	If File(lcArqExcel1)
+		MessageBox('Planilha Gerada Com Sucesso !!!',(0+48+32),'')
+	EndIf
+Else
+	MessageBox('Erro na geração da planilha,' +Chr(10)+ 'Verificar Diretório ou planilha já aberta.',(0+48+32),'')
+EndIf
+
+ThisForm.Pagina.Dados.Enabled = .T.
+With ThisForm.Pagina.Lista
+	.Grupo_Op.Enabled    = .T.
+	.Grade.Enabled       = .T.
+	.Grupo_Saida.Enabled = .T.
+	.Imprimir.Enabled    = .T.
+	.ImpLista.Visible    = .F.
+	.Grade.Column1.SetFocus
+EndWith
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDLPR.PAGINA.Lista.ImpLista.Cmd_Visual
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If This.Parent.Opt_Tipo.Value <> 2
+	If !(ThisForm.MontaRel(1))
+		Return(.F.)
+	EndIf
+
+	Select CsRelatorio
+	Go Top
+	Opt_Tipo = This.Parent.Opt_Tipo.Value
+	If Opt_Tipo = 1 Or Opt_Tipo = 4
+		Report Form SigCdLpr Preview NoConsole
+	Else
+		Report Form SigCdLp1 Preview NoConsole
+	EndIf
+Else
+	If !(ThisForm.MontaRel(2))
+		Return(.F.)
+	EndIf
+
+	Create Cursor  TmpEmb  (Emb1 c(3), Mult1 n(6,1), Preco1 n(12,2),;
+							Emb2 c(3), Mult2 n(6,1), Preco2 n(12,2),;
+							Emb3 c(3), Mult3 n(6,1), Preco3 n(12,2),;
+							Emb4 c(3), Mult4 n(6,1), Preco4 n(12,2),;
+							Emb5 c(3), Mult5 n(6,1), Preco5 n(12,2),;
+							Emb6 c(3), Mult6 n(6,1), Preco6 n(12,2))
+	Append Blank
+	Select CrSigCdEmb
+	Go Top
+	If !Eof()
+		lnCnt = 0
+		For lnCnt = 1 To 5
+			lcFEmb = 'TmpEmb.Emb'   + Str(lnCnt,1)
+			lcFMul = 'TmpEmb.Mult'  + Str(lnCnt,1)
+			lcFPre = 'TmpEmb.Preco' + Str(lnCnt,1)
+			Replace &lcFEmb. With CrSigCdEmb.cods,;
+					&lcFMul. With CrSigCdEmb.multis,;
+					&lcFPre. With CrSigCdEmb.precos
+			Select CrSigCdEmb
+			Skip
+			If Eof()
+				Exit
+			EndIf
+		Next
+	EndIf
+		
+	Select CsRelatorio
+	Go Top
+	Report Form SigCdLp2 Preview NoConsole
+	Use In TmpEmb
+EndIf
+
+ThisForm.Pagina.Dados.Enabled = .T.
+With ThisForm.Pagina.Lista
+	.Grupo_Op.Enabled    = .T.
+	.Grade.Enabled       = .T.
+	.Grupo_Saida.Enabled = .T.
+	.Imprimir.Enabled    = .T.
+	.Grade.Column1.SetFocus
+	.ImpLista.Visible    = .F.
+EndWith
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDLPR.PAGINA.Lista.ImpLista.Cmd_Imprimir
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If This.Parent.Opt_Tipo.Value <> 2
+	If !(ThisForm.MontaRel(1))
+		Return(.F.)
+	EndIf
+
+	Select CsRelatorio
+	Go Top
+	Opt_Tipo = This.Parent.Opt_Tipo.Value
+	If Opt_Tipo = 1 Or Opt_Tipo = 4
+		Report Form SigCdLpr To Print Prompt NoConsole
+	Else
+		Report Form SigCdLp1 To Print Prompt NoConsole
+	EndIf
+Else
+	If !(ThisForm.MontaRel(2))
+		Return(.F.)
+	EndIf
+
+	Create Cursor  TmpEmb  (Emb1 c(3), Mult1 n(6,1), Preco1 n(12,2),;
+							Emb2 c(3), Mult2 n(6,1), Preco2 n(12,2),;
+							Emb3 c(3), Mult3 n(6,1), Preco3 n(12,2),;
+							Emb4 c(3), Mult4 n(6,1), Preco4 n(12,2),;
+							Emb5 c(3), Mult5 n(6,1), Preco5 n(12,2),;
+							Emb6 c(3), Mult6 n(6,1), Preco6 n(12,2))
+	Append Blank
+	Select CrSigCdEmb
+	Go Top
+	If !Eof()
+		lnCnt = 0
+		For lnCnt = 1 To 5
+			lcFEmb = 'TmpEmb.Emb'   + Str(lnCnt,1)
+			lcFMul = 'TmpEmb.Mult'  + Str(lnCnt,1)
+			lcFPre = 'TmpEmb.Preco' + Str(lnCnt,1)
+			Replace &lcFEmb. With CrSigCdEmb.cods,;
+					&lcFMul. With CrSigCdEmb.multis,;
+					&lcFPre. With CrSigCdEmb.precos
+			Select CrSigCdEmb
+			Skip
+			If Eof()
+				Exit
+			EndIf
+		Next
+	EndIf
+	
+	Select CsRelatorio
+	Go Top
+	Report Form SigCdLp2 To Print Prompt NoConsole
+	Use In TmpEmb
+EndIf
+
+ThisForm.Pagina.Dados.Enabled = .T.
+With ThisForm.Pagina.Lista
+	.Grupo_Op.Enabled    = .T.
+	.Grade.Enabled       = .T.
+	.Grupo_Saida.Enabled = .T.
+	.Imprimir.Enabled    = .T.
+	.ImpLista.Visible    = .F.
+	.Grade.Column1.SetFocus
+EndWith
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDLPR.PAGINA.Lista.ImpLista.cmd_grupo
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE cmd_ok.Click
+------------------------------------------------------------
+PROCEDURE cmd_ok.Click
+ThisForm.Pagina.Dados.Enabled = .T.
+With ThisForm.Pagina.Lista
+	.Grupo_Op.Enabled    = .T.
+	.Grade.Enabled       = .T.
+	.Grupo_Saida.Enabled = .T.
+	.Imprimir.Enabled    = .T.
+	.Grade.Column1.SetFocus
+	.ImpLista.Visible    = .F.
+EndWith
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDLPR.PAGINA.Lista.ImpLista.Opt_foto
+* Classe: fwoption (Base: optiongroup)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+NODEFAULT
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDLPR.PAGINA.Lista.bnt_Atualiza
+* Classe: checkbox (Base: checkbox)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+This.Value = 0
+If CrSigCdLpc.Vencis > DATE()
+	MESSAGEBOX('Lista de Preço com Data de Vencimento para '+DTOC(CrSigCdLpc.VencIs),0+48,'')
+	RETURN .f.
+EndIf
+If CrSigCdLpc.Flags
+	MessageBox('Lista de Preço já Atualizada !!!',0+48,'')
+	Return .f.
+EndIf
+
+lcquery = [Select * From SigCdLpi Where Lprecos = ']+CrSigCdLpc.Lprecos+[']
+If ThisForm.PodataMgr.SqlExecute(lcQuery,'TmpLprei') < 1
+	MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')
+	Return(.F.)
+EndIf
+
+Select VencFs ;
+  From TmpLprei ;
+ Where (Ttod(Nvl(VencFs, Ctot([]))) >= Date()) Or ;
+ 	   Empty(Ttod(Nvl(VencFs, Ctot([])))) ;
+  Into Cursor crAlerta
+
+If (Reccount([crAlerta]) > 0)
+	If MessageBox([Existe Produto Com Vencimento Maior Ou Igual a Hoje] + Chr(13) + ;
+				  [Deseja Prosseguir Com a Atualização Mesmo Assim?],4+32+512, [Atenção!!!]) <> 6
+		Return .f.
+	EndIf
+EndIf
+
+Select TmpLpreI
+Scan
+	If Not ThisForm.ChecaGrpVenda(TmpLpreI.CPros)
+		Return .f.
+	EndIf
+EndScan
+
+If MessageBox('Confirma a Atualização dos Preços ',4+32,'Confirmação') = 6
+	Zap In crSigCdPrc
+	Zap In crSigPrCp2
+
+	Select TmpLprei
+	Scan
+		ThisForm.poDataMgr.CursorQuery('SigCdPro', 'LocalPro', 'CPros', TmpLPreI.CPros)
+		If Used('LocalPro') And Not Eof('LocalPro')
+			Select LocalPro
+			Scatter MemVar Memo
+			m.DataAlts  = Datetime()
+			m.HoraAlts  = Substr(Ttoc(m.DataAlts),12,8)
+			m.UsuaAlts  = Usuar
+			m.CIdChaves = fUniqueIds()
+			m.Origem    = Ttoc(Datetime()) + [ SigCdLpc] 
+			Insert Into crSigCdPrc From MemVar
+		EndIf
+
+		ThisForm.poDataMgr.CursorQuery('SigPrCpo', 'LocalCompo', 'CPros', TmpLPreI.CPros)
+		If Used('LocalCompo') And Not Eof('LocalCompo')
+			Select LocalCompo
+			Scan
+				Scatter MemVar Memo
+				m.DataAlts = Datetime()
+				m.HoraAlts = Substr(Ttoc(m.DataAlts),12,8)
+				m.UsuaAlts = Usuar
+				Insert Into crSigPrCp2 From MemVar
+			EndScan
+		EndIf
+		
+		Select TmpLprei
+		Scatter Memvar
+
+		If (ThisForm.CompVenda = [C])
+			lcUpdate = [Update SigCdPro Set Pcuss = ] + Str(m.PCuss,15,3) + [, CustoFs = ]+STR(m.Pcuss,15,3)+[ Where Cpros = ']+m.Cpros+[']
+		Else
+			lcUpdate = [Update SigCdPro Set PVens = ] + Str(m.PVens,15,3) + [, PrecoDe = ] + Str(m.PrecoDe,15,3) + [ Where Cpros = '] + m.Cpros + [']
+		EndIf
+		
+		If ThisForm.PodataMgr.SqlExecute(lcUpdate,'') < 1
+			ThisForm.Podatamgr.RollBack()
+			MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')
+			Return .f.
+		EndIf
+
+		lcDelete = [Delete From SigPrPrt Where Cpros = '] + m.Cpros + [']
+		If ThisForm.PodataMgr.SqlExecute(lcDelete,'') < 1
+			ThisForm.Podatamgr.RollBack()
+			MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão - Delete - SigPrPrt')
+			Return .f.
+		EndIf
+		
+*!*			lcDelete = [Delete From SigPrWeb Where Cpros = '] + m.Cpros + [']
+*!*			If ThisForm.PodataMgr.SqlExecute(lcDelete,'') < 1
+*!*				ThisForm.Podatamgr.RollBack()
+*!*				MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão - Delete - SigPrWeb')
+*!*				Return .f.
+*!*			EndIf
+		
+		If Not ThisForm.AtualizaMarkup(m.Cpros)
+			Return .f.
+		EndIf
+	EndScan
+
+	lcFlag = .t.
+	lcUpdate = [Update SigCdLpc Set Flags = ?lcFlag Where Lprecos = ']+CrSigCdLpc.Lprecos+[']
+	If ThisForm.PodataMgr.SqlExecute(lcUpdate,'') < 1
+		ThisForm.Podatamgr.RollBack()
+		MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')
+		Return(.F.)
+	EndIf 
+
+	If Not ThisForm.poDataMgr.Update('crSigCdPrc')
+		ThisForm.Podatamgr.RollBack()
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update - crSigCdPrc)')
+		Return 0
+	EndIf
+
+	If Not ThisForm.poDataMgr.Update('crSigPrCp2')
+		ThisForm.Podatamgr.RollBack()
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update - crSigPrCp2)')
+		Return 0
+	EndIf
+
+	If ThisForm.Podatamgr.Commit() < 1
+		ThisForm.Podatamgr.RollBack()
+		MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')
+		Return(.F.)
+	EndIf
+
+	lcMsg = [Atualização de preço dos produtos com a lista de preço : ] + CrSigCdLpc.Lprecos
+
+	=fGravarLog([T], ThisForm.Name, Usuar, lcMsg)
+
+	ThisForm.mativapagina1 
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDLPR.PAGINA.Lista.cntFiltros.Optiongroup1
+* Classe: optiongroup (Base: optiongroup)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE InteractiveChange
+------------------------------------------------------------
+PROCEDURE InteractiveChange
+ThisForm.mAtivapagina1()
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDLPR.PAGINA.Dados.GradeC
+* Classe: fwgrade (Base: grid)
+* Registro: 21
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE AfterRowColChange
+------------------------------------------------------------
+PROCEDURE AfterRowColChange
+LParameters nColIndex
+
+This.Parent.TxtCPros.Value = ''
+This.Parent.TxtDPros.Value = ''
+This.Parent.TxtCPros.Refresh
+This.Parent.TxtDPros.Refresh
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDLPR.PAGINA.Dados.GradeC.Column1.Header1
+* Classe: header (Base: header)
+* Registro: 22
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If Upper(Order('CrSigCdLpi')) # 'CPROS'
+	Select CrSigCdLpi
+	Set Order to Cpros
+	With Thisform.Pagina.Dados.Gradec
+		.Column1.Header1.BackColor = RGB(220,255,220)
+		.Column3.Header1.BackColor = RGB(236,233,216)
+		.Column2.Header1.BackColor = RGB(236,233,216)
+		.Refresh
+	EndWith
+ENDIF
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDLPR.PAGINA.Dados.GradeC.Column1.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 23
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+RETURN (.f.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDLPR.PAGINA.Dados.GradeC.Column2.Header1
+* Classe: header (Base: header)
+* Registro: 24
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If Upper(Order('CrSigCdLpi')) # 'DPROS'
+	Select CrSigCdLpi
+	Set Order to Dpros
+	With Thisform.Pagina.Dados.Gradec
+		.Column2.Header1.BackColor = RGB(220,255,220)
+		.Column3.Header1.BackColor = RGB(236,233,216)
+		.Column1.Header1.BackColor = RGB(236,233,216)
+		.Refresh
+	EndWith
+ENDIF
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDLPR.PAGINA.Dados.GradeC.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 25
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If This.Value = ThisForm.AntDPro
+	Return
+EndIf
+
+If !Empty(This.Value)
+	If Seek(This.Value,'CrSigCdLpi','dpros')
+		MessageBox('Produto ' + Alltrim(CrSigCdLpi.cpros) + ' já cadastrado nessa Lista de Preços !!!')
+		This.Value = ''
+		This.Refresh
+		Return(.F.)
+	EndIf
+	m.loLista = CreateObject('fwbuscaext',ThisForm.poDataMgr.pnIdConn,'SigCdPro','CrProds','dpros',This.Value,'Produtos',1000)
+	If !(m.loLista.plAchouRegistro)
+		m.loLista.mAddColuna('dpros','','Descrição')
+		m.loLista.mAddColuna('cpros','','Código')
+		m.loLista.Show()
+	EndIf
+
+	If LastKey() <> 27 And Used('CrProds')
+		Replace CrSigCdLpi.cpros  With CrProds.cpros,;
+				CrSigCdLpi.cgrus  With CrProds.cgrus,;
+				CrSigCdLpi.ordems With ''
+		This.Value                             = Evaluate('CrProds.dpros')
+		This.Parent.Parent.Column1.Text1.Value = Evaluate('CrProds.cpros')
+		This.Parent.Parent.Column3.Text1.Value = Evaluate('CrProds.pvens')
+		This.Parent.Parent.Column4.Text1.Value = Evaluate('CrProds.moevs')
+		This.Parent.Parent.Column9.Text1.Value = Evaluate('CrProds.PrecoDe')
+	Else
+		This.Value = ''
+	EndIf
+EndIf
+This.Refresh
+This.Parent.Parent.Parent.TxtDPros.Refresh
+This.Parent.Parent.Column1.Text1.Refresh
+This.Parent.Parent.Column3.Text1.Refresh
+This.Parent.Parent.Column4.Text1.Refresh
+Return(.T.)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.f.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDLPR.PAGINA.Dados.GradeC.Column3.Header1
+* Classe: header (Base: header)
+* Registro: 26
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If Upper(Order('CrSigCdLpi')) # 'REFFS'
+	Select CrSigCdLpi
+	Set Order to Reffs
+	With Thisform.Pagina.Dados.Gradec
+		.Column3.Header1.BackColor = RGB(220,255,220)
+		.Column1.Header1.BackColor = RGB(236,233,216)
+		.Column2.Header1.BackColor = RGB(236,233,216)
+		.Refresh
+	EndWith
+ENDIF
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDLPR.PAGINA.Dados.GradeC.Column3.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 27
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.f.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDLPR.PAGINA.Dados.GradeC.Column4.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 29
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.f.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDLPR.PAGINA.Dados.GradeC.Column5.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 31
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.f.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDLPR.PAGINA.Dados.GradeC.Column6.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 33
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(.f.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDLPR.PAGINA.Dados.GradeC.Column7.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 35
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If This.Value < 0
+	Messagebox('Valor Inválido !!!',48,'')
+	Return(.F.)
+ENDIF
+IF LASTKEY() = 13
+	Keyboard '{DNARROW}'
+ENDIF
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(InList(ThisForm.pcEscolha,'INSERIR','ALTERAR') And !Empty(CrSigCdLpi.cpros))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDLPR.PAGINA.Dados.Grade
+* Classe: fwgrade (Base: grid)
+* Registro: 36
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE AfterRowColChange
+------------------------------------------------------------
+PROCEDURE AfterRowColChange
+LParameters nColIndex
+
+This.Parent.TxtCPros.Value = ''
+This.Parent.TxtDPros.Value = ''
+This.Parent.TxtCPros.Refresh
+This.Parent.TxtDPros.Refresh
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDLPR.PAGINA.Dados.Grade.Column1.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 38
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE GotFocus
+------------------------------------------------------------
+PROCEDURE GotFocus
+This.Tag = Padr(This.Value, 14)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If This.Value = ThisForm.AntCPro
+	Return
+EndIf
+
+If Not Empty(This.Value)
+	m.loLista = CreateObject('fwbuscaext',ThisForm.poDataMgr.pnIdConn,'SigCdPro','CrProds','cpros',This.Value,'Produtos',1000)
+	If !(m.loLista.plAchouRegistro)
+		m.loLista.mAddColuna('cpros','','Código')
+		m.loLista.mAddColuna('dpros','','Descrição')
+		m.loLista.Show()
+	EndIf
+
+	If LastKey() <> 27 And Used('CrProds')
+		If (This.Tag <> Padr(This.Value, 14)) And Not ThisForm.ChecaGrpVenda(crProds.CPros)
+			Return .f.
+		EndIf
+	
+		Replace CPros  With crProds.CPros,;
+				CGrus  With crProds.CGrus,;
+				Ordems With [] In crSigCdLpi
+
+		This.Value                             = Evaluate('CrProds.cpros')
+		This.Parent.Parent.Column2.Text1.Value = Evaluate('CrProds.dpros')
+		This.Parent.Parent.Column3.Text1.Value = Evaluate('CrProds.pvens')
+		This.Parent.Parent.Column4.Text1.Value = Evaluate('CrProds.moevs')
+		This.Parent.Parent.Column9.Text1.Value = Evaluate('CrProds.precode')
+
+		If (ThisForm.CompVenda <> [C])
+			This.Parent.Parent.Column3.Text1.Value = fArredondamento(This.Parent.Parent.Column3.Text1.Value, ThisForm.poDataMgr)
+		EndIf
+
+	Else
+		This.Value = ''
+	EndIf
+Else
+	If !Empty(ThisForm.AntCpro)
+		Select CrSigCdLpi
+		Replace dpros  	With '',;
+				pvens  	With 0,;
+				precode With 0,;
+				moevs  	With '',;
+				comiss 	With 0,;
+				ordems 	With Chr(255)
+	EndIf
+EndIf
+
+If Not Empty(This.Value)
+	lnRecno = Recno('CrSigCdLpi')
+	Select CPros ;
+	  From crSigCdLpi ;
+	 Where Cpros = Padr(This.Value, 14) And (Recno() <> lnRecno) ;
+	  Into Cursor crBusca
+
+	If (Reccount([crBusca]) > 0)
+		=MessageBox('O Produto "' + Alltrim(This.Value) + '" Já Está Em Uso Nesta Lista!!!', 0+48, 'Atenção!!!')
+		This.Value = Space(14)
+		This.Refresh
+		Return 0
+	EndIf
+EndIf
+
+This.Refresh
+This.Parent.Parent.Parent.TxtDPros.Refresh
+This.Parent.Parent.Column2.Text1.Refresh
+This.Parent.Parent.Column3.Text1.Refresh
+This.Parent.Parent.Column4.Text1.Refresh
+Return(.T.)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+ThisForm.AntCPro = This.Value
+
+Return Empty(crSigCdLpi.Cpros) And (ThisForm.pcEscolha = [INSERIR]) Or (ThisForm.pcEscolha = [ALTERAR] And Not crSigCdLpc.Flags)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDLPR.PAGINA.Dados.Grade.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 40
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE GotFocus
+------------------------------------------------------------
+PROCEDURE GotFocus
+This.Tag = Padr(This.Value, 40)
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If This.Value = ThisForm.AntDPro
+	Return
+EndIf
+
+If !Empty(This.Value)
+	If Seek(This.Value,'CrSigCdLpi','dpros')
+		MessageBox('Produto ' + Alltrim(CrSigCdLpi.cpros) + ' já cadastrado nessa Lista de Preços !!!')
+		This.Value = ''
+		This.Refresh
+		Return(.F.)
+	EndIf
+	m.loLista = CreateObject('fwbuscaext',ThisForm.poDataMgr.pnIdConn,'SigCdPro','CrProds','dpros',This.Value,'Produtos',1000)
+	If !(m.loLista.plAchouRegistro)
+		m.loLista.mAddColuna('dpros','','Descrição')
+		m.loLista.mAddColuna('cpros','','Código')
+		m.loLista.Show()
+	EndIf
+
+	If LastKey() <> 27 And Used('CrProds')
+		If (This.Tag <> Padr(This.Value, 40)) And Not ThisForm.ChecaGrpVenda(crProds.CPros)
+			Return .f.
+		EndIf
+
+		Replace CrSigCdLpi.cpros  With CrProds.cpros,;
+				CrSigCdLpi.cgrus  With CrProds.cgrus,;
+				CrSigCdLpi.ordems With ''
+		This.Value                             = Evaluate('CrProds.dpros')
+		This.Parent.Parent.Column1.Text1.Value = Evaluate('CrProds.cpros')
+		This.Parent.Parent.Column3.Text1.Value = Evaluate('CrProds.pvens')
+		This.Parent.Parent.Column4.Text1.Value = Evaluate('CrProds.moevs')
+		This.Parent.Parent.Column9.Text1.Value = Evaluate('CrProds.precode')
+
+		If (ThisForm.CompVenda <> [C])
+			This.Parent.Parent.Column3.Text1.Value = fArredondamento(This.Parent.Parent.Column3.Text1.Value, ThisForm.poDataMgr)
+		EndIf
+	Else
+		This.Value = ''
+	EndIf
+EndIf
+This.Refresh
+This.Parent.Parent.Parent.TxtDPros.Refresh
+This.Parent.Parent.Column1.Text1.Refresh
+This.Parent.Parent.Column3.Text1.Refresh
+This.Parent.Parent.Column4.Text1.Refresh
+Return(.T.)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+ThisForm.AntDpro = This.Value
+
+Return Empty(crSigCdLpi.Cpros) And (ThisForm.pcEscolha = [INSERIR]) Or (ThisForm.pcEscolha = [ALTERAR] And Not crSigCdLpc.Flags)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDLPR.PAGINA.Dados.Grade.Column3.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 42
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE GotFocus
+------------------------------------------------------------
+PROCEDURE GotFocus
+This.Tag = Str(This.Value, 12, 4)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If (This.Tag <> Str(This.Value, 12, 4)) And Not ThisForm.ChecaGrpVenda(crSigCdLpi.CPros)
+	Return .f.
+EndIf
+
+If This.Value < 0
+	MessageBox('Preço de Venda Inválido !!!',48,'')
+	This.Value = 0
+	Return(.F.)
+Else
+	This.Value = fArredondamento(This.Value, ThisForm.poDataMgr)
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (ThisForm.pcEscolha = [INSERIR]) Or (ThisForm.pcEscolha = [ALTERAR] And Not crSigCdLpc.Flags)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDLPR.PAGINA.Dados.Grade.Column4.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 44
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE GotFocus
+------------------------------------------------------------
+PROCEDURE GotFocus
+This.Tag = Padr(This.Value, 3)
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local lcMoeda, xBrow, xBrowCol
+
+lcMoeda = This.Value
+
+If !Empty(This.Value)
+	If (This.Tag <> Padr(This.Value, 3)) And Not ThisForm.ChecaGrpVenda(crSigCdLpi.CPros)
+		Return .f.
+	EndIf
+
+	m.loLista = CreateObject('fwbuscaext',ThisForm.poDataMgr.pnIdConn,'SigCdMoe','CrMoedas','cmoes',This.Value,'Moedas',.T.)
+	If !(m.loLista.plAchouRegistro)
+		m.loLista.mAddColuna('cmoes','XXXXXX','Código')
+		m.loLista.mAddColuna('dmoes','','Descrição')
+		m.loLista.Show()
+	EndIf
+	If LastKey() <> 27 And Used('CrMoedas')
+		This.Value = Evaluate('CrMoedas.cmoes')
+	Else
+		This.Value = ''
+	EndIf
+EndIf
+This.Refresh
+Return(.T.)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (ThisForm.pcEscolha = [INSERIR]) Or (ThisForm.pcEscolha = [ALTERAR] And Not crSigCdLpc.Flags) And Not Empty(crSigCdLpi.Cpros)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDLPR.PAGINA.Dados.Grade.Column5.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 46
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If This.Value < 0
+	MessageBox('Valor de Comissão Inválido !!!',48,'')
+	This.Value = 0
+	Return(.F.)
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (ThisForm.pcEscolha = [INSERIR]) Or (ThisForm.pcEscolha = [ALTERAR] And Not crSigCdLpc.Flags) And Not Empty(crSigCdLpi.Cpros)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDLPR.PAGINA.Dados.Grade.Column6.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 48
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE GotFocus
+------------------------------------------------------------
+PROCEDURE GotFocus
+This.Tag = Dtos(This.Value)
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If (This.Tag <> Dtos(This.Value)) And Not ThisForm.ChecaGrpVenda(crSigCdLpi.CPros)
+	Return .f.
+EndIf
+
+If This.Value < CrSigCdLpi.vencis
+	Messagebox('Vencimento Inválido !!!',48,'')
+	Return(.F.)
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR]) And Not Empty(crSigCdLpi.Cpros)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDLPR.PAGINA.Dados.Grade.Column7.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 50
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE GotFocus
+------------------------------------------------------------
+PROCEDURE GotFocus
+This.Tag = Dtos(This.Value)
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If (This.Tag <> Dtos(This.Value)) And Not ThisForm.ChecaGrpVenda(crSigCdLpi.CPros)
+	Return .f.
+EndIf
+
+If This.Value < CrSigCdLpi.vencis
+	Messagebox('Vencimento Inválido !!!',48,'')
+	Return(.F.)
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR]) And Not Empty(crSigCdLpi.Cpros)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDLPR.PAGINA.Dados.Grade.Column8.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 52
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (ThisForm.pcEscolha = [INSERIR]) Or (ThisForm.pcEscolha = [ALTERAR] And Not crSigCdLpc.Flags) And Not Empty(crSigCdLpi.Cpros)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDLPR.PAGINA.Dados.Get_lpreco
+* Classe: fwget (Base: textbox)
+* Registro: 58
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+If ThisForm.pcEscolha = 'PROCURAR'
+	ThisForm.Pagina.Dados.Grupo_Salva.Salva.SetFocus
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !Empty(This.Value)
+	If ThisForm.pcEscolha = 'INSERIR'
+		If ThisForm.poDataMgr.CursorQuery('SigCdLpc',,'lprecos',This.Value)
+			MessageBox('Lista de Preço já cadastrada !!!',48,'')
+			This.Value = ThisForm.AntLPreco
+			This.Refresh
+			Return(.F.)
+		EndIf
+	EndIf
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+ThisForm.AntLPreco = This.Value
+
+Return InList(ThisForm.pcEscolha, 'INSERIR', 'PROCURAR') Or (ThisForm.pcEscolha = [ALTERAR] And Not crSigCdLpc.Flags)
+	  
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDLPR.PAGINA.Dados.Get_fpg
+* Classe: fwget (Base: textbox)
+* Registro: 59
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !Empty(This.Value)
+	m.loLista = CreateObject('fwbuscaext',ThisForm.poDataMgr.pnIdConn,'SigOpFp','CrFPags','fpags',This.Value,'Condições de Pagamento',.T.)
+	If !(m.loLista.plAchouRegistro)
+		m.loLista.mAddColuna('fpags','XXXXXXXXXXXX','Código')
+		m.loLista.mAddColuna('fparcs','','')
+		m.loLista.Show()
+	EndIf
+
+	If LastKey() <> 27 And Used('CrFPags')
+		This.Value = Evaluate('CrFPags.fpags')
+	Else
+		This.Value = ''
+	EndIf
+EndIf
+This.Refresh
+Return(.T.)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (ThisForm.pcEscolha = [INSERIR]) Or (ThisForm.pcEscolha = [ALTERAR] And Not crSigCdLpc.Flags) 
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDLPR.PAGINA.Dados.txtcpros
+* Classe: textbox (Base: textbox)
+* Registro: 60
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+This.Parent.Busca.SetFocus
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !Empty(This.Value)
+	m.loLista = CreateObject('fwbuscaext',ThisForm.poDataMgr.pnIdConn,'SigCdPro','CrProds','cpros',This.Value,'Produtos',1000)
+	If !(m.loLista.plAchouRegistro)
+		m.loLista.mAddColuna('cpros','','Código')
+		m.loLista.mAddColuna('dpros','','Descrição')
+		m.loLista.Show()
+	EndIf
+
+	If LastKey() <> 27 And Used('CrProds')
+		This.Value                 = Evaluate('CrProds.cpros')
+		This.Parent.TxtDPros.Value = Evaluate('CrProds.dpros')
+	Else
+		This.Value                 = ''
+		This.Parent.TxtDPros.Value = ''
+	EndIf
+EndIf
+This.Refresh
+This.Parent.TxtDPros.Refresh
+Return(.T.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDLPR.PAGINA.Dados.Txtdpros
+* Classe: textbox (Base: textbox)
+* Registro: 61
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !Empty(This.Value)
+	m.loLista = CreateObject('fwbuscaext',ThisForm.poDataMgr.pnIdConn,'SigCdPro','CrProds','dpros',This.Value,'Produtos',1000)
+	If !(m.loLista.plAchouRegistro)
+		m.loLista.mAddColuna('dpros','','Descrição')
+		m.loLista.mAddColuna('cpros','','Código')
+		m.loLista.Show()
+	EndIf
+
+	If LastKey() <> 27 And Used('CrProds')
+		This.Value                 = Evaluate('CrProds.dpros')
+		This.Parent.TxtCPros.Value = Evaluate('CrProds.cpros')
+	Else
+		This.Value                 = ''
+		This.Parent.TxtCPros.Value = ''
+	EndIf
+EndIf
+This.Refresh
+This.Parent.TxtCPros.Refresh
+Return(.T.)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(Empty(This.Parent.TxtCPros.Value))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDLPR.PAGINA.Dados.Opt_Comissao
+* Classe: fwoption (Base: optiongroup)
+* Registro: 63
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (ThisForm.pcEscolha = [INSERIR]) Or (ThisForm.pcEscolha = [ALTERAR] And Not crSigCdLpc.Flags)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDLPR.PAGINA.Dados.Opt_ApliTabD
+* Classe: fwoption (Base: optiongroup)
+* Registro: 64
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (ThisForm.pcEscolha = [INSERIR]) Or (ThisForm.pcEscolha = [ALTERAR] And Not crSigCdLpc.Flags)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDLPR.PAGINA.Dados.Opt_Vencimento
+* Classe: fwoption (Base: optiongroup)
+* Registro: 65
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (ThisForm.pcEscolha = [INSERIR]) Or (ThisForm.pcEscolha = [ALTERAR] And Not crSigCdLpc.Flags)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDLPR.PAGINA.Dados.Opt_Formula
+* Classe: fwoption (Base: optiongroup)
+* Registro: 66
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (ThisForm.pcEscolha = [INSERIR]) Or (ThisForm.pcEscolha = [ALTERAR] And Not crSigCdLpc.Flags)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDLPR.PAGINA.Dados.Busca
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 67
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+lcGCPros = This.Parent.TxtCPros.Value
+Set Near On
+If !Empty(lcGCPros)
+	If !Seek(lcGCPros,'CrSigCdLpi','CPros')
+		This.Parent.TxtCPros.Value = ''
+		This.Parent.TxtDPros.Value = ''
+	EndIf
+EndIf
+Set Near Off
+This.Parent.TxtCPros.Refresh
+This.Parent.TxtDPros.Refresh
+IF ThisForm.CompVenda = [C]
+	This.Parent.GradeC.Column1.SetFocus
+Else
+	This.Parent.Grade.Column1.SetFocus
+Endif
+	
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDLPR.PAGINA.Dados.SelecionaC
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 70
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If !Empty(ThisForm.Pagina.Dados.Get_LPreco.Value)
+	If (ThisForm.pcEscolha = [INSERIR]) Or (ThisForm.pcEscolha = [ALTERAR] And Not crSigCdLpc.Flags)
+		Select CrSigCdLpc
+		IF ThisForm.CompVenda = [C]
+			ThisForm.Carregaitens()
+			ThisForm.Pagina.Dados.Seleciona.Enabled = .t.
+			ThisForm.Pagina.Dados.Gradec.Column7.SetFocus
+		Else
+			ThisForm.Visible = .F.
+			Do Form SigOpSep With ThisForm
+			ThisForm.Visible = .T.
+		Endif
+	EndIf
+EndIf
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDLPR.PAGINA.Dados.Get_Tabd
+* Classe: fwget (Base: textbox)
+* Registro: 73
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not Empty(This.Value)
+	m.loLista = CreateObject('fwbuscaext',ThisForm.poDataMgr.pnIdConn,'SigOpTdz','CrTabD','codigos',This.Value,'Tabelas de Desconto',.T.)
+	If !(m.loLista.plAchouRegistro)
+		m.loLista.mAddColuna('codigos','XXXXXXXXXX','Código')
+		m.loLista.mAddColuna('descrs','XXXXXXXXXXXXXXXXXXXX','Descrição')
+		m.loLista.Show()
+	EndIf
+	If LastKey() <> 27 And Used('CrTabD')
+		This.Value = Evaluate('CrTabD.codigos')
+	Else
+		This.Value = ''
+	EndIf
+EndIf
+This.Refresh
+Return(.T.)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (ThisForm.pcEscolha = [INSERIR]) Or (ThisForm.pcEscolha = [ALTERAR] And Not crSigCdLpc.Flags)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDLPR.PAGINA.Dados.Get_juros
+* Classe: fwget (Base: textbox)
+* Registro: 74
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (ThisForm.pcEscolha = [INSERIR]) Or (ThisForm.pcEscolha = [ALTERAR] And Not crSigCdLpc.Flags)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDLPR.PAGINA.Dados.getEmps
+* Classe: fwget (Base: textbox)
+* Registro: 75
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+=fAcessoEmpresa(Usuar, 'C', This.Value, ThisForm.Pagina.Dados.getEmps, '', ThisForm.poDataMgr, .t.)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (ThisForm.pcEscolha = [INSERIR]) Or (ThisForm.pcEscolha = [ALTERAR] And Not crSigCdLpc.Flags)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDLPR.PAGINA.Dados.Get_codigo
+* Classe: fwget (Base: textbox)
+* Registro: 76
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDLPR.PAGINA.Dados.cntVencimentos.cmdSalva
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 80
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE btnConfirmar.Click
+------------------------------------------------------------
+PROCEDURE btnConfirmar.Click
+Local ldDat
+
+ldDat = ThisForm.Pagina.Dados.cntVencimentos.getVencs.Value
+
+If Empty(ldDat)
+	=MessageBox([Data Inválida!!!], 0+16, [Atenção])
+	Return 0
+EndIf
+
+Select crSigCdLpi
+Scan
+	If Not ThisForm.ChecaGrpVenda(crSigCdLpi.CPros)
+		Return .f.
+	EndIf
+EndScan
+
+Update crSigCdLpi Set Vencfs = ldDat
+
+Go Top In crSigCdLpi
+
+=MessageBox([Vencimentos Alterados Para ] + Dtoc(ldDat) + [ !!!], 0+16, [Atenção])
+
+loObj = ThisForm.Pagina.Dados
+
+For I=1 To loObj.ControlCount
+	lcNam = loObj.Controls(I).Name
+	If (Upper(lcNam) <> Upper([cntVencimentos]))
+		loObj.Controls(I).Enabled = .t.
+	EndIf
+Next
+
+ThisForm.Pagina.Dados.cntVencimentos.Visible = .f.
+ThisForm.Pagina.Dados.cntVencimentos.Enabled = .f.
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE btnCancelar.Click
+------------------------------------------------------------
+PROCEDURE btnCancelar.Click
+loObj = ThisForm.Pagina.Dados
+
+For I=1 To loObj.ControlCount
+	lcNam = loObj.Controls(I).Name
+	If (Upper(lcNam) <> Upper([cntVencimentos]))
+		loObj.Controls(I).Enabled = .t.
+	EndIf
+Next
+
+ThisForm.Pagina.Dados.cntVencimentos.Visible = .f.
+ThisForm.Pagina.Dados.cntVencimentos.Enabled = .f.
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDLPR.PAGINA.Dados.COPIA
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 81
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If !Empty(ThisForm.Pagina.Dados.Get_LPreco.Value)
+	If InList(ThisForm.pcEscolha,'INSERIR','ALTERAR')
+		Select CrSigCdLpc
+		ThisForm.Visible = .F.
+		Do Form SigPrSlp With ThisForm, CrSigCdLpc.lprecos
+		ThisForm.Visible = .T.
+	EndIf
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (ThisForm.pcEscolha = [INSERIR]) Or (ThisForm.pcEscolha = [ALTERAR] And Not crSigCdLpc.Flags)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDLPR.PAGINA.Dados.DELETE
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 82
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If !Empty(ThisForm.Pagina.Dados.Get_LPreco.Value)
+	If InList(ThisForm.pcEscolha,'INSERIR','ALTERAR')
+		Select CrSigCdLpi
+		If !Empty(cpros)
+			If Not ThisForm.ChecaGrpVenda(crSigCdLpi.CPros)
+				Return .f.
+			EndIf
+
+			Select crSigCdLpi
+			Delete
+			If !Eof()
+				Skip
+				Skip -1
+			EndIf
+		EndIf
+		With ThisForm.Pagina.Dados.Grade
+			.Refresh
+			.SetFocus
+		EndWith
+	EndIf
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (ThisForm.pcEscolha = [INSERIR]) Or (ThisForm.pcEscolha = [ALTERAR] And Not crSigCdLpc.Flags)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDLPR.PAGINA.Dados.INSERE
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 83
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select CrSigCdLpi
+lnRecno = Recno('CrSigCdLpi')
+If !Seek(Space(14),'CrSigCdLpi','cpros')
+	Insert Into CrSigCdLpi(lprecos,ordems,vencis,vencfs) ;
+					Values(CrSigCdLpc.lprecos,Chr(255),{},{})
+	Go Bottom
+	This.Parent.Grade.Refresh
+	This.Parent.Grade.Column1.SetFocus
+Else
+	Go lnRecno
+	This.Parent.Grade.Refresh
+	This.Parent.Grade.Column1.SetFocus
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (ThisForm.pcEscolha = [INSERIR]) Or (ThisForm.pcEscolha = [ALTERAR] And Not crSigCdLpc.Flags)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDLPR.PAGINA.Dados.cmdVencimento
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 84
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+loObj = ThisForm.Pagina.Dados
+
+For I=1 To loObj.ControlCount
+	lcNam = loObj.Controls(I).Name
+	If (Upper(lcNam) <> Upper([cntVencimentos]))
+		loObj.Controls(I).Enabled = .f.
+	EndIf
+Next
+
+ThisForm.Pagina.Dados.cntVencimentos.Visible = .t.
+ThisForm.Pagina.Dados.cntVencimentos.Enabled = .t.
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDLPR.PAGINA.Dados.Seleciona
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 85
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If !Empty(ThisForm.Pagina.Dados.Get_LPreco.Value)
+	If InList(ThisForm.pcEscolha,'INSERIR','ALTERAR')
+		Select CrSigCdLpc
+		IF ThisForm.CompVenda = [C]
+			ThisForm.Carregaitens()
+			ThisForm.Pagina.Dados.Seleciona.Enabled = .t.
+			ThisForm.Pagina.Dados.Gradec.Column7.SetFocus
+		Else
+			ThisForm.Visible = .F.
+			Do Form SigOpSep With ThisForm
+			ThisForm.Visible = .T.
+		Endif
+	EndIf
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (ThisForm.pcEscolha = [INSERIR]) Or (ThisForm.pcEscolha = [ALTERAR] And Not crSigCdLpc.Flags)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDLPR.PAGINA.Dados.Cnt_Compra.GetIndice
+* Classe: fwget (Base: textbox)
+* Registro: 87
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (ThisForm.pcEscolha = [INSERIR]) Or (ThisForm.pcEscolha = [ALTERAR] And Not crSigCdLpc.Flags)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDLPR.PAGINA.Dados.Cnt_Compra.Get_conta
+* Classe: fwget (Base: textbox)
+* Registro: 90
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local Grupo
+Grupo = crSigCdPam.GrPadFors
+If !IsEmpty(this.value)
+	If !fAcessoContas(Usuar,grupo,'C',this.value,This,this.parent.get_dconta)
+		Messagebox('Acesso Negado !!',0+48,'')
+		This.Value=''
+		This.Refresh
+		this.parent.get_dconta.Value = ''
+		this.parent.get_dconta.Refresh
+		return 0 
+	Endif
+Else
+	this.parent.get_dconta.Value = ''
+	this.parent.get_dconta.Refresh
+	return(.t.)
+ENDIF
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (ThisForm.pcEscolha = [INSERIR]) Or (ThisForm.pcEscolha = [ALTERAR] And Not crSigCdLpc.Flags)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDLPR.PAGINA.Dados.Cnt_Compra.Get_dconta
+* Classe: fwget (Base: textbox)
+* Registro: 91
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local Grupo
+Grupo = CrSigCdPam.GrPadFors
+If !IsEmpty(this.value)
+	If !fAcessoContas(Usuar,grupo,'D',this.value,this.parent.get_conta,this)
+		Messagebox('Acesso Negado !!',0+48,'')
+		This.Value=''
+		This.Refresh
+		this.parent.get_conta.Value = ''
+		this.parent.get_conta.Refresh
+		return 0 
+	Endif
+Else
+	this.parent.get_conta.Value = ''
+	this.parent.get_conta.Refresh
+	return(.t.)
+endif
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return IsEmpty( This.Parent.Get_Conta.Value ) And ((ThisForm.pcEscolha = [INSERIR]) Or (ThisForm.pcEscolha = [ALTERAR] And Not crSigCdLpc.Flags))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDLPR.PAGINA.Dados.Cnt_Compra.fweditdata_VENC
+* Classe: fwget (Base: textbox)
+* Registro: 93
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+IF This.Value < DATE()
+	Messagebox('Vencimento Inválido !!!',48,'')
+	Return(.F.)
+ENDIF
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (ThisForm.pcEscolha = [INSERIR]) Or (ThisForm.pcEscolha = [ALTERAR] And Not crSigCdLpc.Flags)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDLPR.PAGINA.Dados.Cnt_Compra.fwget1
+* Classe: fwget (Base: textbox)
+* Registro: 94
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+IF This.Value < DATE()
+	Messagebox('Vencimento Inválido !!!',48,'')
+	Return(.F.)
+ENDIF
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGCDLPR
+RESERVED3 (ClassInfo): antcpro
+antdpro
+antlpreco
+busca
+compvenda
+noldcasas
+opdf
+pcpdfcode
+pcpdflic
+shapewitdth
+updateok
+*atualizamarkup 
+*carregaitens 
+*checagrpvenda 
+*gravarlog 
+*mgettotais 
+*mnovalinha 
+*montarel 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 101
+================================================================================

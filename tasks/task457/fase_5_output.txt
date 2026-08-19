@@ -1,0 +1,14 @@
+﻿Fase 5 conclu├¡da. O arquivo `Formlct.prg` foi atualizado com:
+
+**ConfigurarPaginaDados() completo:**
+- Bot├Áes Confirmar (`cadastro_salvar_60.jpg`) e Cancelar com BINDEVENTs no `cnt_4c_Salva`
+- Label `lbl_4c_Label1` "C├│digo :" ÔÇö Top=153, Left=215 (original 124+29)
+- TextBox `txt_4c_Codigo` ÔÇö Top=150, Left=263, Width=72 (original 121+29), MaxLength=10
+- Label `lbl_4c_Label2` "Descri├º├úo :" ÔÇö Top=178, Left=202 (original 149+29)
+- TextBox `txt_4c_Desc` ÔÇö Top=175, Left=263, Width=240 (original 146+29), MaxLength=40
+
+**M├®todos adicionados:**
+- `FormParaBO()` ÔÇö transfere txt_4c_Codigo/txt_4c_Desc ÔåÆ this_cCods/this_cDescs
+- `BOParaForm()` ÔÇö sentido inverso
+- `LimparCampos()` ÔÇö zera os dois campos
+- `HabilitarCampos(par_lHabilitar)` ÔÇö respeita comportamento original: c├│digo s├│ edit├ível no modo INCLUIR (original: `When` retorna `.F.` no ALTERAR)

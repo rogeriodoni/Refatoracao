@@ -1,0 +1,17 @@
+﻿The file is complete. Here's a summary of all changes made:
+
+**BINDEVENT additions** (lines 1664-1669) in `ConfigurarPaginaDados()`:
+- `txt_4c_Tabd` ÔåÆ LostFocus ÔåÆ `ValidarTabd` + KeyPress ÔåÆ `TeclaTabd`
+- `cnt_4c_Compra.txt_4c_GetConta` ÔåÆ LostFocus ÔåÆ `ValidarGetConta` + KeyPress ÔåÆ `TeclaGetConta`
+- `cnt_4c_Compra.txt_4c_GetDconta` ÔåÆ LostFocus ÔåÆ `ValidarGetDconta` + KeyPress ÔåÆ `TeclaGetDconta`
+
+**9 new methods** (lines 3107-3356) added before `Destroy()`:
+- `ValidarTabd()` / `AbrirBuscaTabd()` / `TeclaTabd()` ÔÇö lookup in `SigOpTdz` (codigos/descrs)
+- `ValidarGetConta()` / `AbrirBuscaGetConta()` / `TeclaGetConta()` ÔÇö lookup in `SigCdCli` (iclis/rclis), fills GetDconta automatically
+- `ValidarGetDconta()` / `AbrirBuscaGetDconta()` / `TeclaGetDconta()` ÔÇö reverse lookup in `SigCdCli` by name (rclis)
+
+**FormParaBO** updated to transfer `txt_4c_Tabd.Value ÔåÆ BO.this_cTabds`
+
+**BOParaForm** updated to load `BO.this_cTabds ÔåÆ txt_4c_Tabd.Value`
+
+**LimparCampos** updated to clear `txt_4c_Tabd.Value = ""`
