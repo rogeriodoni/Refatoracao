@@ -97,13 +97,36 @@ DEFINE CLASS FeaBO AS BusinessBase
     * Init - Inicializa o Business Object
     *--------------------------------------------------------------------------
     PROCEDURE Init()
-        LOCAL loc_lResultado
+        LOCAL loc_lResultado, loc_nResultPam
         loc_lResultado = .F.
 
         TRY
             DODEFAULT()
             THIS.this_cTabela     = "SigCdFcx"
             THIS.this_cCampoChave = "CidChaves"
+
+            *-- Popular crSigCdPam (Erro118): sistema legado Fortyus pre-carregava
+            *-- no startup; sistema novo NAO faz. Padrao: Formsigatcrp.prg:1253-1281.
+            TRY
+                IF USED("crSigCdPam")
+                    USE IN crSigCdPam
+                ENDIF
+                IF TYPE("gnConnHandle") = "N" AND gnConnHandle > 0
+                    loc_nResultPam = SQLEXEC(gnConnHandle, "SELECT * FROM SigCdPam", "cursor_4c_Pam_Temp")
+                    IF loc_nResultPam > 0
+                        SELECT * FROM cursor_4c_Pam_Temp INTO CURSOR crSigCdPam READWRITE
+                        IF USED("cursor_4c_Pam_Temp")
+                            USE IN cursor_4c_Pam_Temp
+                        ENDIF
+                        IF RECCOUNT("crSigCdPam") > 0
+                            SELECT crSigCdPam
+                            GO TOP
+                        ENDIF
+                    ENDIF
+                ENDIF
+            CATCH
+            ENDTRY
+
             loc_lResultado = .T.
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")

@@ -7679,6 +7679,144 @@ Detecta chamadas Pattern B mas nao muta (cada call tem tabela/campos/titulo espe
 - Origem: Erro114 (2026-08-13, Formsigrecog "Relatorio de Comissao por Grupo de Produto" — user reportou "digita M em vendedor + Enter -> nao lista as empresas cadastradas na pesquisa, nem vendedor nem moeda")
 
 
+## 169. Cursores globais Fortyus (`crSigCdPam`) DEVEM ser populados no `BO.Init()` — sistema novo NAO faz pre-load (Erro118 ClienteBO 2026-08-19)
+
+### Contexto
+
+Sistema legado Fortyus tinha cursores globais **pre-carregados no startup** (login/main.prg do sistema legado), como:
+
+- `crSigCdPam` — parametros system-wide (`GrPadClis`, `GrPadVens`, `GrPadCfos`, etc.)
+- `crSigCdSer` — servicos padrao
+- `crSigCdEmp` — empresas ativas
+- outros `crSigCd*`
+
+Forms operacionais migrados de Fortyus (ex: `FormCliente.prg`) frequentemente dependem desses cursores existirem, com codigo tipo:
+
+```foxpro
+IF EMPTY(loc_cGrupo) AND USED("crSigCdPam") AND RECCOUNT("crSigCdPam") > 0
+    SELECT crSigCdPam
+    LOCATE
+    IF !EOF("crSigCdPam")
+        loc_cGrupo = PADR(crSigCdPam.GrPadClis, 10)
+        THIS.this_cGrupo = loc_cGrupo
+    ENDIF
+ENDIF
+
+IF EMPTY(ALLTRIM(THIS.this_cGrupo))
+    MsgAviso("Grupo Padrao Nao Configurado.")
+    loc_lSucesso = .T.   && form abre EM BRANCO (pula ConfigurarCabecalho/etc)
+ELSE
+    ...configura tudo normalmente...
+ENDIF
+```
+
+### Anti-padrao
+
+BO migrado tem `Init()` minimalista:
+
+```foxpro
+PROCEDURE Init()
+    DODEFAULT()
+    THIS.this_cTabela     = "SIGCDCLI"
+    THIS.this_cCampoChave = "iclis"
+    RETURN .T.
+ENDPROC
+```
+
+`crSigCdPam` nunca eh criado por ninguem. Resultado:
+
+1. `USED("crSigCdPam")` retorna `.F.`
+2. `loc_cGrupo` fica vazio
+3. Fluxo pula pra `MsgAviso("Grupo Padrao Nao Configurado")` + `loc_lSucesso = .T.`
+4. Form abre EM BRANCO sem `ConfigurarCabecalho`/`ConfigurarContaCls`/`AddObject`
+5. Usuario ve mensagem + janela cinza vazia
+
+### Fix canonico (BO.Init)
+
+```foxpro
+PROCEDURE Init()
+    LOCAL loc_nResult, loc_oErro
+    DODEFAULT()
+    THIS.this_cTabela     = "SIGCDCLI"
+    THIS.this_cCampoChave = "iclis"
+
+    *-- Popular crSigCdPam com GrPadClis (grupo padrao de clientes).
+    *-- FormCliente.InicializarForm depende deste cursor para determinar
+    *-- o grupo default quando o form abre sem par_cGrupo (menu principal).
+    *-- Padrao canonico: Formsigatcrp.prg:1253-1281.
+    TRY
+        IF USED("crSigCdPam")
+            USE IN crSigCdPam
+        ENDIF
+        IF TYPE("gnConnHandle") = "N" AND gnConnHandle > 0
+            loc_nResult = SQLEXEC(gnConnHandle, "SELECT GrPadClis FROM SigCdPam", "cursor_4c_Pam_Temp")
+            IF loc_nResult > 0
+                SELECT * FROM cursor_4c_Pam_Temp INTO CURSOR crSigCdPam READWRITE
+                IF USED("cursor_4c_Pam_Temp")
+                    USE IN cursor_4c_Pam_Temp
+                ENDIF
+                IF RECCOUNT("crSigCdPam") > 0
+                    SELECT crSigCdPam
+                    GO TOP
+                ENDIF
+            ELSE
+                CREATE CURSOR crSigCdPam (GrPadClis C(10))
+                APPEND BLANK
+            ENDIF
+        ELSE
+            *-- Modo teste (gnConnHandle nao inicializado)
+            CREATE CURSOR crSigCdPam (GrPadClis C(10))
+            APPEND BLANK
+        ENDIF
+    CATCH TO loc_oErro
+        IF !USED("crSigCdPam")
+            CREATE CURSOR crSigCdPam (GrPadClis C(10))
+            APPEND BLANK
+        ENDIF
+    ENDTRY
+
+    RETURN .T.
+ENDPROC
+```
+
+### Ajuste por caso
+
+- **Colunas variam**: `crSigCdPam` pode ter `GrPadVens`/`GrPadCfos`/etc conforme o form use. Adicionar ao SELECT + CREATE CURSOR conforme necessario.
+- **Outros cursores globais**: mesmo padrao para `crSigCdSer` (`SELECT * FROM SigCdSer`), `crSigCdEmp` (`SELECT Cemps, Razas FROM SigCdEmp`), etc.
+- **Multiplos cursores**: se BO depende de 2+, injetar TRY/CATCH separado por cursor.
+
+### Regra secundaria (defensiva no form)
+
+O form `FormCliente` tem um bug de UX secundario: no path `crSigCdPam ausente`, ele seta `loc_lSucesso = .T.` (indicando sucesso) mas pula toda a UI. Preferir:
+
+```foxpro
+IF EMPTY(ALLTRIM(THIS.this_cGrupo))
+    MsgErro("Grupo Padrao Nao Configurado. Configure em SigCdPam antes de abrir Cadastro de Clientes.")
+    loc_lSucesso = .F.   && form NAO abre em branco
+ELSE
+    ...
+ENDIF
+```
+
+Isso impede o form-em-branco. Mas o fix PRIMARIO (popular cursor no BO) elimina o path de erro.
+
+### Detecção automática (Pattern #169)
+
+**WARNING-only** — refactor cirurgico varia por caso:
+- Cada form pode usar colunas diferentes do crSigCdPam
+- BOs podem ja ter Init() com outras responsabilidades (nao trivial injetar sem quebrar)
+- Auto-mutation exige AST parser + cross-file analysis (form ↔ BO)
+
+Detector: escaneia forms operacionais/CRUD para `USED("crSigCdPam")` OU `crSigCdPam.<coluna>`; para cada hit, identifica BO via `CREATEOBJECT("<name>BO")`; verifica se BO tem `crSigCdPam` no Init(). Se mismatch, emite `WARN-169-CRSIGCDPAM-NAO-POPULADO`.
+
+### Referencias
+
+- Memoria detalhada: `feedback_cursores_globais_fortyus.md`
+- Ref canonico: `C:\4c\projeto\app\forms\relatorios\Formsigatcrp.prg:1253-1281`
+- Ref recem-corrigido: `C:\4c\projeto\app\classes\ClienteBO.prg:252` (pos-Erro118)
+- Origem: Erro118 (2026-08-19, FormCliente — user reportou "ao tentar abrir o form clientes aparece a mensagem grupo nao encontrado e apos isso [form em branco]")
+
+
 ## 168. Form REPORT fora do padrao visual — `BackColor` no DEFINE CLASS + faltando `THIS.Picture = "fundo_cad_1003.jpg"` (Erro117 Formsigredtv 2026-08-18)
 
 ### Contexto

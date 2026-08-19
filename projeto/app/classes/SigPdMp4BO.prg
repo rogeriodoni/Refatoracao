@@ -55,9 +55,33 @@ DEFINE CLASS SigPdMp4BO AS BusinessBase
     * OPERACIONAL: this_cTabela usado apenas para auditoria (alvo logico = xNensi)
     *---------------------------------------------------------------------------
     PROCEDURE Init()
+        LOCAL loc_lRet, loc_nResultPam
         THIS.this_cTabela     = "xNensi"
         THIS.this_cCampoChave = "Nops"
-        RETURN DODEFAULT()
+        loc_lRet = DODEFAULT()
+
+        *-- Popular crSigCdPam (Erro118). Padrao: Formsigatcrp.prg:1253-1281.
+        TRY
+            IF USED("crSigCdPam")
+                USE IN crSigCdPam
+            ENDIF
+            IF TYPE("gnConnHandle") = "N" AND gnConnHandle > 0
+                loc_nResultPam = SQLEXEC(gnConnHandle, "SELECT * FROM SigCdPam", "cursor_4c_Pam_Temp")
+                IF loc_nResultPam > 0
+                    SELECT * FROM cursor_4c_Pam_Temp INTO CURSOR crSigCdPam READWRITE
+                    IF USED("cursor_4c_Pam_Temp")
+                        USE IN cursor_4c_Pam_Temp
+                    ENDIF
+                    IF RECCOUNT("crSigCdPam") > 0
+                        SELECT crSigCdPam
+                        GO TOP
+                    ENDIF
+                ENDIF
+            ENDIF
+        CATCH
+        ENDTRY
+
+        RETURN loc_lRet
     ENDPROC
 
     *---------------------------------------------------------------------------

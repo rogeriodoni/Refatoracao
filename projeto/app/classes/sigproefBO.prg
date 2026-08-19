@@ -70,7 +70,7 @@ DEFINE CLASS sigproefBO AS BusinessBase
     * Init - Inicializa Business Object
     *====================================================================
     PROCEDURE Init()
-        LOCAL loc_lResultado
+        LOCAL loc_lResultado, loc_nResultPam
         loc_lResultado = .F.
 
         TRY
@@ -78,6 +78,27 @@ DEFINE CLASS sigproefBO AS BusinessBase
 
             THIS.this_cTabela     = "SigOpFp"
             THIS.this_cCampoChave = "Fpags"
+
+            *-- Popular crSigCdPam (Erro118). Padrao: Formsigatcrp.prg:1253-1281.
+            TRY
+                IF USED("crSigCdPam")
+                    USE IN crSigCdPam
+                ENDIF
+                IF TYPE("gnConnHandle") = "N" AND gnConnHandle > 0
+                    loc_nResultPam = SQLEXEC(gnConnHandle, "SELECT * FROM SigCdPam", "cursor_4c_Pam_Temp")
+                    IF loc_nResultPam > 0
+                        SELECT * FROM cursor_4c_Pam_Temp INTO CURSOR crSigCdPam READWRITE
+                        IF USED("cursor_4c_Pam_Temp")
+                            USE IN cursor_4c_Pam_Temp
+                        ENDIF
+                        IF RECCOUNT("crSigCdPam") > 0
+                            SELECT crSigCdPam
+                            GO TOP
+                        ENDIF
+                    ENDIF
+                ENDIF
+            CATCH
+            ENDTRY
 
             loc_lResultado = .T.
 

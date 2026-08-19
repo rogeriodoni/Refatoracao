@@ -250,9 +250,48 @@ DEFINE CLASS cliBO AS BusinessBase
 
     *===========================================================================
     PROCEDURE Init()
+        LOCAL loc_nResult, loc_oErro
         DODEFAULT()
         THIS.this_cTabela     = "SIGCDCLI"
         THIS.this_cCampoChave = "iclis"
+
+        *-- Popular crSigCdPam com GrPadClis (grupo padrao de clientes).
+        *-- FormCliente.InicializarForm depende deste cursor para determinar
+        *-- o grupo default quando o form abre sem par_cGrupo (menu principal).
+        *-- Sem esse cursor, form mostra "Grupo Padrao Nao Configurado" e abre em branco.
+        *-- Padrao canonico: Formsigatcrp.prg:1253-1281.
+        TRY
+            IF USED("crSigCdPam")
+                USE IN crSigCdPam
+            ENDIF
+            IF TYPE("gnConnHandle") = "N" AND gnConnHandle > 0
+                loc_nResult = SQLEXEC(gnConnHandle, "SELECT GrPadClis FROM SigCdPam", "cursor_4c_Pam_Temp")
+                IF loc_nResult > 0
+                    SELECT * FROM cursor_4c_Pam_Temp INTO CURSOR crSigCdPam READWRITE
+                    IF USED("cursor_4c_Pam_Temp")
+                        USE IN cursor_4c_Pam_Temp
+                    ENDIF
+                    IF RECCOUNT("crSigCdPam") > 0
+                        SELECT crSigCdPam
+                        GO TOP
+                    ENDIF
+                ELSE
+                    *-- Fallback: cursor vazio para nao quebrar checagens downstream
+                    CREATE CURSOR crSigCdPam (GrPadClis C(10))
+                    APPEND BLANK
+                ENDIF
+            ELSE
+                *-- Modo teste (gnConnHandle nao inicializado)
+                CREATE CURSOR crSigCdPam (GrPadClis C(10))
+                APPEND BLANK
+            ENDIF
+        CATCH TO loc_oErro
+            IF !USED("crSigCdPam")
+                CREATE CURSOR crSigCdPam (GrPadClis C(10))
+                APPEND BLANK
+            ENDIF
+        ENDTRY
+
         RETURN .T.
     ENDPROC
 
