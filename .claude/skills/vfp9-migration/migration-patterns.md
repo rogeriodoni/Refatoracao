@@ -7679,6 +7679,105 @@ Detecta chamadas Pattern B mas nao muta (cada call tem tabela/campos/titulo espe
 - Origem: Erro114 (2026-08-13, Formsigrecog "Relatorio de Comissao por Grupo de Produto" — user reportou "digita M em vendedor + Enter -> nao lista as empresas cadastradas na pesquisa, nem vendedor nem moeda")
 
 
+## 172. PUBLIC vars legado Fortyus (`Usuar`, `Comando`, `gcTipoUsuario`) DEVEM ser aliased em config.prg (Erro121 FormCliente 2026-08-19)
+
+### Contexto
+
+Complementa Pattern #171 (sigacess.PRG loading). Alem de carregar as funcoes legado, `config.prg` precisa declarar as PUBLIC vars que o framework espera existir.
+
+Legacy Fortyus (`sig.PRG:3`) declara no startup:
+```foxpro
+Public Usuar, Comando, gcLogoRel, gcCabRel, _Empr
+```
+
+Dump binario dos VCTs (framework.vcx / classresp.vcx / classobj.vcx) mostra referencias:
+- `goSistema` — 49 refs
+- `_EMPR` — 10 refs
+- `Usuar` — 2 refs
+- `gcArquivo` — 10 refs
+
+`sigacess.PRG` usa `Usuar` como FALLBACK quando o parametro `pUsu` nao eh string:
+```foxpro
+Function fAcessoCampos (pPrg, pPar, pCnx, pNot, pUsu, pNta) as Boolean
+    ...
+    pUsu = Upper(Iif(Type([pUsu]) = [C], pUsu, Usuar))
+```
+
+E outras:
+```foxpro
+lcUsu = Upper(Iif(Type([pUsu]) = [C], pUsu, Usuar))
+```
+
+Se o caller nao passa `pUsu` (ou passa nao-string), VFP9 tenta ler `Usuar` como PUBLIC. Se nao existe, dispara **"Variable USUAR is not found"** que cascateia como **"Error instantiating the object GET_GRUPOVEN"** — MESMA mensagem do Erro120 (Pattern #171), causa raiz DIFERENTE.
+
+### Anti-padrao
+
+`config.prg` tem apenas parte das aliases legado:
+```foxpro
+PUBLIC gcUsuarioLogado, gcLogoRel, gcCabRel, gcRodRel, goSistema, _EMPR
+gcUsuarioLogado = gc_4c_UsuarioLogado
+gcLogoRel = gc_4c_LogoRelatorio
+gcCabRel = gc_4c_CabecalhoRelatorio
+gcRodRel = gc_4c_RodapeRelatorio
+goSistema = go_4c_Sistema
+_EMPR = go_4c_Sistema.cCodEmpresa
+* falta Usuar, Comando, gcTipoUsuario
+```
+
+### Fix canonico
+
+Bloco adicional em `config.prg` **antes** de `CarregarSeExistir(gc_4c_CaminhoFramework + "sigacess.PRG")`:
+
+```foxpro
+PUBLIC Usuar, Comando, gcTipoUsuario
+Usuar = gc_4c_UsuarioLogado          && fallback nas funcoes fAcesso*
+Comando = ""                          && Comando corrente (legado)
+gcTipoUsuario = ""                    && sigacess declara mas VCX pode ler antes
+```
+
+**Ordem CRITICA**: PUBLIC declarations DEVEM vir ANTES de `CarregarSeExistir(...sigacess.PRG)` — as vars precisam existir no momento em que sigacess carrega. Idealmente logo apos os aliases `goSistema`/`_EMPR`.
+
+### Lista completa das PUBLICs legado Fortyus necessarias
+
+Consolidando Erro118/119/120/121, config.prg DEVE ter:
+
+| Variavel | Origem | Uso |
+|----------|--------|-----|
+| `goSistema` | alias de `go_4c_Sistema` | Objeto com cEmpresa/BuscaP/Matrizes/Transitorio (49 refs em VCTs) |
+| `_EMPR` | alias de `go_4c_Sistema.cCodEmpresa` | Codigo empresa (10 refs) |
+| `Usuar` | alias de `gc_4c_UsuarioLogado` | Codigo usuario logado (fallback em sigacess.PRG) |
+| `Comando` | `""` | Comando corrente (legado) |
+| `gcTipoUsuario` | `""` | Tipo de usuario (sigacess.PRG declara mas VCX pode ler antes) |
+| `gcLogoRel` | alias de `gc_4c_LogoRelatorio` | Logo em FRXs legado |
+| `gcCabRel` | alias de `gc_4c_CabecalhoRelatorio` | Cabecalho em FRXs |
+| `gcRodRel` | alias de `gc_4c_RodapeRelatorio` | Rodape em FRXs |
+| `gcUsuarioLogado` | alias de `gc_4c_UsuarioLogado` | Compatibilidade |
+
+### Deteccao automatica (Pattern #172)
+
+**WARNING-only** — cross-file: verifica config.prg mas nao muta.
+
+- Guard 1: file eh `Form*.prg` com `AS FormBase`
+- Guard 2: form usa `AddObject(_, "clsconta"/"clstitulo"/"clsproduto"/"clsplano")` (mesmo detector do Pattern #171)
+- Guard 3 (cross-file): le `config.prg` e verifica se contem `PUBLIC Usuar` (ou `Public Usuar` case-insensitive) OU se `Usuar\s*=` (assignment)
+- Se ausente: WARN `WARN-172-USUAR-NAO-DECLARADO` com sugestao de fix
+
+Nao muta pois: (a) fix eh em config.prg (single-file sistemico), (b) config.prg eh handcrafted.
+
+### Impacto
+
+Sweep 2026-08-19: 1 arquivo afetado (FormCliente + config.prg — ambos ja corrigidos).
+
+### Referencias
+
+- Memoria detalhada: `feedback_public_vars_legado_fortyus.md`
+- Ref canonico: `C:\4c\projeto\app\start\config.prg:150-161` (pos-Erro121)
+- Auto-fix: `CorretorAutomatico.ps1` Pattern #172 WARNING-only
+- Framework legado: `C:\4c\Framework\sigacess.PRG` (funcoes que usam Usuar)
+- Complementa Pattern #171 (sigacess.PRG loading)
+- Origem: Erro121 (2026-08-19, FormCliente linha 240 — mesma msg do Erro120 apos fix Erro120 nao resolver totalmente)
+
+
 ## 171. Framework legado Fortyus — funcoes em `sigacess.PRG` DEVEM ser carregadas no startup do sistema (Erro120 FormCliente 2026-08-19)
 
 ### Contexto

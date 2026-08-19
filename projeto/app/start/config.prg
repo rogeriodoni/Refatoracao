@@ -148,6 +148,19 @@ goSistema = go_4c_Sistema
 _EMPR = go_4c_Sistema.cCodEmpresa
 
 *------------------------------------------------------------------------------
+* Aliases essenciais do Framework legado Fortyus (Erro121)
+* Legacy sig.PRG:3 declara `Public Usuar, Comando, gcLogoRel, gcCabRel, _Empr`
+* VCXs (framework.vcx/classresp.vcx/classobj.vcx) referenciam essas globais
+* diretamente (dump binario mostra Usuar 2x + goSistema 49x + _EMPR 10x).
+* Sem essas globais, controles como Get_grupoven falham ao instanciar
+* (Init de fwget chama funcoes em sigacess.PRG que usam `Usuar` como fallback).
+*------------------------------------------------------------------------------
+PUBLIC Usuar, Comando, gcTipoUsuario
+Usuar = gc_4c_UsuarioLogado                && Usuario logado (fallback nas funcoes fAcesso*)
+Comando = ""                                && Comando corrente (legado)
+gcTipoUsuario = ""                          && Tipo de usuario (sigacess.PRG declara mas VCXs podem ler antes)
+
+*------------------------------------------------------------------------------
 * Configuracoes de Interface
 *------------------------------------------------------------------------------
 
