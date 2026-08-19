@@ -363,4 +363,112 @@ DEFINE CLASS FormBase AS Form
         ENDIF
     ENDPROC
 
+    *--------------------------------------------------------------------------
+    * AbrirLookupCanonico - Helper que encapsula o padrao Pattern A do
+    *   FormBuscaAuxiliar (Erro114 2026-08-13). Evita boilerplate de 40+ linhas
+    *   em cada AbrirBusca<X> do form. Substitui o Pattern B defeituoso
+    *   `CREATEOBJECT("FormBuscaAuxiliar", conn, tabela, cursor, campo, val, titulo)`.
+    *
+    * Parametros:
+    *   par_cTabela      - Nome da tabela SQL (ex: "SigCdEmp", "SigCdCli", "SigCdMoe")
+    *   par_cCampoCod    - Coluna do codigo (ex: "cemps", "iclis", "cmoes")
+    *   par_cCampoDesc   - Coluna da descricao (ex: "razas", "rclis", "dmoes")
+    *   par_cTitulo      - Titulo da janela (ex: "Selecao de Empresa")
+    *   par_cValorFiltro - Prefixo digitado pelo usuario (busca com LIKE 'valor%').
+    *                       Se vazio, lista tudo. Se nao bater, fallback SHOW-ALL.
+    *   par_oTxtCod      - Objeto TextBox onde o codigo selecionado sera gravado.
+    *   par_oTxtDesc     - Objeto TextBox onde a descricao selecionada sera gravada.
+    *   par_cFiltroExtra - (opcional) WHERE adicional sem "AND" prefixo. Ex:
+    *                       "Emps = '01'" ou "Grupos = 'X'". Aplicado nas 2 queries.
+    *
+    * Retorno: .T. se o usuario selecionou algum registro, .F. caso contrario.
+    *
+    * Exemplo de uso:
+    *   THIS.AbrirLookupCanonico("SigCdEmp", "cemps", "razas", ;
+    *       "Sele" + CHR(231) + CHR(227) + "o de Empresa", ;
+    *       loc_cValorTypedByUser, ;
+    *       loc_oPag.txt_4c_Empresa, ;
+    *       loc_oPag.txt_4c_EmpresaDesc)
+    *--------------------------------------------------------------------------
+    PROCEDURE AbrirLookupCanonico(par_cTabela, par_cCampoCod, par_cCampoDesc, ;
+                                   par_cTitulo, par_cValorFiltro, ;
+                                   par_oTxtCod, par_oTxtDesc, par_cFiltroExtra)
+        LOCAL loc_oLookup, loc_cSQL, loc_nResult, loc_cCursor, loc_oErro
+        LOCAL loc_lSelecionou, loc_cWhereExtra
+        loc_lSelecionou = .F.
+        loc_cCursor     = "cursor_4c_LkpCanonico"
+
+        loc_cWhereExtra = ""
+        IF VARTYPE(par_cFiltroExtra) = "C" AND !EMPTY(par_cFiltroExtra)
+            loc_cWhereExtra = " AND (" + par_cFiltroExtra + ")"
+        ENDIF
+
+        TRY
+            IF USED(loc_cCursor)
+                USE IN SELECT(loc_cCursor)
+            ENDIF
+
+            *-- 1a query: filtro por prefixo em codigo OR descricao
+            IF VARTYPE(par_cValorFiltro) = "C" AND !EMPTY(par_cValorFiltro)
+                loc_cSQL = "SELECT " + par_cCampoCod + " AS Cods, " + ;
+                           par_cCampoDesc + " AS Descs FROM " + par_cTabela + ;
+                           " WHERE (" + par_cCampoCod + " LIKE " + ;
+                           EscaparSQL(ALLTRIM(par_cValorFiltro) + "%") + ;
+                           " OR " + par_cCampoDesc + " LIKE " + ;
+                           EscaparSQL(ALLTRIM(par_cValorFiltro) + "%") + ")" + ;
+                           loc_cWhereExtra + ;
+                           " ORDER BY " + par_cCampoCod
+            ELSE
+                loc_cSQL = "SELECT " + par_cCampoCod + " AS Cods, " + ;
+                           par_cCampoDesc + " AS Descs FROM " + par_cTabela + ;
+                           IIF(EMPTY(loc_cWhereExtra), "", " WHERE 1=1" + loc_cWhereExtra) + ;
+                           " ORDER BY " + par_cCampoCod
+            ENDIF
+            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, loc_cCursor)
+
+            *-- 2a query (fallback SHOW-ALL): se prefixo nao bateu, mostra tudo
+            IF loc_nResult > 0 AND RECCOUNT(loc_cCursor) = 0 AND ;
+               VARTYPE(par_cValorFiltro) = "C" AND !EMPTY(par_cValorFiltro)
+                IF USED(loc_cCursor)
+                    USE IN SELECT(loc_cCursor)
+                ENDIF
+                loc_cSQL = "SELECT " + par_cCampoCod + " AS Cods, " + ;
+                           par_cCampoDesc + " AS Descs FROM " + par_cTabela + ;
+                           IIF(EMPTY(loc_cWhereExtra), "", " WHERE 1=1" + loc_cWhereExtra) + ;
+                           " ORDER BY " + par_cCampoCod
+                loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, loc_cCursor)
+            ENDIF
+
+            IF loc_nResult > 0 AND USED(loc_cCursor) AND RECCOUNT(loc_cCursor) > 0
+                loc_oLookup = CREATEOBJECT("FormBuscaAuxiliar")
+                IF VARTYPE(loc_oLookup) = "O"
+                    loc_oLookup.DefinirCursor(loc_cCursor, "Cods", "Descs", par_cTitulo)
+                    IF loc_oLookup.Mostrar()
+                        IF VARTYPE(par_oTxtCod) = "O"
+                            par_oTxtCod.Value = ALLTRIM(loc_oLookup.cCodigoSelecionado)
+                        ENDIF
+                        IF VARTYPE(par_oTxtDesc) = "O"
+                            par_oTxtDesc.Value = ALLTRIM(loc_oLookup.cDescricaoSelecionada)
+                        ENDIF
+                        loc_lSelecionou = .T.
+                    ENDIF
+                ENDIF
+            ELSE
+                MsgAviso("Nenhum registro encontrado.", ;
+                         IIF(VARTYPE(par_cTitulo) = "C", par_cTitulo, "Busca"))
+            ENDIF
+
+            IF USED(loc_cCursor)
+                USE IN SELECT(loc_cCursor)
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Erro no Lookup")
+            IF USED(loc_cCursor)
+                USE IN SELECT(loc_cCursor)
+            ENDIF
+        ENDTRY
+
+        RETURN loc_lSelecionou
+    ENDPROC
+
 ENDDEFINE

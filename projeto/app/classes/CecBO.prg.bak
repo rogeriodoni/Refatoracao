@@ -64,7 +64,7 @@ DEFINE CLASS CecBO AS BusinessBase
                        " a.Logon, a.Senha, a.VlrMin, a.VlrFixo, a.cipchps, a.nPortachps," + ;
                        " a.cTipos, a.cUsuProxys, a.cSenProxys, b.Razas" + ;
                        " FROM SigFiChc a" + ;
-                       " INNER JOIN SigCdEmp b ON a.Cemps = b.Cemps"
+                       " INNER JOIN SigCdEmp b ON a.Emps = b.Cemps"
 
             IF !EMPTY(ALLTRIM(par_cFiltro))
                 loc_cSQL = loc_cSQL + " WHERE a.Emps = " + EscaparSQL(par_cFiltro)
@@ -97,7 +97,7 @@ DEFINE CLASS CecBO AS BusinessBase
                        " a.Logon, a.Senha, a.VlrMin, a.VlrFixo, a.cipchps, a.nPortachps," + ;
                        " a.cTipos, a.cUsuProxys, a.cSenProxys, b.Razas" + ;
                        " FROM SigFiChc a" + ;
-                       " INNER JOIN SigCdEmp b ON a.Cemps = b.Cemps" + ;
+                       " INNER JOIN SigCdEmp b ON a.Emps = b.Cemps" + ;
                        " WHERE a.Emps = " + EscaparSQL(par_cEmps) + ;
                        " AND a.Tipos = " + EscaparSQL(par_cTipos)
 

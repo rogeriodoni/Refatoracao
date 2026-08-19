@@ -1,0 +1,124 @@
+{
+  "resumo": {
+    "totalMetodos": 6,
+    "metodosComSQL": 4,
+    "metodosComValidacao": 2,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fUniqueIds"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDMPP",
+      "evento": "Init",
+      "linhas": 39,
+      "codigoOriginal": "Lparameters pcTipo\n\n** Tipo ( = 0 - Carac Produtos, = 1 - Carac Contas, = 2 - Movimentações ) para manter compatibilidade\nThisForm.pnTipo = Iif(Type([pcTipo])<>[C],0,Iif(pcTipo == 'C',1,2))\nDo case\nCase( ThisForm.pnTipo = 1 )\n\tThisForm.Caption = [Complementos de Características de Contas]\n\tThisForm.Name    = [SIGCDMPPC]\n\nCase( ThisForm.pnTipo = 2 )\n\tThisForm.Caption = [Complementos de Características de Movimentações]\n\tThisForm.Name    = [SIGCDMPPO]\n\t\nOtherWise\n\tThisForm.Caption = [Complementos ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "pnTipo = Iif",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDMPP",
+      "evento": "Procedure",
+      "linhas": 3,
+      "codigoOriginal": "Select crSigPrCpP\nLocate for Codigos >= ThisForm.Pagina.Dados.GetCodigos.Value\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMPP",
+      "evento": "Click",
+      "linhas": 20,
+      "codigoOriginal": "Lparameters Opcao\n\nIf Not DoDefault(Opcao)\n\tThisForm.mAtivaPagina1\n\tReturn 0\nEndIf\n\nDo Case\n\tCase InList(Thisform.pcEscolha, 'INSERIR', 'PROCURAR')\n\t\tThisform.Pagina.Dados.getCodigos.Setfocus\n\n\tCase (Thisform.pcEscolha = 'ALTERAR')\n\t\tThisform.Pagina.Dados.getDescrs.Setfocus\n\n\tCase InList(Thisform.pcEscolha, 'CONSULTAR', 'EXCLUIR')\n\t\tThisform.Pagina.Dados.Grupo_Salva.Salva.Setfocus\nEndCase\n\nSelect crSigPrCpP\n* Fim ***********************************************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMPP",
+      "evento": "Click",
+      "linhas": 74,
+      "codigoOriginal": "If Inlist(Thisform.Pagina.Lista.Grupo_op.Value, 1, 3)\n\tIf Empty(Thisform.Pagina.Dados.getCodigos.Value)\n\t\t=Messagebox('Código Inválido!!!', 0+64, '')\n\t\tThisform.Pagina.Dados.getCodigos.SetFocus\n\t\tReturn 0\n\tElse\n\t\tIf (Thisform.Pagina.Lista.Grupo_op.Value = 1)\n\t\t\tlcQuery = [Select * From SigPrCpP ] + ;\n\t\t\t\t[Where Codigos = '] + crSigPrCpP.Codigos + [' ] + ;\n\t\t\t\t[And nTipos = ]+Alltrim(Str(Thisform.pnTipo))\n\t\t\t\t\n\t\t\tIf (Thisform.poDataMgr.SqlExecute(lcQuery, 'crBusca') < 1)\n\t\t\t\t=Messagebox('Favor Re... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMPP",
+      "evento": "Click",
+      "linhas": 6,
+      "codigoOriginal": "=DoDefault()\n\nIf ThisForm.plCancelar\n\tThisForm.mAtivaPagina1\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMPP.Pagina.Dados.getCodigos",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Not InList(Thisform.Pagina.Lista.Grupo_Op.Value, 2, 3)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDMPP.Click",
+      "queryOriginal": "\t\t\tlcQuery = [Select * From SigPrCpP ] + ; \t\t\t\t[Where Codigos = '] + crSigPrCpP.Codigos + [' ] + ; \t\t\t\t[And nTipos = ]+Alltrim(Str(Thisform.pnTipo)) \t\t\t\t",
+      "tabelas": "SigPrCpP",
+      "colunas": "",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigPrCpP"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

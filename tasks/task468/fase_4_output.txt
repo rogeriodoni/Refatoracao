@@ -1,0 +1,18 @@
+﻿All 8 phases are now complete. Here's a summary of what was done across all phases:
+
+**Phase 5** ÔÇö Added all Page2 input fields to `ConfigurarPaginaDados()` in `FormMrc.prg`:
+- `lbl_4c_Label1` ("Demonstrativo : ", Top=224, Left=210)
+- `lbl_4c_Label2` ("T├¡tulo : ", Top=249, Left=254)
+- `lbl_4c_Label3` ("Impress├úo : ", Top=276, Left=230)
+- `txt_4c_Balanco` (Format="!K", MaxLength=20, Top=221, Left=299, Width=150)
+- `txt_4c_Titulo` (MaxLength=40, Top=246, Left=299, Width=290)
+- `opt_4c_Impressao` (OptionGroup, ButtonCount=2 set outside WITH, Value=1 on group, "Plano de Contas"/"Mapa de Contas", Top=271)
+
+**Phase 6** ÔÇö Page2 is complete (all fields match SCX legado with +29px Top compensation).
+
+**Phases 7-8** ÔÇö Menu integration in `menu.prg`:
+- Added `DEFINE BAR 130 OF popCadastros PROMPT "Demonstrativos"`
+- Added `ON SELECTION BAR 130 OF popCadastros DO AbrirFormMrc`
+- Added `PROCEDURE AbrirFormMrc()` with the canonical TRY/CATCH pattern
+
+The migration pipeline next steps are `05b_corrigirAutomatico` (CorretorAutomatico sweep) and `05c_validarCompilacao` before runtime testing.

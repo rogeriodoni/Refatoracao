@@ -1,0 +1,18 @@
+﻿**Fase 3/8 conclu├¡da.** `FormMtt.prg` criado em `C:\4c\projeto\app\forms\cadastros\FormMtt.prg` (316 linhas).
+
+**O que foi criado:**
+
+| M├®todo | Status | Descri├º├úo |
+|--------|--------|-----------|
+| `Init()` | Ô£à | Apenas `DODEFAULT()` ÔÇö padr├úo correto |
+| `InicializarForm()` | Ô£à | Cria BO, configura UI, corrige `SET DATE/CENTURY` (DataSession=2) |
+| `ConfigurarPageFrame()` | Ô£à | `pgf_4c_Paginas` com 2 p├íginas, `Top=-29`, `Tabs=.F.` |
+| `ConfigurarPaginaLista()` | Ô£à | `cnt_4c_Cabecalho` (labels sombra+t├¡tulo) + `cnt_4c_Botoes` (vazio) + `cnt_4c_Saida` (cmd Encerrar can├┤nico Left=917) |
+| `ConfigurarPaginaDados()` | Ô£à | `cnt_4c_Salva` (vazio, `Left=821+29 compensa├º├úo`) + Picture |
+| `CarregarLista()` | Ô£à | Chama `Buscar("")` ÔÇö RecordSource/colunas na Fase 4 |
+| `AlternarPagina()` | Ô£à | Alterna Page1ÔåöPage2, recarrega lista ao voltar |
+| `FormatarGridLista()` | Ô£à | Tahoma 8pt ÔÇö pronto para Fase 4 |
+| `TornarControlesVisiveis()` | Ô£à | Recursivo com suporte a PageFrames |
+| `Destroy()` | Ô£à | Libera BO e cursores |
+
+**Preservado da pr├│xima fase:** grid `grd_4c_Lista`, bot├Áes CRUD dentro de `cnt_4c_Botoes`, bot├Áes Confirmar/Cancelar em `cnt_4c_Salva`, TextBoxes de dados e BINDEVENTs.

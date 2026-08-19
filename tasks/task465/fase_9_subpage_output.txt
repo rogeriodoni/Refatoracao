@@ -1,0 +1,22 @@
+﻿The file has 5322 lines (was 5291 before, grew by 31 lines for the added MaxLength/ReadOnly/FontName/captions) with exactly 1 `ENDDEFINE`. The structure is intact.
+
+Here's a summary of what was completed for the PgOperacao tab in `FormMPD.prg`:
+
+**Changes made to `ConfigurarPgOperacao()` (lines 688ÔÇô1690):**
+
+1. **TextBoxes** ÔÇö added missing properties from the legacy source:
+   - `txt_4c_Hists`: `.MaxLength = 30`
+   - `txt_4c_Titulo`: `.MaxLength = 15`
+   - `txt_4c_Artigo`: `.MaxLength = 1`
+   - `txt_4c_ArqIcone`: `.MaxLength = 64`, `.ReadOnly = .T.`
+   - `txt_4c__Empenho`: `.MaxLength = 20`, `.FontName = "Courier New"`
+   - `txt_4c_EmpLanc`: `.FontName = "Courier New"`
+
+2. **OptionGroup button captions** ÔÇö added missing captions for multi-option groups:
+   - `obj_4c_Op_boleto` Buttons(1/2/3): "Sim" / "N├úo" / "Tela"
+   - `obj_4c_ObjAutos` Buttons(1/2/3): "Movim." / "Encerra" / "Nenhum"
+   - `obj_4c_Op_repete` Buttons(1/2/3): "Sim" / "N├úo" / "Por Setor"
+   - `obj_4c_Fwoption4` Buttons(1/2/3): "Op" / "Env" / "Nenhum"
+   - `obj_4c_Opt_tipomov` all 11 buttons with correct positions (2-column interleaved layout) and captions: "Envelopagem", "Nenhum", "Encerra", "Dev.Pedra", "Sep. Pedra", "Reposi├º├úo", "Mov. Externa", "Mov.Pedra", "Muda de Fase", "Mov Op Envelopado", "Mov Material"
+
+`ControlSource` was intentionally omitted ÔÇö the form uses the explicit `FormParaBO()`/`BOParaForm()` pattern for all data transfer; `crSigCdMpd` cursor does not exist at runtime.

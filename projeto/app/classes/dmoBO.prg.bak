@@ -1138,8 +1138,8 @@ DEFINE CLASS dmoBO AS BusinessBase
                     SELECT cursor_4c_Pec
                     SCAN WHILE loc_lContinuar
                         LOCAL loc_nNDope, loc_cDopePec, loc_nNumePec, loc_cEdnPec
-                        loc_nNDope  = INT(VAL(LEFT(STR(cursor_4c_Pec.Codigos, 10), 4)))
-                        loc_nNumePec = INT(VAL(RIGHT(STR(cursor_4c_Pec.Codigos, 10), 6)))
+                        loc_nNDope  = INT(VAL(LEFT(cursor_4c_Pec.Codigos, 4)))
+                        loc_nNumePec = INT(VAL(RIGHT(cursor_4c_Pec.Codigos, 6)))
 
                         *-- Localiza Dopes desta peca
                         LOCAL loc_cSQLOpe

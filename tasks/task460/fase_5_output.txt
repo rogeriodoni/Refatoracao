@@ -1,0 +1,13 @@
+﻿Fase 5 conclu├¡da. O `FormLOC.prg` foi atualizado com:
+
+**Adicionado em `ConfigurarPaginaDados()`:**
+- `cmd_4c_Confirmar` (Salvar, ├¡cone `cadastro_salvar_60.jpg`, Left=5) + BINDEVENT ÔåÆ BtnSalvarClick
+- `cmd_4c_Cancelar` (├¡cone `cadastro_cancelar_60.jpg`, Left=80) + BINDEVENT ÔåÆ BtnCancelarClick
+- `lbl_4c_Label1` ÔÇö "C├│digo" (Top=155, Left=112, Width=50, ForeColor=RGB(36,84,155), Verdana 8)
+- `txt_4c_Codigo` (Top=171, Left=112, Width=80, MaxLength=10, TabIndex=1)
+- `lbl_4c_Label3` ÔÇö "Conex├úo em SQL" (Top=203, Left=112, Width=114, mesma paleta)
+- `txt_4c_Conexao` (Top=220, Left=112, Width=150, MaxLength=30, TabIndex=2) + BINDEVENT ÔåÆ ValidarConexao (LostFocus)
+
+**Atualizado `BtnSalvarClick()`:** valida├º├Áes obrigat├│rias do legado (C├│digo e Conex├úo n├úo podem estar vazios no modo INCLUIR) executadas antes de `FormParaBO()`, fora de TRY.
+
+A Fase 6 adicionar├í o campo restante: `lbl_4c_Label2` + `txt_4c_Dbfs`.

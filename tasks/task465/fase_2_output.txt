@@ -1,0 +1,15 @@
+﻿5 TRY blocks, 5 ENDTRY blocks ÔÇö all balanced. The file is complete and correct.
+
+Phase 2/8 of MPDBO is done. Here's what was added to `MPDBO.prg`:
+
+| Method | Visibility | Purpose |
+|--------|------------|---------|
+| `ObterChavePrimaria()` | PUBLIC | Returns `THIS.this_cDopps` for audit |
+| `Buscar(par_cFiltro)` | PUBLIC | SELECT Dopps/Ndopps/Ordes/hists with optional LIKE filter |
+| `CarregarPorCodigo(par_cDopps)` | PUBLIC | SELECT * WHERE Dopps=..., calls CarregarDoCursor, sets `this_lNovoRegistro=.F.` |
+| `CarregarDoCursor(par_cAliasCursor)` | PROTECTED | Maps all 110+ columns from cursor to BO properties via `TratarNulo()` |
+| `Inserir()` | PROTECTED | INSERT INTO SigCdOpd with all columns + `RegistrarAuditoria("INSERT")` |
+| `Atualizar()` | PROTECTED | UPDATE SigCdOpd SET all non-PK columns WHERE Dopps=... + `RegistrarAuditoria("UPDATE")` |
+| `ExecutarExclusao()` | PROTECTED | DELETE FROM SigCdOpd WHERE Dopps=... + `RegistrarAuditoria("DELETE")` |
+
+All methods follow the canonical patterns: flag variable for RETURN outside TRY/CATCH, non-silent CATCH, `FormatarNumeroSQL`/`EscaparSQL` for SQL building, `SELECT (par_cAliasCursor)` as first line of `CarregarDoCursor`.

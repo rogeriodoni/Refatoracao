@@ -1,0 +1,19 @@
+﻿O arquivo est├í correto. A Fase 4 est├í completa. Aqui est├í o resumo do que foi adicionado:
+
+**Fase 4 conclu├¡da** ÔÇö `FormMtp.prg` atualizado de 245 para 655 linhas com:
+
+1. **`ConfigurarPaginaLista()`** completa:
+   - 5 bot├Áes CRUD no `cnt_4c_Botoes` (Incluir, Visualizar, Alterar, Excluir, Buscar) com ├¡cones canonicos, `Comic Sans MS`, `Themes=.F.`, e BINDEVENTs
+   - Bot├úo `cmd_4c_Encerrar` no `cnt_4c_Saida` (padr├úo can├┤nico Left=917)
+   - Grid `grd_4c_Lista` (Top=117, Width=890, 3 colunas: C├│digo/Descri├º├úo/Prod.M├¡nima)
+
+2. **`InicializarForm()`** ÔÇö chamada a `CarregarLista()` com guarda `gb_4c_ValidandoUI`
+
+3. **Novos m├®todos**:
+   - `AlternarPagina(par_nPagina)` ÔÇö navega entre Page1/Page2, chama `CarregarLista()` ao voltar
+   - `CarregarLista()` ÔÇö carrega `Buscar("")`, seta `RecordSource`/`ControlSource`/headers
+   - `FormatarGridLista()` ÔÇö `SetAll` Tahoma 8
+   - `BtnEncerrarClick()` ÔÇö `THIS.Release()`
+   - `BtnIncluirClick()`, `BtnVisualizarClick()`, `BtnAlterarClick()` ÔÇö navegam para Page2 com modo correto
+   - `BtnExcluirClick()` ÔÇö confirma com `MsgConfirma` e chama `Excluir()`
+   - `BtnBuscarClick()` ÔÇö abre `FormBuscaAuxiliar` e posiciona grid via `LOCATE`

@@ -96,8 +96,9 @@ PROCEDURE ConectarBancoDados()
             DB_QUERY_TIMEOUT=60
             SQLSETPROP(gnConnHandle, "QueryTimeOut", DB_QUERY_TIMEOUT)
 
-            * Configura para retornar sempre array de erros
-            SQLSETPROP(gnConnHandle, "DispWarnings", .T.)
+            * Suprime dialog nativo ODBC em erro de SQL (Nome de objeto invalido, etc).
+            * BOs checam loc_nResult < 1 + AERROR() e exibem MsgErro amigavel.
+            SQLSETPROP(gnConnHandle, "DispWarnings", .F.)
 
             llConectado = .T.
 

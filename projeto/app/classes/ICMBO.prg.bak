@@ -62,7 +62,7 @@ DEFINE CLASS ICMBO AS BusinessBase
                        " ISNULL(c.dcargs, '') AS dcargs," + ;
                        " ISNULL(d.descrs, '') AS descrs_tabdes" + ;
                        " FROM SigCdCmi a" + ;
-                       " LEFT JOIN SigCdEmp b ON b.cemps = a.emps" + ;
+                       " LEFT JOIN SigCdEmp b ON b.cemps = a.cemps" + ;
                        " LEFT JOIN SigCdCrg c ON c.ccargs = a.cargos" + ;
                        " LEFT JOIN SigOpTdz d ON d.codigos = a.tabdes" + ;
                        loc_cWhere + ;
@@ -99,7 +99,7 @@ DEFINE CLASS ICMBO AS BusinessBase
                        " ISNULL(c.dcargs, '') AS dcargs," + ;
                        " ISNULL(d.descrs, '') AS descrs_tabdes" + ;
                        " FROM SigCdCmi a" + ;
-                       " LEFT JOIN SigCdEmp b ON b.cemps = a.emps" + ;
+                       " LEFT JOIN SigCdEmp b ON b.cemps = a.cemps" + ;
                        " LEFT JOIN SigCdCrg c ON c.ccargs = a.cargos" + ;
                        " LEFT JOIN SigOpTdz d ON d.codigos = a.tabdes" + ;
                        " WHERE a.cidchaves = " + EscaparSQL(ALLTRIM(par_cIdChaves))

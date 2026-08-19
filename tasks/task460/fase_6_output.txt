@@ -1,0 +1,12 @@
+﻿Fase 6 conclu├¡da. O `ConfigurarPaginaDados()` agora tem todos os campos completos:
+
+**Adicionado:**
+- `lbl_4c_Label2` ÔÇö label " Caminho dos Arquivos em .DBF " (Top=254, propriedades visuais exatas do original: ForeColor=RGB(36,84,155), Verdana 8)
+- `txt_4c_Dbfs` ÔÇö campo de caminho (Top=271, Width=570, TabIndex=3, MaxLength=250)
+- `BINDEVENT` para `LostFocus` ÔåÆ `ValidarDiretorioDbfs()` (j├í implementado na Fase 5)
+
+**J├í corretos das fases anteriores:**
+- `FormParaBO()`, `BOParaForm()`, `HabilitarCampos()` e `LimparCampos()` j├í referenciavam `txt_4c_Dbfs` corretamente
+- `ValidarDiretorioDbfs()` j├í implementado como PUBLIC com a l├│gica completa (barra final + `FILE(SigCdLoc.DBF)`)
+
+A Page2 agora tem 100% dos campos do `SIGCDLOC` original: `getCods` ÔåÆ `txt_4c_Codigo`, `getConexao` ÔåÆ `txt_4c_Conexao`, `getDbfs` ÔåÆ `txt_4c_Dbfs`.

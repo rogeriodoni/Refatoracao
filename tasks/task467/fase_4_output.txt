@@ -1,0 +1,12 @@
+﻿Fase 4 conclu├¡da. O arquivo `Formmpp.prg` foi atualizado com:
+
+**Adicionado em `InicializarForm()`:**
+- Chamada a `ConfigurarPaginaLista()` ap├│s `ConfigurarPageFrame()`
+- Chamada a `CarregarLista()` (com guarda `gb_4c_ValidandoUI`)
+
+**Novos m├®todos:**
+- `ConfigurarPaginaLista()` ÔÇö cabecalho escuro com t├¡tulo din├ómico (reflete o `this_nTipo`), 5 bot├Áes CRUD em `cnt_4c_Botoes` (Left=542, fundo escuro), `cnt_4c_Saida` can├┤nico (Left=917) com Encerrar, grid `grd_4c_Lista` com 2 colunas (Codigos/Descrs), `ColumnCount` definido antes do `WITH` para evitar "Unknown member COLUMN1"
+- `AlternarPagina(par_nPagina)` ÔÇö troca `ActivePage` e recarrega lista ao voltar para Page1
+- `CarregarLista()` ÔÇö chama `Buscar("", this_nTipo)` filtrando por tipo, redefine `ControlSource` e `Header1.Caption` ap├│s `RecordSource`; `RETURN` da guarda `gb_4c_ValidandoUI` fora do `TRY`
+- `FormatarGridLista()` / `TornarControlesVisiveis()` ÔÇö auxiliares canonicos
+- `BtnIncluirClick`, `BtnVisualizarClick`, `BtnAlterarClick`, `BtnExcluirClick`, `BtnBuscarClick`, `BtnEncerrarClick` ÔÇö todos `PUBLIC` para funcionar com `BINDEVENT`

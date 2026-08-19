@@ -1,0 +1,12 @@
+﻿A Fase 7 j├í est├í completa. O arquivo `FormMtt.prg` cont├®m todos os 4 eventos CRUD implementados com l├│gica funcional:
+
+| Evento | Linhas | Status |
+|--------|--------|--------|
+| `BtnIncluirClick` | 636ÔÇô646 | Completo: `NovoRegistro()`, `LimparCampos()`, modo INCLUIR, `HabilitarCampos`, `AlternarPagina(2)`, `SetFocus` |
+| `BtnVisualizarClick` | 651ÔÇô677 | Completo: l├¬ `cidchaves` do grid, `CarregarPorCodigo`, `BOParaForm`, campos desabilitados, `AlternarPagina(2)` |
+| `BtnAlterarClick` | 682ÔÇô712 | Completo: l├¬ `cidchaves`, `CarregarPorCodigo`, `EditarRegistro`, `BOParaForm`, campos habilitados, foco em `txt_4c_Descs` |
+| `BtnExcluirClick` | 717ÔÇô748 | Completo: `MsgConfirma`, `CarregarPorCodigo`, `Excluir()`, `CarregarLista` |
+
+O `MttBO.prg` tamb├®m est├í completo ÔÇö `fUniqueIds` do legado foi substitu├¡do por `SYS(2015)` na linha 150 do Inserir(), e a verifica├º├úo de duplicidade (`tipos + codigos`) est├í implementada em `VerificarDuplicidade()`.
+
+A migra├º├úo do `FormMtt`/`MttBO` est├í funcional. Falta apenas a Fase 8 (integra├º├úo com `config.prg` e `menu.prg`), se ainda n├úo foi feita.

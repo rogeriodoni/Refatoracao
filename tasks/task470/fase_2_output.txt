@@ -1,0 +1,11 @@
+﻿`MttBO.prg` est├í completo com todos os m├®todos CRUD. Resumo do que foi adicionado:
+
+- **`Buscar(par_cFiltro)`** ÔÇö SELECT tipos/codigos/descs/cidchaves com ORDER BY tipos, codigos
+- **`CarregarPorCodigo(par_cCidchaves)`** ÔÇö carrega por PK, reseta `this_lNovoRegistro = .F.`
+- **`CarregarDoCursor()`** ÔÇö mapeia cursor ÔåÆ propriedades via `SELECT (alias)` (padr├úo can├┤nico)
+- **`ValidarDados()`** ÔÇö tipos deve ser "M" ou "T", codigos obrigat├│rio
+- **`Inserir()`** ÔÇö verifica duplicata tipos+codigos, gera PK com `SYS(2015)` (substituto de `fUniqueIds`), faz INSERT + auditoria
+- **`Atualizar()`** ÔÇö UPDATE por cidchaves + auditoria
+- **`ExecutarExclusao()`** ÔÇö DELETE por cidchaves + auditoria
+- **`ObterChavePrimaria()`** ÔÇö retorna this_cCidchaves para o sistema de auditoria
+- **`VerificarDuplicidade()`** ÔÇö COUNT no banco excluindo o pr├│prio registro em UPDATE

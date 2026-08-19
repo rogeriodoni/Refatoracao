@@ -1,0 +1,12 @@
+﻿Fase 2 conclu├¡da. O `lctBO.prg` agora est├í completo com todos os m├®todos CRUD:
+
+**Adicionado:**
+- `ObterChavePrimaria()` ÔÇö retorna `this_cCidChaves` (PUBLIC, para auditoria)
+- `CarregarDoCursor()` ÔÇö mapeia as 3 colunas: `cods`, `cidchaves`, `descs`
+- `ValidarDados()` ÔÇö valida c├│digo n├úo vazio + duplicidade (apenas INSERT) + descri├º├úo obrigat├│ria
+- `VerificarCodigoExistente()` ÔÇö verifica unicidade de `cods` via COUNT no banco
+- `Inserir()` ÔÇö INSERT com `fUniqueIds()` gerando `cidchaves` + auditoria
+- `Atualizar()` ÔÇö UPDATE de `descs` via PK `cidchaves` (c├│digo ├® bloqueado no modo ALTERAR) + auditoria
+- `ExecutarExclusao()` ÔÇö DELETE por `cidchaves` + auditoria
+- `Buscar()` ÔÇö SELECT `cods, descs ORDER BY cods` com suporte a filtro e ZAP+APPEND para recarregar
+- `CarregarPorCodigo()` ÔÇö SELECT por `cods` (chave neg├│cio) com reset de `this_lNovoRegistro = .F.`

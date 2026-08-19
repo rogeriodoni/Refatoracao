@@ -87,13 +87,13 @@ DEFINE CLASS Formlch AS FormBase
             .Height    = THIS.Height + 29
             .Tabs      = .F.
             .Visible   = .T.
-            .Page1.Caption   = "Lista"
-            .Page1.BackColor = RGB(100, 100, 100)
-            .Page1.Picture   = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
-            .Page2.Caption   = "Dados"
-            .Page2.BackColor = RGB(100, 100, 100)
-            .Page2.Picture   = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
         ENDWITH
+        loc_oPgf.Page1.Caption   = "Lista"
+        loc_oPgf.Page1.BackColor = RGB(100, 100, 100)
+        loc_oPgf.Page1.Picture   = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
+        loc_oPgf.Page2.Caption   = "Dados"
+        loc_oPgf.Page2.BackColor = RGB(100, 100, 100)
+        loc_oPgf.Page2.Picture   = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
         THIS.ConfigurarPaginaLista()
         THIS.ConfigurarPaginaDados()
     ENDPROC
@@ -4033,6 +4033,9 @@ DEFINE CLASS Formlch AS FormBase
     * Padrao: buscar descricao no SQL e popular o campo de desc
     *--------------------------------------------------------------------------
     PROCEDURE ValidarOper(par_nKeyCode, par_nShiftAltCtrl)
+        IF !INLIST(par_nKeyCode, 13, 9)
+            RETURN
+        ENDIF
         LOCAL loc_oPg2, loc_cOper, loc_nRes
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
         IF VARTYPE(loc_oPg2.txt_4c_Oper) != "O"
@@ -4060,6 +4063,9 @@ DEFINE CLASS Formlch AS FormBase
     ENDPROC
 
     PROCEDURE ValidarMoeda(par_nKeyCode, par_nShiftAltCtrl)
+        IF !INLIST(par_nKeyCode, 13, 9)
+            RETURN
+        ENDIF
         LOCAL loc_oPg2, loc_cMoeda, loc_nRes
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
         IF VARTYPE(loc_oPg2.cnt_4c_Infos.txt_4c_Moeda) != "O"

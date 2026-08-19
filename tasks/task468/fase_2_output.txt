@@ -1,0 +1,13 @@
+﻿Fase 2/8 conclu├¡da. O `MrcBO.prg` agora tem implementa├º├úo CRUD completa:
+
+**M├®todos adicionados:**
+- `CarregarDoCursor()` ÔÇö usa `SELECT (alias)` antes de acessar campos, mapeia `Balancos/Titulos/Mapas`
+- `ValidarDados()` ÔÇö valida que `Balancos` n├úo est├í vazio (regra do legado)
+- `Buscar(par_cFiltro)` ÔÇö SELECT com filtro opcional por `Balancos LIKE` ou `Titulos LIKE`, ordenado por `Balancos`
+- `CarregarPorCodigo()` ÔÇö SELECT WHERE `Balancos = valor`, reseta `this_lNovoRegistro = .F.`
+- `VerificarDuplicidade()` (PROTECTED) ÔÇö COUNT(*) para checar duplicata antes do INSERT
+- `Inserir()` (PROTECTED) ÔÇö INSERT INTO `SigCdMrr`, verifica duplicata antes, chama `RegistrarAuditoria("INSERT")`
+- `Atualizar()` (PROTECTED) ÔÇö UPDATE `SigCdMrr SET Titulos, Mapas WHERE Balancos`
+- `ExecutarExclusao()` (PROTECTED) ÔÇö cascade: DELETE `SigCdMri` primeiro, depois `SigCdMrr`
+
+**Regras do legado preservadas:** valida├º├úo de `Balancos` vazio, mensagem "Demonstrativo j├í Cadastrado" no INSERT duplicado, exclus├úo em cascata dos itens (`SigCdMri`) antes do cabe├ºalho (`SigCdMrr`).

@@ -1,0 +1,11 @@
+﻿O arquivo `mppBO.prg` j├í est├í completo. A Fase 1 incluiu todos os m├®todos CRUD necess├írios para a Fase 2:
+
+- `ObterChavePrimaria()` ÔÇö linha 29 Ô£à
+- `CarregarDoCursor()` ÔÇö linha 228 (usa `SELECT (par_cAliasCursor)` corretamente) Ô£à
+- `Inserir()` ÔÇö linha 243 (gera UUID via `fUniqueIds()`, chama `RegistrarAuditoria("INSERT")`) Ô£à
+- `Atualizar()` ÔÇö linha 273 (atualiza apenas `Descrs`, pois `Codigos` ├® readonly em modo ALTERAR no legado, chama `RegistrarAuditoria("UPDATE")`) Ô£à
+- `ExecutarExclusao()` ÔÇö linha 299 (chama `RegistrarAuditoria("DELETE")`) Ô£à
+
+Tamb├®m j├í est├úo presentes os m├®todos auxiliares: `Buscar()`, `CarregarPorCodigo()`, `CarregarPorCodigosETipo()`, `VerificarCodigoDuplicado()`, `VerificarUsoEmCaracteristicasContas()` e `VerificarUsoEmFichasTecnicas()`.
+
+**A Fase 2/8 est├í conclu├¡da** ÔÇö o BO est├í completo e funcional. A pr├│xima fase (3/8) ser├í criar o `Formmpp.prg`.

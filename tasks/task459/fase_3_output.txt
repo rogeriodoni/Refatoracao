@@ -1,0 +1,19 @@
+﻿Fase 3 conclu├¡da. `C:\4c\projeto\app\forms\cadastros\FormLin.prg` criado com 711 linhas.
+
+**O que foi criado:**
+
+| M├®todo | Conte├║do |
+|--------|----------|
+| `Init()` | Apenas `DODEFAULT()` ÔÇö padr├úo can├┤nico |
+| `InicializarForm()` | Cria LinBO, configura p├íginas, carrega lista |
+| `ConfigurarPageFrame()` | `pgf_4c_Paginas` (Top=-29, 2 pages, Tabs=.F.) |
+| `ConfigurarPaginaLista()` | `cnt_4c_Cabecalho` + `cnt_4c_Botoes` (vazio) + `cnt_4c_Saida` com `cmd_4c_Encerrar` |
+| `ConfigurarPaginaDados()` | `cnt_4c_BotoesAcao` (Confirmar+Cancelar) + `pgf_4c_Abas` (3 pages: Geral/Fases/Composi├º├úo, Top=150) |
+| `CarregarLista()` | Chama `LinBO.Buscar("")` ÔÇö grid vinculado na Fase 4 |
+| `AlternarPagina()` | Alterna Page1ÔåöPage2, recarrega lista ao voltar |
+| `BtnSalvar/Cancelar/EncerrarClick()` | Eventos PUBLIC (BINDEVENT compat├¡vel) |
+| `FormParaBO/BOParaForm/LimparCampos/HabilitarCampos/AjustarBotoesPorModo()` | Com guards PEMSTATUS ÔÇö seguros antes dos campos existirem |
+| `TornarControlesVisiveis/FormatarGridLista()` | Padr├úo can├┤nico FormCor |
+| `Destroy()` | Fecha todos os cursores + anula BO |
+
+**Ponto de aten├º├úo:** `pgf_4c_Abas.Top=150` (121 original + 29 compensa├º├úo outer PF). As 3 pages internas ficam vazias at├® as Fases 5-6 preencherem os campos e grids.

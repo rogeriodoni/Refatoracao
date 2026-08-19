@@ -1,0 +1,17 @@
+﻿Fase 3 conclu├¡da. Resumo do que foi criado/modificado:
+
+**`FormLpr.prg`** (425 linhas) ÔÇö estrutura base completa:
+- `DEFINE CLASS FormLpr AS FormBase` com todas as propriedades visuais (Width=1000, Height=600) e propriedades espec├¡ficas do SIGCDLPR (`this_cCompVenda`, `this_cPcEscolha`, `this_lBusca`, `this_cAntCPro/DPro/LPreco`, `this_nOldCasas`, `this_lPlCancelar`, `this_lUpdateok`, `this_cNomeFrm`, `this_cLprecosAtual`)
+- `Init(par_lCompra, par_cNomeFrm)` ÔÇö recebe par├ómetro de modo compra/venda antes do `DODEFAULT()`
+- `InicializarForm()` ÔÇö cria LprBO, configura PageFrame, propaga Caption com CHR(), respeita `gb_4c_ValidandoUI`
+- `ConfigurarPageFrame()` ÔÇö Top=-29, 2 pages, Picture fundo
+- `ConfigurarPaginaLista()` ÔÇö cnt_4c_Cabecalho + cnt_4c_Botoes + cnt_4c_Saida (posi├º├Áes can├┤nicas)
+- `ConfigurarPaginaDados()` ÔÇö cnt_4c_BotoesAcao
+- `CarregarLista()` ÔÇö chama `Buscar(this_cCompVenda)`, vincula grid quando dispon├¡vel (Fase 4)
+- `TornarControlesVisiveis()` ÔÇö exclui containers flutuantes: `cnt_4c_ImpLista`, `cnt_4c_Vencimentos`, `cnt_4c_Compra`
+- `FormatarGridLista()` ÔÇö Verdana 8 (padr├úo grid frmcadastro)
+- `Destroy()` ÔÇö restaura decimais, libera BO e todos os cursores de trabalho
+
+**`menu.prg`** ÔÇö BAR 121 + ON SELECTION + `AbrirFormLpr()` (padr├úo VARTYPE + Show() sem Release)
+
+**config.prg** ÔÇö n├úo precisou altera├º├úo (ADIR() carrega `*BO.prg` e `Form*.prg` automaticamente).

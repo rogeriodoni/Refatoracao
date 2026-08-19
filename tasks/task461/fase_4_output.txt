@@ -1,0 +1,26 @@
+﻿Phase 4 is complete. Here's what was done in the two edits:
+
+**Edit 2 ÔÇö `CarregarLista()`** enhanced to:
+- Read the vencimento filter option (1=Todos, 2=A Vencer, 3=Vencidos) and apply `SET FILTER TO` on `cursor_4c_Dados` before binding
+- Set `RecordSource` first, then explicitly set all 4 `ControlSource`s (mandatory ÔÇö VFP9 auto-binding overwrites them)
+- Restore all 4 `Header1.Caption`s after `RecordSource` (mandatory ÔÇö VFP9 resets them on assignment)
+
+**Edit 3 ÔÇö 15 new methods added before `Destroy`:**
+
+| Method | Visibility | Purpose |
+|--------|-----------|---------|
+| `AlternarPagina` | PROTECTED | Switches ActivePage; reloads list when returning to Page1 |
+| `BtnIncluirClick` | PUBLIC | Sets INSERIR mode, resets BO, navigates to Page2 |
+| `BtnVisualizarClick` | PUBLIC | Validates selection, loads BO in PROCURAR mode |
+| `BtnAlterarClick` | PUBLIC | Validates selection, warns if flags=1, navigates ALTERAR |
+| `BtnExcluirClick` | PUBLIC | Blocks if flags=1, confirms, calls BO.Excluir() |
+| `BtnBuscarClick` | PUBLIC | Calls CarregarLista() |
+| `BtnEncerrarClick` | PUBLIC | Calls THIS.Release() |
+| `BtnAtualizarClick` | PUBLIC | Confirms if flags=1, calls BO.AtualizarFlags() |
+| `BtnImprimirListaClick` | PUBLIC | Toggles cnt_4c_ImpLista.Visible |
+| `FiltroVencimentoChanged` | PUBLIC | Reloads list on filter change |
+| `MontarRelatorio` | PROTECTED FUNCTION | Builds cursor_4c_Relatorio via SQLEXEC JOIN |
+| `BtnImpVideoClick` | PUBLIC | MontarRelatorio ÔåÆ ExecutarReportForm PREVIEW |
+| `BtnImpImpressoraClick` | PUBLIC | MontarRelatorio ÔåÆ ExecutarReportForm PRINTER_PROMPT |
+| `BtnImpExcelClick` | PUBLIC | MontarRelatorio ÔåÆ COPY TO XL5 |
+| `BtnImpFecharClick` | PUBLIC | Hides cnt_4c_ImpLista |

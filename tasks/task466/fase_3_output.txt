@@ -1,0 +1,19 @@
+﻿`C:\4c\projeto\app\forms\cadastros\FormMPL.prg` criado com 307 linhas.
+
+**Fase 3/8 conclu├¡da.** O arquivo cont├®m:
+
+| M├®todo | Status |
+|--------|--------|
+| `DEFINE CLASS FormMPL AS FormBase` | Propriedades visuais completas (Width=1000, Height=600, Caption com CHR(237)) |
+| `Init()` | Apenas `DODEFAULT()` ÔÇö sem dupla chamada a InicializarForm |
+| `InicializarForm()` | Cria MPLBO, configura PageFrame, propaga Caption nos labels, chama CarregarLista (com guarda `gb_4c_ValidandoUI`) |
+| `ConfigurarPageFrame()` | PageFrame `Top=-29`, `Tabs=.F.`, 2 pages com `Picture=fundo_cad_1003.jpg` |
+| `ConfigurarPaginaLista()` | Containers `cnt_4c_Cabecalho` (com lbl_4c_Sombra/Titulo), `cnt_4c_Botoes` (Left=542) e `cnt_4c_Saida` (Left=917 can├┤nico) |
+| `ConfigurarPaginaDados()` | Container `cnt_4c_BotoesAcao` vazio |
+| `CarregarLista()` | Chama `MPLBO.Buscar("")` ÔÇö sem RETURN dentro de TRY |
+| `AlternarPagina()` | Alterna ActivePage, recarrega lista ao voltar para Page1 |
+| `TornarControlesVisiveis()` | Recursivo com suporte a PageFrame |
+| `FormatarGridLista()` | Tahoma 8pt via SetAll |
+| `Destroy()` | Libera BO + DODEFAULT() |
+
+Pr├│xima fase: **Fase 4/8 ÔÇö Grid e bot├Áes CRUD na Page1**.

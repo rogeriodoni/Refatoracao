@@ -1,0 +1,33 @@
+﻿Tenho a confirma├º├úo necess├íria. Vou explicar o resultado da verifica├º├úo.
+
+---
+
+**RESULTADO DA VERIFICA├ç├âO ÔÇö FALSO POSITIVO**
+
+O problema `[SQL-FILTRO-INVENTADO]` **n├úo ├® uma inven├º├úo** ÔÇö ├® uma tradu├º├úo correta do comportamento legado.
+
+**O que o c├│digo original fazia (linha 1105 do legado):**
+```foxpro
+m.loLista = CreateObject('fwBuscaExt', pnIdConn, 'SigOpFp', 'CrFpag', 'Fpags', This.Value, ...)
+If !(m.loLista.plAchouRegistro)
+    m.loLista.Show()  && s├│ abre browse se N├âO encontrou
+EndIf
+This.Value = Evaluate('CrFpag.Fpags')
+```
+
+O `fwBuscaExt` internamente faz `WHERE Fpags = This.Value` para checar `plAchouRegistro`. O c├│digo migrado apenas tornou esse comportamento **expl├¡cito** em SQL:
+
+```foxpro
+*-- C├│digo migrado (FormMoe.prg:1483)
+"SELECT Fpags, Descrs FROM SigOpFp WHERE Fpags = " + EscaparSQL(loc_cFpag)
+```
+
+**Por que N├âO deve ser removido:**
+
+Remover o `WHERE Fpags = ...` transformaria a query em `SELECT Fpags, Descrs FROM SigOpFp` (sem filtro), que retorna **todas** as condi├º├Áes de pagamento. O `RECCOUNT()` sempre seria > 0, fazendo a valida├º├úo sempre "passar" ÔÇö qualquer c├│digo inv├ílido seria aceito silenciosamente.
+
+**Conclus├úo:** `WHERE cmoes` e `WHERE Fpags` s├úo de queries distintas:
+- `WHERE cmoes = ...` ÔåÆ query em `SigCdMoe`/`SigCdCot` Ô£ô
+- `WHERE Fpags = ...` ÔåÆ lookup de valida├º├úo em `SigOpFp` (tradu├º├úo do `fwBuscaExt`) Ô£ô
+
+**Nenhuma altera├º├úo ├® necess├íria.** O c├│digo est├í correto.

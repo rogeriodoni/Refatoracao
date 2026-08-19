@@ -1,0 +1,7 @@
+﻿Todas as 4 ocorr├¬ncias corrigidas. Resumo das mudan├ºas em `Formmpp.prg`:
+
+- **BtnVisualizarClick**: `loc_cChave` ÔåÆ `loc_cCodigos`, l├¬ `cursor_4c_Dados.Codigos` em vez de `CidChaves`, chama `CarregarPorCodigosETipo(loc_cCodigos, THIS.this_nTipo)`
+- **BtnAlterarClick**: idem
+- **BtnExcluirClick**: removida vari├ível `loc_cChave`, EMPTY check trocado para `loc_cCodigos`, `CarregarPorCodigo(loc_cChave)` ÔåÆ `CarregarPorCodigosETipo(loc_cCodigos, THIS.this_nTipo)`
+
+Nenhuma altera├º├úo no BO ÔÇö `CarregarPorCodigosETipo` j├í existia com `WHERE Codigos = X AND nTipos = Y`, que ├® exatamente o padr├úo do legado.

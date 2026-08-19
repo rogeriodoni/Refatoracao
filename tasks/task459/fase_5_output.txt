@@ -1,0 +1,16 @@
+﻿Fase 5 conclu├¡da com sucesso. O arquivo agora tem o m├®todo `ConfigurarAbaGeral()` inserido com a primeira metade dos campos da aba Geral.
+
+**O que foi adicionado:**
+- `ConfigurarAbaGeral()` chamado dentro de `ConfigurarPaginaDados()` antes do `TornarControlesVisiveis`
+- **6 campos completos** (labels + textboxes com coordenadas exatas do original):
+  - `txt_4c_Linhas` (PK, top=29, left=247)
+  - `txt_4c_Descs` (top=57, width=289)
+  - `txt_4c_Pedidos` (top=84, lookup em `SigCdOpe`)
+  - `txt_4c_TpCustos` (top=110, valida "1" ou "2")
+  - `txt_4c_TpVendas` (top=136, valida "1" ou "2")
+  - `txt_4c_AnaPes` (top=162, valida "1" ou "2")
+- Labels e hints correspondentes a cada campo
+- 4 handlers de valida├º├úo: `ValidarOperacao()`, `ValidarTpCusto()`, `ValidarTpVenda()`, `ValidarAnaPes()`
+- BINDEVENTs para LostFocus em todos os campos com valida├º├úo
+
+Fase 6 adicionar├í a segunda metade: `txt_4c_TpPesos`, `txt_4c_QtPcs`, `opt_4c_Bonus`, `opt_4c_Preco`, `cmd_4c_CmdgFigura`, `Shape5` e `ImgFigTec`.

@@ -1,0 +1,14 @@
+﻿Corre├º├úo aplicada corretamente. 
+
+**O problema e a corre├º├úo:**
+
+O `BtnBuscarClick` usava **Pattern B** do `FormBuscaAuxiliar` passando `"cidchaves"` como 4┬║ par├ómetro, o que gerava internamente dois WHEREs inventados:
+1. `WHERE CAST(cidchaves AS VARCHAR(50)) = ''` (busca exata ÔÇö sempre 0 rows pois GUID nunca ├® vazio)
+2. `WHERE CAST(cidchaves AS VARCHAR(50)) LIKE '%' ORDER BY cidchaves` (fallback show-all, mas ordenado por GUID, n├úo por tipos/grupos)
+
+**Fix aplicado (Pattern A can├┤nico):**
+- SQL pelo caller: `SELECT cidchaves, tipos, grupos, descs, limites FROM SigIdPcp ORDER BY tipos, grupos` ÔÇö sem WHERE cidchaves
+- `CREATEOBJECT("FormBuscaAuxiliar")` sem par├ómetros
+- `DefinirCursor("cursor_4c_Busca", "tipos", "descs", titulo)` + `mAddColuna("limites", ...)`
+- Ap├│s `Mostrar()` retornar `.T.`, l├¬ `cursor_4c_Busca.cidchaves` diretamente (cursor ainda aberto e posicionado no registro selecionado)
+- `LOCATE FOR ALLTRIM(cidchaves) == loc_cChave` em `cursor_4c_Dados` permanece v├ílido

@@ -1,0 +1,10 @@
+﻿O arquivo j├í est├í completo. Os 4 eventos da Fase 7 j├í foram implementados nas fases anteriores:
+
+- **`BtnIncluirClick()`** ÔÇö linha 615: chama `NovoRegistro()`, limpa campos, habilita, navega para Page2
+- **`BtnVisualizarClick()`** ÔÇö linha 626: l├¬ `CidChaves` do cursor, carrega via `CarregarPorCodigo`, desabilita campos
+- **`BtnAlterarClick()`** ÔÇö linha 656: carrega, chama `EditarRegistro()`, preenche campos, habilita
+- **`BtnExcluirClick()`** ÔÇö linha 688: confirma, verifica uso em `SigClCrc` (tipo=1) e `SigCdFtc`, chama `Excluir()`
+
+A refer├¬ncia a `cursor_4c_Dados.CidChaves` est├í **correta** ÔÇö o `mppBO.Buscar()` inclui `CidChaves` no SELECT (linha 46 do BO), ent├úo o campo existe no cursor.
+
+**Fase 7/8 j├í conclu├¡da.** Nenhuma altera├º├úo necess├íria.

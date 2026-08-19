@@ -1,0 +1,13 @@
+﻿A migra├º├úo do FormMrc est├í **100% completa**. Resumo do estado:
+
+**Ambos os arquivos existem e t├¬m implementa├º├úo completa:**
+- `C:\4c\projeto\app\classes\MrcBO.prg` ÔÇö BO com Init, Buscar, CarregarPorCodigo, Inserir, Atualizar, ExecutarExclusao (cascade SigCdMriÔåÆSigCdMrr), ValidarDados, VerificarDuplicidade
+- `C:\4c\projeto\app\forms\cadastros\FormMrc.prg` ÔÇö Form completo com todos os 20+ m├®todos obrigat├│rios: BtnBuscarClick, BtnEncerrarClick, BtnSalvarClick, BtnCancelarClick, FormParaBO, BOParaForm, HabilitarCampos, LimparCampos, AjustarBotoesPorModo, TornarControlesVisiveis, FormatarGridLista
+
+**Integra├º├úo j├í realizada:**
+- `config.prg` ÔÇö carregamento autom├ítico via ADIR() (n├úo precisa de entrada manual)
+- `menu.prg` linha 290 ÔÇö `DEFINE BAR 130 OF popCadastros PROMPT "Demonstrativos"`
+- `menu.prg` linha 407 ÔÇö `ON SELECTION BAR 130 OF popCadastros DO AbrirFormMrc`
+- `menu.prg` linha 8546 ÔÇö `PROCEDURE AbrirFormMrc()` com padr├úo can├┤nico correto
+
+A Fase 8/8 n├úo tinha pend├¬ncias ÔÇö o arquivo j├í estava finalizado nas fases anteriores.

@@ -1,0 +1,35 @@
+﻿{
+    "arquivo":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormMda.prg",
+    "timestamp":  "2026-08-19T11:01:08",
+    "correcoes":  [
+                      {
+                          "Tipo":  "ADDOBJECT_DUPLICADO",
+                          "Linha":  1195,
+                          "Original":  "loc_oPagina.grd_4c_Emps.Column1.AddObject(\"Check1\", \"CheckBox\")",
+                          "Corrigido":  "loc_oPagina.grd_4c_Emps.Column1.AddObject(\"check12\", \"CheckBox\")",
+                          "Descricao":  "Nome duplicado \u0027check1\u0027 no mesmo container - renomeado para \u0027check12\u0027"
+                      },
+                      {
+                          "Tipo":  "CONTAINER_BOTOES_TRANSPARENTE",
+                          "Linha":  410,
+                          "Original":  ".BackStyle = 1",
+                          "Corrigido":  ".BackStyle = 0",
+                          "Descricao":  "Container cnt_4c_BotoesAcao (hospeda botoes CRUD) deve ser transparente - NAO criar caixa cinza ao redor dos botoes"
+                      },
+                      {
+                          "Tipo":  "CNT-OVERLAY-GRID-BACKSTYLE",
+                          "Linha":  410,
+                          "Original":  ".BackStyle = 0",
+                          "Corrigido":  ".BackStyle = 1",
+                          "Descricao":  "Container cnt_4c_botoesacao sobrepoe Grid com BackStyle=0 (ghost trails) - Pattern #107 forcou BackStyle=1"
+                      },
+                      {
+                          "Tipo":  "WARN-166-FORMBUSCAAUXILIAR-PATTERN-B",
+                          "Linha":  1627,
+                          "Original":  "loc_oBusca = CREATEOBJECT(\"FormBuscaAuxiliar\", gnConnHandle, ;",
+                          "Corrigido":  "(REVISAR MANUAL — auto-mutate inseguro)",
+                          "Descricao":  "Pattern #166 WARNING: CREATEOBJECT(\u0027FormBuscaAuxiliar\u0027, \u003cargs\u003e) eh Pattern B defeituoso. Refactor para THIS.AbrirLookupCanonico(par_cTabela, par_cCampoCod, par_cCampoDesc, par_cTitulo, par_cValorFiltro, par_oTxtCod, par_oTxtDesc, par_cFiltroExtra) [PREFERIDO — helper em FormBase.prg] OU Pattern A manual [FALLBACK — ver migration-patterns.md #166]. Pattern B defeitos: (1) Init WHERE exato + LIKE prefixo; se ambos 0 rows, FECHA cursor -\u003e picker vazio; (2) DataSession=1 vs pai DataSession=2 -\u003e USED() pos-Show retorna .F. no caller -\u003e selecao perdida; (3) cursor scope isolado. Ref canonico: Formsigrecrf.prg (task066), Formsigrecog.prg (task059 pos-Erro114). Origem: Erro114 (2026-08-13, Formsigrecog — digita \u0027M\u0027 em vendedor+Enter, picker abre vazio pois WHERE codigos=\u0027M\u0027 e LIKE \u0027M%\u0027 ambos 0 rows)."
+                      }
+                  ],
+    "totalCorrecoes":  4
+}

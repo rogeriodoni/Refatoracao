@@ -1,0 +1,16 @@
+﻿O arquivo `FormMoe.prg` j├í cont├®m todos os 4 eventos da Fase 7 implementados com l├│gica completa:
+
+| Evento | Linhas | Status |
+|--------|--------|--------|
+| `BtnIncluirClick()` | 1190-1196 | Ô£à Completo |
+| `BtnVisualizarClick()` | 1201-1215 | Ô£à Completo |
+| `BtnAlterarClick()` | 1220-1235 | Ô£à Completo |
+| `BtnExcluirClick()` | 1240-1258 | Ô£à Completo |
+
+Cada m├®todo segue os padr├Áes corretos:
+- `BtnIncluirClick`: chama `NovoRegistro()`, seta `this_cModoAtual = "INCLUIR"`, limpa campos, navega para Page2
+- `BtnVisualizarClick`: valida cursor, chama `CarregarPorCodigo()`, seta modo VISUALIZAR, chama `BOParaForm()`, navega para Page2
+- `BtnAlterarClick`: valida cursor, chama `CarregarPorCodigo()` + `EditarRegistro()`, seta modo ALTERAR, chama `BOParaForm()`, navega para Page2
+- `BtnExcluirClick`: valida cursor, pede confirma├º├úo via `MsgConfirma()`, chama `CarregarPorCodigo()` + `Excluir()`, recarrega lista
+
+**Fase 7 j├í estava conclu├¡da** ÔÇö provavelmente implementada junto com as fases anteriores. O arquivo est├í completo com 1624 linhas e pronto para Fase 8/8 (se houver) ou testes.

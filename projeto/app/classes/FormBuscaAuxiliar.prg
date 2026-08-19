@@ -133,10 +133,28 @@ DEFINE CLASS FormBuscaAuxiliar AS FormBase
         loc_nResultado = SQLEXEC(par_nConn, loc_cSQL, par_cCursor)
 
         IF loc_nResultado < 0 OR RECCOUNT(par_cCursor) = 0
-            THIS.this_lAchouRegistro = .F.
-            THIS.this_lSelecionou = .F.
+            *-- Fallback SHOW-ALL (Erro114 2026-08-13): busca parcial retornou 0
+            *   rows (ou erro). Antes o cursor era FECHADO e o picker abria vazio.
+            *   Agora: re-consulta SEM filtro do campo para exibir todos os
+            *   registros disponiveis (respeitando par_cFiltro adicional).
             IF USED(par_cCursor)
                 USE IN (par_cCursor)
+            ENDIF
+            LOCAL loc_cWhereAll
+            loc_cWhereAll = ""
+            IF !EMPTY(loc_cFiltro)
+                loc_cWhereAll = " WHERE (" + loc_cFiltro + ")"
+            ENDIF
+            loc_cSQL = "SELECT * FROM " + par_cTabela + " " + loc_cWhereAll + ;
+                       " ORDER BY " + par_cCampo
+            loc_nResultado = SQLEXEC(par_nConn, loc_cSQL, par_cCursor)
+            THIS.this_lAchouRegistro = .F.
+            THIS.this_lSelecionou = .F.
+            IF loc_nResultado < 0 OR !USED(par_cCursor) OR RECCOUNT(par_cCursor) = 0
+                *-- Tabela realmente vazia (ou erro): fecha cursor
+                IF USED(par_cCursor)
+                    USE IN (par_cCursor)
+                ENDIF
             ENDIF
             RETURN .T.  && REGRA: Sempre .T. para criar objeto
         ENDIF

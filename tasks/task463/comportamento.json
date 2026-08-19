@@ -1,0 +1,118 @@
+{
+  "resumo": {
+    "totalMetodos": 6,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 5,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fGerUniqueKey", "fUniqueIds"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDMOD",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "Local lcBusca\n\nIf Not Empty(ThisForm.Pagina.Dados.getDescs.Value)\n\tThisForm.poDataMgr.LocateCursor([crSigCdMod], [Descs], ThisForm.Pagina.Dados.getDescs.Value)\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "LocateCursor",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMOD",
+      "evento": "Init",
+      "linhas": 19,
+      "codigoOriginal": "With ThisForm\n\t.poDataMgr = CreateObject([fSqlConector], .Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tWith .poDataMgr\n\t\t\t.AddCursor([SigCdMod], [pkchave], [crSigCdMod], [], ThisForm.Pagina.Lista.Grade)\n\t\t\t.pfSqlTabela(1).pColuna([Codigos],  [], [], [Código],    080, .t.)\n\t\t\t.pfSqlTabela(1).pColuna([Descs], [], [], [Descrição], 150, .t.)\n\t\tEndWith\n\n\t\t=DoDefault()\n\n\t\t.Pagina.Lista.Grade.Column1.SetFocus\n\tElse\n\t\t=Messagebox([Impossível Efetuar Conexão Com o Servidor de Banco de Dados...], 0+48, [CreateO... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDMOD",
+      "evento": "Click",
+      "linhas": 28,
+      "codigoOriginal": "Parameters lnOpcao\n\nIf Not DoDefault(lnOpcao)\n\tThisform.mAtivaPagina1\n\tReturn .F.\nEndif\n\nDo Case\nCase Inlist(Thisform.pcEscolha, [INSERIR])\n\t\n\tlnCodigo = fGerUniqueKey('SIGCDMOD')\n\tlcCodigo = Alltrim(Str(lnCodigo))\n\n\tReplace Codigos with lcCodigo in crSigCdMod\n\t\n\tThisform.pagina.dados.getCodigos.Value = lcCodigo\n\tThisform.pagina.dados.getCodigos.Refresh\n\t\n\tThisform.pagina.dados.getDescs.SetFocus\n\nCase Inlist(Thisform.pcEscolha, [INSERIR], [PROCURAR], [ALTERAR])\n\tThisform.pagina.dados.getDescs.Se... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fGerUniqueKey",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDMOD",
+      "evento": "Click",
+      "linhas": 34,
+      "codigoOriginal": "If InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])\n\tIf Empty(ThisForm.Pagina.Dados.getDescs.Value)\n\t\t=Messagebox([Descrição Inválida!!!], 48, [Atenção!!!])\n\t\tThisForm.Pagina.Dados.getDescs.SetFocus()\n\t\tReturn .f.\n\tEndIf\n\tSet Step On \n\tIf (ThisForm.pcEscolha = [INSERIR])\n\t\tlcQuery = [Select Descs ] + ;\n\t\t\t\t    [From SigCdMod ] + ;\n\t\t\t\t   [Where descs = '] + Alltrim(ThisForm.Pagina.Dados.getDescs.Value) + [']\n\n\t\tIf (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalBus]) < 1)\n\t\t\t=MessageBox([Favor Rei... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "SetFocus,SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDMOD",
+      "evento": "Click",
+      "linhas": 6,
+      "codigoOriginal": "=DoDefault()\n\nIf ThisForm.plCancelar\n\tThisForm.mAtivapagina1\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMOD.Pagina.Dados.getCodigos",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

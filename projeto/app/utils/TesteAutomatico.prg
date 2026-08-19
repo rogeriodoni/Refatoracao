@@ -349,9 +349,9 @@ DEFINE CLASS FormTester AS Custom
             IF PEMSTATUS(THIS.oForm, "CarregarLista", 5)
                 THIS.oForm.CarregarLista()
 
-                *-- Verifica cursors conhecidos (mesmo padrao do OPERACIONAL)
+                *-- Verifica cursors conhecidos na datasession do form (suporte DataSession=2)
                 LOCAL ARRAY loc_aCursoresCheck[8]
-                LOCAL loc_k, loc_lAchouCursor, loc_cCursorAchado
+                LOCAL loc_k, loc_lAchouCursor, loc_cCursorAchado, loc_nDSSaved
                 loc_aCursoresCheck[1] = "cursor_4c_Dados"
                 loc_aCursoresCheck[2] = "cursor_4c_Lista"
                 loc_aCursoresCheck[3] = "cursor_4c_Busca"
@@ -362,6 +362,13 @@ DEFINE CLASS FormTester AS Custom
                 loc_aCursoresCheck[8] = "cursor_4c_ListaCab"
                 loc_lAchouCursor = .F.
                 loc_cCursorAchado = ""
+
+                *-- Forms com DataSession=2 criam cursors no datasession privado — mudar para la
+                loc_nDSSaved = SET("DATASESSION")
+                IF PEMSTATUS(THIS.oForm, "DataSessionID", 5)
+                    SET DATASESSION TO THIS.oForm.DataSessionID
+                ENDIF
+
                 FOR loc_k = 1 TO 8
                     IF USED(loc_aCursoresCheck[loc_k])
                         loc_lAchouCursor = .T.
@@ -372,6 +379,12 @@ DEFINE CLASS FormTester AS Custom
 
                 IF loc_lAchouCursor
                     loc_nRecCount = RECCOUNT(loc_cCursorAchado)
+                ENDIF
+
+                *-- Restaura datasession antes de continuar
+                SET DATASESSION TO (loc_nDSSaved)
+
+                IF loc_lAchouCursor
                     loc_cDetalhes = ALLTRIM(STR(loc_nRecCount)) + " registros em " + loc_cCursorAchado
                     loc_lPassou = .T.
                     ?? "PASSOU"

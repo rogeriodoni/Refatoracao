@@ -1,0 +1,32 @@
+﻿Analisei os dois alertas. Ambos s├úo **falsos positivos** do validador. Explica├º├úo:
+
+---
+
+### [SQL-FILTRO-INVENTADO] `CIDCHAVES`
+
+O `cidchaves` aparece em WHERE em tr├¬s lugares do LGRBO.prg ÔÇö todos **corretos e necess├írios**:
+
+| Linha | Fun├º├úo | Contexto |
+|-------|--------|----------|
+| 151 | `CarregarPorCodigo` | `WHERE a.cidchaves = EscaparSQL(par_cIdChaves)` ÔÇö carga por PK |
+| 324 | `Atualizar` | `WHERE cidchaves = EscaparSQL(THIS.this_cIdChaves)` ÔÇö UPDATE por PK |
+| 348-349 | `ExecutarExclusao` | `WHERE cidchaves = EscaparSQL(THIS.this_cIdChaves)` ÔÇö DELETE por PK |
+
+O validador comparou apenas contra o WHERE da query de listagem do legado (`CSERIFAB, CDATAS, LNMOV...`), mas o legado tamb├®m usa PK no UPDATE/DELETE ÔÇö o trecho original fornecido n├úo mostra essas opera├º├Áes CRUD. O `cidchaves` ├® a PK declarada pelo pr├│prio BO (`this_cCampoChave = "cidchaves"`). Remover esses WHEREs quebraria todas as opera├º├Áes de edi├º├úo e exclus├úo.
+
+---
+
+### [SQL-FILTRO-INVENTADO] `CONTROLCOUNT`
+
+N├úo existe nenhuma cl├íusula SQL com `CONTROLCOUNT`. O validador encontrou a string `ControlCount` no arquivo, mas ela est├í em `FormLGR.prg:1455` e `1469`, dentro do m├®todo `TornarControlesVisiveis()`:
+
+```foxpro
+FOR loc_i = 1 TO par_oContainer.ControlCount       && propriedade VFP9, n├úo SQL
+IF PEMSTATUS(loc_oControl, "ControlCount", 5) AND loc_oControl.ControlCount > 0
+```
+
+Isso ├® uma propriedade nativa de container VFP9 (`.ControlCount`), sem rela├º├úo alguma com SQL.
+
+---
+
+**Nenhuma altera├º├úo necess├íria.** Os dois alertas s├úo falsos positivos do validador SQL: um confundiu opera├º├Áes CRUD por PK com filtros de listagem, e o outro confundiu uma propriedade de objeto VFP9 com um nome de coluna SQL.
