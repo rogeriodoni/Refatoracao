@@ -265,7 +265,15 @@ DEFINE CLASS sigreeunBO AS RelatorioBase
 
                             IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_TmpSaldoRu") < 1
                                 THIS.this_cMensagemErro = "Erro ao consultar SigMvEst"
-                                loc_lFalhou = .T.
+                                *-- Cursor-empty guard (Pattern #167 auto): sem esse guard, loc_lFalhou=.T.
+                                *   com cursor_4c_SigCdProRu vazio faria REPORT FORM renderizar preview branco
+                                *   sem mensagem para o usuario (BtnVisualizarClick espera .F.+MsgErro).
+                                IF RECCOUNT("cursor_4c_SigCdProRu") = 0
+                                    THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
+                                    loc_lFalhou = .F.
+                                ELSE
+                                    loc_lFalhou = .T.
+                                ENDIF
                                 LOOP
                             ENDIF
                             SELECT cursor_4c_TmpSaldoRu
@@ -286,7 +294,15 @@ DEFINE CLASS sigreeunBO AS RelatorioBase
 
                             IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_TmpSaldoRu") < 1
                                 THIS.this_cMensagemErro = "Erro ao consultar SigMvHst (historico)"
-                                loc_lFalhou = .T.
+                                *-- Cursor-empty guard (Pattern #167 auto): sem esse guard, loc_lFalhou=.T.
+                                *   com cursor_4c_SigCdProRu vazio faria REPORT FORM renderizar preview branco
+                                *   sem mensagem para o usuario (BtnVisualizarClick espera .F.+MsgErro).
+                                IF RECCOUNT("cursor_4c_SigCdProRu") = 0
+                                    THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
+                                    loc_lFalhou = .F.
+                                ELSE
+                                    loc_lFalhou = .T.
+                                ENDIF
                                 LOOP
                             ENDIF
                             SELECT cursor_4c_TmpSaldoRu
@@ -439,7 +455,15 @@ DEFINE CLASS sigreeunBO AS RelatorioBase
 
                                 IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_TmpHisAll") < 1
                                     THIS.this_cMensagemErro = "Erro ao consultar historico"
-                                    loc_lFalhou = .T.
+                                    *-- Cursor-empty guard (Pattern #167 auto): sem esse guard, loc_lFalhou=.T.
+                                    *   com cursor_4c_TmpSaldoAll vazio faria REPORT FORM renderizar preview branco
+                                    *   sem mensagem para o usuario (BtnVisualizarClick espera .F.+MsgErro).
+                                    IF RECCOUNT("cursor_4c_TmpSaldoAll") = 0
+                                        THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
+                                        loc_lFalhou = .F.
+                                    ELSE
+                                        loc_lFalhou = .T.
+                                    ENDIF
                                     LOOP
                                 ENDIF
                                 SELECT cursor_4c_TmpHisAll
@@ -594,7 +618,15 @@ DEFINE CLASS sigreeunBO AS RelatorioBase
                 ENDIF
 
                 SELECT dbRelatorio
-                loc_lSucesso = .T.
+                *-- Cursor-empty guard (Pattern #167 auto): sem esse guard, loc_lSucesso=.T.
+                *   com dbRelatorio vazio faria REPORT FORM renderizar preview branco
+                *   sem mensagem para o usuario (BtnVisualizarClick espera .F.+MsgErro).
+                IF RECCOUNT("dbRelatorio") = 0
+                    THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
+                    loc_lSucesso = .F.
+                ELSE
+                    loc_lSucesso = .T.
+                ENDIF
             ENDIF
 
         CATCH TO loc_oErro
@@ -771,6 +803,87 @@ DEFINE CLASS sigreeunBO AS RelatorioBase
             USE IN cursor_4c_TmpHisAll
         ENDIF
         DODEFAULT()
+    ENDPROC
+
+
+    *--------------------------------------------------------------------------
+    * Visualizar - Exibe relatorio em preview na tela (Pattern #167 auto)
+    *--------------------------------------------------------------------------
+    PROCEDURE Visualizar()
+        LOCAL loc_lSucesso, loc_oErro
+        loc_lSucesso = .F.
+        TRY
+            IF THIS.PrepararDados()
+                IF USED(THIS.this_cCursorDados) AND RECCOUNT(THIS.this_cCursorDados) > 0
+                    SELECT (THIS.this_cCursorDados)
+                    GO TOP
+                    REPORT FORM (gc_4c_CaminhoReports + THIS.this_cArquivoRelatorio) ;
+                        PREVIEW NOCONSOLE
+                    loc_lSucesso = .T.
+                ELSE
+                    THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Visualizar")
+            THIS.this_cMensagemErro = loc_oErro.Message
+        ENDTRY
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * Imprimir - Imprime relatorio com dialogo de impressora (Pattern #167 auto)
+    *--------------------------------------------------------------------------
+    PROCEDURE Imprimir()
+        LOCAL loc_lSucesso, loc_oErro
+        loc_lSucesso = .F.
+        TRY
+            IF THIS.PrepararDados()
+                IF USED(THIS.this_cCursorDados) AND RECCOUNT(THIS.this_cCursorDados) > 0
+                    SELECT (THIS.this_cCursorDados)
+                    GO TOP
+                    REPORT FORM (gc_4c_CaminhoReports + THIS.this_cArquivoRelatorio) ;
+                        TO PRINTER PROMPT NOCONSOLE
+                    loc_lSucesso = .T.
+                ELSE
+                    THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Imprimir")
+            THIS.this_cMensagemErro = loc_oErro.Message
+        ENDTRY
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * GerarExcel - Exporta relatorio para arquivo ASCII (Excel) (Pattern #167 auto)
+    *--------------------------------------------------------------------------
+    PROCEDURE GerarExcel()
+        LOCAL loc_lSucesso, loc_cArquivo, loc_oErro
+        loc_lSucesso = .F.
+        TRY
+            IF THIS.PrepararDados()
+                IF USED(THIS.this_cCursorDados) AND RECCOUNT(THIS.this_cCursorDados) > 0
+                    SELECT (THIS.this_cCursorDados)
+                    GO TOP
+                    loc_cArquivo = SYS(5) + CURDIR() + "sigreeun_" + ;
+                                   STRTRAN(DTOC(DATE()), "/", "") + ".xls"
+                    REPORT FORM (gc_4c_CaminhoReports + THIS.this_cArquivoRelatorio) ;
+                        TO FILE (loc_cArquivo) NOPREVIEW NOCONSOLE ASCII
+                    IF FILE(loc_cArquivo)
+                        MsgInfo("Arquivo gerado:" + CHR(13) + loc_cArquivo, "Excel")
+                    ENDIF
+                    loc_lSucesso = .T.
+                ELSE
+                    THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "GerarExcel")
+            THIS.this_cMensagemErro = loc_oErro.Message
+        ENDTRY
+        RETURN loc_lSucesso
     ENDPROC
 
 ENDDEFINE

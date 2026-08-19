@@ -169,8 +169,8 @@ DEFINE CLASS sigrecrfBO AS RelatorioBase
 
             loc_cSQL = "Select a.cods, a.datas, a.vends, a.emps, " + ;
                        "b.cpros, b.grupos, b.estos, b.qtds, b.estoque " + ;
-                       "from sigcdcrf a " + ;
-                       "join sigcdcri b on a.cods = b.cods " + ;
+                       "from SigCdCrf a " + ;
+                       "join SigCdCri b on a.cods = b.cods " + ;
                        "Where " + loc_cWhere
 
             loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "crSigCdCrf")
@@ -335,7 +335,15 @@ DEFINE CLASS sigrecrfBO AS RelatorioBase
                                 USE IN crSigCdCrf
                             ENDIF
 
-                            loc_lSucesso = .T.
+                            *-- Cursor-empty guard (Pattern #167 auto): sem esse guard, loc_lSucesso=.T.
+                            *   com crRel vazio faria REPORT FORM renderizar preview branco
+                            *   sem mensagem para o usuario (BtnVisualizarClick espera .F.+MsgErro).
+                            IF RECCOUNT("crRel") = 0
+                                THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
+                                loc_lSucesso = .F.
+                            ELSE
+                                loc_lSucesso = .T.
+                            ENDIF
 
                         ENDIF
                     ENDIF

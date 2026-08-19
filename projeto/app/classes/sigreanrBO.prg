@@ -444,7 +444,15 @@ DEFINE CLASS sigreanrBO AS RelatorioBase
                 SET RELATION TO Emps INTO TmpCabec
                 GO TOP
 
-                loc_lSucesso = .T.
+                *-- Cursor-empty guard (Pattern #167 auto): sem esse guard, loc_lSucesso=.T.
+                *   com TmpFinal vazio faria REPORT FORM renderizar preview branco
+                *   sem mensagem para o usuario (BtnVisualizarClick espera .F.+MsgErro).
+                IF RECCOUNT("TmpFinal") = 0
+                    THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
+                    loc_lSucesso = .F.
+                ELSE
+                    loc_lSucesso = .T.
+                ENDIF
                 EXIT
             ENDDO
 

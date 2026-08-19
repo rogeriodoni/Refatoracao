@@ -75,7 +75,7 @@ DEFINE CLASS sigrechpBO AS RelatorioBase
         TRY
             THIS.this_cTabela          = ""
             THIS.this_cCampoChave      = ""
-            THIS.this_cArquivoRelatorio = gc_4c_CaminhoReports + "SigReChp.frx"
+            THIS.this_cArquivoRelatorio = "SigReChp"
             THIS.this_dDtInicial       = DATE()
             THIS.this_dDtFinal         = DATE()
             THIS.this_nNrTipo          = 1
@@ -361,7 +361,15 @@ DEFINE CLASS sigrechpBO AS RelatorioBase
 
             SELECT CsRelatorio
             GO TOP
-            loc_lSucesso = .T.
+            *-- Cursor-empty guard (Pattern #167 auto): sem esse guard, loc_lSucesso=.T.
+            *   com CsRelatorio vazio faria REPORT FORM renderizar preview branco
+            *   sem mensagem para o usuario (BtnVisualizarClick espera .F.+MsgErro).
+            IF RECCOUNT("CsRelatorio") = 0
+                THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
+                loc_lSucesso = .F.
+            ELSE
+                loc_lSucesso = .T.
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "sigrechpBO.PrepararDados")
         ENDTRY
@@ -566,19 +574,14 @@ DEFINE CLASS sigrechpBO AS RelatorioBase
         loc_lSucesso = .F.
         TRY
             THIS.this_cMensagemErro = ""
-            IF !THIS.PrepararDados()
-                IF EMPTY(THIS.this_cMensagemErro)
-                    THIS.this_cMensagemErro = "Erro ao preparar dados do relat" + CHR(243) + "rio"
+            IF THIS.PrepararDados() AND THIS.MontarCabecalho()
+                loc_lSucesso = THIS.ExecutarReportForm("SigReChp", "PRINTER_PROMPT", "CsRelatorio")
+                THIS.LimparCursores()
+            ELSE
+                IF !EMPTY(THIS.this_cMensagemErro)
+                    MsgErro(THIS.this_cMensagemErro, "sigrechpBO.Imprimir")
                 ENDIF
-                loc_lSucesso = .F.
             ENDIF
-            IF !THIS.MontarCabecalho()
-                loc_lSucesso = .F.
-            ENDIF
-            SELECT CsRelatorio
-            REPORT FORM (THIS.this_cArquivoRelatorio) TO PRINTER PROMPT NOCONSOLE
-            THIS.LimparCursores()
-            loc_lSucesso = .T.
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "sigrechpBO.Imprimir")
         ENDTRY
@@ -593,23 +596,73 @@ DEFINE CLASS sigrechpBO AS RelatorioBase
         loc_lSucesso = .F.
         TRY
             THIS.this_cMensagemErro = ""
-            IF !THIS.PrepararDados()
-                IF EMPTY(THIS.this_cMensagemErro)
-                    THIS.this_cMensagemErro = "Erro ao preparar dados do relat" + CHR(243) + "rio"
+            IF THIS.PrepararDados() AND THIS.MontarCabecalho()
+                loc_lSucesso = THIS.ExecutarReportForm("SigReChp", "PREVIEW", "CsRelatorio")
+                THIS.LimparCursores()
+            ELSE
+                IF !EMPTY(THIS.this_cMensagemErro)
+                    MsgErro(THIS.this_cMensagemErro, "sigrechpBO.Visualizar")
                 ENDIF
-                loc_lSucesso = .F.
             ENDIF
-            IF !THIS.MontarCabecalho()
-                loc_lSucesso = .F.
-            ENDIF
-            SELECT CsRelatorio
-            REPORT FORM (THIS.this_cArquivoRelatorio) PREVIEW NOCONSOLE
-            THIS.LimparCursores()
-            loc_lSucesso = .T.
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "sigrechpBO.Visualizar")
         ENDTRY
         RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ExecutarReportForm (Pattern #117 / #123)
+    *   Helper canonico: guard FRX exists + guard cursor empty (MsgAviso auto)
+    *   + isolamento POINT/SEPARATOR/REPORTBEHAVIOR 80 (Erro28) + restore menu (Erro63)
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ExecutarReportForm(par_cRelatorioBase, par_cModo, par_cCursorDados)
+        LOCAL loc_cFRX
+        loc_cFRX = FULLPATH(gc_4c_CaminhoReports + par_cRelatorioBase + ".frx")
+
+        IF NOT FILE(loc_cFRX)
+            MostrarErro("Arquivo de relat" + CHR(243) + "rio n" + CHR(227) + "o encontrado:" + CHR(13) + ;
+                loc_cFRX + CHR(13) + CHR(13) + ;
+                "O FRX legado ainda n" + CHR(227) + "o foi portado para o novo sistema.", "Erro")
+            RETURN .F.
+        ENDIF
+
+        IF VARTYPE(par_cCursorDados) == "C" AND !EMPTY(par_cCursorDados)
+            IF !USED(par_cCursorDados) OR RECCOUNT(par_cCursorDados) = 0
+                MsgAviso("Nenhum registro encontrado com os filtros informados.", ;
+                    "Aten" + CHR(231) + CHR(227) + "o")
+                RETURN .F.
+            ENDIF
+        ENDIF
+
+        LOCAL loc_cPointOrig, loc_cSepOrig, loc_nBehaviorOrig
+        loc_cPointOrig    = SET("POINT")
+        loc_cSepOrig      = SET("SEPARATOR")
+        loc_nBehaviorOrig = SET("REPORTBEHAVIOR")
+        SET POINT TO "."
+        SET SEPARATOR TO ","
+        SET REPORTBEHAVIOR 80
+
+        DO CASE
+            CASE par_cModo == "PREVIEW"
+                REPORT FORM (loc_cFRX) PREVIEW NOCONSOLE
+            CASE par_cModo == "PRINTER_PROMPT"
+                REPORT FORM (loc_cFRX) TO PRINTER PROMPT NOCONSOLE
+            CASE par_cModo == "PRINTER"
+                REPORT FORM (loc_cFRX) TO PRINTER NOCONSOLE
+        ENDCASE
+
+        SET POINT TO (loc_cPointOrig)
+        SET SEPARATOR TO (loc_cSepOrig)
+        SET REPORTBEHAVIOR (loc_nBehaviorOrig)
+
+        TRY
+            SET SYSMENU TO DEFAULT
+            RELEASE POPUP popArquivo, popCadastros, popMovimentos, popRelatorios, popFerramentas, popAjuda
+            CriarMenuPrincipal()
+        CATCH
+        ENDTRY
+
+        RETURN .T.
     ENDPROC
 
     *--------------------------------------------------------------------------
@@ -787,6 +840,37 @@ DEFINE CLASS sigrechpBO AS RelatorioBase
             USE IN (THIS.this_cCursorOperacoes)
         ENDIF
         DODEFAULT()
+    ENDPROC
+
+
+    *--------------------------------------------------------------------------
+    * GerarExcel - Exporta relatorio para arquivo ASCII (Excel) (Pattern #167 auto)
+    *--------------------------------------------------------------------------
+    PROCEDURE GerarExcel()
+        LOCAL loc_lSucesso, loc_cArquivo, loc_oErro
+        loc_lSucesso = .F.
+        TRY
+            IF THIS.PrepararDados()
+                IF USED(THIS.this_cCursorDados) AND RECCOUNT(THIS.this_cCursorDados) > 0
+                    SELECT (THIS.this_cCursorDados)
+                    GO TOP
+                    loc_cArquivo = SYS(5) + CURDIR() + "sigrechp_" + ;
+                                   STRTRAN(DTOC(DATE()), "/", "") + ".xls"
+                    REPORT FORM (gc_4c_CaminhoReports + THIS.this_cArquivoRelatorio) ;
+                        TO FILE (loc_cArquivo) NOPREVIEW NOCONSOLE ASCII
+                    IF FILE(loc_cArquivo)
+                        MsgInfo("Arquivo gerado:" + CHR(13) + loc_cArquivo, "Excel")
+                    ENDIF
+                    loc_lSucesso = .T.
+                ELSE
+                    THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "GerarExcel")
+            THIS.this_cMensagemErro = loc_oErro.Message
+        ENDTRY
+        RETURN loc_lSucesso
     ENDPROC
 
 ENDDEFINE

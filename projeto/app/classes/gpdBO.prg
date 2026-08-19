@@ -251,6 +251,12 @@ DEFINE CLASS gpdBO AS BusinessBase
                 loc_cSQL = loc_cSQL + " WHERE " + par_cFiltro
             ENDIF
             loc_cSQL = loc_cSQL + " ORDER BY cgrus"
+            *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
+            IF USED("cursor_4c_Dados")
+                TABLEREVERT(.T., "cursor_4c_Dados")
+                USE IN cursor_4c_Dados
+            ENDIF
+
             loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Dados")
             IF loc_nResult > 0
                 loc_lResultado = .T.
@@ -268,6 +274,12 @@ DEFINE CLASS gpdBO AS BusinessBase
         loc_lResultado = .F.
         TRY
             loc_cSQL = "SELECT * FROM SigCdGrp WHERE cgrus = " + EscaparSQL(par_cCodigo)
+            *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
+            IF USED("cursor_4c_Busca")
+                TABLEREVERT(.T., "cursor_4c_Busca")
+                USE IN cursor_4c_Busca
+            ENDIF
+
             loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Busca")
             IF loc_nResult > 0 AND !EOF("cursor_4c_Busca")
                 THIS.CarregarDoCursor("cursor_4c_Busca")
@@ -516,7 +528,10 @@ DEFINE CLASS gpdBO AS BusinessBase
                 "nagmts, pesmts, respcads, patricustos, patrireals, patricusto, " + ;
                 "servprds, despacfs, despacgs, frtsegfs, frtseggs, prdrefcmp, " + ;
                 "cfggergprs, titulospro, " + ;
-                "prodmostr, exibecatlink, selectDescriCompra, chkMultForn) VALUES (" + ;
+                "prodmostr, exibecatlink, selectDescriCompra, chkMultForn) VALUES ("
+            *-- Erro104: linha logica acima >8192 chars quando concatenada com VALUES -
+            *-- quebrar via reassign para nao estourar limite do compilador VFP9.
+            loc_cSQL = loc_cSQL + ;
                 EscaparSQL(THIS.this_cCgrus) + ", " + EscaparSQL(THIS.this_cDgrus) + ", " + ;
                 EscaparSQL(THIS.this_cMercs) + ", " + EscaparSQL(THIS.this_cIdecpros) + ", " + ;
                 EscaparSQL(THIS.this_cCodcols) + ", " + FormatarNumeroSQL(THIS.this_nCodprods) + ", " + ;
@@ -566,7 +581,9 @@ DEFINE CLASS gpdBO AS BusinessBase
                 STR(IIF(THIS.this_lObrfigjpgs,1,0),1) + ", " + STR(IIF(THIS.this_lObrreffs,1,0),1) + ", " + ;
                 STR(IIF(THIS.this_lObralt,1,0),1) + ", " + STR(IIF(THIS.this_lObrlarg,1,0),1) + ", " + ;
                 STR(IIF(THIS.this_lObrdiam,1,0),1) + ", " + STR(IIF(THIS.this_lObrespes,1,0),1) + ", " + ;
-                STR(IIF(THIS.this_lObrcompr,1,0),1) + ", " + ;
+                STR(IIF(THIS.this_lObrcompr,1,0),1) + ", "
+            *-- Erro104: partir SQL para respeitar limite de 8192 chars por linha logica.
+            loc_cSQL = loc_cSQL + ;
                 EscaparSQL(THIS.this_cClfiscals) + ", " + EscaparSQL(THIS.this_cOrigmercs) + ", " + ;
                 EscaparSQL(THIS.this_cSittricms) + ", " + EscaparSQL(THIS.this_cTptribs) + ", " + ;
                 FormatarNumeroSQL(THIS.this_nIcms) + ", " + FormatarNumeroSQL(THIS.this_nIpifabs) + ", " + ;
@@ -730,7 +747,9 @@ DEFINE CLASS gpdBO AS BusinessBase
                 "obrlarg = " + STR(IIF(THIS.this_lObrlarg,1,0),1) + ", " + ;
                 "obrdiam = " + STR(IIF(THIS.this_lObrdiam,1,0),1) + ", " + ;
                 "obrespes = " + STR(IIF(THIS.this_lObrespes,1,0),1) + ", " + ;
-                "obrcompr = " + STR(IIF(THIS.this_lObrcompr,1,0),1) + ", " + ;
+                "obrcompr = " + STR(IIF(THIS.this_lObrcompr,1,0),1) + ", "
+            *-- Erro104: partir SQL UPDATE para respeitar limite de 8192 chars.
+            loc_cSQL = loc_cSQL + ;
                 "clfiscals = " + EscaparSQL(THIS.this_cClfiscals) + ", " + ;
                 "origmercs = " + EscaparSQL(THIS.this_cOrigmercs) + ", " + ;
                 "sittricms = " + EscaparSQL(THIS.this_cSittricms) + ", " + ;
@@ -882,6 +901,12 @@ DEFINE CLASS gpdBO AS BusinessBase
                 loc_cSQL = "SELECT codigos, descricaos, marckupa FROM SigCdPsg " + ;
                     "WHERE cgrus = " + EscaparSQL(ALLTRIM(par_cCgrus)) + ;
                     " ORDER BY codigos"
+                *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
+                IF USED("cursor_4c_SubGrupos")
+                    TABLEREVERT(.T., "cursor_4c_SubGrupos")
+                    USE IN cursor_4c_SubGrupos
+                ENDIF
+
                 loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_SubGrupos")
                 IF loc_nResult > 0
                     loc_lResultado = .T.

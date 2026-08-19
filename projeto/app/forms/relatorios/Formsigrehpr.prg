@@ -48,6 +48,11 @@ DEFINE CLASS Formsigrehpr AS FormBase
             THIS.Caption = "Relat" + CHR(243) + "rio de Hist" + CHR(243) + ;
                            "rico de Produtos"
 
+            IF TYPE("gc_4c_CaminhoIcones") = "U"
+                gc_4c_CaminhoIcones = ""
+            ENDIF
+            THIS.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
+
             IF !(TYPE("gb_4c_ValidandoUI") = "L" AND gb_4c_ValidandoUI)
                 IF TYPE("gnConnHandle") != "N" OR gnConnHandle <= 0
                     MsgErro("Conex" + CHR(227) + "o com banco de dados inv" + ;

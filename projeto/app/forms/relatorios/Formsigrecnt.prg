@@ -376,7 +376,7 @@ DEFINE CLASS Formsigrecnt AS FormBase
         *-- Data
         loc_oPag.AddObject("lbl_4c_Label1", "Label")
         WITH loc_oPag.lbl_4c_Label1
-            .Top       = 106
+            .Top       = 21
             .Left      = 199
             .Width     = 32
             .Height    = 15
@@ -390,7 +390,7 @@ DEFINE CLASS Formsigrecnt AS FormBase
 
         loc_oPag.AddObject("txt_4c_Datas", "TextBox")
         WITH loc_oPag.txt_4c_Datas
-            .Top      = 102
+            .Top      = 17
             .Left     = 235
             .Width    = 80
             .Height   = 24
@@ -404,7 +404,7 @@ DEFINE CLASS Formsigrecnt AS FormBase
         *-- C" + CHR(243) + "digo
         loc_oPag.AddObject("lbl_4c_Label3", "Label")
         WITH loc_oPag.lbl_4c_Label3
-            .Top       = 105
+            .Top       = 20
             .Left      = 366
             .Width     = 42
             .Height    = 15
@@ -418,7 +418,7 @@ DEFINE CLASS Formsigrecnt AS FormBase
 
         loc_oPag.AddObject("txt_4c_Codigo", "TextBox")
         WITH loc_oPag.txt_4c_Codigo
-            .Top      = 101
+            .Top      = 16
             .Left     = 411
             .Width    = 54
             .Height   = 24
@@ -431,7 +431,7 @@ DEFINE CLASS Formsigrecnt AS FormBase
         *-- Vendedor
         loc_oPag.AddObject("lbl_4c_Label2", "Label")
         WITH loc_oPag.lbl_4c_Label2
-            .Top       = 134
+            .Top       = 49
             .Left      = 176
             .Width     = 55
             .Height    = 15
@@ -445,7 +445,7 @@ DEFINE CLASS Formsigrecnt AS FormBase
 
         loc_oPag.AddObject("txt_4c_Conta", "TextBox")
         WITH loc_oPag.txt_4c_Conta
-            .Top      = 129
+            .Top      = 44
             .Left     = 235
             .Width    = 80
             .Height   = 24
@@ -457,7 +457,7 @@ DEFINE CLASS Formsigrecnt AS FormBase
 
         loc_oPag.AddObject("txt_4c_DConta", "TextBox")
         WITH loc_oPag.txt_4c_DConta
-            .Top       = 129
+            .Top       = 44
             .Left      = 317
             .Width     = 290
             .Height    = 24
@@ -472,7 +472,7 @@ DEFINE CLASS Formsigrecnt AS FormBase
         *-- Base (N" + CHR(237) + "vel 1)
         loc_oPag.AddObject("lbl_4c_Label7", "Label")
         WITH loc_oPag.lbl_4c_Label7
-            .Top       = 162
+            .Top       = 77
             .Left      = 199
             .Width     = 32
             .Height    = 15
@@ -486,7 +486,7 @@ DEFINE CLASS Formsigrecnt AS FormBase
 
         loc_oPag.AddObject("txt_4c_Base", "TextBox")
         WITH loc_oPag.txt_4c_Base
-            .Top      = 157
+            .Top      = 72
             .Left     = 235
             .Width    = 54
             .Height   = 24
@@ -498,7 +498,7 @@ DEFINE CLASS Formsigrecnt AS FormBase
 
         loc_oPag.AddObject("txt_4c_DBase", "TextBox")
         WITH loc_oPag.txt_4c_DBase
-            .Top       = 157
+            .Top       = 72
             .Left      = 291
             .Width     = 174
             .Height    = 24
@@ -513,7 +513,7 @@ DEFINE CLASS Formsigrecnt AS FormBase
         *-- Segundo N" + CHR(237) + "vel
         loc_oPag.AddObject("lbl_4c_Label6", "Label")
         WITH loc_oPag.lbl_4c_Label6
-            .Top       = 190
+            .Top       = 105
             .Left      = 154
             .Width     = 77
             .Height    = 15
@@ -527,7 +527,7 @@ DEFINE CLASS Formsigrecnt AS FormBase
 
         loc_oPag.AddObject("txt_4c_Nvl2", "TextBox")
         WITH loc_oPag.txt_4c_Nvl2
-            .Top      = 185
+            .Top      = 100
             .Left     = 235
             .Width    = 54
             .Height   = 24
@@ -539,7 +539,7 @@ DEFINE CLASS Formsigrecnt AS FormBase
 
         loc_oPag.AddObject("txt_4c_DNvl2", "TextBox")
         WITH loc_oPag.txt_4c_DNvl2
-            .Top       = 185
+            .Top       = 100
             .Left      = 291
             .Width     = 174
             .Height    = 24
@@ -554,7 +554,7 @@ DEFINE CLASS Formsigrecnt AS FormBase
         *-- Terceiro N" + CHR(237) + "vel
         loc_oPag.AddObject("lbl_4c_Label5", "Label")
         WITH loc_oPag.lbl_4c_Label5
-            .Top       = 218
+            .Top       = 133
             .Left      = 157
             .Width     = 74
             .Height    = 15
@@ -568,7 +568,7 @@ DEFINE CLASS Formsigrecnt AS FormBase
 
         loc_oPag.AddObject("txt_4c_Nvl3", "TextBox")
         WITH loc_oPag.txt_4c_Nvl3
-            .Top      = 213
+            .Top      = 128
             .Left     = 235
             .Width    = 54
             .Height   = 24
@@ -580,7 +580,7 @@ DEFINE CLASS Formsigrecnt AS FormBase
 
         loc_oPag.AddObject("txt_4c_DNvl3", "TextBox")
         WITH loc_oPag.txt_4c_DNvl3
-            .Top       = 213
+            .Top       = 128
             .Left      = 291
             .Width     = 174
             .Height    = 24
@@ -595,7 +595,7 @@ DEFINE CLASS Formsigrecnt AS FormBase
         *-- Quarto N" + CHR(237) + "vel
         loc_oPag.AddObject("lbl_4c_Label8", "Label")
         WITH loc_oPag.lbl_4c_Label8
-            .Top       = 246
+            .Top       = 161
             .Left      = 162
             .Width     = 69
             .Height    = 15
@@ -609,7 +609,7 @@ DEFINE CLASS Formsigrecnt AS FormBase
 
         loc_oPag.AddObject("txt_4c_Nvl4", "TextBox")
         WITH loc_oPag.txt_4c_Nvl4
-            .Top      = 241
+            .Top      = 156
             .Left     = 235
             .Width    = 54
             .Height   = 24
@@ -621,7 +621,7 @@ DEFINE CLASS Formsigrecnt AS FormBase
 
         loc_oPag.AddObject("txt_4c_DNvl4", "TextBox")
         WITH loc_oPag.txt_4c_DNvl4
-            .Top       = 241
+            .Top       = 156
             .Left      = 291
             .Width     = 174
             .Height    = 24
@@ -636,7 +636,7 @@ DEFINE CLASS Formsigrecnt AS FormBase
         *-- Label Localiza" + CHR(231) + CHR(245) + "es (ao lado do OptionGroup Local)
         loc_oPag.AddObject("lbl_4c_Label4", "Label")
         WITH loc_oPag.lbl_4c_Label4
-            .Top       = 270
+            .Top       = 185
             .Left      = 163
             .Width     = 68
             .Height    = 15
@@ -704,14 +704,14 @@ DEFINE CLASS Formsigrecnt AS FormBase
                 .FontSize  = 8
                 .ForeColor = RGB(90, 90, 90)
             ENDWITH
-            .Top         = 265
+            .Top         = 180
             .Left        = 231
         ENDWITH
 
         *-- Label Ordena" + CHR(231) + CHR(227) + "o (ao lado do OptionGroup Ordem)
         loc_oPag.AddObject("lbl_4c_Label9", "Label")
         WITH loc_oPag.lbl_4c_Label9
-            .Top       = 294
+            .Top       = 209
             .Left      = 169
             .Width     = 62
             .Height    = 15
@@ -779,7 +779,7 @@ DEFINE CLASS Formsigrecnt AS FormBase
                 .FontSize  = 8
                 .ForeColor = RGB(90, 90, 90)
             ENDWITH
-            .Top         = 289
+            .Top         = 204
             .Left        = 231
         ENDWITH
     ENDPROC

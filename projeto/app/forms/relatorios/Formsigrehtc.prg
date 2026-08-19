@@ -51,6 +51,11 @@ DEFINE CLASS Formsigrehtc AS FormBase
         loc_lSucesso = .F.
 
         TRY
+            IF TYPE("gc_4c_CaminhoIcones") = "U"
+                gc_4c_CaminhoIcones = ""
+            ENDIF
+            THIS.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
+
             THIS.this_oRelatorio = CREATEOBJECT("sigrehtcBO")
 
             IF VARTYPE(THIS.this_oRelatorio) != "O"

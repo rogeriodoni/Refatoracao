@@ -208,10 +208,10 @@ DEFINE CLASS sigrecogBO AS RelatorioBase
                            "FROM SigMvItn d " + ;
                            "INNER JOIN SigMvCab a ON d.empdopnums = a.empdopnums " + ;
                            "INNER JOIN SigCdOpe b ON a.dopes = b.dopes " + ;
-                           "INNER JOIN SigCdEmp e ON e.cemps = a.cemps " + ;
+                           "INNER JOIN SigCdEmp e ON e.cemps = a.emps " + ;
                            "INNER JOIN SigCdCli f ON f.iclis = a.vends " + ;
                            "INNER JOIN SigCdPro h ON d.cpros = h.cpros " + ;
-                           "INNER JOIN SigCmGri g ON g.cgrus = h.cgrus " + ;
+                           "INNER JOIN SigCmGri g ON g.cgrus = h.cgrus AND g.cvens = a.vends " + ;
                            "WHERE a.datas >= " + FormatarDataSQL(THIS.this_dDtInicial) + ;
                            " AND a.datas < DATEADD(day, 1, " + FormatarDataSQL(THIS.this_dDtFinal) + ")" + ;
                            " AND b.results = 1 " + ;
@@ -297,6 +297,15 @@ DEFINE CLASS sigrecogBO AS RelatorioBase
                 SELECT tempo
                 INDEX ON PADR(Emps,3) + PADR(Vends,10) + PADR(Cgrus,3) TAG relchave
                 GO TOP
+
+                *-- Cursor-empty guard (Erro114 2026-08-13): SQLEXEC pode retornar
+                *   sucesso (loc_nResult=1) com 0 linhas quando filtros nao batem.
+                *   Sem esse guard, PrepararDados retorna .T. e REPORT FORM renderiza
+                *   preview vazio sem mensagem para o usuario.
+                IF RECCOUNT("tempo") = 0
+                    THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
+                    EXIT
+                ENDIF
 
                 loc_lSucesso = .T.
                 EXIT

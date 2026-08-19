@@ -278,11 +278,11 @@ DEFINE CLASS SIGRECNDBO AS RelatorioBase
 
         DO CASE
             CASE par_cModo == "PREVIEW"
-                REPORT FORM SigReCnd PREVIEW NOCONSOLE
+                THIS.ExecutarReportForm("SigReCnd", "PREVIEW")
             CASE par_cModo == "PRINTER_PROMPT"
-                REPORT FORM SigReCnd TO PRINTER PROMPT NOCONSOLE
+                THIS.ExecutarReportForm("SigReCnd", "PRINTER_PROMPT")
             CASE par_cModo == "PRINTER"
-                REPORT FORM SigReCnd TO PRINTER NOCONSOLE
+                THIS.ExecutarReportForm("SigReCnd", "PRINTER")
         ENDCASE
 
         CD (loc_cCdOrig)
@@ -350,7 +350,7 @@ DEFINE CLASS SIGRECNDBO AS RelatorioBase
         LOCAL loc_lSucesso, loc_cCdOrig, loc_cReports, loc_oErro
         loc_lSucesso = .F.
 
-        LOCAL loc_nBehaviorOrig
+        LOCAL loc_nBehaviorOrig, loc_cPointOrig, loc_cSepOrig
         TRY
             IF THIS.PrepararDados()
                 *-- Erro100/101: bypass ExecutarReportForm — REPORT FORM direto,
@@ -363,11 +363,22 @@ DEFINE CLASS SIGRECNDBO AS RelatorioBase
                 *-- "999999999.99" (sem "@Z") renderizar como asteriscos nas linhas
                 *-- de detalhe (Debito/Credito/Saldo). Totais usam "@Z 999,999,999.99"
                 *-- e renderizam OK. Modo 80 mede fonte como IDE de design legado.
+                *-- Erro105: config.prg forca SET POINT TO "," (locale BR); FRX
+                *-- legado usa PICTURE "999999999.99" com ponto decimal, ficando
+                *-- inconsistente com o POINT atual e disparando asteriscos nas
+                *-- linhas de detalhe mesmo com REPORTBEHAVIOR 80. Isolar POINT/
+                *-- SEPARATOR durante o REPORT FORM (mesma tecnica do helper).
                 loc_nBehaviorOrig = SET("REPORTBEHAVIOR")
+                loc_cPointOrig    = SET("POINT")
+                loc_cSepOrig      = SET("SEPARATOR")
                 SET REPORTBEHAVIOR 80
+                SET POINT TO "."
+                SET SEPARATOR TO ","
                 SELECT TmpHist
-                REPORT FORM SigReCnd PREVIEW NOCONSOLE
+                THIS.ExecutarReportForm("SigReCnd", "PREVIEW")
                 SET REPORTBEHAVIOR (loc_nBehaviorOrig)
+                SET POINT TO (loc_cPointOrig)
+                SET SEPARATOR TO (loc_cSepOrig)
                 CD (loc_cCdOrig)
                 loc_lSucesso = .T.
             ENDIF
@@ -552,6 +563,37 @@ DEFINE CLASS SIGRECNDBO AS RelatorioBase
         ENDIF
 
         RETURN loc_cChave
+    ENDPROC
+
+
+    *--------------------------------------------------------------------------
+    * GerarExcel - Exporta relatorio para arquivo ASCII (Excel) (Pattern #167 auto)
+    *--------------------------------------------------------------------------
+    PROCEDURE GerarExcel()
+        LOCAL loc_lSucesso, loc_cArquivo, loc_oErro
+        loc_lSucesso = .F.
+        TRY
+            IF THIS.PrepararDados()
+                IF USED(THIS.this_cCursorDados) AND RECCOUNT(THIS.this_cCursorDados) > 0
+                    SELECT (THIS.this_cCursorDados)
+                    GO TOP
+                    loc_cArquivo = SYS(5) + CURDIR() + "SIGRECND_" + ;
+                                   STRTRAN(DTOC(DATE()), "/", "") + ".xls"
+                    REPORT FORM (gc_4c_CaminhoReports + THIS.this_cArquivoRelatorio) ;
+                        TO FILE (loc_cArquivo) NOPREVIEW NOCONSOLE ASCII
+                    IF FILE(loc_cArquivo)
+                        MsgInfo("Arquivo gerado:" + CHR(13) + loc_cArquivo, "Excel")
+                    ENDIF
+                    loc_lSucesso = .T.
+                ELSE
+                    THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "GerarExcel")
+            THIS.this_cMensagemErro = loc_oErro.Message
+        ENDTRY
+        RETURN loc_lSucesso
     ENDPROC
 
 ENDDEFINE

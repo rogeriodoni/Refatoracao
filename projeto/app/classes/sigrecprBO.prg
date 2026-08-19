@@ -39,7 +39,7 @@ DEFINE CLASS sigrecprBO AS RelatorioBase
         TRY
             THIS.this_cTabela          = ""
             THIS.this_cCampoChave      = ""
-            THIS.this_cArquivoRelatorio = gc_4c_CaminhoReports + "SigReCpr.frx"
+            THIS.this_cArquivoRelatorio = "SigReCpr"
             THIS.this_dDataIni         = DATE()
             THIS.this_dDataFin         = DATE()
             THIS.this_nTipoFiltro      = 1
@@ -95,7 +95,7 @@ DEFINE CLASS sigrecprBO AS RelatorioBase
             *-- Montar clausula adicional de filtro por tipo de relatorio
             DO CASE
                 CASE THIS.this_nTipoRel = 2  && Baixados
-                    loc_cVerTipo = " AND a.umovs IN (" + ;
+                    loc_cVerTipo = " AND e.umovs IN (" + ;
                         "SELECT operacaos FROM SigCdOpt " + ;
                         "WHERE tipos='CR' AND devolvidos='N' " + ;
                         "AND opants NOT IN (" + ;
@@ -103,34 +103,34 @@ DEFINE CLASS sigrecprBO AS RelatorioBase
                         "WHERE tipos='DB' AND devolvidos='S'))"
 
                 CASE THIS.this_nTipoRel = 3  && NEG.PG (Devolvidos)
-                    loc_cVerTipo = " AND a.umovs IN (" + ;
+                    loc_cVerTipo = " AND e.umovs IN (" + ;
                         "SELECT operacaos FROM SigCdOpt " + ;
                         "WHERE tipos='DB' AND devolvidos='S')"
 
                 CASE THIS.this_nTipoRel = 4  && Bons
                     IF THIS.this_nBons = 1  && Ativos
-                        loc_cVerTipo = " AND a.umovs IN (" + ;
+                        loc_cVerTipo = " AND e.umovs IN (" + ;
                             "SELECT operacaos FROM SigCdOpt " + ;
                             "WHERE devolvidos<>'S' AND tipos='DB' AND Ordens=1)"
                     ELSE  && Todos
-                        loc_cVerTipo = " AND a.umovs IN (" + ;
+                        loc_cVerTipo = " AND e.umovs IN (" + ;
                             "SELECT operacaos FROM SigCdOpt " + ;
                             "WHERE devolvidos<>'S')"
                     ENDIF
                     loc_cVerTipo = loc_cVerTipo + ;
-                        " AND a.contat NOT IN (" + ;
+                        " AND e.contat NOT IN (" + ;
                         "SELECT DISTINCT contat FROM sigche " + ;
                         "WHERE umovs IN (" + ;
                         "SELECT operacaos FROM SigCdOpt " + ;
                         "WHERE devolvidos='S'))"
 
                 CASE THIS.this_nTipoRel = 5  && Devolvidos
-                    loc_cVerTipo = " AND a.umovs IN (" + ;
+                    loc_cVerTipo = " AND e.umovs IN (" + ;
                         "SELECT operacaos FROM SigCdOpt " + ;
                         "WHERE devolvidos='S')"
 
                 OTHERWISE  && Ativos (lnTipoRel=1 ou vazio)
-                    loc_cVerTipo = " AND a.umovs IN (" + ;
+                    loc_cVerTipo = " AND e.umovs IN (" + ;
                         "SELECT operacaos FROM SigCdOpt " + ;
                         "WHERE tipos='DB' AND devolvidos='N')"
             ENDCASE
@@ -178,11 +178,11 @@ DEFINE CLASS sigrecprBO AS RelatorioBase
             IF loc_nResult < 0
                 THIS.this_cMensagemErro = "Erro ao buscar dados de cheques prorrogados"
                 loc_lSucesso = .F.
+            ELSE
+                SELECT (THIS.this_cCursorDados)
+                GO TOP
+                loc_lSucesso = .T.
             ENDIF
-
-            SELECT (THIS.this_cCursorDados)
-            GO TOP
-            loc_lSucesso = .T.
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "sigrecprBO.PrepararDados")
             THIS.this_cMensagemErro = loc_oErro.Message
@@ -253,20 +253,14 @@ DEFINE CLASS sigrecprBO AS RelatorioBase
         loc_lSucesso = .F.
         TRY
             THIS.this_cMensagemErro = ""
-            IF !THIS.PrepararDados()
-                IF EMPTY(THIS.this_cMensagemErro)
-                    THIS.this_cMensagemErro = "Erro ao preparar dados do relat" + ;
-                        CHR(243) + "rio"
+            IF THIS.PrepararDados() AND THIS.MontarCabecalho()
+                loc_lSucesso = THIS.ExecutarReportForm("SigReCpr", "PRINTER_PROMPT", THIS.this_cCursorDados)
+                THIS.LimparCursores()
+            ELSE
+                IF !EMPTY(THIS.this_cMensagemErro)
+                    MsgErro(THIS.this_cMensagemErro, "sigrecprBO.Imprimir")
                 ENDIF
-                loc_lSucesso = .F.
             ENDIF
-            IF !THIS.MontarCabecalho()
-                loc_lSucesso = .F.
-            ENDIF
-            SELECT (THIS.this_cCursorDados)
-            REPORT FORM (THIS.this_cArquivoRelatorio) TO PRINTER PROMPT NOCONSOLE
-            THIS.LimparCursores()
-            loc_lSucesso = .T.
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "sigrecprBO.Imprimir")
             THIS.this_cMensagemErro = loc_oErro.Message
@@ -282,25 +276,83 @@ DEFINE CLASS sigrecprBO AS RelatorioBase
         loc_lSucesso = .F.
         TRY
             THIS.this_cMensagemErro = ""
-            IF !THIS.PrepararDados()
-                IF EMPTY(THIS.this_cMensagemErro)
-                    THIS.this_cMensagemErro = "Erro ao preparar dados do relat" + ;
-                        CHR(243) + "rio"
+            IF THIS.PrepararDados() AND THIS.MontarCabecalho()
+                loc_lSucesso = THIS.ExecutarReportForm("SigReCpr", "PREVIEW", THIS.this_cCursorDados)
+                THIS.LimparCursores()
+            ELSE
+                IF !EMPTY(THIS.this_cMensagemErro)
+                    MsgErro(THIS.this_cMensagemErro, "sigrecprBO.Visualizar")
                 ENDIF
-                loc_lSucesso = .F.
             ENDIF
-            IF !THIS.MontarCabecalho()
-                loc_lSucesso = .F.
-            ENDIF
-            SELECT (THIS.this_cCursorDados)
-            REPORT FORM (THIS.this_cArquivoRelatorio) PREVIEW NOCONSOLE
-            THIS.LimparCursores()
-            loc_lSucesso = .T.
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "sigrecprBO.Visualizar")
             THIS.this_cMensagemErro = loc_oErro.Message
         ENDTRY
         RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ExecutarReportForm (Pattern #117 / #123)
+    *   Executa REPORT FORM apenas se FRX existir; se cursor vazio, mostra
+    *   MsgAviso e retorna .F. sem abrir preview em branco. Isola locale
+    *   (POINT/SEPARATOR/REPORTBEHAVIOR 80) porque FRXs Fortyus foram
+    *   desenhados com REPORTBEHAVIOR 80. Restaura menu apos preview (Erro63).
+    *   par_cModo: "PREVIEW" | "PRINTER_PROMPT" | "PRINTER"
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ExecutarReportForm(par_cRelatorioBase, par_cModo, par_cCursorDados)
+        LOCAL loc_cFRX
+        loc_cFRX = FULLPATH(gc_4c_CaminhoReports + par_cRelatorioBase + ".frx")
+
+        IF NOT FILE(loc_cFRX)
+            MostrarErro("Arquivo de relat" + CHR(243) + "rio n" + CHR(227) + "o encontrado:" + CHR(13) + ;
+                loc_cFRX + CHR(13) + CHR(13) + ;
+                "O FRX legado ainda n" + CHR(227) + "o foi portado para o novo sistema.", "Erro")
+            RETURN .F.
+        ENDIF
+
+        *-- Guard cursor vazio: evita preview em branco / impressao vazia (Erro30)
+        IF VARTYPE(par_cCursorDados) == "C" AND !EMPTY(par_cCursorDados)
+            IF !USED(par_cCursorDados) OR RECCOUNT(par_cCursorDados) = 0
+                MsgAviso("Nenhum registro encontrado com os filtros informados.", ;
+                    "Aten" + CHR(231) + CHR(227) + "o")
+                RETURN .F.
+            ENDIF
+        ENDIF
+
+        *-- Isolamento de locale + modo de renderizacao (Erro28)
+        LOCAL loc_cPointOrig, loc_cSepOrig, loc_nBehaviorOrig
+        loc_cPointOrig    = SET("POINT")
+        loc_cSepOrig      = SET("SEPARATOR")
+        loc_nBehaviorOrig = SET("REPORTBEHAVIOR")
+        SET POINT TO "."
+        SET SEPARATOR TO ","
+        SET REPORTBEHAVIOR 80
+
+        DO CASE
+            CASE par_cModo == "PREVIEW"
+                REPORT FORM (loc_cFRX) PREVIEW NOCONSOLE
+            CASE par_cModo == "PRINTER_PROMPT"
+                REPORT FORM (loc_cFRX) TO PRINTER PROMPT NOCONSOLE
+            CASE par_cModo == "PRINTER"
+                REPORT FORM (loc_cFRX) TO PRINTER NOCONSOLE
+        ENDCASE
+
+        SET POINT TO (loc_cPointOrig)
+        SET SEPARATOR TO (loc_cSepOrig)
+        SET REPORTBEHAVIOR (loc_nBehaviorOrig)
+
+        *-- Restaurar menu (Erro63): REPORT FORM PREVIEW abre toolbar propria que
+        *-- corrompe cache visual do _MSYSMENU. Sem restore, popups renderizam
+        *-- encolhidos apos preview fechar.
+        TRY
+            SET SYSMENU TO DEFAULT
+            RELEASE POPUP popArquivo, popCadastros, popMovimentos, popRelatorios, popFerramentas, popAjuda
+            CriarMenuPrincipal()
+        CATCH
+            *-- CriarMenuPrincipal fora do escopo (teste automatizado) - silencioso
+        ENDTRY
+
+        RETURN .T.
     ENDPROC
 
     *--------------------------------------------------------------------------
@@ -440,6 +492,37 @@ DEFINE CLASS sigrecprBO AS RelatorioBase
     PROCEDURE Destroy()
         THIS.LimparCursores()
         DODEFAULT()
+    ENDPROC
+
+
+    *--------------------------------------------------------------------------
+    * GerarExcel - Exporta relatorio para arquivo ASCII (Excel) (Pattern #167 auto)
+    *--------------------------------------------------------------------------
+    PROCEDURE GerarExcel()
+        LOCAL loc_lSucesso, loc_cArquivo, loc_oErro
+        loc_lSucesso = .F.
+        TRY
+            IF THIS.PrepararDados()
+                IF USED(THIS.this_cCursorDados) AND RECCOUNT(THIS.this_cCursorDados) > 0
+                    SELECT (THIS.this_cCursorDados)
+                    GO TOP
+                    loc_cArquivo = SYS(5) + CURDIR() + "sigrecpr_" + ;
+                                   STRTRAN(DTOC(DATE()), "/", "") + ".xls"
+                    REPORT FORM (gc_4c_CaminhoReports + THIS.this_cArquivoRelatorio) ;
+                        TO FILE (loc_cArquivo) NOPREVIEW NOCONSOLE ASCII
+                    IF FILE(loc_cArquivo)
+                        MsgInfo("Arquivo gerado:" + CHR(13) + loc_cArquivo, "Excel")
+                    ENDIF
+                    loc_lSucesso = .T.
+                ELSE
+                    THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "GerarExcel")
+            THIS.this_cMensagemErro = loc_oErro.Message
+        ENDTRY
+        RETURN loc_lSucesso
     ENDPROC
 
 ENDDEFINE

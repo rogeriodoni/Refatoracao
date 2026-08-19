@@ -32,7 +32,6 @@ DEFINE CLASS Formsigredtv AS FormBase
     TitleBar     = 0
     Themes       = .F.
     WindowType   = 1
-    BackColor    = RGB(192, 192, 192)
     ShowWindow   = 1
 
     *--------------------------------------------------------------------------
@@ -66,6 +65,11 @@ DEFINE CLASS Formsigredtv AS FormBase
             ENDIF
 
             IF loc_lSucesso
+                IF TYPE("gc_4c_CaminhoIcones") = "U"
+                    gc_4c_CaminhoIcones = ""
+                ENDIF
+                THIS.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
+
                 THIS.this_oRelatorio = CREATEOBJECT("sigredtvBO")
                 THIS.this_oRelatorio.ConfigurarTipo(THIS.this_nTipo)
                 THIS.Caption = THIS.this_oRelatorio.ObterCaptionForm()
