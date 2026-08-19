@@ -21,7 +21,6 @@ DEFINE CLASS FormSigRePlc AS FormBase
     TitleBar    = 0
     Themes      = .F.
     ShowTips    = .T.
-    BackColor   = RGB(192, 192, 192)
 
     *-- Propriedades customizadas
     this_cMensagemErro  = ""
@@ -52,6 +51,7 @@ DEFINE CLASS FormSigRePlc AS FormBase
             IF TYPE("gc_4c_CaminhoReports") = "U"
                 gc_4c_CaminhoReports = ""
             ENDIF
+            THIS.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
 
             *-- Instanciar BO
             THIS.this_oBusinessObject = CREATEOBJECT("SigRePlcBO")

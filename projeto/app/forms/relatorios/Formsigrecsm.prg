@@ -27,7 +27,6 @@ DEFINE CLASS Formsigrecsm AS FormBase
     TitleBar    = 0
     Themes      = .F.
     WindowType  = 1
-    BackColor   = RGB(192, 192, 192)
     ShowWindow  = 1
 
     *-- BO de relatorio
@@ -60,6 +59,11 @@ DEFINE CLASS Formsigrecsm AS FormBase
             ENDIF
 
             IF loc_lSucesso
+                IF TYPE("gc_4c_CaminhoIcones") = "U"
+                    gc_4c_CaminhoIcones = ""
+                ENDIF
+                THIS.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
+
                 THIS.this_oRelatorio = CREATEOBJECT("sigrecsmBO")
 
                 THIS.ConfigurarCabecalho()

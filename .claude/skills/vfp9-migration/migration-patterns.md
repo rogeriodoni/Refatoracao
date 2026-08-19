@@ -7206,3 +7206,728 @@ BOs auditados como safe:
 - Complementa: `#158` (fix char — este eh o inverso p/ numeric); `#160` (Cemps→Emps do mesmo commit chore)
 - Origem: Erro93 (2026-08-06, FormSigReCmp — Listagem de Composicao Por Movimentacao/OP nao abria).
 
+## 163. `SigMv*.emps` vs `SigCd*.cemps` — nomes DIFERENTES entre MOVIMENTO e MESTRE (Erro108 sigrecogBO 2026-08-12)
+
+### Sintoma
+Ao clicar Visualizar/Imprimir em REPORT (apos digitar filtros de periodo/empresa), dialog:
+```
+Microsoft Visual FoxPro
+Connectivity error: [Microsoft][ODBC SQL Server Driver][SQL Server]Nome de coluna 'cemps' invalido.
+```
+
+Origem: `BtnVisualizarClick` -> `BO.Visualizar()` -> `PrepararDados()` -> `SQLEXEC` com `INNER JOIN SigCdEmp e ON e.cemps = a.cemps` onde `a` = `SigMvCab` (ou outra `SigMv*`).
+
+### Causa
+Coluna de empresa tem naming irregular entre tabelas:
+- Tabelas MOVIMENTO `SigMv*` (SigMvCab, SigMvItn, SigMvNfi, SigMvPar, SigMvCcr): coluna `emps` (SEM prefixo C)
+- Tabela MESTRE `SigCdEmp`: coluna `cemps` (COM prefixo C)
+
+Migrador deduz por padrao "tabelas Sig prefixadas Cd usam Cxxx / tabelas Mv usam xxx sem C" mas escreve `a.cemps` (JOIN erro-espelho) quando `a` = SigMv*. SQL Server rejeita — coluna nao existe.
+
+### Tabela de referencia — coluna de empresa por tabela
+
+| Tabela | Coluna empresa | Schema linha |
+|---|---|---|
+| `SigMvCab` | `emps` char(3) | 13180 |
+| `SigMvItn` | `emps` char(3) | ~13xxx |
+| `SigMvNfi` | `emps` char(3) | 14464 |
+| `SigMvPar` | `emps` char(3) | — |
+| `SigMvCcr` | `emps` char(3) | — |
+| `SigFiChc` | `emps` char(3) | 11229 |
+| `SigCdEmp` | `cemps` char(3) | 3111 |
+| `SigFiTef` | `cemps` char(3) | 12098 |
+
+**IRREGULARIDADES**: `SIGFICHC` usa `emps` apesar de prefixo `Fi` de master; `SIGFITEF` usa `cemps` apesar de prefixo `Fi` de master. **SEMPRE consultar schema.sql** — nunca deduzir por convencao.
+
+### Bug pattern proibido
+```foxpro
+* ERRADO — a = SigMvCab (tem emps, nao cemps):
+"FROM SigMvItn d " + ;
+"INNER JOIN SigMvCab a ON d.empdopnums = a.empdopnums " + ;
+"INNER JOIN SigCdEmp e ON e.cemps = a.cemps"    && SQL erro "Nome de coluna 'cemps' invalido"
+
+* Legado (sigrecog linha 554):
+"e.cemps   = a.emps  and"                        && CORRETO — a=SigMvCab tem emps
+```
+
+### Fix canonico
+```foxpro
+* JOIN entre MOVIMENTO e MESTRE:
+"INNER JOIN SigCdEmp e ON e.cemps = a.emps"     && SigCdEmp.cemps <-> SigMvCab.emps
+
+* SELECT list dentro de MOVIMENTO:
+"SELECT a.emps FROM SigMvCab a"                 && emps sem C
+
+* SELECT list dentro de MESTRE:
+"SELECT a.cemps FROM SigCdEmp a"                && cemps com C
+```
+
+### Regra generica
+**Em SELECTs e JOINs sobre tabelas Sig*, SEMPRE grep schema.sql pela coluna de empresa da tabela — nunca deduzir por prefixo Cd/Mv/Fi.** Padroes historicos ajudam mas ha irregularidades (SigFiChc/SigFiTef).
+
+### Auto-fix (WARNING-only)
+Pattern #161 detecta `\.cemps\s*=\s*a\w*\.cemps` em SQLEXEC strings e emite WARNING quando o alias `a` binds a tabela Sig*Mv*. **NAO muta** — parse SQL fragil, muitos falsos positivos quando `a` = SigCdEmp legitimo (ex: `SigCdEmp a` + `a.cemps` = correto). LLM/reviewer deve validar contra schema.sql.
+
+### Sweep Erro108 (2026-08-12)
+4 BOs corrigidos:
+- `sigrecogBO.prg:211` — `INNER JOIN SigCdEmp e ON e.cemps = a.cemps` -> `= a.emps` (a = SigMvCab)
+- `sigrecsmBO.prg:207` — `INNER JOIN SigCdEmp e ON a.cemps = e.cemps` -> `a.emps = e.cemps` (a = SigMvCab)
+- `SIGREDIRBO.prg:172` — `LEFT JOIN SigCdEmp d ON a.cemps = d.cemps` -> `a.emps = d.cemps` (a = SigMvNfi)
+- `CecBO.prg:67,100` — `INNER JOIN SigCdEmp b ON a.Cemps = b.Cemps` -> `a.Emps = b.Cemps` (a = SigFiChc — mesmo SELECT list ja usava `a.Emps` corretamente)
+
+BOs auditados como safe (a = master com cemps legitimo):
+- `sigredtvBO.prg:347` — `FROM SigCdEmp a` — `a.cemps` correto
+- `sigtosenBO.prg:212,301,395,1036` — `from SigCdEmp a` — correto
+- `SigReInvBO.prg:102` — SigCdEmp implicit — correto
+- `sigproefBO.prg:191` — `FROM SigFiTef a` — SigFiTef tem `cemps` (irregularidade), correto
+- `CegBO/COMBO/ICMBO/SigPrGf1BO/sigreappBO` — todos com `a` = Sig*Cd* master, correto
+
+### Referencias
+- Memoria detalhada: `feedback_sigmv_emps_vs_sigcd_cemps.md`
+- Complementa: `#160` (invented C prefix em cursor.col — Erro91); `feedback_sigcdpam_where_emps_invalido.md` (WHERE emps em SigCdPam — Erro106); `feedback_cursor_coluna_prefixo_inventado.md`
+- Origem: Erro108 (2026-08-12, FormSigReCog — Relatorio de Comissao por Grupo de Produto)
+
+## 164. REPORT BO — variantes fall-through de Visualizar/Imprimir + PrepararDados com success-flag incondicional (Erro110 sigrecprBO 2026-08-12)
+
+### Sintoma
+Usuario clica Visualizar em REPORT, digita filtros, mas:
+- Preview abre em branco (cursor vazio, sem headers/dados), OU
+- Nenhuma mensagem "Nenhum registro encontrado", OU
+- REPORT FORM roda mesmo quando SQL falha ou nao ha dados no periodo
+
+Sem erro visivel — silencio absoluto.
+
+### Causa (2 variantes correlatas do Erro68)
+
+**VARIANTE A — Double-IF fall-through**: Pattern #153 (Erro68) detecta o single-IF fall-through `IF !PrepararDados() / flag=.F. / ENDIF / REPORT FORM`. Mas em `sigrecprBO.prg` (2026-08-12) foi encontrada variante com 2+ IFs consecutivas — ambos fall-through:
+
+```foxpro
+IF !THIS.PrepararDados()
+    ...
+    loc_lSucesso = .F.
+ENDIF
+IF !THIS.MontarCabecalho()
+    loc_lSucesso = .F.
+ENDIF
+SELECT (THIS.this_cCursorDados)
+REPORT FORM (...) PREVIEW NOCONSOLE   && executa mesmo com preparacao falha
+```
+
+Cada IF seta flag mas NAO retorna — sao independentes. `REPORT FORM` roda sempre.
+
+**VARIANTE B — PrepararDados com `loc_lSucesso = .T.` INCONDICIONAL apos IF de erro**:
+
+```foxpro
+loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, THIS.this_cCursorDados)
+IF loc_nResult < 0
+    THIS.this_cMensagemErro = "Erro ao buscar dados"
+    loc_lSucesso = .F.
+ENDIF
+SELECT (THIS.this_cCursorDados)
+GO TOP
+loc_lSucesso = .T.       && SOBRESCREVE flag error!
+```
+
+`PrepararDados` sempre retorna `.T.` mesmo com SQL error. Visualizar/Imprimir chegam ao REPORT FORM com cursor invalido/vazio.
+
+### Fix canonico (IDEAL)
+
+Refactor Visualizar/Imprimir para fluxo positivo com AND encadeado + helper canonico `ExecutarReportForm` (Pattern #117):
+
+```foxpro
+PROCEDURE Visualizar()
+    LOCAL loc_lSucesso
+    loc_lSucesso = .F.
+    TRY
+        THIS.this_cMensagemErro = ""
+        IF THIS.PrepararDados() AND THIS.MontarCabecalho()
+            loc_lSucesso = THIS.ExecutarReportForm("SigReCpr", "PREVIEW", THIS.this_cCursorDados)
+            THIS.LimparCursores()
+        ELSE
+            IF !EMPTY(THIS.this_cMensagemErro)
+                MsgErro(THIS.this_cMensagemErro, "sigrecprBO.Visualizar")
+            ENDIF
+        ENDIF
+    CATCH TO loc_oErro
+        MsgErro(loc_oErro.Message, "sigrecprBO.Visualizar")
+        THIS.this_cMensagemErro = loc_oErro.Message
+    ENDTRY
+    RETURN loc_lSucesso
+ENDPROC
+```
+
+E em `PrepararDados`, envolver success-path em ELSE:
+
+```foxpro
+IF loc_nResult < 0
+    THIS.this_cMensagemErro = "Erro ao buscar dados"
+    loc_lSucesso = .F.
+ELSE
+    SELECT (THIS.this_cCursorDados)
+    GO TOP
+    loc_lSucesso = .T.
+ENDIF
+```
+
+O helper `ExecutarReportForm` (Pattern #117) traz:
+- `MsgAviso("Nenhum registro encontrado com os filtros informados.")` quando cursor vazio (guard automatico)
+- `MostrarErro` com path descritivo quando FRX ausente
+- Isolamento POINT/SEPARATOR/REPORTBEHAVIOR 80 (Erro28 asteriscos)
+- Restore menu pos-preview (Erro63)
+
+### Auto-fix
+
+- **Pattern #153 (estendido)**: agora cobre variante double-IF. Detector procura 2+ blocos `IF !THIS.<Method>() / <body sem RETURN> / ENDIF` consecutivos em Visualizar/Imprimir de BO REPORT. Injeta `RETURN loc_l<flag>` dentro do ULTIMO IF (fix minimo).
+- **Pattern #164 (WARNING-only)**: detecta `loc_lSucesso = .T.` incondicional apos `IF <error_cond> / loc_lSucesso = .F. / ENDIF` em PrepararDados. NAO muta — refactor exige contexto (envolver success-path em ELSE cirurgicamente). Emite `WARN-164-PREPDADOS-UNCOND-TRUE`.
+
+### Sweep Erro110 (2026-08-12)
+
+1 BO auto-fixado (sigrecprBO — refactor manual completo). 4 BOs REPORT identificados no sweep global:
+- **Padrao A (double-IF)**: `sigrechpBO.prg` (Visualizar linha 591, Imprimir linha 564)
+- **Padrao B (uncond flag)**: `sigreifxBO.prg:194`, `SigReInfBO.prg:38`, `SIGREIPSBO.prg:36`
+
+### Referencias
+- Memoria detalhada: `feedback_report_double_if_fallthrough_uncond_flag.md`
+- Complementa: `#153` (single-IF fall-through — Erro68); `#117` (helper canonico ExecutarReportForm)
+- Origem: Erro110 (2026-08-12, FormSigReCpr — Cheques Prorrogados; usuario reportou "relatorio nao mostra mensagem de nao existem dados ou nao esta chamando o report")
+
+## 165. REPORT com PageFrame — `ConfigurarPaginaLista` DEVE subtrair `PageFrame.Top` de cada Top absoluto legado (Erro113 Formsigrecnt 2026-08-13)
+
+### Distincao vs Secao ## 102 (revoga parcialmente)
+
+Secao **## 102** (retrospectiva 2026-05-19) tratava de forms REPORT **FLAT** — sem PageFrame, controles diretos no form. Naquele modelo, `Top` absoluto legado eh valido (nao subtrair 85).
+
+Esta secao **## 165** trata do modelo ATUAL: forms REPORT com **PageFrame** (`pgf_4c_Paginas.Top = 85`), controles adicionados em `Page1` via `loc_oPag.AddObject`. Aqui as coordenadas sao **RELATIVAS a Page1** — Top absoluto legado empurra tudo pra baixo pelo valor de `PageFrame.Top`.
+
+**Como saber qual modelo o form usa**: procurar `PROTECTED PROCEDURE ConfigurarPageFrame` no arquivo. Se existe, eh modelo PageFrame (aplicar ## 165 — subtrair). Se nao existe (controles direto em `THIS.AddObject`), eh FLAT (aplicar ## 102 — nao subtrair).
+
+### Sintoma
+Form REPORT abre e:
+- Labels/textboxes aparecem numa faixa mais BAIXA que o esperado (empurrados pro rodape)
+- Ultimos controles (ex: OptionGroups no fim) ficam invisiveis ou parcialmente CORTADOS pela borda inferior do form
+- User reporta "labels e textboxes desalinhados" ou "form nao mostra tudo"
+
+### Causa
+
+Gerador de Fase 4 (`ConfigurarPaginaLista`) le `layout.originalTop` do `layout.json` (valor absoluto no SCX legado) e grava DIRETO em `.Top =` sem aplicar a subtracao pelo `PageFrame.Top`. Como Page1 esta a 85 pixels do topo do form (PageFrame.Top=85) e as coords dentro da Page sao relativas, cada controle acaba a `85 + Top_absoluto_legado` do topo real.
+
+**Ironia meta** (Erro113): o proprio codigo defeituoso tinha o comentario `"Posicoes: layout.json original top - 85 (offset do PageFrame)"` MAS os valores nao foram subtraidos — comentario correto, codigo errado.
+
+### Formula CORRETA
+
+```
+control.Top_em_Page1 = layout.originalTop - PageFrame.Top
+```
+
+Para PageFrame.Top=85 (padrao dos REPORTs migrados):
+- Legacy Label1.Top=106 -> generated .Top=21 (106-85)
+- Legacy txt_4c_Datas.Top=102 -> generated .Top=17 (102-85)
+- Legacy OptLocal.Top=265 -> generated .Top=180 (265-85)
+- Legacy OptOrdem.Top=289 -> generated .Top=204 (289-85)
+
+### Excecoes que NAO subtraem
+
+**(a) Buttons(N) INTERNOS a OptionGroup/CommandGroup**: sao relativos ao proprio grupo, nao ao Page. Tipicamente `.Top = 4` na primeira row de botoes:
+
+```foxpro
+loc_oPag.AddObject("obj_4c_OptLocal", "OptionGroup")
+WITH loc_oPag.obj_4c_OptLocal
+    ...
+    WITH .Buttons(1)
+        .Top = 4    && Relativo ao OptionGroup — NAO subtrair
+        .Left = 2
+        ...
+    ENDWITH
+    ...
+    .Top  = 180     && Subtrair (era 265 no legado)
+    .Left = 231
+ENDWITH
+```
+
+**(b) Proprio Top do PageFrame** (definido em `ConfigurarPageFrame`, nao em `ConfigurarPaginaLista`): `loc_oPgf.Top = 85` fica fixo.
+
+### Referencia canonica CORRETA
+
+`Formsigrecrf.prg` (task066) — mesmo tipo REPORT+PageFrame, faz correto:
+
+```foxpro
+PROTECTED PROCEDURE ConfigurarPaginaLista()
+    LOCAL loc_oPagina
+    loc_oPagina = THIS.pgf_4c_Paginas.Page1
+
+    *--------------------------------------------------------------------
+    *-- Linha 1: Data e Codigo de referencia
+    *   Original: Label1.top=99 GetDatas.top=95 Label3.top=98 GetCods.top=94
+    *--------------------------------------------------------------------
+    loc_oPagina.AddObject("lbl_4c_Label1", "Label")
+    WITH loc_oPagina.lbl_4c_Label1
+        .Top       = 14     && 99 - 85
+        .Left      = 220
+        ...
+    ENDWITH
+
+    loc_oPagina.AddObject("txt_4c_Datas", "TextBox")
+    WITH loc_oPagina.txt_4c_Datas
+        .Top       = 10     && 95 - 85
+        ...
+    ENDWITH
+    ...
+ENDPROC
+```
+
+Note o **comentario padrao** no header do metodo: `"Posicoes top = original - 85 (PageFrame.Top=85)"` — documente sempre a origem do offset para revisor entender de imediato.
+
+### Fix manual (quando ja gerou errado)
+
+1. Identificar `PageFrame.Top` na fase 3 (`ConfigurarPageFrame`): tipicamente `loc_oPgf.Top = 85`.
+2. Em `ConfigurarPaginaLista`, para CADA `.Top = X` que NAO esta dentro de `WITH .Buttons(N)`:
+   - Substituir por `.Top = X - PageFrame.Top`
+3. Buttons(N) internos aos Groups: NAO mexer.
+4. Deletar `.fxp` do form e recompilar.
+
+### CorretorAutomatico Pattern #165 (WARNING-only)
+
+Detecta o padrao mas nao muta:
+- Guard: presenca de `PROTECTED PROCEDURE ConfigurarPageFrame` E `ConfigurarPaginaLista` na mesma classe (heuristica REPORT+PageFrame).
+- Extrai `loc_oPgf.Top = N` do `ConfigurarPageFrame`.
+- Se N >= 50, varre `ConfigurarPaginaLista` procurando `.Top = X` (X >= N) fora de WITH `.Buttons(N)`.
+- Se >= 3 suspects, emite `WARN-165-REPORT-PGFTOP-OFFSET` com sugestao de subtracao.
+- NAO auto-mutate: (a) casos legitimos raros (cabecalho interno em Page com Top alto); (b) parser regex nao distingue nesting Buttons(N) sem AST; (c) errar aqui quebra layout inteiro.
+
+### Sweep Erro113 (2026-08-13)
+
+1 form auto-fixado manualmente (Formsigrecnt — 23 controles corrigidos: Label1/Datas/Label3/Codigo/Label2/Conta/DConta/Label7/Base/DBase/Label6/Nvl2/DNvl2/Label5/Nvl3/DNvl3/Label8/Nvl4/DNvl4/Label4/OptLocal/Label9/OptOrdem). Sweep global recomendado apos merge do Pattern #165 — REPORTs migrados apos 2026-05-19 (quando modelo PageFrame virou padrao) podem ter o mesmo bug.
+
+### Referencias
+- Memoria detalhada: `feedback_report_pageframe_top_offset.md`
+- Substitui parcialmente: `#102` (era para REPORT FLAT — modelo antigo sem PageFrame)
+- Ref canonico: `C:\4c\projeto\app\forms\relatorios\Formsigrecrf.prg` (task066)
+- Origem: Erro113 (2026-08-13, Formsigrecnt "Relacao de Contagem por Localizacao" — user reportou "label e text box estao desalinhados"; layout inteiro empurrado 85px pra baixo; OptLocal/OptOrdem alem de form.Height=350 e cortados)
+
+
+## 166. FormBuscaAuxiliar Pattern B (Init com params) tem defeito — usar helper `AbrirLookupCanonico` OU Pattern A manual (Erro114 Formsigrecog 2026-08-13)
+
+### Problema
+
+`FormBuscaAuxiliar` tem DOIS padroes historicos de uso, e o Pattern B (Init com params) tem 3 defeitos que causam picker vazio ou selecao perdida:
+
+**Pattern B (DEFEITUOSO — NAO usar em novos forms)**:
+
+```foxpro
+loc_oForm = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+    "SigCdEmp", "cursor_4c_BuscaEmp", "cemps", loc_cValor, ;
+    "Busca de Empresa")
+IF VARTYPE(loc_oForm) = "O"
+    loc_oForm.mAddColuna("cemps", "", "Codigo")
+    loc_oForm.mAddColuna("razas", "", "Empresa")
+    loc_oForm.Show()
+    IF loc_oForm.this_lSelecionou AND USED("cursor_4c_BuscaEmp")
+        SELECT cursor_4c_BuscaEmp
+        loc_oPag.txt_4c_Empresa.Value = ALLTRIM(cemps)
+        ...
+    ENDIF
+ENDIF
+```
+
+**Os 3 defeitos**:
+
+1. **Init interno faz busca exata + LIKE — se ambos 0 rows, FECHA cursor**: `FormBuscaAuxiliar.Init` executa `WHERE campo = 'valor'` (exato); se 0 rows, tenta `LIKE 'valor%'`; se ainda 0 rows, chama `USE IN cursor` (linha 138 pre-fix Erro114) — picker abre VAZIO. Usuario digita "M" em `codigos`, `WHERE codigos='M'` = 0 rows, `LIKE 'M%'` = 0 rows (pois so ha `A01`, `B02`...), cursor fechado, nenhuma opcao aparece no picker.
+
+2. **DataSession=1 vs pai DataSession=2**: `FormBuscaAuxiliar` herda `DataSession = 1` (Default = shared) de `FormBase`. Se o form pai eh `DataSession = 2` (private datasession — comum em CRUD forms), o cursor criado no `Init` fica em Session-1; `USED("cursor_4c_BuscaEmp")` no caller (Session-N-privada) retorna `.F.` -> selecao PERDIDA silenciosamente.
+
+3. **Cursor scope isolado entre sessoes**: mesmo quando cursor existe pos-Show, `SELECT cursor_4c_BuscaEmp` no caller nao encontra pois vive em session diferente.
+
+### Solucao PREFERIDA — Helper `THIS.AbrirLookupCanonico`
+
+Adicionado em `FormBase.prg` (2026-08-13). Encapsula todo o Pattern A em 1 chamada:
+
+```foxpro
+PROCEDURE AbrirLookupCanonico(par_cTabela, par_cCampoCod, par_cCampoDesc, ;
+                              par_cTitulo, par_cValorFiltro, par_oTxtCod, ;
+                              par_oTxtDesc, par_cFiltroExtra)
+```
+
+Uso tipico:
+
+```foxpro
+THIS.AbrirLookupCanonico("SigCdEmp", "cemps", "razas", ;
+    "Sele" + CHR(231) + CHR(227) + "o de Empresa", ;
+    ALLTRIM(loc_oPag.txt_4c_Empresa.Value), ;
+    loc_oPag.txt_4c_Empresa, ;
+    loc_oPag.txt_4c_EmpresaDesc)
+```
+
+Params:
+- `par_cTabela`: tabela SQL (ex: `"SigCdEmp"`)
+- `par_cCampoCod`: coluna do codigo (ex: `"cemps"`)
+- `par_cCampoDesc`: coluna da descricao (ex: `"razas"`)
+- `par_cTitulo`: titulo do picker
+- `par_cValorFiltro`: prefixo digitado pelo usuario (pode ser `""`)
+- `par_oTxtCod`: TextBox destino do codigo selecionado
+- `par_oTxtDesc`: TextBox destino da descricao selecionada
+- `par_cFiltroExtra`: (opcional) WHERE adicional sem prefixo `WHERE` (ex: `"grupos = 'X'"`)
+
+Helper faz internamente: SQL com aliases `AS Cods`/`AS Descs` + LIKE em cod OR desc + fallback SHOW-ALL + CREATEOBJECT sem params + DefinirCursor + Mostrar + preenche TextBoxes + cleanup.
+
+### Solucao FALLBACK — Pattern A manual
+
+Quando `AbrirLookupCanonico` nao serve (ex: preciso preencher 3+ campos, ou logica custom pos-selecao):
+
+```foxpro
+* 1. SQL no CALLER (roda na DataSession do form pai — cursor visivel pos-Show)
+IF USED("cursor_4c_BuscaEmp")
+    USE IN SELECT("cursor_4c_BuscaEmp")
+ENDIF
+IF !EMPTY(loc_cValor)
+    loc_cSQL = "SELECT cemps AS Cods, razas AS Descs FROM SigCdEmp " + ;
+               "WHERE cemps LIKE " + EscaparSQL(loc_cValor + "%") + ;
+               " OR razas LIKE " + EscaparSQL(loc_cValor + "%") + ;
+               " ORDER BY cemps"
+ELSE
+    loc_cSQL = "SELECT cemps AS Cods, razas AS Descs FROM SigCdEmp ORDER BY cemps"
+ENDIF
+loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaEmp")
+
+* 2. Fallback SHOW-ALL se prefixo bateu 0
+IF loc_nResult > 0 AND RECCOUNT("cursor_4c_BuscaEmp") = 0
+    USE IN SELECT("cursor_4c_BuscaEmp")
+    loc_cSQL = "SELECT cemps AS Cods, razas AS Descs FROM SigCdEmp ORDER BY cemps"
+    loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaEmp")
+ENDIF
+
+* 3. CREATEOBJECT SEM parametros + DefinirCursor + Mostrar
+IF loc_nResult > 0 AND RECCOUNT("cursor_4c_BuscaEmp") > 0
+    loc_oLookup = CREATEOBJECT("FormBuscaAuxiliar")   && sem params!
+    loc_oLookup.DefinirCursor("cursor_4c_BuscaEmp", "Cods", "Descs", ;
+                              "Selecao de Empresa")
+    IF loc_oLookup.Mostrar()
+        loc_oPag.txt_4c_Empresa.Value = ALLTRIM(loc_oLookup.cCodigoSelecionado)
+        loc_oPag.txt_4c_EmpresaDesc.Value = ALLTRIM(loc_oLookup.cDescricaoSelecionada)
+    ENDIF
+ELSE
+    MsgAviso("Nenhuma empresa encontrada.", "Empresa")
+ENDIF
+IF USED("cursor_4c_BuscaEmp")
+    USE IN SELECT("cursor_4c_BuscaEmp")
+ENDIF
+```
+
+Elementos-chave (nao pode faltar):
+- SQL montado no caller (nao delegado ao FormBuscaAuxiliar.Init)
+- Prefixo `LIKE 'valor%'` (starts-with, nao exato)
+- Busca por codigo **E** descricao (OR) — usuario pode digitar inicial do nome tambem
+- Fallback SHOW-ALL se prefixo bater 0
+- Alias `AS Cods` / `AS Descs` (bate com API do `DefinirCursor`)
+- `CREATEOBJECT("FormBuscaAuxiliar")` **SEM** parametros
+- `DefinirCursor(cursor, campoCod, campoDesc, titulo)` (nao `mAddColuna`)
+- `.Mostrar()` retorna `.T.`/`.F.`
+- Ler `.cCodigoSelecionado` / `.cDescricaoSelecionada` (nao `SELECT cursor`)
+
+### Reciproca em `Validar<Campo>` (anti-padrao)
+
+Quando a busca exata (`WHERE campo = <valor>`) falha, NAO fazer:
+
+```foxpro
+* ANTI-PADRAO — NUNCA
+MsgAviso("Empresa nao encontrada.", "Empresa")
+loc_oPag.txt_4c_Empresa.Value = ""
+```
+
+Em vez disso, chamar o picker filtrado pelo prefixo tipado:
+
+```foxpro
+* CORRETO
+THIS.AbrirBuscaEmpresa()   && picker abre com LIKE 'M%' preenchido
+```
+
+Isso preserva o valor digitado (usuario nao perde contexto) e da opcao de escolher entre matches parciais.
+
+### Referencias canonicas
+
+- `Formsigrecrf.prg` (task066) — Pattern A original: vendedor, grupo estoque, conta estoque, produto — todos migrados corretamente desde o comeco
+- `Formsigrecog.prg` (task059, pos-Erro114) — Pattern A recem-convertido de Pattern B: empresa, vendedor, moeda
+- `FormBase.prg:AbrirLookupCanonico` — helper novo (2026-08-13)
+
+### CorretorAutomatico Pattern #166 (WARNING-only)
+
+Detecta chamadas Pattern B mas nao muta (cada call tem tabela/campos/titulo especificos que exigem contexto humano ou LLM):
+
+- Regex: `CREATEOBJECT\s*\(\s*"FormBuscaAuxiliar"\s*,` (chamada com >=2 args)
+- Skip comentarios (`^\s*\*`) e chamadas single-arg (`CREATEOBJECT("FormBuscaAuxiliar")` sem virgula = Pattern A OK)
+- Skip chamadas dentro de `FormBase.prg` / `FormBuscaAuxiliar.prg` (definicoes internas)
+- Emite `WARN-166-FORMBUSCAAUXILIAR-PATTERN-B` com linha + sugestao: "Refactor para `THIS.AbrirLookupCanonico(...)` (preferido) OU Pattern A manual (ver migration-patterns.md #166). Bug Erro114: picker abre vazio se prefixo bate 0 rows; selecao perdida em DataSession=2."
+- NAO auto-mutate: refactor exige mapear tabela/campos/textbox destino/logica pos-selecao — LLM pode fazer, regex nao.
+
+### Sweep Erro114 (2026-08-13)
+
+- Fix inicial: `Formsigrecog.prg` (task059) — 3 lookups (empresa/vendedor/moeda) convertidos manualmente para Pattern A
+- Helper adicionado em `FormBase.prg` (2026-08-13)
+- Sweep pendente: ~209 forms com ~500 chamadas Pattern B — INCREMENTAL (form-a-form conforme testado) pelo tamanho. Forms conhecidos afetados: Formsigrebal, FormSigReAtm, Formsigrevto, FormSigReIfv, FormSIGREFXV, Formsigreegp, FormSIGREEQR, Formsigredtv, FormSIGREEGG, Formsigrecsm, Formsigrecrp, Formsigrecop, Formsigrecom, Formsigrecmc, Formsigreapp, FormSIGREADS, FormSIGREAGV, FormSigPrEs1, Formsigprccp, FormSigPrApr, Formsigopind, FormSigPrCtc, Formccr, e outros.
+- Pipeline (prompts + skill + corretor) atualizado — bloqueia NOVAS geracoes Pattern B mesmo enquanto o sweep retroativo eh feito manualmente
+
+### Meta-licao
+
+- Memoria anterior (`feedback_formbuscaauxiliar_manual_api_broken.md`, 2026-07-02, Erro18) documentou o caminho INVERSO: manual-API vazia (sem params + sem SQL) -> Init com params. Aquele doc estava PARCIALMENTE certo: Init com params RESOLVE picker vazio quando prefixo bate, mas NAO resolve quando prefixo NAO bate (cursor fechado). Update: Pattern A eh o real canonico universal.
+- Regra generica: quando FormBuscaAuxiliar cita 2 padroes com trade-offs, o correto normalmente eh o padrao com SQL no CALLER (control invertido) + DataSession explicita, nao o padrao com magic dentro do lookup.
+
+### Referencias
+- Memoria detalhada: `feedback_formbuscaauxiliar_pattern_b_broken.md`
+- Memoria antecedente: `feedback_formbuscaauxiliar_manual_api_broken.md` (Erro18, agora parcialmente superseded)
+- Ref canonico: `C:\4c\projeto\app\forms\relatorios\Formsigrecrf.prg` (task066)
+- Ref recem-convertido: `C:\4c\projeto\app\forms\relatorios\Formsigrecog.prg` (task059, pos-fix)
+- Helper: `C:\4c\projeto\app\classes\formbase.prg:AbrirLookupCanonico`
+- Origem: Erro114 (2026-08-13, Formsigrecog "Relatorio de Comissao por Grupo de Produto" — user reportou "digita M em vendedor + Enter -> nao lista as empresas cadastradas na pesquisa, nem vendedor nem moeda")
+
+
+## 168. Form REPORT fora do padrao visual — `BackColor` no DEFINE CLASS + faltando `THIS.Picture = "fundo_cad_1003.jpg"` (Erro117 Formsigredtv 2026-08-18)
+
+### Contexto
+
+Forms REPORT canonicos tem visual padronizado:
+- **Fundo**: textura clara `fundo_cad_1003.jpg` (via `THIS.Picture`)
+- **Cabecalho**: container escuro `cnt_4c_Cabecalho` com `BackColor=RGB(100,100,100)` + titulo branco
+- **Contraste**: header escuro sobre fundo textura clara = look consistente com sistema legado Fortyus
+
+### Anti-padrao
+
+Migrador as vezes gera:
+```foxpro
+DEFINE CLASS Formsigredtv AS FormBase
+    Height       = 500
+    Width        = 800
+    Caption      = "Demonstrativo"
+    ...
+    WindowType   = 1
+    BackColor    = RGB(192, 192, 192)   && ANTI-PADRAO: cinza escuro flat
+    ShowWindow   = 1
+    ...
+```
+
+E o `InicializarForm()` NAO seta `THIS.Picture`. Resultado: form abre com fundo cinza uniforme sem textura, e o cabecalho parece destoar por falta de contraste.
+
+### Fix canonico (`Formsigrecrf.prg`)
+
+```foxpro
+DEFINE CLASS Formsigrecrf AS FormBase
+    Height      = 269
+    Width       = 800
+    DataSession = 2
+    ShowWindow  = 1
+    WindowType  = 1
+    AutoCenter  = .T.
+    BorderStyle = 2
+    ControlBox  = .F.
+    ...
+    Themes      = .F.
+    ShowTips    = .T.
+    * NAO ha BackColor aqui — herda default do FormBase
+
+    ...
+
+    PROTECTED PROCEDURE InicializarForm()
+        ...
+        TRY
+            THIS.Caption = "..."
+
+            IF TYPE("gc_4c_CaminhoIcones") = "U"
+                gc_4c_CaminhoIcones = ""
+            ENDIF
+            THIS.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
+
+            *-- Instanciar BO
+            THIS.this_oRelatorio = CREATEOBJECT("sigrecrfBO")
+            ...
+```
+
+### Detecção automática (Pattern #168)
+
+**Auto-remove**: linha `BackColor = RGB(192, 192, 192)` no bloco de propriedades da classe (indent baixo, antes da primeira `PROCEDURE`/`PROTECTED PROCEDURE`).
+
+**NAO confundir**:
+- `.DisabledBackColor = RGB(192, 192, 192)` (property de TextBox em ReadOnly, dentro de WITH block — legitima)
+- `.BackColor = RGB(240, 240, 240)` de Container/Label/Grid dentro de WITH block (indentacao maior, precedido por `.`)
+
+**WARNING-only** para injecao de `THIS.Picture`: inserir com regex confiavel eh dificil porque a estrutura de `InicializarForm()` varia (alguns tem `IF loc_lSucesso` block, outros tem `IF NOT (TYPE("gb_4c_ValidandoUI")...`). Emitir warning listando forms sem `fundo_cad_1003.jpg` para revisao manual.
+
+### Impacto do sweep (2026-08-18)
+
+- 102 forms em `forms/relatorios/`
+- 7 tinham `RGB(192, 192, 192)` — dos quais 5 eram Form BackColor real (o resto era `.DisabledBackColor` de TextBox — falso positivo):
+  - Formsigredtv (Erro117, corrigido manualmente)
+  - FormSIGREAUP, Formsigrebal, FormSigRePlc, Formsigrecsm (corrigidos manualmente pos-Erro117)
+
+### Referencias
+
+- Memoria detalhada: `feedback_report_form_backcolor_flat.md`
+- Ref canonico: `C:\4c\projeto\app\forms\relatorios\Formsigrecrf.prg:48-91`
+- Ref recem-corrigido: `C:\4c\projeto\app\forms\relatorios\Formsigredtv.prg`
+- Origem: Erro117 (2026-08-18, Formsigredtv "Demonstrativo" — user reportou "form fora do padrao com a cor do fundo e a cor da parte de cima do form")
+
+
+## 167. REPORT BO precisa implementar TRIO Visualizar/Imprimir/GerarExcel + `this_cArquivoRelatorio` nome-base canonico (Erro116 sigrectcBO 2026-08-18)
+
+### Contexto
+
+Forms REPORT (`frmrelatorio`) tem 3 botoes canonicos no cabecalho: **Visualizar** (preview em tela), **Imprimir** (dialog de impressora), **Arquivos Email** (exportar Excel/ASCII). Os handlers `BtnVisualizarClick`/`BtnImprimirClick`/`BtnExcelClick` gerados pelo pipeline chamam:
+
+```foxpro
+PROCEDURE BtnVisualizarClick()
+    THIS.FormParaRelatorio()
+    IF !THIS.this_oRelatorio.Visualizar()
+        IF !EMPTY(THIS.this_oRelatorio.ObterMensagemErro())
+            MsgErro(THIS.this_oRelatorio.ObterMensagemErro(), "Erro ao Visualizar")
+        ENDIF
+    ENDIF
+ENDPROC
+```
+
+`this_oRelatorio` eh o BO REPORT (herda de `RelatorioBase`). Se o BO NAO implementa `Visualizar()`/`Imprimir()`/`GerarExcel()`, runtime dispara **"Property VISUALIZAR is not found"** ao clicar Visualizar (idem "IMPRIMIR"/"GERAREXCEL" para os outros botoes).
+
+### Causa raiz
+
+`RelatorioBase` (`classes/relatoriobase.prg`) **NAO** provem esses 3 metodos — sua interface eh apenas:
+
+```foxpro
+DEFINE CLASS RelatorioBase AS Custom
+    this_cTabela        = ""
+    this_cCampoChave    = ""
+    this_cMensagemErro  = ""
+    this_oDataAccess    = .NULL.
+    PROCEDURE Init()                 && RETURN .T. (stub)
+    PROCEDURE PrepararDados()        && RETURN .T. (hook para subclasses)
+    PROCEDURE ObterChavePrimaria()   && RETURN "" (stub)
+    PROCEDURE RegistrarAuditoria()   && RETURN .T. (stub)
+    PROCEDURE Destroy()              && THIS.this_oDataAccess=.NULL. + DODEFAULT()
+ENDDEFINE
+```
+
+O TRIO Visualizar/Imprimir/GerarExcel eh contrato PUBLICO que **cada BO REPORT concreto** deve implementar (nao esta em RelatorioBase para dar flexibilidade — cada BO decide quais FRXs/cursores/branches usar).
+
+### Fix ideal (template canonico `sigrecrfBO.prg:366-423`)
+
+```foxpro
+PROCEDURE Visualizar()
+    LOCAL loc_lSucesso, loc_oErro
+    loc_lSucesso = .F.
+    TRY
+        IF THIS.PrepararDados()
+            IF USED(THIS.this_cCursorDados) AND RECCOUNT(THIS.this_cCursorDados) > 0
+                SELECT (THIS.this_cCursorDados)
+                GO TOP
+                REPORT FORM (gc_4c_CaminhoReports + THIS.this_cArquivoRelatorio) ;
+                    PREVIEW NOCONSOLE
+                loc_lSucesso = .T.
+            ELSE
+                THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
+            ENDIF
+        ENDIF
+    CATCH TO loc_oErro
+        MsgErro(loc_oErro.Message, "Visualizar")
+        THIS.this_cMensagemErro = loc_oErro.Message
+    ENDTRY
+    RETURN loc_lSucesso
+ENDPROC
+
+PROCEDURE Imprimir()
+    LOCAL loc_lSucesso, loc_oErro
+    loc_lSucesso = .F.
+    TRY
+        IF THIS.PrepararDados()
+            IF USED(THIS.this_cCursorDados) AND RECCOUNT(THIS.this_cCursorDados) > 0
+                SELECT (THIS.this_cCursorDados)
+                GO TOP
+                REPORT FORM (gc_4c_CaminhoReports + THIS.this_cArquivoRelatorio) ;
+                    TO PRINTER PROMPT NOCONSOLE
+                loc_lSucesso = .T.
+            ELSE
+                THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
+            ENDIF
+        ENDIF
+    CATCH TO loc_oErro
+        MsgErro(loc_oErro.Message, "Imprimir")
+        THIS.this_cMensagemErro = loc_oErro.Message
+    ENDTRY
+    RETURN loc_lSucesso
+ENDPROC
+
+PROCEDURE GerarExcel()
+    LOCAL loc_lSucesso, loc_cArquivo, loc_oErro
+    loc_lSucesso = .F.
+    TRY
+        IF THIS.PrepararDados()
+            IF USED(THIS.this_cCursorDados) AND RECCOUNT(THIS.this_cCursorDados) > 0
+                SELECT (THIS.this_cCursorDados)
+                GO TOP
+                loc_cArquivo = SYS(5) + CURDIR() + "<Base>_" + ;
+                               STRTRAN(DTOC(DATE()), "/", "") + ".xls"
+                REPORT FORM (gc_4c_CaminhoReports + THIS.this_cArquivoRelatorio) ;
+                    TO FILE &loc_cArquivo NOPREVIEW NOCONSOLE ASCII
+                IF FILE(loc_cArquivo)
+                    MsgInfo("Arquivo gerado:" + CHR(13) + loc_cArquivo, "Excel")
+                ENDIF
+                loc_lSucesso = .T.
+            ELSE
+                THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
+            ENDIF
+        ENDIF
+    CATCH TO loc_oErro
+        MsgErro(loc_oErro.Message, "GerarExcel")
+        THIS.this_cMensagemErro = loc_oErro.Message
+    ENDTRY
+    RETURN loc_lSucesso
+ENDPROC
+```
+
+### Correlato: `this_cArquivoRelatorio` nome-base canonico
+
+`this_cArquivoRelatorio` DEVE ser o **nome-base canonico** do FRX legado (PascalCase, sem path prefix, sem extensao):
+
+```foxpro
+* ERRADO
+THIS.this_cArquivoRelatorio = gc_4c_CaminhoReports + "relsigrectc.frx"
+
+* CORRETO
+THIS.this_cArquivoRelatorio = "SigReCtc"
+```
+
+O `REPORT FORM` concatena `gc_4c_CaminhoReports + THIS.this_cArquivoRelatorio` **dentro** do metodo `Visualizar/Imprimir/GerarExcel`. Colocar prefixo/extensao na property gera path duplicado (`...\reports\...\reports\relsigrectc.frx.frx`) ou nome inventado que nao existe no legado (bug tipico: `relsigrectc.frx` vs canonico `SigReCtc.frx`).
+
+### Metodos de suporte (obrigatorios pelo form)
+
+`RelatorioBase` NAO define `ObterMensagemErro()` como METHOD (apenas expõe property `this_cMensagemErro`). O form chama-o como method: `THIS.this_oRelatorio.ObterMensagemErro()`. BO concreto DEVE adicionar:
+
+```foxpro
+PROCEDURE ObterMensagemErro()
+    RETURN THIS.this_cMensagemErro
+ENDPROC
+```
+
+(Nota: propriedades sao acessadas como `.this_cMensagemErro` — mas o form usa a forma `.ObterMensagemErro()`, entao o accessor eh necessario.)
+
+### FRX legado precisa ser copiado
+
+Se `<Base>.frx` nao existe em `C:\4c\projeto\app\reports\`, mesmo com os metodos implementados o REPORT FORM dispara **"Arquivo de relatorio nao encontrado: ..."**. Copiar de `C:\4install\FortyusMC\Fortyus\<Base>.frx` (+ `.frt`) preservando o nome. Ferramenta: `powershell -ExecutionPolicy Bypass -File C:\4c\automation\CopiarFRXsAusentes.ps1`.
+
+### Detecção automática (Pattern #167)
+
+Guards: (a) BO herda de `RelatorioBase` (`DEFINE CLASS \w+ AS RelatorioBase`); (b) para cada metodo do trio ausente (regex `^\s*PROCEDURE\s+(Visualizar|Imprimir|GerarExcel)\b`), injeta stub canonico antes do `ENDDEFINE`; (c) para property `this_cArquivoRelatorio = gc_4c_CaminhoReports + "..."` OU com `.frx` no fim OU com `.FRX` no fim, normaliza para nome-base (strip prefix + strip extensao).
+
+Idempotente (segundo run detecta metodos ja injetados e skipa).
+
+### Impacto do sweep global (2026-08-18)
+
+- 101 BOs REPORT total
+- 18 faltando `Visualizar` **E** `Imprimir` (mesmo bug critico de sigrectcBO — quebram no clique Visualizar)
+- 1 faltando apenas 1 dos 2
+- 72 faltando apenas `GerarExcel` (quebram no clique "Arquivos Email"/Excel)
+- 5 arquivos com `this_cArquivoRelatorio` mal formado
+
+### Referencias
+
+- Memoria detalhada: `feedback_report_bo_trio_visualizar_ausente.md`
+- Ref canonico simples (single-FRX): `C:\4c\projeto\app\classes\sigrecrfBO.prg:366-423`
+- Ref canonico complexo (dual-FRX 40col/80col): `C:\4c\projeto\app\classes\sigrefcxBO.prg:2666-2900`
+- Ref recem-corrigido: `C:\4c\projeto\app\classes\sigrectcBO.prg` (pos-Erro116)
+- Origem: Erro116 (2026-08-18, FormSigReCtc "Movimentacao de Cartoes" — clicar Visualizar disparou "Property VISUALIZAR is not found" em linha 958 do form)
+
+

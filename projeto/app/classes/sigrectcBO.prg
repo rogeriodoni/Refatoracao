@@ -46,7 +46,7 @@ DEFINE CLASS sigrectcBO AS RelatorioBase
         loc_lSucesso = .F.
         TRY
             loc_lSucesso = DODEFAULT()
-            THIS.this_cArquivoRelatorio = gc_4c_CaminhoReports + "relsigrectc.frx"
+            THIS.this_cArquivoRelatorio = "SigReCtc"
             THIS.this_cTituloRelatorio  = "Relat" + CHR(243) + "rio Movimenta" + ;
                                           CHR(231) + CHR(227) + "o de Cart" + CHR(245) + "es"
             THIS.this_dDtInicial = DATE()
@@ -230,7 +230,15 @@ DEFINE CLASS sigrectcBO AS RelatorioBase
                     USE IN cursor_4c_Listp1
                 ELSE
                     THIS.this_cMensagemErro = "Falha ao buscar Entradas"
-                    loc_lAbortou = .T.
+                    *-- Cursor-empty guard (Pattern #167 auto): sem esse guard, loc_lAbortou=.T.
+                    *   com cursor_4c_Listp1 vazio faria REPORT FORM renderizar preview branco
+                    *   sem mensagem para o usuario (BtnVisualizarClick espera .F.+MsgErro).
+                    IF RECCOUNT("cursor_4c_Listp1") = 0
+                        THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
+                        loc_lAbortou = .F.
+                    ELSE
+                        loc_lAbortou = .T.
+                    ENDIF
                 ENDIF
             ENDIF
 
@@ -279,7 +287,15 @@ DEFINE CLASS sigrectcBO AS RelatorioBase
                     USE IN cursor_4c_Listp2
                 ELSE
                     THIS.this_cMensagemErro = "Falha ao buscar " + CHR(192) + " Receber"
-                    loc_lAbortou = .T.
+                    *-- Cursor-empty guard (Pattern #167 auto): sem esse guard, loc_lAbortou=.T.
+                    *   com cursor_4c_Listp2 vazio faria REPORT FORM renderizar preview branco
+                    *   sem mensagem para o usuario (BtnVisualizarClick espera .F.+MsgErro).
+                    IF RECCOUNT("cursor_4c_Listp2") = 0
+                        THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
+                        loc_lAbortou = .F.
+                    ELSE
+                        loc_lAbortou = .T.
+                    ENDIF
                 ENDIF
             ENDIF
 
@@ -406,7 +422,15 @@ DEFINE CLASS sigrectcBO AS RelatorioBase
                     USE IN cursor_4c_Listp4
                 ELSE
                     THIS.this_cMensagemErro = "Falha ao buscar Baixados"
-                    loc_lAbortou = .T.
+                    *-- Cursor-empty guard (Pattern #167 auto): sem esse guard, loc_lAbortou=.T.
+                    *   com cursor_4c_Listp4 vazio faria REPORT FORM renderizar preview branco
+                    *   sem mensagem para o usuario (BtnVisualizarClick espera .F.+MsgErro).
+                    IF RECCOUNT("cursor_4c_Listp4") = 0
+                        THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
+                        loc_lAbortou = .F.
+                    ELSE
+                        loc_lAbortou = .T.
+                    ENDIF
                 ENDIF
             ENDIF
 
@@ -459,6 +483,86 @@ DEFINE CLASS sigrectcBO AS RelatorioBase
             loc_lSucesso = !loc_lAbortou
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
+            THIS.this_cMensagemErro = loc_oErro.Message
+        ENDTRY
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * Visualizar - Exibe relatorio em preview na tela
+    *--------------------------------------------------------------------------
+    PROCEDURE Visualizar()
+        LOCAL loc_lSucesso, loc_oErro
+        loc_lSucesso = .F.
+        TRY
+            IF THIS.PrepararDados()
+                IF USED(THIS.this_cCursorDados) AND RECCOUNT(THIS.this_cCursorDados) > 0
+                    SELECT (THIS.this_cCursorDados)
+                    GO TOP
+                    REPORT FORM (gc_4c_CaminhoReports + THIS.this_cArquivoRelatorio) ;
+                        PREVIEW NOCONSOLE
+                    loc_lSucesso = .T.
+                ELSE
+                    THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Visualizar")
+            THIS.this_cMensagemErro = loc_oErro.Message
+        ENDTRY
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * Imprimir - Imprime relatorio com dialogo de impressora
+    *--------------------------------------------------------------------------
+    PROCEDURE Imprimir()
+        LOCAL loc_lSucesso, loc_oErro
+        loc_lSucesso = .F.
+        TRY
+            IF THIS.PrepararDados()
+                IF USED(THIS.this_cCursorDados) AND RECCOUNT(THIS.this_cCursorDados) > 0
+                    SELECT (THIS.this_cCursorDados)
+                    GO TOP
+                    REPORT FORM (gc_4c_CaminhoReports + THIS.this_cArquivoRelatorio) ;
+                        TO PRINTER PROMPT NOCONSOLE
+                    loc_lSucesso = .T.
+                ELSE
+                    THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "Imprimir")
+            THIS.this_cMensagemErro = loc_oErro.Message
+        ENDTRY
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * GerarExcel - Exporta relatorio para arquivo texto (ASCII) para Excel
+    *--------------------------------------------------------------------------
+    PROCEDURE GerarExcel()
+        LOCAL loc_lSucesso, loc_cArquivo, loc_oErro
+        loc_lSucesso = .F.
+        TRY
+            IF THIS.PrepararDados()
+                IF USED(THIS.this_cCursorDados) AND RECCOUNT(THIS.this_cCursorDados) > 0
+                    SELECT (THIS.this_cCursorDados)
+                    GO TOP
+                    loc_cArquivo = SYS(5) + CURDIR() + "SigReCtc_" + ;
+                                   STRTRAN(DTOC(DATE()), "/", "") + ".xls"
+                    REPORT FORM (gc_4c_CaminhoReports + THIS.this_cArquivoRelatorio) ;
+                        TO FILE &loc_cArquivo NOPREVIEW NOCONSOLE ASCII
+                    IF FILE(loc_cArquivo)
+                        MsgInfo("Arquivo gerado:" + CHR(13) + loc_cArquivo, "Excel")
+                    ENDIF
+                    loc_lSucesso = .T.
+                ELSE
+                    THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "GerarExcel")
             THIS.this_cMensagemErro = loc_oErro.Message
         ENDTRY
         RETURN loc_lSucesso

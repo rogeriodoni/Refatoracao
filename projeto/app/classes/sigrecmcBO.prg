@@ -759,7 +759,15 @@ DEFINE CLASS sigrecmcBO AS RelatorioBase
                                 "FROM SigCdCli WHERE iclis = " + EscaparSQL(loc_lcConta)
                             loc_lnQueryOk = SQLEXEC(gnConnHandle, loc_lcSql, "TmpCli")
                             IF loc_lnQueryOk < 1
-                                loc_lErroBD = .T.
+                                *-- Cursor-empty guard (Pattern #167 auto): sem esse guard, loc_lErroBD=.T.
+                                *   com TmpClaCo vazio faria REPORT FORM renderizar preview branco
+                                *   sem mensagem para o usuario (BtnVisualizarClick espera .F.+MsgErro).
+                                IF RECCOUNT("TmpClaCo") = 0
+                                    THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
+                                    loc_lErroBD = .F.
+                                ELSE
+                                    loc_lErroBD = .T.
+                                ENDIF
                                 EXIT
                             ENDIF
                             SELECT TmpCli
@@ -780,7 +788,15 @@ DEFINE CLASS sigrecmcBO AS RelatorioBase
                                         " AND grupos = " + EscaparSQL(loc_lcCGrupo)
                                     loc_lnQueryOk = SQLEXEC(gnConnHandle, loc_lcSql, "TmpClaCo")
                                     IF loc_lnQueryOk < 1
-                                        loc_lErroBD = .T.
+                                        *-- Cursor-empty guard (Pattern #167 auto): sem esse guard, loc_lErroBD=.T.
+                                        *   com TmpCli vazio faria REPORT FORM renderizar preview branco
+                                        *   sem mensagem para o usuario (BtnVisualizarClick espera .F.+MsgErro).
+                                        IF RECCOUNT("TmpCli") = 0
+                                            THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
+                                            loc_lErroBD = .F.
+                                        ELSE
+                                            loc_lErroBD = .T.
+                                        ENDIF
                                         EXIT
                                     ENDIF
                                     SELECT TmpClaCo
@@ -1038,7 +1054,15 @@ DEFINE CLASS sigrecmcBO AS RelatorioBase
                                 " AND grupos = " + EscaparSQL(loc_lcCGrupo)
                             loc_lnQueryOk = SQLEXEC(gnConnHandle, loc_lcSql, "TmpClaCo")
                             IF loc_lnQueryOk < 1
-                                loc_lErroBD = .T.
+                                *-- Cursor-empty guard (Pattern #167 auto): sem esse guard, loc_lErroBD=.T.
+                                *   com TmpQuant vazio faria REPORT FORM renderizar preview branco
+                                *   sem mensagem para o usuario (BtnVisualizarClick espera .F.+MsgErro).
+                                IF RECCOUNT("TmpQuant") = 0
+                                    THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
+                                    loc_lErroBD = .F.
+                                ELSE
+                                    loc_lErroBD = .T.
+                                ENDIF
                                 EXIT
                             ENDIF
 
@@ -1068,7 +1092,15 @@ DEFINE CLASS sigrecmcBO AS RelatorioBase
                                 "FROM SigCdCli WHERE iclis = " + EscaparSQL(loc_lcConta)
                             loc_lnQueryOk = SQLEXEC(gnConnHandle, loc_lcSql, "TmpCli")
                             IF loc_lnQueryOk < 1
-                                loc_lErroBD = .T.
+                                *-- Cursor-empty guard (Pattern #167 auto): sem esse guard, loc_lErroBD=.T.
+                                *   com TmpClaCo vazio faria REPORT FORM renderizar preview branco
+                                *   sem mensagem para o usuario (BtnVisualizarClick espera .F.+MsgErro).
+                                IF RECCOUNT("TmpClaCo") = 0
+                                    THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
+                                    loc_lErroBD = .F.
+                                ELSE
+                                    loc_lErroBD = .T.
+                                ENDIF
                                 EXIT
                             ENDIF
                             SELECT TmpCli
@@ -1089,7 +1121,15 @@ DEFINE CLASS sigrecmcBO AS RelatorioBase
                                         " AND grupos = " + EscaparSQL(loc_lcCGrupo)
                                     loc_lnQueryOk = SQLEXEC(gnConnHandle, loc_lcSql, "TmpClaCo")
                                     IF loc_lnQueryOk < 1
-                                        loc_lErroBD = .T.
+                                        *-- Cursor-empty guard (Pattern #167 auto): sem esse guard, loc_lErroBD=.T.
+                                        *   com TmpCli vazio faria REPORT FORM renderizar preview branco
+                                        *   sem mensagem para o usuario (BtnVisualizarClick espera .F.+MsgErro).
+                                        IF RECCOUNT("TmpCli") = 0
+                                            THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
+                                            loc_lErroBD = .F.
+                                        ELSE
+                                            loc_lErroBD = .T.
+                                        ENDIF
                                         EXIT
                                     ENDIF
                                     SELECT TmpClaCo
@@ -1322,7 +1362,15 @@ DEFINE CLASS sigrecmcBO AS RelatorioBase
                 SET ORDER TO impressao
                 GO TOP
 
-                loc_lSucesso = .T.
+                *-- Cursor-empty guard (Pattern #167 auto): sem esse guard, loc_lSucesso=.T.
+                *   com TmpResult vazio faria REPORT FORM renderizar preview branco
+                *   sem mensagem para o usuario (BtnVisualizarClick espera .F.+MsgErro).
+                IF RECCOUNT("TmpResult") = 0
+                    THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
+                    loc_lSucesso = .F.
+                ELSE
+                    loc_lSucesso = .T.
+                ENDIF
             ENDIF && loc_lBdOk
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro")
@@ -1585,6 +1633,37 @@ DEFINE CLASS sigrecmcBO AS RelatorioBase
             THIS.this_cMensagemErro = "Erro auditoria: " + loc_oErro.Message
         ENDTRY
 
+        RETURN loc_lSucesso
+    ENDPROC
+
+
+    *--------------------------------------------------------------------------
+    * GerarExcel - Exporta relatorio para arquivo ASCII (Excel) (Pattern #167 auto)
+    *--------------------------------------------------------------------------
+    PROCEDURE GerarExcel()
+        LOCAL loc_lSucesso, loc_cArquivo, loc_oErro
+        loc_lSucesso = .F.
+        TRY
+            IF THIS.PrepararDados()
+                IF USED(THIS.this_cCursorDados) AND RECCOUNT(THIS.this_cCursorDados) > 0
+                    SELECT (THIS.this_cCursorDados)
+                    GO TOP
+                    loc_cArquivo = SYS(5) + CURDIR() + "sigrecmc_" + ;
+                                   STRTRAN(DTOC(DATE()), "/", "") + ".xls"
+                    REPORT FORM (gc_4c_CaminhoReports + THIS.this_cArquivoRelatorio) ;
+                        TO FILE (loc_cArquivo) NOPREVIEW NOCONSOLE ASCII
+                    IF FILE(loc_cArquivo)
+                        MsgInfo("Arquivo gerado:" + CHR(13) + loc_cArquivo, "Excel")
+                    ENDIF
+                    loc_lSucesso = .T.
+                ELSE
+                    THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "GerarExcel")
+            THIS.this_cMensagemErro = loc_oErro.Message
+        ENDTRY
         RETURN loc_lSucesso
     ENDPROC
 

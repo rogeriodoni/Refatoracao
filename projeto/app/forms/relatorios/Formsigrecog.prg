@@ -326,7 +326,7 @@ DEFINE CLASS Formsigrecog AS FormBase
 
         loc_oPag.AddObject("lbl_4c_Lbl_periodo", "Label")
         WITH loc_oPag.lbl_4c_Lbl_periodo
-            .Top       = 133
+            .Top       = 48
             .Left      = 206
             .Width     = 45
             .AutoSize  = .T.
@@ -352,7 +352,7 @@ DEFINE CLASS Formsigrecog AS FormBase
 
         loc_oPag.AddObject("lbl_4c_Lbl_periodo_a", "Label")
         WITH loc_oPag.lbl_4c_Lbl_periodo_a
-            .Top       = 136
+            .Top       = 51
             .Left      = 338
             .Width     = 8
             .AutoSize  = .T.
@@ -378,7 +378,7 @@ DEFINE CLASS Formsigrecog AS FormBase
 
         loc_oPag.AddObject("lbl_4c_Lbl_empresa", "Label")
         WITH loc_oPag.lbl_4c_Lbl_empresa
-            .Top       = 160
+            .Top       = 75
             .Left      = 201
             .Width     = 50
             .AutoSize  = .T.
@@ -436,7 +436,7 @@ DEFINE CLASS Formsigrecog AS FormBase
 
         loc_oPag.AddObject("lbl_4c_Lbl_vendedor", "Label")
         WITH loc_oPag.lbl_4c_Lbl_vendedor
-            .Top       = 187
+            .Top       = 102
             .Left      = 196
             .Width     = 55
             .AutoSize  = .T.
@@ -479,7 +479,7 @@ DEFINE CLASS Formsigrecog AS FormBase
 
         loc_oPag.AddObject("lbl_4c_Label6", "Label")
         WITH loc_oPag.lbl_4c_Label6
-            .Top       = 214
+            .Top       = 129
             .Left      = 210
             .Width     = 41
             .Height    = 15
@@ -578,12 +578,39 @@ DEFINE CLASS Formsigrecog AS FormBase
     * LimparCampos - Inicializa campos de filtro com valores padrao
     *--------------------------------------------------------------------------
     PROTECTED PROCEDURE LimparCampos()
-        LOCAL loc_oPag
+        LOCAL loc_oPag, loc_cCodEmp, loc_cRazEmp
+        LOCAL loc_cSQL, loc_nResult
         loc_oPag = THIS.pgf_4c_Paginas.Page1
         loc_oPag.txt_4c__dt_inicial.Value    = DATE()
         loc_oPag.txt_4c__dt_final.Value      = DATE()
-        loc_oPag.txt_4c__empresa.Value       = ""
-        loc_oPag.txt_4c__empresa_desc.Value  = ""
+
+        *-- Pre-carrega empresa atual do sistema (Erro114 2026-08-13).
+        *   go_4c_Sistema.cCodEmpresa pode nao bater com SigCdEmp.Cemps (ex:
+        *   config.prg tem "01" mas DB tem "001"). Consulta DB direto usando
+        *   cCodEmpresa: se achou, popula; senao deixa vazio (evita picker
+        *   vazio quando F4 tenta buscar codigo inexistente).
+        loc_cCodEmp = ""
+        loc_cRazEmp = ""
+        IF TYPE("go_4c_Sistema") = "O" AND !ISNULL(go_4c_Sistema) AND ;
+           PEMSTATUS(go_4c_Sistema, "cCodEmpresa", 5) AND ;
+           !EMPTY(go_4c_Sistema.cCodEmpresa) AND ;
+           TYPE("gnConnHandle") = "N" AND gnConnHandle > 0
+            loc_cSQL = "SELECT cemps, razas FROM SigCdEmp WHERE cemps = " + ;
+                       EscaparSQL(ALLTRIM(go_4c_Sistema.cCodEmpresa))
+            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_EmpDefault")
+            IF loc_nResult > 0 AND USED("cursor_4c_EmpDefault") AND ;
+               !EOF("cursor_4c_EmpDefault")
+                SELECT cursor_4c_EmpDefault
+                loc_cCodEmp = ALLTRIM(cemps)
+                loc_cRazEmp = ALLTRIM(razas)
+            ENDIF
+            IF USED("cursor_4c_EmpDefault")
+                USE IN cursor_4c_EmpDefault
+            ENDIF
+        ENDIF
+        loc_oPag.txt_4c__empresa.Value       = loc_cCodEmp
+        loc_oPag.txt_4c__empresa_desc.Value  = loc_cRazEmp
+
         loc_oPag.txt_4c__vendedor.Value      = ""
         loc_oPag.txt_4c__vendedor_desc.Value = ""
         loc_oPag.txt_4c_Cmoeda.Value         = ""
@@ -685,16 +712,19 @@ DEFINE CLASS Formsigrecog AS FormBase
         ENDIF
     ENDPROC
 
-    PROCEDURE TeclaDataInicial(par_nKeyCode, par_nShift)
+    PROCEDURE TeclaDataInicial
+        LPARAMETERS par_nKeyCode, par_nShift
     ENDPROC
 
-    PROCEDURE TeclaDataFinal(par_nKeyCode, par_nShift)
+    PROCEDURE TeclaDataFinal
+        LPARAMETERS par_nKeyCode, par_nShift
     ENDPROC
 
     *--------------------------------------------------------------------------
     * TeclaEmpresa - F4=busca direta / ENTER ou TAB=valida codigo
     *--------------------------------------------------------------------------
-    PROCEDURE TeclaEmpresa(par_nKeyCode, par_nShift)
+    PROCEDURE TeclaEmpresa
+        LPARAMETERS par_nKeyCode, par_nShift
         IF par_nKeyCode = 115
             THIS.AbrirBuscaEmpresa()
             RETURN
@@ -707,7 +737,8 @@ DEFINE CLASS Formsigrecog AS FormBase
     *--------------------------------------------------------------------------
     * TeclaEmpresaDesc - F4=busca por nome / ENTER ou TAB=valida descricao
     *--------------------------------------------------------------------------
-    PROCEDURE TeclaEmpresaDesc(par_nKeyCode, par_nShift)
+    PROCEDURE TeclaEmpresaDesc
+        LPARAMETERS par_nKeyCode, par_nShift
         IF par_nKeyCode = 115
             THIS.AbrirBuscaEmpresa()
             RETURN
@@ -720,7 +751,8 @@ DEFINE CLASS Formsigrecog AS FormBase
     *--------------------------------------------------------------------------
     * TeclaVendedor - F4=busca direta / ENTER ou TAB=valida codigo
     *--------------------------------------------------------------------------
-    PROCEDURE TeclaVendedor(par_nKeyCode, par_nShift)
+    PROCEDURE TeclaVendedor
+        LPARAMETERS par_nKeyCode, par_nShift
         IF par_nKeyCode = 115
             THIS.AbrirBuscaVendedor()
             RETURN
@@ -733,7 +765,8 @@ DEFINE CLASS Formsigrecog AS FormBase
     *--------------------------------------------------------------------------
     * TeclaVendedorDesc - F4=busca por nome / ENTER ou TAB=valida nome
     *--------------------------------------------------------------------------
-    PROCEDURE TeclaVendedorDesc(par_nKeyCode, par_nShift)
+    PROCEDURE TeclaVendedorDesc
+        LPARAMETERS par_nKeyCode, par_nShift
         IF par_nKeyCode = 115
             THIS.AbrirBuscaVendedor()
             RETURN
@@ -746,7 +779,8 @@ DEFINE CLASS Formsigrecog AS FormBase
     *--------------------------------------------------------------------------
     * TeclaMoeda - F4=busca direta / ENTER ou TAB=valida codigo de moeda
     *--------------------------------------------------------------------------
-    PROCEDURE TeclaMoeda(par_nKeyCode, par_nShift)
+    PROCEDURE TeclaMoeda
+        LPARAMETERS par_nKeyCode, par_nShift
         IF par_nKeyCode = 115
             THIS.AbrirBuscaMoeda()
             RETURN
@@ -759,7 +793,8 @@ DEFINE CLASS Formsigrecog AS FormBase
     *--------------------------------------------------------------------------
     * TeclaMoedaDesc - F4=busca por descricao / ENTER ou TAB=valida desc moeda
     *--------------------------------------------------------------------------
-    PROCEDURE TeclaMoedaDesc(par_nKeyCode, par_nShift)
+    PROCEDURE TeclaMoedaDesc
+        LPARAMETERS par_nKeyCode, par_nShift
         IF par_nKeyCode = 115
             THIS.AbrirBuscaMoeda()
             RETURN
@@ -795,10 +830,10 @@ DEFINE CLASS Formsigrecog AS FormBase
             IF USED("cursor_4c_EmpVal")
                 USE IN cursor_4c_EmpVal
             ENDIF
+            *-- Exato nao achou: abre picker com prefixo tipado (nao mostra
+            *   "nao encontrada" nem limpa campo — anti-padrao, Erro114 2026-08-13).
             IF !loc_lEncontrado
-                MsgAviso("Empresa n" + CHR(227) + "o encontrada.", "Empresa")
-                loc_oPag.txt_4c__empresa.Value      = ""
-                loc_oPag.txt_4c__empresa_desc.Value = ""
+                THIS.AbrirBuscaEmpresa()
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro ao Validar Empresa")
@@ -823,34 +858,61 @@ DEFINE CLASS Formsigrecog AS FormBase
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * AbrirBuscaEmpresa - FormBuscaAuxiliar para SigCdEmp (cemps / razas)
+    * AbrirBuscaEmpresa - Lista empresas (SigCdEmp)
+    *   Padrao canonico Formsigrecrf (Erro114 2026-08-13): SQL no caller +
+    *   FormBuscaAuxiliar SEM parametros + DefinirCursor + Mostrar. Evita defeito
+    *   do Pattern B onde LIKE 'prefixo%' com 0 rows abre picker vazio.
     *--------------------------------------------------------------------------
     PROTECTED PROCEDURE AbrirBuscaEmpresa()
-        LOCAL loc_oForm, loc_oPag, loc_cValor, loc_oErro
+        LOCAL loc_oLookup, loc_oPag, loc_cValor, loc_cSQL, loc_nResult, loc_oErro
         loc_oPag   = THIS.pgf_4c_Paginas.Page1
         loc_cValor = ALLTRIM(loc_oPag.txt_4c__empresa.Value)
         TRY
-            loc_oForm = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
-                "SigCdEmp", "cursor_4c_BuscaEmp", "cemps", loc_cValor, ;
-                "Busca de Empresa")
-            IF VARTYPE(loc_oForm) = "O"
-                loc_oForm.mAddColuna("cemps", "", "C" + CHR(243) + "digo")
-                loc_oForm.mAddColuna("razas", "", "Empresa")
-                loc_oForm.Show()
-                IF loc_oForm.this_lSelecionou AND USED("cursor_4c_BuscaEmp")
-                    SELECT cursor_4c_BuscaEmp
-                    loc_oPag.txt_4c__empresa.Value      = ALLTRIM(cemps)
-                    loc_oPag.txt_4c__empresa_desc.Value = ALLTRIM(razas)
-                ENDIF
-                loc_oForm.Release()
-            ENDIF
             IF USED("cursor_4c_BuscaEmp")
-                USE IN cursor_4c_BuscaEmp
+                USE IN SELECT("cursor_4c_BuscaEmp")
+            ENDIF
+            IF !EMPTY(loc_cValor)
+                loc_cSQL = "SELECT cemps AS Cods, razas AS Descs FROM SigCdEmp " + ;
+                           "WHERE cemps LIKE " + EscaparSQL(loc_cValor + "%") + ;
+                           " OR razas LIKE " + EscaparSQL(loc_cValor + "%") + ;
+                           " ORDER BY cemps"
+            ELSE
+                loc_cSQL = "SELECT cemps AS Cods, razas AS Descs FROM SigCdEmp " + ;
+                           "ORDER BY cemps"
+            ENDIF
+            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaEmp")
+            IF loc_nResult > 0
+                IF RECCOUNT("cursor_4c_BuscaEmp") = 0
+                    *-- Prefixo nao bateu — recarrega todas
+                    IF USED("cursor_4c_BuscaEmp")
+                        USE IN SELECT("cursor_4c_BuscaEmp")
+                    ENDIF
+                    loc_cSQL = "SELECT cemps AS Cods, razas AS Descs FROM SigCdEmp ORDER BY cemps"
+                    loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaEmp")
+                ENDIF
+                IF loc_nResult > 0 AND RECCOUNT("cursor_4c_BuscaEmp") > 0
+                    loc_oLookup = CREATEOBJECT("FormBuscaAuxiliar")
+                    IF VARTYPE(loc_oLookup) = "O"
+                        loc_oLookup.DefinirCursor("cursor_4c_BuscaEmp", "Cods", "Descs", ;
+                            "Sele" + CHR(231) + CHR(227) + "o de Empresa")
+                        IF loc_oLookup.Mostrar()
+                            loc_oPag.txt_4c__empresa.Value      = ALLTRIM(loc_oLookup.cCodigoSelecionado)
+                            loc_oPag.txt_4c__empresa_desc.Value = ALLTRIM(loc_oLookup.cDescricaoSelecionada)
+                        ENDIF
+                    ENDIF
+                ELSE
+                    MsgAviso("Nenhuma empresa encontrada.", "Empresa")
+                ENDIF
+                IF USED("cursor_4c_BuscaEmp")
+                    USE IN SELECT("cursor_4c_BuscaEmp")
+                ENDIF
+            ELSE
+                MsgErro("Erro ao buscar empresas.", "Empresa")
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro ao Buscar Empresa")
             IF USED("cursor_4c_BuscaEmp")
-                USE IN cursor_4c_BuscaEmp
+                USE IN SELECT("cursor_4c_BuscaEmp")
             ENDIF
         ENDTRY
     ENDPROC
@@ -881,10 +943,10 @@ DEFINE CLASS Formsigrecog AS FormBase
             IF USED("cursor_4c_VenVal")
                 USE IN cursor_4c_VenVal
             ENDIF
+            *-- Exato nao achou: abre picker com prefixo tipado (nao mostra
+            *   "nao encontrado" nem limpa campo — anti-padrao, Erro114 2026-08-13).
             IF !loc_lEncontrado
-                MsgAviso("Vendedor n" + CHR(227) + "o encontrado.", "Vendedor")
-                loc_oPag.txt_4c__vendedor.Value      = ""
-                loc_oPag.txt_4c__vendedor_desc.Value = ""
+                THIS.AbrirBuscaVendedor()
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro ao Validar Vendedor")
@@ -909,34 +971,57 @@ DEFINE CLASS Formsigrecog AS FormBase
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * AbrirBuscaVendedor - FormBuscaAuxiliar para SigCdCli (iclis / rclis)
+    * AbrirBuscaVendedor - Lista vendedores (SigCdCli) — padrao canonico Formsigrecrf
     *--------------------------------------------------------------------------
     PROTECTED PROCEDURE AbrirBuscaVendedor()
-        LOCAL loc_oForm, loc_oPag, loc_cValor, loc_oErro
+        LOCAL loc_oLookup, loc_oPag, loc_cValor, loc_cSQL, loc_nResult, loc_oErro
         loc_oPag   = THIS.pgf_4c_Paginas.Page1
         loc_cValor = ALLTRIM(loc_oPag.txt_4c__vendedor.Value)
         TRY
-            loc_oForm = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
-                "SigCdCli", "cursor_4c_BuscaVen", "iclis", loc_cValor, ;
-                "Busca de Vendedor")
-            IF VARTYPE(loc_oForm) = "O"
-                loc_oForm.mAddColuna("iclis", "", "C" + CHR(243) + "digo")
-                loc_oForm.mAddColuna("rclis", "", "Vendedor")
-                loc_oForm.Show()
-                IF loc_oForm.this_lSelecionou AND USED("cursor_4c_BuscaVen")
-                    SELECT cursor_4c_BuscaVen
-                    loc_oPag.txt_4c__vendedor.Value      = ALLTRIM(iclis)
-                    loc_oPag.txt_4c__vendedor_desc.Value = ALLTRIM(rclis)
-                ENDIF
-                loc_oForm.Release()
-            ENDIF
             IF USED("cursor_4c_BuscaVen")
-                USE IN cursor_4c_BuscaVen
+                USE IN SELECT("cursor_4c_BuscaVen")
+            ENDIF
+            IF !EMPTY(loc_cValor)
+                loc_cSQL = "SELECT iclis AS Cods, rclis AS Descs FROM SigCdCli " + ;
+                           "WHERE iclis LIKE " + EscaparSQL(loc_cValor + "%") + ;
+                           " OR rclis LIKE " + EscaparSQL(loc_cValor + "%") + ;
+                           " ORDER BY iclis"
+            ELSE
+                loc_cSQL = "SELECT iclis AS Cods, rclis AS Descs FROM SigCdCli " + ;
+                           "ORDER BY iclis"
+            ENDIF
+            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaVen")
+            IF loc_nResult > 0
+                IF RECCOUNT("cursor_4c_BuscaVen") = 0
+                    IF USED("cursor_4c_BuscaVen")
+                        USE IN SELECT("cursor_4c_BuscaVen")
+                    ENDIF
+                    loc_cSQL = "SELECT iclis AS Cods, rclis AS Descs FROM SigCdCli ORDER BY iclis"
+                    loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaVen")
+                ENDIF
+                IF loc_nResult > 0 AND RECCOUNT("cursor_4c_BuscaVen") > 0
+                    loc_oLookup = CREATEOBJECT("FormBuscaAuxiliar")
+                    IF VARTYPE(loc_oLookup) = "O"
+                        loc_oLookup.DefinirCursor("cursor_4c_BuscaVen", "Cods", "Descs", ;
+                            "Sele" + CHR(231) + CHR(227) + "o de Vendedor")
+                        IF loc_oLookup.Mostrar()
+                            loc_oPag.txt_4c__vendedor.Value      = ALLTRIM(loc_oLookup.cCodigoSelecionado)
+                            loc_oPag.txt_4c__vendedor_desc.Value = ALLTRIM(loc_oLookup.cDescricaoSelecionada)
+                        ENDIF
+                    ENDIF
+                ELSE
+                    MsgAviso("Nenhum vendedor encontrado.", "Vendedor")
+                ENDIF
+                IF USED("cursor_4c_BuscaVen")
+                    USE IN SELECT("cursor_4c_BuscaVen")
+                ENDIF
+            ELSE
+                MsgErro("Erro ao buscar vendedores.", "Vendedor")
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro ao Buscar Vendedor")
             IF USED("cursor_4c_BuscaVen")
-                USE IN cursor_4c_BuscaVen
+                USE IN SELECT("cursor_4c_BuscaVen")
             ENDIF
         ENDTRY
     ENDPROC
@@ -992,34 +1077,57 @@ DEFINE CLASS Formsigrecog AS FormBase
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * AbrirBuscaMoeda - FormBuscaAuxiliar para SigCdMoe (cmoes / dmoes)
+    * AbrirBuscaMoeda - Lista moedas (SigCdMoe) — padrao canonico Formsigrecrf
     *--------------------------------------------------------------------------
     PROTECTED PROCEDURE AbrirBuscaMoeda()
-        LOCAL loc_oForm, loc_oPag, loc_cValor, loc_oErro
+        LOCAL loc_oLookup, loc_oPag, loc_cValor, loc_cSQL, loc_nResult, loc_oErro
         loc_oPag   = THIS.pgf_4c_Paginas.Page1
         loc_cValor = ALLTRIM(loc_oPag.txt_4c_Cmoeda.Value)
         TRY
-            loc_oForm = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
-                "SigCdMoe", "cursor_4c_BuscaMoe", "cmoes", loc_cValor, ;
-                "Busca de Moeda")
-            IF VARTYPE(loc_oForm) = "O"
-                loc_oForm.mAddColuna("cmoes", "", "C" + CHR(243) + "digo")
-                loc_oForm.mAddColuna("dmoes", "", "Descri" + CHR(231) + CHR(227) + "o")
-                loc_oForm.Show()
-                IF loc_oForm.this_lSelecionou AND USED("cursor_4c_BuscaMoe")
-                    SELECT cursor_4c_BuscaMoe
-                    loc_oPag.txt_4c_Cmoeda.Value = ALLTRIM(cmoes)
-                    loc_oPag.txt_4c_Dmoeda.Value = ALLTRIM(dmoes)
-                ENDIF
-                loc_oForm.Release()
-            ENDIF
             IF USED("cursor_4c_BuscaMoe")
-                USE IN cursor_4c_BuscaMoe
+                USE IN SELECT("cursor_4c_BuscaMoe")
+            ENDIF
+            IF !EMPTY(loc_cValor)
+                loc_cSQL = "SELECT cmoes AS Cods, dmoes AS Descs FROM SigCdMoe " + ;
+                           "WHERE cmoes LIKE " + EscaparSQL(loc_cValor + "%") + ;
+                           " OR dmoes LIKE " + EscaparSQL(loc_cValor + "%") + ;
+                           " ORDER BY cmoes"
+            ELSE
+                loc_cSQL = "SELECT cmoes AS Cods, dmoes AS Descs FROM SigCdMoe " + ;
+                           "ORDER BY cmoes"
+            ENDIF
+            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaMoe")
+            IF loc_nResult > 0
+                IF RECCOUNT("cursor_4c_BuscaMoe") = 0
+                    IF USED("cursor_4c_BuscaMoe")
+                        USE IN SELECT("cursor_4c_BuscaMoe")
+                    ENDIF
+                    loc_cSQL = "SELECT cmoes AS Cods, dmoes AS Descs FROM SigCdMoe ORDER BY cmoes"
+                    loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaMoe")
+                ENDIF
+                IF loc_nResult > 0 AND RECCOUNT("cursor_4c_BuscaMoe") > 0
+                    loc_oLookup = CREATEOBJECT("FormBuscaAuxiliar")
+                    IF VARTYPE(loc_oLookup) = "O"
+                        loc_oLookup.DefinirCursor("cursor_4c_BuscaMoe", "Cods", "Descs", ;
+                            "Sele" + CHR(231) + CHR(227) + "o de Moeda")
+                        IF loc_oLookup.Mostrar()
+                            loc_oPag.txt_4c_Cmoeda.Value = ALLTRIM(loc_oLookup.cCodigoSelecionado)
+                            loc_oPag.txt_4c_Dmoeda.Value = ALLTRIM(loc_oLookup.cDescricaoSelecionada)
+                        ENDIF
+                    ENDIF
+                ELSE
+                    MsgAviso("Nenhuma moeda encontrada.", "Moeda")
+                ENDIF
+                IF USED("cursor_4c_BuscaMoe")
+                    USE IN SELECT("cursor_4c_BuscaMoe")
+                ENDIF
+            ELSE
+                MsgErro("Erro ao buscar moedas.", "Moeda")
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro ao Buscar Moeda")
             IF USED("cursor_4c_BuscaMoe")
-                USE IN cursor_4c_BuscaMoe
+                USE IN SELECT("cursor_4c_BuscaMoe")
             ENDIF
         ENDTRY
     ENDPROC

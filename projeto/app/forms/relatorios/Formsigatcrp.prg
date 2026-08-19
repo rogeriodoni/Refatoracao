@@ -45,6 +45,8 @@ DEFINE CLASS Formsigatcrp AS FormBase
             *-- Caption com acentos
             THIS.Caption = "Anal" + CHR(237) + "tico de Atendimentos / Pend" + CHR(234) + "ncias"
 
+            THIS.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
+
             *-- Instanciar BO
             THIS.this_oBusinessObject = CREATEOBJECT("sigatcrpBO")
             IF ISNULL(THIS.this_oBusinessObject)

@@ -46,6 +46,11 @@ DEFINE CLASS Formsigreche AS FormBase
         LOCAL loc_lSucesso
         loc_lSucesso = .F.
         TRY
+            IF TYPE("gc_4c_CaminhoIcones") = "U"
+                gc_4c_CaminhoIcones = ""
+            ENDIF
+            THIS.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
+
             THIS.ConfigurarPageFrame()
 
             THIS.this_oRelatorio = CREATEOBJECT("sigrecheBO")

@@ -40,7 +40,6 @@ DEFINE CLASS FormSIGREAUP AS FormBase
     TitleBar     = 0
     Themes       = .F.
     WindowType   = 1
-    BackColor    = RGB(192, 192, 192)
     ShowWindow   = 1
 
     *-- Referencia ao Business Object do relatorio (instanciado em InicializarForm)

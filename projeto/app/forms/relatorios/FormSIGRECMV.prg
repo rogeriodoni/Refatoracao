@@ -1182,6 +1182,18 @@ DEFINE CLASS FormSIGRECMV AS FormBase
                 loc_lContinuar = .F.
             ENDIF
 
+            *-- Erro103: cursor USED mas vazio => filtro CMV nao encontrou operacao.
+            *-- Sem esta checagem o FormBuscaAuxiliar abre grid em branco e usuario
+            *-- interpreta como "picker nao funciona".
+            IF loc_lContinuar AND RECCOUNT("crSigCdOpe") = 0
+                MsgAviso("Nenhuma opera" + CHR(231) + CHR(227) + "o CMV cadastrada." + CHR(13) + ;
+                    "Verifique se existe algum tipo de opera" + CHR(231) + CHR(227) + "o em" + CHR(13) + ;
+                    "SigCdTom com GeraCmvs = 1 (Sim) e opera" + CHR(231) + CHR(245) + "es em" + CHR(13) + ;
+                    "SigCdOpe com vendas = 1, caixas = 1 e copers = 1.", ;
+                    "Sem opera" + CHR(231) + CHR(245) + "es")
+                loc_lContinuar = .F.
+            ENDIF
+
             IF loc_lContinuar
                 loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
                 IF VARTYPE(loc_oBusca) = "O"

@@ -22,7 +22,6 @@ DEFINE CLASS Formsigrebal AS FormBase
     TitleBar    = 0
     Themes      = .F.
     WindowType  = 1
-    BackColor   = RGB(192, 192, 192)
     ShowWindow  = 1
 
     *-- BO de relatorio

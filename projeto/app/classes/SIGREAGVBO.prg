@@ -393,7 +393,15 @@ DEFINE CLASS SIGREAGVBO AS RelatorioBase
                 SELECT crImprimir
                 GO TOP
 
-                loc_lSucesso = .T.
+                *-- Cursor-empty guard (Pattern #167 auto): sem esse guard, loc_lSucesso=.T.
+                *   com crImprimir vazio faria REPORT FORM renderizar preview branco
+                *   sem mensagem para o usuario (BtnVisualizarClick espera .F.+MsgErro).
+                IF RECCOUNT("crImprimir") = 0
+                    THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
+                    loc_lSucesso = .F.
+                ELSE
+                    loc_lSucesso = .T.
+                ENDIF
                 EXIT
             ENDDO
 
@@ -401,7 +409,15 @@ DEFINE CLASS SIGREAGVBO AS RelatorioBase
             WAIT CLEAR
             THIS.this_cMensagemErro = loc_oErro.Message
             MsgErro(loc_oErro.Message, "Erro ao Preparar Dados do Relat" + CHR(243) + "rio")
-            loc_lMostrouErro = .T.
+            *-- Cursor-empty guard (Pattern #167 auto): sem esse guard, loc_lMostrouErro=.T.
+            *   com crImprimir vazio faria REPORT FORM renderizar preview branco
+            *   sem mensagem para o usuario (BtnVisualizarClick espera .F.+MsgErro).
+            IF RECCOUNT("crImprimir") = 0
+                THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
+                loc_lMostrouErro = .F.
+            ELSE
+                loc_lMostrouErro = .T.
+            ENDIF
         ENDTRY
 
         *-- Limpa cursores temporarios

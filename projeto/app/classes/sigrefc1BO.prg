@@ -193,7 +193,15 @@ DEFINE CLASS sigrefc1BO AS RelatorioBase
             SELECT csRelatorio
             GO TOP
 
-            loc_lSucesso = .T.
+            *-- Cursor-empty guard (Pattern #167 auto): sem esse guard, loc_lSucesso=.T.
+            *   com csRelatorio vazio faria REPORT FORM renderizar preview branco
+            *   sem mensagem para o usuario (BtnVisualizarClick espera .F.+MsgErro).
+            IF RECCOUNT("csRelatorio") = 0
+                THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
+                loc_lSucesso = .F.
+            ELSE
+                loc_lSucesso = .T.
+            ENDIF
 
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "PrepararDados")

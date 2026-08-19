@@ -34,6 +34,11 @@ DEFINE CLASS Formsigregnf AS FormBase
         LOCAL loc_lSucesso
         loc_lSucesso = .F.
         TRY
+            IF TYPE("gc_4c_CaminhoIcones") = "U"
+                gc_4c_CaminhoIcones = ""
+            ENDIF
+            THIS.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
+
             *-- Criar Business Object (BO.Init() cria cursores e carrega SigCdPam/SigCdSer)
             THIS.this_oBusinessObject = CREATEOBJECT("sigregnfBO")
             IF VARTYPE(THIS.this_oBusinessObject) # "O"

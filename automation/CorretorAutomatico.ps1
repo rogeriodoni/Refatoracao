@@ -8508,22 +8508,28 @@ function Corrigir-SigCdEmpColunasInvalidas {
     }
 
     # ScriptBlock helper de substituicao case-preserving (inline para evitar scope)
+    # GUARD Erro110 (2026-08-12): `(?<!\.)` negative lookbehind evita substituir
+    # `<alias>.emps` quando o alias esta bound a tabela DIFERENTE de SigCdEmp
+    # (ex: `SigMvCab a` -> `a.emps` eh CORRETO, nao trocar por a.cemps).
+    # Regressao anterior: Erro108 fix `a.cemps` -> `a.emps` foi revertido por
+    # esta funcao quando a linha tinha SigCdEmp + "emps" (mesmo em outro alias).
+    # Case (c) mais abaixo trata `<cursor>.emps` corretamente via cursor tracking.
     $substituirTokens = {
         param([string]$Texto)
         # Order: NComps/ncomps/DEmps antes de nemp/Emps para evitar sobreposicao acidental
         $r = $Texto
-        $r = $r -creplace '\bNCOMPS\b', 'RAZAS'
-        $r = $r -creplace '\bNComps\b', 'Razas'
-        $r = $r -creplace '\bncomps\b', 'razas'
-        $r = $r -creplace '\bNEMP\b',   'RAZAS'
-        $r = $r -creplace '\bNemp\b',   'Razas'
-        $r = $r -creplace '\bnemp\b',   'razas'
-        $r = $r -creplace '\bDEMPS\b',  'RAZAS'
-        $r = $r -creplace '\bDEmps\b',  'Razas'
-        $r = $r -creplace '\bdemps\b',  'razas'
-        $r = $r -creplace '\bEMPS\b',   'CEMPS'
-        $r = $r -creplace '\bEmps\b',   'Cemps'
-        $r = $r -creplace '\bemps\b',   'cemps'
+        $r = $r -creplace '(?<!\.)\bNCOMPS\b', 'RAZAS'
+        $r = $r -creplace '(?<!\.)\bNComps\b', 'Razas'
+        $r = $r -creplace '(?<!\.)\bncomps\b', 'razas'
+        $r = $r -creplace '(?<!\.)\bNEMP\b',   'RAZAS'
+        $r = $r -creplace '(?<!\.)\bNemp\b',   'Razas'
+        $r = $r -creplace '(?<!\.)\bnemp\b',   'razas'
+        $r = $r -creplace '(?<!\.)\bDEMPS\b',  'RAZAS'
+        $r = $r -creplace '(?<!\.)\bDEmps\b',  'Razas'
+        $r = $r -creplace '(?<!\.)\bdemps\b',  'razas'
+        $r = $r -creplace '(?<!\.)\bEMPS\b',   'CEMPS'
+        $r = $r -creplace '(?<!\.)\bEmps\b',   'Cemps'
+        $r = $r -creplace '(?<!\.)\bemps\b',   'cemps'
         return $r
     }
 
@@ -9621,8 +9627,12 @@ function Corrigir-ReportVisualizarFallthroughPrepara {
             $currentProc = ""
         }
 
-        # Detecta linha 1: IF !THIS.PrepararDados()
-        if ($linha -match '(?i)^(\s*)IF\s+!\s*THIS\.PrepararDados\s*\(\s*\)\s*$') {
+        # Detecta linha 1: IF !THIS.<Metodo>()
+        # Generalizado (Erro110 double-IF): antes so pegava PrepararDados; agora
+        # cobre variante DOUBLE-IF onde ha IF !PrepararDados() + IF !MontarCabecalho()
+        # (ou similares) consecutivos, ambos fall-through antes de REPORT FORM.
+        # Cada IF eh detectado em passe proprio ao avancar o cursor +4.
+        if ($linha -match '(?i)^(\s*)IF\s+!\s*THIS\.\w+\s*\(\s*\)\s*$') {
             $indent = $Matches[1]
 
             # Espera linha 2: <indent+4> loc_l<Name> = .F.
@@ -10322,6 +10332,869 @@ function Corrigir-CursorColunaInexistente {
     return $Linhas
 }
 
+#==============================================================================
+# Pattern #163: Corrigir-SigMvCempsJoinInvalido
+# WARNING-only: sinaliza JOINs SQL que referenciam <alias>.cemps quando o
+# alias binds a tabela Sig*Mv* (movimento) ou SigFiChc.
+#
+# Coluna de empresa tem naming irregular entre tabelas Sig*:
+#   - MOVIMENTO (SigMvCab, SigMvItn, SigMvNfi, SigMvPar, SigMvCcr): "emps" (sem C)
+#   - MESTRE   (SigCdEmp): "cemps" (com C)
+#   - IRREGULARIDADES: SIGFICHC usa "emps" (apesar de "Fi" de master),
+#                      SIGFITEF usa "cemps" (apesar de "Fi" de master).
+#
+# Migrador tipicamente ESPELHA `e.cemps` do lado master para `a.cemps` do lado
+# movimento (JOIN erro-espelho), gerando SQL Server "Nome de coluna 'cemps'
+# invalido" ao clicar Visualizar/Imprimir.
+#
+# NAO auto-refactor porque parse SQL fragil:
+#   (a) precisa mapear alias -> tabela em cada JOIN (dificil sem parser SQL);
+#   (b) muitos JOINs legitimos usam `a.cemps = b.cemps` onde AMBOS aliases
+#       bindam SigCdEmp/SIGFITEF (mestres com cemps) — falso positivo alto;
+#   (c) refactor requer verificacao humana contra schema.sql.
+#
+# Detector: regex `[a-z_]+\.[Cc]emps\s*=\s*[a-z_]+\.[Cc]emps` dentro de strings
+# SQL (aspas duplas). Para cada match, tenta descobrir tabela do alias no mesmo
+# SQL (FROM <T> <alias> OU JOIN <T> <alias>). Se algum alias binds Sig*Mv* ou
+# SIGFICHC, emite WARN-163-SIGMV-CEMPS com aliases + tabelas + linha.
+#
+# Origem: Erro108 (2026-08-12, FormSigReCog Visualizar — "Nome de coluna
+# 'cemps' invalido"). Sweep confirmou 4 BOs afetados (sigrecogBO, sigrecsmBO,
+# SIGREDIRBO, CecBO). Complementa Pattern #160 (invented C prefix em cursor.col).
+#==============================================================================
+function Corrigir-SigMvCempsJoinInvalido {
+    param([string[]]$Linhas)
+
+    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
+
+    # Tabelas MOVIMENTO cuja coluna de empresa eh "emps" (sem C)
+    $tabelasMovimento = @(
+        'SigMvCab', 'SigMvItn', 'SigMvNfi', 'SigMvPar', 'SigMvCcr',
+        'SigMvCat', 'SigMvSlc', 'SigMvNat', 'SigMvPer', 'SigMvCbt',
+        'SigMvNiv', 'SigMvVfd', 'SigMvTvd', 'SigMvBai', 'SigMvBap',
+        'SigFiChc'  # Irregularidade: master mas usa emps sem C
+    )
+
+    # Regex de JOIN suspeito: <alias>.cemps = <alias>.cemps dentro de aspas
+    $rxJoin = [regex]'(?i)([a-z_]\w*)\.cemps\s*=\s*([a-z_]\w*)\.cemps'
+
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        $linha = $Linhas[$i]
+
+        # Skip comentarios
+        if ($linha -match '^\s*\*') { continue }
+
+        # Skip se linha nao tem string SQL (aspas duplas com conteudo)
+        if ($linha -notmatch '"[^"]*cemps[^"]*"') { continue }
+
+        $matches = $rxJoin.Matches($linha)
+        if ($matches.Count -eq 0) { continue }
+
+        foreach ($m in $matches) {
+            $aliasEsq = $m.Groups[1].Value
+            $aliasDir = $m.Groups[2].Value
+
+            # Descobrir tabela dos aliases olhando linhas vizinhas (ate 15 acima/abaixo)
+            # Regex simples: FROM <Tabela> <alias> OU JOIN <Tabela> <alias>
+            $inicioContexto = [Math]::Max(0, $i - 15)
+            $fimContexto    = [Math]::Min($Linhas.Count - 1, $i + 15)
+            $contexto = ($Linhas[$inicioContexto..$fimContexto]) -join "`n"
+
+            $tabelaEsq = $null
+            $tabelaDir = $null
+
+            $rxAliasEsq = [regex]"(?i)(?:FROM|JOIN)\s+(\w+)\s+$([regex]::Escape($aliasEsq))\b"
+            $mAE = $rxAliasEsq.Match($contexto)
+            if ($mAE.Success) { $tabelaEsq = $mAE.Groups[1].Value }
+
+            $rxAliasDir = [regex]"(?i)(?:FROM|JOIN)\s+(\w+)\s+$([regex]::Escape($aliasDir))\b"
+            $mAD = $rxAliasDir.Match($contexto)
+            if ($mAD.Success) { $tabelaDir = $mAD.Groups[1].Value }
+
+            # Se pelo menos um alias binds tabela MOVIMENTO -> WARNING
+            $suspeitoEsq = ($tabelaEsq -and ($tabelasMovimento -contains $tabelaEsq))
+            $suspeitoDir = ($tabelaDir -and ($tabelasMovimento -contains $tabelaDir))
+
+            if (-not ($suspeitoEsq -or $suspeitoDir)) { continue }
+
+            $ladoSuspeito = if ($suspeitoEsq) { "$aliasEsq=$tabelaEsq" } else { "$aliasDir=$tabelaDir" }
+            $fixSug = if ($suspeitoEsq) {
+                "$aliasEsq.cemps -> $aliasEsq.emps (tabela $tabelaEsq usa 'emps' sem C)"
+            } else {
+                "$aliasDir.cemps -> $aliasDir.emps (tabela $tabelaDir usa 'emps' sem C)"
+            }
+
+            Add-Correcao -Tipo "WARN-163-SIGMV-CEMPS" -Linha ($i + 1) `
+                -Original $linha.Trim() `
+                -Corrigido "(REVISAR MANUAL) $fixSug" `
+                -Descricao "Pattern #163 WARNING: JOIN com <alias>.cemps onde alias binds tabela MOVIMENTO ($ladoSuspeito). Coluna 'cemps' nao existe em Sig*Mv*/SigFiChc — nome canonico eh 'emps' (sem C). SEMPRE consultar schema.sql. Origem: Erro108 (2026-08-12, sigrecogBO)."
+
+            Write-Host "[Pattern #163] Linha $($i + 1): JOIN suspeito ($ladoSuspeito) - REVISAR ('cemps' -> 'emps' no lado movimento)" -ForegroundColor Yellow
+        }
+    }
+
+    return $Linhas
+}
+
+#==============================================================================
+# Pattern #164: Corrigir-PrepararDadosUncondSuccessFlag
+# WARNING-only: sinaliza PrepararDados de BO REPORT que tem
+#   `loc_l<flag> = .T.` INCONDICIONAL apos IF que setou .F. (sem ELSE).
+#
+# Anti-padrao (sigrecprBO.prg antes do fix Erro110):
+#   IF loc_nResult < 0
+#       THIS.this_cMensagemErro = "Erro"
+#       loc_lSucesso = .F.
+#   ENDIF
+#   SELECT (cursor)
+#   GO TOP
+#   loc_lSucesso = .T.        <- SOBRESCREVE flag error!
+#
+# PrepararDados sempre retorna .T. mesmo com SQL error. Visualizar/Imprimir
+# chegam ao REPORT FORM com cursor invalido/vazio.
+#
+# Fix (manual): envolver success-path em ELSE do IF error:
+#   IF loc_nResult < 0
+#       loc_lSucesso = .F.
+#   ELSE
+#       SELECT (cursor)
+#       GO TOP
+#       loc_lSucesso = .T.
+#   ENDIF
+#
+# WARNING-only: refactor exige contexto — precisa identificar onde termina
+# o "success path" e envolver o bloco todo em ELSE (nao trivial via regex
+# sem parse AST). Emite WARN-164-PREPDADOS-UNCOND-TRUE.
+#
+# Origem: Erro110 (2026-08-12, sigrecprBO/sigreifxBO/SigReInfBO/SIGREIPSBO).
+# Complementa Pattern #153 (fall-through downstream — em Visualizar/Imprimir).
+#==============================================================================
+function Corrigir-PrepararDadosUncondSuccessFlag {
+    param([string[]]$Linhas)
+
+    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
+
+    $conteudo = $Linhas -join "`n"
+
+    # Guard: apenas BOs REPORT
+    if ($conteudo -notmatch '(?i)DEFINE\s+CLASS\s+\w+\s+AS\s+RelatorioBase\b') {
+        return $Linhas
+    }
+
+    # Track de contexto de PROCEDURE/FUNCTION
+    $currentProc = ""
+    $rxProc = [regex]'(?i)^\s*(?:PROTECTED\s+)?(?:PROCEDURE|FUNCTION)\s+(\w+)\b'
+    $rxEndProc = [regex]'(?i)^\s*ENDPROC\s*$|^\s*ENDFUNC\s*$'
+
+    # Estado por-metodo: em PrepararDados, viu IF de erro que setou flag=.F. sem ELSE
+    $inPrepararDados = $false
+    $sawErrorFlagFalseNoElse = $false
+    $flagVar = ""
+    $lineOfErrorIf = 0
+
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        $linha = $Linhas[$i]
+
+        # Track de contexto de PROCEDURE/FUNCTION
+        $mProc = $rxProc.Match($linha)
+        if ($mProc.Success) {
+            $currentProc = $mProc.Groups[1].Value
+            $inPrepararDados = ($currentProc -match '(?i)^(PrepararDados|Processar|MontarDados)$')
+            $sawErrorFlagFalseNoElse = $false
+            $flagVar = ""
+            $lineOfErrorIf = 0
+            continue
+        } elseif ($rxEndProc.IsMatch($linha)) {
+            $currentProc = ""
+            $inPrepararDados = $false
+            $sawErrorFlagFalseNoElse = $false
+            continue
+        }
+
+        if (-not $inPrepararDados) { continue }
+
+        # Detecta bloco: IF <condicao_erro> / [body] / loc_l<flag> = .F. / ENDIF
+        # (sem ELSE entre o = .F. e ENDIF)
+        # Heuristica: linha eh `IF loc_nResult < 0` ou `IF !THIS.<metodo>()`
+        if ($linha -match '(?i)^\s*IF\s+(!|loc_nResult\s*<\s*0|.+?<\s*0)') {
+            # Procurar dentro do IF (ate ENDIF/ELSE) por loc_l<name> = .F.
+            $depth = 1
+            $foundFlagFalse = ""
+            $hasElse = $false
+            for ($j = $i + 1; $j -lt $Linhas.Count -and $j -lt ($i + 40); $j++) {
+                $linhaJ = $Linhas[$j]
+                if ($linhaJ -match '(?i)^\s*IF\b') { $depth++ }
+                elseif ($linhaJ -match '(?i)^\s*ENDIF\b') {
+                    $depth--
+                    if ($depth -eq 0) { break }
+                }
+                elseif ($linhaJ -match '(?i)^\s*ELSE\s*$' -and $depth -eq 1) {
+                    $hasElse = $true
+                    break
+                }
+                elseif ($linhaJ -match '(?i)^\s+(loc_l\w+)\s*=\s*\.F\.\s*$' -and $depth -eq 1) {
+                    $foundFlagFalse = $Matches[1]
+                }
+            }
+
+            if ($foundFlagFalse -ne "" -and -not $hasElse) {
+                $sawErrorFlagFalseNoElse = $true
+                $flagVar = $foundFlagFalse
+                $lineOfErrorIf = $i + 1
+            }
+        }
+        # Detecta linha suspeita: loc_l<flag> = .T. (mesmo flag que foi setado .F. antes)
+        elseif ($sawErrorFlagFalseNoElse -and $linha -match "(?i)^\s+$([regex]::Escape($flagVar))\s*=\s*\.T\.\s*$") {
+            Add-Correcao -Tipo "WARN-164-PREPDADOS-UNCOND-TRUE" -Linha ($i + 1) `
+                -Original $linha.Trim() `
+                -Corrigido "(REVISAR MANUAL) Envolver success-path em ELSE do IF error (linha $lineOfErrorIf)" `
+                -Descricao "Pattern #164 WARNING: em $currentProc, `$flagVar = .T.` INCONDICIONAL sobrescreve o `.F.` setado no IF de erro (linha $lineOfErrorIf). PrepararDados sempre retorna .T. mesmo com erro. Fix: envolver o bloco de success-path em ELSE explicito do IF error. Origem: Erro110 (2026-08-12, sigrecprBO)."
+
+            Write-Host "[Pattern #164] Linha $($i + 1): $flagVar = .T. incondicional em $currentProc (IF error na linha $lineOfErrorIf sem ELSE) - REVISAR" -ForegroundColor Yellow
+
+            # Reset para evitar duplicar WARNING
+            $sawErrorFlagFalseNoElse = $false
+        }
+    }
+
+    return $Linhas
+}
+
+#==============================================================================
+# Pattern #165: Corrigir-ReportPageFrameTopOffsetWarning
+# WARNING-only: detecta form REPORT que declarou pgf_4c_Paginas.Top = N (>= 50)
+# em ConfigurarPageFrame e cujo ConfigurarPaginaLista adiciona controles a
+# `loc_oPag`/`loc_oPagina` (referencia a Page1) com `.Top = X` onde X >= N.
+# Isso indica que o gerador esqueceu de subtrair PageFrame.Top dos Tops
+# absolutos legado. Como coordenadas dentro de Page1 sao RELATIVAS ao Page,
+# usar Top absoluto legado empurra todos os controles N pixels pra baixo,
+# desalinhando labels/textboxes e cortando os ultimos controles do form.
+#
+# NAO auto-fix porque:
+#   (a) Precisaria heuristica confiavel para distinguir "layout legado nao
+#       subtraido" de "layout intencional > PageFrame.Top" (raro mas possivel).
+#   (b) Alguns forms REPORT podem ter cabecalho interno na Page com Top alto
+#       legitimo (ex: sub-titulo dentro de Page ocupando 30-40px).
+#   (c) Buttons(N) INTERNOS a OptionGroup/CommandGroup usam Top relativo ao
+#       grupo, nao devem ser mexidos — parser regex nao distingue nesting sem
+#       AST completo.
+#
+# Fix manual: subtrair PageFrame.Top de cada control.Top em ConfigurarPaginaLista
+# (labels, textboxes, o proprio Top do OptionGroup/CommandGroup) exceto Buttons(N)
+# dentro de grupos. Referencia canonica: Formsigrecrf.prg (task066) faz correto.
+#
+# Origem: Erro113 (2026-08-13, Formsigrecnt "Contagem por Localizacao"): 23
+# controles em Page1 com Top absoluto legado (Label1.Top=106, ..., OptOrdem.Top=289)
+# apesar de PageFrame.Top=85 e comentario `"Posicoes: original top - 85"` no
+# proprio codigo. Sintoma: layout inteiro shifted-down; OptionGroups Localizacoes/
+# Ordenacao (Y > 350 = form.Height) cortados do form.
+#==============================================================================
+function Corrigir-ReportPageFrameTopOffsetWarning {
+    param([string[]]$Linhas)
+
+    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
+
+    $conteudo = $Linhas -join "`n"
+
+    # Guard 1: apenas forms REPORT (herdam FormBase, mas contem
+    # 'AS RelatorioBase' no BO OU marcador de fase 3 REPORT)
+    # Melhor heuristica: presenca de `ConfigurarPageFrame` E `ConfigurarPaginaLista`
+    # ambos protected na mesma classe (padrao pipeline multi-fase REPORT).
+    if ($conteudo -notmatch '(?i)PROTECTED\s+PROCEDURE\s+ConfigurarPageFrame\b') { return $Linhas }
+    if ($conteudo -notmatch '(?i)PROTECTED\s+PROCEDURE\s+ConfigurarPaginaLista\b') { return $Linhas }
+
+    # Guard 2: extrair PageFrame.Top do bloco ConfigurarPageFrame
+    # Padrao: `loc_oPgf.Top    = 85` ou `THIS.pgf_4c_Paginas.Top = 85`
+    $pgfTop = 0
+    $inCfgPgf = $false
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        $linha = $Linhas[$i]
+        if ($linha -match '(?i)^\s*PROTECTED\s+PROCEDURE\s+ConfigurarPageFrame\b') {
+            $inCfgPgf = $true
+            continue
+        }
+        if ($inCfgPgf -and $linha -match '(?i)^\s*ENDPROC\s*$') {
+            $inCfgPgf = $false
+            continue
+        }
+        if ($inCfgPgf -and $linha -match '(?i)^\s*(loc_oPgf|THIS\.pgf_4c_Paginas)\.Top\s*=\s*(\d+)\s*$') {
+            $pgfTop = [int]$Matches[2]
+            break
+        }
+    }
+
+    if ($pgfTop -lt 50) { return $Linhas }  # PageFrame.Top pequeno = sem offset relevante
+
+    # Guard 3: varrer ConfigurarPaginaLista procurando `.Top = X` (X >= pgfTop)
+    # em WITH cujo alvo eh `loc_oPag(ina)?.<controle>` (nao dentro de WITH .Buttons(N))
+    $inCfgLista = $false
+    $inButtonsWith = $false
+    $buttonsWithDepth = 0
+    $suspects = @()  # array de @{Line=N; Top=X; Ctrl=nome}
+    $lastCtrl = ""
+
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        $linha = $Linhas[$i]
+
+        if ($linha -match '(?i)^\s*PROTECTED\s+PROCEDURE\s+ConfigurarPaginaLista\b') {
+            $inCfgLista = $true
+            continue
+        }
+        if ($inCfgLista -and $linha -match '(?i)^\s*ENDPROC\s*$') {
+            $inCfgLista = $false
+            continue
+        }
+        if (-not $inCfgLista) { continue }
+
+        # Track de WITH nested — pular Tops dentro de WITH .Buttons(N)
+        if ($linha -match '(?i)^\s*WITH\s+\.Buttons\s*\(') {
+            $inButtonsWith = $true
+            $buttonsWithDepth++
+            continue
+        }
+        if ($inButtonsWith -and $linha -match '(?i)^\s*ENDWITH\s*$') {
+            $buttonsWithDepth--
+            if ($buttonsWithDepth -le 0) {
+                $inButtonsWith = $false
+                $buttonsWithDepth = 0
+            }
+            continue
+        }
+        if ($inButtonsWith) { continue }
+
+        # Captura nome do controle a partir do WITH pai (para melhor mensagem)
+        if ($linha -match '(?i)^\s*WITH\s+loc_oPag(ina)?\.(\w+)\s*$') {
+            $lastCtrl = $Matches[2]
+            continue
+        }
+
+        # `.Top = X` fora de WITH .Buttons — checa se X >= pgfTop
+        if ($linha -match '^\s*\.Top\s*=\s*(\d+)\s*$') {
+            $topVal = [int]$Matches[1]
+            if ($topVal -ge $pgfTop) {
+                $suspects += [PSCustomObject]@{
+                    Line = ($i + 1)
+                    Top  = $topVal
+                    Ctrl = $lastCtrl
+                }
+            }
+        }
+    }
+
+    # Emitir WARN se 3+ controles suspeitos (evita falso positivo isolado)
+    if ($suspects.Count -ge 3) {
+        $suggestedFix = "Subtrair -$pgfTop de cada .Top acima em ConfigurarPaginaLista (exceto Buttons(N) internos a Groups)"
+        foreach ($susp in $suspects) {
+            Add-Correcao -Tipo "WARN-165-REPORT-PGFTOP-OFFSET" -Linha $susp.Line `
+                -Original ".Top = $($susp.Top) (ctrl=$($susp.Ctrl))" `
+                -Corrigido ".Top = $($susp.Top - $pgfTop)  && legacy $($susp.Top) - PageFrame.Top($pgfTop)" `
+                -Descricao "Pattern #165 WARNING: PageFrame.Top=$pgfTop mas ConfigurarPaginaLista tem $($suspects.Count) controles com .Top>=PageFrame.Top. Isto sugere que os Tops absolutos legado NAO foram subtraidos do offset PageFrame. Coordenadas dentro de Page1 sao RELATIVAS — layout inteiro fica $pgfTop pixels abaixo do esperado (ultimos controles ficam cortados do form). Fix manual: $suggestedFix. Ref canonico: Formsigrecrf.prg (task066). Origem: Erro113 (2026-08-13, Formsigrecnt)."
+        }
+        Write-Host "[Pattern #165] $($suspects.Count) controles com .Top>=PageFrame.Top($pgfTop) em ConfigurarPaginaLista - REVISAR offset PageFrame" -ForegroundColor Yellow
+    }
+
+    return $Linhas
+}
+
+function Corrigir-FormBuscaAuxiliarPatternBWarning {
+    <#
+    .SYNOPSIS
+    Pattern #166 — WARNING-only. Detecta CREATEOBJECT("FormBuscaAuxiliar",<args>) —
+    o Pattern B defeituoso — e sugere refactor para helper AbrirLookupCanonico
+    (preferido) ou Pattern A manual (fallback).
+
+    Bug (Erro114 Formsigrecog 2026-08-13):
+      1. FormBuscaAuxiliar.Init faz WHERE campo = 'X' + LIKE 'X%'; se ambos 0
+         rows, FECHA o cursor e picker abre VAZIO.
+      2. FormBuscaAuxiliar herda DataSession=1 (shared); se form pai eh
+         DataSession=2 (private), USED() pos-Show retorna .F. no caller e
+         selecao perde silenciosamente.
+      3. Cursor scope isolado entre sessoes causa selecao invisivel ao caller.
+
+    Fix preferido: THIS.AbrirLookupCanonico(par_cTabela, par_cCampoCod,
+    par_cCampoDesc, par_cTitulo, par_cValorFiltro, par_oTxtCod, par_oTxtDesc,
+    par_cFiltroExtra) — helper novo em FormBase.prg (2026-08-13).
+
+    Fix fallback (Pattern A manual): ver migration-patterns.md #166.
+
+    NAO auto-mutate: cada call tem tabela/campos/titulo/textbox destino/logica
+    pos-selecao especificos. Refactor exige contexto — LLM pode fazer, regex nao.
+    #>
+    param([string[]]$Linhas)
+
+    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
+
+    # Guard: skip arquivos-fonte de FormBuscaAuxiliar/FormBase (definicoes
+    # internas, nao chamadas de callers).
+    $conteudo = $Linhas -join "`n"
+    if ($conteudo -match '(?im)^\s*DEFINE\s+CLASS\s+(FormBuscaAuxiliar|FormBase)\b') {
+        return $Linhas
+    }
+
+    $suspects = @()
+
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        $linha = $Linhas[$i]
+
+        # Skip comentarios
+        if ($linha -match '^\s*\*') { continue }
+
+        # Detecta Pattern B: CREATEOBJECT("FormBuscaAuxiliar", ...) com >=2 args.
+        # Aceita whitespace/case variados. A virgula apos "FormBuscaAuxiliar"
+        # (antes do proximo arg) e a marca do Pattern B.
+        if ($linha -match '(?i)CREATEOBJECT\s*\(\s*"FormBuscaAuxiliar"\s*,') {
+            $suspects += [PSCustomObject]@{
+                Line = ($i + 1)
+                Snippet = ($linha.Trim())
+            }
+        }
+    }
+
+    foreach ($susp in $suspects) {
+        $sugestao = "Refactor para THIS.AbrirLookupCanonico(par_cTabela, par_cCampoCod, par_cCampoDesc, par_cTitulo, par_cValorFiltro, par_oTxtCod, par_oTxtDesc, par_cFiltroExtra) [PREFERIDO — helper em FormBase.prg] OU Pattern A manual [FALLBACK — ver migration-patterns.md #166]. Pattern B defeitos: (1) Init WHERE exato + LIKE prefixo; se ambos 0 rows, FECHA cursor -> picker vazio; (2) DataSession=1 vs pai DataSession=2 -> USED() pos-Show retorna .F. no caller -> selecao perdida; (3) cursor scope isolado."
+        Add-Correcao -Tipo "WARN-166-FORMBUSCAAUXILIAR-PATTERN-B" -Linha $susp.Line `
+            -Original $susp.Snippet `
+            -Corrigido "(REVISAR MANUAL — auto-mutate inseguro)" `
+            -Descricao "Pattern #166 WARNING: CREATEOBJECT('FormBuscaAuxiliar', <args>) eh Pattern B defeituoso. $sugestao Ref canonico: Formsigrecrf.prg (task066), Formsigrecog.prg (task059 pos-Erro114). Origem: Erro114 (2026-08-13, Formsigrecog — digita 'M' em vendedor+Enter, picker abre vazio pois WHERE codigos='M' e LIKE 'M%' ambos 0 rows)."
+    }
+
+    if ($suspects.Count -gt 0) {
+        Write-Host "[Pattern #166] $($suspects.Count) chamada(s) Pattern B de FormBuscaAuxiliar - REVISAR (refactor para AbrirLookupCanonico ou Pattern A)" -ForegroundColor Yellow
+    }
+
+    return $Linhas
+}
+
+#==============================================================================
+# Pattern #167: Corrigir-ReportPrepararDadosEmptyCursorGuard
+# AUTO-MUTATE: injeta guard `IF RECCOUNT("<cursor>") = 0 / this_cMensagemErro =
+# "Nenhum registro encontrado..." / EXIT / ENDIF` antes de `loc_l<flag> = .T. /
+# EXIT` no final de PrepararDados (ou Processar/MontarDados) em BOs REPORT.
+#
+# Motivo: SQLEXEC retorna sucesso (1) mesmo quando query retorna 0 rows. Sem
+# guard, PrepararDados retorna .T. com cursor vazio, Visualizar chama
+# REPORT FORM sobre cursor vazio -> preview em branco SEM mensagem para o
+# usuario (que esperava "Nenhum registro encontrado com os filtros informados").
+#
+# Detector:
+#   1. Guard: BO herda `RelatorioBase`
+#   2. Encontra bloco final `SELECT <cursor> / [INDEX ON | SET ORDER | GO TOP] /
+#      loc_l<flag> = .T. / EXIT` dentro de PrepararDados/Processar/MontarDados
+#   3. Se ja tem `IF RECCOUNT(<cursor>)` no janela de 15 linhas antes: skip
+#   4. Se cursor eh literal (nao expressao dinamica com var): injetar guard
+#
+# Auto-fix SEGURO porque:
+#   (a) Nome do cursor eh detectado do proprio codigo (SELECT literal)
+#   (b) Mensagem eh generica ("Nenhum registro encontrado...")
+#   (c) Comportamento resultante eh amigavel: usuario ve dialog em vez de
+#      preview em branco
+#   (d) Se cursor NAO estiver vazio, RECCOUNT>0 e guard nao dispara — zero
+#      impacto no fluxo happy-path
+#
+# Origem: Erro115 (2026-08-13, Formsigrecop "Comissoes por Recebimento").
+# Sweep 2026-08-13 detectou 67 BOs REPORT sem RECCOUNT guard (25 tinham). O
+# Pattern #164 (WARNING-only) documentava o problema mas nao consertava.
+#==============================================================================
+function Corrigir-ReportPrepararDadosEmptyCursorGuard {
+    param([string[]]$Linhas)
+
+    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
+
+    $conteudo = $Linhas -join "`n"
+    if ($conteudo -notmatch '(?i)DEFINE\s+CLASS\s+\w+\s+AS\s+RelatorioBase\b') { return $Linhas }
+
+    $rxProc     = [regex]'(?i)^\s*(?:PROTECTED\s+)?(?:PROCEDURE|FUNCTION)\s+(\w+)\b'
+    $rxEndProc  = [regex]'(?i)^\s*(?:ENDPROC|ENDFUNC)\s*$'
+    $rxFlagTrue = [regex]'^(\s+)(loc_l\w+)\s*=\s*\.T\.\s*$'
+    # Literal SELECT: `SELECT alias_name` (nao `SELECT (var)` nem `SELECT * FROM ...`)
+    $rxSelectLit = [regex]'(?i)^\s*SELECT\s+([A-Za-z_][A-Za-z0-9_]*)\s*$'
+    # RECCOUNT check ja existente
+    $rxReccount  = [regex]'(?i)\bRECCOUNT\s*\('
+
+    $currentProc = ""
+    $inTarget    = $false
+    $newLinhas   = @()
+    $injectedCount = 0
+    # Rastreia posicao (indice em $Linhas) dos flag=.T. ja tratados para evitar loop
+    $treatedFlagLines = @{}
+
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        $linha = $Linhas[$i]
+        $newLinhas += $linha
+
+        $mProc = $rxProc.Match($linha)
+        if ($mProc.Success) {
+            $currentProc = $mProc.Groups[1].Value
+            $inTarget = ($currentProc -match '(?i)^(PrepararDados|Processar|MontarDados)$')
+            continue
+        }
+        if ($rxEndProc.IsMatch($linha)) {
+            $currentProc = ""
+            $inTarget = $false
+            continue
+        }
+
+        if (-not $inTarget) { continue }
+        if ($treatedFlagLines.ContainsKey($i)) { continue }
+
+        # Detecta `loc_l<flag> = .T.` (sozinho, sem contexto IF/ELSE ao redor)
+        $mFlag = $rxFlagTrue.Match($linha)
+        if (-not $mFlag.Success) { continue }
+
+        # Guard 1: proxima linha nao-vazia NAO pode ser ELSE/ENDIF (indicando que
+        # ja estamos dentro de bloco condicional que trata sucesso)
+        $j = $i + 1
+        while ($j -lt $Linhas.Count -and $Linhas[$j].Trim() -eq "") { $j++ }
+        if ($j -lt $Linhas.Count) {
+            $nextTrim = $Linhas[$j].Trim().ToUpper()
+            if ($nextTrim -eq "ELSE" -or $nextTrim -like "ELSEIF*") { continue }
+        }
+
+        # Guard 2: linha anterior nao-vazia NAO pode ser ENDIF (ja tratado por IF)
+        # nem ELSE (dentro de else de IF que ja checa RECCOUNT)
+        $prev = $i - 1
+        while ($prev -ge 0 -and $Linhas[$prev].Trim() -eq "") { $prev-- }
+        if ($prev -ge 0) {
+            $prevTrim = $Linhas[$prev].Trim().ToUpper()
+            if ($prevTrim -eq "ELSE") { continue }
+        }
+
+        # Guard 3: RECCOUNT check ja existente em ate 15 linhas antes
+        $hasReccount = $false
+        for ($k = $i - 1; $k -ge [Math]::Max(0, $i - 15); $k--) {
+            if ($rxProc.IsMatch($Linhas[$k])) { break }
+            if ($rxReccount.IsMatch($Linhas[$k])) { $hasReccount = $true; break }
+        }
+        if ($hasReccount) { continue }
+
+        # Achar cursor literal em ate 20 linhas antes (SELECT <name>)
+        $cursorName = ""
+        for ($k = $i - 1; $k -ge [Math]::Max(0, $i - 20); $k--) {
+            if ($rxProc.IsMatch($Linhas[$k])) { break }
+            $mSel = $rxSelectLit.Match($Linhas[$k])
+            if ($mSel.Success) {
+                $cand = $mSel.Groups[1].Value
+                if ($cand -match '(?i)^(TOP|DISTINCT|ALL|FROM)$') { continue }
+                $cursorName = $cand
+                break
+            }
+        }
+
+        if ([string]::IsNullOrEmpty($cursorName)) { continue }
+
+        # Envolve `loc_l<flag> = .T.` em IF/ELSE: se RECCOUNT=0, seta mensagem+.F.
+        # Funciona tanto dentro de DO WHILE quanto direto no TRY (nao usa EXIT)
+        $indent = $mFlag.Groups[1].Value
+        $flagName = $mFlag.Groups[2].Value
+
+        # Remove a linha ja adicionada (era `loc_l<flag> = .T.`) e re-injeta em IF/ELSE
+        $lastIdx = $newLinhas.Count - 1
+        $newLinhas = $newLinhas[0..($lastIdx - 1)]
+
+        $guardLines = @(
+            "${indent}*-- Cursor-empty guard (Pattern #167 auto): sem esse guard, ${flagName}=.T."
+            "${indent}*   com $cursorName vazio faria REPORT FORM renderizar preview branco"
+            "${indent}*   sem mensagem para o usuario (BtnVisualizarClick espera .F.+MsgErro)."
+            "${indent}IF RECCOUNT(""$cursorName"") = 0"
+            "${indent}    THIS.this_cMensagemErro = ""Nenhum registro encontrado com os filtros informados."""
+            "${indent}    $flagName = .F."
+            "${indent}ELSE"
+            "${indent}    $flagName = .T."
+            "${indent}ENDIF"
+        )
+        $newLinhas += $guardLines
+        $treatedFlagLines[$i] = $true
+
+        Add-Correcao -Tipo "AUTO-167-RECCOUNT-GUARD-INJETADO" -Linha ($i + 1) `
+            -Original "$($linha.Trim()) (cursor=$cursorName)" `
+            -Corrigido "Envolvido em IF RECCOUNT(""$cursorName"")=0 / this_cMensagemErro+$flagName=.F. / ELSE / $flagName=.T. / ENDIF" `
+            -Descricao "Pattern #167: em $currentProc, injetado guard de cursor vazio para $cursorName. Sem esse guard, PrepararDados retorna .T. com cursor vazio -> REPORT FORM preview branco sem mensagem. Origem: Erro115 (2026-08-13, sigrecopBO)."
+
+        Write-Host "[Pattern #167] Linha $($i + 1): $currentProc - envolvido $flagName=.T. em IF RECCOUNT(""$cursorName"")=0/ELSE" -ForegroundColor Green
+        $injectedCount++
+    }
+
+    if ($injectedCount -gt 0) {
+        return $newLinhas
+    }
+    return $Linhas
+}
+
+function Corrigir-ReportFormBackColorFlat {
+    param([string[]]$Linhas)
+
+    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
+
+    $conteudo = $Linhas -join "`n"
+
+    # Guard 1: arquivo eh Form*.prg herdando de FormBase
+    if ($conteudo -notmatch '(?i)DEFINE\s+CLASS\s+Form\w+\s+AS\s+FormBase\b') {
+        return $Linhas
+    }
+
+    # Guard 2: se ja NAO tem `BackColor = RGB(192, 192, 192)` no arquivo, nao faz nada
+    if ($conteudo -notmatch '(?i)BackColor\s*=\s*RGB\(\s*192\s*,\s*192\s*,\s*192\s*\)') {
+        # Ainda emite warning se fundo_cad_1003.jpg ausente (case (b) isolado)
+        if ($conteudo -notmatch '(?i)fundo_cad_1003\.jpg') {
+            Write-Host "[Pattern #168] AVISO: forma REPORT sem 'fundo_cad_1003.jpg' — considerar injetar THIS.Picture no InicializarForm" -ForegroundColor Yellow
+            Add-Correcao -Tipo "WARN-168-MISSING-PICTURE" -Linha 0 `
+                -Original "(sem fundo_cad_1003.jpg no arquivo)" `
+                -Corrigido "(REVISAR MANUAL - injetar THIS.Picture no InicializarForm)" `
+                -Descricao "Pattern #168 WARN: form REPORT canonico usa THIS.Picture = gc_4c_CaminhoIcones + 'fundo_cad_1003.jpg' no InicializarForm(). Sem essa injecao form abre com fundo default. Referencia: Formsigrecrf.prg:91."
+        }
+        return $Linhas
+    }
+
+    # Localizar a primeira PROCEDURE/PROTECTED PROCEDURE — BackColor a nivel de classe DEVE estar antes
+    $primeiraProcIdx = -1
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        if ($Linhas[$i] -match '(?i)^\s*(?:PROTECTED\s+|HIDDEN\s+)?PROCEDURE\s+\w+') {
+            $primeiraProcIdx = $i
+            break
+        }
+    }
+    if ($primeiraProcIdx -lt 0) { return $Linhas }
+
+    # Regex: BackColor no nivel de classe (indent baixo, sem `.` no prefixo, sem `Disabled`)
+    # Aceita 0-7 espacos de indent (class-level tipico eh 4 espacos)
+    # Rejeita: `.BackColor`, `.DisabledBackColor`, indent >= 8
+    $rxBackColor = [regex]'(?i)^(\s{0,7})BackColor\s*=\s*RGB\(\s*192\s*,\s*192\s*,\s*192\s*\)\s*$'
+
+    $novoLinhas = @()
+    $removed = $false
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        $linha = $Linhas[$i]
+
+        # Se estamos dentro do bloco de propriedades (antes da primeira PROCEDURE) e linha bate
+        if ($i -lt $primeiraProcIdx -and $rxBackColor.IsMatch($linha)) {
+            $removed = $true
+            Add-Correcao -Tipo "AUTO-168-FORM-BACKCOLOR-REMOVIDO" -Linha ($i + 1) `
+                -Original $linha.Trim() `
+                -Corrigido "(linha removida)" `
+                -Descricao "Pattern #168: Form REPORT com BackColor = RGB(192,192,192) no DEFINE CLASS removido. Canonico herda default do FormBase e sobrepoe fundo textura via THIS.Picture no InicializarForm. Origem: Erro117 (2026-08-18, Formsigredtv 'Demonstrativo')."
+            Write-Host "[Pattern #168] Linha $($i + 1): BackColor = RGB(192,192,192) removida (nivel de classe)" -ForegroundColor Green
+            continue  # nao adiciona a linha
+        }
+
+        $novoLinhas += $linha
+    }
+
+    if ($removed) {
+        # Warning se fundo_cad_1003.jpg tambem ausente (caso (b) do bug)
+        if ($conteudo -notmatch '(?i)fundo_cad_1003\.jpg') {
+            Write-Host "[Pattern #168] AVISO: BackColor removida mas 'fundo_cad_1003.jpg' AUSENTE — injetar THIS.Picture manualmente no InicializarForm" -ForegroundColor Yellow
+            Add-Correcao -Tipo "WARN-168-MISSING-PICTURE" -Linha 0 `
+                -Original "(sem fundo_cad_1003.jpg apos remover BackColor)" `
+                -Corrigido "(REVISAR MANUAL - injetar THIS.Picture no InicializarForm antes de AddObject)" `
+                -Descricao "Pattern #168 WARN: apos remover BackColor RGB(192,192,192), form REPORT canonico ainda precisa de THIS.Picture = gc_4c_CaminhoIcones + 'fundo_cad_1003.jpg' no InicializarForm(). Referencia: Formsigrecrf.prg:91."
+        }
+        return $novoLinhas
+    }
+
+    return $Linhas
+}
+
+function Corrigir-RelatorioBaseTrioMetodosAusentes {
+    param([string[]]$Linhas)
+
+    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
+
+    $conteudo = $Linhas -join "`n"
+
+    # Guard: apenas BOs que herdam de RelatorioBase
+    if ($conteudo -notmatch '(?i)DEFINE\s+CLASS\s+(\w+)\s+AS\s+RelatorioBase\b') {
+        return $Linhas
+    }
+    $className = $matches[1]
+
+    # --- FASE 1: Normalizar this_cArquivoRelatorio (nome-base canonico) ---
+    # ERRADO (variantes):
+    #   this_cArquivoRelatorio = gc_4c_CaminhoReports + "relsigrectc.frx"
+    #   this_cArquivoRelatorio = gc_4c_CaminhoReports + "SigReCtc.frx"
+    #   this_cArquivoRelatorio = "SigReCtc.frx"
+    # CORRETO:
+    #   this_cArquivoRelatorio = "SigReCtc"  (nome-base do FRX legado, sem path, sem ext)
+    $rxArqInline = [regex]'(?i)^(\s*(?:THIS\.)?this_cArquivoRelatorio\s*=\s*)gc_4c_CaminhoReports\s*\+\s*"([^"]+?)(?:\.frx)?"'
+    $rxArqExt    = [regex]'(?i)^(\s*(?:THIS\.)?this_cArquivoRelatorio\s*=\s*)"([^"\\/:]+?)\.frx"'
+
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        $linha = $Linhas[$i]
+        if ($linha -match '^\s*\*') { continue }  # skip comentarios
+
+        $mArq = $rxArqInline.Match($linha)
+        if ($mArq.Success) {
+            $prefix = $mArq.Groups[1].Value
+            $base   = $mArq.Groups[2].Value
+            # Strip leading "rel" se presente (bug tipico: "relsigrectc" -> deveria ser "SigReCtc")
+            # Nao vamos alterar case aqui — deixar como veio (Windows FS eh case-insensitive)
+            # Apenas removemos path prefix e .frx
+            $novaLinha = $prefix + '"' + $base + '"'
+            $Linhas[$i] = $novaLinha
+            Add-Correcao -Tipo "AUTO-167-ARQREL-NORMALIZADO" -Linha ($i + 1) `
+                -Original $linha.Trim() `
+                -Corrigido $novaLinha.Trim() `
+                -Descricao "Pattern #167: this_cArquivoRelatorio normalizado para nome-base canonico (sem gc_4c_CaminhoReports prefix, sem .frx). REPORT FORM concatena o prefixo dentro do metodo. Ver sigrecrfBO."
+            Write-Host "[Pattern #167] Linha $($i + 1): this_cArquivoRelatorio normalizado para `"$base`"" -ForegroundColor Green
+            continue
+        }
+
+        $mArq2 = $rxArqExt.Match($linha)
+        if ($mArq2.Success) {
+            $prefix = $mArq2.Groups[1].Value
+            $base   = $mArq2.Groups[2].Value
+            $novaLinha = $prefix + '"' + $base + '"'
+            $Linhas[$i] = $novaLinha
+            Add-Correcao -Tipo "AUTO-167-ARQREL-STRIP-FRX" -Linha ($i + 1) `
+                -Original $linha.Trim() `
+                -Corrigido $novaLinha.Trim() `
+                -Descricao "Pattern #167: this_cArquivoRelatorio strip .frx (canonical eh nome-base sem extensao). Ver sigrecrfBO."
+            Write-Host "[Pattern #167] Linha $($i + 1): strip .frx" -ForegroundColor Green
+        }
+    }
+
+    # --- FASE 2: Injetar metodos ausentes do trio Visualizar/Imprimir/GerarExcel ---
+    # Refresh conteudo apos Fase 1
+    $conteudo = $Linhas -join "`n"
+
+    $trio = @("Visualizar", "Imprimir", "GerarExcel")
+    $ausentes = @()
+    foreach ($metodo in $trio) {
+        $rxMetodo = [regex]"(?im)^\s*PROCEDURE\s+$metodo\s*\("
+        if (-not $rxMetodo.IsMatch($conteudo)) {
+            $ausentes += $metodo
+        }
+    }
+
+    if ($ausentes.Count -eq 0) { return $Linhas }  # nada a fazer
+
+    # Deriva nome-base para o filename XLS (usado em GerarExcel)
+    # Preferir o proprio nome da classe strip "BO" — ex: sigrectcBO -> SigReCtc
+    $baseExcel = $className -replace '(?i)BO$', ''
+    # Se todo lower-case, fica lower — nao tentar re-caser (Windows FS case-insensitive)
+
+    # Localizar o ENDDEFINE (ultima ocorrencia, no fim do arquivo)
+    $endDefineIdx = -1
+    for ($i = $Linhas.Count - 1; $i -ge 0; $i--) {
+        if ($Linhas[$i] -match '(?i)^\s*ENDDEFINE\s*$') {
+            $endDefineIdx = $i
+            break
+        }
+    }
+    if ($endDefineIdx -lt 0) {
+        Write-Host "[Pattern #167] AVISO: ENDDEFINE nao encontrado — nao injetando metodos" -ForegroundColor Yellow
+        return $Linhas
+    }
+
+    # Construir os stubs
+    $stubs = @()
+    $stubs += ""
+
+    foreach ($metodo in $ausentes) {
+        $stubs += "    *--------------------------------------------------------------------------"
+        switch ($metodo) {
+            "Visualizar" {
+                $stubs += "    * Visualizar - Exibe relatorio em preview na tela (Pattern #167 auto)"
+                $stubs += "    *--------------------------------------------------------------------------"
+                $stubs += "    PROCEDURE Visualizar()"
+                $stubs += "        LOCAL loc_lSucesso, loc_oErro"
+                $stubs += "        loc_lSucesso = .F."
+                $stubs += "        TRY"
+                $stubs += "            IF THIS.PrepararDados()"
+                $stubs += "                IF USED(THIS.this_cCursorDados) AND RECCOUNT(THIS.this_cCursorDados) > 0"
+                $stubs += "                    SELECT (THIS.this_cCursorDados)"
+                $stubs += "                    GO TOP"
+                $stubs += "                    REPORT FORM (gc_4c_CaminhoReports + THIS.this_cArquivoRelatorio) ;"
+                $stubs += "                        PREVIEW NOCONSOLE"
+                $stubs += "                    loc_lSucesso = .T."
+                $stubs += "                ELSE"
+                $stubs += "                    THIS.this_cMensagemErro = `"Nenhum registro encontrado com os filtros informados.`""
+                $stubs += "                ENDIF"
+                $stubs += "            ENDIF"
+                $stubs += "        CATCH TO loc_oErro"
+                $stubs += "            MsgErro(loc_oErro.Message, `"Visualizar`")"
+                $stubs += "            THIS.this_cMensagemErro = loc_oErro.Message"
+                $stubs += "        ENDTRY"
+                $stubs += "        RETURN loc_lSucesso"
+                $stubs += "    ENDPROC"
+            }
+            "Imprimir" {
+                $stubs += "    * Imprimir - Imprime relatorio com dialogo de impressora (Pattern #167 auto)"
+                $stubs += "    *--------------------------------------------------------------------------"
+                $stubs += "    PROCEDURE Imprimir()"
+                $stubs += "        LOCAL loc_lSucesso, loc_oErro"
+                $stubs += "        loc_lSucesso = .F."
+                $stubs += "        TRY"
+                $stubs += "            IF THIS.PrepararDados()"
+                $stubs += "                IF USED(THIS.this_cCursorDados) AND RECCOUNT(THIS.this_cCursorDados) > 0"
+                $stubs += "                    SELECT (THIS.this_cCursorDados)"
+                $stubs += "                    GO TOP"
+                $stubs += "                    REPORT FORM (gc_4c_CaminhoReports + THIS.this_cArquivoRelatorio) ;"
+                $stubs += "                        TO PRINTER PROMPT NOCONSOLE"
+                $stubs += "                    loc_lSucesso = .T."
+                $stubs += "                ELSE"
+                $stubs += "                    THIS.this_cMensagemErro = `"Nenhum registro encontrado com os filtros informados.`""
+                $stubs += "                ENDIF"
+                $stubs += "            ENDIF"
+                $stubs += "        CATCH TO loc_oErro"
+                $stubs += "            MsgErro(loc_oErro.Message, `"Imprimir`")"
+                $stubs += "            THIS.this_cMensagemErro = loc_oErro.Message"
+                $stubs += "        ENDTRY"
+                $stubs += "        RETURN loc_lSucesso"
+                $stubs += "    ENDPROC"
+            }
+            "GerarExcel" {
+                $stubs += "    * GerarExcel - Exporta relatorio para arquivo ASCII (Excel) (Pattern #167 auto)"
+                $stubs += "    *--------------------------------------------------------------------------"
+                $stubs += "    PROCEDURE GerarExcel()"
+                $stubs += "        LOCAL loc_lSucesso, loc_cArquivo, loc_oErro"
+                $stubs += "        loc_lSucesso = .F."
+                $stubs += "        TRY"
+                $stubs += "            IF THIS.PrepararDados()"
+                $stubs += "                IF USED(THIS.this_cCursorDados) AND RECCOUNT(THIS.this_cCursorDados) > 0"
+                $stubs += "                    SELECT (THIS.this_cCursorDados)"
+                $stubs += "                    GO TOP"
+                $stubs += "                    loc_cArquivo = SYS(5) + CURDIR() + `"$baseExcel`_`" + ;"
+                $stubs += "                                   STRTRAN(DTOC(DATE()), `"/`", `"`") + `".xls`""
+                $stubs += "                    REPORT FORM (gc_4c_CaminhoReports + THIS.this_cArquivoRelatorio) ;"
+                $stubs += "                        TO FILE (loc_cArquivo) NOPREVIEW NOCONSOLE ASCII"
+                $stubs += "                    IF FILE(loc_cArquivo)"
+                $stubs += "                        MsgInfo(`"Arquivo gerado:`" + CHR(13) + loc_cArquivo, `"Excel`")"
+                $stubs += "                    ENDIF"
+                $stubs += "                    loc_lSucesso = .T."
+                $stubs += "                ELSE"
+                $stubs += "                    THIS.this_cMensagemErro = `"Nenhum registro encontrado com os filtros informados.`""
+                $stubs += "                ENDIF"
+                $stubs += "            ENDIF"
+                $stubs += "        CATCH TO loc_oErro"
+                $stubs += "            MsgErro(loc_oErro.Message, `"GerarExcel`")"
+                $stubs += "            THIS.this_cMensagemErro = loc_oErro.Message"
+                $stubs += "        ENDTRY"
+                $stubs += "        RETURN loc_lSucesso"
+                $stubs += "    ENDPROC"
+            }
+        }
+        $stubs += ""
+    }
+
+    # Inserir stubs ANTES do ENDDEFINE
+    $novoLinhas = @()
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        if ($i -eq $endDefineIdx) {
+            $novoLinhas += $stubs
+        }
+        $novoLinhas += $Linhas[$i]
+    }
+
+    Add-Correcao -Tipo "AUTO-167-TRIO-INJETADO" -Linha ($endDefineIdx + 1) `
+        -Original "$className AS RelatorioBase (faltando: $($ausentes -join ', '))" `
+        -Corrigido "Injetado $($ausentes.Count) metodo(s) canonico(s) antes do ENDDEFINE" `
+        -Descricao "Pattern #167: RelatorioBase nao provem Visualizar/Imprimir/GerarExcel — injetado stub canonico (sigrecrfBO template) para cada metodo ausente. Sem esses metodos, BtnVisualizarClick/BtnImprimirClick/BtnExcelClick do form disparam 'Property VISUALIZAR/IMPRIMIR/GERAREXCEL is not found'. Origem: Erro116 (2026-08-18, sigrectcBO)."
+
+    Write-Host "[Pattern #167] $className : injetado $($ausentes.Count) metodo(s) [$($ausentes -join ', ')] antes do ENDDEFINE" -ForegroundColor Green
+
+    return $novoLinhas
+}
+
 function Invoke-CorrecaoAutomatica {
     param(
         [string]$Arquivo,
@@ -10506,6 +11379,13 @@ function Invoke-CorrecaoAutomatica {
     $linhas = Corrigir-StrEmColunaCharDoCursor -Linhas $linhas
     $linhas = Corrigir-InputMaskHashEmTextBoxChar -Linhas $linhas
     $linhas = Corrigir-CursorColunaInexistente -Linhas $linhas
+    $linhas = Corrigir-SigMvCempsJoinInvalido -Linhas $linhas
+    $linhas = Corrigir-PrepararDadosUncondSuccessFlag -Linhas $linhas
+    $linhas = Corrigir-ReportPageFrameTopOffsetWarning -Linhas $linhas
+    $linhas = Corrigir-FormBuscaAuxiliarPatternBWarning -Linhas $linhas
+    $linhas = Corrigir-ReportPrepararDadosEmptyCursorGuard -Linhas $linhas
+    $linhas = Corrigir-RelatorioBaseTrioMetodosAusentes -Linhas $linhas
+    $linhas = Corrigir-ReportFormBackColorFlat -Linhas $linhas
 
     # Salva arquivo corrigido em UTF-8 SEM BOM.
     # - VFP9 nao suporta BOM (por isso removemos no read com bytes[3..])

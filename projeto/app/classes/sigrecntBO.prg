@@ -51,8 +51,9 @@ DEFINE CLASS sigrecntBO AS RelatorioBase
         loc_lSucesso = .F.
         TRY
             DO WHILE .T.
-                loc_cSQL = "SELECT TOP 1 GrPadVens FROM SigCdPam " + ;
-                           "WHERE Emps = " + EscaparSQL(go_4c_Sistema.cCodEmpresa)
+                *-- Erro106: SigCdPam eh tabela de parametros single-row (system-wide),
+                *-- nao tem coluna Emps. Legado usa `SELECT GrPadVens FROM SigCdPam` sem WHERE.
+                loc_cSQL = "SELECT TOP 1 GrPadVens FROM SigCdPam"
                 loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_LocalPam")
                 IF loc_nResult > 0
                     SELECT cursor_4c_LocalPam
@@ -368,7 +369,15 @@ DEFINE CLASS sigrecntBO AS RelatorioBase
                 ENDCASE
                 GO TOP
 
-                loc_lSucesso = .T.
+                *-- Cursor-empty guard (Pattern #167 auto): sem esse guard, loc_lSucesso=.T.
+                *   com crRel vazio faria REPORT FORM renderizar preview branco
+                *   sem mensagem para o usuario (BtnVisualizarClick espera .F.+MsgErro).
+                IF RECCOUNT("crRel") = 0
+                    THIS.this_cMensagemErro = "Nenhum registro encontrado com os filtros informados."
+                    loc_lSucesso = .F.
+                ELSE
+                    loc_lSucesso = .T.
+                ENDIF
                 EXIT
             ENDDO
         CATCH TO loc_oErro
