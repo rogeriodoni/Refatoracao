@@ -10920,6 +10920,59 @@ function Corrigir-ReportPrepararDadosEmptyCursorGuard {
     return $Linhas
 }
 
+function Corrigir-UsuarPublicNaoDeclarado {
+    param([string[]]$Linhas)
+
+    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
+
+    $conteudo = $Linhas -join "`n"
+
+    # Guard 1: file eh Form*.prg com AS FormBase
+    if ($conteudo -notmatch '(?i)DEFINE\s+CLASS\s+Form\w+\s+AS\s+FormBase\b') {
+        return $Linhas
+    }
+
+    # Guard 2: form usa AddObject com uma das classes legado wrapper
+    $rxAddObj = [regex]'(?i)AddObject\s*\(\s*[^,]+,\s*"(clsconta|clstitulo|clsproduto|clsplano)"\s*\)'
+    if (-not $rxAddObj.IsMatch($conteudo)) {
+        return $Linhas
+    }
+
+    # Guard 3: config.prg NAO declara Usuar como PUBLIC (nem faz assignment Usuar = ...)
+    $configPath = "C:\4c\projeto\app\start\config.prg"
+    if (-not (Test-Path $configPath)) { return $Linhas }
+
+    $configContent = Get-Content -Path $configPath -Raw -Encoding UTF8 -ErrorAction SilentlyContinue
+    if ($configContent) {
+        # Aceita: `PUBLIC Usuar` (case-insensitive, comma-separated list OK)
+        # OU: `Usuar = <algo>` (assignment)
+        if ($configContent -match '(?im)^\s*PUBLIC\s+[^*]*\bUsuar\b' -or `
+            $configContent -match '(?im)^\s*Usuar\s*=') {
+            return $Linhas  # config.prg ja declara, skip
+        }
+    }
+
+    # Localiza a linha do AddObject para reportar
+    $linhaRef = 0
+    $classeRef = ""
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        $m = $rxAddObj.Match($Linhas[$i])
+        if ($m.Success) {
+            $linhaRef = $i + 1
+            $classeRef = $m.Groups[1].Value
+            break
+        }
+    }
+
+    Write-Host "[Pattern #172] Linha $linhaRef : form usa $classeRef mas config.prg nao declara PUBLIC Usuar — sigacess funcoes falharao com Usuar undefined" -ForegroundColor Yellow
+    Add-Correcao -Tipo "WARN-172-USUAR-NAO-DECLARADO" -Linha $linhaRef `
+        -Original "AddObject(_, `"$classeRef`") em Form*.prg mas Usuar undefined em config.prg" `
+        -Corrigido "(REVISAR MANUAL - adicionar em config.prg antes de CarregarSeExistir(sigacess.PRG): PUBLIC Usuar, Comando, gcTipoUsuario / Usuar = gc_4c_UsuarioLogado / Comando = '' / gcTipoUsuario = '')" `
+        -Descricao "Pattern #172 WARN: $classeRef eh classe legado Fortyus. sigacess.PRG usa Usuar como fallback: `pUsu = Upper(Iif(Type([pUsu]) = [C], pUsu, Usuar))`. Se Usuar undefined, VFP9 dispara 'Variable USUAR is not found' que cascateia como 'Error instantiating the object GET_GRUPOVEN' (MESMA msg do Erro120/Pattern #171 mas causa raiz diferente). Fix sistemico em config.prg antes de carregar sigacess.PRG (ordem critica): declarar PUBLIC Usuar/Comando/gcTipoUsuario. Legacy sig.PRG:3 declara Public Usuar, Comando, gcLogoRel, gcCabRel, _Empr (padrao canonico). Dump binario VCTs mostra Usuar 2 refs. NAO muta form nem config.prg. Complementa Pattern #171. Origem: Erro121 (2026-08-19, FormCliente linha 240)."
+
+    return $Linhas  # WARNING-only, nao muta
+}
+
 function Corrigir-SigacessPrgNaoCarregado {
     param([string[]]$Linhas)
 
@@ -11595,6 +11648,7 @@ function Invoke-CorrecaoAutomatica {
     $linhas = Corrigir-CrSigCdPamNaoPopulado -Linhas $linhas
     $linhas = Corrigir-GcCaminhoBasePlusFramework -Linhas $linhas
     $linhas = Corrigir-SigacessPrgNaoCarregado -Linhas $linhas
+    $linhas = Corrigir-UsuarPublicNaoDeclarado -Linhas $linhas
 
     # Salva arquivo corrigido em UTF-8 SEM BOM.
     # - VFP9 nao suporta BOM (por isso removemos no read com bytes[3..])
