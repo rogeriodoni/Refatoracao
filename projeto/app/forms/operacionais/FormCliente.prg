@@ -78,8 +78,8 @@ DEFINE CLASS FormCliente AS FormBase
             *-- Instanciar Business Object (cliBO)
             THIS.this_oBusinessObject = CREATEOBJECT("cliBO")
 
-            *-- Fundo de tela
-            THIS.Picture = gc_4c_CaminhoBase + "Framework\imagens\new_background.jpg"
+            *-- Fundo de tela (imagem legado Fortyus em Framework\imagens\)
+            THIS.Picture = gc_4c_CaminhoFramework + "imagens\new_background.jpg"
 
             *-- Normalizar CPF (remover pontuacao para verificacao)
             loc_cCpf = STRTRAN(STRTRAN(STRTRAN(ALLTRIM(THIS.this_cCpf), ".", ""), "-", ""), "/", "")
@@ -216,9 +216,12 @@ DEFINE CLASS FormCliente AS FormBase
     PROTECTED PROCEDURE ConfigurarContaCls
     *============================================================
         LOCAL loc_oErro, loc_cVcx1, loc_cVcx2, loc_cVcx3
-        loc_cVcx1 = gc_4c_CaminhoBase + "Framework\framework.vcx"
-        loc_cVcx2 = gc_4c_CaminhoBase + "Framework\classobj.vcx"
-        loc_cVcx3 = gc_4c_CaminhoBase + "Framework\classresp.vcx"
+        *-- gc_4c_CaminhoFramework aponta para C:\4c\Framework\ (config.prg:67)
+        *-- Path anterior (gc_4c_CaminhoBase + "Framework\...") resolvia incorretamente
+        *-- para C:\4c\projeto\app\start\Framework\ (inexistente).
+        loc_cVcx1 = gc_4c_CaminhoFramework + "framework.vcx"
+        loc_cVcx2 = gc_4c_CaminhoFramework + "classobj.vcx"
+        loc_cVcx3 = gc_4c_CaminhoFramework + "classresp.vcx"
 
         TRY
             IF FILE(loc_cVcx1)

@@ -42,7 +42,7 @@ DEFINE CLASS FormSIGBLCTA AS FormBase
         ENDIF
 
         TRY
-            THIS.Picture = gc_4c_CaminhoBase + "Framework\imagens\fundo_cadastro.jpg"
+            THIS.Picture = gc_4c_CaminhoFramework + "imagens\fundo_cadastro.jpg"
             THIS.ConfigurarCabecalho()
             THIS.ConfigurarCampos()
             THIS.ConfigurarOpcoes()
@@ -404,7 +404,7 @@ DEFINE CLASS FormSIGBLCTA AS FormBase
             .Left     = 347
             .Height   = 75
             .Width    = 75
-            .Picture  = gc_4c_CaminhoBase + "Framework\imagens\geral_processar_60.jpg"
+            .Picture  = gc_4c_CaminhoFramework + "imagens\geral_processar_60.jpg"
             .Caption  = "\<Processar"
             .Themes           = .T.
             .Visible  = .T.
@@ -417,7 +417,7 @@ DEFINE CLASS FormSIGBLCTA AS FormBase
             .Left     = 423
             .Height   = 75
             .Width    = 75
-            .Picture  = gc_4c_CaminhoBase + "Framework\imagens\cadastro_sair_60.jpg"
+            .Picture  = gc_4c_CaminhoFramework + "imagens\cadastro_sair_60.jpg"
             .Cancel   = .T.
             .Caption  = "Encerrar"
             .Themes           = .T.
@@ -686,7 +686,7 @@ DEFINE CLASS FormSIGBLCTA AS FormBase
 
             IF loc_lProsseguir
                 *-- Exibir relatorio preview
-                loc_lcRelPath = gc_4c_CaminhoBase + "Framework\SigBlCta"
+                loc_lcRelPath = gc_4c_CaminhoFramework + "SigBlCta"
                 REPORT FORM &loc_lcRelPath PREVIEW
 
                 *-- Confirmar atualizacao de situacoes

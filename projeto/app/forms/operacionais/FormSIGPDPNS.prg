@@ -70,7 +70,7 @@ DEFINE CLASS FormSIGPDPNS AS FormBase
             THIS.this_oBusinessObject.this_cKey = ALLTRIM(THIS.lpKey)
 
             *-- Fundo do form (equivalente a Picture = new_background.jpg do legado)
-            THIS.Picture = gc_4c_CaminhoBase + "Framework\imagens\new_background.jpg"
+            THIS.Picture = gc_4c_CaminhoFramework + "imagens\new_background.jpg"
 
             *-- Verificar conexao com banco (exceto em modo de teste/validacao UI)
             IF TYPE("gb_4c_ModoTeste") = "L" AND gb_4c_ModoTeste

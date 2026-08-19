@@ -67,7 +67,7 @@ DEFINE CLASS sigredocBO AS RelatorioBase
     PROCEDURE Init()
         THIS.this_cTabela     = "SigMvCab"
         THIS.this_cCampoChave = "Numes"
-        THIS.this_cArquivoFRX = gc_4c_CaminhoBase + "Framework\SigReDoc.frx"
+        THIS.this_cArquivoFRX = gc_4c_CaminhoFramework + "SigReDoc.frx"
         RETURN DODEFAULT()
     ENDPROC
 

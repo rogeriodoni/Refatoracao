@@ -10920,6 +10920,49 @@ function Corrigir-ReportPrepararDadosEmptyCursorGuard {
     return $Linhas
 }
 
+function Corrigir-GcCaminhoBasePlusFramework {
+    param([string[]]$Linhas)
+
+    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
+
+    # Regex: gc_4c_CaminhoBase + "Framework\..." -> gc_4c_CaminhoFramework + "..."
+    # Path errado: resolve para C:\4c\projeto\app\start\Framework\ (inexistente)
+    # Path correto: gc_4c_CaminhoFramework aponta para C:\4c\Framework\ (via ..\..\..\)
+    # Analogo ao Pattern #156 (reports\).
+    $rxCaminho = [regex]'(?i)gc_4c_CaminhoBase\s*\+\s*"Framework\\'
+
+    $novoLinhas = @()
+    $corrigiu = $false
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        $linha = $Linhas[$i]
+
+        # Skip comentarios (linha comeca com *)
+        if ($linha -match '^\s*\*') {
+            $novoLinhas += $linha
+            continue
+        }
+
+        if ($rxCaminho.IsMatch($linha)) {
+            $original = $linha
+            $novaLinha = $rxCaminho.Replace($linha, 'gc_4c_CaminhoFramework + "')
+            $novoLinhas += $novaLinha
+            $corrigiu = $true
+            Add-Correcao -Tipo "AUTO-170-CAMINHO-FRAMEWORK" -Linha ($i + 1) `
+                -Original $original.Trim() `
+                -Corrigido $novaLinha.Trim() `
+                -Descricao "Pattern #170: gc_4c_CaminhoBase + 'Framework\\...' corrompe path (resolve para C:\\4c\\projeto\\app\\start\\Framework\\ inexistente). Substituido por gc_4c_CaminhoFramework (nova variavel global em config.prg apontando para C:\\4c\\Framework\\ via ..\\..\\..\\). Analogo Pattern #156 (reports\\). Origem: Erro119 (2026-08-19, FormCliente 'Class definition CLSCONTA is not found')."
+            Write-Host "[Pattern #170] Linha $($i + 1): gc_4c_CaminhoBase + 'Framework\\' -> gc_4c_CaminhoFramework +" -ForegroundColor Green
+        } else {
+            $novoLinhas += $linha
+        }
+    }
+
+    if ($corrigiu) {
+        return $novoLinhas
+    }
+    return $Linhas
+}
+
 function Corrigir-CrSigCdPamNaoPopulado {
     param([string[]]$Linhas)
 
@@ -11501,6 +11544,7 @@ function Invoke-CorrecaoAutomatica {
     $linhas = Corrigir-RelatorioBaseTrioMetodosAusentes -Linhas $linhas
     $linhas = Corrigir-ReportFormBackColorFlat -Linhas $linhas
     $linhas = Corrigir-CrSigCdPamNaoPopulado -Linhas $linhas
+    $linhas = Corrigir-GcCaminhoBasePlusFramework -Linhas $linhas
 
     # Salva arquivo corrigido em UTF-8 SEM BOM.
     # - VFP9 nao suporta BOM (por isso removemos no read com bytes[3..])

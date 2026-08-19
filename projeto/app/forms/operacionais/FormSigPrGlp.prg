@@ -153,7 +153,7 @@ DEFINE CLASS FormSigPrGlp AS FormBase
     PROTECTED PROCEDURE ConfigurarPageFrame
     *==========================================================================
         LOCAL loc_cImg
-        loc_cImg = gc_4c_CaminhoBase + "Framework\imagens\new_background.jpg"
+        loc_cImg = gc_4c_CaminhoFramework + "imagens\new_background.jpg"
         IF FILE(loc_cImg)
             THIS.Picture = loc_cImg
         ENDIF

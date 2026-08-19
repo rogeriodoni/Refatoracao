@@ -63,6 +63,10 @@ gc_4c_CaminhoForms = ADDBS(gc_4c_CaminhoBase) + "..\forms\"
 PUBLIC gc_4c_CaminhoIcones
 gc_4c_CaminhoIcones = ADDBS(gc_4c_CaminhoBase) + "..\..\..\vbmp\"
 
+* Caminho do Framework legado Fortyus (VCXs para forms wrapper como FormCliente/clsconta)
+PUBLIC gc_4c_CaminhoFramework
+gc_4c_CaminhoFramework = ADDBS(gc_4c_CaminhoBase) + "..\..\..\Framework\"
+
 * Caminho dos relatorios
 PUBLIC gc_4c_CaminhoReports
 gc_4c_CaminhoReports = ADDBS(gc_4c_CaminhoBase) + "..\reports\"

@@ -42,7 +42,7 @@ DEFINE CLASS FormSIGMDETQ AS FormBase
         TRY
             THIS.this_oBusinessObject = CREATEOBJECT("SIGMDETQBO")
 
-            THIS.Picture = gc_4c_CaminhoBase + "Framework\imagens\new_background.jpg"
+            THIS.Picture = gc_4c_CaminhoFramework + "imagens\new_background.jpg"
 
             IF TYPE("gb_4c_ModoTeste") = "L" AND gb_4c_ModoTeste
                 *-- Modo teste automatizado: pular verificacoes de banco
@@ -208,7 +208,7 @@ DEFINE CLASS FormSIGMDETQ AS FormBase
             .Themes           = .T.
             .MousePointer    = 15
             .PicturePosition = 13
-            .Picture         = gc_4c_CaminhoBase + "Framework\imagens\geral_configuracao_60.jpg"
+            .Picture         = gc_4c_CaminhoFramework + "imagens\geral_configuracao_60.jpg"
             .ToolTipText     = "Confirmar a Sele" + CHR(231) + CHR(227) + "o"
         ENDWITH
 
@@ -231,7 +231,7 @@ DEFINE CLASS FormSIGMDETQ AS FormBase
             .MousePointer    = 15
             .Cancel          = .T.
             .PicturePosition = 13
-            .Picture         = gc_4c_CaminhoBase + "Framework\imagens\cadastro_sair_60.jpg"
+            .Picture         = gc_4c_CaminhoFramework + "imagens\cadastro_sair_60.jpg"
             .ToolTipText     = "[Esc] Encerrar"
         ENDWITH
     ENDPROC
