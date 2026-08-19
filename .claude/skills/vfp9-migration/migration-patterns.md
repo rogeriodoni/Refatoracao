@@ -7679,6 +7679,105 @@ Detecta chamadas Pattern B mas nao muta (cada call tem tabela/campos/titulo espe
 - Origem: Erro114 (2026-08-13, Formsigrecog "Relatorio de Comissao por Grupo de Produto" — user reportou "digita M em vendedor + Enter -> nao lista as empresas cadastradas na pesquisa, nem vendedor nem moeda")
 
 
+## 170. Paths para Framework legado (VCXs, imagens) — usar `gc_4c_CaminhoFramework`, nunca `gc_4c_CaminhoBase + "Framework\\..."` (Erro119 FormCliente 2026-08-19)
+
+### Contexto
+
+Alguns forms operacionais migrados (ex: `FormCliente`, wrapper de `clsconta` do legado Fortyus) precisam carregar VCXs legados (`framework.vcx`, `classresp.vcx`, `classobj.vcx`) e/ou imagens (`imagens\new_background.jpg`) que ainda vivem na pasta `C:\4c\Framework\`.
+
+Migrador tende a escrever:
+
+```foxpro
+* ERRADO
+loc_cVcx1 = gc_4c_CaminhoBase + "Framework\framework.vcx"
+loc_cVcx2 = gc_4c_CaminhoBase + "Framework\classobj.vcx"
+loc_cVcx3 = gc_4c_CaminhoBase + "Framework\classresp.vcx"
+IF FILE(loc_cVcx1)
+    SET CLASSLIB TO (loc_cVcx1) ADDITIVE
+ENDIF
+...
+THIS.Picture = gc_4c_CaminhoBase + "Framework\imagens\new_background.jpg"
+```
+
+**Problema**: `gc_4c_CaminhoBase = JUSTPATH(SYS(16))` retorna `C:\4c\projeto\app\start\`. Concatenar `"Framework\..."` gera `C:\4c\projeto\app\start\Framework\...` (**inexistente**). SET CLASSLIB falha silenciosamente sob `IF FILE(...)` guard. Depois `THIS.AddObject("cnt_4c_Conta", "clsconta")` estora **"Class definition CLSCONTA is not found"** em runtime (o erro so aparece la, dificultando o diagnostico).
+
+### Localizacao real do Framework
+
+`C:\4c\Framework\` fica 3 niveis acima de `gc_4c_CaminhoBase`:
+
+```
+C:\4c\                             <- 3 niveis acima
+  Framework\                        <- pasta legada
+    framework.vcx / classresp.vcx / classobj.vcx / imagens\
+  projeto\
+    app\
+      start\                        <- gc_4c_CaminhoBase
+        main.prg / config.prg
+```
+
+### Fix canonico
+
+**Passo 1**: Adicionar variavel global em `config.prg` (padrao identico ao `gc_4c_CaminhoIcones` que ja usa `..\..\..\vbmp\`):
+
+```foxpro
+* Caminho do Framework legado Fortyus (VCXs para forms wrapper como FormCliente/clsconta)
+PUBLIC gc_4c_CaminhoFramework
+gc_4c_CaminhoFramework = ADDBS(gc_4c_CaminhoBase) + "..\..\..\Framework\"
+```
+
+**Passo 2**: Substituir todo `gc_4c_CaminhoBase + "Framework\<X>"` por `gc_4c_CaminhoFramework + "<X>"`:
+
+```foxpro
+* CORRETO
+loc_cVcx1 = gc_4c_CaminhoFramework + "framework.vcx"
+loc_cVcx2 = gc_4c_CaminhoFramework + "classobj.vcx"
+loc_cVcx3 = gc_4c_CaminhoFramework + "classresp.vcx"
+...
+THIS.Picture = gc_4c_CaminhoFramework + "imagens\new_background.jpg"
+```
+
+### Regra generica
+
+Usar SEMPRE as variaveis globais ja resolvidas em config.prg:
+- `gc_4c_CaminhoFramework` — Framework legado Fortyus
+- `gc_4c_CaminhoReports` — FRXs em projeto/app/reports/
+- `gc_4c_CaminhoClasses` — classes em projeto/app/classes/
+- `gc_4c_CaminhoUtils` — helpers em projeto/app/utils/
+- `gc_4c_CaminhoForms` — forms em projeto/app/forms/
+- `gc_4c_CaminhoIcones` — imagens em C:\4c\vbmp\
+
+**NUNCA** reconstruir path a partir de `gc_4c_CaminhoBase`. Complementa Pattern #156 (`reports\` path corruption).
+
+### Deteccao automatica (Pattern #170)
+
+Regex simples e sem falso positivo — `gc_4c_CaminhoBase + "Framework\..."` **nunca** eh valido:
+
+- Match: `gc_4c_CaminhoBase\s*\+\s*"Framework\\`
+- Replace: `gc_4c_CaminhoFramework + "`
+
+Skip comentarios (linha comeca com `*`). Idempotente. Se apos correcao alguem verifica FILE() sobre `gc_4c_CaminhoFramework + "framework.vcx"` e falha (arquivo realmente ausente), esse eh problema separado (nao coberto por este pattern).
+
+### Impacto do sweep (2026-08-19)
+
+- 17+ arquivos com o anti-padrao (grep inicial):
+  * FormCliente, FormSIGBLCTA, FormSIGMDETQ, FormSIGPDPNS, FormSigPrApr
+  * Formsigprccp, FormSIGPRCIC, FormSIGPRCOT, Formsigprcpd, FormSIGPRCPR
+  * Formsigprdis, FormSigPrEs1, FormSigPrGl2, FormSigPrGlp
+  * FormSigPrRet, FormSigPrSnd
+  * sigredocBO
+- Todos serao corrigidos pelo sweep quando rodado
+- config.prg ganha `gc_4c_CaminhoFramework` (nova variavel global)
+
+### Referencias
+
+- Memoria detalhada: `feedback_caminho_framework_legado.md`
+- Ref canonico: `C:\4c\projeto\app\start\config.prg:67` (`gc_4c_CaminhoFramework` novo)
+- Ref recem-corrigido: `C:\4c\projeto\app\forms\operacionais\FormCliente.prg` (pos-Erro119)
+- Auto-fix: `CorretorAutomatico.ps1` Pattern #170 (`Corrigir-GcCaminhoBasePlusFramework`)
+- Complementa Pattern #156 (Erro88 `reports\` path corruption)
+- Origem: Erro119 (2026-08-19, FormCliente — "Class definition CLSCONTA is not found. Procedure: configurarcontacls" apos fix Erro118)
+
+
 ## 169. Cursores globais Fortyus (`crSigCdPam`) DEVEM ser populados no `BO.Init()` — sistema novo NAO faz pre-load (Erro118 ClienteBO 2026-08-19)
 
 ### Contexto

@@ -61,7 +61,7 @@ DEFINE CLASS FormSigPrRet AS FormBase
             ENDIF
 
             *-- Imagem de fundo identica ao original
-            THIS.Picture = gc_4c_CaminhoBase + "Framework\imagens\new_background.jpg"
+            THIS.Picture = gc_4c_CaminhoFramework + "imagens\new_background.jpg"
 
             *-- Construir UI (form OPERACIONAL: layout flat, sem PageFrame Lista/Dados)
             THIS.ConfigurarPageFrame()

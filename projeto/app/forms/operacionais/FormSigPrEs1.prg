@@ -87,7 +87,7 @@ DEFINE CLASS FormSigPrEs1 AS FormBase
     *===========================================================================
     PROTECTED PROCEDURE ConfigurarPageFrame()
         LOCAL loc_cImgFundo
-        loc_cImgFundo = gc_4c_CaminhoBase + "Framework\imagens\new_background.jpg"
+        loc_cImgFundo = gc_4c_CaminhoFramework + "imagens\new_background.jpg"
         IF FILE(loc_cImgFundo)
             THIS.Picture = loc_cImgFundo
         ENDIF

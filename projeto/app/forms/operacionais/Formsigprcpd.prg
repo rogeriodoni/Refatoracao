@@ -131,7 +131,7 @@ DEFINE CLASS Formsigprcpd AS FormBase
         LOCAL loc_cImgFundo
         *-- Form OPERACIONAL flat (sem PageFrame CRUD)
         *-- Configura picture de fundo identico ao legado
-        loc_cImgFundo = gc_4c_CaminhoBase + "Framework\imagens\new_background.jpg"
+        loc_cImgFundo = gc_4c_CaminhoFramework + "imagens\new_background.jpg"
         IF FILE(loc_cImgFundo)
             THIS.Picture = loc_cImgFundo
         ENDIF

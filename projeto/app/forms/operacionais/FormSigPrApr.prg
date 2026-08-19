@@ -33,7 +33,7 @@ DEFINE CLASS FormSigPrApr AS FormBase
     *==========================================================================
     PROTECTED PROCEDURE ConfigurarPageFrame()
     *==========================================================================
-        THIS.Picture    = gc_4c_CaminhoBase + "Framework\imagens\new_background.jpg"
+        THIS.Picture    = gc_4c_CaminhoFramework + "imagens\new_background.jpg"
         THIS.ScrollBars = 0
         THIS.ShowTips   = .F.
     ENDPROC
