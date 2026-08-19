@@ -10920,6 +10920,55 @@ function Corrigir-ReportPrepararDadosEmptyCursorGuard {
     return $Linhas
 }
 
+function Corrigir-SigacessPrgNaoCarregado {
+    param([string[]]$Linhas)
+
+    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
+
+    $conteudo = $Linhas -join "`n"
+
+    # Guard 1: file eh Form*.prg com AS FormBase
+    if ($conteudo -notmatch '(?i)DEFINE\s+CLASS\s+Form\w+\s+AS\s+FormBase\b') {
+        return $Linhas
+    }
+
+    # Guard 2: form usa AddObject com uma das classes legado wrapper
+    # (clsconta/clstitulo/clsproduto/clsplano)
+    $rxAddObj = [regex]'(?i)AddObject\s*\(\s*[^,]+,\s*"(clsconta|clstitulo|clsproduto|clsplano)"\s*\)'
+    if (-not $rxAddObj.IsMatch($conteudo)) {
+        return $Linhas
+    }
+
+    # Guard 3: config.prg NAO contem referencia a sigacess.PRG
+    $configPath = "C:\4c\projeto\app\start\config.prg"
+    if (-not (Test-Path $configPath)) { return $Linhas }
+
+    $configContent = Get-Content -Path $configPath -Raw -Encoding UTF8 -ErrorAction SilentlyContinue
+    if ($configContent -and $configContent -match '(?i)sigacess\.PRG') {
+        return $Linhas  # config.prg ja carrega, skip
+    }
+
+    # Localiza a linha do AddObject para reportar
+    $linhaRef = 0
+    $classeRef = ""
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        $m = $rxAddObj.Match($Linhas[$i])
+        if ($m.Success) {
+            $linhaRef = $i + 1
+            $classeRef = $m.Groups[1].Value
+            break
+        }
+    }
+
+    Write-Host "[Pattern #171] Linha $linhaRef : form usa clsconta/similar ($classeRef) mas config.prg nao carrega sigacess.PRG — instanciacao falhara em runtime" -ForegroundColor Yellow
+    Add-Correcao -Tipo "WARN-171-SIGACESS-NAO-CARREGADO" -Linha $linhaRef `
+        -Original "AddObject(_, `"$classeRef`") em Form*.prg mas sigacess.PRG ausente em config.prg" `
+        -Corrigido "(REVISAR MANUAL - adicionar em config.prg apos utilitarios: CarregarSeExistir(gc_4c_CaminhoFramework + 'sigacess.PRG'))" `
+        -Descricao "Pattern #171 WARN: $classeRef eh classe legado Fortyus cujos sub-controles (Get_grupoven/Get_conta/etc) herdam de fwget e chamam funcoes globais em sigacess.PRG (fAcessoCampos/fAcessoContab/fAcessoContas/fAcessoEmpresa/fAcessoGrupos/fAcessoMovInd/fAcessoMovmto/fAcessoProduto/fAcessoTitulo/fChecaAcesso/fChecaAcessoJOB/fRestritos). Sem essas funcoes em memoria, VFP9 estora 'Error instantiating the object GET_GRUPOVEN' (ou similar) ao runtime — erro aponta pra AddObject nao pra funcao ausente. Fix sistemico: adicionar em config.prg apos CarregarSeExistir(validators.prg): CarregarSeExistir(gc_4c_CaminhoFramework + 'sigacess.PRG'). NAO muta form nem config.prg (config.prg eh handcrafted). Complementa Pattern #170 (gc_4c_CaminhoFramework). Origem: Erro120 (2026-08-19, FormCliente linha 240)."
+
+    return $Linhas  # WARNING-only, nao muta
+}
+
 function Corrigir-GcCaminhoBasePlusFramework {
     param([string[]]$Linhas)
 
@@ -11545,6 +11594,7 @@ function Invoke-CorrecaoAutomatica {
     $linhas = Corrigir-ReportFormBackColorFlat -Linhas $linhas
     $linhas = Corrigir-CrSigCdPamNaoPopulado -Linhas $linhas
     $linhas = Corrigir-GcCaminhoBasePlusFramework -Linhas $linhas
+    $linhas = Corrigir-SigacessPrgNaoCarregado -Linhas $linhas
 
     # Salva arquivo corrigido em UTF-8 SEM BOM.
     # - VFP9 nao suporta BOM (por isso removemos no read com bytes[3..])

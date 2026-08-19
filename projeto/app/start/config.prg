@@ -275,6 +275,16 @@ PROCEDURE ConfigurarAmbiente()
     CarregarSeExistir(gcCaminhoUtils + "validators.prg")
 
     * =========================================================================
+    * FRAMEWORK LEGADO Fortyus - Funcoes de acesso (sigacess.PRG)
+    * Requerido pelos VCXs legado (framework.vcx / classresp.vcx / classobj.vcx)
+    * quando forms wrapper (FormCliente/clsconta) instanciam controles como
+    * GET_GRUPOVEN que chamam fAcessoCampos/fAcessoContas/etc.
+    * Sem esse carregamento: "Error instantiating the object GET_GRUPOVEN"
+    * (fixed em Erro120, 2026-08-19).
+    * =========================================================================
+    CarregarSeExistir(gc_4c_CaminhoFramework + "sigacess.PRG")
+
+    * =========================================================================
     * BUSINESS OBJECTS - Carrega todos os *BO.prg dinamicamente
     * =========================================================================
     loc_nArquivos = ADIR(loc_aArquivos, gcCaminhoClasses + "*BO.prg")
