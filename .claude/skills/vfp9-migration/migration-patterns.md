@@ -7679,6 +7679,86 @@ Detecta chamadas Pattern B mas nao muta (cada call tem tabela/campos/titulo espe
 - Origem: Erro114 (2026-08-13, Formsigrecog "Relatorio de Comissao por Grupo de Produto" — user reportou "digita M em vendedor + Enter -> nao lista as empresas cadastradas na pesquisa, nem vendedor nem moeda")
 
 
+## 171. Framework legado Fortyus — funcoes em `sigacess.PRG` DEVEM ser carregadas no startup do sistema (Erro120 FormCliente 2026-08-19)
+
+### Contexto
+
+Forms wrapper de VCXs legado (ex: `FormCliente` que faz `AddObject(_, "clsconta")`) instanciam controles em cadeia:
+- `clsconta` (classresp.vcx) contem PageFrames com Pages
+- Cada Page tem sub-controles como `Get_grupoven` (TextBox de "Grupo de Vendedores")
+- `Get_grupoven` herda de `fwget` (framework.vcx)
+- `fwget.Init()` chama funcoes globais legado: `fAcessoCampos`, `fAcessoContab`, `fAcessoContas`, `fAcessoEmpresa`, `fAcessoGrupos`, `fAcessoMovInd`, `fAcessoMovmto`, `fAcessoProduto`, `fAcessoTitulo`, `fChecaAcesso`, `fChecaAcessoJOB`, `fRestritos`
+
+Todas essas 12 funcoes vivem em `C:\4c\Framework\sigacess.PRG` (arquivo legado Fortyus preservado).
+
+### Anti-padrao
+
+`config.prg` carrega apenas os utilitarios novos:
+```foxpro
+CarregarSeExistir(gcCaminhoUtils + "functions.prg")
+CarregarSeExistir(gcCaminhoUtils + "messages.prg")
+CarregarSeExistir(gcCaminhoUtils + "validators.prg")
+* sigacess.PRG NAO carregado — funcoes fAcessoCampos etc ausentes
+```
+
+Quando FormCliente faz `THIS.AddObject("cnt_4c_Conta", "clsconta")`, a cascata de instanciacao chega em `Get_grupoven.Init()` que chama `fAcessoCampos(...)`. VFP9 nao encontra a funcao e falha silenciosamente ao instanciar o controle:
+
+```
+Error instantiating the object GET_GRUPOVEN.
+Linha: 240
+Procedure: configurarcontacls
+```
+
+O erro aponta pra `AddObject` (linha 240) NAO pra funcao ausente — dificil de diagnosticar.
+
+### Fix sistemico
+
+Uma unica linha em `config.prg`, apos carregar utilitarios:
+
+```foxpro
+* =========================================================================
+* FRAMEWORK LEGADO Fortyus - Funcoes de acesso (sigacess.PRG)
+* Requerido pelos VCXs legado (framework.vcx / classresp.vcx / classobj.vcx)
+* quando forms wrapper (FormCliente/clsconta) instanciam controles como
+* GET_GRUPOVEN que chamam fAcessoCampos/fAcessoContas/etc.
+* =========================================================================
+CarregarSeExistir(gc_4c_CaminhoFramework + "sigacess.PRG")
+```
+
+`gc_4c_CaminhoFramework` (do Erro119) resolve para `C:\4c\Framework\`. `CarregarSeExistir` (helper em start/) chama `SET PROCEDURE TO (...) ADDITIVE` se o arquivo existir.
+
+### Regra generica
+
+- Sempre que um form usar `AddObject(_, "clsconta")` (ou `clstitulo`/`clsproduto`/`clsplano`/similar), config.prg DEVE carregar `sigacess.PRG`
+- Se novos PRGs legado forem necessarios (`SIGFUNCS.PRG`, `SIGOPE.PRG`, `SIGPRMOV.PRG`, etc.), adicionar mesmo padrao
+- Ordem importa: `sigacess.PRG` deve vir DEPOIS de `functions.prg` (pode compartilhar helpers) mas ANTES de qualquer form abrir
+
+### Deteccao automatica (Pattern #171)
+
+**WARNING-only** — o fix eh sistemico (config.prg), nao por-arquivo. Pattern verifica combinacao form ↔ config.prg:
+
+- Guard 1: file eh `Form*.prg`
+- Guard 2: contem `AddObject(_, "cls\w+")` onde `\w+` sao classes legado tipicas (`clsconta`/`clstitulo`/`clsproduto`/`clsplano`)
+- Check: le `config.prg` e verifica se contem referencia a `sigacess.PRG` (case-insensitive)
+- Se ausente: WARN `WARN-171-SIGACESS-NAO-CARREGADO` com sugestao de adicionar a linha
+
+Nao muta (config.prg eh handcrafted, single-file).
+
+### Impacto
+
+Sweep 2026-08-19: 1 arquivo afetado inicialmente (FormCliente + config.prg — ambos ja corrigidos). Pattern serve para preveni bug em novas migracoes.
+
+### Referencias
+
+- Memoria detalhada: `feedback_sigacess_prg_startup.md`
+- Ref canonico: `C:\4c\projeto\app\start\config.prg` (pos-Erro120, linhas 277-286)
+- Ref recem-corrigido: `C:\4c\projeto\app\start\config.prg`
+- Auto-fix: `CorretorAutomatico.ps1` Pattern #171 WARNING-only
+- Framework legado: `C:\4c\Framework\sigacess.PRG` (12 funcoes)
+- Complementa Erro119 (Pattern #170: `gc_4c_CaminhoFramework` path)
+- Origem: Erro120 (2026-08-19, FormCliente linha 240 "Error instantiating the object GET_GRUPOVEN")
+
+
 ## 170. Paths para Framework legado (VCXs, imagens) — usar `gc_4c_CaminhoFramework`, nunca `gc_4c_CaminhoBase + "Framework\\..."` (Erro119 FormCliente 2026-08-19)
 
 ### Contexto
