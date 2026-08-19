@@ -10940,9 +10940,46 @@ function Corrigir-CrSigCdPamNaoPopulado {
     }
 
     # Guard 3: file NAO cria o cursor (evita false positive quando form popula sozinho)
-    $rxCriaCursor = [regex]'(?i)CREATE\s+CURSOR\s+crSigCdPam\b|INTO\s+CURSOR\s+crSigCdPam\b'
+    # Detecta 3 formas de popular:
+    #   - CREATE CURSOR crSigCdPam
+    #   - SELECT ... INTO CURSOR crSigCdPam
+    #   - SQLEXEC(conn, sql, "crSigCdPam") — populacao direta como alias de resultado
+    $rxCriaCursor = [regex]'(?i)CREATE\s+CURSOR\s+crSigCdPam\b|INTO\s+CURSOR\s+crSigCdPam\b|SQLEXEC\s*\([^)]*,\s*"crSigCdPam"\s*\)'
     if ($rxCriaCursor.IsMatch($conteudo)) {
         return $Linhas  # form ja popula, skip
+    }
+
+    # Guard 4: unica ref eh `USE IN crSigCdPam` (cleanup em Destroy — nao precisa criar)
+    # Se TODAS as refs sao dentro de `IF USED("crSigCdPam") / USE IN crSigCdPam / ENDIF`, skip
+    $refsCleanupOnly = $true
+    foreach ($linha in $Linhas) {
+        if ($rxRef.IsMatch($linha)) {
+            # Se essa linha eh USED() ou USE IN, provavelmente cleanup — continua checando
+            if ($linha -match '(?i)USE\s+IN\s+crSigCdPam' -or $linha -match '(?i)USED\s*\(\s*"crSigCdPam"\s*\)') {
+                continue
+            }
+            # Qualquer outra ref (read de coluna, SELECT crSigCdPam para trabalhar) = uso real
+            $refsCleanupOnly = $false
+            break
+        }
+    }
+    if ($refsCleanupOnly) {
+        return $Linhas  # so cleanup, skip
+    }
+
+    # Guard 5: unica ref eh dentro de comentario (linha comeca com *)
+    $refsComentarioOnly = $true
+    foreach ($linha in $Linhas) {
+        if ($rxRef.IsMatch($linha)) {
+            $lstrip = $linha.TrimStart()
+            if (-not $lstrip.StartsWith("*")) {
+                $refsComentarioOnly = $false
+                break
+            }
+        }
+    }
+    if ($refsComentarioOnly) {
+        return $Linhas  # so comentario, skip
     }
 
     # Extrai o nome do BO via CREATEOBJECT("<name>BO")
@@ -10960,8 +10997,9 @@ function Corrigir-CrSigCdPamNaoPopulado {
     }
 
     # Verifica se o BO (se identificado) tem CREATE/INTO CURSOR crSigCdPam
-    # Nome da classe (ex: cliBO) pode estar em qualquer arquivo (ex: ClienteBO.prg)
-    # entao buscamos "DEFINE CLASS <nome> AS" em todos os *BO.prg.
+    # OU SQLEXEC populando o cursor. Nome da classe (ex: cliBO) pode estar
+    # em qualquer arquivo (ex: ClienteBO.prg) entao buscamos DEFINE CLASS em todos *BO.prg.
+    # Aceita as mesmas 3 formas de populacao do guard 3.
     $boPopula = $false
     if ($mBO.Success) {
         $classesDir = "C:\4c\projeto\app\classes"
@@ -10972,6 +11010,7 @@ function Corrigir-CrSigCdPamNaoPopulado {
                 if ($boFile.Name -match "\.bak$") { continue }
                 $boContent = Get-Content -Path $boFile.FullName -Raw -Encoding UTF8 -ErrorAction SilentlyContinue
                 if ($boContent -and $rxDefine.IsMatch($boContent)) {
+                    # $rxCriaCursor ja cobre CREATE CURSOR, INTO CURSOR, e SQLEXEC
                     if ($rxCriaCursor.IsMatch($boContent)) {
                         $boPopula = $true
                     }
