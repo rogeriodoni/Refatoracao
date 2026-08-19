@@ -10920,6 +10920,81 @@ function Corrigir-ReportPrepararDadosEmptyCursorGuard {
     return $Linhas
 }
 
+function Corrigir-CrSigCdPamNaoPopulado {
+    param([string[]]$Linhas)
+
+    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
+
+    $conteudo = $Linhas -join "`n"
+
+    # Guard 1: file eh Form*.prg (nao BO, nao classe base)
+    # Detectado via presenca de "DEFINE CLASS Form\w+ AS FormBase"
+    if ($conteudo -notmatch '(?i)DEFINE\s+CLASS\s+Form\w+\s+AS\s+FormBase\b') {
+        return $Linhas
+    }
+
+    # Guard 2: file referencia crSigCdPam (via USED ou .coluna)
+    $rxRef = [regex]'(?i)USED\s*\(\s*"crSigCdPam"\s*\)|crSigCdPam\.[A-Za-z_]\w*'
+    if (-not $rxRef.IsMatch($conteudo)) {
+        return $Linhas
+    }
+
+    # Guard 3: file NAO cria o cursor (evita false positive quando form popula sozinho)
+    $rxCriaCursor = [regex]'(?i)CREATE\s+CURSOR\s+crSigCdPam\b|INTO\s+CURSOR\s+crSigCdPam\b'
+    if ($rxCriaCursor.IsMatch($conteudo)) {
+        return $Linhas  # form ja popula, skip
+    }
+
+    # Extrai o nome do BO via CREATEOBJECT("<name>BO")
+    $rxBO = [regex]'(?i)CREATEOBJECT\s*\(\s*"(\w+BO)"\s*\)'
+    $mBO = $rxBO.Match($conteudo)
+    $nomeBO = if ($mBO.Success) { $mBO.Groups[1].Value } else { "(BO nao identificado)" }
+
+    # Localiza primeira linha com ref para reportar
+    $linhaRef = 0
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        if ($rxRef.IsMatch($Linhas[$i])) {
+            $linhaRef = $i + 1
+            break
+        }
+    }
+
+    # Verifica se o BO (se identificado) tem CREATE/INTO CURSOR crSigCdPam
+    # Nome da classe (ex: cliBO) pode estar em qualquer arquivo (ex: ClienteBO.prg)
+    # entao buscamos "DEFINE CLASS <nome> AS" em todos os *BO.prg.
+    $boPopula = $false
+    if ($mBO.Success) {
+        $classesDir = "C:\4c\projeto\app\classes"
+        if (Test-Path $classesDir) {
+            $rxDefine = [regex]"(?i)DEFINE\s+CLASS\s+$nomeBO\s+AS\s+"
+            $boFiles = Get-ChildItem -Path $classesDir -Filter "*BO.prg" -ErrorAction SilentlyContinue
+            foreach ($boFile in $boFiles) {
+                if ($boFile.Name -match "\.bak$") { continue }
+                $boContent = Get-Content -Path $boFile.FullName -Raw -Encoding UTF8 -ErrorAction SilentlyContinue
+                if ($boContent -and $rxDefine.IsMatch($boContent)) {
+                    if ($rxCriaCursor.IsMatch($boContent)) {
+                        $boPopula = $true
+                    }
+                    break  # achou a classe, para de procurar
+                }
+            }
+        }
+    }
+
+    if ($boPopula) {
+        return $Linhas  # BO ja popula, skip
+    }
+
+    # Emite WARNING
+    Write-Host "[Pattern #169] Linha $linhaRef : form referencia crSigCdPam mas $nomeBO nao popula em Init() — form pode abrir em branco" -ForegroundColor Yellow
+    Add-Correcao -Tipo "WARN-169-CRSIGCDPAM-NAO-POPULADO" -Linha $linhaRef `
+        -Original "Form referencia crSigCdPam (linha $linhaRef); BO=$nomeBO" `
+        -Corrigido "(REVISAR MANUAL - injetar em $nomeBO.Init() apos DODEFAULT bloco canonico Formsigatcrp.prg:1253-1281)" `
+        -Descricao "Pattern #169 WARN: Form usa crSigCdPam (cursor global Fortyus) mas $nomeBO nao popula em Init(). Sistema legado pre-carregava no startup; migrado nao faz. Sem populacao, USED() retorna .F. -> form abre em branco silenciosamente (MsgAviso + loc_lSucesso=.T. pulando ConfigurarCabecalho). Fix: injetar em BO.Init() apos DODEFAULT o bloco SQLEXEC + INTO CURSOR READWRITE + fallback CREATE CURSOR + APPEND BLANK (padrao canonico Formsigatcrp.prg:1253-1281). Ajustar colunas conforme uso (GrPadClis/GrPadVens/GrPadCfos). Origem: Erro118 (2026-08-19, FormCliente/cliBO)."
+
+    return $Linhas  # WARNING-only, nao muta
+}
+
 function Corrigir-ReportFormBackColorFlat {
     param([string[]]$Linhas)
 
@@ -11386,6 +11461,7 @@ function Invoke-CorrecaoAutomatica {
     $linhas = Corrigir-ReportPrepararDadosEmptyCursorGuard -Linhas $linhas
     $linhas = Corrigir-RelatorioBaseTrioMetodosAusentes -Linhas $linhas
     $linhas = Corrigir-ReportFormBackColorFlat -Linhas $linhas
+    $linhas = Corrigir-CrSigCdPamNaoPopulado -Linhas $linhas
 
     # Salva arquivo corrigido em UTF-8 SEM BOM.
     # - VFP9 nao suporta BOM (por isso removemos no read com bytes[3..])
