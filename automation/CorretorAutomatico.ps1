@@ -11454,6 +11454,77 @@ function Corrigir-RelatorioBaseTrioMetodosAusentes {
     return $novoLinhas
 }
 
+# =============================================================================
+# Pattern #173 — Forms wrapper (clsconta/clstitulo/etc): botoes CRUD sem
+#                validacao pre-acao (Erro132, 2026-08-21)
+# =============================================================================
+# WARNING-only. Detecta forms wrapper cujo BtnIncluir/BtnAlterar/BtnVisualizar/
+# BtnExcluirClick chamam THIS.IrPara* sem uma chamada previa a
+# THIS.ValidarPreAcao(). Nao muta — o helper canonico depende de convencoes
+# especificas do form (nome do filtro, coluna do crSigCdPam, PGM do fChecaAcesso)
+# que exigem contexto humano. Regra completa em migration-patterns.md #173.
+function Corrigir-BtnCrudSemValidarPreAcao {
+    param([string[]]$Linhas)
+
+    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
+
+    $conteudo = $Linhas -join "`n"
+
+    # Guard: apenas forms wrapper (que instanciam clsconta/clstitulo/clsproduto/clsplano)
+    $rxWrapper = [regex]'(?im)\bAddObject\s*\(\s*"[^"]+"\s*,\s*"(clsconta|clstitulo|clsproduto|clsplano|clsauditor|clsfollowup)"'
+    if (-not $rxWrapper.IsMatch($conteudo)) { return $Linhas }
+
+    # Se o form ja tem ValidarPreAcao definido, provavelmente ja esta OK — nao warn
+    # (pode ainda faltar em algum botao, mas evita ruido em forms ja adaptados)
+    $rxHelperDefinido = [regex]'(?im)^\s*(PROTECTED\s+)?FUNCTION\s+ValidarPreAcao\s*\('
+    $helperDefinido   = $rxHelperDefinido.IsMatch($conteudo)
+
+    $rxProc     = [regex]'(?i)^\s*PROCEDURE\s+(Btn(Incluir|Alterar|Visualizar|Excluir)Click)\s*(\(|\s*$)'
+    $rxEndProc  = [regex]'(?i)^\s*ENDPROC\s*$'
+    $rxIrPara   = [regex]'(?i)\bTHIS\.IrPara\w+\s*\('
+    $rxValidar  = [regex]'(?i)\bTHIS\.ValidarPreAcao\s*\('
+
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        $mProc = $rxProc.Match($Linhas[$i])
+        if (-not $mProc.Success) { continue }
+
+        $nomeProc = $mProc.Groups[1].Value
+
+        # Encontrar limites da procedure
+        $inicioBody = $i + 1
+        $fimBody = $Linhas.Count - 1
+        for ($j = $inicioBody; $j -lt $Linhas.Count; $j++) {
+            if ($rxEndProc.IsMatch($Linhas[$j])) { $fimBody = $j - 1; break }
+            # Nova PROCEDURE tambem encerra
+            if ($j -gt $inicioBody -and $rxProc.IsMatch($Linhas[$j])) { $fimBody = $j - 1; break }
+        }
+
+        # Colecionar body
+        $bodyLinhas = @()
+        for ($k = $inicioBody; $k -le $fimBody; $k++) { $bodyLinhas += $Linhas[$k] }
+        $body = $bodyLinhas -join "`n"
+
+        # Precisa chamar IrPara* e NAO chamar ValidarPreAcao antes
+        if (-not $rxIrPara.IsMatch($body)) { continue }
+        if ($rxValidar.IsMatch($body)) { continue }
+
+        $descricao = "Pattern #173: $nomeProc chama THIS.IrPara* sem chamada previa a THIS.ValidarPreAcao(). Form wrapper (clsconta/clstitulo/etc) deve re-executar validacoes portadas do Init legado (crSigCdPam populado, crSigCdGcr populado, Grupo definido e presente em crSigCdGcr, fChecaAcesso) antes de saltar para Dados. Ver FormCliente.prg:1985-2050 (helper canonico) + migration-patterns.md #173. Origem: Erro132 (2026-08-21)."
+        if ($helperDefinido) {
+            $acaoUpper = $mProc.Groups[2].Value.ToUpper()
+            $descricao += ' NOTA: helper ValidarPreAcao ja existe no form — provavelmente basta adicionar IF !THIS.ValidarPreAcao("' + $acaoUpper + '") / RETURN / ENDIF antes do TRY.'
+        }
+
+        Add-Correcao -Tipo "WARN-173-BTNCRUD-SEM-VALIDACAO" -Linha ($i + 1) `
+            -Original "PROCEDURE $nomeProc (sem THIS.ValidarPreAcao antes de IrPara*)" `
+            -Corrigido "(warning-only — refactor manual: extrair helper ValidarPreAcao + chamar em cada botao CRUD)" `
+            -Descricao $descricao
+
+        Write-Host "[Pattern #173] Linha $($i + 1): $nomeProc chama IrPara* sem ValidarPreAcao" -ForegroundColor Yellow
+    }
+
+    return $Linhas
+}
+
 function Invoke-CorrecaoAutomatica {
     param(
         [string]$Arquivo,
@@ -11649,6 +11720,7 @@ function Invoke-CorrecaoAutomatica {
     $linhas = Corrigir-GcCaminhoBasePlusFramework -Linhas $linhas
     $linhas = Corrigir-SigacessPrgNaoCarregado -Linhas $linhas
     $linhas = Corrigir-UsuarPublicNaoDeclarado -Linhas $linhas
+    $linhas = Corrigir-BtnCrudSemValidarPreAcao -Linhas $linhas
 
     # Salva arquivo corrigido em UTF-8 SEM BOM.
     # - VFP9 nao suporta BOM (por isso removemos no read com bytes[3..])

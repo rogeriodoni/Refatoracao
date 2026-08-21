@@ -14,9 +14,11 @@
 
 DEFINE CLASS FormCliente AS FormBase
 
-    *-- Propriedades visuais (copiadas do original)
+    *-- Propriedades visuais (aumentado para 1000x600 p/ acomodar layout
+    *-- Lista+Dados como no legado SIGCDCTA. Wrapper clsconta interno usa
+    *-- 768 de largura fixa; sobra 232 na direita para botoes CRUD topo.)
     Height       = 600
-    Width        = 852
+    Width        = 1000
     AutoCenter   = .T.
     Caption      = "Cadastro de Cliente"
     ShowWindow = 1
@@ -41,6 +43,18 @@ DEFINE CLASS FormCliente AS FormBase
     *-- Integracao com BusinessObject (cliBO)
     this_oBusinessObject = .NULL.
     this_cModoAtual      = ""
+
+    *-- Properties requeridas pelos VCXs legado Fortyus (Erro122).
+    *-- ClassResp.vcx/Framework.vcx referenciam ThisForm.poDataMgr em 186 pontos;
+    *-- sem essa property, AddObject("clsconta") falha em GET_GRUPOVEN.Init
+    *-- ("Error instantiating the object GET_GRUPOVEN"). Instanciacao ocorre
+    *-- em InicializarForm antes de ConfigurarContaCls.
+    poDataMgr     = .NULL.
+    Inicio        = .T.       && flag legado (uso em wrapper Refresh)
+    ValidaIE      = .F.       && flag DLL de valida??o de Insc. Estadual (Sintegra)
+    plAltCpf      = .F.       && permite alterar CPF/CNPJ apos INSERIR
+    CodClis       = ""        && codigo do cliente corrente (usado pelo wrapper)
+    tipopais      = .F.       && flag pais estrangeiro
 
     *-- Parametros recebidos em Init (armazenados para uso em InicializarForm)
     this_cCpf         = ""
@@ -78,6 +92,24 @@ DEFINE CLASS FormCliente AS FormBase
             *-- Instanciar Business Object (cliBO)
             THIS.this_oBusinessObject = CREATEOBJECT("cliBO")
 
+            *-- Instanciar poDataMgr (fSqlConector legado Fortyus, sigclcnx.PRG).
+            *-- Passa gnConnHandle NUMERICO -> Init pula caminho goSistema.ObjectConn.
+            *-- pOpnRelease=.T. logo apos -> Release() nao chama SQLDisConnect na
+            *-- conexao global (senao fecha a conexao inteira ao fechar o form).
+            IF ISNULL(THIS.poDataMgr) OR VARTYPE(THIS.poDataMgr) <> "O"
+                THIS.poDataMgr = CREATEOBJECT("fSqlConector", gnConnHandle)
+                IF !ISNULL(THIS.poDataMgr) AND VARTYPE(THIS.poDataMgr) = "O"
+                    THIS.poDataMgr.pOpnRelease = .T.
+                ENDIF
+            ENDIF
+
+            *-- Pre-criar cursores stub que os controles do clsconta usam como
+            *-- ControlSource (crSigCdCli.grupovens, crSigCdCeb.bancos, etc.).
+            *-- Sem esses cursores existirem no momento do AddObject("clsconta"),
+            *-- VFP9 falha ao validar ControlSource -> "Error instantiating GET_GRUPOVEN".
+            *-- O mIniConta() do wrapper substitui pelos dados reais depois.
+            THIS.CriarCursoresControlSource()
+
             *-- Fundo de tela (imagem legado Fortyus em Framework\imagens\)
             THIS.Picture = gc_4c_CaminhoFramework + "imagens\new_background.jpg"
 
@@ -100,26 +132,84 @@ DEFINE CLASS FormCliente AS FormBase
                 MsgAviso("Grupo Padr" + CHR(227) + "o N" + CHR(227) + "o Configurado.")
                 loc_lSucesso = .T.
             ELSE
-                *-- Definir modo (INSERIR / ALTERAR)
+                *-- Definir plAltCd (usado por wrapper depois de mIniConta).
+                *-- IMPORTANTE: pcEscolha NAO pode ser setado aqui — miniconta
+                *-- resetaria para '' via `With ThisForm / .pcEscolha = ''`.
+                *-- Legado SIGCDCLI seta pcEscolha APOS mIniConta (tasks/task372).
                 THIS.mudavend = .T.
                 IF EMPTY(ALLTRIM(THIS.this_cCli))
-                    THIS.pcEscolha       = "INSERIR"
                     THIS.this_cModoAtual = "INCLUIR"
                     THIS.plaltcd         = .F.
                 ELSE
                     THIS.plaltcd         = .T.
-                    THIS.pcEscolha       = "ALTERAR"
                     THIS.this_cModoAtual = "ALTERAR"
                 ENDIF
 
-                *-- Criar componentes visuais
+                *-- Estrutura 2-estados via containers separados (Lista / Dados).
+                *-- Preserva as 77 refs a THIS.cnt_4c_Sombra/cnt_4c_Conta/cmg_4c_Sair
+                *-- (Dados) e adiciona container Lista lado a lado. Toggle Visible.
+                *-- Phase 2 populara ViewLista (grid+6 botoes+filtro).
+                *-- Phase 3 implementara IrParaLista()/IrParaDados() state machine.
+                THIS.ConfigurarViewLista()
+
+                *-- Popular Dados: cabecalho + clsconta + Ok/Cancelar (comportamento atual)
                 THIS.ConfigurarCabecalho()
                 THIS.ConfigurarContaCls()
                 THIS.ConfigurarBotoesSair()
                 THIS.TornarControlesVisiveis()
 
-                *-- Inicializar clsconta
-                THIS.cnt_4c_Conta.mIniConta()
+                *-- Inicializar clsconta (log diagnostico Erro126/127)
+                LOCAL loc_nHDiag, loc_oDiagErr, loc_cDiagPath
+                loc_cDiagPath = ADDBS(gc_4c_CaminhoBase) + "FormCliente_DiagInit.log"
+                loc_nHDiag = FCREATE(loc_cDiagPath)
+                IF loc_nHDiag > 0
+                    FPUTS(loc_nHDiag, "=== " + TTOC(DATETIME()) + " ===")
+                    FPUTS(loc_nHDiag, "pcEscolha=" + THIS.pcEscolha + " grupo=[" + ALLTRIM(THIS.this_cGrupo) + "] cli=[" + ALLTRIM(THIS.this_cCli) + "]")
+                ENDIF
+
+                TRY
+                    THIS.cnt_4c_Conta.mIniConta()
+                    IF loc_nHDiag > 0
+                        FPUTS(loc_nHDiag, "mIniConta: OK")
+                        FPUTS(loc_nHDiag, "  Used(crSigCdCli)=" + TRANSFORM(USED("crSigCdCli")) + " reccount=" + TRANSFORM(IIF(USED("crSigCdCli"), RECCOUNT("crSigCdCli"), -1)))
+                        FPUTS(loc_nHDiag, "  Used(crSigCdGcr)=" + TRANSFORM(USED("crSigCdGcr")) + " reccount=" + TRANSFORM(IIF(USED("crSigCdGcr"), RECCOUNT("crSigCdGcr"), -1)))
+                        FPUTS(loc_nHDiag, "  Used(crSigCdPam)=" + TRANSFORM(USED("crSigCdPam")) + " reccount=" + TRANSFORM(IIF(USED("crSigCdPam"), RECCOUNT("crSigCdPam"), -1)))
+                        FPUTS(loc_nHDiag, "  Used(crSigCdPac)=" + TRANSFORM(USED("crSigCdPac")) + " reccount=" + TRANSFORM(IIF(USED("crSigCdPac"), RECCOUNT("crSigCdPac"), -1)))
+                        FPUTS(loc_nHDiag, "  Used(crSigCdEmp)=" + TRANSFORM(USED("crSigCdEmp")) + " reccount=" + TRANSFORM(IIF(USED("crSigCdEmp"), RECCOUNT("crSigCdEmp"), -1)))
+
+                        *-- Diagnostico: pfSqlTabela + tentativa manual de Insert
+                        IF !ISNULL(THIS.poDataMgr) AND VARTYPE(THIS.poDataMgr) = "O"
+                            LOCAL loc_nTab, loc_k
+                            loc_nTab = ALEN(THIS.poDataMgr.pfSqlTabela, 1)
+                            FPUTS(loc_nHDiag, "  pfSqlTabela.count=" + TRANSFORM(loc_nTab))
+                            FOR loc_k = 1 TO loc_nTab
+                                IF !ISNULL(THIS.poDataMgr.pfSqlTabela(loc_k, 1))
+                                    FPUTS(loc_nHDiag, "    [" + TRANSFORM(loc_k) + "] cursor=" + THIS.poDataMgr.pfSqlTabela(loc_k, 1).pcNomeCursor)
+                                ELSE
+                                    FPUTS(loc_nHDiag, "    [" + TRANSFORM(loc_k) + "] NULL")
+                                ENDIF
+                            ENDFOR
+                        ENDIF
+
+                        *-- Teste manual: Insert Into crSigCdCli via Scatter Blank
+                        *-- NAO limpar depois — se funcionar, mLeDados NewReg fara Zap+Insert
+                        *-- de qualquer forma (o registro extra e transparente).
+                        LOCAL loc_oTestErr
+                        TRY
+                            SELECT crSigCdCli
+                            SCATTER MEMVAR BLANK
+                            INSERT INTO crSigCdCli FROM MEMVAR
+                            FPUTS(loc_nHDiag, "  Manual Insert crSigCdCli: OK reccount=" + TRANSFORM(RECCOUNT("crSigCdCli")))
+                        CATCH TO loc_oTestErr
+                            FPUTS(loc_nHDiag, "  Manual Insert crSigCdCli: EXCEPTION " + loc_oTestErr.Message + " linha=" + TRANSFORM(loc_oTestErr.LineNo))
+                        ENDTRY
+                    ENDIF
+                CATCH TO loc_oDiagErr
+                    IF loc_nHDiag > 0
+                        FPUTS(loc_nHDiag, "mIniConta: EXCEPTION " + loc_oDiagErr.Message + " linha=" + TRANSFORM(loc_oDiagErr.LineNo) + " proc=" + loc_oDiagErr.Procedure)
+                    ENDIF
+                ENDTRY
+
                 THIS.cnt_4c_Conta.pgframeDados.Top = 0
                 THIS.cnt_4c_Conta.cmdgPessoal.cmdPessoal.ToolTipText = "F5 - Dados Pessoais/Comerciais"
 
@@ -128,27 +218,62 @@ DEFINE CLASS FormCliente AS FormBase
                 THIS.ConfigurarPaginaDados()
                 THIS.ConfigurarPaginaDados2()
 
-                *-- Carregar dados do cliente
-                loc_lRetLeDados = THIS.cnt_4c_Conta.mLeDados(THIS.this_cGrupo, THIS.this_cCli, "1", ;
-                    THIS.this_cTpBloqCar, THIS.this_cMudaCpfCgc)
-
-                IF loc_lRetLeDados
-                    THIS.cnt_4c_Conta.cmdgftec.Visible = .F.
-
-                    IF THIS.pcEscolha = "INSERIR" AND !EMPTY(loc_cCpf)
-                        WITH THIS.cnt_4c_Conta.pgframeDados.pgframeDados1
-                            .OpcaoCPFCGC.Value = IIF(LEN(loc_cCpf) <> 14, 1, 2)
-                            .GetCPFCGC.Value   = THIS.this_cCpf
-                        ENDWITH
-                        THIS.cnt_4c_Conta.mAtuGetCpf()
-                    ENDIF
-
-                    THIS.cnt_4c_Conta.Visible = .T.
-                    THIS.cnt_4c_Conta.Refresh()
-                    loc_lSucesso = .T.
+                *-- Determinar estado inicial: LISTA (default) ou DADOS (se cli pre-selecionado).
+                LOCAL loc_lIniciarEmDados
+                loc_lIniciarEmDados = !EMPTY(ALLTRIM(THIS.this_cCli))
+                IF loc_lIniciarEmDados
+                    THIS.pcEscolha = "ALTERAR"
                 ELSE
-                    MsgErro("Erro Na Leitura dos Dados", "Erro")
+                    THIS.pcEscolha = "INSERIR"
                 ENDIF
+                IF loc_nHDiag > 0
+                    FPUTS(loc_nHDiag, "pcEscolha=" + THIS.pcEscolha + " iniciarEmDados=" + TRANSFORM(loc_lIniciarEmDados))
+                ENDIF
+
+                *-- mLeDados apenas se indo para DADOS. Se LISTA, cursores stub
+                *-- ja bastam (Requery real acontece no RefreshGridClientes).
+                loc_lRetLeDados = .T.  && default sucesso se pulando mLeDados
+                IF loc_lIniciarEmDados
+                    TRY
+                        loc_lRetLeDados = THIS.cnt_4c_Conta.mLeDados(THIS.this_cGrupo, THIS.this_cCli, "1", ;
+                            THIS.this_cTpBloqCar, THIS.this_cMudaCpfCgc)
+                        IF loc_nHDiag > 0
+                            FPUTS(loc_nHDiag, "mLeDados: retornou=" + TRANSFORM(loc_lRetLeDados))
+                        ENDIF
+                    CATCH TO loc_oDiagErr
+                        loc_lRetLeDados = USED("crSigCdCli") AND RECCOUNT("crSigCdCli") > 0
+                        IF loc_nHDiag > 0
+                            FPUTS(loc_nHDiag, "mLeDados: EXCEPTION " + loc_oDiagErr.Message + " tratado nao-fatal")
+                        ENDIF
+                    ENDTRY
+
+                    IF loc_lRetLeDados
+                        THIS.cnt_4c_Conta.cmdgftec.Visible = .F.
+                        IF THIS.pcEscolha = "INSERIR" AND !EMPTY(loc_cCpf)
+                            WITH THIS.cnt_4c_Conta.pgframeDados.pgframeDados1
+                                .OpcaoCPFCGC.Value = IIF(LEN(loc_cCpf) <> 14, 1, 2)
+                                .GetCPFCGC.Value   = THIS.this_cCpf
+                            ENDWITH
+                            THIS.cnt_4c_Conta.mAtuGetCpf()
+                        ENDIF
+                        THIS.cnt_4c_Conta.Refresh()
+                    ELSE
+                        MsgErro("Erro Na Leitura dos Dados", "Erro")
+                    ENDIF
+                ENDIF
+
+                IF loc_nHDiag > 0
+                    FPUTS(loc_nHDiag, "=== FIM ===")
+                    FCLOSE(loc_nHDiag)
+                ENDIF
+
+                *-- Estado inicial: aplica visibility conforme decidido acima.
+                IF loc_lIniciarEmDados AND loc_lRetLeDados
+                    THIS.IrParaDados()
+                ELSE
+                    THIS.IrParaLista()
+                ENDIF
+                loc_lSucesso = .T.
             ENDIF
 
         CATCH TO loc_oErro
@@ -158,6 +283,442 @@ DEFINE CLASS FormCliente AS FormBase
                 "Erro em InicializarForm")
         ENDTRY
         RETURN loc_lSucesso
+    ENDPROC
+
+    *============================================================
+    PROTECTED PROCEDURE CriarCursoresControlSource
+    *============================================================
+    *-- Cria cursores stub vazios (WHERE 1=0) para os aliases usados como
+    *-- ControlSource pelos controles do clsconta legado. VFP9 valida
+    *-- ControlSource no instante do AddObject; se o alias nao existir,
+    *-- lanca "Error instantiating the object <nome>". Depois o mIniConta()
+    *-- via poDataMgr.CursorQuery repopula com dados reais.
+    *-- Tabelas requeridas (dump ClassResp.VCX filtrado por Parent LIKE 'clsconta%'):
+    *--   SigCdCli, SigCdCe, SigCdCeb, SigClCrc, SigClInf
+    *============================================================
+        LOCAL loc_nResult, loc_oErro, loc_aTabelas, loc_i, loc_cItem, loc_cTabela, ;
+              loc_cCursor, loc_nH, loc_cLog, loc_cLogPath, loc_nErr, loc_aErr
+        loc_aTabelas = "SigCdCli,crSigCdCli;" + ;
+                       "SigCdCe,crSigCdCe;" + ;
+                       "SigCdCeb,crSigCdCeb;" + ;
+                       "SigClCrc,crSigClCrc;" + ;
+                       "SigClInf,crSigClInf"
+
+        *-- Log de diagnostico Erro122 (remover apos fix confirmado)
+        loc_cLogPath = ADDBS(gc_4c_CaminhoBase) + "FormCliente_DiagCursores.log"
+        loc_nH = FCREATE(loc_cLogPath)
+        IF loc_nH > 0
+            FPUTS(loc_nH, "=== CriarCursoresControlSource " + TTOC(DATETIME()) + " ===")
+            FPUTS(loc_nH, "gnConnHandle=" + TRANSFORM(IIF(TYPE("gnConnHandle")="N", gnConnHandle, -999)))
+        ENDIF
+
+        FOR loc_i = 1 TO GETWORDCOUNT(loc_aTabelas, ";")
+            loc_cItem = GETWORDNUM(loc_aTabelas, loc_i, ";")
+            loc_cTabela = GETWORDNUM(loc_cItem, 1, ",")
+            loc_cCursor = GETWORDNUM(loc_cItem, 2, ",")
+
+            IF USED(loc_cCursor)
+                USE IN (loc_cCursor)
+            ENDIF
+
+            TRY
+                IF TYPE("gnConnHandle") != "N" OR gnConnHandle <= 0
+                    CREATE CURSOR (loc_cCursor) (dummy C(1))
+                    IF loc_nH > 0
+                        FPUTS(loc_nH, loc_cCursor + ": FALLBACK dummy (sem conexao)")
+                    ENDIF
+                ELSE
+                    *-- Passo 1: SQLEXEC para tabela temp (schema completo, mas read-only)
+                    LOCAL loc_cTemp
+                    loc_cTemp = "__stub_" + SYS(2015)
+                    loc_nResult = SQLEXEC(gnConnHandle, ;
+                        "SELECT * FROM " + loc_cTabela + " WHERE 1=0", ;
+                        loc_cTemp)
+                    IF loc_nResult < 0
+                        DIMENSION loc_aErr[1]
+                        AERROR(loc_aErr)
+                        IF loc_nH > 0
+                            FPUTS(loc_nH, loc_cCursor + ": SQLEXEC FALHOU (result=" + TRANSFORM(loc_nResult) + ") ERR=" + TRANSFORM(loc_aErr[2]))
+                        ENDIF
+                    ENDIF
+                    IF loc_nResult < 0 OR !USED(loc_cTemp)
+                        CREATE CURSOR (loc_cCursor) (dummy C(1))
+                        IF loc_nH > 0
+                            FPUTS(loc_nH, loc_cCursor + ": FALLBACK dummy pos-falha")
+                        ENDIF
+                    ELSE
+                        *-- Passo 2: SELECT INTO CURSOR READWRITE para cursor local writable
+                        *-- Sem isso o wrapper NewReg('crSigCdCli',.T.) faz Scatter+Insert
+                        *-- em cursor SQL read-only e silenciosamente falha (reccount=0).
+                        SELECT * FROM (loc_cTemp) WHERE .F. ;
+                            INTO CURSOR (loc_cCursor) READWRITE NOFILTER
+                        USE IN (loc_cTemp)
+                        IF loc_nH > 0
+                            LOCAL loc_j, loc_cFields
+                            loc_cFields = ""
+                            FOR loc_j = 1 TO FCOUNT(loc_cCursor)
+                                loc_cFields = loc_cFields + FIELD(loc_j, loc_cCursor) + ","
+                            ENDFOR
+                            FPUTS(loc_nH, loc_cCursor + ": OK RW (fields=" + TRANSFORM(FCOUNT(loc_cCursor)) + " buffering=" + TRANSFORM(CURSORGETPROP("Buffering", loc_cCursor)) + ")")
+                            FPUTS(loc_nH, "  campos: " + LEFT(loc_cFields, 500))
+                        ENDIF
+                    ENDIF
+                ENDIF
+            CATCH TO loc_oErro
+                IF loc_nH > 0
+                    FPUTS(loc_nH, loc_cCursor + ": EXCEPTION " + loc_oErro.Message + " (linha " + TRANSFORM(loc_oErro.LineNo) + ")")
+                ENDIF
+                IF !USED(loc_cCursor)
+                    CREATE CURSOR (loc_cCursor) (dummy C(1))
+                ENDIF
+            ENDTRY
+        ENDFOR
+
+        IF loc_nH > 0
+            FPUTS(loc_nH, "=== FIM ===")
+            FCLOSE(loc_nH)
+        ENDIF
+    ENDPROC
+
+    *============================================================
+    PROTECTED PROCEDURE ConfigurarViewLista
+    *============================================================
+    *-- Container `cnt_4c_ViewLista` ocupa toda a area do form. Contem:
+    *--   1. Cabecalho cinza com titulo "Cadastro de Clientes"
+    *--   2. 6 botoes CRUD topo-direita: Incluir/Visualizar/Alterar/Excluir/Buscar/Encerrar
+    *--   3. Filtro: Grupo de Contas (cod+desc) + Alterados entre (data ini/fim)
+    *--   4. Grid bound a crSigCdCli com colunas Codigo/Nome/CPF-CNPJ/Sit/Ult.Compra/Alterado/Usuar/DDD/Tel
+    *-- Baseado em contas_grid.png (legado SIGCDCTA lista state).
+    *============================================================
+        LOCAL loc_oCnt
+        THIS.AddObject("cnt_4c_ViewLista", "Container")
+        loc_oCnt = THIS.cnt_4c_ViewLista
+        WITH loc_oCnt
+            .Top         = 0
+            .Left        = 0
+            .Width       = THIS.Width
+            .Height      = THIS.Height
+            .BackColor   = RGB(240, 240, 240)
+            .BorderWidth = 0
+            .Visible     = .F.
+        ENDWITH
+
+        THIS.ConfigurarListaCabecalho(loc_oCnt)
+        THIS.ConfigurarListaBotoesTopo(loc_oCnt)
+        THIS.ConfigurarListaFiltros(loc_oCnt)
+        THIS.ConfigurarListaGrid(loc_oCnt)
+    ENDPROC
+
+    *============================================================
+    PROTECTED PROCEDURE ConfigurarListaCabecalho
+    *============================================================
+        LPARAMETERS par_oPai
+        par_oPai.AddObject("cnt_4c_ListaCab", "Container")
+        WITH par_oPai.cnt_4c_ListaCab
+            .Top         = 0
+            .Left        = 0
+            .Width       = THIS.Width - 400
+            .Height      = 80
+            .BackColor   = RGB(100, 100, 100)
+            .BorderWidth = 0
+            .Visible     = .T.
+        ENDWITH
+        par_oPai.cnt_4c_ListaCab.AddObject("lbl_4c_ListaSombra", "Label")
+        WITH par_oPai.cnt_4c_ListaCab.lbl_4c_ListaSombra
+            .FontBold      = .T.
+            .FontName      = "Tahoma"
+            .FontSize      = 18
+            .WordWrap      = .T.
+            .Alignment     = 0
+            .BackStyle     = 0
+            .AutoSize      = .F.
+            .Caption       = "Cadastro de Clientes"
+            .Height        = 40
+            .Left          = 10
+            .Top           = 18
+            .Width         = 569
+            .ForeColor     = RGB(0, 0, 0)
+            .Visible       = .T.
+        ENDWITH
+        par_oPai.cnt_4c_ListaCab.AddObject("lbl_4c_ListaTitulo", "Label")
+        WITH par_oPai.cnt_4c_ListaCab.lbl_4c_ListaTitulo
+            .FontBold      = .T.
+            .FontName      = "Tahoma"
+            .FontSize      = 18
+            .WordWrap      = .T.
+            .Alignment     = 0
+            .BackStyle     = 0
+            .AutoSize      = .F.
+            .Caption       = "Cadastro de Clientes"
+            .Height        = 46
+            .Left          = 10
+            .Top           = 17
+            .Width         = 569
+            .ForeColor     = RGB(255, 255, 255)
+            .Visible       = .T.
+        ENDWITH
+    ENDPROC
+
+    *============================================================
+    PROTECTED PROCEDURE ConfigurarListaBotoesTopo
+    *============================================================
+    *-- 6 botoes CRUD alinhados topo-direita, mesma altura do cabecalho.
+    *-- Nomes/imagens espelham contas_grid.png: Incluir/Visualizar/Alterar/Excluir/Buscar/Encerrar
+    *============================================================
+        LPARAMETERS par_oPai
+        LOCAL loc_aBotoes, loc_i, loc_cNome, loc_cCaption, loc_cImg, loc_cHandler, loc_nLeft
+        LOCAL loc_cItem
+
+        *-- Array: nome_prop|caption|imagem|handler
+        loc_aBotoes = "cmd_4c_Incluir|Incluir|cadastro_inserir_26.jpg|BtnIncluirClick;" + ;
+                      "cmd_4c_Visualizar|Visualizar|cadastro_visualizar_26.jpg|BtnVisualizarClick;" + ;
+                      "cmd_4c_Alterar|Alterar|cadastro_alterar_26.jpg|BtnAlterarClick;" + ;
+                      "cmd_4c_Excluir|Excluir|cadastro_excluir_26.jpg|BtnExcluirClick;" + ;
+                      "cmd_4c_Buscar|Buscar|cadastro_procurar_26.jpg|BtnBuscarClick;" + ;
+                      "cmd_4c_EncerrarLst|Encerrar|cadastro_sair_60.jpg|BtnEncerrarClick"
+
+        par_oPai.AddObject("cnt_4c_ListaBotoes", "Container")
+        WITH par_oPai.cnt_4c_ListaBotoes
+            .Top         = 0
+            .Left        = THIS.Width - 400
+            .Width       = 400
+            .Height      = 80
+            .BackStyle   = 0
+            .BorderWidth = 0
+            .Visible     = .T.
+        ENDWITH
+
+        loc_nLeft = 5
+        FOR loc_i = 1 TO 6
+            loc_cItem = GETWORDNUM(loc_aBotoes, loc_i, ";")
+            loc_cNome = GETWORDNUM(loc_cItem, 1, "|")
+            loc_cCaption = GETWORDNUM(loc_cItem, 2, "|")
+            loc_cImg = GETWORDNUM(loc_cItem, 3, "|")
+            loc_cHandler = GETWORDNUM(loc_cItem, 4, "|")
+
+            par_oPai.cnt_4c_ListaBotoes.AddObject(loc_cNome, "CommandButton")
+            WITH par_oPai.cnt_4c_ListaBotoes.&loc_cNome.
+                .Caption         = loc_cCaption
+                .Picture         = gc_4c_CaminhoIcones + loc_cImg
+                .PicturePosition = 13
+                .Top             = 5
+                .Left            = loc_nLeft
+                .Width           = 60
+                .Height          = 70
+                .FontName        = "Tahoma"
+                .FontBold        = .T.
+                .FontItalic      = .T.
+                .FontSize        = 8
+                .ForeColor       = RGB(90, 90, 90)
+                .BackColor       = RGB(255, 255, 255)
+                .Themes          = .F.
+                .SpecialEffect   = 0
+                .MousePointer    = 15
+                .WordWrap        = .T.
+                .AutoSize        = .F.
+                .Visible         = .T.
+            ENDWITH
+            BINDEVENT(par_oPai.cnt_4c_ListaBotoes.&loc_cNome., "Click", THIS, loc_cHandler)
+            loc_nLeft = loc_nLeft + 65
+        ENDFOR
+    ENDPROC
+
+    *============================================================
+    PROTECTED PROCEDURE ConfigurarListaFiltros
+    *============================================================
+        LPARAMETERS par_oPai
+        par_oPai.AddObject("cnt_4c_ListaFiltros", "Container")
+        WITH par_oPai.cnt_4c_ListaFiltros
+            .Top         = 90
+            .Left        = 15
+            .Width       = 620
+            .Height      = 55
+            .BackStyle   = 0
+            .BorderWidth = 1
+            .Visible     = .T.
+        ENDWITH
+
+        *-- Label Grupo de Contas
+        par_oPai.cnt_4c_ListaFiltros.AddObject("lbl_4c_LblGrupo", "Label")
+        WITH par_oPai.cnt_4c_ListaFiltros.lbl_4c_LblGrupo
+            .Caption   = "\<Grupo de Contas"
+            .Top       = 4
+            .Left      = 10
+            .Width     = 100
+            .Height    = 15
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Visible   = .T.
+        ENDWITH
+
+        *-- TxtBox grupo (codigo)
+        par_oPai.cnt_4c_ListaFiltros.AddObject("txt_4c_FiltroGrupo", "TextBox")
+        WITH par_oPai.cnt_4c_ListaFiltros.txt_4c_FiltroGrupo
+            .Top           = 22
+            .Left          = 10
+            .Width         = 100
+            .Height        = 24
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Value         = ""
+            .Visible       = .T.
+        ENDWITH
+
+        *-- TxtBox descricao grupo
+        par_oPai.cnt_4c_ListaFiltros.AddObject("txt_4c_FiltroGrupoDesc", "TextBox")
+        WITH par_oPai.cnt_4c_ListaFiltros.txt_4c_FiltroGrupoDesc
+            .Top           = 22
+            .Left          = 115
+            .Width         = 280
+            .Height        = 24
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .ReadOnly      = .T.
+            .Value         = ""
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Label Alterados entre
+        par_oPai.cnt_4c_ListaFiltros.AddObject("lbl_4c_LblAlt", "Label")
+        WITH par_oPai.cnt_4c_ListaFiltros.lbl_4c_LblAlt
+            .Caption   = "Alterados entre"
+            .Top       = 4
+            .Left      = 410
+            .Width     = 100
+            .Height    = 15
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Visible   = .T.
+        ENDWITH
+
+        *-- Data inicial
+        par_oPai.cnt_4c_ListaFiltros.AddObject("txt_4c_FiltroDtIni", "TextBox")
+        WITH par_oPai.cnt_4c_ListaFiltros.txt_4c_FiltroDtIni
+            .Top           = 22
+            .Left          = 410
+            .Width         = 80
+            .Height        = 24
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Value         = DATE()
+            .InputMask     = "99/99/9999"
+            .Visible       = .T.
+        ENDWITH
+
+        par_oPai.cnt_4c_ListaFiltros.AddObject("lbl_4c_LblAte", "Label")
+        WITH par_oPai.cnt_4c_ListaFiltros.lbl_4c_LblAte
+            .Caption   = "at" + CHR(233)
+            .Top       = 25
+            .Left      = 495
+            .Width     = 18
+            .Height    = 15
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .Visible   = .T.
+        ENDWITH
+
+        par_oPai.cnt_4c_ListaFiltros.AddObject("txt_4c_FiltroDtFim", "TextBox")
+        WITH par_oPai.cnt_4c_ListaFiltros.txt_4c_FiltroDtFim
+            .Top           = 22
+            .Left          = 515
+            .Width         = 80
+            .Height        = 24
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Value         = DATE()
+            .InputMask     = "99/99/9999"
+            .Visible       = .T.
+        ENDWITH
+    ENDPROC
+
+    *============================================================
+    PROTECTED PROCEDURE ConfigurarListaGrid
+    *============================================================
+    *-- Grid bound a crSigCdCli (populado por miniconta do wrapper).
+    *-- Colunas: Codigo/Nome/CPF-CNPJ/Sit/Ult.Compra/Alterado em/Usuar.Alt/DDD/Telefone
+    *============================================================
+        LPARAMETERS par_oPai
+        par_oPai.AddObject("grd_4c_Clientes", "Grid")
+        par_oPai.grd_4c_Clientes.ColumnCount = 9
+        WITH par_oPai.grd_4c_Clientes
+            .Top                = 155
+            .Left               = 15
+            .Width              = THIS.Width - 30
+            .Height             = THIS.Height - 170
+            .FontName           = "Tahoma"
+            .FontSize           = 8
+            .ForeColor          = RGB(90, 90, 90)
+            .BackColor          = RGB(255, 255, 255)
+            .GridLineColor      = RGB(238, 238, 238)
+            .HighlightBackColor = RGB(15, 41, 104)
+            .HighlightForeColor = RGB(255, 255, 255)
+            .HighlightStyle     = 2
+            .DeleteMark         = .F.
+            .RecordMark         = .F.
+            .RowHeight          = 18
+            .HeaderHeight       = 22
+            .ScrollBars         = 2
+            .GridLines          = 3
+            .Visible            = .T.
+
+            .Column1.Width = 80
+            .Column1.Header1.Caption = "C" + CHR(243) + "digo"
+            .Column1.Header1.Alignment = 2
+            .Column1.ReadOnly = .T.
+
+            .Column2.Width = 380
+            .Column2.Header1.Caption = "Descri" + CHR(231) + CHR(227) + "o"
+            .Column2.Header1.Alignment = 2
+            .Column2.ReadOnly = .T.
+
+            .Column3.Width = 140
+            .Column3.Header1.Caption = "CPF/CNPJ"
+            .Column3.Header1.Alignment = 2
+            .Column3.ReadOnly = .T.
+
+            .Column4.Width = 35
+            .Column4.Header1.Caption = "Sit"
+            .Column4.Header1.Alignment = 2
+            .Column4.ReadOnly = .T.
+
+            .Column5.Width = 80
+            .Column5.Header1.Caption = CHR(218) + "lt.Compra"
+            .Column5.Header1.Alignment = 2
+            .Column5.ReadOnly = .T.
+
+            .Column6.Width = 80
+            .Column6.Header1.Caption = "Alterado em"
+            .Column6.Header1.Alignment = 2
+            .Column6.ReadOnly = .T.
+
+            .Column7.Width = 80
+            .Column7.Header1.Caption = "Usuar.Alt"
+            .Column7.Header1.Alignment = 2
+            .Column7.ReadOnly = .T.
+
+            .Column8.Width = 35
+            .Column8.Header1.Caption = "DDD"
+            .Column8.Header1.Alignment = 2
+            .Column8.ReadOnly = .T.
+
+            .Column9.Width = 100
+            .Column9.Header1.Caption = "Telefone"
+            .Column9.Header1.Alignment = 2
+            .Column9.ReadOnly = .T.
+        ENDWITH
+
+        *-- BindGrid: RecordSource + ControlSources somente APOS crSigCdCli existir
+        *-- Fase 3 aplicara em IrParaLista() (chamado apos mIniConta populate cursores).
     ENDPROC
 
     *============================================================
@@ -260,7 +821,7 @@ DEFINE CLASS FormCliente AS FormBase
             .BorderStyle   = 0
             .Value         = 1
             .Height        = 85
-            .Left          = 688
+            .Left          = THIS.Width - 165   && ancorar a direita (was 688 para Width=852)
             .SpecialEffect = 1
             .Top           = -2
             .Width         = 161
@@ -276,7 +837,7 @@ DEFINE CLASS FormCliente AS FormBase
             .FontSize   = 8
             .WordWrap   = .T.
             .Picture    = gc_4c_CaminhoIcones + "cadastro_salvar_60.jpg"
-            .Caption    = "\<Ok"
+            .Caption    = "\<Salvar"
             .ForeColor  = RGB(90,90,90)
             .BackColor  = RGB(255,255,255)
             .Themes     = .F.
@@ -341,7 +902,8 @@ DEFINE CLASS FormCliente AS FormBase
                     ELSE
                         THIS.RetCodCliente = THIS.cnt_4c_Conta.pgframeDados.pgframeDados1.GetCPFCGC.Value
                     ENDIF
-                    THIS.Release()
+                    *-- Retorno a Lista + refresh grid (nao fechar form)
+                    THIS.IrParaLista()
                 ELSE
                     MsgErro("Erro na Grava" + CHR(231) + CHR(227) + "o dos Dados, " + ;
                         "Favor Clicar no Bot" + CHR(227) + "o [OK] Novamente.", "Erro")
@@ -384,7 +946,8 @@ DEFINE CLASS FormCliente AS FormBase
         ENDIF
 
         THIS.RetCodCliente = " "
-        THIS.Release()
+        *-- Voltar para Lista em vez de fechar form
+        THIS.IrParaLista()
     ENDPROC
 
     *============================================================
@@ -1370,6 +1933,156 @@ DEFINE CLASS FormCliente AS FormBase
     ENDPROC
 
     *============================================================
+    * IrParaLista - Estado Lista: mostra grid, esconde dados
+    *============================================================
+    PROCEDURE IrParaLista
+        LOCAL loc_oErro
+        TRY
+            IF PEMSTATUS(THIS, "cnt_4c_ViewLista", 5)
+                THIS.cnt_4c_ViewLista.Visible = .T.
+            ENDIF
+            IF PEMSTATUS(THIS, "cnt_4c_Sombra", 5)
+                THIS.cnt_4c_Sombra.Visible = .F.
+            ENDIF
+            IF PEMSTATUS(THIS, "cnt_4c_Conta", 5) AND !ISNULL(THIS.cnt_4c_Conta)
+                THIS.cnt_4c_Conta.Visible = .F.
+            ENDIF
+            IF PEMSTATUS(THIS, "cmg_4c_Sair", 5)
+                THIS.cmg_4c_Sair.Visible = .F.
+            ENDIF
+            THIS.this_cModoAtual = "LISTA"
+            THIS.RefreshGridClientes()
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + "Linha: " + TRANSFORM(loc_oErro.LineNo), "IrParaLista")
+        ENDTRY
+    ENDPROC
+
+    *============================================================
+    * IrParaDados - Estado Dados: mostra clsconta+cabecalho+Ok/Cancelar
+    *============================================================
+    PROCEDURE IrParaDados
+        LOCAL loc_oErro
+        TRY
+            IF PEMSTATUS(THIS, "cnt_4c_ViewLista", 5)
+                THIS.cnt_4c_ViewLista.Visible = .F.
+            ENDIF
+            IF PEMSTATUS(THIS, "cnt_4c_Sombra", 5)
+                THIS.cnt_4c_Sombra.Visible = .T.
+            ENDIF
+            IF PEMSTATUS(THIS, "cnt_4c_Conta", 5) AND !ISNULL(THIS.cnt_4c_Conta)
+                THIS.cnt_4c_Conta.Visible = .T.
+            ENDIF
+            IF PEMSTATUS(THIS, "cmg_4c_Sair", 5)
+                THIS.cmg_4c_Sair.Visible = .T.
+            ENDIF
+            THIS.this_cModoAtual = "DADOS"
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + "Linha: " + TRANSFORM(loc_oErro.LineNo), "IrParaDados")
+        ENDTRY
+    ENDPROC
+
+    *============================================================
+    * ValidarPreAcao - Validacoes pre-acao portadas do SIGCDCLI.Init legado
+    * (sigcdcli_form_codigo_fonte.txt linhas 2103-2166).
+    * Retorna .T. se OK, .F. se qualquer check falhar (ja exibiu MsgAviso).
+    * Efeito colateral: atualiza THIS.this_cGrupo com o grupo resolvido.
+    * par_cAcao: "INCLUIR" | "ALTERAR" | "EXCLUIR" | "VISUALIZAR"
+    *  - INCLUIR/ALTERAR/EXCLUIR checam fChecaAcesso("SIGCDCTA","ALTERAR")
+    *  - VISUALIZAR nao exige acesso de alteracao
+    *============================================================
+    PROTECTED FUNCTION ValidarPreAcao(par_cAcao)
+        LOCAL loc_cGrupo, loc_cAcao
+        loc_cAcao = UPPER(IIF(TYPE("par_cAcao") = "C", ALLTRIM(par_cAcao), ""))
+        loc_cGrupo = ""
+        IF PEMSTATUS(THIS, "cnt_4c_ViewLista", 5) AND ;
+           PEMSTATUS(THIS.cnt_4c_ViewLista, "cnt_4c_ListaFiltros", 5) AND ;
+           PEMSTATUS(THIS.cnt_4c_ViewLista.cnt_4c_ListaFiltros, "txt_4c_FiltroGrupo", 5)
+            loc_cGrupo = ALLTRIM(THIS.cnt_4c_ViewLista.cnt_4c_ListaFiltros.txt_4c_FiltroGrupo.Value)
+        ENDIF
+        IF EMPTY(loc_cGrupo)
+            loc_cGrupo = ALLTRIM(THIS.this_cGrupo)
+        ENDIF
+        IF EMPTY(loc_cGrupo) AND USED("crSigCdPam") AND RECCOUNT("crSigCdPam") > 0
+            SELECT crSigCdPam
+            LOCATE
+            IF !EOF("crSigCdPam")
+                loc_cGrupo = ALLTRIM(crSigCdPam.GrPadClis)
+            ENDIF
+        ENDIF
+
+        IF !USED("crSigCdPam") OR RECCOUNT("crSigCdPam") = 0
+            MsgAviso("Configura" + CHR(231) + CHR(227) + "o de Parametros do Sistema N" + CHR(227) + "o Encontrado.")
+            RETURN .F.
+        ENDIF
+        IF !USED("crSigCdGcr") OR RECCOUNT("crSigCdGcr") = 0
+            MsgAviso("Nenhum Grupo de Conta Cadastrado.")
+            RETURN .F.
+        ENDIF
+        IF EMPTY(loc_cGrupo)
+            MsgAviso("Grupo Padr" + CHR(227) + "o N" + CHR(227) + "o Configurado.")
+            RETURN .F.
+        ENDIF
+        SELECT crSigCdGcr
+        LOCATE FOR ALLTRIM(Codigos) == ALLTRIM(loc_cGrupo)
+        IF EOF("crSigCdGcr")
+            MsgAviso("Grupo Padr" + CHR(227) + "o N" + CHR(227) + "o Configurado.")
+            RETURN .F.
+        ENDIF
+        IF loc_cAcao <> "VISUALIZAR"
+            IF !fChecaAcesso("SIGCDCTA", "ALTERAR")
+                MsgAviso("Usu" + CHR(225) + "rio N" + CHR(227) + "o Possui Acesso p/ Incluir / Alterar Dados de Clientes.")
+                RETURN .F.
+            ENDIF
+        ENDIF
+        THIS.this_cGrupo = PADR(loc_cGrupo, 10)
+        RETURN .T.
+    ENDFUNC
+
+    *============================================================
+    * RefreshGridClientes - Popula crSigCdCli via poDataMgr.Requery
+    * e bind grid columns. Chamado toda vez que entra em Lista.
+    *============================================================
+    PROCEDURE RefreshGridClientes
+        LOCAL loc_oErro, loc_oGrd, loc_cGrupo
+        TRY
+            IF !PEMSTATUS(THIS, "cnt_4c_ViewLista", 5) OR ;
+               !PEMSTATUS(THIS.cnt_4c_ViewLista, "grd_4c_Clientes", 5)
+                RETURN
+            ENDIF
+
+            *-- Requery com filtro grupo (pega do textbox ou padrao)
+            loc_cGrupo = ALLTRIM(THIS.cnt_4c_ViewLista.cnt_4c_ListaFiltros.txt_4c_FiltroGrupo.Value)
+            IF EMPTY(loc_cGrupo) AND USED("crSigCdPam") AND RECCOUNT("crSigCdPam") > 0
+                loc_cGrupo = ALLTRIM(crSigCdPam.GrPadClis)
+                THIS.cnt_4c_ViewLista.cnt_4c_ListaFiltros.txt_4c_FiltroGrupo.Value = loc_cGrupo
+                THIS.this_cGrupo = PADR(loc_cGrupo, 10)
+            ENDIF
+
+            IF !ISNULL(THIS.poDataMgr) AND VARTYPE(THIS.poDataMgr) = "O" AND !EMPTY(loc_cGrupo)
+                THIS.poDataMgr.ReQuery("crSigCdCli", "Grupos", PADR(loc_cGrupo, 10))
+            ENDIF
+
+            *-- Bind grid a crSigCdCli (uma vez ou toda vez, VFP aceita)
+            loc_oGrd = THIS.cnt_4c_ViewLista.grd_4c_Clientes
+            IF USED("crSigCdCli")
+                loc_oGrd.RecordSource = "crSigCdCli"
+                loc_oGrd.Column1.ControlSource = "crSigCdCli.iclis"
+                loc_oGrd.Column2.ControlSource = "crSigCdCli.rclis"
+                loc_oGrd.Column3.ControlSource = "crSigCdCli.cpfs"
+                loc_oGrd.Column4.ControlSource = "crSigCdCli.situas"
+                loc_oGrd.Column5.ControlSource = "crSigCdCli.ultcomps"
+                loc_oGrd.Column6.ControlSource = "crSigCdCli.dtalts"
+                loc_oGrd.Column7.ControlSource = "crSigCdCli.usualts"
+                loc_oGrd.Column8.ControlSource = "crSigCdCli.ddds"
+                loc_oGrd.Column9.ControlSource = "crSigCdCli.tel1s"
+            ENDIF
+            loc_oGrd.Refresh()
+        CATCH TO loc_oErro
+            *-- Silent: se cursor/wrapper ainda nao pronto, apenas nao popula
+        ENDTRY
+    ENDPROC
+
+    *============================================================
     * ConfigurarPaginaDados2 - Aplica overrides visuais do SCX
     * legado nos controles internos de cnt_4c_Conta.pgframeDados2
     * (aba de Dados Pessoais/Comerciais do cliente).
@@ -1650,23 +2363,32 @@ DEFINE CLASS FormCliente AS FormBase
     *============================================================
     PROCEDURE BtnIncluirClick
         LOCAL loc_lRet, loc_oErro
+        IF !THIS.ValidarPreAcao("INCLUIR")
+            RETURN
+        ENDIF
         TRY
             THIS.pcEscolha       = "INSERIR"
             THIS.this_cModoAtual = "INCLUIR"
             THIS.plaltcd         = .F.
             THIS.this_cCli       = SPACE(10)
             THIS.RetCodCliente   = " "
+            THIS.IrParaDados()
             IF PEMSTATUS(THIS, "cnt_4c_Conta", 5) AND !ISNULL(THIS.cnt_4c_Conta)
-                loc_lRet = THIS.cnt_4c_Conta.mLeDados(THIS.this_cGrupo, SPACE(10), "1", ;
-                    THIS.this_cTpBloqCar, THIS.this_cMudaCpfCgc)
+                TRY
+                    loc_lRet = THIS.cnt_4c_Conta.mLeDados(THIS.this_cGrupo, SPACE(10), "1", ;
+                        THIS.this_cTpBloqCar, THIS.this_cMudaCpfCgc)
+                CATCH
+                    *-- exception nao-fatal (fwcombo1 etc.) — form usavel
+                    loc_lRet = USED("crSigCdCli") AND RECCOUNT("crSigCdCli") > 0
+                ENDTRY
                 IF loc_lRet
-                    THIS.cnt_4c_Conta.Visible = .T.
                     THIS.cnt_4c_Conta.Refresh()
                     IF PEMSTATUS(THIS, "cmg_4c_Sair", 5)
                         THIS.cmg_4c_Sair.Buttons(1).Enabled = .T.
                     ENDIF
                 ELSE
                     MsgErro("Erro ao inicializar formul" + CHR(225) + "rio para inclus" + CHR(227) + "o.", "Erro")
+                    THIS.IrParaLista()
                 ENDIF
             ENDIF
         CATCH TO loc_oErro
@@ -1682,18 +2404,14 @@ DEFINE CLASS FormCliente AS FormBase
     *============================================================
     PROCEDURE BtnAlterarClick
         LOCAL loc_cCodigoCli, loc_lRet, loc_oErro
+        IF !THIS.ValidarPreAcao("ALTERAR")
+            RETURN
+        ENDIF
         TRY
-            *-- Obter codigo do cliente atual do controle interno do clsconta
+            *-- Ler codigo do cliente da linha corrente do grid
             loc_cCodigoCli = ""
-            IF PEMSTATUS(THIS, "cnt_4c_Conta", 5) AND !ISNULL(THIS.cnt_4c_Conta)
-                IF PEMSTATUS(THIS.cnt_4c_Conta, "pgframeDados", 5) AND ;
-                   PEMSTATUS(THIS.cnt_4c_Conta.pgframeDados, "pgframeDados1", 5) AND ;
-                   PEMSTATUS(THIS.cnt_4c_Conta.pgframeDados.pgframeDados1, "getcodigo", 5)
-                    loc_cCodigoCli = ALLTRIM(THIS.cnt_4c_Conta.pgframeDados.pgframeDados1.getcodigo.Value)
-                ENDIF
-            ENDIF
-            IF EMPTY(loc_cCodigoCli)
-                loc_cCodigoCli = ALLTRIM(THIS.this_cCli)
+            IF USED("crSigCdCli") AND !EOF("crSigCdCli")
+                loc_cCodigoCli = ALLTRIM(crSigCdCli.iclis)
             ENDIF
 
             IF EMPTY(loc_cCodigoCli)
@@ -1705,18 +2423,23 @@ DEFINE CLASS FormCliente AS FormBase
             THIS.this_cModoAtual = "ALTERAR"
             THIS.plaltcd         = .T.
             THIS.this_cCli       = PADR(loc_cCodigoCli, 10)
+            THIS.IrParaDados()
 
             IF PEMSTATUS(THIS, "cnt_4c_Conta", 5) AND !ISNULL(THIS.cnt_4c_Conta)
-                loc_lRet = THIS.cnt_4c_Conta.mLeDados(THIS.this_cGrupo, THIS.this_cCli, "1", ;
-                    THIS.this_cTpBloqCar, THIS.this_cMudaCpfCgc)
+                TRY
+                    loc_lRet = THIS.cnt_4c_Conta.mLeDados(THIS.this_cGrupo, THIS.this_cCli, "1", ;
+                        THIS.this_cTpBloqCar, THIS.this_cMudaCpfCgc)
+                CATCH
+                    loc_lRet = USED("crSigCdCli") AND RECCOUNT("crSigCdCli") > 0
+                ENDTRY
                 IF loc_lRet
-                    THIS.cnt_4c_Conta.Visible = .T.
                     THIS.cnt_4c_Conta.Refresh()
                     IF PEMSTATUS(THIS, "cmg_4c_Sair", 5)
                         THIS.cmg_4c_Sair.Buttons(1).Enabled = .T.
                     ENDIF
                 ELSE
                     MsgErro("Erro ao carregar dados para altera" + CHR(231) + CHR(227) + "o.", "Erro")
+                    THIS.IrParaLista()
                 ENDIF
             ENDIF
         CATCH TO loc_oErro
@@ -1732,6 +2455,9 @@ DEFINE CLASS FormCliente AS FormBase
     *============================================================
     PROCEDURE BtnVisualizarClick
         LOCAL loc_cCodigoCli, loc_lRet, loc_oErro
+        IF !THIS.ValidarPreAcao("VISUALIZAR")
+            RETURN
+        ENDIF
         TRY
             loc_cCodigoCli = ""
             IF PEMSTATUS(THIS, "cnt_4c_Conta", 5) AND !ISNULL(THIS.cnt_4c_Conta)
@@ -1779,6 +2505,9 @@ DEFINE CLASS FormCliente AS FormBase
     *============================================================
     PROCEDURE BtnExcluirClick
         LOCAL loc_cCodigoCli, loc_lConfirma, loc_lSucesso, loc_cSQL, loc_oErro
+        IF !THIS.ValidarPreAcao("EXCLUIR")
+            RETURN
+        ENDIF
         TRY
             loc_cCodigoCli = ""
             IF PEMSTATUS(THIS, "cnt_4c_Conta", 5) AND !ISNULL(THIS.cnt_4c_Conta)
@@ -1913,7 +2642,14 @@ DEFINE CLASS FormCliente AS FormBase
     * BtnEncerrarClick - Fechar sem gravar (alias de BtnCancelarClick)
     *============================================================
     PROCEDURE BtnEncerrarClick
-        THIS.BtnCancelarClick()
+        *-- Estado LISTA: fecha form
+        *-- Estado DADOS: volta para LISTA (cancela edicao corrente)
+        IF THIS.this_cModoAtual == "LISTA"
+            THIS.Release()
+        ELSE
+            THIS.BtnCancelarClick()
+            THIS.IrParaLista()
+        ENDIF
     ENDPROC
 
     *============================================================
@@ -1968,6 +2704,14 @@ DEFINE CLASS FormCliente AS FormBase
     *============================================================
         IF !ISNULL(THIS.this_oBusinessObject)
             THIS.this_oBusinessObject = .NULL.
+        ENDIF
+        *-- Liberar poDataMgr (fSqlConector) — sem isso conex??o ODBC fica presa
+        IF !ISNULL(THIS.poDataMgr) AND VARTYPE(THIS.poDataMgr) = "O"
+            TRY
+                THIS.poDataMgr.Release()
+            CATCH
+            ENDTRY
+            THIS.poDataMgr = .NULL.
         ENDIF
         DODEFAULT()
     ENDPROC

@@ -8347,3 +8347,112 @@ Idempotente (segundo run detecta metodos ja injetados e skipa).
 - Origem: Erro116 (2026-08-18, FormSigReCtc "Movimentacao de Cartoes" — clicar Visualizar disparou "Property VISUALIZAR is not found" em linha 958 do form)
 
 
+## 173. Forms wrapper (clsconta/clstitulo/etc) — botoes CRUD DEVEM re-executar validacoes do Init legado (Erro132 FormCliente 2026-08-21)
+
+### Problema
+
+Forms operacionais que embrulham VCXs legado (`clsconta`, `clstitulo`, `clsproduto`, `clsplano`, etc) tem o Init do wrapper contendo validacoes portadas do form legado (verificar `crSigCdPam`/`crSigCdGcr` populados, resolver Grupo, checar acesso via `fChecaAcesso`). Essas validacoes rodam APENAS 1 vez, no Show do form. Os botoes CRUD topo-direita (Incluir/Alterar/Visualizar/Excluir) sao adicionados na fase 2 (post-Init) e disparam DEPOIS — quando o estado pode ter mudado:
+
+- Usuario alterou o filtro `txt_4c_FiltroGrupo` deixando-o vazio
+- Cursor global `crSigCdPam` foi esvaziado por outro form modal
+- `crSigCdGcr` mudou
+
+Sem re-validar, `BtnIncluirClick` chama `THIS.IrParaDados()` direto e o form salta para a aba de Dados em branco. Sintoma reportado pelo usuario: **"clico no botao Incluir e mesmo sem selecionar o Grupo ele vai para a aba de dados"**.
+
+### Anti-padrao
+
+```foxpro
+PROCEDURE BtnIncluirClick
+    LOCAL loc_lRet, loc_oErro
+    TRY
+        THIS.pcEscolha       = "INSERIR"
+        THIS.this_cModoAtual = "INCLUIR"
+        THIS.IrParaDados()   && SALTO SEM VALIDACAO
+        ...
+    ENDTRY
+ENDPROC
+```
+
+### Padrao correto
+
+Extrair um helper `PROTECTED FUNCTION ValidarPreAcao(par_cAcao)` que replica as checagens do Init legado e chamar ANTES do TRY em cada botao CRUD.
+
+```foxpro
+PROTECTED FUNCTION ValidarPreAcao(par_cAcao)
+    LOCAL loc_cGrupo, loc_cAcao
+    loc_cAcao = UPPER(IIF(TYPE("par_cAcao") = "C", ALLTRIM(par_cAcao), ""))
+    loc_cGrupo = ""
+    IF PEMSTATUS(THIS, "cnt_4c_ViewLista", 5) AND ;
+       PEMSTATUS(THIS.cnt_4c_ViewLista, "cnt_4c_ListaFiltros", 5) AND ;
+       PEMSTATUS(THIS.cnt_4c_ViewLista.cnt_4c_ListaFiltros, "txt_4c_FiltroGrupo", 5)
+        loc_cGrupo = ALLTRIM(THIS.cnt_4c_ViewLista.cnt_4c_ListaFiltros.txt_4c_FiltroGrupo.Value)
+    ENDIF
+    IF EMPTY(loc_cGrupo)
+        loc_cGrupo = ALLTRIM(THIS.this_cGrupo)
+    ENDIF
+    IF EMPTY(loc_cGrupo) AND USED("crSigCdPam") AND RECCOUNT("crSigCdPam") > 0
+        SELECT crSigCdPam
+        LOCATE
+        IF !EOF("crSigCdPam")
+            loc_cGrupo = ALLTRIM(crSigCdPam.GrPadClis)
+        ENDIF
+    ENDIF
+
+    IF !USED("crSigCdPam") OR RECCOUNT("crSigCdPam") = 0
+        MsgAviso("Configura" + CHR(231) + CHR(227) + "o de Parametros do Sistema N" + CHR(227) + "o Encontrado.")
+        RETURN .F.
+    ENDIF
+    IF !USED("crSigCdGcr") OR RECCOUNT("crSigCdGcr") = 0
+        MsgAviso("Nenhum Grupo de Conta Cadastrado.")
+        RETURN .F.
+    ENDIF
+    IF EMPTY(loc_cGrupo)
+        MsgAviso("Grupo Padr" + CHR(227) + "o N" + CHR(227) + "o Configurado.")
+        RETURN .F.
+    ENDIF
+    SELECT crSigCdGcr
+    LOCATE FOR ALLTRIM(Codigos) == ALLTRIM(loc_cGrupo)
+    IF EOF("crSigCdGcr")
+        MsgAviso("Grupo Padr" + CHR(227) + "o N" + CHR(227) + "o Configurado.")
+        RETURN .F.
+    ENDIF
+    IF loc_cAcao <> "VISUALIZAR"
+        IF !fChecaAcesso("SIGCDCTA", "ALTERAR")
+            MsgAviso("Usu" + CHR(225) + "rio N" + CHR(227) + "o Possui Acesso p/ Incluir / Alterar Dados de Clientes.")
+            RETURN .F.
+        ENDIF
+    ENDIF
+    THIS.this_cGrupo = PADR(loc_cGrupo, 10)
+    RETURN .T.
+ENDFUNC
+
+PROCEDURE BtnIncluirClick
+    LOCAL loc_lRet, loc_oErro
+    IF !THIS.ValidarPreAcao("INCLUIR")
+        RETURN
+    ENDIF
+    TRY
+        THIS.pcEscolha       = "INSERIR"
+        THIS.this_cModoAtual = "INCLUIR"
+        THIS.IrParaDados()
+        ...
+    ENDTRY
+ENDPROC
+```
+
+### Detalhes
+
+- Mensagens IDENTICAS ao legado, via `CHR()` (nunca literais acentuados).
+- Todos os `RETURN` ficam ANTES do `TRY` (respeita CLAUDE.md #1).
+- Ajustar `PGM`/tabela conforme o form (ex: `"SIGCDCTA"` para clientes, `"SIGCDTIT"` para titulos).
+- `VISUALIZAR` pula `fChecaAcesso` — visualizar nao exige acesso de alteracao.
+- Ajustar coluna `crSigCdPam.GrPad<X>s` conforme o cadastro (`GrPadClis` clientes, `GrPadVens` vendedores, `GrPadCfos` fornecedores).
+
+### Referencias
+
+- Ref canonico (helper): `C:\4c\projeto\app\forms\operacionais\FormCliente.prg:1985-2050`
+- Ref canonico (uso nos 4 botoes): `C:\4c\projeto\app\forms\operacionais\FormCliente.prg:2364-2410`
+- Legado que originou as validacoes: `C:\4c\tasks\task372\sigcdcli_form_codigo_fonte.txt:2103-2166` (SIGCDCLI.Init)
+- Origem: Erro132 (2026-08-21, FormCliente — botoes CRUD saltavam para IrParaDados sem re-validar Grupo)
+
+
