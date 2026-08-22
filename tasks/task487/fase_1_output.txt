@@ -1,0 +1,11 @@
+﻿`C:\4c\projeto\app\classes\OpsBO.prg` criado com sucesso.
+
+**Fase 1 completa.** O arquivo cont├®m:
+- `DEFINE CLASS OpsBO AS BusinessBase` com `this_cTabela` e `this_cCampoChave` declarados na classe
+- **14 propriedades** extra├¡das diretamente dos `ControlSource` do fonte original e do schema.sql:
+  - `this_cDopes` (char 20, PK)
+  - `this_nNDopes`, `this_nOrdes`, `this_nCopers`, `this_nTipoOps`, `this_nNFiscals` (num├®ricos)
+  - `this_cTitOpes`, `this_cMenus`, `this_cSubMenus`, `this_cCmoes`, `this_cAbrevs`, `this_cNivels`, `this_cObsOpes` (char/memo)
+  - `this_nOpeInatvs` (de SigOpCdc ÔÇö controla checkbox INATIVA)
+- `Init()` configurando `this_cTabela = "SigCdOpe"` e `this_cCampoChave = "dopes"`
+- `ObterChavePrimaria()` para auditoria

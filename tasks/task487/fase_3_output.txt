@@ -1,0 +1,18 @@
+﻿Arquivo criado corretamente. Fase 3/8 conclu├¡da com sucesso.
+
+**FormOps.prg - Fase 3/8 - O que foi criado:**
+
+| M├®todo | Status |
+|--------|--------|
+| `Init()` | `RETURN DODEFAULT()` ÔÇö padr├úo can├┤nico |
+| `InicializarForm()` | Cria `OpsBO`, cursor placeholder (11 colunas espelhando `OpsBO.Buscar()`), chama `ConfigurarPageFrame`, respeita `gb_4c_ValidandoUI` |
+| `ConfigurarPageFrame()` | `pgf_4c_Paginas` com `Top=-29`, 2 pages, `fundo_cad_1003.jpg` |
+| `ConfigurarPaginaLista()` | `cnt_4c_Cabecalho` (com `lbl_4c_Sombra`/`lbl_4c_Titulo`), `cnt_4c_Botoes` (vazio, Left=539), `cnt_4c_Saida` (can├┤nico Left=917) |
+| `ConfigurarPaginaDados()` | `cnt_4c_BotoesAcao` (vazio, Grupo_Salva.Left=821, Top=36) |
+| `CarregarLista()` | Chama `OpsBO.Buscar("")` ÔÇö grid binding vem na Fase 4 |
+| `AlternarPagina()` | Troca `ActivePage` |
+| `FormatarGridLista()` | Tahoma 8 nas colunas |
+| `TornarControlesVisiveis()` | Recursivo (Pages + Controls) |
+| `Destroy()` | Fecha cursor, limpa BO, chama `DODEFAULT()` |
+
+**Pr├│ximas fases:** Fase 4 adiciona grid + bot├Áes CRUD (Incluir/Visualizar/Alterar/Excluir/Buscar/Encerrar + cmdFPOper/TabDesconto/MontaLista + `optFilSituas`). Fases 5-6 adicionam os campos TextBox/ComboBox da Page2.
