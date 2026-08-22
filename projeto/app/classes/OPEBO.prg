@@ -295,11 +295,24 @@ DEFINE CLASS OPEBO AS BusinessBase
     * Buscar - Busca registros com filtro opcional
     *====================================================================
     FUNCTION Buscar(par_cFiltro)
-        LOCAL loc_lResultado
+        LOCAL loc_lResultado, loc_cSQL, loc_nResult
         loc_lResultado = .F.
         TRY
-            *-- Fase 2: implementar
-            loc_lResultado = .T.
+            IF USED("cursor_4c_BuscaOPE")
+                USE IN SELECT("cursor_4c_BuscaOPE")
+            ENDIF
+            loc_cSQL = "SELECT a.dopes, a.titopes, a.tipoops, a.situas, a.opers " + ;
+                       "FROM SigCdOpe a"
+            IF !EMPTY(par_cFiltro)
+                loc_cSQL = loc_cSQL + " WHERE " + par_cFiltro
+            ENDIF
+            loc_cSQL = loc_cSQL + " ORDER BY a.dopes"
+            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaOPE")
+            IF loc_nResult < 0
+                MsgErro("Erro ao buscar opera" + CHR(231) + CHR(245) + "es.", "Erro em Buscar")
+            ELSE
+                loc_lResultado = .T.
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + "Linha: " + TRANSFORM(loc_oErro.LineNo), "Erro em Buscar")
         ENDTRY
@@ -310,11 +323,22 @@ DEFINE CLASS OPEBO AS BusinessBase
     * CarregarPorCodigo - Carrega registro pela chave primaria (dopes)
     *====================================================================
     FUNCTION CarregarPorCodigo(par_cCodigo)
-        LOCAL loc_lResultado
+        LOCAL loc_lResultado, loc_cSQL, loc_nResult
         loc_lResultado = .F.
         TRY
-            *-- Fase 2: implementar
-            loc_lResultado = .T.
+            IF USED("cursor_4c_OPE_tmp")
+                USE IN SELECT("cursor_4c_OPE_tmp")
+            ENDIF
+            loc_cSQL = "SELECT * FROM SigCdOpe WHERE dopes = " + EscaparSQL(par_cCodigo)
+            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_OPE_tmp")
+            IF loc_nResult > 0 AND !EOF("cursor_4c_OPE_tmp")
+                THIS.CarregarDoCursor("cursor_4c_OPE_tmp")
+                THIS.this_lNovoRegistro = .F.
+                loc_lResultado = .T.
+            ENDIF
+            IF USED("cursor_4c_OPE_tmp")
+                USE IN SELECT("cursor_4c_OPE_tmp")
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + "Linha: " + TRANSFORM(loc_oErro.LineNo), "Erro em CarregarPorCodigo")
         ENDTRY
@@ -330,7 +354,268 @@ DEFINE CLASS OPEBO AS BusinessBase
         TRY
             IF USED(par_cAliasCursor)
                 SELECT (par_cAliasCursor)
-                *-- Fase 2: implementar campos
+                *-- PK
+                THIS.this_cDopes         = ALLTRIM(dopes)
+                *-- char
+                THIS.this_cTitopes       = ALLTRIM(titopes)
+                THIS.this_cAbrevs        = ALLTRIM(abrevs)
+                THIS.this_cCcentrals     = ALLTRIM(ccentrals)
+                THIS.this_cCmoes         = ALLTRIM(cmoes)
+                THIS.this_cCnopes        = ALLTRIM(cnopes)
+                THIS.this_cCondests      = ALLTRIM(condests)
+                THIS.this_cConorigs      = ALLTRIM(conorigs)
+                THIS.this_cContas        = ALLTRIM(contas)
+                THIS.this_cEmppads       = ALLTRIM(emppads)
+                THIS.this_cGrudests      = ALLTRIM(grudests)
+                THIS.this_cGruorigs      = ALLTRIM(gruorigs)
+                THIS.this_cGrupos        = ALLTRIM(grupos)
+                THIS.this_cGrvends       = ALLTRIM(grvends)
+                THIS.this_cMenus         = ALLTRIM(menus)
+                THIS.this_cNivels        = ALLTRIM(nivels)
+                THIS.this_cNopcrs        = ALLTRIM(nopcrs)
+                THIS.this_cTabdps        = ALLTRIM(tabdps)
+                THIS.this_cDopcs         = ALLTRIM(dopcs)
+                THIS.this_cEspecies      = ALLTRIM(especies)
+                THIS.this_cSeries        = ALLTRIM(series)
+                THIS.this_cHist2s        = ALLTRIM(hist2s)
+                THIS.this_cHists         = ALLTRIM(hists)
+                THIS.this_cSubmenus      = ALLTRIM(submenus)
+                THIS.this_cGrucados      = ALLTRIM(grucados)
+                THIS.this_cGrucadds      = ALLTRIM(grucadds)
+                THIS.this_cGrucadvs      = ALLTRIM(grucadvs)
+                THIS.this_cCfos          = ALLTRIM(cfos)
+                THIS.this_cRelfechgrs    = ALLTRIM(relfechgrs)
+                THIS.this_cDopeetrfs     = ALLTRIM(dopeetrfs)
+                THIS.this_cDopestrfs     = ALLTRIM(dopestrfs)
+                THIS.this_cOperchqes     = ALLTRIM(operchqes)
+                THIS.this_cOperchqss     = ALLTRIM(operchqss)
+                THIS.this_cGremiss       = ALLTRIM(gremiss)
+                THIS.this_cConemiss      = ALLTRIM(conemiss)
+                THIS.this_cOperfisics    = ALLTRIM(operfisics)
+                THIS.this_cCodpropads    = ALLTRIM(codpropads)
+                THIS.this_cFpagopcrs     = ALLTRIM(fpagopcrs)
+                THIS.this_cLprecopads    = ALLTRIM(lprecopads)
+                THIS.this_cMascvens      = ALLTRIM(mascvens)
+                THIS.this_cImpclis       = ALLTRIM(impclis)
+                THIS.this_cOpernf        = ALLTRIM(opernf)
+                THIS.this_cCodconpads    = ALLTRIM(codconpads)
+                THIS.this_cEmpbxs        = ALLTRIM(empbxs)
+                THIS.this_cEmplancs      = ALLTRIM(emplancs)
+                THIS.this_cOpepads       = ALLTRIM(opepads)
+                THIS.this_cProgramas     = ALLTRIM(programas)
+                THIS.this_cCtipomarms    = ALLTRIM(NVL(ctipomarms, ""))
+                THIS.this_cCarqicones    = ALLTRIM(NVL(carqicones, ""))
+                THIS.this_cDopcreds      = ALLTRIM(dopcreds)
+                THIS.this_cCfgfinancs    = ALLTRIM(cfgfinancs)
+                *-- numeric(1,0)
+                THIS.this_nPedclis       = pedclis
+                THIS.this_nZerqtds       = zerqtds
+                THIS.this_nValinotas     = valinotas
+                THIS.this_nValitems      = valitems
+                THIS.this_nExibsits      = exibsits
+                THIS.this_nChkqtds       = chkqtds
+                THIS.this_nDtcontab      = dtcontab
+                THIS.this_nAltdescs      = altdescs
+                THIS.this_nAntecs        = antecs
+                THIS.this_nAptpfats      = aptpfats
+                THIS.this_nArreds        = arreds
+                THIS.this_nBaixasns      = baixasns
+                THIS.this_nBxautos       = bxautos
+                THIS.this_nBxparcials    = bxparcials
+                THIS.this_nCadclis       = cadclis
+                THIS.this_nCaixas        = caixas
+                THIS.this_nCalcfecs      = calcfecs
+                THIS.this_nCarnes        = carnes
+                THIS.this_nCcomis        = ccomis
+                THIS.this_nCdesps        = cdesps
+                THIS.this_nChdtentrs     = chdtentrs
+                THIS.this_nCheqs         = cheqs
+                THIS.this_nCodbars       = codbars
+                THIS.this_nComcargs      = comcargs
+                THIS.this_nCondsubs      = condsubs
+                THIS.this_nConfes        = confes
+                THIS.this_nConosubs      = conosubs
+                THIS.this_nConsclis      = consclis
+                THIS.this_nConsers       = consers
+                THIS.this_nConsgs        = consgs
+                THIS.this_nCopers        = copers
+                THIS.this_nCrepls        = crepls
+                THIS.this_nCtipos        = ctipos
+                THIS.this_nCupfis        = cupfis
+                THIS.this_nDeacrs        = deacrs
+                THIS.this_nDesmembs      = desmembs
+                THIS.this_nDestinos      = destinos
+                THIS.this_nDfpags        = dfpags
+                THIS.this_nDigdoc        = digdoc
+                THIS.this_nDigitens      = digitens
+                THIS.this_nDigobs        = digobs
+                THIS.this_nDtentrs       = dtentrs
+                THIS.this_nEdcotas       = edcotas
+                THIS.this_nEdtpfats      = edtpfats
+                THIS.this_nEfators       = efators
+                THIS.this_nEpesos        = epesos
+                THIS.this_nEprecos       = eprecos
+                THIS.this_nEstdests      = estdests
+                THIS.this_nEstoqs        = estoqs
+                THIS.this_nEstorigs      = estorigs
+                THIS.this_nExpends       = expends
+                THIS.this_nFatauts       = fatauts
+                THIS.this_nGlobalizas    = globalizas
+                THIS.this_nImagems       = imagems
+                THIS.this_nItemalfas     = itemalfas
+                THIS.this_nItemzeros     = itemzeros
+                THIS.this_nLimcres       = limcres
+                THIS.this_nLimpauts      = limpauts
+                THIS.this_nLprecos       = lprecos
+                THIS.this_nMestoqs       = mestoqs
+                THIS.this_nNdebitos      = ndebitos
+                THIS.this_nNfiscals      = nfiscals
+                THIS.this_nNumeras       = numeras
+                THIS.this_nOpcrs         = opcrs
+                THIS.this_nOpers         = opers
+                THIS.this_nOrigems       = origems
+                THIS.this_nParautos      = parautos
+                THIS.this_nParcontas     = parcontas
+                THIS.this_nParcs         = parcs
+                THIS.this_nParrecals     = parrecals
+                THIS.this_nPesoauts      = pesoauts
+                THIS.this_nPesods        = pesods
+                THIS.this_nPesos         = pesos
+                THIS.this_nPesovts       = pesovts
+                THIS.this_nPrecoauts     = precoauts
+                THIS.this_nPrecods       = precods
+                THIS.this_nPrecovts      = precovts
+                THIS.this_nProduc        = produc
+                THIS.this_nQtdpesos      = qtdpesos
+                THIS.this_nQtdprecos     = qtdprecos
+                THIS.this_nQtdrelevs     = qtdrelevs
+                THIS.this_nRelfechas     = relfechas
+                THIS.this_nReservas      = reservas
+                THIS.this_nResults       = results
+                THIS.this_nSituas        = situas
+                THIS.this_nSubns         = subns
+                THIS.this_nTabdescs      = tabdescs
+                THIS.this_nTransons      = transons
+                THIS.this_nTransps       = transps
+                THIS.this_nTranss        = transs
+                THIS.this_nUnitpesos     = unitpesos
+                THIS.this_nValests       = valests
+                THIS.this_nValpends      = valpends
+                THIS.this_nValpres       = valpres
+                THIS.this_nVars          = vars
+                THIS.this_nVendas        = vendas
+                THIS.this_nVendes        = vendes
+                THIS.this_nSemetiqs      = semetiqs
+                THIS.this_nCasas         = casas
+                THIS.this_nAlttrans      = alttrans
+                THIS.this_nDadosnotas    = dadosnotas
+                THIS.this_nObsdests      = obsdests
+                THIS.this_nObsorigs      = obsorigs
+                THIS.this_nServicos      = servicos
+                THIS.this_nSubnobrigs    = subnobrigs
+                THIS.this_nTphist2s      = tphist2s
+                THIS.this_nTphists       = tphists
+                THIS.this_nBlqdatas      = blqdatas
+                THIS.this_nSenhads       = senhads
+                THIS.this_nSenhaos       = senhaos
+                THIS.this_nDemocreds     = democreds
+                THIS.this_nDigcpfs       = digcpfs
+                THIS.this_nCongvends     = congvends
+                THIS.this_nChkqtdss      = chkqtdss
+                THIS.this_nValitnegs     = valitnegs
+                THIS.this_nCalcmos       = calcmos
+                THIS.this_nChkdval       = chkdval
+                THIS.this_nTabdobrigs    = tabdobrigs
+                THIS.this_nDtemis        = dtemis
+                THIS.this_nConprecs      = conprecs
+                THIS.this_nTrocoauts     = trocoauts
+                THIS.this_nParczeros     = parczeros
+                THIS.this_nBxvlopcrs     = bxvlopcrs
+                THIS.this_nCadcliauts    = cadcliauts
+                THIS.this_nObsitems      = obsitems
+                THIS.this_nVaritems      = varitems
+                THIS.this_nItsituas      = itsituas
+                THIS.this_nHabsubits     = habsubits
+                THIS.this_nOppends       = oppends
+                THIS.this_nCadprods      = cadprods
+                THIS.this_nSubnautos     = subnautos
+                THIS.this_nSenhars       = senhars
+                THIS.this_nTotcompos     = totcompos
+                THIS.this_nChkedesc      = chkedesc
+                THIS.this_nNcpesos       = ncpesos
+                THIS.this_nEditdocs      = editdocs
+                THIS.this_nCempsubns     = cempsubns
+                THIS.this_nCarcbars      = carcbars
+                THIS.this_nCtrllotes     = ctrllotes
+                THIS.this_nOrilotes      = orilotes
+                THIS.this_nReffs         = reffs
+                THIS.this_nCcustos       = ccustos
+                THIS.this_nDcpns         = dcpns
+                THIS.this_nDtbars        = dtbars
+                THIS.this_nAciosens      = aciosens
+                THIS.this_nCliods        = cliods
+                THIS.this_nEdcomis       = edcomis
+                THIS.this_nInfoipis      = infoipis
+                THIS.this_nAgrupas       = agrupas
+                THIS.this_nDigenves      = digenves
+                THIS.this_nDigrecs       = digrecs
+                THIS.this_nEmpsubns      = empsubns
+                THIS.this_nFechmals      = fechmals
+                THIS.this_nHabservs      = habservs
+                THIS.this_nMarcasubns    = marcasubns
+                THIS.this_nTiponfs       = tiponfs
+                THIS.this_nChkacpro      = chkacpro
+                THIS.this_nEdunis        = edunis
+                THIS.this_nAnprodzs      = anprodzs
+                THIS.this_nAutenticas    = autenticas
+                THIS.this_nAutoins       = autoins
+                THIS.this_nBxpagos       = bxpagos
+                THIS.this_nCarvends      = carvends
+                THIS.this_nCbxsubns      = cbxsubns
+                THIS.this_nChecpagos     = checpagos
+                THIS.this_nChkagends     = chkagends
+                THIS.this_nInibcchqs     = inibcchqs
+                THIS.this_nInibmens      = inibmens
+                THIS.this_nInibmlcs      = inibmlcs
+                THIS.this_nNcarsubs      = ncarsubs
+                THIS.this_nObrigvd2s     = obrigvd2s
+                THIS.this_nObrigvds      = obrigvds
+                THIS.this_nTplprecs      = tplprecs
+                THIS.this_nFpubl         = fpubl
+                THIS.this_nNfcompls      = nfcompls
+                *-- numeric(2,0)
+                THIS.this_nDocus         = docus
+                THIS.this_nItautos       = itautos
+                THIS.this_nPrecops       = precops
+                THIS.this_nComisdivs     = comisdivs
+                THIS.this_nTipoops       = tipoops
+                THIS.this_nTrnfis        = trnfis
+                *-- numeric(3,0)
+                THIS.this_nObspads       = obspads
+                THIS.this_nObsfins       = obsfins
+                THIS.this_nObsinis       = obsinis
+                THIS.this_nCdopes        = cdopes
+                *-- numeric(4,0)
+                THIS.this_nNdopes        = ndopes
+                THIS.this_nOrdes         = ordes
+                THIS.this_nQtdites       = qtdites
+                *-- numeric(5,2)
+                THIS.this_nPorcs         = porcs
+                THIS.this_nVcompensas    = vcompensas
+                *-- bit (SQL Server bit -> VFP numeric 0/1 -> logical)
+                THIS.this_lFixcdests     = (fixcdests = 1)
+                THIS.this_lFixcnopes     = (fixcnopes = 1)
+                THIS.this_lFixcorigs     = (fixcorigs = 1)
+                THIS.this_lFixgdests     = (fixgdests = 1)
+                THIS.this_lFixgorigs     = (fixgorigs = 1)
+                THIS.this_lFixgropes     = (fixgropes = 1)
+                THIS.this_lFixgvends     = (fixgvends = 1)
+                THIS.this_lChkfunds      = (chkfunds = 1)
+                THIS.this_lFixgven2s     = (fixgven2s = 1)
+                *-- datetime
+                THIS.this_dDatatrans     = datatrans
+                *-- text/memo
+                THIS.this_mObsopes       = ALLTRIM(obsopes)
                 loc_lResultado = .T.
             ENDIF
         CATCH TO loc_oErro
@@ -343,11 +628,317 @@ DEFINE CLASS OPEBO AS BusinessBase
     * Inserir - Insere novo registro na tabela SigCdOpe
     *====================================================================
     PROTECTED PROCEDURE Inserir()
-        LOCAL loc_lResultado
+        LOCAL loc_lResultado, loc_cSQL, loc_cCols, loc_cVals, loc_nResult
+        LOCAL loc_cDatatrans
         loc_lResultado = .F.
         TRY
-            *-- Fase 2: implementar
-            loc_lResultado = .T.
+            THIS.RegistrarAuditoria("I")
+            IF EMPTY(THIS.this_dDatatrans)
+                loc_cDatatrans = "NULL"
+            ELSE
+                loc_cDatatrans = FormatarDataSQL(THIS.this_dDatatrans)
+            ENDIF
+            loc_cCols = "dopes, titopes, tipoops, situas, opers, pedclis, zerqtds, valinotas, " + ;
+                        "valitems, exibsits, chkqtds, dtcontab, altdescs, antecs, aptpfats, arreds, " + ;
+                        "baixasns, bxautos, bxparcials, cadclis, caixas, calcfecs, carnes, ccomis, " + ;
+                        "cdesps, chdtentrs, cheqs, codbars, comcargs, condsubs, confes, conosubs, " + ;
+                        "consclis, consers, consgs, copers, crepls, ctipos, cupfis, deacrs, " + ;
+                        "desmembs, destinos, dfpags, digdoc, digitens, digobs, dtentrs, edcotas, " + ;
+                        "edtpfats, efators, epesos, eprecos, estdests, estoqs, estorigs, expends, " + ;
+                        "fatauts, globalizas, imagems, itemalfas, itemzeros, limcres, limpauts, " + ;
+                        "lprecos, mestoqs, ndebitos, nfiscals, numeras, opcrs, origems, parautos, " + ;
+                        "parcontas, parcs, parrecals, pesoauts, pesods, pesos, pesovts, precoauts, " + ;
+                        "precods, precovts, produc, qtdpesos, qtdprecos, qtdrelevs, relfechas, " + ;
+                        "reservas, results, subns, tabdescs, transons, transps, transs, unitpesos, " + ;
+                        "valests, valpends, valpres, vars, vendas, vendes, semetiqs, casas, " + ;
+                        "alttrans, dadosnotas, obsdests, obsorigs, servicos, subnobrigs, tphist2s, " + ;
+                        "tphists, blqdatas, senhads, senhaos, democreds, digcpfs, congvends, " + ;
+                        "chkqtdss, valitnegs, calcmos, chkdval, tabdobrigs, dtemis, conprecs, " + ;
+                        "trocoauts, parczeros, bxvlopcrs, cadcliauts, obsitems, varitems, itsituas, " + ;
+                        "habsubits, oppends, cadprods, subnautos, senhars, totcompos, chkedesc, " + ;
+                        "ncpesos, editdocs, cempsubns, carcbars, ctrllotes, orilotes, reffs, " + ;
+                        "ccustos, dcpns, dtbars, aciosens, cliods, edcomis, infoipis, agrupas, " + ;
+                        "digenves, digrecs, empsubns, fechmals, habservs, marcasubns, tiponfs, " + ;
+                        "chkacpro, edunis, anprodzs, autenticas, autoins, bxpagos, carvends, " + ;
+                        "cbxsubns, checpagos, chkagends, inibcchqs, inibmens, inibmlcs, ncarsubs, " + ;
+                        "obrigvd2s, obrigvds, tplprecs, fpubl, nfcompls, " + ;
+                        "docus, itautos, precops, comisdivs, trnfis, " + ;
+                        "obspads, obsfins, obsinis, cdopes, " + ;
+                        "ndopes, ordes, qtdites, " + ;
+                        "porcs, vcompensas, " + ;
+                        "fixcdests, fixcnopes, fixcorigs, fixgdests, fixgorigs, fixgropes, fixgvends, " + ;
+                        "chkfunds, fixgven2s, datatrans, " + ;
+                        "dopeetrfs, abrevs, ccentrals, cmoes, cnopes, condests, conorigs, contas, " + ;
+                        "emppads, grudests, gruorigs, grupos, grvends, menus, nivels, nopcrs, " + ;
+                        "tabdps, dopcs, especies, series, hist2s, hists, submenus, grucados, " + ;
+                        "grucadds, grucadvs, cfos, relfechgrs, dopestrfs, operchqes, operchqss, " + ;
+                        "gremiss, conemiss, operfisics, codpropads, fpagopcrs, lprecopads, " + ;
+                        "mascvens, impclis, opernf, codconpads, empbxs, emplancs, opepads, " + ;
+                        "programas, ctipomarms, carqicones, dopcreds, cfgfinancs, obsopes"
+            loc_cVals = EscaparSQL(THIS.this_cDopes) + ", " + ;
+                        EscaparSQL(THIS.this_cTitopes) + ", " + ;
+                        TRANSFORM(THIS.this_nTipoops) + ", " + ;
+                        TRANSFORM(THIS.this_nSituas) + ", " + ;
+                        TRANSFORM(THIS.this_nOpers) + ", " + ;
+                        TRANSFORM(THIS.this_nPedclis) + ", " + ;
+                        TRANSFORM(THIS.this_nZerqtds) + ", " + ;
+                        TRANSFORM(THIS.this_nValinotas) + ", " + ;
+                        TRANSFORM(THIS.this_nValitems) + ", " + ;
+                        TRANSFORM(THIS.this_nExibsits) + ", " + ;
+                        TRANSFORM(THIS.this_nChkqtds) + ", " + ;
+                        TRANSFORM(THIS.this_nDtcontab) + ", " + ;
+                        TRANSFORM(THIS.this_nAltdescs) + ", " + ;
+                        TRANSFORM(THIS.this_nAntecs) + ", " + ;
+                        TRANSFORM(THIS.this_nAptpfats) + ", " + ;
+                        TRANSFORM(THIS.this_nArreds) + ", " + ;
+                        TRANSFORM(THIS.this_nBaixasns) + ", " + ;
+                        TRANSFORM(THIS.this_nBxautos) + ", " + ;
+                        TRANSFORM(THIS.this_nBxparcials) + ", " + ;
+                        TRANSFORM(THIS.this_nCadclis) + ", " + ;
+                        TRANSFORM(THIS.this_nCaixas) + ", " + ;
+                        TRANSFORM(THIS.this_nCalcfecs) + ", " + ;
+                        TRANSFORM(THIS.this_nCarnes) + ", " + ;
+                        TRANSFORM(THIS.this_nCcomis) + ", " + ;
+                        TRANSFORM(THIS.this_nCdesps) + ", " + ;
+                        TRANSFORM(THIS.this_nChdtentrs) + ", " + ;
+                        TRANSFORM(THIS.this_nCheqs) + ", " + ;
+                        TRANSFORM(THIS.this_nCodbars) + ", " + ;
+                        TRANSFORM(THIS.this_nComcargs) + ", " + ;
+                        TRANSFORM(THIS.this_nCondsubs) + ", " + ;
+                        TRANSFORM(THIS.this_nConfes) + ", " + ;
+                        TRANSFORM(THIS.this_nConosubs) + ", " + ;
+                        TRANSFORM(THIS.this_nConsclis) + ", " + ;
+                        TRANSFORM(THIS.this_nConsers) + ", " + ;
+                        TRANSFORM(THIS.this_nConsgs) + ", " + ;
+                        TRANSFORM(THIS.this_nCopers) + ", " + ;
+                        TRANSFORM(THIS.this_nCrepls) + ", " + ;
+                        TRANSFORM(THIS.this_nCtipos) + ", " + ;
+                        TRANSFORM(THIS.this_nCupfis) + ", " + ;
+                        TRANSFORM(THIS.this_nDeacrs) + ", "
+            loc_cVals = loc_cVals + ;
+                        TRANSFORM(THIS.this_nDesmembs) + ", " + ;
+                        TRANSFORM(THIS.this_nDestinos) + ", " + ;
+                        TRANSFORM(THIS.this_nDfpags) + ", " + ;
+                        TRANSFORM(THIS.this_nDigdoc) + ", " + ;
+                        TRANSFORM(THIS.this_nDigitens) + ", " + ;
+                        TRANSFORM(THIS.this_nDigobs) + ", " + ;
+                        TRANSFORM(THIS.this_nDtentrs) + ", " + ;
+                        TRANSFORM(THIS.this_nEdcotas) + ", " + ;
+                        TRANSFORM(THIS.this_nEdtpfats) + ", " + ;
+                        TRANSFORM(THIS.this_nEfators) + ", " + ;
+                        TRANSFORM(THIS.this_nEpesos) + ", " + ;
+                        TRANSFORM(THIS.this_nEprecos) + ", " + ;
+                        TRANSFORM(THIS.this_nEstdests) + ", " + ;
+                        TRANSFORM(THIS.this_nEstoqs) + ", " + ;
+                        TRANSFORM(THIS.this_nEstorigs) + ", " + ;
+                        TRANSFORM(THIS.this_nExpends) + ", " + ;
+                        TRANSFORM(THIS.this_nFatauts) + ", " + ;
+                        TRANSFORM(THIS.this_nGlobalizas) + ", " + ;
+                        TRANSFORM(THIS.this_nImagems) + ", " + ;
+                        TRANSFORM(THIS.this_nItemalfas) + ", " + ;
+                        TRANSFORM(THIS.this_nItemzeros) + ", " + ;
+                        TRANSFORM(THIS.this_nLimcres) + ", " + ;
+                        TRANSFORM(THIS.this_nLimpauts) + ", " + ;
+                        TRANSFORM(THIS.this_nLprecos) + ", " + ;
+                        TRANSFORM(THIS.this_nMestoqs) + ", " + ;
+                        TRANSFORM(THIS.this_nNdebitos) + ", " + ;
+                        TRANSFORM(THIS.this_nNfiscals) + ", " + ;
+                        TRANSFORM(THIS.this_nNumeras) + ", " + ;
+                        TRANSFORM(THIS.this_nOpcrs) + ", " + ;
+                        TRANSFORM(THIS.this_nOrigems) + ", " + ;
+                        TRANSFORM(THIS.this_nParautos) + ", " + ;
+                        TRANSFORM(THIS.this_nParcontas) + ", " + ;
+                        TRANSFORM(THIS.this_nParcs) + ", " + ;
+                        TRANSFORM(THIS.this_nParrecals) + ", " + ;
+                        TRANSFORM(THIS.this_nPesoauts) + ", " + ;
+                        TRANSFORM(THIS.this_nPesods) + ", " + ;
+                        TRANSFORM(THIS.this_nPesos) + ", " + ;
+                        TRANSFORM(THIS.this_nPesovts) + ", " + ;
+                        TRANSFORM(THIS.this_nPrecoauts) + ", "
+            loc_cVals = loc_cVals + ;
+                        TRANSFORM(THIS.this_nPrecods) + ", " + ;
+                        TRANSFORM(THIS.this_nPrecovts) + ", " + ;
+                        TRANSFORM(THIS.this_nProduc) + ", " + ;
+                        TRANSFORM(THIS.this_nQtdpesos) + ", " + ;
+                        TRANSFORM(THIS.this_nQtdprecos) + ", " + ;
+                        TRANSFORM(THIS.this_nQtdrelevs) + ", " + ;
+                        TRANSFORM(THIS.this_nRelfechas) + ", " + ;
+                        TRANSFORM(THIS.this_nReservas) + ", " + ;
+                        TRANSFORM(THIS.this_nResults) + ", " + ;
+                        TRANSFORM(THIS.this_nSubns) + ", " + ;
+                        TRANSFORM(THIS.this_nTabdescs) + ", " + ;
+                        TRANSFORM(THIS.this_nTransons) + ", " + ;
+                        TRANSFORM(THIS.this_nTransps) + ", " + ;
+                        TRANSFORM(THIS.this_nTranss) + ", " + ;
+                        TRANSFORM(THIS.this_nUnitpesos) + ", " + ;
+                        TRANSFORM(THIS.this_nValests) + ", " + ;
+                        TRANSFORM(THIS.this_nValpends) + ", " + ;
+                        TRANSFORM(THIS.this_nValpres) + ", " + ;
+                        TRANSFORM(THIS.this_nVars) + ", " + ;
+                        TRANSFORM(THIS.this_nVendas) + ", " + ;
+                        TRANSFORM(THIS.this_nVendes) + ", " + ;
+                        TRANSFORM(THIS.this_nSemetiqs) + ", " + ;
+                        TRANSFORM(THIS.this_nCasas) + ", " + ;
+                        TRANSFORM(THIS.this_nAlttrans) + ", " + ;
+                        TRANSFORM(THIS.this_nDadosnotas) + ", " + ;
+                        TRANSFORM(THIS.this_nObsdests) + ", " + ;
+                        TRANSFORM(THIS.this_nObsorigs) + ", " + ;
+                        TRANSFORM(THIS.this_nServicos) + ", " + ;
+                        TRANSFORM(THIS.this_nSubnobrigs) + ", " + ;
+                        TRANSFORM(THIS.this_nTphist2s) + ", " + ;
+                        TRANSFORM(THIS.this_nTphists) + ", " + ;
+                        TRANSFORM(THIS.this_nBlqdatas) + ", " + ;
+                        TRANSFORM(THIS.this_nSenhads) + ", " + ;
+                        TRANSFORM(THIS.this_nSenhaos) + ", " + ;
+                        TRANSFORM(THIS.this_nDemocreds) + ", " + ;
+                        TRANSFORM(THIS.this_nDigcpfs) + ", " + ;
+                        TRANSFORM(THIS.this_nCongvends) + ", " + ;
+                        TRANSFORM(THIS.this_nChkqtdss) + ", " + ;
+                        TRANSFORM(THIS.this_nValitnegs) + ", " + ;
+                        TRANSFORM(THIS.this_nCalcmos) + ", "
+            loc_cVals = loc_cVals + ;
+                        TRANSFORM(THIS.this_nChkdval) + ", " + ;
+                        TRANSFORM(THIS.this_nTabdobrigs) + ", " + ;
+                        TRANSFORM(THIS.this_nDtemis) + ", " + ;
+                        TRANSFORM(THIS.this_nConprecs) + ", " + ;
+                        TRANSFORM(THIS.this_nTrocoauts) + ", " + ;
+                        TRANSFORM(THIS.this_nParczeros) + ", " + ;
+                        TRANSFORM(THIS.this_nBxvlopcrs) + ", " + ;
+                        TRANSFORM(THIS.this_nCadcliauts) + ", " + ;
+                        TRANSFORM(THIS.this_nObsitems) + ", " + ;
+                        TRANSFORM(THIS.this_nVaritems) + ", " + ;
+                        TRANSFORM(THIS.this_nItsituas) + ", " + ;
+                        TRANSFORM(THIS.this_nHabsubits) + ", " + ;
+                        TRANSFORM(THIS.this_nOppends) + ", " + ;
+                        TRANSFORM(THIS.this_nCadprods) + ", " + ;
+                        TRANSFORM(THIS.this_nSubnautos) + ", " + ;
+                        TRANSFORM(THIS.this_nSenhars) + ", " + ;
+                        TRANSFORM(THIS.this_nTotcompos) + ", " + ;
+                        TRANSFORM(THIS.this_nChkedesc) + ", " + ;
+                        TRANSFORM(THIS.this_nNcpesos) + ", " + ;
+                        TRANSFORM(THIS.this_nEditdocs) + ", " + ;
+                        TRANSFORM(THIS.this_nCempsubns) + ", " + ;
+                        TRANSFORM(THIS.this_nCarcbars) + ", " + ;
+                        TRANSFORM(THIS.this_nCtrllotes) + ", " + ;
+                        TRANSFORM(THIS.this_nOrilotes) + ", " + ;
+                        TRANSFORM(THIS.this_nReffs) + ", " + ;
+                        TRANSFORM(THIS.this_nCcustos) + ", " + ;
+                        TRANSFORM(THIS.this_nDcpns) + ", " + ;
+                        TRANSFORM(THIS.this_nDtbars) + ", " + ;
+                        TRANSFORM(THIS.this_nAciosens) + ", " + ;
+                        TRANSFORM(THIS.this_nCliods) + ", " + ;
+                        TRANSFORM(THIS.this_nEdcomis) + ", " + ;
+                        TRANSFORM(THIS.this_nInfoipis) + ", " + ;
+                        TRANSFORM(THIS.this_nAgrupas) + ", " + ;
+                        TRANSFORM(THIS.this_nDigenves) + ", " + ;
+                        TRANSFORM(THIS.this_nDigrecs) + ", " + ;
+                        TRANSFORM(THIS.this_nEmpsubns) + ", " + ;
+                        TRANSFORM(THIS.this_nFechmals) + ", " + ;
+                        TRANSFORM(THIS.this_nHabservs) + ", " + ;
+                        TRANSFORM(THIS.this_nMarcasubns) + ", "
+            loc_cVals = loc_cVals + ;
+                        TRANSFORM(THIS.this_nTiponfs) + ", " + ;
+                        TRANSFORM(THIS.this_nChkacpro) + ", " + ;
+                        TRANSFORM(THIS.this_nEdunis) + ", " + ;
+                        TRANSFORM(THIS.this_nAnprodzs) + ", " + ;
+                        TRANSFORM(THIS.this_nAutenticas) + ", " + ;
+                        TRANSFORM(THIS.this_nAutoins) + ", " + ;
+                        TRANSFORM(THIS.this_nBxpagos) + ", " + ;
+                        TRANSFORM(THIS.this_nCarvends) + ", " + ;
+                        TRANSFORM(THIS.this_nCbxsubns) + ", " + ;
+                        TRANSFORM(THIS.this_nChecpagos) + ", " + ;
+                        TRANSFORM(THIS.this_nChkagends) + ", " + ;
+                        TRANSFORM(THIS.this_nInibcchqs) + ", " + ;
+                        TRANSFORM(THIS.this_nInibmens) + ", " + ;
+                        TRANSFORM(THIS.this_nInibmlcs) + ", " + ;
+                        TRANSFORM(THIS.this_nNcarsubs) + ", " + ;
+                        TRANSFORM(THIS.this_nObrigvd2s) + ", " + ;
+                        TRANSFORM(THIS.this_nObrigvds) + ", " + ;
+                        TRANSFORM(THIS.this_nTplprecs) + ", " + ;
+                        TRANSFORM(THIS.this_nFpubl) + ", " + ;
+                        TRANSFORM(THIS.this_nNfcompls) + ", " + ;
+                        TRANSFORM(THIS.this_nDocus) + ", " + ;
+                        TRANSFORM(THIS.this_nItautos) + ", " + ;
+                        TRANSFORM(THIS.this_nPrecops) + ", " + ;
+                        TRANSFORM(THIS.this_nComisdivs) + ", " + ;
+                        TRANSFORM(THIS.this_nTrnfis) + ", " + ;
+                        TRANSFORM(THIS.this_nObspads) + ", " + ;
+                        TRANSFORM(THIS.this_nObsfins) + ", " + ;
+                        TRANSFORM(THIS.this_nObsinis) + ", " + ;
+                        TRANSFORM(THIS.this_nCdopes) + ", " + ;
+                        TRANSFORM(THIS.this_nNdopes) + ", " + ;
+                        TRANSFORM(THIS.this_nOrdes) + ", " + ;
+                        TRANSFORM(THIS.this_nQtdites) + ", " + ;
+                        FormatarNumeroSQL(THIS.this_nPorcs) + ", " + ;
+                        FormatarNumeroSQL(THIS.this_nVcompensas) + ", " + ;
+                        IIF(THIS.this_lFixcdests, "1", "0") + ", " + ;
+                        IIF(THIS.this_lFixcnopes, "1", "0") + ", " + ;
+                        IIF(THIS.this_lFixcorigs, "1", "0") + ", " + ;
+                        IIF(THIS.this_lFixgdests, "1", "0") + ", " + ;
+                        IIF(THIS.this_lFixgorigs, "1", "0") + ", " + ;
+                        IIF(THIS.this_lFixgropes, "1", "0") + ", " + ;
+                        IIF(THIS.this_lFixgvends, "1", "0") + ", " + ;
+                        IIF(THIS.this_lChkfunds,  "1", "0") + ", " + ;
+                        IIF(THIS.this_lFixgven2s, "1", "0") + ", " + ;
+                        loc_cDatatrans + ", "
+            loc_cVals = loc_cVals + ;
+                        EscaparSQL(THIS.this_cDopeetrfs) + ", " + ;
+                        EscaparSQL(THIS.this_cAbrevs) + ", " + ;
+                        EscaparSQL(THIS.this_cCcentrals) + ", " + ;
+                        EscaparSQL(THIS.this_cCmoes) + ", " + ;
+                        EscaparSQL(THIS.this_cCnopes) + ", " + ;
+                        EscaparSQL(THIS.this_cCondests) + ", " + ;
+                        EscaparSQL(THIS.this_cConorigs) + ", " + ;
+                        EscaparSQL(THIS.this_cContas) + ", " + ;
+                        EscaparSQL(THIS.this_cEmppads) + ", " + ;
+                        EscaparSQL(THIS.this_cGrudests) + ", " + ;
+                        EscaparSQL(THIS.this_cGruorigs) + ", " + ;
+                        EscaparSQL(THIS.this_cGrupos) + ", " + ;
+                        EscaparSQL(THIS.this_cGrvends) + ", " + ;
+                        EscaparSQL(THIS.this_cMenus) + ", " + ;
+                        EscaparSQL(THIS.this_cNivels) + ", " + ;
+                        EscaparSQL(THIS.this_cNopcrs) + ", " + ;
+                        EscaparSQL(THIS.this_cTabdps) + ", " + ;
+                        EscaparSQL(THIS.this_cDopcs) + ", " + ;
+                        EscaparSQL(THIS.this_cEspecies) + ", " + ;
+                        EscaparSQL(THIS.this_cSeries) + ", " + ;
+                        EscaparSQL(THIS.this_cHist2s) + ", " + ;
+                        EscaparSQL(THIS.this_cHists) + ", " + ;
+                        EscaparSQL(THIS.this_cSubmenus) + ", " + ;
+                        EscaparSQL(THIS.this_cGrucados) + ", " + ;
+                        EscaparSQL(THIS.this_cGrucadds) + ", " + ;
+                        EscaparSQL(THIS.this_cGrucadvs) + ", " + ;
+                        EscaparSQL(THIS.this_cCfos) + ", " + ;
+                        EscaparSQL(THIS.this_cRelfechgrs) + ", " + ;
+                        EscaparSQL(THIS.this_cDopestrfs) + ", " + ;
+                        EscaparSQL(THIS.this_cOperchqes) + ", " + ;
+                        EscaparSQL(THIS.this_cOperchqss) + ", " + ;
+                        EscaparSQL(THIS.this_cGremiss) + ", " + ;
+                        EscaparSQL(THIS.this_cConemiss) + ", " + ;
+                        EscaparSQL(THIS.this_cOperfisics) + ", " + ;
+                        EscaparSQL(THIS.this_cCodpropads) + ", " + ;
+                        EscaparSQL(THIS.this_cFpagopcrs) + ", " + ;
+                        EscaparSQL(THIS.this_cLprecopads) + ", " + ;
+                        EscaparSQL(THIS.this_cMascvens) + ", " + ;
+                        EscaparSQL(THIS.this_cImpclis) + ", " + ;
+                        EscaparSQL(THIS.this_cOpernf) + ", " + ;
+                        EscaparSQL(THIS.this_cCodconpads) + ", " + ;
+                        EscaparSQL(THIS.this_cEmpbxs) + ", " + ;
+                        EscaparSQL(THIS.this_cEmplancs) + ", " + ;
+                        EscaparSQL(THIS.this_cOpepads) + ", " + ;
+                        EscaparSQL(THIS.this_cProgramas) + ", " + ;
+                        IIF(EMPTY(THIS.this_cCtipomarms), "NULL", EscaparSQL(THIS.this_cCtipomarms)) + ", " + ;
+                        IIF(EMPTY(THIS.this_cCarqicones), "NULL", EscaparSQL(THIS.this_cCarqicones)) + ", " + ;
+                        EscaparSQL(THIS.this_cDopcreds) + ", " + ;
+                        EscaparSQL(THIS.this_cCfgfinancs) + ", " + ;
+                        EscaparSQL(THIS.this_mObsopes)
+            loc_cSQL = "INSERT INTO SigCdOpe (" + loc_cCols + ") VALUES (" + loc_cVals + ")"
+            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL)
+            IF loc_nResult < 0
+                MsgErro("Erro ao inserir opera" + CHR(231) + CHR(227) + "o.", "Erro em Inserir")
+            ELSE
+                loc_lResultado = .T.
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + "Linha: " + TRANSFORM(loc_oErro.LineNo), "Erro em Inserir")
         ENDTRY
@@ -358,11 +949,286 @@ DEFINE CLASS OPEBO AS BusinessBase
     * Atualizar - Atualiza registro existente na tabela SigCdOpe
     *====================================================================
     PROTECTED PROCEDURE Atualizar()
-        LOCAL loc_lResultado
+        LOCAL loc_lResultado, loc_cSQL, loc_cSet, loc_nResult, loc_cDatatrans
         loc_lResultado = .F.
         TRY
-            *-- Fase 2: implementar
-            loc_lResultado = .T.
+            THIS.RegistrarAuditoria("A")
+            IF EMPTY(THIS.this_dDatatrans)
+                loc_cDatatrans = "NULL"
+            ELSE
+                loc_cDatatrans = FormatarDataSQL(THIS.this_dDatatrans)
+            ENDIF
+            loc_cSet = "titopes = "     + EscaparSQL(THIS.this_cTitopes)   + ", " + ;
+                       "tipoops = "     + TRANSFORM(THIS.this_nTipoops)    + ", " + ;
+                       "situas = "      + TRANSFORM(THIS.this_nSituas)     + ", " + ;
+                       "opers = "       + TRANSFORM(THIS.this_nOpers)      + ", " + ;
+                       "pedclis = "     + TRANSFORM(THIS.this_nPedclis)    + ", " + ;
+                       "zerqtds = "     + TRANSFORM(THIS.this_nZerqtds)    + ", " + ;
+                       "valinotas = "   + TRANSFORM(THIS.this_nValinotas)  + ", " + ;
+                       "valitems = "    + TRANSFORM(THIS.this_nValitems)   + ", " + ;
+                       "exibsits = "    + TRANSFORM(THIS.this_nExibsits)   + ", " + ;
+                       "chkqtds = "     + TRANSFORM(THIS.this_nChkqtds)    + ", " + ;
+                       "dtcontab = "    + TRANSFORM(THIS.this_nDtcontab)   + ", " + ;
+                       "altdescs = "    + TRANSFORM(THIS.this_nAltdescs)   + ", " + ;
+                       "antecs = "      + TRANSFORM(THIS.this_nAntecs)     + ", " + ;
+                       "aptpfats = "    + TRANSFORM(THIS.this_nAptpfats)   + ", " + ;
+                       "arreds = "      + TRANSFORM(THIS.this_nArreds)     + ", " + ;
+                       "baixasns = "    + TRANSFORM(THIS.this_nBaixasns)   + ", " + ;
+                       "bxautos = "     + TRANSFORM(THIS.this_nBxautos)    + ", " + ;
+                       "bxparcials = "  + TRANSFORM(THIS.this_nBxparcials) + ", " + ;
+                       "cadclis = "     + TRANSFORM(THIS.this_nCadclis)    + ", " + ;
+                       "caixas = "      + TRANSFORM(THIS.this_nCaixas)     + ", "
+            loc_cSet = loc_cSet + ;
+                       "calcfecs = "    + TRANSFORM(THIS.this_nCalcfecs)   + ", " + ;
+                       "carnes = "      + TRANSFORM(THIS.this_nCarnes)     + ", " + ;
+                       "ccomis = "      + TRANSFORM(THIS.this_nCcomis)     + ", " + ;
+                       "cdesps = "      + TRANSFORM(THIS.this_nCdesps)     + ", " + ;
+                       "chdtentrs = "   + TRANSFORM(THIS.this_nChdtentrs)  + ", " + ;
+                       "cheqs = "       + TRANSFORM(THIS.this_nCheqs)      + ", " + ;
+                       "codbars = "     + TRANSFORM(THIS.this_nCodbars)    + ", " + ;
+                       "comcargs = "    + TRANSFORM(THIS.this_nComcargs)   + ", " + ;
+                       "condsubs = "    + TRANSFORM(THIS.this_nCondsubs)   + ", " + ;
+                       "confes = "      + TRANSFORM(THIS.this_nConfes)     + ", " + ;
+                       "conosubs = "    + TRANSFORM(THIS.this_nConosubs)   + ", " + ;
+                       "consclis = "    + TRANSFORM(THIS.this_nConsclis)   + ", " + ;
+                       "consers = "     + TRANSFORM(THIS.this_nConsers)    + ", " + ;
+                       "consgs = "      + TRANSFORM(THIS.this_nConsgs)     + ", " + ;
+                       "copers = "      + TRANSFORM(THIS.this_nCopers)     + ", " + ;
+                       "crepls = "      + TRANSFORM(THIS.this_nCrepls)     + ", " + ;
+                       "ctipos = "      + TRANSFORM(THIS.this_nCtipos)     + ", " + ;
+                       "cupfis = "      + TRANSFORM(THIS.this_nCupfis)     + ", " + ;
+                       "deacrs = "      + TRANSFORM(THIS.this_nDeacrs)     + ", " + ;
+                       "desmembs = "    + TRANSFORM(THIS.this_nDesmembs)   + ", "
+            loc_cSet = loc_cSet + ;
+                       "destinos = "    + TRANSFORM(THIS.this_nDestinos)   + ", " + ;
+                       "dfpags = "      + TRANSFORM(THIS.this_nDfpags)     + ", " + ;
+                       "digdoc = "      + TRANSFORM(THIS.this_nDigdoc)     + ", " + ;
+                       "digitens = "    + TRANSFORM(THIS.this_nDigitens)   + ", " + ;
+                       "digobs = "      + TRANSFORM(THIS.this_nDigobs)     + ", " + ;
+                       "dtentrs = "     + TRANSFORM(THIS.this_nDtentrs)    + ", " + ;
+                       "edcotas = "     + TRANSFORM(THIS.this_nEdcotas)    + ", " + ;
+                       "edtpfats = "    + TRANSFORM(THIS.this_nEdtpfats)   + ", " + ;
+                       "efators = "     + TRANSFORM(THIS.this_nEfators)    + ", " + ;
+                       "epesos = "      + TRANSFORM(THIS.this_nEpesos)     + ", " + ;
+                       "eprecos = "     + TRANSFORM(THIS.this_nEprecos)    + ", " + ;
+                       "estdests = "    + TRANSFORM(THIS.this_nEstdests)   + ", " + ;
+                       "estoqs = "      + TRANSFORM(THIS.this_nEstoqs)     + ", " + ;
+                       "estorigs = "    + TRANSFORM(THIS.this_nEstorigs)   + ", " + ;
+                       "expends = "     + TRANSFORM(THIS.this_nExpends)    + ", " + ;
+                       "fatauts = "     + TRANSFORM(THIS.this_nFatauts)    + ", " + ;
+                       "globalizas = "  + TRANSFORM(THIS.this_nGlobalizas) + ", " + ;
+                       "imagems = "     + TRANSFORM(THIS.this_nImagems)    + ", " + ;
+                       "itemalfas = "   + TRANSFORM(THIS.this_nItemalfas)  + ", " + ;
+                       "itemzeros = "   + TRANSFORM(THIS.this_nItemzeros)  + ", "
+            loc_cSet = loc_cSet + ;
+                       "limcres = "     + TRANSFORM(THIS.this_nLimcres)    + ", " + ;
+                       "limpauts = "    + TRANSFORM(THIS.this_nLimpauts)   + ", " + ;
+                       "lprecos = "     + TRANSFORM(THIS.this_nLprecos)    + ", " + ;
+                       "mestoqs = "     + TRANSFORM(THIS.this_nMestoqs)    + ", " + ;
+                       "ndebitos = "    + TRANSFORM(THIS.this_nNdebitos)   + ", " + ;
+                       "nfiscals = "    + TRANSFORM(THIS.this_nNfiscals)   + ", " + ;
+                       "numeras = "     + TRANSFORM(THIS.this_nNumeras)    + ", " + ;
+                       "opcrs = "       + TRANSFORM(THIS.this_nOpcrs)      + ", " + ;
+                       "origems = "     + TRANSFORM(THIS.this_nOrigems)    + ", " + ;
+                       "parautos = "    + TRANSFORM(THIS.this_nParautos)   + ", " + ;
+                       "parcontas = "   + TRANSFORM(THIS.this_nParcontas)  + ", " + ;
+                       "parcs = "       + TRANSFORM(THIS.this_nParcs)      + ", " + ;
+                       "parrecals = "   + TRANSFORM(THIS.this_nParrecals)  + ", " + ;
+                       "pesoauts = "    + TRANSFORM(THIS.this_nPesoauts)   + ", " + ;
+                       "pesods = "      + TRANSFORM(THIS.this_nPesods)     + ", " + ;
+                       "pesos = "       + TRANSFORM(THIS.this_nPesos)      + ", " + ;
+                       "pesovts = "     + TRANSFORM(THIS.this_nPesovts)    + ", " + ;
+                       "precoauts = "   + TRANSFORM(THIS.this_nPrecoauts)  + ", " + ;
+                       "precods = "     + TRANSFORM(THIS.this_nPrecods)    + ", " + ;
+                       "precovts = "    + TRANSFORM(THIS.this_nPrecovts)   + ", "
+            loc_cSet = loc_cSet + ;
+                       "produc = "      + TRANSFORM(THIS.this_nProduc)     + ", " + ;
+                       "qtdpesos = "    + TRANSFORM(THIS.this_nQtdpesos)   + ", " + ;
+                       "qtdprecos = "   + TRANSFORM(THIS.this_nQtdprecos)  + ", " + ;
+                       "qtdrelevs = "   + TRANSFORM(THIS.this_nQtdrelevs)  + ", " + ;
+                       "relfechas = "   + TRANSFORM(THIS.this_nRelfechas)  + ", " + ;
+                       "reservas = "    + TRANSFORM(THIS.this_nReservas)   + ", " + ;
+                       "results = "     + TRANSFORM(THIS.this_nResults)    + ", " + ;
+                       "subns = "       + TRANSFORM(THIS.this_nSubns)      + ", " + ;
+                       "tabdescs = "    + TRANSFORM(THIS.this_nTabdescs)   + ", " + ;
+                       "transons = "    + TRANSFORM(THIS.this_nTransons)   + ", " + ;
+                       "transps = "     + TRANSFORM(THIS.this_nTransps)    + ", " + ;
+                       "transs = "      + TRANSFORM(THIS.this_nTranss)     + ", " + ;
+                       "unitpesos = "   + TRANSFORM(THIS.this_nUnitpesos)  + ", " + ;
+                       "valests = "     + TRANSFORM(THIS.this_nValests)    + ", " + ;
+                       "valpends = "    + TRANSFORM(THIS.this_nValpends)   + ", " + ;
+                       "valpres = "     + TRANSFORM(THIS.this_nValpres)    + ", " + ;
+                       "vars = "        + TRANSFORM(THIS.this_nVars)       + ", " + ;
+                       "vendas = "      + TRANSFORM(THIS.this_nVendas)     + ", " + ;
+                       "vendes = "      + TRANSFORM(THIS.this_nVendes)     + ", " + ;
+                       "semetiqs = "    + TRANSFORM(THIS.this_nSemetiqs)   + ", "
+            loc_cSet = loc_cSet + ;
+                       "casas = "       + TRANSFORM(THIS.this_nCasas)      + ", " + ;
+                       "alttrans = "    + TRANSFORM(THIS.this_nAlttrans)   + ", " + ;
+                       "dadosnotas = "  + TRANSFORM(THIS.this_nDadosnotas) + ", " + ;
+                       "obsdests = "    + TRANSFORM(THIS.this_nObsdests)   + ", " + ;
+                       "obsorigs = "    + TRANSFORM(THIS.this_nObsorigs)   + ", " + ;
+                       "servicos = "    + TRANSFORM(THIS.this_nServicos)   + ", " + ;
+                       "subnobrigs = "  + TRANSFORM(THIS.this_nSubnobrigs) + ", " + ;
+                       "tphist2s = "    + TRANSFORM(THIS.this_nTphist2s)   + ", " + ;
+                       "tphists = "     + TRANSFORM(THIS.this_nTphists)    + ", " + ;
+                       "blqdatas = "    + TRANSFORM(THIS.this_nBlqdatas)   + ", " + ;
+                       "senhads = "     + TRANSFORM(THIS.this_nSenhads)    + ", " + ;
+                       "senhaos = "     + TRANSFORM(THIS.this_nSenhaos)    + ", " + ;
+                       "democreds = "   + TRANSFORM(THIS.this_nDemocreds)  + ", " + ;
+                       "digcpfs = "     + TRANSFORM(THIS.this_nDigcpfs)    + ", " + ;
+                       "congvends = "   + TRANSFORM(THIS.this_nCongvends)  + ", " + ;
+                       "chkqtdss = "    + TRANSFORM(THIS.this_nChkqtdss)   + ", " + ;
+                       "valitnegs = "   + TRANSFORM(THIS.this_nValitnegs)  + ", " + ;
+                       "calcmos = "     + TRANSFORM(THIS.this_nCalcmos)    + ", " + ;
+                       "chkdval = "     + TRANSFORM(THIS.this_nChkdval)    + ", " + ;
+                       "tabdobrigs = "  + TRANSFORM(THIS.this_nTabdobrigs) + ", "
+            loc_cSet = loc_cSet + ;
+                       "dtemis = "      + TRANSFORM(THIS.this_nDtemis)     + ", " + ;
+                       "conprecs = "    + TRANSFORM(THIS.this_nConprecs)   + ", " + ;
+                       "trocoauts = "   + TRANSFORM(THIS.this_nTrocoauts)  + ", " + ;
+                       "parczeros = "   + TRANSFORM(THIS.this_nParczeros)  + ", " + ;
+                       "bxvlopcrs = "   + TRANSFORM(THIS.this_nBxvlopcrs)  + ", " + ;
+                       "cadcliauts = "  + TRANSFORM(THIS.this_nCadcliauts) + ", " + ;
+                       "obsitems = "    + TRANSFORM(THIS.this_nObsitems)   + ", " + ;
+                       "varitems = "    + TRANSFORM(THIS.this_nVaritems)   + ", " + ;
+                       "itsituas = "    + TRANSFORM(THIS.this_nItsituas)   + ", " + ;
+                       "habsubits = "   + TRANSFORM(THIS.this_nHabsubits)  + ", " + ;
+                       "oppends = "     + TRANSFORM(THIS.this_nOppends)    + ", " + ;
+                       "cadprods = "    + TRANSFORM(THIS.this_nCadprods)   + ", " + ;
+                       "subnautos = "   + TRANSFORM(THIS.this_nSubnautos)  + ", " + ;
+                       "senhars = "     + TRANSFORM(THIS.this_nSenhars)    + ", " + ;
+                       "totcompos = "   + TRANSFORM(THIS.this_nTotcompos)  + ", " + ;
+                       "chkedesc = "    + TRANSFORM(THIS.this_nChkedesc)   + ", " + ;
+                       "ncpesos = "     + TRANSFORM(THIS.this_nNcpesos)    + ", " + ;
+                       "editdocs = "    + TRANSFORM(THIS.this_nEditdocs)   + ", " + ;
+                       "cempsubns = "   + TRANSFORM(THIS.this_nCempsubns)  + ", " + ;
+                       "carcbars = "    + TRANSFORM(THIS.this_nCarcbars)   + ", "
+            loc_cSet = loc_cSet + ;
+                       "ctrllotes = "   + TRANSFORM(THIS.this_nCtrllotes)  + ", " + ;
+                       "orilotes = "    + TRANSFORM(THIS.this_nOrilotes)   + ", " + ;
+                       "reffs = "       + TRANSFORM(THIS.this_nReffs)      + ", " + ;
+                       "ccustos = "     + TRANSFORM(THIS.this_nCcustos)    + ", " + ;
+                       "dcpns = "       + TRANSFORM(THIS.this_nDcpns)      + ", " + ;
+                       "dtbars = "      + TRANSFORM(THIS.this_nDtbars)     + ", " + ;
+                       "aciosens = "    + TRANSFORM(THIS.this_nAciosens)   + ", " + ;
+                       "cliods = "      + TRANSFORM(THIS.this_nCliods)     + ", " + ;
+                       "edcomis = "     + TRANSFORM(THIS.this_nEdcomis)    + ", " + ;
+                       "infoipis = "    + TRANSFORM(THIS.this_nInfoipis)   + ", " + ;
+                       "agrupas = "     + TRANSFORM(THIS.this_nAgrupas)    + ", " + ;
+                       "digenves = "    + TRANSFORM(THIS.this_nDigenves)   + ", " + ;
+                       "digrecs = "     + TRANSFORM(THIS.this_nDigrecs)    + ", " + ;
+                       "empsubns = "    + TRANSFORM(THIS.this_nEmpsubns)   + ", " + ;
+                       "fechmals = "    + TRANSFORM(THIS.this_nFechmals)   + ", " + ;
+                       "habservs = "    + TRANSFORM(THIS.this_nHabservs)   + ", " + ;
+                       "marcasubns = "  + TRANSFORM(THIS.this_nMarcasubns) + ", " + ;
+                       "tiponfs = "     + TRANSFORM(THIS.this_nTiponfs)    + ", " + ;
+                       "chkacpro = "    + TRANSFORM(THIS.this_nChkacpro)   + ", " + ;
+                       "edunis = "      + TRANSFORM(THIS.this_nEdunis)     + ", "
+            loc_cSet = loc_cSet + ;
+                       "anprodzs = "    + TRANSFORM(THIS.this_nAnprodzs)   + ", " + ;
+                       "autenticas = "  + TRANSFORM(THIS.this_nAutenticas) + ", " + ;
+                       "autoins = "     + TRANSFORM(THIS.this_nAutoins)    + ", " + ;
+                       "bxpagos = "     + TRANSFORM(THIS.this_nBxpagos)    + ", " + ;
+                       "carvends = "    + TRANSFORM(THIS.this_nCarvends)   + ", " + ;
+                       "cbxsubns = "    + TRANSFORM(THIS.this_nCbxsubns)   + ", " + ;
+                       "checpagos = "   + TRANSFORM(THIS.this_nChecpagos)  + ", " + ;
+                       "chkagends = "   + TRANSFORM(THIS.this_nChkagends)  + ", " + ;
+                       "inibcchqs = "   + TRANSFORM(THIS.this_nInibcchqs)  + ", " + ;
+                       "inibmens = "    + TRANSFORM(THIS.this_nInibmens)   + ", " + ;
+                       "inibmlcs = "    + TRANSFORM(THIS.this_nInibmlcs)   + ", " + ;
+                       "ncarsubs = "    + TRANSFORM(THIS.this_nNcarsubs)   + ", " + ;
+                       "obrigvd2s = "   + TRANSFORM(THIS.this_nObrigvd2s)  + ", " + ;
+                       "obrigvds = "    + TRANSFORM(THIS.this_nObrigvds)   + ", " + ;
+                       "tplprecs = "    + TRANSFORM(THIS.this_nTplprecs)   + ", " + ;
+                       "fpubl = "       + TRANSFORM(THIS.this_nFpubl)      + ", " + ;
+                       "nfcompls = "    + TRANSFORM(THIS.this_nNfcompls)   + ", " + ;
+                       "docus = "       + TRANSFORM(THIS.this_nDocus)      + ", " + ;
+                       "itautos = "     + TRANSFORM(THIS.this_nItautos)    + ", " + ;
+                       "precops = "     + TRANSFORM(THIS.this_nPrecops)    + ", "
+            loc_cSet = loc_cSet + ;
+                       "comisdivs = "   + TRANSFORM(THIS.this_nComisdivs)  + ", " + ;
+                       "trnfis = "      + TRANSFORM(THIS.this_nTrnfis)     + ", " + ;
+                       "obspads = "     + TRANSFORM(THIS.this_nObspads)    + ", " + ;
+                       "obsfins = "     + TRANSFORM(THIS.this_nObsfins)    + ", " + ;
+                       "obsinis = "     + TRANSFORM(THIS.this_nObsinis)    + ", " + ;
+                       "cdopes = "      + TRANSFORM(THIS.this_nCdopes)     + ", " + ;
+                       "ndopes = "      + TRANSFORM(THIS.this_nNdopes)     + ", " + ;
+                       "ordes = "       + TRANSFORM(THIS.this_nOrdes)      + ", " + ;
+                       "qtdites = "     + TRANSFORM(THIS.this_nQtdites)    + ", " + ;
+                       "porcs = "       + FormatarNumeroSQL(THIS.this_nPorcs)      + ", " + ;
+                       "vcompensas = "  + FormatarNumeroSQL(THIS.this_nVcompensas) + ", " + ;
+                       "fixcdests = "   + IIF(THIS.this_lFixcdests, "1", "0") + ", " + ;
+                       "fixcnopes = "   + IIF(THIS.this_lFixcnopes, "1", "0") + ", " + ;
+                       "fixcorigs = "   + IIF(THIS.this_lFixcorigs, "1", "0") + ", " + ;
+                       "fixgdests = "   + IIF(THIS.this_lFixgdests, "1", "0") + ", " + ;
+                       "fixgorigs = "   + IIF(THIS.this_lFixgorigs, "1", "0") + ", " + ;
+                       "fixgropes = "   + IIF(THIS.this_lFixgropes, "1", "0") + ", " + ;
+                       "fixgvends = "   + IIF(THIS.this_lFixgvends, "1", "0") + ", " + ;
+                       "chkfunds = "    + IIF(THIS.this_lChkfunds,  "1", "0") + ", " + ;
+                       "fixgven2s = "   + IIF(THIS.this_lFixgven2s, "1", "0") + ", " + ;
+                       "datatrans = "   + loc_cDatatrans + ", "
+            loc_cSet = loc_cSet + ;
+                       "dopeetrfs = "   + EscaparSQL(THIS.this_cDopeetrfs)  + ", " + ;
+                       "abrevs = "      + EscaparSQL(THIS.this_cAbrevs)     + ", " + ;
+                       "ccentrals = "   + EscaparSQL(THIS.this_cCcentrals)  + ", " + ;
+                       "cmoes = "       + EscaparSQL(THIS.this_cCmoes)      + ", " + ;
+                       "cnopes = "      + EscaparSQL(THIS.this_cCnopes)     + ", " + ;
+                       "condests = "    + EscaparSQL(THIS.this_cCondests)   + ", " + ;
+                       "conorigs = "    + EscaparSQL(THIS.this_cConorigs)   + ", " + ;
+                       "contas = "      + EscaparSQL(THIS.this_cContas)     + ", " + ;
+                       "emppads = "     + EscaparSQL(THIS.this_cEmppads)    + ", " + ;
+                       "grudests = "    + EscaparSQL(THIS.this_cGrudests)   + ", " + ;
+                       "gruorigs = "    + EscaparSQL(THIS.this_cGruorigs)   + ", " + ;
+                       "grupos = "      + EscaparSQL(THIS.this_cGrupos)     + ", " + ;
+                       "grvends = "     + EscaparSQL(THIS.this_cGrvends)    + ", " + ;
+                       "menus = "       + EscaparSQL(THIS.this_cMenus)      + ", " + ;
+                       "nivels = "      + EscaparSQL(THIS.this_cNivels)     + ", " + ;
+                       "nopcrs = "      + EscaparSQL(THIS.this_cNopcrs)     + ", " + ;
+                       "tabdps = "      + EscaparSQL(THIS.this_cTabdps)     + ", " + ;
+                       "dopcs = "       + EscaparSQL(THIS.this_cDopcs)      + ", " + ;
+                       "especies = "    + EscaparSQL(THIS.this_cEspecies)   + ", " + ;
+                       "series = "      + EscaparSQL(THIS.this_cSeries)     + ", "
+            loc_cSet = loc_cSet + ;
+                       "hist2s = "      + EscaparSQL(THIS.this_cHist2s)     + ", " + ;
+                       "hists = "       + EscaparSQL(THIS.this_cHists)      + ", " + ;
+                       "submenus = "    + EscaparSQL(THIS.this_cSubmenus)   + ", " + ;
+                       "grucados = "    + EscaparSQL(THIS.this_cGrucados)   + ", " + ;
+                       "grucadds = "    + EscaparSQL(THIS.this_cGrucadds)   + ", " + ;
+                       "grucadvs = "    + EscaparSQL(THIS.this_cGrucadvs)   + ", " + ;
+                       "cfos = "        + EscaparSQL(THIS.this_cCfos)       + ", " + ;
+                       "relfechgrs = "  + EscaparSQL(THIS.this_cRelfechgrs) + ", " + ;
+                       "dopestrfs = "   + EscaparSQL(THIS.this_cDopestrfs)  + ", " + ;
+                       "operchqes = "   + EscaparSQL(THIS.this_cOperchqes)  + ", " + ;
+                       "operchqss = "   + EscaparSQL(THIS.this_cOperchqss)  + ", " + ;
+                       "gremiss = "     + EscaparSQL(THIS.this_cGremiss)    + ", " + ;
+                       "conemiss = "    + EscaparSQL(THIS.this_cConemiss)   + ", " + ;
+                       "operfisics = "  + EscaparSQL(THIS.this_cOperfisics) + ", " + ;
+                       "codpropads = "  + EscaparSQL(THIS.this_cCodpropads) + ", " + ;
+                       "fpagopcrs = "   + EscaparSQL(THIS.this_cFpagopcrs)  + ", " + ;
+                       "lprecopads = "  + EscaparSQL(THIS.this_cLprecopads) + ", " + ;
+                       "mascvens = "    + EscaparSQL(THIS.this_cMascvens)   + ", " + ;
+                       "impclis = "     + EscaparSQL(THIS.this_cImpclis)    + ", " + ;
+                       "opernf = "      + EscaparSQL(THIS.this_cOpernf)     + ", "
+            loc_cSet = loc_cSet + ;
+                       "codconpads = "  + EscaparSQL(THIS.this_cCodconpads) + ", " + ;
+                       "empbxs = "      + EscaparSQL(THIS.this_cEmpbxs)     + ", " + ;
+                       "emplancs = "    + EscaparSQL(THIS.this_cEmplancs)   + ", " + ;
+                       "opepads = "     + EscaparSQL(THIS.this_cOpepads)    + ", " + ;
+                       "programas = "   + EscaparSQL(THIS.this_cProgramas)  + ", " + ;
+                       "ctipomarms = "  + IIF(EMPTY(THIS.this_cCtipomarms), "NULL", EscaparSQL(THIS.this_cCtipomarms)) + ", " + ;
+                       "carqicones = "  + IIF(EMPTY(THIS.this_cCarqicones), "NULL", EscaparSQL(THIS.this_cCarqicones)) + ", " + ;
+                       "dopcreds = "    + EscaparSQL(THIS.this_cDopcreds)   + ", " + ;
+                       "cfgfinancs = "  + EscaparSQL(THIS.this_cCfgfinancs) + ", " + ;
+                       "obsopes = "     + EscaparSQL(THIS.this_mObsopes)
+            loc_cSQL = "UPDATE SigCdOpe SET " + loc_cSet + ;
+                       " WHERE dopes = " + EscaparSQL(THIS.this_cDopes)
+            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL)
+            IF loc_nResult < 0
+                MsgErro("Erro ao atualizar opera" + CHR(231) + CHR(227) + "o.", "Erro em Atualizar")
+            ELSE
+                loc_lResultado = .T.
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + "Linha: " + TRANSFORM(loc_oErro.LineNo), "Erro em Atualizar")
         ENDTRY
@@ -373,11 +1239,17 @@ DEFINE CLASS OPEBO AS BusinessBase
     * ExecutarExclusao - Exclui registro da tabela SigCdOpe
     *====================================================================
     PROTECTED PROCEDURE ExecutarExclusao()
-        LOCAL loc_lResultado
+        LOCAL loc_lResultado, loc_cSQL, loc_nResult
         loc_lResultado = .F.
         TRY
-            *-- Fase 2: implementar
-            loc_lResultado = .T.
+            THIS.RegistrarAuditoria("E")
+            loc_cSQL = "DELETE FROM SigCdOpe WHERE dopes = " + EscaparSQL(THIS.this_cDopes)
+            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL)
+            IF loc_nResult < 0
+                MsgErro("Erro ao excluir opera" + CHR(231) + CHR(227) + "o.", "Erro em ExecutarExclusao")
+            ELSE
+                loc_lResultado = .T.
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + "Linha: " + TRANSFORM(loc_oErro.LineNo), "Erro em ExecutarExclusao")
         ENDTRY

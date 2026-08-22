@@ -913,6 +913,7 @@ DEFINE CLASS FormOPE AS FormBase
         ENDWITH
 
         *-- TextBox Descricao (Get1 legado: top=28, left=73, width=179, height=23)
+        *-- titopes char(30) -> MaxLength=30
         loc_oPagina.AddObject("txt_4c_Descricao", "TextBox")
         WITH loc_oPagina.txt_4c_Descricao
             .Value         = ""
@@ -922,11 +923,46 @@ DEFINE CLASS FormOPE AS FormBase
             .Height        = 23
             .FontName      = "Tahoma"
             .FontSize      = 8
-            .MaxLength     = 100
+            .MaxLength     = 30
             .BackColor     = RGB(255, 255, 255)
             .ForeColor     = RGB(0, 0, 0)
             .BorderStyle   = 1
             .SpecialEffect = 0
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Label "Menu :" (menus char(10))
+        loc_oPagina.AddObject("lbl_4c_LMenu", "Label")
+        WITH loc_oPagina.lbl_4c_LMenu
+            .Caption   = "Menu :"
+            .Top       = 86
+            .Left      = 37
+            .Width     = 35
+            .Height    = 15
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .ForeColor = RGB(90, 90, 90)
+            .BackStyle = 0
+            .AutoSize  = .F.
+            .Visible   = .T.
+        ENDWITH
+
+        *-- ComboBox Menu (menus char(10))
+        loc_oPagina.AddObject("cbo_4c_Menu", "ComboBox")
+        WITH loc_oPagina.cbo_4c_Menu
+            .Value         = ""
+            .Top           = 82
+            .Left          = 73
+            .Width         = 150
+            .Height        = 23
+            .RowSourceType = 1
+            .RowSource     = ",SISTEMA,OPERACIONA,CAIXA"
+            .Style         = 2
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .MaxLength     = 10
+            .BackColor     = RGB(255, 255, 255)
+            .ForeColor     = RGB(0, 0, 0)
             .Visible       = .T.
         ENDWITH
 
@@ -1022,22 +1058,23 @@ DEFINE CLASS FormOPE AS FormBase
             ENDIF
 
             *-- SigCdOpe nao tem coluna emps - tabela global de configuracao
+            *-- Descricao em SigCdOpe: titopes char(30)
             DO CASE
             CASE loc_nFiltroSit = 2
                 *-- Ativos: situas = 0
-                loc_cSQL = "SELECT a.dopes, a.descrs, a.tipoops, a.situas, a.opers " + ;
+                loc_cSQL = "SELECT a.dopes, a.titopes, a.tipoops, a.situas, a.opers " + ;
                            "FROM SigCdOpe a " + ;
                            "WHERE a.situas = 0 " + ;
                            "ORDER BY a.dopes"
             CASE loc_nFiltroSit = 3
                 *-- Inativos: situas <> 0
-                loc_cSQL = "SELECT a.dopes, a.descrs, a.tipoops, a.situas, a.opers " + ;
+                loc_cSQL = "SELECT a.dopes, a.titopes, a.tipoops, a.situas, a.opers " + ;
                            "FROM SigCdOpe a " + ;
                            "WHERE a.situas <> 0 " + ;
                            "ORDER BY a.dopes"
             OTHERWISE
                 *-- Todos
-                loc_cSQL = "SELECT a.dopes, a.descrs, a.tipoops, a.situas, a.opers " + ;
+                loc_cSQL = "SELECT a.dopes, a.titopes, a.tipoops, a.situas, a.opers " + ;
                            "FROM SigCdOpe a " + ;
                            "ORDER BY a.dopes"
             ENDCASE
@@ -1055,7 +1092,7 @@ DEFINE CLASS FormOPE AS FormBase
                         loc_oGrid.ColumnCount = 4
                         loc_oGrid.RecordSource          = "cursor_4c_Dados"
                         loc_oGrid.Column1.ControlSource = "cursor_4c_Dados.dopes"
-                        loc_oGrid.Column2.ControlSource = "cursor_4c_Dados.descrs"
+                        loc_oGrid.Column2.ControlSource = "cursor_4c_Dados.titopes"
                         loc_oGrid.Column3.ControlSource = "cursor_4c_Dados.tipoops"
                         loc_oGrid.Column4.ControlSource = "cursor_4c_Dados.situas"
                         loc_oGrid.Column1.Header1.Caption = "C" + CHR(243) + "digo"
@@ -1105,10 +1142,10 @@ DEFINE CLASS FormOPE AS FormBase
     * CRUD - Handlers de clique dos botoes principais
     *==========================================================================
     PROCEDURE BtnIncluirClick()
-        *-- Fase B: implementar ValidarPreAcao + logica de inclusao
         LOCAL loc_lResultado
         loc_lResultado = .F.
         TRY
+            THIS.this_oBusinessObject.NovoRegistro()
             THIS.this_cModoAtual = "INCLUSAO"
             THIS.LimparCampos()
             THIS.HabilitarCampos(.T.)
@@ -1341,13 +1378,15 @@ DEFINE CLASS FormOPE AS FormBase
     * FormParaBO - Transfere dados dos campos visuais para o BO
     *==========================================================================
     PROTECTED PROCEDURE FormParaBO()
-        *-- Fase B: implementar mapeamento completo de todos os campos
         LOCAL loc_oPagDados
         loc_oPagDados = THIS.pgf_4c_Paginas.Page2
-
         TRY
-            THIS.this_oBusinessObject.this_cDopes = ;
-                ALLTRIM(loc_oPagDados.txt_4c_Codigo.Value)
+            THIS.this_oBusinessObject.this_cDopes   = UPPER(ALLTRIM(loc_oPagDados.txt_4c_Codigo.Value))
+            THIS.this_oBusinessObject.this_cTitopes = ALLTRIM(loc_oPagDados.txt_4c_Descricao.Value)
+            THIS.this_oBusinessObject.this_nTipoops = VAL(ALLTRIM(loc_oPagDados.txt_4c_Tipo.Value))
+            IF PEMSTATUS(loc_oPagDados, "cbo_4c_Menu", 5)
+                THIS.this_oBusinessObject.this_cMenus = ALLTRIM(loc_oPagDados.cbo_4c_Menu.Value)
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;
                 "Linha: " + TRANSFORM(loc_oErro.LineNo), ;
@@ -1359,19 +1398,19 @@ DEFINE CLASS FormOPE AS FormBase
     * BOParaForm - Transfere dados do BO para os campos visuais
     *==========================================================================
     PROTECTED PROCEDURE BOParaForm()
-        *-- Fase B: implementar mapeamento completo de todos os campos
-        LOCAL loc_lResultado, loc_oPagDados
+        LOCAL loc_lResultado, loc_oPagDados, loc_cDopes
         loc_lResultado = .F.
         loc_oPagDados = THIS.pgf_4c_Paginas.Page2
-
         TRY
-            *-- Carregar registro do banco para o BO
             IF USED("cursor_4c_Dados") AND !EOF("cursor_4c_Dados")
-                LOCAL loc_cDopes
                 loc_cDopes = ALLTRIM(cursor_4c_Dados.dopes)
-                IF THIS.this_oBusinessObject.Buscar("a.dopes = " + EscaparSQL(loc_cDopes))
-                    *-- Preencher campos basicos
-                    loc_oPagDados.txt_4c_Codigo.Value   = ALLTRIM(THIS.this_oBusinessObject.this_cDopes)
+                IF THIS.this_oBusinessObject.CarregarPorCodigo(loc_cDopes)
+                    loc_oPagDados.txt_4c_Codigo.Value    = ALLTRIM(THIS.this_oBusinessObject.this_cDopes)
+                    loc_oPagDados.txt_4c_Descricao.Value = ALLTRIM(THIS.this_oBusinessObject.this_cTitopes)
+                    loc_oPagDados.txt_4c_Tipo.Value      = TRANSFORM(THIS.this_oBusinessObject.this_nTipoops)
+                    IF PEMSTATUS(loc_oPagDados, "cbo_4c_Menu", 5)
+                        loc_oPagDados.cbo_4c_Menu.Value  = ALLTRIM(THIS.this_oBusinessObject.this_cMenus)
+                    ENDIF
                     loc_lResultado = .T.
                 ENDIF
             ENDIF
@@ -1387,13 +1426,15 @@ DEFINE CLASS FormOPE AS FormBase
     * HabilitarCampos - Habilita/desabilita edicao dos campos
     *==========================================================================
     PROTECTED PROCEDURE HabilitarCampos(par_lHabilitar)
-        *-- Fase B: habilitar/desabilitar todos os campos das 18 abas
         LOCAL loc_oPagDados
         loc_oPagDados = THIS.pgf_4c_Paginas.Page2
         TRY
-            loc_oPagDados.txt_4c_Codigo.ReadOnly   = !par_lHabilitar
+            loc_oPagDados.txt_4c_Codigo.ReadOnly    = !par_lHabilitar
             loc_oPagDados.txt_4c_Descricao.ReadOnly = !par_lHabilitar
-            loc_oPagDados.txt_4c_Tipo.ReadOnly      = !par_lHabilitar
+            loc_oPagDados.txt_4c_Tipo.ReadOnly       = !par_lHabilitar
+            IF PEMSTATUS(loc_oPagDados, "cbo_4c_Menu", 5)
+                loc_oPagDados.cbo_4c_Menu.Enabled = par_lHabilitar
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;
                 "Linha: " + TRANSFORM(loc_oErro.LineNo), ;
@@ -1405,13 +1446,15 @@ DEFINE CLASS FormOPE AS FormBase
     * LimparCampos - Limpa todos os campos de edicao
     *==========================================================================
     PROTECTED PROCEDURE LimparCampos()
-        *-- Fase B: limpar todos os campos das 18 abas
         LOCAL loc_oPagDados
         loc_oPagDados = THIS.pgf_4c_Paginas.Page2
         TRY
-            loc_oPagDados.txt_4c_Codigo.Value   = ""
+            loc_oPagDados.txt_4c_Codigo.Value    = ""
             loc_oPagDados.txt_4c_Descricao.Value = ""
-            loc_oPagDados.txt_4c_Tipo.Value      = ""
+            loc_oPagDados.txt_4c_Tipo.Value      = "0"
+            IF PEMSTATUS(loc_oPagDados, "cbo_4c_Menu", 5)
+                loc_oPagDados.cbo_4c_Menu.Value = ""
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;
                 "Linha: " + TRANSFORM(loc_oErro.LineNo), ;
