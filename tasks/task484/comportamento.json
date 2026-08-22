@@ -1,0 +1,454 @@
+{
+  "resumo": {
+    "totalMetodos": 27,
+    "metodosComSQL": 3,
+    "metodosComValidacao": 8,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fDtoSQL", "fConfigGeral", "fUniqueIds", "fAcessoEmpresa", "fAcessoContas"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDPAT",
+      "evento": "Init",
+      "linhas": 39,
+      "codigoOriginal": "With ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\n\t\tThisForm.Pagina.Lista.Dt_inicial.Value = Date() - goSistema.PerFiltros\n\t\tThisForm.Pagina.Lista.Dt_Final.Value   = Date() + goSistema.PerFiltros\t\n\t\tThisForm.Pagina.Lista.Get_cd_empresa.Value = _Empr\n\t\tldDtIni = ThisForm.Pagina.Lista.Dt_inicial.Value\n\t\tldDtFin = ThisForm.Pagina.Lista.Dt_final.Value\n\t\tlcEmpr  = ThisForm.Pagina.Lista.Get_cd_empresa.Value\n\t\tldDtIni = fDtoSQL(ldDtIni)\n\t\tldDtFin= f... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "Value = Date,Value   = Date,SetFocus",
+        "controlesReferenciados": "Get_cd_empresa",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDPAT",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "=fConfigGeral()\n=DoDefault()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPAT",
+      "evento": "Procedure",
+      "linhas": 12,
+      "codigoOriginal": "ldDtIni = ThisForm.Pagina.Lista.Dt_inicial.Value\nldDtFin = ThisForm.Pagina.Lista.Dt_final.Value\nlcEmpr  = ThisForm.Pagina.Lista.Get_cd_empresa.Value\nldDtIni = fDtoSQL(ldDtIni)\nldDtFin= fDtoSQL(ldDtFin,[23:59:59])\n\nDodefault()\n\n*!*\tthisform.podatamgr.Requery([crSigCdPat])\n\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_cd_empresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPAT",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.podatamgr.Release\n=DoDefault()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPAT",
+      "evento": "Click",
+      "linhas": 36,
+      "codigoOriginal": "LPARAMETERS opcao\n\nIf !dodefault( Opcao )\n\tThisForm.mAtivapagina1\n\tReturn\nEndif\n\nSelect crSigCdPat\n\n* posiciona o cursor de acordo com a opção\nDo Case\n\tCase Inlist( ThisForm.pcEscolha, 'INSERIR', 'PROCURAR', 'ALTERAR' )\n\t\tthisform.pagina.dados.getEmps.setfocus\t\n\tCase Inlist( ThisForm.pcEscolha, 'CONSULTAR', 'EXCLUIR' )\n\t\tthisform.pagina.dados.grupo_salva.salva.setfocus\nEndcase\n\nSelect crSigCdPat\n=DoDefault()\n\n**** mostra descricao de empresa e de vendedor ****\nThisForm.Pagina.Dados.getDEmps.Valu... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery,value = DATETIME",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPAT",
+      "evento": "Click",
+      "linhas": 21,
+      "codigoOriginal": "LOCAL lcQuery, lcCon, lcCod\n\nIf ThisForm.pcEscolha = 'INSERIR'\n\tIf IsEmpty(ThisForm.Pagina.Dados.GetClientes.Value)\n\t\tMessageBox( 'Obrigatório Informar o Cliente.', 48, '' )\n\t\tThisForm.Pagina.Dados.GetClientes.SetFocus\n\t\tReturn\n\tENDIF  \n\tIf IsEmpty(ThisForm.Pagina.Dados.GetVends.Value)\n\t\tMessageBox( 'Obrigatório Informar o Vendedor.', 48, '' )\n\t\tThisForm.Pagina.Dados.GetVends.SetFocus\n\t\tReturn\n\tENDIF  \n\n\tReplace datas With datetime() in crSigCdPat\n\tReplace pkChaves With fUniqueIds() in crSigCdPa... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPAT",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "=DoDefault()\nIf ThisForm.plCancelar\n\tThisForm.mAtivapagina1\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPAT.Pagina.Lista.Get_cd_empresa",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "If !Empty(This.Value)\n\t= fAcessoEmpresa(Usuar,'C',This.value,ThisForm.Pagina.Lista.get_Cd_Empresa,'',ThisForm.poDataMgr,.t.)\nElse\n\tMessageBox('Preenchimento Obrigatorio!',0+48,'Empresa')\n\tReturn 0\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Cd_Empresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPAT.Pagina.Lista.Get_cd_empresa",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Nodefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPAT.Pagina.Lista.Dt_inicial",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "*!*\tThis.Parent.Dt_final.Setfocus",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPAT.Pagina.Lista.Dt_inicial",
+      "evento": "Valid",
+      "linhas": 4,
+      "codigoOriginal": "If This.Value > This.Parent.Dt_final.Value\n\tThis.Parent.Dt_Final.Value = This.Value\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPAT.Pagina.Lista.Dt_final",
+      "evento": "LostFocus",
+      "linhas": 10,
+      "codigoOriginal": "ldDtIni = ThisForm.Pagina.Lista.Dt_inicial.Value\nldDtFin = ThisForm.Pagina.Lista.Dt_final.Value\nlcEmpr  = ThisForm.Pagina.Lista.Get_cd_empresa.Value\nldDtIni = fDtoSQL(ldDtIni)\nldDtFin= fDtoSQL(ldDtFin,[23:59:59])\n\nthisform.podatamgr.Requery([crSigCdPat])\n\nThisForm.Pagina.Lista.Grade.SetFocus()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fDtoSQL",
+        "metodosFormChamados": "Requery,SetFocus",
+        "controlesReferenciados": "Get_cd_empresa",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPAT.Pagina.Lista.Dt_final",
+      "evento": "Valid",
+      "linhas": 4,
+      "codigoOriginal": "If This.Value < This.Parent.Dt_Inicial.Value\n\tThis.Parent.Dt_Inicial.Value = This.Value\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPAT.Pagina.Lista.Dt_final",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPAT.Pagina.Dados.getDatas",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "RETURN .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDPAT.Pagina.Dados.getPergunta",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Inlist(ThisForm.pcEscolha, \"INSERIR\", \"PROCURAR\", \"ALTERAR\")\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPAT.Pagina.Dados.getClientes",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Inlist(ThisForm.pcEscolha, \"INSERIR\", \"PROCURAR\", \"ALTERAR\")\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPAT.Pagina.Dados.getDEmps",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "=fAcessoEmpresa(Usuar, 'D', This.Value, ThisForm.Pagina.Dados.getEmps, ThisForm.Pagina.Dados.getDEmps)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPAT.Pagina.Dados.getDEmps",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.Pagina.Dados.getEmps.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPAT.Pagina.Dados.getEmps",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "=fAcessoEmpresa(Usuar, 'C', This.Value, ThisForm.Pagina.Dados.getEmps, ThisForm.Pagina.Dados.getDEmps)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPAT.Pagina.Dados.getEmps",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Inlist(ThisForm.pcEscolha, \"INSERIR\", \"PROCURAR\", \"ALTERAR\")\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPAT.Pagina.Dados.getDVends",
+      "evento": "Valid",
+      "linhas": 16,
+      "codigoOriginal": "Grupo = ''\nIf Not Empty(This.Value)\n\tIf Not fAcessoContas(Usuar, Grupo, 'D', This.Value, ThisForm.Pagina.Dados.getVends, ThisForm.Pagina.Dados.getDVends)\n\t\t=Messagebox('Acesso Negado!!!', 0+48, '')\n\t\tThis.Value = ''\n\t\tThis.Refresh\n\t\tThisForm.Pagina.Dados.getVends.Value = ''\n\t\tThisForm.Pagina.Dados.getVends.Refresh\n\t\tReturn 0\n\tEndIf\nElse\n\tThisForm.Pagina.Dados.getVends.Value = ''\n\tThisForm.Pagina.Dados.getVends.Refresh\nEndIf\n* Fim ******************************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPAT.Pagina.Dados.getDVends",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.Pagina.Dados.getvends.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPAT.Pagina.Dados.getVends",
+      "evento": "Valid",
+      "linhas": 16,
+      "codigoOriginal": "Grupo = ''\nIf Not Empty(This.Value)\n\tIf Not fAcessoContas(Usuar, Grupo, 'C', This.Value, ThisForm.Pagina.Dados.getVends, ThisForm.Pagina.Dados.getDVends)\n\t\t=Messagebox('Acesso Negado!!!', 0+48, '')\n\t\tThis.Value = ''\n\t\tThis.Refresh\n\t\tThisForm.Pagina.Dados.getDVends.Value = ''\n\t\tThisForm.Pagina.Dados.getDVends.Refresh\n\t\tReturn 0\n\tEndIf\nElse\n\tThisForm.Pagina.Dados.getDVends.Value = ''\n\tThisForm.Pagina.Dados.getDVends.Refresh\nEndIf\n* Fim **************************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPAT.Pagina.Dados.getVends",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Inlist(ThisForm.pcEscolha, \"INSERIR\", \"PROCURAR\", \"ALTERAR\")\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPAT.Pagina.Dados.opVendConcs",
+      "evento": "Valid",
+      "linhas": 4,
+      "codigoOriginal": "If ThisForm.Pagina.Dados.OpVendConcs.Value <> 1\n\tThisForm.Pagina.Dados.OpVendConcs.Value = 2\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPAT.Pagina.Dados.opVendConcs",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}
