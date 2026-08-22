@@ -50,7 +50,11 @@ DEFINE CLASS FormOpt AS FormBase
                     "VARTYPE retornou: " + VARTYPE(THIS.this_oBusinessObject), ;
                     "FormOpt.InicializarForm")
             ELSE
+                THIS.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
                 THIS.ConfigurarPageFrame()
+
+                THIS.pgf_4c_Paginas.Page1.cnt_4c_Cabecalho.lbl_4c_Sombra.Caption = THIS.Caption
+                THIS.pgf_4c_Paginas.Page1.cnt_4c_Cabecalho.lbl_4c_Titulo.Caption = THIS.Caption
 
                 THIS.pgf_4c_Paginas.Visible    = .T.
                 THIS.pgf_4c_Paginas.ActivePage = 1
@@ -177,7 +181,7 @@ DEFINE CLASS FormOpt AS FormBase
             .Height          = 75
             .BackColor       = RGB(255, 255, 255)
             .ForeColor       = RGB(90, 90, 90)
-            .FontName        = "Comic Sans MS"
+            .FontName        = "Tahoma"
             .FontSize        = 8
             .FontBold        = .T.
             .FontItalic      = .T.
@@ -202,7 +206,7 @@ DEFINE CLASS FormOpt AS FormBase
             .Height          = 75
             .BackColor       = RGB(255, 255, 255)
             .ForeColor       = RGB(90, 90, 90)
-            .FontName        = "Comic Sans MS"
+            .FontName        = "Tahoma"
             .FontSize        = 8
             .FontBold        = .T.
             .FontItalic      = .T.
@@ -227,7 +231,7 @@ DEFINE CLASS FormOpt AS FormBase
             .Height          = 75
             .BackColor       = RGB(255, 255, 255)
             .ForeColor       = RGB(90, 90, 90)
-            .FontName        = "Comic Sans MS"
+            .FontName        = "Tahoma"
             .FontSize        = 8
             .FontBold        = .T.
             .FontItalic      = .T.
@@ -252,7 +256,7 @@ DEFINE CLASS FormOpt AS FormBase
             .Height          = 75
             .BackColor       = RGB(255, 255, 255)
             .ForeColor       = RGB(90, 90, 90)
-            .FontName        = "Comic Sans MS"
+            .FontName        = "Tahoma"
             .FontSize        = 8
             .FontBold        = .T.
             .FontItalic      = .T.
@@ -277,7 +281,7 @@ DEFINE CLASS FormOpt AS FormBase
             .Height          = 75
             .BackColor       = RGB(255, 255, 255)
             .ForeColor       = RGB(90, 90, 90)
-            .FontName        = "Comic Sans MS"
+            .FontName        = "Tahoma"
             .FontSize        = 8
             .FontBold        = .T.
             .FontItalic      = .T.
@@ -314,7 +318,7 @@ DEFINE CLASS FormOpt AS FormBase
             .Height          = 75
             .BackColor       = RGB(255, 255, 255)
             .ForeColor       = RGB(90, 90, 90)
-            .FontName        = "Comic Sans MS"
+            .FontName        = "Tahoma"
             .FontSize        = 8
             .FontBold        = .T.
             .FontItalic      = .T.
@@ -417,7 +421,7 @@ DEFINE CLASS FormOpt AS FormBase
             .Height          = 75
             .BackColor       = RGB(255, 255, 255)
             .ForeColor       = RGB(90, 90, 90)
-            .FontName        = "Comic Sans MS"
+            .FontName        = "Tahoma"
             .FontSize        = 8
             .FontBold        = .T.
             .FontItalic      = .T.
@@ -441,7 +445,7 @@ DEFINE CLASS FormOpt AS FormBase
             .Height          = 75
             .BackColor       = RGB(255, 255, 255)
             .ForeColor       = RGB(90, 90, 90)
-            .FontName        = "Comic Sans MS"
+            .FontName        = "Tahoma"
             .FontSize        = 8
             .FontBold        = .T.
             .FontItalic      = .T.
@@ -3941,7 +3945,7 @@ DEFINE CLASS FormOpt AS FormBase
     *==========================================================================
     * ValidarOpAnts - LostFocus: Movimento Anterior (lookup SigCdOpt)
     *==========================================================================
-    PROCEDURE ValidarOpAnts()
+    PROCEDURE ValidarOpAnts(par_nKeyCode, par_nShiftAltCtrl)
         LOCAL loc_oPg2, loc_cVal
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
 
@@ -3961,7 +3965,7 @@ DEFINE CLASS FormOpt AS FormBase
     *==========================================================================
     * ValidarOpContas - LostFocus: Movimento de Titulos (lookup SIGOPOPE)
     *==========================================================================
-    PROCEDURE ValidarOpContas()
+    PROCEDURE ValidarOpContas(par_nKeyCode, par_nShiftAltCtrl)
         LOCAL loc_oPg2, loc_cVal
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
 
@@ -3982,7 +3986,7 @@ DEFINE CLASS FormOpt AS FormBase
     * ValidarOpEntrada - LostFocus: Movimento de Entrada (lookup SigCdOpt)
     * Exclui o proprio registro corrente do lookup
     *==========================================================================
-    PROCEDURE ValidarOpEntrada()
+    PROCEDURE ValidarOpEntrada(par_nKeyCode, par_nShiftAltCtrl)
         LOCAL loc_oPg2, loc_cVal, loc_cFiltro
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
 
@@ -4009,7 +4013,7 @@ DEFINE CLASS FormOpt AS FormBase
     *==========================================================================
     * ValidarFpg - LostFocus: Condicao de Pagamento (lookup SigOpFp)
     *==========================================================================
-    PROCEDURE ValidarFpg()
+    PROCEDURE ValidarFpg(par_nKeyCode, par_nShiftAltCtrl)
         LOCAL loc_oPg2, loc_cVal
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
 
@@ -4029,7 +4033,7 @@ DEFINE CLASS FormOpt AS FormBase
     *==========================================================================
     * ValidarSituacao - LostFocus: Situacao do Cliente (lookup SigCdCst)
     *==========================================================================
-    PROCEDURE ValidarSituacao()
+    PROCEDURE ValidarSituacao(par_nKeyCode, par_nShiftAltCtrl)
         LOCAL loc_oPg2, loc_cVal
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
 
@@ -4049,7 +4053,7 @@ DEFINE CLASS FormOpt AS FormBase
     *==========================================================================
     * ValidarHispad - LostFocus: Grupo Emissor Default (fAcessoContab)
     *==========================================================================
-    PROCEDURE ValidarHispad()
+    PROCEDURE ValidarHispad(par_nKeyCode, par_nShiftAltCtrl)
         LOCAL loc_oPg2, loc_cVal, loc_lResultado
         loc_lResultado = .F.
         loc_oPg2       = THIS.pgf_4c_Paginas.Page2
@@ -4076,7 +4080,7 @@ DEFINE CLASS FormOpt AS FormBase
     *==========================================================================
     * ValidarResponsavel - LostFocus: Responsavel (fAcessoContab)
     *==========================================================================
-    PROCEDURE ValidarResponsavel()
+    PROCEDURE ValidarResponsavel(par_nKeyCode, par_nShiftAltCtrl)
         LOCAL loc_oPg2, loc_cVal, loc_lResultado
         loc_lResultado = .F.
         loc_oPg2       = THIS.pgf_4c_Paginas.Page2
@@ -4103,7 +4107,7 @@ DEFINE CLASS FormOpt AS FormBase
     *==========================================================================
     * ValidarCentral - LostFocus: Central de Credito por codigo (lookup SIGCCCCO)
     *==========================================================================
-    PROCEDURE ValidarCentral()
+    PROCEDURE ValidarCentral(par_nKeyCode, par_nShiftAltCtrl)
         LOCAL loc_oPg2, loc_cVal
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
 
@@ -4123,7 +4127,7 @@ DEFINE CLASS FormOpt AS FormBase
     *==========================================================================
     * ValidarDescCentral - LostFocus: Central de Credito por descricao
     *==========================================================================
-    PROCEDURE ValidarDescCentral()
+    PROCEDURE ValidarDescCentral(par_nKeyCode, par_nShiftAltCtrl)
         LOCAL loc_oPg2, loc_cDesc
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
 
@@ -4143,7 +4147,7 @@ DEFINE CLASS FormOpt AS FormBase
     *==========================================================================
     * ValidarGrupoOrig - LostFocus: Grupo de Origem por codigo (fAcessoContab)
     *==========================================================================
-    PROCEDURE ValidarGrupoOrig()
+    PROCEDURE ValidarGrupoOrig(par_nKeyCode, par_nShiftAltCtrl)
         LOCAL loc_oPg2, loc_cVal, loc_lResultado
         loc_lResultado = .F.
         loc_oPg2       = THIS.pgf_4c_Paginas.Page2
@@ -4171,7 +4175,7 @@ DEFINE CLASS FormOpt AS FormBase
     *==========================================================================
     * ValidarDescGrupoOrig - LostFocus: Grupo de Origem por descricao (fAcessoContab 'D')
     *==========================================================================
-    PROCEDURE ValidarDescGrupoOrig()
+    PROCEDURE ValidarDescGrupoOrig(par_nKeyCode, par_nShiftAltCtrl)
         LOCAL loc_oPg2, loc_cDesc, loc_lResultado
         loc_lResultado = .F.
         loc_oPg2       = THIS.pgf_4c_Paginas.Page2
@@ -4199,7 +4203,7 @@ DEFINE CLASS FormOpt AS FormBase
     *==========================================================================
     * ValidarGrupoDest - LostFocus: Grupo de Destino por codigo (fAcessoContab)
     *==========================================================================
-    PROCEDURE ValidarGrupoDest()
+    PROCEDURE ValidarGrupoDest(par_nKeyCode, par_nShiftAltCtrl)
         LOCAL loc_oPg2, loc_cVal, loc_lResultado
         loc_lResultado = .F.
         loc_oPg2       = THIS.pgf_4c_Paginas.Page2
@@ -4227,7 +4231,7 @@ DEFINE CLASS FormOpt AS FormBase
     *==========================================================================
     * ValidarDescGrupoDest - LostFocus: Grupo de Destino por descricao (fAcessoContab 'D')
     *==========================================================================
-    PROCEDURE ValidarDescGrupoDest()
+    PROCEDURE ValidarDescGrupoDest(par_nKeyCode, par_nShiftAltCtrl)
         LOCAL loc_oPg2, loc_cDesc, loc_lResultado
         loc_lResultado = .F.
         loc_oPg2       = THIS.pgf_4c_Paginas.Page2
@@ -4255,7 +4259,7 @@ DEFINE CLASS FormOpt AS FormBase
     *==========================================================================
     * ValidarContaOrig - LostFocus: Conta de Origem por codigo (fAcessoContas)
     *==========================================================================
-    PROCEDURE ValidarContaOrig()
+    PROCEDURE ValidarContaOrig(par_nKeyCode, par_nShiftAltCtrl)
         LOCAL loc_oPg2, loc_cVal, loc_cGrupoOs, loc_lResultado
         loc_lResultado = .F.
         loc_oPg2       = THIS.pgf_4c_Paginas.Page2
@@ -4287,7 +4291,7 @@ DEFINE CLASS FormOpt AS FormBase
     *==========================================================================
     * ValidarDescContaOrig - LostFocus: Conta de Origem por descricao (fAcessoContas 'D')
     *==========================================================================
-    PROCEDURE ValidarDescContaOrig()
+    PROCEDURE ValidarDescContaOrig(par_nKeyCode, par_nShiftAltCtrl)
         LOCAL loc_oPg2, loc_cDesc, loc_cGrupoOs, loc_lResultado
         loc_lResultado = .F.
         loc_oPg2       = THIS.pgf_4c_Paginas.Page2
@@ -4319,7 +4323,7 @@ DEFINE CLASS FormOpt AS FormBase
     *==========================================================================
     * ValidarContaDest - LostFocus: Conta de Destino por codigo (fAcessoContas)
     *==========================================================================
-    PROCEDURE ValidarContaDest()
+    PROCEDURE ValidarContaDest(par_nKeyCode, par_nShiftAltCtrl)
         LOCAL loc_oPg2, loc_cVal, loc_cGrupo, loc_lResultado
         loc_lResultado = .F.
         loc_oPg2       = THIS.pgf_4c_Paginas.Page2
@@ -4351,7 +4355,7 @@ DEFINE CLASS FormOpt AS FormBase
     *==========================================================================
     * ValidarDescContaDest - LostFocus: Conta de Destino por descricao (fAcessoContas 'D')
     *==========================================================================
-    PROCEDURE ValidarDescContaDest()
+    PROCEDURE ValidarDescContaDest(par_nKeyCode, par_nShiftAltCtrl)
         LOCAL loc_oPg2, loc_cDesc, loc_cGrupo, loc_lResultado
         loc_lResultado = .F.
         loc_oPg2       = THIS.pgf_4c_Paginas.Page2
@@ -4383,7 +4387,7 @@ DEFINE CLASS FormOpt AS FormBase
     *==========================================================================
     * ValidarGrupoT - LostFocus: Grupo Terceiro por codigo (fAcessoContab)
     *==========================================================================
-    PROCEDURE ValidarGrupoT()
+    PROCEDURE ValidarGrupoT(par_nKeyCode, par_nShiftAltCtrl)
         LOCAL loc_oPg2, loc_cVal, loc_lResultado
         loc_lResultado = .F.
         loc_oPg2       = THIS.pgf_4c_Paginas.Page2
@@ -4415,7 +4419,7 @@ DEFINE CLASS FormOpt AS FormBase
     *==========================================================================
     * ValidarDescGrupoT - LostFocus: Grupo Terceiro por descricao (fAcessoContab 'D')
     *==========================================================================
-    PROCEDURE ValidarDescGrupoT()
+    PROCEDURE ValidarDescGrupoT(par_nKeyCode, par_nShiftAltCtrl)
         LOCAL loc_oPg2, loc_cDesc, loc_lResultado
         loc_lResultado = .F.
         loc_oPg2       = THIS.pgf_4c_Paginas.Page2
@@ -4447,7 +4451,7 @@ DEFINE CLASS FormOpt AS FormBase
     *==========================================================================
     * ValidarMoedas - LostFocus: Moeda (lookup SigCdMoe)
     *==========================================================================
-    PROCEDURE ValidarMoedas()
+    PROCEDURE ValidarMoedas(par_nKeyCode, par_nShiftAltCtrl)
         LOCAL loc_oPg2, loc_cVal
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
 
@@ -4583,6 +4587,7 @@ DEFINE CLASS FormOpt AS FormBase
                         loc_oBusca.DefinirCursor(loc_cCursorBusca, par_cCampoCod, ;
                             IIF(!EMPTY(par_cCampoDesc), par_cCampoDesc, par_cCampoCod), ;
                             par_cTitulo)
+                        loc_oBusca.this_cCursorDestino = loc_cCursorBusca
                         loc_oBusca.Mostrar()
                         IF !EMPTY(loc_oBusca.cCodigoSelecionado)
                             IF VARTYPE(par_oCtrlCod) = "O"
