@@ -262,6 +262,11 @@ DEFINE CLASS ComparadorUI AS Custom
         IF par_cProp = "Picture"
             loc_cOriginalStr = UPPER(JUSTFNAME(loc_cOriginalStr))
             loc_cMigradoStr = UPPER(JUSTFNAME(loc_cMigradoStr))
+            *-- new_background.jpg e fundo_cad_1003.jpg sao o mesmo arquivo (renomeado no sistema novo)
+            IF (loc_cOriginalStr = "NEW_BACKGROUND.JPG" AND loc_cMigradoStr = "FUNDO_CAD_1003.JPG") OR ;
+               (loc_cOriginalStr = "FUNDO_CAD_1003.JPG" AND loc_cMigradoStr = "NEW_BACKGROUND.JPG")
+                RETURN .F.
+            ENDIF
         ENDIF
 
         *-- Normalizar Caption: remover hotkey markers \<

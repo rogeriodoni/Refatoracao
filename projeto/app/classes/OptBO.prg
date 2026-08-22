@@ -583,8 +583,8 @@ DEFINE CLASS OptBO AS BusinessBase
         loc_nUso     = 0
 
         TRY
-            loc_cSQL = "SELECT COUNT(*) AS qtd FROM SigMvChe" + ;
-                " WHERE Dopes = " + EscaparSQL(ALLTRIM(THIS.this_cOperacaos))
+            loc_cSQL = "SELECT COUNT(*) AS qtd FROM SIGCQDEV" + ;
+                " WHERE Operacaos = " + EscaparSQL(ALLTRIM(THIS.this_cOperacaos))
             loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_ChkUso")
             IF loc_nResultado >= 0 AND USED("cursor_4c_ChkUso")
                 SELECT cursor_4c_ChkUso
@@ -850,11 +850,8 @@ DEFINE CLASS OptBO AS BusinessBase
         loc_lSucesso = .F.
 
         TRY
-            loc_cSQL = "SELECT Dopes, Descrs FROM SIGOPOPE WHERE Congvs = 1"
-            IF VARTYPE(par_cFiltro) = "C" AND !EMPTY(ALLTRIM(par_cFiltro))
-                loc_cSQL = loc_cSQL + " AND Dopes LIKE " + EscaparSQL(ALLTRIM(par_cFiltro) + "%")
-            ENDIF
-            loc_cSQL = loc_cSQL + " ORDER BY Dopes"
+            loc_cSQL = "SELECT Dopes, Descrs FROM SIGOPOPE WHERE Congvs = 1" + ;
+                " ORDER BY Dopes"
             loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaOpContas")
             IF loc_nResult >= 0
                 loc_lSucesso = .T.
@@ -875,11 +872,8 @@ DEFINE CLASS OptBO AS BusinessBase
 
         TRY
             loc_cSQL = "SELECT FPags, Descrs FROM SigOpFp" + ;
-                " WHERE Infos = 'C' AND EmiChqs <> 1"
-            IF VARTYPE(par_cFiltro) = "C" AND !EMPTY(ALLTRIM(par_cFiltro))
-                loc_cSQL = loc_cSQL + " AND FPags LIKE " + EscaparSQL(ALLTRIM(par_cFiltro) + "%")
-            ENDIF
-            loc_cSQL = loc_cSQL + " ORDER BY FPags"
+                " WHERE Infos = 'C' AND EmiChqs <> 1" + ;
+                " ORDER BY FPags"
             loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaFpg")
             IF loc_nResult >= 0
                 loc_lSucesso = .T.
