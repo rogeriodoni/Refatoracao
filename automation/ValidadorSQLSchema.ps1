@@ -362,6 +362,10 @@ function Validate-InsertColumns {
         # Ignorar cursores locais (cursor_4c_*)
         if ($tableName -match '^cursor_4c_') { return $problemas }
 
+        # Ignorar quando a lista de colunas e uma variavel VFP (ex: " + loc_cCols + ")
+        # Analise estatica nao consegue resolver variaveis em tempo de compilacao
+        if ($columnList -match '\+\s*\w+\s*\+') { return $problemas }
+
         $tableColumns = Get-SchemaForTable -TableName $tableName -FileSchema $Schema
         if ($tableColumns.Count -gt 0) {
             $columns = $columnList -split ',' | ForEach-Object { $_.Trim().ToLower() }

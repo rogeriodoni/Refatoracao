@@ -135,6 +135,15 @@ ADDPROPERTY(go_4c_Sistema, "BuscaNome", "RClis")
 ADDPROPERTY(go_4c_Sistema, "Matrizes", .F.)
 ADDPROPERTY(go_4c_Sistema, "Transitorio", "")
 
+*-- Fortyus VCX compat (Erro122): wrapper classresp.vcx/framework.vcx referenciam
+*-- goSistema.Usuario (32x), .DirImagens (3x), .ControlaImp (2x), .QtdDecimais (2x)
+*-- Sem essas properties: "Property USUARIO is not found" ao instanciar GET_GRUPOVEN
+*-- (cascateado como "Error instantiating the object GET_GRUPOVEN").
+ADDPROPERTY(go_4c_Sistema, "Usuario", "SISTEMA")
+ADDPROPERTY(go_4c_Sistema, "DirImagens", ADDBS(gc_4c_CaminhoFramework) + "Imagens\")
+ADDPROPERTY(go_4c_Sistema, "ControlaImp", .F.)
+ADDPROPERTY(go_4c_Sistema, "QtdDecimais", 2)
+
 *------------------------------------------------------------------------------
 * Aliases para compatibilidade com FRX legados
 * NOTA: FRX antigos esperam estas variaveis com nomes especificos
@@ -277,7 +286,11 @@ PROCEDURE ConfigurarAmbiente()
     CarregarSeExistir(gcCaminhoClasses + "FormBuscaSimples.prg")
     CarregarSeExistir(gcCaminhoClasses + "FormErro.prg")
     CarregarSeExistir(gcCaminhoClasses + "TextBoxGridLookup.prg")
-    CarregarSeExistir(gcCaminhoClasses + "fSqlConector.prg")
+    *-- fSqlConector: usar classe legada Fortyus (sigclcnx.PRG) — contem
+    *-- cOpenConn + fSqlConector + pClsCursor. Nosso stub (fSqlConector.prg)
+    *-- era incompleto (faltava AddCursor, Requery, pfSqlTabela), causando
+    *-- Erro124 no wrapper clsconta.mIniConta. Backup em .stub-erro124.
+    CarregarSeExistir(gcCaminhoClasses + "sigclcnx.PRG")
     CarregarSeExistir(gcCaminhoClasses + "fwprogressbar.prg")
 
     * =========================================================================
@@ -286,6 +299,9 @@ PROCEDURE ConfigurarAmbiente()
     CarregarSeExistir(gcCaminhoUtils + "functions.prg")
     CarregarSeExistir(gcCaminhoUtils + "messages.prg")
     CarregarSeExistir(gcCaminhoUtils + "validators.prg")
+    *-- Stubs para funcoes utilitarias do legado Fortyus (SIGFUNCS.PRG)
+    *-- Referenciadas pelos VCXs wrapper (fCarregaGrade em clsconta.mMontaGrade, etc.)
+    CarregarSeExistir(gcCaminhoUtils + "fortyus_stubs.prg")
 
     * =========================================================================
     * FRAMEWORK LEGADO Fortyus - Funcoes de acesso (sigacess.PRG)
