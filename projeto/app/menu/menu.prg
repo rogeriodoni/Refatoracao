@@ -327,6 +327,8 @@ PROCEDURE CriarMenuPrincipal()
            MESSAGE "Cadastro de Origem (SigCdOrl)"
     DEFINE BAR 149 OF popCadastros PROMPT "Opera" + CHR(231) + CHR(245) + "es de T" + CHR(237) + "tulos" ;
            MESSAGE "Cadastro de Opera" + CHR(231) + CHR(245) + "es de T" + CHR(237) + "tulos (SigOpOpe)"
+    DEFINE BAR 150 OF popCadastros PROMPT "Condi" + CHR(231) + CHR(245) + "es de Pagamento" ;
+           MESSAGE "Cadastro de Condi" + CHR(231) + CHR(245) + "es de Pagamento (SigOpFp)"
 
     * Vincular acoes dos itens do menu Cadastros
     ON SELECTION BAR 1 OF popCadastros DO AbrirFormCargo
@@ -462,6 +464,7 @@ PROCEDURE CriarMenuPrincipal()
     ON SELECTION BAR 147 OF popCadastros DO AbrirFormOrc
     ON SELECTION BAR 148 OF popCadastros DO AbrirFormorl
     ON SELECTION BAR 149 OF popCadastros DO AbrirFormOTI
+    ON SELECTION BAR 150 OF popCadastros DO AbrirFormpag
 
     * Menu Movimentos
     ON PAD padMovimentos OF _MSYSMENU ACTIVATE POPUP popMovimentos
@@ -1169,12 +1172,16 @@ PROCEDURE CriarMenuPrincipal()
     DEFINE BAR 11 OF popFerramentas PROMPT "\-"
     DEFINE BAR 12 OF popFerramentas PROMPT "Cadastro de " + CHR(205) + "cones" ;
            MESSAGE "Cadastro de " + CHR(205) + "cones do sistema (SigSyIco)"
+    DEFINE BAR 13 OF popFerramentas PROMPT "\-"
+    DEFINE BAR 14 OF popFerramentas PROMPT "Configura" + CHR(231) + CHR(227) + "o PAF-ECF" ;
+           MESSAGE "Configura" + CHR(231) + CHR(227) + "o do Programa Aplicativo Fiscal - Emissor de Cupom Fiscal"
     ON SELECTION BAR 3  OF popFerramentas DO AbrirFormSIGBLCTA
     ON SELECTION BAR 4  OF popFerramentas DO AbrirFormSIGPGCNB
     ON SELECTION BAR 6  OF popFerramentas DO TestarConexaoBD
     ON SELECTION BAR 8  OF popFerramentas DO AbrirFormSIGPREST
     ON SELECTION BAR 10 OF popFerramentas DO AbrirFormsigprsen
     ON SELECTION BAR 12 OF popFerramentas DO AbrirFormICO
+    ON SELECTION BAR 14 OF popFerramentas DO AbrirFormpaf
 
     * Menu Ajuda
     ON PAD padAjuda OF _MSYSMENU ACTIVATE POPUP popAjuda
@@ -9285,6 +9292,59 @@ PROCEDURE AbrirFormOTI()
     CATCH TO loException
         LOCAL lcMensagem
         lcMensagem = "Erro ao abrir formul" + CHR(225) + "rio de Opera" + CHR(231) + CHR(245) + "es de T" + CHR(237) + "tulos:" + CHR(13) + CHR(13) + ;
+                     "Erro: "      + loException.Message + CHR(13) + ;
+                     "Linha: "     + TRANSFORM(loException.LineNo) + CHR(13) + ;
+                     "Procedure: " + loException.Procedure
+        MostrarErro(lcMensagem, "Erro Detalhado")
+    ENDTRY
+ENDPROC
+
+*------------------------------------------------------------------------------
+* AbrirFormpaf - Abre formulario de configuracao PAF-ECF
+*------------------------------------------------------------------------------
+PROCEDURE AbrirFormpaf()
+    LOCAL loForm, loException
+
+    TRY
+        loForm = CREATEOBJECT("Formpaf")
+
+        IF VARTYPE(loForm) = "O"
+            loForm.Show()
+        ELSE
+            MostrarErro("Erro ao criar formul" + CHR(225) + "rio Formpaf" + CHR(13) + ;
+                       "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
+        ENDIF
+
+    CATCH TO loException
+        LOCAL lcMensagem
+        lcMensagem = "Erro ao abrir formul" + CHR(225) + "rio de Configura" + CHR(231) + CHR(227) + "o PAF-ECF:" + CHR(13) + CHR(13) + ;
+                     "Erro: "      + loException.Message + CHR(13) + ;
+                     "Linha: "     + TRANSFORM(loException.LineNo) + CHR(13) + ;
+                     "Procedure: " + loException.Procedure
+        MostrarErro(lcMensagem, "Erro Detalhado")
+    ENDTRY
+ENDPROC
+
+*------------------------------------------------------------------------------
+* AbrirFormpag - Abre formulario de Cadastro de Condicoes de Pagamento (SigOpFp)
+*------------------------------------------------------------------------------
+PROCEDURE AbrirFormpag()
+    LOCAL loForm, loException
+
+    TRY
+        loForm = CREATEOBJECT("Formpag")
+
+        IF VARTYPE(loForm) = "O"
+            loForm.Show()
+        ELSE
+            MostrarErro("Erro ao criar formul" + CHR(225) + "rio Formpag" + CHR(13) + ;
+                       "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
+        ENDIF
+
+    CATCH TO loException
+        LOCAL lcMensagem
+        lcMensagem = "Erro ao abrir formul" + CHR(225) + "rio de Condi" + CHR(231) + CHR(245) + ;
+                     "es de Pagamento:" + CHR(13) + CHR(13) + ;
                      "Erro: "      + loException.Message + CHR(13) + ;
                      "Linha: "     + TRANSFORM(loException.LineNo) + CHR(13) + ;
                      "Procedure: " + loException.Procedure

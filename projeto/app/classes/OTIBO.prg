@@ -134,7 +134,9 @@ DEFINE CLASS OTIBO AS BusinessBase
             loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Dados")
             IF loc_nResult >= 0
                 IF !USED("cursor_4c_Dados")
+                    SET NULL ON
                     CREATE CURSOR cursor_4c_Dados (dopes C(20), opers C(2), ndopes N(10,0))
+                    SET NULL OFF
                 ENDIF
                 IF !EOF("cursor_4c_Dados")
                     GO TOP IN cursor_4c_Dados
