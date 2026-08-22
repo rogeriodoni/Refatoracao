@@ -1,0 +1,12 @@
+﻿Todos os `RETURN` est├úo fora de TRY/CATCH ÔÇö correto. A implementa├º├úo est├í completa e funcional.
+
+**Fase 4/8 entregue.** O `FormOps.prg` foi atualizado com:
+
+- **5 bot├Áes CRUD** em `cnt_4c_Botoes` (Incluir/Visualizar/Alterar/Excluir/Buscar) com ├¡cones, Comic Sans MS, BINDEVENT para handlers PUBLIC
+- **Bot├úo Encerrar** em `cnt_4c_Saida` com padr├úo can├┤nico (Left=917, Width=90, cmd Width=75)
+- **OptionGroup** `opt_4c_FilSituas` (Geral/Ativos/Inativos) com `OptFilSituasChanged` que chama `CarregarLista()`
+- **3 bot├Áes legados** da Page1 original: `cmd_4c_CmdFPOper`, `cmd_4c_TabDesconto`, `cmd_4c_MontaLista`
+- **Grid** `grd_4c_Lista` (top=159, width=938, height=420) com 10 colunas ÔÇö `RecordSource`/`ColumnCount` definidos fora de `WITH` em `CarregarLista()` (Problemas 36/48)
+- **`CarregarLista()`** completo: detecta filtro do OptionGroup, chama `Buscar()`, seta `RecordSource`/`ColumnCount` e reconfigura headers ap├│s
+- **Handlers completos**: `BtnExcluirClick` com `MsgConfirma`+`Excluir()`+`CarregarLista()`, `BtnVisualizarClick`/`BtnAlterarClick` com `CarregarPorCodigo`+`EditarRegistro()`+navega├º├úo
+- **M├®todos-esqueleto** para Fases 5-7: `HabilitarCampos`, `LimparCampos`, `FormParaBO`, `BOParaForm`, `AjustarBotoesPorModo`

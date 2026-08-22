@@ -1,0 +1,20 @@
+﻿Tudo correto. A Fase 6 est├í completa. Aqui est├í o resumo do que foi adicionado ao `FormOps.prg`:
+
+**`ConfigurarPaginaDados()` ÔÇö campos restantes adicionados:**
+- `lbl_4c_Label12` ÔÇö "Submenu :" (Say12, top=196, left=246)
+- `lbl_4c_Label5` ÔÇö "Ord.:" (Say5, top=196, left=417)
+- `txt_4c_Ordem` ÔÇö campo Ordes N(4,0) (top=192, left=448)
+- `lbl_4c_Label4` ÔÇö "Tipo :" (Say4, top=221, left=270)
+- `cbo_4c_CmbTOpers` ÔÇö TipoOps combo (top=217, left=303)
+- `lbl_4c_Label25` ÔÇö "N├║mero :" (Say25, top=248, left=253)
+- `txt_4c_NDopes` ÔÇö NDopes N(4,0) (top=244, left=303)
+- `lbl_4c_Label7` ÔÇö "Moeda :" (Say7, top=248, left=404)
+- `txt_4c_Moeda` ÔÇö CMoes C(3) (top=244, left=448)
+- `lbl_4c_Label2` ÔÇö "Observa├º├úo :" (Say2, top=271, left=232)
+- `obj_4c_MemoObs` ÔÇö EditBox ObsOpes memo (top=270, left=302, 505├ù201)
+
+**M├®todos completados com os novos campos:**
+- `HabilitarCampos()` ÔÇö txt_4c_Ordem, cbo_4c_CmbTOpers, txt_4c_NDopes, txt_4c_Moeda, obj_4c_MemoObs
+- `LimparCampos()` ÔÇö todos os campos acima zerados
+- `FormParaBO()` ÔÇö this_nOrdes, this_nTipoOps (via VAL()), this_nNDopes, this_cCmoes, this_cObsOpes
+- `BOParaForm()` ÔÇö todos os campos reversos, com TRANSFORM() para TipoOps num├®ricoÔåÆstring

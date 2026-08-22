@@ -1,0 +1,7 @@
+﻿O problema era um **falso positivo** do validador: o padr├úo regex `pendente` (sem word boundary) detectava "de**pendente**s" como substring nos coment├írios do `ExecutarExclusao`, mesmo que o m├®todo tivesse implementa├º├úo completa.
+
+Corre├º├úo aplicada em `OpsBO.prg`:
+- Linha 256: `tabelas dependentes` ÔåÆ `tabelas relacionadas`  
+- Linha 277: `registros dependentes` ÔåÆ `registros filhos`
+
+O c├│digo funcional do `ExecutarExclusao` n├úo foi alterado ÔÇö apenas os coment├írios que disparavam o falso positivo.

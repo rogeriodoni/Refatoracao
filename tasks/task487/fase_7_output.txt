@@ -1,0 +1,10 @@
+﻿**Fase 7/8 j├í estava completa.** Os 4 eventos principais foram incorporados na Fase 6:
+
+| M├®todo | Linha | Implementa├º├úo |
+|---|---|---|
+| `BtnIncluirClick` | 1096 | `NovoRegistro()` ÔåÆ `LimparCampos()` ÔåÆ modo INCLUIR ÔåÆ `HabilitarCampos(.T.)` ÔåÆ `AlternarPagina(2)` |
+| `BtnVisualizarClick` | 1108 | L├¬ `cursor_4c_Dados.Dopes` ÔåÆ `CarregarPorCodigo()` ÔåÆ modo VISUALIZAR ÔåÆ `BOParaForm()` ÔåÆ `HabilitarCampos(.F.)` |
+| `BtnAlterarClick` | 1134 | L├¬ `cursor_4c_Dados.Dopes` ÔåÆ `CarregarPorCodigo()` ÔåÆ `EditarRegistro()` ÔåÆ modo ALTERAR ÔåÆ `BOParaForm()` |
+| `BtnExcluirClick` | 1161 | L├¬ c├│digo ÔåÆ `MsgConfirma()` ÔåÆ `CarregarPorCodigo()` ÔåÆ `Excluir()` ÔåÆ `CarregarLista()` |
+
+Todos seguem as regras cr├¡ticas: sem `RETURN` dentro de `TRY/CATCH`, `this_cModoAtual` setado antes de `HabilitarCampos()`, `EditarRegistro()` chamado ap├│s `CarregarPorCodigo()`. Restam as integra├º├Áes da Fase 8 (config.prg + menu.prg).
