@@ -664,7 +664,7 @@ DEFINE CLASS Formpag AS FormBase
                 .Visible  = .T.
             ENDWITH
             loc_oPage.AddObject("txt_4c___formas", "TextBox")
-            WITH loc_oPage.txt_4c__formas
+            WITH loc_oPage.txt_4c___formas
                 .Top       = 80
                 .Left      = 144
                 .Width     = 94
@@ -2909,7 +2909,7 @@ DEFINE CLASS Formpag AS FormBase
                 .this_cDescrs    = ALLTRIM(loc_oPage2.txt_4c_Descrs.Value)
                 .this_cTitfpags  = ALLTRIM(loc_oPage2.txt_4c_TitFPags.Value)
                 .this_cFormas    = ALLTRIM(loc_oPage2.txt_4c_Forma.Value)
-                .this_cNfpags    = VAL(ALLTRIM(loc_oPage2.txt_4c_Nfpag.Value))
+                .this_nNfpags    = ALLTRIM(loc_oPage2.txt_4c_Nfpag.Value)
                 .this_cModpagto  = ALLTRIM(loc_oPage2.txt_4c_Modalidade.Value)
                 .this_cGrupods   = ALLTRIM(loc_oPage2.txt_4c_Grupo.Value)
                 .this_cContads   = ALLTRIM(loc_oPage2.txt_4c_Conta.Value)

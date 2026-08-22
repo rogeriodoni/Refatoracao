@@ -447,7 +447,7 @@ DEFINE CLASS pagBO AS BusinessBase
     *==========================================================================
     * Inserir - Insere novo registro na tabela SigOpFp
     *==========================================================================
-    PROTECTED FUNCTION Inserir()
+    FUNCTION Inserir()
     *==========================================================================
         LOCAL loc_cSQL, loc_nResult, loc_lSucesso, loc_cDatatrans
         loc_lSucesso = .F.
@@ -630,7 +630,7 @@ DEFINE CLASS pagBO AS BusinessBase
     *==========================================================================
     * Atualizar - Atualiza registro existente na tabela SigOpFp
     *==========================================================================
-    PROTECTED FUNCTION Atualizar()
+    FUNCTION Atualizar()
     *==========================================================================
         LOCAL loc_cSQL, loc_nResult, loc_lSucesso, loc_cDatatrans
         loc_lSucesso = .F.
