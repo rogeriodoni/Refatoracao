@@ -762,6 +762,18 @@ PROCEDURE CriarMenuPrincipal()
 
     ON SELECTION BAR 115 OF popMovimentos DO AbrirFormICN
 
+    DEFINE BAR 116 OF popMovimentos PROMPT "\-"
+    DEFINE BAR 117 OF popMovimentos PROMPT "Romaneio XML" ;
+           MESSAGE "Cadastro de Romaneio XML"
+
+    ON SELECTION BAR 117 OF popMovimentos DO AbrirFormROM
+
+    DEFINE BAR 118 OF popMovimentos PROMPT "\-"
+    DEFINE BAR 119 OF popMovimentos PROMPT "Romaneio Recebimento XML" ;
+           MESSAGE "Cadastro de Romaneio Recebimento XML"
+
+    ON SELECTION BAR 119 OF popMovimentos DO AbrirFormROMRecebimento
+
     * Menu Relatorios
     ON PAD padRelatorios OF _MSYSMENU ACTIVATE POPUP popRelatorios
 
@@ -9077,6 +9089,44 @@ PROCEDURE AbrirFormPAT()
                      "Linha: "     + TRANSFORM(loException.LineNo) + CHR(13) + ;
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
+    ENDTRY
+ENDPROC
+
+*------------------------------------------------------------------------------
+PROCEDURE AbrirFormROM
+    LOCAL loForm
+    TRY
+        loForm = CREATEOBJECT("FormROM")
+        IF VARTYPE(loForm) = "O"
+            loForm.Show()
+        ELSE
+            MsgErro("Erro ao instanciar FormROM. " + ;
+                       "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
+        ENDIF
+    CATCH TO loException
+        MsgErro("Erro ao abrir Romaneio XML:" + CHR(13) + CHR(13) + ;
+                "Erro: "      + loException.Message + CHR(13) + ;
+                "Linha: "     + TRANSFORM(loException.LineNo) + CHR(13) + ;
+                "Procedure: " + loException.Procedure, "Erro Detalhado")
+    ENDTRY
+ENDPROC
+
+*------------------------------------------------------------------------------
+PROCEDURE AbrirFormROMRecebimento
+    LOCAL loForm
+    TRY
+        loForm = CREATEOBJECT("FormROM", "R")
+        IF VARTYPE(loForm) = "O"
+            loForm.Show()
+        ELSE
+            MsgErro("Erro ao instanciar FormROM (Recebimento). " + ;
+                       "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
+        ENDIF
+    CATCH TO loException
+        MsgErro("Erro ao abrir Romaneio Recebimento XML:" + CHR(13) + CHR(13) + ;
+                "Erro: "      + loException.Message + CHR(13) + ;
+                "Linha: "     + TRANSFORM(loException.LineNo) + CHR(13) + ;
+                "Procedure: " + loException.Procedure, "Erro Detalhado")
     ENDTRY
 ENDPROC
 
