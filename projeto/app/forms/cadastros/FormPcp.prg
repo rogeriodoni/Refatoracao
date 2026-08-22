@@ -89,6 +89,9 @@ DEFINE CLASS FormPcp AS FormBase
             THIS.ConfigurarPaginaLista()
             THIS.ConfigurarPaginaDados()
 
+            loc_oPgf.Pages(1).cnt_4c_Cabecalho.lbl_4c_Sombra.Caption = THIS.Caption
+            loc_oPgf.Pages(1).cnt_4c_Cabecalho.lbl_4c_Titulo.Caption = THIS.Caption
+
             loc_oPgf.ActivePage = 1
         CATCH TO loc_oErro
             MsgErro("Erro em FormPcp.ConfigurarPageFrame: " + loc_oErro.Message, "Erro")
@@ -121,7 +124,7 @@ DEFINE CLASS FormPcp AS FormBase
                 .Width       = THIS.Width
                 .Height      = 80
                 .BackStyle   = 1
-                .BackColor   = RGB(53, 53, 53)
+                .BackColor   = RGB(100, 100, 100)
                 .BorderWidth = 0
                 .Visible     = .T.
             ENDWITH
@@ -181,7 +184,7 @@ DEFINE CLASS FormPcp AS FormBase
                 .Height          = 75
                 .BackColor       = RGB(255, 255, 255)
                 .ForeColor       = RGB(90, 90, 90)
-                .FontName        = "Comic Sans MS"
+                .FontName        = "Tahoma"
                 .FontSize        = 8
                 .FontBold        = .T.
                 .FontItalic      = .T.
@@ -204,7 +207,7 @@ DEFINE CLASS FormPcp AS FormBase
                 .Height          = 75
                 .BackColor       = RGB(255, 255, 255)
                 .ForeColor       = RGB(90, 90, 90)
-                .FontName        = "Comic Sans MS"
+                .FontName        = "Tahoma"
                 .FontSize        = 8
                 .FontBold        = .T.
                 .FontItalic      = .T.
@@ -227,7 +230,7 @@ DEFINE CLASS FormPcp AS FormBase
                 .Height          = 75
                 .BackColor       = RGB(255, 255, 255)
                 .ForeColor       = RGB(90, 90, 90)
-                .FontName        = "Comic Sans MS"
+                .FontName        = "Tahoma"
                 .FontSize        = 8
                 .FontBold        = .T.
                 .FontItalic      = .T.
@@ -250,7 +253,7 @@ DEFINE CLASS FormPcp AS FormBase
                 .Height          = 75
                 .BackColor       = RGB(255, 255, 255)
                 .ForeColor       = RGB(90, 90, 90)
-                .FontName        = "Comic Sans MS"
+                .FontName        = "Tahoma"
                 .FontSize        = 8
                 .FontBold        = .T.
                 .FontItalic      = .T.
@@ -273,7 +276,7 @@ DEFINE CLASS FormPcp AS FormBase
                 .Height          = 75
                 .BackColor       = RGB(255, 255, 255)
                 .ForeColor       = RGB(90, 90, 90)
-                .FontName        = "Comic Sans MS"
+                .FontName        = "Tahoma"
                 .FontSize        = 8
                 .FontBold        = .T.
                 .FontItalic      = .T.
@@ -309,7 +312,7 @@ DEFINE CLASS FormPcp AS FormBase
                 .Height          = 75
                 .BackColor       = RGB(255, 255, 255)
                 .ForeColor       = RGB(90, 90, 90)
-                .FontName        = "Comic Sans MS"
+                .FontName        = "Tahoma"
                 .FontSize        = 8
                 .FontBold        = .T.
                 .FontItalic      = .T.
@@ -467,7 +470,7 @@ DEFINE CLASS FormPcp AS FormBase
                 .Height          = 75
                 .BackColor       = RGB(255, 255, 255)
                 .ForeColor       = RGB(90, 90, 90)
-                .FontName        = "Comic Sans MS"
+                .FontName        = "Tahoma"
                 .FontSize        = 8
                 .FontBold        = .T.
                 .FontItalic      = .T.
@@ -490,7 +493,7 @@ DEFINE CLASS FormPcp AS FormBase
                 .Height          = 75
                 .BackColor       = RGB(255, 255, 255)
                 .ForeColor       = RGB(90, 90, 90)
-                .FontName        = "Comic Sans MS"
+                .FontName        = "Tahoma"
                 .FontSize        = 8
                 .FontBold        = .T.
                 .FontItalic      = .T.
@@ -1150,6 +1153,9 @@ DEFINE CLASS FormPcp AS FormBase
     * GridListaAfterRowColChange - Handler de mudanca de linha no Grid
     *==========================================================================
     PROCEDURE GridListaAfterRowColChange(par_nColIndex)
+        IF USED("cursor_4c_Dados") AND !EOF("cursor_4c_Dados")
+            SELECT cursor_4c_Dados
+        ENDIF
     ENDPROC
 
     *==========================================================================
