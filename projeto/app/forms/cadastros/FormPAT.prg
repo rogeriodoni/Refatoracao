@@ -7,8 +7,8 @@
 DEFINE CLASS FormPAT AS FormBase
 
     *-- Propriedades visuais (PILAR 1 - UX FIDELITY)
-    Height      = 599
-    Width       = 785
+    Height      = 600
+    Width       = 1000
     Caption     = "Pedido de Atendimento"
     AutoCenter  = .T.
     ShowWindow  = 1
@@ -44,9 +44,7 @@ DEFINE CLASS FormPAT AS FormBase
             THIS.this_oBusinessObject = CREATEOBJECT("PATBO")
 
             IF VARTYPE(THIS.this_oBusinessObject) != "O"
-                MostrarErro("Erro ao criar PATBO" + CHR(13) + ;
-                    "VARTYPE retornou: " + VARTYPE(THIS.this_oBusinessObject), ;
-                    "FormPAT.InicializarForm")
+                MsgErro("Erro ao criar PATBO.", "FormPAT")
             ELSE
                 *-- Criar cursor vazio para o grid (DataSession=2 isolado)
                 CREATE CURSOR cursor_4c_Dados ;
@@ -96,12 +94,12 @@ DEFINE CLASS FormPAT AS FormBase
             .Height    = THIS.Height + 29
             .Tabs      = .F.
             .Visible   = .T.
-            .Page1.Caption  = "Lista"
-            .Page1.Picture  = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
-            .Page1.BackColor = RGB(255, 255, 255)
-            .Page2.Caption  = "Dados"
-            .Page2.Picture  = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
-            .Page2.BackColor = RGB(255, 255, 255)
+            .Page1.Caption   = "Lista"
+            .Page1.Picture   = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
+            .Page1.BackColor = RGB(100, 100, 100)
+            .Page2.Caption   = "Dados"
+            .Page2.Picture   = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
+            .Page2.BackColor = RGB(100, 100, 100)
         ENDWITH
 
         THIS.ConfigurarPaginaLista()
@@ -313,7 +311,7 @@ DEFINE CLASS FormPAT AS FormBase
         loc_oPagina.cnt_4c_Saida.AddObject("cmd_4c_Encerrar", "CommandButton")
         WITH loc_oPagina.cnt_4c_Saida.cmd_4c_Encerrar
             .Caption         = "Encerrar"
-            .Picture         = gc_4c_CaminhoIcones + "relatorio_sair_60.jpg"
+            .Picture         = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
             .PicturePosition = 13
             .Top             = 5
             .Left            = 5
@@ -410,7 +408,6 @@ DEFINE CLASS FormPAT AS FormBase
             .Visible       = .T.
         ENDWITH
         BINDEVENT(loc_oPagina.cnt_4c_Filtros.txt_4c_DtIni, "LostFocus", THIS, "ValidarFiltroData")
-        BINDEVENT(loc_oPagina.cnt_4c_Filtros.txt_4c_DtIni, "KeyPress", THIS, "FiltroDataLostFocus")
 
         *-- TextBox Data Final
         loc_oPagina.cnt_4c_Filtros.AddObject("txt_4c_DtFim", "TextBox")
@@ -429,16 +426,15 @@ DEFINE CLASS FormPAT AS FormBase
             .Visible       = .T.
         ENDWITH
         BINDEVENT(loc_oPagina.cnt_4c_Filtros.txt_4c_DtFim, "LostFocus", THIS, "ValidarFiltroData")
-        BINDEVENT(loc_oPagina.cnt_4c_Filtros.txt_4c_DtFim, "KeyPress", THIS, "FiltroDataLostFocus")
 
         *-- Grid cursor_4c_Dados
         *-- Top=159 (130 original + 29 offset)
         loc_oPagina.AddObject("grd_4c_Dados", "Grid")
         WITH loc_oPagina.grd_4c_Dados
             .Top             = 159
-            .Left            = 23
-            .Width           = 736
-            .Height          = 440
+            .Left            = 12
+            .Width           = 970
+            .Height          = 450
             .RecordSource    = "cursor_4c_Dados"
             .ReadOnly        = .T.
             .DeleteMark      = .F.
@@ -551,7 +547,6 @@ DEFINE CLASS FormPAT AS FormBase
             .Visible       = .T.
         ENDWITH
         BINDEVENT(loc_oPagina.txt_4c_Emps, "LostFocus", THIS, "ValidarEmps")
-        BINDEVENT(loc_oPagina.txt_4c_Emps, "KeyPress", THIS, "EmpsLostFocus")
 
         loc_oPagina.AddObject("txt_4c_DEmps", "TextBox")
         WITH loc_oPagina.txt_4c_DEmps
@@ -745,11 +740,11 @@ DEFINE CLASS FormPAT AS FormBase
 
         loc_oPagina.AddObject("cmd_4c_Cancelar", "CommandButton")
         WITH loc_oPagina.cmd_4c_Cancelar
-            .Caption       = "Encerrar"
+            .Caption       = "Cancelar"
             .Top           = 456
             .Left          = 253
-            .Width         = 75
-            .Height        = 75
+            .Width         = 90
+            .Height        = 27
             .FontName      = "Tahoma"
             .FontSize      = 8
             .Themes        = .F.
@@ -788,7 +783,7 @@ DEFINE CLASS FormPAT AS FormBase
                     ENDIF
                     IF PEMSTATUS(.Self, "txt_4c_DtFim", 5)
                         IF !EMPTY(.txt_4c_DtFim.Value)
-                            loc_cDtFim = FormatarDataSQL(.txt_4c_DtFim.Value + 1 - 1)
+                            loc_cDtFim = FormatarDataSQL(.txt_4c_DtFim.Value + 1)
                         ENDIF
                     ENDIF
                     .Visible     = .T.
@@ -807,21 +802,17 @@ DEFINE CLASS FormPAT AS FormBase
                     loc_cFiltro = loc_cFiltro + " AND "
                 ENDIF
                 loc_cFiltro = loc_cFiltro + ;
-                    "datas BETWEEN " + loc_cDtIni + " AND " + loc_cDtFim
-            ELSE
-                IF !EMPTY(loc_cDtIni)
+                    "datas >= " + loc_cDtIni + " AND datas < " + loc_cDtFim
+            ELSEIF !EMPTY(loc_cDtIni)
                 IF !EMPTY(loc_cFiltro)
                     loc_cFiltro = loc_cFiltro + " AND "
                 ENDIF
                 loc_cFiltro = loc_cFiltro + "datas >= " + loc_cDtIni
-            ELSE
-                IF !EMPTY(loc_cDtFim)
+            ELSEIF !EMPTY(loc_cDtFim)
                 IF !EMPTY(loc_cFiltro)
                     loc_cFiltro = loc_cFiltro + " AND "
                 ENDIF
-                loc_cFiltro = loc_cFiltro + "datas <= " + loc_cDtFim
-                ENDIF
-                ENDIF
+                loc_cFiltro = loc_cFiltro + "datas < " + loc_cDtFim
             ENDIF
 
             loc_lSucesso = THIS.this_oBusinessObject.Buscar(loc_cFiltro)
@@ -881,7 +872,7 @@ DEFINE CLASS FormPAT AS FormBase
                     .txt_4c_Datas.ReadOnly = .T.
                 ENDIF
                 IF PEMSTATUS(.Self, "txt_4c_Emps", 5)
-                    .txt_4c_Emps.ReadOnly = loc_lReadOnly OR !loc_lNovo
+                    .txt_4c_Emps.ReadOnly = loc_lReadOnly
                 ENDIF
                 IF PEMSTATUS(.Self, "txt_4c_DEmps", 5)
                     .txt_4c_DEmps.ReadOnly = .T.
@@ -914,7 +905,7 @@ DEFINE CLASS FormPAT AS FormBase
                     loc_oPg2.txt_4c_DEmps.Value    = THIS.this_oBusinessObject.BuscarDescEmpresa(go_4c_Sistema.cCodEmpresa)
                 ENDIF
                 IF PEMSTATUS(loc_oPg2, "txt_4c_Datas", 5)
-                    loc_oPg2.txt_4c_Datas.Value = DATETIME()
+                    loc_oPg2.txt_4c_Datas.Value = TTOC(DATETIME())
                 ENDIF
             ENDIF
 
@@ -967,7 +958,13 @@ DEFINE CLASS FormPAT AS FormBase
         TRY
             WITH loc_oPg2
                 IF PEMSTATUS(.Self, "txt_4c_Datas", 5)
-                    .txt_4c_Datas.Value = loc_oBO.this_tDatas
+                    IF VARTYPE(loc_oBO.this_tDatas) = "T" AND !EMPTY(loc_oBO.this_tDatas)
+                        .txt_4c_Datas.Value = TTOC(loc_oBO.this_tDatas)
+                    ELSEIF VARTYPE(loc_oBO.this_tDatas) = "D" AND !EMPTY(loc_oBO.this_tDatas)
+                        .txt_4c_Datas.Value = DTOC(loc_oBO.this_tDatas)
+                    ELSE
+                        .txt_4c_Datas.Value = ""
+                    ENDIF
                 ENDIF
                 IF PEMSTATUS(.Self, "txt_4c_Emps", 5)
                     .txt_4c_Emps.Value = loc_oBO.this_cEmps
@@ -1005,9 +1002,6 @@ DEFINE CLASS FormPAT AS FormBase
 
         TRY
             WITH loc_oPg2
-                IF PEMSTATUS(.Self, "txt_4c_Datas", 5)
-                    loc_oBO.this_tDatas = .txt_4c_Datas.Value
-                ENDIF
                 IF PEMSTATUS(.Self, "txt_4c_Emps", 5)
                     loc_oBO.this_cEmps = ALLTRIM(.txt_4c_Emps.Value)
                 ENDIF
@@ -1184,7 +1178,7 @@ DEFINE CLASS FormPAT AS FormBase
                 *-- Para INCLUIR: atualizar data/hora
                 IF THIS.this_cModoAtual == "INCLUIR"
                     IF PEMSTATUS(THIS.pgf_4c_Paginas.Page2, "txt_4c_Datas", 5)
-                        THIS.pgf_4c_Paginas.Page2.txt_4c_Datas.Value = DATETIME()
+                        THIS.pgf_4c_Paginas.Page2.txt_4c_Datas.Value = TTOC(DATETIME())
                     ENDIF
                 ENDIF
 
@@ -1225,6 +1219,7 @@ DEFINE CLASS FormPAT AS FormBase
             MsgAviso("Empresa obrigat" + CHR(243) + "ria.", "Empresa")
             RETURN
         ENDIF
+        THIS.CarregarLista()
     ENDPROC
 
     PROCEDURE ValidarFiltroData()
@@ -1243,11 +1238,7 @@ DEFINE CLASS FormPAT AS FormBase
                     ENDIF
                 ENDIF
             ENDIF
-            .Visible     = .T.
         ENDWITH
-    ENDPROC
-
-    PROCEDURE FiltroDataLostFocus()
         THIS.CarregarLista()
     ENDPROC
 
@@ -1274,10 +1265,6 @@ DEFINE CLASS FormPAT AS FormBase
         ELSE
             loc_oPg2.txt_4c_DEmps.Value = loc_cDesc
         ENDIF
-    ENDPROC
-
-    PROCEDURE EmpsLostFocus()
-        THIS.ValidarEmps()
     ENDPROC
 
     PROCEDURE ValidarDEmps()
