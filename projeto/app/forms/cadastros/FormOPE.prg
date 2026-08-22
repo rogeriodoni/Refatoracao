@@ -1033,6 +1033,17 @@ DEFINE CLASS FormOPE AS FormBase
             .Page18.Caption = "T" + CHR(237) + "tulos"
         ENDWITH
 
+        *-- Fase C: Popular paginas internas com controles
+        THIS.ConfigurarPagOperacao(loc_oPagina.pgf_4c_PagDados.Page1)
+        THIS.ConfigurarPagItens(loc_oPagina.pgf_4c_PagDados.Page2)
+        THIS.ConfigurarPagFinanceiro(loc_oPagina.pgf_4c_PagDados.Page3)
+        THIS.ConfigurarPagFiscal(loc_oPagina.pgf_4c_PagDados.Page4)
+        THIS.ConfigurarPagDocumento(loc_oPagina.pgf_4c_PagDados.Page5)
+        THIS.ConfigurarPagPreco(loc_oPagina.pgf_4c_PagDados.Page6)
+        THIS.ConfigurarPagDiv(loc_oPagina.pgf_4c_PagDados.Page7)
+        THIS.ConfigurarPagDiversos(loc_oPagina.pgf_4c_PagDados.Page8)
+        THIS.ConfigurarPagComissao(loc_oPagina.pgf_4c_PagDados.Page17)
+
         *-- Z-ORDER: Trazer botoes Salvar/Cancelar para frente do PageFrame interno
         loc_oPagina.cnt_4c_Salva.ZOrder(0)
 
@@ -1378,15 +1389,175 @@ DEFINE CLASS FormOPE AS FormBase
     * FormParaBO - Transfere dados dos campos visuais para o BO
     *==========================================================================
     PROTECTED PROCEDURE FormParaBO()
-        LOCAL loc_oPagDados
+        LOCAL loc_oPagDados, loc_oPg1, loc_oPg2, loc_oPg3, loc_oPg4, loc_oPg5, loc_oPg6, loc_oPg7, loc_oPg8, loc_oPg17
         loc_oPagDados = THIS.pgf_4c_Paginas.Page2
         TRY
+            *-- Cabecalho (Pagina Dados)
             THIS.this_oBusinessObject.this_cDopes   = UPPER(ALLTRIM(loc_oPagDados.txt_4c_Codigo.Value))
             THIS.this_oBusinessObject.this_cTitopes = ALLTRIM(loc_oPagDados.txt_4c_Descricao.Value)
             THIS.this_oBusinessObject.this_nTipoops = VAL(ALLTRIM(loc_oPagDados.txt_4c_Tipo.Value))
             IF PEMSTATUS(loc_oPagDados, "cbo_4c_Menu", 5)
                 THIS.this_oBusinessObject.this_cMenus = ALLTRIM(loc_oPagDados.cbo_4c_Menu.Value)
             ENDIF
+
+            *-- Referencias das paginas internas
+            loc_oPg1  = loc_oPagDados.pgf_4c_PagDados.Page1
+            loc_oPg2  = loc_oPagDados.pgf_4c_PagDados.Page2
+            loc_oPg3  = loc_oPagDados.pgf_4c_PagDados.Page3
+            loc_oPg4  = loc_oPagDados.pgf_4c_PagDados.Page4
+            loc_oPg5  = loc_oPagDados.pgf_4c_PagDados.Page5
+            loc_oPg6  = loc_oPagDados.pgf_4c_PagDados.Page6
+            loc_oPg7  = loc_oPagDados.pgf_4c_PagDados.Page7
+            loc_oPg8  = loc_oPagDados.pgf_4c_PagDados.Page8
+            loc_oPg17 = loc_oPagDados.pgf_4c_PagDados.Page17
+
+            *-- Pagina 1: Operacao
+            IF PEMSTATUS(loc_oPg1, "opt_4c_Blqdt", 5)
+                THIS.this_oBusinessObject.this_nBlqdatas = loc_oPg1.opt_4c_Blqdt.Value
+            ENDIF
+            IF PEMSTATUS(loc_oPg1, "opt_4c_Conf", 5)
+                THIS.this_oBusinessObject.this_nConfes = loc_oPg1.opt_4c_Conf.Value
+            ENDIF
+            IF PEMSTATUS(loc_oPg1, "opt_4c_Bloqueio", 5)
+                THIS.this_oBusinessObject.this_nAciosens = loc_oPg1.opt_4c_Bloqueio.Value
+            ENDIF
+            IF PEMSTATUS(loc_oPg1, "txt_4c_DopeSTrfs", 5)
+                THIS.this_oBusinessObject.this_cDopestrfs = ALLTRIM(loc_oPg1.txt_4c_DopeSTrfs.Value)
+            ENDIF
+            IF PEMSTATUS(loc_oPg1, "txt_4c_DopeETrfs", 5)
+                THIS.this_oBusinessObject.this_cDopeetrfs = ALLTRIM(loc_oPg1.txt_4c_DopeETrfs.Value)
+            ENDIF
+            IF PEMSTATUS(loc_oPg1, "txt_4c_Central", 5)
+                THIS.this_oBusinessObject.this_cCcentrals = ALLTRIM(loc_oPg1.txt_4c_Central.Value)
+            ENDIF
+            IF PEMSTATUS(loc_oPg1, "chk_4c_CarESubN", 5)
+                THIS.this_oBusinessObject.this_nCempsubns = IIF(loc_oPg1.chk_4c_CarESubN.Value = 1, 1, 0)
+            ENDIF
+            IF PEMSTATUS(loc_oPg1, "chk_4c_VincEstM", 5)
+                THIS.this_oBusinessObject.this_nMestoqs = IIF(loc_oPg1.chk_4c_VincEstM.Value = 1, 1, 0)
+            ENDIF
+            IF PEMSTATUS(loc_oPg1, "txt_4c_EmpPad", 5)
+                THIS.this_oBusinessObject.this_cEmppads = ALLTRIM(loc_oPg1.txt_4c_EmpPad.Value)
+            ENDIF
+            IF PEMSTATUS(loc_oPg1, "opt_4c_Tipo", 5)
+                THIS.this_oBusinessObject.this_nOpers = loc_oPg1.opt_4c_Tipo.Value
+            ENDIF
+            IF PEMSTATUS(loc_oPg1, "opt_4c_Cai", 5)
+                THIS.this_oBusinessObject.this_nCaixas = loc_oPg1.opt_4c_Cai.Value
+            ENDIF
+            IF PEMSTATUS(loc_oPg1, "mem_4c_ObsOpe", 5)
+                THIS.this_oBusinessObject.this_mObsopes = ALLTRIM(loc_oPg1.mem_4c_ObsOpe.Value)
+            ENDIF
+
+            *-- Pagina 2: Itens
+            IF PEMSTATUS(loc_oPg2, "opt_4c_Cbar", 5)
+                THIS.this_oBusinessObject.this_nCodbars = loc_oPg2.opt_4c_Cbar.Value
+            ENDIF
+            IF PEMSTATUS(loc_oPg2, "opt_4c_Imagem", 5)
+                THIS.this_oBusinessObject.this_nImagems = loc_oPg2.opt_4c_Imagem.Value
+            ENDIF
+            IF PEMSTATUS(loc_oPg2, "opt_4c_ObsItems", 5)
+                THIS.this_oBusinessObject.this_nObsitems = loc_oPg2.opt_4c_ObsItems.Value
+            ENDIF
+            IF PEMSTATUS(loc_oPg2, "opt_4c_Desmemb", 5)
+                THIS.this_oBusinessObject.this_nDesmembs = loc_oPg2.opt_4c_Desmemb.Value
+            ENDIF
+            IF PEMSTATUS(loc_oPg2, "opt_4c_ChkQtds", 5)
+                THIS.this_oBusinessObject.this_nChkqtds = loc_oPg2.opt_4c_ChkQtds.Value
+            ENDIF
+            IF PEMSTATUS(loc_oPg2, "txt_4c_QtdIte", 5)
+                THIS.this_oBusinessObject.this_nQtdites = VAL(ALLTRIM(loc_oPg2.txt_4c_QtdIte.Value))
+            ENDIF
+
+            *-- Pagina 3: Financeiro
+            IF PEMSTATUS(loc_oPg3, "opt_4c_Che", 5)
+                THIS.this_oBusinessObject.this_nCheqs = loc_oPg3.opt_4c_Che.Value
+            ENDIF
+            IF PEMSTATUS(loc_oPg3, "opt_4c_Contas", 5)
+                THIS.this_oBusinessObject.this_nParcontas = loc_oPg3.opt_4c_Contas.Value
+            ENDIF
+            IF PEMSTATUS(loc_oPg3, "opt_4c_LimCre", 5)
+                THIS.this_oBusinessObject.this_nLimcres = loc_oPg3.opt_4c_LimCre.Value
+            ENDIF
+            IF PEMSTATUS(loc_oPg3, "opt_4c_Troco", 5)
+                THIS.this_oBusinessObject.this_nTrocoauts = loc_oPg3.opt_4c_Troco.Value
+            ENDIF
+            IF PEMSTATUS(loc_oPg3, "txt_4c_OpChqEnt", 5)
+                THIS.this_oBusinessObject.this_cOperchqes = ALLTRIM(loc_oPg3.txt_4c_OpChqEnt.Value)
+            ENDIF
+            IF PEMSTATUS(loc_oPg3, "txt_4c_OpChqSai", 5)
+                THIS.this_oBusinessObject.this_cOperchqss = ALLTRIM(loc_oPg3.txt_4c_OpChqSai.Value)
+            ENDIF
+            IF PEMSTATUS(loc_oPg3, "txt_4c_Conta", 5)
+                THIS.this_oBusinessObject.this_cContas = ALLTRIM(loc_oPg3.txt_4c_Conta.Value)
+            ENDIF
+            IF PEMSTATUS(loc_oPg3, "txt_4c_Grupo", 5)
+                THIS.this_oBusinessObject.this_cGrupos = ALLTRIM(loc_oPg3.txt_4c_Grupo.Value)
+            ENDIF
+
+            *-- Pagina 4: Fiscal
+            IF PEMSTATUS(loc_oPg4, "txt_4c_Especies", 5)
+                THIS.this_oBusinessObject.this_cEspecies = ALLTRIM(loc_oPg4.txt_4c_Especies.Value)
+            ENDIF
+            IF PEMSTATUS(loc_oPg4, "txt_4c_Series", 5)
+                THIS.this_oBusinessObject.this_cSeries = ALLTRIM(loc_oPg4.txt_4c_Series.Value)
+            ENDIF
+            IF PEMSTATUS(loc_oPg4, "txt_4c_CfoPad", 5)
+                THIS.this_oBusinessObject.this_cCfos = ALLTRIM(loc_oPg4.txt_4c_CfoPad.Value)
+            ENDIF
+            IF PEMSTATUS(loc_oPg4, "opt_4c_TipoNF", 5)
+                THIS.this_oBusinessObject.this_nTiponfs = loc_oPg4.opt_4c_TipoNF.Value
+            ENDIF
+
+            *-- Pagina 5: Documento
+            IF PEMSTATUS(loc_oPg5, "opt_4c_DigDoc", 5)
+                THIS.this_oBusinessObject.this_nDigdoc = loc_oPg5.opt_4c_DigDoc.Value
+            ENDIF
+            IF PEMSTATUS(loc_oPg5, "opt_4c_EditDocs", 5)
+                THIS.this_oBusinessObject.this_nEditdocs = loc_oPg5.opt_4c_EditDocs.Value
+            ENDIF
+
+            *-- Pagina 6: Preco
+            IF PEMSTATUS(loc_oPg6, "opt_4c_AltPreco", 5)
+                THIS.this_oBusinessObject.this_nEprecos = loc_oPg6.opt_4c_AltPreco.Value
+            ENDIF
+            IF PEMSTATUS(loc_oPg6, "opt_4c_AltPeso", 5)
+                THIS.this_oBusinessObject.this_nEpesos = loc_oPg6.opt_4c_AltPeso.Value
+            ENDIF
+            IF PEMSTATUS(loc_oPg6, "txt_4c_LPrecoPad", 5)
+                THIS.this_oBusinessObject.this_cLprecopads = ALLTRIM(loc_oPg6.txt_4c_LPrecoPad.Value)
+            ENDIF
+
+            *-- Pagina 7: Div
+            IF PEMSTATUS(loc_oPg7, "opt_4c_DivVar", 5)
+                THIS.this_oBusinessObject.this_nVars = loc_oPg7.opt_4c_DivVar.Value
+            ENDIF
+
+            *-- Pagina 8: Diversos
+            IF PEMSTATUS(loc_oPg8, "chk_4c_Digenves", 5)
+                THIS.this_oBusinessObject.this_nDigenves = IIF(loc_oPg8.chk_4c_Digenves.Value = 1, 1, 0)
+            ENDIF
+            IF PEMSTATUS(loc_oPg8, "chk_4c_Digrecs", 5)
+                THIS.this_oBusinessObject.this_nDigrecs = IIF(loc_oPg8.chk_4c_Digrecs.Value = 1, 1, 0)
+            ENDIF
+
+            *-- Pagina 17: Comissao
+            IF PEMSTATUS(loc_oPg17, "chk_4c_Grupov", 5)
+                THIS.this_oBusinessObject.this_lFixgvends = (loc_oPg17.chk_4c_Grupov.Value = 1)
+            ENDIF
+            IF PEMSTATUS(loc_oPg17, "txt_4c_Grupov", 5)
+                THIS.this_oBusinessObject.this_cGrvends = ALLTRIM(loc_oPg17.txt_4c_Grupov.Value)
+            ENDIF
+            IF PEMSTATUS(loc_oPg17, "txt_4c_MascVen", 5)
+                THIS.this_oBusinessObject.this_cMascvens = ALLTRIM(loc_oPg17.txt_4c_MascVen.Value)
+            ENDIF
+            IF PEMSTATUS(loc_oPg17, "opt_4c_Vende", 5)
+                THIS.this_oBusinessObject.this_nVendes = loc_oPg17.opt_4c_Vende.Value
+            ENDIF
+            IF PEMSTATUS(loc_oPg17, "opt_4c_CadCli", 5)
+                THIS.this_oBusinessObject.this_nCadclis = loc_oPg17.opt_4c_CadCli.Value
+            ENDIF
+
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;
                 "Linha: " + TRANSFORM(loc_oErro.LineNo), ;
@@ -1399,18 +1570,181 @@ DEFINE CLASS FormOPE AS FormBase
     *==========================================================================
     PROTECTED PROCEDURE BOParaForm()
         LOCAL loc_lResultado, loc_oPagDados, loc_cDopes
+        LOCAL loc_oPg1, loc_oPg2, loc_oPg3, loc_oPg4, loc_oPg5, loc_oPg6, loc_oPg7, loc_oPg8, loc_oPg17
+        LOCAL loc_oBO
         loc_lResultado = .F.
         loc_oPagDados = THIS.pgf_4c_Paginas.Page2
         TRY
             IF USED("cursor_4c_Dados") AND !EOF("cursor_4c_Dados")
                 loc_cDopes = ALLTRIM(cursor_4c_Dados.dopes)
                 IF THIS.this_oBusinessObject.CarregarPorCodigo(loc_cDopes)
-                    loc_oPagDados.txt_4c_Codigo.Value    = ALLTRIM(THIS.this_oBusinessObject.this_cDopes)
-                    loc_oPagDados.txt_4c_Descricao.Value = ALLTRIM(THIS.this_oBusinessObject.this_cTitopes)
-                    loc_oPagDados.txt_4c_Tipo.Value      = TRANSFORM(THIS.this_oBusinessObject.this_nTipoops)
+                    loc_oBO = THIS.this_oBusinessObject
+
+                    *-- Cabecalho
+                    loc_oPagDados.txt_4c_Codigo.Value    = ALLTRIM(loc_oBO.this_cDopes)
+                    loc_oPagDados.txt_4c_Descricao.Value = ALLTRIM(loc_oBO.this_cTitopes)
+                    loc_oPagDados.txt_4c_Tipo.Value      = TRANSFORM(loc_oBO.this_nTipoops)
                     IF PEMSTATUS(loc_oPagDados, "cbo_4c_Menu", 5)
-                        loc_oPagDados.cbo_4c_Menu.Value  = ALLTRIM(THIS.this_oBusinessObject.this_cMenus)
+                        loc_oPagDados.cbo_4c_Menu.Value  = ALLTRIM(loc_oBO.this_cMenus)
                     ENDIF
+
+                    loc_oPg1  = loc_oPagDados.pgf_4c_PagDados.Page1
+                    loc_oPg2  = loc_oPagDados.pgf_4c_PagDados.Page2
+                    loc_oPg3  = loc_oPagDados.pgf_4c_PagDados.Page3
+                    loc_oPg4  = loc_oPagDados.pgf_4c_PagDados.Page4
+                    loc_oPg5  = loc_oPagDados.pgf_4c_PagDados.Page5
+                    loc_oPg6  = loc_oPagDados.pgf_4c_PagDados.Page6
+                    loc_oPg7  = loc_oPagDados.pgf_4c_PagDados.Page7
+                    loc_oPg8  = loc_oPagDados.pgf_4c_PagDados.Page8
+                    loc_oPg17 = loc_oPagDados.pgf_4c_PagDados.Page17
+
+                    *-- Pagina 1: Operacao
+                    IF PEMSTATUS(loc_oPg1, "opt_4c_Blqdt", 5)
+                        loc_oPg1.opt_4c_Blqdt.Value = IIF(loc_oBO.this_nBlqdatas > 0, loc_oBO.this_nBlqdatas, 1)
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg1, "opt_4c_Conf", 5)
+                        loc_oPg1.opt_4c_Conf.Value = loc_oBO.this_nConfes
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg1, "opt_4c_Bloqueio", 5)
+                        loc_oPg1.opt_4c_Bloqueio.Value = loc_oBO.this_nAciosens
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg1, "txt_4c_DopeSTrfs", 5)
+                        loc_oPg1.txt_4c_DopeSTrfs.Value = ALLTRIM(loc_oBO.this_cDopestrfs)
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg1, "txt_4c_DopeETrfs", 5)
+                        loc_oPg1.txt_4c_DopeETrfs.Value = ALLTRIM(loc_oBO.this_cDopeetrfs)
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg1, "txt_4c_Central", 5)
+                        loc_oPg1.txt_4c_Central.Value = ALLTRIM(loc_oBO.this_cCcentrals)
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg1, "chk_4c_CarESubN", 5)
+                        loc_oPg1.chk_4c_CarESubN.Value = IIF(loc_oBO.this_nCempsubns = 1, 1, 0)
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg1, "chk_4c_VincEstM", 5)
+                        loc_oPg1.chk_4c_VincEstM.Value = IIF(loc_oBO.this_nMestoqs = 1, 1, 0)
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg1, "txt_4c_EmpPad", 5)
+                        loc_oPg1.txt_4c_EmpPad.Value = ALLTRIM(loc_oBO.this_cEmppads)
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg1, "opt_4c_Tipo", 5)
+                        loc_oPg1.opt_4c_Tipo.Value = IIF(loc_oBO.this_nOpers > 0, loc_oBO.this_nOpers, 1)
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg1, "opt_4c_Cai", 5)
+                        loc_oPg1.opt_4c_Cai.Value = IIF(loc_oBO.this_nCaixas > 0, loc_oBO.this_nCaixas, 1)
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg1, "mem_4c_ObsOpe", 5)
+                        loc_oPg1.mem_4c_ObsOpe.Value = ALLTRIM(loc_oBO.this_mObsopes)
+                    ENDIF
+
+                    *-- Pagina 2: Itens
+                    IF PEMSTATUS(loc_oPg2, "opt_4c_Cbar", 5)
+                        loc_oPg2.opt_4c_Cbar.Value = IIF(loc_oBO.this_nCodbars > 0, loc_oBO.this_nCodbars, 1)
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg2, "opt_4c_Imagem", 5)
+                        loc_oPg2.opt_4c_Imagem.Value = IIF(loc_oBO.this_nImagems > 0, loc_oBO.this_nImagems, 1)
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg2, "opt_4c_ObsItems", 5)
+                        loc_oPg2.opt_4c_ObsItems.Value = IIF(loc_oBO.this_nObsitems > 0, loc_oBO.this_nObsitems, 1)
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg2, "opt_4c_Desmemb", 5)
+                        loc_oPg2.opt_4c_Desmemb.Value = IIF(loc_oBO.this_nDesmembs > 0, loc_oBO.this_nDesmembs, 1)
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg2, "opt_4c_ChkQtds", 5)
+                        loc_oPg2.opt_4c_ChkQtds.Value = IIF(loc_oBO.this_nChkqtds > 0, loc_oBO.this_nChkqtds, 1)
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg2, "txt_4c_QtdIte", 5)
+                        loc_oPg2.txt_4c_QtdIte.Value = TRANSFORM(loc_oBO.this_nQtdites)
+                    ENDIF
+
+                    *-- Pagina 3: Financeiro
+                    IF PEMSTATUS(loc_oPg3, "opt_4c_Che", 5)
+                        loc_oPg3.opt_4c_Che.Value = IIF(loc_oBO.this_nCheqs > 0, loc_oBO.this_nCheqs, 1)
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg3, "opt_4c_Contas", 5)
+                        loc_oPg3.opt_4c_Contas.Value = IIF(loc_oBO.this_nParcontas > 0, loc_oBO.this_nParcontas, 1)
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg3, "opt_4c_LimCre", 5)
+                        loc_oPg3.opt_4c_LimCre.Value = IIF(loc_oBO.this_nLimcres > 0, loc_oBO.this_nLimcres, 1)
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg3, "opt_4c_Troco", 5)
+                        loc_oPg3.opt_4c_Troco.Value = IIF(loc_oBO.this_nTrocoauts > 0, loc_oBO.this_nTrocoauts, 1)
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg3, "txt_4c_OpChqEnt", 5)
+                        loc_oPg3.txt_4c_OpChqEnt.Value = ALLTRIM(loc_oBO.this_cOperchqes)
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg3, "txt_4c_OpChqSai", 5)
+                        loc_oPg3.txt_4c_OpChqSai.Value = ALLTRIM(loc_oBO.this_cOperchqss)
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg3, "txt_4c_Conta", 5)
+                        loc_oPg3.txt_4c_Conta.Value = ALLTRIM(loc_oBO.this_cContas)
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg3, "txt_4c_Grupo", 5)
+                        loc_oPg3.txt_4c_Grupo.Value = ALLTRIM(loc_oBO.this_cGrupos)
+                    ENDIF
+
+                    *-- Pagina 4: Fiscal
+                    IF PEMSTATUS(loc_oPg4, "txt_4c_Especies", 5)
+                        loc_oPg4.txt_4c_Especies.Value = ALLTRIM(loc_oBO.this_cEspecies)
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg4, "txt_4c_Series", 5)
+                        loc_oPg4.txt_4c_Series.Value = ALLTRIM(loc_oBO.this_cSeries)
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg4, "txt_4c_CfoPad", 5)
+                        loc_oPg4.txt_4c_CfoPad.Value = ALLTRIM(loc_oBO.this_cCfos)
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg4, "opt_4c_TipoNF", 5)
+                        loc_oPg4.opt_4c_TipoNF.Value = IIF(loc_oBO.this_nTiponfs > 0, loc_oBO.this_nTiponfs, 1)
+                    ENDIF
+
+                    *-- Pagina 5: Documento
+                    IF PEMSTATUS(loc_oPg5, "opt_4c_DigDoc", 5)
+                        loc_oPg5.opt_4c_DigDoc.Value = IIF(loc_oBO.this_nDigdoc > 0, loc_oBO.this_nDigdoc, 1)
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg5, "opt_4c_EditDocs", 5)
+                        loc_oPg5.opt_4c_EditDocs.Value = IIF(loc_oBO.this_nEditdocs > 0, loc_oBO.this_nEditdocs, 1)
+                    ENDIF
+
+                    *-- Pagina 6: Preco
+                    IF PEMSTATUS(loc_oPg6, "opt_4c_AltPreco", 5)
+                        loc_oPg6.opt_4c_AltPreco.Value = IIF(loc_oBO.this_nEprecos > 0, loc_oBO.this_nEprecos, 1)
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg6, "opt_4c_AltPeso", 5)
+                        loc_oPg6.opt_4c_AltPeso.Value = IIF(loc_oBO.this_nEpesos > 0, loc_oBO.this_nEpesos, 1)
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg6, "txt_4c_LPrecoPad", 5)
+                        loc_oPg6.txt_4c_LPrecoPad.Value = ALLTRIM(loc_oBO.this_cLprecopads)
+                    ENDIF
+
+                    *-- Pagina 7: Div
+                    IF PEMSTATUS(loc_oPg7, "opt_4c_DivVar", 5)
+                        loc_oPg7.opt_4c_DivVar.Value = IIF(loc_oBO.this_nVars > 0, loc_oBO.this_nVars, 1)
+                    ENDIF
+
+                    *-- Pagina 8: Diversos
+                    IF PEMSTATUS(loc_oPg8, "chk_4c_Digenves", 5)
+                        loc_oPg8.chk_4c_Digenves.Value = IIF(loc_oBO.this_nDigenves = 1, 1, 0)
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg8, "chk_4c_Digrecs", 5)
+                        loc_oPg8.chk_4c_Digrecs.Value = IIF(loc_oBO.this_nDigrecs = 1, 1, 0)
+                    ENDIF
+
+                    *-- Pagina 17: Comissao
+                    IF PEMSTATUS(loc_oPg17, "chk_4c_Grupov", 5)
+                        loc_oPg17.chk_4c_Grupov.Value = IIF(loc_oBO.this_lFixgvends, 1, 0)
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg17, "txt_4c_Grupov", 5)
+                        loc_oPg17.txt_4c_Grupov.Value = ALLTRIM(loc_oBO.this_cGrvends)
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg17, "txt_4c_MascVen", 5)
+                        loc_oPg17.txt_4c_MascVen.Value = ALLTRIM(loc_oBO.this_cMascvens)
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg17, "opt_4c_Vende", 5)
+                        loc_oPg17.opt_4c_Vende.Value = IIF(loc_oBO.this_nVendes > 0, loc_oBO.this_nVendes, 1)
+                    ENDIF
+                    IF PEMSTATUS(loc_oPg17, "opt_4c_CadCli", 5)
+                        loc_oPg17.opt_4c_CadCli.Value = IIF(loc_oBO.this_nCadclis > 0, loc_oBO.this_nCadclis, 1)
+                    ENDIF
+
                     loc_lResultado = .T.
                 ENDIF
             ENDIF
@@ -1435,11 +1769,44 @@ DEFINE CLASS FormOPE AS FormBase
             IF PEMSTATUS(loc_oPagDados, "cbo_4c_Menu", 5)
                 loc_oPagDados.cbo_4c_Menu.Enabled = par_lHabilitar
             ENDIF
+            *-- Habilitar recursivamente todos os controles das paginas internas
+            IF PEMSTATUS(loc_oPagDados, "pgf_4c_PagDados", 5)
+                THIS.HabilitarControlesRecursivo(loc_oPagDados.pgf_4c_PagDados, par_lHabilitar)
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;
                 "Linha: " + TRANSFORM(loc_oErro.LineNo), ;
                 "Erro em HabilitarCampos")
         ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    * HabilitarControlesRecursivo - Percorre recursivamente e ajusta ReadOnly/Enabled
+    *==========================================================================
+    PROTECTED PROCEDURE HabilitarControlesRecursivo(par_oContainer, par_lHabilitar)
+        LOCAL loc_nI, loc_oObj, loc_nP, loc_cCls
+        FOR loc_nI = 1 TO par_oContainer.ControlCount
+            loc_oObj = par_oContainer.Controls(loc_nI)
+            IF VARTYPE(loc_oObj) = "O"
+                loc_cCls = UPPER(loc_oObj.BaseClass)
+                DO CASE
+                CASE loc_cCls = "TEXTBOX" OR loc_cCls = "EDITBOX"
+                    IF PEMSTATUS(loc_oObj, "ReadOnly", 5)
+                        loc_oObj.ReadOnly = !par_lHabilitar
+                    ENDIF
+                CASE loc_cCls = "CHECKBOX" OR loc_cCls = "OPTIONGROUP" OR loc_cCls = "COMBOBOX" OR loc_cCls = "SPINNER"
+                    IF PEMSTATUS(loc_oObj, "Enabled", 5)
+                        loc_oObj.Enabled = par_lHabilitar
+                    ENDIF
+                CASE loc_cCls = "PAGEFRAME"
+                    FOR loc_nP = 1 TO loc_oObj.PageCount
+                        THIS.HabilitarControlesRecursivo(loc_oObj.Pages(loc_nP), par_lHabilitar)
+                    ENDFOR
+                CASE loc_cCls = "CONTAINER"
+                    THIS.HabilitarControlesRecursivo(loc_oObj, par_lHabilitar)
+                ENDCASE
+            ENDIF
+        ENDFOR
     ENDPROC
 
     *==========================================================================
@@ -1455,11 +1822,52 @@ DEFINE CLASS FormOPE AS FormBase
             IF PEMSTATUS(loc_oPagDados, "cbo_4c_Menu", 5)
                 loc_oPagDados.cbo_4c_Menu.Value = ""
             ENDIF
+            *-- Limpar todos os controles das paginas internas
+            IF PEMSTATUS(loc_oPagDados, "pgf_4c_PagDados", 5)
+                THIS.LimparControlesRecursivo(loc_oPagDados.pgf_4c_PagDados)
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;
                 "Linha: " + TRANSFORM(loc_oErro.LineNo), ;
                 "Erro em LimparCampos")
         ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    * LimparControlesRecursivo - Reset de todos controles a defaults
+    *==========================================================================
+    PROTECTED PROCEDURE LimparControlesRecursivo(par_oContainer)
+        LOCAL loc_nI, loc_oObj, loc_nP, loc_cCls
+        FOR loc_nI = 1 TO par_oContainer.ControlCount
+            loc_oObj = par_oContainer.Controls(loc_nI)
+            IF VARTYPE(loc_oObj) = "O"
+                loc_cCls = UPPER(loc_oObj.BaseClass)
+                DO CASE
+                CASE loc_cCls = "TEXTBOX" OR loc_cCls = "EDITBOX"
+                    IF PEMSTATUS(loc_oObj, "Value", 5)
+                        IF VARTYPE(loc_oObj.Value) = "N"
+                            loc_oObj.Value = 0
+                        ELSE
+                            loc_oObj.Value = ""
+                        ENDIF
+                    ENDIF
+                CASE loc_cCls = "CHECKBOX"
+                    loc_oObj.Value = 0
+                CASE loc_cCls = "OPTIONGROUP"
+                    loc_oObj.Value = 1
+                CASE loc_cCls = "COMBOBOX"
+                    loc_oObj.Value = ""
+                CASE loc_cCls = "SPINNER"
+                    loc_oObj.Value = 0
+                CASE loc_cCls = "PAGEFRAME"
+                    FOR loc_nP = 1 TO loc_oObj.PageCount
+                        THIS.LimparControlesRecursivo(loc_oObj.Pages(loc_nP))
+                    ENDFOR
+                CASE loc_cCls = "CONTAINER"
+                    THIS.LimparControlesRecursivo(loc_oObj)
+                ENDCASE
+            ENDIF
+        ENDFOR
     ENDPROC
 
     *==========================================================================
@@ -1517,6 +1925,517 @@ DEFINE CLASS FormOPE AS FormBase
                 .FontSize = 8
             ENDIF
         ENDWITH
+    ENDPROC
+
+    *==========================================================================
+    * Helpers de criacao rapida (reduzem verbosidade)
+    *==========================================================================
+    PROTECTED PROCEDURE AddLabel(par_oPag, par_cName, par_cCaption, par_nTop, par_nLeft, par_nWidth)
+        par_oPag.AddObject(par_cName, "Label")
+        WITH EVALUATE("par_oPag." + par_cName)
+            .Caption   = par_cCaption
+            .Top       = par_nTop
+            .Left      = par_nLeft
+            .Width     = par_nWidth
+            .Height    = 15
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .F.
+            .Visible   = .T.
+        ENDWITH
+    ENDPROC
+
+    PROTECTED PROCEDURE AddTextBox(par_oPag, par_cName, par_nTop, par_nLeft, par_nWidth, par_nMaxLen)
+        par_oPag.AddObject(par_cName, "TextBox")
+        WITH EVALUATE("par_oPag." + par_cName)
+            .Value         = ""
+            .Top           = par_nTop
+            .Left          = par_nLeft
+            .Width         = par_nWidth
+            .Height        = 20
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .MaxLength     = par_nMaxLen
+            .BackColor     = RGB(255, 255, 255)
+            .ForeColor     = RGB(0, 0, 0)
+            .BorderStyle   = 1
+            .SpecialEffect = 1
+            .Visible       = .T.
+        ENDWITH
+    ENDPROC
+
+    PROTECTED PROCEDURE AddCheckBox(par_oPag, par_cName, par_cCaption, par_nTop, par_nLeft, par_nWidth)
+        par_oPag.AddObject(par_cName, "CheckBox")
+        WITH EVALUATE("par_oPag." + par_cName)
+            .Caption   = par_cCaption
+            .Top       = par_nTop
+            .Left      = par_nLeft
+            .Width     = par_nWidth
+            .Height    = 17
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .F.
+            .Value     = 0
+            .Visible   = .T.
+        ENDWITH
+    ENDPROC
+
+    PROTECTED PROCEDURE AddOptGroupSN(par_oPag, par_cName, par_nTop, par_nLeft, par_nWidth)
+        *-- Cria OptionGroup padrao "Sim / Nao" (2 botoes horizontais)
+        par_oPag.AddObject(par_cName, "OptionGroup")
+        WITH EVALUATE("par_oPag." + par_cName)
+            .ButtonCount   = 2
+            .BackStyle     = 0
+            .BorderStyle   = 1
+            .SpecialEffect = 1
+            .Top           = par_nTop
+            .Left          = par_nLeft
+            .Width         = par_nWidth
+            .Height        = 22
+            .Value         = 1
+            .Themes        = .F.
+            .Buttons(1).Caption   = "Sim"
+            .Buttons(1).FontName  = "Tahoma"
+            .Buttons(1).FontSize  = 8
+            .Buttons(1).BackStyle = 0
+            .Buttons(1).Top       = 3
+            .Buttons(1).Left      = 5
+            .Buttons(1).Width     = 45
+            .Buttons(1).Height    = 17
+            .Buttons(1).ForeColor = RGB(90, 90, 90)
+            .Buttons(1).AutoSize  = .F.
+            .Buttons(2).Caption   = "N" + CHR(227) + "o"
+            .Buttons(2).FontName  = "Tahoma"
+            .Buttons(2).FontSize  = 8
+            .Buttons(2).BackStyle = 0
+            .Buttons(2).Top       = 3
+            .Buttons(2).Left      = 60
+            .Buttons(2).Width     = 45
+            .Buttons(2).Height    = 17
+            .Buttons(2).ForeColor = RGB(90, 90, 90)
+            .Buttons(2).AutoSize  = .F.
+            .Visible = .T.
+        ENDWITH
+    ENDPROC
+
+    *==========================================================================
+    * ConfigurarPagOperacao - Popula Page1 (Operacao) do PageFrame interno
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarPagOperacao(par_oPagina)
+        TRY
+            *-- Numeracao label
+            THIS.AddLabel(par_oPagina, "lbl_4c_Numeracao", "Numera" + CHR(231) + CHR(227) + "o :", 11, 78, 63)
+            *-- Bloqueio de alterar data (OptionGroup 4 botoes)
+            THIS.AddLabel(par_oPagina, "lbl_4c_BlqDt", "Bloq. Alterar Data :", 45, 46, 95)
+            par_oPagina.AddObject("opt_4c_Blqdt", "OptionGroup")
+            WITH par_oPagina.opt_4c_Blqdt
+                .ButtonCount   = 4
+                .BackStyle     = 0
+                .BorderStyle   = 1
+                .SpecialEffect = 1
+                .Top           = 43
+                .Left          = 145
+                .Width         = 248
+                .Height        = 32
+                .Value         = 1
+                .Themes        = .F.
+                .Buttons(1).Caption = "Sim"
+                .Buttons(1).Value   = 1
+                .Buttons(1).Top     = 2
+                .Buttons(1).Left    = 5
+                .Buttons(1).Width   = 40
+                .Buttons(1).Height  = 17
+                .Buttons(1).BackStyle = 0
+                .Buttons(1).FontName  = "Tahoma"
+                .Buttons(1).FontSize  = 8
+                .Buttons(1).ForeColor = RGB(90, 90, 90)
+                .Buttons(1).AutoSize  = .F.
+                .Buttons(2).Caption = "N" + CHR(227) + "o"
+                .Buttons(2).Top     = 15
+                .Buttons(2).Left    = 5
+                .Buttons(2).Width   = 40
+                .Buttons(2).Height  = 17
+                .Buttons(2).BackStyle = 0
+                .Buttons(2).FontName  = "Tahoma"
+                .Buttons(2).FontSize  = 8
+                .Buttons(2).ForeColor = RGB(90, 90, 90)
+                .Buttons(2).AutoSize  = .F.
+                .Buttons(3).Caption = "Subn" + CHR(237) + "vel Sim"
+                .Buttons(3).Top     = 2
+                .Buttons(3).Left    = 110
+                .Buttons(3).Width   = 100
+                .Buttons(3).Height  = 15
+                .Buttons(3).BackStyle = 0
+                .Buttons(3).FontName  = "Tahoma"
+                .Buttons(3).FontSize  = 8
+                .Buttons(3).ForeColor = RGB(90, 90, 90)
+                .Buttons(3).AutoSize  = .T.
+                .Buttons(4).Caption = "Subn" + CHR(237) + "vel N" + CHR(227) + "o"
+                .Buttons(4).Top     = 15
+                .Buttons(4).Left    = 110
+                .Buttons(4).Width   = 100
+                .Buttons(4).Height  = 15
+                .Buttons(4).BackStyle = 0
+                .Buttons(4).FontName  = "Tahoma"
+                .Buttons(4).FontSize  = 8
+                .Buttons(4).ForeColor = RGB(90, 90, 90)
+                .Buttons(4).AutoSize  = .T.
+                .Visible = .T.
+            ENDWITH
+
+            *-- Conferencia (S/N)
+            THIS.AddLabel(par_oPagina, "lbl_4c_Conf", "Confer" + CHR(234) + "ncia :", 181, 74, 67)
+            THIS.AddOptGroupSN(par_oPagina, "opt_4c_Conf", 179, 145, 248)
+
+            *-- Verificar Bloqueio (Aciosens)
+            THIS.AddLabel(par_oPagina, "lbl_4c_VerBlq", "Verificar Bloqueio :", 221, 516, 91)
+            THIS.AddOptGroupSN(par_oPagina, "opt_4c_Bloqueio", 219, 611, 175)
+
+            *-- Transferencia de Saida
+            THIS.AddLabel(par_oPagina, "lbl_4c_MovSai", "Movimenta" + CHR(231) + CHR(227) + "o de Sa" + CHR(237) + "da :", 309, 340, 145)
+            THIS.AddTextBox(par_oPagina, "txt_4c_DopeSTrfs", 306, 486, 150, 20)
+
+            *-- Movimentacao de Entrada
+            THIS.AddLabel(par_oPagina, "lbl_4c_MovEnt", "Movimenta" + CHR(231) + CHR(227) + "o de Entrada :", 331, 340, 145)
+            THIS.AddTextBox(par_oPagina, "txt_4c_DopeETrfs", 328, 486, 150, 20)
+
+            *-- Central
+            THIS.AddLabel(par_oPagina, "lbl_4c_Central", "Central :", 258, 90, 50)
+            THIS.AddTextBox(par_oPagina, "txt_4c_Central", 255, 145, 50, 2)
+
+            *-- Empresa Padrao
+            THIS.AddLabel(par_oPagina, "lbl_4c_EmpPad", "Empresa Padr" + CHR(227) + "o :", 388, 60, 80)
+            THIS.AddTextBox(par_oPagina, "txt_4c_EmpPad", 385, 145, 50, 3)
+
+            *-- CheckBoxes
+            THIS.AddCheckBox(par_oPagina, "chk_4c_CarESubN", "Carregar E-Subn" + CHR(237) + "vel", 415, 145, 180)
+            THIS.AddCheckBox(par_oPagina, "chk_4c_VincEstM", "Vincular Est. Mestre", 435, 145, 180)
+
+            *-- Tipo (Opers)
+            THIS.AddLabel(par_oPagina, "lbl_4c_Tipo1", "Tipo :", 460, 100, 45)
+            par_oPagina.AddObject("opt_4c_Tipo", "OptionGroup")
+            WITH par_oPagina.opt_4c_Tipo
+                .ButtonCount   = 3
+                .BackStyle     = 0
+                .BorderStyle   = 1
+                .SpecialEffect = 1
+                .Top           = 458
+                .Left          = 145
+                .Width         = 250
+                .Height        = 22
+                .Value         = 1
+                .Themes        = .F.
+                .Buttons(1).Caption = "Sa" + CHR(237) + "da"
+                .Buttons(1).Value   = 1
+                .Buttons(1).Top     = 3
+                .Buttons(1).Left    = 5
+                .Buttons(1).Width   = 60
+                .Buttons(1).BackStyle = 0
+                .Buttons(1).FontName  = "Tahoma"
+                .Buttons(1).FontSize  = 8
+                .Buttons(1).ForeColor = RGB(90, 90, 90)
+                .Buttons(2).Caption = "Entrada"
+                .Buttons(2).Top     = 3
+                .Buttons(2).Left    = 70
+                .Buttons(2).Width   = 60
+                .Buttons(2).BackStyle = 0
+                .Buttons(2).FontName  = "Tahoma"
+                .Buttons(2).FontSize  = 8
+                .Buttons(2).ForeColor = RGB(90, 90, 90)
+                .Buttons(3).Caption = "Nenhum"
+                .Buttons(3).Top     = 3
+                .Buttons(3).Left    = 140
+                .Buttons(3).Width   = 60
+                .Buttons(3).BackStyle = 0
+                .Buttons(3).FontName  = "Tahoma"
+                .Buttons(3).FontSize  = 8
+                .Buttons(3).ForeColor = RGB(90, 90, 90)
+                .Visible = .T.
+            ENDWITH
+
+            *-- Caixa
+            THIS.AddLabel(par_oPagina, "lbl_4c_Cai", "Caixa :", 490, 100, 45)
+            THIS.AddOptGroupSN(par_oPagina, "opt_4c_Cai", 488, 145, 120)
+
+            *-- Observacao (EditBox)
+            THIS.AddLabel(par_oPagina, "lbl_4c_ObsOpe", "Observa" + CHR(231) + CHR(245) + "es :", 520, 60, 80)
+            par_oPagina.AddObject("mem_4c_ObsOpe", "EditBox")
+            WITH par_oPagina.mem_4c_ObsOpe
+                .Value       = ""
+                .Top         = 518
+                .Left        = 145
+                .Width       = 640
+                .Height      = 60
+                .FontName    = "Tahoma"
+                .FontSize    = 8
+                .BackColor   = RGB(255, 255, 255)
+                .ForeColor   = RGB(0, 0, 0)
+                .BorderStyle = 1
+                .SpecialEffect = 1
+                .Visible     = .T.
+            ENDWITH
+
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo), ;
+                "Erro em ConfigurarPagOperacao")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    * ConfigurarPagItens - Popula Page2 (Itens)
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarPagItens(par_oPagina)
+        TRY
+            THIS.AddLabel(par_oPagina, "lbl_4c_CBar", "C" + CHR(243) + "d. Barras :", 20, 30, 80)
+            THIS.AddOptGroupSN(par_oPagina, "opt_4c_Cbar", 18, 120, 120)
+
+            THIS.AddLabel(par_oPagina, "lbl_4c_Imagem", "Imagem :", 50, 30, 80)
+            THIS.AddOptGroupSN(par_oPagina, "opt_4c_Imagem", 48, 120, 120)
+
+            THIS.AddLabel(par_oPagina, "lbl_4c_ObsItems", "Obs. Itens :", 80, 30, 80)
+            THIS.AddOptGroupSN(par_oPagina, "opt_4c_ObsItems", 78, 120, 120)
+
+            THIS.AddLabel(par_oPagina, "lbl_4c_Desmemb", "Desmembra :", 110, 30, 80)
+            THIS.AddOptGroupSN(par_oPagina, "opt_4c_Desmemb", 108, 120, 120)
+
+            THIS.AddLabel(par_oPagina, "lbl_4c_ChkQtds", "Check Qtd :", 140, 30, 80)
+            THIS.AddOptGroupSN(par_oPagina, "opt_4c_ChkQtds", 138, 120, 120)
+
+            THIS.AddLabel(par_oPagina, "lbl_4c_QtdIte", "Qtde. Itens :", 175, 30, 80)
+            THIS.AddTextBox(par_oPagina, "txt_4c_QtdIte", 172, 120, 60, 4)
+
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo), ;
+                "Erro em ConfigurarPagItens")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    * ConfigurarPagFinanceiro - Popula Page3 (Financeiro)
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarPagFinanceiro(par_oPagina)
+        TRY
+            THIS.AddLabel(par_oPagina, "lbl_4c_Che", "Cheque :", 20, 30, 80)
+            THIS.AddOptGroupSN(par_oPagina, "opt_4c_Che", 18, 120, 120)
+
+            THIS.AddLabel(par_oPagina, "lbl_4c_Contas", "Contas :", 50, 30, 80)
+            THIS.AddOptGroupSN(par_oPagina, "opt_4c_Contas", 48, 120, 120)
+
+            THIS.AddLabel(par_oPagina, "lbl_4c_LimCre", "Lim. Cr" + CHR(233) + "dito :", 80, 30, 80)
+            THIS.AddOptGroupSN(par_oPagina, "opt_4c_LimCre", 78, 120, 120)
+
+            THIS.AddLabel(par_oPagina, "lbl_4c_Troco", "Troco Auto :", 110, 30, 80)
+            THIS.AddOptGroupSN(par_oPagina, "opt_4c_Troco", 108, 120, 120)
+
+            THIS.AddLabel(par_oPagina, "lbl_4c_OpChqEnt", "Op. Cheq. Entr. :", 145, 30, 100)
+            THIS.AddTextBox(par_oPagina, "txt_4c_OpChqEnt", 142, 145, 150, 15)
+
+            THIS.AddLabel(par_oPagina, "lbl_4c_OpChqSai", "Op. Cheq. Sa" + CHR(237) + "da :", 175, 30, 100)
+            THIS.AddTextBox(par_oPagina, "txt_4c_OpChqSai", 172, 145, 150, 15)
+
+            THIS.AddLabel(par_oPagina, "lbl_4c_Conta", "Conta :", 205, 30, 60)
+            THIS.AddTextBox(par_oPagina, "txt_4c_Conta", 202, 145, 100, 10)
+
+            THIS.AddLabel(par_oPagina, "lbl_4c_Grupo", "Grupo :", 235, 30, 60)
+            THIS.AddTextBox(par_oPagina, "txt_4c_Grupo", 232, 145, 100, 10)
+
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo), ;
+                "Erro em ConfigurarPagFinanceiro")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    * ConfigurarPagFiscal - Popula Page4 (Fiscal)
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarPagFiscal(par_oPagina)
+        TRY
+            THIS.AddLabel(par_oPagina, "lbl_4c_Especies", "Esp" + CHR(233) + "cie :", 20, 30, 60)
+            THIS.AddTextBox(par_oPagina, "txt_4c_Especies", 17, 120, 80, 6)
+
+            THIS.AddLabel(par_oPagina, "lbl_4c_Series", "S" + CHR(233) + "rie :", 50, 30, 60)
+            THIS.AddTextBox(par_oPagina, "txt_4c_Series", 47, 120, 80, 3)
+
+            THIS.AddLabel(par_oPagina, "lbl_4c_CfoPad", "CFO Padr" + CHR(227) + "o :", 80, 30, 80)
+            THIS.AddTextBox(par_oPagina, "txt_4c_CfoPad", 77, 120, 100, 10)
+
+            THIS.AddLabel(par_oPagina, "lbl_4c_TipoNF", "Tipo NF :", 110, 30, 60)
+            par_oPagina.AddObject("opt_4c_TipoNF", "OptionGroup")
+            WITH par_oPagina.opt_4c_TipoNF
+                .ButtonCount   = 3
+                .BackStyle     = 0
+                .BorderStyle   = 1
+                .SpecialEffect = 1
+                .Top           = 108
+                .Left          = 120
+                .Width         = 260
+                .Height        = 22
+                .Value         = 1
+                .Themes        = .F.
+                .Buttons(1).Caption = "Entrada"
+                .Buttons(1).Top     = 3
+                .Buttons(1).Left    = 5
+                .Buttons(1).Width   = 70
+                .Buttons(1).BackStyle = 0
+                .Buttons(1).FontName  = "Tahoma"
+                .Buttons(1).FontSize  = 8
+                .Buttons(2).Caption = "Sa" + CHR(237) + "da"
+                .Buttons(2).Top     = 3
+                .Buttons(2).Left    = 80
+                .Buttons(2).Width   = 70
+                .Buttons(2).BackStyle = 0
+                .Buttons(2).FontName  = "Tahoma"
+                .Buttons(2).FontSize  = 8
+                .Buttons(3).Caption = "Nenhum"
+                .Buttons(3).Top     = 3
+                .Buttons(3).Left    = 155
+                .Buttons(3).Width   = 70
+                .Buttons(3).BackStyle = 0
+                .Buttons(3).FontName  = "Tahoma"
+                .Buttons(3).FontSize  = 8
+                .Visible = .T.
+            ENDWITH
+
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo), ;
+                "Erro em ConfigurarPagFiscal")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    * ConfigurarPagDocumento - Popula Page5 (Documento)
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarPagDocumento(par_oPagina)
+        TRY
+            THIS.AddLabel(par_oPagina, "lbl_4c_DigDoc", "Digita Doc :", 20, 30, 80)
+            THIS.AddOptGroupSN(par_oPagina, "opt_4c_DigDoc", 18, 120, 120)
+
+            THIS.AddLabel(par_oPagina, "lbl_4c_EditDocs", "Editar Docs :", 50, 30, 80)
+            THIS.AddOptGroupSN(par_oPagina, "opt_4c_EditDocs", 48, 120, 120)
+
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo), ;
+                "Erro em ConfigurarPagDocumento")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    * ConfigurarPagPreco - Popula Page6 (Preco)
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarPagPreco(par_oPagina)
+        TRY
+            THIS.AddLabel(par_oPagina, "lbl_4c_AltPreco", "Altera Pre" + CHR(231) + "o :", 20, 30, 100)
+            THIS.AddOptGroupSN(par_oPagina, "opt_4c_AltPreco", 18, 140, 120)
+
+            THIS.AddLabel(par_oPagina, "lbl_4c_AltPeso", "Altera Peso :", 50, 30, 100)
+            THIS.AddOptGroupSN(par_oPagina, "opt_4c_AltPeso", 48, 140, 120)
+
+            THIS.AddLabel(par_oPagina, "lbl_4c_LPrecoPad", "Lista Pre" + CHR(231) + "o Padr" + CHR(227) + "o :", 80, 30, 120)
+            THIS.AddTextBox(par_oPagina, "txt_4c_LPrecoPad", 77, 155, 200, 30)
+
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo), ;
+                "Erro em ConfigurarPagPreco")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    * ConfigurarPagDiv - Popula Page7 (Div)
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarPagDiv(par_oPagina)
+        TRY
+            THIS.AddLabel(par_oPagina, "lbl_4c_DivVar", "Var. Div. :", 20, 30, 80)
+            THIS.AddOptGroupSN(par_oPagina, "opt_4c_DivVar", 18, 120, 120)
+
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo), ;
+                "Erro em ConfigurarPagDiv")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    * ConfigurarPagDiversos - Popula Page8 (Diversos)
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarPagDiversos(par_oPagina)
+        TRY
+            THIS.AddCheckBox(par_oPagina, "chk_4c_Digenves", "Digitar Envelope", 20, 30, 200)
+            THIS.AddCheckBox(par_oPagina, "chk_4c_Digrecs", "Digitar Recebimento", 45, 30, 200)
+
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo), ;
+                "Erro em ConfigurarPagDiversos")
+        ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    * ConfigurarPagComissao - Popula Page17 (Comissao)
+    *==========================================================================
+    PROTECTED PROCEDURE ConfigurarPagComissao(par_oPagina)
+        TRY
+            THIS.AddCheckBox(par_oPagina, "chk_4c_Grupov", "Fixar Grupo Vend.", 20, 30, 180)
+            THIS.AddLabel(par_oPagina, "lbl_4c_Grupov", "Grupo Vend. :", 45, 30, 90)
+            THIS.AddTextBox(par_oPagina, "txt_4c_Grupov", 42, 130, 120, 20)
+
+            THIS.AddLabel(par_oPagina, "lbl_4c_MascVen", "M" + CHR(225) + "scara Vend. :", 75, 30, 90)
+            THIS.AddTextBox(par_oPagina, "txt_4c_MascVen", 72, 130, 120, 20)
+
+            THIS.AddLabel(par_oPagina, "lbl_4c_Vende", "Vendedor :", 105, 30, 80)
+            par_oPagina.AddObject("opt_4c_Vende", "OptionGroup")
+            WITH par_oPagina.opt_4c_Vende
+                .ButtonCount   = 3
+                .BackStyle     = 0
+                .BorderStyle   = 1
+                .SpecialEffect = 1
+                .Top           = 103
+                .Left          = 130
+                .Width         = 260
+                .Height        = 22
+                .Value         = 1
+                .Themes        = .F.
+                .Buttons(1).Caption = "Obrigat" + CHR(243) + "rio"
+                .Buttons(1).Top     = 3
+                .Buttons(1).Left    = 5
+                .Buttons(1).Width   = 80
+                .Buttons(1).BackStyle = 0
+                .Buttons(1).FontName  = "Tahoma"
+                .Buttons(1).FontSize  = 8
+                .Buttons(2).Caption = "Opcional"
+                .Buttons(2).Top     = 3
+                .Buttons(2).Left    = 90
+                .Buttons(2).Width   = 70
+                .Buttons(2).BackStyle = 0
+                .Buttons(2).FontName  = "Tahoma"
+                .Buttons(2).FontSize  = 8
+                .Buttons(3).Caption = "N" + CHR(227) + "o"
+                .Buttons(3).Top     = 3
+                .Buttons(3).Left    = 165
+                .Buttons(3).Width   = 50
+                .Buttons(3).BackStyle = 0
+                .Buttons(3).FontName  = "Tahoma"
+                .Buttons(3).FontSize  = 8
+                .Visible = .T.
+            ENDWITH
+
+            THIS.AddLabel(par_oPagina, "lbl_4c_CadCli", "Cad. Cliente :", 140, 30, 90)
+            THIS.AddOptGroupSN(par_oPagina, "opt_4c_CadCli", 138, 130, 120)
+
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo), ;
+                "Erro em ConfigurarPagComissao")
+        ENDTRY
     ENDPROC
 
 ENDDEFINE

@@ -287,14 +287,14 @@ DEFINE CLASS OPEBO AS BusinessBase
     *====================================================================
     * ObterChavePrimaria - Retorna chave primaria para auditoria
     *====================================================================
-    FUNCTION ObterChavePrimaria()
+    PROCEDURE ObterChavePrimaria()
         RETURN ALLTRIM(THIS.this_cDopes)
-    ENDFUNCTION
+    ENDPROC
 
     *====================================================================
     * Buscar - Busca registros com filtro opcional
     *====================================================================
-    FUNCTION Buscar(par_cFiltro)
+    PROCEDURE Buscar(par_cFiltro)
         LOCAL loc_lResultado, loc_cSQL, loc_nResult
         loc_lResultado = .F.
         TRY
@@ -317,12 +317,12 @@ DEFINE CLASS OPEBO AS BusinessBase
             MsgErro(loc_oErro.Message + CHR(13) + "Linha: " + TRANSFORM(loc_oErro.LineNo), "Erro em Buscar")
         ENDTRY
         RETURN loc_lResultado
-    ENDFUNCTION
+    ENDPROC
 
     *====================================================================
     * CarregarPorCodigo - Carrega registro pela chave primaria (dopes)
     *====================================================================
-    FUNCTION CarregarPorCodigo(par_cCodigo)
+    PROCEDURE CarregarPorCodigo(par_cCodigo)
         LOCAL loc_lResultado, loc_cSQL, loc_nResult
         loc_lResultado = .F.
         TRY
@@ -343,7 +343,7 @@ DEFINE CLASS OPEBO AS BusinessBase
             MsgErro(loc_oErro.Message + CHR(13) + "Linha: " + TRANSFORM(loc_oErro.LineNo), "Erro em CarregarPorCodigo")
         ENDTRY
         RETURN loc_lResultado
-    ENDFUNCTION
+    ENDPROC
 
     *====================================================================
     * CarregarDoCursor - Carrega propriedades do BO a partir de cursor
