@@ -9,7 +9,7 @@ DEFINE CLASS FormOPE AS FormBase
     *-- Propriedades visuais (PILAR 1 - UX FIDELITY)
     Height      = 650
     Width       = 1000
-    Caption     = "Cadastro de Tipos de Opera" + CHR(231) + CHR(227) + "o"
+    Caption     = "Cadastro de Movimenta" + CHR(231) + CHR(245) + "es de Estoque"
     AutoCenter  = .T.
     ShowWindow  = 1
     WindowType  = 1
@@ -382,7 +382,7 @@ DEFINE CLASS FormOPE AS FormBase
             .Left        = 5
             .Width       = 992
             .Height      = 410
-            .ColumnCount = 4
+            .ColumnCount = 2
             .DeleteMark  = .F.
             .RecordMark  = .F.
             .ReadOnly    = .T.
@@ -392,15 +392,9 @@ DEFINE CLASS FormOPE AS FormBase
             .Column1.Width     = 100
             .Column1.Movable   = .F.
             .Column1.Resizable = .F.
-            .Column2.Width     = 400
+            .Column2.Width     = 892
             .Column2.Movable   = .F.
             .Column2.Resizable = .F.
-            .Column3.Width     = 80
-            .Column3.Movable   = .F.
-            .Column3.Resizable = .F.
-            .Column4.Width     = 80
-            .Column4.Movable   = .F.
-            .Column4.Resizable = .F.
         ENDWITH
         BINDEVENT(loc_oPagina.grd_4c_Dados, "AfterRowColChange", THIS, "GridAfterRowColChange")
 
@@ -1073,10 +1067,6 @@ DEFINE CLASS FormOPE AS FormBase
                 loc_nFiltroSit = THIS.pgf_4c_Paginas.Page1.opt_4c_FilSituas.Value
             ENDIF
 
-            IF USED("cursor_4c_Dados")
-                USE IN SELECT("cursor_4c_Dados")
-            ENDIF
-
             *-- SigCdOpe nao tem coluna emps - tabela global de configuracao
             *-- Descricao em SigCdOpe: titopes char(30)
             DO CASE
@@ -1099,26 +1089,33 @@ DEFINE CLASS FormOPE AS FormBase
                            "ORDER BY a.dopes"
             ENDCASE
 
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Dados")
+            *-- SQLEXEC em cursor temporario para preservar colunas do Grid
+            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_DadosTemp")
             IF loc_nResult < 0
                 MsgErro("Erro ao carregar tipos de opera" + CHR(231) + CHR(227) + "o.", ;
                     "Erro em CarregarLista")
             ELSE
                 IF USED("cursor_4c_Dados")
+                    SELECT cursor_4c_Dados
+                    ZAP
+                    APPEND FROM DBF("cursor_4c_DadosTemp")
+                ELSE
+                    SELECT * FROM cursor_4c_DadosTemp INTO CURSOR cursor_4c_Dados READWRITE
+                ENDIF
+                IF USED("cursor_4c_DadosTemp")
+                    USE IN SELECT("cursor_4c_DadosTemp")
+                ENDIF
+                IF USED("cursor_4c_Dados")
                     *-- Configurar grid
                     IF PEMSTATUS(THIS.pgf_4c_Paginas.Page1, "grd_4c_Dados", 5)
                         LOCAL loc_oGrid
                         loc_oGrid = THIS.pgf_4c_Paginas.Page1.grd_4c_Dados
-                        loc_oGrid.ColumnCount = 4
+                        loc_oGrid.ColumnCount = 2
                         loc_oGrid.RecordSource          = "cursor_4c_Dados"
                         loc_oGrid.Column1.ControlSource = "cursor_4c_Dados.dopes"
                         loc_oGrid.Column2.ControlSource = "cursor_4c_Dados.titopes"
-                        loc_oGrid.Column3.ControlSource = "cursor_4c_Dados.tipoops"
-                        loc_oGrid.Column4.ControlSource = "cursor_4c_Dados.situas"
-                        loc_oGrid.Column1.Header1.Caption = "C" + CHR(243) + "digo"
-                        loc_oGrid.Column2.Header1.Caption = "Descri" + CHR(231) + CHR(227) + "o"
-                        loc_oGrid.Column3.Header1.Caption = "Tipo"
-                        loc_oGrid.Column4.Header1.Caption = "Situa" + CHR(231) + CHR(227) + "o"
+                        loc_oGrid.Column1.Header1.Caption = "Descri" + CHR(231) + CHR(227) + "o"
+                        loc_oGrid.Column2.Header1.Caption = "Origem dos Valores a Serem Lan" + CHR(231) + "ados na Movimenta" + CHR(231) + CHR(227) + "o Financeira"
                         THIS.FormatarGridLista(loc_oGrid)
                     ENDIF
                     SELECT cursor_4c_Dados
@@ -1291,7 +1288,9 @@ DEFINE CLASS FormOPE AS FormBase
     * Handlers de eventos de grid e filtro
     *==========================================================================
     PROCEDURE GridAfterRowColChange(par_nColIndex)
-        *-- Fase B: implementar selecao de registro no grid
+        IF THIS.this_cModoAtual = "LISTA" AND USED("cursor_4c_Dados") AND !EOF("cursor_4c_Dados")
+            SELECT cursor_4c_Dados
+        ENDIF
     ENDPROC
 
     PROCEDURE FiltroSituaClick()
@@ -1406,7 +1405,7 @@ DEFINE CLASS FormOPE AS FormBase
             *-- Cabecalho (Pagina Dados)
             THIS.this_oBusinessObject.this_cDopes   = UPPER(ALLTRIM(loc_oPagDados.txt_4c_Codigo.Value))
             THIS.this_oBusinessObject.this_cTitopes = ALLTRIM(loc_oPagDados.txt_4c_Descricao.Value)
-            THIS.this_oBusinessObject.this_nTipoops = VAL(ALLTRIM(loc_oPagDados.txt_4c_Tipo.Value))
+            THIS.this_oBusinessObject.this_nTipoops = ALLTRIM(loc_oPagDados.txt_4c_Tipo.Value)
             IF PEMSTATUS(loc_oPagDados, "cbo_4c_Menu", 5)
                 THIS.this_oBusinessObject.this_cMenus = ALLTRIM(loc_oPagDados.cbo_4c_Menu.Value)
             ENDIF
@@ -1477,7 +1476,7 @@ DEFINE CLASS FormOPE AS FormBase
                 THIS.this_oBusinessObject.this_nChkqtds = loc_oPg2.opt_4c_ChkQtds.Value
             ENDIF
             IF PEMSTATUS(loc_oPg2, "txt_4c_QtdIte", 5)
-                THIS.this_oBusinessObject.this_nQtdites = VAL(ALLTRIM(loc_oPg2.txt_4c_QtdIte.Value))
+                THIS.this_oBusinessObject.this_nQtdites = ALLTRIM(loc_oPg2.txt_4c_QtdIte.Value)
             ENDIF
 
             *-- Pagina 3: Financeiro
@@ -1796,6 +1795,16 @@ DEFINE CLASS FormOPE AS FormBase
     *==========================================================================
     PROTECTED PROCEDURE HabilitarControlesRecursivo(par_oContainer, par_lHabilitar)
         LOCAL loc_nI, loc_oObj, loc_nP, loc_cCls
+        *-- PageFrame usa Pages(N)/PageCount, nao Controls(N)/ControlCount
+        IF UPPER(par_oContainer.BaseClass) = "PAGEFRAME"
+            FOR loc_nP = 1 TO par_oContainer.PageCount
+                THIS.HabilitarControlesRecursivo(par_oContainer.Pages(loc_nP), par_lHabilitar)
+            ENDFOR
+            RETURN
+        ENDIF
+        IF !PEMSTATUS(par_oContainer, "ControlCount", 5)
+            RETURN
+        ENDIF
         FOR loc_nI = 1 TO par_oContainer.ControlCount
             loc_oObj = par_oContainer.Controls(loc_nI)
             IF VARTYPE(loc_oObj) = "O"
@@ -1849,6 +1858,16 @@ DEFINE CLASS FormOPE AS FormBase
     *==========================================================================
     PROTECTED PROCEDURE LimparControlesRecursivo(par_oContainer)
         LOCAL loc_nI, loc_oObj, loc_nP, loc_cCls
+        *-- PageFrame usa Pages(N)/PageCount, nao Controls(N)/ControlCount
+        IF UPPER(par_oContainer.BaseClass) = "PAGEFRAME"
+            FOR loc_nP = 1 TO par_oContainer.PageCount
+                THIS.LimparControlesRecursivo(par_oContainer.Pages(loc_nP))
+            ENDFOR
+            RETURN
+        ENDIF
+        IF !PEMSTATUS(par_oContainer, "ControlCount", 5)
+            RETURN
+        ENDIF
         FOR loc_nI = 1 TO par_oContainer.ControlCount
             loc_oObj = par_oContainer.Controls(loc_nI)
             IF VARTYPE(loc_oObj) = "O"
@@ -1902,9 +1921,27 @@ DEFINE CLASS FormOPE AS FormBase
         IF USED("cursor_4c_Dados")
             USE IN SELECT("cursor_4c_Dados")
         ENDIF
+        IF USED("cursor_4c_DadosTemp")
+            USE IN SELECT("cursor_4c_DadosTemp")
+        ENDIF
         DODEFAULT()
     ENDPROC
 
+
+    *==========================================================================
+    * Handlers InteractiveChange dos OptionGroups das paginas internas
+    *==========================================================================
+    PROCEDURE OptBlqdtChange()
+    ENDPROC
+
+    PROCEDURE OptTipoChange()
+    ENDPROC
+
+    PROCEDURE OptTipoNFChange()
+    ENDPROC
+
+    PROCEDURE OptVendeChange()
+    ENDPROC
 
     *--------------------------------------------------------------------------
     * TornarControlesVisiveis - Torna controles visiveis recursivamente
@@ -2104,6 +2141,7 @@ DEFINE CLASS FormOPE AS FormBase
                 .Buttons(4).AutoSize  = .T.
                 .Visible = .T.
             ENDWITH
+            BINDEVENT(par_oPagina.opt_4c_Blqdt, "InteractiveChange", THIS, "OptBlqdtChange")
 
             *-- Conferencia (S/N)
             THIS.AddLabel(par_oPagina, "lbl_4c_Conf", "Confer" + CHR(234) + "ncia :", 181, 74, 67)
@@ -2174,6 +2212,7 @@ DEFINE CLASS FormOPE AS FormBase
                 .Buttons(3).ForeColor = RGB(90, 90, 90)
                 .Visible = .T.
             ENDWITH
+            BINDEVENT(par_oPagina.opt_4c_Tipo, "InteractiveChange", THIS, "OptTipoChange")
 
             *-- Caixa
             THIS.AddLabel(par_oPagina, "lbl_4c_Cai", "Caixa :", 490, 100, 45)
@@ -2320,6 +2359,7 @@ DEFINE CLASS FormOPE AS FormBase
                 .Buttons(3).FontSize  = 8
                 .Visible = .T.
             ENDWITH
+            BINDEVENT(par_oPagina.opt_4c_TipoNF, "InteractiveChange", THIS, "OptTipoNFChange")
 
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;
@@ -2445,9 +2485,29 @@ DEFINE CLASS FormOPE AS FormBase
                 .Buttons(3).FontSize  = 8
                 .Visible = .T.
             ENDWITH
+            BINDEVENT(par_oPagina.opt_4c_Vende, "InteractiveChange", THIS, "OptVendeChange")
 
             THIS.AddLabel(par_oPagina, "lbl_4c_CadCli", "Cad. Cliente :", 140, 30, 90)
             THIS.AddOptGroupSN(par_oPagina, "opt_4c_CadCli", 138, 130, 120)
+
+            *-- Ccusto: legado Lista Top=574, compensado +29=603, Left=810
+            par_oPagina.AddObject("cmd_4c_Ccusto", "CommandButton")
+            WITH par_oPagina.cmd_4c_Ccusto
+                .Caption       = "C.C."
+                .Top           = 603
+                .Left          = 810
+                .Width         = 80
+                .Height        = 23
+                .FontName      = "Tahoma"
+                .FontSize      = 8
+                .FontBold      = .T.
+                .ForeColor     = RGB(90, 90, 90)
+                .BackColor     = RGB(255, 255, 255)
+                .Themes        = .F.
+                .SpecialEffect = 0
+                .Visible       = .T.
+            ENDWITH
+            BINDEVENT(par_oPagina.cmd_4c_Ccusto, "Click", THIS, "BtnCcustoClick")
 
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + CHR(13) + ;
