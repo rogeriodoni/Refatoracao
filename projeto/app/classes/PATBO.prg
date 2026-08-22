@@ -119,11 +119,11 @@ DEFINE CLASS PATBO AS BusinessBase
                 "VALUES (" + ;
                 EscaparSQL(loc_cPk) + ", " + ;
                 EscaparSQL(THIS.this_cEmps) + ", " + ;
-                FormatarDataSQL(THIS.this_tDatas) + ", " + ;
+                "GETDATE(), " + ;
                 EscaparSQL(THIS.this_cCodvends) + ", " + ;
                 EscaparSQL(THIS.this_cClientes) + ", " + ;
                 EscaparSQL(THIS.this_cPerguntas) + ", " + ;
-                FormatarNumeroSQL(THIS.this_nVendconcs, 0) + ")"
+                FormatarNumeroSQL(THIS.this_nVendconcs) + ")"
 
             loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL)
 
@@ -155,11 +155,10 @@ DEFINE CLASS PATBO AS BusinessBase
         TRY
             loc_cSQL = "UPDATE SigCdPat SET " + ;
                 "emps = " + EscaparSQL(THIS.this_cEmps) + ", " + ;
-                "datas = " + FormatarDataSQL(THIS.this_tDatas) + ", " + ;
                 "codvends = " + EscaparSQL(THIS.this_cCodvends) + ", " + ;
                 "clientes = " + EscaparSQL(THIS.this_cClientes) + ", " + ;
                 "perguntas = " + EscaparSQL(THIS.this_cPerguntas) + ", " + ;
-                "vendconcs = " + FormatarNumeroSQL(THIS.this_nVendconcs, 0) + ;
+                "vendconcs = " + FormatarNumeroSQL(THIS.this_nVendconcs) + ;
                 " WHERE pkchaves = " + EscaparSQL(THIS.this_cPkchaves)
 
             loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL)
@@ -261,8 +260,8 @@ DEFINE CLASS PATBO AS BusinessBase
     *====================================================================
     * ObterChavePrimaria - Para auditoria
     *====================================================================
-    PROTECTED PROCEDURE ObterChavePrimaria()
+    FUNCTION ObterChavePrimaria()
         RETURN THIS.this_cPkchaves
-    ENDPROC
+    ENDFUNC
 
 ENDDEFINE
