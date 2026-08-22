@@ -1058,6 +1058,15 @@ DEFINE CLASS FormOPE AS FormBase
         loc_lResultado = .F.
         loc_nFiltroSit = 1
 
+        *-- Modo de validacao de UI: criar cursor vazio para testes sem banco
+        IF TYPE("gb_4c_ValidandoUI") = "L" AND gb_4c_ValidandoUI
+            IF !USED("cursor_4c_Dados")
+                SET NULL ON
+                CREATE CURSOR cursor_4c_Dados (dopes C(4), titopes C(30), tipoops N(2,0), situas N(1,0), opers N(1,0))
+            ENDIF
+            RETURN .T.
+        ENDIF
+
         TRY
             *-- Ler filtro de situacao se disponivel
             IF PEMSTATUS(THIS.pgf_4c_Paginas.Page1, "opt_4c_FilSituas", 5)
@@ -1134,7 +1143,9 @@ DEFINE CLASS FormOPE AS FormBase
         LOCAL loc_lResultado
         loc_lResultado = .F.
         TRY
-            IF par_cPagina = "LISTA"
+            *-- Suporta tanto string ("LISTA"/"DADOS") quanto numero (1/2)
+            IF (VARTYPE(par_cPagina) = "N" AND par_cPagina = 1) OR ;
+               (VARTYPE(par_cPagina) = "C" AND UPPER(ALLTRIM(par_cPagina)) = "LISTA")
                 THIS.pgf_4c_Paginas.ActivePage = 1
                 THIS.this_cModoAtual = "LISTA"
             ELSE
@@ -1873,8 +1884,15 @@ DEFINE CLASS FormOPE AS FormBase
     *==========================================================================
     * AjustarBotoesPorModo - Ajusta estado dos botoes conforme modo atual
     *==========================================================================
-    PROTECTED PROCEDURE AjustarBotoesPorModo(par_cModo)
-        *-- Fase B: implementar ajuste de botoes conforme INCLUSAO/ALTERACAO/VISUALIZACAO/LISTA
+    PROCEDURE AjustarBotoesPorModo(par_cModo)
+        LOCAL loc_lHabilitar, loc_lModoEdicao
+        loc_lHabilitar = .T.
+        loc_lModoEdicao = (THIS.this_cModoAtual = "INCLUSAO" OR THIS.this_cModoAtual = "ALTERACAO")
+        IF VARTYPE(par_cModo) = "C" AND !EMPTY(par_cModo)
+            loc_lModoEdicao = (par_cModo = "INCLUSAO" OR par_cModo = "ALTERACAO")
+        ENDIF
+        *-- Habilitar/desabilitar campos conforme modo
+        THIS.HabilitarCampos(loc_lModoEdicao)
     ENDPROC
 
     *==========================================================================
