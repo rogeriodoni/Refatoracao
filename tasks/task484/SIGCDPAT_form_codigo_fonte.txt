@@ -1,0 +1,1022 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGCDPAT.SCX
+* Data/Hora: 22/08/2026 06:46:02
+* Total de registros: 23
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDPAT
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGCDPAT.Pagina.Lista
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGCDPAT.Pagina.Lista
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_cd_empresa
+  Parent: SIGCDPAT.Pagina.Lista
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Dt_inicial
+  Parent: SIGCDPAT.Pagina.Lista
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Dt_final
+  Parent: SIGCDPAT.Pagina.Lista
+  Class: fweditdata
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGCDPAT.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGCDPAT.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGCDPAT.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDatas
+  Parent: SIGCDPAT.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getPergunta
+  Parent: SIGCDPAT.Pagina.Dados
+  Class: fwmemo
+  BaseClass: editbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getClientes
+  Parent: SIGCDPAT.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDEmps
+  Parent: SIGCDPAT.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say7
+  Parent: SIGCDPAT.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGCDPAT.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getEmps
+  Parent: SIGCDPAT.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDVends
+  Parent: SIGCDPAT.Pagina.Dados
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: getVends
+  Parent: SIGCDPAT.Pagina.Dados
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Say8
+  Parent: SIGCDPAT.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: opVendConcs
+  Parent: SIGCDPAT.Pagina.Dados
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 181
+  Left = 62
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPAT
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 599
+  Width = 785
+  DoCreate = .T.
+  Caption = (prompt())
+  Name = "SIGCDPAT"
+  Pagina.ErasePage = .T.
+  Pagina.Lista.cntSombra.lblSombra.Name = "lblSombra"
+  Pagina.Lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  Pagina.Lista.cntSombra.Top = 1
+  Pagina.Lista.cntSombra.Left = -1
+  Pagina.Lista.cntSombra.Name = "cntSombra"
+  Pagina.Lista.Grade.FontName = "Tahoma"
+  Pagina.Lista.Grade.Height = 468
+  Pagina.Lista.Grade.Left = 23
+  Pagina.Lista.Grade.TabIndex = 5
+  Pagina.Lista.Grade.Top = 130
+  Pagina.Lista.Grade.Width = 736
+  Pagina.Lista.Grade.ForeColor = 90,90,90
+  Pagina.Lista.Grade.Name = "Grade"
+  Pagina.Lista.Grupo_op.AutoSize = .F.
+  Pagina.Lista.Grupo_op.Inserir.Top = 5
+  Pagina.Lista.Grupo_op.Inserir.Left = 5
+  Pagina.Lista.Grupo_op.Inserir.Name = "Inserir"
+  Pagina.Lista.Grupo_op.Consultar.Top = 5
+  Pagina.Lista.Grupo_op.Consultar.Left = 81
+  Pagina.Lista.Grupo_op.Consultar.Name = "Consultar"
+  Pagina.Lista.Grupo_op.Alterar.Top = 5
+  Pagina.Lista.Grupo_op.Alterar.Left = 157
+  Pagina.Lista.Grupo_op.Alterar.Name = "Alterar"
+  Pagina.Lista.Grupo_op.Excluir.Top = 5
+  Pagina.Lista.Grupo_op.Excluir.Left = 233
+  Pagina.Lista.Grupo_op.Excluir.Name = "Excluir"
+  Pagina.Lista.Grupo_op.procurar.Top = 5
+  Pagina.Lista.Grupo_op.procurar.Left = 309
+  Pagina.Lista.Grupo_op.procurar.Name = "procurar"
+  Pagina.Lista.Grupo_op.Left = 322
+  Pagina.Lista.Grupo_op.Top = -1
+  Pagina.Lista.Grupo_op.TabIndex = 8
+  Pagina.Lista.Grupo_op.Name = "Grupo_op"
+  Pagina.Lista.Grupo_Saida.Sair.Top = 5
+  Pagina.Lista.Grupo_Saida.Sair.Left = 5
+  Pagina.Lista.Grupo_Saida.Sair.Name = "Sair"
+  Pagina.Lista.Grupo_Saida.Left = 702
+  Pagina.Lista.Grupo_Saida.Top = -1
+  Pagina.Lista.Grupo_Saida.TabIndex = 9
+  Pagina.Lista.Grupo_Saida.Name = "Grupo_Saida"
+  Pagina.Lista.cntFiltros.Top = 49
+  Pagina.Lista.cntFiltros.Left = 141
+  Pagina.Lista.cntFiltros.TabIndex = 11
+  Pagina.Lista.cntFiltros.Name = "cntFiltros"
+  Pagina.Lista.Name = "Lista"
+  Pagina.Dados.Grupo_Salva.AutoSize = .T.
+  Pagina.Dados.Grupo_Salva.Salva.Top = 5
+  Pagina.Dados.Grupo_Salva.Salva.Left = 5
+  Pagina.Dados.Grupo_Salva.Salva.Name = "Salva"
+  Pagina.Dados.Grupo_Salva.Cancelar.Top = 5
+  Pagina.Dados.Grupo_Salva.Cancelar.Left = 80
+  Pagina.Dados.Grupo_Salva.Cancelar.Name = "Cancelar"
+  Pagina.Dados.Grupo_Salva.TabIndex = 9
+  Pagina.Dados.Grupo_Salva.ZOrderSet = 1
+  Pagina.Dados.Grupo_Salva.Name = "Grupo_Salva"
+  Pagina.Dados.Name = "Dados"
+  Pagina.Top = -29
+  Pagina.Left = 0
+  Pagina.Name = "Pagina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPAT.Pagina.Lista.Say2
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "à"
+  Left = 250
+  Top = 105
+  TabIndex = 10
+  ForeColor = 90,90,90
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPAT.Pagina.Lista.Say4
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "\<Empresa :"
+  Left = 71
+  Top = 105
+  TabIndex = 1
+  ForeColor = 90,90,90
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPAT.Pagina.Lista.Get_cd_empresa
+------------------------------------------------------------
+  Height = 23
+  Left = 124
+  MaxLength = 3
+  SpecialEffect = 1
+  TabIndex = 2
+  ToolTipText = "Filtro de Empresa"
+  Top = 101
+  Width = 35
+  Themes = .F.
+  Name = "Get_cd_empresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPAT.Pagina.Lista.Dt_inicial
+------------------------------------------------------------
+  Format = "K"
+  Left = 163
+  SpecialEffect = 1
+  TabIndex = 3
+  ToolTipText = "Filtro de Data Inicial de Lançamentos"
+  Top = 101
+  Name = "Dt_inicial"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPAT.Pagina.Lista.Dt_final
+------------------------------------------------------------
+  Format = "K"
+  Left = 266
+  SpecialEffect = 1
+  TabIndex = 4
+  ToolTipText = "Filtro de Data Final de Lançamentos"
+  Top = 101
+  Name = "Dt_final"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPAT.Pagina.Dados.Say1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Caption = "Cliente :"
+  Left = 106
+  Top = 227
+  TabIndex = 11
+  ForeColor = 90,90,90
+  ZOrderSet = 2
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPAT.Pagina.Dados.Say2
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Caption = "Intenção :"
+  Left = 96
+  Top = 291
+  TabIndex = 13
+  ForeColor = 90,90,90
+  ZOrderSet = 2
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPAT.Pagina.Dados.Say4
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Caption = "Data :"
+  Left = 116
+  Top = 138
+  TabIndex = 12
+  ForeColor = 90,90,90
+  ZOrderSet = 2
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPAT.Pagina.Dados.getDatas
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  ControlSource = "crSigCdPat.datas"
+  Format = "K!"
+  Height = 23
+  InputMask = ""
+  Left = 153
+  MaxLength = 30
+  SpecialEffect = 1
+  TabIndex = 1
+  Top = 134
+  Width = 80
+  ForeColor = 90,90,90
+  Name = "getDatas"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPAT.Pagina.Dados.getPergunta
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Format = "K!"
+  Height = 126
+  Left = 153
+  SpecialEffect = 1
+  TabIndex = 8
+  Top = 288
+  Width = 460
+  ForeColor = 90,90,90
+  ControlSource = "crSigCdPat.Perguntas"
+  NullDisplay = "  "
+  Name = "getPergunta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPAT.Pagina.Dados.getClientes
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  ControlSource = "crSigCdPat.clientes"
+  Format = "K!"
+  Height = 23
+  InputMask = ""
+  Left = 153
+  MaxLength = 30
+  SpecialEffect = 1
+  TabIndex = 6
+  Top = 224
+  Width = 460
+  ForeColor = 90,90,90
+  Name = "getClientes"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPAT.Pagina.Dados.getDEmps
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Height = 23
+  Left = 191
+  SpecialEffect = 1
+  TabIndex = 3
+  Top = 164
+  Width = 422
+  ForeColor = 90,90,90
+  ZOrderSet = 17
+  Name = "getDEmps"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPAT.Pagina.Dados.Say7
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Empresa :"
+  Height = 15
+  Left = 98
+  Top = 169
+  Width = 50
+  TabIndex = 10
+  ForeColor = 90,90,90
+  ZOrderSet = 18
+  Name = "Say7"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPAT.Pagina.Dados.Say3
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = "Conta :"
+  Left = 110
+  Top = 200
+  Width = 38
+  TabIndex = 14
+  ForeColor = 90,90,90
+  ZOrderSet = 9
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPAT.Pagina.Dados.getEmps
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  ControlSource = "crSigcdPat.emps"
+  Height = 23
+  Left = 153
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 164
+  Width = 31
+  ForeColor = 90,90,90
+  ZOrderSet = 19
+  plprocurar = .T.
+  Name = "getEmps"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPAT.Pagina.Dados.getDVends
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Tahoma"
+  FontSize = 8
+  ControlSource = ""
+  Format = "K"
+  Height = 23
+  Left = 240
+  MaxLength = 40
+  SpecialEffect = 1
+  TabIndex = 5
+  Top = 194
+  Width = 373
+  ForeColor = 90,90,90
+  ZOrderSet = 12
+  Name = "getDVends"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPAT.Pagina.Dados.getVends
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = "crSigcdPat.codvends"
+  Format = "K"
+  Height = 23
+  Left = 153
+  MaxLength = 10
+  SpecialEffect = 1
+  TabIndex = 4
+  ToolTipText = ""
+  Top = 194
+  Width = 80
+  ForeColor = 90,90,90
+  ZOrderSet = 13
+  Name = "getVends"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPAT.Pagina.Dados.Say8
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Venda Concluída :"
+  Height = 15
+  Left = 60
+  Top = 258
+  Width = 88
+  TabIndex = 15
+  ForeColor = 90,90,90
+  ZOrderSet = 21
+  Name = "Say8"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPAT.Pagina.Dados.opVendConcs
+------------------------------------------------------------
+  AutoSize = .T.
+  BackStyle = 0
+  Value = 0
+  ControlSource = "crSigCdPat.vendconcs"
+  Height = 25
+  Left = 153
+  SpecialEffect = 0
+  Top = 255
+  Width = 93
+  TabIndex = 7
+  ZOrderSet = 34
+  Name = "opVendConcs"
+  Option1.FontSize = 8
+  Option1.Alignment = 0
+  Option1.BackStyle = 0
+  Option1.Caption = "Sim"
+  Option1.Value = 0
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.AutoSize = .T.
+  Option1.Name = "Option1"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Não"
+  Option2.Left = 51
+  Option2.Top = 5
+  Option2.AutoSize = .T.
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDPAT
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+
+		ThisForm.Pagina.Lista.Dt_inicial.Value = Date() - goSistema.PerFiltros
+		ThisForm.Pagina.Lista.Dt_Final.Value   = Date() + goSistema.PerFiltros	
+		ThisForm.Pagina.Lista.Get_cd_empresa.Value = _Empr
+		ldDtIni = ThisForm.Pagina.Lista.Dt_inicial.Value
+		ldDtFin = ThisForm.Pagina.Lista.Dt_final.Value
+		lcEmpr  = ThisForm.Pagina.Lista.Get_cd_empresa.Value
+		ldDtIni = fDtoSQL(ldDtIni)
+		ldDtFin= fDtoSQL(ldDtFin,'23:59:59')
+		
+		lcQry = [Select * From SigCdPat where Emps = ?lcEmpr And Datas Between ?ldDtIni And ?ldDtFin]
+
+		With .poDataMgr		
+			.AddCursor('SigCdPat', 'pkChaves', 'crSigCdPat', '', ThisForm.Pagina.Lista.Grade, lcQry)
+			.pfSqlTabela(1).pColuna('emps', '', '', 'Empresa', 80, .t.)
+			.pfSqlTabela(1).pColuna('datas', '', '', 'Data', 200, .t.)
+			.pfSqlTabela(1).pColuna('codvends', '', '', 'Vendedor', 100, .t.)
+			.pfSqlTabela(1).pColuna('clientes', '', '', 'Cliente', 300, .t.)
+		EndWith
+
+		Select crSigCdPat
+		Index On datas tag datas
+		Index On clientes tag clientes
+		Set Order To datas
+		=DoDefault()
+		ThisForm.Pagina.Lista.get_cd_empresa.SetFocus()		
+	Else
+		=Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+=DoDefault()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE mativapagina1
+------------------------------------------------------------
+PROCEDURE mativapagina1
+ldDtIni = ThisForm.Pagina.Lista.Dt_inicial.Value
+ldDtFin = ThisForm.Pagina.Lista.Dt_final.Value
+lcEmpr  = ThisForm.Pagina.Lista.Get_cd_empresa.Value
+ldDtIni = fDtoSQL(ldDtIni)
+ldDtFin= fDtoSQL(ldDtFin,[23:59:59])
+
+Dodefault()
+
+*!*	thisform.podatamgr.Requery([crSigCdPat])
+
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.podatamgr.Release
+=DoDefault()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Lista.Grupo_op.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Lista.Grupo_op.Click
+LPARAMETERS opcao
+
+If !dodefault( Opcao )
+	ThisForm.mAtivapagina1
+	Return
+Endif
+
+Select crSigCdPat
+
+* posiciona o cursor de acordo com a opção
+Do Case
+	Case Inlist( ThisForm.pcEscolha, 'INSERIR', 'PROCURAR', 'ALTERAR' )
+		thisform.pagina.dados.getEmps.setfocus	
+	Case Inlist( ThisForm.pcEscolha, 'CONSULTAR', 'EXCLUIR' )
+		thisform.pagina.dados.grupo_salva.salva.setfocus
+Endcase
+
+Select crSigCdPat
+=DoDefault()
+
+**** mostra descricao de empresa e de vendedor ****
+ThisForm.Pagina.Dados.getDEmps.Value = ''
+ThisForm.Pagina.Dados.getDVends.Value = ''
+If InList(ThisForm.pcEscolha, 'ALTERAR', 'CONSULTAR', 'EXCLUIR')
+	ThisForm.poDataMgr.CursorQuery('SigCdEmp', 'crSigCdEmp', 'Cemps', crSigCdpat.Emps)
+	ThisForm.Pagina.Dados.getDEmps.Value = crSigCdEmp.Razas
+	ThisForm.poDataMgr.CursorQuery('SigCdcli', 'crSigCdCli', 'iclis', crSigCdpat.codvends)
+	ThisForm.Pagina.Dados.getDVends.Value = crSigCdCli.rclis
+EndIf
+
+IF ThisForm.pcEscolha='INSERIR'
+	ThisForm.Pagina.Dados.getEmps.value = _empr
+	ThisForm.Pagina.Dados.getDatas.value = DATETIME()
+ENDIF
+ThisForm.Pagina.Dados.Refresh
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+LOCAL lcQuery, lcCon, lcCod
+
+If ThisForm.pcEscolha = 'INSERIR'
+	If IsEmpty(ThisForm.Pagina.Dados.GetClientes.Value)
+		MessageBox( 'Obrigatório Informar o Cliente.', 48, '' )
+		ThisForm.Pagina.Dados.GetClientes.SetFocus
+		Return
+	ENDIF  
+	If IsEmpty(ThisForm.Pagina.Dados.GetVends.Value)
+		MessageBox( 'Obrigatório Informar o Vendedor.', 48, '' )
+		ThisForm.Pagina.Dados.GetVends.SetFocus
+		Return
+	ENDIF  
+
+	Replace datas With datetime() in crSigCdPat
+	Replace pkChaves With fUniqueIds() in crSigCdPat
+ENDIF
+SELECT crSigCdPat
+=DoDefault()
+ThisForm.mAtivapagina1
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+=DoDefault()
+If ThisForm.plCancelar
+	ThisForm.mAtivapagina1
+Endif
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDPAT.Pagina.Lista.Get_cd_empresa
+* Classe: fwget (Base: textbox)
+* Registro: 6
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !Empty(This.Value)
+	= fAcessoEmpresa(Usuar,'C',This.value,ThisForm.Pagina.Lista.get_Cd_Empresa,'',ThisForm.poDataMgr,.t.)
+Else
+	MessageBox('Preenchimento Obrigatorio!',0+48,'Empresa')
+	Return 0
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Nodefault
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDPAT.Pagina.Lista.Dt_inicial
+* Classe: fweditdata (Base: textbox)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+*!*	This.Parent.Dt_final.Setfocus
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If This.Value > This.Parent.Dt_final.Value
+	This.Parent.Dt_Final.Value = This.Value
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDPAT.Pagina.Lista.Dt_final
+* Classe: fweditdata (Base: textbox)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+ldDtIni = ThisForm.Pagina.Lista.Dt_inicial.Value
+ldDtFin = ThisForm.Pagina.Lista.Dt_final.Value
+lcEmpr  = ThisForm.Pagina.Lista.Get_cd_empresa.Value
+ldDtIni = fDtoSQL(ldDtIni)
+ldDtFin= fDtoSQL(ldDtFin,[23:59:59])
+
+thisform.podatamgr.Requery([crSigCdPat])
+
+ThisForm.Pagina.Lista.Grade.SetFocus()
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If This.Value < This.Parent.Dt_Inicial.Value
+	This.Parent.Dt_Inicial.Value = This.Value
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+NoDefault
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDPAT.Pagina.Dados.getDatas
+* Classe: fwget (Base: textbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+RETURN .f.
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDPAT.Pagina.Dados.getPergunta
+* Classe: fwmemo (Base: editbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist(ThisForm.pcEscolha, "INSERIR", "PROCURAR", "ALTERAR")
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDPAT.Pagina.Dados.getClientes
+* Classe: fwget (Base: textbox)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist(ThisForm.pcEscolha, "INSERIR", "PROCURAR", "ALTERAR")
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDPAT.Pagina.Dados.getDEmps
+* Classe: fwget (Base: textbox)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+=fAcessoEmpresa(Usuar, 'D', This.Value, ThisForm.Pagina.Dados.getEmps, ThisForm.Pagina.Dados.getDEmps)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(ThisForm.Pagina.Dados.getEmps.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDPAT.Pagina.Dados.getEmps
+* Classe: fwget (Base: textbox)
+* Registro: 18
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+=fAcessoEmpresa(Usuar, 'C', This.Value, ThisForm.Pagina.Dados.getEmps, ThisForm.Pagina.Dados.getDEmps)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist(ThisForm.pcEscolha, "INSERIR", "PROCURAR", "ALTERAR")
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDPAT.Pagina.Dados.getDVends
+* Classe: textbox (Base: textbox)
+* Registro: 19
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Grupo = ''
+If Not Empty(This.Value)
+	If Not fAcessoContas(Usuar, Grupo, 'D', This.Value, ThisForm.Pagina.Dados.getVends, ThisForm.Pagina.Dados.getDVends)
+		=Messagebox('Acesso Negado!!!', 0+48, '')
+		This.Value = ''
+		This.Refresh
+		ThisForm.Pagina.Dados.getVends.Value = ''
+		ThisForm.Pagina.Dados.getVends.Refresh
+		Return 0
+	EndIf
+Else
+	ThisForm.Pagina.Dados.getVends.Value = ''
+	ThisForm.Pagina.Dados.getVends.Refresh
+EndIf
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(ThisForm.Pagina.Dados.getvends.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDPAT.Pagina.Dados.getVends
+* Classe: textbox (Base: textbox)
+* Registro: 20
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Grupo = ''
+If Not Empty(This.Value)
+	If Not fAcessoContas(Usuar, Grupo, 'C', This.Value, ThisForm.Pagina.Dados.getVends, ThisForm.Pagina.Dados.getDVends)
+		=Messagebox('Acesso Negado!!!', 0+48, '')
+		This.Value = ''
+		This.Refresh
+		ThisForm.Pagina.Dados.getDVends.Value = ''
+		ThisForm.Pagina.Dados.getDVends.Refresh
+		Return 0
+	EndIf
+Else
+	ThisForm.Pagina.Dados.getDVends.Value = ''
+	ThisForm.Pagina.Dados.getDVends.Refresh
+EndIf
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist(ThisForm.pcEscolha, "INSERIR", "PROCURAR", "ALTERAR")
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDPAT.Pagina.Dados.opVendConcs
+* Classe: fwoption (Base: optiongroup)
+* Registro: 22
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If ThisForm.Pagina.Dados.OpVendConcs.Value <> 1
+	ThisForm.Pagina.Dados.OpVendConcs.Value = 2
+Endif
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' )
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGCDPAT
+RESERVED3 (ClassInfo): *iniciadesc 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 27
+================================================================================
