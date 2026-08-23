@@ -1,4 +1,4 @@
-﻿*==============================================================================
+*==============================================================================
 * Formprc.prg - Cadastro de Movimenta" + CHR(231) + CHR(245) + "es Para C" + CHR(243) + "pia
 * Herda de  : FormBase
 * Entidade  : prc
@@ -329,7 +329,7 @@ DEFINE CLASS Formprc AS FormBase
                 .Picture         = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
                 .PicturePosition = 13
                 .Top             = 5
-                .Left            = 917
+                .Left            = 5
                 .Width           = 75
                 .Height          = 75
                 .BackColor       = RGB(255, 255, 255)
@@ -372,13 +372,13 @@ DEFINE CLASS Formprc AS FormBase
             .Visible            = .T.
             .Column1.Width      = 200
             .Column1.ReadOnly   = .T.
-            .Column1.Header1.Caption = "Processo"
+            .Column1.Header1.Caption = "Processos"
             .Column2.Width      = 60
             .Column2.ReadOnly   = .T.
             .Column2.Header1.Caption = "Emp"
             .Column3.Width      = 80
             .Column3.ReadOnly   = .T.
-            .Column3.Header1.Caption = "C" + CHR(243) + "digo"
+            .Column3.Header1.Caption = "C" + CHR(243) + "digos"
         ENDWITH
 
         *-- BINDEVENTs
@@ -514,7 +514,7 @@ DEFINE CLASS Formprc AS FormBase
 
         loc_oPagina.AddObject("txt_4c_Codigos", "TextBox")
         WITH loc_oPagina.txt_4c_Codigos
-            .Value         = .F.
+            .Value         = 0
             .Top           = 51
             .Left          = 343
             .Width         = 52
@@ -552,7 +552,6 @@ DEFINE CLASS Formprc AS FormBase
             .Value        = 2
             .Visible      = .T.
             .Buttons(1).Caption   = "Sim"
-            .Buttons(1).Value     = .T.
             .Buttons(1).Width     = 40
             .Buttons(1).Left      = 0
             .Buttons(1).Top       = 0
@@ -560,7 +559,6 @@ DEFINE CLASS Formprc AS FormBase
             .Buttons(1).ForeColor = RGB(90, 90, 90)
             .Buttons(1).Themes    = .F.
             .Buttons(2).Caption   = "N" + CHR(227) + "o"
-            .Buttons(2).Value     = 2
             .Buttons(2).Width     = 43
             .Buttons(2).Left      = 40
             .Buttons(2).Top       = 0
@@ -594,7 +592,6 @@ DEFINE CLASS Formprc AS FormBase
             .Value        = 1
             .Visible      = .T.
             .Buttons(1).Caption   = "Op"
-            .Buttons(1).Value     = .T.
             .Buttons(1).Width     = 30
             .Buttons(1).Left      = 0
             .Buttons(1).Top       = 0
@@ -602,7 +599,6 @@ DEFINE CLASS Formprc AS FormBase
             .Buttons(1).ForeColor = RGB(90, 90, 90)
             .Buttons(1).Themes    = .F.
             .Buttons(2).Caption   = "Dest"
-            .Buttons(2).Value     = 5
             .Buttons(2).Width     = 38
             .Buttons(2).Left      = 30
             .Buttons(2).Top       = 0
@@ -636,7 +632,6 @@ DEFINE CLASS Formprc AS FormBase
             .Value        = 2
             .Visible      = .T.
             .Buttons(1).Caption   = "Sim"
-            .Buttons(1).Value     = .T.
             .Buttons(1).Width     = 35
             .Buttons(1).Left      = 0
             .Buttons(1).Top       = 0
@@ -644,7 +639,6 @@ DEFINE CLASS Formprc AS FormBase
             .Buttons(1).ForeColor = RGB(90, 90, 90)
             .Buttons(1).Themes    = .F.
             .Buttons(2).Caption   = "N" + CHR(227) + "o"
-            .Buttons(2).Value     = 2
             .Buttons(2).Width     = 40
             .Buttons(2).Left      = 35
             .Buttons(2).Top       = 0
@@ -678,7 +672,6 @@ DEFINE CLASS Formprc AS FormBase
             .Value        = 2
             .Visible      = .T.
             .Buttons(1).Caption   = "Sim"
-            .Buttons(1).Value     = .T.
             .Buttons(1).Width     = 40
             .Buttons(1).Left      = 0
             .Buttons(1).Top       = 0
@@ -686,7 +679,6 @@ DEFINE CLASS Formprc AS FormBase
             .Buttons(1).ForeColor = RGB(90, 90, 90)
             .Buttons(1).Themes    = .F.
             .Buttons(2).Caption   = "N" + CHR(227) + "o"
-            .Buttons(2).Value     = 2
             .Buttons(2).Width     = 44
             .Buttons(2).Left      = 40
             .Buttons(2).Top       = 0
@@ -720,7 +712,6 @@ DEFINE CLASS Formprc AS FormBase
             .Value        = 1
             .Visible      = .T.
             .Buttons(1).Caption   = "Ambos"
-            .Buttons(1).Value     = .T.
             .Buttons(1).Width     = 50
             .Buttons(1).Left      = 0
             .Buttons(1).Top       = 0
@@ -728,7 +719,6 @@ DEFINE CLASS Formprc AS FormBase
             .Buttons(1).ForeColor = RGB(90, 90, 90)
             .Buttons(1).Themes    = .F.
             .Buttons(2).Caption   = "S" + CHR(243) + " Dados"
-            .Buttons(2).Value     = 2
             .Buttons(2).Width     = 62
             .Buttons(2).Left      = 50
             .Buttons(2).Top       = 0
@@ -736,7 +726,6 @@ DEFINE CLASS Formprc AS FormBase
             .Buttons(2).ForeColor = RGB(90, 90, 90)
             .Buttons(2).Themes    = .F.
             .Buttons(3).Caption   = "S" + CHR(243) + " Fiscais"
-            .Buttons(3).Value     = 3
             .Buttons(3).Width     = 65
             .Buttons(3).Left      = 112
             .Buttons(3).Top       = 0
@@ -744,7 +733,6 @@ DEFINE CLASS Formprc AS FormBase
             .Buttons(3).ForeColor = RGB(90, 90, 90)
             .Buttons(3).Themes    = .F.
             .Buttons(4).Caption   = "Nenhum"
-            .Buttons(4).Value     = 4
             .Buttons(4).Width     = 58
             .Buttons(4).Left      = 177
             .Buttons(4).Top       = 0
@@ -1011,7 +999,6 @@ DEFINE CLASS Formprc AS FormBase
             .Value        = 1
             .Visible      = .T.
             .Buttons(1).Caption   = "Produtos"
-            .Buttons(1).Value     = .T.
             .Buttons(1).Width     = 65
             .Buttons(1).Left      = 0
             .Buttons(1).Top       = 0
@@ -1019,7 +1006,6 @@ DEFINE CLASS Formprc AS FormBase
             .Buttons(1).ForeColor = RGB(90, 90, 90)
             .Buttons(1).Themes    = .F.
             .Buttons(2).Caption   = "Serv." + CHR(47) + "Prod."
-            .Buttons(2).Value     = 2
             .Buttons(2).Width     = 75
             .Buttons(2).Left      = 65
             .Buttons(2).Top       = 0
@@ -1027,7 +1013,6 @@ DEFINE CLASS Formprc AS FormBase
             .Buttons(2).ForeColor = RGB(90, 90, 90)
             .Buttons(2).Themes    = .F.
             .Buttons(3).Caption   = "Servi" + CHR(231) + "os"
-            .Buttons(3).Value     = 3
             .Buttons(3).Width     = 65
             .Buttons(3).Left      = 140
             .Buttons(3).Top       = 0
@@ -1035,7 +1020,6 @@ DEFINE CLASS Formprc AS FormBase
             .Buttons(3).ForeColor = RGB(90, 90, 90)
             .Buttons(3).Themes    = .F.
             .Buttons(4).Caption   = "S/N.Fiscal"
-            .Buttons(4).Value     = 4
             .Buttons(4).Width     = 75
             .Buttons(4).Left      = 205
             .Buttons(4).Top       = 0
@@ -1043,7 +1027,6 @@ DEFINE CLASS Formprc AS FormBase
             .Buttons(4).ForeColor = RGB(90, 90, 90)
             .Buttons(4).Themes    = .F.
             .Buttons(5).Caption   = "Todos"
-            .Buttons(5).Value     = 5
             .Buttons(5).Width     = 55
             .Buttons(5).Left      = 280
             .Buttons(5).Top       = 0
@@ -1076,7 +1059,6 @@ DEFINE CLASS Formprc AS FormBase
             .Value        = 1
             .Visible      = .T.
             .Buttons(1).Caption   = "Produtos"
-            .Buttons(1).Value     = .T.
             .Buttons(1).Width     = 65
             .Buttons(1).Left      = 0
             .Buttons(1).Top       = 0
@@ -1084,7 +1066,6 @@ DEFINE CLASS Formprc AS FormBase
             .Buttons(1).ForeColor = RGB(90, 90, 90)
             .Buttons(1).Themes    = .F.
             .Buttons(2).Caption   = "Serv." + CHR(47) + "Prod."
-            .Buttons(2).Value     = 2
             .Buttons(2).Width     = 75
             .Buttons(2).Left      = 65
             .Buttons(2).Top       = 0
@@ -1092,7 +1073,6 @@ DEFINE CLASS Formprc AS FormBase
             .Buttons(2).ForeColor = RGB(90, 90, 90)
             .Buttons(2).Themes    = .F.
             .Buttons(3).Caption   = "Servi" + CHR(231) + "os"
-            .Buttons(3).Value     = 3
             .Buttons(3).Width     = 65
             .Buttons(3).Left      = 140
             .Buttons(3).Top       = 0
@@ -1100,7 +1080,6 @@ DEFINE CLASS Formprc AS FormBase
             .Buttons(3).ForeColor = RGB(90, 90, 90)
             .Buttons(3).Themes    = .F.
             .Buttons(4).Caption   = "Todos"
-            .Buttons(4).Value     = 4
             .Buttons(4).Width     = 55
             .Buttons(4).Left      = 205
             .Buttons(4).Top       = 0
@@ -1184,7 +1163,6 @@ DEFINE CLASS Formprc AS FormBase
             .Value = 1
             .Visible = .T.
             .Buttons(1).Caption   = "Sim"
-            .Buttons(1).Value     = .T.
             .Buttons(1).Width     = 40
             .Buttons(1).Left      = 0
             .Buttons(1).Top       = 0
@@ -1192,7 +1170,6 @@ DEFINE CLASS Formprc AS FormBase
             .Buttons(1).ForeColor = RGB(90, 90, 90)
             .Buttons(1).Themes    = .F.
             .Buttons(2).Caption   = "N" + CHR(227) + "o"
-            .Buttons(2).Value     = 2
             .Buttons(2).Width     = 40
             .Buttons(2).Left      = 40
             .Buttons(2).Top       = 0
@@ -1200,7 +1177,6 @@ DEFINE CLASS Formprc AS FormBase
             .Buttons(2).ForeColor = RGB(90, 90, 90)
             .Buttons(2).Themes    = .F.
             .Buttons(3).Caption   = "Divis" + CHR(227) + "o"
-            .Buttons(3).Value     = 3
             .Buttons(3).Width     = 70
             .Buttons(3).Left      = 80
             .Buttons(3).Top       = 0
@@ -1233,7 +1209,6 @@ DEFINE CLASS Formprc AS FormBase
             .Value = 2
             .Visible = .T.
             .Buttons(1).Caption   = "Sim"
-            .Buttons(1).Value     = .T.
             .Buttons(1).Width     = 35
             .Buttons(1).Left      = 0
             .Buttons(1).Top       = 0
@@ -1241,7 +1216,6 @@ DEFINE CLASS Formprc AS FormBase
             .Buttons(1).ForeColor = RGB(90, 90, 90)
             .Buttons(1).Themes    = .F.
             .Buttons(2).Caption   = "N" + CHR(227) + "o"
-            .Buttons(2).Value     = 2
             .Buttons(2).Width     = 40
             .Buttons(2).Left      = 35
             .Buttons(2).Top       = 0
@@ -1274,7 +1248,6 @@ DEFINE CLASS Formprc AS FormBase
             .Value = 2
             .Visible = .T.
             .Buttons(1).Caption   = "Sim"
-            .Buttons(1).Value     = .T.
             .Buttons(1).Width     = 35
             .Buttons(1).Left      = 0
             .Buttons(1).Top       = 0
@@ -1282,7 +1255,6 @@ DEFINE CLASS Formprc AS FormBase
             .Buttons(1).ForeColor = RGB(90, 90, 90)
             .Buttons(1).Themes    = .F.
             .Buttons(2).Caption   = "N" + CHR(227) + "o"
-            .Buttons(2).Value     = 2
             .Buttons(2).Width     = 40
             .Buttons(2).Left      = 35
             .Buttons(2).Top       = 0
@@ -1315,7 +1287,6 @@ DEFINE CLASS Formprc AS FormBase
             .Value = 2
             .Visible = .T.
             .Buttons(1).Caption   = "Sim"
-            .Buttons(1).Value     = .T.
             .Buttons(1).Width     = 35
             .Buttons(1).Left      = 0
             .Buttons(1).Top       = 0
@@ -1323,7 +1294,6 @@ DEFINE CLASS Formprc AS FormBase
             .Buttons(1).ForeColor = RGB(90, 90, 90)
             .Buttons(1).Themes    = .F.
             .Buttons(2).Caption   = "N" + CHR(227) + "o"
-            .Buttons(2).Value     = 2
             .Buttons(2).Width     = 40
             .Buttons(2).Left      = 35
             .Buttons(2).Top       = 0
@@ -1356,7 +1326,6 @@ DEFINE CLASS Formprc AS FormBase
             .Value = 1
             .Visible = .T.
             .Buttons(1).Caption   = "Origem"
-            .Buttons(1).Value     = .T.
             .Buttons(1).Width     = 55
             .Buttons(1).Left      = 0
             .Buttons(1).Top       = 0
@@ -1364,7 +1333,6 @@ DEFINE CLASS Formprc AS FormBase
             .Buttons(1).ForeColor = RGB(90, 90, 90)
             .Buttons(1).Themes    = .F.
             .Buttons(2).Caption   = "Destino"
-            .Buttons(2).Value     = 2
             .Buttons(2).Width     = 60
             .Buttons(2).Left      = 55
             .Buttons(2).Top       = 0
@@ -1397,7 +1365,6 @@ DEFINE CLASS Formprc AS FormBase
             .Value = 2
             .Visible = .T.
             .Buttons(1).Caption   = "Sim"
-            .Buttons(1).Value     = .T.
             .Buttons(1).Width     = 35
             .Buttons(1).Left      = 0
             .Buttons(1).Top       = 0
@@ -1405,7 +1372,6 @@ DEFINE CLASS Formprc AS FormBase
             .Buttons(1).ForeColor = RGB(90, 90, 90)
             .Buttons(1).Themes    = .F.
             .Buttons(2).Caption   = "N" + CHR(227) + "o"
-            .Buttons(2).Value     = 2
             .Buttons(2).Width     = 40
             .Buttons(2).Left      = 35
             .Buttons(2).Top       = 0
@@ -1438,7 +1404,6 @@ DEFINE CLASS Formprc AS FormBase
             .Value = 2
             .Visible = .T.
             .Buttons(1).Caption   = "Sim"
-            .Buttons(1).Value     = .T.
             .Buttons(1).Width     = 35
             .Buttons(1).Left      = 0
             .Buttons(1).Top       = 0
@@ -1446,7 +1411,6 @@ DEFINE CLASS Formprc AS FormBase
             .Buttons(1).ForeColor = RGB(90, 90, 90)
             .Buttons(1).Themes    = .F.
             .Buttons(2).Caption   = "N" + CHR(227) + "o"
-            .Buttons(2).Value     = 2
             .Buttons(2).Width     = 40
             .Buttons(2).Left      = 35
             .Buttons(2).Top       = 0
@@ -1479,7 +1443,6 @@ DEFINE CLASS Formprc AS FormBase
             .Value = 1
             .Visible = .T.
             .Buttons(1).Caption   = "Sim"
-            .Buttons(1).Value     = .T.
             .Buttons(1).Width     = 35
             .Buttons(1).Left      = 0
             .Buttons(1).Top       = 0
@@ -1487,7 +1450,6 @@ DEFINE CLASS Formprc AS FormBase
             .Buttons(1).ForeColor = RGB(90, 90, 90)
             .Buttons(1).Themes    = .F.
             .Buttons(2).Caption   = "Divis" + CHR(227) + "o"
-            .Buttons(2).Value     = 3
             .Buttons(2).Width     = 60
             .Buttons(2).Left      = 35
             .Buttons(2).Top       = 0
@@ -1495,7 +1457,6 @@ DEFINE CLASS Formprc AS FormBase
             .Buttons(2).ForeColor = RGB(90, 90, 90)
             .Buttons(2).Themes    = .F.
             .Buttons(3).Caption   = "N" + CHR(227) + "o"
-            .Buttons(3).Value     = 2
             .Buttons(3).Width     = 40
             .Buttons(3).Left      = 95
             .Buttons(3).Top       = 0
@@ -1530,7 +1491,6 @@ DEFINE CLASS Formprc AS FormBase
             .Value = 1
             .Visible = .T.
             .Buttons(1).Caption   = "Igual"
-            .Buttons(1).Value     = .T.
             .Buttons(1).Width     = 42
             .Buttons(1).Left      = 0
             .Buttons(1).Top       = 0
@@ -1538,7 +1498,6 @@ DEFINE CLASS Formprc AS FormBase
             .Buttons(1).ForeColor = RGB(90, 90, 90)
             .Buttons(1).Themes    = .F.
             .Buttons(2).Caption   = "Drive"
-            .Buttons(2).Value     = 2
             .Buttons(2).Width     = 42
             .Buttons(2).Left      = 42
             .Buttons(2).Top       = 0
@@ -1546,7 +1505,6 @@ DEFINE CLASS Formprc AS FormBase
             .Buttons(2).ForeColor = RGB(90, 90, 90)
             .Buttons(2).Themes    = .F.
             .Buttons(3).Caption   = "Config."
-            .Buttons(3).Value     = 3
             .Buttons(3).Width     = 46
             .Buttons(3).Left      = 84
             .Buttons(3).Top       = 0
@@ -1579,7 +1537,6 @@ DEFINE CLASS Formprc AS FormBase
             .Value = 2
             .Visible = .T.
             .Buttons(1).Caption   = "Sim"
-            .Buttons(1).Value     = .T.
             .Buttons(1).Width     = 35
             .Buttons(1).Left      = 0
             .Buttons(1).Top       = 0
@@ -1587,7 +1544,6 @@ DEFINE CLASS Formprc AS FormBase
             .Buttons(1).ForeColor = RGB(90, 90, 90)
             .Buttons(1).Themes    = .F.
             .Buttons(2).Caption   = "N" + CHR(227) + "o"
-            .Buttons(2).Value     = 2
             .Buttons(2).Width     = 40
             .Buttons(2).Left      = 35
             .Buttons(2).Top       = 0
@@ -1620,7 +1576,6 @@ DEFINE CLASS Formprc AS FormBase
             .Value = 2
             .Visible = .T.
             .Buttons(1).Caption   = "Sim"
-            .Buttons(1).Value     = .T.
             .Buttons(1).Width     = 35
             .Buttons(1).Left      = 0
             .Buttons(1).Top       = 0
@@ -1628,7 +1583,6 @@ DEFINE CLASS Formprc AS FormBase
             .Buttons(1).ForeColor = RGB(90, 90, 90)
             .Buttons(1).Themes    = .F.
             .Buttons(2).Caption   = "N" + CHR(227) + "o"
-            .Buttons(2).Value     = 2
             .Buttons(2).Width     = 40
             .Buttons(2).Left      = 35
             .Buttons(2).Top       = 0
@@ -1661,7 +1615,6 @@ DEFINE CLASS Formprc AS FormBase
             .Value = 2
             .Visible = .T.
             .Buttons(1).Caption   = "Sim"
-            .Buttons(1).Value     = .T.
             .Buttons(1).Width     = 35
             .Buttons(1).Left      = 0
             .Buttons(1).Top       = 0
@@ -1669,7 +1622,6 @@ DEFINE CLASS Formprc AS FormBase
             .Buttons(1).ForeColor = RGB(90, 90, 90)
             .Buttons(1).Themes    = .F.
             .Buttons(2).Caption   = "N" + CHR(227) + "o"
-            .Buttons(2).Value     = 2
             .Buttons(2).Width     = 40
             .Buttons(2).Left      = 35
             .Buttons(2).Top       = 0
@@ -1702,7 +1654,6 @@ DEFINE CLASS Formprc AS FormBase
             .Value = 2
             .Visible = .T.
             .Buttons(1).Caption   = "Sim"
-            .Buttons(1).Value     = .T.
             .Buttons(1).Width     = 35
             .Buttons(1).Left      = 0
             .Buttons(1).Top       = 0
@@ -1710,7 +1661,6 @@ DEFINE CLASS Formprc AS FormBase
             .Buttons(1).ForeColor = RGB(90, 90, 90)
             .Buttons(1).Themes    = .F.
             .Buttons(2).Caption   = "N" + CHR(227) + "o"
-            .Buttons(2).Value     = 2
             .Buttons(2).Width     = 40
             .Buttons(2).Left      = 35
             .Buttons(2).Top       = 0
@@ -1743,7 +1693,6 @@ DEFINE CLASS Formprc AS FormBase
             .Value = 2
             .Visible = .T.
             .Buttons(1).Caption   = "Sim"
-            .Buttons(1).Value     = .T.
             .Buttons(1).Width     = 35
             .Buttons(1).Left      = 0
             .Buttons(1).Top       = 0
@@ -1751,7 +1700,6 @@ DEFINE CLASS Formprc AS FormBase
             .Buttons(1).ForeColor = RGB(90, 90, 90)
             .Buttons(1).Themes    = .F.
             .Buttons(2).Caption   = "N" + CHR(227) + "o"
-            .Buttons(2).Value     = 2
             .Buttons(2).Width     = 40
             .Buttons(2).Left      = 35
             .Buttons(2).Top       = 0
@@ -1784,7 +1732,6 @@ DEFINE CLASS Formprc AS FormBase
             .Value = 2
             .Visible = .T.
             .Buttons(1).Caption   = "Sim"
-            .Buttons(1).Value     = .T.
             .Buttons(1).Width     = 35
             .Buttons(1).Left      = 0
             .Buttons(1).Top       = 0
@@ -1792,7 +1739,6 @@ DEFINE CLASS Formprc AS FormBase
             .Buttons(1).ForeColor = RGB(90, 90, 90)
             .Buttons(1).Themes    = .F.
             .Buttons(2).Caption   = "N" + CHR(227) + "o"
-            .Buttons(2).Value     = 2
             .Buttons(2).Width     = 40
             .Buttons(2).Left      = 35
             .Buttons(2).Top       = 0
@@ -1827,7 +1773,6 @@ DEFINE CLASS Formprc AS FormBase
             .Value = 2
             .Visible = .T.
             .Buttons(1).Caption   = "Sim"
-            .Buttons(1).Value     = .T.
             .Buttons(1).Width     = 35
             .Buttons(1).Left      = 0
             .Buttons(1).Top       = 0
@@ -1835,7 +1780,6 @@ DEFINE CLASS Formprc AS FormBase
             .Buttons(1).ForeColor = RGB(90, 90, 90)
             .Buttons(1).Themes    = .F.
             .Buttons(2).Caption   = "N" + CHR(227) + "o"
-            .Buttons(2).Value     = 2
             .Buttons(2).Width     = 40
             .Buttons(2).Left      = 35
             .Buttons(2).Top       = 0
@@ -1868,7 +1812,6 @@ DEFINE CLASS Formprc AS FormBase
             .Value = 2
             .Visible = .T.
             .Buttons(1).Caption   = "Sim"
-            .Buttons(1).Value     = .T.
             .Buttons(1).Width     = 35
             .Buttons(1).Left      = 0
             .Buttons(1).Top       = 0
@@ -1876,7 +1819,6 @@ DEFINE CLASS Formprc AS FormBase
             .Buttons(1).ForeColor = RGB(90, 90, 90)
             .Buttons(1).Themes    = .F.
             .Buttons(2).Caption   = "N" + CHR(227) + "o"
-            .Buttons(2).Value     = 2
             .Buttons(2).Width     = 40
             .Buttons(2).Left      = 35
             .Buttons(2).Top       = 0
@@ -1909,7 +1851,6 @@ DEFINE CLASS Formprc AS FormBase
             .Value = 2
             .Visible = .T.
             .Buttons(1).Caption   = "Sim"
-            .Buttons(1).Value     = .T.
             .Buttons(1).Width     = 35
             .Buttons(1).Left      = 0
             .Buttons(1).Top       = 0
@@ -1917,7 +1858,6 @@ DEFINE CLASS Formprc AS FormBase
             .Buttons(1).ForeColor = RGB(90, 90, 90)
             .Buttons(1).Themes    = .F.
             .Buttons(2).Caption   = "N" + CHR(227) + "o"
-            .Buttons(2).Value     = 2
             .Buttons(2).Width     = 40
             .Buttons(2).Left      = 35
             .Buttons(2).Top       = 0
@@ -1950,7 +1890,6 @@ DEFINE CLASS Formprc AS FormBase
             .Value = 2
             .Visible = .T.
             .Buttons(1).Caption   = "Sim"
-            .Buttons(1).Value     = .T.
             .Buttons(1).Width     = 35
             .Buttons(1).Left      = 0
             .Buttons(1).Top       = 0
@@ -1958,7 +1897,6 @@ DEFINE CLASS Formprc AS FormBase
             .Buttons(1).ForeColor = RGB(90, 90, 90)
             .Buttons(1).Themes    = .F.
             .Buttons(2).Caption   = "N" + CHR(227) + "o"
-            .Buttons(2).Value     = 2
             .Buttons(2).Width     = 40
             .Buttons(2).Left      = 35
             .Buttons(2).Top       = 0
@@ -1991,7 +1929,6 @@ DEFINE CLASS Formprc AS FormBase
             .Value = 2
             .Visible = .T.
             .Buttons(1).Caption   = "Sim"
-            .Buttons(1).Value     = .T.
             .Buttons(1).Width     = 35
             .Buttons(1).Left      = 0
             .Buttons(1).Top       = 0
@@ -1999,7 +1936,6 @@ DEFINE CLASS Formprc AS FormBase
             .Buttons(1).ForeColor = RGB(90, 90, 90)
             .Buttons(1).Themes    = .F.
             .Buttons(2).Caption   = "N" + CHR(227) + "o"
-            .Buttons(2).Value     = 2
             .Buttons(2).Width     = 40
             .Buttons(2).Left      = 35
             .Buttons(2).Top       = 0
@@ -2032,7 +1968,6 @@ DEFINE CLASS Formprc AS FormBase
             .Value = 2
             .Visible = .T.
             .Buttons(1).Caption   = "Sim"
-            .Buttons(1).Value     = .T.
             .Buttons(1).Width     = 35
             .Buttons(1).Left      = 0
             .Buttons(1).Top       = 0
@@ -2040,7 +1975,6 @@ DEFINE CLASS Formprc AS FormBase
             .Buttons(1).ForeColor = RGB(90, 90, 90)
             .Buttons(1).Themes    = .F.
             .Buttons(2).Caption   = "N" + CHR(227) + "o"
-            .Buttons(2).Value     = 2
             .Buttons(2).Width     = 40
             .Buttons(2).Left      = 35
             .Buttons(2).Top       = 0
@@ -2075,7 +2009,6 @@ DEFINE CLASS Formprc AS FormBase
             .Value = 1
             .Visible = .T.
             .Buttons(1).Caption   = "Igual"
-            .Buttons(1).Value     = .T.
             .Buttons(1).Width     = 40
             .Buttons(1).Left      = 0
             .Buttons(1).Top       = 0
@@ -2083,7 +2016,6 @@ DEFINE CLASS Formprc AS FormBase
             .Buttons(1).ForeColor = RGB(90, 90, 90)
             .Buttons(1).Themes    = .F.
             .Buttons(2).Caption   = "Aberto"
-            .Buttons(2).Value     = 2
             .Buttons(2).Width     = 50
             .Buttons(2).Left      = 40
             .Buttons(2).Top       = 0
@@ -2091,7 +2023,6 @@ DEFINE CLASS Formprc AS FormBase
             .Buttons(2).ForeColor = RGB(90, 90, 90)
             .Buttons(2).Themes    = .F.
             .Buttons(3).Caption   = "Fech."
-            .Buttons(3).Value     = 3
             .Buttons(3).Width     = 40
             .Buttons(3).Left      = 90
             .Buttons(3).Top       = 0
@@ -2124,7 +2055,6 @@ DEFINE CLASS Formprc AS FormBase
             .Value = 1
             .Visible = .T.
             .Buttons(1).Caption   = "N" + CHR(227) + "o"
-            .Buttons(1).Value     = .T.
             .Buttons(1).Width     = 35
             .Buttons(1).Left      = 0
             .Buttons(1).Top       = 0
@@ -2132,7 +2062,6 @@ DEFINE CLASS Formprc AS FormBase
             .Buttons(1).ForeColor = RGB(90, 90, 90)
             .Buttons(1).Themes    = .F.
             .Buttons(2).Caption   = "Sim"
-            .Buttons(2).Value     = 2
             .Buttons(2).Width     = 35
             .Buttons(2).Left      = 35
             .Buttons(2).Top       = 0
@@ -2140,7 +2069,6 @@ DEFINE CLASS Formprc AS FormBase
             .Buttons(2).ForeColor = RGB(90, 90, 90)
             .Buttons(2).Themes    = .F.
             .Buttons(3).Caption   = "Dest."
-            .Buttons(3).Value     = 3
             .Buttons(3).Width     = 40
             .Buttons(3).Left      = 70
             .Buttons(3).Top       = 0
@@ -2173,7 +2101,6 @@ DEFINE CLASS Formprc AS FormBase
             .Value = 2
             .Visible = .T.
             .Buttons(1).Caption   = "Sim"
-            .Buttons(1).Value     = .T.
             .Buttons(1).Width     = 35
             .Buttons(1).Left      = 0
             .Buttons(1).Top       = 0
@@ -2181,7 +2108,6 @@ DEFINE CLASS Formprc AS FormBase
             .Buttons(1).ForeColor = RGB(90, 90, 90)
             .Buttons(1).Themes    = .F.
             .Buttons(2).Caption   = "N" + CHR(227) + "o"
-            .Buttons(2).Value     = 2
             .Buttons(2).Width     = 40
             .Buttons(2).Left      = 35
             .Buttons(2).Top       = 0
@@ -2214,7 +2140,6 @@ DEFINE CLASS Formprc AS FormBase
             .Value = 2
             .Visible = .T.
             .Buttons(1).Caption   = "Sim"
-            .Buttons(1).Value     = .T.
             .Buttons(1).Width     = 35
             .Buttons(1).Left      = 0
             .Buttons(1).Top       = 0
@@ -2222,7 +2147,6 @@ DEFINE CLASS Formprc AS FormBase
             .Buttons(1).ForeColor = RGB(90, 90, 90)
             .Buttons(1).Themes    = .F.
             .Buttons(2).Caption   = "N" + CHR(227) + "o"
-            .Buttons(2).Value     = 2
             .Buttons(2).Width     = 40
             .Buttons(2).Left      = 35
             .Buttons(2).Top       = 0
@@ -2246,7 +2170,7 @@ DEFINE CLASS Formprc AS FormBase
 
         loc_oPagina.AddObject("txt_4c_Toleras", "TextBox")
         WITH loc_oPagina.txt_4c_Toleras
-            .Value         = .F.
+            .Value         = 0
             .Top           = 554
             .Left          = 90
             .Width         = 80
@@ -2416,9 +2340,9 @@ DEFINE CLASS Formprc AS FormBase
                         loc_oGrid.Column1.ControlSource = "cursor_4c_Dados.processos"
                         loc_oGrid.Column2.ControlSource = "cursor_4c_Dados.emps"
                         loc_oGrid.Column3.ControlSource = "cursor_4c_Dados.codigos"
-                        loc_oGrid.Column1.Header1.Caption = "Processo"
+                        loc_oGrid.Column1.Header1.Caption = "Processos"
                         loc_oGrid.Column2.Header1.Caption = "Emp"
-                        loc_oGrid.Column3.Header1.Caption = "C" + CHR(243) + "digo"
+                        loc_oGrid.Column3.Header1.Caption = "C" + CHR(243) + "digos"
                         THIS.FormatarGridLista(loc_oGrid)
                     ENDIF
                     loc_lResultado = .T.
@@ -2968,10 +2892,10 @@ DEFINE CLASS Formprc AS FormBase
             loc_oPg2.txt_4c_Processos.Value = ""
         ENDIF
         IF PEMSTATUS(loc_oPg2, "txt_4c_Codigos", 5)
-            loc_oPg2.txt_4c_Codigos.Value = .F.
+            loc_oPg2.txt_4c_Codigos.Value = 0
         ENDIF
         IF PEMSTATUS(loc_oPg2, "txt_4c_Toleras", 5)
-            loc_oPg2.txt_4c_Toleras.Value = .F.
+            loc_oPg2.txt_4c_Toleras.Value = 0
         ENDIF
         IF PEMSTATUS(loc_oPg2, "obj_4c_OptFiscal", 5)
             loc_oPg2.obj_4c_OptFiscal.Value = 2
@@ -3202,9 +3126,9 @@ DEFINE CLASS Formprc AS FormBase
                         loc_oGrid.Column1.ControlSource = "cursor_4c_Dados.processos"
                         loc_oGrid.Column2.ControlSource = "cursor_4c_Dados.emps"
                         loc_oGrid.Column3.ControlSource = "cursor_4c_Dados.codigos"
-                        loc_oGrid.Column1.Header1.Caption = "Processo"
+                        loc_oGrid.Column1.Header1.Caption = "Processos"
                         loc_oGrid.Column2.Header1.Caption = "Emp"
-                        loc_oGrid.Column3.Header1.Caption = "C" + CHR(243) + "digo"
+                        loc_oGrid.Column3.Header1.Caption = "C" + CHR(243) + "digos"
                         THIS.FormatarGridLista(loc_oGrid)
                     ENDIF
                 ENDIF
