@@ -1,0 +1,7 @@
+﻿Nenhum `KeyDown` restante em BINDEVENT. S├│ coment├írios explicativos. As tr├¬s mudan├ºas foram aplicadas corretamente:
+
+1. **Linha 661**: `BINDEVENT(txt_4c_Cgrus, "KeyDown", ...)` ÔåÆ `"KeyPress"`, handler `TxtCgrusKeyPress`
+2. **Linha 906**: `BINDEVENT(txt_4c_Ifors, "KeyDown", ...)` ÔåÆ `"KeyPress"`, handler `TxtIforsKeyPress`
+3. **M├®todos**: `TxtCgrusKeyDown` / `TxtIforsKeyDown` renomeados para `TxtCgrusKeyPress` / `TxtIforsKeyPress`, com detec├º├úo de tecla de fun├º├úo via `par_nKeyCode = 0` (em `KeyPress`, teclas de fun├º├úo como F4 n├úo t├¬m c├│digo ASCII, produzem 0 ÔÇö diferente de `KeyDown` onde usam c├│digo virtual 115)
+
+**Causa raiz**: `BINDEVENT` em VFP9 n├úo suporta o evento `"KeyDown"` em controles base. Apenas eventos como `"KeyPress"`, `"Click"`, `"LostFocus"`, `"InteractiveChange"` s├úo bind├íveis. Tentativa de bindar `"KeyDown"` resulta em `Property KeyDown is not found` na instancia├º├úo.

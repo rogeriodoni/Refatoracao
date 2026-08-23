@@ -1,0 +1,32 @@
+FASE 4/8 concluida. `FormProduto.prg` atualizado com Grid e botoes CRUD na Page1.
+
+**ConfigurarPaginaLista() implementada:**
+- `cnt_4c_Cabecalho` (Top=31, Height=80, BackColor=RGB(100,100,100)) com lbl_4c_Sombra + lbl_4c_Titulo
+- `cnt_4c_Botoes` (Left=542, Top=29, Width=390, Height=85) com 5 botoes:
+  - cmd_4c_Incluir (Left=5), cmd_4c_Visualizar (Left=80), cmd_4c_Alterar (Left=155)
+  - cmd_4c_Excluir (Left=230), cmd_4c_Buscar (Left=305)
+- `cnt_4c_Saida` (Left=917, Top=29 - canonico CLAUDE.md regra #10) com cmd_4c_Encerrar
+- `grd_4c_Lista` (ColumnCount=7 FORA do WITH, Top=117, Left=11, Width=972, Height=422)
+  - BINDEVENT DblClick -> BtnVisualizarClick
+
+**CarregarLista() implementado:**
+- Buscar("") -> cursor_4c_Dados
+- RecordSource + ColumnCount FORA do WITH (auto-bind)
+- 7 ControlSources: cpros/dpros/cgrus/sgrus/reffs/colecoes/situas
+- Widths: 110/408/40/70/150/100/40
+- Headers com CHR() para acentos
+- ReadOnly=.T. em todas as colunas
+
+**AlternarPagina() implementado:**
+- Alterna ActivePage 1/2
+- Chama CarregarLista() ao voltar para Page1
+
+**Handlers implementados (PUBLIC para BINDEVENT):**
+- BtnIncluirClick, BtnVisualizarClick, BtnAlterarClick, BtnExcluirClick
+- BtnBuscarClick, BtnEncerrarClick
+- BtnSalvarClick, BtnCancelarClick
+
+**Stubs para Fases 5-6:** LimparCampos, HabilitarCampos, FormParaBO, BOParaForm
+(dependem dos TextBoxes a serem adicionados nas Fases 5-6)
+
+**ProdutoBO.prg (Buscar):** Atualizado para incluir reffs e colecoes nas colunas SELECT.

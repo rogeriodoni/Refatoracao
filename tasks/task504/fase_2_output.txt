@@ -1,0 +1,12 @@
+﻿FASE 2/8 est├í completa. O arquivo `ProdutoBO.prg` agora tem 1073 linhas com todos os m├®todos CRUD adicionados:
+
+- **`ObterChavePrimaria()`** ÔÇö retorna `this_cCpros`
+- **`Buscar(par_cFiltro)`** ÔÇö SELECT para o grid com colunas-chave de SigCdPro
+- **`CarregarPorCodigo(par_cCpros)`** ÔÇö SELECT * WHERE cpros = ... + chama CarregarDoCursor
+- **`CarregarDoCursor(par_cAliasCursor)`** ÔÇö mapeia todos os 155+ campos, `SELECT (alias)` antes de acessar campos, bit fields convertidos com `<> 0`
+- **`ObterProxIdPro()`** *(PROTECTED)* ÔÇö gera pr├│ximo `idpro` via MAX+1
+- **`Inserir()`** *(PROTECTED)* ÔÇö INSERT completo em SigCdPro, seta `dtincs`/`usuincs` automaticamente, campos nullable com `IIF(EMPTY, "NULL", ...)`
+- **`Atualizar()`** *(PROTECTED)* ÔÇö UPDATE completo, seta `dtalts`/`usuaalts` automaticamente
+- **`ExecutarExclusao()`** *(PROTECTED)* ÔÇö DELETE WHERE cpros
+
+Tamb├®m adicionada a propriedade `this_nProdwebs = 0` que estava faltando na FASE 1 (coluna `prodwebs` NOT NULL no schema causaria falha no INSERT).
