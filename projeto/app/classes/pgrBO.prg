@@ -1,625 +1,391 @@
 *==============================================================================
-* pgrBO.prg - Business Object de Lancamentos e Pagamentos (SigCdPgr)
-* Herda de BusinessBase
-* Tabela: SigCdPgr
-* Fase 2/8: BO - Propriedades e Metodos CRUD
-* Fase 5/8: Propriedades adicionais (datarcs, mascnum, obs, datalims)
+* PGRBO.prg - Business Object para Pagamentos e Recebimentos
 *==============================================================================
+* Tabela   : SigCdPgr
+* PK real  : cidchaves (CHAR 20, gerado por fUniqueIds)
+* Chave neg: empdopnums = emps + dopes + PADL(STR(numes),6)
+* Herda de : BusinessBase (app\classes\businessbase.prg)
+*
+* Fases 1-2/8 - Propriedades, Init, CRUD:
+*   Buscar, CarregarPorCodigo, CarregarDoCursor,
+*   Inserir, Atualizar, ExecutarExclusao
+*==============================================================================
+SET SAFETY OFF
+SET RESOURCE OFF
 
-DEFINE CLASS pgrBO AS BusinessBase
-
-    *--------------------------------------------------------------------------
-    * Propriedades da tabela SigCdPgr
-    *--------------------------------------------------------------------------
-
-    *-- Chave primaria composta (Emps + Dopes + Str(Numes,6))
-    this_cEmpdopnums = ""      && empdopnums char(29)
-
-    *-- Conta e grupo
-    this_cContas    = ""       && contas char(10)
-    this_cGrupos    = ""       && grupos char(10)
-
-    *-- Datas
-    this_dDatas     = {}       && datas datetime (legado: datas)
-    this_dDataRcs   = {}       && datarcs datetime - data do lancamento
-    this_dDataLims  = {}       && datalims datetime - data limite
-
-    *-- Identificacao
-    this_cEmps      = ""       && emps char(3)
-    this_cDopes     = ""       && dopes char(20)
-    this_nNumes     = 0        && numes numeric(6,0)
-    this_cMascNum   = ""       && mascnum char(6) - numero mascarado
-    this_cUsuars    = ""       && usuars char(10)
-
-    *-- Identificacao da operacao
-    this_cNopers   = ""        && nopers char(7)
-    this_cOpers    = ""        && opers char(1)
-
-    *-- Forma de pagamento e moeda
-    this_cFpags    = ""        && fpags char(12)
-    this_cMoedas   = ""        && moedas char(3)
-
-    *-- Observacao
-    this_cObs      = ""        && obs text
-
-    *-- Flags
-    this_lAutos    = .F.       && autos bit
-    this_lConcs    = .F.       && concs bit
-    this_nCnotas   = 0         && cnotas numeric(1,0)
-
-    *-- Chave do lancamento
-    this_cCidchaves = ""       && cidchaves char(20)
+DEFINE CLASS PGRBO AS BusinessBase
 
     *==========================================================================
-    * Init - Inicializa propriedades do BusinessBase
+    *-- PROPRIEDADES DA TABELA SigCdPgr (schema exato)
     *==========================================================================
+
+    *-- Chave primaria real e chave de negocio derivada
+    this_cCidChaves  = ""    && cidchaves  CHAR(20)   - PK (fUniqueIds)
+    this_cEmpDopNums = ""    && empdopnums CHAR(29)   - emps+dopes+padl(numes,6)
+
+    *-- Chave de negocio composta: Emps + Dopes + Numes
+    this_cEmps       = ""    && emps       CHAR(3)    - Empresa
+    this_cDopes      = ""    && dopes      CHAR(20)   - Tipo de Operacao
+    this_nNumes      = 0     && numes      NUM(6,0)   - Numero sequencial
+    this_cMascNum    = ""    && mascnum    CHAR(6)    - Mascara de numero exibida
+
+    *-- Datas (nullable)
+    this_tDataRcs    = {}    && datarcs    DATETIME NULL - Data lancamento/recebimento
+    this_tDataLims   = {}    && datalims   DATETIME NULL - Data limite do periodo
+    this_tDataTrans  = {}    && datatrans  DATETIME NULL - Data da transacao
+
+    *-- Contabil e localizacao
+    this_cGrupos     = ""    && grupos     CHAR(10)   - Grupo contabil
+    this_cContas     = ""    && contas     CHAR(10)   - Conta contabil
+    this_cLocals     = ""    && locals     CHAR(10)   - Localizacao
+
+    *-- Usuario e controle
+    this_cUsuars     = ""    && usuars     CHAR(10)   - Usuario de inclusao
+    this_nNTrans     = 0     && ntrans     NUM(6,0)   - Numero de transacao
+
+    *-- Flags de status (BIT -> logical)
+    this_lAutos      = .F.   && autos      BIT        - Automatico (baixa automatica)
+    this_lConcs      = .F.   && concs      BIT        - Conciliado com extrato bancario
+
+    *-- Configuracoes numericas
+    this_nPgUnicos   = 0     && pgunicos   NUM(1,0)   - Pagamento unico (1=sim)
+    this_nCNotas     = 0     && cnotas     NUM(1,0)   - Config notas fiscais
+    this_nPJuros     = 0     && pjuros     NUM(4,2)   - Percentual de juros
+    this_nPMulta     = 0     && pmulta     NUM(4,2)   - Percentual de multa
+
+    *-- Texto livre
+    this_cObs        = ""    && obs        TEXT       - Observacoes do lancamento
+
+    *-- Propriedades de runtime (nao persistidas na tabela)
+    this_cTipo       = ""    && D=Debito (pagamento) / C=Credito (recebimento)
+    this_cJustDel    = ""    && Justificativa de cancelamento/exclusao
+
+    *==========================================================================
+    *-- INICIALIZACAO
+    *==========================================================================
+
     PROCEDURE Init()
-        THIS.this_cTabela     = "SigCdPgr"
-        THIS.this_cCampoChave = "empdopnums"
-        DODEFAULT()
+        LOCAL loc_lSucesso
+        loc_lSucesso = .F.
+        TRY
+            DODEFAULT()
+            THIS.this_cTabela     = "SigCdPgr"
+            THIS.this_cCampoChave = "cidchaves"
+            loc_lSucesso = .T.
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "PGRBO.Init")
+        ENDTRY
+        RETURN loc_lSucesso
     ENDPROC
 
     *==========================================================================
-    * ObterChavePrimaria - Retorna chave para auditoria
+    *-- AUDITORIA: retorna PK real para RegistrarAuditoria()
     *==========================================================================
+
     FUNCTION ObterChavePrimaria()
-        RETURN ALLTRIM(THIS.this_cEmpdopnums)
+        RETURN THIS.this_cCidChaves
     ENDFUNC
 
     *==========================================================================
-    * CarregarDoCursor - Carrega dados do cursor para as propriedades
+    *-- BUSCAR - SELECT lista no cursor_4c_Dados
+    *-- par_cFiltro: condicao WHERE (sem a palavra WHERE) ou "" para todos
     *==========================================================================
-    PROCEDURE CarregarDoCursor(par_cAliasCursor)
-        SELECT (par_cAliasCursor)
-        THIS.this_cEmpdopnums = empdopnums
-        THIS.this_cContas     = contas
-        THIS.this_cGrupos     = grupos
-        THIS.this_cEmps       = emps
-        THIS.this_cDopes      = dopes
-        THIS.this_nNumes      = numes
-        THIS.this_cMascNum    = mascnum
-        THIS.this_cUsuars     = usuars
-        THIS.this_dDatas      = datas
-        THIS.this_dDataRcs    = datarcs
-        THIS.this_dDataLims   = datalims
-        THIS.this_cNopers     = nopers
-        THIS.this_cOpers      = opers
-        THIS.this_cFpags      = fpags
-        THIS.this_cMoedas     = moedas
-        THIS.this_cObs        = NVL(obs, "")
-        IF VARTYPE(autos) = "L"
-            THIS.this_lAutos = autos
-        ELSE
-            IF VARTYPE(autos) = "L"
-                THIS.this_lAutos = autos
-            ELSE
-                IF VARTYPE(autos) = "L"
-                    THIS.this_lAutos = autos
-                ELSE
-                    IF VARTYPE(autos) = "L"
-                        THIS.this_lAutos = autos
-                    ELSE
-                        IF VARTYPE(autos) = "L"
-                            THIS.this_lAutos = autos
-                        ELSE
-                            IF VARTYPE(autos) = "L"
-                                THIS.this_lAutos = autos
-                            ELSE
-                                IF VARTYPE(autos) = "L"
-                                    THIS.this_lAutos = autos
-                                ELSE
-                                    IF VARTYPE(autos) = "L"
-                                        THIS.this_lAutos = autos
-                                    ELSE
-                                        IF VARTYPE(autos) = "L"
-                                            THIS.this_lAutos = autos
-                                        ELSE
-                                            IF VARTYPE(autos) = "L"
-                                                THIS.this_lAutos = autos
-                                            ELSE
-                                                IF VARTYPE(autos) = "L"
-                                                    THIS.this_lAutos = autos
-                                                ELSE
-                                                    IF VARTYPE(autos) = "L"
-                                                        THIS.this_lAutos = autos
-                                                    ELSE
-                                                        IF VARTYPE(autos) = "L"
-                                                            THIS.this_lAutos = autos
-                                                        ELSE
-                                                            IF VARTYPE(autos) = "L"
-                                                                THIS.this_lAutos = autos
-                                                            ELSE
-                                                                IF VARTYPE(autos) = "L"
-                                                                    THIS.this_lAutos = autos
-                                                                ELSE
-                                                                    IF VARTYPE(autos) = "L"
-                                                                        THIS.this_lAutos = autos
-                                                                    ELSE
-                                                                        IF VARTYPE(autos) = "L"
-                                                                            THIS.this_lAutos = autos
-                                                                        ELSE
-                                                                            IF VARTYPE(autos) = "L"
-                                                                                THIS.this_lAutos = autos
-                                                                            ELSE
-                                                                                IF VARTYPE(autos) = "L"
-                                                                                    THIS.this_lAutos = autos
-                                                                                ELSE
-                                                                                    IF VARTYPE(autos) = "L"
-                                                                                        THIS.this_lAutos = autos
-                                                                                    ELSE
-                                                                                        IF VARTYPE(autos) = "L"
-                                                                                            THIS.this_lAutos = autos
-                                                                                        ELSE
-                                                                                            IF VARTYPE(autos) = "L"
-                                                                                                THIS.this_lAutos = autos
-                                                                                            ELSE
-                                                                                                IF VARTYPE(autos) = "L"
-                                                                                                    THIS.this_lAutos = autos
-                                                                                                ELSE
-                                                                                                    IF VARTYPE(autos) = "L"
-                                                                                                        THIS.this_lAutos = autos
-                                                                                                    ELSE
-                                                                                                        IF VARTYPE(autos) = "L"
-                                                                                                            THIS.this_lAutos = autos
-                                                                                                        ELSE
-                                                                                                            IF VARTYPE(autos) = "L"
-                                                                                                                THIS.this_lAutos = autos
-                                                                                                            ELSE
-                                                                                                                IF VARTYPE(autos) = "L"
-                                                                                                                    THIS.this_lAutos = autos
-                                                                                                                ELSE
-                                                                                                                    IF VARTYPE(autos) = "L"
-                                                                                                                        THIS.this_lAutos = autos
-                                                                                                                    ELSE
-                                                                                                                        IF VARTYPE(autos) = "L"
-                                                                                                                            THIS.this_lAutos = autos
-                                                                                                                        ELSE
-                                                                                                                            IF VARTYPE(autos) = "L"
-                                                                                                                                THIS.this_lAutos = autos
-                                                                                                                            ELSE
-                                                                                                                                IF VARTYPE(autos) = "L"
-                                                                                                                                    THIS.this_lAutos = autos
-                                                                                                                                ELSE
-                                                                                                                                    IF VARTYPE(autos) = "L"
-                                                                                                                                        THIS.this_lAutos = autos
-                                                                                                                                    ELSE
-                                                                                                                                        IF VARTYPE(autos) = "L"
-                                                                                                                                            THIS.this_lAutos = autos
-                                                                                                                                        ELSE
-                                                                                                                                            THIS.this_lAutos = (NVL(autos, 0) = 1)
-                                                                                                                                        ENDIF
-                                                                                                                                    ENDIF
-                                                                                                                                ENDIF
-                                                                                                                            ENDIF
-                                                                                                                        ENDIF
-                                                                                                                    ENDIF
-                                                                                                                ENDIF
-                                                                                                            ENDIF
-                                                                                                        ENDIF
-                                                                                                    ENDIF
-                                                                                                ENDIF
-                                                                                            ENDIF
-                                                                                        ENDIF
-                                                                                    ENDIF
-                                                                                ENDIF
-                                                                            ENDIF
-                                                                        ENDIF
-                                                                    ENDIF
-                                                                ENDIF
-                                                            ENDIF
-                                                        ENDIF
-                                                    ENDIF
-                                                ENDIF
-                                            ENDIF
-                                        ENDIF
-                                    ENDIF
-                                ENDIF
-                            ENDIF
-                        ENDIF
-                    ENDIF
-                ENDIF
-            ENDIF
-        ENDIF
-        IF VARTYPE(concs) = "L"
-            THIS.this_lConcs = concs
-        ELSE
-            IF VARTYPE(concs) = "L"
-                THIS.this_lConcs = concs
-            ELSE
-                IF VARTYPE(concs) = "L"
-                    THIS.this_lConcs = concs
-                ELSE
-                    IF VARTYPE(concs) = "L"
-                        THIS.this_lConcs = concs
-                    ELSE
-                        IF VARTYPE(concs) = "L"
-                            THIS.this_lConcs = concs
-                        ELSE
-                            IF VARTYPE(concs) = "L"
-                                THIS.this_lConcs = concs
-                            ELSE
-                                IF VARTYPE(concs) = "L"
-                                    THIS.this_lConcs = concs
-                                ELSE
-                                    IF VARTYPE(concs) = "L"
-                                        THIS.this_lConcs = concs
-                                    ELSE
-                                        IF VARTYPE(concs) = "L"
-                                            THIS.this_lConcs = concs
-                                        ELSE
-                                            IF VARTYPE(concs) = "L"
-                                                THIS.this_lConcs = concs
-                                            ELSE
-                                                IF VARTYPE(concs) = "L"
-                                                    THIS.this_lConcs = concs
-                                                ELSE
-                                                    IF VARTYPE(concs) = "L"
-                                                        THIS.this_lConcs = concs
-                                                    ELSE
-                                                        IF VARTYPE(concs) = "L"
-                                                            THIS.this_lConcs = concs
-                                                        ELSE
-                                                            IF VARTYPE(concs) = "L"
-                                                                THIS.this_lConcs = concs
-                                                            ELSE
-                                                                IF VARTYPE(concs) = "L"
-                                                                    THIS.this_lConcs = concs
-                                                                ELSE
-                                                                    IF VARTYPE(concs) = "L"
-                                                                        THIS.this_lConcs = concs
-                                                                    ELSE
-                                                                        IF VARTYPE(concs) = "L"
-                                                                            THIS.this_lConcs = concs
-                                                                        ELSE
-                                                                            IF VARTYPE(concs) = "L"
-                                                                                THIS.this_lConcs = concs
-                                                                            ELSE
-                                                                                IF VARTYPE(concs) = "L"
-                                                                                    THIS.this_lConcs = concs
-                                                                                ELSE
-                                                                                    IF VARTYPE(concs) = "L"
-                                                                                        THIS.this_lConcs = concs
-                                                                                    ELSE
-                                                                                        IF VARTYPE(concs) = "L"
-                                                                                            THIS.this_lConcs = concs
-                                                                                        ELSE
-                                                                                            IF VARTYPE(concs) = "L"
-                                                                                                THIS.this_lConcs = concs
-                                                                                            ELSE
-                                                                                                IF VARTYPE(concs) = "L"
-                                                                                                    THIS.this_lConcs = concs
-                                                                                                ELSE
-                                                                                                    IF VARTYPE(concs) = "L"
-                                                                                                        THIS.this_lConcs = concs
-                                                                                                    ELSE
-                                                                                                        IF VARTYPE(concs) = "L"
-                                                                                                            THIS.this_lConcs = concs
-                                                                                                        ELSE
-                                                                                                            IF VARTYPE(concs) = "L"
-                                                                                                                THIS.this_lConcs = concs
-                                                                                                            ELSE
-                                                                                                                IF VARTYPE(concs) = "L"
-                                                                                                                    THIS.this_lConcs = concs
-                                                                                                                ELSE
-                                                                                                                    IF VARTYPE(concs) = "L"
-                                                                                                                        THIS.this_lConcs = concs
-                                                                                                                    ELSE
-                                                                                                                        IF VARTYPE(concs) = "L"
-                                                                                                                            THIS.this_lConcs = concs
-                                                                                                                        ELSE
-                                                                                                                            IF VARTYPE(concs) = "L"
-                                                                                                                                THIS.this_lConcs = concs
-                                                                                                                            ELSE
-                                                                                                                                IF VARTYPE(concs) = "L"
-                                                                                                                                    THIS.this_lConcs = concs
-                                                                                                                                ELSE
-                                                                                                                                    IF VARTYPE(concs) = "L"
-                                                                                                                                        THIS.this_lConcs = concs
-                                                                                                                                    ELSE
-                                                                                                                                        IF VARTYPE(concs) = "L"
-                                                                                                                                            THIS.this_lConcs = concs
-                                                                                                                                        ELSE
-                                                                                                                                            THIS.this_lConcs = (NVL(concs, 0) = 1)
-                                                                                                                                        ENDIF
-                                                                                                                                    ENDIF
-                                                                                                                                ENDIF
-                                                                                                                            ENDIF
-                                                                                                                        ENDIF
-                                                                                                                    ENDIF
-                                                                                                                ENDIF
-                                                                                                            ENDIF
-                                                                                                        ENDIF
-                                                                                                    ENDIF
-                                                                                                ENDIF
-                                                                                            ENDIF
-                                                                                        ENDIF
-                                                                                    ENDIF
-                                                                                ENDIF
-                                                                            ENDIF
-                                                                        ENDIF
-                                                                    ENDIF
-                                                                ENDIF
-                                                            ENDIF
-                                                        ENDIF
-                                                    ENDIF
-                                                ENDIF
-                                            ENDIF
-                                        ENDIF
-                                    ENDIF
-                                ENDIF
-                            ENDIF
-                        ENDIF
-                    ENDIF
-                ENDIF
-            ENDIF
-        ENDIF
-        THIS.this_nCnotas     = cnotas
-        THIS.this_cCidchaves  = cidchaves
-    ENDPROC
 
-    *==========================================================================
-    * Buscar - Busca registros de SigPrCsh
-    *==========================================================================
-    PROCEDURE Buscar(par_cFiltro)
-        LOCAL loc_cSQL, loc_nRet, loc_lResultado
-        loc_lResultado = .T.
-        loc_cSQL = "SELECT empdopnums, datas, nopers, opers, fpags, moedas, " + ;
-                   "codigocsh, valorori, valorcsh, perccsh, grupocash, contacsh " + ;
-                   "FROM SigPrCsh "
-        IF !EMPTY(par_cFiltro)
-            loc_cSQL = loc_cSQL + "WHERE " + par_cFiltro + " "
-        ENDIF
-        loc_cSQL = loc_cSQL + "ORDER BY datas DESC, empdopnums"
+    FUNCTION Buscar(par_cFiltro)
+        LOCAL loc_cSQL, loc_nResult, loc_lSucesso
+        loc_lSucesso = .F.
+
         TRY
             IF USED("cursor_4c_Dados")
                 USE IN cursor_4c_Dados
             ENDIF
-            SET NULL ON
-            CREATE CURSOR cursor_4c_Dados ( ;
-                empdopnums C(29),    ;
-                datas      T,        ;
-                nopers     C(7),     ;
-                opers      C(1),     ;
-                fpags      C(12),    ;
-                moedas     C(3),     ;
-                codigocsh  C(3),     ;
-                valorori   N(15,4),  ;
-                valorcsh   N(15,4),  ;
-                perccsh    N(6,2),   ;
-                grupocash  C(10),    ;
-                contacsh   C(10)     ;
-            )
-            SET NULL OFF
-            loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Dados")
-            IF loc_nRet < 0
-                THIS.this_cMensagemErro = "Erro ao buscar SigPrCsh"
-                loc_lResultado = .F.
-            ENDIF
-        CATCH TO loc_oErro
-            THIS.this_cMensagemErro = loc_oErro.Message
-            loc_lResultado = .F.
-        ENDTRY
-        RETURN loc_lResultado
-    ENDPROC
 
-    *==========================================================================
-    * CarregarPorCodigo - Carrega registro pelo empdopnums
-    *==========================================================================
-    PROCEDURE CarregarPorCodigo(par_cChave)
-        LOCAL loc_cSQL, loc_nRet, loc_lResultado
-        loc_lResultado = .F.
-        loc_cSQL = "SELECT * FROM SigPrCsh WHERE empdopnums = " + ;
-                   EscaparSQL(par_cChave)
-        TRY
-            IF USED("cursor_4c_Registro")
-                USE IN cursor_4c_Registro
-            ENDIF
-            loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Registro")
-            IF loc_nRet > 0 AND !EMPTY("cursor_4c_Registro") AND ;
-               RECCOUNT("cursor_4c_Registro") > 0
-                THIS.CarregarDoCursor("cursor_4c_Registro")
-                THIS.this_lNovoRegistro = .F.
-                loc_lResultado = .T.
+            IF EMPTY(par_cFiltro)
+                loc_cSQL = "SELECT cidchaves, numes, mascnum, datarcs, grupos, contas," + ;
+                           " usuars, emps," + ;
+                           " SUBSTRING(CAST(obs AS VARCHAR(8000)),1,40) AS obs," + ;
+                           " dopes, empdopnums" + ;
+                           " FROM SigCdPgr" + ;
+                           " ORDER BY datarcs DESC, numes DESC"
             ELSE
-                THIS.this_cMensagemErro = "Registro n" + CHR(227) + "o encontrado"
+                loc_cSQL = "SELECT cidchaves, numes, mascnum, datarcs, grupos, contas," + ;
+                           " usuars, emps," + ;
+                           " SUBSTRING(CAST(obs AS VARCHAR(8000)),1,40) AS obs," + ;
+                           " dopes, empdopnums" + ;
+                           " FROM SigCdPgr" + ;
+                           " WHERE " + par_cFiltro + ;
+                           " ORDER BY datarcs DESC, numes DESC"
             ENDIF
-            IF USED("cursor_4c_Registro")
-                USE IN cursor_4c_Registro
+
+            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Dados")
+
+            IF loc_nResult >= 0
+                loc_lSucesso = .T.
+            ELSE
+                MsgErro("Erro ao buscar Pagamentos e Recebimentos:" + ;
+                    CHR(13) + CapturarErroSQL(), "Erro SQL")
             ENDIF
         CATCH TO loc_oErro
-            THIS.this_cMensagemErro = loc_oErro.Message
-            loc_lResultado = .F.
+            MsgErro("Erro em PGRBO.Buscar:" + CHR(13) + loc_oErro.Message, "Erro")
         ENDTRY
-        RETURN loc_lResultado
-    ENDPROC
+
+        RETURN loc_lSucesso
+    ENDFUNC
 
     *==========================================================================
-    PROTECTED PROCEDURE Inserir()
+    *-- CARREGAR POR CODIGO - Carrega registro pelo cidchaves (PK real)
     *==========================================================================
-        LOCAL loc_cSQL, loc_nRet, loc_lResultado
-        loc_lResultado = .F.
-        loc_cSQL = "INSERT INTO SigPrCsh " + ;
-                   "(empdopnums, datas, validade, nopers, opers, fpags, moedas, " + ;
-                   "codigocsh, valorori, cotacaos, perccsh, valorcsh, " + ;
-                   "grupocash, contacsh, cidchaves) " + ;
-                   "VALUES (" + ;
-                   EscaparSQL(THIS.this_cEmpdopnums)   + ", " + ;
-                   FormatarDataSQL(THIS.this_dDatas)   + ", " + ;
-                   FormatarDataSQL(THIS.this_dValidade) + ", " + ;
-                   EscaparSQL(THIS.this_cNopers)        + ", " + ;
-                   EscaparSQL(THIS.this_cOpers)         + ", " + ;
-                   EscaparSQL(THIS.this_cFpags)         + ", " + ;
-                   EscaparSQL(THIS.this_cMoedas)        + ", " + ;
-                   EscaparSQL(THIS.this_cCodigocsh)     + ", " + ;
-                   FormatarNumeroSQL(THIS.this_nValorori)  + ", " + ;
-                   FormatarNumeroSQL(THIS.this_nCotacaos)  + ", " + ;
-                   FormatarNumeroSQL(THIS.this_nPerccsh)   + ", " + ;
-                   FormatarNumeroSQL(THIS.this_nValorcsh)  + ", " + ;
-                   EscaparSQL(THIS.this_cGrupocash)     + ", " + ;
-                   EscaparSQL(THIS.this_cContacsh)      + ", " + ;
-                   EscaparSQL(THIS.this_cCidchaves)     + ;
-                   ")"
+
+    FUNCTION CarregarPorCodigo(par_cCodigo)
+        LOCAL loc_cSQL, loc_nResult, loc_lSucesso
+        loc_lSucesso = .F.
+
         TRY
-            loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL)
-            IF loc_nRet > 0
+            IF USED("cursor_4c_Carrega")
+                USE IN cursor_4c_Carrega
+            ENDIF
+
+            loc_cSQL = "SELECT cidchaves, empdopnums, emps, dopes, numes, mascnum," + ;
+                       " datarcs, datalims, datatrans, grupos, contas, locals," + ;
+                       " usuars, ntrans, autos, concs, pgunicos, cnotas, pjuros, pmulta," + ;
+                       " CAST(obs AS VARCHAR(8000)) AS obs" + ;
+                       " FROM SigCdPgr" + ;
+                       " WHERE cidchaves = " + EscaparSQL(par_cCodigo)
+
+            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Carrega")
+
+            IF loc_nResult >= 0
+                IF RECCOUNT("cursor_4c_Carrega") > 0
+                    loc_lSucesso = THIS.CarregarDoCursor("cursor_4c_Carrega")
+                    THIS.this_lNovoRegistro = .F.
+                ENDIF
+                IF USED("cursor_4c_Carrega")
+                    USE IN cursor_4c_Carrega
+                ENDIF
+            ELSE
+                MsgErro("Erro ao carregar Pagamento/Recebimento:" + ;
+                    CHR(13) + CapturarErroSQL(), "Erro SQL")
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro("Erro em PGRBO.CarregarPorCodigo:" + CHR(13) + loc_oErro.Message, "Erro")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDFUNC
+
+    *==========================================================================
+    *-- CARREGAR DO CURSOR - Copia campos do cursor para propriedades do BO
+    *-- Usa {} como default para campos datetime NULLaveis (nao "T" - causa erro)
+    *==========================================================================
+
+    FUNCTION CarregarDoCursor(par_cAliasCursor)
+        LOCAL loc_lSucesso
+        loc_lSucesso = .F.
+
+        TRY
+            IF USED(par_cAliasCursor)
+                SELECT (par_cAliasCursor)
+                THIS.this_cCidChaves   = TratarNulo(cidchaves,  "")
+                THIS.this_cEmpDopNums  = TratarNulo(empdopnums, "")
+                THIS.this_cEmps        = TratarNulo(emps,       "")
+                THIS.this_cDopes       = TratarNulo(dopes,      "")
+                THIS.this_nNumes       = TratarNulo(numes,      0)
+                THIS.this_cMascNum     = TratarNulo(mascnum,    "")
+                THIS.this_tDataRcs     = TratarNulo(datarcs,    {})
+                THIS.this_tDataLims    = TratarNulo(datalims,   {})
+                THIS.this_tDataTrans   = TratarNulo(datatrans,  {})
+                THIS.this_cGrupos      = TratarNulo(grupos,     "")
+                THIS.this_cContas      = TratarNulo(contas,     "")
+                THIS.this_cLocals      = TratarNulo(locals,     "")
+                THIS.this_cUsuars      = TratarNulo(usuars,     "")
+                THIS.this_nNTrans      = TratarNulo(ntrans,     0)
+                THIS.this_lAutos       = (TratarNulo(autos,     0) <> 0)
+                THIS.this_lConcs       = (TratarNulo(concs,     0) <> 0)
+                THIS.this_nPgUnicos    = TratarNulo(pgunicos,   0)
+                THIS.this_nCNotas      = TratarNulo(cnotas,     0)
+                THIS.this_nPJuros      = TratarNulo(pjuros,     0)
+                THIS.this_nPMulta      = TratarNulo(pmulta,     0)
+                THIS.this_cObs         = TratarNulo(obs,        "")
+                loc_lSucesso = .T.
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro("Erro em PGRBO.CarregarDoCursor:" + CHR(13) + loc_oErro.Message, "Erro")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDFUNC
+
+    *==========================================================================
+    *-- INSERIR - INSERT INTO SigCdPgr
+    *-- Gera cidchaves via fUniqueIds() e numes via ObterProxNumes()
+    *==========================================================================
+
+    PROTECTED FUNCTION Inserir()
+        LOCAL loc_cSQL, loc_nResult, loc_lSucesso
+        loc_lSucesso = .F.
+
+        TRY
+            THIS.this_cCidChaves  = fUniqueIds()
+            THIS.this_nNumes      = THIS.ObterProxNumes(THIS.this_cEmps, THIS.this_cDopes)
+            THIS.this_cMascNum    = PADL(TRANSFORM(THIS.this_nNumes), 6, "0")
+            THIS.this_cEmpDopNums = ALLTRIM(THIS.this_cEmps) + ;
+                                    ALLTRIM(THIS.this_cDopes) + ;
+                                    PADL(TRANSFORM(THIS.this_nNumes), 6, "0")
+            THIS.this_cUsuars     = gc_4c_UsuarioLogado
+
+            loc_cSQL = "INSERT INTO SigCdPgr" + ;
+                " (cidchaves, empdopnums, emps, dopes, numes, mascnum," + ;
+                "  datarcs, datalims, datatrans, grupos, contas, locals," + ;
+                "  usuars, ntrans, autos, concs, pgunicos, cnotas, pjuros, pmulta, obs)" + ;
+                " VALUES (" + ;
+                EscaparSQL(THIS.this_cCidChaves)           + ", " + ;
+                EscaparSQL(THIS.this_cEmpDopNums)          + ", " + ;
+                EscaparSQL(THIS.this_cEmps)                + ", " + ;
+                EscaparSQL(THIS.this_cDopes)               + ", " + ;
+                FormatarNumeroSQL(THIS.this_nNumes)        + ", " + ;
+                EscaparSQL(THIS.this_cMascNum)             + ", " + ;
+                FormatarDataSQL(THIS.this_tDataRcs)        + ", " + ;
+                FormatarDataSQL(THIS.this_tDataLims)       + ", " + ;
+                FormatarDataSQL(THIS.this_tDataTrans)      + ", " + ;
+                EscaparSQL(THIS.this_cGrupos)              + ", " + ;
+                EscaparSQL(THIS.this_cContas)              + ", " + ;
+                EscaparSQL(THIS.this_cLocals)              + ", " + ;
+                EscaparSQL(THIS.this_cUsuars)              + ", " + ;
+                FormatarNumeroSQL(THIS.this_nNTrans)       + ", " + ;
+                IIF(THIS.this_lAutos, "1", "0")            + ", " + ;
+                IIF(THIS.this_lConcs, "1", "0")            + ", " + ;
+                FormatarNumeroSQL(THIS.this_nPgUnicos)     + ", " + ;
+                FormatarNumeroSQL(THIS.this_nCNotas)       + ", " + ;
+                FormatarNumeroSQL(THIS.this_nPJuros)       + ", " + ;
+                FormatarNumeroSQL(THIS.this_nPMulta)       + ", " + ;
+                EscaparSQL(THIS.this_cObs)                 + ")"
+
+            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL)
+
+            IF loc_nResult >= 0
                 THIS.RegistrarAuditoria("INSERT")
-                loc_lResultado = .T.
+                loc_lSucesso = .T.
             ELSE
-                THIS.this_cMensagemErro = "Erro ao inserir em SigPrCsh"
+                MsgErro("Erro ao inserir Pagamento/Recebimento:" + ;
+                    CHR(13) + CapturarErroSQL(), "Erro SQL")
             ENDIF
         CATCH TO loc_oErro
-            THIS.this_cMensagemErro = loc_oErro.Message
-            loc_lResultado = .F.
+            MsgErro("Erro em PGRBO.Inserir:" + CHR(13) + loc_oErro.Message, "Erro")
         ENDTRY
-        RETURN loc_lResultado
-    ENDPROC
+
+        RETURN loc_lSucesso
+    ENDFUNC
 
     *==========================================================================
-    PROTECTED PROCEDURE Atualizar()
+    *-- ATUALIZAR - UPDATE SigCdPgr WHERE cidchaves = ...
     *==========================================================================
-        LOCAL loc_cSQL, loc_nRet, loc_lResultado
-        loc_lResultado = .F.
-        loc_cSQL = "UPDATE SigPrCsh SET " + ;
-                   "datas = "      + FormatarDataSQL(THIS.this_dDatas)      + ", " + ;
-                   "validade = "   + FormatarDataSQL(THIS.this_dValidade)   + ", " + ;
-                   "nopers = "     + EscaparSQL(THIS.this_cNopers)          + ", " + ;
-                   "opers = "      + EscaparSQL(THIS.this_cOpers)           + ", " + ;
-                   "fpags = "      + EscaparSQL(THIS.this_cFpags)           + ", " + ;
-                   "moedas = "     + EscaparSQL(THIS.this_cMoedas)          + ", " + ;
-                   "codigocsh = "  + EscaparSQL(THIS.this_cCodigocsh)       + ", " + ;
-                   "valorori = "   + FormatarNumeroSQL(THIS.this_nValorori)  + ", " + ;
-                   "cotacaos = "   + FormatarNumeroSQL(THIS.this_nCotacaos)  + ", " + ;
-                   "perccsh = "    + FormatarNumeroSQL(THIS.this_nPerccsh)   + ", " + ;
-                   "valorcsh = "   + FormatarNumeroSQL(THIS.this_nValorcsh)  + ", " + ;
-                   "grupocash = "  + EscaparSQL(THIS.this_cGrupocash)       + ", " + ;
-                   "contacsh = "   + EscaparSQL(THIS.this_cContacsh)        + ", " + ;
-                   "cidchaves = "  + EscaparSQL(THIS.this_cCidchaves)       + " " + ;
-                   "WHERE empdopnums = " + EscaparSQL(THIS.this_cEmpdopnums)
+
+    PROTECTED FUNCTION Atualizar()
+        LOCAL loc_cSQL, loc_nResult, loc_lSucesso
+        loc_lSucesso = .F.
+
         TRY
-            loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL)
-            IF loc_nRet > 0
+            THIS.this_cEmpDopNums = ALLTRIM(THIS.this_cEmps) + ;
+                                    ALLTRIM(THIS.this_cDopes) + ;
+                                    PADL(TRANSFORM(THIS.this_nNumes), 6, "0")
+
+            loc_cSQL = "UPDATE SigCdPgr SET" + ;
+                " empdopnums = " + EscaparSQL(THIS.this_cEmpDopNums)       + ", " + ;
+                " datarcs    = " + FormatarDataSQL(THIS.this_tDataRcs)     + ", " + ;
+                " datalims   = " + FormatarDataSQL(THIS.this_tDataLims)    + ", " + ;
+                " datatrans  = " + FormatarDataSQL(THIS.this_tDataTrans)   + ", " + ;
+                " grupos     = " + EscaparSQL(THIS.this_cGrupos)           + ", " + ;
+                " contas     = " + EscaparSQL(THIS.this_cContas)           + ", " + ;
+                " locals     = " + EscaparSQL(THIS.this_cLocals)           + ", " + ;
+                " ntrans     = " + FormatarNumeroSQL(THIS.this_nNTrans)    + ", " + ;
+                " autos      = " + IIF(THIS.this_lAutos, "1", "0")        + ", " + ;
+                " concs      = " + IIF(THIS.this_lConcs, "1", "0")        + ", " + ;
+                " pgunicos   = " + FormatarNumeroSQL(THIS.this_nPgUnicos)  + ", " + ;
+                " cnotas     = " + FormatarNumeroSQL(THIS.this_nCNotas)    + ", " + ;
+                " pjuros     = " + FormatarNumeroSQL(THIS.this_nPJuros)    + ", " + ;
+                " pmulta     = " + FormatarNumeroSQL(THIS.this_nPMulta)    + ", " + ;
+                " obs        = " + EscaparSQL(THIS.this_cObs)              + ;
+                " WHERE cidchaves = " + EscaparSQL(THIS.this_cCidChaves)
+
+            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL)
+
+            IF loc_nResult >= 0
                 THIS.RegistrarAuditoria("UPDATE")
-                loc_lResultado = .T.
+                loc_lSucesso = .T.
             ELSE
-                THIS.this_cMensagemErro = "Erro ao atualizar SigPrCsh"
+                MsgErro("Erro ao atualizar Pagamento/Recebimento:" + ;
+                    CHR(13) + CapturarErroSQL(), "Erro SQL")
             ENDIF
         CATCH TO loc_oErro
-            THIS.this_cMensagemErro = loc_oErro.Message
-            loc_lResultado = .F.
+            MsgErro("Erro em PGRBO.Atualizar:" + CHR(13) + loc_oErro.Message, "Erro")
         ENDTRY
-        RETURN loc_lResultado
-    ENDPROC
+
+        RETURN loc_lSucesso
+    ENDFUNC
 
     *==========================================================================
-    PROCEDURE ExecutarExclusao()
+    *-- EXECUTAR EXCLUSAO - DELETE FROM SigCdPgr WHERE cidchaves = ...
+    *-- Chamado por Excluir() no BusinessBase (nao chamar diretamente)
+    *-- Nota: validacoes de relacionamentos (SigCdPgc, SigMvCcr) ficam no form
     *==========================================================================
-        LOCAL loc_cSQL, loc_nRet, loc_lResultado
-        loc_lResultado = .F.
-        loc_cSQL = "DELETE FROM SigPrCsh WHERE empdopnums = " + ;
-                   EscaparSQL(THIS.this_cEmpdopnums)
+
+    PROTECTED FUNCTION ExecutarExclusao()
+        LOCAL loc_cSQL, loc_nResult, loc_lSucesso
+        loc_lSucesso = .F.
+
         TRY
-            loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL)
-            IF loc_nRet > 0
+            loc_cSQL = "DELETE FROM SigCdPgr" + ;
+                       " WHERE cidchaves = " + EscaparSQL(THIS.this_cCidChaves)
+
+            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL)
+
+            IF loc_nResult >= 0
                 THIS.RegistrarAuditoria("DELETE")
-                loc_lResultado = .T.
+                loc_lSucesso = .T.
             ELSE
-                THIS.this_cMensagemErro = "Erro ao excluir de SigPrCsh"
+                MsgErro("Erro ao excluir Pagamento/Recebimento:" + ;
+                    CHR(13) + CapturarErroSQL(), "Erro SQL")
             ENDIF
         CATCH TO loc_oErro
-            THIS.this_cMensagemErro = loc_oErro.Message
-            loc_lResultado = .F.
+            MsgErro("Erro em PGRBO.ExecutarExclusao:" + CHR(13) + loc_oErro.Message, "Erro")
         ENDTRY
-        RETURN loc_lResultado
-    ENDPROC
+
+        RETURN loc_lSucesso
+    ENDFUNC
 
     *==========================================================================
-    * CarregarPendencias - Carrega titulos nao baixados de SigMvCcr
-    * Popula cursor_4c_Pendencias para o grid ContaCorrente (Page1 SubPaginas)
-    * Filtro: registros nao pagos vinculados ao lancamento atual
+    *-- OBTER PROX NUMES - Calcula proximo numes para emps+dopes
+    *-- Consulta MAX(numes)+1 no banco para garantir unicidade por operacao
     *==========================================================================
-    PROCEDURE CarregarPendencias()
-        LOCAL loc_cSQL, loc_nRet, loc_lResultado
-        loc_lResultado = .F.
+
+    PROTECTED FUNCTION ObterProxNumes(par_cEmps, par_cDopes)
+        LOCAL loc_cSQL, loc_nResult, loc_nNumes
+        loc_nNumes = 1
 
         TRY
-            *-- Garantir cursor com estrutura correta (campo L obrigatorio para CheckBox)
-            IF USED("cursor_4c_Pendencias")
-                USE IN cursor_4c_Pendencias
-            ENDIF
-            SET NULL ON
-            CREATE CURSOR cursor_4c_Pendencias ;
-                (Flag L, Emps C(3), Datas D, Vencs D, ;
-                 Valos N(13,2), Acerto N(13,2), Moedas C(3), ;
-                 Nomes C(100), OrdCopChS N(4))
-            SET NULL OFF
-
-            IF EMPTY(THIS.this_cEmpdopnums)
-                *-- Modo INSERIR: sem lancamento salvo - retorna cursor vazio
-                *-- Sera populado por CarregarPendenciasFiltro() apos usuario definir grupo/conta
-                loc_lResultado = .T.
-            ELSE
-                *-- Modo ALTERAR/VISUALIZAR: busca itens vinculados ao lancamento
-                loc_cSQL = "SELECT " + ;
-                           "CAST(0 AS BIT) AS Flag, " + ;
-                           "LEFT(ISNULL(EmpCCs,'   '),3) AS Emps, " + ;
-                           "CAST(Datas AS date) AS Datas, " + ;
-                           "CAST(ISNULL(Vencs,Datas) AS date) AS Vencs, " + ;
-                           "ISNULL(Valors,0) AS Valos, " + ;
-                           "ISNULL(Acertos,0) AS Acerto, " + ;
-                           "LEFT(ISNULL(Moedas,''),3) AS Moedas, " + ;
-                           "LEFT(RTRIM(ISNULL(Titulos,'')),100) AS Nomes, " + ;
-                           "ISNULL(Nopers,0) AS OrdCopChS " + ;
-                           "FROM SigMvCcr " + ;
-                           "WHERE EmpDopNcs = " + EscaparSQL(THIS.this_cEmpdopnums) + " " + ;
-                           "ORDER BY Datas, Nopers"
-
-                IF USED("cursor_4c_PendTemp")
-                    USE IN cursor_4c_PendTemp
-                ENDIF
-                loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_PendTemp")
-                IF loc_nRet > 0
-                    *-- CRITICO: SQLEXEC em cursor separado + APPEND INTO cursor do grid
-                    *-- Evita "Unknown member COLUMN1" se RecordSource muda alias
-                    IF !EOF("cursor_4c_PendTemp")
-                        GO TOP IN cursor_4c_PendTemp
-                        DO WHILE !EOF("cursor_4c_PendTemp")
-                            INSERT INTO cursor_4c_Pendencias ;
-                                (Flag, Emps, Datas, Vencs, Valos, Acerto, Moedas, Nomes, OrdCopChS) ;
-                            VALUES ;
-                                (.F., ;
-                                 ALLTRIM(cursor_4c_PendTemp.Emps), ;
-                                 cursor_4c_PendTemp.Datas, ;
-                                 cursor_4c_PendTemp.Vencs, ;
-                                 cursor_4c_PendTemp.Valos, ;
-                                 cursor_4c_PendTemp.Acerto, ;
-                                 ALLTRIM(cursor_4c_PendTemp.Moedas), ;
-                                 ALLTRIM(cursor_4c_PendTemp.Nomes), ;
-                                 cursor_4c_PendTemp.OrdCopChS)
-                            SKIP IN cursor_4c_PendTemp
-                        ENDDO
-                    ENDIF
-                    IF USED("cursor_4c_PendTemp")
-                        USE IN cursor_4c_PendTemp
-                    ENDIF
-                    GO TOP IN cursor_4c_Pendencias
-                    loc_lResultado = .T.
-                ELSE
-                    THIS.this_cMensagemErro = "Erro ao carregar pendencias de SigMvCcr"
-                    IF USED("cursor_4c_PendTemp")
-                        USE IN cursor_4c_PendTemp
-                    ENDIF
-                ENDIF
+            IF USED("cursor_4c_MaxNumes")
+                USE IN cursor_4c_MaxNumes
             ENDIF
 
+            loc_cSQL = "SELECT ISNULL(MAX(numes), 0) + 1 AS proxnumes" + ;
+                       " FROM SigCdPgr" + ;
+                       " WHERE emps  = " + EscaparSQL(par_cEmps)  + ;
+                       " AND   dopes = " + EscaparSQL(par_cDopes)
+
+            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_MaxNumes")
+
+            IF loc_nResult > 0 AND !EOF("cursor_4c_MaxNumes")
+                loc_nNumes = cursor_4c_MaxNumes.proxnumes
+            ENDIF
+
+            IF USED("cursor_4c_MaxNumes")
+                USE IN cursor_4c_MaxNumes
+            ENDIF
         CATCH TO loc_oErro
-            THIS.this_cMensagemErro = loc_oErro.Message
-            IF USED("cursor_4c_PendTemp")
-                USE IN cursor_4c_PendTemp
-            ENDIF
-            loc_lResultado = .F.
+            MsgErro("Erro em PGRBO.ObterProxNumes:" + CHR(13) + loc_oErro.Message, "Erro")
         ENDTRY
 
-        RETURN loc_lResultado
-    ENDPROC
+        RETURN loc_nNumes
+    ENDFUNC
 
 ENDDEFINE
