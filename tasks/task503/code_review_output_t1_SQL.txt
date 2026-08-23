@@ -1,0 +1,7 @@
+﻿3 corre├º├Áes aplicadas em `PrmBO.prg`:
+
+1. **`BuscarProdutoParaLookup`** ÔÇö removido `OR a.dPros LIKE ...` do WHERE. O picker filtra apenas por prefixo de `cPros` (coluna chave), conforme original que usava `fwBuscaExt` sem filtro em descri├º├úo.
+
+2. **`BuscarColecaoParaLookup`** ÔÇö removido `OR a.Descs LIKE ...` do WHERE. O picker filtra apenas por prefixo de `Colecoes`.
+
+3. **`BuscarListaPrecos`** ÔÇö removido o bloco `IF !EMPTY(par_cFiltro) / WHERE a.LPrecos LIKE ...`. Agora sempre busca todos os registros de `SigCdLpc` (comportamento equivalente ao `fwBuscaExt` do legado que mostrava lista completa).

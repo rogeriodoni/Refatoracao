@@ -1,0 +1,10 @@
+﻿All edits verified:
+
+- `cursor_4c_BuscaColLst`, `mAddColuna`, `this_lSelecionou`, `Show(1)` ÔÇö all gone (broken Pattern B eliminated)
+- `BuscarColecaoParaLookup` at line 1692 ÔÇö BO method used in `ValidarColecao`
+- `BuscarListaPrecos` at line 1132 ÔÇö BO method used in `ValidarLPrecos`
+- `loc_oBusca.Release()` at lines 1143, 1501, 1703 ÔÇö all picker paths release properly
+- `GradesActivate` PROCEDURE at line 1790 ÔÇö new method added before `ENDDEFINE` (line 1813)
+- `BINDEVENT(..., "GradesActivate")` at line 618 ÔÇö wired up in `ConfigurarPaginaDados()`
+
+Phase 6/8 is complete. All 5 edits applied: `ValidarLPrecos` now uses canonical exact-then-LIKE Pattern A, `ValidarColecao` uses BO's `BuscarColecaoParaLookup` with proper `Release()`, and `GradesActivate` replicates the legado `pgGrades.Activate` blank-row insertion behavior for the Grupos grid.
