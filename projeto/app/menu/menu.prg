@@ -337,6 +337,15 @@ PROCEDURE CriarMenuPrincipal()
            MESSAGE "Tabela de Promo" + CHR(231) + CHR(245) + "es por Per" + CHR(237) + "odo (SigCdPmc)"
     DEFINE BAR 154 OF popCadastros PROMPT "Movimenta" + CHR(231) + CHR(245) + "es Para C" + CHR(243) + "pia" ;
            MESSAGE "Cadastro de Movimenta" + CHR(231) + CHR(245) + "es Para C" + CHR(243) + "pia (SigPcOoP)"
+    DEFINE BAR 155 OF popCadastros PROMPT "Localiza" + CHR(231) + CHR(245) + "es" ;
+           MESSAGE "Cadastro de Localiza" + CHR(231) + CHR(245) + "es (SigPrLcl)"
+    DEFINE BAR 156 OF popCadastros PROMPT "Promo" + CHR(231) + CHR(245) + "es" ;
+           MESSAGE "Cadastro de Promo" + CHR(231) + CHR(245) + "es (SigPrPmc)"
+    DEFINE BAR 157 OF popCadastros PROMPT "Restri" + CHR(231) + CHR(245) + "es Por Opera" + CHR(231) + CHR(227) + "o" ;
+           MESSAGE "Restri" + CHR(231) + CHR(245) + "es Por Opera" + CHR(231) + CHR(227) + "o (SigCdRpo)"
+
+    DEFINE BAR 158 OF popCadastros PROMPT "Publicidade" ;
+           MESSAGE "Cadastro de Publicidade (SigCdFpb)"
 
     * Vincular acoes dos itens do menu Cadastros
     ON SELECTION BAR 1 OF popCadastros DO AbrirFormCargo
@@ -477,6 +486,10 @@ PROCEDURE CriarMenuPrincipal()
     ON SELECTION BAR 152 OF popCadastros DO AbrirFormPcp
     ON SELECTION BAR 153 OF popCadastros DO AbrirFormPMC
     ON SELECTION BAR 154 OF popCadastros DO AbrirFormprc
+    ON SELECTION BAR 155 OF popCadastros DO AbrirFormPrl
+    ON SELECTION BAR 156 OF popCadastros DO AbrirFormPrm
+    ON SELECTION BAR 157 OF popCadastros DO AbrirFormRop
+    ON SELECTION BAR 158 OF popCadastros DO AbrirFormPub
 
     * Menu Movimentos
     ON PAD padMovimentos OF _MSYSMENU ACTIVATE POPUP popMovimentos
@@ -9459,6 +9472,110 @@ PROCEDURE AbrirFormPMC()
     CATCH TO loException
         LOCAL lcMensagem
         lcMensagem = "Erro ao abrir formul" + CHR(225) + "rio de Promo" + CHR(231) + CHR(245) + "es:" + CHR(13) + CHR(13) + ;
+                     "Erro: " + loException.Message + CHR(13) + ;
+                     "Linha: " + TRANSFORM(loException.LineNo) + CHR(13) + ;
+                     "Procedure: " + loException.Procedure
+        MostrarErro(lcMensagem, "Erro Detalhado")
+    ENDTRY
+ENDPROC
+
+*------------------------------------------------------------------------------
+* AbrirFormPrl - Abre formulario de cadastro de Localizacoes (SigPrLcl)
+*------------------------------------------------------------------------------
+PROCEDURE AbrirFormPrl()
+    LOCAL loForm, loException
+
+    TRY
+        loForm = CREATEOBJECT("FormPrl")
+
+        IF VARTYPE(loForm) = "O"
+            loForm.Show()
+        ELSE
+            MostrarErro("Erro ao criar formul" + CHR(225) + "rio FormPrl" + CHR(13) + ;
+                       "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
+        ENDIF
+
+    CATCH TO loException
+        LOCAL lcMensagem
+        lcMensagem = "Erro ao abrir formul" + CHR(225) + "rio de Localiza" + CHR(231) + CHR(245) + "es:" + CHR(13) + CHR(13) + ;
+                     "Erro: " + loException.Message + CHR(13) + ;
+                     "Linha: " + TRANSFORM(loException.LineNo) + CHR(13) + ;
+                     "Procedure: " + loException.Procedure
+        MostrarErro(lcMensagem, "Erro Detalhado")
+    ENDTRY
+ENDPROC
+
+*------------------------------------------------------------------------------
+* AbrirFormPrm - Abre formulario de Cadastro de Promocoes (SigPrPmc)
+*------------------------------------------------------------------------------
+PROCEDURE AbrirFormPrm()
+    LOCAL loForm, loException
+
+    TRY
+        loForm = CREATEOBJECT("FormPrm")
+
+        IF VARTYPE(loForm) = "O"
+            loForm.Show()
+        ELSE
+            MostrarErro("Erro ao criar formul" + CHR(225) + "rio FormPrm" + CHR(13) + ;
+                       "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
+        ENDIF
+
+    CATCH TO loException
+        LOCAL lcMensagem
+        lcMensagem = "Erro ao abrir formul" + CHR(225) + "rio de Promo" + CHR(231) + CHR(245) + "es:" + CHR(13) + CHR(13) + ;
+                     "Erro: " + loException.Message + CHR(13) + ;
+                     "Linha: " + TRANSFORM(loException.LineNo) + CHR(13) + ;
+                     "Procedure: " + loException.Procedure
+        MostrarErro(lcMensagem, "Erro Detalhado")
+    ENDTRY
+ENDPROC
+
+*------------------------------------------------------------------------------
+* AbrirFormRop - Abre formulario de Restricoes Por Operacao (SigCdRpo)
+*------------------------------------------------------------------------------
+PROCEDURE AbrirFormRop()
+    LOCAL loForm, loException
+
+    TRY
+        loForm = CREATEOBJECT("FormRop")
+
+        IF VARTYPE(loForm) = "O"
+            loForm.Show()
+        ELSE
+            MostrarErro("Erro ao criar formul" + CHR(225) + "rio FormRop" + CHR(13) + ;
+                       "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
+        ENDIF
+
+    CATCH TO loException
+        LOCAL lcMensagem
+        lcMensagem = "Erro ao abrir formul" + CHR(225) + "rio de Restri" + CHR(231) + CHR(245) + "es Por Opera" + CHR(231) + CHR(227) + "o:" + CHR(13) + CHR(13) + ;
+                     "Erro: " + loException.Message + CHR(13) + ;
+                     "Linha: " + TRANSFORM(loException.LineNo) + CHR(13) + ;
+                     "Procedure: " + loException.Procedure
+        MostrarErro(lcMensagem, "Erro Detalhado")
+    ENDTRY
+ENDPROC
+
+*------------------------------------------------------------------------------
+* AbrirFormPub - Abre formulario de Cadastro de Publicidade (SigCdFpb)
+*------------------------------------------------------------------------------
+PROCEDURE AbrirFormPub()
+    LOCAL loForm, loException
+
+    TRY
+        loForm = CREATEOBJECT("FormPub")
+
+        IF VARTYPE(loForm) = "O"
+            loForm.Show()
+        ELSE
+            MostrarErro("Erro ao criar formul" + CHR(225) + "rio FormPub" + CHR(13) + ;
+                       "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
+        ENDIF
+
+    CATCH TO loException
+        LOCAL lcMensagem
+        lcMensagem = "Erro ao abrir formul" + CHR(225) + "rio de Publicidade:" + CHR(13) + CHR(13) + ;
                      "Erro: " + loException.Message + CHR(13) + ;
                      "Linha: " + TRANSFORM(loException.LineNo) + CHR(13) + ;
                      "Procedure: " + loException.Procedure

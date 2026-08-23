@@ -212,7 +212,7 @@ DEFINE CLASS FormPgb AS FormBase
                 .Width      = 75
                 .FontBold   = .T.
                 .FontItalic = .T.
-                .FontName   = "Comic Sans MS"
+                .FontName   = "Tahoma"
                 .FontSize   = 8
                 .Picture    = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
                 .Cancel     = .T.
@@ -288,7 +288,6 @@ DEFINE CLASS FormPgb AS FormBase
                 .HighlightBackColor  = RGB(255, 255, 255)
                 .HighlightForeColor  = RGB(15, 41, 104)
                 .HighlightStyle      = 2
-                .RecordSource        = "cursor_4c_HistoricoPgb"
             ENDWITH
 
             *-- Column1: Data
@@ -390,6 +389,19 @@ DEFINE CLASS FormPgb AS FormBase
             loc_oGrd.Column7.Header1.Caption   = "Dt.Base"
             loc_oGrd.Column7.Header1.Alignment = 2
 
+            *-- RecordSource definido apos todos os ControlSources para evitar auto-bind do VFP
+            loc_oGrd.ColumnCount  = 7
+            loc_oGrd.RecordSource = "cursor_4c_HistoricoPgb"
+
+            *-- Apos RecordSource, VFP faz auto-bind por ordem de campo -- redefinir todos os ControlSources
+            loc_oGrd.Column1.ControlSource = "cursor_4c_HistoricoPgb.Datas"
+            loc_oGrd.Column2.ControlSource = "cursor_4c_HistoricoPgb.Etiqs"
+            loc_oGrd.Column3.ControlSource = "cursor_4c_HistoricoPgb.Ccustos"
+            loc_oGrd.Column4.ControlSource = "cursor_4c_HistoricoPgb.Ccusto2s"
+            loc_oGrd.Column5.ControlSource = "cursor_4c_HistoricoPgb.Tpoperas"
+            loc_oGrd.Column6.ControlSource = "cursor_4c_HistoricoPgb.Tplancs"
+            loc_oGrd.Column7.ControlSource = "cursor_4c_HistoricoPgb.Dtbases"
+
             BINDEVENT(THIS.grd_4c_Dados, "AfterRowColChange", THIS, "GrdDadosAfterRowColChange")
 
         CATCH TO loc_oErro
@@ -404,7 +416,7 @@ DEFINE CLASS FormPgb AS FormBase
     *   O cursor cursor_4c_HistoricoPgb e populado pelo BO; o grid e rebindado
     *   aqui porque o BO fecha e recria o cursor (USE IN + CREATE CURSOR).
     *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE CarregarDados()
+    PROCEDURE CarregarDados()
         LOCAL loc_lOk, loc_oErro
         loc_lOk = .F.
 
@@ -489,6 +501,7 @@ DEFINE CLASS FormPgb AS FormBase
     *   com contratos comuns de forms CRUD (que alternam Lista/Dados).
     *--------------------------------------------------------------------------
     PROCEDURE AlternarPagina(par_nPagina)
+        RETURN
     ENDPROC
 
     *--------------------------------------------------------------------------
@@ -502,6 +515,7 @@ DEFINE CLASS FormPgb AS FormBase
     *   TextBoxes/Labels aqui violaria PILAR 1 (UX identica ao legado).
     *--------------------------------------------------------------------------
     PROTECTED PROCEDURE ConfigurarPaginaDados()
+        RETURN
     ENDPROC
 
     *--------------------------------------------------------------------------
@@ -520,6 +534,7 @@ DEFINE CLASS FormPgb AS FormBase
     *   Nao tem botao Incluir nem operacao de inclusao.
     *--------------------------------------------------------------------------
     PROCEDURE BtnIncluirClick()
+        RETURN
     ENDPROC
 
     *--------------------------------------------------------------------------
@@ -528,6 +543,7 @@ DEFINE CLASS FormPgb AS FormBase
     *   Nao tem botao Alterar nem operacao de alteracao.
     *--------------------------------------------------------------------------
     PROCEDURE BtnAlterarClick()
+        RETURN
     ENDPROC
 
     *--------------------------------------------------------------------------
@@ -536,6 +552,7 @@ DEFINE CLASS FormPgb AS FormBase
     *   Nao tem botao Visualizar nem modo de consulta separado.
     *--------------------------------------------------------------------------
     PROCEDURE BtnVisualizarClick()
+        RETURN
     ENDPROC
 
     *--------------------------------------------------------------------------
@@ -544,6 +561,7 @@ DEFINE CLASS FormPgb AS FormBase
     *   Nao tem botao Excluir nem operacao de exclusao.
     *--------------------------------------------------------------------------
     PROCEDURE BtnExcluirClick()
+        RETURN
     ENDPROC
 
     *--------------------------------------------------------------------------
@@ -552,6 +570,7 @@ DEFINE CLASS FormPgb AS FormBase
     *   Nao ha campo de busca interativo.
     *--------------------------------------------------------------------------
     PROCEDURE BtnBuscarClick()
+        RETURN
     ENDPROC
 
     *--------------------------------------------------------------------------
@@ -567,6 +586,7 @@ DEFINE CLASS FormPgb AS FormBase
     *   Historico de barras eh populado por SP SigPrCtb; sem edicao manual.
     *--------------------------------------------------------------------------
     PROCEDURE BtnSalvarClick()
+        RETURN
     ENDPROC
 
     *--------------------------------------------------------------------------
@@ -574,6 +594,7 @@ DEFINE CLASS FormPgb AS FormBase
     *   Nao ha operacoes de edicao que possam ser canceladas.
     *--------------------------------------------------------------------------
     PROCEDURE BtnCancelarClick()
+        RETURN
     ENDPROC
 
     *--------------------------------------------------------------------------
@@ -606,6 +627,7 @@ DEFINE CLASS FormPgb AS FormBase
     *   Todos os controles sao ReadOnly por definicao; nao ha modo de edicao.
     *--------------------------------------------------------------------------
     PROTECTED PROCEDURE HabilitarCampos(par_lHabilitar)
+        RETURN
     ENDPROC
 
     *--------------------------------------------------------------------------
@@ -613,6 +635,7 @@ DEFINE CLASS FormPgb AS FormBase
     *   Nao ha campos de entrada de dados para limpar.
     *--------------------------------------------------------------------------
     PROTECTED PROCEDURE LimparCampos()
+        RETURN
     ENDPROC
 
     *--------------------------------------------------------------------------
@@ -632,6 +655,7 @@ DEFINE CLASS FormPgb AS FormBase
     *   O unico controle disponivel ao usuario e o botao Encerrar.
     *--------------------------------------------------------------------------
     PROTECTED PROCEDURE AjustarBotoesPorModo(par_cModo)
+        RETURN
     ENDPROC
 
     *--------------------------------------------------------------------------

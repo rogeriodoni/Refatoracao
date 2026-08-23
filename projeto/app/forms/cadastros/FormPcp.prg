@@ -1057,7 +1057,7 @@ DEFINE CLASS FormPcp AS FormBase
             WITH loc_oPage.lbl_4c_Mensagem
                 .Caption   = ""
                 .Top       = 428
-                .Left      = 136
+                .Left      = 304
                 .Width     = 600
                 .Height    = 18
                 .FontName  = "Tahoma"
@@ -1082,6 +1082,7 @@ DEFINE CLASS FormPcp AS FormBase
         loc_lValidandoUI = (TYPE("gb_4c_ValidandoUI") = "L" AND gb_4c_ValidandoUI)
 
         IF loc_lValidandoUI
+            CREATE CURSOR cursor_4c_Dados (Codigos N(10,0), Titulos C(50), Datas T)
             RETURN .T.
         ENDIF
 
@@ -1115,7 +1116,7 @@ DEFINE CLASS FormPcp AS FormBase
     *==========================================================================
     * AlternarPagina - Alterna entre Page1 (Lista=1) e Page2 (Dados=2)
     *==========================================================================
-    PROTECTED PROCEDURE AlternarPagina(par_nPagina)
+    PROCEDURE AlternarPagina(par_nPagina)
         LOCAL loc_lResultado, loc_oErro
         loc_lResultado = .F.
 
@@ -1577,7 +1578,7 @@ DEFINE CLASS FormPcp AS FormBase
     *   ALTERAR: Confirmar habilitado, Processar desabilitado
     *   VISUALIZAR: ambos desabilitados
     *==========================================================================
-    PROTECTED PROCEDURE AjustarBotoesPorModo()
+    PROCEDURE AjustarBotoesPorModo()
         LOCAL loc_oPag2, loc_oCntAcao, loc_lModoIncluir, loc_lModoVisualizar, loc_oErro
 
         TRY
