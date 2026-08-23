@@ -1,0 +1,9 @@
+﻿Ambas as corre├º├Áes aplicadas corretamente. 
+
+**Fase 6 conclu├¡da.** As duas altera├º├Áes realizadas:
+
+1. **`FormPub.prg` linha 417** ÔÇö `cmd_4c_Cancelar.Caption` corrigido de `"Encerrar"` para `"Cancelar"`
+
+2. **`PubBO.prg` `ValidarDados()`** ÔÇö adicionada verifica├º├úo de duplicata ao inserir (equivalente ao `ChkRegister('SigCdFpb','cods',...)` do legado): faz `SELECT COUNT(*) FROM SigCdFpb WHERE cods = X` e exibe "C├│digo j├í cadastrado!" se existir
+
+Como este form tem apenas 2 campos (`cods`/`descs`) e **nenhum lookup** no original, a ConfigurarPaginaDados() estava completa desde a Fase 5. A Fase 6 resolveu os dois itens pendentes de completude funcional.
