@@ -1,0 +1,9 @@
+﻿As corre├º├Áes est├úo corretas. Resumo do que foi feito:
+
+**[CONTAINER-VISIVEL] ÔÇö Bug funcional corrigido:**  
+`TornarControlesVisiveis` adicionou `loc_lOcultar` e agora guarda a flag antes dos IFs. O bloco `PAGEFRAME` + `ControlCount` (recurs├úo) ficou dentro do `IF !loc_lOcultar` ÔÇö so `CNT_4C_CABECALHO` n├úo recebe `Visible=.T.` quanto nenhum dos seus filhos ├® tocado pela recurs├úo.
+
+**[GRID-HEADER] ÔÇö Headers inventados removidos:**  
+Colunas 1, 2 e 3 do `grd_4c_Produtos` tinham captions `"Produto"`, `"Descri├º├úo"`, `"Pe├ºa"` que o validador n├úo encontrou no legado. O legado s├│ tinha headers expl├¡citos em Column4 (`C?d. Barra`), Column5 (`Data Inicial`) e Column6 (`V`) ÔÇö as outras 3 colunas n├úo tinham caption. Foram zeradas para `""`, alinhando com o legado.
+
+Os headers do `grd_4c_Lista` (lista principal da Page1) foram mantidos ÔÇö esse grid n├úo existia no legado como grid expl├¡cito (era BROWSE) e os captions descritivos s├úo necess├írios para a UX da nova arquitetura em camadas.

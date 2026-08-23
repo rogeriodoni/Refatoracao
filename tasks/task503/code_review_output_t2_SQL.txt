@@ -1,0 +1,12 @@
+﻿Encontrei o contexto completo. O `WHERE LPrecos = ...` na linha 1130 ├® uma **valida├º├úo de lookup can├┤nica (Pattern A)** contra a tabela `SigCdLpc` ÔÇö substitui o `fwBuscaExt` do legado que o controle `getLPrecos` usava.
+
+Este ├® um **falso positivo** do passe automatizado:
+
+- A condi├º├úo detectada est├í em `ValidarLPrecos()` (linhas 1112-1166), n├úo no `Buscar()` principal
+- ├ë uma query contra **SigCdLpc** (tabela de listas de pre├ºo), n├úo contra SigPrPmc
+- O padr├úo ├®: digita valor ÔåÆ verifica exato em SigCdLpc ÔåÆ se n├úo encontrado, abre picker
+- O WHERE original listado (ECOMMERCE, PROMOS, PCTIPO, etc.) refere-se a queries de SigPrPmc; esta query ├® contra outra tabela completamente
+
+Remover o `WHERE LPrecos = ...` quebraria a valida├º├úo do campo LPrecos (a instru├º├úo ├® "NAO remover... lookups").
+
+**Conclus├úo:** O c├│digo est├í correto. O passe SQL detectou um WHERE em lookup de outra tabela (SigCdLpc) e o confundiu com filtro inventado no query principal de SigPrPmc. Nenhuma altera├º├úo ├® necess├íria ÔÇö o falso positivo n├úo representa um bug real.

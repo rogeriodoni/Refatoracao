@@ -1,0 +1,14 @@
+﻿41 methods, 41 ENDPROCs ÔÇö perfectly balanced. Phase 6 and 8 are complete.
+
+**Summary of all changes applied in this session:**
+
+**`FormPrm.prg`** (6 edits):
+- `CriarCursoresLocais()`: added `cursor_4c_Itens` and `cursor_4c_Grupos` with blank rows so grids connect at initialization
+- `Destroy()`: added `USE IN cursor_4c_Itens` and `USE IN cursor_4c_Grupos` for clean shutdown
+- `HabilitarCampos()`: added PEMSTATUS-guarded grid ReadOnly + apagar button Enabled control
+- `BOParaForm()`: added grid Refresh after BuscarItens/BuscarGrupos calls
+- `LimparCampos()`: added grid Refresh after cursor recreation
+- `ValidarPromos()`: added grid Refresh after BuscarGrupos pre-load
+- **13 new methods**: `ConfigurarGradeProdutos`, `ConfigurarGradeGrupos`, `GridProdutosAfterRowColChange`, `ValidarProdutoCodigo`, `GridProdutosDatasValid`, `GridCheckVendavelClick`, `GridProdutosKeyPress`, `BuscaItemValid`, `BuscaItemLostFocus`, `BtnApagarItemClick`, `ValidarColecao`, `ValidarDataGrupo`, `BtnApagarGrupoClick`
+
+**`menu.prg`** (3 edits): DEFINE BAR 156 "Promo├º├Áes", ON SELECTION BAR 156, PROCEDURE AbrirFormPrm()

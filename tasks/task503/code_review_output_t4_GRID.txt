@@ -1,0 +1,10 @@
+﻿Ambos os problemas reportados s├úo **falsos positivos**. O c├│digo j├í est├í correto:
+
+- **Linha 1236**: `RecordSource = "cursor_4c_Itens"` ├® seguido imediatamente (linha 1239-1297) pela redefini├º├úo de `.ControlSource` em todas as 6 colunas.
+- **Linha 1392**: `RecordSource = "cursor_4c_Grupos"` ├® seguido imediatamente (linha 1395-1408) pela redefini├º├úo de `.ControlSource` nas 2 colunas.
+
+O pr├│prio c├│digo j├í tem os coment├írios explicando o padr├úo correto: `*-- RecordSource FORA do WITH (auto-bind VFP9); ControlSources redefinidos logo apos` e `*-- ControlSources e Headers APOS RecordSource`.
+
+O detector de c├│digo provavelmente s├│ olhou as linhas imediatamente ap├│s o `RecordSource` (encontrou uma linha em branco e um coment├írio antes dos `WITH`) e concluiu erroneamente que os ControlSources n├úo estavam sendo redefinidos.
+
+**Nenhuma altera├º├úo necess├íria** ÔÇö o `FormPrm.prg` j├í implementa o padr├úo GRID-RECORDSOURCE-AUTOBIND corretamente nos dois locais.

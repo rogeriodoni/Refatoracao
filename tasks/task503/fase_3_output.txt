@@ -1,0 +1,14 @@
+﻿O arquivo foi criado corretamente. Fase 3 conclu├¡da.
+
+**Resumo do que foi criado em `C:\4c\projeto\app\forms\cadastros\FormPrm.prg`:**
+
+- **DEFINE CLASS FormPrm AS FormBase** ÔÇö propriedades visuais completas (Height=600, Width=1000, DataSession=2, etc.)
+- **Init(par_cTipo)** ÔÇö captura o par├ómetro `par_cTipo` antes do DODEFAULT(), ajusta Caption conforme modo (padr├úo vs e-Commerce), chama DODEFAULT()
+- **InicializarForm()** ÔÇö cria PrmBO, propaga `this_cTipo` para o BO, chama CriarCursoresLocais + ConfigurarPageFrame/Lista/Dados, carrega lista
+- **CriarCursoresLocais()** ÔÇö equivalente ao LOAD do legado: cria `csSigPrPmi`, `TcrSigPrPmi`, `csSigPrPmv` com SET NULL ON/OFF e INDEX
+- **ConfigurarPageFrame()** ÔÇö PageFrame Top=-29, 2 p├íginas com `fundo_cad_1003.jpg`
+- **ConfigurarPaginaLista()** ÔÇö cnt_4c_Cabecalho (com labels sombra/titulo), cnt_4c_Botoes (vazio, Fase 4), cnt_4c_Saida (can├┤nico Left=917)
+- **ConfigurarPaginaDados()** ÔÇö cnt_4c_BotoesAcao (vazio, Fase 5-6)
+- **CarregarLista()** ÔÇö placeholder para Fase 4
+- **Destroy()** ÔÇö libera BO e fecha cursores locais
+- **TornarControlesVisiveis()** ÔÇö itera├º├úo recursiva com suporte a PageFrames

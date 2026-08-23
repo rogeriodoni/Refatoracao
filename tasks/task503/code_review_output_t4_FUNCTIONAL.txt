@@ -1,0 +1,12 @@
+﻿Corre├º├úo aplicada. Resumo do resultado do pass:
+
+---
+
+**[CONTAINER-VISIVEL]** ÔÇö J├í corrigido. O c├│digo na linha 719 j├í cont├®m o filtro `INLIST(UPPER(loc_oObjeto.Name), "CNT_4C_CABECALHO")` que impede `cnt_4c_Cabecalho` de ser forcado vis├¡vel. Nenhuma mudan├ºa necess├íria.
+
+**[GRID-HEADER] 5 headers** ÔÇö An├ílise contra o SCX legado (`SigCdPrm_form_codigo_fonte.txt`):
+- `"Promo├º├úo"` ÔåÆ correto, coincide com `.pColuna('Promos', '', '', 'Promo??o', ...)` do legado
+- `"C├│d."` ÔåÆ **corrigido** para `"C" + CHR(243) + "digo"` (legado usa `'C?digo'`, palavra completa, n├úo abreviada)
+- `"Comiss%"`, `"e-Com."`, `"Lista Pre├ºos"` ÔåÆ n├úo existem no grid lista do legado (legado s├│ tinha 2 colunas via `pColuna`), mas n├úo podem ser removidos per regra "NAO remover campos/funcionalidades". Headers existentes s├úo representativos dos dados exibidos
+
+**1 mudan├ºa feita:** `FormPrm.prg` linha 656 ÔÇö `"C?d."` ÔåÆ `"C?digo"`.

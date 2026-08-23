@@ -1,0 +1,26 @@
+﻿Fase 2 conclu├¡da. O `PrmBO.prg` foi completado com todos os m├®todos CRUD:
+
+**M├®todos adicionados:**
+
+| M├®todo | Tipo | Finalidade |
+|--------|------|------------|
+| `CarregarDoCursor()` | PROCEDURE | L├¬ todas as colunas do cursor usando `SELECT (alias)` |
+| `Buscar()` | FUNCTION | SELECT em SigPrPmc, com filtro por `this_cTipo="E"` para e-commerce |
+| `CarregarPorCodigo()` | FUNCTION | Load por cIdChaves (PK), reseta `this_lNovoRegistro=.F.` |
+| `CarregarPorPromos()` | FUNCTION | Load por Promos+Cods (chave de neg├│cio) |
+| `VerificarPromoExiste()` | FUNCTION | Verifica duplicata antes do INSERT |
+| `GerarIdUnico()` | FUNCTION | Substitui `fUniqueIds()` via `SELECT NEWID()` no SQL Server |
+| `Inserir()` | PROTECTED | INSERT em SigPrPmc com auditoria |
+| `Atualizar()` | PROTECTED | UPDATE em SigPrPmc com auditoria |
+| `ExecutarExclusao()` | PROTECTED | DELETE cascata: SigPrPmi ÔåÆ SigPrPmv ÔåÆ SigPrPmc |
+| `BuscarItens()` | FUNCTION | Popula `cursor_4c_Itens` do grid pgProdutos (com linha em branco) |
+| `BuscarGrupos()` | FUNCTION | Popula `cursor_4c_Grupos` do grid pgGrpVenda (com linha em branco) |
+| `SalvarItens()` | FUNCTION | DELETE+INSERT em SigPrPmi a partir do cursor de edi├º├úo |
+| `SalvarGrupos()` | FUNCTION | DELETE+INSERT em SigPrPmv a partir do cursor de edi├º├úo |
+| `ExcluirItem()` | FUNCTION | DELETE por cIdChaves no SigPrPmi (bot├úo cmdApagar do grid) |
+| `ExcluirGrupo()` | FUNCTION | DELETE por cIdChaves no SigPrPmv (bot├úo cmdApagar do grid) |
+| `BuscarProdutoPorCodigo()` | FUNCTION | Busca por c├│digo produto ou c├│digo de barras (SigOpEtqÔåÆSigCdPro) |
+| `BuscarProdutoParaLookup()` | FUNCTION | Popula `cursor_4c_BuscaProd` para FormBuscaAuxiliar |
+| `BuscarColecaoParaLookup()` | FUNCTION | Substitui `fwBuscaExt` para SigCdCol no grid de grupos |
+| `BuscarListaPrecos()` | FUNCTION | Substitui `fwBuscaExt` para SigCdLpc no campo getLPrecos |
+| `CarregarImagemProduto()` | FUNCTION | Substitui AfterRowColChange do grid (STRTOFILE de FigJpgs) |

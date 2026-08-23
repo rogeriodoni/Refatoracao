@@ -1,0 +1,5 @@
+﻿Corre├º├úo aplicada. O que foi feito:
+
+**Problema real (GRID-RECORDSOURCE-AUTOBIND):** Em `LimparCampos`, os cursores `cursor_4c_Itens` e `cursor_4c_Grupos` eram fechados com `USE IN` e recriados com `CREATE CURSOR`. Quando VFP9 fecha e recria um cursor que um grid usa como `RecordSource`, ele faz auto-bind por posi├º├úo de campo ÔÇö sobrescrevendo os `ControlSource` definidos em `ConfigurarGradeProdutos`/`ConfigurarGradeGrupos`. O resultado era que ap├│s qualquer Incluir/Alterar (que chama `LimparCampos`), os grids exibiriam colunas na ordem errada dos campos do cursor (cIdChaves, CPros, DPros... em vez de CPros, DPros, Pecas...).
+
+**Fix (linhas 1056-1077):** Ap├│s recriar os cursores, o bloco TRY agora reatribui explicitamente `RecordSource` e todos os `ControlSource` de cada coluna (`grd_4c_Produtos`: 6 colunas + CheckBox; `grd_4c_Grupos`: 2 colunas) antes de chamar `.Refresh`.

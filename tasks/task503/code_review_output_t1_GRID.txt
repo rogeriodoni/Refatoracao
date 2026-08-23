@@ -1,0 +1,7 @@
+﻿Corre├º├Áes aplicadas em `FormPrm.prg`:
+
+- **Linha 1222** (`grd_4c_Produtos`): `.RecordSource = "cursor_4c_Itens"` removido do `WITH` block e movido para `loc_oGrid.RecordSource = "cursor_4c_Itens"` fora do WITH, imediatamente antes dos blocos `WITH loc_oGrid.Column1..6` que redefinem os ControlSources.
+
+- **Linha 1375** (`grd_4c_Grupos`): Mesmo padr├úo ÔÇö `.RecordSource = "cursor_4c_Grupos"` saiu do `WITH` block e virou `loc_oGrid.RecordSource = "cursor_4c_Grupos"` antes dos `WITH loc_oGrid.Column1..2`.
+
+Em ambos os casos os ControlSources j├í estavam definidos ap├│s o RecordSource, mas com o RecordSource dentro do `WITH`, o VFP9 pode causar o auto-bind antes das atribui├º├Áes. Com RecordSource fora do WITH, a sequ├¬ncia ├® inequ├¡voca: RecordSource ÔåÆ auto-bind ÔåÆ ControlSources expl├¡citos (sempre vence o auto-bind).
