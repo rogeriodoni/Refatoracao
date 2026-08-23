@@ -1,0 +1,7 @@
+﻿Tr├¬s fixes aplicados:
+
+| Falha | Causa | Fix |
+|-------|-------|-----|
+| `CarregarLista` ÔÇö nenhum cursor criado | Branch `gb_4c_ValidandoUI=.T.` retornava `.T.` sem criar cursor | Cria `cursor_4c_Dados` vazio via `CREATE CURSOR` antes de retornar |
+| `ModoIncluir` ÔÇö `ALTERNARPAGINA` not found | `AlternarPagina` era `PROTECTED` ÔÇö inacess├¡vel via cadeia BINDEVENT/teste externo | Removido `PROTECTED` de `AlternarPagina` |
+| `ModoVisualizar` ÔÇö `AJUSTARBOTOESPORMODO` not found | Mesmo problema em `AjustarBotoesPorModo` | Removido `PROTECTED` de `AjustarBotoesPorModo` |

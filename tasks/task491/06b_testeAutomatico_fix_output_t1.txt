@@ -1,0 +1,5 @@
+﻿Corre├º├Áes aplicadas. Resumo do que foi corrigido em `Formorl.prg`:
+
+**Bug prim├írio (crash):** `InicializarForm` acessava `cnt_4c_Cabecalho.lbl_4c_Sombra` e `cnt_4c_Cabecalho.lbl_4c_Titulo` *antes* de `ConfigurarPaginaLista()` cri├í-los. O erro resultante disparava `MostrarErro` ÔåÆ dialog ÔåÆ `SYS(2335,0)` matava o VFP sem escrever o resultado. As duas linhas foram removidas (redundantes, pois `ConfigurarPaginaLista` j├í define `.Caption = THIS.Caption`).
+
+**Bugs secund├írios (bot├Áes invis├¡veis):** Todos os 5 bot├Áes em `cnt_4c_Botoes` tinham `.Left = 542` dentro de um container de Width=390 ÔÇö ficavam fora dos limites. Corrigidos para posi├º├Áes relativas sequenciais (5, 80, 155, 230, 305). `cmd_4c_Encerrar` corrigido de `Left=917, Width=90` para `Left=5, Width=75` conforme padr├úo can├┤nico do CLAUDE.md.

@@ -1,0 +1,8 @@
+﻿Fase 6 conclu├¡da. As altera├º├Áes foram:
+
+**Menu.prg ÔÇö integra├º├úo completa:**
+- `DEFINE BAR 148 OF popCadastros PROMPT "Origem"` (linha 326)
+- `ON SELECTION BAR 148 OF popCadastros DO AbrirFormorl` (linha 461)
+- `PROCEDURE AbrirFormorl()` (linha 9244) com padr├úo can├┤nico: `VARTYPE`, `Show()` sem par├ómetro, sem `Release()`
+
+**Por que n├úo h├í campos/lookups novos nesta fase:** O formul├írio `sigcdorl` ├® simples ÔÇö apenas 2 campos (`cods`/`descs`) e nenhum lookup no original (n├úo h├í `fwbuscaext`, `sigacess` nem `fwBuscaSel`). O `ConfigurarPaginaDados()` j├í estava completo nas fases anteriores com ambos os campos, o container `cnt_4c_BotoesAcao` e os BINDEVENTs. A integra├º├úo com `config.prg` ├® autom├ítica via ADIR() (arquivos `*BO.prg` e `Form*.prg` s├úo carregados dinamicamente).

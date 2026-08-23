@@ -1,0 +1,18 @@
+﻿Fase 4 conclu├¡da. O arquivo `Formorl.prg` foi atualizado com:
+
+**Adicionado em `ConfigurarPaginaLista()`:**
+- 5 bot├Áes CRUD em `cnt_4c_Botoes` (Incluir, Visualizar, Alterar, Excluir, Buscar) com ├¡cones e propriedades can├┤nicas
+- Bot├úo Encerrar em `cnt_4c_Saida` com `Caption="Encerrar"` e `Width=75`
+- Grid `grd_4c_Lista` (Top=117, Left=12, Width=900, Height=490) com 2 colunas: `cods`/90px e `descs`/337px
+- BINDEVENT para todos os 6 bot├Áes de Page1
+
+**Adicionado em `ConfigurarPaginaDados()`:**
+- Bot├Áes Confirmar e Cancelar em `cnt_4c_BotoesAcao` com ├¡cones corretos (`cadastro_salvar_60.jpg`)
+- BINDEVENT para bot├Áes de Page2
+
+**Novos m├®todos implementados:**
+- `FormatarGridLista()` ÔÇö formata├º├úo Verdana/8
+- `CarregarLista()` ÔÇö vincula RecordSource + ControlSource + Headers ap├│s Buscar()
+- `BtnIncluirClick/BtnVisualizarClick/BtnAlterarClick/BtnExcluirClick/BtnBuscarClick/BtnEncerrarClick` ÔÇö l├│gica real baseada no legado
+- `BtnSalvarClick/BtnCancelarClick` ÔÇö salvar e cancelar
+- `FormParaBO/BOParaForm/LimparCampos/HabilitarCampos/ValidarCampos/AjustarBotoesPorModo` ÔÇö data binding completo
