@@ -1,0 +1,294 @@
+{
+  "resumo": {
+    "totalMetodos": 17,
+    "metodosComSQL": 3,
+    "metodosComValidacao": 7,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fwBuscaSel"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDPRL",
+      "evento": "Procedure",
+      "linhas": 83,
+      "codigoOriginal": "lnPrinters = APrinters(laPrinters)\nIf (lnPrinters <> 0)\n\tFor lnI = 1 to lnPrinters\n\t\tlaPrinters(lnI, 1) = Upper(laPrinters(lnI, 1))\n\tEndFor\n\t=ASort(laPrinters)\n\tlnTam = Len(laPrinters(1, 1))\nElse\n\t=MessageBox('Não Foi Encontrada Nenhuma Impressora!!!', 48, '')\n\tReturn 0\nEndIf\n\nlcCpo = 'OcoEtiqs, Ouros, nMaxTpEtis, TpEtiPads, nMaxImpEti, ImpEtis, AjVerts, AjHorzs, LibObss, TpInstalas'\nThisForm.poDataMgr.CursorQuery('SigCdPam', 'LocalParam', .F., .F., lcCpo)\n\nThisForm.poDataMgr.CursorQuery('SigCdm... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "optImpressora,Option&lcI,Option1",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRL",
+      "evento": "Procedure",
+      "linhas": 7,
+      "codigoOriginal": "Local lcBusca\n\nIf Not Empty(ThisForm.Pagina.Dados.Get_codigos.Value)\n\tThisForm.poDataMgr.LocateCursor('crSigPrLcl','codigos',ThisForm.Pagina.Dados.Get_codigos.Value)\nEndIf\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "LocateCursor",
+        "controlesReferenciados": "Get_codigos",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRL",
+      "evento": "Init",
+      "linhas": 21,
+      "codigoOriginal": "With ThisForm\n\t.poDataMgr = CreateObject([fSqlConector], .Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tWith .poDataMgr\n\t\t\t.AddCursor([SigPrLcl], [Codigos], [crSigPrLcl], [], ThisForm.Pagina.Lista.Grade)\n\t\t\t.pfSqlTabela(1).pColuna([Codigos],    [], [], [Código],    100, .t.)\n\t\t\t.pfSqlTabela(1).pColuna([Descricaos], [], [], [Descrição], 290, .t.)\n\t\tEndWith\n\n\t\t=DoDefault()\n\n\t\t.Pagina.Lista.cntEtiquetas.Visible = .f.\n\t\t.Pagina.Lista.cntEtiquetas.Enabled = .f.\n\t\t.Pagina.Lista.Grade.Column1.SetFocus\n\tElse\n\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDPRL",
+      "evento": "Click",
+      "linhas": 16,
+      "codigoOriginal": "LPARAMETERS opcao\n\nIf !dodefault( Opcao )\n\tThisForm.mAtivapagina1\n\tReturn\nEndif\n\nDo Case\n\tCase ThisForm.pcEscolha = 'INSERIR' or ThisForm.pcEscolha = 'PROCURAR'\n\t\tThisForm.Pagina.Dados.Get_Codigos.SetFocus\n\tCase Inlist( ThisForm.pcEscolha, 'EXCLUIR', 'CONSULTAR' )\n\t\tThisForm.Pagina.Dados.Grupo_Salva.Salva.SetFocus\n\tCase ThisForm.pcEscolha = 'ALTERAR'\n\t\tThisForm.Pagina.Dados.Get_Descricaos.SetFocus\nEndcase\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Codigos,Get_Descricaos",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRL",
+      "evento": "Click",
+      "linhas": 17,
+      "codigoOriginal": "If Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')\n\tIf Empty(CrSigPrLcl.Descricaos)\n\t\t=Messagebox('Localização Inválida!!!', 48, '')\n\t\tThisForm.Pagina.Dados.Get_Descricaos.SetFocus\n\t\tReturn 0\n\tEndIf\n\n\tIf (crSigPrLcl.Etiquetas = 1) And (Len(Alltrim(crSigPrLcl.Codigos)) > 3)\n\t\t=Messagebox('Para Impressão de Etiquetas o Código Deve Ter no Máximo 3 Caracteres!!!', 48, '')\n\t\tThisForm.Pagina.Dados.get_codigos.SetFocus\n\t\tReturn 0\n\tEndIf\nEndIf\n\n=DoDefault()\n\nThisForm.mAtivapagina1",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Descricaos,get_codigos",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRL",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "=DoDefault()\nIf ThisForm.plCancelar\n\tThisForm.mAtivapagina1\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRL.Pagina.Lista.cmdEtiquetas",
+      "evento": "Valid",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.ImpEtiqueta\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRL.Pagina.Lista.cntEtiquetas.getCodigos",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "NoDefault\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRL.Pagina.Lista.cntEtiquetas.getCodigos",
+      "evento": "Valid",
+      "linhas": 30,
+      "codigoOriginal": "Local loLista\n\nlcQuery = [Select Codigos, Descricaos ] + ;\n\t\t    [From SigPrLcl ] + ;\n\t\t   [Where Etiquetas = 1]\n\nIf (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crBusca') < 1)\n\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crBusca)')\n\tReturn 0\nEndIf\nSelect crBusca\nIndex On Codigos Tag Codigos\nIndex On Descricaos + Codigos Tag Descrs\n\nIf Not Empty(This.Value)\n\tSet Near On\n\tIf Not Seek(This.Value, 'crBusca', 'Codigos')\n\t\tm.loBrowse = CreateObject('fwbuscasel', 'crBusca', 'Co... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRL.Pagina.Lista.cntEtiquetas.optTipo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRL.Pagina.Lista.cntEtiquetas.optTipo",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRL.Pagina.Lista.cntEtiquetas.optTipo",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRL.Pagina.Lista.cntEtiquetas.CmdOk",
+      "evento": "Click",
+      "linhas": 102,
+      "codigoOriginal": "* Impressão das Etiquetas\nlcCod = ThisForm.Pagina.Lista.cntEtiquetas.getCodigos.Value\nlnQtd = ThisForm.Pagina.Lista.cntEtiquetas.getQtde.Value\nlnTip = ThisForm.Pagina.Lista.cntEtiquetas.optTipo.Value\nlnDen = Int(ThisForm.Pagina.Lista.cntEtiquetas.spnDensidade.Value)\nlnHor = Int(ThisForm.Pagina.Lista.cntEtiquetas.spnHorizontal.Value)\nlnVer = Int(ThisForm.Pagina.Lista.cntEtiquetas.spnVertical.Value)\nlnImp = ThisForm.Pagina.Lista.cntEtiquetas.optImpressora.Value\nlcImp = ThisForm.Pagina.Lista.cntEti... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "optTipo,optImpressora",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRL.Pagina.Lista.cntEtiquetas.CmdCancel",
+      "evento": "Click",
+      "linhas": 10,
+      "codigoOriginal": "* Retornando Para a Grade\nThisForm.Pagina.Lista.cntEtiquetas.Visible \t= .f.\nThisForm.Pagina.Lista.cntEtiquetas.Enabled \t= .f.\nThisForm.Pagina.Lista.Grade.Enabled \t\t= .t.\nThisForm.Pagina.Lista.Grupo_op.Enabled \t\t= .t.\nThisForm.Pagina.Lista.Grupo_saida.Enabled \t= .t.\nThisForm.Pagina.Lista.cmdEtiquetas.Enabled \t= .t.\nThisForm.Refresh\nThisForm.Pagina.Lista.Grade.SetFocus\n* Fim *********************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRL.Pagina.Lista.cntEtiquetas.getQtde",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "NoDefault\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRL.Pagina.Dados.get_codigos",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return( Inlist(thisform.pcEscolha,'INSERIR', 'PROCURAR' ) )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRL.Pagina.Dados.get_codigos",
+      "evento": "Valid",
+      "linhas": 10,
+      "codigoOriginal": "If IsEmpty(This.Value) And Thisform.pcEscolha = 'INSERIR'\n\tThisForm.Pagina.Dados.Get_Codigos.Value = Padl(fGerUniqueKey([SigPrLcl]), 10, [0])\n\tThisform.pagina.dados.get_codigos.refresh\nElse\n\tIf ThisForm.poDataMgr.ChkRegister('SigPrLcl','codigos',ThisForm.Pagina.Dados.Get_Codigos.Value) and Thisform.pcEscolha = 'INSERIR'\n\t\t=MessageBox('Código Já Cadastrado!!!', 48, '')\n\t\tThis.Value = ''\n\t\tReturn 0\n\tEndif\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value = Padl,ChkRegister",
+        "controlesReferenciados": "Get_Codigos,ChkRegister('SigPrLcl'",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

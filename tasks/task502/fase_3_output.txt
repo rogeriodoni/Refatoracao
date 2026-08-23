@@ -1,0 +1,22 @@
+﻿Fase 3/8 conclu├¡da. O arquivo `FormPrl.prg` foi criado em `C:\4c\projeto\app\forms\cadastros\FormPrl.prg` com 316 linhas.
+
+**O que foi entregue na Fase 3:**
+
+| M├®todo | Status | Observa├º├úo |
+|--------|--------|------------|
+| `DEFINE CLASS FormPrl AS FormBase` | Ô£à | Height=600, Width=1000, Caption com CHR() |
+| `Init()` | Ô£à | Apenas `DODEFAULT()` ÔÇö sem InicializarForm duplicado |
+| `InicializarForm()` | Ô£à | Cria PrlBO, configura PageFrame, carrega lista |
+| `ConfigurarPageFrame()` | Ô£à | PageFrame Top=-29, Tabs=.F., 2 pages com Picture |
+| `ConfigurarPaginaLista()` | Ô£à | cnt_4c_Cabecalho + lbl sombra/titulo, cnt_4c_Botoes, cnt_4c_Saida (canonical), cnt_4c_Etiquetas (**OCULTO**) |
+| `ConfigurarPaginaDados()` | Ô£à | cnt_4c_BotoesAcao (Top=38 compensado) |
+| `CarregarLista()` | Ô£à | Chama BO.Buscar(); binding do grid na Fase 4 |
+| `AlternarPagina()` | Ô£à | Alterna Page1/Page2, recarrega lista |
+| `TornarControlesVisiveis()` | Ô£à | Preserva `cnt_4c_Etiquetas` oculto (Problema 26) |
+| `FormatarGridLista()` | Ô£à | Tahoma 8 |
+| `Destroy()` | Ô£à | Libera BO + DODEFAULT() |
+
+**Decis├Áes de design cr├¡ticas:**
+- `cnt_4c_Etiquetas` preservado com `Visible=.F.` e o `TornarControlesVisiveis()` pula este container especificamente (evita Problema 26)
+- `cnt_4c_Saida` usa valores can├┤nicos (Left=917, Width=90) ignorando o legado (CLAUDE.md regra #10)
+- Compensa├º├úo +29 aplicada em todos os Top dos containers da Page1
