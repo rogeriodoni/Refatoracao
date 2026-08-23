@@ -335,6 +335,8 @@ PROCEDURE CriarMenuPrincipal()
            MESSAGE "Planejamento e Controle da Produ" + CHR(231) + CHR(227) + "o (SigCdPcz)"
     DEFINE BAR 153 OF popCadastros PROMPT "Promo" + CHR(231) + CHR(245) + "es por Per" + CHR(237) + "odo" ;
            MESSAGE "Tabela de Promo" + CHR(231) + CHR(245) + "es por Per" + CHR(237) + "odo (SigCdPmc)"
+    DEFINE BAR 154 OF popCadastros PROMPT "Movimenta" + CHR(231) + CHR(245) + "es Para C" + CHR(243) + "pia" ;
+           MESSAGE "Cadastro de Movimenta" + CHR(231) + CHR(245) + "es Para C" + CHR(243) + "pia (SigPcOoP)"
 
     * Vincular acoes dos itens do menu Cadastros
     ON SELECTION BAR 1 OF popCadastros DO AbrirFormCargo
@@ -474,6 +476,7 @@ PROCEDURE CriarMenuPrincipal()
     ON SELECTION BAR 151 OF popCadastros DO AbrirFormPai
     ON SELECTION BAR 152 OF popCadastros DO AbrirFormPcp
     ON SELECTION BAR 153 OF popCadastros DO AbrirFormPMC
+    ON SELECTION BAR 154 OF popCadastros DO AbrirFormprc
 
     * Menu Movimentos
     ON PAD padMovimentos OF _MSYSMENU ACTIVATE POPUP popMovimentos
@@ -9406,6 +9409,32 @@ PROCEDURE AbrirFormPcp()
         lcMensagem = "Erro ao abrir formul" + CHR(225) + "rio de PCP:" + CHR(13) + CHR(13) + ;
                      "Erro: "      + loException.Message + CHR(13) + ;
                      "Linha: "     + TRANSFORM(loException.LineNo) + CHR(13) + ;
+                     "Procedure: " + loException.Procedure
+        MostrarErro(lcMensagem, "Erro Detalhado")
+    ENDTRY
+ENDPROC
+
+*------------------------------------------------------------------------------
+* AbrirFormprc - Abre formulario de Movimentacoes Para Copia (SigPcOoP)
+*------------------------------------------------------------------------------
+PROCEDURE AbrirFormprc()
+    LOCAL loForm, loException
+
+    TRY
+        loForm = CREATEOBJECT("Formprc")
+
+        IF VARTYPE(loForm) = "O"
+            loForm.Show()
+        ELSE
+            MostrarErro("Erro ao criar formul" + CHR(225) + "rio Formprc" + CHR(13) + ;
+                       "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
+        ENDIF
+
+    CATCH TO loException
+        LOCAL lcMensagem
+        lcMensagem = "Erro ao abrir formul" + CHR(225) + "rio de Movimenta" + CHR(231) + CHR(245) + "es Para C" + CHR(243) + "pia:" + CHR(13) + CHR(13) + ;
+                     "Erro: " + loException.Message + CHR(13) + ;
+                     "Linha: " + TRANSFORM(loException.LineNo) + CHR(13) + ;
                      "Procedure: " + loException.Procedure
         MostrarErro(lcMensagem, "Erro Detalhado")
     ENDTRY
