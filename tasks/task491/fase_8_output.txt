@@ -1,0 +1,21 @@
+﻿A migra├º├úo est├í **completamente finalizada**. Todos os m├®todos da Fase 8 j├í foram implementados nas fases anteriores. Aqui est├í o resumo da situa├º├úo:
+
+## Fase 8/8 ÔÇö Consolida├º├úo Final: COMPLETO Ô£à
+
+### `Formorl.prg` ÔÇö 865 linhas, todos os m├®todos implementados:
+- `BtnBuscarClick()` ÔÇö linha 669 (INPUTBOX + Buscar com filtro)
+- `BtnEncerrarClick()` ÔÇö linha 702 (THIS.Release())
+- `BtnSalvarClick()` ÔÇö linha 709 (ValidarCampos ÔåÆ FormParaBO ÔåÆ Salvar)
+- `BtnCancelarClick()` ÔÇö linha 731 (AlternarPagina + CarregarLista)
+- `FormParaBO()` ÔÇö linha 740 (cods + descs)
+- `BOParaForm()` ÔÇö linha 750 (cods + descs)
+- `HabilitarCampos()` ÔÇö linha 774 (c├│digo s├│ habilitado em INCLUIR)
+- `LimparCampos()` ÔÇö linha 760
+- `AjustarBotoesPorModo()` ÔÇö linha 810 (Confirmar disabled em VISUALIZAR)
+
+### `orlBO.prg` ÔÇö 291 linhas, completo:
+- Inserir/Atualizar/ExecutarExclusao, Buscar, CarregarPorCodigo, fUniqueIds para cidchaves
+
+### Integra├º├úo:
+- `config.prg` ÔÇö carregamento din├ómico via ADIR (autom├ítico, sem entrada manual)
+- `menu.prg` ÔÇö `DEFINE BAR 148 OF popCadastros` + `ON SELECTION BAR 148 DO AbrirFormorl` + `PROCEDURE AbrirFormorl()` com padr├úo can├┤nico (VARTYPE, Show() sem par├ómetro, sem Release)

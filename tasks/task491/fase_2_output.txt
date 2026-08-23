@@ -1,0 +1,19 @@
+﻿O arquivo `orlBO.prg` j├í est├í completo ÔÇö a Fase 1 incluiu todos os m├®todos CRUD. Veja o que j├í est├í implementado:
+
+| M├®todo | Status |
+|--------|--------|
+| `Init()` | Ô£à `this_cTabela = "sigcdorl"`, `this_cCampoChave = "cods"` |
+| `ObterChavePrimaria()` | Ô£à Retorna `this_cCodigo` |
+| `CarregarDoCursor()` | Ô£à `SELECT (par_cAliasCursor)` + campos sem alias |
+| `ValidarDados()` | Ô£à Valida `cods` e `descs` obrigat├│rios |
+| `Buscar()` | Ô£à SELECT com filtro por `cods`/`descs`, cursor `cursor_4c_Dados` |
+| `CarregarPorCodigo()` | Ô£à SELECT por `cods`, seta `this_lNovoRegistro = .F.` |
+| `VerificarCodigoDuplicado()` | Ô£à COUNT(*) para checar duplicidade antes do INSERT |
+| `Inserir()` | Ô£à Chama `VerificarCodigoDuplicado()` + `fUniqueIds()` + `RegistrarAuditoria("INSERT")` |
+| `Atualizar()` | Ô£à UPDATE apenas `descs` (correto ÔÇö `cods` ├® readonly em ALTERAR) + `RegistrarAuditoria("UPDATE")` |
+| `ExecutarExclusao()` | Ô£à DELETE por `cods` + `RegistrarAuditoria("DELETE")` |
+| `Destroy()` | Ô£à Fecha cursores `cursor_4c_Dados`, `cursor_4c_Carrega`, `cursor_4c_Chk` |
+
+O arquivo est├í correto e alinhado com o c├│digo fonte original ÔÇö inclusive a l├│gica de `Get_codigo.When` retornando `.F.` em modo ALTERAR est├í refletida na estrutura do UPDATE (n├úo atualiza `cods`).
+
+**Fase 2 j├í est├í conclu├¡da.** O orlBO.prg est├í pronto para a Fase 3 (cria├º├úo do Form).
