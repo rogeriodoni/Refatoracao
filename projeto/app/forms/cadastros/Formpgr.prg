@@ -36,6 +36,8 @@ DEFINE CLASS Formpgr AS FormBase
     moedamaior      = " "
     novolacto       = 0
     cotusu          = " "
+    this_cMoedas    = ""    && Moeda do lancamento (nao persiste em SigCdPgr)
+    this_cFpags     = ""    && Forma de pagamento (nao persiste em SigCdPgr)
     matriz          = .F.
     grupooper       = .F.
     cnab            = .F.
@@ -72,8 +74,10 @@ DEFINE CLASS Formpgr AS FormBase
             *-- Criar instancia do Business Object
             THIS.this_oBusinessObject = CREATEOBJECT("pgrBO")
 
-            IF ISNULL(THIS.this_oBusinessObject)
-                MostrarErro("Erro ao criar Business Object pgrBO", "Erro Cr" + CHR(237) + "tico")
+            IF VARTYPE(THIS.this_oBusinessObject) != "O"
+                MsgErro("Erro ao criar Business Object PGRBO." + CHR(13) + ;
+                    "VARTYPE retornou: " + VARTYPE(THIS.this_oBusinessObject), ;
+                    "FormPGR.InicializarForm")
                 loc_lSucesso = .F.
             ELSE
                 THIS.ConfigurarPageFrame()
@@ -936,28 +940,29 @@ DEFINE CLASS Formpgr AS FormBase
                 loc_oGrid.RecordSource = "cursor_4c_Dados"
 
                 *-- 3. ControlSource OBRIGATORIO APOS RecordSource
-                loc_oGrid.Column1.ControlSource = "cursor_4c_Dados.empdopnums"
-                loc_oGrid.Column2.ControlSource = "cursor_4c_Dados.datas"
-                loc_oGrid.Column3.ControlSource = "cursor_4c_Dados.grupocash"
-                loc_oGrid.Column4.ControlSource = "cursor_4c_Dados.contacsh"
-                loc_oGrid.Column5.ControlSource = "cursor_4c_Dados.fpags"
-                loc_oGrid.Column6.ControlSource = "cursor_4c_Dados.nopers"
+                *-- Colunas de PGRBO.Buscar(): cidchaves,numes,mascnum,datarcs,grupos,contas,usuars,emps,obs,dopes,empdopnums
+                loc_oGrid.Column1.ControlSource = "cursor_4c_Dados.mascnum"
+                loc_oGrid.Column2.ControlSource = "cursor_4c_Dados.datarcs"
+                loc_oGrid.Column3.ControlSource = "cursor_4c_Dados.grupos"
+                loc_oGrid.Column4.ControlSource = "cursor_4c_Dados.contas"
+                loc_oGrid.Column5.ControlSource = "cursor_4c_Dados.obs"
+                loc_oGrid.Column6.ControlSource = "cursor_4c_Dados.usuars"
 
                 *-- 4. Larguras APOS RecordSource
-                loc_oGrid.Column1.Width = 58
-                loc_oGrid.Column2.Width = 75
+                loc_oGrid.Column1.Width = 80
+                loc_oGrid.Column2.Width = 80
                 loc_oGrid.Column3.Width = 100
                 loc_oGrid.Column4.Width = 100
-                loc_oGrid.Column5.Width = 477
+                loc_oGrid.Column5.Width = 430
                 loc_oGrid.Column6.Width = 100
 
-                *-- 5. FontName por coluna (Legado: Courier New)
-                loc_oGrid.Column1.FontName = "Courier New"
-                loc_oGrid.Column2.FontName = "Courier New"
-                loc_oGrid.Column3.FontName = "Courier New"
-                loc_oGrid.Column4.FontName = "Courier New"
-                loc_oGrid.Column5.FontName = "Courier New"
-                loc_oGrid.Column6.FontName = "Courier New"
+                *-- 5. FontName por coluna
+                loc_oGrid.Column1.FontName = "Tahoma"
+                loc_oGrid.Column2.FontName = "Tahoma"
+                loc_oGrid.Column3.FontName = "Tahoma"
+                loc_oGrid.Column4.FontName = "Tahoma"
+                loc_oGrid.Column5.FontName = "Tahoma"
+                loc_oGrid.Column6.FontName = "Tahoma"
 
                 *-- 6. Cabecalhos APOS RecordSource
                 loc_oGrid.Column1.Header1.Caption = "C" + CHR(243) + "digo"
@@ -1020,7 +1025,7 @@ DEFINE CLASS Formpgr AS FormBase
             RETURN
         ENDIF
 
-        loc_cChave = ALLTRIM(cursor_4c_Dados.empdopnums)
+        loc_cChave = ALLTRIM(cursor_4c_Dados.cidchaves)
 
         IF THIS.this_oBusinessObject.CarregarPorCodigo(loc_cChave)
             THIS.BOParaForm()
@@ -1042,7 +1047,7 @@ DEFINE CLASS Formpgr AS FormBase
             RETURN
         ENDIF
 
-        loc_cChave = ALLTRIM(cursor_4c_Dados.empdopnums)
+        loc_cChave = ALLTRIM(cursor_4c_Dados.cidchaves)
 
         IF THIS.this_oBusinessObject.CarregarPorCodigo(loc_cChave)
             THIS.this_oBusinessObject.EditarRegistro()
@@ -1065,7 +1070,7 @@ DEFINE CLASS Formpgr AS FormBase
             RETURN
         ENDIF
 
-        loc_cChave = ALLTRIM(cursor_4c_Dados.empdopnums)
+        loc_cChave = ALLTRIM(cursor_4c_Dados.cidchaves)
 
         IF THIS.this_oBusinessObject.CarregarPorCodigo(loc_cChave)
             IF MsgConfirma("Confirma exclus" + CHR(227) + "o do lan" + CHR(231) + ;
@@ -1167,8 +1172,8 @@ DEFINE CLASS Formpgr AS FormBase
 
         *-- Cabecalho
         loc_oBO.this_cMascNum  = ALLTRIM(loc_oCab.txt_4c_NumLancamento.Value)
-        loc_oBO.this_dDataRcs  = loc_oCab.txt_4c_DataLancamento.Value
-        loc_oBO.this_dDataLims = loc_oCab.txt_4c_DataLimite.Value
+        loc_oBO.this_tDataRcs  = loc_oCab.txt_4c_DataLancamento.Value
+        loc_oBO.this_tDataLims = loc_oCab.txt_4c_DataLimite.Value
         loc_oBO.this_cContas   = ALLTRIM(loc_oCab.txt_4c_ContaHeader.Value)
 
         *-- Page3 Lancamentos: campos de observacao
@@ -1178,12 +1183,12 @@ DEFINE CLASS Formpgr AS FormBase
         LOCAL loc_oPag1
         loc_oPag1 = THIS.pgf_4c_Paginas.Page2.pgf_4c_SubPaginas.Page1
         loc_oBO.this_cGrupos   = ALLTRIM(loc_oPag1.txt_4c_GrupoPend.Value)
-        loc_oBO.this_cMoedas   = ALLTRIM(loc_oPag1.txt_4c_MoedaPend.Value)
+        THIS.this_cMoedas      = ALLTRIM(loc_oPag1.txt_4c_MoedaPend.Value)
 
         *-- Page2 Pagamento: forma de pagamento
         LOCAL loc_oPag2
         loc_oPag2 = THIS.pgf_4c_Paginas.Page2.pgf_4c_SubPaginas.Page2
-        loc_oBO.this_cFpags    = ALLTRIM(loc_oPag2.txt_4c_Fpg.Value)
+        THIS.this_cFpags       = ALLTRIM(loc_oPag2.txt_4c_Fpg.Value)
     ENDPROC
 
     *--------------------------------------------------------------------------
@@ -1199,8 +1204,8 @@ DEFINE CLASS Formpgr AS FormBase
 
         *-- Cabecalho
         loc_oCab.txt_4c_NumLancamento.Value  = ALLTRIM(loc_oBO.this_cMascNum)
-        loc_oCab.txt_4c_DataLancamento.Value = loc_oBO.this_dDataRcs
-        loc_oCab.txt_4c_DataLimite.Value     = loc_oBO.this_dDataLims
+        loc_oCab.txt_4c_DataLancamento.Value = loc_oBO.this_tDataRcs
+        loc_oCab.txt_4c_DataLimite.Value     = loc_oBO.this_tDataLims
         loc_oCab.txt_4c_ContaHeader.Value    = ALLTRIM(loc_oBO.this_cContas)
 
         *-- Page3 Lancamentos: campos de observacao
@@ -1210,12 +1215,12 @@ DEFINE CLASS Formpgr AS FormBase
         LOCAL loc_oPag1
         loc_oPag1 = THIS.pgf_4c_Paginas.Page2.pgf_4c_SubPaginas.Page1
         loc_oPag1.txt_4c_GrupoPend.Value     = ALLTRIM(loc_oBO.this_cGrupos)
-        loc_oPag1.txt_4c_MoedaPend.Value     = ALLTRIM(loc_oBO.this_cMoedas)
+        loc_oPag1.txt_4c_MoedaPend.Value     = ALLTRIM(THIS.this_cMoedas)
 
         *-- Page2 Pagamento: forma de pagamento
         LOCAL loc_oPag2
         loc_oPag2 = THIS.pgf_4c_Paginas.Page2.pgf_4c_SubPaginas.Page2
-        loc_oPag2.txt_4c_Fpg.Value           = ALLTRIM(loc_oBO.this_cFpags)
+        loc_oPag2.txt_4c_Fpg.Value           = ALLTRIM(THIS.this_cFpags)
     ENDPROC
 
     *--------------------------------------------------------------------------
@@ -5477,7 +5482,7 @@ DEFINE CLASS Formpgr AS FormBase
             RETURN
         ENDIF
         LOCAL loc_cChave
-        loc_cChave = ALLTRIM(cursor_4c_Dados.empdopnums)
+        loc_cChave = ALLTRIM(cursor_4c_Dados.cidchaves)
         MsgInfo("Gera" + CHR(231) + CHR(227) + "o de boleto - Lan" + ;
             CHR(231) + "amento: " + loc_cChave)
     ENDPROC
@@ -5488,7 +5493,7 @@ DEFINE CLASS Formpgr AS FormBase
             RETURN
         ENDIF
         LOCAL loc_cChave
-        loc_cChave = ALLTRIM(cursor_4c_Dados.empdopnums)
+        loc_cChave = ALLTRIM(cursor_4c_Dados.cidchaves)
         MsgInfo("Impress" + CHR(227) + "o de documento - Lan" + ;
             CHR(231) + "amento: " + loc_cChave)
     ENDPROC
@@ -5499,7 +5504,7 @@ DEFINE CLASS Formpgr AS FormBase
             RETURN
         ENDIF
         LOCAL loc_cChave
-        loc_cChave = ALLTRIM(cursor_4c_Dados.empdopnums)
+        loc_cChave = ALLTRIM(cursor_4c_Dados.cidchaves)
         MsgInfo("Impress" + CHR(227) + "o de recibo - Lan" + ;
             CHR(231) + "amento: " + loc_cChave)
     ENDPROC
@@ -5608,8 +5613,7 @@ DEFINE CLASS Formpgr AS FormBase
             RETURN
         ENDIF
 
-        THIS.this_oBusinessObject.this_cMoedas = ;
-            ALLTRIM(THIS.this_oBusinessObject.this_cMoedas)
+        THIS.this_cMoedas = ALLTRIM(THIS.this_cMoedas)
         MsgInfo("Cota" + CHR(231) + CHR(227) + "o atualizada: " + ;
             TRANSFORM(loc_nCotacao))
     ENDPROC
@@ -5744,7 +5748,7 @@ DEFINE CLASS Formpgr AS FormBase
             ZAP IN cursor_4c_Parcelas
         ENDIF
 
-        loc_cMoeda = ALLTRIM(THIS.this_oBusinessObject.this_cMoedas)
+        loc_cMoeda = ALLTRIM(THIS.this_cMoedas)
         IF EMPTY(loc_cMoeda)
             loc_cMoeda = "BRL"
         ENDIF
