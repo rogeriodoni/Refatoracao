@@ -1932,15 +1932,87 @@ DEFINE CLASS FormOPE AS FormBase
     * Handlers InteractiveChange dos OptionGroups das paginas internas
     *==========================================================================
     PROCEDURE OptBlqdtChange()
+        LOCAL loc_oPg1, loc_nVal
+        TRY
+            loc_oPg1 = THIS.pgf_4c_Paginas.Page2.pgf_4c_PagDados.Page1
+            IF PEMSTATUS(loc_oPg1, "opt_4c_Blqdt", 5)
+                loc_nVal = loc_oPg1.opt_4c_Blqdt.Value
+                *-- Opcoes 3/4 (Subnivel): habilitar campos de transferencia
+                IF PEMSTATUS(loc_oPg1, "txt_4c_DopeSTrfs", 5)
+                    loc_oPg1.txt_4c_DopeSTrfs.ReadOnly = (loc_nVal < 3)
+                ENDIF
+                IF PEMSTATUS(loc_oPg1, "txt_4c_DopeETrfs", 5)
+                    loc_oPg1.txt_4c_DopeETrfs.ReadOnly = (loc_nVal < 3)
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo), ;
+                "Erro em OptBlqdtChange")
+        ENDTRY
     ENDPROC
 
     PROCEDURE OptTipoChange()
+        LOCAL loc_oPg1, loc_nVal
+        TRY
+            loc_oPg1 = THIS.pgf_4c_Paginas.Page2.pgf_4c_PagDados.Page1
+            IF PEMSTATUS(loc_oPg1, "opt_4c_Tipo", 5)
+                loc_nVal = loc_oPg1.opt_4c_Tipo.Value
+                *-- Tipo Nenhum (3): desabilitar Caixa
+                IF PEMSTATUS(loc_oPg1, "opt_4c_Cai", 5)
+                    loc_oPg1.opt_4c_Cai.Enabled = (loc_nVal <> 3)
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo), ;
+                "Erro em OptTipoChange")
+        ENDTRY
     ENDPROC
 
     PROCEDURE OptTipoNFChange()
+        LOCAL loc_oPg4, loc_nVal
+        TRY
+            loc_oPg4 = THIS.pgf_4c_Paginas.Page2.pgf_4c_PagDados.Page4
+            IF PEMSTATUS(loc_oPg4, "opt_4c_TipoNF", 5)
+                loc_nVal = loc_oPg4.opt_4c_TipoNF.Value
+                *-- TipoNF Nenhum (3): tornar Especie e Serie somente-leitura
+                IF PEMSTATUS(loc_oPg4, "txt_4c_Especies", 5)
+                    loc_oPg4.txt_4c_Especies.ReadOnly = (loc_nVal = 3)
+                ENDIF
+                IF PEMSTATUS(loc_oPg4, "txt_4c_Series", 5)
+                    loc_oPg4.txt_4c_Series.ReadOnly = (loc_nVal = 3)
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo), ;
+                "Erro em OptTipoNFChange")
+        ENDTRY
     ENDPROC
 
     PROCEDURE OptVendeChange()
+        LOCAL loc_oPg17, loc_nVal, loc_lAtivo
+        TRY
+            loc_oPg17 = THIS.pgf_4c_Paginas.Page2.pgf_4c_PagDados.Page17
+            IF PEMSTATUS(loc_oPg17, "opt_4c_Vende", 5)
+                loc_nVal  = loc_oPg17.opt_4c_Vende.Value
+                loc_lAtivo = (loc_nVal <> 3)
+                IF PEMSTATUS(loc_oPg17, "txt_4c_MascVen", 5)
+                    loc_oPg17.txt_4c_MascVen.ReadOnly = !loc_lAtivo
+                ENDIF
+                IF PEMSTATUS(loc_oPg17, "txt_4c_Grupov", 5)
+                    loc_oPg17.txt_4c_Grupov.ReadOnly = !loc_lAtivo
+                ENDIF
+                IF PEMSTATUS(loc_oPg17, "chk_4c_Grupov", 5)
+                    loc_oPg17.chk_4c_Grupov.Enabled = loc_lAtivo
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message + CHR(13) + ;
+                "Linha: " + TRANSFORM(loc_oErro.LineNo), ;
+                "Erro em OptVendeChange")
+        ENDTRY
     ENDPROC
 
     *--------------------------------------------------------------------------
@@ -2490,12 +2562,12 @@ DEFINE CLASS FormOPE AS FormBase
             THIS.AddLabel(par_oPagina, "lbl_4c_CadCli", "Cad. Cliente :", 140, 30, 90)
             THIS.AddOptGroupSN(par_oPagina, "opt_4c_CadCli", 138, 130, 120)
 
-            *-- Ccusto: legado Lista Top=574, compensado +29=603, Left=810
+            *-- Ccusto: legado PgComissao Top=54, Left=463 (coords relativas a page interna)
             par_oPagina.AddObject("cmd_4c_Ccusto", "CommandButton")
             WITH par_oPagina.cmd_4c_Ccusto
                 .Caption       = "C.C."
-                .Top           = 603
-                .Left          = 810
+                .Top           = 54
+                .Left          = 463
                 .Width         = 80
                 .Height        = 23
                 .FontName      = "Tahoma"

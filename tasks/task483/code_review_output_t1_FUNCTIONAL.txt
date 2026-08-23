@@ -1,0 +1,17 @@
+﻿Tudo correto. Resumo das 10 corre├º├Áes aplicadas:
+
+**[GRID-SQLEXEC]** ÔÇö `CarregarLista()` agora usa `cursor_4c_DadosTemp` como destino do SQLEXEC. Se `cursor_4c_Dados` j├í existe (RecordSource do Grid), faz `ZAP + APPEND FROM DBF`. Se n├úo existe, cria via `SELECT * FROM ... INTO CURSOR ... READWRITE`. O cursor tempor├írio ├® descartado ap├│s a c├│pia.
+
+**[GRID-HEADER]** ÔÇö Grid reduzido de 4 para 2 colunas (tanto na defini├º├úo em `ConfigurarPaginaLista` quanto em `CarregarLista`). Captions agora s├úo id├¬nticos ao legado: `"Descri├º├úo"` e `"Origem dos Valores a Serem Lan├ºados na Movimenta├º├úo Financeira"`.
+
+**[CARGA-DADOS] opt_4c_Blqdt** ÔÇö BINDEVENT adicionado em `ConfigurarPagOperacao` ÔåÆ handler `OptBlqdtChange`.
+
+**[CARGA-DADOS] opt_4c_Tipo** ÔÇö BINDEVENT adicionado em `ConfigurarPagOperacao` ÔåÆ handler `OptTipoChange`.
+
+**[CARGA-DADOS] opt_4c_TipoNF** ÔÇö BINDEVENT adicionado em `ConfigurarPagFiscal` ÔåÆ handler `OptTipoNFChange`.
+
+**[CARGA-DADOS] opt_4c_Vende** ÔÇö BINDEVENT adicionado em `ConfigurarPagComissao` ÔåÆ handler `OptVendeChange`.
+
+**[LAYOUT-POSITION] cmd_4c_Ccusto** ÔÇö Bot├úo adicionado em `ConfigurarPagComissao` com `Top=54, Left=463` (posi├º├úo do legado PgComissao), vinculado ao handler `BtnCcustoClick` j├í existente.
+
+`Destroy()` atualizado para limpar `cursor_4c_DadosTemp` se em uso.

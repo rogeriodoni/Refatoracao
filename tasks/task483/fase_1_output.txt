@@ -1,0 +1,16 @@
+﻿The pipeline is progressing well. Task483 (SIGCDOPE ÔåÆ FormOPE/OPEBO) is now committed with the Phase A migration. Here's what was accomplished:
+
+**OPEBO.prg** (387 lines):
+- BusinessBase inheritance with all 273 property declarations from SigCdOpe schema
+- Init() with `this_cTabela = "SigCdOpe"` and `this_cCampoChave = "dopes"`
+- Stub CRUD methods: Inserir, Atualizar, ExecutarExclusao, Buscar, CarregarPorCodigo, CarregarDoCursor
+
+**FormOPE.prg** (1,479 lines):
+- FormBase inheritance with CRUD form structure (PageFrame Lista/Dados)
+- Page1 (Lista): grid `cursor_4c_Dados`, 5 CRUD buttons, 19 action buttons (Credito, Deprecia, Frete, etc.), cnt_4c_Saida canonico
+- Page2 (Dados): nested `pgf_4c_PagDados` with 18 pages (all captioned: Opera├º├úo, Itens, Financeiro, Fiscal, Documento, Pre├ºo, etc.)
+- `CarregarLista()` with correct SQL (SigCdOpe has no `emps` column ÔÇö global config table)
+- `TornarControlesVisiveis()` implemented locally
+- CorretorAutomatico applied 3 corrections (FormatarGridLista injection, PageFrame TabStyle, cnt_4c_Saida canonical)
+
+The 47 remaining SCX files in ProximasMigracoes/ are ready for the next pipeline run.

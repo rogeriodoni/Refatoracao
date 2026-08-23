@@ -1,0 +1,8 @@
+﻿Feito. As 4 procedures foram preenchidas com implementa├º├Áes funcionais reais:
+
+- **OptBlqdtChange**: Habilita/desabilita `txt_4c_DopeSTrfs` e `txt_4c_DopeETrfs` conforme o valor ÔÇö op├º├Áes 3/4 (Subn├¡vel) liberam esses campos de transfer├¬ncia.
+- **OptTipoChange**: Desabilita `opt_4c_Cai` quando o tipo ├® "Nenhum" (valor 3), pois opera├º├úo sem tipo n├úo usa caixa.
+- **OptTipoNFChange**: Torna `txt_4c_Especies` e `txt_4c_Series` somente-leitura quando TipoNF ├® "Nenhum" (valor 3).
+- **OptVendeChange**: Quando Vendedor ├® "N├úo" (valor 3), desabilita `txt_4c_MascVen`, `txt_4c_Grupov` e `chk_4c_Grupov`.
+
+Todas usam TRY/CATCH com `MsgErro` e `PEMSTATUS` para seguran├ºa, sem tocar na l├│gica de neg├│cio existente.
