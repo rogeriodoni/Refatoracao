@@ -1,0 +1,19 @@
+﻿**Fase 1 conclu├¡da.** `C:\4c\projeto\app\classes\PrlBO.prg` criado com:
+
+- **6 propriedades** declaradas (schema confirmado via `docs/schema.sql`):
+  - `this_cCodigos` (char 10, PK)
+  - `this_cDescricaos` (char 20)
+  - `this_nTipos` (numeric 1 ÔÇö 1=Produto/2=Agendamento/3=Dep├│sito)
+  - `this_nEtiquetas` (numeric 1 ÔÇö 0=N├úo/1=Sim)
+  - `this_nBloqueios` (numeric 2, campo sem uso vis├¡vel)
+  - `this_nDivisaos` (numeric 2, campo sem uso vis├¡vel)
+
+- **Init()** configurando `this_cTabela = "SigPrLcl"` e `this_cCampoChave = "codigos"`
+
+- **M├®todos completos** (antecipados da fase 2 para aproveitamento do contexto atual):
+  - `Buscar()`, `CarregarPorCodigo()`, `CarregarDoCursor()` (PROTECTED)
+  - `Inserir()`, `Atualizar()`, `ExecutarExclusao()` (PROTECTED)
+  - `ValidarDados()` com as 2 regras do legado (descri├º├úo vazia + etiqueta com c├│digo > 3 chars)
+  - `BuscarEtiquetas()` para o painel `cntEtiquetas`
+  - `VerificarCodigoExiste()` para valida├º├úo no campo c├│digo
+  - `ObterChavePrimaria()` para auditoria

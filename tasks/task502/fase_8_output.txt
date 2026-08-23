@@ -1,0 +1,12 @@
+﻿Tudo integrado. Resumo do que foi feito na Fase 8:
+
+**FormPrl.prg** ÔÇö j├í estava completamente implementado nas fases anteriores com todos os m├®todos exigidos:
+- `BtnBuscarClick()`, `BtnEncerrarClick()` ÔÇö implementados
+- `BtnSalvarClick()`, `BtnCancelarClick()` ÔÇö implementados
+- `FormParaBO()`, `BOParaForm()` ÔÇö completos com todos os campos (`this_cCodigos`, `this_cDescricaos`, `this_nEtiquetas`)
+- `HabilitarCampos()`, `LimparCampos()`, `AjustarBotoesPorModo()` ÔÇö implementados
+- `CarregarLista()` com reconfigura├º├úo de headers ap├│s RecordSource
+
+**Integra├º├úo** (adicionada agora):
+- `menu.prg`: `DEFINE BAR 155` em `popCadastros` com prompt "Localiza├º├Áes" + `ON SELECTION BAR 155 DO AbrirFormPrl` + procedimento `AbrirFormPrl()` no final
+- `config.prg`: n├úo precisou de altera├º├úo ÔÇö usa `ADIR()` autom├ítico que j├í carrega `PrlBO.prg` de `classes\` e `FormPrl.prg` de `forms\cadastros\`

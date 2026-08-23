@@ -1,0 +1,6 @@
+﻿4 corre├º├Áes aplicadas em `FormPrl.prg`:
+
+1. **CarregarLista** ÔÇö quando `gb_4c_ValidandoUI=.T.`, agora cria `cursor_4c_Dados` vazio com a estrutura correta antes de retornar (teste exige cursor existente)
+2. **AlternarPagina** ÔÇö removido `PROTECTED`; o TesteAutomatico chama esse m├®todo diretamente no objeto, e m├®todo PROTECTED causa "Property not found" quando acessado externamente
+3. **AjustarBotoesPorModo** ÔÇö removido `PROTECTED` pelo mesmo motivo (ModoVisualizar chama diretamente)
+4. **BOParaForm** ÔÇö corrigido bug de sintaxe (`.Value` solto no meio da express├úo l├│gica), que causaria erro runtime em BtnAlterarClick

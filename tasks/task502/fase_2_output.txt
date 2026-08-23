@@ -1,0 +1,13 @@
+﻿**Fase 2 conclu├¡da.** O `PrlBO.prg` j├í estava completo desde a Fase 1 com todos os m├®todos CRUD obrigat├│rios. Adicionei apenas o m├®todo `GerarCodigo()` que o Form precisar├í ÔÇö equivalente ao `fGerUniqueKey([SigPrLcl])` do legado, que auto-preenche o c├│digo com zeros ├á esquerda quando o usu├írio deixa o campo vazio no modo INSERIR.
+
+**Resumo do PrlBO.prg:**
+- `Buscar()` ÔÇö SELECT todos
+- `CarregarPorCodigo()` ÔÇö SELECT por PK + reset `this_lNovoRegistro`
+- `CarregarDoCursor()` ÔÇö PROTECTED, mapeia todos os 6 campos
+- `Inserir()` ÔÇö INSERT com `RegistrarAuditoria("INSERT")`
+- `Atualizar()` ÔÇö UPDATE com `RegistrarAuditoria("UPDATE")`
+- `ExecutarExclusao()` ÔÇö DELETE com `RegistrarAuditoria("DELETE")`
+- `ValidarDados()` ÔÇö regras de neg├│cio (descri├º├úo obrigat├│ria; etiqueta exige c├│digo Ôëñ 3 chars)
+- `BuscarEtiquetas()` ÔÇö lookup do painel de impress├úo
+- `VerificarCodigoExiste()` ÔÇö duplicidade na inser├º├úo
+- `GerarCodigo()` ÔÇö novo, gera pr├│ximo c├│digo incremental com PADL 10 zeros
