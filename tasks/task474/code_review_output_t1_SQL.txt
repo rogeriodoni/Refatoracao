@@ -1,0 +1,4 @@
+﻿Corre├º├Áes aplicadas:
+
+- **NcfBO.prg `Buscar()`**: Removido o bloco IF/ELSE que adicionava `cods LIKE` e `descs LIKE` no WHERE ÔÇö condi├º├Áes inventadas pela LLM. Agora usa sempre o WHERE original (`emps = X OR emps = ' '`), fiel ao `lcQuerLista` do legado.
+- **FormNcf.prg linha 971 (CEMPS)**: Falso positivo ÔÇö `SELECT CEmps FROM SigCdEmp WHERE CEmps = ...` ├® uma query de valida├º├úo de empresa numa tabela diferente (`SigCdEmp`), onde `CEmps` ├® a coluna PK correta. Nenhuma altera├º├úo necess├íria.

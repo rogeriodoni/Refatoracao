@@ -345,7 +345,7 @@ DEFINE CLASS FormPrm AS FormBase
                 .PicturePosition = 13
                 .Top             = 5
                 .Left            = 917
-                .Width           = 75
+                .Width           = 90
                 .Height          = 75
                 .BackColor       = RGB(255, 255, 255)
                 .ForeColor       = RGB(90, 90, 90)

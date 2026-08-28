@@ -1,0 +1,16 @@
+﻿The full file review looks good. Both bugs are now fixed and the implementation is solid:
+
+- **Line 825**: `"Comic Sans MS"` (was `"Tahoma"`) Ô£ô
+- **Line 1050**: `THIS.Release()` (was `THIS.Release`) Ô£ô
+
+The rest of the implementation correctly handles:
+- `LPARAMETERS` in `Init()` before `DODEFAULT()` for the parent form reference
+- Flat layout (no PageFrame) matching the OPERACIONAL type
+- 5-column grid bound to `CsPrazE` with correct `DynamicReadOnly` expressions
+- CHR() codes throughout (no raw accented chars in .prg)
+- `BINDEVENT` handlers all declared as `FUNCTION` (public by default) with correct parameter signatures (`par_nColIndex` on `AtualizarLinhaGrid`)
+- Canonical `cnt_4c_Saida` (Left=917, W=90) + `cmd_4c_Encerrar` (W=75, H=75, Caption="Encerrar", FontName="Comic Sans MS")
+- `DODEFAULT()` called outside TRY/CATCH in `Destroy()`
+- `this_oBusinessObject` and `this_oFormPai` both nulled in `Destroy()`
+
+`FormPzo.prg` migration is complete.

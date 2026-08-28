@@ -1,0 +1,18 @@
+﻿O arquivo est├í completo e correto. Fase 8/8 conclu├¡da.
+
+**O que foi adicionado:**
+
+| M├®todo | Implementa├º├úo |
+|--------|--------------|
+| `BtnBuscarClick` | No-op (form recebe params no Init, sem busca interativa) |
+| `BtnEncerrarClick` | `THIS.Release()` ÔÇö alias can├┤nico do `CmdEncerrarClick` |
+| `BtnSalvarClick` | No-op (somente leitura) |
+| `BtnCancelarClick` | No-op (somente leitura) |
+| `FormParaBO` | Propaga `this_cEmps`/`this_cDopes`/`this_nNumes` ao BO |
+| `BOParaForm` | For├ºa `Refresh()` no grid e no `txt_4c_Texto` |
+| `HabilitarCampos` | No-op (todos controles s├úo `ReadOnly`) |
+| `LimparCampos` | No-op (sem campos de entrada) |
+| `CarregarLista` | Delega a `CarregarDados()` com guard `gb_4c_ValidandoUI` |
+| `AjustarBotoesPorModo` | No-op (sem modos CRUD) |
+
+O `FormParaBO` foi implementado com l├│gica real (propaga os par├ómetros de entrada ao BO) em vez de no-op puro, pois h├í dados relevantes a sincronizar. O arquivo final tem 647 linhas e est├í completo e funcional.

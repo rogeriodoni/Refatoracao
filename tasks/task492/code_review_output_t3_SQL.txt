@@ -1,0 +1,29 @@
+﻿Verifica├º├úo completa. Aqui est├í o resultado da an├ílise:
+
+---
+
+## Resultado: Falsos Positivos ÔÇö Nenhuma Altera├º├úo Necess├íria
+
+Ap├│s comparar cuidadosamente as 5 ocorr├¬ncias flagradas com o c├│digo legado, **todos os tr├¬s "problemas" s├úo falsos positivos** do validador autom├ítico.
+
+### Por que o validador errou
+
+O original usa **DataManager** (`poDataMgr.UpDate('crSigOpOpe')`), que ├® um padr├úo VFP9 de cursor-binding onde:
+- O UPDATE/DELETE n├úo precisa de WHERE ÔÇö o DataManager sabe qual registro est├í ativo pelo cursor
+- O SEEK/LOCATE navegava pelo cursor pr├®-carregado sem SQL expl├¡cito
+
+O c├│digo migrado usa **SQL direto** ÔÇö e cada `WHERE` flagrado tem papel cr├¡tico:
+
+| Linha (OTIBO.prg) | WHERE | Papel | Remover = |
+|---|---|---|---|
+| 168 | `WHERE NDopes = par_nCodigo` | CarregarPorCodigo ÔÇö busca registro pelo PK | Carrega registro errado |
+| 304 | `WHERE dopes = EscaparSQL(...)` | VerificarCodigoDuplicado ÔÇö valida unicidade | Remove valida├º├úo de duplicidade |
+| 355 | `WHERE Codigos = EscaparSQL(...)` | BuscarDescricaoGrpCad ÔÇö lookup em SigCdGcr | Lookup sempre retorna vazio |
+| 623 | `WHERE NDopes = THIS.this_nNdopes` | Atualizar ÔÇö cl├íusula de UPDATE | **Atualiza TODOS os registros** |
+| 650 | `WHERE NDopes = THIS.this_nNdopes` | ExecutarExclusao ÔÇö cl├íusula de DELETE | **Apaga TODOS os registros** |
+
+Em nenhum dos casos a LLM "inventou" um filtro ÔÇö ela realizou a convers├úo correta de cursor-navigation para SQL expl├¡cito com WHERE por PK.
+
+**FormOTI.prg** n├úo tem nenhuma ocorr├¬ncia de WHERE com essas colunas (confirmado pelo grep). O c├│digo do form est├í correto.
+
+Nenhum arquivo alterado. Este pass SQL n├úo tem corre├º├Áes a fazer.

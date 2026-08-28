@@ -1,0 +1,18 @@
+﻿Encontrei todos os `WHERE codigo` no PMCBO.prg. Vou verificar se s├úo filtros inventados ou opera├º├Áes leg├¡timas de CRUD.
+
+**An├ílise das ocorr├¬ncias de `WHERE codigo`:**
+
+| Linha | Contexto | Avalia├º├úo |
+|-------|----------|-----------|
+| 126 | `CarregarPorCodigo` ÔåÆ `WHERE codigo = ?` | PK load padr├úo da arquitetura |
+| 165 | `GerarCodigo` ÔåÆ `WHERE codigo LIKE 'PMC2608%'` | Gera├º├úo de sequ├¬ncia PMC+AAMM+SEQ |
+| 319 | `Atualizar` ÔåÆ `UPDATE ... WHERE codigo = ?` | PK update padr├úo |
+| 345 | `ExecutarExclusao` ÔåÆ `DELETE ... WHERE codigo = ?` | PK delete padr├úo |
+
+**Conclus├úo: Falso positivo.** Todas as ocorr├¬ncias de `WHERE codigo = ...` s├úo opera├º├Áes CRUD padr├úo por chave prim├íria ÔÇö necess├írias pela nova arquitetura (FormBase/BusinessBase). O c├│digo legado SCX usava navega├º├úo de cursor VFP9 (sem SQL expl├¡cito para load/update/delete por PK), ent├úo o validador automatizado flagou qualquer `WHERE` com coluna diferente de `cpros` como "inventado".
+
+O `codigo` ├® de fato a PK da tabela (`this_cCampoChave = "codigo"`, `char(10)`, documentado no cabe├ºalho do BO). Remover essas condi├º├Áes quebraria todo o CRUD.
+
+O ├║nico SQL que efetivamente replica a query original (`SELECT * FROM SigCdPmc WHERE cpros = ... AND <date>`) ├® o `ValidarPeriodo` no BO ÔÇö que corretamente usa `WHERE cpros = ...` sem nenhum `codigo` inventado.
+
+**Nenhuma altera├º├úo necess├íria.** O problema detectado ├® um falso positivo do validador autom├ítico. Os arquivos est├úo corretos.

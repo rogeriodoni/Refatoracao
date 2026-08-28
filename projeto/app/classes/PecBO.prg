@@ -65,6 +65,12 @@ DEFINE CLASS PecBO AS BusinessBase
                     " ORDER BY descs"
             ENDIF
 
+            *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
+            IF USED("cursor_4c_Dados")
+                TABLEREVERT(.T., "cursor_4c_Dados")
+                USE IN cursor_4c_Dados
+            ENDIF
+
             loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Dados")
 
             IF loc_nResultado >= 0
@@ -332,6 +338,12 @@ DEFINE CLASS PecBO AS BusinessBase
                 " LEFT OUTER JOIN SigCdGcr GCR ON GCR.codigos = PEI.grupos" + ;
                 " WHERE PEC.pkchaves = " + EscaparSQL(par_cPkChaves)
 
+            *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
+            IF USED("cursor_4c_Itens")
+                TABLEREVERT(.T., "cursor_4c_Itens")
+                USE IN cursor_4c_Itens
+            ENDIF
+
             loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Itens")
 
             IF loc_nResultado >= 0
@@ -452,6 +464,12 @@ DEFINE CLASS PecBO AS BusinessBase
                 " where CCR.grupos = " + EscaparSQL(par_cGrupo) + ;
                 " order by 1"
 
+            *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
+            IF USED("cursor_4c_ExpGrupo")
+                TABLEREVERT(.T., "cursor_4c_ExpGrupo")
+                USE IN cursor_4c_ExpGrupo
+            ENDIF
+
             loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_ExpGrupo")
 
             IF loc_nResultado >= 0
@@ -492,6 +510,12 @@ DEFINE CLASS PecBO AS BusinessBase
                 " left outer join SigCdGcr GCR on CCR.grupos = GCR.codigos" + ;
                 " where CCR.grupos <> ''" + ;
                 " order by 1"
+
+            *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
+            IF USED("cursor_4c_GruposCli")
+                TABLEREVERT(.T., "cursor_4c_GruposCli")
+                USE IN cursor_4c_GruposCli
+            ENDIF
 
             loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_GruposCli")
 

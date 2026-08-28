@@ -1,0 +1,644 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGCDPMC.SCX
+* Data/Hora: 22/08/2026 21:21:16
+* Total de registros: 16
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDPMC
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say5
+  Parent: SIGCDPMC.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say6
+  Parent: SIGCDPMC.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say7
+  Parent: SIGCDPMC.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getcodigo
+  Parent: SIGCDPMC.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGCDPMC.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetDtfin
+  Parent: SIGCDPMC.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDtini
+  Parent: SIGCDPMC.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetValmin
+  Parent: SIGCDPMC.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getCpros
+  Parent: SIGCDPMC.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cmbTpDesc
+  Parent: SIGCDPMC.Pagina.Dados
+  Class: fwcombo
+  BaseClass: combobox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say11
+  Parent: SIGCDPMC.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGCDPMC.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPMC
+------------------------------------------------------------
+  DataSession = 2
+  Height = 600
+  Width = 1000
+  DoCreate = .T.
+  Caption = "Tabela de promoções por período"
+  Name = "SIGCDPMC"
+  Pagina.ErasePage = .T.
+  Pagina.Lista.cntSombra.lblSombra.Name = "lblSombra"
+  Pagina.Lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  Pagina.Lista.cntSombra.Top = 1
+  Pagina.Lista.cntSombra.Left = -1
+  Pagina.Lista.cntSombra.Width = 1008
+  Pagina.Lista.cntSombra.Height = 80
+  Pagina.Lista.cntSombra.Name = "cntSombra"
+  Pagina.Lista.Grade.FontBold = .F.
+  Pagina.Lista.Grade.FontName = "Tahoma"
+  Pagina.Lista.Grade.FontSize = 8
+  Pagina.Lista.Grade.Height = 470
+  Pagina.Lista.Grade.Left = 12
+  Pagina.Lista.Grade.RowHeight = 16
+  Pagina.Lista.Grade.Top = 121
+  Pagina.Lista.Grade.Width = 940
+  Pagina.Lista.Grade.ForeColor = 90,90,90
+  Pagina.Lista.Grade.Name = "Grade"
+  Pagina.Lista.Grupo_op.AutoSize = .T.
+  Pagina.Lista.Grupo_op.Inserir.Top = 5
+  Pagina.Lista.Grupo_op.Inserir.Left = 5
+  Pagina.Lista.Grupo_op.Inserir.Name = "Inserir"
+  Pagina.Lista.Grupo_op.Consultar.Top = 5
+  Pagina.Lista.Grupo_op.Consultar.Left = 81
+  Pagina.Lista.Grupo_op.Consultar.Name = "Consultar"
+  Pagina.Lista.Grupo_op.Alterar.Top = 5
+  Pagina.Lista.Grupo_op.Alterar.Left = 157
+  Pagina.Lista.Grupo_op.Alterar.Name = "Alterar"
+  Pagina.Lista.Grupo_op.Excluir.Top = 5
+  Pagina.Lista.Grupo_op.Excluir.Left = 233
+  Pagina.Lista.Grupo_op.Excluir.Name = "Excluir"
+  Pagina.Lista.Grupo_op.procurar.Top = 5
+  Pagina.Lista.Grupo_op.procurar.Left = 309
+  Pagina.Lista.Grupo_op.procurar.Name = "procurar"
+  Pagina.Lista.Grupo_op.Height = 85
+  Pagina.Lista.Grupo_op.Left = 538
+  Pagina.Lista.Grupo_op.Top = -1
+  Pagina.Lista.Grupo_op.Width = 389
+  Pagina.Lista.Grupo_op.Name = "Grupo_op"
+  Pagina.Lista.Grupo_Saida.SAIR.Top = 5
+  Pagina.Lista.Grupo_Saida.SAIR.Left = 5
+  Pagina.Lista.Grupo_Saida.SAIR.Name = "SAIR"
+  Pagina.Lista.Grupo_Saida.Left = 918
+  Pagina.Lista.Grupo_Saida.Top = -1
+  Pagina.Lista.Grupo_Saida.Name = "Grupo_Saida"
+  Pagina.Lista.cntFiltros.Name = "cntFiltros"
+  Pagina.Lista.Picture = ..\framework\imagens\new_background.jpg
+  Pagina.Lista.Name = "Lista"
+  Pagina.Dados.Grupo_Salva.AutoSize = .T.
+  Pagina.Dados.Grupo_Salva.Salva.Top = 5
+  Pagina.Dados.Grupo_Salva.Salva.Left = 5
+  Pagina.Dados.Grupo_Salva.Salva.Name = "Salva"
+  Pagina.Dados.Grupo_Salva.Cancelar.Top = 5
+  Pagina.Dados.Grupo_Salva.Cancelar.Left = 80
+  Pagina.Dados.Grupo_Salva.Cancelar.Name = "Cancelar"
+  Pagina.Dados.Grupo_Salva.Left = 819
+  Pagina.Dados.Grupo_Salva.Top = 9
+  Pagina.Dados.Grupo_Salva.TabIndex = 7
+  Pagina.Dados.Grupo_Salva.Name = "Grupo_Salva"
+  Pagina.Dados.Picture = ..\framework\imagens\new_background.jpg
+  Pagina.Dados.Name = "Dados"
+  Pagina.Width = 1003
+  Pagina.Name = "Pagina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPMC.Pagina.Dados.Say5
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Data Inicial :"
+  Left = 323
+  Top = 232
+  TabIndex = 12
+  ForeColor = 90,90,90
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPMC.Pagina.Dados.Say6
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Data Final :"
+  Left = 328
+  Top = 259
+  TabIndex = 10
+  ForeColor = 90,90,90
+  Name = "Say6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPMC.Pagina.Dados.Say7
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Código :"
+  Left = 343
+  Top = 156
+  TabIndex = 9
+  ForeColor = 90,90,90
+  Name = "Say7"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPMC.Pagina.Dados.getcodigo
+------------------------------------------------------------
+  FontName = "Tahoma"
+  ControlSource = "CrSigCdPmc.codigo"
+  Height = 24
+  InputMask = "!!!!!!!!!!"
+  Left = 387
+  SpecialEffect = 1
+  TabIndex = 1
+  Top = 151
+  Width = 80
+  ZOrderSet = 57
+  Themes = .F.
+  Name = "getcodigo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPMC.Pagina.Dados.Say3
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Produto :"
+  Left = 338
+  Top = 181
+  Width = 47
+  TabIndex = 13
+  ForeColor = 90,90,90
+  ZOrderSet = 20
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPMC.Pagina.Dados.GetDtfin
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Alignment = 3
+  Value = 0
+  ControlSource = "CrSigCdPmc.dtfin"
+  Format = ""
+  Height = 24
+  InputMask = ""
+  Left = 387
+  SpecialEffect = 1
+  TabIndex = 5
+  Top = 254
+  Width = 80
+  ZOrderSet = 8
+  Name = "GetDtfin"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPMC.Pagina.Dados.getDtini
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Alignment = 3
+  Value = 0
+  ControlSource = "CrSigCdPmc.dtini"
+  Format = ""
+  Height = 24
+  InputMask = ""
+  Left = 387
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 227
+  Width = 80
+  ZOrderSet = 8
+  Name = "getDtini"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPMC.Pagina.Dados.GetValmin
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Alignment = 3
+  Value = 0
+  ControlSource = "CrSigCdPmc.valmin"
+  Height = 24
+  InputMask = "99,999,999.99"
+  Left = 387
+  SpecialEffect = 1
+  TabIndex = 6
+  ToolTipText = "Valor mínimo da venda para dar esse produto de brinde"
+  Top = 282
+  Width = 126
+  ZOrderSet = 8
+  Name = "GetValmin"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPMC.Pagina.Dados.getCpros
+------------------------------------------------------------
+  FontName = "Tahoma"
+  ControlSource = "CrSigCdPmc.cpros"
+  Height = 21
+  Left = 387
+  MaxLength = 14
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 178
+  Width = 108
+  ZOrderSet = 76
+  Themes = .F.
+  Name = "getCpros"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPMC.Pagina.Dados.cmbTpDesc
+------------------------------------------------------------
+  FontName = "Tahoma"
+  RowSourceType = 1
+  RowSource = "1-Brinde"
+  ControlSource = "crSigCdPmc.tppro"
+  Height = 21
+  Left = 387
+  SpecialEffect = 1
+  TabIndex = 3
+  ToolTipText = ""
+  Top = 202
+  Width = 221
+  Name = "cmbTpDesc"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPMC.Pagina.Dados.Say11
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Tipo de Promoção :"
+  Height = 15
+  Left = 291
+  Top = 205
+  Width = 94
+  TabIndex = 8
+  ForeColor = 90,90,90
+  Name = "Say11"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPMC.Pagina.Dados.Say1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Valor Min :"
+  Left = 333
+  Top = 287
+  TabIndex = 11
+  ForeColor = 90,90,90
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDPMC
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LPARAMETERS lcacesso
+
+With ThisForm
+	.poDatamgr = CreateObject('fSqlConector', THISFORM.NAME)
+	With .poDatamgr
+		.AddCursor('SigCdPmc','codigo','crSigCdPmc','',ThisForm.pagina.lista.grade)
+		.pfSqlTabela(1).pColuna('codigo','','','Codigo',100,.t.)
+		.pfSqlTabela(1).pColuna('cpros','','','Produto',150,.t.)
+		.pfSqlTabela(1).pColuna('tppro','','','Tipo',75,.t.)
+		.pfSqlTabela(1).pColuna('valmin','','','Valor minimo',75,.t.)
+		.pfSqlTabela(1).pColuna('dtini','','','Dt Inicio',75,.t.)
+		.pfSqlTabela(1).pColuna('dtfin','','','Dt final',75,.t.)
+		.pfSqlTabela(1).pColuna('usualts','','','Usuário',75,.t.)
+		.pfSqlTabela(1).pColuna('dtalts','','','Alteracao',75,.t.)
+	EndWith
+	= DoDefault()
+	.LockScreen = .f.
+EndWith
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_procurar
+------------------------------------------------------------
+PROCEDURE msv_procurar
+Local lcBusca
+
+If .Not.Empty(ThisForm.Pagina.Dados.Getcpros.Value)
+	ThisForm.poDataMgr.LocateCursor('crSigCdPmc','cpros',ThisForm.Pagina.Dados.Getcpros.Value)
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Lista.Grupo_op.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Lista.Grupo_op.Click
+LParameters opcao
+
+If !dodefault( Opcao )
+	ThisForm.mAtivapagina1
+	Return
+Endif
+
+Do Case
+	Case Inlist( ThisForm.pcEscolha, 'INSERIR', 'PROCURAR' )
+		ThisForm.Pagina.Dados.Getcpros.SetFocus
+	Case ThisForm.pcEscolha = 'ALTERAR'
+		ThisForm.Pagina.Dados.Getcpros.SetFocus
+	Case Inlist( ThisForm.pcEscolha, 'EXCLUIR', 'CONSULTAR' )
+		ThisForm.Pagina.Dados.Grupo_Salva.Salva.SetFocus
+Endcase
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+LOCAL lcQuery
+
+If INLIST(ThisForm.pcEscolha,'INSERIR')
+	If Empty( CrSigCdPmc.cpros )
+		Messagebox( 'Produto não pode ficar em branco!', 48, '' ) 
+		ThisForm.Pagina.Dados.Getcpros.SetFocus
+		Return
+	Endif
+	If Empty( CrSigCdPmc.dtini )
+		Messagebox( 'Data Inicial não pode ficar em branco!', 48, '' ) 
+		ThisForm.Pagina.Dados.Getdtini.SetFocus
+		Return
+	Endif
+	If Empty( CrSigCdPmc.dtFin )
+		Messagebox( 'Data final não pode ficar em branco!', 48, '' ) 
+		ThisForm.Pagina.Dados.Getdtfin.SetFocus
+		Return
+	Endif
+	If CrSigCdPmc.dtini >  CrSigCdPmc.dtfin
+		Messagebox( 'As datas estão incompatíveis!', 48, '' ) 
+		ThisForm.Pagina.Dados.Getdtini.SetFocus
+		Return
+	Endif
+
+	lcDat=SUBSTR(DTOS(TTOd(CrSigCdPmc.dtini)),1,10)
+	lcDat=SUBSTR(lcDat,1,4)+'-'+SUBSTR(lcDat,5,2)+'-'+SUBSTR(lcDat,7,2)
+	lcQuery = 	[Select * From SigCdPmc where cpros = ']+CrSigCdPmc.cpros+[' and ']+lcDat+[' ]+;
+				[between LEFT(CONVERT(VARCHAR, dtini, 120), 10) and  LEFT(CONVERT(VARCHAR, dtfin, 120),10)]	 && 2017-01-21
+	If ThisForm.Podatamgr.Sqlexecute(lcQuery,'crAux1') < 1
+		Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),'Erro')
+		Return
+	Endif
+
+	lcDat=SUBSTR(DTOS(TTOd(CrSigCdPmc.dtfin)),1,10)
+	lcDat=SUBSTR(lcDat,1,4)+'-'+SUBSTR(lcDat,5,2)+'-'+SUBSTR(lcDat,7,2)
+	lcQuery = 	[Select * From SigCdPmc where cpros = ']+CrSigCdPmc.cpros+[' and ']+lcDat+[' ]+;
+				[between LEFT(CONVERT(VARCHAR, dtini, 120), 10) and  LEFT(CONVERT(VARCHAR, dtfin, 120),10)]	 && 2017-01-21
+	If ThisForm.Podatamgr.Sqlexecute(lcQuery,'crAux2') < 1
+		Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),'Erro')
+		Return
+	Endif
+
+	If RECCOUNT('crAux1')>0 or RECCOUNT('crAux2') >0
+		Messagebox( 'Esse intervado já está cadastrado para esse produto!', 48, '' ) 
+		ThisForm.Pagina.Dados.Getdtini.SetFocus
+		Return
+	Endif
+
+	lcDat=SUBSTR(ALLTRIM(STR(YEAR(DATE()))),3)+PADL(ALLTRIM(STR(month(DATE()))),2,'0')
+	replace codigo with 'PMC'+lcDat+PADL(ALLTRIM(STR(fGerUniqueKey('PMC'+lcDat))),3,'0') in crSigCdPmc
+
+Endif
+
+replace dtalts with DATETIME() in crSigCdPmc
+replace usualts with Usuar in crSigCdPmc
+
+=DoDefault()
+ThisForm.mAtivapagina1
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+=DoDefault()
+If ThisForm.plCancelar
+	ThisForm.mAtivapagina1
+Endif
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDPMC.Pagina.Dados.getcodigo
+* Classe: fwget (Base: textbox)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+RETURN .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDPMC.Pagina.Dados.GetDtfin
+* Classe: fwget (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+RETURN INLIST(ThisForm.pcEscolha, 'INSERIR')
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDPMC.Pagina.Dados.getDtini
+* Classe: fwget (Base: textbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+RETURN INLIST(ThisForm.pcEscolha, 'INSERIR')
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDPMC.Pagina.Dados.getCpros
+* Classe: fwget (Base: textbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigCdPro', 'crListaRemota', 'CPros', This.Value, 'Seleção', 1000)
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('CPros', '', 'Código')
+		loLista.mAddColuna('DPros', '', 'Descrição')
+		loLista.Show()
+	EndIf
+	
+	This.Parent.getCpros.Value = crListaRemota.CPros
+	Use In crListaRemota
+Else
+	This.Parent.getCpros.Value = ''
+EndIf
+This.Parent.getCPros.Refresh
+
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+RETURN INLIST(ThisForm.pcEscolha, 'INSERIR')
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDPMC.Pagina.Dados.cmbTpDesc
+* Classe: fwcombo (Base: combobox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+RETURN INLIST(ThisForm.pcEscolha, 'INSERIR')
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 12
+================================================================================

@@ -1,0 +1,9 @@
+﻿Fase 4 conclu├¡da. O `FormPgb.prg` foi atualizado com:
+
+- **`ConfigurarPaginaLista()`** ÔÇö cria `grd_4c_Dados` com as 7 colunas exatas do SCX original (Top=107, Left=80, Width=490, Height=292, RowHeight=17), headers com `CHR(234)` para "Ocorr├¬ncia", e `BINDEVENT` para `AfterRowColChange`
+
+- **`ConfigurarPageFrame()`** ÔÇö agora chama `THIS.ConfigurarPaginaLista()` dentro do TRY antes do CATCH
+
+- **`CarregarDados()`** ÔÇö ap├│s o BO popula o cursor (que ele fecha e recria via `USE IN + CREATE CURSOR`), o grid ├® rebindado: `ColumnCount = 7`, `RecordSource`, `ControlSource` das 7 colunas, headers restaurados e `Refresh()`
+
+O rebind em `CarregarDados()` ├® necess├írio porque `PgbBO.CarregarHistorico()` fecha e recria o `cursor_4c_HistoricoPgb` (linhas 48-60 do BO), invalidando o v├¡nculo inicial do grid.

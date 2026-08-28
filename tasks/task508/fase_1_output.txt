@@ -1,0 +1,14 @@
+﻿Fase 1 conclu├¡da. O arquivo `C:\4c\projeto\app\classes\RccBO.prg` foi criado com:
+
+- **Propriedades** do cabe├ºalho (`SigCdRcc`): `this_cDescRats`, `this_cEmpOs`, `this_cCidChaves`, `this_dDatas`, `this_dDtAlts`
+- **`Init()`** configurando `this_cTabela = "SigCdRcc"` e `this_cCampoChave = "DescRats"`
+- **Todos os m├®todos obrigat├│rios** j├í implementados (n├úo stubs):
+  - `Buscar()` / `CarregarPorCodigo()` / `CarregarDoCursor()`
+  - `CarregarItensPorRateio()` ÔÇö carrega SigCdRci para visualiza├º├úo
+  - `CarregarClientesPorGrupoColetora()` ÔÇö popula grid de edi├º├úo (clientes do grupo coletora=9)
+  - `MarcarItensExistentes()` ÔÇö marca itens j├í salvos ao abrir ALTERAR
+  - `CalcularRateioAuto()` ÔÇö distribui % automaticamente entre itens marcados (l├│gica do `calcularateioauto` legado)
+  - `ValidarTotalRateio()` ÔÇö valida soma = 100%
+  - `VerificarDescricaoExistente()` ÔÇö checa duplicidade no INSERIR
+  - `Inserir()` / `Atualizar()` / `ExecutarExclusao()` ÔÇö at├┤micos com `BEGIN/COMMIT/ROLLBACK TRANSACTION` (ambas as tabelas juntas)
+  - `SalvarItensRateio()` ÔÇö persiste os itens marcados do `cursor_4c_RateioEdit`

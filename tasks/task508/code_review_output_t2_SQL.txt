@@ -1,0 +1,9 @@
+﻿**Resultado do pass SQL:**
+
+| Problema | Status | A├º├úo |
+|---|---|---|
+| `COLUMNCOUNT` (linha 734) | Falso positivo ÔÇö VFP property, n├úo SQL. Linha duplicada removida. | `loc_oGrid.ColumnCount = 3` redundante exclu├¡do |
+| `CEMPS` em WHERE | Falso positivo ÔÇö `WHERE CEmps = ...` ├® lookup v├ílido em `SigCdEmp` (tabela diferente) para validar o campo `EmpOs` de SigCdRcc | Sem altera├º├úo |
+| `RAZAS` em WHERE | Falso positivo ÔÇö `WHERE Razas LIKE ...` ├® busca por nome de empresa em `SigCdEmp`, funcionalidade leg├¡tima do campo empresa | Sem altera├º├úo |
+
+Os checks de CEMPS/RAZAS foram gerados porque o detector compara todas as colunas usadas em WHERE no arquivo migrado contra as colunas do WHERE do SigCdRci original (MARCAS, DESCRATS, COLETORSÔÇª), mas as queries em quest├úo s├úo contra **SigCdEmp** ÔÇö tabela auxiliar completamente diferente. Nenhum filtro foi inventado.

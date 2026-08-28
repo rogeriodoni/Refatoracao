@@ -346,6 +346,19 @@ PROCEDURE CriarMenuPrincipal()
 
     DEFINE BAR 158 OF popCadastros PROMPT "Publicidade" ;
            MESSAGE "Cadastro de Publicidade (SigCdFpb)"
+    DEFINE BAR 159 OF popCadastros PROMPT "Registro de An" + CHR(225) + "lises" ;
+           MESSAGE "Registro de An" + CHR(225) + "lises (SigInAna)"
+    DEFINE BAR 160 OF popCadastros PROMPT "Rateio de Centros de Custo" ;
+           MESSAGE "Cadastro de Rateio de Centros de Custo (SigCdRcc)"
+    DEFINE BAR 161 OF popCadastros PROMPT "Recebimentos" ;
+           MESSAGE "Cadastro Financeiro de Recebimentos (SIGCDREC)"
+    DEFINE BAR 162 OF popCadastros PROMPT "Regi" + CHR(245) + "es" ;
+           MESSAGE "Cadastro de Regi" + CHR(245) + "es (SIGCDREG)"
+    DEFINE BAR 163 OF popCadastros PROMPT "Regras de E-Commerce" ;
+           MESSAGE "Cadastro de Regras de E-Commerce (SIGCDRGR)"
+    DEFINE BAR 164 OF popCadastros PROMPT "\-"
+    DEFINE BAR 165 OF popCadastros PROMPT "Relat" + CHR(243) + "rios 4Report" ;
+           MESSAGE "Cadastro Customizado de Relat" + CHR(243) + "rios 4Report (SIGCDRPT)"
 
     * Vincular acoes dos itens do menu Cadastros
     ON SELECTION BAR 1 OF popCadastros DO AbrirFormCargo
@@ -490,6 +503,12 @@ PROCEDURE CriarMenuPrincipal()
     ON SELECTION BAR 156 OF popCadastros DO AbrirFormPrm
     ON SELECTION BAR 157 OF popCadastros DO AbrirFormRop
     ON SELECTION BAR 158 OF popCadastros DO AbrirFormPub
+    ON SELECTION BAR 159 OF popCadastros DO AbrirFormRAN
+    ON SELECTION BAR 160 OF popCadastros DO AbrirFormRcc
+    ON SELECTION BAR 161 OF popCadastros DO AbrirFormRec
+    ON SELECTION BAR 162 OF popCadastros DO AbrirFormReg
+    ON SELECTION BAR 163 OF popCadastros DO AbrirFormrgr
+    ON SELECTION BAR 165 OF popCadastros DO AbrirFormRPT
 
     * Menu Movimentos
     ON PAD padMovimentos OF _MSYSMENU ACTIVATE POPUP popMovimentos
@@ -9576,6 +9595,165 @@ PROCEDURE AbrirFormPub()
     CATCH TO loException
         LOCAL lcMensagem
         lcMensagem = "Erro ao abrir formul" + CHR(225) + "rio de Publicidade:" + CHR(13) + CHR(13) + ;
+                     "Erro: " + loException.Message + CHR(13) + ;
+                     "Linha: " + TRANSFORM(loException.LineNo) + CHR(13) + ;
+                     "Procedure: " + loException.Procedure
+        MostrarErro(lcMensagem, "Erro Detalhado")
+    ENDTRY
+ENDPROC
+
+*------------------------------------------------------------------------------
+* AbrirFormRAN - Abre formulario de Registro de Analises (SigInAna)
+*------------------------------------------------------------------------------
+PROCEDURE AbrirFormRAN()
+    LOCAL loForm, loException
+
+    TRY
+        loForm = CREATEOBJECT("FormRAN")
+
+        IF VARTYPE(loForm) = "O"
+            loForm.Show()
+        ELSE
+            MostrarErro("Erro ao criar formul" + CHR(225) + "rio FormRAN" + CHR(13) + ;
+                       "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
+        ENDIF
+
+    CATCH TO loException
+        LOCAL lcMensagem
+        lcMensagem = "Erro ao abrir formul" + CHR(225) + "rio de Registro de An" + CHR(225) + "lises:" + CHR(13) + CHR(13) + ;
+                     "Erro: " + loException.Message + CHR(13) + ;
+                     "Linha: " + TRANSFORM(loException.LineNo) + CHR(13) + ;
+                     "Procedure: " + loException.Procedure
+        MostrarErro(lcMensagem, "Erro Detalhado")
+    ENDTRY
+ENDPROC
+
+*------------------------------------------------------------------------------
+* AbrirFormRcc - Abre formulario de Rateio de Centros de Custo (SigCdRcc)
+*------------------------------------------------------------------------------
+PROCEDURE AbrirFormRcc()
+    LOCAL loForm, loException
+
+    TRY
+        loForm = CREATEOBJECT("FormRcc")
+
+        IF VARTYPE(loForm) = "O"
+            loForm.Show()
+        ELSE
+            MostrarErro("Erro ao criar formul" + CHR(225) + "rio FormRcc" + CHR(13) + ;
+                       "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
+        ENDIF
+
+    CATCH TO loException
+        LOCAL lcMensagem
+        lcMensagem = "Erro ao abrir formul" + CHR(225) + "rio de Rateio de Centros de Custo:" + CHR(13) + CHR(13) + ;
+                     "Erro: " + loException.Message + CHR(13) + ;
+                     "Linha: " + TRANSFORM(loException.LineNo) + CHR(13) + ;
+                     "Procedure: " + loException.Procedure
+        MostrarErro(lcMensagem, "Erro Detalhado")
+    ENDTRY
+ENDPROC
+
+*------------------------------------------------------------------------------
+* AbrirFormRec - Abre formulario de Cadastro Financeiro de Recebimentos
+*------------------------------------------------------------------------------
+PROCEDURE AbrirFormRec()
+    LOCAL loForm, loException
+
+    TRY
+        loForm = CREATEOBJECT("FormRec")
+
+        IF VARTYPE(loForm) = "O"
+            loForm.Show()
+        ELSE
+            MostrarErro("Erro ao criar formul" + CHR(225) + "rio FormRec" + CHR(13) + ;
+                       "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
+        ENDIF
+
+    CATCH TO loException
+        LOCAL lcMensagem
+        lcMensagem = "Erro ao abrir formul" + CHR(225) + "rio de Recebimentos:" + CHR(13) + CHR(13) + ;
+                     "Erro: " + loException.Message + CHR(13) + ;
+                     "Linha: " + TRANSFORM(loException.LineNo) + CHR(13) + ;
+                     "Procedure: " + loException.Procedure
+        MostrarErro(lcMensagem, "Erro Detalhado")
+    ENDTRY
+ENDPROC
+
+*------------------------------------------------------------------------------
+* AbrirFormReg - Abre formulario de cadastro de Regioes (SIGCDREG)
+*------------------------------------------------------------------------------
+PROCEDURE AbrirFormReg()
+    LOCAL loForm, loException
+
+    TRY
+        loForm = CREATEOBJECT("FormReg")
+
+        IF VARTYPE(loForm) = "O"
+            loForm.Show()
+        ELSE
+            MostrarErro("Erro ao criar formulario FormReg" + CHR(13) + ;
+                "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
+        ENDIF
+
+    CATCH TO loException
+        LOCAL lcMensagem
+        lcMensagem = "Erro ao abrir formulario de Regi" + CHR(245) + "es:" + ;
+                     CHR(13) + CHR(13) + ;
+                     "Erro: " + loException.Message + CHR(13) + ;
+                     "Linha: " + TRANSFORM(loException.LineNo) + CHR(13) + ;
+                     "Procedure: " + loException.Procedure
+        MostrarErro(lcMensagem, "Erro Detalhado")
+    ENDTRY
+ENDPROC
+
+*------------------------------------------------------------------------------
+* AbrirFormrgr - Abre formulario de Regras de E-Commerce
+*------------------------------------------------------------------------------
+PROCEDURE AbrirFormrgr()
+    LOCAL loForm, loException
+
+    TRY
+        loForm = CREATEOBJECT("Formrgr")
+
+        IF VARTYPE(loForm) = "O"
+            loForm.Show()
+        ELSE
+            MostrarErro("Erro ao criar formul" + CHR(225) + "rio Formrgr" + CHR(13) + ;
+                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
+        ENDIF
+
+    CATCH TO loException
+        LOCAL lcMensagem
+        lcMensagem = "Erro ao abrir formul" + CHR(225) + "rio Regras de E-Commerce:" + ;
+                     CHR(13) + CHR(13) + ;
+                     "Erro: " + loException.Message + CHR(13) + ;
+                     "Linha: " + TRANSFORM(loException.LineNo) + CHR(13) + ;
+                     "Procedure: " + loException.Procedure
+        MostrarErro(lcMensagem, "Erro Detalhado")
+    ENDTRY
+ENDPROC
+
+*------------------------------------------------------------------------------
+* AbrirFormRPT - Abre formulario de Cadastro Customizado de Relatorios 4Report
+*------------------------------------------------------------------------------
+PROCEDURE AbrirFormRPT()
+    LOCAL loForm, loException
+
+    TRY
+        loForm = CREATEOBJECT("FormRPT")
+
+        IF VARTYPE(loForm) = "O"
+            loForm.Show()
+        ELSE
+            MostrarErro("Erro ao criar formul" + CHR(225) + "rio FormRPT" + CHR(13) + ;
+                        "VARTYPE retornou: " + VARTYPE(loForm), "Erro")
+        ENDIF
+
+    CATCH TO loException
+        LOCAL lcMensagem
+        lcMensagem = "Erro ao abrir Relat" + CHR(243) + "rios 4Report:" + ;
+                     CHR(13) + CHR(13) + ;
                      "Erro: " + loException.Message + CHR(13) + ;
                      "Linha: " + TRANSFORM(loException.LineNo) + CHR(13) + ;
                      "Procedure: " + loException.Procedure

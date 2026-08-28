@@ -1,0 +1,265 @@
+﻿{
+    "taskId":  "task506",
+    "arquivoOriginal":  "",
+    "tipoArquivo":  "SCX",
+    "comentario_tipoArquivo":  "SCX=Form, FRX=Report, VCX=ClassLib",
+    "status":  "COMPLETED",
+    "statusComentario":  "PENDING | IN_PROGRESS | COMPLETED | FAILED | BLOCKED",
+    "criadoEm":  "2026-08-23T03:45:59",
+    "atualizadoEm":  "2026-08-23T05:17:46",
+    "etapas":  {
+                   "01_moverArquivos":  {
+                                            "status":  "COMPLETED",
+                                            "inicio":  "2026-08-23T03:45:59",
+                                            "fim":  "2026-08-23T03:45:59",
+                                            "tentativas":  1,
+                                            "erro":  null,
+                                            "sctFile":  "C:\\4c\\tasks\\task506\\SigCdPzo.sct",
+                                            "baseName":  "SigCdPzo",
+                                            "scxFile":  "C:\\4c\\tasks\\task506\\SigCdPzo.scx"
+                                        },
+                   "02_extractCode":  {
+                                          "status":  "COMPLETED",
+                                          "inicio":  "2026-08-23T03:45:59",
+                                          "fim":  "2026-08-23T03:46:00",
+                                          "tentativas":  1,
+                                          "arquivoGerado":  "SIGCDCOR_codigo_fonte.txt",
+                                          "erro":  null,
+                                          "baseNameNormalizado":  "SigCdPzo",
+                                          "txtFile":  "C:\\4c\\tasks\\task506\\SigCdPzo_form_codigo_fonte.txt"
+                                      },
+                   "02b_analisarTarefa":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-08-23T03:46:00",
+                                              "fim":  "2026-08-23T03:46:00",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "analise.json",
+                                              "erro":  null,
+                                              "comentario":  "NOVO - Analise inteligente do codigo fonte",
+                                              "analiseFile":  "C:\\4c\\tasks\\task506\\analise.json"
+                                          },
+                   "03_gerarMetaPrompt":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-08-23T03:46:01",
+                                              "fim":  "2026-08-23T03:46:01",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "meta_prompt.md",
+                                              "erro":  null,
+                                              "formType":  "OPERACIONAL",
+                                              "phaseBFile":  "C:\\4c\\tasks\\task506\\meta_prompt_phaseB.md",
+                                              "metaPromptFile":  "C:\\4c\\tasks\\task506\\meta_prompt.md",
+                                              "boClass":  "PzoBO",
+                                              "formClass":  "FormPzo",
+                                              "phaseAFile":  "C:\\4c\\tasks\\task506\\meta_prompt_phaseA.md"
+                                          },
+                   "04_gerarMapeamento":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-08-23T03:46:01",
+                                              "fim":  "2026-08-23T03:46:02",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "mapeamento.json",
+                                              "erro":  null,
+                                              "jsonFile":  "C:\\4c\\tasks\\task506\\mapeamento.json"
+                                          },
+                   "04b_gerarEsqueletos":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-08-23T03:46:02",
+                                               "fim":  "2026-08-23T03:46:02",
+                                               "tentativas":  1,
+                                               "arquivosGerados":  [
+
+                                                                   ],
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Geracao de codigo base ~70% completo",
+                                               "esqueletosDir":  "C:\\4c\\tasks\\task506\\esqueletos",
+                                               "arquivos":  [
+                                                                "FormPzo_esqueleto.prg",
+                                                                "PzoBO_esqueleto.prg"
+                                                            ]
+                                           },
+                   "05_migracao":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-08-23T03:57:24",
+                                       "fim":  "2026-08-23T04:54:57",
+                                       "tentativas":  1,
+                                       "maxTentativas":  3,
+                                       "arquivosGerados":  [
+
+                                                           ],
+                                       "comentario":  "FormXXX.prg, XXXBO.prg",
+                                       "erro":  null,
+                                       "boExists":  true,
+                                       "boFile":  "C:\\4c\\projeto\\app\\classes\\PzoBO.prg",
+                                       "formExists":  true,
+                                       "tamanhoKB":  57.18,
+                                       "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\FormPzo.prg",
+                                       "complexidade":  "COMPLEXO",
+                                       "linhas":  2042
+                                   },
+                   "05b_corrigirAutomatico":  {
+                                                  "status":  "COMPLETED",
+                                                  "inicio":  "2026-08-23T04:54:57",
+                                                  "fim":  "2026-08-23T04:55:06",
+                                                  "tentativas":  1,
+                                                  "correcoesAplicadas":  0,
+                                                  "erro":  null,
+                                                  "comentario":  "NOVO - Correcao automatica de anti-padroes",
+                                                  "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\FormPzo.prg",
+                                                  "boFile":  "C:\\4c\\projeto\\app\\classes\\PzoBO.prg"
+                                              },
+                   "05c_validarCompilacao":  {
+                                                 "status":  "COMPLETED",
+                                                 "inicio":  "2026-08-23T04:55:07",
+                                                 "fim":  "2026-08-23T04:57:01",
+                                                 "tentativas":  1,
+                                                 "errosCompilacao":  [
+
+                                                                     ],
+                                                 "erro":  null,
+                                                 "comentario":  "NOVO - Valida compilacao dos .prg antes de testar",
+                                                 "tentativasUsadas":  1,
+                                                 "sucesso":  true,
+                                                 "corrigidoPorClaude":  true,
+                                                 "arquivosValidados":  2
+                                             },
+                   "06_testForm":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-08-23T05:10:28",
+                                       "fim":  "2026-08-23T05:12:09",
+                                       "tentativas":  1,
+                                       "maxTentativas":  5,
+                                       "errosEncontrados":  [
+
+                                                            ],
+                                       "erro":  null,
+                                       "tentativasUsadas":  1
+                                   },
+                   "06b_testeAutomatico":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-08-23T05:12:09",
+                                               "fim":  "2026-08-23T05:17:44",
+                                               "tentativas":  1,
+                                               "erro":  null,
+                                               "comentario":  "Sub-form - nao aplicavel",
+                                               "threshold":  100,
+                                               "falhou":  0,
+                                               "passou":  9,
+                                               "total":  9,
+                                               "percentual":  100,
+                                               "tentativasUsadas":  2,
+                                               "resultFile":  "C:\\4c\\tasks\\task506\\teste_resultado.json"
+                                           },
+                   "07_validarUI":  {
+                                        "status":  "COMPLETED",
+                                        "inicio":  "2026-08-23T05:17:45",
+                                        "fim":  "2026-08-23T05:17:46",
+                                        "tentativas":  1,
+                                        "maxTentativas":  5,
+                                        "problemas":  {
+                                                          "erros":  0,
+                                                          "avisos":  0,
+                                                          "diferencas":  0,
+                                                          "total":  0
+                                                      },
+                                        "limiteProblemas":  10,
+                                        "erro":  null,
+                                        "exitCode":  0,
+                                        "htmlFile":  "C:\\4c\\projeto\\app\\utils\\relatorios\\UIFidelity_FormPzo_20260823051746.html",
+                                        "diferencas":  0,
+                                        "erros":  0,
+                                        "totalProblemas":  377,
+                                        "avisos":  377
+                                    },
+                   "08_gerarTestManual":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-08-23T05:17:46",
+                                              "fim":  "2026-08-23T05:17:46",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  null,
+                                              "erro":  null,
+                                              "testManualFile":  "C:\\4c\\SolicitacaoTesteManual\\task506_SigCdPzo.md"
+                                          },
+                   "02c_analisarComportamento":  {
+                                                     "inicio":  "2026-08-23T03:46:00",
+                                                     "tentativas":  1,
+                                                     "erro":  null,
+                                                     "fim":  "2026-08-23T03:46:01",
+                                                     "comportamentoFile":  "C:\\4c\\tasks\\task506\\comportamento.json",
+                                                     "status":  "COMPLETED"
+                                                 },
+                   "02d_extrairLayout":  {
+                                             "inicio":  "2026-08-23T03:46:01",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-08-23T03:46:01"
+                                         },
+                   "05b2_atualizarMapeamento":  {
+                                                    "inicio":  "2026-08-23T04:55:06",
+                                                    "status":  "COMPLETED",
+                                                    "tentativas":  1,
+                                                    "erro":  null,
+                                                    "fim":  "2026-08-23T04:55:07",
+                                                    "destFile":  "C:\\4c\\projeto\\app\\utils\\mapeamentos\\FormPzo_mapeamento.json",
+                                                    "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\FormPzo.prg",
+                                                    "mapeamentoFile":  "C:\\4c\\tasks\\task506\\mapeamento.json"
+                                                },
+                   "05d_validarCompletude":  {
+                                                 "inicio":  "2026-08-23T04:57:01",
+                                                 "status":  "COMPLETED",
+                                                 "tentativas":  1,
+                                                 "erro":  null,
+                                                 "fim":  "2026-08-23T04:57:01",
+                                                 "sucesso":  true,
+                                                 "arquivosComProblema":  0
+                                             },
+                   "05e_codeReview":  {
+                                          "inicio":  "2026-08-23T04:57:01",
+                                          "status":  "COMPLETED",
+                                          "erro":  null,
+                                          "fim":  "2026-08-23T05:09:16",
+                                          "passes":  5,
+                                          "problemas":  "[SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027NMINENTS\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: EMPDNCRDS, CDOPES, CNIVELS, ABREVS, CPROS, QTDS, LCDYNFC, DOPES, ICLIS, LOCALENTS, ABREVIS, BLQDESCS, VALUE, CPFS, CGC1, CODIGOS; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027NMAXENTS\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: EMPDNCRDS, CDOPES, CNIVELS, ABREVS, CPROS, QTDS, LCDYNFC, DOPES, ICLIS, LOCALENTS, ABREVIS, BLQDESCS, VALUE, CPFS, CGC1, CODIGOS; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027LOCENTOBS\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: EMPDNCRDS, CDOPES, CNIVELS, ABREVS, CPROS, QTDS, LCDYNFC, DOPES, ICLIS, LOCALENTS, ABREVIS, BLQDESCS, VALUE, CPFS, CGC1, CODIGOS; [METODO-INEXISTENTE] Metodo \u0027THIS.AtualizarLinhaGrid()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [METODO-INEXISTENTE] Metodo \u0027THIS.AbrirBuscaConta()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [METODO-INEXISTENTE] Metodo \u0027THIS.AbrirBuscaCpf()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [METODO-INEXISTENTE] Metodo \u0027THIS.AtualizarTotaisNaTela()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [METODO-INEXISTENTE] Metodo \u0027THIS.EncerrarClick()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.",
+                                          "tentativas":  3,
+                                          "problemasRestantes":  8
+                                      },
+                   "05f_validarSQLSchema":  {
+                                                "inicio":  "2026-08-23T05:09:16",
+                                                "tentativas":  1,
+                                                "erro":  null,
+                                                "fim":  "2026-08-23T05:10:28",
+                                                "status":  "FIXED",
+                                                "retries":  1,
+                                                "boFile":  "C:\\4c\\projeto\\app\\classes\\PzoBO.prg",
+                                                "formFile":  "C:\\4c\\projeto\\app\\forms\\operacionais\\FormPzo.prg"
+                                            },
+                   "06c_validarLayout":  {
+                                             "inicio":  "2026-08-23T05:17:44",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-08-23T05:17:45",
+                                             "thresholdPx":  5,
+                                             "unmatched":  2,
+                                             "errors":  2,
+                                             "matched":  36,
+                                             "warnings":  10,
+                                             "reportFile":  "C:\\4c\\tasks\\task506\\layout_vs_prg_report.json"
+                                         }
+               },
+    "metricas":  {
+                     "tempoTotalSegundos":  0,
+                     "tempoExtracao":  0,
+                     "tempoAnalise":  0,
+                     "tempoEsqueletos":  0,
+                     "tempoMigracao":  0,
+                     "tempoCorrecao":  0,
+                     "tempoCompilacao":  0,
+                     "tempoTesteAuto":  0,
+                     "tempoValidacao":  0,
+                     "linhasCodigoOriginal":  0,
+                     "linhasCodigoGerado":  0,
+                     "correcoesAutomaticas":  0,
+                     "testesAutomaticos":  0
+                 }
+}

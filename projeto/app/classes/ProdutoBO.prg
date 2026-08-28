@@ -804,6 +804,8 @@ DEFINE CLASS ProdutoBO AS BusinessBase
 			loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL)
 			IF loc_nResult >= 0
 				THIS.RegistrarAuditoria("INSERT")
+				THIS.SalvarFaseP()
+				THIS.SalvarServicos()
 				loc_lSucesso = .T.
 			ELSE
 				MsgErro("Erro ao inserir produto:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
@@ -1044,6 +1046,8 @@ DEFINE CLASS ProdutoBO AS BusinessBase
 			loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL)
 			IF loc_nResult >= 0
 				THIS.RegistrarAuditoria("UPDATE")
+				THIS.SalvarFaseP()
+				THIS.SalvarServicos()
 				loc_lSucesso = .T.
 			ELSE
 				MsgErro("Erro ao atualizar produto:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
@@ -1062,6 +1066,10 @@ DEFINE CLASS ProdutoBO AS BusinessBase
 		LOCAL loc_cSQL, loc_nResult, loc_lSucesso
 		loc_lSucesso = .F.
 		TRY
+			*-- Excluir sub-tabelas de processos e matrizes antes do produto principal
+			SQLEXEC(gnConnHandle, "DELETE FROM SigCdPrf WHERE produtos = " + EscaparSQL(THIS.this_cCpros))
+			SQLEXEC(gnConnHandle, "DELETE FROM sigprmtz WHERE cpros = "    + EscaparSQL(THIS.this_cCpros))
+
 			loc_cSQL    = "DELETE FROM SigCdPro WHERE cpros = " + EscaparSQL(THIS.this_cCpros)
 			loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL)
 			IF loc_nResult >= 0
@@ -1076,5 +1084,160 @@ DEFINE CLASS ProdutoBO AS BusinessBase
 		ENDTRY
 		RETURN loc_lSucesso
 	ENDFUNC
+
+	*====================================================================
+	* SalvarFaseP - Persiste cursor_4c_GradFase -> SigCdPrf
+	*               e cursor_4c_GrdMatrizes -> sigprmtz
+	* Chamado por Inserir() e Atualizar() apos sucesso no SigCdPro.
+	* Estrategia SigCdPrf: UPDATE linhas existentes (preserva figprocs),
+	*   INSERT novas, DELETE removidas.
+	* Estrategia sigprmtz: DELETE + INSERT simples.
+	*====================================================================
+	PROTECTED PROCEDURE SalvarFaseP()
+		LOCAL loc_cCpros, loc_nRet, loc_cSQL, loc_cKey, loException
+		TRY
+			loc_cCpros = ALLTRIM(THIS.this_cCpros)
+
+			*--------------------------------------------------------------
+			*-- SigCdPrf: processos de producao (cursor_4c_GradFase)
+			*--------------------------------------------------------------
+			IF USED("cursor_4c_GradFase")
+				*-- Obter cidchaves existentes no banco para este produto
+				SET NULL ON
+				loc_nRet = SQLEXEC(gnConnHandle, ;
+					"SELECT cidchaves FROM SigCdPrf WHERE produtos = " + EscaparSQL(loc_cCpros), ;
+					"cursor_4c_PrfExist")
+				SET NULL OFF
+				IF loc_nRet < 0
+					IF USED("cursor_4c_PrfExist")
+						USE IN cursor_4c_PrfExist
+					ENDIF
+					CREATE CURSOR cursor_4c_PrfExist (cidchaves C(20))
+				ENDIF
+
+				*-- Coletar cidchaves dos registros nao-deletados do cursor
+				LOCAL loc_cKeysAtivos
+				loc_cKeysAtivos = ","
+				SELECT cursor_4c_GradFase
+				SCAN
+					loc_cKeysAtivos = loc_cKeysAtivos + ALLTRIM(cursor_4c_GradFase.cidchaves) + ","
+				ENDSCAN
+
+				*-- INSERT/UPDATE linhas do cursor (SCAN ignora registros deletados)
+				SELECT cursor_4c_GradFase
+				SCAN
+					loc_cKey = ALLTRIM(cursor_4c_GradFase.cidchaves)
+					SELECT cursor_4c_PrfExist
+					LOCATE FOR ALLTRIM(cursor_4c_PrfExist.cidchaves) = loc_cKey
+					IF FOUND()
+						*-- Linha existente: UPDATE (preserva figprocs e etiquetas)
+						loc_cSQL = "UPDATE SigCdPrf SET" + ;
+							" ordems   = " + TRANSFORM(cursor_4c_GradFase.ordems)             + "," + ;
+							" grupos   = " + EscaparSQL(ALLTRIM(cursor_4c_GradFase.grupos))   + "," + ;
+							" minutos  = " + TRANSFORM(cursor_4c_GradFase.minutos)            + "," + ;
+							" uniprdts = " + EscaparSQL(ALLTRIM(cursor_4c_GradFase.uniprdts)) + "," + ;
+							" matprdts = " + EscaparSQL(ALLTRIM(cursor_4c_GradFase.matprdts)) + "," + ;
+							" obs      = " + IIF(EMPTY(cursor_4c_GradFase.obs), "NULL", ;
+								EscaparSQL(ALLTRIM(cursor_4c_GradFase.obs))) + ;
+							" WHERE cidchaves = " + EscaparSQL(loc_cKey)
+					ELSE
+						*-- Linha nova: INSERT com figprocs NULL
+						loc_cSQL = "INSERT INTO SigCdPrf" + ;
+							" (produtos, ordems, grupos, etiquetas, ordem2, cidchaves," + ;
+							"  minutos, uniprdts, matprdts, obs)" + ;
+							" VALUES (" + ;
+							EscaparSQL(loc_cCpros)                                             + "," + ;
+							TRANSFORM(cursor_4c_GradFase.ordems)                               + "," + ;
+							EscaparSQL(ALLTRIM(cursor_4c_GradFase.grupos))                     + "," + ;
+							"0,0," + ;
+							EscaparSQL(loc_cKey)                                               + "," + ;
+							TRANSFORM(cursor_4c_GradFase.minutos)                              + "," + ;
+							EscaparSQL(ALLTRIM(cursor_4c_GradFase.uniprdts))                   + "," + ;
+							EscaparSQL(ALLTRIM(cursor_4c_GradFase.matprdts))                   + "," + ;
+							IIF(EMPTY(cursor_4c_GradFase.obs), "NULL", ;
+								EscaparSQL(ALLTRIM(cursor_4c_GradFase.obs))) + ")"
+					ENDIF
+					SELECT cursor_4c_GradFase
+					SQLEXEC(gnConnHandle, loc_cSQL)
+				ENDSCAN
+
+				*-- DELETE linhas removidas (em DB mas nao no cursor ativo)
+				IF USED("cursor_4c_PrfExist") AND RECCOUNT("cursor_4c_PrfExist") > 0
+					SELECT cursor_4c_PrfExist
+					SCAN
+						loc_cKey = ALLTRIM(cursor_4c_PrfExist.cidchaves)
+						IF !( ("," + loc_cKey + ",") $ loc_cKeysAtivos )
+							SQLEXEC(gnConnHandle, ;
+								"DELETE FROM SigCdPrf WHERE cidchaves = " + EscaparSQL(loc_cKey))
+						ENDIF
+					ENDSCAN
+				ENDIF
+
+				IF USED("cursor_4c_PrfExist")
+					USE IN cursor_4c_PrfExist
+				ENDIF
+			ENDIF
+
+			*--------------------------------------------------------------
+			*-- sigprmtz: matrizes (cursor_4c_GrdMatrizes) — DELETE + INSERT simples
+			*--------------------------------------------------------------
+			IF USED("cursor_4c_GrdMatrizes")
+				SQLEXEC(gnConnHandle, ;
+					"DELETE FROM sigprmtz WHERE cpros = " + EscaparSQL(loc_cCpros))
+
+				SELECT cursor_4c_GrdMatrizes
+				SCAN
+					IF !EMPTY(ALLTRIM(cursor_4c_GrdMatrizes.cmats))
+						loc_cSQL = "INSERT INTO sigprmtz (cidchaves, cmats, cpros, qtds) VALUES (" + ;
+							EscaparSQL(ALLTRIM(cursor_4c_GrdMatrizes.cidchaves)) + "," + ;
+							EscaparSQL(ALLTRIM(cursor_4c_GrdMatrizes.cmats))     + "," + ;
+							EscaparSQL(loc_cCpros)                               + "," + ;
+							TRANSFORM(cursor_4c_GrdMatrizes.qtds)                + ")"
+						SQLEXEC(gnConnHandle, loc_cSQL)
+					ENDIF
+				ENDSCAN
+			ENDIF
+
+		CATCH TO loException
+			MsgErro("Erro ao salvar processos/matrizes:" + CHR(13) + loException.Message + ;
+				CHR(13) + "Linha: " + TRANSFORM(loException.LineNo), ;
+				"ProdutoBO.SalvarFaseP")
+		ENDTRY
+	ENDPROC
+
+	*====================================================================
+	* SalvarServicos - Persiste cursor_4c_GrdServico -> SigSerPr
+	* Estrategia: DELETE todos do produto + INSERT novos com Marcas=1
+	* Chamado por Inserir() e Atualizar() apos sucesso em SigCdPro.
+	*====================================================================
+	PROTECTED PROCEDURE SalvarServicos()
+		LOCAL loc_cCpros, loc_cCods, loc_cIdChaves, loc_cSQL, loException
+		TRY
+			loc_cCpros = ALLTRIM(THIS.this_cCpros)
+
+			*-- Remover associacoes anteriores do produto
+			SQLEXEC(gnConnHandle, "DELETE FROM SigSerPr WHERE cpros = " + EscaparSQL(loc_cCpros))
+
+			*-- Inserir servicos marcados (Marcas=1) do cursor de tela
+			IF USED("cursor_4c_GrdServico")
+				SELECT cursor_4c_GrdServico
+				GO TOP
+				SCAN FOR cursor_4c_GrdServico.Marcas = 1
+					loc_cCods     = ALLTRIM(cursor_4c_GrdServico.Cods)
+					loc_cIdChaves = fUniqueIds()
+					loc_cSQL      = "INSERT INTO SigSerPr (cidchaves, cods, cpros) VALUES (" + ;
+					               EscaparSQL(loc_cIdChaves) + ", " + ;
+					               EscaparSQL(loc_cCods)     + ", " + ;
+					               EscaparSQL(loc_cCpros)    + ")"
+					SQLEXEC(gnConnHandle, loc_cSQL)
+				ENDSCAN
+			ENDIF
+
+		CATCH TO loException
+			MsgErro("Erro ao salvar Servi" + CHR(231) + "os:" + CHR(13) + ;
+				loException.Message + CHR(13) + "Linha: " + TRANSFORM(loException.LineNo), ;
+				"ProdutoBO.SalvarServicos")
+		ENDTRY
+	ENDPROC
 
 ENDDEFINE

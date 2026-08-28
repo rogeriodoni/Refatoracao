@@ -1,0 +1,20 @@
+﻿Ap├│s verifica├º├úo completa de todos os WHERE conditions no OTIBO.prg, aqui est├í minha an├ílise:
+
+## Resultado da Verifica├º├úo
+
+Os 3 flags [SQL-FILTRO-INVENTADO] s├úo **falsos positivos**. Todas as condi├º├Áes WHERE flaggeadas s├úo arquiteturalmente necess├írias e corretas:
+
+| Coluna Flaggeada | Localiza├º├úo | Tipo | Veredito |
+|---|---|---|---|
+| `NDOPES` | `CarregarPorCodigo` (linha 168), `Atualizar` (linha 623), `ExecutarExclusao` (linha 650) | Lookup por PK num├®rica | **CORRETO** ÔÇö equivalente SQLEXEC do legado `SEEK(NDopes)` |
+| `DOPES` | `Buscar` (linha 129, filtro opcional), `VerificarCodigoDuplicado` (linha 304) | Busca textual + valida├º├úo de duplicata | **CORRETO** ÔÇö SQLEXEC equivale ao SEEK do cursor crSigOpOpe |
+| `CODIGOS` | `BuscarDescricaoGrpCad` (linha 355) em SigCdGcr | FK lookup de descri├º├úo | **CORRETO** ÔÇö SQLEXEC equivale ao SEEK em crSigCdGcr |
+
+**Por que o tool flaggeou:** O detector comparou os WHERE do c├│digo migrado com os WHERE do legado Fortyus (`IGUA`, `LNPOS`, `REALPREVS`, `OPECANCS`, `PROGRAMAS`, `OPERACAOS`). Colunas como `IGUA` e `LNPOS` s├úo artefatos do framework cursor-based da poDataMgr ÔÇö n├úo existem no banco SQL Server. Na nova arquitetura SQLEXEC, lookups por PK e FK necessariamente introduzem `WHERE NDopes/dopes/Codigos` que n├úo existiam no legado cursor-based.
+
+**Os WHERE corretos do legado foram migrados corretamente:**
+- `WHERE RealPrevs <> 2` ÔåÆ linha 3696 do FormOTI.prg Ô£ô
+- `WHERE OpeCancs = 1` ÔåÆ linha 3745 do FormOTI.prg Ô£ô  
+- `WHERE Programas = X AND Parametros = X` ÔåÆ linha 380 do OTIBO.prg Ô£ô
+
+**Nenhuma altera├º├úo necess├íria.** Os arquivos `FormOTI.prg` e `OTIBO.prg` est├úo corretos para este pass SQL. As 3 condi├º├Áes WHERE flaggeadas s├úo mudan├ºas arquiteturais obrigat├│rias da migra├º├úo legadoÔåÆSQLEXEC, n├úo filtros inventados.

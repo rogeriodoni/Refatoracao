@@ -1,0 +1,26 @@
+﻿All 4 edits are clean and in place. Fase 6/8 is complete.
+
+**Summary of what was implemented:**
+
+**ConfigurarPaginaDados()** ÔÇö Added 7 new controls after `lbl_4c_Municipios`:
+- `lbl_4c_Vendedores` (bold, Top=157, Left=498)
+- `grd_4c_Municipios` (Top=175, Left=51, 358├ù438, 2 cols: uf/munici, BINDEVENT AfterRowColChange ÔåÆ `GradMuniAfterRowColChange`)
+- `cmd_4c_InserirMun` / `cmd_4c_ExcluirMun` (Top=353/398, Left=414)
+- `grd_4c_Vendedores` (Top=175, Left=497, 402├ù438, 2 cols: iclis/vend, BINDEVENT ÔåÆ `GradVendAfterRowColChange`)
+- `cmd_4c_InserirVend` / `cmd_4c_ExcluirVend` (Top=353/398, Left=903)
+
+**BOParaForm()** ÔÇö Replaced PEMSTATUS+Refresh guards with `THIS.RebindGridsDetalhe()`
+
+**LimparCampos()** ÔÇö Added `THIS.RebindGridsDetalhe()` after BuscarMunicipios/BuscarVendedores
+
+**10 new methods added:**
+- `RebindGridsDetalhe()` ÔÇö rebinds both grids after cursor recreation (Problem 36/32 pattern)
+- `GradMuniAfterRowColChange(par_nColIndex)` ÔÇö dispatches to ValidarUFMuni() (col 1) or ValidarMuniMuni() (col 2)
+- `ValidarUFMuni()` ÔÇö exact lookup in SigCdUfs; opens FormBuscaAuxiliar picker if not found
+- `ValidarMuniMuni()` ÔÇö lookup in SigCdMun+SigCdUfs filtered by current UF; updates codibges; opens picker; calls ValidarDuplicadosMuni()
+- `ValidarDuplicadosMuni()` ÔÇö GROUP BY/HAVING SUM(1)>1 check on crMuni
+- `GradVendAfterRowColChange(par_nColIndex)` ÔÇö calls ValidarCodigoVend() on col 1 exit
+- `ValidarCodigoVend()` ÔÇö exactÔåÆpartialÔåÆall lookup in SigCdCli; auto-fills crVend.vend (razaos); opens picker; calls ValidarDuplicadosVend()
+- `ValidarDuplicadosVend()` ÔÇö duplicate check on crVend.iclis
+- `BtnInserirMunClick()` / `BtnExcluirMunClick()` ÔÇö APPEND BLANK / DELETE+PACK on crMuni
+- `BtnInserirVendClick()` / `BtnExcluirVendClick()` ÔÇö APPEND BLANK / DELETE+PACK on crVend

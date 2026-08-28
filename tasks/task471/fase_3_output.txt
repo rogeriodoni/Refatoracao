@@ -1,0 +1,15 @@
+﻿**FormMTV.prg criado** ÔÇö 297 linhas com 10 m├®todos implementados.
+
+**Estrutura entregue na Fase 3:**
+- `DEFINE CLASS FormMTV AS FormBase` com propriedades visuais completas (Width=1000, Height=600, Caption="Cadastro de Motivos", WindowType=1 modal)
+- `Init()` ÔåÆ s├│ `DODEFAULT()` (FormBase chama InicializarForm automaticamente)
+- `InicializarForm()` ÔåÆ cria MTVBO, configura PageFrame, carrega lista, seta Page1/modo LISTA
+- `ConfigurarPageFrame()` ÔåÆ PageFrame Top=-29, Tabs=.F., 2 pages com Picture fundo_cad_1003.jpg
+- `ConfigurarPaginaLista()` ÔåÆ `cnt_4c_Cabecalho` (com lbl_4c_Sombra + lbl_4c_Titulo), `cnt_4c_Botoes` (vazio ÔÇö Fase 4), `cnt_4c_Saida` com `cmd_4c_Encerrar` canonico (Left=917, Width=90, btn 75├ù75) + BINDEVENT
+- `ConfigurarPaginaDados()` ÔåÆ `cnt_4c_BotoesAcao` (vazio ÔÇö Fase 4)
+- `CarregarLista()` ÔåÆ chama `MTVBO.Buscar("")` (vincula├º├úo ao grid na Fase 4)
+- `BtnEncerrarClick()` ÔåÆ `THIS.Release()`
+- `TornarControlesVisiveis()` ÔåÆ recursivo (Pages + Controls)
+- `Destroy()` ÔåÆ limpa BO + cursor_4c_Dados + `DODEFAULT()`
+
+**Pr├│xima fase (4/8):** adicionar bot├Áes CRUD em `cnt_4c_Botoes`, bot├Áes Salvar/Cancelar em `cnt_4c_BotoesAcao`, e `grd_4c_Lista` na Page1.

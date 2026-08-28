@@ -2,7 +2,7 @@
 
 **Task ID:** task504
 **Formulario:** FormProduto (origem: sigcdpro)
-**Data:** 2026-08-23 03:18:32
+**Data:** 2026-08-23 10:15:21
 
 ---
 

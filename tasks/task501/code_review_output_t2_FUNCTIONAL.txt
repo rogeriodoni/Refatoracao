@@ -1,0 +1,13 @@
+﻿Todos os fixes est├úo confirmados. Resumo do que foi corrigido em `Formprc.prg`:
+
+**[GRID-WITH] (3 fixes):** `ColumnCount` e `RecordSource` movidos para FORA dos WITH blocks em `grd_4c_Lista`, `grd_4c_Destinos` e `grd_4c_DestinoG` ÔÇö evita o erro VFP9 "Unknown member COLUMNx".
+
+**[GRID-HEADER] (11 fixes):** Captions abreviados substitu├¡dos pelos textos completos do legado: `"Local/Drive"ÔåÆ"Local"`, `"Op.Dest."ÔåÆ"Opera{├º}{├ú}o no Destino"`, `"Mg.Min."ÔåÆ"Margem M{├¡}n."`, `"Mg.Max."ÔåÆ"Margem M{├í}x."`, `"Op.Orig."ÔåÆ"Opera{├º}{├ú}o na Origem"`, `"Cta.Orig."ÔåÆ"Cta.Origem"`, `"Cta.Dest."ÔåÆ"Cta.Destino"`, `"% Prod/$"ÔåÆ"% Produto / $"`, `"Pct.Comps"ÔåÆ"% Compos."`, `"Merc"ÔåÆ"G.Grp."`.
+
+**[NULL-CURSOR] (1 fix):** `SET NULL ON/OFF` adicionados ao redor do `CREATE CURSOR cursor_4c_Dados` em `CarregarLista`.
+
+**[BUSCA-CURSOR] (9 fixes):** `loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaXXX"` adicionado ap├│s `CREATEOBJECT("FormBuscaAuxiliar")` em todos os 9 m├®todos de lookup.
+
+**[OPTIONGROUP-LEFT] (24 OptionGroups):** Propriedades `.Left`, `.Top`, `.AutoSize`, `.ForeColor`, `.Themes` adicionadas a TODOS os Buttons de cada OptionGroup, com Left calculado por acumula├º├úo de widths anteriores.
+
+**[LAYOUT-POSITION] (12 fixes):** Posi├º├Áes corrigidas para valores originais do legado: `OptBarras` Left 450ÔåÆ656, `OptCustos` Top 445ÔåÆ414, `OptEmpDests` Top 427ÔåÆ364/Left 450ÔåÆ102, `OptDelets` Top 534ÔåÆ416/Left 700ÔåÆ494, e demais.

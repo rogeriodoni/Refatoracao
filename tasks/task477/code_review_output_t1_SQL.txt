@@ -1,0 +1,3 @@
+﻿O problema estava no `BtnBuscarClick`: o 4┬║ par├ómetro do `FormBuscaAuxiliar` era `"codigos"`, fazendo o picker gerar internamente `WHERE codigos LIKE ...`. O legado original usava `pColuna('Tipos',...)` como campo prim├írio de filtro, gerando `WHERE Tipos = ...`.
+
+**Corre├º├úo aplicada:** mudan├ºa de `"codigos"` ÔåÆ `"tipos"` como campo-chave do `FormBuscaAuxiliar`. O `LOCATE FOR codigos = cursor_4c_Busca.codigos` na p├│s-sele├º├úo continua funcionando porque `codigos` ├® adicionado via `mAddColuna`.

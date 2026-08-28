@@ -1,0 +1,190 @@
+EscreverLog("=== TESTE DIRETO Formprc ===")
+Error in line 26: Statement is not in a procedure.
+EscreverLog("Inicio: " + TTOC(DATETIME()))
+Error in line 27: Statement is not in a procedure.
+EscreverLog("")
+Error in line 28: Statement is not in a procedure.
+EscreverLog("[ETAPA 1] Carregando dependencias...")
+Error in line 31: Statement is not in a procedure.
+CD C:\4c\projeto\app\start
+Error in line 33: Statement is not in a procedure.
+DO config.prg
+Error in line 34: Statement is not in a procedure.
+SET PROCEDURE TO C:\4c\projeto\app\classes\dataaccess.prg ADDITIVE
+Error in line 36: Statement is not in a procedure.
+SET PROCEDURE TO C:\4c\projeto\app\classes\businessbase.prg ADDITIVE
+Error in line 37: Statement is not in a procedure.
+SET PROCEDURE TO C:\4c\projeto\app\classes\formbase.prg ADDITIVE
+Error in line 38: Statement is not in a procedure.
+SET PROCEDURE TO C:\4c\projeto\app\classes\gridbase.prg ADDITIVE
+Error in line 39: Statement is not in a procedure.
+SET PROCEDURE TO C:\4c\projeto\app\utils\functions.prg ADDITIVE
+Error in line 40: Statement is not in a procedure.
+SET PROCEDURE TO C:\4c\projeto\app\utils\messages.prg ADDITIVE
+Error in line 41: Statement is not in a procedure.
+SET PROCEDURE TO C:\4c\projeto\app\utils\validators.prg ADDITIVE
+Error in line 42: Statement is not in a procedure.
+SET PROCEDURE TO C:\4c\projeto\app\classes\FormBuscaAuxiliar.prg ADDITIVE
+Error in line 43: Statement is not in a procedure.
+SET PROCEDURE TO C:\4c\projeto\app\classes\FormErro.prg ADDITIVE
+Error in line 44: Statement is not in a procedure.
+SET PROCEDURE TO C:\4c\projeto\app\classes\prcBO.prg ADDITIVE
+Error in line 45: Statement is not in a procedure.
+SET PROCEDURE TO C:\4c\projeto\app\forms\cadastros\Formprc.prg ADDITIVE
+Error in line 46: Statement is not in a procedure.
+EscreverLog("OK - Dependencias carregadas")
+Error in line 48: Statement is not in a procedure.
+EscreverLog("")
+Error in line 49: Statement is not in a procedure.
+EscreverLog("[ETAPA 1B] Conectando ao banco...")
+Error in line 52: Statement is not in a procedure.
+PUBLIC gnConnHandle
+Error in line 54: Statement is not in a procedure.
+gnConnHandle = SQLSTRINGCONNECT(ObterStringConexao())
+Error in line 55: Statement is not in a procedure.
+IF gnConnHandle < 0
+Error in line 57: Statement is not in a procedure.
+EscreverLog("ERRO - Falha na conexao SQL")
+Error in line 58: Statement is not in a procedure.
+QUIT
+Error in line 59: Statement is not in a procedure.
+ELSE
+Error in line 60: Statement is not in a procedure.
+SQLSETPROP(gnConnHandle, "QueryTimeOut", 60)
+Error in line 61: Statement is not in a procedure.
+EscreverLog("OK - Conectado (Handle: " + TRANSFORM(gnConnHandle) + ")")
+Error in line 62: Statement is not in a procedure.
+ENDIF
+Error in line 63: Statement is not in a procedure.
+EscreverLog("")
+Error in line 65: Statement is not in a procedure.
+EscreverLog("[ETAPA 2] Criando objeto Formprc...")
+Error in line 68: Statement is not in a procedure.
+LOCAL loc_oForm
+Error in line 70: Statement is not in a procedure.
+TRY
+Error in line 71: Statement is not in a procedure.
+loc_oForm = CREATEOBJECT("Formprc")
+Error in line 72: Statement is not in a procedure.
+IF ISNULL(loc_oForm) OR TYPE("loc_oForm") # "O"
+Error in line 73: Statement is not in a procedure.
+EscreverLog("ERRO - CREATEOBJECT retornou NULL")
+Error in line 74: Statement is not in a procedure.
+ELSE
+Error in line 75: Statement is not in a procedure.
+EscreverLog("OK - Objeto criado: " + loc_oForm.Class)
+Error in line 76: Statement is not in a procedure.
+ENDIF
+Error in line 77: Statement is not in a procedure.
+CATCH TO loEx
+Error in line 78: Statement is not in a procedure.
+EscreverLog("ERRO - " + loEx.Message + " L" + TRANSFORM(loEx.LineNo) + " em " + loEx.Procedure)
+Error in line 79: Statement is not in a procedure.
+ENDTRY
+Error in line 80: Statement is not in a procedure.
+EscreverLog("")
+Error in line 82: Statement is not in a procedure.
+IF TYPE("loc_oForm") = "O" AND !ISNULL(loc_oForm)
+Error in line 85: Statement is not in a procedure.
+EscreverLog("[ETAPA 3] Mostrando formulario...")
+Error in line 86: Statement is not in a procedure.
+TRY
+Error in line 87: Statement is not in a procedure.
+loc_oForm.WindowType = 0
+Error in line 88: Statement is not in a procedure.
+loc_oForm.Show()
+Error in line 89: Statement is not in a procedure.
+DOEVENTS
+Error in line 90: Statement is not in a procedure.
+IF loc_oForm.Visible
+Error in line 91: Statement is not in a procedure.
+EscreverLog("OK - Visivel, Width=" + TRANSFORM(loc_oForm.Width) + " Height=" + TRANSFORM(loc_oForm.Height))
+Error in line 92: Statement is not in a procedure.
+ELSE
+Error in line 93: Statement is not in a procedure.
+EscreverLog("ERRO - Nao ficou visivel")
+Error in line 94: Statement is not in a procedure.
+ENDIF
+Error in line 95: Statement is not in a procedure.
+CATCH TO loEx
+Error in line 96: Statement is not in a procedure.
+EscreverLog("ERRO - " + loEx.Message + " L" + TRANSFORM(loEx.LineNo))
+Error in line 97: Statement is not in a procedure.
+ENDTRY
+Error in line 98: Statement is not in a procedure.
+EscreverLog("")
+Error in line 100: Statement is not in a procedure.
+EscreverLog("[ETAPA 4] Testando botoes...")
+Error in line 103: Statement is not in a procedure.
+LOCAL loc_cPath, loc_oBotao
+Error in line 104: Statement is not in a procedure.
+FOR EACH loc_cPath IN ["pgf_4c_Principal.Page1.cnt_4c_Botoes.cmd_4c_Incluir",  "pgf_4c_Principal.Page1.cnt_4c_Botoes.cmd_4c_Alterar",  "pgf_4c_Principal.Page1.cnt_4c_Botoes.cmd_4c_Excluir"]
+Error in line 107: Statement is not in a procedure.
+TRY
+Error in line 108: Statement is not in a procedure.
+loc_oBotao = EVALUATE("loc_oForm." + loc_cPath)
+Error in line 109: Statement is not in a procedure.
+IF TYPE("loc_oBotao") = "O" AND !ISNULL(loc_oBotao)
+Error in line 110: Statement is not in a procedure.
+loc_oBotao.Click()
+Error in line 111: Statement is not in a procedure.
+DOEVENTS
+Error in line 112: Statement is not in a procedure.
+EscreverLog("OK - " + loc_cPath)
+Error in line 113: Statement is not in a procedure.
+IF WEXIST(WONTOP()) AND WONTOP() # loc_oForm.Name
+Error in line 114: Statement is not in a procedure.
+KEYBOARD "{ESC}"
+Error in line 115: Statement is not in a procedure.
+DOEVENTS
+Error in line 116: Statement is not in a procedure.
+ENDIF
+Error in line 117: Statement is not in a procedure.
+ENDIF
+Error in line 118: Statement is not in a procedure.
+CATCH TO loEx
+Error in line 119: Statement is not in a procedure.
+EscreverLog("ERR - " + loc_cPath + ": " + loEx.Message)
+Error in line 120: Statement is not in a procedure.
+ENDTRY
+Error in line 121: Statement is not in a procedure.
+ENDFOR
+Error in line 122: Statement is not in a procedure.
+EscreverLog("")
+Error in line 124: Statement is not in a procedure.
+EscreverLog("[ETAPA 5] Fechando...")
+Error in line 127: Statement is not in a procedure.
+TRY
+Error in line 128: Statement is not in a procedure.
+loc_oForm.Release()
+Error in line 129: Statement is not in a procedure.
+EscreverLog("OK - Fechado")
+Error in line 130: Statement is not in a procedure.
+CATCH TO loEx
+Error in line 131: Statement is not in a procedure.
+EscreverLog("ERRO - " + loEx.Message)
+Error in line 132: Statement is not in a procedure.
+ENDTRY
+Error in line 133: Statement is not in a procedure.
+ENDIF
+Error in line 134: Statement is not in a procedure.
+EscreverLog("")
+Error in line 137: Statement is not in a procedure.
+EscreverLog("[ETAPA 6] Desconectando...")
+Error in line 138: Statement is not in a procedure.
+IF TYPE("gnConnHandle") = "N" AND gnConnHandle > 0
+Error in line 139: Statement is not in a procedure.
+SQLDISCONNECT(gnConnHandle)
+Error in line 140: Statement is not in a procedure.
+EscreverLog("OK - Desconectado")
+Error in line 141: Statement is not in a procedure.
+ENDIF
+Error in line 142: Statement is not in a procedure.
+EscreverLog("")
+Error in line 144: Statement is not in a procedure.
+EscreverLog("=== FIM DO TESTE ===")
+Error in line 145: Statement is not in a procedure.
+EscreverLog("Fim: " + TTOC(DATETIME()))
+Error in line 146: Statement is not in a procedure.
+QUIT
+Error in line 148: Statement is not in a procedure.

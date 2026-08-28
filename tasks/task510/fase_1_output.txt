@@ -1,0 +1,10 @@
+﻿Fase 1 completa. `RegBO.prg` criado em `C:\4c\projeto\app\classes\RegBO.prg` com:
+
+- `DEFINE CLASS RegBO AS BusinessBase`
+- 3 propriedades mapeadas diretamente do schema da `SigCdReg`:
+  - `this_cRegiaos` ÔåÆ `regiaos char(10)` (PK)
+  - `this_cDescs` ÔåÆ `descs char(30)`
+  - `this_cSkChaves` ÔåÆ `skchaves char(20)` (chave UUID que liga com `SigCdRgi`)
+- `Init()` configurando `this_cTabela = "SigCdReg"` e `this_cCampoChave = "regiaos"`
+
+Os registros filhos (`SigCdRgi` com `tipos='M'` para munic├¡pios e `tipos='C'` para vendedores) s├úo gerenciados via cursors no Form ÔÇö n├úo geram propriedades individuais no BO, mas m├®todos dedicados (`CarregarMunicipios`, `CarregarVendedores`, `SalvarMunicipios`, `SalvarVendedores`) ser├úo criados nas Fases 2+.

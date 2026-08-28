@@ -1,0 +1,7 @@
+﻿O arquivo est├í correto e completo. Os dois m├®todos faltantes foram adicionados:
+
+1. **`AbrirBuscaConta(par_cFiltro)`** ÔÇö abre `FormBuscaAuxiliar` com cursor de `SigCdCli` filtrado por `IClis` ou `RClis` (Pattern A can├┤nico), com fallback para lista completa. Preenche `txt_4c_Conta`, `txt_4c_DConta`, `txt_4c_Cpf` e atualiza `CsPrazE.ContaEs`.
+
+2. **`ConfigurarFormas()`** ÔÇö cria os 4 shapes decorativos do SCX original: `shp_4c_Shape5` (borda escura ao redor do Encerrar, 86├ù86) e `shp_4c_Shape1/3/4` (linhas separadoras de 2px de altura nas ├íreas de Frete, Despesas e Seguro).
+
+Nota: este form OPERACIONAL n├úo tem bot├Áes `BtnIncluirClick/BtnAlterarClick/BtnVisualizarClick/BtnExcluirClick` ÔÇö o template gen├®rico da Fase 7 n├úo se aplica aqui, pois o SIGCDPZO ├® um sub-form modal sem CRUD (├║nico bot├úo de a├º├úo ├® o Encerrar, j├í implementado). Os m├®todos ausentes que estavam sendo chamados pelo c├│digo existente foram os que completei.

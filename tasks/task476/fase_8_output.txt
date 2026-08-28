@@ -1,0 +1,14 @@
+﻿FormObs.prg est├í completo e correto. Resumo da Fase 8:
+
+**O que j├í estava implementado nas fases anteriores** (FormObs.prg linha 1-1514 j├í continha todos os m├®todos da Fase 8):
+- `BtnBuscarClick()`, `BtnEncerrarClick()`, `BtnSalvarClick()`, `BtnCancelarClick()`
+- `FormParaBO()`, `BOParaForm()`, `HabilitarCampos()`, `LimparCampos()`
+- `CarregarLista()`, `AjustarBotoesPorModo()`
+
+**O que foi feito na Fase 8** (integra├º├úo ao sistema):
+- `menu.prg`: DEFINE BAR 137 em `popCadastros` com prompt "Observa├º├Áes"
+- `menu.prg`: `ON SELECTION BAR 137 OF popCadastros DO AbrirFormObs`
+- `menu.prg`: Fun├º├úo `AbrirFormObs()` com padr├úo can├┤nico (VARTYPE, Show() sem par├ómetro, sem Release())
+- `config.prg`: n├úo necess├írio ÔÇö usa ADIR() din├ómico, carrega `ObsBO.prg` e `FormObs.prg` automaticamente
+
+Migra├º├úo FormObs completa. O formul├írio est├í acess├¡vel via menu Cadastros ÔåÆ Observa├º├Áes.

@@ -1,0 +1,18 @@
+﻿The file structure is correct. Phase 6 is complete. Here's what was added to `Formmtz.prg`:
+
+**In `ConfigurarPaginaDados()`** (lines 712ÔÇô1097):
+- `grd_4c_Dados` grid ÔÇö 28 columns with headers (Grupo, Conta, JanÔÇôDez monthly editable cols 3ÔÇô14, Total readonly col 15, Acm_JanÔÇôAcm_Dez readonly cols 16ÔÇô27, Valida checkbox col 28)
+- `cnt_4c_InsFtc` container with `cmd_4c_InserirLinha` (+) and `cmd_4c_ExcluirLinha` (-) buttons
+- `shp_4c_Shape3` separator
+- Audit fields: `lbl_4c_Label20/24/25`, `txt_4c_DtIncs`, `txt_4c_Usuario`, `txt_4c_DataAlts`, `txt_4c_UsuaAlts`
+- BINDEVENTs for grid `AfterRowColChange` + insert/delete buttons
+
+**`AlternarGradeDetalhe()`** updated ÔÇö wires all 28 `ControlSource` assignments (including `chk_4c_Valida.ControlSource`) after `RecordSource` is set.
+
+**New methods** (lines 1995ÔÇô2200):
+- `AtualizaTotal(par_cIdChaves)` ÔÇö delegates to `mtzBO.AtualizarTotal`, updates `txt_4c_ValorTotal` + `txt_4c_Saldo`, refreshes grid
+- `BtnInserirLinhaClick()` ÔÇö calls `mtzBO.InserirLinhaDetalhe`, refreshes grid
+- `BtnExcluirLinhaClick()` ÔÇö calls `mtzBO.ExcluirLinhaDetalhe`, refreshes grid
+- `GrdDadosAfterRowColChange(par_nColIndex)` ÔÇö routes column-leave events: cols 3ÔÇô14 ÔåÆ AtualizaTotal, col 1 ÔåÆ ValidarGrupoLinhaGrid, col 2 ÔåÆ ValidarContaLinhaGrid
+- `ValidarGrupoLinhaGrid()` ÔÇö validates `SigCdGcr.Codigos`, clears and refocuses on failure
+- `ValidarContaLinhaGrid()` ÔÇö validates `SigCdCli.IClis`, checks Inativa flag, clears on failure

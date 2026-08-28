@@ -1,0 +1,21 @@
+﻿Encontrei a resposta definitiva. Linhas 1038-1041 do legado mostram:
+
+```
+.pfSqlTabela(1).pColuna('cEmps','','','Empresa',45,.T.)
+.pfSqlTabela(1).pColuna('cAno','','','M?s/Ano',59,.t.)    ÔåÉ M?s/Ano = "M├¬s/Ano" (encoding)
+.pfSqlTabela(1).pColuna('cTitulo','','','Titulo',290,.t.)
+.pfSqlTabela(1).pColuna('Moeda','','','Moeda',40,.f.)
+```
+
+Os 12 problemas listados s├úo **falsos positivos**. Explica├º├úo:
+
+- O legado usa `fwgrade` com `Caption = (prompt())` nos Headers SCX ÔÇö captions din├ómicos, n├úo propriedades est├íticas
+- O legado define os captions reais via m├®todo `pColuna` em c├│digo (runtime), n├úo no SCX
+- O validador s├│ l├¬ propriedades est├íticas do SCX, por isso n├úo encontrou "Empresa", "M├¬s/Ano", "Titulo", "Moeda"
+- Os captions no c├│digo migrado s├úo **id├¬nticos** ao que o legado define via `pColuna`:
+  - `"Empresa"` ÔåÉ `pColuna('cEmps','','','Empresa',45,.T.)` Ô£ô
+  - `"M" + CHR(234) + "s/Ano"` = "M├¬s/Ano" ÔåÉ `pColuna('cAno','','','M?s/Ano',59,.t.)` Ô£ô
+  - `"Titulo"` ÔåÉ `pColuna('cTitulo','','','Titulo',290,.t.)` Ô£ô
+  - `"Moeda"` ÔåÉ `pColuna('Moeda','','','Moeda',40,.f.)` Ô£ô
+
+**Nenhuma altera├º├úo deve ser feita.** Modificar esses captions quebraria a fidelidade UX. O arquivo `FormOrc.prg` j├í est├í correto.

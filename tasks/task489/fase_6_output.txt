@@ -1,0 +1,9 @@
+﻿All three insertions are in place. The migration is complete:
+
+- **config.prg**: No changes needed ÔÇö dynamic ADIR() loading already picks up `OrcBO.prg` (in `classes/`) and `FormOrc.prg` (in `forms/cadastros/`).
+- **menu.prg**:
+  - `DEFINE BAR 147 OF popCadastros PROMPT "Or" + CHR(231) + "amento"` (line 324)
+  - `ON SELECTION BAR 147 OF popCadastros DO AbrirFormOrc` (line 458)
+  - `PROCEDURE AbrirFormOrc()` with full TRY/CATCH pattern (line 9223)
+
+The SIGCDORC migration is now **fully complete** across all 8 phases: FormOrc.prg (UI layer), OrcBO.prg (business layer), config.prg (auto-loaded), and menu.prg (navigation entry point).

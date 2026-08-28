@@ -1,0 +1,12 @@
+﻿Todas as corre├º├Áes foram aplicadas corretamente. Resumo dos 5 bugs corrigidos:
+
+**Formpag.prg**:
+1. **`txt_4c__formas` ÔåÆ `txt_4c___formas`** (linha 667): `AddObject` criava com 3 underscores mas `WITH` acessava com 2 ÔåÆ "Property not found" durante `CriarPaginaGeral` ÔåÆ `MsgErro` dialog ÔåÆ VFP terminava (SYS(2335,0)). Era o bug que causava o crash na abertura do form.
+
+2. **`.this_cNfpags` ÔåÆ `.this_nNfpags`** em `FormParaBO`: propriedade inexistente no BO.
+
+3. **`ALLTRIM(...)` ÔåÆ `VAL(ALLTRIM(...))` em 11 campos num├®ricos** em `FormParaBO` (Entrada, Dias, Parcelas, Valor, Desconto, Comissao, Encargos, PVaria, Indice, TaxJuros, TolFecCx, Taxa, Prazo, VlrMinPar): string sendo atribu├¡da a propriedade num├®rica ÔåÆ "Data type mismatch" no Salvar.
+
+**pagBO.prg**:
+4. **`PROTECTED FUNCTION Inserir()`** ÔåÆ `FUNCTION Inserir()`: m├®todo PROTECTED n├úo pode ser chamado externamente pela form.
+5. **`PROTECTED FUNCTION Atualizar()`** ÔåÆ `FUNCTION Atualizar()`: mesma raz├úo.

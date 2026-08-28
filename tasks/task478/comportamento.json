@@ -1,0 +1,102 @@
+{
+  "resumo": {
+    "totalMetodos": 5,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 3,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": []
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDOCC",
+      "evento": "Init",
+      "linhas": 14,
+      "codigoOriginal": "LPARAMETERS lcacesso\n\nWith ThisForm\n\t.poDatamgr = CreateObject('fSqlConector')\n\tWith .poDatamgr\n\t\t.AddCursor('SigCcOco','ncodigos','crSigCcOco','',ThisForm.pagina.lista.grade)\n\t\t.pfSqlTabela(1).pColuna('ncodigos','','','Código',80,.t.)\n\t\t.pfSqlTabela(1).pColuna('cdescrs','','','Descrição',200,.t.)\n\t\t.AddCursor('SigNfCor','noccors','crSigNfCor','','')\n\tEndWith\n\t= DoDefault()\n\t.LockScreen = .f.\nEndWith\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDOCC",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "Local lcBusca\n\nIf .Not.IsEmpty(Thisform.Pagina.Dados.Get_ncodigo.value)\n\tThisForm.poDataMgr.LocateCursor('crSigCcOco','ncodigos',Thisform.Pagina.Dados.Get_ncodigo.value)\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "LocateCursor",
+        "controlesReferenciados": "Get_ncodigo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDOCC",
+      "evento": "Click",
+      "linhas": 27,
+      "codigoOriginal": "LPARAMETERS opcao\nIf Type( 'Opcao' ) = 'N'\n\tThis.Value = Opcao\nEndif\nIf This.Value=4\n\tIf ThisForm.poDataMgr.ChkRegister('SigNfCor','noccors',ThisForm.Pagina.Dados.Get_nCodigo.Value)\n\t\tMessagebox( 'Ocorrência com Movimentação, Exclusão Inválida !', 48, '' )\n\t\tThisForm.Pagina.Dados.Grupo_Salva.Cancelar.SetFocus\n\t\tReturn\n\tEndif\nEndif\n\nSelect CrSigCcOco\nIf !dodefault( Opcao )\n\tThisForm.mAtivapagina1\n\tReturn\nEndif\nIf Inlist(Thisform.pcEscolha,'INSERIR','PROCURAR')\n\tThisform.Pagina.Dados.Get_ncodigo.S... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChkRegister",
+        "controlesReferenciados": "Get_nCodigo,ChkRegister('SigNfCor',Get_cdescr",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDOCC",
+      "evento": "Click",
+      "linhas": 25,
+      "codigoOriginal": "If Thisform.pcEscolha='INSERIR'\n\tIf IsEmpty(Thisform.Pagina.Dados.Get_NCodigo.Value)\n\t\tMessagebox('Código Inválido !!',0+48,'')\n\t\tThisform.Pagina.Dados.Get_NCodigo.SetFocus\n\t\tReturn\n\tEndif\n\t\n\tIf ThisForm.poDataMgr.ChkRegister('SigCcOco','ncodigos',ThisForm.Pagina.Dados.Get_Ncodigo.Value)\n\t\tMessagebox( 'Código já Cadastrado !!', 48, '' )\n\t\tThisForm.Pagina.Dados.Get_Ncodigo.SetFocus\n\t\tReturn\n\tEndif\nEndif\nIf Inlist(Thisform.pcEscolha,'INSERIR','ALTERAR')\n\tIf IsEmpty(Thisform.Pagina.Dados.Get_cDescr... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChkRegister",
+        "controlesReferenciados": "Get_NCodigo,ChkRegister('SigCcOco',Get_cDescr",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDOCC",
+      "evento": "Click",
+      "linhas": 7,
+      "codigoOriginal": "=DoDefault()\n\nIf ThisForm.plCancelar\n\tThisForm.mAtivapagina1\nEndif\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

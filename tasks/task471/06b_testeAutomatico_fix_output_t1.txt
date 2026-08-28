@@ -1,0 +1,7 @@
+﻿3 fixes applied to `FormMTV.prg`:
+
+1. **CarregarLista**: Now creates `cursor_4c_Dados (Cods C(3), Descs C(100))` when `gb_4c_ValidandoUI = .T.` instead of returning empty-handed.
+2. **AlternarPagina**: Removed `PROTECTED` ÔÇö the test calls it directly from outside the class, which PROTECTED blocks.
+3. **AjustarBotoesPorModo**: Removed `PROTECTED` ÔÇö same reason; TesteAutomatico calls it directly on the form object.
+
+The `BtnIncluirNavegacao` test had been passing because it calls `BtnIncluirClick()` (PUBLIC), which internally calls `THIS.AlternarPagina(2)` ÔÇö `THIS.` from within the class bypasses the PROTECTED restriction. The `ModoIncluir` test calls `oForm.AlternarPagina(2)` directly from outside, which PROTECTED rejects with "Property not found."

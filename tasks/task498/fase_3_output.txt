@@ -1,0 +1,13 @@
+﻿Todos os `RETURN` est├úo depois dos `ENDTRY`. 
+
+**Fase 3 conclu├¡da.** `C:\4c\projeto\app\forms\operacionais\FormPgb.prg` criado com:
+
+- **DEFINE CLASS FormPgb AS FormBase** com propriedades visuais exatas do SCX (650x450, TitleBar=0, WindowType=1, sem barra de t├¡tulo)
+- **Init(par_cEmps, par_cDopes, par_nNumes)** ÔÇö armazena par├ómetros, cria PgbBO, chama DODEFAULT()
+- **InicializarForm()** ÔÇö define Picture/Caption via CHR(), cria cursor placeholder, chama ConfigurarLayout() + CarregarDados() + TornarControlesVisiveis()
+- **ConfigurarLayout()** ÔÇö cria cnt_4c_Cabecalho (com lbl_4c_Sombra/lbl_4c_Titulo usando path expl├¡cito para evitar bug de WITH aninhado), shp_4c_Shape2, cmd_4c_Encerrar (BINDEVENT ÔåÆ CmdEncerrarClick), shp_4c_Shape1, txt_4c_Texto (ControlSource = cursor_4c_HistoricoPgb.Dpros)
+- **CarregarDados()** ÔÇö delega ao PgbBO.CarregarHistorico() e posiciona GO BOTTOM
+- **GrdDadosAfterRowColChange()** ÔÇö PUBLIC (pronto para BINDEVENT na Fase 4)
+- **Destroy()** ÔÇö fecha cursor + DODEFAULT()
+
+**Pr├│xima fase (4):** adicionar grd_4c_Dados (7 colunas) + BINDEVENT AfterRowColChange + vincular grid ao cursor.

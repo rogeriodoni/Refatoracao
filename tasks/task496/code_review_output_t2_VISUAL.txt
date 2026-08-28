@@ -1,0 +1,55 @@
+﻿Agora tenho confirma├º├úo completa. Vou documentar minha an├ílise dos 6 problemas:
+
+---
+
+## An├ílise dos 6 Problemas Detectados
+
+Todos os 6 problemas s├úo **falsos positivos do validador**, causados por matching incorreto de nomes de controles. Nenhuma corre├º├úo deve ser feita ÔÇö as mudan├ºas especificadas quebrariam o layout visual.
+
+### Problemas 1-2: `lbl_4c_SepPrevisao` (Top/Left)
+
+O validador diz que o controle SCX `'previsao'` (Pagina.Lista, Top=84, Left=133) foi mapeado para `lbl_4c_SepPrevisao`.
+
+**Realidade:**
+- `cmd_4c_Previsao` (Page1/Lista) ÔåÆ Top=113, Left=133 ÔåÆ **correto** (84+29=113, Left=133 igual ao SCX) Ô£ô
+- `lbl_4c_SepPrevisao` ├® um separador "├á" em `ConfigurarPaginaDados` (Page2, linha 716) ÔÇö controle completamente diferente
+- O validador escolheu `lbl_4c_SepPrevisao` em vez de `cmd_4c_Previsao` provavelmente por ordem alfab├®tica (`l` antes de `c`)
+
+Mover `lbl_4c_SepPrevisao` para Top=113, Left=133 o colocaria sobre `lbl_4c_Codigo` na Page2 ÔÇö **quebra o layout**.
+
+### Problemas 3-4: `cmd_4c_Processar` (Top/Left)
+
+O validador diz que `'Processa'` (Pagina.Lista, Top=84, Left=13) foi mapeado para `cmd_4c_Processar`.
+
+**Realidade:**
+- `cmd_4c_Processa` (Page1/Lista, linha 329) ÔåÆ Top=113, Left=13 ÔåÆ **correto** (84+29=113, Left=13 igual) Ô£ô
+- `cmd_4c_Processar` (Page2/Dados, linha 509) ├® um bot├úo diferente em outra p├ígina ÔÇö original Top=12, migrado 12+29=41 Ô£ô
+- O validador confundiu `cmd_4c_Processa` (Page1) com `cmd_4c_Processar` (Page2) por similaridade de nome
+
+Mover `cmd_4c_Processar` para Top=113, Left=13 tiraria o bot├úo "Processar" do lado direito e jogaria para a esquerda da Page2 ÔÇö **quebra o layout**.
+
+### Problemas 5-6: `lbl_4c_LblConta` (Top/Left)
+
+O validador diz que `'Conta'` (Pagina.Dados, Top=249, Left=240) foi mapeado para `lbl_4c_LblConta` (Top=286, Left=195).
+
+**Realidade:**
+- O controle GET `'Conta'` do SCX (Top=249, Left=240) mapeia para `cnt_4c_Conta` (Top=278=249+29, Left=240) Ô£ô
+- `lbl_4c_LblConta` ├® o **label** criado na migra├º├úo, n├úo existia como objeto separado no SCX
+- O padr├úo de posicionamento de labels na Page2 ├® consistente: label 8px abaixo do container para centraliza├º├úo vertical:
+  - `lbl_4c_TxtPedido` "Opera├º├úo :": Top=252, `cnt_4c_Operacao` Top=244 ÔåÆ diff=8px Ô£ô
+  - `lbl_4c_LblConta` "Conta :": Top=286, `cnt_4c_Conta` Top=278 ÔåÆ diff=8px Ô£ô
+- Left=195 (label "Conta :") vs Left=240 (container): padr├úo correto ÔÇö labels ficam ├á esquerda dos containers
+
+Mover `lbl_4c_LblConta` para Left=240 faria o label sobrepor `cnt_4c_Conta` (tamb├®m Left=240) ÔÇö **quebra o layout**.
+
+---
+
+## Conclus├úo
+
+| Problema | Controle Correto no Migrado | Posi├º├úo | Status |
+|---|---|---|---|
+| 1-2 (previsaoÔåÆSepPrevisao) | `cmd_4c_Previsao` linha 347-362 | Top=113=84+29, Left=133 | Correto Ô£ô |
+| 3-4 (ProcessaÔåÆProcessar) | `cmd_4c_Processa` linha 329-344 | Top=113=84+29, Left=13 | Correto Ô£ô |
+| 5-6 (ContaÔåÆLblConta) | `cnt_4c_Conta` linha 849-857 | Top=278=249+29, Left=240 | Correto Ô£ô |
+
+O validador fez matching errado em todos os 6 casos. Aplicar as corre├º├Áes especificadas quebraria o formul├írio. **Nenhuma altera├º├úo ├® necess├íria no `FormPcp.prg`.**

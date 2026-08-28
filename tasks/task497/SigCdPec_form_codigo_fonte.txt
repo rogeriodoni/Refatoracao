@@ -1,0 +1,2153 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigCdPec.SCX
+* Data/Hora: 22/08/2026 19:40:25
+* Total de registros: 33
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDPEC
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: btnCopiar
+  Parent: SIGCDPEC.Pagina.Lista
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: Shape2
+  Parent: SIGCDPEC.Pagina.Dados
+  Class: shape
+  BaseClass: shape
+
+Objeto: cmdgCompo
+  Parent: SIGCDPEC.Pagina.Dados
+  Class: commandgroup
+  BaseClass: commandgroup
+
+Objeto: Shape1
+  Parent: SIGCDPEC.Pagina.Dados
+  Class: shape
+  BaseClass: shape
+
+Objeto: Say11
+  Parent: SIGCDPEC.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getRelatorio
+  Parent: SIGCDPEC.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say7
+  Parent: SIGCDPEC.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getEmpresa
+  Parent: SIGCDPEC.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: FwbtnpSobe
+  Parent: SIGCDPEC.Pagina.Dados
+  Class: fwbtnp
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: FwbtnpDesce
+  Parent: SIGCDPEC.Pagina.Dados
+  Class: fwbtnp
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Txt_Procura_Grupo
+  Parent: SIGCDPEC.Pagina.Dados
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Txt_Procura_Conta
+  Parent: SIGCDPEC.Pagina.Dados
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: grdGrupos
+  Parent: SIGCDPEC.Pagina.Dados
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGCDPEC.Pagina.Dados.grdGrupos.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDPEC.Pagina.Dados.grdGrupos.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDPEC.Pagina.Dados.grdGrupos.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDPEC.Pagina.Dados.grdGrupos.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: CmdExpandir
+  Parent: SIGCDPEC.Pagina.Dados
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: grdDestinos
+  Parent: SIGCDPEC.Pagina.Dados
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGCDPEC.Pagina.Dados.grdDestinos.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Check1
+  Parent: SIGCDPEC.Pagina.Dados.grdDestinos.Column1
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: Header1
+  Parent: SIGCDPEC.Pagina.Dados.grdDestinos.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDPEC.Pagina.Dados.grdDestinos.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDPEC.Pagina.Dados.grdDestinos.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDPEC.Pagina.Dados.grdDestinos.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDPEC.Pagina.Dados.grdDestinos.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDPEC.Pagina.Dados.grdDestinos.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDPEC.Pagina.Dados.grdDestinos.Column5
+  Class: header
+  BaseClass: header
+
+Objeto: Combo1
+  Parent: SIGCDPEC.Pagina.Dados.grdDestinos.Column5
+  Class: combobox
+  BaseClass: combobox
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 79
+  Left = 8
+  Width = 635
+  Height = 155
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPEC
+------------------------------------------------------------
+  DataSession = 2
+  Height = 600
+  Width = 1000
+  DoCreate = .T.
+  Caption = "Cadastro de Posição  Empresarial"
+  WindowState = 0
+  lmarcados = .F.
+  nultimoreg = 0
+  Name = "SIGCDPEC"
+  Pagina.ErasePage = .T.
+  Pagina.Lista.cntSombra.lblSombra.Name = "lblSombra"
+  Pagina.Lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  Pagina.Lista.cntSombra.Top = 1
+  Pagina.Lista.cntSombra.Left = -1
+  Pagina.Lista.cntSombra.Width = 1008
+  Pagina.Lista.cntSombra.Height = 80
+  Pagina.Lista.cntSombra.Name = "cntSombra"
+  Pagina.Lista.Grade.FontName = "Tahoma"
+  Pagina.Lista.Grade.FontSize = 8
+  Pagina.Lista.Grade.Height = 470
+  Pagina.Lista.Grade.Left = 33
+  Pagina.Lista.Grade.RowHeight = 16
+  Pagina.Lista.Grade.Top = 121
+  Pagina.Lista.Grade.Width = 932
+  Pagina.Lista.Grade.ForeColor = 90,90,90
+  Pagina.Lista.Grade.Name = "Grade"
+  Pagina.Lista.Grupo_op.AutoSize = .T.
+  Pagina.Lista.Grupo_op.Inserir.Top = 5
+  Pagina.Lista.Grupo_op.Inserir.Left = 5
+  Pagina.Lista.Grupo_op.Inserir.Alignment = 6
+  Pagina.Lista.Grupo_op.Inserir.Name = "Inserir"
+  Pagina.Lista.Grupo_op.Consultar.Top = 5
+  Pagina.Lista.Grupo_op.Consultar.Left = 80
+  Pagina.Lista.Grupo_op.Consultar.Alignment = 6
+  Pagina.Lista.Grupo_op.Consultar.Name = "Consultar"
+  Pagina.Lista.Grupo_op.Alterar.Top = 5
+  Pagina.Lista.Grupo_op.Alterar.Left = 155
+  Pagina.Lista.Grupo_op.Alterar.Alignment = 6
+  Pagina.Lista.Grupo_op.Alterar.Name = "Alterar"
+  Pagina.Lista.Grupo_op.Excluir.Top = 5
+  Pagina.Lista.Grupo_op.Excluir.Left = 230
+  Pagina.Lista.Grupo_op.Excluir.Alignment = 6
+  Pagina.Lista.Grupo_op.Excluir.Name = "Excluir"
+  Pagina.Lista.Grupo_op.Procurar.Top = 5
+  Pagina.Lista.Grupo_op.Procurar.Left = 305
+  Pagina.Lista.Grupo_op.Procurar.Name = "Procurar"
+  Pagina.Lista.Grupo_op.Height = 85
+  Pagina.Lista.Grupo_op.Left = 543
+  Pagina.Lista.Grupo_op.Top = -1
+  Pagina.Lista.Grupo_op.Width = 385
+  Pagina.Lista.Grupo_op.Name = "Grupo_op"
+  Pagina.Lista.Grupo_Saida.Sair.Top = 5
+  Pagina.Lista.Grupo_Saida.Sair.Left = 5
+  Pagina.Lista.Grupo_Saida.Sair.Name = "Sair"
+  Pagina.Lista.Grupo_Saida.Left = 918
+  Pagina.Lista.Grupo_Saida.Top = -1
+  Pagina.Lista.Grupo_Saida.Name = "Grupo_Saida"
+  Pagina.Lista.cntFiltros.Name = "cntFiltros"
+  Pagina.Lista.Picture = ..\framework\imagens\new_background.jpg
+  Pagina.Lista.Name = "Lista"
+  Pagina.Dados.Grupo_Salva.AutoSize = .T.
+  Pagina.Dados.Grupo_Salva.Salva.Top = 5
+  Pagina.Dados.Grupo_Salva.Salva.Left = 5
+  Pagina.Dados.Grupo_Salva.Salva.Name = "Salva"
+  Pagina.Dados.Grupo_Salva.Cancelar.Top = 5
+  Pagina.Dados.Grupo_Salva.Cancelar.Left = 80
+  Pagina.Dados.Grupo_Salva.Cancelar.Name = "Cancelar"
+  Pagina.Dados.Grupo_Salva.Left = 839
+  Pagina.Dados.Grupo_Salva.Top = 7
+  Pagina.Dados.Grupo_Salva.ZOrderSet = 10
+  Pagina.Dados.Grupo_Salva.Name = "Grupo_Salva"
+  Pagina.Dados.Comment = ""
+  Pagina.Dados.Picture = ..\framework\imagens\new_background.jpg
+  Pagina.Dados.Name = "Dados"
+  Pagina.Top = -28
+  Pagina.Left = 0
+  Pagina.Width = 1003
+  Pagina.Name = "Pagina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPEC.Pagina.Lista.btnCopiar
+------------------------------------------------------------
+  Top = 4
+  Left = 473
+  Height = 75
+  Width = 75
+  FontBold = .T.
+  FontItalic = .T.
+  FontName = "Comic Sans MS"
+  FontSize = 8
+  FontExtend = .F.
+  Picture = ..\framework\imagens\geral_subnivel_60.jpg
+  Caption = "Copiar"
+  TabIndex = 6
+  Visible = .F.
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  ZOrderSet = 12
+  Name = "btnCopiar"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPEC.Pagina.Dados.Shape2
+------------------------------------------------------------
+  Top = 13
+  Left = 8
+  Height = 75
+  Width = 663
+  BackStyle = 0
+  SpecialEffect = 1
+  ZOrderSet = 0
+  Name = "Shape2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPEC.Pagina.Dados.cmdgCompo
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 85
+  Left = 689
+  SpecialEffect = 1
+  Top = 7
+  Width = 160
+  TabIndex = 65
+  Visible = .F.
+  ZOrderSet = 1
+  Themes = .F.
+  Name = "cmdgCompo"
+  Command1.AutoSize = .F.
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Comic Sans MS"
+  Command1.FontSize = 8
+  Command1.Picture = ..\framework\imagens\cadastro_inserir_60.jpg
+  Command1.Caption = "I\<nserir Ítem"
+  Command1.TabIndex = 1
+  Command1.ToolTipText = "Insere um Novo Ítem na Grade"
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.DisabledForeColor = 128,128,128
+  Command1.Name = "cmdCompoInserir"
+  Command2.AutoSize = .F.
+  Command2.Top = 5
+  Command2.Left = 80
+  Command2.Height = 75
+  Command2.Width = 75
+  Command2.FontBold = .T.
+  Command2.FontItalic = .T.
+  Command2.FontName = "Comic Sans MS"
+  Command2.FontSize = 8
+  Command2.Picture = ..\framework\imagens\cadastro_excluir_60.jpg
+  Command2.Caption = "E\<xcluir Ítem"
+  Command2.TabIndex = 2
+  Command2.ToolTipText = "Exclui um Ítem da Grade"
+  Command2.ForeColor = 90,90,90
+  Command2.BackColor = 255,255,255
+  Command2.Name = "cmdCompoIexcluir"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPEC.Pagina.Dados.Shape1
+------------------------------------------------------------
+  Top = 126
+  Left = 1
+  Height = 470
+  Width = 994
+  BackStyle = 0
+  SpecialEffect = 1
+  ZOrderSet = 2
+  Name = "Shape1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPEC.Pagina.Dados.Say11
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  FontCharSet = 0
+  Caption = "Empresa: "
+  Left = 20
+  Top = 58
+  TabIndex = 3
+  ForeColor = 90,90,90
+  ZOrderSet = 3
+  Name = "Say11"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPEC.Pagina.Dados.getRelatorio
+------------------------------------------------------------
+  ControlSource = "crSigCdPec.descs"
+  Format = "K!"
+  Height = 23
+  Left = 74
+  SpecialEffect = 1
+  TabIndex = 2
+  ToolTipText = "Nome do Relatório"
+  Top = 26
+  Width = 290
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 0,0,255
+  ZOrderSet = 5
+  AutoComplete = 1
+  plprocurar = .T.
+  Name = "getRelatorio"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPEC.Pagina.Dados.Say7
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  FontCharSet = 0
+  Caption = "Relatório: "
+  Left = 18
+  Top = 31
+  TabIndex = 1
+  ForeColor = 90,90,90
+  ZOrderSet = 6
+  Name = "Say7"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPEC.Pagina.Dados.getEmpresa
+------------------------------------------------------------
+  ControlSource = "crSigCdPec.emps"
+  Format = "K!"
+  Height = 23
+  Left = 74
+  SpecialEffect = 1
+  TabIndex = 2
+  ToolTipText = "Empresa"
+  Top = 50
+  Width = 31
+  DisabledBackColor = 255,255,255
+  DisabledForeColor = 0,0,255
+  ZOrderSet = 7
+  plprocurar = .T.
+  Name = "getEmpresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPEC.Pagina.Dados.FwbtnpSobe
+------------------------------------------------------------
+  Top = 176
+  Left = 950
+  Height = 40
+  Width = 40
+  Picture = ..\framework\imagens\cadastro_seta_cima_20.jpg
+  Caption = ""
+  ToolTipText = "Move o registro posicionado uma linha acima"
+  ZOrderSet = 8
+  Name = "FwbtnpSobe"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPEC.Pagina.Dados.FwbtnpDesce
+------------------------------------------------------------
+  Top = 217
+  Left = 950
+  Height = 40
+  Width = 40
+  Picture = ..\framework\imagens\cadastro_seta_baixo_20.jpg
+  Caption = ""
+  ToolTipText = "Move o registro posicionado uma linha abaixo"
+  ZOrderSet = 9
+  Name = "FwbtnpDesce"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPEC.Pagina.Dados.Txt_Procura_Grupo
+------------------------------------------------------------
+  FontSize = 9
+  Alignment = 0
+  ControlSource = "chave_descrs"
+  Height = 21
+  Left = 81
+  SpecialEffect = 1
+  Top = 129
+  Width = 256
+  Name = "Txt_Procura_Grupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPEC.Pagina.Dados.Txt_Procura_Conta
+------------------------------------------------------------
+  FontSize = 9
+  Alignment = 0
+  ControlSource = "chave_descontag"
+  Height = 21
+  Left = 456
+  SpecialEffect = 1
+  Top = 129
+  Width = 256
+  Name = "Txt_Procura_Conta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPEC.Pagina.Dados.grdGrupos
+------------------------------------------------------------
+  ColumnCount = 2
+  FontName = "Tahoma"
+  FontSize = 8
+  AllowHeaderSizing = .F.
+  AllowRowSizing = .F.
+  DeleteMark = .F.
+  HeaderHeight = 24
+  Height = 443
+  Left = 4
+  RecordMark = .F.
+  RecordSource = "crsSigCdGcr"
+  RowHeight = 21
+  ScrollBars = 2
+  Top = 152
+  Width = 353
+  ForeColor = 0,0,0
+  GridLineColor = 238,238,238
+  HighlightBackColor = 252,255,191
+  HighlightForeColor = 0,0,0
+  HighlightStyle = 2
+  AllowAutoColumnFit = 0
+  Name = "grdGrupos"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.ControlSource = ""
+  Column1.Enabled = .F.
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.ForeColor = 0,0,0
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.ControlSource = ""
+  Column2.Width = 256
+  Column2.ForeColor = 0,0,0
+  Column2.Name = "Column2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPEC.Pagina.Dados.grdGrupos.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Grupo"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPEC.Pagina.Dados.grdGrupos.Column1.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  ControlSource = "crsSigCdGcr.codigos"
+  Enabled = .F.
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPEC.Pagina.Dados.grdGrupos.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Descrição Grupo"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPEC.Pagina.Dados.grdGrupos.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  ControlSource = "crsSigCdGcr.descrs"
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPEC.Pagina.Dados.CmdExpandir
+------------------------------------------------------------
+  Top = 128
+  Left = 3
+  Height = 25
+  Width = 77
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Expandir"
+  ForeColor = 90,90,90
+  BackColor = 255,255,255
+  DisabledForeColor = 128,128,128
+  Name = "CmdExpandir"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPEC.Pagina.Dados.grdDestinos
+------------------------------------------------------------
+  ColumnCount = 5
+  FontName = "Tahoma"
+  FontSize = 8
+  AllowHeaderSizing = .F.
+  AllowRowSizing = .F.
+  DeleteMark = .F.
+  HeaderHeight = 24
+  Height = 443
+  Left = 359
+  RecordMark = .F.
+  RecordSource = "csDestinos"
+  RowHeight = 21
+  ScrollBars = 2
+  Top = 152
+  Width = 589
+  ForeColor = 0,0,0
+  GridLineColor = 238,238,238
+  HighlightBackColor = 252,255,191
+  HighlightForeColor = 0,0,0
+  HighlightStyle = 2
+  AllowAutoColumnFit = 0
+  Name = "grdDestinos"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.ControlSource = ""
+  Column1.Enabled = .T.
+  Column1.Width = 20
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.Sparse = .F.
+  Column1.ForeColor = 0,0,0
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.ControlSource = ""
+  Column2.Width = 75
+  Column2.ForeColor = 0,0,0
+  Column2.Name = "Column2"
+  Column3.FontName = "Tahoma"
+  Column3.FontSize = 8
+  Column3.ControlSource = ""
+  Column3.Width = 254
+  Column3.ForeColor = 0,0,0
+  Column3.Name = "Column3"
+  Column4.FontName = "Tahoma"
+  Column4.FontSize = 8
+  Column4.ControlSource = ""
+  Column4.Width = 115
+  Column4.ForeColor = 0,0,0
+  Column4.Name = "Column4"
+  Column5.FontName = "Tahoma"
+  Column5.FontSize = 8
+  Column5.Width = 100
+  Column5.Movable = .F.
+  Column5.Sparse = .F.
+  Column5.ForeColor = 0,0,0
+  Column5.Name = "Column5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPEC.Pagina.Dados.grdDestinos.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = ""
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPEC.Pagina.Dados.grdDestinos.Column1.Check1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Alignment = 0
+  Centered = .T.
+  Caption = ""
+  ControlSource = "csDestinos.Marcas"
+  Enabled = .T.
+  ForeColor = 0,0,0
+  Name = "Check1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPEC.Pagina.Dados.grdDestinos.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Conta"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPEC.Pagina.Dados.grdDestinos.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  ControlSource = "csDestinos.ContaG"
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPEC.Pagina.Dados.grdDestinos.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Descrição Conta"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPEC.Pagina.Dados.grdDestinos.Column3.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 0
+  ControlSource = "csDestinos.DescontaG"
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPEC.Pagina.Dados.grdDestinos.Column4.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Codigo"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPEC.Pagina.Dados.grdDestinos.Column4.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BorderStyle = 0
+  ControlSource = "csDestinos.Codigos"
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPEC.Pagina.Dados.grdDestinos.Column5.Header1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "( + / - )"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPEC.Pagina.Dados.grdDestinos.Column5.Combo1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  BoundColumn = 2
+  ColumnCount = 2
+  ColumnWidths = "70,10"
+  RowSourceType = 2
+  FirstElement = 2
+  Style = 2
+  ForeColor = 0,0,0
+  BoundTo = .T.
+  DisplayCount = 2
+  Name = "Combo1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDPEC
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE atualizagrupos
+------------------------------------------------------------
+PROCEDURE atualizagrupos
+*-- Incrementar o Proximo numero da ordem
+Lparameters lcChavePai
+
+Local lnProx
+Select MAX(Ordems) As npro from crSigCdPeI into cursor crsProximo readwrite 
+
+lnProx = NVL(crsProximo.npro,0)
+*-- Fim incrementar 
+
+Zap in csDestinos
+
+Select crSigCdPei
+index on Ordems to indordems
+
+Go top in crSigCdPei
+
+*!* 08/08/2014 - Wellington
+lcQuery = 	[Select distinct GCR.codigos,GCR.descrs,CLI.iclis,CLI.rclis ] + ;
+				[From SigCdGcr GCR ] + ;
+				[inner join SigCdCli CLI on GCR.codigos = CLI.Grupos ] + ;
+					[UNION ] + ;
+			[Select distinct CCR.grupos as codigos,GCR.descrs,CCR.contas as iclis, CLI.rclis ] + ;
+				[From SigMvCCR CCR ] + ;
+				[inner join SigCdCli CLI on CCR.contas = CLI.iclis ] + ;
+				[left outer join SigCdGcr GCR on CCR.grupos = GCR.codigos ] + ;
+				[where CCR.grupos <> '' ] + ;
+					[order by 1 ]
+*!* mena - 13/05/2015 - retirado pois dava erro [order by codigos ]
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crsGcr_Cli') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Grupo_Op - 1)')
+	Return 0
+ENDIF	
+*!*--------------------------------------------------------------------------------------------------------
+
+
+SELECT crsGcr_Cli
+Go top in crsGcr_Cli
+Scan
+	
+	lcCodigos	= crsGcr_Cli.Codigos
+	lcContas	= crsGcr_Cli.iclis
+	vlcGrupos	= crsGcr_Cli.codigos
+    *-- verifico se existe o registro 
+    *!* 26/05/2014 - Wellington
+    *!* Troca do LOCATE pelo comando SEEK
+    Select crSigCdPeI
+    SEEK vlcGrupos+lcContas
+		
+    *-- Se não existir
+    If !FOUND("crSigCdPeI")
+        lnProx = lnProx+1 && Próxima Ordem
+        SELECT crsGcr_Cli
+		Insert Into crSigCdPeI (PkChaves,;
+								FkChaves,;
+								Marcas,;
+								Grupos,;
+								Codigos,;
+								Opers,;
+								Ordems,;
+								Contas);
+		Values (fUniqueIds(),;
+				lcChavePai,;
+				0,;
+				ALLTRIM(crsGcr_Cli.Codigos),;
+				"",;
+				"+",;
+				lnProx,;
+				ALLTRIM(crsGcr_Cli.iclis))
+
+	Endif 			
+
+	SELECT crsGcr_Cli
+
+EndScan
+
+Go top in crSigCdPei
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE carregagrid
+------------------------------------------------------------
+PROCEDURE carregagrid
+Private pPro
+
+pPro = crSigCdPec.pkChaves   
+
+Zap in csDestinos
+
+ThisForm.poDataMgr.Requery([crSigCdPei])
+
+lcQuery = [select PEC.descs,PEC.pkchaves,PEI.codigos,PEI.fkchaves,PEI.grupos,PEI.contas,PEI.ordems,GCR.descrs,CLI.iclis,CLI.rclis, PEI.Opers ] + ;
+		  [from SigCdPec PEC ] + ;
+		  [left outer join SigCdPei PEI on PEI.fkchaves = '] + pPro + [' ] + ;
+		  [inner join SigCdCli CLI on CLI.iclis = PEI.contas ] + ;
+		  [inner join SigCdGcr GCR on GCR.codigos = PEI.grupos ] + ;
+		  [where PEC.pkchaves = '] + pPro + [']
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crsGcr_Cli') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Grupo_Op - 1)')
+	Return 0
+ENDIF
+
+SELECT crsGcr_Cli
+Go top in crsGcr_Cli
+if(reccount("crsGcr_Cli")) > 0
+
+	Scan
+		
+	 	Insert Into csDestinos (PkChaves,;
+								FkChaves,;
+								Marcas,;
+								Grupos,;
+								Codigos,;
+								DescontaG,;
+								ContaG,;
+								Opers,;
+								Ordems);
+		Values (crsGcr_Cli.PkChaves,;
+				crsGcr_Cli.FkChaves,;
+				1,;
+				crsGcr_Cli.Grupos,;
+				crsGcr_Cli.codigos,;
+				crsGcr_Cli.rclis,;
+				crsGcr_Cli.contas,;
+				crsGcr_Cli.Opers,;
+				crsGcr_Cli.ordems)
+				
+		SELECT crsGcr_Cli
+		
+	Endscan
+
+ENDIF 
+
+SELECT csDestinos
+index on ordems to idOrdems
+
+*-- Cria o indice por codigo so grupo para pesquisa na tabela de grupos
+Select crSigCdPeI
+index on ordems to indaux
+Go top in csDestinos 
+
+ThisForm.MontaGrades
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE montagrades
+------------------------------------------------------------
+PROCEDURE montagrades
+* Acertando a Grade Da Página Dados e Os 'ControlSources'
+WITH thisform.pagina.Dados.GrdGrupos
+	.ColumnCount = 2
+	.AllowHeaderSizing = .F.
+	.AllowRowSizing = .F.
+	.DeleteMark = .F.
+	.RecordSource = 'crsSigCdGcr'
+	.Name = 'grdGrupos'
+
+	.SetAll("Resizable", .F., "Column")
+	.SetAll("Movable",   .F., "Column")
+
+    .Column1.ControlSource  = 'crsSigCdGcr.Codigos'
+	.Column1.Width          = 75
+    .Column2.ControlSource  = 'crsSigCdGcr.Descrs'
+	.Column2.Width          = 256
+ENDWITH
+
+With ThisForm.Pagina.Dados.grdDestinos
+	.ColumnCount 		= 5
+	.AllowHeaderSizing 	= .F.
+	.AllowRowSizing 	= .F.
+	.DeleteMark 		= .F.
+	.RecordSource 		= 'csDestinos'
+	.Name 				= 'grdDestinos'
+	
+	.SetAll("Resizable", .F., "Column")
+	.SetAll("Movable",   .F., "Column")
+	.SetAll("ReadOnly",  .F., "Column")
+
+    .Column1.ControlSource  = 'csDestinos.Marcas'
+	.Column1.Width          = 20
+    .Column2.ControlSource  = 'csDestinos.ContaG'
+	.Column2.Width          = 75
+    .Column3.ControlSource  = 'csDestinos.DescontaG'
+	.Column3.Width          = 254
+	.Column4.ControlSource  = 'csDestinos.Codigos'
+	.Column4.Width          = 115
+	.Column5.ControlSource  = 'csDestinos.Opers'
+	.Column5.Width          = 100
+Endwith
+
+If !Used("csSomatoria")
+	Create Cursor csSomatoria (descricao c(10),operacao c(1))
+	Insert into csSomatoria(descricao,operacao) Values("Somar","+") 
+	Insert into csSomatoria(descricao,operacao) Values("Subtrair","-")
+EndIf 
+Thisform.Pagina.Dados.grdDestinos.Column5.Combo1.RowSource = "csSomatoria"
+Thisform.Pagina.Dados.grdDestinos.Column5.Combo1.Refresh()
+
+* Fim *********************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters lcAcesso
+
+Private pPro, pKey
+
+pPro = Replicate(Chr(254), 20)
+pKey = Replicate(Chr(254), 20)
+
+lcQryCdPec = 'Select * From SigCdPec'
+lcQryCdPeI = 'Select * From SigCdPeI Where FkChaves = ?pPro'
+
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+	
+	If (.poDataMgr.pnIdconn > 0)
+		With .poDataMgr
+			* Cursor Principal Para Montagem da Lista (Tabela Grande)
+			.AddCursor('SigCdPec', 'PkChaves', 'crSigCdPec', '', ThisForm.Pagina.Lista.Grade, lcQryCdPec)
+			.pfSqlTabela(1).pColuna('Descs',      '', '',  'Descrição',280, .f.)
+			.pfSqlTabela(1).pColuna('Emps',      '', '', 	'Empresa',   081, .f.)
+			.pfSqlTabela(1).pColuna('Usuars',   '', '', 	'Usuário Inc',   081, .f.)
+			.pfSqlTabela(1).pColuna('DtIncs',   '', '', 	'Data Inclusão',   150, .f.)
+			.pfSqlTabela(1).pColuna('UsuAlts',   '', '', 	'Usuário Alt',   081, .f.)
+			.pfSqlTabela(1).pColuna('DtAlts',   '', '', 	'Data Alteração',   150, .f.)
+
+			* Cursores Carregados Posteriormente (Tabela Relacional)
+			.AddCursor('SigCdPeI', 'PkChaves', 'crSigCdPeI', '', '', lcQryCdPeI)
+			*-- Crio o indice por ordem
+			Select crSigCdPeI
+			Index on codigos + contas to indauxCodigos
+			Index on grupos + contas to indauxGrupos
+			
+			*-- Abro a tabela de grupos e crio o indice chave
+*!*				With Thisform
+*!*					.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)	
+*!*					 If (.poDataMgr.pnIdconn > 0)
+			.SqlExecute([Select * From SigCdGcr] , [crsSigCdGcr])
+			Select crsSigCdGcr
+*!*					 Endif 	
+*!*				Endwith 			
+		EndWith
+	Else
+		=Messagebox([Impossível Efetuar Conexão Com o Servidor de Banco de Dados...], 0+48, [CreateObject])
+		Return .f.
+	EndIf
+EndWith
+
+=DoDefault()
+ThisForm.Pagina.Lista.Grade.Column1.SetFocus
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+*!* 21/05/2014 - 26/05/2014 - Wellington
+*!* Foi acrescentado o campo Descrs(50) / Acrescentados campos CongaT(10) e DescontaG(50)
+Create Cursor csDestinos (PkChaves c(20), fkChaves c(20), Marcas n(1), Grupos c(10), Descrs c(50), ContaG c(10), DescontaG c(50), Codigos c(50), Opers c(1), Ordems n(4))
+Index On fkChaves  Tag fkChaves
+Index On Descrs	   Tag Descrs
+Index On DescontaG Tag DescontaG
+Index On ContaG    Tag ContaG
+Index On Ordems	   Tag Ordems
+
+=DoDefault()
+* Fim *********************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE mativapagina1
+------------------------------------------------------------
+PROCEDURE mativapagina1
+Private pPro
+
+Select crSigCdPec
+pPro = crSigCdPec.pkChaves
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_alterar
+------------------------------------------------------------
+PROCEDURE msv_alterar
+Private pPro
+
+pPro = crSigCdPec.PkChaves
+
+* Eliminando os Registros
+If (ThisForm.poDataMgr.SQLExecute([Delete From SigCdPeI Where FkChaves = ?pPro], '') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (msv_Alterar - 1)')
+	Return 0
+EndIf
+
+* Incluindo os Registros
+If Not ThisForm.poDataMgr.Update('crSigCdPeI')
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (msv_Alterar - 3)')
+	Return 0
+EndIf
+
+=DoDefault()
+* Fim *********************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_excluir
+------------------------------------------------------------
+PROCEDURE msv_excluir
+Private pPro
+
+pPro = crSigCdPec.PkChaves
+
+* Eliminando os Registros
+If (ThisForm.poDataMgr.SQLExecute([Delete From SigCdPeI Where FkChaves = ?pPro], '') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (msv_Excluir - 1)')
+	Return 0
+EndIf
+
+=DoDefault()
+* Fim *********************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_inserir
+------------------------------------------------------------
+PROCEDURE msv_inserir
+Private pPro
+
+pPro = crSigCdPec.PkChaves
+
+* Incluindo os Registros
+If Not ThisForm.poDataMgr.Update('crSigCdPeI')
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (msv_Inserir - 1)')
+	Return 0
+EndIf
+
+=DoDefault()
+
+ThisForm.msv_Procurar
+* Fim *********************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_procurar
+------------------------------------------------------------
+PROCEDURE msv_procurar
+Select crSigCdPec
+index on descs to descs
+Set Near On
+If Not Empty(ThisForm.Pagina.Dados.GETRELATORIO.Value)
+	Seek Alltrim(ThisForm.Pagina.Dados.GetRelatorio.Value)
+	Thisform.carregagrid()
+EndIf
+Set Near Off
+* Fim *********************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Lista.Grupo_op.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Lista.Grupo_op.Click
+LParameters Opcao
+
+Private pPro, pKey
+
+Local lnCount && Incrementar Ordens da tabela sigCdPeI
+
+If (Type('Opcao') = 'N')
+	This.Value = Opcao
+EndIf
+
+Select crSigCdPec
+
+If Not DoDefault(Opcao)
+	ThisForm.mAtivapagina1
+	Return 0
+EndIf 
+
+pPro = Iif(Type("pPro")="U",crSigCdPec.pkChaves,pPro)
+pKey = Iif(Type("pKey")="U","",pKey)
+
+If InList(Thisform.pcEscolha, 'CONSULTAR', 'ALTERAR', 'EXCLUIR')
+	If !EMPTY(pPro)
+	    *-- Abro a tabela de grupos e crio o indice chave
+	    This.parent.parent.Dados.getRelatorio.Enabled  = InList(Thisform.pcEscolha, 'INSERIR', 'PROCURAR')
+	    This.parent.parent.Dados.getRelatorio.Value = crSigCdPec.descs
+	    This.parent.parent.Dados.getEmpresa.Value   = crSigCdPec.emps 
+	Endif 	    	
+Endif 				
+
+This.parent.parent.Dados.FwbtnpSobe.Visible= .t.
+This.parent.parent.Dados.FwbtnpDesce.Visible= .t.
+         
+Go top in crSigCdPeC			
+
+Do Case
+
+   Case (Thisform.pcEscolha = 'INSERIR')
+        
+		if(reccount("crSigCdPec")) > 0
+		   replace crSigCdPec.PkChaves 	with fUniqueIds()
+		   replace crSigCdPec.usuars 	with m.UsuAr
+		   replace crSigCdPec.dtincs 	with datetime()
+		   replace crSigCdPec.usualts 	with ""
+		   replace crSigCdPec.dtalts 	with Ctod("")		    
+		Endif    
+   
+ 		This.parent.parent.Dados.getRelatorio.SetFocus()	    
+	     
+   Case (Thisform.pcEscolha = 'ALTERAR')   
+        
+        
+         * usar update----------------------------------
+          * replace crSigCdPec.usualts with ""
+		  * replace crSigCdPec.dtalts with Ctod("")		    
+        
+		This.parent.parent.Dados.getRelatorio.SetFocus()
+		
+   Case (Thisform.pcEscolha = 'EXCLUIR')
+		ThisForm.Pagina.Dados.Grupo_Salva.Salva.SetFocus
+
+   Case (Thisform.pcEscolha = 'PROCURAR') or (Thisform.pcEscolha = 'CONSULTAR')
+         This.parent.parent.Dados.FwbtnpSobe.Visible= .F.
+         This.parent.parent.Dados.FwbtnpDesce.Visible= .F.
+         If Thisform.pcEscolha = 'PROCURAR'
+         	ThisForm.Pagina.Dados.getRelatorio.Value=Space(40)
+         	ThisForm.Pagina.Dados.getEmpresa.Value=Space(03)
+*!*	         	This.parent.parent.Dados.grdDestinos.RecordSource=""
+*!*	         	This.parent.parent.Dados.grdDestinos.Refresh 
+         EndIf 	
+         	           
+		 ThisForm.Pagina.Dados.getRelatorio.SetFocus
+EndCase
+
+ThisForm.Pagina.Dados.Activate
+If Thisform.pcEscolha <> 'PROCURAR'
+   Thisform.carregagrid()
+EndIf 
+	
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+Private pPro, pKeyW
+
+pPro  = crSigCdPec.pkChaves
+lcRel = This.parent.parent.getRelatorio.Value 
+lcEmp = This.parent.parent.getEmpresa.Value 	
+
+If InList(Thisform.pcEscolha, 'INSERIR', 'ALTERAR')
+	If Empty(This.parent.parent.getRelatorio.Value)
+		=Messagebox('O Nome do Relatório Tem Que Ser Preenchido!!!', 0+48, 'Informe os dados requisitados!!!')
+		This.parent.parent.getRelatorio.SetFocus()
+		Return 0		
+	Endif	
+EndIf
+
+*!* Verificando se foi selecionada a Empresa
+*
+If InList(Thisform.pcEscolha, 'INSERIR', 'ALTERAR')
+	If Empty(This.parent.parent.getEmpresa.Value)
+		=Messagebox('A Empresa Tem Que Ser Preenchida!!!', 0+48, 'Informe os dados requisitados!!!')
+		This.parent.parent.getEmpresa.SetFocus()
+		Return 0		
+	Endif	
+EndIf
+*!*
+
+Select crSigCdPec
+If (Thisform.pcEscolha = 'INSERIR')
+    
+	ThisForm.poDataMgr.CursorQuery('SigCdPec', 'crTmp', 'descs', This.parent.parent.getRelatorio.Value)
+	If (Reccount('crTmp') > 0)
+		=Messagebox('O Nome do Relatório Já Está Cadastrado!!!', 0+48, 'Nome do Processo Inválido!!!')
+		This.parent.parent.getRelatorio.SetFocus()
+		Return 0		
+	EndIf
+
+EndIf
+
+If InList(Thisform.pcEscolha, 'INSERIR', 'ALTERAR')
+	
+	Select Marcas,codigos From csDestinos where marcas>0 and Empty(codigos) into cursor csTemp
+	If Reccount("csTemp")>0
+	   MessageBox("Existem códigos não informados!",16,"ATENÇÃO")
+	   Return 0
+	EndIf    
+	
+	If (Thisform.pcEscolha <> 'EXCLUIR') and (Thisform.pcEscolha <> "PROCURAR")
+	
+	    Select crSigCdPec
+	
+	    Update crSigCdPec set crSigCdPec.Descs    = lcRel,;
+	                          crSigCdPec.Emps     = lcEmp,;
+	                          crSigCdPec.UsuAlts  = m.UsuAr,;
+	                          crSigCdPec.DtAlts   = DATETIME(); 
+    	Where pkchaves = pPro	
+		
+		Select crSigCdPeI 
+		Zap in crSigCdPeI
+	
+	    *-- Grava Grid Filho
+		Select csDestinos
+		Delete from csDestinos where Marcas=0
+		Go top in csDestinos 
+		
+		lnSeq=0
+		
+		Scan
+	        Select crSigCdPeI 
+            lnSeq=lnSeq+1
+		    Insert Into crSigCdPeI (pkChaves,;
+		    						FkChaves,;
+		    						Marcas,;
+		    						Grupos,;
+		    						Codigos,;
+		    						Opers,;
+		    						Ordems, ;
+		    						Contas);
+			Values (fUniqueIds(),;
+			        crSigCdPec.PkChaves,;
+			        csDestinos.Marcas,;
+			        csDestinos.Grupos,;
+			        csDestinos.Codigos,;
+			        csDestinos.opers,;
+			        lnSeq,;
+			        csDestinos.Contag)
+			Select csDestinos         
+		Endscan
+	Endif
+Endif 	
+
+=DoDefault()
+
+Thisform.mAtivapagina1
+* Fim *********************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+Private pPro, pKey
+
+pPro = crSigCdPec.PkChaves
+pKey = Replicate(Chr(254), 20)
+
+SELECT csDestinos
+ZAP 
+
+*=DoDefault()
+
+Thisform.mAtivapagina1
+
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Init
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Init
+This.cmdgCompo.cmdCompoInserir.Enabled= .F.
+This.cmdgCompo.cmdCompoIexcluir.Enabled= .F.
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDPEC.Pagina.Lista.btnCopiar
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 4
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If Not Empty(crSigCdPec.PkChaves)
+*!*		ThisForm.LockScreen = .t.
+
+*!*		Do Form SigOpCpr With ThisForm, crSigCdPec.Processos
+
+*!*		lcDes = crSigCdPec.Processos
+
+*!*		ThisForm.mAtivaPagina1
+
+*!*		Select crSigCdPec
+*!*		Locate For Processos = lcDes
+
+*!*		ThisForm.LockScreen = .f.
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDPEC.Pagina.Dados.cmdgCompo
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 6
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE cmdCompoInserir.Click
+------------------------------------------------------------
+PROCEDURE cmdCompoInserir.Click
+*-- Incrementa o Proximo numero da ordem
+Local lnProx
+Select MAX(Ordems) As npro from csDestinos into cursor crsProximo readwrite 
+
+lnProx = NVL(crsProximo.npro,0)
+lnProx = lnProx+1
+
+Select csDestinos
+
+Insert Into csDestinos (FkChaves, Marcas, Grupos, Codigos, Opers, Ordems) ;
+				Values (Space(20), 0, Space(10), Space(15), "+", lnProx)
+*-- Fim Incrementa o Proximo numero da ordem
+				
+KeyBoard "{DnArrow}"
+
+* Fim **************************************************************************************
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE cmdCompoIexcluir.Click
+------------------------------------------------------------
+PROCEDURE cmdCompoIexcluir.Click
+Select csDestinos
+If Not Eof() And Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')
+	If Messagebox('Deseja Excluir Esta Operação?', 4+32+256, '')=6
+	EndIf
+EndIf 
+* Fim **************************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDPEC.Pagina.Dados.getEmpresa
+* Classe: fwget (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject([fwBuscaExt], ThisForm.poDataMgr.pnIdConn, [SigCdEmp], ;
+						   [crListaRemota], [Cemps], This.Value, [Empresas], .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna([Cemps], [], [Emp])
+		loLista.mAddColuna([Razas], [], [Descrição])
+		loLista.Show()
+	EndIf
+	
+	ThisForm.Pagina.Dados.getEmpresa.Value = crListaRemota.Cemps
+	*ThisForm.Pagina.Dados.get_Class.Value = crListaRemota.Class
+	Use In crListaRemota
+Else
+	ThisForm.Pagina.Dados.getEmpresa.Value = []
+*	ThisForm.Pagina.Dados.get_Class.Value = []
+EndIf
+ThisForm.Pagina.Dados.GetEmpresa.Refresh
+*ThisForm.Pagina.Dados.get_Class.Refresh
+
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDPEC.Pagina.Dados.FwbtnpSobe
+* Classe: fwbtnp (Base: commandbutton)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+
+*!*	If Used("csSobe")
+*!*	   Use in csSobe
+*!*	Endif
+
+*!*	If Used("csDesce")
+*!*	   Use in csDesce
+*!*	Endif
+
+*!*	*!* 22/05/2014 - Wellington
+*!*	*!* Foi acrescentado o campo DESCRS c(50) nos dois cursores
+*!*	CREATE CURSOR csSobe( codigos c(15), fkchaves c(20), grupos c(10), descrs c(50), ContaG c(10), DescontaG c(50), marcas n(1), opers c(1), ordems n(4),pkchaves c(20))
+*!*	CREATE CURSOR csDesce( codigos c(15), fkchaves c(20), grupos c(10), descrs c(50), ContaG c(10), DescontaG c(50), marcas n(1), opers c(1), ordems n(4),pkchaves c(20))    
+
+*!*	Select csDestinos
+
+*!*	clChecked=.F.
+*!*	 
+*!*	If csDestinos.Ordems > 1
+*!*	    *-- Guardo a chave do registro atual
+*!*	    lcOrdems1=csDestinos.Ordems
+*!*	    clChecked=This.parent.grdDestinos.Column1.Check1.Value
+*!*	    *-- Gravo os dados  do registro atual
+*!*	    Insert into csSobe( codigos,;
+*!*	         				grupos,;
+*!*	         				descrs,;
+*!*	         				ContaG,;
+*!*	         				DescontaG,;
+*!*	         				marcas,;
+*!*	         				opers,;
+*!*	         				ordems,;
+*!*	         				pkChaves,;
+*!*	         				FkChaves);
+*!*	    Values(csDestinos.codigos,;
+*!*	    		 csDestinos.Grupos,;
+*!*	    		 csDestinos.Descrs,;
+*!*	    		 csDestinos.ContaG,;
+*!*	    		 csDestinos.DescontaG,;
+*!*	    		 csDestinos.Marcas,;
+*!*	    		 csDestinos.Opers,;
+*!*	    		 csDestinos.Ordems,;
+*!*	    		 csDestinos.pkChaves,;
+*!*	    		 csDestinos.fkChaves) 
+*!*	    
+*!*	    *-- Posiciono no registro anterior
+*!*	    Skip - 1 in csDestinos    	                    					  
+*!*	         
+*!*	    *-- Guardo a chave do registro anterior
+*!*	    lcOrdems2=csDestinos.Ordems 
+*!*	        
+*!*	    *-- Gravo os dados  do registro 
+*!*	    Insert into csDesce( codigos,;
+*!*	         				grupos,;
+*!*							descrs,;
+*!*							ContaG,;
+*!*							DescontaG,;
+*!*	         				marcas,;
+*!*	         				opers,;
+*!*	         				ordems,;
+*!*	         				pkChaves,;
+*!*	         				fkChaves);
+*!*	    Values(csDestinos.codigos,;
+*!*	    		 csDestinos.Grupos,;
+*!*	    		 csDestinos.Descrs,;
+*!*	    		 csDestinos.ContaG,;
+*!*	    		 csDestinos.DescontaG,;
+*!*	    		 csDestinos.Marcas,;
+*!*	    		 csDestinos.Opers,;
+*!*	    		 lcOrdems1,;
+*!*	    		 csDestinos.pkChaves,;
+*!*	    		 csDestinos.fkChaves) 
+*!*		
+*!*		
+*!*		Update csSobe set Ordems = lcOrdems2
+*!*		Update csDesce set Ordems = lcOrdems1
+*!*		
+*!*		*-- Excluo os registros do csDestino
+*!*		Delete From csDestinos where csDestinos.Ordems=lcOrdems1
+*!*		Delete From csDestinos where csDestinos.Ordems=lcOrdems2	
+*!*		
+*!*		Go Top in csDestinos 
+*!*				
+*!*		*---------------------------------------------------------------------------
+*!*		
+*!*		Select csSobe
+*!*		*-- Atualizo o curso do grid csDestinos
+*!*		Insert Into csDestinos(codigos,;
+*!*						  PkChaves,;
+*!*						  FkChaves,;
+*!*				    	  Grupos,;
+*!*				    	  Descrs,;
+*!*				    	  ContaG,;
+*!*				    	  DescontaG,;
+*!*			    	  	  Marcas,;
+*!*				    	  Opers,;
+*!*				    	  Ordems);
+*!*		Values(csSobe.Codigos,;
+*!*			   csSobe.PkChaves,;
+*!*			   csSobe.FkChaves,;
+*!*	     	   csSobe.Grupos,;
+*!*	     	   csSobe.Descrs,;
+*!*	     	   csSobe.ContaG,;
+*!*	     	   csSobe.DescontaG,;
+*!*			   csSobe.Marcas,;
+*!*			   csSobe.Opers,;
+*!*			   lcOrdems2)		    		  
+*!*		 	
+*!*		Select csDesce
+*!*		*-- Atualizo o curso do grid csDestinos
+*!*		Insert Into csDestinos(codigos,;
+*!*						  PkChaves,;
+*!*						  FkChaves,;
+*!*				    	  Grupos,;
+*!*				    	  Descrs,;
+*!*				    	  ContaG,;
+*!*				    	  DescontaG,;
+*!*			    	  	  Marcas,;
+*!*				    	  Opers,;
+*!*				    	  Ordems);
+*!*		Values(csDesce.Codigos,;
+*!*			   csDesce.PkChaves,;
+*!*			   csDesce.FkChaves,;
+*!*	     	   csDesce.Grupos,;
+*!*	     	   csDesce.Descrs,;
+*!*	     	   csDesce.ContaG,;
+*!*	     	   csDesce.DescontaG,;
+*!*			   csDesce.Marcas,;
+*!*			   csDesce.Opers,;
+*!*			   lcOrdems1)
+
+*!*	 
+*!*		Zap in crSigCdPeI 
+*!*		 
+*!*		Select csDestinos
+*!*		Go top in csDestinos
+*!*		  
+*!*		Scan
+*!*			
+*!*		 	Insert Into crSigCdPeI (PkChaves,;
+*!*									FkChaves,;
+*!*									Marcas,;
+*!*									Grupos,;
+*!*									Codigos,;
+*!*									Opers,;
+*!*									Ordems,;
+*!*									Contas);
+*!*			Values (csDestinos.PkChaves,;
+*!*					csDestinos.FkChaves,;
+*!*					csDestinos.Marcas,;
+*!*					csDestinos.Grupos,;
+*!*					csDestinos.Codigos,;
+*!*					csDestinos.Opers,;
+*!*					csDestinos.Ordems,;   
+*!*					csDestinos.ContaG)   
+*!*					
+*!*			SELECT csDestinos
+*!*			
+*!*		Endscan
+
+*!*		Select csDestinos
+*!*		index on Ordems to iiordx 
+*!*		Go top in csDestinos
+
+*!*		Thisform.montagrades()
+*!*		Seek lcOrdems2
+*!*		
+*!*		This.parent.grdDestinos.Column3.Text1.Click()
+*!*		This.parent.grdDestinos.Column3.Text1.SetFocus()
+*!*		This.parent.grdDestinos.Column1.Check1.Value=clChecked
+*!*	Else
+*!*		MessageBox("Topo do arquivo atingido",64,"ATENÇÃO")
+*!*	EndIf && If csDestinos.Ordems > 1
+
+Select csDestinos
+If csDestinos.Ordems = 1
+	MessageBox("Topo do arquivo atingido",64,"ATENÇÃO")
+Else
+	Select csDestinos
+	lnOrdem = csDestinos.Ordems
+	Set Order To 	
+	Replace Ordems With Ordems * (- 1) For Ordems = lnOrdem
+	Go Top
+	Replace Ordems With Ordems + 1 For Ordems = lnOrdem - 1
+	Go Top
+	Replace Ordems With Abs(Ordems) - 1 For Ordems = lnOrdem * (- 1)
+	
+	Set Order To Tag Ordems	
+	Seek lnOrdem - 1
+
+	thisform.pagina.dados.grdDestinos.Refresh()
+	This.parent.grdDestinos.Column3.Text1.SetFocus()	
+Endif
+
+
+
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDPEC.Pagina.Dados.FwbtnpDesce
+* Classe: fwbtnp (Base: commandbutton)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+*!*	If Used("csSobe")
+*!*	   use in csSobe
+*!*	EndIf
+
+*!*	If Used("csDesce")
+*!*	   use in csDesce
+*!*	EndIf 
+
+*!*	*!* 22/05/2014 - Wellington
+*!*	*!* Foi acrescentado o campo DESCRS c(50) nos dois cursores
+*!*	CREATE CURSOR csDesce( codigos c(15), fkchaves c(20), grupos c(10), descrs c(50), ContaG c(10), DescontaG c(50), marcas n(1), opers c(1), ordems n(4),pkchaves c(20))
+*!*	CREATE CURSOR csSobe( codigos c(15), fkchaves c(20), grupos c(10), descrs c(50), ContaG c(10), DescontaG c(50), marcas n(1), opers c(1), ordems n(4),pkchaves c(20))
+
+*!*	clChecked=.f.
+
+*!*	Select csDestinos
+*!*	If csDestinos.Ordems < thisform.nultimoreg
+
+*!*	    *-- Guardo a chave do registro atual
+*!*	    lcOrdems1=csDestinos.Ordems
+*!*	    clChecked=This.parent.grdDestinos.Column1.Check1.Value
+*!*	    *-- Gravo os dados  do registro atual
+*!*	    Insert into csDesce( codigos,;
+*!*	         				grupos,;
+*!*	         				descrs,;
+*!*	         				ContaG,;
+*!*	         				DescontaG,;
+*!*	         				marcas,;
+*!*	         				opers,;
+*!*	         				ordems,;
+*!*	         				pkChaves,;
+*!*	         				FkChaves);
+*!*	    Values(csDestinos.codigos,;
+*!*	    		 csDestinos.Grupos,;
+*!*	    		 csDestinos.Descrs,;
+*!*	    		 csDestinos.ContaG,;
+*!*	    		 csDestinos.DescontaG,;
+*!*	    		 csDestinos.Marcas,;
+*!*	    		 csDestinos.Opers,;
+*!*	    		 csDestinos.Ordems,;
+*!*	    		 csDestinos.pkChaves,;
+*!*	    		 csDestinos.fkChaves) 
+*!*	    
+*!*	    *-- Posiciono no  próximo registro
+*!*	    Skip + 1 in csDestinos    	                    					  
+*!*	         
+*!*	    *-- Guardo a chave do registro 
+*!*	    lcOrdems2=csDestinos.Ordems 
+*!*	        
+*!*	    *-- Gravo os dados  do registro 
+*!*	    Insert into csSobe( codigos,;
+*!*	         				grupos,;
+*!*	         				descrs,;
+*!*	         				ContaG,;
+*!*	         				DescontaG,;
+*!*	         				marcas,;
+*!*	         				opers,;
+*!*	         				ordems,;
+*!*	         				pkChaves,;
+*!*	         				fkChaves);
+*!*	    Values(csDestinos.codigos,;
+*!*	    		 csDestinos.Grupos,;
+*!*	    		 csDestinos.Descrs,;
+*!*	    		 csDestinos.ContaG,;
+*!*	    		 csDestinos.DescontaG,;
+*!*	    		 csDestinos.Marcas,;
+*!*	    		 csDestinos.Opers,;
+*!*	    		 lcOrdems1,;
+*!*	    		 csDestinos.pkChaves,;
+*!*	    		 csDestinos.fkChaves) 
+*!*		
+*!*		
+*!*		Update csDesce set Ordems = lcOrdems2
+*!*		Update csSobe set Ordems = lcOrdems1
+*!*		
+*!*		*-- Excluo os registros do csDestino
+*!*		Delete From csDestinos where csDestinos.Ordems=lcOrdems1
+*!*		Delete From csDestinos where csDestinos.Ordems=lcOrdems2	
+*!*		
+*!*		Go Top in csDestinos 
+*!*				
+*!*		*---------------------------------------------------------------------------
+*!*		
+*!*		Select csDesce
+*!*		*-- Atualizo o curso do grid csDestinos
+*!*		Insert Into csDestinos(codigos,;
+*!*						  PkChaves,;
+*!*						  FkChaves,;
+*!*				    	  Grupos,;
+*!*				    	  Descrs,;
+*!*				    	  ContaG,;
+*!*				    	  DescontaG,;
+*!*			    	  	  Marcas,;
+*!*				    	  Opers,;
+*!*				    	  Ordems);
+*!*		Values(csDesce.Codigos,;
+*!*			   csDesce.PkChaves,;
+*!*			   csDesce.FkChaves,;
+*!*	     	   csDesce.Grupos,;
+*!*	     	   csDesce.Descrs,;
+*!*	     	   csDesce.ContaG,;
+*!*	     	   csDesce.DescontaG,;
+*!*			   csDesce.Marcas,;
+*!*			   csDesce.Opers,;
+*!*			   lcOrdems2)		    		  
+*!*		 	
+*!*		Select csSobe
+*!*		*-- Atualizo o curso do grid csDestinos
+*!*		Insert Into csDestinos(codigos,;
+*!*						  PkChaves,;
+*!*						  FkChaves,;
+*!*				    	  Grupos,;
+*!*				    	  Descrs,;
+*!*				    	  ContaG,;
+*!*				    	  DescontaG,;
+*!*			    	  	  Marcas,;
+*!*				    	  Opers,;
+*!*				    	  Ordems);
+*!*		Values(csSobe.Codigos,;
+*!*			   csSobe.PkChaves,;
+*!*			   csSobe.FkChaves,;
+*!*	     	   csSobe.Grupos,;
+*!*	     	   csSobe.Descrs,;
+*!*	     	   csSobe.ContaG,;
+*!*	     	   csSobe.DescontaG,;
+*!*			   csSobe.Marcas,;
+*!*			   csSobe.Opers,;
+*!*			   lcOrdems1)
+
+*!*		Zap in crSigCdPeI 
+*!*		 
+*!*		Select csDestinos
+*!*		Go top in csDestinos
+*!*		  
+*!*		Scan
+*!*			
+*!*		 	Insert Into crSigCdPeI (PkChaves,;
+*!*									FkChaves,;
+*!*									Marcas,;
+*!*									Grupos,;
+*!*									Codigos,;
+*!*									Opers,;
+*!*									Ordems,;
+*!*									Contas);
+*!*			Values (csDestinos.PkChaves,;
+*!*					csDestinos.FkChaves,;
+*!*					csDestinos.Marcas,;
+*!*					csDestinos.Grupos,;
+*!*					csDestinos.Codigos,;
+*!*					csDestinos.Opers,;
+*!*					csDestinos.Ordems,;
+*!*					csDestinos.ContaG)   
+*!*					
+*!*			SELECT csDestinos
+*!*			
+*!*		Endscan
+
+*!*		Select csDestinos
+*!*		index on Ordems to iiordx 
+*!*		Go top in csDestinos
+
+*!*		Thisform.montagrades()
+*!*		Seek lcOrdems2
+*!*		This.parent.grdDestinos.Column3.Text1.Click()
+*!*		This.parent.grdDestinos.Column3.Text1.SetFocus()
+*!*		This.parent.grdDestinos.Column1.Check1.Value=clChecked
+*!*	Else
+*!*		MessageBox("Final do arquivo atingido",64,"ATENÇÃO")	
+*!*	EndIf && csDestinos.Ordems < thisform.nultimoreg
+
+Select Max(Ordems) as Ordems From csDestinos Into Cursor TmpOrdem
+
+Select csDestinos
+If csDestinos.Ordems = TmpOrdem.Ordems
+	MessageBox("Final da grade atingido",64,"ATENÇÃO")
+Else
+	Select csDestinos
+	lnOrdem = csDestinos.Ordems
+	Set Order To
+	Replace Ordems With Ordems * (- 1) For Ordems = lnOrdem
+	Go Top
+	Replace Ordems With Ordems - 1 For Ordems = lnOrdem + 1
+	Go Top
+	Replace Ordems With Abs(Ordems) + 1 For Ordems = lnOrdem * (- 1)
+	
+	Set Order To Tag Ordems
+	Seek lnOrdem + 1
+
+	thisform.pagina.dados.grdDestinos.Refresh()
+	This.parent.grdDestinos.Column3.Text1.SetFocus()	
+Endif
+Use in TmpOrdem
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDPEC.Pagina.Dados.Txt_Procura_Grupo
+* Classe: textbox (Base: textbox)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+chave_descrs = ""
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE InteractiveChange
+------------------------------------------------------------
+PROCEDURE InteractiveChange
+SELECT csDestinos
+SET ORDER TO Descrs
+ntp=lastkey()
+do while .t.
+	if ntp=13 .or. ntp=5 .or. ntp=24 .and. len(alltrim(chave_descrs))=0
+		exit
+	endif
+	chave_descrs	=	alltrim(UPPER(this.Value))
+	seek chave_descrs
+	pchave1 = DESCRS
+	pchave2 = chave_descrs+"z"
+	set key to range pchave1,pchave2
+	thisform.pagina.dados.grdDestinos.Refresh
+	exit
+enddo
+set key to
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+chave_descrs = ""
+SELECT csDestinos
+SET ORDER TO Ordems
+GO top 
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDPEC.Pagina.Dados.Txt_Procura_Conta
+* Classe: textbox (Base: textbox)
+* Registro: 15
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+chave_descontag = ""
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE InteractiveChange
+------------------------------------------------------------
+PROCEDURE InteractiveChange
+SELECT csDestinos
+SET ORDER TO DescontaG
+ntp=lastkey()
+do while .t.
+	if ntp=13 .or. ntp=5 .or. ntp=24 .and. len(alltrim(DescontaG))=0
+		exit
+	endif
+	chave_descontag	=	alltrim(UPPER(this.Value))
+	seek chave_descontag
+	pchave1 = DescontaG
+	pchave2 = chave_descontag + "z"
+	set key to range pchave1,pchave2
+	thisform.pagina.dados.grdDestinos.Refresh
+	exit
+enddo
+set key to
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+chave_descontag = ""
+SELECT csDestinos
+SET ORDER TO Ordems
+
+GO top
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDPEC.Pagina.Dados.CmdExpandir
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 21
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+lcCodGrupo	= Alltrim(Thisform.Pagina.Dados.GrdGrupos.Column1.Text1.Value )
+
+* -- 2ª Grade
+
+lcQuery = 	[Select distinct GCR.codigos,GCR.descrs,CLI.iclis,CLI.rclis ] + ;
+	[From SigCdGcr GCR ] + ;
+	[inner join SigCdCli CLI on GCR.codigos = CLI.Grupos ] + ;
+	[where CLI.grupos = '] + lcCodGrupo + [' ] + ;
+	[UNION ] + ;
+	[Select distinct CCR.grupos as codigos,GCR.descrs,CCR.contas as iclis, CLI.rclis ] + ;
+	[From SigMvCCR CCR ] + ;
+	[inner join SigCdCli CLI on CCR.contas = CLI.iclis ] + ;
+	[left outer join SigCdGcr GCR on CCR.grupos = GCR.codigos ] + ;
+	[where CCR.grupos = '] + lcCodGrupo + [' ] + ;
+	[order by 1 ]
+*!* mena - 13/05/2015 - retirado pois dava erro [order by codigos ]
+
+If (Thisform.poDataMgr.SqlExecute(lcQuery, 'crsGcr_Cli') < 1)
+	=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Grupo_Op - 1)')
+	Return 0
+Endif
+
+Select Max(Ordems) As Ordems From csDestinos Into Cursor TmpOrdem
+lnOrdem = Nvl(TmpOrdem.Ordems,0)
+Use in TmpOrdem
+
+Select crsGcr_Cli
+Scan
+	lnOrdem = lnOrdem + 1
+	lcBusca	= crsGcr_Cli.iclis
+
+	Select csDestinos
+&&	SET ORDER TO DescontaG
+	Set Order To ContaG
+	Seek lcBusca
+	If Eof()
+		Insert Into csDestinos (Grupos,Descrs,Marcas,ContaG,DescontaG,Codigos,Opers,Ordems) ;
+			Values (crsGcr_Cli.Codigos,crsGcr_Cli.Descrs,0,crsGcr_Cli.iclis,crsGcr_Cli.rclis,'','+',lnOrdem)
+	Endif
+
+	Select crsGcr_Cli
+Endscan
+
+Select csDestinos
+Index On Ordems To idOrdems
+Go Top
+
+With Thisform.Pagina.Dados.grdDestinos
+	.ColumnCount 		= 5
+	.AllowHeaderSizing 	= .F.
+	.AllowRowSizing 	= .F.
+	.DeleteMark 		= .F.
+	.RecordSource 		= 'csDestinos'
+	.Name 				= 'grdDestinos'
+
+	.SetAll("Resizable", .F., "Column")
+	.SetAll("Movable",   .F., "Column")
+	.SetAll("ReadOnly",  .F., "Column")
+
+	.Column1.ControlSource  = 'csDestinos.Marcas'
+	.Column1.Width          = 20
+	.Column2.ControlSource  = 'csDestinos.ContaG'
+	.Column2.Width          = 75
+	.Column3.ControlSource  = 'csDestinos.DescontaG'
+	.Column3.Width          = 254
+	.Column4.ControlSource  = 'csDestinos.Codigos'
+	.Column4.Width          = 115
+	.Column5.ControlSource  = 'csDestinos.Opers'
+	.Column5.Width          = 100
+Endwith
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDPEC.Pagina.Dados.grdDestinos.Column1.Check1
+* Classe: checkbox (Base: checkbox)
+* Registro: 24
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE InteractiveChange
+------------------------------------------------------------
+PROCEDURE InteractiveChange
+If this.Value > 0
+	* Wellington - 02/06/2014
+	* Alterei o preenchimento da coluna CODIGO, preenchendo com os 50 primeiros caracteres da Descrição da Conta
+	* Solicitação Marcelo
+	This.Parent.Parent.Column4.Text1.Value = SUBSTR(csDestinos.DescontaG,1,50)
+	This.parent.parent.Column4.Text1.Refresh
+ELSE
+	This.parent.parent.Column4.Text1.Value = " "
+	This.parent.parent.Column4.Text1.Refresh
+EndIf    
+
+thisform.Refresh 
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDPEC.Pagina.Dados.grdDestinos.Column5.Combo1
+* Classe: combobox (Base: combobox)
+* Registro: 32
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')		
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGCDPEC
+RESERVED3 (ClassInfo): lmarcados
+nultimoreg Ultimo registro do cursor
+podatatmp
+*atualizagrupos Carrega registros do cadastro de grupos que não constam  na tabela sigcdpei
+*carregagrid 
+*montagrades 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 29
+================================================================================

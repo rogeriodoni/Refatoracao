@@ -1,0 +1,3 @@
+﻿The edit is correct. The expanded CREATE CURSOR statements cover all 239 columns for `crSigCnFNf` (including every ControlSource reference across all 10 tab-configure methods) and 67 columns for `crSigCnFN2`, with types matching the actual SQL Server schema (`n(5,2)` for the layout position columns, `l` for bit fields, `c()` for char fields, etc.).
+
+The root cause was that `InicializarForm()` in UI validation mode created cursors with only 3 columns (`cidchaves`, `emps`, `series`), but tab-configure methods like `ConfigurarCabecalhoTab` immediately set `.ControlSource = "crSigCnFNf.l1nf"` ÔÇö causing VFP9 to throw `Variable 'L1NF' is not found` since the column didn't exist in the cursor.

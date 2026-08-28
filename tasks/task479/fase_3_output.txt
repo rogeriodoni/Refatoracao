@@ -1,0 +1,12 @@
+﻿Fase 3/8 conclu├¡da. `C:\4c\projeto\app\forms\cadastros\FormOCO.prg` criado com:
+
+- **DEFINE CLASS FormOCO AS FormBase** ÔÇö propriedades visuais (600├ù1000, Caption sem acento na declara├º├úo)
+- **Init()** ÔÇö apenas `DODEFAULT()` com TRY/CATCH, sem chamar InicializarForm() explicitamente
+- **InicializarForm()** ÔÇö seta Caption com CHR(234), instancia OCOBO, chama ConfigurarPageFrame(), propaga Caption para labels, define ActivePage=1
+- **ConfigurarPageFrame()** ÔÇö PageFrame Top=-29, Tabs=.F., 2 pages com fundo `fundo_cad_1003.jpg`
+- **ConfigurarPaginaListaBase()** ÔÇö cnt_4c_Cabecalho (Top=31, compensa├º├úo +29), cnt_4c_Botoes (Top=29, Left=542), cnt_4c_Saida can├┤nico (Left=917, Width=90, cmd_4c_Encerrar 75├ù75)
+- **ConfigurarPaginaDadosBase()** ÔÇö cnt_4c_BotoesAcao com cmd_4c_Confirmar e cmd_4c_Cancelar
+- **TornarControlesVisiveis()** ÔÇö recursivo, trata PageFrames e Containers
+- **Destroy()** ÔÇö libera BO, chama DODEFAULT()
+
+Grid, bot├Áes CRUD e campos TextBox ser├úo adicionados nas Fases 4-6.

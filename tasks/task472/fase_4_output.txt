@@ -1,0 +1,5 @@
+﻿Fase 4 conclu├¡da. Duas altera├º├Áes em `Formmtz.prg`:
+
+1. **Grid adicionado a `ConfigurarPaginaLista()`** ÔÇö `grd_4c_Lista` com 7 colunas (C├│digo, Ano, Grupo, Conta, Descri├º├úo, Moeda, Inativa), usando `RecordSource`/`ColumnCount` fora do WITH (Problema 36), dimens├Áes Top=88, Width=905, Height=480.
+
+2. **`CarregarLista()` atualizado** ÔÇö o check `gb_4c_ValidandoUI` foi movido para **fora do TRY** (corrige RETURN-dentro-de-TRY, CLAUDE.md regra #1), e ap├│s `Buscar()` vincula RecordSource + ControlSources + redefine Header1.Captions + chama `FormatarGridLista`.

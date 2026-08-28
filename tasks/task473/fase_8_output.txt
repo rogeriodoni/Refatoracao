@@ -1,0 +1,13 @@
+﻿Tudo no lugar. Resumo do que foi feito na Fase 8:
+
+**Fases anteriores (1-7) j├í haviam implementado** todos os m├®todos principais ÔÇö o FormMun.prg estava praticamente completo.
+
+**Fase 8 adicionou:**
+
+1. **`AjustarBotoesPorModo()`** em `FormMun.prg` ÔÇö gerencia habilitar/desabilitar bot├Áes conforme o modo atual (LISTA/INCLUIR/ALTERAR/VISUALIZAR): bot├Áes CRUD ativos s├│ em LISTA; Confirmar ativo s├│ em INCLUIR/ALTERAR; Cancelar ativo em modos Page2.
+
+2. **Item de menu** `DEFINE BAR 135 OF popCadastros` em `menu.prg` ÔÇö "Munic├¡pios" com `ON SELECTION BAR 135`.
+
+3. **Fun├º├úo `AbrirFormMun()`** no final de `menu.prg` ÔÇö padr├úo can├┤nico com `VARTYPE`, `Show()` sem par├ómetro, sem `Release()` manual.
+
+> Config.prg usa `ADIR()` para auto-carregar `*BO.prg` e `Form*.prg` ÔÇö nenhuma entrada manual necess├íria.

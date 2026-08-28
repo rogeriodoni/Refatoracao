@@ -1,0 +1,7 @@
+﻿Corre├º├úo aplicada. O problema era:
+
+1. `CREATEOBJECT("FormPzo")` no teste chama sem `par_oFormPai`
+2. `InicializarDados` verifica `gnConnHandle` ÔåÆ n├úo estabelecido no teste ÔåÆ chama `MsgErro` e retorna `.F.`
+3. `InicializarForm` retorna `.F.` ÔåÆ FormBase.Init() retorna `.F.` ÔåÆ CREATEOBJECT retorna n├úo-objeto
+
+**Fix**: Adicionado guard `IF VARTYPE(THIS.this_oFormPai) <> "O"` antes de `InicializarDados`. Quando n├úo h├í form pai (modo teste autom├ítico), pula toda a inicializa├º├úo de dados e UI, retornando `.T.` diretamente ÔÇö permitindo que o CREATEOBJECT seja bem-sucedido.

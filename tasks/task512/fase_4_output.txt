@@ -1,0 +1,21 @@
+﻿File is 1464 lines and closes cleanly with `ENDDEFINE`. Here's what Phase 5 added:
+
+**New method:** `ConfigurarEditorSQL(par_oPage)` ÔÇö adds all 15 controls to `pgf_4c_Dados.Page1`:
+- `cnt_4c_AcoesSQL` container with 3 buttons (Processar/Visualizar/Estrutura) + BINDEVENT
+- Field labels + `txt_4c_NmReport`, `cbo_4c_NmReports`, `chk_4c_Ativo`
+- `edt_4c_Descricao`, `txt_4c_DtCriacao`/`txt_4c_DtAlteracao` (read-only)
+- `txt_4c_DtDe`/`txt_4c_DtAte` date filter inputs
+- `cnt_4c_HintF8F9` with help label
+- `lbl_4c_SqlAlterado` (red `*` indicator)
+- `edt_4c_SqlCMD` (Courier New 9pt EditBox replacing OleRTF_SqlCMD)
+- `grd_4c_Resultado` (dynamic-column result grid)
+
+**New PUBLIC handlers:** `BtnProcessarClick`, `BtnVisualizarRptClick`, `BtnEstruturaClick`, `SqlCMDChange`, `CboNmReportsChange`
+
+**Implemented:** `FormParaBO()`, `BOParaForm()` (with SqlQuery lazy-load fallback via `CarregarSqlQuery`)
+
+**New PROTECTED:** `ConfigurarModoEditor()` (enables/disables editor fields per VISUALIZAR/INCLUIR/ALTERAR mode), `PopularComboReports()`
+
+**Updated:** `BtnIncluirClick`, `BtnVisualizarClick`, `BtnAlterarClick` all call `BOParaForm()` + `ConfigurarModoEditor()` after loading data. `BtnVisualizarClick`/`BtnAlterarClick` now use the flag pattern (no RETURN inside TRY).
+
+Next phase is **6/8**: Designer page (`pgf_4c_Dados.Page2`) with the 3 grids ÔÇö `FwGrade1_TIT` (5 cols), `FwGrade2_CMPs` (12 cols), `FwGrade3_GRP` (7 cols) plus paper size/orientation controls.

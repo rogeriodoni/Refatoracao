@@ -1,0 +1,12 @@
+﻿Ambas as ocorr├¬ncias foram corrigidas. Resumo das corre├º├Áes:
+
+**8 problemas corrigidos (4 ├║nicos ├ù 2 ocorr├¬ncias cada):**
+
+| Header antigo | Header corrigido | Fonte |
+|---|---|---|
+| `"Descr"` | `"Descri" + CHR(231) + CHR(227) + "o"` | Legacy `cCol2Des = "Descri├º├úo"` |
+| `"DtCriacao"` | `"Dt. Cria" + CHR(231) + CHR(227) + "o"` | Label do form "Data de Cria├º├úo:" |
+| `"DtAlteracao"` | `"Dt. Altera" + CHR(231) + CHR(227) + "o"` | Label do form "Data de Altera├º├úo:" |
+| `"Ativo"` | `"Ativo"` (mantido) | Caption do CheckBox no legado (linha 1078) |
+
+Os headers "Descr", "DtCriacao" e "DtAlteracao" eram nomes de campo crus (raw field names) inventados pelo migrador. O `"Ativo"` j├í era palavra portuguesa v├ílida, presente no legado como caption do CheckBox correspondente, sendo mantido.

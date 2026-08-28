@@ -1,0 +1,10 @@
+﻿Fase 2 conclu├¡da. O arquivo `PgbBO.prg` foi atualizado com:
+
+- **`ObterChavePrimaria()`** ÔÇö retorna `""` (form operacional sem PK)
+- **`CarregarHistorico(par_cEmps, par_cDopes, par_nNumes)`** ÔÇö m├®todo central que:
+  - Cria `cursor_4c_HistoricoPgb` com os 8 campos do cursor legado (`Datas`, `Etiqs`, `Ccustos`, `Ccusto2s`, `Tpoperas`, `Tplancs`, `Dtbases`, `Dpros`)
+  - Concatena o par├ómetro `EmpdopNums` igual ao legado: `Emp + Dope + STR(Nume, 6)`
+  - Executa `EXEC SigPrCtb @EmpdopNums = '...'` via SQLEXEC
+  - Usa padr├úo SQLEXEC ÔåÆ cursor temp ÔåÆ ZAP ÔåÆ APPEND FROM (nunca direto no cursor do grid)
+  - Faz `GO BOTTOM` ao final, igual ao legado (`Go Bott`)
+  - CATCH com mensagem completa (Message + LineNo + Procedure)

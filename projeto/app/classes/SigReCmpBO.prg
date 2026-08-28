@@ -81,6 +81,9 @@ DEFINE CLASS SigReCmpBO AS RelatorioBase
     this_lPendente        = .F.   && .T. = filtrar apenas pendentes
     this_lOrdem           = .F.   && .T. = filtrar por ordem de composicao
 
+    *-- Pattern #142: injetado pelo CorretorAutomatico (default vazio) - REVISAR e substituir pelo alias do cursor binding do FRX
+    this_cCursorDados = ""     && FIXME Pattern #142 pos-Erro51
+
     *==========================================================================
     * Init - Inicializa o BO de relatorio (sem tabela direta)
     *==========================================================================

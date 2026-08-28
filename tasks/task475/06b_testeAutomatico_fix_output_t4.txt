@@ -1,0 +1,15 @@
+﻿All fixes are clean. All Page sub-property assignments are now outside their WITH blocks using full object paths, and all `.Buttons(N)` are replaced with `.Option1`/`.Option2`.
+
+**Summary of changes to `FormNfl.prg`:**
+
+1. **`ConfigurarPageFrame()`** (lines 94ÔÇô108): Moved `.Page1.Caption/Picture/BackColor` and `.Page2.Caption/Picture/BackColor` outside the `WITH THIS.pgf_4c_Paginas` block.
+
+2. **`ConfigurarPaginaDados()` ÔÇö PageFrame** (lines 595ÔÇô615): Moved `.Page1.Caption` through `.Page10.Caption` outside the `WITH loc_oPagina.pgf_4c_Abas` block.
+
+3. **`ConfigurarPaginaDados()` ÔÇö OptionGroup** (lines 534/542): `obj_4c_Op_ItCasas.Buttons(1)` ÔåÆ `.Option1`, `.Buttons(2)` ÔåÆ `.Option2`.
+
+4. **`ConfigurarCabecalhoTab()`** (lines 1983/1991): `obj_4c_OptTpMargem.Buttons(1)` ÔåÆ `.Option1`, `.Buttons(2)` ÔåÆ `.Option2`.
+
+5. **`ConfigurarRodapeTab()`** (lines 8886/8894): `obj_4c_ClsFisTp.Buttons(1)` ÔåÆ `.Option1`, `.Buttons(2)` ÔåÆ `.Option2`.
+
+The root cause was VFP9 evaluating `OptionGroup.Buttons` (without subscript) as the numeric `ButtonCount` property ÔÇö calling `(1)` on a number fails with "BUTTONS is not an object". Using `.Option1`/`.Option2` (VFP9's default naming for `AddObject`-created OptionButtons) resolves it.

@@ -1,0 +1,18 @@
+﻿Confirmo: li o arquivo FormRPT.prg completo (2830 linhas) e o RPTBO.prg. Todas as ocorr├¬ncias de `RowSourceType` s├úo **property assignments VFP leg├¡timas** dentro de blocos `WITH` para controles ComboBox:
+
+| Linha | Contexto |
+|-------|---------|
+| 614 | `WITH par_oPage.cbo_4c_NmReports` ÔåÆ `.RowSourceType = 0` |
+| 1547 | `WITH THIS.pgf...cbo_4c_NmReports` ÔåÆ `.RowSourceType = 2` |
+| 1697 | `WITH par_oPage.cbo_4c_TamPapel` ÔåÆ `.RowSourceType = 0` |
+| 1843 | `par_oCbo.RowSourceType = 1` (PopularCboTamPapel) |
+| 1948 | `WITH loc_oCol.cbo_4c_AlinharTIT` ÔåÆ `.RowSourceType = 1` |
+| 2155 | `WITH loc_oCol.cbo_4c_AlinharCMP` ÔåÆ `.RowSourceType = 1` |
+| 2222 | `WITH loc_oCol.cbo_4c_NmCampoGRP` ÔåÆ `.RowSourceType = 1` |
+| 2303 | `WITH loc_oCol.cbo_4c_AlinharGRP` ÔåÆ `.RowSourceType = 1` |
+
+**Nenhuma** dessas linhas ├® uma condi├º├úo `WHERE` de SQL ÔÇö s├úo todas atribui├º├Áes de propriedade VFP para ComboBoxes (`RowSourceType` controla como o ComboBox carrega itens).
+
+O flag `[SQL-FILTRO-INVENTADO]` ├® um **falso positivo** do scanner automatizado: ele reconheceu o token `ROWSOURCETYPE` no arquivo e o classificou incorretamente como filtro SQL inventado, quando na verdade ├® uma property VFP nativa.
+
+**N├úo h├í nenhuma corre├º├úo necess├íria.** O c├│digo est├í correto ÔÇö ambos os arquivos (FormRPT.prg e RPTBO.prg) n├úo cont├¬m nenhum `WHERE ROWSOURCETYPE` em nenhuma query SQL. O pass SQL est├í limpo.

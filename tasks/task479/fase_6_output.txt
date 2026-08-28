@@ -1,0 +1,13 @@
+﻿O arquivo est├í correto. Fase 6 conclu├¡da. As altera├º├Áes feitas em `FormOCO.prg`:
+
+1. **PILAR 1 - pixel-perfect** (comparando com original SIGCDOCO):
+   - `lbl_4c_Label1.Caption`: adicionado espa├ºo ap├│s ":" (`"C├│digo : "`)
+   - `lbl_4c_Label2.Caption`: adicionado espa├ºo ap├│s ":" (`"Descri├º├úo : "`)
+   - `lbl_4c_Label2.Left`: 348 ÔåÆ **359** (original `Say2.Left=359`)
+   - `lbl_4c_Label2.Width`: 69 ÔåÆ **60** (ajustado para n├úo sobrepor textbox em Left=419)
+   - `txt_4c_Codigo.Width`: 80 ÔåÆ **24** (original `Get_Cods.Width=24`)
+
+2. **Valida├º├úo completa em BtnSalvarClick** (replicando `Salva.Click` original):
+   - C├│digo vazio: bloqueado na tela antes de chamar BO (somente em INCLUIR)
+   - Descri├º├úo vazia: bloqueado na tela antes de chamar BO (em INCLUIR e ALTERAR)
+   - C├│digo duplicado: delegado ao `OCOBO.ValidarDados()` via `Salvar()` (evita SQLEXEC extra no form)

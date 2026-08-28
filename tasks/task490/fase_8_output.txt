@@ -1,0 +1,12 @@
+﻿A migra├º├úo est├í completa. Resumo do que foi feito na Fase 8:
+
+**Modifica├º├Áes em `FormOrg.prg`:**
+- Adicionado `FormParaBO()` (linhas 902-913) ÔÇö transfere campos do formul├írio para propriedades do BO antes de salvar
+- Adicionado `AjustarBotoesPorModo()` (linhas 919-946) ÔÇö ajusta habilita├º├úo dos bot├Áes por modo (LISTA/INCLUIR/ALTERAR/VISUALIZAR)
+- Refatorado `BtnSalvarClick()` para chamar `THIS.FormParaBO()` em vez de fazer a transfer├¬ncia inline
+
+**Integra├º├úo ao sistema:**
+- `OrgBO.prg` e `FormOrg.prg` s├úo carregados automaticamente pelo `config.prg` via `ADIR()` (sem necessidade de modifica├º├úo)
+- Adicionado `DEFINE BAR 146` em `menu.prg` ÔåÆ "Origens" no popup `popCadastros`
+- Adicionado `ON SELECTION BAR 146` ÔåÆ `AbrirFormOrg`
+- Adicionada `PROCEDURE AbrirFormOrg()` seguindo o padr├úo can├┤nico (VARTYPE, Show sem par├ómetro, sem Release)

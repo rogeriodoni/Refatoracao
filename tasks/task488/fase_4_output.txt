@@ -1,0 +1,16 @@
+﻿Fase 4 conclu├¡da. O arquivo `FormOpt.prg` foi atualizado com:
+
+**Page1 - completa:**
+- `cnt_4c_Botoes` com 5 bot├Áes CRUD: Incluir (Left=5), Visualizar (80), Alterar (155), Excluir (230), Buscar (305) ÔÇö todos com ├¡cones, Comic Sans MS, BINDEVENT
+- `cnt_4c_Saida` com bot├úo Encerrar (padr├úo can├┤nico: Left=917, Width=90, cmd Width=75)
+- `grd_4c_Lista` com 4 colunas do legado: Movimento/Tipo/Mv. Anterior/Grupo-Ori (Top=117, Left=4, Width=992, Height=450, Verdana, GridLines=3)
+
+**Page2 - bot├Áes adicionados:**
+- `cmd_4c_Confirmar` + `cmd_4c_Cancelar` em `cnt_4c_BotoesAcao` com BINDEVENTs
+
+**M├®todos implementados:**
+- `CarregarLista()` ÔÇö SQLEXEC em SigCdOpt + RecordSource + ControlSource + Headers reconfigurados + FormatarGridLista
+- `AlternarPagina()` ÔÇö chama CarregarLista() ao voltar para Page1
+- Todos os Btn*Click com l├│gica completa (BtnBuscarClick usa FormBuscaAuxiliar, BtnExcluirClick com MsgConfirma, etc.)
+
+Pr├│xima fase: Fase 5/6 ÔÇö campos e labels da Page2 (os ~100 controles da SigCdOpt).

@@ -1,0 +1,24 @@
+﻿The file is complete and correct ÔÇö 1519 lines total. All 6 edits applied successfully. The file structure is:
+
+**Phase 5 summary ÔÇö what was done:**
+
+1. **`SET DELETED ON`** added to `InicializarForm` ELSE block ÔÇö prevents deleted `csSigCdRga` rows from appearing in the grid (DataSession=2 resets this to OFF)
+
+2. **`ConfigurarPaginaDados()`** fully implemented with:
+   - `cnt_4c_Salva`: Salvar (Left=5) + Cancelar (Left=80) buttons with BINDEVENTs
+   - `lbl_4c_LblGrupo` + `txt_4c_Codigo` (Top=81, compensated +27)
+   - `chk_4c_Check1` "Inativa" (Top=85)
+   - `lbl_4c_Label6` + `txt_4c_Descricao` (Top=107)
+   - `lbl_4c_Label2` + `txt_4c_Valor` with `InputMask` (Top=131)
+   - `grd_4c_Dados`: 9-column grid bound to `csSigCdRga` placeholder cursor, RecordSource/ColumnCount set outside WITH, ControlSources set after to override auto-bind
+   - `obj_4c_Commandgroup1` (^/v move buttons, Top=227)
+   - `obj_4c_CmdInsFtc` (+/- insert/delete buttons, Top=314)
+   - All BINDEVENTs for grid and commandgroups
+
+3. **`BtnIncluirClick`** updated: LimparCampos + HabilitarCampos + AjustarBotoesPorModo + ZAP csSigCdRga
+
+4. **`BtnVisualizarClick`** updated: replaced `CarregarLinhasRegra` ÔåÆ `BOParaForm + CarregarGradeRegra + HabilitarCampos(.F.) + AjustarBotoesPorModo`
+
+5. **`BtnAlterarClick`** updated: same pattern with `HabilitarCampos(.T.)`
+
+6. **19 new methods** added before Destroy: `BtnSalvarClick`, `BtnCancelarClick`, `FormParaBO`, `BOParaForm`, `LimparCampos`, `HabilitarCampos`, `AjustarBotoesPorModo`, `CarregarGradeRegra` (ZAP+SQLEXEC+APPEND, preserves grid columns per Problem 34), `GradeRegraAfterRowColChange`, `ValidarColecaoGrid`, `ValidarGrupoProdutoGrid`, `ValidarZerarGrid`, `ValidarOrdemGrid`, `CmdInsRowClick`, `CmdDelRowClick`, `CmdMoveUpClick`, `CmdMoveDownClick`, `AbrirLookupColecao`, `AbrirLookupGrupoProduto`

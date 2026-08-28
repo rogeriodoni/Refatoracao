@@ -1,0 +1,12 @@
+﻿`NcfBO.prg` est├í completo. Fase 2/8 conclu├¡da.
+
+**O que foi adicionado:**
+- `Buscar(par_cFiltro)` ÔÇö SELECT com filtro por empresa (`emps = empresa OR emps = ' '`), suporte a busca por c├│digo/descri├º├úo
+- `CarregarPorCodigo(par_cCodigo)` ÔÇö SELECT por PK + reset de `this_lNovoRegistro = .F.`
+- `CarregarDoCursor(par_cAliasCursor)` ÔÇö padr├úo can├┤nico com `SELECT (alias)` antes de acessar campos (sem `(alias).campo`)
+- `ObterChavePrimaria()` ÔÇö retorna `this_cCodigo` para auditoria
+- `Inserir()` ÔÇö INSERT com todos os 5 campos + `RegistrarAuditoria("INSERT")`
+- `Atualizar()` ÔÇö UPDATE de descs/fixos/tipos/emps WHERE cods + `RegistrarAuditoria("UPDATE")`
+- `ExecutarExclusao()` ÔÇö DELETE WHERE cods + `RegistrarAuditoria("DELETE")`
+
+Pr├│xima fase (3/8): criar `FormNcf.prg`.

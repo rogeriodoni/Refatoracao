@@ -1,0 +1,9 @@
+﻿OETBO.prg est├í completo com todos os m├®todos CRUD. Resumo do que foi adicionado:
+
+- **`Buscar(par_cFiltro)`** ÔÇö SELECT com ORDER BY cods, popula `cursor_4c_Dados`
+- **`CarregarPorCodigo(par_cCodigo)`** ÔÇö SELECT por PK, reseta `this_lNovoRegistro = .F.`
+- **`CarregarDoCursor(par_cAliasCursor)`** ÔÇö PROTECTED, usa `SELECT (alias)` antes de acessar campos (regra cr├¡tica), converte `justifs` via `ConverterParaLogico()`
+- **`Inserir()`** ÔÇö PROTECTED, INSERT com `IIF(this_lJustifs, "1", "0")` para campo num├®rico, chama `RegistrarAuditoria("INSERT")`
+- **`Atualizar()`** ÔÇö PROTECTED, UPDATE excluindo `cods` (PK n├úo atualiza), chama `RegistrarAuditoria("UPDATE")`
+- **`ExecutarExclusao()`** ÔÇö PROTECTED (chamado por `Excluir()` do BusinessBase), chama `RegistrarAuditoria("DELETE")`
+- **`ObterChavePrimaria()`** ÔÇö retorna `this_cCodigo` para auditoria

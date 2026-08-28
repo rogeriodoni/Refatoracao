@@ -1,0 +1,13 @@
+﻿`OrcBO.prg` is complete. The file now implements all 12 methods:
+
+- **`Buscar(par_cFiltro)`** ÔÇö grouped SELECT from SIGCDMRP filtered by empresa, returns READWRITE `cursor_4c_Dados`
+- **`CarregarDoCursor()`** ÔÇö maps all header columns (cemps/cmes/cano/ctitulo/moeda/nvltots/cidchaves) to `this_*` properties; saves `this_cChaveCompostaAnterior` before edit
+- **`CarregarPorCodigo()`** ÔÇö loads a single or├ºamento by `cidchaves`, delegates to `CarregarDoCursor`
+- **`BuscarGrupos()`** ÔÇö two-step SQLEXECÔåÆSELECT INTO READWRITE from SigCdGcr with Valor/Perc columns initialized to 0
+- **`BuscarContas()`** ÔÇö same pattern from SIGCDCLI filtered by empresa
+- **`CarregarDetalhe()`** ÔÇö populates existing Valor/Perc from SIGCDMRP into `cursor_4c_Grupos`/`cursor_4c_Contas` via LOCATE + REPLACE
+- **`VerificarDuplicidade()`** ÔÇö COUNT(*) on composite key, returns `.T.` if duplicate exists
+- **`ObterDescricaoMoeda()`** ÔÇö fetches `dmoes` from `SigCdMoe` by `cmoes`
+- **`EfetuarSalvamento()`** ÔÇö delta save: for ALTERAR deletes zero rows first, then iterates both cursors doing UPDATE-or-INSERT per row via `cursor_4c_ChkExiste` check; uses `fUniqueIds()` for new PKs
+- **`Inserir()`** / **`Atualizar()`** ÔÇö both delegate to `EfetuarSalvamento()` (same logic, `this_lNovoRegistro` gates the delete-zeros path)
+- **`ExecutarExclusao()`** ÔÇö single DELETE WHERE composite key, then audit

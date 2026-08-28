@@ -1,0 +1,5 @@
+﻿Corre├º├Áes aplicadas:
+
+1. **OrcBO.prg `BuscarContas()`** ÔÇö removido `WHERE emps = go_4c_Sistema.cCodEmpresa`. O original faz `SELECT Grupos, iClis, rClis from SigCdCli` sem filtro por empresa.
+
+2. **FormOrc.prg `ValidarMoedaDesc()`** ÔÇö removido o bloco SQL com `WHERE dmoes = loc_cDesc`. O original nunca filtra `SigCdMoe` por descri├º├úo (s├│ por `cmoes`). A fun├º├úo agora chama `AbrirLookupMoeda()` diretamente, que ├® o comportamento can├┤nico quando a descri├º├úo precisa ser resolvida.

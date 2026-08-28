@@ -1,0 +1,1184 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigCdRcc.SCX
+* Data/Hora: 23/08/2026 05:17:47
+* Total de registros: 26
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDRCC
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cmdDuplicar
+  Parent: SIGCDRCC.Pagina.Lista
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDesc
+  Parent: SIGCDRCC.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say6
+  Parent: SIGCDRCC.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetEmpresa
+  Parent: SIGCDRCC.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetDempresa
+  Parent: SIGCDRCC.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getPTotal
+  Parent: SIGCDRCC.Pagina.Dados
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: grdRateio
+  Parent: SIGCDRCC.Pagina.Dados
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGCDRCC.Pagina.Dados.grdRateio.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDRCC.Pagina.Dados.grdRateio.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDRCC.Pagina.Dados.grdRateio.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDRCC.Pagina.Dados.grdRateio.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDRCC.Pagina.Dados.grdRateio.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDRCC.Pagina.Dados.grdRateio.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDRCC.Pagina.Dados.grdRateio.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDRCC.Pagina.Dados.grdRateio.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDRCC.Pagina.Dados.grdRateio.Column5
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDRCC.Pagina.Dados.grdRateio.Column5
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDRCC.Pagina.Dados.grdRateio.Column6
+  Class: header
+  BaseClass: header
+
+Objeto: Check1
+  Parent: SIGCDRCC.Pagina.Dados.grdRateio.Column6
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: apaga
+  Parent: SIGCDRCC.Pagina.Dados
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: SelTudo
+  Parent: SIGCDRCC.Pagina.Dados
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: lbl_grupo
+  Parent: SIGCDRCC.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 26
+  Left = 31
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDRCC
+------------------------------------------------------------
+  DataSession = 2
+  DoCreate = .T.
+  Caption = "Rateio de Centros de Custos"
+  Name = "SIGCDRCC"
+  Pagina.ErasePage = .T.
+  Pagina.Lista.cntSombra.lblSombra.Name = "lblSombra"
+  Pagina.Lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  Pagina.Lista.cntSombra.Name = "cntSombra"
+  Pagina.Lista.Grade.FontName = "Tahoma"
+  Pagina.Lista.Grade.FontSize = 8
+  Pagina.Lista.Grade.Height = 460
+  Pagina.Lista.Grade.Left = 32
+  Pagina.Lista.Grade.RowHeight = 16
+  Pagina.Lista.Grade.Top = 131
+  Pagina.Lista.Grade.Width = 736
+  Pagina.Lista.Grade.ForeColor = 90,90,90
+  Pagina.Lista.Grade.ZOrderSet = 0
+  Pagina.Lista.Grade.Name = "Grade"
+  Pagina.Lista.Grupo_op.AutoSize = .T.
+  Pagina.Lista.Grupo_op.ButtonCount = 5
+  Pagina.Lista.Grupo_op.Inserir.Top = 5
+  Pagina.Lista.Grupo_op.Inserir.Left = 5
+  Pagina.Lista.Grupo_op.Inserir.Name = "Inserir"
+  Pagina.Lista.Grupo_op.Consultar.Top = 5
+  Pagina.Lista.Grupo_op.Consultar.Left = 80
+  Pagina.Lista.Grupo_op.Consultar.Name = "Consultar"
+  Pagina.Lista.Grupo_op.Alterar.Top = 5
+  Pagina.Lista.Grupo_op.Alterar.Left = 155
+  Pagina.Lista.Grupo_op.Alterar.Name = "Alterar"
+  Pagina.Lista.Grupo_op.Excluir.Top = 5
+  Pagina.Lista.Grupo_op.Excluir.Left = 230
+  Pagina.Lista.Grupo_op.Excluir.Name = "Excluir"
+  Pagina.Lista.Grupo_op.Procurar.Top = 5
+  Pagina.Lista.Grupo_op.Procurar.Left = 305
+  Pagina.Lista.Grupo_op.Procurar.Name = "Procurar"
+  Pagina.Lista.Grupo_op.Height = 85
+  Pagina.Lista.Grupo_op.Left = 344
+  Pagina.Lista.Grupo_op.Top = -1
+  Pagina.Lista.Grupo_op.Width = 385
+  Pagina.Lista.Grupo_op.ZOrderSet = 3
+  Pagina.Lista.Grupo_op.Name = "Grupo_op"
+  Pagina.Lista.Grupo_Saida.Sair.Top = 5
+  Pagina.Lista.Grupo_Saida.Sair.Left = 5
+  Pagina.Lista.Grupo_Saida.Sair.Name = "Sair"
+  Pagina.Lista.Grupo_Saida.Left = 719
+  Pagina.Lista.Grupo_Saida.Top = -1
+  Pagina.Lista.Grupo_Saida.ZOrderSet = 4
+  Pagina.Lista.Grupo_Saida.Name = "Grupo_Saida"
+  Pagina.Lista.cntFiltros.ZOrderSet = 5
+  Pagina.Lista.cntFiltros.Name = "cntFiltros"
+  Pagina.Lista.Name = "Lista"
+  Pagina.Dados.Grupo_Salva.AutoSize = .T.
+  Pagina.Dados.Grupo_Salva.Salva.Top = 5
+  Pagina.Dados.Grupo_Salva.Salva.Left = 5
+  Pagina.Dados.Grupo_Salva.Salva.Name = "Salva"
+  Pagina.Dados.Grupo_Salva.Cancelar.Top = 5
+  Pagina.Dados.Grupo_Salva.Cancelar.Left = 80
+  Pagina.Dados.Grupo_Salva.Cancelar.Name = "Cancelar"
+  Pagina.Dados.Grupo_Salva.TabIndex = 9
+  Pagina.Dados.Grupo_Salva.Name = "Grupo_Salva"
+  Pagina.Dados.Caption = "Page2"
+  Pagina.Dados.Name = "Dados"
+  Pagina.Top = -27
+  Pagina.Left = 0
+  Pagina.Name = "Pagina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDRCC.Pagina.Lista.cmdDuplicar
+------------------------------------------------------------
+  Top = 82
+  Left = 604
+  Height = 45
+  Width = 120
+  FontBold = .T.
+  Picture = ..\framework\imagens\geral_duplicar_60.jpg
+  Caption = "Duplicar rateio"
+  Visible = .T.
+  PicturePosition = 1
+  ZOrderSet = 6
+  Name = "cmdDuplicar"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDRCC.Pagina.Dados.getDesc
+------------------------------------------------------------
+  Comment = ""
+  ControlSource = "crSigCdRcc.DescRats"
+  Format = "K!"
+  Height = 23
+  Left = 146
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 107
+  Width = 150
+  ZOrderSet = 23
+  Name = "getDesc"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDRCC.Pagina.Dados.Say6
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Empresa :"
+  Left = 91
+  Top = 137
+  TabIndex = 3
+  ForeColor = 90,90,90
+  ZOrderSet = 54
+  Name = "Say6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDRCC.Pagina.Dados.GetEmpresa
+------------------------------------------------------------
+  ControlSource = "crSigCdRcc.Empos"
+  Height = 21
+  Left = 146
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 134
+  Width = 31
+  ZOrderSet = 57
+  Themes = .F.
+  Name = "GetEmpresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDRCC.Pagina.Dados.GetDempresa
+------------------------------------------------------------
+  Height = 21
+  Left = 179
+  SpecialEffect = 1
+  TabIndex = 5
+  Top = 134
+  Width = 351
+  ZOrderSet = 58
+  Themes = .F.
+  Name = "GetDempresa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDRCC.Pagina.Dados.getPTotal
+------------------------------------------------------------
+  FontName = "Courier New"
+  Alignment = 3
+  Value = 0
+  Format = "K"
+  Height = 21
+  Left = 499
+  SpecialEffect = 1
+  TabIndex = 6
+  Top = 546
+  Width = 80
+  ZOrderSet = 13
+  Themes = .F.
+  Name = "getPTotal"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDRCC.Pagina.Dados.grdRateio
+------------------------------------------------------------
+  ColumnCount = 6
+  FontName = "Tahoma"
+  FontSize = 8
+  DeleteMark = .F.
+  Height = 387
+  Left = 128
+  RecordMark = .F.
+  RowHeight = 16
+  ScrollBars = 2
+  TabIndex = 2
+  Top = 159
+  Width = 471
+  GridLineColor = 238,238,238
+  Name = "grdRateio"
+  Column1.FontName = "Tahoma"
+  Column1.FontSize = 8
+  Column1.ColumnOrder = 2
+  Column1.Width = 31
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.Name = "Column1"
+  Column2.FontName = "Tahoma"
+  Column2.FontSize = 8
+  Column2.ColumnOrder = 3
+  Column2.ControlSource = ""
+  Column2.Width = 80
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.Name = "Column2"
+  Column3.FontName = "Tahoma"
+  Column3.FontSize = 8
+  Column3.ColumnOrder = 4
+  Column3.ControlSource = ""
+  Column3.Width = 95
+  Column3.Movable = .F.
+  Column3.Resizable = .F.
+  Column3.ReadOnly = .T.
+  Column3.Name = "Column3"
+  Column4.FontName = "Tahoma"
+  Column4.FontSize = 8
+  Column4.ColumnOrder = 5
+  Column4.ControlSource = ""
+  Column4.Width = 141
+  Column4.Movable = .F.
+  Column4.Resizable = .F.
+  Column4.ReadOnly = .T.
+  Column4.Name = "Column4"
+  Column5.FontName = "Tahoma"
+  Column5.FontSize = 8
+  Column5.ColumnOrder = 6
+  Column5.ControlSource = ""
+  Column5.Width = 80
+  Column5.Movable = .F.
+  Column5.Resizable = .F.
+  Column5.InputMask = "999.99"
+  Column5.Name = "Column5"
+  Column6.FontName = "Tahoma"
+  Column6.FontSize = 8
+  Column6.ColumnOrder = 1
+  Column6.Width = 17
+  Column6.Sparse = .F.
+  Column6.Name = "Column6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDRCC.Pagina.Dados.grdRateio.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Emp."
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDRCC.Pagina.Dados.grdRateio.Column1.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 3
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .F.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDRCC.Pagina.Dados.grdRateio.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Grupo"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDRCC.Pagina.Dados.grdRateio.Column2.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDRCC.Pagina.Dados.grdRateio.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Centro de Custo"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDRCC.Pagina.Dados.grdRateio.Column3.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDRCC.Pagina.Dados.grdRateio.Column4.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Descrição"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDRCC.Pagina.Dados.grdRateio.Column4.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDRCC.Pagina.Dados.grdRateio.Column5.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "% Rateio"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDRCC.Pagina.Dados.grdRateio.Column5.Text1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  BorderStyle = 0
+  InputMask = "999.99"
+  Margin = 0
+  ReadOnly = .F.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDRCC.Pagina.Dados.grdRateio.Column6.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = ""
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDRCC.Pagina.Dados.grdRateio.Column6.Check1
+------------------------------------------------------------
+  Top = 22
+  Left = 22
+  Height = 17
+  Width = 60
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = "Check1"
+  Name = "Check1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDRCC.Pagina.Dados.apaga
+------------------------------------------------------------
+  Top = 346
+  Left = 599
+  Height = 40
+  Width = 45
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Verdana"
+  FontSize = 8
+  Picture = ..\framework\imagens\cadastro_excluir_26.jpg
+  Caption = ""
+  TabIndex = 26
+  TabStop = .F.
+  ToolTipText = "Desmarcar"
+  ForeColor = 36,84,155
+  BackColor = 255,255,255
+  ZOrderSet = 84
+  Themes = .F.
+  Name = "apaga"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDRCC.Pagina.Dados.SelTudo
+------------------------------------------------------------
+  Top = 305
+  Left = 599
+  Height = 40
+  Width = 45
+  FontName = "Verdana"
+  FontSize = 8
+  Picture = ..\framework\imagens\geral_marcar_26.jpg
+  Caption = ""
+  TabIndex = 24
+  TabStop = .F.
+  ToolTipText = "Selecionar"
+  ForeColor = 36,84,155
+  BackColor = 255,255,255
+  ZOrderSet = 85
+  Themes = .F.
+  Name = "SelTudo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDRCC.Pagina.Dados.lbl_grupo
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = "Descrição :"
+  Left = 86
+  Top = 111
+  Width = 55
+  TabIndex = 1
+  ForeColor = 90,90,90
+  ZOrderSet = 10
+  Name = "lbl_grupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Courier New, 0, 9, 7, 15, 12, 9, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDRCC
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE calcularateioauto
+------------------------------------------------------------
+PROCEDURE calcularateioauto
+Select csSigCdRci
+lnReg = Recno()
+Go Top
+Count For Marcas = 1 To lnQtde
+If lnQtde > 0
+	lnRat = Round(100/lnQtde,2)
+	Select csSigCdRci
+	Scan For Marcas = 1
+		Replace PercRats With lnRat In csSigCdRci
+	Endscan
+EndIf
+Select csSigCdRci
+Sum PercRats To lnPTotal
+
+If lnPTotal > 100
+	Select csSigCdRci
+	Locate for Marcas = 1
+	replace PercRats With PercRats - (lnPTotal - 100) in csSigCdRci
+	lnPTotal = 0
+	Sum PercRats To lnPTotal
+EndIf 
+
+If Not Empty(lnPTotal) And lnPTotal < 100
+	Select csSigCdRci
+	Locate for Marcas = 1
+	replace PercRats With PercRats + ((lnPTotal - 100)*-1) in csSigCdRci
+	lnPTotal = 0
+	Sum PercRats To lnPTotal
+EndIf 
+
+Go lnReg
+Thisform.pagina.dados.getPTotal.Value = lnPTotal
+Thisform.pagina.dados.getPTotal.Refresh()
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Lparameters pAce, pTit
+
+With Thisform
+	.poDatamgr = Createobject('fSqlConector',Thisform.Name)
+
+	If Not .poDatamgr.pnIdconn > 0
+		Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),'Erro')
+		Return(.F.)
+	Endif
+
+	lcDescRat = Space(20)
+	lcSqlCdCri = [Select * From SigCdRci Where DescRats = ?lcDescRat]
+
+	With .poDatamgr
+		.AddCursor('SigCdRcc','cidchaves','crSigCdRcc','',Thisform.pagina.lista.grade)
+		.pfSqlTabela(1).pColuna('DescRats','','','Descrição',150,.T.)
+		.pfSqlTabela(1).pColuna('EmpOs','','','Emp.',31,.T.)
+
+		.AddCursor('SigCdRci','CidChaves','crSigCdRci','','',lcSqlCdCri)
+	Endwith
+
+Endwith
+
+=DoDefault()
+thisform.pagina.lista.cmdDuplicar.Visible = .T.
+   
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_alterar
+------------------------------------------------------------
+PROCEDURE msv_alterar
+llOk = .t.
+
+lcDescRat = crSigCdRcc.DescRats
+If (ThisForm.poDataMgr.SQLExecute([Delete From SigCdRcc Where DescRats = ?lcDescRat], '') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (msv_excluir - 1)')
+	llOk = .f.
+EndIf
+
+If llOk
+	If (ThisForm.poDataMgr.SQLExecute([Delete From SigCdRci Where DescRats = ?lcDescRat], '') < 1)
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (msv_excluir - 2)')
+		llOk = .f.
+	EndIf
+EndIf
+
+If llOk And Not Thisform.poDataMgr.Update('crSigCdRcc')
+	=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update - crSigCdRcc )')
+	llOk = .F.
+Endif
+
+If llOk And Not Thisform.poDataMgr.Update('crSigCdRci')
+	=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update - crSigCdRci )')
+	llOk = .F.
+EndIf
+
+If llOk
+	ThisForm.poDataMgr.Commit()
+Else
+	Thisform.poDataMgr.Rollback()
+	Return .F.
+Endif
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_excluir
+------------------------------------------------------------
+PROCEDURE msv_excluir
+llOk = .t.
+
+lcDescRat = crSigCdRcc.DescRats
+If (ThisForm.poDataMgr.SQLExecute([Delete From SigCdRcc Where DescRats = ?lcDescRat], '') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (msv_excluir - 1)')
+	llOk = .f.
+EndIf
+
+If llOk
+	If (ThisForm.poDataMgr.SQLExecute([Delete From SigCdRci Where DescRats = ?lcDescRat], '') < 1)
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (msv_excluir - 2)')
+		llOk = .f.
+	EndIf
+EndIf
+
+If llOk
+	ThisForm.poDataMgr.Commit()
+Else
+	Thisform.poDataMgr.Rollback()
+	Return .F.
+Endif
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_inserir
+------------------------------------------------------------
+PROCEDURE msv_inserir
+llOk = .t.
+
+If Not Thisform.poDataMgr.Update('crSigCdRcc')
+	=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update - crSigCdRcc )')
+	llOks = .F.
+Endif
+
+If llOk And Not Thisform.poDataMgr.Update('crSigCdRci')
+	=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update - crSigCdRci )')
+	llOk = .F.
+Endif
+If llOk
+	ThisForm.poDataMgr.Commit()
+Else
+	Thisform.poDataMgr.Rollback()
+	Return .F.
+Endif
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Lista.Grupo_op.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Lista.Grupo_op.Click
+LPARAMETERS opcao
+
+*** Mena - 30/03/2017 - prepara para duplicar ***
+lcDescRat = ''
+IF VARTYPE(opcao) = 'N' and opcao = 6
+	lcDescRat = crSigCdRcc.DescRats
+	opcao = 1
+ENDIF
+	
+If !Dodefault( OPCAO )
+	ThisForm.mAtivapagina1
+	Return
+Endif
+
+lcDescRat = IIF(EMPTY(lcDescRat),crSigCdRcc.DescRats,lcDescRat)	&& mena 30/03/2017 - recupera descrição para duplicar
+*Thisform.podatamgr.Requery([crSigCdRci])
+
+Thisform.pagina.dados.grdRateio.RecordSource = []
+
+lcQuery = [Select 0 as Marcas, Space(3) as Emps, a.grupos, a.iclis as Contas, a.rclis as Descs, CAST(0.00 as numeric(5,2)) as percrats, 0 as Manual ] + ;
+	[from sigcdcli a ] + ;
+	[join sigcdgcr b on a.grupos = b.codigos ] + ;
+	[where b.coletors = 9 ] + ;
+	[order by a.grupos, a.rclis ]
+Thisform.poDatamgr.SqlExecute(lcQuery,[csSigCdRci])
+
+Thisform.podatamgr.Requery([crSigCdRci])
+
+Select csSigCdRci
+Index on Grupos + Contas Tag GruConta 
+Index on Descs tag Descs
+Go top 
+
+Select crSigCdRci
+Scan 
+	If Seek(crSigCdRci.Grupos + crSigCdRci.Contas,[csSigCdRci],[GruConta])
+		Replace Marcas With 1, percrats With crSigCdRci.PercRats in csSigCdRci
+	EndIf 
+EndScan 
+
+Select crSigCdRci
+Zap 
+
+Select csSigCdRci
+Set Order To Tag Descs
+Go top 
+
+Thisform.pagina.dados.grdRateio.RecordSource = [csSigCdRci]
+Thisform.pagina.dados.grdRateio.column1.ControlSource = [csSigCdRci.Emps]
+Thisform.pagina.dados.grdRateio.column2.ControlSource = [csSigCdRci.Grupos]
+Thisform.pagina.dados.grdRateio.column3.ControlSource = [csSigCdRci.Contas]
+Thisform.pagina.dados.grdRateio.column4.ControlSource = [csSigCdRci.Descs]
+Thisform.pagina.dados.grdRateio.column5.ControlSource = [csSigCdRci.PercRats]
+Thisform.pagina.dados.grdRateio.column6.ControlSource = [csSigCdRci.Marcas]
+Thisform.pagina.dados.grdRateio.Refresh()
+
+Select csSigCdRci
+Go top
+Sum PercRats To lnPTotal
+Thisform.pagina.dados.getPTotal.Value = lnPTotal
+
+
+
+* inicializa os campos para inserção e procura
+Do Case
+	Case Inlist(thisform.pcEscolha,[INSERIR],[PROCURAR])
+		Thisform.pagina.dados.getDesc.value = []
+		Thisform.pagina.dados.getDempresa.Value = []
+	Case Inlist(thisform.pcEscolha,[ALTERAR],[CONSULTAR],[EXCLUIR])
+		If ThisForm.podatamgr.CursorQuery([SigCdEmp],[crSigCdEmp], [cEmps], crSigCdRcc.EmpOs, [Razas])
+			Thisform.pagina.dados.getDempresa.Value = Evaluate('crSigCdEmp.Razas')
+			Use In crSigCdEmp
+		Endif
+Endcase
+
+Thisform.Refresh()
+Thisform.pagina.dados.getDesc.SetFocus()
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+
+lcDescRat = thisform.pagina.dados.getDesc.value
+
+If Inlist( ThisForm.pcEscolha,[INSERIR],[ALTERAR] )
+	If Inlist( ThisForm.pcEscolha,[INSERIR]) 
+		If Empty(lcDescRat)
+			Messagebox([Descrição de rateio obrigatório.],64,[Aviso])
+			thisform.pagina.dados.getDesc.Setfocus()
+			Return .f.
+		Endif
+		If ThisForm.podatamgr.ChkRegister('SigCdRcc', 'DescRats', lcDescRat)
+			Messagebox([Descrição de rateio já cadastrada.],64,[Aviso])
+			thisform.pagina.dados.getDesc.Setfocus()
+			Return .f.
+		Endif
+		
+		Replace CidChaves With fUniqueIds(), Datas With Datetime() in crSigCdRcc
+	Endif
+
+	Select crSigCdRci
+	Go Top
+	
+	Select Sum(PercRats) as TotRats From csSigCdRci Where Marcas = 1 Into Cursor TmpItens
+	If Nvl(TmpItens.TotRats,0) <> 100
+		Messagebox([Total de rateio diferente de 100%.],48,[Lançamento incorreto])
+		Return .f.
+	Endif		
+	Use In TmpItens
+	
+	Select csSigCdRci
+	Scan For Marcas = 1
+		Scatter Memvar
+		
+		Select crSigCdRci
+		Append Blank 
+		
+		Gather Memvar 
+		Select csSigCdRci
+	EndScan 
+	
+	Select crSigCdRci
+	Go Top
+	Delete For (Empty(Emps) And Empty(Grupos) And Empty(Contas)) And PercRats = 0
+	Go Top
+	
+	Replace DescRats With crSigCdRcc.DescRats For Empty(DescRats)
+	Replace CidChaves With fUniqueIds() For Empty(CidChaves)
+
+	If Inlist( ThisForm.pcEscolha,[ALTERAR])
+		Replace DtAlts With Datetime() in crSigCdRcc
+	Endif
+Endif
+
+DoDefault()
+Thisform.mAtivapagina1
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+DoDefault()
+If thisform.plCancelar
+	thisform.mAtivapagina1
+Endif
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDRCC.Pagina.Lista.cmdDuplicar
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 4
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+thisform.pagina.lista.grupo_Op.Click(6)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDRCC.Pagina.Dados.getDesc
+* Classe: fwget (Base: textbox)
+* Registro: 5
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+return(thisform.pcEscolha $ 'INSERIR/PROCURAR')
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDRCC.Pagina.Dados.GetEmpresa
+* Classe: fwget (Base: textbox)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+=fAcessoEmpresa(Usuar, 'C', This.Value, This, This.Parent.getDEmpresa)
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDRCC.Pagina.Dados.GetDempresa
+* Classe: fwget (Base: textbox)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+=fAcessoEmpresa(Usuar, 'D', This.Value, This.Parent.getEmpresa, This)
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(This.Parent.getEmpresa.Value)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDRCC.Pagina.Dados.getPTotal
+* Classe: textbox (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDRCC.Pagina.Dados.grdRateio.Column1.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+=fAcessoEmpresa(Usuar, 'C', This.Value, This, '')
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR') And Marcas = 1)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDRCC.Pagina.Dados.grdRateio.Column5.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 20
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !Empty(this.Value)
+	This.value = Iif(This.Value < 0,0,This.Value)
+Endif
+
+Select csSigCdRci
+lnReg = Recno()
+Go top
+Sum PercRats To lnPTotal
+Go lnReg
+Thisform.pagina.dados.getPTotal.Value = lnPTotal
+Thisform.pagina.dados.getPTotal.Refresh()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR') And Marcas = 1)
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDRCC.Pagina.Dados.grdRateio.Column6.Check1
+* Classe: checkbox (Base: checkbox)
+* Registro: 22
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+NoDefault
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE KeyPress
+------------------------------------------------------------
+PROCEDURE KeyPress
+LParameters nKeyCode, nShiftAltCtrl
+
+If InList(m.nKeyCode,13,32)
+	Replace csSigCdRci.Marcas With IIf(csSigCdRci.Marcas == 0,1,0)	
+	If csSigCdRci.Marcas = 0
+		Replace PercRats With 0
+	EndIf 	
+	ThisForm.Calcularateioauto()
+	This.parent.parent.parent.grdRateio.Refresh
+	NoDefault
+EndIf
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE MouseDown
+------------------------------------------------------------
+PROCEDURE MouseDown
+LParameters nButton, nShift, nXCoord, nYCoord
+
+NoDefault
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE MouseUp
+------------------------------------------------------------
+PROCEDURE MouseUp
+LParameters nButton, nShift, nXCoord, nYCoord
+
+This.KeyPress(13,0)
+NoDefault
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDRCC.Pagina.Dados.apaga
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 23
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select csSigCdRci
+Replace All csSigCdRci.Marcas with 0, PercRats With 0
+Go Top
+ThisForm.Calcularateioauto()
+ThisForm.Refresh
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDRCC.Pagina.Dados.SelTudo
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 24
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select csSigCdRci
+Replace All csSigCdRci.Marcas with 1
+Go Top
+ThisForm.Calcularateioauto()
+ThisForm.Refresh
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGCDRCC
+RESERVED3 (ClassInfo): busca
+*calcularateioauto 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 27
+================================================================================

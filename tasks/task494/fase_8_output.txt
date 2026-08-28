@@ -1,0 +1,15 @@
+﻿The migration for task494 (SIGCDPAG ÔåÆ Condi├º├Áes de Pagamento) is complete:
+
+**Created:**
+- `C:\4c\projeto\app\classes\pagBO.prg` (827 lines) ÔÇö Business Object for SigOpFp table with all ~100 properties, full INSERT/UPDATE SQL, DELETE cascade (SigOpFpI ÔåÆ SigOpFpP ÔåÆ SigOpFp), CarregarPorCodigo, Buscar, ValidarInsercao
+- `C:\4c\projeto\app\forms\cadastros\Formpag.prg` (3629 lines) ÔÇö Full CRUD form with:
+  - Page1 (Lista): 5 CRUD buttons, 6 legacy extra buttons (M├¡nimo, Desconto, BIN, Exportar, Importar, Copiar), 5-column grid, canonical cnt_4c_Saida (Left=917)
+  - Page2 (Dados): outer controls (Forma/C├│digo, Descri├º├úo, T├¡tulo, Nfpag, C├│digo Alt, Moeda, Grupo, Conta, DescConta, Opt_ContaMov, Forma, Modalidade), inner pgf_4c_Dados with Page1 (Dados) and Page2 (Financeiro/Cart├úo) ÔÇö ~30 OptionGroups + TextBoxes across both tabs
+  - FormParaBO/BOParaForm with PEMSTATUS guards for all fields
+  - BtnExcluirClick checks SigMvPar before deleting
+  - BtnBuscarClick uses canonical Pattern A (FormBuscaAuxiliar)
+
+**Modified:**
+- `C:\4c\projeto\app\menu\menu.prg` ÔÇö Added BAR 150 "Condi├º├Áes de Pagamento" + AbrirFormpag() procedure
+
+The files are auto-loaded by config.prg's ADIR wildcards (`*BO.prg` and `Form*.prg`).

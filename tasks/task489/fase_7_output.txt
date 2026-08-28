@@ -1,0 +1,13 @@
+﻿A migra├º├úo j├í est├í 100% completa. A Fase 7/8 j├í havia sido conclu├¡da em sess├úo anterior:
+
+**Status da task489 (FormOrc):**
+- `BtnIncluirClick()` ÔÇö implementado na linha 883 com l├│gica completa (NovoRegistro + BuscarGrupos + BuscarContas + LimparCampos + HabilitarCampos + ConfigurarGridsDetalhe)
+- `BtnAlterarClick()` ÔÇö implementado na linha 925 com CarregarPorCodigo + BuscarGrupos + BuscarContas + CarregarDetalhe + EditarRegistro + BOParaForm
+- `BtnVisualizarClick()` ÔÇö implementado na linha 897 com carregamento completo em modo somente leitura
+- `BtnExcluirClick()` ÔÇö implementado na linha 954 com MsgConfirma + CarregarPorCodigo + Excluir
+
+**Integra├º├úo:**
+- `menu.prg`: `DEFINE BAR 147 OF popCadastros` + `ON SELECTION BAR 147 DO AbrirFormOrc` + fun├º├úo `AbrirFormOrc()` ÔÇö tudo presente
+- `config.prg`: carregamento via ADIR() autom├ítico, sem entrada manual necess├íria
+
+N├úo h├í nenhuma modifica├º├úo a fazer ÔÇö a migra├º├úo do FormOrc/OrcBO est├í completa em todas as 8 fases.

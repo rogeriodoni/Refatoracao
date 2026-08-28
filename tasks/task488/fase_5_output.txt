@@ -1,0 +1,13 @@
+﻿The file is complete. All 19 handlers are in place, `LimparCampos()` expanded to 29 fields (lines 1650-1749), `HabilitarCampos()` expanded to 29 fields with ReadOnly special-case for txt_4c_Codigo in ALTERAR mode (lines 1756-1857), and ENDDEFINE is at the expected final line 2417.
+
+**Phase 5 is now complete.** Summary of what was done:
+
+- `ConfigurarPaginaDados()` ÔÇö 53 controls (CheckBox, Labels, TextBoxes, OptionGroups, Shapes) with +29 top compensation, all BINDEVENTs wired (done in previous session)
+- `LimparCampos()` ÔÇö resets all 29 Page2 fields to blank/default values; resets OptionGroups to button 1; sets Opc_TipoData.Enabled=.F.
+- `HabilitarCampos()` ÔÇö enables/disables all 29 fields; txt_4c_Codigo is ReadOnly in ALTERAR mode
+- 19 PUBLIC handler methods: 8 using `AbrirLookupCanonico` (no TRY/CATCH needed, FormBase handles errors internally), 10 using `fAcessoContab`/`fAcessoContas` Fortyus framework calls (with TRY/CATCH + MsgErro), plus `AtualizarEstadoTipoData`
+
+**Next phases remaining:**
+- **Phase 6**: Remaining Page2 fields below lin_4c_Line2 (original top > 248)
+- **Phase 7**: `FormParaBO()` and `BOParaForm()` implementations
+- **Phase 8**: Integration (config.prg + menu.prg)

@@ -1,0 +1,262 @@
+﻿{
+    "taskId":  "task474",
+    "arquivoOriginal":  "",
+    "tipoArquivo":  "SCX",
+    "comentario_tipoArquivo":  "SCX=Form, FRX=Report, VCX=ClassLib",
+    "status":  "COMPLETED",
+    "statusComentario":  "PENDING | IN_PROGRESS | COMPLETED | FAILED | BLOCKED",
+    "criadoEm":  "2026-08-21T18:22:28",
+    "atualizadoEm":  "2026-08-21T19:01:08",
+    "etapas":  {
+                   "01_moverArquivos":  {
+                                            "status":  "COMPLETED",
+                                            "inicio":  "2026-08-21T18:22:28",
+                                            "fim":  "2026-08-21T18:22:28",
+                                            "tentativas":  1,
+                                            "erro":  null,
+                                            "sctFile":  "C:\\4c\\tasks\\task474\\SigCdNcf.sct",
+                                            "baseName":  "SigCdNcf",
+                                            "scxFile":  "C:\\4c\\tasks\\task474\\SigCdNcf.scx"
+                                        },
+                   "02_extractCode":  {
+                                          "status":  "COMPLETED",
+                                          "inicio":  "2026-08-21T18:22:28",
+                                          "fim":  "2026-08-21T18:22:29",
+                                          "tentativas":  1,
+                                          "arquivoGerado":  "SIGCDCOR_codigo_fonte.txt",
+                                          "erro":  null,
+                                          "baseNameNormalizado":  "SigCdNcf",
+                                          "txtFile":  "C:\\4c\\tasks\\task474\\SigCdNcf_form_codigo_fonte.txt"
+                                      },
+                   "02b_analisarTarefa":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-08-21T18:22:29",
+                                              "fim":  "2026-08-21T18:22:29",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "analise.json",
+                                              "erro":  null,
+                                              "comentario":  "NOVO - Analise inteligente do codigo fonte",
+                                              "analiseFile":  "C:\\4c\\tasks\\task474\\analise.json"
+                                          },
+                   "03_gerarMetaPrompt":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-08-21T18:22:30",
+                                              "fim":  "2026-08-21T18:22:38",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "meta_prompt.md",
+                                              "erro":  null,
+                                              "formType":  "CRUD",
+                                              "phaseBFile":  "C:\\4c\\tasks\\task474\\meta_prompt_phaseB.md",
+                                              "metaPromptFile":  "C:\\4c\\tasks\\task474\\meta_prompt.md",
+                                              "boClass":  "NcfBO",
+                                              "formClass":  "FormNcf",
+                                              "phaseAFile":  "C:\\4c\\tasks\\task474\\meta_prompt_phaseA.md"
+                                          },
+                   "04_gerarMapeamento":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-08-21T18:22:38",
+                                              "fim":  "2026-08-21T18:22:39",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "mapeamento.json",
+                                              "erro":  null,
+                                              "jsonFile":  "C:\\4c\\tasks\\task474\\mapeamento.json"
+                                          },
+                   "04b_gerarEsqueletos":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-08-21T18:22:39",
+                                               "fim":  "2026-08-21T18:22:39",
+                                               "tentativas":  1,
+                                               "arquivosGerados":  [
+
+                                                                   ],
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Geracao de codigo base ~70% completo",
+                                               "esqueletosDir":  "C:\\4c\\tasks\\task474\\esqueletos",
+                                               "arquivos":  [
+                                                                "FormNcf_esqueleto.prg",
+                                                                "NcfBO_esqueleto.prg"
+                                                            ]
+                                           },
+                   "05_migracao":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-08-21T18:22:39",
+                                       "fim":  "2026-08-21T18:50:01",
+                                       "tentativas":  1,
+                                       "maxTentativas":  3,
+                                       "arquivosGerados":  [
+
+                                                           ],
+                                       "comentario":  "FormXXX.prg, XXXBO.prg",
+                                       "erro":  null,
+                                       "boExists":  true,
+                                       "boFile":  "C:\\4c\\projeto\\app\\classes\\NcfBO.prg",
+                                       "formExists":  true,
+                                       "tamanhoKB":  17.23,
+                                       "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormNcf.prg",
+                                       "complexidade":  "COMPLEXO",
+                                       "linhas":  599
+                                   },
+                   "05b_corrigirAutomatico":  {
+                                                  "status":  "COMPLETED",
+                                                  "inicio":  "2026-08-21T18:50:01",
+                                                  "fim":  "2026-08-21T18:50:05",
+                                                  "tentativas":  1,
+                                                  "correcoesAplicadas":  0,
+                                                  "erro":  null,
+                                                  "comentario":  "NOVO - Correcao automatica de anti-padroes",
+                                                  "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormNcf.prg",
+                                                  "boFile":  "C:\\4c\\projeto\\app\\classes\\NcfBO.prg"
+                                              },
+                   "05c_validarCompilacao":  {
+                                                 "status":  "COMPLETED",
+                                                 "inicio":  "2026-08-21T18:50:05",
+                                                 "fim":  "2026-08-21T18:50:06",
+                                                 "tentativas":  1,
+                                                 "errosCompilacao":  [
+
+                                                                     ],
+                                                 "erro":  null,
+                                                 "comentario":  "NOVO - Valida compilacao dos .prg antes de testar",
+                                                 "arquivosValidados":  2,
+                                                 "sucesso":  true
+                                             },
+                   "06_testForm":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-08-21T18:55:36",
+                                       "fim":  "2026-08-21T18:57:01",
+                                       "tentativas":  1,
+                                       "maxTentativas":  5,
+                                       "errosEncontrados":  [
+
+                                                            ],
+                                       "erro":  null,
+                                       "tentativasUsadas":  1
+                                   },
+                   "06b_testeAutomatico":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-08-21T18:57:01",
+                                               "fim":  "2026-08-21T19:01:06",
+                                               "tentativas":  1,
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Testes CRUD automaticos",
+                                               "threshold":  100,
+                                               "falhou":  0,
+                                               "passou":  9,
+                                               "total":  9,
+                                               "percentual":  100,
+                                               "tentativasUsadas":  2,
+                                               "resultFile":  "C:\\4c\\tasks\\task474\\teste_resultado.json"
+                                           },
+                   "07_validarUI":  {
+                                        "status":  "COMPLETED",
+                                        "inicio":  "2026-08-21T19:01:07",
+                                        "fim":  "2026-08-21T19:01:08",
+                                        "tentativas":  1,
+                                        "maxTentativas":  5,
+                                        "problemas":  {
+                                                          "erros":  0,
+                                                          "avisos":  0,
+                                                          "diferencas":  0,
+                                                          "total":  0
+                                                      },
+                                        "limiteProblemas":  10,
+                                        "erro":  null,
+                                        "exitCode":  0,
+                                        "htmlFile":  "C:\\4c\\projeto\\app\\utils\\relatorios\\UIFidelity_FormNcf_20260821190107.html",
+                                        "diferencas":  0,
+                                        "erros":  0,
+                                        "totalProblemas":  125,
+                                        "avisos":  125
+                                    },
+                   "08_gerarTestManual":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-08-21T19:01:08",
+                                              "fim":  "2026-08-21T19:01:08",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  null,
+                                              "erro":  null,
+                                              "testManualFile":  "C:\\4c\\SolicitacaoTesteManual\\task474_SigCdNcf.md"
+                                          },
+                   "02c_analisarComportamento":  {
+                                                     "inicio":  "2026-08-21T18:22:29",
+                                                     "tentativas":  1,
+                                                     "erro":  null,
+                                                     "fim":  "2026-08-21T18:22:30",
+                                                     "comportamentoFile":  "C:\\4c\\tasks\\task474\\comportamento.json",
+                                                     "status":  "COMPLETED"
+                                                 },
+                   "02d_extrairLayout":  {
+                                             "inicio":  "2026-08-21T18:22:30",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-08-21T18:22:30"
+                                         },
+                   "05b2_atualizarMapeamento":  {
+                                                    "inicio":  "2026-08-21T18:50:05",
+                                                    "status":  "COMPLETED",
+                                                    "tentativas":  1,
+                                                    "erro":  null,
+                                                    "fim":  "2026-08-21T18:50:05",
+                                                    "destFile":  "C:\\4c\\projeto\\app\\utils\\mapeamentos\\FormNcf_mapeamento.json",
+                                                    "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormNcf.prg",
+                                                    "mapeamentoFile":  "C:\\4c\\tasks\\task474\\mapeamento.json"
+                                                },
+                   "05d_validarCompletude":  {
+                                                 "inicio":  "2026-08-21T18:50:06",
+                                                 "status":  "COMPLETED",
+                                                 "tentativas":  1,
+                                                 "erro":  null,
+                                                 "fim":  "2026-08-21T18:50:06",
+                                                 "sucesso":  true,
+                                                 "arquivosComProblema":  0
+                                             },
+                   "05e_codeReview":  {
+                                          "inicio":  "2026-08-21T18:50:06",
+                                          "status":  "COMPLETED",
+                                          "erro":  null,
+                                          "fim":  "2026-08-21T18:55:20",
+                                          "passes":  4,
+                                          "problemas":  "[SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027CODS\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: EMPS; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027CEMPS\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: EMPS",
+                                          "tentativas":  3,
+                                          "problemasRestantes":  2
+                                      },
+                   "05f_validarSQLSchema":  {
+                                                "inicio":  "2026-08-21T18:55:20",
+                                                "tentativas":  1,
+                                                "erro":  null,
+                                                "fim":  "2026-08-21T18:55:36",
+                                                "status":  "PASSED",
+                                                "boFile":  "C:\\4c\\projeto\\app\\classes\\NcfBO.prg",
+                                                "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormNcf.prg"
+                                            },
+                   "06c_validarLayout":  {
+                                             "inicio":  "2026-08-21T19:01:06",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-08-21T19:01:07",
+                                             "thresholdPx":  5,
+                                             "unmatched":  3,
+                                             "errors":  3,
+                                             "matched":  7,
+                                             "warnings":  8,
+                                             "reportFile":  "C:\\4c\\tasks\\task474\\layout_vs_prg_report.json"
+                                         }
+               },
+    "metricas":  {
+                     "tempoTotalSegundos":  0,
+                     "tempoExtracao":  0,
+                     "tempoAnalise":  0,
+                     "tempoEsqueletos":  0,
+                     "tempoMigracao":  0,
+                     "tempoCorrecao":  0,
+                     "tempoCompilacao":  0,
+                     "tempoTesteAuto":  0,
+                     "tempoValidacao":  0,
+                     "linhasCodigoOriginal":  0,
+                     "linhasCodigoGerado":  0,
+                     "correcoesAutomaticas":  0,
+                     "testesAutomaticos":  0
+                 }
+}

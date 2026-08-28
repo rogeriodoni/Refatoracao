@@ -1,0 +1,16 @@
+﻿Both files are intact. FASE 12 is fully implemented. Here's a summary of everything that was done:
+
+**FormProduto.prg** (7848 lines, +~900 lines from previous session + edits this session):
+- `cursor_4c_GradFase` now includes `obs M` column (3 places: init, CarregarFaseP, fallback)
+- `CarregarFaseP()` SELECTs `obs` from `SigCdPrf`
+- `GrdFaseBeforeRowColChange()` ÔÇö new PUBLIC handler that flushes `edt_4c_Obs` ÔåÆ cursor before row navigation
+- `GrdFaseAfterRowColChange()` ÔÇö now reads obs from cursor (not SQL), only queries SQL for `figprocs` (binary image)
+- `BtnInserirFaseClick` / `BtnAlternativaFaseClick` ÔÇö INSERT includes `obs`
+- `FormParaBO()` ÔÇö flushes current editbox obs to cursor before save
+- BINDEVENT for `BeforeRowColChange` wired to `GrdFaseBeforeRowColChange`
+
+**ProdutoBO.prg** (1204 lines, +~120 lines):
+- `SalvarFaseP()` ÔÇö new PROTECTED method: UPDATE existing SigCdPrf rows (preserving `figprocs` binary), INSERT new rows, DELETE removed rows; simple DELETE+INSERT for `sigprmtz`
+- `Inserir()` ÔÇö calls `THIS.SalvarFaseP()` after successful INSERT
+- `Atualizar()` ÔÇö calls `THIS.SalvarFaseP()` after successful UPDATE  
+- `ExecutarExclusao()` ÔÇö also cleans `SigCdPrf` and `sigprmtz` before deleting `SigCdPro`

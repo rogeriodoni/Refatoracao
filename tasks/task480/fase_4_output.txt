@@ -1,0 +1,15 @@
+﻿Arquivo correto e completo. Resumo do que foi adicionado na **Fase 4/8**:
+
+**ConfigurarPaginaLista() ÔÇö reescrita completa:**
+- 5 bot├Áes em `cnt_4c_Botoes` (Incluir/Visualizar/Alterar/Excluir/Buscar ÔÇö Left 5/80/155/230/305)
+- `cmd_4c_Encerrar` em `cnt_4c_Saida` (Left=917, can├┤nico)
+- `grd_4c_Lista` com 2 colunas (cods width=90, descs width=337), `RecordSource`/`ColumnCount` definidos antes do `WITH` (Problema 36)
+- 6 `BINDEVENT` para todos os bot├Áes ÔåÆ handlers `PUBLIC`
+
+**Novos m├®todos adicionados:**
+- `AlternarPagina()` ÔÇö alterna page + recarga da lista (PROTECTED)
+- `CarregarLista()` ÔÇö guarda `gb_4c_ValidandoUI`, seta RecordSource, redefine headers p├│s-RecordSource (Problema 32)
+- `BtnIncluirClick/BtnVisualizarClick/BtnAlterarClick/BtnExcluirClick/BtnBuscarClick/BtnEncerrarClick` ÔÇö todos PUBLIC sem PROTECTED
+- `LimparCampos/HabilitarCampos/BOParaForm/FormParaBO` ÔÇö usando `this_cCods`/`this_cDescs` do OCSBO (confirmados no BO)
+
+**Regras cr├¡ticas respeitadas:** nenhum `RETURN` dentro de `TRY/CATCH`; `MsgConfirma()` usado como l├│gico (`IF !loc_lConfirma`); ├¡cones corretos da tabela can├┤nica; sem `.Themes` em Container.

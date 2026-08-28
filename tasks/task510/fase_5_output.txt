@@ -1,0 +1,22 @@
+﻿A implementa├º├úo da Fase 5/8 est├í completa e correta. Aqui est├í o resumo do que foi feito:
+
+**`ConfigurarPaginaDados()` expandida com:**
+- `cmd_4c_Confirmar` + `cmd_4c_Cancelar` dentro de `cnt_4c_BotoesAcao` (icone correto `cadastro_salvar_60.jpg`)
+- `lbl_4c_Codigo` (Top=115, Left=53) + `txt_4c_Codigo` (Top=111, Left=97, Width=80, MaxLength=10) com BINDEVENT LostFocus ÔåÆ `ValidarCodigo`
+- `lbl_4c_Descricao` (Top=115, Left=210) + `txt_4c_Descricao` (Top=111, Left=267, Width=150, MaxLength=30)
+- `lbl_4c_Municipios` (Top=157, Left=54, Width=189) ÔÇö primeiro label da se├º├úo de grids da Fase 6
+
+**8 novos m├®todos adicionados:**
+
+| M├®todo | Tipo | Fun├º├úo |
+|--------|------|--------|
+| `BtnSalvarClick` | PUBLIC | Valida (fora do TRY) ÔåÆ `FormParaBO()` ÔåÆ `Salvar()` ÔåÆ `AlternarPagina(1)` |
+| `BtnCancelarClick` | PUBLIC | `this_cModoAtual = "LISTA"` ÔåÆ `AlternarPagina(1)` |
+| `ValidarCodigo` | PUBLIC | Verifica duplicidade de c├│digo no modo INCLUIR |
+| `FormParaBO` | PROTECTED | Copia `txt_4c_Codigo/Descricao` ÔåÆ `this_oBusinessObject.this_cRegiaos/Descs` |
+| `BOParaForm` | PROTECTED | Copia BO ÔåÆ form + chama `BuscarMunicipios/Vendedores` (pr├®-carrega crMuni/crVend para Fase 6) |
+| `LimparCampos` | PROTECTED | Limpa campos + reinicializa crMuni/crVend vazios via BO |
+| `HabilitarCampos` | PROTECTED | ReadOnly por modo (c├│digo bloqueado no ALTERAR); guards PEMSTATUS para controles da Fase 6 |
+| `AjustarBotoesPorModo` | PROTECTED | Confirmar disabled no VISUALIZAR; Cancelar sempre enabled |
+
+Os m├®todos `BtnIncluirClick`, `BtnVisualizarClick` e `BtnAlterarClick` (da Fase 4) j├í tinham guards `PEMSTATUS` para esses m├®todos ÔÇö agora que existem, ser├úo sempre invocados corretamente.

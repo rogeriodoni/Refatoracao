@@ -1,0 +1,14 @@
+﻿O arquivo est├í correto. A Fase 5 est├í conclu├¡da com ├¬xito.
+
+**O que foi implementado:**
+
+1. **InicializarForm()** ÔÇö adicionado carregamento de `cursor_4c_Nivel` (SigCdOpe) com guard `gb_4c_ValidandoUI`, necess├írio para o lookup de MovAutDop.
+
+2. **ConfigurarPaginaDados()** ÔÇö substitu├¡do o esqueleto vazio pela implementa├º├úo completa dos primeiros 50%:
+   - **cnt_4c_BotoesAcao** com bot├Áes `cmd_4c_Confirmar` (cadastro_salvar_60.jpg) e `cmd_4c_Cancelar`, ambos com BINDEVENT
+   - **Row 1** (Top original + 29 = 57ÔÇô61): `txt_4c_Codigos` (num├®rico, InputMask="999"), `txt_4c_Grupos`, `txt_4c_Agrupas` (InputMask="!!!!!!!!!!"), `txt_4c_MovAutDop` com BINDEVENT LostFocus
+   - **Row 2** (Top original + 29 = 85): `edt_4c_Observas` (EditBox/memo 179px de altura)
+
+3. **ValidarMovAutDop()** ÔÇö m├®todo PUBLIC para BINDEVENT que: verifica modo INCLUIR/ALTERAR, cria cursor filtrado de `cursor_4c_Nivel`, faz LOCATE, e abre `FormBuscaAuxiliar` (Modo 2 - cursor local) se n├úo encontrado.
+
+**Fase 6** adicionar├í a segunda metade: Row 3 (Descri├º├úo), Row 4 (PagaComiss├úo + Classifica├º├úo) e o Container1 com os labels de comandos especiais.

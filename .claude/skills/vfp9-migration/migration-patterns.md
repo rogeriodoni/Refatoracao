@@ -8456,3 +8456,163 @@ ENDPROC
 - Origem: Erro132 (2026-08-21, FormCliente — botoes CRUD saltavam para IrParaDados sem re-validar Grupo)
 
 
+## 174. ValidarPreAcao — textbox de filtro eh fonte UNICA; wrapper ChamarMLeDadosSeguro para clsconta.mLeDados (Erro136 FormCliente 2026-08-25)
+
+**Complemento critico do Pattern #173.** Duas regras acopladas que aparecem juntas em forms wrapper (clsconta/clstitulo/etc):
+
+### Regra 1: textbox como fonte UNICA em ValidarPreAcao
+
+Quando o filtro de grupo esta visivel na tela (form em Lista ou aberto pelo menu com filtros CRUD visiveis), ler o textbox `txt_4c_FiltroGrupo` diretamente. **NUNCA fazer fallback silencioso** para propriedade `THIS.this_cGrupo` — a property guarda estado ANTIGO (ex: grupo padrao carregado no Init) e mascara a intencao do usuario ao limpar intencionalmente o campo antes de clicar Incluir.
+
+**Cenario do bug**: usuario abre form, grupo vem pre-preenchido com "11201" (auto-populado do `crSigCdPam.GrPadClis`). Usuario limpa o textbox intencionalmente e clica Incluir. `ValidarPreAcao` le textbox vazio, cai no fallback `THIS.this_cGrupo` (ainda "11201        " em memoria), valida OK, e o INSERT roda no grupo antigo — silenciosamente, sem msg ao usuario.
+
+**Fix (canonico)**: `ValidarPreAcao` detecta se o textbox de filtro existe. Se existir E estiver vazio, mostra msg de obrigatoriedade + `SetFocus` + `RETURN .F.`. Se existir mas o valor nao esta no `crSigCdGcr`, mostra msg de "Grupo Invalido" + SetFocus + RETURN .F. Fallback para propriedade/`GrPadClis` SO permitido quando o textbox nao existe (form aberto via Init parameter, sem UI de filtro).
+
+```foxpro
+PROTECTED FUNCTION ValidarPreAcao(par_cAcao)
+    LOCAL loc_cGrupo, loc_cAcao, loc_oFiltros, loc_lTemTxt
+    loc_cAcao = UPPER(IIF(TYPE("par_cAcao") = "C", ALLTRIM(par_cAcao), ""))
+    loc_cGrupo   = ""
+    loc_lTemTxt  = .F.
+    loc_oFiltros = .NULL.
+
+    *-- Fonte UNICA: textbox de filtro do usuario (sem fallback silencioso para
+    *-- this_cGrupo, que mascarava a intencao do usuario ao esvaziar o campo).
+    IF PEMSTATUS(THIS, "cnt_4c_ViewLista", 5) AND ;
+       PEMSTATUS(THIS.cnt_4c_ViewLista, "cnt_4c_ListaFiltros", 5) AND ;
+       PEMSTATUS(THIS.cnt_4c_ViewLista.cnt_4c_ListaFiltros, "txt_4c_FiltroGrupo", 5)
+        loc_oFiltros = THIS.cnt_4c_ViewLista.cnt_4c_ListaFiltros
+        loc_lTemTxt  = .T.
+        loc_cGrupo   = ALLTRIM(NVL(loc_oFiltros.txt_4c_FiltroGrupo.Value, ""))
+    ENDIF
+
+    *-- Textbox vazio: msg de obrigatoriedade + foco no campo, bloqueia acao
+    IF loc_lTemTxt AND EMPTY(loc_cGrupo)
+        MsgAviso("Grupo Obrigat" + CHR(243) + "rio. Preencha o Grupo de Contas antes de prosseguir.", ;
+            "Aten" + CHR(231) + CHR(227) + "o")
+        loc_oFiltros.txt_4c_FiltroGrupo.SetFocus()
+        RETURN .F.
+    ENDIF
+
+    *-- Sem textbox visivel (form aberto por programa via par_cGrupo):
+    *-- usa this_cGrupo como fonte, com fallback para GrPadClis do sistema.
+    IF !loc_lTemTxt
+        loc_cGrupo = ALLTRIM(THIS.this_cGrupo)
+        IF EMPTY(loc_cGrupo) AND USED("crSigCdPam") AND RECCOUNT("crSigCdPam") > 0
+            SELECT crSigCdPam
+            LOCATE
+            IF !EOF("crSigCdPam")
+                loc_cGrupo = ALLTRIM(NVL(crSigCdPam.GrPadClis, ""))
+            ENDIF
+        ENDIF
+    ENDIF
+
+    *-- Validacoes downstream (crSigCdPam populado, crSigCdGcr populado, grupo existe)
+    IF EMPTY(loc_cGrupo)
+        MsgAviso("Grupo Obrigat" + CHR(243) + "rio. Preencha o Grupo de Contas antes de prosseguir.", ;
+            "Aten" + CHR(231) + CHR(227) + "o")
+        RETURN .F.
+    ENDIF
+    SELECT crSigCdGcr
+    LOCATE FOR ALLTRIM(Codigos) == ALLTRIM(loc_cGrupo)
+    IF EOF("crSigCdGcr")
+        MsgAviso("Grupo Inv" + CHR(225) + "lido: [" + loc_cGrupo + "] n" + CHR(227) + "o cadastrado.", ;
+            "Aten" + CHR(231) + CHR(227) + "o")
+        IF loc_lTemTxt
+            loc_oFiltros.txt_4c_FiltroGrupo.SetFocus()
+        ENDIF
+        RETURN .F.
+    ENDIF
+    IF loc_cAcao <> "VISUALIZAR"
+        IF !fChecaAcesso("SIGCDCTA", "ALTERAR")
+            MsgAviso("Usu" + CHR(225) + "rio N" + CHR(227) + "o Possui Acesso p/ Incluir / Alterar Dados de Clientes.")
+            RETURN .F.
+        ENDIF
+    ENDIF
+    THIS.this_cGrupo = PADR(loc_cGrupo, 10)
+    RETURN .T.
+ENDFUNC
+```
+
+### Regra 2: wrapper `ChamarMLeDadosSeguro` para clsconta.mLeDados
+
+O legado `clsconta.mLeDados` (`classresp.vcx`, linha 895) faz:
+```
+If Empty(lcGrupo) And (ThisForm.pcEscolha <> 'PROCURAR')
+    = MessageBox('Grupo Invalido.', 0+48, 'Atencao!!!')
+    Return (.f.)
+EndIf
+```
+
+Ou seja: quando grupo passado esta vazio E `pcEscolha` NAO eh 'PROCURAR', o clsconta dispara MessageBox nativo (fora do sistema de mensagens do projeto novo, e nao suprimivel em teste automatizado).
+
+**Fix**: TODAS chamadas a `THIS.cnt_4c_Conta.mLeDados(...)` devem passar por um wrapper que ative o gate silencioso quando apropriado. Se grupo E cli forem ambos vazios, o wrapper salva `THIS.pcEscolha`, seta em `"PROCURAR"` (dispara o `RETURN .F.` silencioso do clsconta ao inves do MessageBox), chama mLeDados, restaura pcEscolha.
+
+```foxpro
+PROTECTED FUNCTION ChamarMLeDadosSeguro(par_cGrupo, par_cCli, par_cTpCadCli, par_cTpBloqCar, par_cMudaCpfCgc)
+    LOCAL loc_cGrupo, loc_cCli, loc_cEscolhaSalva, loc_lRet, loc_lRestaurar
+    loc_cGrupo = ALLTRIM(IIF(TYPE("par_cGrupo") = "C", par_cGrupo, ""))
+    loc_cCli   = ALLTRIM(IIF(TYPE("par_cCli")   = "C", par_cCli,   ""))
+
+    *-- Fallback #1: resolver grupo do parametro sistema (crSigCdPam.GrPadClis)
+    IF EMPTY(loc_cGrupo) AND USED("crSigCdPam") AND RECCOUNT("crSigCdPam") > 0
+        SELECT crSigCdPam
+        LOCATE
+        IF !EOF("crSigCdPam")
+            loc_cGrupo = ALLTRIM(NVL(crSigCdPam.GrPadClis, ""))
+        ENDIF
+    ENDIF
+
+    *-- Fallback #2: se grupo E cli vazios, gate silencioso via pcEscolha=PROCURAR
+    loc_lRestaurar    = .F.
+    loc_cEscolhaSalva = ""
+    IF EMPTY(loc_cGrupo) AND EMPTY(loc_cCli)
+        loc_cEscolhaSalva = THIS.pcEscolha
+        THIS.pcEscolha    = "PROCURAR"
+        loc_lRestaurar    = .T.
+    ENDIF
+
+    loc_lRet = THIS.cnt_4c_Conta.mLeDados( ;
+        IIF(EMPTY(loc_cGrupo), par_cGrupo, PADR(loc_cGrupo, 10)), ;
+        par_cCli, par_cTpCadCli, par_cTpBloqCar, par_cMudaCpfCgc)
+
+    IF loc_lRestaurar
+        THIS.pcEscolha = loc_cEscolhaSalva
+    ENDIF
+
+    RETURN loc_lRet
+ENDFUNC
+```
+
+**Substituir TODAS as chamadas** a `THIS.cnt_4c_Conta.mLeDados(...)` no form por `THIS.ChamarMLeDadosSeguro(...)` (mesma assinatura). No FormCliente.prg foram 5 chamadas: linha 238 (InicializarForm), 2425 (BtnIncluirClick), 2477 (BtnAlterarClick), 2530 (BtnVisualizarClick), 2613 (CarregarLista). A chamada real ao `mLeDados` fica APENAS dentro do wrapper (linha 2077).
+
+### Sinais de detecao
+
+**ANTI-PADRAO em ValidarPreAcao** (fallback silencioso):
+```foxpro
+loc_cGrupo = ""
+IF ... txt_filtro exists ...
+    loc_cGrupo = ALLTRIM(THIS...txt_filtro.Value)
+ENDIF
+IF EMPTY(loc_cGrupo)
+    loc_cGrupo = ALLTRIM(THIS.this_cGrupo)   && <-- FALLBACK SILENCIOSO
+ENDIF
+IF EMPTY(loc_cGrupo) AND USED("crSigCdPam") ...
+    loc_cGrupo = ALLTRIM(crSigCdPam.GrPadClis)
+ENDIF
+```
+
+**ANTI-PADRAO em chamadas a mLeDados** (sem wrapper):
+```foxpro
+loc_lRet = THIS.cnt_4c_Conta.mLeDados(THIS.this_cGrupo, THIS.this_cCli, "1", ...)
+```
+
+### Referencias
+
+- Ref canonico (ValidarPreAcao): `C:\4c\projeto\app\forms\operacionais\FormCliente.prg:1993-2054`
+- Ref canonico (ChamarMLeDadosSeguro): `C:\4c\projeto\app\forms\operacionais\FormCliente.prg:2054-2088`
+- Legado que originou a msg silenciosa: `classresp.vcx` -> `clsconta.mLeDados` linha 895 (dump em `C:\4c\Framework\classresp.vcx`)
+- Complementa Pattern #173 (Btn CRUD sempre chamando ValidarPreAcao)
+- Origem: Erro136 (2026-08-25, FormCliente — user limpa Grupo, clica Incluir, prossegue sem msg gravando registro no grupo antigo em memoria)
+
+

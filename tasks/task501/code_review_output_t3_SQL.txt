@@ -1,0 +1,22 @@
+﻿All three instances of `WHERE codigos` in `prcBO.prg` are standard PK-based CRUD operations ÔÇö not invented filter conditions:
+
+| M├®todo | Uso | Linha |
+|--------|-----|-------|
+| `CarregarPorCodigo` | `SELECT FROM SigPcOoP WHERE codigos = par_nCodigos` | 111 |
+| `Atualizar` | `UPDATE SigPcOoP ... WHERE codigos = THIS.this_nCodigos` | 229 |
+| `ExecutarExclusao` | `DELETE FROM SigPcOoP WHERE codigos = THIS.this_nCodigos` | 275 |
+
+**Por que o detector disparou (falso positivo):**
+
+O legado original usava `lcQryCopOp = 'Select * From SigPcOop'` (sem WHERE) para carregamento em bloco, e depois `poDataMgr.Update('crSigPcOop')` para persistir mudan├ºas. O DataMgr do Fortyus gerava o `WHERE codigos = X` internamente ÔÇö n├úo aparece expl├¡cito no c├│digo legado mostrado ao checker.
+
+Os `WHERE codigos` exibidos no c├│digo migrado s├úo a tradu├º├úo correta dessas opera├º├Áes impl├¡citas do DataMgr para SQL Server expl├¡cito.
+
+**Por que N├âO devem ser removidos:**
+
+- Remover `WHERE codigos` do `UPDATE` atualizaria **todos** os registros de SigPcOoP ÔÇö cat├ístrofe
+- Remover do `DELETE` apagaria **todos** os registros ÔÇö idem
+- Remover do `CarregarPorCodigo` traria todos os registros em vez de um espec├¡fico
+- O CLAUDE.md pro├¡be: *"NUNCA alterar logica de negocio"* e *"NAO remover campos, funcionalidades ou lookups"*
+
+**Conclus├úo:** Detec├º├úo ├® **falso positivo**. O pass SQL-FILTRO-INVENTADO n├úo se aplica aqui ÔÇö os tr├¬s `WHERE codigos` s├úo lookups por PK necess├írios e corretos. Nenhuma altera├º├úo foi feita.

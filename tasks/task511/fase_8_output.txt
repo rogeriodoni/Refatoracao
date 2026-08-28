@@ -1,0 +1,12 @@
+﻿Tudo correto. Resumo da Fase 8 conclu├¡da:
+
+**Corre├º├Áes aplicadas:**
+
+1. **`BtnSalvarClick` (Formrgr.prg:1203)** ÔÇö substitu├¡do `Inserir()`/`Atualizar()` (PROTECTED, inacess├¡veis do Form) por `Salvar()` (PUBLIC do BusinessBase), que usa internamente `this_lNovoRegistro` configurado via `NovoRegistro()`/`EditarRegistro()`.
+
+2. **`menu.prg`** ÔÇö adicionados:
+   - `DEFINE BAR 163 OF popCadastros` com "Regras de E-Commerce"
+   - `ON SELECTION BAR 163 OF popCadastros DO AbrirFormrgr`
+   - `PROCEDURE AbrirFormrgr()` no final (padr├úo can├┤nico: `VARTYPE`, `Show()` sem par├ómetro, sem `Release()`)
+
+**Sem altera├º├Áes em config.prg** ÔÇö o ADIR j├í carrega automaticamente `*BO.prg` de `classes\` e `Form*.prg` de `forms\cadastros\`, ent├úo `rgrBO.prg` e `Formrgr.prg` s├úo detectados sem configura├º├úo manual.

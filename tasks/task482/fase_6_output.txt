@@ -1,0 +1,13 @@
+﻿Fase 6 conclu├¡da. As altera├º├Áes em `FormOpd.prg` foram:
+
+**BINDEVENTs adicionados em `ConfigurarPaginaDados()`:**
+- `txt_4c_Nopes` ÔåÆ `KeyPress` ÔåÆ `NopesKeyPress` + `DblClick` ÔåÆ `NopesDblClick`
+- `txt_4c_Dopes` ÔåÆ `KeyPress` ÔåÆ `DopesKeyPress` + `DblClick` ÔåÆ `DopesDblClick`
+
+**4 m├®todos handler adicionados (PUBLIC, com LPARAMETERS para KeyPress):**
+- `NopesKeyPress(par_nKeyCode, par_nShiftAltCtrl)` ÔÇö F4 (keyCode 28) abre `AbrirBuscaNopes()`
+- `NopesDblClick()` ÔÇö abre `AbrirBuscaNopes()`
+- `DopesKeyPress(par_nKeyCode, par_nShiftAltCtrl)` ÔÇö F4 abre `AbrirBuscaDopes()`
+- `DopesDblClick()` ÔÇö abre `AbrirBuscaDopes()`
+
+Todos os handlers verificam `.ReadOnly` antes de abrir o picker, evitando lookup em modo VISUALIZAR.

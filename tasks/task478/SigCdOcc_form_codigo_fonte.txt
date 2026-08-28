@@ -1,0 +1,339 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigCdOcc.SCX
+* Data/Hora: 22/08/2026 01:51:06
+* Total de registros: 8
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDOCC
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGCDOCC.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGCDOCC.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_cdescr
+  Parent: SIGCDOCC.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_ncodigo
+  Parent: SIGCDOCC.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDOCC
+------------------------------------------------------------
+  DataSession = 2
+  Height = 600
+  Width = 1000
+  DoCreate = .T.
+  Caption = "Ocorrências de Correção"
+  Name = "SIGCDOCC"
+  Pagina.ErasePage = .T.
+  Pagina.Lista.cntSombra.lblSombra.Name = "lblSombra"
+  Pagina.Lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  Pagina.Lista.cntSombra.Top = 1
+  Pagina.Lista.cntSombra.Left = -1
+  Pagina.Lista.cntSombra.Width = 1008
+  Pagina.Lista.cntSombra.Height = 80
+  Pagina.Lista.cntSombra.Name = "cntSombra"
+  Pagina.Lista.Grade.FontName = "Tahoma"
+  Pagina.Lista.Grade.Height = 470
+  Pagina.Lista.Grade.Left = 12
+  Pagina.Lista.Grade.Top = 121
+  Pagina.Lista.Grade.Width = 971
+  Pagina.Lista.Grade.ForeColor = 0,0,0
+  Pagina.Lista.Grade.GridLineColor = 238,238,238
+  Pagina.Lista.Grade.Name = "Grade"
+  Pagina.Lista.Grupo_op.AutoSize = .T.
+  Pagina.Lista.Grupo_op.Inserir.Top = 5
+  Pagina.Lista.Grupo_op.Inserir.Left = 5
+  Pagina.Lista.Grupo_op.Inserir.Name = "Inserir"
+  Pagina.Lista.Grupo_op.Consultar.Top = 5
+  Pagina.Lista.Grupo_op.Consultar.Left = 80
+  Pagina.Lista.Grupo_op.Consultar.Name = "Consultar"
+  Pagina.Lista.Grupo_op.Alterar.Top = 5
+  Pagina.Lista.Grupo_op.Alterar.Left = 155
+  Pagina.Lista.Grupo_op.Alterar.Name = "Alterar"
+  Pagina.Lista.Grupo_op.Excluir.Top = 5
+  Pagina.Lista.Grupo_op.Excluir.Left = 230
+  Pagina.Lista.Grupo_op.Excluir.Name = "Excluir"
+  Pagina.Lista.Grupo_op.procurar.Top = 5
+  Pagina.Lista.Grupo_op.procurar.Left = 305
+  Pagina.Lista.Grupo_op.procurar.Name = "procurar"
+  Pagina.Lista.Grupo_op.Height = 85
+  Pagina.Lista.Grupo_op.Left = 544
+  Pagina.Lista.Grupo_op.Top = -1
+  Pagina.Lista.Grupo_op.Width = 385
+  Pagina.Lista.Grupo_op.Name = "Grupo_op"
+  Pagina.Lista.Grupo_Saida.Sair.Top = 5
+  Pagina.Lista.Grupo_Saida.Sair.Left = 5
+  Pagina.Lista.Grupo_Saida.Sair.Name = "Sair"
+  Pagina.Lista.Grupo_Saida.Left = 919
+  Pagina.Lista.Grupo_Saida.Top = -1
+  Pagina.Lista.Grupo_Saida.Name = "Grupo_Saida"
+  Pagina.Lista.cntFiltros.Top = 95
+  Pagina.Lista.cntFiltros.Left = 851
+  Pagina.Lista.cntFiltros.Name = "cntFiltros"
+  Pagina.Lista.Picture = ..\framework\imagens\new_background.jpg
+  Pagina.Lista.Name = "Lista"
+  Pagina.Dados.Grupo_Salva.AutoSize = .T.
+  Pagina.Dados.Grupo_Salva.Salva.Top = 5
+  Pagina.Dados.Grupo_Salva.Salva.Left = 5
+  Pagina.Dados.Grupo_Salva.Salva.Name = "Salva"
+  Pagina.Dados.Grupo_Salva.Cancelar.Top = 5
+  Pagina.Dados.Grupo_Salva.Cancelar.Left = 81
+  Pagina.Dados.Grupo_Salva.Cancelar.Name = "Cancelar"
+  Pagina.Dados.Grupo_Salva.Height = 85
+  Pagina.Dados.Grupo_Salva.Left = 836
+  Pagina.Dados.Grupo_Salva.Top = -5
+  Pagina.Dados.Grupo_Salva.Width = 161
+  Pagina.Dados.Grupo_Salva.TabIndex = 3
+  Pagina.Dados.Grupo_Salva.ZOrderSet = 1
+  Pagina.Dados.Grupo_Salva.Name = "Grupo_Salva"
+  Pagina.Dados.Picture = ..\framework\imagens\new_background.jpg
+  Pagina.Dados.Name = "Dados"
+  Pagina.Width = 1003
+  Pagina.Name = "Pagina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDOCC.Pagina.Dados.Say1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Código : "
+  Left = 311
+  Top = 140
+  TabIndex = 4
+  ForeColor = 90,90,90
+  ZOrderSet = 2
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDOCC.Pagina.Dados.Say2
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Descrição : "
+  Left = 298
+  Top = 166
+  TabIndex = 5
+  ForeColor = 90,90,90
+  ZOrderSet = 3
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDOCC.Pagina.Dados.Get_cdescr
+------------------------------------------------------------
+  ControlSource = "crSigCcOco.cdescrs"
+  Left = 359
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 163
+  Width = 220
+  ForeColor = 0,0,0
+  ZOrderSet = 5
+  Name = "Get_cdescr"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDOCC.Pagina.Dados.Get_ncodigo
+------------------------------------------------------------
+  ControlSource = "crSigCcOco.ncodigos"
+  InputMask = "999"
+  Left = 359
+  SpecialEffect = 1
+  TabIndex = 1
+  Top = 137
+  Width = 31
+  ForeColor = 0,0,0
+  ZOrderSet = 4
+  plprocurar = .T.
+  Name = "Get_ncodigo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDOCC
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LPARAMETERS lcacesso
+
+With ThisForm
+	.poDatamgr = CreateObject('fSqlConector')
+	With .poDatamgr
+		.AddCursor('SigCcOco','ncodigos','crSigCcOco','',ThisForm.pagina.lista.grade)
+		.pfSqlTabela(1).pColuna('ncodigos','','','Código',80,.t.)
+		.pfSqlTabela(1).pColuna('cdescrs','','','Descrição',200,.t.)
+		.AddCursor('SigNfCor','noccors','crSigNfCor','','')
+	EndWith
+	= DoDefault()
+	.LockScreen = .f.
+EndWith
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_procurar
+------------------------------------------------------------
+PROCEDURE msv_procurar
+Local lcBusca
+
+If .Not.IsEmpty(Thisform.Pagina.Dados.Get_ncodigo.value)
+	ThisForm.poDataMgr.LocateCursor('crSigCcOco','ncodigos',Thisform.Pagina.Dados.Get_ncodigo.value)
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Lista.Grupo_op.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Lista.Grupo_op.Click
+LPARAMETERS opcao
+If Type( 'Opcao' ) = 'N'
+	This.Value = Opcao
+Endif
+If This.Value=4
+	If ThisForm.poDataMgr.ChkRegister('SigNfCor','noccors',ThisForm.Pagina.Dados.Get_nCodigo.Value)
+		Messagebox( 'Ocorrência com Movimentação, Exclusão Inválida !', 48, '' )
+		ThisForm.Pagina.Dados.Grupo_Salva.Cancelar.SetFocus
+		Return
+	Endif
+Endif
+
+Select CrSigCcOco
+If !dodefault( Opcao )
+	ThisForm.mAtivapagina1
+	Return
+Endif
+If Inlist(Thisform.pcEscolha,'INSERIR','PROCURAR')
+	Thisform.Pagina.Dados.Get_ncodigo.SetFocus
+Endif
+If Thisform.pcEscolha='ALTERAR'
+	Thisform.Pagina.DAdos.Get_cdescr.SetFocus
+Endif
+If Inlist(Thisform.pcEscolha,'CONSULTAR','EXCLUIR')
+	Thisform.Pagina.Dados.Grupo_Salva.Salva.SetFocus
+Endif
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+If Thisform.pcEscolha='INSERIR'
+	If IsEmpty(Thisform.Pagina.Dados.Get_NCodigo.Value)
+		Messagebox('Código Inválido !!',0+48,'')
+		Thisform.Pagina.Dados.Get_NCodigo.SetFocus
+		Return
+	Endif
+	
+	If ThisForm.poDataMgr.ChkRegister('SigCcOco','ncodigos',ThisForm.Pagina.Dados.Get_Ncodigo.Value)
+		Messagebox( 'Código já Cadastrado !!', 48, '' )
+		ThisForm.Pagina.Dados.Get_Ncodigo.SetFocus
+		Return
+	Endif
+Endif
+If Inlist(Thisform.pcEscolha,'INSERIR','ALTERAR')
+	If IsEmpty(Thisform.Pagina.Dados.Get_cDescr.Value)
+		Messagebox('Descrição Inválida !!',0+48,'')
+		Thisform.Pagina.Dados.Get_cDescr.SetFocus
+		Return
+	Endif	
+Endif
+=DoDefault()
+
+ThisForm.Refresh
+Thisform.mAtivapagina1
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+=DoDefault()
+
+If ThisForm.plCancelar
+	ThisForm.mAtivapagina1
+Endif
+
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 5
+================================================================================

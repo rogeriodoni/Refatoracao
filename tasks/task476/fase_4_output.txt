@@ -1,0 +1,9 @@
+﻿Todas as edits foram aplicadas corretamente. Resumo do que foi feito na Fase 4:
+
+**`ObsBO.prg`**: SQL de `Buscar()` agora retorna coluna computada `PgComissao` via `CASE WHEN Comiss = 2 THEN 'NAO' ELSE 'SIM' END` ÔÇö sem depender de ALTER TABLE em cursor remoto.
+
+**`FormObs.prg`** ÔÇö 4 mudan├ºas:
+1. **`InicializarForm()`**: adicionado guard `IF TYPE("gb_4c_ValidandoUI") != "L" OR !gb_4c_ValidandoUI` antes de `CarregarLista()` (Problema 4 do FORMCOR_LICOES)
+2. **`ConfigurarPaginaLista()`**: substitu├¡do completamente ÔÇö 5 bot├Áes CRUD adicionados a `cnt_4c_Botoes` (Incluir/Visualizar/Alterar/Excluir/Buscar, todos com FontName="Comic Sans MS"), grid `grd_4c_Lista` com 5 colunas (ColumnCount fora do WITH per Problema 36)
+3. **`CarregarLista()`**: novo m├®todo ÔÇö chama `Buscar("")`, seta RecordSource/ColumnCount fora de WITH, redefine ControlSource e Headers ap├│s RecordSource (Problemas 48 e 32)
+4. **`AlternarPagina(par_nPagina)`**: novo m├®todo ÔÇö alterna PageFrame, restaura ModoAtual="LISTA" e recarrega dados ao voltar para Page1

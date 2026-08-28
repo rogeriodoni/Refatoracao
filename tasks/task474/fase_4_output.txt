@@ -1,0 +1,17 @@
+﻿O arquivo est├í correto. Fase 4 completa. Resumo do que foi adicionado/modificado:
+
+**ConfigurarPaginaLista()** ÔÇö agora inclui:
+- 5 bot├Áes CRUD dentro de `cnt_4c_Botoes` (Incluir, Visualizar, Alterar, Excluir, Buscar) com ├¡cones, fontes Comic Sans MS, PicturePosition=13 e BINDEVENT para cada handler
+- Bot├úo `cmd_4c_Encerrar` dentro de `cnt_4c_Saida` (padr├úo can├┤nico: Left=917, Width=90)
+- Grid `grd_4c_Lista` (top=150, left=12, width=940, height=470, Verdana 8, GridLines=3, 2 colunas)
+
+**CarregarLista()** ÔÇö agora faz bind completo do grid ap├│s Buscar(): RecordSource, ControlSource das 2 colunas, Header1.Caption com acentos via CHR(), chama FormatarGridLista()
+
+**Novos m├®todos adicionados:**
+- `FormatarGridLista(par_oGrid)` ÔÇö SetAll Verdana/8 nas colunas
+- `BtnIncluirClick()` ÔÇö NovoRegistro() + modoAtual="INCLUIR" + AlternarPagina(2)
+- `BtnVisualizarClick()` ÔÇö l├¬ c├│digo do cursor + CarregarPorCodigo() + AlternarPagina(2)
+- `BtnAlterarClick()` ÔÇö l├¬ c├│digo + CarregarPorCodigo() + EditarRegistro() + AlternarPagina(2)
+- `BtnExcluirClick()` ÔÇö MsgConfirma() + Excluir() + CarregarLista()
+- `BtnBuscarClick()` ÔÇö INPUTBOX para filtro + Buscar(filtro) + re-bind grid
+- `BtnEncerrarClick()` ÔÇö Release()

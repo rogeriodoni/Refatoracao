@@ -1,0 +1,488 @@
+{
+  "resumo": {
+    "totalMetodos": 27,
+    "metodosComSQL": 10,
+    "metodosComValidacao": 10,
+    "totalQueries": 5,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fUniqueIds", "For", "For Empty", "fAcessoEmpresa"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDRCC",
+      "evento": "Procedure",
+      "linhas": 34,
+      "codigoOriginal": "Select csSigCdRci\nlnReg = Recno()\nGo Top\nCount For Marcas = 1 To lnQtde\nIf lnQtde > 0\n\tlnRat = Round(100/lnQtde,2)\n\tSelect csSigCdRci\n\tScan For Marcas = 1\n\t\tReplace PercRats With lnRat In csSigCdRci\n\tEndscan\nEndIf\nSelect csSigCdRci\nSum PercRats To lnPTotal\n\nIf lnPTotal > 100\n\tSelect csSigCdRci\n\tLocate for Marcas = 1\n\treplace PercRats With PercRats - (lnPTotal - 100) in csSigCdRci\n\tlnPTotal = 0\n\tSum PercRats To lnPTotal\nEndIf \n\nIf Not Empty(lnPTotal) And lnPTotal < 100\n\tSelect csSigCdRci\n\tLocate ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Refresh",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRCC",
+      "evento": "Init",
+      "linhas": 28,
+      "codigoOriginal": "Lparameters pAce, pTit\n\nWith Thisform\n\t.poDatamgr = Createobject('fSqlConector',Thisform.Name)\n\n\tIf Not .poDatamgr.pnIdconn > 0\n\t\tMessagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),'Erro')\n\t\tReturn(.F.)\n\tEndif\n\n\tlcDescRat = Space(20)\n\tlcSqlCdCri = [Select * From SigCdRci Where DescRats = ?lcDescRat]\n\n\tWith .poDatamgr\n\t\t.AddCursor('SigCdRcc','cidchaves','crSigCdRcc','',Thisform.pagina.lista.grade)\n\t\t.pfSqlTabela(1).pColuna('DescRats','','','Descrição',150,.T.)\n\t\t.pfSql... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRCC",
+      "evento": "Procedure",
+      "linhas": 31,
+      "codigoOriginal": "llOk = .t.\n\nlcDescRat = crSigCdRcc.DescRats\nIf (ThisForm.poDataMgr.SQLExecute([Delete From SigCdRcc Where DescRats = ?lcDescRat], '') < 1)\n\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (msv_excluir - 1)')\n\tllOk = .f.\nEndIf\n\nIf llOk\n\tIf (ThisForm.poDataMgr.SQLExecute([Delete From SigCdRci Where DescRats = ?lcDescRat], '') < 1)\n\t\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (msv_excluir - 2)')\n\t\tllOk = .f.\n\tEndIf\nEndIf\n\nIf llOk And Not Thisform.p... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SQLExecute,Update,Commit,Rollback",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDRCC",
+      "evento": "Procedure",
+      "linhas": 21,
+      "codigoOriginal": "llOk = .t.\n\nlcDescRat = crSigCdRcc.DescRats\nIf (ThisForm.poDataMgr.SQLExecute([Delete From SigCdRcc Where DescRats = ?lcDescRat], '') < 1)\n\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (msv_excluir - 1)')\n\tllOk = .f.\nEndIf\n\nIf llOk\n\tIf (ThisForm.poDataMgr.SQLExecute([Delete From SigCdRci Where DescRats = ?lcDescRat], '') < 1)\n\t\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (msv_excluir - 2)')\n\t\tllOk = .f.\n\tEndIf\nEndIf\n\nIf llOk\n\tThisForm.poDataMg... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SQLExecute,Commit,Rollback",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDRCC",
+      "evento": "Procedure",
+      "linhas": 17,
+      "codigoOriginal": "llOk = .t.\n\nIf Not Thisform.poDataMgr.Update('crSigCdRcc')\n\t=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update - crSigCdRcc )')\n\tllOks = .F.\nEndif\n\nIf llOk And Not Thisform.poDataMgr.Update('crSigCdRci')\n\t=Messagebox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update - crSigCdRci )')\n\tllOk = .F.\nEndif\nIf llOk\n\tThisForm.poDataMgr.Commit()\nElse\n\tThisform.poDataMgr.Rollback()\n\tReturn .F.\nEndif",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Update,Commit,Rollback",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDRCC",
+      "evento": "Click",
+      "linhas": 78,
+      "codigoOriginal": "LPARAMETERS opcao\n\n*** Mena - 30/03/2017 - prepara para duplicar ***\nlcDescRat = ''\nIF VARTYPE(opcao) = 'N' and opcao = 6\n\tlcDescRat = crSigCdRcc.DescRats\n\topcao = 1\nENDIF\n\t\nIf !Dodefault( OPCAO )\n\tThisForm.mAtivapagina1\n\tReturn\nEndif\n\nlcDescRat = IIF(EMPTY(lcDescRat),crSigCdRcc.DescRats,lcDescRat)\t&& mena 30/03/2017 - recupera descrição para duplicar\n*Thisform.podatamgr.Requery([crSigCdRci])\n\nThisform.pagina.dados.grdRateio.RecordSource = []\n\nlcQuery = [Select 0 as Marcas, Space(3) as Emps, a.g... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute,Requery,Refresh,CursorQuery,SetFocus",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRCC",
+      "evento": "Click",
+      "linhas": 55,
+      "codigoOriginal": "lcDescRat = thisform.pagina.dados.getDesc.value\n\nIf Inlist( ThisForm.pcEscolha,[INSERIR],[ALTERAR] )\n\tIf Inlist( ThisForm.pcEscolha,[INSERIR]) \n\t\tIf Empty(lcDescRat)\n\t\t\tMessagebox([Descrição de rateio obrigatório.],64,[Aviso])\n\t\t\tthisform.pagina.dados.getDesc.Setfocus()\n\t\t\tReturn .f.\n\t\tEndif\n\t\tIf ThisForm.podatamgr.ChkRegister('SigCdRcc', 'DescRats', lcDescRat)\n\t\t\tMessagebox([Descrição de rateio já cadastrada.],64,[Aviso])\n\t\t\tthisform.pagina.dados.getDesc.Setfocus()\n\t\t\tReturn .f.\n\t\tEndif\n\t\t\n\t\tRe... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fUniqueIds,For,For Empty",
+        "metodosFormChamados": "Setfocus,ChkRegister",
+        "controlesReferenciados": "ChkRegister('SigCdRcc'",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDRCC",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "DoDefault()\nIf thisform.plCancelar\n\tthisform.mAtivapagina1\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRCC.Pagina.Lista.cmdDuplicar",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "thisform.pagina.lista.grupo_Op.Click(6)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Click",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRCC.Pagina.Dados.getDesc",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return(thisform.pcEscolha $ 'INSERIR/PROCURAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRCC.Pagina.Dados.GetEmpresa",
+      "evento": "Valid",
+      "linhas": 2,
+      "codigoOriginal": "=fAcessoEmpresa(Usuar, 'C', This.Value, This, This.Parent.getDEmpresa)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRCC.Pagina.Dados.GetDempresa",
+      "evento": "Valid",
+      "linhas": 2,
+      "codigoOriginal": "=fAcessoEmpresa(Usuar, 'D', This.Value, This.Parent.getEmpresa, This)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRCC.Pagina.Dados.GetDempresa",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(This.Parent.getEmpresa.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRCC.Pagina.Dados.getPTotal",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDRCC.Pagina.Dados.grdRateio.Column1.Text1",
+      "evento": "Valid",
+      "linhas": 2,
+      "codigoOriginal": "=fAcessoEmpresa(Usuar, 'C', This.Value, This, '')\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRCC.Pagina.Dados.grdRateio.Column1.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR') And Marcas = 1)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRCC.Pagina.Dados.grdRateio.Column5.Text1",
+      "evento": "Valid",
+      "linhas": 11,
+      "codigoOriginal": "If !Empty(this.Value)\n\tThis.value = Iif(This.Value < 0,0,This.Value)\nEndif\n\nSelect csSigCdRci\nlnReg = Recno()\nGo top\nSum PercRats To lnPTotal\nGo lnReg\nThisform.pagina.dados.getPTotal.Value = lnPTotal\nThisform.pagina.dados.getPTotal.Refresh()",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Refresh",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRCC.Pagina.Dados.grdRateio.Column5.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR') And Marcas = 1)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRCC.Pagina.Dados.grdRateio.Column6.Check1",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "NoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRCC.Pagina.Dados.grdRateio.Column6.Check1",
+      "evento": "KeyPress",
+      "linhas": 11,
+      "codigoOriginal": "LParameters nKeyCode, nShiftAltCtrl\n\nIf InList(m.nKeyCode,13,32)\n\tReplace csSigCdRci.Marcas With IIf(csSigCdRci.Marcas == 0,1,0)\t\n\tIf csSigCdRci.Marcas = 0\n\t\tReplace PercRats With 0\n\tEndIf \t\n\tThisForm.Calcularateioauto()\n\tThis.parent.parent.parent.grdRateio.Refresh\n\tNoDefault\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Calcularateioauto",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRCC.Pagina.Dados.grdRateio.Column6.Check1",
+      "evento": "Procedure",
+      "linhas": 3,
+      "codigoOriginal": "LParameters nButton, nShift, nXCoord, nYCoord\n\nNoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRCC.Pagina.Dados.grdRateio.Column6.Check1",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "LParameters nButton, nShift, nXCoord, nYCoord\n\nThis.KeyPress(13,0)\nNoDefault",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRCC.Pagina.Dados.grdRateio.Column6.Check1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRCC.Pagina.Dados.apaga",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "Select csSigCdRci\nReplace All csSigCdRci.Marcas with 0, PercRats With 0\nGo Top\nThisForm.Calcularateioauto()\nThisForm.Refresh",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Calcularateioauto",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRCC.Pagina.Dados.apaga",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRCC.Pagina.Dados.SelTudo",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "Select csSigCdRci\nReplace All csSigCdRci.Marcas with 1\nGo Top\nThisForm.Calcularateioauto()\nThisForm.Refresh",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Calcularateioauto",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRCC.Pagina.Dados.SelTudo",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDRCC.Init",
+      "queryOriginal": "\tlcSqlCdCri = [Select * From SigCdRci Where DescRats = ?lcDescRat]",
+      "tabelas": "SigCdRci",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDRCC.Procedure",
+      "queryOriginal": "If (ThisForm.poDataMgr.SQLExecute([Delete From SigCdRcc Where DescRats = ?lcDescRat], '') < 1)",
+      "tabelas": "SigCdRcc",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDRCC.Procedure",
+      "queryOriginal": "\tIf (ThisForm.poDataMgr.SQLExecute([Delete From SigCdRci Where DescRats = ?lcDescRat], '') < 1)",
+      "tabelas": "SigCdRci",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDRCC.Procedure",
+      "queryOriginal": "If (ThisForm.poDataMgr.SQLExecute([Delete From SigCdRcc Where DescRats = ?lcDescRat], '') < 1)",
+      "tabelas": "SigCdRcc",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDRCC.Procedure",
+      "queryOriginal": "\tIf (ThisForm.poDataMgr.SQLExecute([Delete From SigCdRci Where DescRats = ?lcDescRat], '') < 1)",
+      "tabelas": "SigCdRci",
+      "colunas": "",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdRci", "SigCdRcc"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

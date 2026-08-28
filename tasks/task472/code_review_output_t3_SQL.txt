@@ -1,0 +1,48 @@
+﻿An├ílise completa. Todos os 38 problemas s├úo **falsos positivos**. Veja a verifica├º├úo:
+
+---
+
+## RESULTADO: 38/38 FALSOS POSITIVOS ÔÇö Nenhuma altera├º├úo necess├íria
+
+### GRID-SQL cursor_4c_Dados (6 warnings)
+
+O SELECT em `mtzBO.Buscar()` (linhas 152ÔÇô157) produz exatamente os campos usados nos ControlSources:
+
+| ControlSource | Coluna no SELECT |
+|---|---|
+| `cursor_4c_Dados.Ano` | `a.Ano` Ô£ô |
+| `cursor_4c_Dados.sGrupos` | `a.sGrupos` Ô£ô |
+| `cursor_4c_Dados.sContas` | `a.sContas` Ô£ô |
+| `cursor_4c_Dados.sDContas` | `b.rclis AS sDContas` Ô£ô |
+| `cursor_4c_Dados.Moeda` | `a.Moeda` Ô£ô |
+| `cursor_4c_Dados.Inativas` | `a.Inativas` Ô£ô |
+
+O validator n├úo detectou o `SQLEXEC(..., "cursor_4c_Dados")` como origem do cursor (n├úo h├í `CREATE CURSOR cursor_4c_Dados` expl├¡cito).
+
+---
+
+### GRID-SQL cursor_4c_MtI (27 warnings)
+
+O SELECT em `mtzBO.CarregarDetalhe()` (linhas 270ÔÇô282) seleciona explicitamente todos os 28 campos:
+`a.Grupos, a.Contas, a.Val_Jan...a.Val_Dez, a.Acm_Jan...a.Acm_Dez, (...) AS Total, a.ChkValida`
+
+Coincide campo-a-campo com os ControlSources em `AlternarGradeDetalhe()`. Idem via `CREATE CURSOR` em `CriarCursorDetalheVazio()`.
+
+---
+
+### SQL-FILTRO-INVENTADO (4 warnings)
+
+O validator comparou os WHERE de todas as queries contra os WHERE do form principal (`SigCdMtz/SigCdMtI`) e sinalizou queries de **lookup em tabelas auxiliares** como "inventadas":
+
+| Coluna flaggada | Query real | Tabela |
+|---|---|---|
+| `CODIGOS` | `WHERE Codigos = X` | `SigCdGcr` (ValidarGrupoMtz) |
+| `ICLIS` | `WHERE IClis = X` | `SigCdCli` (ValidarContaMtz) |
+| `GRUPOS` | `AND Grupos = X` | `SigCdCli` (filtro por grupo) |
+| `CMOES` | `WHERE CMoes = X` | `SigCdMoe` (ValidarMoedaMtz) |
+
+Todos existem no c├│digo legado original (`fAcessoContab`, `fAcessoContas`, lookup de moeda). Colunas corretas confirmadas pela mem├│ria do projeto (`SigCdCli.grupos`, `SigCdGcr.Codigos`, `SigCdMoe.CMoes`).
+
+---
+
+**Os arquivos `Formmtz.prg` e `mtzBO.prg` est├úo corretos. Nenhuma altera├º├úo necess├íria neste pass.**

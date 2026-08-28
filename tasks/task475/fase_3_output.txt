@@ -1,0 +1,12 @@
+﻿**Fase 3 conclu├¡da.** `C:\4c\projeto\app\forms\cadastros\FormNfl.prg` criado com 219 linhas.
+
+Pontos-chave da estrutura entregue:
+
+- `Caption` com CHR() atribu├¡do em `InicializarForm()` (n├úo no `DEFINE CLASS`, que n├úo aceita expressions)
+- `TornarControlesVisiveis(THIS)` chamado uma vez, ap├│s todos os `Configurar*` ÔÇö evita o problema de controles adicionados em fases posteriores ficarem invis├¡veis
+- `cnt_4c_copia` j├í tratado no `TornarControlesVisiveis` (LOOP sem setar `.Visible=.T.`, mas percorre filhos)
+- Inner PageFrame `pgf_4c_Abas`: `Top=153` (124 legado + 29 compensa├º├úo outer PageFrame), 10 abas com CHR() correto
+- `CarregarLista()` verifica `gb_4c_ValidandoUI` antes de SQL, e usa `PEMSTATUS` para acessar o grid (ainda n├úo existe nesta fase)
+- Stubs comentados em `ConfigurarPaginaLista()` e `ConfigurarPaginaDados()` documentam o que Fases 4ÔÇô6 v├úo adicionar
+
+Pr├│ximo: **Fase 4** ÔÇö adicionar `grd_4c_Lista`, bot├Áes CRUD e bot├Áes especiais (Copiar, ExpXML, ImpXML) em `ConfigurarPaginaLista()`.

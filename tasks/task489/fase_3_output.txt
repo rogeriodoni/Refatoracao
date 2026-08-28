@@ -1,0 +1,11 @@
+﻿Fase 3 conclu├¡da. O `FormOrc.prg` foi criado em `C:\4c\projeto\app\forms\cadastros\FormOrc.prg` com:
+
+- **DEFINE CLASS FormOrc AS FormBase** ÔÇö Height=600, Width=1000, propriedades visuais completas
+- **Init()** ÔÇö apenas `RETURN DODEFAULT()` (sem duplica├º├úo de InicializarForm)
+- **InicializarForm()** ÔÇö cria OrcBO, configura PageFrame, propaga Caption, chama CarregarLista (com guarda `gb_4c_ValidandoUI`)
+- **ConfigurarPageFrame()** ÔÇö 2 pages com `Top=-29, Tabs=.F.`, Picture fundo_cad_1003.jpg, chama ConfigurarPaginaLista/Dados
+- **ConfigurarPaginaLista()** ÔÇö containers base: `cnt_4c_Cabecalho` (com lbl_4c_Sombra + lbl_4c_Titulo), `cnt_4c_Botoes` (Left=542), `cnt_4c_Saida` (canonico Left=917) ÔÇö Grid e bot├Áes CRUD na Fase 4
+- **ConfigurarPaginaDados()** ÔÇö `cnt_4c_BotoesAcao` (Top=33, Left=842) ÔÇö TextBoxes e Grids nas Fases 5-6
+- **CarregarLista()** ÔÇö chama `OrcBO.Buscar("")`, pronto para vincular ao Grid na Fase 4
+- **Destroy()** ÔÇö libera BO e fecha cursores (cursor_4c_Dados, cursor_4c_Grupos, cursor_4c_Contas)
+- **TornarControlesVisiveis()** e **FormatarGridLista()** ÔÇö m├®todos auxiliares completos

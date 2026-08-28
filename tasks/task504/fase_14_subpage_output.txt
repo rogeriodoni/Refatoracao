@@ -1,0 +1,22 @@
+﻿Everything looks correct. FASE 14 is complete. Here's a summary of what was implemented:
+
+**Changes to `ConfigurarPaginaDados()`** (line 484): replaced placeholder `ConfigurarPgDadosInfo` call for Page7 with the real `ConfigurarPgpgDesigner(loc_oPagina.pgf_4c_Dados.Page7)`.
+
+**New `PROTECTED PROCEDURE ConfigurarPgpgDesigner(par_oPg)`** adds all 21 controls from the original `pgDesigner` page:
+- `grd_4c_GrdDesigner` (4 columns: dtini/dtfim/usuarios/codcads) + BINDEVENT on Column4
+- `lbl_4c_Label31` + `obj_4c_GetObsTarefas` (EditBox memo)
+- `cmd_4c_BtnIniTarefa` / `cmd_4c_BtnFimTarefa` + BINDEVENTs
+- `lbl_4c_Label1` + `obj_4c_GetObsInsp` (EditBox memo)
+- `grd_4c_GrdArquivos` (1 column: arqnome)
+- `cmd_4c_BtnInsArqs` / `cmd_4c_BtnExcArqs` / `cmd_4c_BtnOpnArqs` + BINDEVENTs
+- `shp_4c_Shape1` / `img_4c_ImgArqJpg` (initially hidden)
+- `lbl_4c_Label19` / `lin_4c_Line1` / `lbl_4c_Label6` / `txt_4c_DtAprAmo`
+- `lbl_4c_Label4` / `txt_4c_DesLacto` / `lbl_4c_Label5` / `txt_4c_CriaLacto` + BINDEVENTs
+- 3 placeholder cursors: `cursor_4c_GrdDesigner`, `cursor_4c_GrdArquivos`, `crTarefas` (pre-loaded from SigCdCad)
+
+**New handler methods** (12 total):
+- `GrdDesignerCol4TarefaValid` + `AbrirBuscaTarefaDesigner` ÔÇö validates CodCads against crTarefas cursor from SigCdCad
+- `ValidarDesLacto` + `AbrirBuscaDesLacto` ÔÇö validates against SigCdUsu (cativos <> 'N')
+- `ValidarCriaLacto` + `AbrirBuscaCriaLacto` ÔÇö same pattern
+- `BtnIniTarefaClick` / `BtnFimTarefaClick` ÔÇö append DATE() to grdDesigner rows
+- `BtnInsArqsClick` / `BtnExcArqsClick` / `BtnOpnArqsClick` ÔÇö file management via GETFILE/ShellExecute

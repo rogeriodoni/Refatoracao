@@ -1,0 +1,20 @@
+﻿Phase 8 is complete. Here's a summary of all changes made:
+
+**`NflBO.prg`** ÔÇö Added `SalvarSigCnFNf()` (PUBLIC):
+- Dynamically reads all columns from `crSigCnFNf` cursor using `FCOUNT`/`FIELD`/`EVALUATE`
+- Builds a single `UPDATE SigCnFNf SET ... WHERE cidchaves = ...` string
+- Handles C, N, and L field types correctly
+
+**`FormNfl.prg`** ÔÇö 6 changes:
+
+1. **`InicializarForm`**: Creates `crSigCnFNf` and `crSigCnFN2` empty cursors before `ConfigurarPaginaDados()` so all ControlSource bindings have valid targets. Uses `SELECT TOP 0 *` in production mode; minimal fallback for UI validation mode.
+
+2. **`ConfirmarClick`**: Fixed critical bug ÔÇö replaced direct calls to PROTECTED `Inserir()`/`Atualizar()` with `Salvar()` (PUBLIC in BusinessBase), then calls `SalvarSigCnFNf()` to persist the `SigCnFNf` position data.
+
+3. **`LimparCampos`** (new): Zaps both cursors + appends blank rows, clears `txt_4c_Series`, `txt_4c_ProxNota/Selo/SeloTrans`, `obj_4c_Op_ItCasas`, and `txt_4c_EmpPad`.
+
+4. **`FormParaBO`** (complete): Reads ALL 113 fields from `crSigCnFN2` cursor ÔåÆ BO properties. Then overrides `vseqnota` and the 8 desdobramento fields (`lopcvd/copcvd/loploc/coploc/lopnvd/copnvd/lopnrp/copnrp`) from `crSigCnFNf` (since the form binds those to `crSigCnFNf`). Reads standalone controls `txt_4c_Series` and `txt_4c_EmpPad`.
+
+5. **`BOParaForm`** (complete): Reloads `crSigCnFNf` and `crSigCnFN2` from DB using `SELECT * WHERE cidchaves = ...`, restoring all column values for display via ControlSource bindings. Sets standalone controls from BO properties.
+
+6. **`Destroy`**: Added cleanup of `crSigCnFNf`, `crSigCnFN2`, and `cursor_4c_Dados` before nulling the BO.

@@ -1,0 +1,11 @@
+﻿Fase 4 conclu├¡da. O arquivo FormRec.prg foi atualizado com:
+
+**Adicionado nesta fase:**
+- `ConfigurarPaginaLista()` completo ÔÇö grid `grd_4c_Lista` (Top=117, Left=26, Width=890, Height=498, 2 colunas: Grupo/Descri├º├úo) + 5 bot├Áes CRUD em `cnt_4c_Botoes` + `cmd_4c_Encerrar` em `cnt_4c_Saida`, todos com BINDEVENT
+- `AlternarPagina(par_nPagina)` ÔÇö alterna entre Page1/Page2, recarrega lista ao voltar
+- `CarregarLista()` atualizado ÔÇö vincula RecordSource + ColumnCount + ControlSource + Header captions + FormatarGridLista (seguindo Problema 36: RecordSource fora do WITH)
+- `FormatarGridLista()` ÔÇö aplica Verdana/8 nas colunas
+- Todos os handlers PUBLIC para BINDEVENT: `BtnIncluirClick`, `BtnVisualizarClick`, `BtnAlterarClick`, `BtnExcluirClick`, `BtnBuscarClick`, `BtnSalvarClick`, `BtnCancelarClick`, `BtnEncerrarClick`
+- M├®todos de suporte: `FormParaBO`, `BOParaForm`, `LimparCampos`, `HabilitarCampos`, `AjustarBotoesPorModo`, `ValidarCodigo`, `ValidarDescricao`, `AbrirBuscaGrupo`
+
+**Fase 5** adicionar├í os campos `txt_4c_CdGrupo` e `txt_4c_DsGrupo` + bot├Áes Confirmar/Cancelar em `ConfigurarPaginaDados()`, completando Page2.

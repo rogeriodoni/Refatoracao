@@ -1,0 +1,16 @@
+﻿All fixes applied and verified. Here's the summary:
+
+**Changes made to `FormProduto.prg`:**
+
+3 edits ÔÇö added `SET NULL ON/OFF` around the **fallback** `CREATE CURSOR` instances (the `IF loc_nRet <= 0` branches that create empty placeholder cursors when SQLEXEC fails):
+- Line 8184: `cursor_4c_GradFase` fallback ÔÇö now wrapped with SET NULL ON/OFF
+- Line 8216: `cursor_4c_GrdMatrizes` fallback ÔÇö now wrapped with SET NULL ON/OFF
+- Line 11406: `cursor_4c_GrdServico` fallback ÔÇö now wrapped with SET NULL ON/OFF
+
+**Already correct (no changes needed):**
+- `[CONTAINER-VISIVEL]`: `TornarControlesVisiveis()` already had the INLIST filter excluding CNT_4C_CABECALHO and CNT_4C_MTPRIMA
+- Primary cursor creations at lines 7111/7118/11292 already had SET NULL ON/OFF
+- `cursor_4c_PrfExist`: This cursor does not exist anywhere in the file ÔÇö the review item was a phantom reference
+
+**Out of scope (not touched):**
+- ~110 `[LAYOUT-POSITION]` issues ÔÇö task instructions explicitly prohibit altering `Top`, `Left`, `Width`, `Height` properties in this functional pass

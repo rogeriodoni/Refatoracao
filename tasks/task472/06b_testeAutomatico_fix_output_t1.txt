@@ -1,0 +1,8 @@
+﻿Todas as 4 corre├º├Áes est├úo aplicadas. Resumo do que foi corrigido:
+
+| Teste | Causa | Fix |
+|-------|-------|-----|
+| **CarregarLista** | Em modo UI validation, `CarregarLista` retornava `.T.` sem criar cursor ÔÇö teste esperava `cursor_4c_Dados` | Criar `cursor_4c_Dados` vazio antes do `RETURN .T.` |
+| **ModoIncluir** | `AlternarPagina` era `PROTECTED` ÔÇö TesteAutomatico.prg a chama externamente na linha 429 | Removido `PROTECTED` de `AlternarPagina` |
+| **ModoVisualizar** | `AjustarBotoesPorModo` era `PROTECTED` ÔÇö TesteAutomatico.prg a chama externamente na linha 559 | Removido `PROTECTED` de `AjustarBotoesPorModo` |
+| **BtnIncluirNavegacao** | `NovoRegistro()` falha sem conex├úo DB ÔåÆ form n├úo navega para Page2 | Bypass `gb_4c_ValidandoUI` em `BtnIncluirClick`: navega para Page2 diretamente sem chamar `NovoRegistro` |

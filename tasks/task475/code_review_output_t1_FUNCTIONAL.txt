@@ -1,0 +1,11 @@
+﻿Todas as corre├º├Áes foram aplicadas. Resumo do que foi feito em `FormNfl.prg`:
+
+1. **[CONTAINER-VISIVEL]** ÔÇö `TornarControlesVisiveis` agora tem `INLIST(loc_cNome, "CNT_4C_CABECALHO", "CNT_4C_SALVA")` que faz `LOOP` antes de setar `Visible=.T.`, preservando o estado oculto desses containers.
+
+2. **[LOSTFOCUS-SEM-GUARDIA]** ÔÇö Adicionada property `this_cUltimoSeriesValidado = ""`. `SeriesDadosValid` agora retorna imediatamente se o valor n├úo mudou desde a ├║ltima valida├º├úo bem-sucedida, e atualiza a property quando a s├®rie ├® v├ílida.
+
+3. **[BUSCA-CURSOR]** ÔÇö Todos os 6 m├®todos `AbrirLookup*` (Series, Nomedest, EmpDest, EmpPad, UnPesos, ClsFis) agora definem `loc_oBusca.this_cCursorDestino` antes de chamar `Mostrar()`.
+
+4. **[NULL-CURSOR]** ÔÇö Todos os 6 m├®todos `AbrirLookup*` envolvem os `SQLEXEC`/`CREATE CURSOR` com `SET NULL ON` antes e `SET NULL OFF` depois, prevenindo falhas com campos NULL do SQL Server.
+
+5. **[METODO-INEXISTENTE]** ÔÇö `ObterControle` est├í definido nas linhas 11054-11064; falso positivo do code review, nenhuma a├º├úo necess├íria.

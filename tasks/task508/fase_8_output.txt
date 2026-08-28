@@ -1,0 +1,15 @@
+﻿Migra├º├úo FASE 8/8 conclu├¡da. Resumo do que estava no arquivo e o que foi adicionado:
+
+**FormRcc.prg ÔÇö j├í estava completo** (fases 1-7 anteriores):
+- Todos os m├®todos: `BtnBuscarClick`, `BtnEncerrarClick`, `BtnSalvarClick`, `BtnCancelarClick`
+- `FormParaBO()` e `BOParaForm()` com todos os campos (`this_cDescRats`, `this_cEmpOs`)
+- `HabilitarCampos()`, `LimparCampos()`, `AjustarBotoesPorModo()`
+- `CarregarLista()` com reconfigura├º├úo de headers p├│s-RecordSource
+- `CarregarGridRateio()`, `AtualizarPTotal()`, eventos do grid
+
+**Integra├º├úo no menu.prg** (adicionada agora):
+- `DEFINE BAR 160 OF popCadastros` ÔÇö item vis├¡vel no menu
+- `ON SELECTION BAR 160` ÔÇö dispara a abertura
+- `PROCEDURE AbrirFormRcc()` ÔÇö padr├úo can├┤nico com `VARTYPE`, `Show()` sem par├ómetro, sem `Release()`
+
+**config.prg** ÔÇö n├úo necessitou altera├º├úo; o carregamento din├ómico via `ADIR()` j├í detecta `RccBO.prg` e `FormRcc.prg` automaticamente.

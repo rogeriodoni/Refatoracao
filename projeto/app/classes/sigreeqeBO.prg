@@ -43,6 +43,9 @@ DEFINE CLASS sigreeqeBO AS RelatorioBase
     *-- Opcao de agrupamento: 1=Barra, 2=Identidade
     this_nAgrupa        = 1
 
+    *-- Pattern #142: injetado pelo CorretorAutomatico (default vazio) - REVISAR e substituir pelo alias do cursor binding do FRX
+    this_cCursorDados = ""     && FIXME Pattern #142 pos-Erro51
+
     *--------------------------------------------------------------------------
     * Init - Carrega cursores de apoio e parametros do sistema
     *--------------------------------------------------------------------------

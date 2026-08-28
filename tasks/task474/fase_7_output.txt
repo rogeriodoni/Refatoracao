@@ -1,0 +1,7 @@
+﻿Fase 7 conclu├¡da. Os 4 eventos CRUD j├í existiam do Fase 6 ÔÇö adicionei as melhorias faltantes:
+
+- **`AjustarBotoesPorModo()`**: bot├úo Confirmar fica disabled em VISUALIZAR, enabled em INCLUIR/ALTERAR
+- **`BtnIncluirClick`**: chama `AjustarBotoesPorModo()` + `SetFocus` em `txt_4c_Codigo` (fidelidade ao legado: `getCods.Setfocus` no INSERIR)
+- **`BtnAlterarClick`**: chama `AjustarBotoesPorModo()` + `SetFocus` em `txt_4c_Descricao` (fidelidade ao legado: `getDescs.Setfocus` no ALTERAR)
+- **`BtnVisualizarClick`**: chama `AjustarBotoesPorModo()` para desabilitar Confirmar
+- **`BtnCancelarClick`**: corrigido ÔÇö reset `this_cModoAtual = "LISTA"` e removida chamada redundante de `CarregarLista()` (j├í ├® chamada por `AlternarPagina(1)`)

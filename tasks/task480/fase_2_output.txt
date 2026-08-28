@@ -1,0 +1,8 @@
+﻿Fase 2/8 conclu├¡da. O `OCSBO.prg` agora tem todos os m├®todos CRUD completos:
+
+- **`Buscar(par_cFiltro)`** ÔÇö SELECT com filtro opcional em `cods`/`descs`, result em `cursor_4c_Dados`
+- **`CarregarPorCodigo(par_cCodigo)`** ÔÇö SELECT por `cods` (chave de neg├│cio), carrega todas as 3 colunas incluindo `cidchaves` para UPDATE/DELETE posteriores, seta `this_lNovoRegistro = .F.`
+- **`CarregarDoCursor()`** ÔÇö padr├úo can├┤nico com `SELECT (par_cAliasCursor)` antes de acessar campos
+- **`Inserir()`** ÔÇö valida `cods` n├úo-vazio, verifica duplicidade via `COUNT(*)`, gera `cidchaves = fUniqueIds()`, INSERT + auditoria
+- **`Atualizar()`** ÔÇö UPDATE apenas de `descs` por `cidchaves` (o `cods` ├® imut├ível no ALTERAR, conforme o legado: `Get_codigo.When` retorna `.F.` no modo ALTERAR) + auditoria
+- **`ExecutarExclusao()`** ÔÇö DELETE por `cidchaves` + auditoria

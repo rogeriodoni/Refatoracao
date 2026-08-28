@@ -1,0 +1,50 @@
+﻿Ap├│s verifica├º├úo cuidadosa do c├│digo nos dois arquivos, **todos os 38 problemas detectados s├úo falsos positivos**. Aqui est├í a evid├¬ncia:
+
+---
+
+## GRID-SQL ÔÇö cursor_4c_Dados (6 campos)
+
+O validator s├│ inspecionou o arquivo de form e n├úo encontrou o SELECT que cria `cursor_4c_Dados`. Mas ele est├í no BO, em `mtzBO.Buscar()`:
+
+```foxpro
+"SELECT a.Codigo, a.Ano, a.sGrupos, a.sContas," + ;
+" b.rclis AS sDContas, a.Moeda, a.Inativas," + ;
+" a.DtIncs, a.UsuIncs" + ;
+" FROM SigCdMtz a LEFT JOIN SigCdCli b ON a.sContas = b.IClis"
+```
+
+Todos os 6 campos (`Ano`, `sGrupos`, `sContas`, `sDContas`, `Moeda`, `Inativas`) **est├úo presentes** no SELECT.
+
+---
+
+## GRID-SQL ÔÇö cursor_4c_MtI (28 campos)
+
+O cursor ├® criado por `mtzBO.CarregarDetalhe()`:
+
+```foxpro
+"SELECT a.Codigo, a.CidChaves, a.Grupos, a.Contas," + ;
+" a.Val_Jan ... a.Val_Dez," + ;
+" a.Acm_Jan ... a.Acm_Dez," + ;
+" (soma dos Val_*) AS Total, a.ChkValida"
+```
+
+E tamb├®m por `CriarCursorDetalheVazio()` com `CREATE CURSOR cursor_4c_MtI` incluindo todos os 28 campos. Todos os ControlSources t├¬m correspond├¬ncia.
+
+---
+
+## SQL-FILTRO-INVENTADO (4 casos)
+
+O validator comparou os WHERE de **lookups em tabelas auxiliares** com o WHERE do SQL principal em `SigCdMtz`. S├úo queries completamente diferentes:
+
+| Condi├º├úo flaggada | Onde est├í no c├│digo | Tabela da query |
+|---|---|---|
+| `CODIGOS` | `ValidarGrupoLinhaGrid()` | `SigCdGcr` ÔÇö valida├º├úo de grupo Ô£ô |
+| `ICLIS` | `ValidarContaMtz()` / `ValidarContaLinhaGrid()` | `SigCdCli` ÔÇö valida├º├úo de conta Ô£ô |
+| `GRUPOS` | `ValidarContaMtz()` / `ValidarContaLinhaGrid()` | `SigCdCli` ÔÇö filtro por grupo (existe no legado via `fAcessoContas`) Ô£ô |
+| `CMOES` | `ValidarMoedaMtz()` | `SigCdMoe` ÔÇö valida├º├úo de moeda Ô£ô |
+
+Nenhuma dessas condi├º├Áes foi inventada ÔÇö todas correspondem a queries de lookup/valida├º├úo em tabelas secund├írias, que o validator confundiu com filtros indevidos no SQL principal de `SigCdMtz`.
+
+---
+
+**Conclus├úo: nenhuma altera├º├úo necess├íria.** O c├│digo est├í correto. O validator cruzou dados de arquivos diferentes (form vs BO) e comparou WHEREs de tabelas distintas como se fossem a mesma query. Fazer as "corre├º├Áes" indicadas quebraria o c├│digo funcionando.

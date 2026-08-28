@@ -235,7 +235,7 @@ DEFINE CLASS FormCliente AS FormBase
                 loc_lRetLeDados = .T.  && default sucesso se pulando mLeDados
                 IF loc_lIniciarEmDados
                     TRY
-                        loc_lRetLeDados = THIS.cnt_4c_Conta.mLeDados(THIS.this_cGrupo, THIS.this_cCli, "1", ;
+                        loc_lRetLeDados = THIS.ChamarMLeDadosSeguro(THIS.this_cGrupo, THIS.this_cCli, "1", ;
                             THIS.this_cTpBloqCar, THIS.this_cMudaCpfCgc)
                         IF loc_nHDiag > 0
                             FPUTS(loc_nHDiag, "mLeDados: retornou=" + TRANSFORM(loc_lRetLeDados))
@@ -566,6 +566,7 @@ DEFINE CLASS FormCliente AS FormBase
             .Value         = ""
             .Visible       = .T.
         ENDWITH
+        BINDEVENT(par_oPai.cnt_4c_ListaFiltros.txt_4c_FiltroGrupo, "KeyPress", THIS, "TxtFiltroGrupoKeyPress")
 
         *-- TxtBox descricao grupo
         par_oPai.cnt_4c_ListaFiltros.AddObject("txt_4c_FiltroGrupoDesc", "TextBox")
@@ -577,10 +578,11 @@ DEFINE CLASS FormCliente AS FormBase
             .FontName      = "Tahoma"
             .FontSize      = 8
             .SpecialEffect = 1
-            .ReadOnly      = .T.
+            .ReadOnly      = .F.
             .Value         = ""
             .Visible       = .T.
         ENDWITH
+        BINDEVENT(par_oPai.cnt_4c_ListaFiltros.txt_4c_FiltroGrupoDesc, "KeyPress", THIS, "TxtFiltroGrupoDescKeyPress")
 
         *-- Label Alterados entre
         par_oPai.cnt_4c_ListaFiltros.AddObject("lbl_4c_LblAlt", "Label")
@@ -1991,27 +1993,45 @@ DEFINE CLASS FormCliente AS FormBase
     *  - VISUALIZAR nao exige acesso de alteracao
     *============================================================
     PROTECTED FUNCTION ValidarPreAcao(par_cAcao)
-        LOCAL loc_cGrupo, loc_cAcao
+        LOCAL loc_cGrupo, loc_cAcao, loc_oFiltros, loc_lTemTxt
         loc_cAcao = UPPER(IIF(TYPE("par_cAcao") = "C", ALLTRIM(par_cAcao), ""))
         loc_cGrupo = ""
+        loc_lTemTxt = .F.
+        loc_oFiltros = .NULL.
+
+        *-- Fonte UNICA: textbox de filtro do usuario (sem fallback silencioso para
+        *-- this_cGrupo, que mascarava a intencao do usuario ao esvaziar o campo).
         IF PEMSTATUS(THIS, "cnt_4c_ViewLista", 5) AND ;
            PEMSTATUS(THIS.cnt_4c_ViewLista, "cnt_4c_ListaFiltros", 5) AND ;
            PEMSTATUS(THIS.cnt_4c_ViewLista.cnt_4c_ListaFiltros, "txt_4c_FiltroGrupo", 5)
-            loc_cGrupo = ALLTRIM(THIS.cnt_4c_ViewLista.cnt_4c_ListaFiltros.txt_4c_FiltroGrupo.Value)
+            loc_oFiltros = THIS.cnt_4c_ViewLista.cnt_4c_ListaFiltros
+            loc_lTemTxt  = .T.
+            loc_cGrupo   = ALLTRIM(NVL(loc_oFiltros.txt_4c_FiltroGrupo.Value, ""))
         ENDIF
-        IF EMPTY(loc_cGrupo)
+
+        *-- Textbox vazio: msg de obrigatoriedade + foco no campo, bloqueia acao
+        IF loc_lTemTxt AND EMPTY(loc_cGrupo)
+            MsgAviso("Grupo Obrigat" + CHR(243) + "rio. Preencha o Grupo de Contas antes de prosseguir.", ;
+                "Aten" + CHR(231) + CHR(227) + "o")
+            loc_oFiltros.txt_4c_FiltroGrupo.SetFocus()
+            RETURN .F.
+        ENDIF
+
+        *-- Sem textbox visivel (form aberto por programa via par_cGrupo): usa
+        *-- this_cGrupo como fonte, com fallback para GrPadClis do sistema.
+        IF !loc_lTemTxt
             loc_cGrupo = ALLTRIM(THIS.this_cGrupo)
-        ENDIF
-        IF EMPTY(loc_cGrupo) AND USED("crSigCdPam") AND RECCOUNT("crSigCdPam") > 0
-            SELECT crSigCdPam
-            LOCATE
-            IF !EOF("crSigCdPam")
-                loc_cGrupo = ALLTRIM(crSigCdPam.GrPadClis)
+            IF EMPTY(loc_cGrupo) AND USED("crSigCdPam") AND RECCOUNT("crSigCdPam") > 0
+                SELECT crSigCdPam
+                LOCATE
+                IF !EOF("crSigCdPam")
+                    loc_cGrupo = ALLTRIM(NVL(crSigCdPam.GrPadClis, ""))
+                ENDIF
             ENDIF
         ENDIF
 
         IF !USED("crSigCdPam") OR RECCOUNT("crSigCdPam") = 0
-            MsgAviso("Configura" + CHR(231) + CHR(227) + "o de Parametros do Sistema N" + CHR(227) + "o Encontrado.")
+            MsgAviso("Configura" + CHR(231) + CHR(227) + "o de Parametros do Sistema N" + CHR(227) + "o Encontrada.")
             RETURN .F.
         ENDIF
         IF !USED("crSigCdGcr") OR RECCOUNT("crSigCdGcr") = 0
@@ -2019,13 +2039,18 @@ DEFINE CLASS FormCliente AS FormBase
             RETURN .F.
         ENDIF
         IF EMPTY(loc_cGrupo)
-            MsgAviso("Grupo Padr" + CHR(227) + "o N" + CHR(227) + "o Configurado.")
+            MsgAviso("Grupo Obrigat" + CHR(243) + "rio. Preencha o Grupo de Contas antes de prosseguir.", ;
+                "Aten" + CHR(231) + CHR(227) + "o")
             RETURN .F.
         ENDIF
         SELECT crSigCdGcr
         LOCATE FOR ALLTRIM(Codigos) == ALLTRIM(loc_cGrupo)
         IF EOF("crSigCdGcr")
-            MsgAviso("Grupo Padr" + CHR(227) + "o N" + CHR(227) + "o Configurado.")
+            MsgAviso("Grupo Inv" + CHR(225) + "lido: [" + loc_cGrupo + "] n" + CHR(227) + "o cadastrado.", ;
+                "Aten" + CHR(231) + CHR(227) + "o")
+            IF loc_lTemTxt
+                loc_oFiltros.txt_4c_FiltroGrupo.SetFocus()
+            ENDIF
             RETURN .F.
         ENDIF
         IF loc_cAcao <> "VISUALIZAR"
@@ -2037,6 +2062,132 @@ DEFINE CLASS FormCliente AS FormBase
         THIS.this_cGrupo = PADR(loc_cGrupo, 10)
         RETURN .T.
     ENDFUNC
+
+    *============================================================
+    * ChamarMLeDadosSeguro - Wrapper canonico para clsconta.mLeDados
+    * Legacy clsconta.mLeDados (classresp.vcx linha 895):
+    *   If Empty(lcGrupo) And (ThisForm.pcEscolha <> 'PROCURAR')
+    *       = MessageBox('Grupo Invalido.', 0+48, 'Atencao!!!')
+    *       Return (.f.)
+    *   EndIf
+    * Este helper garante que a msg NAO dispare:
+    *  1. Resolve par_cGrupo do crSigCdPam.GrPadClis se vazio
+    *  2. Se AINDA vazio E cli tambem vazio, seta pcEscolha=PROCURAR
+    *     temporariamente para ativar o gate silencioso do clsconta
+    *  3. Chama mLeDados, restaura pcEscolha
+    *============================================================
+    PROTECTED FUNCTION ChamarMLeDadosSeguro(par_cGrupo, par_cCli, par_cTpCadCli, par_cTpBloqCar, par_cMudaCpfCgc)
+        LOCAL loc_cGrupo, loc_cCli, loc_cEscolhaSalva, loc_lRet, loc_lRestaurar
+        loc_cGrupo = ALLTRIM(IIF(TYPE("par_cGrupo") = "C", par_cGrupo, ""))
+        loc_cCli   = ALLTRIM(IIF(TYPE("par_cCli")   = "C", par_cCli,   ""))
+
+        *-- Fallback #1: resolver grupo do parametro sistema (crSigCdPam.GrPadClis)
+        IF EMPTY(loc_cGrupo) AND USED("crSigCdPam") AND RECCOUNT("crSigCdPam") > 0
+            SELECT crSigCdPam
+            LOCATE
+            IF !EOF("crSigCdPam")
+                loc_cGrupo = ALLTRIM(NVL(crSigCdPam.GrPadClis, ""))
+            ENDIF
+        ENDIF
+
+        *-- Fallback #2: se grupo E cli vazios, gate silencioso via pcEscolha=PROCURAR
+        loc_lRestaurar    = .F.
+        loc_cEscolhaSalva = ""
+        IF EMPTY(loc_cGrupo) AND EMPTY(loc_cCli)
+            loc_cEscolhaSalva = THIS.pcEscolha
+            THIS.pcEscolha    = "PROCURAR"
+            loc_lRestaurar    = .T.
+        ENDIF
+
+        loc_lRet = THIS.cnt_4c_Conta.mLeDados( ;
+            IIF(EMPTY(loc_cGrupo), par_cGrupo, PADR(loc_cGrupo, 10)), ;
+            par_cCli, par_cTpCadCli, par_cTpBloqCar, par_cMudaCpfCgc)
+
+        IF loc_lRestaurar
+            THIS.pcEscolha = loc_cEscolhaSalva
+        ENDIF
+
+        RETURN loc_lRet
+    ENDFUNC
+
+    *============================================================
+    * TxtFiltroGrupoKeyPress - Enter/Tab/F4 no textbox codigo Grupo
+    * abre picker SigCdGcr (por codigo). Se selecao, atualiza codigo+desc
+    * e re-popula grid via RefreshGridClientes.
+    *============================================================
+    PROCEDURE TxtFiltroGrupoKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF par_nKeyCode = 13 OR par_nKeyCode = 9 OR par_nKeyCode = 115
+            THIS.AbrirLookupGrupoFiltro(.F.)
+            RETURN
+        ENDIF
+    ENDPROC
+
+    *============================================================
+    * TxtFiltroGrupoDescKeyPress - Enter/Tab/F4 no textbox descricao Grupo
+    * abre picker SigCdGcr (por descricao). Selecao atualiza cod+desc + grid.
+    *============================================================
+    PROCEDURE TxtFiltroGrupoDescKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF par_nKeyCode = 13 OR par_nKeyCode = 9 OR par_nKeyCode = 115
+            THIS.AbrirLookupGrupoFiltro(.T.)
+            RETURN
+        ENDIF
+    ENDPROC
+
+    *============================================================
+    * AbrirLookupGrupoFiltro - Abre picker SigCdGcr para filtros
+    * (codigo ou descricao). Se usuario selecionar grupo, atualiza os
+    * dois textboxes e re-popula grid via RefreshGridClientes.
+    * par_lPorDescr: .T. = busca por descricao, .F. = busca por codigo
+    *============================================================
+    PROCEDURE AbrirLookupGrupoFiltro(par_lPorDescr)
+        LOCAL loc_oFiltros, loc_oLookup, loc_cValorAtual
+        TRY
+            IF !PEMSTATUS(THIS, "cnt_4c_ViewLista", 5) OR ;
+               !PEMSTATUS(THIS.cnt_4c_ViewLista, "cnt_4c_ListaFiltros", 5)
+                RETURN
+            ENDIF
+            loc_oFiltros = THIS.cnt_4c_ViewLista.cnt_4c_ListaFiltros
+
+            IF par_lPorDescr
+                loc_cValorAtual = ALLTRIM(NVL(loc_oFiltros.txt_4c_FiltroGrupoDesc.Value, ""))
+                loc_oLookup = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+                    "SigCdGcr", "cursor_4c_GrupoFiltro", "Descrs", loc_cValorAtual, ;
+                    "Grupo de Contas", .F., .T., "")
+            ELSE
+                loc_cValorAtual = ALLTRIM(NVL(loc_oFiltros.txt_4c_FiltroGrupo.Value, ""))
+                loc_oLookup = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
+                    "SigCdGcr", "cursor_4c_GrupoFiltro", "Codigos", loc_cValorAtual, ;
+                    "Grupo de Contas", .F., .T., "")
+            ENDIF
+
+            IF VARTYPE(loc_oLookup) = "O"
+                loc_oLookup.mAddColuna("Codigos", "", "C" + CHR(243) + "digo")
+                loc_oLookup.mAddColuna("Descrs", "", "Descri" + CHR(231) + CHR(227) + "o")
+                loc_oLookup.Show()
+
+                IF loc_oLookup.this_lSelecionou AND USED("cursor_4c_GrupoFiltro")
+                    SELECT cursor_4c_GrupoFiltro
+                    loc_oFiltros.txt_4c_FiltroGrupo.Value     = ALLTRIM(NVL(cursor_4c_GrupoFiltro.Codigos, ""))
+                    loc_oFiltros.txt_4c_FiltroGrupoDesc.Value = ALLTRIM(NVL(cursor_4c_GrupoFiltro.Descrs, ""))
+                    THIS.this_cGrupo = PADR(ALLTRIM(cursor_4c_GrupoFiltro.Codigos), 10)
+                    USE IN cursor_4c_GrupoFiltro
+                    THIS.RefreshGridClientes()
+                ELSE
+                    IF USED("cursor_4c_GrupoFiltro")
+                        USE IN cursor_4c_GrupoFiltro
+                    ENDIF
+                ENDIF
+                loc_oLookup.Release()
+                loc_oLookup = .NULL.
+            ENDIF
+
+        CATCH TO loc_oErr
+            IF USED("cursor_4c_GrupoFiltro")
+                USE IN cursor_4c_GrupoFiltro
+            ENDIF
+            MsgErro("Erro no lookup de Grupo:" + CHR(13) + loc_oErr.Message, "Erro")
+        ENDTRY
+    ENDPROC
 
     *============================================================
     * RefreshGridClientes - Popula crSigCdCli via poDataMgr.Requery
@@ -2375,7 +2526,7 @@ DEFINE CLASS FormCliente AS FormBase
             THIS.IrParaDados()
             IF PEMSTATUS(THIS, "cnt_4c_Conta", 5) AND !ISNULL(THIS.cnt_4c_Conta)
                 TRY
-                    loc_lRet = THIS.cnt_4c_Conta.mLeDados(THIS.this_cGrupo, SPACE(10), "1", ;
+                    loc_lRet = THIS.ChamarMLeDadosSeguro(THIS.this_cGrupo, SPACE(10), "1", ;
                         THIS.this_cTpBloqCar, THIS.this_cMudaCpfCgc)
                 CATCH
                     *-- exception nao-fatal (fwcombo1 etc.) — form usavel
@@ -2427,7 +2578,7 @@ DEFINE CLASS FormCliente AS FormBase
 
             IF PEMSTATUS(THIS, "cnt_4c_Conta", 5) AND !ISNULL(THIS.cnt_4c_Conta)
                 TRY
-                    loc_lRet = THIS.cnt_4c_Conta.mLeDados(THIS.this_cGrupo, THIS.this_cCli, "1", ;
+                    loc_lRet = THIS.ChamarMLeDadosSeguro(THIS.this_cGrupo, THIS.this_cCli, "1", ;
                         THIS.this_cTpBloqCar, THIS.this_cMudaCpfCgc)
                 CATCH
                     loc_lRet = USED("crSigCdCli") AND RECCOUNT("crSigCdCli") > 0
@@ -2480,7 +2631,7 @@ DEFINE CLASS FormCliente AS FormBase
             THIS.pcEscolha       = "VISUALIZAR"
 
             IF PEMSTATUS(THIS, "cnt_4c_Conta", 5) AND !ISNULL(THIS.cnt_4c_Conta)
-                loc_lRet = THIS.cnt_4c_Conta.mLeDados(THIS.this_cGrupo, PADR(loc_cCodigoCli, 10), "1", ;
+                loc_lRet = THIS.ChamarMLeDadosSeguro(THIS.this_cGrupo, PADR(loc_cCodigoCli, 10), "1", ;
                     THIS.this_cTpBloqCar, THIS.this_cMudaCpfCgc)
                 IF loc_lRet
                     THIS.cnt_4c_Conta.Visible = .T.
@@ -2563,7 +2714,7 @@ DEFINE CLASS FormCliente AS FormBase
         LOCAL loc_lRet, loc_oErro
         TRY
             IF PEMSTATUS(THIS, "cnt_4c_Conta", 5) AND !ISNULL(THIS.cnt_4c_Conta)
-                loc_lRet = THIS.cnt_4c_Conta.mLeDados(THIS.this_cGrupo, THIS.this_cCli, "1", ;
+                loc_lRet = THIS.ChamarMLeDadosSeguro(THIS.this_cGrupo, THIS.this_cCli, "1", ;
                     THIS.this_cTpBloqCar, THIS.this_cMudaCpfCgc)
                 IF loc_lRet
                     THIS.cnt_4c_Conta.Visible = .T.

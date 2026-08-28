@@ -1,0 +1,367 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigCdRec.SCX
+* Data/Hora: 23/08/2026 06:15:31
+* Total de registros: 8
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDREC
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_grupo
+  Parent: SIGCDREC.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_cadastro
+  Parent: SIGCDREC.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_ds_grupo
+  Parent: SIGCDREC.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_cd_grupo
+  Parent: SIGCDREC.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDREC
+------------------------------------------------------------
+  DataSession = 2
+  DoCreate = .T.
+  Caption = "Cadastro Financeiro de Recebimentos"
+  Name = "SIGCDREC"
+  Pagina.ErasePage = .T.
+  Pagina.Lista.cntSombra.lblSombra.Name = "lblSombra"
+  Pagina.Lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  Pagina.Lista.cntSombra.Name = "cntSombra"
+  Pagina.Lista.Grade.FontName = "Tahoma"
+  Pagina.Lista.Grade.FontSize = 8
+  Pagina.Lista.Grade.RowHeight = 16
+  Pagina.Lista.Grade.ForeColor = 90,90,90
+  Pagina.Lista.Grade.Name = "Grade"
+  Pagina.Lista.Grupo_op.AutoSize = .F.
+  Pagina.Lista.Grupo_op.Inserir.Top = 5
+  Pagina.Lista.Grupo_op.Inserir.Left = 5
+  Pagina.Lista.Grupo_op.Inserir.Name = "Inserir"
+  Pagina.Lista.Grupo_op.Consultar.Top = 5
+  Pagina.Lista.Grupo_op.Consultar.Left = 80
+  Pagina.Lista.Grupo_op.Consultar.Name = "Consultar"
+  Pagina.Lista.Grupo_op.Alterar.Top = 5
+  Pagina.Lista.Grupo_op.Alterar.Left = 155
+  Pagina.Lista.Grupo_op.Alterar.Name = "Alterar"
+  Pagina.Lista.Grupo_op.Excluir.Top = 5
+  Pagina.Lista.Grupo_op.Excluir.Left = 230
+  Pagina.Lista.Grupo_op.Excluir.Name = "Excluir"
+  Pagina.Lista.Grupo_op.procurar.Top = 5
+  Pagina.Lista.Grupo_op.procurar.Left = 305
+  Pagina.Lista.Grupo_op.procurar.Name = "procurar"
+  Pagina.Lista.Grupo_op.Height = 85
+  Pagina.Lista.Grupo_op.Left = 344
+  Pagina.Lista.Grupo_op.Top = -1
+  Pagina.Lista.Grupo_op.Width = 385
+  Pagina.Lista.Grupo_op.Name = "Grupo_op"
+  Pagina.Lista.Grupo_Saida.SAIR.Top = 5
+  Pagina.Lista.Grupo_Saida.SAIR.Left = 5
+  Pagina.Lista.Grupo_Saida.SAIR.Name = "SAIR"
+  Pagina.Lista.Grupo_Saida.Left = 719
+  Pagina.Lista.Grupo_Saida.Top = -1
+  Pagina.Lista.Grupo_Saida.Name = "Grupo_Saida"
+  Pagina.Lista.cntFiltros.Name = "cntFiltros"
+  Pagina.Lista.Name = "Lista"
+  Pagina.Dados.Grupo_Salva.AutoSize = .T.
+  Pagina.Dados.Grupo_Salva.Salva.Top = 5
+  Pagina.Dados.Grupo_Salva.Salva.Left = 5
+  Pagina.Dados.Grupo_Salva.Salva.Name = "Salva"
+  Pagina.Dados.Grupo_Salva.Cancelar.Top = 5
+  Pagina.Dados.Grupo_Salva.Cancelar.Left = 80
+  Pagina.Dados.Grupo_Salva.Cancelar.Name = "Cancelar"
+  Pagina.Dados.Grupo_Salva.Name = "Grupo_Salva"
+  Pagina.Dados.Name = "Dados"
+  Pagina.Name = "Pagina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDREC.Pagina.Dados.lbl_grupo
+------------------------------------------------------------
+  AutoSize = .T.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Grupo :"
+  Left = 206
+  Top = 198
+  Width = 38
+  TabIndex = 4
+  ForeColor = 90,90,90
+  ZOrderSet = 10
+  Name = "lbl_grupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDREC.Pagina.Dados.lbl_cadastro
+------------------------------------------------------------
+  FontBold = .T.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Cadastro de Contas a Receber"
+  Left = 255
+  Top = 175
+  Visible = .T.
+  TabIndex = 1
+  ForeColor = 90,90,90
+  ZOrderSet = 3
+  Name = "lbl_cadastro"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDREC.Pagina.Dados.get_ds_grupo
+------------------------------------------------------------
+  ControlSource = "crSigCdRec.Descrs"
+  Format = "K!"
+  Height = 23
+  InputMask = ""
+  Left = 335
+  MaxLength = 20
+  ReadOnly = .F.
+  TabIndex = 3
+  Top = 193
+  Width = 150
+  ZOrderSet = 24
+  Name = "get_ds_grupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDREC.Pagina.Dados.get_cd_grupo
+------------------------------------------------------------
+  ControlSource = "crSigCdRec.Grupos"
+  Format = "K!"
+  Height = 23
+  InputMask = ""
+  Left = 253
+  MaxLength = 10
+  TabIndex = 2
+  Top = 193
+  Width = 79
+  ZOrderSet = 23
+  plprocurar = .T.
+  Name = "get_cd_grupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDREC
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LPARAMETERS lcacesso
+
+With ThisForm
+	.poDatamgr = CreateObject('fSqlConector')
+	With .poDatamgr
+		.AddCursor('SigCdRec','grupos','crSigCdRec','',ThisForm.pagina.lista.grade)
+		.pfSqlTabela(1).pColuna('grupos','','','Grupos',80,.t.)
+		.AddCursor('SigCdGcr','Codigos','crSigCdGcr','','')		
+	EndWith
+	= DoDefault()
+	.LockScreen = .f.
+EndWith
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_procurar
+------------------------------------------------------------
+PROCEDURE msv_procurar
+Local lcBusca
+
+If .Not.IsEmpty(ThisForm.Pagina.Dados.Get_cd_grupo.Value)
+	ThisForm.poDataMgr.LocateCursor('crSigCdRec','grupos',ThisForm.Pagina.Dados.Get_cd_grupo.Value)
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Lista.Grupo_op.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Lista.Grupo_op.Click
+LParameters Opcao
+
+If !dodefault( OPCAO )
+	ThisForm.mAtivapagina1
+	Return
+Endif
+
+Do Case 
+	Case Inlist( ThisForm.pcEscolha, 'INSERIR', 'PROCURAR' )
+		ThisForm.Pagina.Dados.Get_cd_grupo.SetFocus
+	Case Inlist( ThisForm.pcEscolha, 'EXCLUIR', 'CONSULTAR' , 'ALTERAR')
+		ThisForm.Pagina.Dados.Grupo_Salva.Salva.SetFocus
+EndCase
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+If Inlist( ThisForm.pcEscolha, 'INSERIR' )
+	If IsEmpty( CrSigCdRec.Grupos )
+		Messagebox( 'Grupo não pode ficar em branco!', 48, '' ) 
+		ThisForm.Pagina.Dados.Get_cd_grupo.SetFocus
+		Return
+	Endif
+	If ThisForm.poDataMgr.ChkRegister('SigCdRec','grupos',ThisForm.Pagina.Dados.Get_Cd_grupo.Value)
+		=Messagebox( 'Grupo já cadastrado!', 48, '' )
+		ThisForm.Pagina.Dados.Get_Cd_Grupo.SetFocus
+		Return
+	Endif
+
+
+Endif
+=DoDefault()
+ThisForm.mAtivapagina1
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+=DoDefault()
+If ThisForm.plCancelar
+	ThisForm.mAtivapagina1
+Endif
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDREC.Pagina.Dados.get_ds_grupo
+* Classe: fwget (Base: textbox)
+* Registro: 6
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !IsEmpty(this.value)
+	fAcessoContab(Usuar,'D',this.value,thisform.pagina.dados.get_cd_grupo,thisform.pagina.dados.get_ds_grupo)
+Else
+	thisform.pagina.dados.get_cd_grupo.value = ''
+	thisform.pagina.dados.get_cd_grupo.refresh
+endif
+select CrSigCdRec
+return(.t.)
+
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+return( thisform.pcEscolha $ 'INSERIR' )
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDREC.Pagina.Dados.get_cd_grupo
+* Classe: fwget (Base: textbox)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !IsEmpty(this.value)
+	fAcessoContab(Usuar,'C',this.value,this,thisform.pagina.dados.get_ds_grupo)
+Else
+	thisform.pagina.dados.get_ds_grupo.value = ''
+	thisform.pagina.dados.get_ds_grupo.refresh
+endif
+select CrSigCdRec
+return(.t.)
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+return( Inlist( Thisform.pcEscolha, 'INSERIR', 'PROCURAR' ) )
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 9
+================================================================================

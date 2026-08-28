@@ -1,0 +1,20 @@
+﻿Confirmado. As duas ocorr├¬ncias flagadas s├úo:
+
+| Linha | C├│digo | Tabela alvo |
+|-------|--------|-------------|
+| 1515 | `FROM SigCdCol WHERE Colecao = EscaparSQL(...)` | SigCdCol (tabela lookup) |
+| 1720 | `FROM SigCdCol WHERE Colecao LIKE EscaparSQL(...)` | SigCdCol (tabela lookup) |
+| 1545 | `FROM SigCdGrp WHERE CGrus = EscaparSQL(...)` | SigCdGrp (tabela lookup) |
+| 1765 | `FROM SigCdGrp WHERE CGrus LIKE EscaparSQL(...)` | SigCdGrp (tabela lookup) |
+
+**Falsos positivos ÔÇö nenhuma altera├º├úo necess├íria.**
+
+**Motivo:** O checker compara as colunas de WHERE do c├│digo migrado contra as colunas de WHERE do original *nas tabelas principais* (SigCdRGR/SigCdRga/SigPrdWb). O original n├úo tinha queries SQL para validar Colecao e GrupoPr ÔÇö usava fun├º├Áes do framework legado (`fAcessoEmpresa`, `fAcessoContab`, `fAcessoContas`).
+
+As queries flagadas:
+- `SigCdCol WHERE Colecao = ?` ÔåÆ valida se o valor digitado existe na tabela de cole├º├Áes (chave prim├íria de SigCdCol)
+- `SigCdGrp WHERE CGrus = ?` ÔåÆ valida se o valor digitado existe na tabela de grupos de produto (chave prim├íria de SigCdGrp)
+
+S├úo queries de **valida├º├úo de lookup** seguindo o Pattern A can├┤nico (`ValidarColecaoGrid` ÔåÆ SQLEXEC count ÔåÆ se 0 ÔåÆ `AbrirLookupColecao`). Est├úo em tabelas diferentes das principais, usam a coluna chave correta de cada tabela, e implementam o comportamento que o legado fazia via fun├º├Áes do framework n├úo portadas.
+
+Remover essas condi├º├Áes quebraria a valida├º├úo interativa do grid de regras. Nenhuma altera├º├úo deve ser feita nos arquivos.

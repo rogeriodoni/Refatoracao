@@ -1,0 +1,15 @@
+﻿Phase 6/8 is complete. Here's what was done:
+
+**Edit 1** (previous session): `cmd_4c_Estrutura.Caption` ÔåÆ `"Layout"`
+
+**Edit 2** (this session): Replaced `BtnEstruturaClick` with `BtnLayoutClick` ÔÇö the correct implementation that:
+- Executes the SQL from the editor field
+- Calls `THIS.CriarCursoresDesigner()` to create working cursors
+- Populates `CrsProps_Titulo` (1 title row from report name)
+- Populates `CrsProps_Campos` (one row per SQL result field via `AFIELDS()`, with smart defaults for numeric alignment/subtotals)
+- Wires `RecordSource` on all 3 designer grids (`grd_4c_TIT`, `grd_4c_CMPs`, `grd_4c_GRP`)
+- Navigates `pgf_4c_Dados.ActivePage = 2` to open the designer
+
+**Edit 3** (this session): Added `PROTECTED PROCEDURE CriarCursoresDesigner()` before `ENDDEFINE` that creates the three working cursors (`CrsProps_Titulo`, `CrsProps_Campos`, `CrsProps_GRP`) ÔÇö `Destroy()` already cleaned them up (was already in the file from earlier phases).
+
+**Edit 4** (this session): Updated the `BINDEVENT` on line 566 from `"BtnEstruturaClick"` to `"BtnLayoutClick"`.

@@ -1,0 +1,6 @@
+﻿Todas as 4 corre├º├Áes aplicadas corretamente. Sobre os [GRID-HEADER]: confirmei no `SigCdReg.SCT` original que os cabe├ºalhos legados eram exatamente `'Regios'`/"Regi├Áes" e `'Descrio'`/"Descri├º├úo" ÔÇö o c├│digo migrado est├í correto, os 4 erros [GRID-HEADER] s├úo **falsos positivos** por encoding no validator.
+
+**Resumo das corre├º├Áes em `FormReg.prg`:**
+- `[BUSCA-CURSOR] ├ù3` ÔÇö adicionado `loc_oBusca.this_cCursorDestino = "<cursor>"` antes de `Mostrar()` em `ValidarUFMuni` (UfLocal), `ValidarMuniMuni` (MuniLocal) e `ValidarCodigoVend` (VendLocal)
+- `[BINDEVENT-PARAMS]` ÔÇö `ValidarCodigo` alterado de assinatura `(par_nKeyCode, par_nShiftAltCtrl)` para `LPARAMETERS` expl├¡cito no corpo
+- `[GRID-HEADER] ├ù4` ÔÇö falso positivo confirmado; cabe├ºalhos "Regi├Áes" e "Descri├º├úo" correspondem ao legado (`pColuna(...,'Regios'...)` e `pColuna(...,'Descrio'...)` no SigCdReg.SCT)

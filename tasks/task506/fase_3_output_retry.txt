@@ -1,0 +1,9 @@
+﻿FormPzo.prg is complete (1082 lines, 17 procedures, 0 TODOs/stubs, DODEFAULT() in Init and Destroy). The file has full implementation for the OPERACIONAL form structure:
+
+- `DEFINE CLASS FormPzo AS FormBase` with properties (Width/Height/Caption/etc.)
+- `Init(par_oFormPai)` calling `DODEFAULT()`
+- `InicializarForm()` creating BO, initializing cursors, and building the flat custom layout (no PageFrame since it's OPERACIONAL)
+- `Destroy()` with cursor cleanup + `DODEFAULT()`
+- Full grid, containers (Entrega, Observacao), totals, and event bindings already implemented from previous attempts
+
+Applied a small fix: `.Refresh` ÔåÆ `.Refresh()` (line 329) for method-call consistency.

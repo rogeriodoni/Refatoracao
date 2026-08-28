@@ -1,0 +1,16 @@
+﻿`C:\4c\projeto\app\classes\mtzBO.prg` criado com sucesso ÔÇö Fase 1/8 conclu├¡da.
+
+**O que foi criado:**
+- `DEFINE CLASS mtzBO AS BusinessBase` com 10 propriedades de `SigCdMtz` + 2 auxiliares
+- `Init()` com `DODEFAULT()`, `this_cTabela = "SigCdMtz"`, `this_cCampoChave = "Codigo"`, RETURN fora do TRY/CATCH
+- `ObterChavePrimaria()` retornando `this_cCodigo` para o sistema de auditoria
+
+**Propriedades declaradas** (confirmadas via ControlSource do SCX):
+- `this_cCodigo` ÔÇö char(3), chave usuario gerada por `fGerUniqueKey`
+- `this_cAno`, `this_cSGrupos`, `this_cSContas`, `this_cMoeda` ÔÇö campos char
+- `this_lInativas` ÔÇö flag l├│gico (Inativas 0/1 do DB convertido)
+- `this_tDtIncs`, `this_cUsuIncs`, `this_tDtAlts`, `this_cUsuAlts` ÔÇö auditoria
+- `this_cSDesconta` ÔÇö derivado do JOIN com `SigCdCli.rclis`, n├úo existe em SigCdMtz
+- `this_nValorTotal` ÔÇö total calculado dos meses de SigCdMtI (display only)
+
+**Fase 2** adicionar├í `CarregarDoCursor()`, `Buscar()`, `CarregarPorCodigo()`, `Inserir()`, `Atualizar()` e `ExecutarExclusao()`.

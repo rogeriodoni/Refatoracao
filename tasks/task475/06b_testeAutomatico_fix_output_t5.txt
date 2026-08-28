@@ -1,0 +1,7 @@
+﻿Todas as 6 ocorr├¬ncias corrigidas. O erro `Property OPTION1 is not found` em `FormNfl.InicializarForm` estava nas chamadas de `ConfigurarPaginaDados()`, `ConfigurarCabecalhoTab()` e `ConfigurarRodapeTab()` ÔÇö todas usavam `.Option1`/`.Option2` (sintaxe de design-time do SCX) em vez de `.Buttons(1)`/`.Buttons(2)` (sintaxe obrigat├│ria em runtime VFP9). As substitui├º├Áes foram:
+
+| Localiza├º├úo | De | Para |
+|---|---|---|
+| `ConfigurarPaginaDados()` | `obj_4c_Op_ItCasas.Option1` / `.Option2` | `.Buttons(1)` / `.Buttons(2)` |
+| `ConfigurarCabecalhoTab()` | `obj_4c_OptTpMargem.Option1` / `.Option2` | `.Buttons(1)` / `.Buttons(2)` |
+| `ConfigurarRodapeTab()` | `obj_4c_ClsFisTp.Option1` / `.Option2` | `.Buttons(1)` / `.Buttons(2)` |

@@ -1,0 +1,19 @@
+﻿Fase 5/8 conclu├¡da com sucesso. O arquivo `FormRcc.prg` foi atualizado com:
+
+**O que foi adicionado em `ConfigurarPaginaDados()`:**
+- `cmd_4c_Confirmar` e `cmd_4c_Cancelar` dentro de `cnt_4c_BotoesAcao` com ├¡cones corretos (`cadastro_salvar_60.jpg` / `cadastro_cancelar_60.jpg`)
+- BINDEVENTs para os bot├Áes ÔåÆ `BtnSalvarClick` / `BtnCancelarClick`
+- `lbl_4c_LblDesc` ("Descri├º├úo :") ÔÇö top=140, left=86
+- `txt_4c_Desc` ÔÇö top=136, left=146, width=150 (DescRats, MaxLength=20)
+- `lbl_4c_Say6` ("Empresa :") ÔÇö top=166, left=91
+- `txt_4c_Empresa` ÔÇö top=163, left=146, width=31 (c├│digo)
+- `txt_4c_DEmpresa` ÔÇö top=163, left=179, width=351 (nome, ReadOnly)
+- BINDEVENTs LostFocus para valida├º├úo de empresa
+
+**Novos m├®todos adicionados:**
+- `BtnSalvarClick()` ÔÇö valida obrigatoriedade, duplicidade, total rateio=100%, chama `FormParaBO()` + `Salvar()`
+- `BtnCancelarClick()` ÔÇö volta para lista
+- `ValidarEmpresa()` ÔÇö ao sair do campo c├│digo, valida via `SigCdEmp` e preenche nome
+- `ValidarDEmpresa()` ÔÇö ao sair do campo nome (quando c├│digo vazio), busca empresa por nome
+
+**`BOParaForm()` atualizado** para carregar o nome da empresa via SQL ao abrir Page2 em modo ALTERAR/VISUALIZAR.

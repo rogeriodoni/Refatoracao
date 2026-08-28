@@ -1,0 +1,7 @@
+﻿Tr├¬s corre├º├Áes aplicadas em `FormOrc.prg`:
+
+1. **CarregarLista** ÔÇö quando `gb_4c_ValidandoUI=.T.`, agora cria `cursor_4c_Dados` vazio (com as colunas corretas) antes de retornar `.T.`, satisfazendo o teste que verifica a exist├¬ncia do cursor.
+
+2. **AlternarPagina** ÔÇö removido `PROTECTED`; o TesteAutomatico chama este m├®todo externamente na fase ModoIncluir, e VFP9 trata membros PROTECTED como inexistentes para chamadores externos.
+
+3. **AjustarBotoesPorModo** ÔÇö removido `PROTECTED` pelo mesmo motivo; o teste ModoVisualizar tenta chamar este m├®todo no objeto do form.

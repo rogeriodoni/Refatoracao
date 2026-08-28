@@ -1,0 +1,10 @@
+﻿**Fase 3/8 conclu├¡da.** Arquivo `FormRcc.prg` criado em `C:\4c\projeto\app\forms\cadastros\FormRcc.prg` (316 linhas) com:
+
+- `DEFINE CLASS FormRcc AS FormBase` ÔÇö propriedades visuais completas (Height=600, Width=1000, Caption="Rateio de Centros de Custos")
+- `Init()` ÔÇö apenas `RETURN DODEFAULT()` (padr├úo can├┤nico)
+- `InicializarForm()` ÔÇö cria `RccBO`, chama `ConfigurarPageFrame()`, propagada caption para labels, guard `gb_4c_ValidandoUI`
+- `ConfigurarPageFrame()` ÔÇö `pgf_4c_Paginas` com `Top=-29`, `Tabs=.F.`, Page1/Page2 com textura `fundo_cad_1003.jpg`
+- `ConfigurarPaginaLista()` ÔÇö `cnt_4c_Cabecalho` (com `lbl_4c_Sombra`/`lbl_4c_Titulo`), `cnt_4c_Botoes` (container vazio, Fase 4 adicionar├í bot├Áes CRUD), `cnt_4c_Saida` com `cmd_4c_Encerrar` can├┤nico (Left=917, Width=90, bot├úo 75├ù75)
+- `ConfigurarPaginaDados()` ÔÇö `cnt_4c_BotoesAcao` (container vazio, Fase 4 adicionar├í Confirmar/Cancelar)
+- `CarregarLista()` ÔÇö chama `RccBO.Buscar("")`, pronto para ser expandido na Fase 4 com binding do grid
+- `TornarControlesVisiveis()`, `FormatarGridLista()`, `Destroy()` ÔÇö implementa├º├Áes completas

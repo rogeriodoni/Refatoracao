@@ -1,0 +1,150 @@
+{
+  "resumo": {
+    "totalMetodos": 8,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 2,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": []
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDORG",
+      "evento": "Procedure",
+      "linhas": 7,
+      "codigoOriginal": "Local lcBusca\n\nIf .Not.IsEmpty(ThisForm.Pagina.Dados.Getcodigo.Value)\n\tThisForm.poDataMgr.LocateCursor('crSigCdOrg','codigos',ThisForm.Pagina.Dados.Getcodigo.Value)\nEndIf\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "LocateCursor",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDORG",
+      "evento": "Init",
+      "linhas": 13,
+      "codigoOriginal": "LPARAMETERS lcacesso\n\nWith ThisForm\n\t.poDatamgr = CreateObject('fSqlConector',ThisForm.Name)\n\tWith .poDatamgr\n\t\t.AddCursor('SigCdOrg','codigos','crSigCdOrg','',ThisForm.pagina.lista.grade)\n\t\t.pfSqlTabela(1).pColuna('Codigos','','','Código',50,.t.)\n\t\t.pfSqlTabela(1).pColuna('Descricaos','','','Descriçãos',290,.t.)\n\tEndWith\n\t= DoDefault()\n\t.LockScreen = .f.\nEndWith\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDORG",
+      "evento": "Click",
+      "linhas": 18,
+      "codigoOriginal": "parameters lnOpcao\n\nIf !dodefault( lnOpcao )\n\tThisForm.mAtivapagina1\n\tReturn\nEndif\n\ndo case\n\tcase thisform.pcEscolha='INSERIR' or ;\n\t\tthisform.pcEscolha='PROCURAR'\n\t\tthisform.Pagina.Dados.getcodigo.setfocus\n\tcase thisform.pcEscolha='ALTERAR'\n\t\tthisform.pagina.dados.getdescricao.setfocus\n\tcase thisform.pcEscolha='CONSULTAR' or ;\n\t\tthisform.pcEscolha='EXCLUIR'\n\t\tthisform.pagina.dados.grupo_salva.salva.setfocus\nendcase\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDORG",
+      "evento": "Click",
+      "linhas": 39,
+      "codigoOriginal": "local lcRetorno\n\nm.lcRetorno = .t.\n\nif inlist(thisform.pcEscolha,'INSERIR','ALTERAR')\n\n   with thisform.Pagina.Dados\n      if IsEmpty(.getCodigo.value)\n\t      = messagebox('Código em branco !!!',0+64,goSistema.NomeSistema)\n         .getCodigo.setfocus\n\t\t  return\n\t  else\n\t\t  If ThisForm.poDataMgr.ChkRegister('SigCdOrg','Codigos',ThisForm.Pagina.Dados.GetCodigo.Value) and thisform.pcEscolha = 'INSERIR'\n\t         = messagebox('Código já cadastrado !!!',0+64,goSistema.NomeSistema)\n\t         .getCodi... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChkRegister",
+        "controlesReferenciados": "ChkRegister('SigCdOrg',ChkRegister('SigCdPro',ChkRegister('SigCdPrc'",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDORG",
+      "evento": "Click",
+      "linhas": 6,
+      "codigoOriginal": "=DoDefault()\nselect CrSigCdOrg\nif thisform.plCancelar\n\tThisForm.mAtivapagina1\nendif\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDORG",
+      "evento": "Activate",
+      "linhas": 19,
+      "codigoOriginal": "=dodefault()\n\nif (thisform.pcEscolha=='INSERIR'.or.!eof('CrSigCdOrg'))\n\n\tif inlist(thisform.pcEscolha,'INSERIR','ALTERAR','PROCURAR')\n\t\tthisform.Pagina.Dados.getCodigo.setfocus\n\telse\n\t   thisform.Pagina.Dados.Grupo_salva.Salva.setfocus\n\tendif   \n\nelse\n\n   thisform.Pagina.Lista.enabled = .t.\n   thisform.Pagina.activepage = 1\n   thisform.Pagina.Lista.Grade.setfocus\n   \nendif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "!eof",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDORG.Pagina.Dados.getCodigo",
+      "evento": "When",
+      "linhas": 6,
+      "codigoOriginal": "local saida\nsaida = .t.\nif inlist(thisform.Pagina.Lista.Grupo_op.value,2,3)\n\tsaida = .f.\nendif\nreturn saida",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDORG.Pagina.Dados.getDescricao",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return(inlist(thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

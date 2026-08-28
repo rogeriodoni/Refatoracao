@@ -348,7 +348,7 @@ DEFINE CLASS FormDmo AS FormBase
                     .Top             = 5
                     .Left            = 917
                     .Height          = 75
-                    .Width           = 75
+                    .Width           = 90
                     .Caption         = "Encerrar"
                     .FontBold        = .T.
                     .FontItalic      = .T.

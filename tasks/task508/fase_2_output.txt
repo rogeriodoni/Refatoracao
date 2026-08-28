@@ -1,0 +1,7 @@
+﻿Fase 2 conclu├¡da. O arquivo j├í tinha os m├®todos CRUD da Fase 1, mas corrigi os seguintes bugs cr├¡ticos:
+
+1. **RETURN dentro de TRY** em `Inserir()`, `Atualizar()`, `ExecutarExclusao()` ÔÇö substitu├¡do pelo padr├úo `loc_lTransAberta` + rollback **fora** do TRY
+2. **RETURN dentro de TRY** em `SalvarItensRateio()` ÔÇö verifica├º├úo `USED()` movida para fora do TRY
+3. **RETURN dentro de TRY** em `CalcularRateioAuto()` ÔÇö verifica├º├úo `USED()` movida para fora do TRY
+4. **SQLEXEC em cursor VFP local** em `ValidarTotalRateio()` ÔÇö substitu├¡do por `SUM PercRats FOR Marcas = 1 TO loc_nTotal` (opera├º├úo VFP nativa, n├úo SQL Server)
+5. **RETURN dentro de TRY** em `ValidarTotalRateio()` ÔÇö verifica├º├úo `USED()` movida para fora do TRY

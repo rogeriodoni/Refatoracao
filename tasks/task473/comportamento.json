@@ -1,0 +1,163 @@
+{
+  "resumo": {
+    "totalMetodos": 8,
+    "metodosComSQL": 4,
+    "metodosComValidacao": 3,
+    "totalQueries": 2,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fUniqueIds", "fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDMUN",
+      "evento": "Procedure",
+      "linhas": 8,
+      "codigoOriginal": "SELECT crSigCdMun\nIf not Empty(ThisForm.Pagina.Dados.get_Codigos.Value) \n\tLOCATE FOR Codigos = ThisForm.Pagina.Dados.get_Codigos.Value\nElse\n\tLOCATE FOR Descs = ThisForm.Pagina.Dados.get_Descs.Value \nEndif\t\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Codigos,get_Descs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMUN",
+      "evento": "Init",
+      "linhas": 17,
+      "codigoOriginal": "Lparameters lcAcesso\n\nWith ThisForm\n\t.poDatamgr = CreateObject('fSqlConector', 'SigCdMun')\n\tWith .poDataMgr\n\t\tlcQry = [Select * from SigCdMun]\n\t\t.AddCursor('SigCdMun', 'cIdChaves', 'crSigCdMun', '', ThisForm.Pagina.Lista.Grade,lcQry)\n\t\t.pfSqlTabela(1).pColuna('Codigos', '', '', 'Código',    060, .t.)\n\t\t.pfSqlTabela(1).pColuna('Descs',    '', '', 'Município', 290, .t.)\n\tEndWith\t\nEndWith\n\n=DoDefault()\n\nThisForm.Pagina.Lista.Grade.Column1.SetFocus\n* Fim *********************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMUN",
+      "evento": "Click",
+      "linhas": 19,
+      "codigoOriginal": "Lparameters Opcao\n\nIf Not DoDefault(Opcao)\n\tThisForm.mAtivapagina1\n\tReturn 0\nEndIf\n\nSelect crSigCdMun\nDo Case\n\tCase Inlist(ThisForm.pcEscolha, 'CONSULTAR', 'EXCLUIR')\n\t\tThisForm.Pagina.Dados.Grupo_Salva.Salva.Setfocus\n\tOtherwise \n\t\tThis.Parent.Parent.Dados.get_Codigos.Setfocus\nEndCase \n\nSelect crSigCdMun\n\nThisForm.Pagina.Dados.Activate\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Codigos",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMUN",
+      "evento": "Click",
+      "linhas": 36,
+      "codigoOriginal": "Local lnRecno1,lnNreg1,lcGrupo,lcDope,laCampos(2,2)\n\nIf InList(ThisForm.pcEscolha,'INSERIR')\n\tIf Empty(ThisForm.Pagina.Dados.get_Codigos.Value)\n\t\t=MessageBox('Obrigatório Informar o Código do Município!!!', 48, '')\n\t\tThis.Parent.Parent.Get_Codigos.SetFocus\n\t\tReturn 0\n\tEndIf\n\t\n\tIf Empty(This.Parent.Parent.Get_Descs.Value)\n\t\t=MessageBox('Obrigatório Informar o Nome do Município!!!', 48, '')\n\t\tThis.Parent.Parent.Get_Descs.SetFocus\n\t\tReturn 0\n\tEndIf\n\t\n\tlcquery = [select codigos from SigCdMun where c... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "sqlexecute",
+        "controlesReferenciados": "get_Codigos,Get_Descs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMUN",
+      "evento": "Click",
+      "linhas": 7,
+      "codigoOriginal": "=DoDefault()\n\nIf ThisForm.plCancelar\n\tThisForm.mAtivapagina1\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMUN.Pagina.Dados.get_Descs",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR', 'PROCURAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMUN.Pagina.Dados.getUFIBGES",
+      "evento": "Valid",
+      "linhas": 20,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject([fwBuscaExt], ThisForm.poDataMgr.pnIdConn, [SigCdUfs], ;\n\t\t\t\t\t\t   [crListaRemota], [UFIBGEs], This.Value, [Seleção], .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna([UFIBGEs], [99], [C])\n\t\tloLista.mAddColuna([Estados], [], [UF])\n\t\tloLista.mAddColuna([Descrs],  [], [Descrição])\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value = Iif(Lastkey()=27, [], crListaRemota.UFIBGEs)\n\tUse In crListaRemota\nEndIf\nThis.Refresh\n* Fim ***************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDMUN.Pagina.Dados.get_Codigos",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, 'INSERIR', 'PROCURAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDMUN.Init",
+      "queryOriginal": "\t\tlcQry = [Select * from SigCdMun]",
+      "tabelas": "SigCdMun",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDMUN.Click",
+      "queryOriginal": "\tlcquery = [select codigos from SigCdMun where c... [TRUNCADO]",
+      "tabelas": "SigCdMun",
+      "colunas": "codigos",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdMun"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

@@ -1,0 +1,15 @@
+﻿Phase 8/8 is complete. Here's what was done:
+
+**FormRPT.prg** ÔÇö added 3 missing methods before `ENDDEFINE`:
+- `HabilitarCampos(par_lHabilitar)` ÔÇö thin wrapper over `ConfigurarModoEditor(!par_lHabilitar)` (PROTECTED)
+- `LimparCampos()` ÔÇö resets all Page1 editor fields to blank/defaults (PROTECTED, TRY/CATCH)
+- `AjustarBotoesPorModo()` ÔÇö enables/disables CRUD buttons on Page1 and Confirmar/Cancelar on Page2 based on `this_cModoAtual` (PROTECTED, TRY/CATCH)
+- Header comment updated to `Fase: 8/8 - COMPLETO`
+
+**menu.prg** ÔÇö integrated:
+- `DEFINE BAR 164 OF popCadastros` ÔÇö separator
+- `DEFINE BAR 165 OF popCadastros PROMPT "Relat" + CHR(243) + "rios 4Report"` ÔÇö correct accent via CHR()
+- `ON SELECTION BAR 165 OF popCadastros DO AbrirFormRPT`
+- `PROCEDURE AbrirFormRPT()` ÔÇö canonical pattern with CREATEOBJECT + VARTYPE guard + CATCH/MostrarErro
+
+**config.prg** ÔÇö no changes needed; ADIR() already auto-loads all `*BO.prg` (RPTBO.prg) and `Form*.prg` (FormRPT.prg) from their respective directories.

@@ -1,0 +1,14 @@
+﻿O arquivo j├í cont├®m todos os 4 eventos solicitados na Fase 7. Verificando as implementa├º├Áes:
+
+- **BtnIncluirClick()** (linha 637): `NovoRegistro()` ÔåÆ `this_cModoAtual = "INCLUIR"` ÔåÆ `LimparCampos()` ÔåÆ `HabilitarCampos(.T.)` ÔåÆ `AlternarPagina(2)` Ô£à
+- **BtnVisualizarClick()** (linha 648): l├¬ cursor, valida, `CarregarPorCodigo()` ÔåÆ `BOParaForm()` ÔåÆ `HabilitarCampos(.F.)` ÔåÆ `AlternarPagina(2)` Ô£à
+- **BtnAlterarClick()** (linha 675): l├¬ cursor, valida, `CarregarPorCodigo()` ÔåÆ `EditarRegistro()` ÔåÆ `BOParaForm()` ÔåÆ `HabilitarCampos(.T.)` ÔåÆ `AlternarPagina(2)` Ô£à
+- **BtnExcluirClick()** (linha 704): l├¬ cursor, valida, `CarregarPorCodigo()` ÔåÆ `MsgConfirma()` ÔåÆ `Excluir()` ÔåÆ recarrega lista Ô£à
+
+Todas as implementa├º├Áes seguem os padr├Áes cr├¡ticos:
+- `this_cModoAtual` setado **antes** de `HabilitarCampos()` (Problema 19)
+- `EditarRegistro()` chamado ap├│s `CarregarPorCodigo()` em Alterar (Problema 18)
+- `MsgConfirma()` usado como l├│gico `IF loc_lConfirma` (Problema 50)
+- `Excluir()` (PUBLIC) chamado do Form, nunca `ExecutarExclusao()` (Problema 57)
+
+**Fase 7 j├í estava completa** ÔÇö os eventos foram inclu├¡dos nas fases anteriores. O arquivo FormOrg.prg est├í ├¡ntegro com todos os m├®todos funcionais.

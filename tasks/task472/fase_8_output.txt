@@ -1,0 +1,17 @@
+﻿O arquivo Formmtz.prg est├í completo. Checklist final da Fase 8:
+
+**M├®todos presentes e funcionais:**
+- `BtnBuscarClick()` ÔÇö corrigido: rebinda grid e reaplica ControlSources/Headers ap├│s `Buscar()` filtrado
+- `BtnEncerrarClick()` ÔÇö `THIS.Release()`
+- `BtnSalvarClick()` ÔÇö valida├º├Áes fora do TRY, `Salvar()` sem par├ómetro, volta para lista
+- `BtnCancelarClick()` ÔÇö `AlternarPagina(1)` + `CarregarLista()`
+- `FormParaBO()` / `BOParaForm()` ÔÇö todos os campos mapeados (`this_cCodigo`, `this_cAno`, `this_cSGrupos`, `this_cSContas`, `this_cMoeda`, `this_lInativas`, `this_cSDesconta`, `this_nValorTotal`, campos de auditoria)
+- `HabilitarCampos()`, `LimparCampos()`, `AjustarBotoesPorModo()`
+- `CarregarLista()`, `AlternarPagina()`
+- `TornarControlesVisiveis()`, `FormatarGridLista()`
+- Todos os m├®todos de valida├º├úo/lookup (Grupo, Conta, Moeda, F4)
+- `GrdDadosAfterRowColChange()`, `AtualizaTotal()`, `BtnInserirLinhaClick()`, `BtnExcluirLinhaClick()`
+
+**Integra├º├úo:** menu.prg j├í tem `AbrirFormmtz()` + `DEFINE BAR 134 OF popCadastros`; config.prg usa ADIR() din├ómico ÔÇö nenhuma altera├º├úo necess├íria.
+
+**├Ünica corre├º├úo aplicada nesta fase:** `BtnBuscarClick` agora rebinda `RecordSource`, `ControlSource` e `Header1.Caption` das 7 colunas do grid ap├│s `Buscar()` filtrado, para que os resultados apare├ºam corretamente na lista.

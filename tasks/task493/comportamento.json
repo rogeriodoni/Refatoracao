@@ -1,0 +1,273 @@
+{
+  "resumo": {
+    "totalMetodos": 14,
+    "metodosComSQL": 5,
+    "metodosComValidacao": 7,
+    "totalQueries": 4,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fGerarMD52016", "fCriptografar", "fDecriptografar", "fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDPAF",
+      "evento": "Valid",
+      "linhas": 19,
+      "codigoOriginal": "Lparameters pMov\n\nLocal lcMd5\n\nlcQry = [Select * From SigCdPaf Where Dopes = '] + fDecriptografar(pMov) + [']\nIf ThisForm.poDataMgr.SqlExecute(lcQry, [LocalMd5]) < 1\n\t=MessageBox([Favor Reinicializar o Processo!!! Falha na Conexão (LocalMd5)], 0+16, [Erro!!!])\n\tReturn .f.\nEndIf\nSelect LocalMd5\nGo Top\n\nlcMd5 = fGerarMD52016([LocalMd5], [cMd5s])\n\nIf (LocalMd5.cMd5s <> lcMd5)\n\tReturn .f.\nEndIf\n\nReturn .t.",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fGerarMD52016",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDPAF",
+      "evento": "Init",
+      "linhas": 134,
+      "codigoOriginal": "LParameters lcAcesso\n\nWith ThisForm\n\t.poDatamgr = CreateObject('fSqlConector',ThisForm.Name)\n\n\tlcSql = [Select a.Dopes,b.OpeInatvs,b.cnCaixas,c.CupFis,c.nFiscals,c.Agrupas,c.Docus,c.TrNfis From SigOpCdd a, SigOpCdc b, SigCdOpe c ]+;\n\t\t\t[Where a.pafEcfs = 1 And a.Dopes = b.dopes And a.Dopes = c.Dopes ]\n\n\tThisForm.Podatamgr.SqlExecute(lcSql,'LocalOpe2')\n\tSelect LocalOpe2\n\tIndex on Dopes Tag Dopes\n\tLocate for .f.\n\n\tlcSql = [Select Dopes,cncaixas,trnfis From SigCdPaf ]\n\tThisForm.Podatamgr.SqlExecute... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fCriptografar,fDecriptografar,fGerarMD52016",
+        "metodosFormChamados": "SqlExecute,Commit,ValidarMd5",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPAF",
+      "evento": "Procedure",
+      "linhas": 10,
+      "codigoOriginal": "Local lcBusca\n\nIf .Not.IsEmpty(ThisForm.Pagina.Dados.Get_unid.Value)\n\tThisForm.poDataMgr.LocateCursor('crSigCdUni','cunis',ThisForm.Pagina.Dados.Get_unid.Value)\nElse\n\tIf .Not.IsEmpty(ThisForm.Pagina.Dados.Get_desc.Value)\n\t\tThisForm.poDataMgr.LocateCursor('crSigCdUni','dunis',ThisForm.Pagina.Dados.Get_desc.Value)\n\tEndIf\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "LocateCursor",
+        "controlesReferenciados": "Get_unid,Get_desc",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPAF",
+      "evento": "Procedure",
+      "linhas": 5,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n\n= DoDefault()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPAF",
+      "evento": "Click",
+      "linhas": 32,
+      "codigoOriginal": "LParameters lnOpcao\n\nSelect CrSigCdPaf\n\nIf !DoDefault(lnOpcao)\n\tThisForm.mAtivaPagina1\n\tReturn 0\nEndIf\n\nUpdate CrSigCdPaf Set DopepafEcfs = fCriptografar(Dopes), cx = fCriptografar(cnCaixas), trnf = fCriptografar(trNFis)\nGo top IN CrSigCdPaf\n\nIf Not ThisForm.ValidarMd5(CrSigCdPaf.DopePafEcfs)\n\tMessageBox('Parâmetros de Função Incorreto. Os Dados Foram alterados!!!'+Chr(13)+;\n\t\t\t\t'Favor Sair da Tela de Função e Entrar Novamente.',0+16,' ')\n\tThisForm.mAtivaPagina1\n\tReturn 0\nEndif\n\nThis.parent.pare... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fCriptografar",
+        "metodosFormChamados": "ValidarMd5",
+        "controlesReferenciados": "chk_Inativar,Get_ncaixa,Get_cupomnfis",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPAF",
+      "evento": "Click",
+      "linhas": 108,
+      "codigoOriginal": "If ThisForm.pcEscolha = 'ALTERAR'\n\n\tlcDopPaf = CrSigCdPaf.DopePafEcfs\n\tlnDoc = Str(This.parent.parent.op_doc.Value,1)\n\tlnInt = Str(This.Parent.Parent.Chk_Inativar.Value,1)\n\tlcCaixa = This.Parent.Parent.Get_ncaixa.Value\n\tlcTrfNf = This.Parent.Parent.Get_cupomnfis.Value\n\t\n\tIf Not InList(lnInt,'0','1')\n\t\tMessageBox('Configuração Inválida. Acerte a Opção Inativar!!! ',0+16,'')\n\t\tReturn .f.\n\tEndIf\n\n\tSelect CrSigCdPaf\n\tReplace Inativas With fDecriptografar(lnInt),;\n\t\t\tDocs     With fDecriptografar(lnD... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDecriptografar,fGerarMD52016",
+        "metodosFormChamados": "SqlExecute,Update,Commit",
+        "controlesReferenciados": "Chk_Inativar,Get_ncaixa,Get_cupomnfis",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDPAF",
+      "evento": "Click",
+      "linhas": 6,
+      "codigoOriginal": "= DoDefault()\nIf ThisForm.plCancelar\n\tThisForm.mAtivaPagina1\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPAF.Pagina.Dados.Get_desc",
+      "evento": "LostFocus",
+      "linhas": 19,
+      "codigoOriginal": "If ThisForm.pcEscolha = 'INSERIR' \n   sele crSigOpCdc\n   GO TOP\n   IF EOF()\n\t  append blank\n   \t  Replace crSigOpCdc.dopes with crSigCdOpe.Dopes\n   Endif\n   \n   sele crSigOpCdi\n   GO TOP\n   IF EOF()\n\t  append blank\n   \t  Replace crSigOpCdi.dopes with crSigCdOpe.Dopes\n   Endif\n   \n   ThisForm.Pagina.Dados.PagDados.PgEstoque.Op_Est.Option1.SetFocus\nElse\n   ThisForm.Pagina.Dados.Grupo_Salva.Salva.SetFocus\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Option1",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPAF.Pagina.Dados.Get_desc",
+      "evento": "When",
+      "linhas": 16,
+      "codigoOriginal": "LOCAL RET\n\nRET=DoDefault()\nIF THISForm.pcEscolha='INSERIR' and !empt(This.value)\n\tRET=.F.\nENDIF\n\nIF THISForm.pcEscolha='ALTERAR'\n\tRET=.F.\nENDIF\n\nIF THISForm.pcEscolha='PROCURAR'\n\tRET=.T.\nENDIF\n\nRETURN(RET)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "pcEscolha='INSERIR' and !empt",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPAF.Pagina.Dados.Get_ncaixa",
+      "evento": "Valid",
+      "linhas": 5,
+      "codigoOriginal": "If Not Empty(This.Value) And Len(Alltrim(This.Value)) < 3\n\tMessageBox('Obrigatorio Preenchimento de 3 digitos',0+48,'Erro')\n\tReturn 0\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPAF.Pagina.Dados.Get_ncaixa",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist( ThisForm.pcEscolha, \"INSERIR\", \"ALTERAR\" )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPAF.Pagina.Dados.Get_cupomnfis",
+      "evento": "Valid",
+      "linhas": 24,
+      "codigoOriginal": "Local xobj, xBrox, lnOrdem\n\nIf not Empty(This.value)\n\tlnOrdem = VAL(this.Value) \n\txBrox = CreateObject('fwBuscaExt',Thisform.poDatamgr.pnIdconn,'SigFiNtb','crSigFiNtb','ordems',lnOrdem,'Seleção',.t.,'ordems')\n\tIf  Not xBrox.plAchouRegistro\n\t\txBrox.mAddColuna('ordems','xxxxx','Ordem')\n\t\txBrox.mAddColuna('descrs','xxxxxxxxxXxxxxxxxxxx','Descrição')\n\t\txBrox.mAddColuna('Imps','','Impressora')\n\t\txBrox.mAddColuna('OpeRnf','xxxxxx','Codigo')\n\t\txBrox.Show()\n\tEndIf \n\n\tIf lastkey()<>27\n\t\tThis.value = str(... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPAF.Pagina.Dados.Get_cupomnfis",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Inlist( ThisForm.pcEscolha, \"INSERIR\", \"ALTERAR\" )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPAF.Pagina.Dados.op_doc",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist( ThisForm.pcEscolha, \"INSERIR\", \"ALTERAR\" ) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDPAF.Valid",
+      "queryOriginal": "lcQry = [Select * From SigCdPaf Where Dopes = '] + fDecriptografar(pMov) + [']",
+      "tabelas": "SigCdPaf",
+      "colunas": "Dopes,fDecriptografarpMov",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDPAF.Init",
+      "queryOriginal": "\tlcSql = [Select a.Dopes,b.OpeInatvs,b.cnCaixas,c.CupFis,c.nFiscals,c.Agrupas,c.Docus,c.TrNfis From SigOpCdd a, SigOpCdc b, SigCdOpe c ]+; \t\t\t[Where a.pafEcfs = 1 And a.Dopes = b.dopes And a.Dopes = c.Dopes ]",
+      "tabelas": "SigOpCdd",
+      "colunas": "Dopes,OpeInatvs,cnCaixas,CupFis,nFiscals,Agrupas,Docus,TrNfis",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDPAF.Init",
+      "queryOriginal": "\tlcSql = [Select Dopes,cncaixas,trnfis From SigCdPaf ]",
+      "tabelas": "SigCdPaf",
+      "colunas": "Dopes,cncaixas,trnfis",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDPAF.Click",
+      "queryOriginal": "Update CrSigCdPaf Set DopepafEcfs = fCriptografar(Dopes), cx = fCriptografar(cnCaixas), trnf = fCriptografar(trNFis)",
+      "tabelas": "CrSigCdPaf",
+      "colunas": "DopepafEcfs,cx,trnf",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdPaf", "SigOpCdd", "CrSigCdPaf"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

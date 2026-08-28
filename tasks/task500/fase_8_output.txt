@@ -1,0 +1,21 @@
+﻿A migra├º├úo FormPMC est├í **100% completa**. Todos os m├®todos da Fase 8 j├í est├úo implementados no arquivo:
+
+**FormPMC.prg** (C:\4c\projeto\app\forms\cadastros\FormPMC.prg):
+- `BtnBuscarClick()` ÔÇö linha 911
+- `BtnEncerrarClick()` ÔÇö linha 953
+- `BtnSalvarClick()` ÔÇö linha 962 (com valida├º├Áes fora do TRY, gera├º├úo de c├│digo PMC+AAMM+SEQ)
+- `BtnCancelarClick()` ÔÇö linha 1040
+- `FormParaBO()` ÔÇö linha 1049
+- `BOParaForm()` ÔÇö linha 1073
+- `HabilitarCampos()` ÔÇö linha 1133 (respeitando When clauses do legado)
+- `LimparCampos()` ÔÇö linha 1100
+- `CarregarLista()` ÔÇö linha 655
+- `AjustarBotoesPorModo()` ÔÇö linha 1181
+
+**PMCBO.prg** (C:\4c\projeto\app\classes\PMCBO.prg): completo com Buscar, CarregarPorCodigo, GerarCodigo, ValidarPeriodo, Inserir, Atualizar, ExecutarExclusao.
+
+**Integra├º├úo completa**:
+- `menu.prg`: DEFINE BAR 153 + ON SELECTION + `AbrirFormPMC()` com padr├úo correto
+- `config.prg`: usa ADIR() din├ómico ÔÇö sem necessidade de SET PROCEDURE manual
+
+A task500 (FormPMC) est├í finalizada e pronta para testes.

@@ -1,0 +1,12 @@
+﻿Tudo correto. A migra├º├úo da Fase 8/8 est├í conclu├¡da.
+
+**Resumo das altera├º├Áes realizadas:**
+
+**FormOCS.prg** ÔÇö adicionado `AjustarBotoesPorModo()` (PROTECTED) que desabilita o bot├úo Confirmar em modo VISUALIZAR e habilita nos modos INCLUIR/ALTERAR. O m├®todo ├® chamado automaticamente ao final de `HabilitarCampos()`.
+
+**menu.prg** ÔÇö 3 adi├º├Áes:
+- `DEFINE BAR 140 OF popCadastros` com prompt "Ocasi├úo" na se├º├úo de cadastros
+- `ON SELECTION BAR 140 OF popCadastros DO AbrirFormOCS` nos bindings
+- `PROCEDURE AbrirFormOCS()` completo no padr├úo can├┤nico (VARTYPE, Show() sem par├ómetro, sem Release())
+
+A integra├º├úo com config.prg n├úo foi necess├íria ÔÇö o ADIR() autom├ítico j├í carrega todos os `*BO.prg` de `classes/` e todos os `Form*.prg` de `cadastros/`.

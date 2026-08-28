@@ -1,0 +1,13 @@
+﻿O arquivo est├í correto. Verifico que outros forms na pasta j├í usam `CHR()` em declara├º├Áes de `Caption` dentro de `DEFINE CLASS` (ex: `FormBAL.prg`, `FormCfb.prg`) ÔÇö ent├úo a sintaxe est├í v├ílida.
+
+**Fase 3/8 conclu├¡da.** `C:\4c\projeto\app\forms\cadastros\FormOcb.prg` criado com:
+
+- `DEFINE CLASS FormOcb AS FormBase` com propriedades visuais completas (Height=600, Width=1000, Caption com CHR codes, WindowType=1, etc.)
+- `Init()` ÔÇö apenas `RETURN DODEFAULT()` (sem duplicar InicializarForm)
+- `InicializarForm()` ÔÇö cria OcbBO, chama ConfigurarPageFrame, propaga Caption para labels, respeita `gb_4c_ValidandoUI`
+- `ConfigurarPageFrame()` ÔÇö PageFrame com Top=-29, Tabs=.F., 2 Pages com Picture fundo_cad_1003.jpg
+- `ConfigurarPaginaLista()` ÔÇö cria `cnt_4c_Cabecalho` (com lbl_4c_Sombra/lbl_4c_Titulo), `cnt_4c_Botoes` (posi├º├úo can├┤nica Left=542) e `cnt_4c_Saida` (posi├º├úo can├┤nica Left=917)
+- `ConfigurarPaginaDados()` ÔÇö cria `cnt_4c_BotoesAcao` (posi├º├úo can├┤nica Left=842, Top=33)
+- `CarregarLista()` ÔÇö chama `OcbBO.Buscar("")` (ser├í expandido na Fase 4 com o grid)
+- `TornarControlesVisiveis()` ÔÇö recursivo, percorre Pages e Controls
+- `Destroy()` ÔÇö libera BO e chama DODEFAULT()

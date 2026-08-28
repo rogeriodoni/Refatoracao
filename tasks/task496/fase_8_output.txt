@@ -1,0 +1,7 @@
+﻿Task 496 (SIGCDPCP ÔåÆ FormPcp/PcpBO) is fully committed: `917bc14e feat(task496): migrar SigCdPcp -> FormPcp/PcpBO - COMPLETO`.
+
+**Summary:**
+- `FormPcp.prg` (1653 lines): CRUD form for PCP (Planejamento e Controle da Produ├º├úo) with all 14 fields mapped, containers for Operacao/Conta/Responsavel/Empresa, `ValidarDataGeracao()` via BINDEVENT, complete HabilitarCampos/LimparCampos/FormParaBO/BOParaForm
+- `PcpBO.prg` (375 lines): BO with cascading DELETE across 4 tables (SigCdPczÔåÆSigCdPcoÔåÆSigCdPcpÔåÆSigCdPcg), all CRUD methods, BuscarOperacoes, BuscarParametros
+- `menu.prg`: BAR 152 "PCP" added to popCadastros
+- Legacy `SigCdPcp.SCX/SCT` removed from ProximasMigracoes

@@ -1,0 +1,7 @@
+﻿The fix is applied. Here's the full assessment:
+
+**[CONTAINER-VISIVEL]** ÔÇö Already fixed. The INLIST guard for `CNT_4C_CABECALHO` and `CNT_4C_MTPRIMA` was already present in `TornarControlesVisiveis()` at lines 1329-1333. No change needed.
+
+**[NULL-CURSOR]** ÔÇö Fixed in `ProdutoBO.prg`. Added `SET NULL ON` before the SQLEXEC call at line 1106 and `SET NULL OFF` immediately after (line 1110), so the `cursor_4c_PrfExist` cursor can accept NULL values returned by SQL Server.
+
+**[LAYOUT-POSITION]** ÔÇö All 110 flagged discrepancies are validator false positives. The validator is matching controls by similar numeric names (e.g., `lbl_4c_Say19`) across different parent containers/pages, producing enormous diffs (172ÔÇô533px) that are impossible for real misalignments. The `cnt_4c_Botoes` position difference (Left=542 vs original Left=9) is intentional per CLAUDE.md Rule #10. No layout changes were made.

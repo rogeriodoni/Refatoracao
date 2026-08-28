@@ -1,0 +1,14 @@
+﻿O arquivo est├í correto. Fase 4 conclu├¡da com sucesso.
+
+**O que foi feito:**
+
+- **`ConfigurarPaginaLista()`** ÔÇö completada com 5 bot├Áes CRUD dentro de `cnt_4c_Botoes` (Incluir, Visualizar, Alterar, Excluir, Buscar), cada um com ├¡cone + BINDEVENT, e o grid `grd_4c_Lista` (4 colunas: C├│digo, Descri├º├úo, Valor M├¡n., Inativa) com DblClick vinculado ao `BtnVisualizarClick`.
+
+- **`CarregarLista()`** ÔÇö atualizada para ap├│s `Buscar()` vincular o grid: `RecordSource` + `ColumnCount` fora do WITH (regra Problem 36), `ControlSource` e `Header1.Caption` obrigat├│rios dentro do WITH (Problem 2/32), seguido de `FormatarGridLista()`.
+
+- **5 handlers CRUD inseridos** ÔÇö todos `PROCEDURE` (PUBLIC, sem PROTECTED, para funcionar com BINDEVENT):
+  - `BtnIncluirClick`: `NovoRegistro()` + `AlternarPagina(2)`
+  - `BtnVisualizarClick`: guarda de cursor vazio + `CarregarPorCodigo()` + `CarregarLinhasRegra()` + navega
+  - `BtnAlterarClick`: guarda + `CarregarPorCodigo()` + `EditarRegistro()` + `CarregarLinhasRegra()` + navega
+  - `BtnExcluirClick`: confirma├º├úo `MsgConfirma()` + `Excluir()` + `CarregarLista()`
+  - `BtnBuscarClick`: `INPUTBOX()` + `CarregarLista()` + `LOCATE` no cursor

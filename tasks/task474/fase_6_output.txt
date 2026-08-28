@@ -1,0 +1,17 @@
+﻿O arquivo est├í completo e correto. A Fase 6/8 est├í conclu├¡da com:
+
+**Campos adicionados a `ConfigurarPaginaDados()`:**
+- `lbl_4c_Label9` + `opt_4c_OptMenu` ÔÇö "Descri├º├úo Fixa" (Sim/N├úo, campo `fixos`)
+- `lbl_4c_LabelTipo` + `opt_4c_GetTipo` ÔÇö "Tipo" (4 op├º├Áes: N├úo Conforme/Limite Qtd/Varia├º├úo Peso/Reposi├º├úo, campo `tipos`)
+- `lbl_4c_Label20` + `txt_4c_EmpPad` ÔÇö "Empresa" (campo `emps`, Courier New, MaxLength=3) com BINDEVENT para LostFocus e DblClick
+
+**Lookup completo para `txt_4c_EmpPad`:**
+- `EmpPadLostFocus()` ÔåÆ chama `ValidarEmpPad()` (verifica `SigCdEmp` via SQLEXEC; se n├úo encontrado, abre busca)
+- `EmpPadDblClick()` ÔåÆ chama `AbrirLookupEmpPad()` (carrega todas as empresas e exibe `FormBuscaAuxiliar`)
+- Ambos os m├®todos guardam do campo desabilitado (`!Enabled`)
+
+**Atualizados:**
+- `FormParaBO()` ÔÇö inclui `this_nFixos`, `this_nTipos`, `this_cEmps`
+- `BOParaForm()` ÔÇö inclui os tr├¬s campos com valida├º├úo de range para os OptionGroups
+- `HabilitarCampos()` ÔÇö habilita/desabilita `opt_4c_OptMenu`, `opt_4c_GetTipo`, `txt_4c_EmpPad`
+- `LimparCampos()` ÔÇö reseta para defaults (fixos=2/N├úo, tipos=1/N├úo Conforme, emps="")

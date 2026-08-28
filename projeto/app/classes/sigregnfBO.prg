@@ -27,6 +27,9 @@ DEFINE CLASS sigregnfBO AS RelatorioBase
     *-- Mensagem de erro para o form exibir
     this_cMensagemErro      = ""
 
+    *-- Pattern #142: injetado pelo CorretorAutomatico (default vazio) - REVISAR e substituir pelo alias do cursor binding do FRX
+    this_cCursorDados = ""     && FIXME Pattern #142 pos-Erro51
+
     *--------------------------------------------------------------------------
     * Init - Cria cursors de trabalho e carrega dados auxiliares do banco
     * Equivalente ao Load + Init do legado: fConfigGeral + SigCdPam + SigCdSer

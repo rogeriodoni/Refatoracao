@@ -1,0 +1,21 @@
+﻿Todos os CATCH t├¬m `MostrarErro`. O OptBO.prg da Fase 2 est├í completo. Resumo do que foi adicionado:
+
+**Fase 2/8 ÔÇö OptBO.prg COMPLETO** com 870 linhas e os seguintes m├®todos CRUD:
+
+| M├®todo | Tipo | Finalidade |
+|---|---|---|
+| `CarregarDoCursor()` | PROTECTED | Mapeia todas as ~70 colunas do cursor para propriedades |
+| `ValidarDados()` | PROTECTED | Valida Operacaos, Descrs, Tipos (CR/DB/TR), duplicata, regras de Parcelas/Comiss |
+| `VerificarCodigoExistente()` | PUBLIC | COUNT(*) para checagem de duplicata |
+| `Inserir()` | PROTECTED | INSERT com todas as colunas da tabela SigCdOpt |
+| `Atualizar()` | PROTECTED | UPDATE com todas as colunas (exceto PK) |
+| `ExecutarExclusao()` | PROTECTED | DELETE com verifica├º├úo de uso em SigMvChe |
+| `Buscar()` | PUBLIC | SELECT para grid (Operacaos, Tipos, OpAnts, GrupoOs, ContaOs, GruDeps, ConDeps, ValPends) |
+| `CarregarPorCodigo()` | PUBLIC | SELECT * por PK, seta `this_lNovoRegistro = .F.` |
+| `BuscarDescGrupoContab()` | PUBLIC | Lookup descricao em SigCdGcr |
+| `BuscarDescContaContab()` | PUBLIC | Lookup descricao em SigCdCli |
+| `BuscarDescCentral()` | PUBLIC | Lookup descricao em SIGCCCCO |
+| `BuscarDescSituacao()` | PUBLIC | Lookup descricao em SigCdCst |
+| `BuscarDescMoeda()` | PUBLIC | Lookup descricao em SigCdMoe |
+| `BuscarOpContas()` | PUBLIC | Busca operacoes de titulo em SIGOPOPE |
+| `BuscarCondicaoPagamento()` | PUBLIC | Busca condicoes de pagamento em SigOpFp |

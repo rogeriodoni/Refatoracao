@@ -1,0 +1,15 @@
+﻿Tudo certo. A fase 8/8 da migra├º├úo est├í conclu├¡da.
+
+**O que foi feito:**
+
+**FormOET.prg** ÔÇö j├í estava completo com todos os m├®todos necess├írios para a fase 8:
+- `BtnBuscarClick()`, `BtnEncerrarClick()`, `BtnSalvarClick()`, `BtnCancelarClick()`
+- `FormParaBO()`, `BOParaForm()` (todos os 3 campos: cods, descrs, lJustifs)
+- `HabilitarCampos()`, `LimparCampos()`, `CarregarLista()`, `AjustarBotoesPorModo()`
+
+**menu.prg** ÔÇö integra├º├úo adicionada:
+- `DEFINE BAR 141 OF popCadastros` com prompt "Ocorr├¬ncias de Etiquetas"
+- `ON SELECTION BAR 141 OF popCadastros DO AbrirFormOET`
+- `PROCEDURE AbrirFormOET()` com padr├úo can├┤nico (VARTYPE, Show() sem par├ómetro, sem Release())
+
+**config.prg** ÔÇö nenhuma altera├º├úo necess├íria: o ADIR() din├ómico j├í carrega automaticamente `OETBO.prg` (classes/) e `FormOET.prg` (forms/cadastros/).

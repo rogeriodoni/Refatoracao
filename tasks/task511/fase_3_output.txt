@@ -1,0 +1,15 @@
+﻿Verifica├º├úo conclu├¡da. Todas as regras cr├¡ticas respeitadas:
+
+- 11 m├®todos, todos com `ENDPROC` correspondente
+- `RETURN .F.` na linha 268 est├í **antes** do `TRY` em `AlternarPagina` (n├úo dentro de TRY/CATCH)
+- `BtnEncerrarClick` ├® PUBLIC (sem `PROTECTED`) para funcionar com BINDEVENT
+
+**Fase 3 entregue** ÔÇö `C:\4c\projeto\app\forms\cadastros\Formrgr.prg` criado com:
+
+- `DEFINE CLASS Formrgr AS FormBase` ÔÇö propriedades visuais completas (Width=1000, Height=600, Caption="Regras de E-Commerce", DataSession=2)
+- `PageFrame.Top = -27` (do original `Pagina.Top = -27`), compensa├º├úo `+27` em todos os controles
+- **Page1**: `cnt_4c_Cabecalho` (com `lbl_4c_Sombra`/`lbl_4c_Titulo`), `cnt_4c_Botoes` (vazio ÔÇö Fase 4 adiciona bot├Áes CRUD), `cnt_4c_Saida` com `cmd_4c_Encerrar` (canonico)
+- **Page2**: `cnt_4c_Salva` (vazio ÔÇö Fase 5/6 adiciona Salvar/Cancelar)
+- M├®todos auxiliares: `TornarControlesVisiveis`, `FormatarGridLista`, `CarregarLista`, `AlternarPagina`, `Destroy`
+
+**Pr├│xima fase**: Fase 4/8 ÔÇö adicionar grid de lista em Page1 e bot├Áes CRUD dentro de `cnt_4c_Botoes`.

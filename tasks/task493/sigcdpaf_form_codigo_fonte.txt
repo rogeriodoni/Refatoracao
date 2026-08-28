@@ -1,0 +1,866 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: sigcdpaf.SCX
+* Data/Hora: 22/08/2026 15:16:59
+* Total de registros: 13
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDPAF
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGCDPAF.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGCDPAF.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say18
+  Parent: SIGCDPAF.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say29
+  Parent: SIGCDPAF.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_desc
+  Parent: SIGCDPAF.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_ncaixa
+  Parent: SIGCDPAF.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_cupomnfis
+  Parent: SIGCDPAF.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Chk_Inativar
+  Parent: SIGCDPAF.Pagina.Dados
+  Class: fwcheckbox
+  BaseClass: checkbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: op_doc
+  Parent: SIGCDPAF.Pagina.Dados
+  Class: optiongroup
+  BaseClass: optiongroup
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPAF
+------------------------------------------------------------
+  DoCreate = .T.
+  Caption = (prompt())
+  Name = "SIGCDPAF"
+  Pagina.ErasePage = .T.
+  Pagina.Lista.cntSombra.lblSombra.Name = "lblSombra"
+  Pagina.Lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  Pagina.Lista.cntSombra.Name = "cntSombra"
+  Pagina.Lista.Grade.FontName = "Tahoma"
+  Pagina.Lista.Grade.FontSize = 8
+  Pagina.Lista.Grade.RowHeight = 16
+  Pagina.Lista.Grade.ForeColor = 90,90,90
+  Pagina.Lista.Grade.Name = "Grade"
+  Pagina.Lista.Grupo_op.Inserir.Top = 5
+  Pagina.Lista.Grupo_op.Inserir.Left = 32
+  Pagina.Lista.Grupo_op.Inserir.Name = "Inserir"
+  Pagina.Lista.Grupo_op.Consultar.Top = 5
+  Pagina.Lista.Grupo_op.Consultar.Left = 108
+  Pagina.Lista.Grupo_op.Consultar.Name = "Consultar"
+  Pagina.Lista.Grupo_op.Alterar.Top = 5
+  Pagina.Lista.Grupo_op.Alterar.Left = 184
+  Pagina.Lista.Grupo_op.Alterar.Name = "Alterar"
+  Pagina.Lista.Grupo_op.Excluir.Top = 5
+  Pagina.Lista.Grupo_op.Excluir.Left = 260
+  Pagina.Lista.Grupo_op.Excluir.Name = "Excluir"
+  Pagina.Lista.Grupo_op.Procurar.Top = 5
+  Pagina.Lista.Grupo_op.Procurar.Left = 336
+  Pagina.Lista.Grupo_op.Procurar.Name = "Procurar"
+  Pagina.Lista.Grupo_op.Height = 85
+  Pagina.Lista.Grupo_op.Left = 312
+  Pagina.Lista.Grupo_op.Top = -1
+  Pagina.Lista.Grupo_op.Width = 414
+  Pagina.Lista.Grupo_op.Name = "Grupo_op"
+  Pagina.Lista.Grupo_Saida.Sair.Top = 5
+  Pagina.Lista.Grupo_Saida.Sair.Left = 5
+  Pagina.Lista.Grupo_Saida.Sair.Name = "Sair"
+  Pagina.Lista.Grupo_Saida.Left = 719
+  Pagina.Lista.Grupo_Saida.Top = -1
+  Pagina.Lista.Grupo_Saida.Name = "Grupo_Saida"
+  Pagina.Lista.cntFiltros.Name = "cntFiltros"
+  Pagina.Lista.Name = "Lista"
+  Pagina.Dados.Grupo_Salva.Salva.Top = 5
+  Pagina.Dados.Grupo_Salva.Salva.Left = 5
+  Pagina.Dados.Grupo_Salva.Salva.Name = "Salva"
+  Pagina.Dados.Grupo_Salva.Cancelar.Top = 5
+  Pagina.Dados.Grupo_Salva.Cancelar.Left = 88
+  Pagina.Dados.Grupo_Salva.Cancelar.Name = "Cancelar"
+  Pagina.Dados.Grupo_Salva.TabIndex = 14
+  Pagina.Dados.Grupo_Salva.Name = "Grupo_Salva"
+  Pagina.Dados.Name = "Dados"
+  Pagina.Name = "Pagina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPAF.Pagina.Dados.Say1
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Verdana"
+  FontSize = 8
+  Caption = "Descrição : "
+  Height = 15
+  Left = 191
+  Top = 176
+  Width = 78
+  TabIndex = 10
+  ForeColor = 36,84,155
+  ZOrderSet = 2
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPAF.Pagina.Dados.Say2
+------------------------------------------------------------
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Documento :"
+  Left = 189
+  Top = 220
+  TabIndex = 23
+  ZOrderSet = 2
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPAF.Pagina.Dados.Say18
+------------------------------------------------------------
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Finalizadora Não Fiscal :"
+  Left = 125
+  Top = 319
+  TabIndex = 14
+  ZOrderSet = 2
+  Name = "Say18"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPAF.Pagina.Dados.Say29
+------------------------------------------------------------
+  FontSize = 8
+  BackStyle = 0
+  Caption = "No do Caixa - NSEQ. :"
+  Left = 135
+  Top = 292
+  TabIndex = 23
+  ZOrderSet = 2
+  Name = "Say29"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPAF.Pagina.Dados.Get_desc
+------------------------------------------------------------
+  FontItalic = .F.
+  FontName = "Courier New"
+  ControlSource = "crSigCdPaf.DopepafEcfs"
+  Format = "K!"
+  Height = 23
+  Left = 268
+  TabIndex = 1
+  Top = 172
+  Width = 150
+  ForeColor = 0,0,255
+  ZOrderSet = 3
+  Name = "Get_desc"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPAF.Pagina.Dados.Get_ncaixa
+------------------------------------------------------------
+  Height = 21
+  InputMask = "999"
+  Left = 268
+  TabIndex = 10
+  Top = 289
+  Width = 31
+  ZOrderSet = 6
+  Name = "Get_ncaixa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPAF.Pagina.Dados.Get_cupomnfis
+------------------------------------------------------------
+  Format = "K"
+  Height = 21
+  InputMask = "99"
+  Left = 268
+  TabIndex = 2
+  Top = 316
+  Width = 24
+  ZOrderSet = 6
+  Name = "Get_cupomnfis"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPAF.Pagina.Dados.Chk_Inativar
+------------------------------------------------------------
+  Top = 176
+  Left = 443
+  Height = 15
+  Width = 74
+  FontBold = .T.
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "INATIVA"
+  Value = 0
+  TabIndex = 23
+  Name = "Chk_Inativar"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPAF.Pagina.Dados.op_doc
+------------------------------------------------------------
+  AutoSize = .F.
+  ButtonCount = 5
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 2
+  Height = 63
+  Left = 263
+  Top = 220
+  Width = 140
+  TabIndex = 4
+  Name = "op_doc"
+  Option1.FontName = "Verdana"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "CF"
+  Option1.Value = 0
+  Option1.Height = 15
+  Option1.Left = 5
+  Option1.Top = 2
+  Option1.Width = 34
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 36,84,155
+  Option1.Name = "Option1"
+  Option2.FontName = "Verdana"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "CNF"
+  Option2.Value = 1
+  Option2.Height = 15
+  Option2.Left = 74
+  Option2.Top = 2
+  Option2.Width = 42
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 36,84,155
+  Option2.Name = "Option2"
+  Option3.FontName = "Verdana"
+  Option3.FontSize = 8
+  Option3.BackStyle = 0
+  Option3.Caption = "DAV RG"
+  Option3.Height = 17
+  Option3.Left = 5
+  Option3.Top = 19
+  Option3.Width = 64
+  Option3.ForeColor = 36,84,155
+  Option3.Name = "Option3"
+  Option4.FontName = "Verdana"
+  Option4.FontSize = 8
+  Option4.BackStyle = 0
+  Option4.Caption = "DAV A4"
+  Option4.Height = 17
+  Option4.Left = 74
+  Option4.Top = 19
+  Option4.Width = 61
+  Option4.ForeColor = 36,84,155
+  Option4.Name = "Option4"
+  Option5.FontName = "Verdana"
+  Option5.FontSize = 8
+  Option5.BackStyle = 0
+  Option5.Caption = "PRE VENDA"
+  Option5.Height = 17
+  Option5.Left = 5
+  Option5.Top = 38
+  Option5.Width = 88
+  Option5.ForeColor = 36,84,155
+  Option5.BackColor = 236,233,216
+  Option5.Name = "Option5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDPAF
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE validarmd5
+------------------------------------------------------------
+PROCEDURE validarmd5
+Lparameters pMov
+
+Local lcMd5
+
+lcQry = [Select * From SigCdPaf Where Dopes = '] + fDecriptografar(pMov) + [']
+If ThisForm.poDataMgr.SqlExecute(lcQry, [LocalMd5]) < 1
+	=MessageBox([Favor Reinicializar o Processo!!! Falha na Conexão (LocalMd5)], 0+16, [Erro!!!])
+	Return .f.
+EndIf
+Select LocalMd5
+Go Top
+
+lcMd5 = fGerarMD52016([LocalMd5], [cMd5s])
+
+If (LocalMd5.cMd5s <> lcMd5)
+	Return .f.
+EndIf
+
+Return .t.
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LParameters lcAcesso
+
+With ThisForm
+	.poDatamgr = CreateObject('fSqlConector',ThisForm.Name)
+
+	lcSql = [Select a.Dopes,b.OpeInatvs,b.cnCaixas,c.CupFis,c.nFiscals,c.Agrupas,c.Docus,c.TrNfis From SigOpCdd a, SigOpCdc b, SigCdOpe c ]+;
+			[Where a.pafEcfs = 1 And a.Dopes = b.dopes And a.Dopes = c.Dopes ]
+
+	ThisForm.Podatamgr.SqlExecute(lcSql,'LocalOpe2')
+	Select LocalOpe2
+	Index on Dopes Tag Dopes
+	Locate for .f.
+
+	lcSql = [Select Dopes,cncaixas,trnfis From SigCdPaf ]
+	ThisForm.Podatamgr.SqlExecute(lcSql,'CrTmpPafEc')
+	Select CrTmpPafEc
+	Locate for .f.
+	Update CrTmpPafEc Set Dopes = fCriptografar(Dopes), cncaixas = fCriptografar(cnCaixas), trnfis= fCriptografar(trNFis)
+	Locate for .f.
+
+	Select * From LocalOpe2 WHERE Dopes NOt in (select dopes from CrTmpPafEc) ;
+	Into Cursor CsSelecao
+	If Reccount('CsSelecao') > 0
+
+		Create Cursor TmpPafEc (Dopes c(20), Inativas c(1), Docs c(1), cnCaixas c(3), TrNfis c(2), cmd5s c(32))
+
+		Select CsSelecao
+		Scan
+			MessageBox('Atenção!!!, Operação :'+CsSelecao.Dopes+' Esta Inconsistente. O sistema irá assumir as Configurações Padrões!!!!',0+16,'')
+			
+			lcDoc = '0'
+			Do Case
+				Case CsSelecao.CupFis = 1
+					lcDoc = '1'
+				Case CsSelecao.CupFis = 3
+					lcDoc = '2'
+				Case CsSelecao.CupFis = 2 And CsSelecao.Docus = 3
+					lcDoc = '3'
+				Case CsSelecao.CupFis = 2 And CsSelecao.Docus = 2
+					lcDoc = '4'
+			EndCase
+
+			Insert Into TmpPafEc (Dopes,Inativas,Docs,cnCaixas,TrNfis) Values ;
+					(fDecriptografar(CsSelecao.Dopes),fDecriptografar(Str(CsSelecao.OpeInatvs,1)),;
+					 fDecriptografar(lcDoc),fDecriptografar(CsSelecao.cnCaixas),fDecriptografar(Str(CsSelecao.TrNfis,2)))
+			
+			lcMd5 = fGerarMD52016('TmpPafEc', 'cMd5s')
+
+			Replace cMd5s With lcMd5 In TmpPafEc
+
+			lcSql = [Insert Into SigCdPaf (Dopes, Inativas, Docs,cMd5s, cnCaixas, TrNfis ) Values (]+;
+					[']+TmpPafEc.Dopes+[',']+TmpPafEc.Inativas+[',']+TmpPafEc.docs+[',]+;
+					[']+TmpPafEc.cMd5s+[',']+TmpPafEc.cnCaixas+[',']+TmpPafEc.TrNfis+[')]
+
+			ThisForm.Podatamgr.SqlExecute(lcSql,'')
+		EndScan
+		
+		Select Dopes From CrTmpPafEc Where dopes Not in (Select Dopes From LocalOpe2) ;
+		Into Cursor CsErro
+		Select CsErro
+		Scan
+			lcDopePaf = fDecriptografar(CsErro.Dopes)
+			lcDelete = [Delete From SigCdPaf Where Dopes = ']+lcDopePaf+[']
+			ThisForm.Podatamgr.SqlExecute(lcDelete,'')
+		EndScan
+
+		Thisform.Podatamgr.Commit()
+		
+	EndIf
+
+	Create Cursor TmpPafEc (Dopes c(20), Inativas c(1), Docs c(1), cnCaixas c(3), TrNfis c(2), cmd5s c(32))
+
+	Select CrTmpPafEc
+	Scan
+		If Not ThisForm.ValidarMd5(CrTmpPafEc.Dopes) And Seek(CrTmpPafEc.dopes,'LocalOpe2','Dopes')
+			MessageBox('Atenção!!!, Operação :'+CrTmpPafEc.Dopes+' Esta Inconsistente. O sistema irá assumir as Configurações Padrões!!!!',0+16,'')
+			lcDoc = '0'
+			Do Case
+				Case LocalOpe2.CupFis = 1
+					lcDoc = '1'
+				Case LocalOpe2.CupFis = 3
+					lcDoc = '2'
+				Case LocalOpe2.CupFis = 2 And LocalOpe2.Docus = 3
+					lcDoc = '3'
+				Case LocalOpe2.CupFis = 2 And LocalOpe2.Docus = 2
+					lcDoc = '4'
+			EndCase
+
+			Insert Into TmpPafEc (Dopes,Inativas,Docs,cnCaixas,TrNfis) Values ;
+					(fDecriptografar(CrTmpPafEc.Dopes),fDecriptografar(Str(LocalOpe2.OpeInatvs,1)),;
+					 fDecriptografar(lcDoc),fDecriptografar(LocalOpe2.cnCaixas),fDecriptografar(Str(LocalOpe2.TrNfis,2)) )
+
+			lcMd5 = fGerarMD52016('TmpPafEc', 'cMd5s')
+			Replace cMd5s With lcMd5 In TmpPafEc
+		
+		Endif
+	EndScan
+	
+	Select TmpPafEc
+	Scan
+		Scatter Memvar
+		lcSql = [Update SigCdPaf Set Inativas = ']+TmpPafEc.Inativas+[', ]+;
+				[Docs = ']+TmpPafEc.docs+[', cMd5s = ']+TmpPafEc.cMd5s+[', cnCaixas = ']+TmpPafEc.cnCaixas+[', ]+;
+				[TrNfis = ']+TmpPafEc.TrNfis+[' Where Dopes=']+m.Dopes+[' ]
+
+		ThisForm.Podatamgr.SqlExecute(lcSql,'')
+
+		Thisform.Podatamgr.Commit()
+
+	EndScan
+
+	lcQueryPAF = [Select *, Dopes as DopePafEcfs, cnCaixas as CX, trNFis as TRNF From SigCdPaf ]
+	With .poDatamgr
+		.AddCursor('SigCdPaf','Dopes','CrSigCdPaf','',ThisForm.Pagina.Lista.Grade,lcQueryPaf)
+		.pfSqlTabela(1).pColuna('DopePafEcfs','','','Função'  , 200,.T.)
+		.pfSqlTabela(1).pColuna('CX','','','Nº do caixa',90,.T.)
+		.pfSqlTabela(1).pColuna('TRNF','','','Finalizadora Não Fiscal',161,.T.)
+		.AddCursor('SlvSerie','EmpCods','CqSlvSerie','','')
+	EndWith
+	
+	Update CrSigCdPaf Set DopePafEcfs = fCriptografar(Dopes), cx = fCriptografar(cnCaixas), trnf = fCriptografar(trNFis)
+
+	ThisForm.placexcluir = .f.
+	ThisForm.plAcInserir = .f.
+	
+	=DoDefault()
+	.LockScreen = .F.
+EndWith
+
+ThisForm.mAtivaPagina1
+
+ThisForm.LockScreen = .T.
+=fCarregaGrade(ThisForm.Pagina.Lista.Grade)
+ThisForm.LockScreen = .F.
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_procurar
+------------------------------------------------------------
+PROCEDURE msv_procurar
+Local lcBusca
+
+If .Not.IsEmpty(ThisForm.Pagina.Dados.Get_unid.Value)
+	ThisForm.poDataMgr.LocateCursor('crSigCdUni','cunis',ThisForm.Pagina.Dados.Get_unid.Value)
+Else
+	If .Not.IsEmpty(ThisForm.Pagina.Dados.Get_desc.Value)
+		ThisForm.poDataMgr.LocateCursor('crSigCdUni','dunis',ThisForm.Pagina.Dados.Get_desc.Value)
+	EndIf
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+
+ThisForm.poDataMgr.Release
+
+= DoDefault()
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Lista.Grupo_op.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Lista.Grupo_op.Click
+LParameters lnOpcao
+
+Select CrSigCdPaf
+
+If !DoDefault(lnOpcao)
+	ThisForm.mAtivaPagina1
+	Return 0
+EndIf
+
+Update CrSigCdPaf Set DopepafEcfs = fCriptografar(Dopes), cx = fCriptografar(cnCaixas), trnf = fCriptografar(trNFis)
+Go top IN CrSigCdPaf
+
+If Not ThisForm.ValidarMd5(CrSigCdPaf.DopePafEcfs)
+	MessageBox('Parâmetros de Função Incorreto. Os Dados Foram alterados!!!'+Chr(13)+;
+				'Favor Sair da Tela de Função e Entrar Novamente.',0+16,' ')
+	ThisForm.mAtivaPagina1
+	Return 0
+Endif
+
+This.parent.parent.Dados.op_doc.Value       = Val(fCriptografar(CrSigCdPaf.Docs))
+This.Parent.Parent.dados.chk_Inativar.Value = Val(fCriptografar(CrSigCdPaf.Inativas))
+This.Parent.Parent.Dados.Get_ncaixa.Value   = fCriptografar(CrSigCdPaf.cnCaixas)
+This.Parent.Parent.Dados.Get_cupomnfis.Value= fCriptografar(CrSigCdPaf.TrNfis)
+
+This.Parent.Parent.Dados.Refresh()
+
+Do Case
+	Case InList(Thisform.pcEscolha,'ALTERAR')
+
+	OtherWise
+		Thisform.Pagina.Dados.Grupo_Salva.Salva.SetFocus()
+EndCase
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+If ThisForm.pcEscolha = 'ALTERAR'
+
+	lcDopPaf = CrSigCdPaf.DopePafEcfs
+	lnDoc = Str(This.parent.parent.op_doc.Value,1)
+	lnInt = Str(This.Parent.Parent.Chk_Inativar.Value,1)
+	lcCaixa = This.Parent.Parent.Get_ncaixa.Value
+	lcTrfNf = This.Parent.Parent.Get_cupomnfis.Value
+	
+	If Not InList(lnInt,'0','1')
+		MessageBox('Configuração Inválida. Acerte a Opção Inativar!!! ',0+16,'')
+		Return .f.
+	EndIf
+
+	Select CrSigCdPaf
+	Replace Inativas With fDecriptografar(lnInt),;
+			Docs     With fDecriptografar(lnDoc),;
+			cnCaixas With fDecriptografar(lcCaixa),;
+			TrNfis   With fDecriptografar(lcTrfNf)
+
+	lcmd5 = fGerarMD52016('CrSigCdPaf', 'cMd5s,DopePafecfs,Cx,TrNf')
+	
+	Replace cMd5s With lcMd5 In CrSigCdPaf
+
+	Do Case
+		Case lnDoc = '1'
+			lcUpdate = [Update SigCdOpe Set CupFis = 1, estoqs = 1, docus = 2 Where Dopes = ']+lcDopPaf+[']
+			ThisForm.Podatamgr.SqlExecute(lcUpdate,'')
+
+			lcUpdate = [Update SigOpCdc Set verests = 1, opeinatvs = ]+lnInt+[, cncaixas = ']+lcCaixa+[' Where Dopes = ']+lcDopPaf+[']
+			ThisForm.Podatamgr.SqlExecute(lcUpdate,'')
+
+		Case lnDoc = '2'
+		
+			lcSql = [Select Series From SigCdOpe Where Dopes = ']+lcDopPaf+[']
+			ThisForm.Podatamgr.SqlExecute(lcSql,'LocalOpe')
+			If Empty(LocalOpe.Series)
+				lcSerie = 'PED'
+				lcSql = [Select * From SlvSerie Where EmpCods = ']+_Empr+lcSerie+[' ]
+				ThisForm.Podatamgr.SqlExecute(lcSql,'LocalSerie')
+				If Reccount('LocalSerie') = 0
+					Select CqSlvSerie
+					Zap
+					Append Blank
+					Replace Emps     With _Empr,;
+							Cods     With lcSerie,;
+							Descs    With lcSerie,;
+							cTipoNfs With 'ECF',;
+							ImpNfs   With 2,;
+							TipoNfs  With 1,;
+							EmpCods  With _Empr+lcSerie
+				
+					=ThisForm.Podatamgr.Update('CqSlvSerie')
+				EndIf
+			Else
+				lcSerie = LocalOpe.Series
+			Endif
+			
+			lcUpdate = [Update SigCdOpe Set CupFis=3, estoqs=2, docus=2, TipoNfs=1, Series=']+lcSerie+[', ]+;
+						[TrNfis = ]+Str(VAL(lcTrfNf),2)+[ Where Dopes = ']+lcDopPaf+[']
+			ThisForm.Podatamgr.SqlExecute(lcUpdate,'')
+
+			lcUpdate = [Update SigOpCdc Set verests = 2, opeinatvs = ]+lnInt+[, cncaixas = ']+lcCaixa+[' Where Dopes = ']+lcDopPaf+[']
+			ThisForm.Podatamgr.SqlExecute(lcUpdate,'')
+
+		Case lnDoc = '3'
+
+			lcUpdate = [Update SigCdOpe Set CupFis = 2, estoqs = 2, Docus = 3 Where Dopes = ']+lcDopPaf+[']
+			ThisForm.Podatamgr.SqlExecute(lcUpdate,'')
+
+			lcUpdate = [Update SigOpCdc Set verests = 3 , opeinatvs = ]+lnInt+[, cncaixas = ']+lcCaixa+[' Where Dopes = ']+lcDopPaf+[']
+			ThisForm.Podatamgr.SqlExecute(lcUpdate,'')
+ 
+		Case lnDoc = '4'
+
+			lcUpdate = [Update SigCdOpe Set CupFis = 2, estoqs = 2, Docus = 2 Where Dopes = ']+lcDopPaf+[']
+			ThisForm.Podatamgr.SqlExecute(lcUpdate,'')
+
+			lcUpdate = [Update SigOpCdc Set verests = 2, opeinatvs = ]+lnInt+[, cncaixas = ']+lcCaixa+[' Where Dopes = ']+lcDopPaf+[']
+			ThisForm.Podatamgr.SqlExecute(lcUpdate,'')
+
+		Case lnDoc = '6'
+
+			lcUpdate = [Update SigCdOpe Set CupFis = 2, estoqs = 1, nfiscals = 2, Agrupas = 2, Docus = 2 Where Dopes = ']+lcDopPaf+[']
+			ThisForm.Podatamgr.SqlExecute(lcUpdate,'')
+
+			lcUpdate = [Update SigOpCdc Set verests = 1, opeinatvs = ]+lnInt+[, cncaixas = ']+lcCaixa+[' Where Dopes = ']+lcDopPaf+[']
+			ThisForm.Podatamgr.SqlExecute(lcUpdate,'')
+ 
+		Case lnDoc = '5'
+
+			lcUpdate = [Update SigCdOpe Set CupFis = 2, estoqs = 1, nfiscals = 2, Agrupas = 1, Docus = 2 Where Dopes = ']+lcDopPaf+[']
+			ThisForm.Podatamgr.SqlExecute(lcUpdate,'')
+
+			lcUpdate = [Update SigOpCdc Set verests = 1, opeinatvs = ]+lnInt+[, cncaixas = ']+lcCaixa+[' Where Dopes = ']+lcDopPaf+[']
+			ThisForm.Podatamgr.SqlExecute(lcUpdate,'')
+		
+		Otherwise
+			MessageBox('Configuração Invalida de Documento!!! ',0+16,'')
+			Return .f.
+			
+	EndCase
+
+	ThisForm.Podatamgr.Commit()
+EndIf
+
+=DoDefault()
+ThisForm.mAtivaPagina1
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+
+= DoDefault()
+If ThisForm.plCancelar
+	ThisForm.mAtivaPagina1
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDPAF.Pagina.Dados.Get_desc
+* Classe: fwget (Base: textbox)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE LostFocus
+------------------------------------------------------------
+PROCEDURE LostFocus
+If ThisForm.pcEscolha = 'INSERIR' 
+   sele crSigOpCdc
+   GO TOP
+   IF EOF()
+	  append blank
+   	  Replace crSigOpCdc.dopes with crSigCdOpe.Dopes
+   Endif
+   
+   sele crSigOpCdi
+   GO TOP
+   IF EOF()
+	  append blank
+   	  Replace crSigOpCdi.dopes with crSigCdOpe.Dopes
+   Endif
+   
+   ThisForm.Pagina.Dados.PagDados.PgEstoque.Op_Est.Option1.SetFocus
+Else
+   ThisForm.Pagina.Dados.Grupo_Salva.Salva.SetFocus
+Endif
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+LOCAL RET
+
+RET=DoDefault()
+IF THISForm.pcEscolha='INSERIR' and !empt(This.value)
+	RET=.F.
+ENDIF
+
+IF THISForm.pcEscolha='ALTERAR'
+	RET=.F.
+ENDIF
+
+IF THISForm.pcEscolha='PROCURAR'
+	RET=.T.
+ENDIF
+
+RETURN(RET)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDPAF.Pagina.Dados.Get_ncaixa
+* Classe: fwget (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Not Empty(This.Value) And Len(Alltrim(This.Value)) < 3
+	MessageBox('Obrigatorio Preenchimento de 3 digitos',0+48,'Erro')
+	Return 0
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist( ThisForm.pcEscolha, "INSERIR", "ALTERAR" )
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDPAF.Pagina.Dados.Get_cupomnfis
+* Classe: fwget (Base: textbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local xobj, xBrox, lnOrdem
+
+If not Empty(This.value)
+	lnOrdem = VAL(this.Value) 
+	xBrox = CreateObject('fwBuscaExt',Thisform.poDatamgr.pnIdconn,'SigFiNtb','crSigFiNtb','ordems',lnOrdem,'Seleção',.t.,'ordems')
+	If  Not xBrox.plAchouRegistro
+		xBrox.mAddColuna('ordems','xxxxx','Ordem')
+		xBrox.mAddColuna('descrs','xxxxxxxxxXxxxxxxxxxx','Descrição')
+		xBrox.mAddColuna('Imps','','Impressora')
+		xBrox.mAddColuna('OpeRnf','xxxxxx','Codigo')
+		xBrox.Show()
+	EndIf 
+
+	If lastkey()<>27
+		This.value = str(crSigFiNtb.ordems,2)
+		This.refresh
+	Else
+		This.value = '0'
+	endif
+
+endif
+Select crSigCdPaf
+return(.t.)
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist( ThisForm.pcEscolha, "INSERIR", "ALTERAR" )
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDPAF.Pagina.Dados.op_doc
+* Classe: optiongroup (Base: optiongroup)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist( ThisForm.pcEscolha, "INSERIR", "ALTERAR" ) 
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGCDPAF
+RESERVED3 (ClassInfo): *validarmd5 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 14
+================================================================================

@@ -1,0 +1,7 @@
+﻿As 3 corre├º├Áes est├úo aplicadas corretamente em `RPTBO.prg`:
+
+1. **DESCR removido do WHERE** (linha 59): `Buscar()` agora filtra s├│ por `NmReport LIKE`, sem o `OR Descr LIKE` inventado.
+2. **TABLE_TYPE eliminado** (linhas 480-482): `BuscarTabelasSqlServer()` usa `sys.tables` sem WHERE, igual ao original (`Select Upper(Name) As NmTable, Object_ID, Modify_Date From Sys.Tables`).
+3. **TABLE_NAME eliminado** (linhas 514-518): `BuscarColunasDaTabela()` usa `sys.all_Columns JOIN sys.types WHERE c.Object_ID = OBJECT_ID(...)`, alinhado com o padr├úo do c├│digo legado.
+
+O 4┬║ problema (`ROWSOURCETYPE`) ├® **falso positivo** ÔÇö n├úo existe nenhuma cl├íusula WHERE com essa coluna nos arquivos; todas as ocorr├¬ncias de `RowSourceType` no c├│digo s├úo atribui├º├Áes de propriedades VFP9 (`.RowSourceType = N`), n├úo filtros SQL.

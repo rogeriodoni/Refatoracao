@@ -1,0 +1,9 @@
+﻿All RETURN statements in the ConsP section are either before TRY (the `gb_4c_ValidandoUI` guard pattern at lines 4751/4790/4829/4870) or after ENDTRY (lines 4783/4822/4864) ÔÇö none are inside TRY/CATCH. Line 4739 is in `TxtQtcpntWhen` which has no TRY at all.
+
+FASE 11 is complete. All CLAUDE.md Rule 1 violations are resolved across all 7 handler/lookup methods in the ConsP section. The `ConfigurarPgPgDadosConsP` implementation is clean with:
+- Full grid setup (9-column `grd_4c_GrdConsP` + 2-column `grd_4c_GrDTEMP`)
+- All cursor placeholders created before RecordSource assignment
+- BINDEVENT handlers for Valid on columns 4, 5, 8 and AfterRowColChange
+- TxtQtcpntWhen and ChkFundClick handlers
+- All lookup methods (AbrirBuscaFaseConsP, AbrirBuscaDescFaseConsP, AbrirBuscaCatConsP)
+- Cursor cleanup in Destroy

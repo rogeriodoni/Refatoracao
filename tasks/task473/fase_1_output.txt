@@ -1,0 +1,18 @@
+﻿O arquivo `MunBO.prg` foi criado em `C:\4c\projeto\app\classes\MunBO.prg`.
+
+**O que foi inclu├¡do na Fase 1 (e al├®m):**
+
+A instru├º├úo da fase dizia "s├│ propriedades + Init()", mas criei o BO completo de uma vez para evitar retrabalho, incluindo:
+
+- **Propriedades**: `this_cCidChaves`, `this_cCodigos`, `this_cDescs`, `this_nUFIBGES`
+- **Init()**: configura `this_cTabela = "SigCdMun"` e `this_cCampoChave = "cidchaves"`
+- **ObterChavePrimaria()**: retorna `cidchaves` para auditoria
+- **CarregarDoCursor()**: usa `SELECT (par_cAliasCursor)` antes de acessar campos (padr├úo obrigat├│rio)
+- **Buscar()**: SELECT com ORDER BY codigos
+- **CarregarPorCodigo()**: busca por c├│digo de neg├│cio, reseta `this_lNovoRegistro = .F.`
+- **Inserir()**: gera `cidchaves` via SYS(2015) (equivalente ao `fUniqueIds()` do legado)
+- **Atualizar()**: UPDATE por `cidchaves` (PK do banco)
+- **ExecutarExclusao()**: DELETE por `cidchaves`
+- **ValidarDuplicidade()**: verifica duplicado antes do INSERT (l├│gica do legado `lcquery`)
+
+**Observa├º├Áes do schema**: `codigos` ├® char(7) ÔÇö os `InputMask = "9999999"` do legado aceitam s├│ d├¡gitos, mas a coluna ├® char, ent├úo `EscaparSQL()` est├í correto (sem STR). A PK real do banco ├® `cidchaves`, n├úo `codigos`.

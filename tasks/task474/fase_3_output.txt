@@ -1,0 +1,14 @@
+﻿`C:\4c\projeto\app\forms\cadastros\FormNcf.prg` criado com 301 linhas. Estrutura da Fase 3 completa:
+
+- **DEFINE CLASS FormNcf AS FormBase** ÔÇö propriedades visuais (Height=600, Width=1000, DataSession=2, Caption sem acento no literal)
+- **Init()** ÔÇö apenas `DODEFAULT()` com TRY/CATCH
+- **InicializarForm()** ÔÇö seta Caption com CHR(227), cria `NcfBO`, chama `ConfigurarPageFrame`, respeita `gb_4c_ValidandoUI`
+- **ConfigurarPageFrame()** ÔÇö PageFrame Top=-29, Tabs=.F., 2 pages com Picture=fundo_cad_1003.jpg
+- **ConfigurarPaginaLista()** ÔÇö `cnt_4c_Cabecalho` (com lbl_4c_Sombra/lbl_4c_Titulo), `cnt_4c_Botoes` (vazio, Left=542 can├┤nico), `cnt_4c_Saida` (Left=917 can├┤nico)
+- **ConfigurarPaginaDados()** ÔÇö `cnt_4c_Salva` (vazio, Top=52 = legado 23+29)
+- **CarregarLista()** ÔÇö chama `BO.Buscar("")`, respeita ValidandoUI
+- **AlternarPagina()** ÔÇö funcional
+- **TornarControlesVisiveis()** ÔÇö recursivo com suporte a PageFrame
+- **Destroy()** ÔÇö libera BO e cursor_4c_Dados
+
+Fases 4ÔÇô8 completar├úo: bot├Áes CRUD + grid (4), campos Page2 (5ÔÇô6), eventos/BINDEVENTs (7ÔÇô8).

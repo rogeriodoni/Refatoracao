@@ -1,0 +1,12065 @@
+﻿# CORRIGIR ERRO DE RUNTIME VFP9
+
+## TAREFA OBRIGATORIA
+O formulario VFP9 apresentou erro de runtime durante teste automatizado.
+Voce DEVE corrigir o erro e salvar os arquivos corrigidos usando Write tool.
+
+## ERRO DETECTADO
+- Etapa: 06b_testeAutomatico
+- Tentativa: 1/10
+- Mensagem: Testes automaticos: 0% < 100%. Falhas: Teste 'Instanciacao': CREATEOBJECT retornou valor nao-objeto
+
+## CONTEXTO DO ERRO
+
+### ERROS CAPTURADOS EM MODO TESTE (vfp_error_details.txt):
+[21/08/2026 22:20:29] FormNfl.InicializarForm: Unknown member CNT_4C_CABECALHO.
+
+
+### LOG DA ETAPA (06b_testeAutomatico):
+[2026-08-21 22:19:12] [INFO] === VFP EXECUTOR v2.0 ===
+[2026-08-21 22:19:12] [INFO] Config FPW: (nao fornecido)
+[2026-08-21 22:19:12] [INFO] Script PRG: C:\4c\projeto\app\utils\TesteAutomatico.prg
+[2026-08-21 22:19:12] [INFO] Timeout: 300 segundos
+[2026-08-21 22:19:12] [INFO] Wrapper PRG criado para parametros: C:\Users\roger\AppData\Local\Temp\vfp_wrapper_eqm52zec.prg
+[2026-08-21 22:19:12] [INFO] Conteudo do wrapper:
+[2026-08-21 22:19:12] [INFO] * Auto-generated wrapper for parameters
+* Script: C:\4c\projeto\app\utils\TesteAutomatico.prg
+* Parameters: 'FormNfl', 'C:\4c\tasks\task475', 'CRUD'
+
+* Anti-dialog protections for unattended execution
+SET SAFETY OFF
+SET RESOURCE OFF
+SET TALK OFF
+SET NOTIFY OFF
+SYS(2335, 0)
+
+DO "C:\4c\projeto\app\utils\TesteAutomatico" WITH 'FormNfl', 'C:\4c\tasks\task475', 'CRUD'
+QUIT
+
+[2026-08-21 22:19:12] [INFO] Comando VFP: C:\Users\roger\AppData\Local\Temp\vfp_wrapper_eqm52zec.prg
+[2026-08-21 22:19:12] [INFO] VFP output esperado em: C:\4c\tasks\task475\vfp_output.txt
+[2026-08-21 22:19:12] [INFO] Executando Visual FoxPro 9...
+[2026-08-21 22:19:12] [INFO] Comando completo: VFP9.EXE -T C:\Users\roger\AppData\Local\Temp\vfp_wrapper_eqm52zec.prg
+[2026-08-21 22:19:12] [INFO] Executando: VFP9.EXE -T C:\Users\roger\AppData\Local\Temp\vfp_wrapper_eqm52zec.prg
+[2026-08-21 22:19:12] [INFO] Timeout configurado: 300 segundos
+[2026-08-21 22:20:29] [INFO] VFP9 finalizou normalmente com exit code: 
+[2026-08-21 22:20:29] [INFO] VFP9 finalizado em 77.5243639 segundos
+[2026-08-21 22:20:29] [INFO] Exit Code: 
+[2026-08-21 22:20:29] [INFO] 
+[2026-08-21 22:20:29] [INFO] Arquivos temporarios preservados para inspecao:
+[2026-08-21 22:20:29] [INFO]   Wrapper.prg: C:\Users\roger\AppData\Local\Temp\vfp_wrapper_eqm52zec.prg
+[2026-08-21 22:20:29] [INFO] 
+[2026-08-21 22:20:29] [INFO] === Conteudo do Wrapper.prg temporario ===
+[2026-08-21 22:20:29] [INFO] * Auto-generated wrapper for parameters
+[2026-08-21 22:20:29] [INFO] * Script: C:\4c\projeto\app\utils\TesteAutomatico.prg
+[2026-08-21 22:20:29] [INFO] * Parameters: 'FormNfl', 'C:\4c\tasks\task475', 'CRUD'
+[2026-08-21 22:20:29] [INFO] 
+[2026-08-21 22:20:29] [INFO] * Anti-dialog protections for unattended execution
+[2026-08-21 22:20:29] [INFO] SET SAFETY OFF
+[2026-08-21 22:20:29] [INFO] SET RESOURCE OFF
+[2026-08-21 22:20:29] [INFO] SET TALK OFF
+[2026-08-21 22:20:29] [INFO] SET NOTIFY OFF
+[2026-08-21 22:20:29] [INFO] SYS(2335, 0)
+[2026-08-21 22:20:29] [INFO] 
+[2026-08-21 22:20:29] [INFO] DO "C:\4c\projeto\app\utils\TesteAutomatico" WITH 'FormNfl', 'C:\4c\tasks\task475', 'CRUD'
+[2026-08-21 22:20:29] [INFO] QUIT
+[2026-08-21 22:20:29] [INFO] 
+[2026-08-21 22:20:29] [INFO] === Fim do Wrapper.prg ===
+[2026-08-21 22:20:29] [WARN] AVISO: VFP9 retornou exit code  (normal para VFP9 GUI - validar pelo arquivo de saida)
+
+
+### RESULTADO DOS TESTES (teste_resultado.json):
+{
+  "formClass": "FormNfl",
+  "timestamp": "20260821222029",
+  "testes": [
+    {
+      "nome": "Instanciacao",
+      "passou": false,
+      "erro": "CREATEOBJECT retornou valor nao-objeto",
+      "detalhes": ""
+    }
+  ],
+  "resumo": {
+    "total": 1,
+    "passou": 0,
+    "falhou": 1,
+    "percentual": 0
+  }
+}
+
+
+
+## ERROS COMUNS E SOLUCOES (Consultar CLAUDE.md)
+- "Property PAGE1 is not found" -> Definir .PageCount ANTES de acessar .Page1
+- "Property BACKCOLOR is not found" em PageFrame -> Remover BackColor do PageFrame, usar Page1.BackColor
+- "RETURN/RETRY not allowed in TRY/CATCH" -> Usar variavel loc_lResultado e RETURN fora do TRY
+- "Property ALLOWDELETE is not found" -> Grid VFP9 nao tem AllowDelete/AllowEdit/AllowAddNew
+- "Property VISIBLE is not found" em Page -> Pages NAO tem .Visible, apenas PageFrame tem
+- "Property ERASEPAGE is not found" -> PageFrame NAO tem ErasePage
+- "Unknown member BUTTON1" -> OptionGroup: usar .Buttons(1) ao inves de .Button1
+- "Property FONTNAME is not found" em OptionGroup -> OptionGroup NAO tem FontName/FontSize, definir nas Buttons(N)
+- "Property FONTNAME is not found" em Grid -> SetAll("FontName",...,"Column") invalido, usar Grid.FontName diretamente
+- "Alias XXX is not found" -> Criar cursor ANTES de definir ControlSource
+- "Property THIS_CNOMETABELA is not found" -> Usar this_cTabela (nao this_cNomeTabela)
+- "Property OBTERTODOS is not found" -> Usar Buscar("") (nao ObterTodos)
+- "Property RELEASE is not found" -> Custom/BO NAO tem Release(), usar = .NULL.
+- "Function argument value, type, or count is invalid" em FormParaBO -> Se TextBox.Value ja eh numerico, NAO usar VAL()
+- "Unknown member PAGE1" apos WITH PageFrame -> Mover config das Pages para FORA do WITH block
+- "PAGE1" ou "COLUMN1" apos .Name -> NUNCA usar .Name em Pages ou Columns (rename quebra TODAS as referencias .Page1/.Column1 no resto do codigo)
+- BINDEVENT nao funciona -> Metodo deve ser PUBLIC (sem PROTECTED)
+- "Incorrect syntax near" em SQL com EscaparSQL/FormatarDataSQL -> Estas funcoes JA INCLUEM aspas. NUNCA adicionar aspas extras: usar campo = " + EscaparSQL(val), NAO campo = '" + EscaparSQL(val) + "'"
+- TIMEOUT sem mensagem de erro visivel -> Provavelmente dialog modal de erro travando VFP
+
+## REGRAS OBRIGATORIAS
+- Corrigir APENAS o erro indicado, NAO alterar logica de negocio
+- NAO remover campos, funcionalidades ou lookups
+- NAO alterar nomes de tabelas/colunas do banco (PILAR 2)
+- Manter nomenclatura padronizada _4c_ (PILAR 3)
+- Strings SQL longas DEVEM ser quebradas com `+;` (continuation) a cada 3-4 campos - NUNCA numa unica linha
+- Usar Write tool para salvar os arquivos corrigidos nos mesmos caminhos
+
+## CODIGO ATUAL DOS ARQUIVOS
+
+### FORM (C:\4c\projeto\app\forms\cadastros\FormNfl.prg):
+*==============================================================================
+* FormNfl.prg - Formulario de Configuracao de Nota Fiscal
+* Migrado de: SIGCDNFL.SCX (frmcadastro)
+* Tabelas: SigCnFnf, SigCnFN2
+* Fase 3/8: Estrutura Base
+*==============================================================================
+
+DEFINE CLASS FormNfl AS FormBase
+
+    Height      = 600
+    Width       = 1000
+    Caption     = "Configuracao de Nota Fiscal"
+    AutoCenter  = .T.
+    ShowWindow  = 1
+    WindowType  = 1
+    ControlBox  = .F.
+    TitleBar    = 0
+    Themes      = .F.
+    BorderStyle = 2
+
+    this_oBusinessObject        = .NULL.
+    this_cModoAtual             = "LISTA"
+    this_cUltimoSeriesValidado  = ""
+
+    *--------------------------------------------------------------------------
+    PROCEDURE Init()
+        RETURN DODEFAULT()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE InicializarForm()
+        LOCAL loc_lSucesso
+        loc_lSucesso = .F.
+
+        TRY
+            THIS.Caption = "Configura" + CHR(231) + CHR(227) + "o de Nota Fiscal"
+
+            THIS.this_oBusinessObject = CREATEOBJECT("NflBO")
+
+            IF VARTYPE(THIS.this_oBusinessObject) != "O"
+                MsgErro("Erro ao criar NflBO.", "FormNfl")
+            ELSE
+                THIS.ConfigurarPageFrame()
+                THIS.pgf_4c_Paginas.Page1.cnt_4c_Cabecalho.lbl_4c_Sombra.Caption = THIS.Caption
+                THIS.pgf_4c_Paginas.Page1.cnt_4c_Cabecalho.lbl_4c_Titulo.Caption = THIS.Caption
+                THIS.ConfigurarPaginaLista()
+
+                *-- Criar cursores para ControlSource dos controles das 10 abas
+                IF TYPE("gb_4c_ValidandoUI") != "L" OR !gb_4c_ValidandoUI
+                    IF !USED("crSigCnFNf")
+                        IF SQLEXEC(gnConnHandle, "SELECT TOP 0 * FROM SigCnFNf", "crSigCnFNf") > 0
+                            APPEND BLANK IN crSigCnFNf
+                        ENDIF
+                    ENDIF
+                    IF !USED("crSigCnFN2")
+                        IF SQLEXEC(gnConnHandle, "SELECT TOP 0 * FROM SigCnFN2", "crSigCnFN2") > 0
+                            APPEND BLANK IN crSigCnFN2
+                        ENDIF
+                    ENDIF
+                ELSE
+                    IF !USED("crSigCnFNf")
+                        CREATE CURSOR crSigCnFNf (cidchaves c(20), emps c(3), series c(3))
+                        APPEND BLANK IN crSigCnFNf
+                    ENDIF
+                    IF !USED("crSigCnFN2")
+                        CREATE CURSOR crSigCnFN2 (cidchaves c(20), emps c(3), series c(3))
+                        APPEND BLANK IN crSigCnFN2
+                    ENDIF
+                ENDIF
+
+                THIS.ConfigurarPaginaDados()
+                THIS.TornarControlesVisiveis(THIS)
+
+                IF TYPE("gb_4c_ValidandoUI") != "L" OR !gb_4c_ValidandoUI
+                    THIS.CarregarLista()
+                ENDIF
+
+                THIS.pgf_4c_Paginas.Visible = .T.
+                THIS.pgf_4c_Paginas.ActivePage = 1
+                THIS.this_cModoAtual = "LISTA"
+                THIS.AjustarBotoesPorModo("LISTA")
+                loc_lSucesso = .T.
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormNfl.InicializarForm")
+        ENDTRY
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConfigurarPageFrame()
+        THIS.AddObject("pgf_4c_Paginas", "PageFrame")
+        WITH THIS.pgf_4c_Paginas
+            .PageCount   = 2
+            .Top         = -29
+            .Left        = 0
+            .Width       = THIS.Width
+            .Height      = THIS.Height + 29
+            .Tabs        = .F.
+            .Visible     = .T.
+            .Page1.Caption = "Lista"
+            .Page1.Picture   = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
+            .Page2.Caption = "Dados"
+            .Page2.Picture   = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
+            .Page1.BackColor = RGB(255, 255, 255)
+            .Page2.BackColor = RGB(255, 255, 255)
+        ENDWITH
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConfigurarPaginaLista()
+        LOCAL loc_oPagina
+        loc_oPagina = THIS.pgf_4c_Paginas.Page1
+
+        *-- Fundo padrao do framework frmcadastro (sem isso a pagina fica branca)
+        loc_oPagina.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
+
+        *-- Cabecalho (faixa escura com titulo shadow + titulo principal)
+        loc_oPagina.AddObject("cnt_4c_Cabecalho", "Container")
+        WITH loc_oPagina.cnt_4c_Cabecalho
+            .Top       = 2
+            .Left      = 0
+            .Width     = THIS.Width
+            .Height    = 80
+            .BackColor = RGB(100, 100, 100)
+            .Visible   = .T.
+            .AddObject("lbl_4c_Sombra", "Label")
+            WITH .lbl_4c_Sombra
+                .Caption   = "Configura" + CHR(231) + CHR(227) + "o de Nota Fiscal"
+                .Top       = 35
+                .Left      = 22
+                .Width     = THIS.Width
+                .Height    = 28
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .ForeColor = RGB(0, 0, 0)
+                .BackStyle = 0
+                .Visible   = .T.
+            ENDWITH
+            .AddObject("lbl_4c_Titulo", "Label")
+            WITH .lbl_4c_Titulo
+                .Caption   = "Configura" + CHR(231) + CHR(227) + "o de Nota Fiscal"
+                .Top       = 33
+                .Left      = 20
+                .Width     = THIS.Width
+                .Height    = 28
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .ForeColor = RGB(255, 255, 255)
+                .BackStyle = 0
+                .Visible   = .T.
+            ENDWITH
+        ENDWITH
+
+        *-- Container CRUD (Left=542 canonico)
+        loc_oPagina.AddObject("cnt_4c_Botoes", "Container")
+        WITH loc_oPagina.cnt_4c_Botoes
+            .Top         = 0
+            .Left        = 542
+            .Width       = 375
+            .Height      = 85
+            .BackStyle   = 0
+            .BorderWidth = 0
+            .Visible     = .T.
+            .AddObject("cmd_4c_Incluir", "CommandButton")
+            WITH .cmd_4c_Incluir
+                .Top     = 5
+                .Left    =  542
+                .Width   = 70
+                .Height  = 70
+                .Caption = "Incluir"
+                .Picture = gc_4c_CaminhoIcones + "cadastro_inserir_26.jpg"
+                .Visible = .T.
+            ENDWITH
+            .AddObject("cmd_4c_Visualizar", "CommandButton")
+            WITH .cmd_4c_Visualizar
+                .Top     = 5
+                .Left    =  542
+                .Width   = 70
+                .Height  = 70
+                .Caption = "Visualizar"
+                .Picture = gc_4c_CaminhoIcones + "cadastro_vizualizar_60.jpg"
+                .Visible = .T.
+            ENDWITH
+            .AddObject("cmd_4c_Alterar", "CommandButton")
+            WITH .cmd_4c_Alterar
+                .Top     = 5
+                .Left    =  542
+                .Width   = 70
+                .Height  = 70
+                .Caption = "Alterar"
+                .Picture = gc_4c_CaminhoIcones + "cadastro_alterar_60.jpg"
+                .Visible = .T.
+            ENDWITH
+            .AddObject("cmd_4c_Excluir", "CommandButton")
+            WITH .cmd_4c_Excluir
+                .Top     = 5
+                .Left    =  542
+                .Width   = 70
+                .Height  = 70
+                .Caption = "Excluir"
+                .Picture = gc_4c_CaminhoIcones + "cadastro_excluir_60.jpg"
+                .Visible = .T.
+            ENDWITH
+            .AddObject("cmd_4c_Buscar", "CommandButton")
+            WITH .cmd_4c_Buscar
+                .Top     = 5
+                .Left    =  542
+                .Width   = 70
+                .Height  = 70
+                .Caption = "Buscar"
+                .Picture = gc_4c_CaminhoIcones + "cadastro_procurar_60.jpg"
+                .Visible = .T.
+            ENDWITH
+        ENDWITH
+
+        *-- Botao Copia (especifico SIGCDNFL, entre CRUD e ExpXML)
+        loc_oPagina.AddObject("cmd_4c_Copia", "CommandButton")
+        WITH loc_oPagina.cmd_4c_Copia
+            .Top     = 5
+            .Left    = 471
+            .Width   = 70
+            .Height  = 70
+            .Caption = "Copia"
+            .Visible = .T.
+        ENDWITH
+
+        *-- Container Saida (canonico Left=917, Width=90)
+        loc_oPagina.AddObject("cnt_4c_Saida", "Container")
+        WITH loc_oPagina.cnt_4c_Saida
+            .Top         = 0
+            .Left        = 917
+            .Width       = 90
+            .Height      = 85
+            .BackStyle   = 0
+            .BorderWidth = 0
+            .Visible     = .T.
+            .AddObject("cmd_4c_Encerrar", "CommandButton")
+            WITH .cmd_4c_Encerrar
+                .Top     = 5
+                .Left    = 917
+                .Width   = 75
+                .Height  = 75
+                .Caption = "Encerrar"
+                .Picture = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
+                .Visible = .T.
+            ENDWITH
+        ENDWITH
+
+        *-- Botoes XML especificos (Top=82+29=111 compensado)
+        loc_oPagina.AddObject("cmd_4c_BtnExpXML", "CommandButton")
+        WITH loc_oPagina.cmd_4c_BtnExpXML
+            .Top     = 111
+            .Left    = 682
+            .Width   = 120
+            .Height  = 45
+            .Caption = "Exportar XML"
+            .Visible = .T.
+        ENDWITH
+
+        loc_oPagina.AddObject("cmd_4c_BtnImpXML", "CommandButton")
+        WITH loc_oPagina.cmd_4c_BtnImpXML
+            .Top     = 111
+            .Left    = 804
+            .Width   = 120
+            .Height  = 45
+            .Caption = "Importar XML"
+            .Visible = .T.
+        ENDWITH
+
+        *-- Grid Lista (Top=135+29=164 compensado; Width=971 original)
+        loc_oPagina.AddObject("grd_4c_Lista", "Grid")
+        WITH loc_oPagina.grd_4c_Lista
+            .Top          = 164
+            .Left         = 12
+            .Width        = 971
+            .Height       = 450
+            .FontName     = "Tahoma"
+            .FontSize     = 8
+            .ColumnCount  = 4
+            .RecordSource = ""
+            .ReadOnly     = .T.
+            .GridLines    = 2
+            .RecordMark   = .F.
+            .DeleteMark   = .F.
+            .Visible      = .T.
+            WITH .Column1
+                .ControlSource   = "cursor_4c_Dados.emps"
+                .Width           = 55
+                .ReadOnly        = .T.
+                .Header1.Caption = "Empr."
+            ENDWITH
+            WITH .Column2
+                .ControlSource   = "cursor_4c_Dados.Razas"
+                .Width           = 220
+                .ReadOnly        = .T.
+                .Header1.Caption = "Empresa"
+            ENDWITH
+            WITH .Column3
+                .ControlSource   = "cursor_4c_Dados.series"
+                .Width           = 55
+                .ReadOnly        = .T.
+                .Header1.Caption = "S" + CHR(233) + "rie"
+            ENDWITH
+            WITH .Column4
+                .ControlSource   = "cursor_4c_Dados.cidchaves"
+                .Width           = 641
+                .ReadOnly        = .T.
+                .Header1.Caption = "Chave"
+            ENDWITH
+        ENDWITH
+        THIS.FormatarGridLista(loc_oPagina.grd_4c_Lista)
+
+        *-- Container cntcopia (flutuante, inicialmente oculto)
+        *-- Top=244+29=273 compensado; Left=257 como no legado
+        loc_oPagina.AddObject("cnt_4c_copia", "Container")
+        WITH loc_oPagina.cnt_4c_copia
+            .Top         = 273
+            .Left        = 257
+            .Width       = 484
+            .Height      = 116
+            .BackColor   = RGB(240, 240, 240)
+            .BorderWidth = 1
+            .Visible     = .F.
+            .AddObject("lbl_4c_CopSerie", "Label")
+            WITH .lbl_4c_CopSerie
+                .Caption   = "S" + CHR(233) + "rie Dest.:"
+                .Top       = 8
+                .Left      = 5
+                .Width     = 100
+                .Height    = 20
+                .Visible   = .T.
+            ENDWITH
+            .AddObject("txt_4c_nomedest", "TextBox")
+            WITH .txt_4c_nomedest
+                .Top       = 5
+                .Left      = 110
+                .Width     = 80
+                .Height    = 22
+                .MaxLength = 3
+                .Visible   = .T.
+            ENDWITH
+            .AddObject("lbl_4c_CopEmp", "Label")
+            WITH .lbl_4c_CopEmp
+                .Caption   = "Empresa Dest.:"
+                .Top       = 38
+                .Left      = 5
+                .Width     = 100
+                .Height    = 20
+                .Visible   = .T.
+            ENDWITH
+            .AddObject("txt_4c_empDest", "TextBox")
+            WITH .txt_4c_empDest
+                .Top       = 35
+                .Left      = 110
+                .Width     = 50
+                .Height    = 22
+                .MaxLength = 2
+                .Visible   = .T.
+            ENDWITH
+            .AddObject("cmd_4c_OK", "CommandButton")
+            WITH .cmd_4c_OK
+                .Top     = 83
+                .Left    = 310
+                .Width   = 70
+                .Height  = 25
+                .Caption = "OK"
+                .Visible = .T.
+            ENDWITH
+            .AddObject("cmd_4c_Cancela", "CommandButton")
+            WITH .cmd_4c_Cancela
+                .Top     = 83
+                .Left    = 390
+                .Width   = 85
+                .Height  = 25
+                .Caption = "Cancelar"
+                .Visible = .T.
+            ENDWITH
+        ENDWITH
+
+        *-- BINDEVENTs (handlers PUBLIC obrigatorio para BINDEVENT funcionar)
+        BINDEVENT(loc_oPagina.cnt_4c_Botoes.cmd_4c_Incluir,    "Click", THIS, "BtnIncluirClick")
+        BINDEVENT(loc_oPagina.cnt_4c_Botoes.cmd_4c_Visualizar, "Click", THIS, "BtnVisualizarClick")
+        BINDEVENT(loc_oPagina.cnt_4c_Botoes.cmd_4c_Alterar,    "Click", THIS, "BtnAlterarClick")
+        BINDEVENT(loc_oPagina.cnt_4c_Botoes.cmd_4c_Excluir,    "Click", THIS, "BtnExcluirClick")
+        BINDEVENT(loc_oPagina.cnt_4c_Botoes.cmd_4c_Buscar,     "Click", THIS, "BtnBuscarClick")
+        BINDEVENT(loc_oPagina.cmd_4c_Copia,                    "Click", THIS, "BtnCopiaClick")
+        BINDEVENT(loc_oPagina.cnt_4c_Saida.cmd_4c_Encerrar,    "Click", THIS, "BtnEncerrarClick")
+        BINDEVENT(loc_oPagina.cmd_4c_BtnExpXML,                "Click", THIS, "BtnExpXMLClick")
+        BINDEVENT(loc_oPagina.cmd_4c_BtnImpXML,                "Click", THIS, "BtnImpXMLClick")
+        BINDEVENT(loc_oPagina.cnt_4c_copia.cmd_4c_OK,          "Click",    THIS, "CntCopiaOKClick")
+        BINDEVENT(loc_oPagina.cnt_4c_copia.cmd_4c_Cancela,     "Click",    THIS, "CntCopiaCancelaClick")
+        BINDEVENT(loc_oPagina.cnt_4c_copia.txt_4c_nomedest,    "KeyPress", THIS, "NomedestKeyPress")
+        BINDEVENT(loc_oPagina.cnt_4c_copia.txt_4c_nomedest,    "DblClick", THIS, "NomedestDblClick")
+        BINDEVENT(loc_oPagina.cnt_4c_copia.txt_4c_empDest,     "KeyPress", THIS, "EmpDestKeyPress")
+        BINDEVENT(loc_oPagina.cnt_4c_copia.txt_4c_empDest,     "DblClick", THIS, "EmpDestDblClick")
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConfigurarPaginaDados()
+        LOCAL loc_oPagina
+        loc_oPagina = THIS.pgf_4c_Paginas.Page2
+
+        *-- Fundo padrao do framework frmcadastro (sem isso a pagina fica branca)
+        loc_oPagina.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
+
+        *-- Serie (Top original=27/23, +29 comp)
+        loc_oPagina.AddObject("lbl_4c_LblSerie", "Label")
+        WITH loc_oPagina.lbl_4c_LblSerie
+            .Caption   = "S" + CHR(233) + "rie :"
+            .Top       = 56
+            .Left      = 23
+            .Height    = 15
+            .Width     = 45
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .Visible   = .T.
+        ENDWITH
+        loc_oPagina.AddObject("txt_4c_Series", "TextBox")
+        WITH loc_oPagina.txt_4c_Series
+            .Top           = 52
+            .Left          = 65
+            .Width         = 31
+            .Height        = 24
+            .MaxLength     = 3
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Proxima Nota Fiscal (Top original=25/21, +29 comp)
+        loc_oPagina.AddObject("lbl_4c_LblProxNota", "Label")
+        WITH loc_oPagina.lbl_4c_LblProxNota
+            .Caption   = "Pr" + CHR(243) + "xima Nota Fiscal :"
+            .Top       = 54
+            .Left      = 132
+            .Width     = 105
+            .Height    = 15
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .Visible   = .T.
+        ENDWITH
+        loc_oPagina.AddObject("txt_4c_ProxNota", "TextBox")
+        WITH loc_oPagina.txt_4c_ProxNota
+            .Top           = 50
+            .Left          = 245
+            .Width         = 89
+            .Height        = 21
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Proximo Selo (Top original=49/45, +29 comp)
+        loc_oPagina.AddObject("lbl_4c_LblProxSelo", "Label")
+        WITH loc_oPagina.lbl_4c_LblProxSelo
+            .Caption   = "Pr" + CHR(243) + "ximo Selo :"
+            .Top       = 78
+            .Left      = 164
+            .Width     = 73
+            .Height    = 15
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .Visible   = .T.
+        ENDWITH
+        loc_oPagina.AddObject("txt_4c_ProxSelo", "TextBox")
+        WITH loc_oPagina.txt_4c_ProxSelo
+            .Top           = 74
+            .Left          = 245
+            .Width         = 89
+            .Height        = 21
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Proximo Selo Transporte (Top original=73/69, +29 comp)
+        loc_oPagina.AddObject("lbl_4c_LblProxSeloTrans", "Label")
+        WITH loc_oPagina.lbl_4c_LblProxSeloTrans
+            .Caption   = "Pr" + CHR(243) + "ximo Selo Transporte :"
+            .Top       = 102
+            .Left      = 108
+            .Width     = 129
+            .Height    = 15
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .Visible   = .T.
+        ENDWITH
+        loc_oPagina.AddObject("txt_4c_ProxSeloTrans", "TextBox")
+        WITH loc_oPagina.txt_4c_ProxSeloTrans
+            .Top           = 98
+            .Left          = 245
+            .Width         = 89
+            .Height        = 21
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Casas Decimais dos Itens (Top original=98/96, +29 comp)
+        loc_oPagina.AddObject("lbl_4c_LblCasas", "Label")
+        WITH loc_oPagina.lbl_4c_LblCasas
+            .Caption   = "No. de Casas Decimais dos Itens :"
+            .Top       = 127
+            .Left      = 72
+            .Height    = 15
+            .Width     = 165
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .Visible   = .T.
+        ENDWITH
+        loc_oPagina.AddObject("obj_4c_Op_ItCasas", "OptionGroup")
+        WITH loc_oPagina.obj_4c_Op_ItCasas
+            .Top         = 125
+            .Left        = 242
+            .Width       = 126
+            .Height      = 20
+            .BackStyle   = 0
+            .BorderStyle = 0
+            .Value       = 1
+            .Visible     = .T.
+            WITH .Buttons(1)
+                .Caption   = "2 Casas"
+                .Left      = 5
+                .Top       = 2
+                .AutoSize  = .T.
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
+            ENDWITH
+            WITH .Buttons(2)
+                .Caption   = "4 Casas"
+                .Left      = 68
+                .Top       = 2
+                .AutoSize  = .T.
+                .BackStyle = 0
+                .FontName  = "Tahoma"
+                .FontSize  = 8
+                .ForeColor = RGB(90, 90, 90)
+            ENDWITH
+        ENDWITH
+
+        *-- Grupo_Salva (Confirmar + Cancelar), Top original=7, +29 comp
+        loc_oPagina.AddObject("cnt_4c_Salva", "Container")
+        WITH loc_oPagina.cnt_4c_Salva
+            .Top         = 36
+            .Left        = 819
+            .Width       = 161
+            .Height      = 85
+            .BackStyle   = 0
+            .BorderWidth = 0
+            .Visible     = .T.
+            .AddObject("cmd_4c_Confirmar", "CommandButton")
+            WITH .cmd_4c_Confirmar
+                .Top        = 5
+                .Left       = 5
+                .Width      = 75
+                .Height     = 75
+                .Caption    = "Confirmar"
+                .Picture    = gc_4c_CaminhoIcones + "cadastro_salvar_60.jpg"
+                .FontBold   = .T.
+                .FontItalic = .T.
+                .FontName   = "Tahoma"
+                .FontSize   = 8
+                .Visible    = .T.
+            ENDWITH
+            .AddObject("cmd_4c_Cancelar", "CommandButton")
+            WITH .cmd_4c_Cancelar
+                .Top        = 5
+                .Left       = 81
+                .Width      = 75
+                .Height     = 75
+                .Caption    = "Encerrar"
+                .Picture    = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
+                .FontBold   = .T.
+                .FontItalic = .T.
+                .FontName   = "Tahoma"
+                .FontSize   = 8
+                .Visible    = .T.
+            ENDWITH
+        ENDWITH
+
+        *-- Inner PageFrame com 10 abas (Top original=124, +29 comp=153)
+        loc_oPagina.AddObject("pgf_4c_Abas", "PageFrame")
+        WITH loc_oPagina.pgf_4c_Abas
+            .PageCount  = 10
+            .Top        = 153
+            .Left       = 8
+            .Width      = 982
+            .Height     = 472
+            .Tabs       = .T.
+            .FontName   = "Tahoma"
+            .FontSize   = 7
+            .Visible    = .T.
+            .Page1.Caption  = "Cabe" + CHR(231) + "alho"
+            .Page2.Caption  = "Empresa"
+            .Page3.Caption  = "Desdobramento"
+            .Page4.Caption  = "Produtos"
+            .Page5.Caption  = "Impostos"
+            .Page6.Caption  = "Transporte"
+            .Page7.Caption  = "Rodap" + CHR(233)
+            .Page8.Caption  = "Dados Fatura"
+            .Page9.Caption  = "Servi" + CHR(231) + "os"
+            .Page10.Caption = "Outros"
+        ENDWITH
+
+        THIS.ConfigurarCabecalhoTab()
+        THIS.ConfigurarEmpresaTab()
+        THIS.ConfigurarDesdobramentoTab()
+        THIS.ConfigurarProdutosTab()
+        THIS.ConfigurarImpostosTab()
+        THIS.ConfigurarTransporteTab()
+        THIS.ConfigurarRodapeTab()
+        THIS.ConfigurarFaturaTab()
+        THIS.ConfigurarServicosTab()
+        THIS.ConfigurarOutrosTab()
+
+        *-- BINDEVENTs Page2 diretos
+        BINDEVENT(loc_oPagina.txt_4c_Series,                 "LostFocus",    THIS, "SeriesDadosValid")
+        BINDEVENT(loc_oPagina.txt_4c_Series,                 "KeyPress", THIS, "SeriesKeyPress")
+        BINDEVENT(loc_oPagina.txt_4c_Series,                 "DblClick", THIS, "SeriesDblClick")
+        BINDEVENT(loc_oPagina.cnt_4c_Salva.cmd_4c_Confirmar, "Click",   THIS, "ConfirmarClick")
+        BINDEVENT(loc_oPagina.cnt_4c_Salva.cmd_4c_Cancelar,  "Click",   THIS, "CancelarClick")
+
+        *-- BINDEVENTs lookups nas abas internas
+        LOCAL loc_oAbas, loc_oRdp, loc_nBI, loc_cBI
+        loc_oAbas = loc_oPagina.pgf_4c_Abas
+
+        *-- EmpPad (Outros, aba 10)
+        BINDEVENT(loc_oAbas.Page10.txt_4c_EmpPad, "KeyPress", THIS, "EmpPadKeyPress")
+        BINDEVENT(loc_oAbas.Page10.txt_4c_EmpPad, "DblClick", THIS, "EmpPadDblClick")
+        BINDEVENT(loc_oAbas.Page10.txt_4c_EmpPad, "KeyPress",    THIS, "EmpPadValid")
+
+        *-- UnPesos (Transporte, aba 6)
+        BINDEVENT(loc_oAbas.Page6.txt_4c_UnPesos, "KeyPress", THIS, "UnPesosKeyPress")
+        BINDEVENT(loc_oAbas.Page6.txt_4c_UnPesos, "DblClick", THIS, "UnPesosDblClick")
+        BINDEVENT(loc_oAbas.Page6.txt_4c_UnPesos, "KeyPress",    THIS, "UnPesosValid")
+
+        *-- CodImp 1-7 (Rodape, aba 7, bloco 1)
+        loc_oRdp = loc_oAbas.Page7
+        LOCAL loc_oTxtDin
+        FOR loc_nBI = 1 TO 7
+            loc_cBI    = ALLTRIM(STR(loc_nBI))
+            loc_oTxtDin = THIS.ObterControle(loc_oRdp, "txt_4c_CodImp" + loc_cBI)
+            IF VARTYPE(loc_oTxtDin) = "O"
+                BINDEVENT(loc_oTxtDin, "KeyPress",  THIS, "CodImp"  + loc_cBI + "KeyPress")
+                BINDEVENT(loc_oTxtDin, "DblClick",  THIS, "CodImp"  + loc_cBI + "DblClick")
+                BINDEVENT(loc_oTxtDin, "LostFocus", THIS, "CodImp"  + loc_cBI + "LostFocus")
+            ENDIF
+        ENDFOR
+
+        *-- CodImpB 8-12 (Rodape, aba 7, bloco 2)
+        FOR loc_nBI = 8 TO 12
+            loc_cBI    = ALLTRIM(STR(loc_nBI))
+            loc_oTxtDin = THIS.ObterControle(loc_oRdp, "txt_4c_CodImpB" + loc_cBI)
+            IF VARTYPE(loc_oTxtDin) = "O"
+                BINDEVENT(loc_oTxtDin, "KeyPress",  THIS, "CodImpB" + loc_cBI + "KeyPress")
+                BINDEVENT(loc_oTxtDin, "DblClick",  THIS, "CodImpB" + loc_cBI + "DblClick")
+                BINDEVENT(loc_oTxtDin, "LostFocus", THIS, "CodImpB" + loc_cBI + "LostFocus")
+            ENDIF
+        ENDFOR
+
+        *-- Get_Class (Rodape, aba 7)
+        BINDEVENT(loc_oRdp.obj_4c_ClsFisTp, "Click", THIS, "ClsFisTpClick")
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    PROCEDURE CarregarLista()
+        LOCAL loc_lResultado
+        loc_lResultado = .F.
+
+        TRY
+            IF TYPE("gb_4c_ValidandoUI") = "L" AND gb_4c_ValidandoUI
+                loc_lResultado = .T.
+            ELSE
+                loc_lResultado = THIS.this_oBusinessObject.Buscar("")
+                IF loc_lResultado AND VARTYPE(THIS.pgf_4c_Paginas) = "O"
+                    IF PEMSTATUS(THIS.pgf_4c_Paginas.Page1, "grd_4c_Lista", 5)
+                        THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.ColumnCount = 4
+                        THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.RecordSource = "cursor_4c_Dados"
+                        THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.Column1.ControlSource = "cursor_4c_Dados.emps"
+                        THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.Column2.ControlSource = "cursor_4c_Dados.Razas"
+                        THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.Column3.ControlSource = "cursor_4c_Dados.series"
+                        THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.Column4.ControlSource = "cursor_4c_Dados.cidchaves"
+                        THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.Column1.Header1.Caption = "Empr."
+                        THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.Column2.Header1.Caption = "Empresa"
+                        THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.Column3.Header1.Caption = "S" + CHR(233) + "rie"
+                        THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.Column4.Header1.Caption = "Chave"
+                    ENDIF
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormNfl.CarregarLista")
+        ENDTRY
+
+        RETURN loc_lResultado
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE AlternarPagina(par_nPagina)
+        LOCAL loc_lResultado
+        loc_lResultado = .F.
+
+        TRY
+            IF VARTYPE(par_nPagina) = "N" AND par_nPagina >= 1 AND par_nPagina <= 2
+                THIS.pgf_4c_Paginas.ActivePage = par_nPagina
+                IF par_nPagina = 1
+                    THIS.this_cModoAtual = "LISTA"
+                    THIS.AjustarBotoesPorModo("LISTA")
+                    THIS.CarregarLista()
+                ENDIF
+                loc_lResultado = .T.
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormNfl.AlternarPagina")
+        ENDTRY
+
+        RETURN loc_lResultado
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE FormatarGridLista(par_oGrid)
+        WITH par_oGrid
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SetAll("ForeColor", RGB(90, 90, 90), "Column")
+        ENDWITH
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE TornarControlesVisiveis(par_oContainer)
+        LOCAL loc_nI, loc_oObjeto, loc_cNome, loc_nP
+        FOR loc_nI = 1 TO par_oContainer.ControlCount
+            loc_oObjeto = par_oContainer.Controls(loc_nI)
+            IF VARTYPE(loc_oObjeto) = "O"
+                loc_cNome = UPPER(loc_oObjeto.Name)
+
+                IF INLIST(loc_cNome, "CNT_4C_CABECALHO", "CNT_4C_SALVA")
+                    LOOP
+                ENDIF
+
+                IF loc_cNome == "CNT_4C_COPIA"
+                    IF PEMSTATUS(loc_oObjeto, "ControlCount", 5)
+                        THIS.TornarControlesVisiveis(loc_oObjeto)
+                    ENDIF
+                    LOOP
+                ENDIF
+
+                IF PEMSTATUS(loc_oObjeto, "Visible", 5)
+                    loc_oObjeto.Visible = .T.
+                ENDIF
+
+                IF PEMSTATUS(loc_oObjeto, "BaseClass", 5) AND UPPER(loc_oObjeto.BaseClass) = "PAGEFRAME"
+                    FOR loc_nP = 1 TO loc_oObjeto.PageCount
+                        THIS.TornarControlesVisiveis(loc_oObjeto.Pages(loc_nP))
+                    ENDFOR
+                ENDIF
+
+                IF PEMSTATUS(loc_oObjeto, "ControlCount", 5)
+                    THIS.TornarControlesVisiveis(loc_oObjeto)
+                ENDIF
+            ENDIF
+        ENDFOR
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE LimparCampos()
+        LOCAL loc_oPag2
+        TRY
+            IF USED("crSigCnFNf")
+                ZAP IN crSigCnFNf
+                APPEND BLANK IN crSigCnFNf
+            ENDIF
+            IF USED("crSigCnFN2")
+                ZAP IN crSigCnFN2
+                APPEND BLANK IN crSigCnFN2
+            ENDIF
+            IF VARTYPE(THIS.pgf_4c_Paginas) = "O"
+                loc_oPag2 = THIS.pgf_4c_Paginas.Page2
+                IF PEMSTATUS(loc_oPag2, "txt_4c_Series", 5)
+                    loc_oPag2.txt_4c_Series.Value = ""
+                ENDIF
+                IF PEMSTATUS(loc_oPag2, "txt_4c_ProxNota", 5)
+                    loc_oPag2.txt_4c_ProxNota.Value = ""
+                ENDIF
+                IF PEMSTATUS(loc_oPag2, "txt_4c_ProxSelo", 5)
+                    loc_oPag2.txt_4c_ProxSelo.Value = ""
+                ENDIF
+                IF PEMSTATUS(loc_oPag2, "txt_4c_ProxSeloTrans", 5)
+                    loc_oPag2.txt_4c_ProxSeloTrans.Value = ""
+                ENDIF
+                IF PEMSTATUS(loc_oPag2, "obj_4c_Op_ItCasas", 5)
+                    loc_oPag2.obj_4c_Op_ItCasas.Value = 1
+                ENDIF
+                IF VARTYPE(loc_oPag2.pgf_4c_Abas) = "O"
+                    IF PEMSTATUS(loc_oPag2.pgf_4c_Abas.Page10, "txt_4c_EmpPad", 5)
+                        loc_oPag2.pgf_4c_Abas.Page10.txt_4c_EmpPad.Value = ""
+                    ENDIF
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormNfl.LimparCampos")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * HabilitarCampos - Habilita/desabilita campos de entrada da Page2 (todas as abas)
+    * par_lHabilitar = .T. para habilitar edicao, .F. para modo VISUALIZAR
+    * A chave (Series) so eh editavel em modo INCLUIR
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE HabilitarCampos(par_lHabilitar)
+        LOCAL loc_oPag2, loc_lChaveEdit
+        TRY
+            IF VARTYPE(THIS.pgf_4c_Paginas) = "O"
+                loc_oPag2      = THIS.pgf_4c_Paginas.Page2
+                loc_lChaveEdit = (THIS.this_cModoAtual = "INCLUIR")
+
+                *-- Campos standalone Page2
+                IF PEMSTATUS(loc_oPag2, "txt_4c_Series", 5)
+                    loc_oPag2.txt_4c_Series.Enabled = loc_lChaveEdit
+                ENDIF
+                IF PEMSTATUS(loc_oPag2, "txt_4c_ProxNota", 5)
+                    loc_oPag2.txt_4c_ProxNota.Enabled = par_lHabilitar
+                ENDIF
+                IF PEMSTATUS(loc_oPag2, "txt_4c_ProxSelo", 5)
+                    loc_oPag2.txt_4c_ProxSelo.Enabled = par_lHabilitar
+                ENDIF
+                IF PEMSTATUS(loc_oPag2, "txt_4c_ProxSeloTrans", 5)
+                    loc_oPag2.txt_4c_ProxSeloTrans.Enabled = par_lHabilitar
+                ENDIF
+                IF PEMSTATUS(loc_oPag2, "obj_4c_Op_ItCasas", 5)
+                    loc_oPag2.obj_4c_Op_ItCasas.Enabled = par_lHabilitar
+                ENDIF
+
+                *-- Recursivamente aplica a todas as abas internas
+                IF PEMSTATUS(loc_oPag2, "pgf_4c_Abas", 5)
+                    THIS.AplicarEnabledRecursivo(loc_oPag2.pgf_4c_Abas, par_lHabilitar)
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormNfl.HabilitarCampos")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * AplicarEnabledRecursivo - Percorre container e seta Enabled em controles de entrada
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE AplicarEnabledRecursivo(par_oContainer, par_lEnabled)
+        LOCAL loc_nI, loc_oCtrl, loc_cBase, loc_nP
+        FOR loc_nI = 1 TO par_oContainer.ControlCount
+            loc_oCtrl = par_oContainer.Controls(loc_nI)
+            IF VARTYPE(loc_oCtrl) != "O"
+                LOOP
+            ENDIF
+            IF !PEMSTATUS(loc_oCtrl, "BaseClass", 5)
+                LOOP
+            ENDIF
+            loc_cBase = UPPER(loc_oCtrl.BaseClass)
+
+            DO CASE
+                CASE loc_cBase = "PAGEFRAME"
+                    FOR loc_nP = 1 TO loc_oCtrl.PageCount
+                        THIS.AplicarEnabledRecursivo(loc_oCtrl.Pages(loc_nP), par_lEnabled)
+                    ENDFOR
+                CASE INLIST(loc_cBase, "CONTAINER", "PAGE")
+                    IF PEMSTATUS(loc_oCtrl, "ControlCount", 5)
+                        THIS.AplicarEnabledRecursivo(loc_oCtrl, par_lEnabled)
+                    ENDIF
+                CASE INLIST(loc_cBase, "TEXTBOX", "EDITBOX", "COMBOBOX", "CHECKBOX", "OPTIONGROUP", "SPINNER")
+                    IF PEMSTATUS(loc_oCtrl, "Enabled", 5)
+                        loc_oCtrl.Enabled = par_lEnabled
+                    ENDIF
+            ENDCASE
+        ENDFOR
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * AjustarBotoesPorModo - Habilita/desabilita botoes CRUD/Salvar/Cancelar
+    * par_cModo: "LISTA", "INCLUIR", "ALTERAR", "VISUALIZAR"
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE AjustarBotoesPorModo(par_cModo)
+        LOCAL loc_oPag1, loc_oPag2, loc_oBot, loc_oSal
+        LOCAL loc_lLista, loc_lEditando, loc_lVisualiza
+        TRY
+            IF VARTYPE(THIS.pgf_4c_Paginas) = "O"
+                loc_oPag1      = THIS.pgf_4c_Paginas.Page1
+                loc_oPag2      = THIS.pgf_4c_Paginas.Page2
+                loc_lLista     = (par_cModo = "LISTA")
+                loc_lEditando  = (par_cModo = "INCLUIR" OR par_cModo = "ALTERAR")
+                loc_lVisualiza = (par_cModo = "VISUALIZAR")
+
+                *-- Botoes CRUD Page1
+                IF PEMSTATUS(loc_oPag1, "cnt_4c_Botoes", 5)
+                    loc_oBot = loc_oPag1.cnt_4c_Botoes
+                    IF PEMSTATUS(loc_oBot, "cmd_4c_Incluir", 5)
+                        loc_oBot.cmd_4c_Incluir.Enabled    = loc_lLista
+                    ENDIF
+                    IF PEMSTATUS(loc_oBot, "cmd_4c_Visualizar", 5)
+                        loc_oBot.cmd_4c_Visualizar.Enabled = loc_lLista
+                    ENDIF
+                    IF PEMSTATUS(loc_oBot, "cmd_4c_Alterar", 5)
+                        loc_oBot.cmd_4c_Alterar.Enabled    = loc_lLista
+                    ENDIF
+                    IF PEMSTATUS(loc_oBot, "cmd_4c_Excluir", 5)
+                        loc_oBot.cmd_4c_Excluir.Enabled    = loc_lLista
+                    ENDIF
+                    IF PEMSTATUS(loc_oBot, "cmd_4c_Buscar", 5)
+                        loc_oBot.cmd_4c_Buscar.Enabled     = loc_lLista
+                    ENDIF
+                ENDIF
+                IF PEMSTATUS(loc_oPag1, "cmd_4c_Copia", 5)
+                    loc_oPag1.cmd_4c_Copia.Enabled       = loc_lLista
+                ENDIF
+                IF PEMSTATUS(loc_oPag1, "cmd_4c_BtnExpXML", 5)
+                    loc_oPag1.cmd_4c_BtnExpXML.Enabled   = loc_lLista
+                ENDIF
+                IF PEMSTATUS(loc_oPag1, "cmd_4c_BtnImpXML", 5)
+                    loc_oPag1.cmd_4c_BtnImpXML.Enabled   = loc_lLista
+                ENDIF
+
+                *-- Botoes Confirmar/Cancelar Page2
+                IF PEMSTATUS(loc_oPag2, "cnt_4c_Salva", 5)
+                    loc_oSal = loc_oPag2.cnt_4c_Salva
+                    IF PEMSTATUS(loc_oSal, "cmd_4c_Confirmar", 5)
+                        loc_oSal.cmd_4c_Confirmar.Enabled = loc_lEditando
+                    ENDIF
+                    IF PEMSTATUS(loc_oSal, "cmd_4c_Cancelar", 5)
+                        loc_oSal.cmd_4c_Cancelar.Enabled  = (loc_lEditando OR loc_lVisualiza)
+                    ENDIF
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormNfl.AjustarBotoesPorModo")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnIncluirClick()
+        LOCAL loc_lResultado
+        loc_lResultado = .F.
+        TRY
+            THIS.this_oBusinessObject.NovoRegistro()
+            THIS.LimparCampos()
+            THIS.this_cModoAtual = "INCLUIR"
+            THIS.HabilitarCampos(.T.)
+            THIS.AjustarBotoesPorModo("INCLUIR")
+            THIS.AlternarPagina(2)
+            THIS.this_cModoAtual = "INCLUIR"
+            loc_lResultado = .T.
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormNfl.BtnIncluirClick")
+        ENDTRY
+        RETURN loc_lResultado
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnVisualizarClick()
+        LOCAL loc_lResultado, loc_cChave
+        loc_lResultado = .F.
+        TRY
+            IF !USED("cursor_4c_Dados") OR RECCOUNT("cursor_4c_Dados") = 0 OR EOF("cursor_4c_Dados")
+                MsgAviso("Nenhum registro selecionado.", "FormNfl")
+            ELSE
+                SELECT cursor_4c_Dados
+                loc_cChave = ALLTRIM(cursor_4c_Dados.cidchaves)
+                IF THIS.this_oBusinessObject.CarregarPorCodigo(loc_cChave)
+                    THIS.BOParaForm()
+                    THIS.this_cModoAtual = "VISUALIZAR"
+                    THIS.HabilitarCampos(.F.)
+                    THIS.AjustarBotoesPorModo("VISUALIZAR")
+                    THIS.AlternarPagina(2)
+                    THIS.this_cModoAtual = "VISUALIZAR"
+                    loc_lResultado = .T.
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormNfl.BtnVisualizarClick")
+        ENDTRY
+        RETURN loc_lResultado
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnAlterarClick()
+        LOCAL loc_lResultado, loc_cChave
+        loc_lResultado = .F.
+        TRY
+            IF !USED("cursor_4c_Dados") OR RECCOUNT("cursor_4c_Dados") = 0 OR EOF("cursor_4c_Dados")
+                MsgAviso("Nenhum registro selecionado.", "FormNfl")
+            ELSE
+                SELECT cursor_4c_Dados
+                loc_cChave = ALLTRIM(cursor_4c_Dados.cidchaves)
+                IF THIS.this_oBusinessObject.CarregarPorCodigo(loc_cChave)
+                    THIS.this_oBusinessObject.EditarRegistro()
+                    THIS.BOParaForm()
+                    THIS.this_cModoAtual = "ALTERAR"
+                    THIS.HabilitarCampos(.T.)
+                    THIS.AjustarBotoesPorModo("ALTERAR")
+                    THIS.AlternarPagina(2)
+                    THIS.this_cModoAtual = "ALTERAR"
+                    loc_lResultado = .T.
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormNfl.BtnAlterarClick")
+        ENDTRY
+        RETURN loc_lResultado
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnExcluirClick()
+        LOCAL loc_lResultado, loc_cChave, loc_lConfirma
+        loc_lResultado = .F.
+        TRY
+            IF !USED("cursor_4c_Dados") OR RECCOUNT("cursor_4c_Dados") = 0 OR EOF("cursor_4c_Dados")
+                MsgAviso("Nenhum registro selecionado.", "FormNfl")
+            ELSE
+                SELECT cursor_4c_Dados
+                loc_cChave    = ALLTRIM(cursor_4c_Dados.cidchaves)
+                loc_lConfirma = MsgConfirma("Confirma exclus" + CHR(227) + "o da configura" + CHR(231) + CHR(227) + "o selecionada?", "FormNfl")
+                IF loc_lConfirma
+                    IF THIS.this_oBusinessObject.CarregarPorCodigo(loc_cChave)
+                        loc_lResultado = THIS.this_oBusinessObject.Excluir()
+                        IF loc_lResultado
+                            THIS.CarregarLista()
+                        ENDIF
+                    ENDIF
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormNfl.BtnExcluirClick")
+        ENDTRY
+        RETURN loc_lResultado
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnBuscarClick()
+        LOCAL loc_lResultado, loc_cFiltro
+        loc_lResultado = .F.
+        TRY
+            loc_cFiltro    = INPUTBOX("Informe s" + CHR(233) + "rie ou empresa:", "Buscar", "")
+            loc_lResultado = THIS.this_oBusinessObject.Buscar(ALLTRIM(loc_cFiltro))
+            IF loc_lResultado AND PEMSTATUS(THIS.pgf_4c_Paginas.Page1, "grd_4c_Lista", 5)
+                THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.ColumnCount = 4
+                THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.RecordSource = "cursor_4c_Dados"
+                THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.Column1.ControlSource = "cursor_4c_Dados.emps"
+                THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.Column2.ControlSource = "cursor_4c_Dados.Razas"
+                THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.Column3.ControlSource = "cursor_4c_Dados.series"
+                THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.Column4.ControlSource = "cursor_4c_Dados.cidchaves"
+                THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.Column1.Header1.Caption = "Empr."
+                THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.Column2.Header1.Caption = "Empresa"
+                THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.Column3.Header1.Caption = "S" + CHR(233) + "rie"
+                THIS.pgf_4c_Paginas.Page1.grd_4c_Lista.Column4.Header1.Caption = "Chave"
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormNfl.BtnBuscarClick")
+        ENDTRY
+        RETURN loc_lResultado
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnEncerrarClick()
+        THIS.Release()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnCopiaClick()
+        TRY
+            IF PEMSTATUS(THIS.pgf_4c_Paginas.Page1, "cnt_4c_copia", 5)
+                THIS.pgf_4c_Paginas.Page1.cnt_4c_copia.Visible = .T.
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormNfl.BtnCopiaClick")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnExpXMLClick()
+        LOCAL loc_oForm
+        TRY
+            loc_oForm = CREATEOBJECT("FormSigOpXml")
+            IF VARTYPE(loc_oForm) = "O"
+                loc_oForm.Show()
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormNfl.BtnExpXMLClick")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    PROCEDURE BtnImpXMLClick()
+        LOCAL loc_oForm
+        TRY
+            loc_oForm = CREATEOBJECT("FormSigOpXml")
+            IF VARTYPE(loc_oForm) = "O"
+                loc_oForm.Show()
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormNfl.BtnImpXMLClick")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    PROCEDURE CntCopiaOKClick()
+        LOCAL loc_lResultado, loc_cSerieOrig, loc_cSerieDest, loc_cEmpDest
+        LOCAL loc_oCopia
+        loc_lResultado = .F.
+        TRY
+            IF !USED("cursor_4c_Dados") OR RECCOUNT("cursor_4c_Dados") = 0
+                MsgAviso("Nenhuma configura" + CHR(231) + CHR(227) + "o selecionada para copiar.", "FormNfl")
+            ELSE
+                loc_oCopia     = THIS.pgf_4c_Paginas.Page1.cnt_4c_copia
+                loc_cSerieOrig = ALLTRIM(cursor_4c_Dados.series)
+                loc_cSerieDest = ALLTRIM(loc_oCopia.txt_4c_nomedest.Value)
+                loc_cEmpDest   = ALLTRIM(loc_oCopia.txt_4c_empDest.Value)
+                IF EMPTY(loc_cSerieDest)
+                    MsgAviso("Informe a s" + CHR(233) + "rie destino.", "FormNfl")
+                ELSE
+                    IF EMPTY(loc_cEmpDest)
+                    MsgAviso("Informe a empresa destino.", "FormNfl")
+                ELSE
+                    loc_lResultado = THIS.this_oBusinessObject.Copiar(loc_cSerieOrig, loc_cSerieDest, loc_cEmpDest)
+                    IF loc_lResultado
+                        loc_oCopia.Visible = .F.
+                        THIS.CarregarLista()
+                    ENDIF
+                    ENDIF
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormNfl.CntCopiaOKClick")
+        ENDTRY
+        RETURN loc_lResultado
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    PROCEDURE CntCopiaCancelaClick()
+        TRY
+            IF PEMSTATUS(THIS.pgf_4c_Paginas.Page1, "cnt_4c_copia", 5)
+                THIS.pgf_4c_Paginas.Page1.cnt_4c_copia.Visible = .F.
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormNfl.CntCopiaCancelaClick")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConfigurarCabecalhoTab()
+        LOCAL loc_oAba
+        loc_oAba = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page1
+
+        *-- Shape decorativo (painel impressora)
+        loc_oAba.AddObject("shp_4c_Shape1", "Shape")
+        WITH loc_oAba.shp_4c_Shape1
+            .Top           = 41
+            .Left          = 381
+            .Height        = 139
+            .Width         = 265
+            .BackStyle     = 0
+            .SpecialEffect = 0
+            .Visible       = .T.
+        ENDWITH
+
+        *===== Coluna esquerda: dimensoes de impressao NF =====
+
+        *-- No NF (l1nf x c1nf)
+        loc_oAba.AddObject("lbl_4c_Label1", "Label")
+        WITH loc_oAba.lbl_4c_Label1
+            .Caption   = "N" + CHR(186) + " NF"
+            .Top       = 33
+            .Left      = 41
+            .Width     = 29
+            .Height    = 13
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .Visible   = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Text1", "TextBox")
+        WITH loc_oAba.txt_4c_Text1
+            .ControlSource = "crSigCnFNf.l1nf"
+            .Top           = 46
+            .Left          = 41
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .SpecialEffect = 1
+            .Margin        = 0
+            .Visible       = .T.
+        ENDWITH
+        loc_oAba.AddObject("lbl_4c_Label2", "Label")
+        WITH loc_oAba.lbl_4c_Label2
+            .Caption   = "x"
+            .Top       = 48
+            .Left      = 84
+            .Width     = 6
+            .Height    = 13
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .Visible   = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Text2", "TextBox")
+        WITH loc_oAba.txt_4c_Text2
+            .ControlSource = "crSigCnFNf.c1nf"
+            .Top           = 46
+            .Left          = 90
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .SpecialEffect = 1
+            .Margin        = 0
+            .Visible       = .T.
+        ENDWITH
+
+        *-- NF Saida (lnfsai x cnfsai)
+        loc_oAba.AddObject("lbl_4c_Label3", "Label")
+        WITH loc_oAba.lbl_4c_Label3
+            .Caption   = "NF Sa" + CHR(237) + "da"
+            .Top       = 65
+            .Left      = 41
+            .Width     = 41
+            .Height    = 13
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .Visible   = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Text3", "TextBox")
+        WITH loc_oAba.txt_4c_Text3
+            .ControlSource = "crSigCnFNf.lnfsai"
+            .Top           = 78
+            .Left          = 41
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .SpecialEffect = 1
+            .Margin        = 0
+            .Visible       = .T.
+        ENDWITH
+        loc_oAba.AddObject("lbl_4c_Label4", "Label")
+        WITH loc_oAba.lbl_4c_Label4
+            .Caption   = "x"
+            .Top       = 80
+            .Left      = 84
+            .Width     = 6
+            .Height    = 13
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .Visible   = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Text4", "TextBox")
+        WITH loc_oAba.txt_4c_Text4
+            .ControlSource = "crSigCnFNf.cnfsai"
+            .Top           = 78
+            .Left          = 90
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .SpecialEffect = 1
+            .Margin        = 0
+            .Visible       = .T.
+        ENDWITH
+
+        *-- NF Entrada (lnfent x cnfent)
+        loc_oAba.AddObject("lbl_4c_Label5", "Label")
+        WITH loc_oAba.lbl_4c_Label5
+            .Caption   = "NF Entrada"
+            .Top       = 97
+            .Left      = 41
+            .Width     = 50
+            .Height    = 13
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .Visible   = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Text5", "TextBox")
+        WITH loc_oAba.txt_4c_Text5
+            .ControlSource = "crSigCnFNf.lnfent"
+            .Top           = 110
+            .Left          = 41
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .SpecialEffect = 1
+            .Margin        = 0
+            .Visible       = .T.
+        ENDWITH
+        loc_oAba.AddObject("lbl_4c_Label6", "Label")
+        WITH loc_oAba.lbl_4c_Label6
+            .Caption   = "x"
+            .Top       = 112
+            .Left      = 84
+            .Width     = 6
+            .Height    = 13
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .Visible   = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Text6", "TextBox")
+        WITH loc_oAba.txt_4c_Text6
+            .ControlSource = "crSigCnFNf.cnfent"
+            .Top           = 110
+            .Left          = 90
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .SpecialEffect = 1
+            .Margin        = 0
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Nat. Operacao (lnatop x cnatop)
+        loc_oAba.AddObject("lbl_4c_Label7", "Label")
+        WITH loc_oAba.lbl_4c_Label7
+            .Caption   = "Nat. Opera" + CHR(231) + CHR(227) + "o"
+            .Top       = 129
+            .Left      = 41
+            .Width     = 63
+            .Height    = 13
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .Visible   = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Text7", "TextBox")
+        WITH loc_oAba.txt_4c_Text7
+            .ControlSource = "crSigCnFNf.lnatop"
+            .Top           = 142
+            .Left          = 41
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .SpecialEffect = 1
+            .Margin        = 0
+            .Visible       = .T.
+        ENDWITH
+        loc_oAba.AddObject("lbl_4c_Label8", "Label")
+        WITH loc_oAba.lbl_4c_Label8
+            .Caption   = "x"
+            .Top       = 144
+            .Left      = 84
+            .Width     = 6
+            .Height    = 13
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .Visible   = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Text8", "TextBox")
+        WITH loc_oAba.txt_4c_Text8
+            .ControlSource = "crSigCnFNf.cnatop"
+            .Top           = 142
+            .Left          = 90
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .SpecialEffect = 1
+            .Margin        = 0
+            .Visible       = .T.
+        ENDWITH
+
+        *-- CFOP (lcfop x ccfop)
+        loc_oAba.AddObject("lbl_4c_Label9", "Label")
+        WITH loc_oAba.lbl_4c_Label9
+            .Caption   = "CFOP"
+            .Top       = 161
+            .Left      = 41
+            .Width     = 29
+            .Height    = 13
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .Visible   = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Text9", "TextBox")
+        WITH loc_oAba.txt_4c_Text9
+            .ControlSource = "crSigCnFNf.lcfop"
+            .Top           = 174
+            .Left          = 41
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .SpecialEffect = 1
+            .Margin        = 0
+            .Visible       = .T.
+        ENDWITH
+        loc_oAba.AddObject("lbl_4c_Label10", "Label")
+        WITH loc_oAba.lbl_4c_Label10
+            .Caption   = "x"
+            .Top       = 176
+            .Left      = 84
+            .Width     = 6
+            .Height    = 13
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .Visible   = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Text10", "TextBox")
+        WITH loc_oAba.txt_4c_Text10
+            .ControlSource = "crSigCnFNf.ccfop"
+            .Top           = 174
+            .Left          = 90
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .SpecialEffect = 1
+            .Margin        = 0
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Razao Social (LRAZEMP x CRAZEMP, sem ControlSource)
+        loc_oAba.AddObject("lbl_4c_Label11", "Label")
+        WITH loc_oAba.lbl_4c_Label11
+            .Caption   = "Raz" + CHR(227) + "o Social"
+            .Top       = 193
+            .Left      = 41
+            .Width     = 54
+            .Height    = 13
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .Visible   = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_LRAZEMP", "TextBox")
+        WITH loc_oAba.txt_4c_LRAZEMP
+            .Top           = 206
+            .Left          = 41
+            .Width         = 42
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .SpecialEffect = 1
+            .Margin        = 0
+            .Visible       = .T.
+        ENDWITH
+        loc_oAba.AddObject("lbl_4c_Label12", "Label")
+        WITH loc_oAba.lbl_4c_Label12
+            .Caption   = "x"
+            .Top       = 209
+            .Left      = 85
+            .Width     = 6
+            .Height    = 13
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .Visible   = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_CRAZEMP", "TextBox")
+        WITH loc_oAba.txt_4c_CRAZEMP
+            .Top           = 208
+            .Left          = 92
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .SpecialEffect = 1
+            .Margin        = 0
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Endereco (LENDEMP x CENDEMP, sem ControlSource)
+        loc_oAba.AddObject("lbl_4c_Label16", "Label")
+        WITH loc_oAba.lbl_4c_Label16
+            .Caption   = "Endere" + CHR(231) + "o"
+            .Top       = 226
+            .Left      = 43
+            .Width     = 40
+            .Height    = 13
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .Visible   = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_LENDEMP", "TextBox")
+        WITH loc_oAba.txt_4c_LENDEMP
+            .Top           = 241
+            .Left          = 42
+            .Width         = 43
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .SpecialEffect = 1
+            .Margin        = 0
+            .Visible       = .T.
+        ENDWITH
+        loc_oAba.AddObject("lbl_4c_Label17", "Label")
+        WITH loc_oAba.lbl_4c_Label17
+            .Caption   = "x"
+            .Top       = 244
+            .Left      = 86
+            .Width     = 6
+            .Height    = 13
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .Visible   = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_CENDEMP", "TextBox")
+        WITH loc_oAba.txt_4c_CENDEMP
+            .Top           = 241
+            .Left          = 91
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .SpecialEffect = 1
+            .Margin        = 0
+            .Visible       = .T.
+        ENDWITH
+
+        *===== Coluna central: sequencia X, SAC, Nat.Op.Sub, CFOP Sub =====
+
+        *-- Sequencia de X (lxinc x cxinc x lenxinc)
+        loc_oAba.AddObject("lbl_4c_Label19", "Label")
+        WITH loc_oAba.lbl_4c_Label19
+            .Caption   = "Seq" + CHR(252) + CHR(234) + "ncia de X     (Quant)"
+            .Top       = 33
+            .Left      = 165
+            .Width     = 112
+            .Height    = 13
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .Visible   = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Text12", "TextBox")
+        WITH loc_oAba.txt_4c_Text12
+            .ControlSource = "crSigCnFN2.lxinc"
+            .Top           = 46
+            .Left          = 165
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .SpecialEffect = 1
+            .Margin        = 0
+            .Visible       = .T.
+        ENDWITH
+        loc_oAba.AddObject("lbl_4c_Label20", "Label")
+        WITH loc_oAba.lbl_4c_Label20
+            .Caption   = "x"
+            .Top       = 48
+            .Left      = 208
+            .Width     = 6
+            .Height    = 13
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .Visible   = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Text16", "TextBox")
+        WITH loc_oAba.txt_4c_Text16
+            .ControlSource = "crSigCnFN2.cxinc"
+            .Top           = 46
+            .Left          = 214
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .SpecialEffect = 1
+            .Margin        = 0
+            .Visible       = .T.
+        ENDWITH
+        loc_oAba.AddObject("lbl_4c_Label21", "Label")
+        WITH loc_oAba.lbl_4c_Label21
+            .Caption   = "x"
+            .Top       = 48
+            .Left      = 255
+            .Width     = 6
+            .Height    = 13
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .Visible   = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Text17", "TextBox")
+        WITH loc_oAba.txt_4c_Text17
+            .ControlSource = "crSigCnFN2.lenxinc"
+            .Top           = 46
+            .Left          = 261
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .Format        = "K"
+            .InputMask     = "99999"
+            .SpecialEffect = 1
+            .Margin        = 0
+            .Visible       = .T.
+        ENDWITH
+
+        *-- SAC (lsac x csac + contsac)
+        loc_oAba.AddObject("lbl_4c_Label22", "Label")
+        WITH loc_oAba.lbl_4c_Label22
+            .Caption   = "SAC:"
+            .Top       = 65
+            .Left      = 164
+            .Width     = 25
+            .Height    = 13
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .Visible   = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Text18", "TextBox")
+        WITH loc_oAba.txt_4c_Text18
+            .ControlSource = "crSigCnFN2.lsac"
+            .Top           = 78
+            .Left          = 164
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .SpecialEffect = 1
+            .Margin        = 0
+            .Visible       = .T.
+        ENDWITH
+        loc_oAba.AddObject("lbl_4c_Label23", "Label")
+        WITH loc_oAba.lbl_4c_Label23
+            .Caption   = "x"
+            .Top       = 80
+            .Left      = 207
+            .Width     = 6
+            .Height    = 13
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .Visible   = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Text19", "TextBox")
+        WITH loc_oAba.txt_4c_Text19
+            .ControlSource = "crSigCnFN2.csac"
+            .Top           = 78
+            .Left          = 213
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .SpecialEffect = 1
+            .Margin        = 0
+            .Visible       = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Text20", "TextBox")
+        WITH loc_oAba.txt_4c_Text20
+            .ControlSource = "crSigCnFN2.contsac"
+            .Top           = 97
+            .Left          = 164
+            .Width         = 137
+            .Height        = 18
+            .MaxLength     = 20
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .Format        = "K"
+            .SpecialEffect = 1
+            .Margin        = 0
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Nat. Operacao Substituicao Tributaria (lnatopsub x cnatopsub)
+        loc_oAba.AddObject("lbl_4c_Label24", "Label")
+        WITH loc_oAba.lbl_4c_Label24
+            .Caption   = "Nat. Opera" + CHR(231) + CHR(227) + "o Substitui" + CHR(231) + CHR(227) + "o Tribut" + CHR(225) + "ria"
+            .Top       = 129
+            .Left      = 164
+            .Width     = 157
+            .Height    = 13
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .Visible   = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Text21", "TextBox")
+        WITH loc_oAba.txt_4c_Text21
+            .ControlSource = "crSigCnFN2.lnatopsub"
+            .Top           = 142
+            .Left          = 164
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .SpecialEffect = 1
+            .Margin        = 0
+            .Visible       = .T.
+        ENDWITH
+        loc_oAba.AddObject("lbl_4c_Label25", "Label")
+        WITH loc_oAba.lbl_4c_Label25
+            .Caption   = "x"
+            .Top       = 144
+            .Left      = 207
+            .Width     = 6
+            .Height    = 13
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .Visible   = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Text22", "TextBox")
+        WITH loc_oAba.txt_4c_Text22
+            .ControlSource = "crSigCnFN2.cnatopsub"
+            .Top           = 142
+            .Left          = 213
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .SpecialEffect = 1
+            .Margin        = 0
+            .Visible       = .T.
+        ENDWITH
+
+        *-- CFOP Substituicao Tributaria (lcfopsub x ccfopsub)
+        loc_oAba.AddObject("lbl_4c_Label26", "Label")
+        WITH loc_oAba.lbl_4c_Label26
+            .Caption   = "CFOP Substitui" + CHR(231) + CHR(227) + "o Tribut" + CHR(225) + "ria"
+            .Top       = 161
+            .Left      = 164
+            .Width     = 123
+            .Height    = 13
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .Visible   = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Text23", "TextBox")
+        WITH loc_oAba.txt_4c_Text23
+            .ControlSource = "crSigCnFN2.lcfopsub"
+            .Top           = 174
+            .Left          = 164
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .SpecialEffect = 1
+            .Margin        = 0
+            .Visible       = .T.
+        ENDWITH
+        loc_oAba.AddObject("lbl_4c_Label27", "Label")
+        WITH loc_oAba.lbl_4c_Label27
+            .Caption   = "x"
+            .Top       = 176
+            .Left      = 207
+            .Width     = 6
+            .Height    = 13
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .Visible   = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Text24", "TextBox")
+        WITH loc_oAba.txt_4c_Text24
+            .ControlSource = "crSigCnFN2.ccfopsub"
+            .Top           = 174
+            .Left          = 213
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .SpecialEffect = 1
+            .Margin        = 0
+            .Visible       = .T.
+        ENDWITH
+
+        *===== Coluna direita: impressora (dentro do Shape1) =====
+
+        *-- Nome da Impressora (imppads)
+        loc_oAba.AddObject("lbl_4c_Label13", "Label")
+        WITH loc_oAba.lbl_4c_Label13
+            .Caption   = "Nome da Impressora"
+            .Top       = 49
+            .Left      = 393
+            .Width     = 89
+            .Height    = 13
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .Visible   = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Text13", "TextBox")
+        WITH loc_oAba.txt_4c_Text13
+            .ControlSource = "crSigCnFNf.imppads"
+            .Top           = 61
+            .Left          = 393
+            .Width         = 240
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .Format        = "K"
+            .SpecialEffect = 1
+            .Margin        = 0
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Fonte Padrao + Tamanho (sem ControlSource; Text14 abre dialogo fonte)
+        loc_oAba.AddObject("lbl_4c_Label14", "Label")
+        WITH loc_oAba.lbl_4c_Label14
+            .Caption   = "Fonte Padr" + CHR(227) + "o"
+            .Top       = 81
+            .Left      = 393
+            .Width     = 58
+            .Height    = 13
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .Visible   = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Text14", "TextBox")
+        WITH loc_oAba.txt_4c_Text14
+            .Top           = 93
+            .Left          = 393
+            .Width         = 192
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .Format        = "K"
+            .SpecialEffect = 1
+            .Margin        = 0
+            .Visible       = .T.
+        ENDWITH
+        loc_oAba.AddObject("lbl_4c_Label15", "Label")
+        WITH loc_oAba.lbl_4c_Label15
+            .Caption   = "Tamanho"
+            .Top       = 81
+            .Left      = 591
+            .Width     = 41
+            .Height    = 13
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .Visible   = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Text15", "TextBox")
+        WITH loc_oAba.txt_4c_Text15
+            .ControlSource = "crSigCnFNf.tamanhos"
+            .Top           = 93
+            .Left          = 592
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .Format        = "K"
+            .InputMask     = "999"
+            .SpecialEffect = 1
+            .Margin        = 0
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Tamanho da Folha (Text11, sem ControlSource; abre dialogo)
+        loc_oAba.AddObject("lbl_4c_Label18", "Label")
+        WITH loc_oAba.lbl_4c_Label18
+            .Caption   = "Tamanho da Folha"
+            .Top       = 114
+            .Left      = 394
+            .Width     = 80
+            .Height    = 13
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .Visible   = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Text11", "TextBox")
+        WITH loc_oAba.txt_4c_Text11
+            .Top           = 127
+            .Left          = 393
+            .Width         = 240
+            .Height        = 18
+            .MaxLength     = 50
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .Format        = "K"
+            .SpecialEffect = 1
+            .Margin        = 0
+            .Visible       = .T.
+        ENDWITH
+
+        *-- optTpMargem (Sem Margem / Com Margem)
+        loc_oAba.AddObject("obj_4c_OptTpMargem", "OptionGroup")
+        WITH loc_oAba.obj_4c_OptTpMargem
+            .ControlSource = "crSigCnFN2.ntpmargems"
+            .Top           = 149
+            .Left          = 389
+            .Width         = 202
+            .Height        = 27
+            .BackStyle     = 0
+            .BorderStyle   = 0
+            .Value         = 1
+            .Visible       = .T.
+            WITH .Buttons(1)
+                .Caption   = "Sem Margem"
+                .Left      = 5
+                .Top       = 5
+                .AutoSize  = .T.
+                .BackStyle = 0
+                .ForeColor = RGB(90, 90, 90)
+            ENDWITH
+            WITH .Buttons(2)
+                .Caption   = "Com Margem"
+                .Left      = 105
+                .Top       = 5
+                .AutoSize  = .T.
+                .BackStyle = 0
+                .FontName  = "Tahoma"
+                .FontSize  = 8
+                .ForeColor = RGB(90, 90, 90)
+            ENDWITH
+        ENDWITH
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    PROCEDURE ConfirmarClick()
+        LOCAL loc_lResultado
+        loc_lResultado = .F.
+        TRY
+            IF THIS.this_cModoAtual != "INCLUIR" AND THIS.this_cModoAtual != "ALTERAR"
+                MsgAviso("Nada a salvar no modo atual.", "FormNfl")
+            ELSE
+                THIS.FormParaBO()
+                loc_lResultado = THIS.this_oBusinessObject.Salvar()
+                IF loc_lResultado
+                    THIS.this_oBusinessObject.SalvarSigCnFNf()
+                    MsgInfo("Configura" + CHR(231) + CHR(227) + "o salva com sucesso.", "FormNfl")
+                    THIS.AjustarBotoesPorModo("LISTA")
+                    THIS.AlternarPagina(1)
+                    THIS.CarregarLista()
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormNfl.ConfirmarClick")
+        ENDTRY
+        RETURN loc_lResultado
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    PROCEDURE CancelarClick()
+        TRY
+            THIS.AjustarBotoesPorModo("LISTA")
+            THIS.AlternarPagina(1)
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormNfl.CancelarClick")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    PROCEDURE SeriesDadosValid()
+        LOCAL loc_lResultado, loc_cVal, loc_nRes
+        loc_lResultado = .T.
+        TRY
+            loc_cVal = ALLTRIM(THIS.pgf_4c_Paginas.Page2.txt_4c_Series.Value)
+            IF loc_cVal == THIS.this_cUltimoSeriesValidado
+                loc_lResultado = loc_lResultado
+            ENDIF
+            IF EMPTY(loc_cVal) OR (TYPE("gb_4c_ValidandoUI") = "L" AND gb_4c_ValidandoUI)
+                loc_lResultado = .T.
+            ELSE
+                loc_nRes = SQLEXEC(gnConnHandle, ;
+                    "SELECT cods FROM SigCdSer WHERE cods = " + EscaparSQL(loc_cVal), ;
+                    "cursor_4c_ValidSer")
+                IF loc_nRes <= 0 OR RECCOUNT("cursor_4c_ValidSer") = 0
+                    THIS.AbrirLookupSeries()
+                ELSE
+                    THIS.this_cUltimoSeriesValidado = loc_cVal
+                ENDIF
+                IF USED("cursor_4c_ValidSer")
+                    USE IN cursor_4c_ValidSer
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormNfl.SeriesDadosValid")
+        ENDTRY
+        RETURN loc_lResultado
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    PROCEDURE SeriesKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF par_nKeyCode = 28
+            THIS.AbrirLookupSeries()
+        ENDIF
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    PROCEDURE SeriesDblClick()
+        THIS.AbrirLookupSeries()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE AbrirLookupSeries()
+        LOCAL loc_oCtrl, loc_cVal, loc_oBusca, loc_cSQL
+        TRY
+            loc_oCtrl = THIS.pgf_4c_Paginas.Page2.txt_4c_Series
+            IF PEMSTATUS(loc_oCtrl, "Enabled", 5) AND !loc_oCtrl.Enabled
+                RETURN
+            ENDIF
+            loc_cVal = ALLTRIM(loc_oCtrl.Value)
+            IF !EMPTY(loc_cVal)
+                loc_cSQL = "SELECT cods, descs FROM SigCdSer WHERE UPPER(cods) LIKE '" + UPPER(loc_cVal) + "%' ORDER BY cods"
+            ELSE
+                loc_cSQL = "SELECT cods, descs FROM SigCdSer ORDER BY cods"
+            ENDIF
+            SET NULL ON
+            SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaSer")
+            IF !USED("cursor_4c_BuscaSer") OR RECCOUNT("cursor_4c_BuscaSer") = 0
+                IF USED("cursor_4c_BuscaSer")
+                    USE IN cursor_4c_BuscaSer
+                ENDIF
+                SQLEXEC(gnConnHandle, "SELECT cods, descs FROM SigCdSer ORDER BY cods", "cursor_4c_BuscaSer")
+            ENDIF
+            IF !USED("cursor_4c_BuscaSer")
+                CREATE CURSOR cursor_4c_BuscaSer (cods c(3), descs c(50))
+            ENDIF
+            SET NULL OFF
+            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
+            IF VARTYPE(loc_oBusca) = "O"
+                loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaSer"
+                loc_oBusca.DefinirCursor("cursor_4c_BuscaSer", "cods", "descs", "S" + CHR(233) + "ries")
+                loc_oBusca.mAddColuna("cods",  "", "C" + CHR(243) + "digo")
+                loc_oBusca.mAddColuna("descs", "", "Descri" + CHR(231) + CHR(227) + "o")
+                loc_oBusca.Mostrar()
+                IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaSer")
+                    SELECT cursor_4c_BuscaSer
+                    loc_oCtrl.Value = ALLTRIM(cods)
+                ENDIF
+            ENDIF
+            IF USED("cursor_4c_BuscaSer")
+                USE IN cursor_4c_BuscaSer
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormNfl.AbrirLookupSeries")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    PROCEDURE NomedestKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF par_nKeyCode = 28
+            THIS.AbrirLookupNomedest()
+        ENDIF
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    PROCEDURE NomedestDblClick()
+        THIS.AbrirLookupNomedest()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE AbrirLookupNomedest()
+        LOCAL loc_oCtrl, loc_cVal, loc_oBusca, loc_cSQL
+        TRY
+            loc_oCtrl = THIS.pgf_4c_Paginas.Page1.cnt_4c_copia.txt_4c_nomedest
+            loc_cVal  = ALLTRIM(loc_oCtrl.Value)
+            IF !EMPTY(loc_cVal)
+                loc_cSQL = "SELECT cods, descs FROM SigCdSer WHERE UPPER(cods) LIKE '" + UPPER(loc_cVal) + "%' ORDER BY cods"
+            ELSE
+                loc_cSQL = "SELECT cods, descs FROM SigCdSer ORDER BY cods"
+            ENDIF
+            SET NULL ON
+            SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaSerCp")
+            IF !USED("cursor_4c_BuscaSerCp") OR RECCOUNT("cursor_4c_BuscaSerCp") = 0
+                IF USED("cursor_4c_BuscaSerCp")
+                    USE IN cursor_4c_BuscaSerCp
+                ENDIF
+                SQLEXEC(gnConnHandle, "SELECT cods, descs FROM SigCdSer ORDER BY cods", "cursor_4c_BuscaSerCp")
+            ENDIF
+            IF !USED("cursor_4c_BuscaSerCp")
+                CREATE CURSOR cursor_4c_BuscaSerCp (cods c(3), descs c(50))
+            ENDIF
+            SET NULL OFF
+            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
+            IF VARTYPE(loc_oBusca) = "O"
+                loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaSerCp"
+                loc_oBusca.DefinirCursor("cursor_4c_BuscaSerCp", "cods", "descs", "S" + CHR(233) + "rie Destino")
+                loc_oBusca.mAddColuna("cods",  "", "C" + CHR(243) + "digo")
+                loc_oBusca.mAddColuna("descs", "", "Descri" + CHR(231) + CHR(227) + "o")
+                loc_oBusca.Mostrar()
+                IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaSerCp")
+                    SELECT cursor_4c_BuscaSerCp
+                    loc_oCtrl.Value = ALLTRIM(cods)
+                ENDIF
+            ENDIF
+            IF USED("cursor_4c_BuscaSerCp")
+                USE IN cursor_4c_BuscaSerCp
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormNfl.AbrirLookupNomedest")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    PROCEDURE EmpDestKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF par_nKeyCode = 28
+            THIS.AbrirLookupEmpDest()
+        ENDIF
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    PROCEDURE EmpDestDblClick()
+        THIS.AbrirLookupEmpDest()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE AbrirLookupEmpDest()
+        LOCAL loc_oCtrl, loc_cVal, loc_oBusca, loc_cSQL
+        TRY
+            loc_oCtrl = THIS.pgf_4c_Paginas.Page1.cnt_4c_copia.txt_4c_empDest
+            loc_cVal  = ALLTRIM(loc_oCtrl.Value)
+            IF !EMPTY(loc_cVal)
+                loc_cSQL = "SELECT CEmps, Razas FROM SigCdEmp WHERE UPPER(CEmps) LIKE '" + UPPER(loc_cVal) + "%' ORDER BY CEmps"
+            ELSE
+                loc_cSQL = "SELECT CEmps, Razas FROM SigCdEmp ORDER BY CEmps"
+            ENDIF
+            SET NULL ON
+            SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaEmpDest")
+            IF !USED("cursor_4c_BuscaEmpDest") OR RECCOUNT("cursor_4c_BuscaEmpDest") = 0
+                IF USED("cursor_4c_BuscaEmpDest")
+                    USE IN cursor_4c_BuscaEmpDest
+                ENDIF
+                SQLEXEC(gnConnHandle, "SELECT CEmps, Razas FROM SigCdEmp ORDER BY CEmps", "cursor_4c_BuscaEmpDest")
+            ENDIF
+            IF !USED("cursor_4c_BuscaEmpDest")
+                CREATE CURSOR cursor_4c_BuscaEmpDest (CEmps c(2), Razas c(60))
+            ENDIF
+            SET NULL OFF
+            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
+            IF VARTYPE(loc_oBusca) = "O"
+                loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaEmpDest"
+                loc_oBusca.DefinirCursor("cursor_4c_BuscaEmpDest", "CEmps", "Razas", "Empresa Destino")
+                loc_oBusca.mAddColuna("CEmps", "", "C" + CHR(243) + "digo")
+                loc_oBusca.mAddColuna("Razas", "", "Raz" + CHR(227) + "o Social")
+                loc_oBusca.Mostrar()
+                IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaEmpDest")
+                    SELECT cursor_4c_BuscaEmpDest
+                    loc_oCtrl.Value = ALLTRIM(CEmps)
+                ENDIF
+            ENDIF
+            IF USED("cursor_4c_BuscaEmpDest")
+                USE IN cursor_4c_BuscaEmpDest
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormNfl.AbrirLookupEmpDest")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    PROCEDURE EmpPadKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF par_nKeyCode = 28
+            THIS.AbrirLookupEmpPad()
+        ENDIF
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    PROCEDURE EmpPadDblClick()
+        THIS.AbrirLookupEmpPad()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    PROCEDURE EmpPadValid(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lResultado, loc_cVal, loc_nRes
+        loc_lResultado = .T.
+        TRY
+            loc_cVal = ALLTRIM(THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page10.txt_4c_EmpPad.Value)
+            IF EMPTY(loc_cVal) OR (TYPE("gb_4c_ValidandoUI") = "L" AND gb_4c_ValidandoUI)
+                loc_lResultado = .T.
+            ENDIF
+            loc_nRes = SQLEXEC(gnConnHandle, ;
+                "SELECT CEmps FROM SigCdEmp WHERE CEmps = " + EscaparSQL(loc_cVal), ;
+                "cursor_4c_ValidEmpPad")
+            IF loc_nRes <= 0 OR RECCOUNT("cursor_4c_ValidEmpPad") = 0
+                THIS.AbrirLookupEmpPad()
+            ENDIF
+            IF USED("cursor_4c_ValidEmpPad")
+                USE IN cursor_4c_ValidEmpPad
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormNfl.EmpPadValid")
+        ENDTRY
+        RETURN loc_lResultado
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE AbrirLookupEmpPad()
+        LOCAL loc_oCtrl, loc_cVal, loc_oBusca, loc_cSQL
+        TRY
+            loc_oCtrl = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page10.txt_4c_EmpPad
+            IF PEMSTATUS(loc_oCtrl, "Enabled", 5) AND !loc_oCtrl.Enabled
+                RETURN
+            ENDIF
+            loc_cVal = ALLTRIM(loc_oCtrl.Value)
+            IF !EMPTY(loc_cVal)
+                loc_cSQL = "SELECT CEmps, Razas FROM SigCdEmp WHERE UPPER(CEmps) LIKE '" + UPPER(loc_cVal) + "%' ORDER BY CEmps"
+            ELSE
+                loc_cSQL = "SELECT CEmps, Razas FROM SigCdEmp ORDER BY CEmps"
+            ENDIF
+            SET NULL ON
+            SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaEmpPad")
+            IF !USED("cursor_4c_BuscaEmpPad") OR RECCOUNT("cursor_4c_BuscaEmpPad") = 0
+                IF USED("cursor_4c_BuscaEmpPad")
+                    USE IN cursor_4c_BuscaEmpPad
+                ENDIF
+                SQLEXEC(gnConnHandle, "SELECT CEmps, Razas FROM SigCdEmp ORDER BY CEmps", "cursor_4c_BuscaEmpPad")
+            ENDIF
+            IF !USED("cursor_4c_BuscaEmpPad")
+                CREATE CURSOR cursor_4c_BuscaEmpPad (CEmps c(2), Razas c(60))
+            ENDIF
+            SET NULL OFF
+            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
+            IF VARTYPE(loc_oBusca) = "O"
+                loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaEmpPad"
+                loc_oBusca.DefinirCursor("cursor_4c_BuscaEmpPad", "CEmps", "Razas", "Empresa Padr" + CHR(227) + "o")
+                loc_oBusca.mAddColuna("CEmps", "", "C" + CHR(243) + "digo")
+                loc_oBusca.mAddColuna("Razas", "", "Raz" + CHR(227) + "o Social")
+                loc_oBusca.Mostrar()
+                IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaEmpPad")
+                    SELECT cursor_4c_BuscaEmpPad
+                    loc_oCtrl.Value = ALLTRIM(CEmps)
+                ENDIF
+            ENDIF
+            IF USED("cursor_4c_BuscaEmpPad")
+                USE IN cursor_4c_BuscaEmpPad
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormNfl.AbrirLookupEmpPad")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    PROCEDURE UnPesosKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF par_nKeyCode = 28
+            THIS.AbrirLookupUnPesos()
+        ENDIF
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    PROCEDURE UnPesosDblClick()
+        THIS.AbrirLookupUnPesos()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    PROCEDURE UnPesosValid(par_nKeyCode, par_nShiftAltCtrl)
+        LOCAL loc_lResultado, loc_cVal, loc_nRes
+        loc_lResultado = .T.
+        TRY
+            loc_cVal = ALLTRIM(THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page6.txt_4c_UnPesos.Value)
+            IF EMPTY(loc_cVal) OR (TYPE("gb_4c_ValidandoUI") = "L" AND gb_4c_ValidandoUI)
+                loc_lResultado = .T.
+            ENDIF
+            loc_nRes = SQLEXEC(gnConnHandle, ;
+                "SELECT CUnis FROM SigCdUni WHERE CUnis = " + EscaparSQL(loc_cVal), ;
+                "cursor_4c_ValidUni")
+            IF loc_nRes <= 0 OR RECCOUNT("cursor_4c_ValidUni") = 0
+                THIS.AbrirLookupUnPesos()
+            ENDIF
+            IF USED("cursor_4c_ValidUni")
+                USE IN cursor_4c_ValidUni
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormNfl.UnPesosValid")
+        ENDTRY
+        RETURN loc_lResultado
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE AbrirLookupUnPesos()
+        LOCAL loc_oCtrl, loc_cVal, loc_oBusca, loc_cSQL
+        TRY
+            loc_oCtrl = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page6.txt_4c_UnPesos
+            IF PEMSTATUS(loc_oCtrl, "Enabled", 5) AND !loc_oCtrl.Enabled
+                RETURN
+            ENDIF
+            loc_cVal = ALLTRIM(loc_oCtrl.Value)
+            IF !EMPTY(loc_cVal)
+                loc_cSQL = "SELECT CUnis, DUnis FROM SigCdUni WHERE UPPER(CUnis) LIKE '" + UPPER(loc_cVal) + "%' ORDER BY CUnis"
+            ELSE
+                loc_cSQL = "SELECT CUnis, DUnis FROM SigCdUni ORDER BY CUnis"
+            ENDIF
+            SET NULL ON
+            SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaUni")
+            IF !USED("cursor_4c_BuscaUni") OR RECCOUNT("cursor_4c_BuscaUni") = 0
+                IF USED("cursor_4c_BuscaUni")
+                    USE IN cursor_4c_BuscaUni
+                ENDIF
+                SQLEXEC(gnConnHandle, "SELECT CUnis, DUnis FROM SigCdUni ORDER BY CUnis", "cursor_4c_BuscaUni")
+            ENDIF
+            IF !USED("cursor_4c_BuscaUni")
+                CREATE CURSOR cursor_4c_BuscaUni (CUnis c(6), DUnis c(30))
+            ENDIF
+            SET NULL OFF
+            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
+            IF VARTYPE(loc_oBusca) = "O"
+                loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaUni"
+                loc_oBusca.DefinirCursor("cursor_4c_BuscaUni", "CUnis", "DUnis", "Unidades de Medida")
+                loc_oBusca.mAddColuna("CUnis", "", "C" + CHR(243) + "digo")
+                loc_oBusca.mAddColuna("DUnis", "", "Descri" + CHR(231) + CHR(227) + "o")
+                loc_oBusca.Mostrar()
+                IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaUni")
+                    SELECT cursor_4c_BuscaUni
+                    loc_oCtrl.Value = ALLTRIM(CUnis)
+                ENDIF
+            ENDIF
+            IF USED("cursor_4c_BuscaUni")
+                USE IN cursor_4c_BuscaUni
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormNfl.AbrirLookupUnPesos")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE AbrirLookupClsFis(par_cNomeCampo)
+        LOCAL loc_oRdp, loc_oCtrl, loc_cVal, loc_oBusca, loc_cSQL
+        TRY
+            loc_oRdp  = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page7
+            loc_oCtrl = THIS.ObterControle(loc_oRdp, par_cNomeCampo)
+            IF PEMSTATUS(loc_oCtrl, "Enabled", 5) AND !loc_oCtrl.Enabled
+                RETURN
+            ENDIF
+            loc_cVal = ALLTRIM(loc_oCtrl.Value)
+            IF !EMPTY(loc_cVal)
+                loc_cSQL = "SELECT codigos, descricaos FROM SigCdClf WHERE UPPER(codigos) LIKE '" + UPPER(loc_cVal) + "%' ORDER BY codigos"
+            ELSE
+                loc_cSQL = "SELECT codigos, descricaos FROM SigCdClf ORDER BY codigos"
+            ENDIF
+            SET NULL ON
+            SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaClf")
+            IF !USED("cursor_4c_BuscaClf") OR RECCOUNT("cursor_4c_BuscaClf") = 0
+                IF USED("cursor_4c_BuscaClf")
+                    USE IN cursor_4c_BuscaClf
+                ENDIF
+                SQLEXEC(gnConnHandle, "SELECT codigos, descricaos FROM SigCdClf ORDER BY codigos", "cursor_4c_BuscaClf")
+            ENDIF
+            IF !USED("cursor_4c_BuscaClf")
+                CREATE CURSOR cursor_4c_BuscaClf (codigos c(10), descricaos c(60))
+            ENDIF
+            SET NULL OFF
+            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
+            IF VARTYPE(loc_oBusca) = "O"
+                loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaClf"
+                loc_oBusca.DefinirCursor("cursor_4c_BuscaClf", "codigos", "descricaos", "Classifica" + CHR(231) + CHR(227) + "o Fiscal")
+                loc_oBusca.mAddColuna("codigos",    "", "C" + CHR(243) + "digo")
+                loc_oBusca.mAddColuna("descricaos", "", "Descri" + CHR(231) + CHR(227) + "o")
+                loc_oBusca.Mostrar()
+                IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaClf")
+                    SELECT cursor_4c_BuscaClf
+                    loc_oCtrl.Value = ALLTRIM(codigos)
+                ENDIF
+            ENDIF
+            IF USED("cursor_4c_BuscaClf")
+                USE IN cursor_4c_BuscaClf
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormNfl.AbrirLookupClsFis")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ValidarClsFis(par_cNomeCampo)
+        LOCAL loc_lResultado, loc_oRdp, loc_cVal, loc_nRes
+        loc_lResultado = .T.
+        TRY
+            loc_oRdp = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page7
+            loc_cVal = ALLTRIM(loc_oRdp.Value)
+            IF EMPTY(loc_cVal) OR (TYPE("gb_4c_ValidandoUI") = "L" AND gb_4c_ValidandoUI)
+                loc_lResultado = .T.
+            ENDIF
+            loc_nRes = SQLEXEC(gnConnHandle, ;
+                "SELECT codigos FROM SigCdClf WHERE codigos = " + EscaparSQL(loc_cVal), ;
+                "cursor_4c_ValidClf")
+            IF loc_nRes <= 0 OR RECCOUNT("cursor_4c_ValidClf") = 0
+                THIS.AbrirLookupClsFis(par_cNomeCampo)
+            ENDIF
+            IF USED("cursor_4c_ValidClf")
+                USE IN cursor_4c_ValidClf
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormNfl.ValidarClsFis")
+        ENDTRY
+        RETURN loc_lResultado
+    ENDPROC
+
+    *-- CodImp bloco 1 (campos 1-7)
+    PROCEDURE CodImp1KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF par_nKeyCode = 28
+            THIS.AbrirLookupClsFis("txt_4c_CodImp1")
+        ENDIF
+    ENDPROC
+    PROCEDURE CodImp1DblClick()
+        THIS.AbrirLookupClsFis("txt_4c_CodImp1")
+    ENDPROC
+    PROCEDURE CodImp1Valid()
+        RETURN THIS.ValidarClsFis("txt_4c_CodImp1")
+    ENDPROC
+
+    PROCEDURE CodImp2KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF par_nKeyCode = 28
+            THIS.AbrirLookupClsFis("txt_4c_CodImp2")
+        ENDIF
+    ENDPROC
+    PROCEDURE CodImp2DblClick()
+        THIS.AbrirLookupClsFis("txt_4c_CodImp2")
+    ENDPROC
+    PROCEDURE CodImp2Valid()
+        RETURN THIS.ValidarClsFis("txt_4c_CodImp2")
+    ENDPROC
+
+    PROCEDURE CodImp3KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF par_nKeyCode = 28
+            THIS.AbrirLookupClsFis("txt_4c_CodImp3")
+        ENDIF
+    ENDPROC
+    PROCEDURE CodImp3DblClick()
+        THIS.AbrirLookupClsFis("txt_4c_CodImp3")
+    ENDPROC
+    PROCEDURE CodImp3Valid()
+        RETURN THIS.ValidarClsFis("txt_4c_CodImp3")
+    ENDPROC
+
+    PROCEDURE CodImp4KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF par_nKeyCode = 28
+            THIS.AbrirLookupClsFis("txt_4c_CodImp4")
+        ENDIF
+    ENDPROC
+    PROCEDURE CodImp4DblClick()
+        THIS.AbrirLookupClsFis("txt_4c_CodImp4")
+    ENDPROC
+    PROCEDURE CodImp4Valid()
+        RETURN THIS.ValidarClsFis("txt_4c_CodImp4")
+    ENDPROC
+
+    PROCEDURE CodImp5KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF par_nKeyCode = 28
+            THIS.AbrirLookupClsFis("txt_4c_CodImp5")
+        ENDIF
+    ENDPROC
+    PROCEDURE CodImp5DblClick()
+        THIS.AbrirLookupClsFis("txt_4c_CodImp5")
+    ENDPROC
+    PROCEDURE CodImp5Valid()
+        RETURN THIS.ValidarClsFis("txt_4c_CodImp5")
+    ENDPROC
+
+    PROCEDURE CodImp6KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF par_nKeyCode = 28
+            THIS.AbrirLookupClsFis("txt_4c_CodImp6")
+        ENDIF
+    ENDPROC
+    PROCEDURE CodImp6DblClick()
+        THIS.AbrirLookupClsFis("txt_4c_CodImp6")
+    ENDPROC
+    PROCEDURE CodImp6Valid()
+        RETURN THIS.ValidarClsFis("txt_4c_CodImp6")
+    ENDPROC
+
+    PROCEDURE CodImp7KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF par_nKeyCode = 28
+            THIS.AbrirLookupClsFis("txt_4c_CodImp7")
+        ENDIF
+    ENDPROC
+    PROCEDURE CodImp7DblClick()
+        THIS.AbrirLookupClsFis("txt_4c_CodImp7")
+    ENDPROC
+    PROCEDURE CodImp7Valid()
+        RETURN THIS.ValidarClsFis("txt_4c_CodImp7")
+    ENDPROC
+
+    *-- CodImpB bloco 2 (campos 8-12)
+    PROCEDURE CodImpB8KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF par_nKeyCode = 28
+            THIS.AbrirLookupClsFis("txt_4c_CodImpB8")
+        ENDIF
+    ENDPROC
+    PROCEDURE CodImpB8DblClick()
+        THIS.AbrirLookupClsFis("txt_4c_CodImpB8")
+    ENDPROC
+    PROCEDURE CodImpB8Valid()
+        RETURN THIS.ValidarClsFis("txt_4c_CodImpB8")
+    ENDPROC
+
+    PROCEDURE CodImpB9KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF par_nKeyCode = 28
+            THIS.AbrirLookupClsFis("txt_4c_CodImpB9")
+        ENDIF
+    ENDPROC
+    PROCEDURE CodImpB9DblClick()
+        THIS.AbrirLookupClsFis("txt_4c_CodImpB9")
+    ENDPROC
+    PROCEDURE CodImpB9Valid()
+        RETURN THIS.ValidarClsFis("txt_4c_CodImpB9")
+    ENDPROC
+
+    PROCEDURE CodImpB10KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF par_nKeyCode = 28
+            THIS.AbrirLookupClsFis("txt_4c_CodImpB10")
+        ENDIF
+    ENDPROC
+    PROCEDURE CodImpB10DblClick()
+        THIS.AbrirLookupClsFis("txt_4c_CodImpB10")
+    ENDPROC
+    PROCEDURE CodImpB10Valid()
+        RETURN THIS.ValidarClsFis("txt_4c_CodImpB10")
+    ENDPROC
+
+    PROCEDURE CodImpB11KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF par_nKeyCode = 28
+            THIS.AbrirLookupClsFis("txt_4c_CodImpB11")
+        ENDIF
+    ENDPROC
+    PROCEDURE CodImpB11DblClick()
+        THIS.AbrirLookupClsFis("txt_4c_CodImpB11")
+    ENDPROC
+    PROCEDURE CodImpB11Valid()
+        RETURN THIS.ValidarClsFis("txt_4c_CodImpB11")
+    ENDPROC
+
+    PROCEDURE CodImpB12KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF par_nKeyCode = 28
+            THIS.AbrirLookupClsFis("txt_4c_CodImpB12")
+        ENDIF
+    ENDPROC
+    PROCEDURE CodImpB12DblClick()
+        THIS.AbrirLookupClsFis("txt_4c_CodImpB12")
+    ENDPROC
+    PROCEDURE CodImpB12Valid()
+        RETURN THIS.ValidarClsFis("txt_4c_CodImpB12")
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    PROCEDURE ClsFisTpClick()
+        LOCAL loc_oAba, loc_nI, loc_cN, loc_lLetras, loc_oLbl
+        TRY
+            loc_oAba    = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page7
+            loc_lLetras = (loc_oAba.obj_4c_ClsFisTp.Value = 1)
+            FOR loc_nI = 1 TO 7
+                loc_cN  = ALLTRIM(STR(loc_nI))
+                loc_oLbl = THIS.ObterControle(loc_oAba, "lbl_4c_Cod" + loc_cN)
+                IF VARTYPE(loc_oLbl) = "O"
+                    IF loc_lLetras
+                        loc_oLbl.Caption = CHR(64 + loc_nI)
+                    ELSE
+                        loc_oLbl.Caption = "C" + CHR(243) + "digo " + loc_cN
+                    ENDIF
+                ENDIF
+            ENDFOR
+            FOR loc_nI = 8 TO 12
+                loc_cN  = ALLTRIM(STR(loc_nI))
+                loc_oLbl = THIS.ObterControle(loc_oAba, "lbl_4c_CodB" + loc_cN)
+                IF VARTYPE(loc_oLbl) = "O"
+                    IF loc_lLetras
+                        loc_oLbl.Caption = CHR(64 + loc_nI)
+                    ELSE
+                        loc_oLbl.Caption = "C" + CHR(243) + "digo " + loc_cN
+                    ENDIF
+                ENDIF
+            ENDFOR
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormNfl.ClsFisTpClick")
+        ENDTRY
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE FormParaBO()
+        LOCAL loc_oPag2, loc_oBO
+        loc_oPag2 = THIS.pgf_4c_Paginas.Page2
+        loc_oBO   = THIS.this_oBusinessObject
+
+        *-- Controles standalone (sem ControlSource)
+        IF PEMSTATUS(loc_oPag2, "txt_4c_Series", 5)
+            loc_oBO.this_cSeries = ALLTRIM(loc_oPag2.txt_4c_Series.Value)
+        ENDIF
+        IF VARTYPE(loc_oPag2.pgf_4c_Abas) = "O"
+            IF PEMSTATUS(loc_oPag2.pgf_4c_Abas.Page10, "txt_4c_EmpPad", 5)
+                loc_oBO.this_cEmps = ALLTRIM(loc_oPag2.pgf_4c_Abas.Page10.txt_4c_EmpPad.Value)
+            ENDIF
+        ENDIF
+
+        *-- Campos de crSigCnFN2 (Empresa, Destinatario, Impostos adicionais, Classes extras)
+        IF USED("crSigCnFN2") AND RECCOUNT("crSigCnFN2") > 0
+            SELECT crSigCnFN2
+            loc_oBO.this_cCtitent      = ALLTRIM(ctitent)
+            loc_oBO.this_nLendent      = lendent
+            loc_oBO.this_nCendent      = cendent
+            loc_oBO.this_nLbaient      = lbaient
+            loc_oBO.this_nCbaient      = cbaient
+            loc_oBO.this_nLmunent      = lmunent
+            loc_oBO.this_nCmunent      = cmunent
+            loc_oBO.this_nLestent      = lestent
+            loc_oBO.this_nCestent      = cestent
+            loc_oBO.this_nLcepent      = lcepent
+            loc_oBO.this_nCcepent      = ccepent
+            loc_oBO.this_nLfoneent     = lfoneent
+            loc_oBO.this_nCfoneent     = cfoneent
+            loc_oBO.this_nLiniped      = liniped
+            loc_oBO.this_nCiniped      = ciniped
+            loc_oBO.this_nLendtite     = lendtite
+            loc_oBO.this_nCendtite     = cendtite
+            loc_oBO.this_nLempnome     = lempnome
+            loc_oBO.this_nCempnome     = cempnome
+            loc_oBO.this_nLempcgc      = lempcgc
+            loc_oBO.this_nCempcgc      = cempcgc
+            loc_oBO.this_nLempiest     = lempiest
+            loc_oBO.this_nCempiest     = cempiest
+            loc_oBO.this_nLempender    = lempender
+            loc_oBO.this_nCempender    = cempender
+            loc_oBO.this_nLempbair     = lempbair
+            loc_oBO.this_nCempbair     = cempbair
+            loc_oBO.this_nLempmuni     = lempmuni
+            loc_oBO.this_nCempmuni     = cempmuni
+            loc_oBO.this_nLempcep      = lempcep
+            loc_oBO.this_nCempcep      = cempcep
+            loc_oBO.this_nLempesta     = lempesta
+            loc_oBO.this_nCempesta     = cempesta
+            loc_oBO.this_nLempfone     = lempfone
+            loc_oBO.this_nCempfone     = cempfone
+            loc_oBO.this_nNvias        = nvias
+            loc_oBO.this_nNtpmargems   = ntpmargems
+            loc_oBO.this_lVseqnota     = (vseqnota = 1)
+            loc_oBO.this_cContsac      = ALLTRIM(contsac)
+            loc_oBO.this_nLsac         = lsac
+            loc_oBO.this_nCsac         = csac
+            loc_oBO.this_nLxinc        = lxinc
+            loc_oBO.this_nCxinc        = cxinc
+            loc_oBO.this_nLenxinc      = lenxinc
+            loc_oBO.this_nNftgdi1s     = nftgdi1s
+            loc_oBO.this_nTotfsize     = totfsize
+            loc_oBO.this_nAtnotar      = atnotar
+            loc_oBO.this_nCopcrp       = copcrp
+            loc_oBO.this_nLopcrp       = lopcrp
+            loc_oBO.this_nCopcvd       = copcvd
+            loc_oBO.this_nLopcvd       = lopcvd
+            loc_oBO.this_nCoploc       = coploc
+            loc_oBO.this_nLoploc       = loploc
+            loc_oBO.this_nCopnrp       = copnrp
+            loc_oBO.this_nLopnrp       = lopnrp
+            loc_oBO.this_nCopnvd       = copnvd
+            loc_oBO.this_nLopnvd       = lopnvd
+            loc_oBO.this_nLbipi        = lbipi
+            loc_oBO.this_nCbipi        = cbipi
+            loc_oBO.this_nA2nf         = a2nf
+            loc_oBO.this_nAclas1       = aclas1
+            loc_oBO.this_nAclas2       = aclas2
+            loc_oBO.this_nAclas3       = aclas3
+            loc_oBO.this_nAclas4       = aclas4
+            loc_oBO.this_nAclas5       = aclas5
+            loc_oBO.this_nAclas6       = aclas6
+            loc_oBO.this_nAclas7       = aclas7
+            loc_oBO.this_nAiniped      = ainiped
+            loc_oBO.this_nAiniped2     = ainiped2
+            loc_oBO.this_nAnfselo      = anfselo
+            loc_oBO.this_nAobs         = aobs
+            loc_oBO.this_nAselo        = aselo
+            loc_oBO.this_nAclas8       = aclas8
+            loc_oBO.this_nAclas9       = aclas9
+            loc_oBO.this_nAclas10      = aclas10
+            loc_oBO.this_nAclas11      = aclas11
+            loc_oBO.this_nAclas12      = aclas12
+            loc_oBO.this_nCclas8       = cclas8
+            loc_oBO.this_nCclas9       = cclas9
+            loc_oBO.this_nCclas10      = cclas10
+            loc_oBO.this_nCclas11      = cclas11
+            loc_oBO.this_nCclas12      = cclas12
+            loc_oBO.this_nLclas8       = lclas8
+            loc_oBO.this_nLclas9       = lclas9
+            loc_oBO.this_nLclas10      = lclas10
+            loc_oBO.this_nLclas11      = lclas11
+            loc_oBO.this_nLclas12      = lclas12
+            loc_oBO.this_lImpc8        = (impc8 = 1)
+            loc_oBO.this_lImpc9        = (impc9 = 1)
+            loc_oBO.this_lImpc10       = (impc10 = 1)
+            loc_oBO.this_lImpc11       = (impc11 = 1)
+            loc_oBO.this_lImpc12       = (impc12 = 1)
+            loc_oBO.this_cImpclas8     = ALLTRIM(impclas8)
+            loc_oBO.this_cImpclas9     = ALLTRIM(impclas9)
+            loc_oBO.this_cImpclas10    = ALLTRIM(impclas10)
+            loc_oBO.this_cImpclas11    = ALLTRIM(impclas11)
+            loc_oBO.this_cImpclas12    = ALLTRIM(impclas12)
+            loc_oBO.this_nLbicmss      = lbicmss
+            loc_oBO.this_nCbicmss      = cbicmss
+            loc_oBO.this_nLvicmss      = lvicmss
+            loc_oBO.this_nCvicmss      = cvicmss
+            loc_oBO.this_nLcfopsub     = lcfopsub
+            loc_oBO.this_nCcfopsub     = ccfopsub
+            loc_oBO.this_nCcfoppro     = ccfoppro
+            loc_oBO.this_nLnatopsub    = lnatopsub
+            loc_oBO.this_nCnatopsub    = cnatopsub
+            loc_oBO.this_nCpesomet     = cpesomet
+            loc_oBO.this_cCunipesos    = ALLTRIM(cunipesos)
+            loc_oBO.this_nLiniped2     = liniped2
+            loc_oBO.this_nCiniped2     = ciniped2
+        ENDIF
+
+        *-- Campos editados via crSigCnFNf que tem contraparte em SigCnFN2
+        *   (desdobramento posicoes e vseqnota)
+        IF USED("crSigCnFNf") AND FCOUNT("crSigCnFNf") > 3 AND RECCOUNT("crSigCnFNf") > 0
+            SELECT crSigCnFNf
+            loc_oBO.this_lVseqnota = (vseqnota = 1)
+            loc_oBO.this_nLopcvd   = lopcvd
+            loc_oBO.this_nCopcvd   = copcvd
+            loc_oBO.this_nLoploc   = loploc
+            loc_oBO.this_nCoploc   = coploc
+            loc_oBO.this_nLopnvd   = lopnvd
+            loc_oBO.this_nCopnvd   = copnvd
+            loc_oBO.this_nLopnrp   = lopnrp
+            loc_oBO.this_nCopnrp   = copnrp
+        ENDIF
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE BOParaForm()
+        LOCAL loc_lResultado, loc_oPag2, loc_oBO, loc_cChave
+        loc_lResultado = .F.
+        TRY
+            loc_oPag2  = THIS.pgf_4c_Paginas.Page2
+            loc_oBO    = THIS.this_oBusinessObject
+            loc_cChave = ALLTRIM(loc_oBO.this_cCidchaves)
+
+            IF !EMPTY(loc_cChave)
+                IF SQLEXEC(gnConnHandle, ;
+                    "SELECT * FROM SigCnFNf WHERE cidchaves = " + EscaparSQL(loc_cChave), ;
+                    "crSigCnFNf") <= 0
+                    MsgErro("Erro ao recarregar SigCnFNf.", "FormNfl.BOParaForm")
+                ENDIF
+                IF SQLEXEC(gnConnHandle, ;
+                    "SELECT * FROM SigCnFN2 WHERE cidchaves = " + EscaparSQL(loc_cChave), ;
+                    "crSigCnFN2") <= 0
+                    MsgErro("Erro ao recarregar SigCnFN2.", "FormNfl.BOParaForm")
+                ENDIF
+            ENDIF
+
+            IF PEMSTATUS(loc_oPag2, "txt_4c_Series", 5)
+                loc_oPag2.txt_4c_Series.Value = ALLTRIM(loc_oBO.this_cSeries)
+            ENDIF
+            IF VARTYPE(loc_oPag2.pgf_4c_Abas) = "O"
+                IF PEMSTATUS(loc_oPag2.pgf_4c_Abas.Page10, "txt_4c_EmpPad", 5)
+                    loc_oPag2.pgf_4c_Abas.Page10.txt_4c_EmpPad.Value = ALLTRIM(loc_oBO.this_cEmps)
+                ENDIF
+            ENDIF
+            loc_lResultado = .T.
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormNfl.BOParaForm")
+        ENDTRY
+        RETURN loc_lResultado
+    ENDPROC
+
+    PROTECTED PROCEDURE ConfigurarEmpresaTab()
+        LOCAL loc_oAba
+        loc_oAba = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page2
+
+        *-- Secao: Dados/Endereco - Empresa (top=7, shape+header)
+        loc_oAba.AddObject("shp_4c_Shape3", "Shape")
+        WITH loc_oAba.shp_4c_Shape3
+            .Top           = 7
+            .Left          = 42
+            .Height        = 3
+            .Width         = 414
+            .BackStyle     = 1
+            .SpecialEffect = 1
+            .BackColor     = RGB(136, 189, 188)
+            .Visible       = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_Label57", "Label")
+        WITH loc_oAba.lbl_4c_Label57
+            .Caption   = "Dados / Endere" + CHR(231) + "o - Empresa"
+            .Top       = 11
+            .Left      = 50
+            .FontBold  = .T.
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        *-- Empresa - Nome/Razao Social (top=26)
+        loc_oAba.AddObject("lbl_4c_Label41", "Label")
+        WITH loc_oAba.lbl_4c_Label41
+            .Caption   = "Nome / Raz" + CHR(227) + "o Social"
+            .Top       = 26
+            .Left      = 42
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_EmpNomeL", "TextBox")
+        WITH loc_oAba.txt_4c_EmpNomeL
+            .ControlSource = "crSigCnFN2.lempnome"
+            .Top           = 38
+            .Left          = 42
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_Label42", "Label")
+        WITH loc_oAba.lbl_4c_Label42
+            .Caption   = "x"
+            .Top       = 40
+            .Left      = 85
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_EmpNomeC", "TextBox")
+        WITH loc_oAba.txt_4c_EmpNomeC
+            .ControlSource = "crSigCnFN2.cempnome"
+            .Top           = 38
+            .Left          = 91
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Empresa - CGC/CPF (top=26)
+        loc_oAba.AddObject("lbl_4c_Label43", "Label")
+        WITH loc_oAba.lbl_4c_Label43
+            .Caption   = "C.G.C. / C.P.F."
+            .Top       = 26
+            .Left      = 150
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_EmpCgcL", "TextBox")
+        WITH loc_oAba.txt_4c_EmpCgcL
+            .ControlSource = "crSigCnFN2.lempcgc"
+            .Top           = 38
+            .Left          = 150
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_Label44", "Label")
+        WITH loc_oAba.lbl_4c_Label44
+            .Caption   = "x"
+            .Top       = 40
+            .Left      = 193
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_EmpCgcC", "TextBox")
+        WITH loc_oAba.txt_4c_EmpCgcC
+            .ControlSource = "crSigCnFN2.cempcgc"
+            .Top           = 38
+            .Left          = 199
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Empresa - Insc.Estadual (top=26)
+        loc_oAba.AddObject("lbl_4c_Label55", "Label")
+        WITH loc_oAba.lbl_4c_Label55
+            .Caption   = "Insc. Estadual"
+            .Top       = 26
+            .Left      = 258
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_EmpIestL", "TextBox")
+        WITH loc_oAba.txt_4c_EmpIestL
+            .ControlSource = "crSigCnFN2.lempiest"
+            .Top           = 38
+            .Left          = 258
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_Label56", "Label")
+        WITH loc_oAba.lbl_4c_Label56
+            .Caption   = "x"
+            .Top       = 40
+            .Left      = 301
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_EmpIestC", "TextBox")
+        WITH loc_oAba.txt_4c_EmpIestC
+            .ControlSource = "crSigCnFN2.cempiest"
+            .Top           = 38
+            .Left          = 307
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Empresa - Endereco (top=56)
+        loc_oAba.AddObject("lbl_4c_Label45", "Label")
+        WITH loc_oAba.lbl_4c_Label45
+            .Caption   = "Endere" + CHR(231) + "o"
+            .Top       = 56
+            .Left      = 42
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_EmpEnderL", "TextBox")
+        WITH loc_oAba.txt_4c_EmpEnderL
+            .ControlSource = "crSigCnFN2.lempender"
+            .Top           = 68
+            .Left          = 42
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_Label46", "Label")
+        WITH loc_oAba.lbl_4c_Label46
+            .Caption   = "x"
+            .Top       = 70
+            .Left      = 85
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_EmpEnderC", "TextBox")
+        WITH loc_oAba.txt_4c_EmpEnderC
+            .ControlSource = "crSigCnFN2.cempender"
+            .Top           = 68
+            .Left          = 91
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Empresa - Bairro (top=56)
+        loc_oAba.AddObject("lbl_4c_Label47", "Label")
+        WITH loc_oAba.lbl_4c_Label47
+            .Caption   = "Bairro"
+            .Top       = 56
+            .Left      = 149
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_EmpBairL", "TextBox")
+        WITH loc_oAba.txt_4c_EmpBairL
+            .ControlSource = "crSigCnFN2.lempbair"
+            .Top           = 68
+            .Left          = 149
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_Label48", "Label")
+        WITH loc_oAba.lbl_4c_Label48
+            .Caption   = "x"
+            .Top       = 70
+            .Left      = 192
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_EmpBairC", "TextBox")
+        WITH loc_oAba.txt_4c_EmpBairC
+            .ControlSource = "crSigCnFN2.cempbair"
+            .Top           = 68
+            .Left          = 198
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Empresa - Municipio (top=56)
+        loc_oAba.AddObject("lbl_4c_Label51", "Label")
+        WITH loc_oAba.lbl_4c_Label51
+            .Caption   = "Munic" + CHR(237) + "pio"
+            .Top       = 56
+            .Left      = 257
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_EmpMuniL", "TextBox")
+        WITH loc_oAba.txt_4c_EmpMuniL
+            .ControlSource = "crSigCnFN2.lempmuni"
+            .Top           = 68
+            .Left          = 257
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_Label52", "Label")
+        WITH loc_oAba.lbl_4c_Label52
+            .Caption   = "x"
+            .Top       = 70
+            .Left      = 300
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_EmpMuniC", "TextBox")
+        WITH loc_oAba.txt_4c_EmpMuniC
+            .ControlSource = "crSigCnFN2.cempmuni"
+            .Top           = 68
+            .Left          = 306
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Empresa - CEP (top=86)
+        loc_oAba.AddObject("lbl_4c_Label49", "Label")
+        WITH loc_oAba.lbl_4c_Label49
+            .Caption   = "CEP"
+            .Top       = 86
+            .Left      = 41
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_EmpCepL", "TextBox")
+        WITH loc_oAba.txt_4c_EmpCepL
+            .ControlSource = "crSigCnFN2.lempcep"
+            .Top           = 98
+            .Left          = 41
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_Label50", "Label")
+        WITH loc_oAba.lbl_4c_Label50
+            .Caption   = "x"
+            .Top       = 100
+            .Left      = 84
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_EmpCepC", "TextBox")
+        WITH loc_oAba.txt_4c_EmpCepC
+            .ControlSource = "crSigCnFN2.cempcep"
+            .Top           = 98
+            .Left          = 90
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Empresa - Fone/Fax (top=86)
+        loc_oAba.AddObject("lbl_4c_Label53", "Label")
+        WITH loc_oAba.lbl_4c_Label53
+            .Caption   = "Fone / Fax"
+            .Top       = 86
+            .Left      = 149
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_EmpFoneL", "TextBox")
+        WITH loc_oAba.txt_4c_EmpFoneL
+            .ControlSource = "crSigCnFN2.lempfone"
+            .Top           = 98
+            .Left          = 149
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_Label54", "Label")
+        WITH loc_oAba.lbl_4c_Label54
+            .Caption   = "x"
+            .Top       = 100
+            .Left      = 192
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_EmpFoneC", "TextBox")
+        WITH loc_oAba.txt_4c_EmpFoneC
+            .ControlSource = "crSigCnFN2.cempfone"
+            .Top           = 98
+            .Left          = 198
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Empresa - Estado (top=86)
+        loc_oAba.AddObject("lbl_4c_Label58", "Label")
+        WITH loc_oAba.lbl_4c_Label58
+            .Caption   = "Estado"
+            .Top       = 86
+            .Left      = 257
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_EmpEstaL", "TextBox")
+        WITH loc_oAba.txt_4c_EmpEstaL
+            .ControlSource = "crSigCnFN2.lempesta"
+            .Top           = 98
+            .Left          = 257
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_Label59", "Label")
+        WITH loc_oAba.lbl_4c_Label59
+            .Caption   = "x"
+            .Top       = 100
+            .Left      = 300
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_EmpEstaC", "TextBox")
+        WITH loc_oAba.txt_4c_EmpEstaC
+            .ControlSource = "crSigCnFN2.cempesta"
+            .Top           = 98
+            .Left          = 306
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Secao: Dados/Endereco - Empresa/Cliente (top=120 shape + top=127 header)
+        loc_oAba.AddObject("shp_4c_Shape1", "Shape")
+        WITH loc_oAba.shp_4c_Shape1
+            .Top           = 120
+            .Left          = 42
+            .Height        = 3
+            .Width         = 414
+            .BackStyle     = 1
+            .SpecialEffect = 1
+            .BackColor     = RGB(136, 189, 188)
+            .Visible       = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_Label37", "Label")
+        WITH loc_oAba.lbl_4c_Label37
+            .Caption   = "Dados / Endere" + CHR(231) + "o - Empresa / Cliente"
+            .Top       = 127
+            .Left      = 50
+            .FontBold  = .T.
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        *-- Nome/Razao Social (cliente, top=141)
+        loc_oAba.AddObject("lbl_4c_Label1", "Label")
+        WITH loc_oAba.lbl_4c_Label1
+            .Caption   = "Nome / Raz" + CHR(227) + "o Social"
+            .Top       = 141
+            .Left      = 42
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_CliNomeL", "TextBox")
+        WITH loc_oAba.txt_4c_CliNomeL
+            .ControlSource = "crSigCnFNf.lnome"
+            .Top           = 153
+            .Left          = 42
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_Label2", "Label")
+        WITH loc_oAba.lbl_4c_Label2
+            .Caption   = "x"
+            .Top       = 155
+            .Left      = 85
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_CliNomeC", "TextBox")
+        WITH loc_oAba.txt_4c_CliNomeC
+            .ControlSource = "crSigCnFNf.cnome"
+            .Top           = 153
+            .Left          = 91
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        *-- CGC/CPF (cliente, top=141)
+        loc_oAba.AddObject("lbl_4c_Label3", "Label")
+        WITH loc_oAba.lbl_4c_Label3
+            .Caption   = "C.G.C. / C.P.F."
+            .Top       = 141
+            .Left      = 150
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_CliCgcL", "TextBox")
+        WITH loc_oAba.txt_4c_CliCgcL
+            .ControlSource = "crSigCnFNf.lcgc"
+            .Top           = 153
+            .Left          = 150
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_Label4", "Label")
+        WITH loc_oAba.lbl_4c_Label4
+            .Caption   = "x"
+            .Top       = 155
+            .Left      = 193
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_CliCgcC", "TextBox")
+        WITH loc_oAba.txt_4c_CliCgcC
+            .ControlSource = "crSigCnFNf.ccgc"
+            .Top           = 153
+            .Left          = 199
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Insc.Estadual (cliente, top=141)
+        loc_oAba.AddObject("lbl_4c_Label21", "Label")
+        WITH loc_oAba.lbl_4c_Label21
+            .Caption   = "Insc. Estadual"
+            .Top       = 141
+            .Left      = 258
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_CliIestL", "TextBox")
+        WITH loc_oAba.txt_4c_CliIestL
+            .ControlSource = "crSigCnFNf.liest"
+            .Top           = 153
+            .Left          = 258
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_Label22", "Label")
+        WITH loc_oAba.lbl_4c_Label22
+            .Caption   = "x"
+            .Top       = 155
+            .Left      = 301
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_CliIestC", "TextBox")
+        WITH loc_oAba.txt_4c_CliIestC
+            .ControlSource = "crSigCnFNf.ciest"
+            .Top           = 153
+            .Left          = 307
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Data de Emissao (cliente, top=141)
+        loc_oAba.AddObject("lbl_4c_Label5", "Label")
+        WITH loc_oAba.lbl_4c_Label5
+            .Caption   = "Data de Emiss" + CHR(227) + "o"
+            .Top       = 141
+            .Left      = 366
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_CliDtEmiL", "TextBox")
+        WITH loc_oAba.txt_4c_CliDtEmiL
+            .ControlSource = "crSigCnFNf.ldtemi"
+            .Top           = 153
+            .Left          = 366
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_Label6", "Label")
+        WITH loc_oAba.lbl_4c_Label6
+            .Caption   = "x"
+            .Top       = 155
+            .Left      = 409
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_CliDtEmiC", "TextBox")
+        WITH loc_oAba.txt_4c_CliDtEmiC
+            .ControlSource = "crSigCnFNf.cdtemi"
+            .Top           = 153
+            .Left          = 415
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Endereco (cliente, top=171)
+        loc_oAba.AddObject("lbl_4c_Label7", "Label")
+        WITH loc_oAba.lbl_4c_Label7
+            .Caption   = "Endere" + CHR(231) + "o"
+            .Top       = 171
+            .Left      = 42
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_CliEnderL", "TextBox")
+        WITH loc_oAba.txt_4c_CliEnderL
+            .ControlSource = "crSigCnFNf.lender"
+            .Top           = 183
+            .Left          = 42
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_Label8", "Label")
+        WITH loc_oAba.lbl_4c_Label8
+            .Caption   = "x"
+            .Top       = 185
+            .Left      = 85
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_CliEnderC", "TextBox")
+        WITH loc_oAba.txt_4c_CliEnderC
+            .ControlSource = "crSigCnFNf.cender"
+            .Top           = 183
+            .Left          = 91
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Bairro (cliente, top=171)
+        loc_oAba.AddObject("lbl_4c_Label9", "Label")
+        WITH loc_oAba.lbl_4c_Label9
+            .Caption   = "Bairro"
+            .Top       = 171
+            .Left      = 149
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_CliBairrL", "TextBox")
+        WITH loc_oAba.txt_4c_CliBairrL
+            .ControlSource = "crSigCnFNf.lbairr"
+            .Top           = 183
+            .Left          = 149
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_Label10", "Label")
+        WITH loc_oAba.lbl_4c_Label10
+            .Caption   = "x"
+            .Top       = 185
+            .Left      = 192
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_CliBairrC", "TextBox")
+        WITH loc_oAba.txt_4c_CliBairrC
+            .ControlSource = "crSigCnFNf.cbairr"
+            .Top           = 183
+            .Left          = 198
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Municipio (cliente, top=171)
+        loc_oAba.AddObject("lbl_4c_Label15", "Label")
+        WITH loc_oAba.lbl_4c_Label15
+            .Caption   = "Munic" + CHR(237) + "pio"
+            .Top       = 171
+            .Left      = 257
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_CliMuniL", "TextBox")
+        WITH loc_oAba.txt_4c_CliMuniL
+            .ControlSource = "crSigCnFNf.lmuni"
+            .Top           = 183
+            .Left          = 257
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_Label16", "Label")
+        WITH loc_oAba.lbl_4c_Label16
+            .Caption   = "x"
+            .Top       = 185
+            .Left      = 300
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_CliMuniC", "TextBox")
+        WITH loc_oAba.txt_4c_CliMuniC
+            .ControlSource = "crSigCnFNf.cmuni"
+            .Top           = 183
+            .Left          = 306
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Estado (cliente, top=171)
+        loc_oAba.AddObject("lbl_4c_Label17", "Label")
+        WITH loc_oAba.lbl_4c_Label17
+            .Caption   = "Estado"
+            .Top       = 171
+            .Left      = 365
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_CliEstaL", "TextBox")
+        WITH loc_oAba.txt_4c_CliEstaL
+            .ControlSource = "crSigCnFNf.lesta"
+            .Top           = 183
+            .Left          = 365
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_Label18", "Label")
+        WITH loc_oAba.lbl_4c_Label18
+            .Caption   = "x"
+            .Top       = 185
+            .Left      = 408
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_CliEstaC", "TextBox")
+        WITH loc_oAba.txt_4c_CliEstaC
+            .ControlSource = "crSigCnFNf.cesta"
+            .Top           = 183
+            .Left          = 414
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        *-- CEP (cliente, top=201)
+        loc_oAba.AddObject("lbl_4c_Label13", "Label")
+        WITH loc_oAba.lbl_4c_Label13
+            .Caption   = "CEP"
+            .Top       = 201
+            .Left      = 41
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_CliCepL", "TextBox")
+        WITH loc_oAba.txt_4c_CliCepL
+            .ControlSource = "crSigCnFNf.lcep"
+            .Top           = 213
+            .Left          = 41
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_Label14", "Label")
+        WITH loc_oAba.lbl_4c_Label14
+            .Caption   = "x"
+            .Top       = 215
+            .Left      = 84
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_CliCepC", "TextBox")
+        WITH loc_oAba.txt_4c_CliCepC
+            .ControlSource = "crSigCnFNf.ccep"
+            .Top           = 213
+            .Left          = 90
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Fone/Fax (cliente, top=201)
+        loc_oAba.AddObject("lbl_4c_Label19", "Label")
+        WITH loc_oAba.lbl_4c_Label19
+            .Caption   = "Fone / Fax"
+            .Top       = 201
+            .Left      = 149
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_CliFoneL", "TextBox")
+        WITH loc_oAba.txt_4c_CliFoneL
+            .ControlSource = "crSigCnFNf.lfone"
+            .Top           = 213
+            .Left          = 149
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_Label20", "Label")
+        WITH loc_oAba.lbl_4c_Label20
+            .Caption   = "x"
+            .Top       = 215
+            .Left      = 192
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_CliFoneC", "TextBox")
+        WITH loc_oAba.txt_4c_CliFoneC
+            .ControlSource = "crSigCnFNf.cfone"
+            .Top           = 213
+            .Left          = 198
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Secao: Endereco de Entrega - Empresa/Cliente (top=234 shape + top=238 header)
+        loc_oAba.AddObject("shp_4c_Shape2", "Shape")
+        WITH loc_oAba.shp_4c_Shape2
+            .Top           = 234
+            .Left          = 42
+            .Height        = 3
+            .Width         = 414
+            .BackStyle     = 1
+            .SpecialEffect = 1
+            .BackColor     = RGB(136, 189, 188)
+            .Visible       = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_Label38", "Label")
+        WITH loc_oAba.lbl_4c_Label38
+            .Caption   = "Endere" + CHR(231) + "o de Entrega - Empresa / Cliente"
+            .Top       = 238
+            .Left      = 52
+            .FontBold  = .T.
+            .FontName  = "Tahoma"
+            .FontSize  = 8
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        *-- Entrega - Endereco (top=252)
+        loc_oAba.AddObject("lbl_4c_Label25", "Label")
+        WITH loc_oAba.lbl_4c_Label25
+            .Caption   = "Endere" + CHR(231) + "o"
+            .Top       = 252
+            .Left      = 42
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_EntEnderL", "TextBox")
+        WITH loc_oAba.txt_4c_EntEnderL
+            .ControlSource = "crSigCnFN2.lendent"
+            .Top           = 264
+            .Left          = 42
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_Label26", "Label")
+        WITH loc_oAba.lbl_4c_Label26
+            .Caption   = "x"
+            .Top       = 266
+            .Left      = 85
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_EntEnderC", "TextBox")
+        WITH loc_oAba.txt_4c_EntEnderC
+            .ControlSource = "crSigCnFN2.cendent"
+            .Top           = 264
+            .Left          = 91
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Entrega - Bairro (top=252)
+        loc_oAba.AddObject("lbl_4c_Label27", "Label")
+        WITH loc_oAba.lbl_4c_Label27
+            .Caption   = "Bairro"
+            .Top       = 252
+            .Left      = 149
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_EntBairL", "TextBox")
+        WITH loc_oAba.txt_4c_EntBairL
+            .ControlSource = "crSigCnFN2.lbaient"
+            .Top           = 264
+            .Left          = 149
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_Label28", "Label")
+        WITH loc_oAba.lbl_4c_Label28
+            .Caption   = "x"
+            .Top       = 266
+            .Left      = 192
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_EntBairC", "TextBox")
+        WITH loc_oAba.txt_4c_EntBairC
+            .ControlSource = "crSigCnFN2.cbaient"
+            .Top           = 264
+            .Left          = 198
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Entrega - Municipio (top=252)
+        loc_oAba.AddObject("lbl_4c_Label31", "Label")
+        WITH loc_oAba.lbl_4c_Label31
+            .Caption   = "Munic" + CHR(237) + "pio"
+            .Top       = 252
+            .Left      = 257
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_EntMuniL", "TextBox")
+        WITH loc_oAba.txt_4c_EntMuniL
+            .ControlSource = "crSigCnFN2.lmunent"
+            .Top           = 264
+            .Left          = 257
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_Label32", "Label")
+        WITH loc_oAba.lbl_4c_Label32
+            .Caption   = "x"
+            .Top       = 266
+            .Left      = 300
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_EntMuniC", "TextBox")
+        WITH loc_oAba.txt_4c_EntMuniC
+            .ControlSource = "crSigCnFN2.cmunent"
+            .Top           = 264
+            .Left          = 306
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Entrega - Estado (top=252)
+        loc_oAba.AddObject("lbl_4c_Label33", "Label")
+        WITH loc_oAba.lbl_4c_Label33
+            .Caption   = "Estado"
+            .Top       = 252
+            .Left      = 365
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_EntEstaL", "TextBox")
+        WITH loc_oAba.txt_4c_EntEstaL
+            .ControlSource = "crSigCnFN2.lestent"
+            .Top           = 264
+            .Left          = 365
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_Label34", "Label")
+        WITH loc_oAba.lbl_4c_Label34
+            .Caption   = "x"
+            .Top       = 266
+            .Left      = 408
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_EntEstaC", "TextBox")
+        WITH loc_oAba.txt_4c_EntEstaC
+            .ControlSource = "crSigCnFN2.cestent"
+            .Top           = 264
+            .Left          = 414
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Entrega - CEP (top=282)
+        loc_oAba.AddObject("lbl_4c_Label29", "Label")
+        WITH loc_oAba.lbl_4c_Label29
+            .Caption   = "CEP"
+            .Top       = 282
+            .Left      = 41
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_EntCepL", "TextBox")
+        WITH loc_oAba.txt_4c_EntCepL
+            .ControlSource = "crSigCnFN2.lcepent"
+            .Top           = 294
+            .Left          = 41
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_Label30", "Label")
+        WITH loc_oAba.lbl_4c_Label30
+            .Caption   = "x"
+            .Top       = 296
+            .Left      = 84
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_EntCepC", "TextBox")
+        WITH loc_oAba.txt_4c_EntCepC
+            .ControlSource = "crSigCnFN2.ccepent"
+            .Top           = 294
+            .Left          = 90
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Entrega - Fone/Fax (top=282)
+        loc_oAba.AddObject("lbl_4c_Label35", "Label")
+        WITH loc_oAba.lbl_4c_Label35
+            .Caption   = "Fone / Fax"
+            .Top       = 282
+            .Left      = 149
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_EntFoneL", "TextBox")
+        WITH loc_oAba.txt_4c_EntFoneL
+            .ControlSource = "crSigCnFN2.lfoneent"
+            .Top           = 294
+            .Left          = 149
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_Label36", "Label")
+        WITH loc_oAba.lbl_4c_Label36
+            .Caption   = "x"
+            .Top       = 296
+            .Left      = 192
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_EntFoneC", "TextBox")
+        WITH loc_oAba.txt_4c_EntFoneC
+            .ControlSource = "crSigCnFN2.cfoneent"
+            .Top           = 294
+            .Left          = 198
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Entrega - Titulo de Impressao (top=282)
+        loc_oAba.AddObject("lbl_4c_Label39", "Label")
+        WITH loc_oAba.lbl_4c_Label39
+            .Caption   = "Titulo de Impress" + CHR(227) + "o (Enrdere" + CHR(231) + "o Entrega)"
+            .Top       = 282
+            .Left      = 257
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_EntTitEndL", "TextBox")
+        WITH loc_oAba.txt_4c_EntTitEndL
+            .ControlSource = "crSigCnFN2.lendtite"
+            .Top           = 294
+            .Left          = 257
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_Label40", "Label")
+        WITH loc_oAba.lbl_4c_Label40
+            .Caption   = "x"
+            .Top       = 296
+            .Left      = 300
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_EntTitEndC", "TextBox")
+        WITH loc_oAba.txt_4c_EntTitEndC
+            .ControlSource = "crSigCnFN2.cendtite"
+            .Top           = 294
+            .Left          = 306
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_EntTitulo", "TextBox")
+        WITH loc_oAba.txt_4c_EntTitulo
+            .ControlSource = "crSigCnFN2.ctitent"
+            .Top           = 294
+            .Left          = 353
+            .Width         = 150
+            .Height        = 18
+            .MaxLength     = 20
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = ""
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Secao: Codigo Posto Fiscal / Codigo Suframa (top=313)
+        loc_oAba.AddObject("lbl_4c_Label11", "Label")
+        WITH loc_oAba.lbl_4c_Label11
+            .Caption   = "C" + CHR(243) + "digo Posto Fiscal"
+            .Top       = 313
+            .Left      = 41
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_PosFisL", "TextBox")
+        WITH loc_oAba.txt_4c_PosFisL
+            .ControlSource = "crSigCnFNf.lposfis"
+            .Top           = 325
+            .Left          = 41
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_Label12", "Label")
+        WITH loc_oAba.lbl_4c_Label12
+            .Caption   = "x"
+            .Top       = 327
+            .Left      = 84
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_PosFisC", "TextBox")
+        WITH loc_oAba.txt_4c_PosFisC
+            .ControlSource = "crSigCnFNf.cposfis"
+            .Top           = 325
+            .Left          = 90
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_Label23", "Label")
+        WITH loc_oAba.lbl_4c_Label23
+            .Caption   = "C" + CHR(243) + "digo Suframa"
+            .Top       = 313
+            .Left      = 149
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_SuframaL", "TextBox")
+        WITH loc_oAba.txt_4c_SuframaL
+            .ControlSource = "crSigCnFNf.lsufras"
+            .Top           = 325
+            .Left          = 149
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_Label24", "Label")
+        WITH loc_oAba.lbl_4c_Label24
+            .Caption   = "x"
+            .Top       = 327
+            .Left      = 192
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_SuframaC", "TextBox")
+        WITH loc_oAba.txt_4c_SuframaC
+            .ControlSource = "crSigCnFNf.csufras"
+            .Top           = 325
+            .Left          = 198
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConfigurarDesdobramentoTab()
+        LOCAL loc_oAba
+        loc_oAba = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page3
+
+        *-- Cabecalho de colunas (top=25)
+        loc_oAba.AddObject("lbl_4c_LblNumero", "Label")
+        WITH loc_oAba.lbl_4c_LblNumero
+            .Caption   = "N" + CHR(250) + "mero"
+            .Top       = 25
+            .Left      = 87
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_LblValor", "Label")
+        WITH loc_oAba.lbl_4c_LblValor
+            .Caption   = "Valor"
+            .Top       = 25
+            .Left      = 200
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_LblVecto", "Label")
+        WITH loc_oAba.lbl_4c_LblVecto
+            .Caption   = "Vencimento"
+            .Top       = 25
+            .Left      = 294
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        *-- Faturas 1 a 10 - cada fatura tem: Label[Fat N], txt[num L], x, txt[num C], txt[val L], x, txt[val C], txt[vec L], x, txt[vec C]
+        *-- Fatura 1 (top=37/39, fat-label at top=39)
+        loc_oAba.AddObject("lbl_4c_Fat1", "Label")
+        WITH loc_oAba.lbl_4c_Fat1
+            .Caption   = "Fatura 1"
+            .Top       = 39
+            .Left      = 13
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Fat1NumL", "TextBox")
+        WITH loc_oAba.txt_4c_Fat1NumL
+            .ControlSource = "crSigCnFNf.lfat1num"
+            .Top = 37
+            .Left = 58
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("lbl_4c_F1NX", "Label")
+        WITH loc_oAba.lbl_4c_F1NX
+            .Caption = "x"
+            .Top = 39
+            .Left = 101
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Fat1NumC", "TextBox")
+        WITH loc_oAba.txt_4c_Fat1NumC
+            .ControlSource = "crSigCnFNf.cfat1num"
+            .Top = 37
+            .Left = 107
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Fat1ValL", "TextBox")
+        WITH loc_oAba.txt_4c_Fat1ValL
+            .ControlSource = "crSigCnFNf.lfat1val"
+            .Top = 37
+            .Left = 165
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("lbl_4c_F1VX", "Label")
+        WITH loc_oAba.lbl_4c_F1VX
+            .Caption = "x"
+            .Top = 39
+            .Left = 208
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Fat1ValC", "TextBox")
+        WITH loc_oAba.txt_4c_Fat1ValC
+            .ControlSource = "crSigCnFNf.cfat1val"
+            .Top = 37
+            .Left = 214
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Fat1VecL", "TextBox")
+        WITH loc_oAba.txt_4c_Fat1VecL
+            .ControlSource = "crSigCnFNf.lfat1vec"
+            .Top = 37
+            .Left = 273
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("lbl_4c_F1EX", "Label")
+        WITH loc_oAba.lbl_4c_F1EX
+            .Caption = "x"
+            .Top = 39
+            .Left = 316
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Fat1VecC", "TextBox")
+        WITH loc_oAba.txt_4c_Fat1VecC
+            .ControlSource = "crSigCnFNf.cfat1vec"
+            .Top = 37
+            .Left = 322
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        *-- Fatura 2 (top=56/58)
+        loc_oAba.AddObject("lbl_4c_Fat2", "Label")
+        WITH loc_oAba.lbl_4c_Fat2
+            .Caption = "Fatura 2"
+            .Top = 58
+            .Left = 13
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Fat2NumL", "TextBox")
+        WITH loc_oAba.txt_4c_Fat2NumL
+            .ControlSource = "crSigCnFNf.lfat2num"
+            .Top = 56
+            .Left = 58
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("lbl_4c_F2NX", "Label")
+        WITH loc_oAba.lbl_4c_F2NX
+            .Caption = "x"
+            .Top = 58
+            .Left = 101
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Fat2NumC", "TextBox")
+        WITH loc_oAba.txt_4c_Fat2NumC
+            .ControlSource = "crSigCnFNf.cfat2num"
+            .Top = 56
+            .Left = 107
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Fat2ValL", "TextBox")
+        WITH loc_oAba.txt_4c_Fat2ValL
+            .ControlSource = "crSigCnFNf.lfat2val"
+            .Top = 56
+            .Left = 165
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("lbl_4c_F2VX", "Label")
+        WITH loc_oAba.lbl_4c_F2VX
+            .Caption = "x"
+            .Top = 58
+            .Left = 208
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Fat2ValC", "TextBox")
+        WITH loc_oAba.txt_4c_Fat2ValC
+            .ControlSource = "crSigCnFNf.cfat2val"
+            .Top = 56
+            .Left = 214
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Fat2VecL", "TextBox")
+        WITH loc_oAba.txt_4c_Fat2VecL
+            .ControlSource = "crSigCnFNf.lfat2vec"
+            .Top = 56
+            .Left = 273
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("lbl_4c_F2EX", "Label")
+        WITH loc_oAba.lbl_4c_F2EX
+            .Caption = "x"
+            .Top = 58
+            .Left = 316
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Fat2VecC", "TextBox")
+        WITH loc_oAba.txt_4c_Fat2VecC
+            .ControlSource = "crSigCnFNf.cfat2vec"
+            .Top = 56
+            .Left = 322
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        *-- Fatura 3 (top=75/77)
+        loc_oAba.AddObject("lbl_4c_Fat3", "Label")
+        WITH loc_oAba.lbl_4c_Fat3
+            .Caption = "Fatura 3"
+            .Top = 77
+            .Left = 13
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Fat3NumL", "TextBox")
+        WITH loc_oAba.txt_4c_Fat3NumL
+            .ControlSource = "crSigCnFNf.lfat3num"
+            .Top = 75
+            .Left = 58
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("lbl_4c_F3NX", "Label")
+        WITH loc_oAba.lbl_4c_F3NX
+            .Caption = "x"
+            .Top = 77
+            .Left = 101
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Fat3NumC", "TextBox")
+        WITH loc_oAba.txt_4c_Fat3NumC
+            .ControlSource = "crSigCnFNf.cfat3num"
+            .Top = 75
+            .Left = 107
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Fat3ValL", "TextBox")
+        WITH loc_oAba.txt_4c_Fat3ValL
+            .ControlSource = "crSigCnFNf.lfat3val"
+            .Top = 75
+            .Left = 165
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("lbl_4c_F3VX", "Label")
+        WITH loc_oAba.lbl_4c_F3VX
+            .Caption = "x"
+            .Top = 77
+            .Left = 208
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Fat3ValC", "TextBox")
+        WITH loc_oAba.txt_4c_Fat3ValC
+            .ControlSource = "crSigCnFNf.cfat3val"
+            .Top = 75
+            .Left = 214
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Fat3VecL", "TextBox")
+        WITH loc_oAba.txt_4c_Fat3VecL
+            .ControlSource = "crSigCnFNf.lfat3vec"
+            .Top = 75
+            .Left = 273
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("lbl_4c_F3EX", "Label")
+        WITH loc_oAba.lbl_4c_F3EX
+            .Caption = "x"
+            .Top = 77
+            .Left = 316
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Fat3VecC", "TextBox")
+        WITH loc_oAba.txt_4c_Fat3VecC
+            .ControlSource = "crSigCnFNf.cfat3vec"
+            .Top = 75
+            .Left = 322
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        *-- Fatura 4 (top=94/96)
+        loc_oAba.AddObject("lbl_4c_Fat4", "Label")
+        WITH loc_oAba.lbl_4c_Fat4
+            .Caption = "Fatura 4"
+            .Top = 96
+            .Left = 13
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Fat4NumL", "TextBox")
+        WITH loc_oAba.txt_4c_Fat4NumL
+            .ControlSource = "crSigCnFNf.lfat4num"
+            .Top = 94
+            .Left = 58
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("lbl_4c_F4NX", "Label")
+        WITH loc_oAba.lbl_4c_F4NX
+            .Caption = "x"
+            .Top = 96
+            .Left = 101
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Fat4NumC", "TextBox")
+        WITH loc_oAba.txt_4c_Fat4NumC
+            .ControlSource = "crSigCnFNf.cfat4num"
+            .Top = 94
+            .Left = 107
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Fat4ValL", "TextBox")
+        WITH loc_oAba.txt_4c_Fat4ValL
+            .ControlSource = "crSigCnFNf.lfat4val"
+            .Top = 94
+            .Left = 165
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("lbl_4c_F4VX", "Label")
+        WITH loc_oAba.lbl_4c_F4VX
+            .Caption = "x"
+            .Top = 96
+            .Left = 208
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Fat4ValC", "TextBox")
+        WITH loc_oAba.txt_4c_Fat4ValC
+            .ControlSource = "crSigCnFNf.cfat4val"
+            .Top = 94
+            .Left = 214
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Fat4VecL", "TextBox")
+        WITH loc_oAba.txt_4c_Fat4VecL
+            .ControlSource = "crSigCnFNf.lfat4vec"
+            .Top = 94
+            .Left = 273
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("lbl_4c_F4EX", "Label")
+        WITH loc_oAba.lbl_4c_F4EX
+            .Caption = "x"
+            .Top = 96
+            .Left = 316
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Fat4VecC", "TextBox")
+        WITH loc_oAba.txt_4c_Fat4VecC
+            .ControlSource = "crSigCnFNf.cfat4vec"
+            .Top = 94
+            .Left = 322
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        *-- Fatura 5 (top=113/115)
+        loc_oAba.AddObject("lbl_4c_Fat5", "Label")
+        WITH loc_oAba.lbl_4c_Fat5
+            .Caption = "Fatura 5"
+            .Top = 115
+            .Left = 13
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Fat5NumL", "TextBox")
+        WITH loc_oAba.txt_4c_Fat5NumL
+            .ControlSource = "crSigCnFNf.lfat5num"
+            .Top = 113
+            .Left = 58
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("lbl_4c_F5NX", "Label")
+        WITH loc_oAba.lbl_4c_F5NX
+            .Caption = "x"
+            .Top = 115
+            .Left = 101
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Fat5NumC", "TextBox")
+        WITH loc_oAba.txt_4c_Fat5NumC
+            .ControlSource = "crSigCnFNf.cfat5num"
+            .Top = 113
+            .Left = 107
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Fat5ValL", "TextBox")
+        WITH loc_oAba.txt_4c_Fat5ValL
+            .ControlSource = "crSigCnFNf.lfat5val"
+            .Top = 113
+            .Left = 165
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("lbl_4c_F5VX", "Label")
+        WITH loc_oAba.lbl_4c_F5VX
+            .Caption = "x"
+            .Top = 115
+            .Left = 208
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Fat5ValC", "TextBox")
+        WITH loc_oAba.txt_4c_Fat5ValC
+            .ControlSource = "crSigCnFNf.cfat5val"
+            .Top = 113
+            .Left = 214
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Fat5VecL", "TextBox")
+        WITH loc_oAba.txt_4c_Fat5VecL
+            .ControlSource = "crSigCnFNf.lfat5vec"
+            .Top = 113
+            .Left = 273
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("lbl_4c_F5EX", "Label")
+        WITH loc_oAba.lbl_4c_F5EX
+            .Caption = "x"
+            .Top = 115
+            .Left = 316
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Fat5VecC", "TextBox")
+        WITH loc_oAba.txt_4c_Fat5VecC
+            .ControlSource = "crSigCnFNf.cfat5vec"
+            .Top = 113
+            .Left = 322
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        *-- Fatura 6 (top=132/134)
+        loc_oAba.AddObject("lbl_4c_Fat6", "Label")
+        WITH loc_oAba.lbl_4c_Fat6
+            .Caption = "Fatura 6"
+            .Top = 134
+            .Left = 13
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Fat6NumL", "TextBox")
+        WITH loc_oAba.txt_4c_Fat6NumL
+            .ControlSource = "crSigCnFNf.lfat6num"
+            .Top = 132
+            .Left = 58
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("lbl_4c_F6NX", "Label")
+        WITH loc_oAba.lbl_4c_F6NX
+            .Caption = "x"
+            .Top = 134
+            .Left = 101
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Fat6NumC", "TextBox")
+        WITH loc_oAba.txt_4c_Fat6NumC
+            .ControlSource = "crSigCnFNf.cfat6num"
+            .Top = 132
+            .Left = 107
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Fat6ValL", "TextBox")
+        WITH loc_oAba.txt_4c_Fat6ValL
+            .ControlSource = "crSigCnFNf.lfat6val"
+            .Top = 132
+            .Left = 165
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("lbl_4c_F6VX", "Label")
+        WITH loc_oAba.lbl_4c_F6VX
+            .Caption = "x"
+            .Top = 134
+            .Left = 208
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Fat6ValC", "TextBox")
+        WITH loc_oAba.txt_4c_Fat6ValC
+            .ControlSource = "crSigCnFNf.cfat6val"
+            .Top = 132
+            .Left = 214
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Fat6VecL", "TextBox")
+        WITH loc_oAba.txt_4c_Fat6VecL
+            .ControlSource = "crSigCnFNf.lfat6vec"
+            .Top = 132
+            .Left = 273
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("lbl_4c_F6EX", "Label")
+        WITH loc_oAba.lbl_4c_F6EX
+            .Caption = "x"
+            .Top = 134
+            .Left = 316
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Fat6VecC", "TextBox")
+        WITH loc_oAba.txt_4c_Fat6VecC
+            .ControlSource = "crSigCnFNf.cfat6vec"
+            .Top = 132
+            .Left = 322
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        *-- Fatura 7 (top=151/153)
+        loc_oAba.AddObject("lbl_4c_Fat7", "Label")
+        WITH loc_oAba.lbl_4c_Fat7
+            .Caption = "Fatura 7"
+            .Top = 153
+            .Left = 13
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Fat7NumL", "TextBox")
+        WITH loc_oAba.txt_4c_Fat7NumL
+            .ControlSource = "crSigCnFNf.lfat7num"
+            .Top = 151
+            .Left = 58
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("lbl_4c_F7NX", "Label")
+        WITH loc_oAba.lbl_4c_F7NX
+            .Caption = "x"
+            .Top = 153
+            .Left = 101
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Fat7NumC", "TextBox")
+        WITH loc_oAba.txt_4c_Fat7NumC
+            .ControlSource = "crSigCnFNf.cfat7num"
+            .Top = 151
+            .Left = 107
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Fat7ValL", "TextBox")
+        WITH loc_oAba.txt_4c_Fat7ValL
+            .ControlSource = "crSigCnFNf.lfat7val"
+            .Top = 151
+            .Left = 165
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("lbl_4c_F7VX", "Label")
+        WITH loc_oAba.lbl_4c_F7VX
+            .Caption = "x"
+            .Top = 153
+            .Left = 208
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Fat7ValC", "TextBox")
+        WITH loc_oAba.txt_4c_Fat7ValC
+            .ControlSource = "crSigCnFNf.cfat7val"
+            .Top = 151
+            .Left = 214
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Fat7VecL", "TextBox")
+        WITH loc_oAba.txt_4c_Fat7VecL
+            .ControlSource = "crSigCnFNf.lfat7vec"
+            .Top = 151
+            .Left = 273
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("lbl_4c_F7EX", "Label")
+        WITH loc_oAba.lbl_4c_F7EX
+            .Caption = "x"
+            .Top = 153
+            .Left = 316
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Fat7VecC", "TextBox")
+        WITH loc_oAba.txt_4c_Fat7VecC
+            .ControlSource = "crSigCnFNf.cfat7vec"
+            .Top = 151
+            .Left = 322
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        *-- Fatura 8 (top=170/172)
+        loc_oAba.AddObject("lbl_4c_Fat8", "Label")
+        WITH loc_oAba.lbl_4c_Fat8
+            .Caption = "Fatura 8"
+            .Top = 172
+            .Left = 13
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Fat8NumL", "TextBox")
+        WITH loc_oAba.txt_4c_Fat8NumL
+            .ControlSource = "crSigCnFNf.lfat8num"
+            .Top = 170
+            .Left = 58
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("lbl_4c_F8NX", "Label")
+        WITH loc_oAba.lbl_4c_F8NX
+            .Caption = "x"
+            .Top = 172
+            .Left = 101
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Fat8NumC", "TextBox")
+        WITH loc_oAba.txt_4c_Fat8NumC
+            .ControlSource = "crSigCnFNf.cfat8num"
+            .Top = 170
+            .Left = 107
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Fat8ValL", "TextBox")
+        WITH loc_oAba.txt_4c_Fat8ValL
+            .ControlSource = "crSigCnFNf.lfat8val"
+            .Top = 170
+            .Left = 165
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("lbl_4c_F8VX", "Label")
+        WITH loc_oAba.lbl_4c_F8VX
+            .Caption = "x"
+            .Top = 172
+            .Left = 208
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Fat8ValC", "TextBox")
+        WITH loc_oAba.txt_4c_Fat8ValC
+            .ControlSource = "crSigCnFNf.cfat8val"
+            .Top = 170
+            .Left = 214
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Fat8VecL", "TextBox")
+        WITH loc_oAba.txt_4c_Fat8VecL
+            .ControlSource = "crSigCnFNf.lfat8vec"
+            .Top = 170
+            .Left = 273
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("lbl_4c_F8EX", "Label")
+        WITH loc_oAba.lbl_4c_F8EX
+            .Caption = "x"
+            .Top = 172
+            .Left = 316
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Fat8VecC", "TextBox")
+        WITH loc_oAba.txt_4c_Fat8VecC
+            .ControlSource = "crSigCnFNf.cfat8vec"
+            .Top = 170
+            .Left = 322
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        *-- Fatura 9 (top=189/191)
+        loc_oAba.AddObject("lbl_4c_Fat9", "Label")
+        WITH loc_oAba.lbl_4c_Fat9
+            .Caption = "Fatura 9"
+            .Top = 191
+            .Left = 13
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Fat9NumL", "TextBox")
+        WITH loc_oAba.txt_4c_Fat9NumL
+            .ControlSource = "crSigCnFNf.lfat9num"
+            .Top = 189
+            .Left = 58
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("lbl_4c_F9NX", "Label")
+        WITH loc_oAba.lbl_4c_F9NX
+            .Caption = "x"
+            .Top = 191
+            .Left = 101
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Fat9NumC", "TextBox")
+        WITH loc_oAba.txt_4c_Fat9NumC
+            .ControlSource = "crSigCnFNf.cfat9num"
+            .Top = 189
+            .Left = 107
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Fat9ValL", "TextBox")
+        WITH loc_oAba.txt_4c_Fat9ValL
+            .ControlSource = "crSigCnFNf.lfat9val"
+            .Top = 189
+            .Left = 165
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("lbl_4c_F9VX", "Label")
+        WITH loc_oAba.lbl_4c_F9VX
+            .Caption = "x"
+            .Top = 191
+            .Left = 208
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Fat9ValC", "TextBox")
+        WITH loc_oAba.txt_4c_Fat9ValC
+            .ControlSource = "crSigCnFNf.cfat9val"
+            .Top = 189
+            .Left = 214
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Fat9VecL", "TextBox")
+        WITH loc_oAba.txt_4c_Fat9VecL
+            .ControlSource = "crSigCnFNf.lfat9vec"
+            .Top = 189
+            .Left = 273
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("lbl_4c_F9EX", "Label")
+        WITH loc_oAba.lbl_4c_F9EX
+            .Caption = "x"
+            .Top = 191
+            .Left = 316
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Fat9VecC", "TextBox")
+        WITH loc_oAba.txt_4c_Fat9VecC
+            .ControlSource = "crSigCnFNf.cfat9vec"
+            .Top = 189
+            .Left = 322
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        *-- Fatura 10 (top=208/210)
+        loc_oAba.AddObject("lbl_4c_Fat10", "Label")
+        WITH loc_oAba.lbl_4c_Fat10
+            .Caption = "Fatura 10"
+            .Top = 210
+            .Left = 8
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Fat10NumL", "TextBox")
+        WITH loc_oAba.txt_4c_Fat10NumL
+            .ControlSource = "crSigCnFNf.lfat10num"
+            .Top = 208
+            .Left = 58
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("lbl_4c_F10NX", "Label")
+        WITH loc_oAba.lbl_4c_F10NX
+            .Caption = "x"
+            .Top = 210
+            .Left = 101
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Fat10NumC", "TextBox")
+        WITH loc_oAba.txt_4c_Fat10NumC
+            .ControlSource = "crSigCnFNf.cfat10num"
+            .Top = 208
+            .Left = 107
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Fat10ValL", "TextBox")
+        WITH loc_oAba.txt_4c_Fat10ValL
+            .ControlSource = "crSigCnFNf.lfat10val"
+            .Top = 208
+            .Left = 165
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("lbl_4c_F10VX", "Label")
+        WITH loc_oAba.lbl_4c_F10VX
+            .Caption = "x"
+            .Top = 210
+            .Left = 208
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Fat10ValC", "TextBox")
+        WITH loc_oAba.txt_4c_Fat10ValC
+            .ControlSource = "crSigCnFNf.cfat10val"
+            .Top = 208
+            .Left = 214
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Fat10VecL", "TextBox")
+        WITH loc_oAba.txt_4c_Fat10VecL
+            .ControlSource = "crSigCnFNf.lfat10vec"
+            .Top = 208
+            .Left = 273
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("lbl_4c_F10EX", "Label")
+        WITH loc_oAba.lbl_4c_F10EX
+            .Caption = "x"
+            .Top = 210
+            .Left = 316
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+        loc_oAba.AddObject("txt_4c_Fat10VecC", "TextBox")
+        WITH loc_oAba.txt_4c_Fat10VecC
+            .ControlSource = "crSigCnFNf.cfat10vec"
+            .Top = 208
+            .Left = 322
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        *-- Endereco de Cobranca (right side, top=25 label at left=395)
+        loc_oAba.AddObject("lbl_4c_LblEndCob", "Label")
+        WITH loc_oAba.lbl_4c_LblEndCob
+            .Caption   = "Endere" + CHR(231) + "o Cobran" + CHR(231) + "a"
+            .Top       = 25
+            .Left      = 395
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_CobEnderL", "TextBox")
+        WITH loc_oAba.txt_4c_CobEnderL
+            .ControlSource = "crSigCnFNf.lendcob"
+            .Top = 37
+            .Left = 395
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_CobEX1", "Label")
+        WITH loc_oAba.lbl_4c_CobEX1
+            .Caption = "x"
+            .Top = 39
+            .Left = 438
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_CobEnderC", "TextBox")
+        WITH loc_oAba.txt_4c_CobEnderC
+            .ControlSource = "crSigCnFNf.cendcob"
+            .Top = 37
+            .Left = 444
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        *-- Cobranca - Bairro (top=25, left=495)
+        loc_oAba.AddObject("lbl_4c_LblCobBai", "Label")
+        WITH loc_oAba.lbl_4c_LblCobBai
+            .Caption = "Bairro"
+            .Top = 25
+            .Left = 495
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_CobBairL", "TextBox")
+        WITH loc_oAba.txt_4c_CobBairL
+            .ControlSource = "crSigCnFNf.lbaicob"
+            .Top = 37
+            .Left = 495
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_CobBX", "Label")
+        WITH loc_oAba.lbl_4c_CobBX
+            .Caption = "x"
+            .Top = 39
+            .Left = 538
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_CobBairC", "TextBox")
+        WITH loc_oAba.txt_4c_CobBairC
+            .ControlSource = "crSigCnFNf.cbaicob"
+            .Top = 37
+            .Left = 544
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        *-- Cobranca - Municipio (top=61, left=394)
+        loc_oAba.AddObject("lbl_4c_LblCobMun", "Label")
+        WITH loc_oAba.lbl_4c_LblCobMun
+            .Caption = "Munic" + CHR(237) + "pio"
+            .Top = 61
+            .Left = 394
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_CobMuniL", "TextBox")
+        WITH loc_oAba.txt_4c_CobMuniL
+            .ControlSource = "crSigCnFNf.lmuncob"
+            .Top = 73
+            .Left = 394
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_CobMX", "Label")
+        WITH loc_oAba.lbl_4c_CobMX
+            .Caption = "x"
+            .Top = 75
+            .Left = 437
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_CobMuniC", "TextBox")
+        WITH loc_oAba.txt_4c_CobMuniC
+            .ControlSource = "crSigCnFNf.cmuncob"
+            .Top = 73
+            .Left = 443
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        *-- Cobranca - Estado (top=61, left=495)
+        loc_oAba.AddObject("lbl_4c_LblCobEst", "Label")
+        WITH loc_oAba.lbl_4c_LblCobEst
+            .Caption = "Estado"
+            .Top = 61
+            .Left = 495
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_CobEstL", "TextBox")
+        WITH loc_oAba.txt_4c_CobEstL
+            .ControlSource = "crSigCnFNf.lestcob"
+            .Top = 73
+            .Left = 495
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_CobEstX", "Label")
+        WITH loc_oAba.lbl_4c_CobEstX
+            .Caption = "x"
+            .Top = 75
+            .Left = 538
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_CobEstC", "TextBox")
+        WITH loc_oAba.txt_4c_CobEstC
+            .ControlSource = "crSigCnFNf.cestcob"
+            .Top = 73
+            .Left = 544
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        *-- Cobranca - CEP (top=97, left=394)
+        loc_oAba.AddObject("lbl_4c_LblCobCep", "Label")
+        WITH loc_oAba.lbl_4c_LblCobCep
+            .Caption = "CEP"
+            .Top = 97
+            .Left = 394
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_CobCepL", "TextBox")
+        WITH loc_oAba.txt_4c_CobCepL
+            .ControlSource = "crSigCnFNf.lcepcob"
+            .Top = 109
+            .Left = 394
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_CobCepX", "Label")
+        WITH loc_oAba.lbl_4c_CobCepX
+            .Caption = "x"
+            .Top = 111
+            .Left = 437
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_CobCepC", "TextBox")
+        WITH loc_oAba.txt_4c_CobCepC
+            .ControlSource = "crSigCnFNf.ccepcob"
+            .Top = 109
+            .Left = 443
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConfigurarProdutosTab()
+        LOCAL loc_oAba
+        loc_oAba = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page4
+
+        *-- Linha inicial dos produtos (top=28)
+        loc_oAba.AddObject("lbl_4c_LblLinIni", "Label")
+        WITH loc_oAba.lbl_4c_LblLinIni
+            .Caption   = "Linha Inicial dos Produtos"
+            .Top       = 28
+            .Left      = 18
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_LinIni", "TextBox")
+        WITH loc_oAba.txt_4c_LinIni
+            .ControlSource = "crSigCnFNf.linprod"
+            .Top           = 24
+            .Left          = 153
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Codigo (top=50)
+        loc_oAba.AddObject("lbl_4c_LblCodigo", "Label")
+        WITH loc_oAba.lbl_4c_LblCodigo
+            .Caption   = "C" + CHR(243) + "digo"
+            .Top       = 50
+            .Left      = 34
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_ProdCodL", "TextBox")
+        WITH loc_oAba.txt_4c_ProdCodL
+            .ControlSource = "crSigCnFNf.lcodpro"
+            .Top           = 62
+            .Left          = 32
+            .Width         = 38
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Descricao (top=50)
+        loc_oAba.AddObject("lbl_4c_LblDescr", "Label")
+        WITH loc_oAba.lbl_4c_LblDescr
+            .Caption   = "Descr"
+            .Top       = 50
+            .Left      = 77
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_ProdDescL", "TextBox")
+        WITH loc_oAba.txt_4c_ProdDescL
+            .ControlSource = "crSigCnFNf.ldescpro"
+            .Top           = 62
+            .Left          = 75
+            .Width         = 38
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Peso (top=50)
+        loc_oAba.AddObject("lbl_4c_LblPeso", "Label")
+        WITH loc_oAba.lbl_4c_LblPeso
+            .Caption   = "Peso"
+            .Top       = 50
+            .Left      = 121
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_ProdPesoL", "TextBox")
+        WITH loc_oAba.txt_4c_ProdPesoL
+            .ControlSource = "crSigCnFNf.cpespro"
+            .Top           = 62
+            .Left          = 118
+            .Width         = 38
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Tipo (top=50)
+        loc_oAba.AddObject("lbl_4c_LblTipo", "Label")
+        WITH loc_oAba.lbl_4c_LblTipo
+            .Caption   = "Tipo"
+            .Top       = 50
+            .Left      = 164
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_ProdTipoL", "TextBox")
+        WITH loc_oAba.txt_4c_ProdTipoL
+            .ControlSource = "crSigCnFNf.ltprod"
+            .Top           = 62
+            .Left          = 161
+            .Width         = 38
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Metal (top=50)
+        loc_oAba.AddObject("lbl_4c_LblMetal", "Label")
+        WITH loc_oAba.lbl_4c_LblMetal
+            .Caption   = "Metal"
+            .Top       = 50
+            .Left      = 206
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_ProdMetalL", "TextBox")
+        WITH loc_oAba.txt_4c_ProdMetalL
+            .ControlSource = "crSigCnFNf.cmarca"
+            .Top           = 62
+            .Left          = 204
+            .Width         = 38
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Teor (top=50)
+        loc_oAba.AddObject("lbl_4c_LblTeor", "Label")
+        WITH loc_oAba.lbl_4c_LblTeor
+            .Caption   = "Teor"
+            .Top       = 50
+            .Left      = 248
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_ProdTeorL", "TextBox")
+        WITH loc_oAba.txt_4c_ProdTeorL
+            .ControlSource = "crSigCnFNf.cticm"
+            .Top           = 62
+            .Left          = 247
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Cl.Fiscal (top=50)
+        loc_oAba.AddObject("lbl_4c_LblClFis", "Label")
+        WITH loc_oAba.lbl_4c_LblClFis
+            .Caption   = "Cl. Fiscal"
+            .Top       = 50
+            .Left      = 287
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_ProdClFisL", "TextBox")
+        WITH loc_oAba.txt_4c_ProdClFisL
+            .ControlSource = "crSigCnFNf.lcclas1"
+            .Top           = 62
+            .Left          = 293
+            .Width         = 38
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Sit.Trib (top=50)
+        loc_oAba.AddObject("lbl_4c_LblSitTrib", "Label")
+        WITH loc_oAba.lbl_4c_LblSitTrib
+            .Caption   = "Sit. Trib."
+            .Top       = 50
+            .Left      = 335
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_ProdSitTribL", "TextBox")
+        WITH loc_oAba.txt_4c_ProdSitTribL
+            .ControlSource = "crSigCnFNf.lstrib"
+            .Top           = 62
+            .Left          = 336
+            .Width         = 38
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Origem (top=50)
+        loc_oAba.AddObject("lbl_4c_LblOrigem", "Label")
+        WITH loc_oAba.lbl_4c_LblOrigem
+            .Caption   = "Origem"
+            .Top       = 50
+            .Left      = 379
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_ProdOrigemL", "TextBox")
+        WITH loc_oAba.txt_4c_ProdOrigemL
+            .ControlSource = "crSigCnFNf.corigem"
+            .Top           = 62
+            .Left          = 379
+            .Width         = 38
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Unidade (top=50)
+        loc_oAba.AddObject("lbl_4c_LblUnid", "Label")
+        WITH loc_oAba.lbl_4c_LblUnid
+            .Caption   = "Unidade"
+            .Top       = 50
+            .Left      = 422
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_ProdUnidL", "TextBox")
+        WITH loc_oAba.txt_4c_ProdUnidL
+            .ControlSource = "crSigCnFNf.lunid"
+            .Top           = 62
+            .Left          = 422
+            .Width         = 38
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Quant (top=50)
+        loc_oAba.AddObject("lbl_4c_LblQtde", "Label")
+        WITH loc_oAba.lbl_4c_LblQtde
+            .Caption   = "Quant"
+            .Top       = 50
+            .Left      = 470
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_ProdQtdeL", "TextBox")
+        WITH loc_oAba.txt_4c_ProdQtdeL
+            .ControlSource = "crSigCnFNf.lqtde"
+            .Top           = 62
+            .Left          = 466
+            .Width         = 38
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Vlr Unit (top=85)
+        loc_oAba.AddObject("lbl_4c_LblVlUnit", "Label")
+        WITH loc_oAba.lbl_4c_LblVlUnit
+            .Caption   = "Vlr Unit"
+            .Top       = 85
+            .Left      = 30
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_ProdVlUnitL", "TextBox")
+        WITH loc_oAba.txt_4c_ProdVlUnitL
+            .ControlSource = "crSigCnFNf.lvluni"
+            .Top           = 97
+            .Left          = 32
+            .Width         = 38
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Vlr Total (top=85)
+        loc_oAba.AddObject("lbl_4c_LblVlTot", "Label")
+        WITH loc_oAba.lbl_4c_LblVlTot
+            .Caption   = "Vlr Total"
+            .Top       = 85
+            .Left      = 71
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_ProdVlTotL", "TextBox")
+        WITH loc_oAba.txt_4c_ProdVlTotL
+            .ControlSource = "crSigCnFNf.lvltot"
+            .Top           = 97
+            .Left          = 75
+            .Width         = 38
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Al ICMS (top=85)
+        loc_oAba.AddObject("lbl_4c_LblAlICMS", "Label")
+        WITH loc_oAba.lbl_4c_LblAlICMS
+            .Caption   = "Al ICMS"
+            .Top       = 85
+            .Left      = 116
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_ProdAlICMSL", "TextBox")
+        WITH loc_oAba.txt_4c_ProdAlICMSL
+            .ControlSource = "crSigCnFNf.lbicm"
+            .Top           = 97
+            .Left          = 118
+            .Width         = 38
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Al IPI (top=85)
+        loc_oAba.AddObject("lbl_4c_LblAlIPI", "Label")
+        WITH loc_oAba.lbl_4c_LblAlIPI
+            .Caption   = "Al IPI"
+            .Top       = 85
+            .Left      = 165
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_ProdAlIPIL", "TextBox")
+        WITH loc_oAba.txt_4c_ProdAlIPIL
+            .ControlSource = "crSigCnFNf.ltipi"
+            .Top           = 97
+            .Left          = 161
+            .Width         = 38
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Valor IPI (top=85)
+        loc_oAba.AddObject("lbl_4c_LblValIPI", "Label")
+        WITH loc_oAba.lbl_4c_LblValIPI
+            .Caption   = "Valor IPI"
+            .Top       = 85
+            .Left      = 201
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_ProdValIPIL", "TextBox")
+        WITH loc_oAba.txt_4c_ProdValIPIL
+            .ControlSource = "crSigCnFNf.cvipi"
+            .Top           = 97
+            .Left          = 203
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        *-- CFOP (top=85)
+        loc_oAba.AddObject("lbl_4c_LblCFOP", "Label")
+        WITH loc_oAba.lbl_4c_LblCFOP
+            .Caption   = "CFOP"
+            .Top       = 85
+            .Left      = 253
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_ProdCFOPL", "TextBox")
+        WITH loc_oAba.txt_4c_ProdCFOPL
+            .ControlSource = "crSigCnFNf.lcfop"
+            .Top           = 97
+            .Left          = 248
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Peso Metal (top=85)
+        loc_oAba.AddObject("lbl_4c_LblPesoMet", "Label")
+        WITH loc_oAba.lbl_4c_LblPesoMet
+            .Caption   = "Peso Metal"
+            .Top       = 85
+            .Left      = 289
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_ProdPesoMetL", "TextBox")
+        WITH loc_oAba.txt_4c_ProdPesoMetL
+            .ControlSource = "crSigCnFNf.cpbru"
+            .Top           = 97
+            .Left          = 293
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Config. Descricao Produto (shape + labels, top=125-248)
+        loc_oAba.AddObject("shp_4c_Shape1", "Shape")
+        WITH loc_oAba.shp_4c_Shape1
+            .Top           = 125
+            .Left          = 29
+            .Width         = 150
+            .Height        = 128
+            .Visible       = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_LblCfgDesc", "Label")
+        WITH loc_oAba.lbl_4c_LblCfgDesc
+            .Caption   = " Config. Descri" + CHR(231) + CHR(227) + "o Produto "
+            .Top       = 127
+            .Left      = 32
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        *-- Separador interno (top=157)
+        loc_oAba.AddObject("shp_4c_Shape2", "Shape")
+        WITH loc_oAba.shp_4c_Shape2
+            .Top     = 157
+            .Left    = 29
+            .Width   = 150
+            .Height  = 2
+            .Visible = .T.
+        ENDWITH
+
+        *-- Qt.Max.Caracteres (top=142)
+        loc_oAba.AddObject("lbl_4c_LblQtMax", "Label")
+        WITH loc_oAba.lbl_4c_LblQtMax
+            .Caption   = "Qt.M" + CHR(225) + "x.Caracteres"
+            .Top       = 142
+            .Left      = 38
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_QtMaxCarL", "TextBox")
+        WITH loc_oAba.txt_4c_QtMaxCarL
+            .ControlSource = "crSigCnFNf.tamdesc"
+            .Top           = 138
+            .Left          = 143
+            .Width         = 27
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Descricao Original (top=162)
+        loc_oAba.AddObject("lbl_4c_LblDescOrig", "Label")
+        WITH loc_oAba.lbl_4c_LblDescOrig
+            .Caption   = "Descri" + CHR(231) + CHR(227) + "o Original"
+            .Top       = 162
+            .Left      = 38
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_DescOrigL", "TextBox")
+        WITH loc_oAba.txt_4c_DescOrigL
+            .ControlSource = "crSigCnFNf.ldescpro"
+            .Top           = 159
+            .Left          = 143
+            .Width         = 27
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Adendo Tp. Fatura (top=180)
+        loc_oAba.AddObject("lbl_4c_LblAdendo", "Label")
+        WITH loc_oAba.lbl_4c_LblAdendo
+            .Caption   = "Adendo Tp. Fatura"
+            .Top       = 180
+            .Left      = 38
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_AdendoL", "TextBox")
+        WITH loc_oAba.txt_4c_AdendoL
+            .ControlSource = "crSigCnFNf.ltipi"
+            .Top           = 177
+            .Left          = 143
+            .Width         = 27
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Cor (top=198)
+        loc_oAba.AddObject("lbl_4c_LblCor", "Label")
+        WITH loc_oAba.lbl_4c_LblCor
+            .Caption   = "Cor"
+            .Top       = 198
+            .Left      = 38
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_CorL", "TextBox")
+        WITH loc_oAba.txt_4c_CorL
+            .ControlSource = "crSigCnFNf.ocor"
+            .Top           = 195
+            .Left          = 143
+            .Width         = 27
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Embalagem (top=216)
+        loc_oAba.AddObject("lbl_4c_LblEmb", "Label")
+        WITH loc_oAba.lbl_4c_LblEmb
+            .Caption   = "Embalagem"
+            .Top       = 216
+            .Left      = 38
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_EmbL", "TextBox")
+        WITH loc_oAba.txt_4c_EmbL
+            .ControlSource = "crSigCnFNf.oemb"
+            .Top           = 213
+            .Left          = 143
+            .Width         = 27
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Tamanho (top=234)
+        loc_oAba.AddObject("lbl_4c_LblTamanho", "Label")
+        WITH loc_oAba.lbl_4c_LblTamanho
+            .Caption   = "Tamanho"
+            .Top       = 234
+            .Left      = 38
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_TamL", "TextBox")
+        WITH loc_oAba.txt_4c_TamL
+            .ControlSource = "crSigCnFNf.otam"
+            .Top           = 231
+            .Left          = 143
+            .Width         = 27
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Coluna Obs (top=137, right side)
+        loc_oAba.AddObject("lbl_4c_LblColObs", "Label")
+        WITH loc_oAba.lbl_4c_LblColObs
+            .Caption   = "Coluna Obs"
+            .Top       = 137
+            .Left      = 199
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_ColObsL", "TextBox")
+        WITH loc_oAba.txt_4c_ColObsL
+            .ControlSource = "crSigCnFNf.tamcolobs"
+            .Top           = 149
+            .Left          = 207
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        *-- No. Colunas (top=137)
+        loc_oAba.AddObject("lbl_4c_LblNoCols", "Label")
+        WITH loc_oAba.lbl_4c_LblNoCols
+            .Caption   = "No. Colunas"
+            .Top       = 137
+            .Left      = 268
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_NoColsL", "TextBox")
+        WITH loc_oAba.txt_4c_NoColsL
+            .ControlSource = "crSigCnFNf.nldser"
+            .Top           = 149
+            .Left          = 279
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        *-- No. Linhas (top=137)
+        loc_oAba.AddObject("lbl_4c_LblNoLins", "Label")
+        WITH loc_oAba.lbl_4c_LblNoLins
+            .Caption   = "No. Linhas"
+            .Top       = 137
+            .Left      = 341
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_NoLinsL", "TextBox")
+        WITH loc_oAba.txt_4c_NoLinsL
+            .ControlSource = "crSigCnFNf.ncdser"
+            .Top           = 149
+            .Left          = 348
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Total de Quantidade (top=136)
+        loc_oAba.AddObject("lbl_4c_LblTotQtd", "Label")
+        WITH loc_oAba.lbl_4c_LblTotQtd
+            .Caption   = "Total de Quantidade"
+            .Top       = 136
+            .Left      = 415
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_TotQtdL", "TextBox")
+        WITH loc_oAba.txt_4c_TotQtdL
+            .ControlSource = "crSigCnFNf.ltqtde"
+            .Top           = 148
+            .Left          = 419
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_TotQtdX", "Label")
+        WITH loc_oAba.lbl_4c_TotQtdX
+            .Caption   = "x"
+            .Top       = 150
+            .Left      = 462
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_TotQtdC", "TextBox")
+        WITH loc_oAba.txt_4c_TotQtdC
+            .ControlSource = "crSigCnFNf.ctqtde"
+            .Top           = 148
+            .Left          = 468
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Desconto/Acrescimo (top=193)
+        loc_oAba.AddObject("lbl_4c_LblDescAcr", "Label")
+        WITH loc_oAba.lbl_4c_LblDescAcr
+            .Caption   = "Desconto / Acr" + CHR(233) + "scimo"
+            .Top       = 193
+            .Left      = 241
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_DescAcrL", "TextBox")
+        WITH loc_oAba.txt_4c_DescAcrL
+            .ControlSource = "crSigCnFNf.cdesconto"
+            .Top           = 205
+            .Left          = 250
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_DescAcrX", "Label")
+        WITH loc_oAba.lbl_4c_DescAcrX
+            .Caption   = "x"
+            .Top       = 207
+            .Left      = 293
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_DescAcrC", "TextBox")
+        WITH loc_oAba.txt_4c_DescAcrC
+            .ControlSource = "crSigCnFNf.cdesconto"
+            .Top           = 205
+            .Left          = 299
+            .Width         = 41
+            .Height        = 18
+            .FontName      = "Tahoma"
+            .FontSize      = 8
+            .SpecialEffect = 1
+            .Format        = "K"
+            .InputMask     = "999.99"
+            .Visible       = .T.
+        ENDWITH
+
+        *-- Shape para Descricao 3D border (top=134)
+        loc_oAba.AddObject("shp_4c_Shape3", "Shape")
+        WITH loc_oAba.shp_4c_Shape3
+            .Top     = 134
+            .Left    = 193
+            .Width   = 217
+            .Height  = 37
+            .Visible = .T.
+        ENDWITH
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConfigurarImpostosTab()
+        LOCAL loc_oAba
+        loc_oAba = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page5
+
+        *-- Base de Calculo ICMS (top=19)
+        loc_oAba.AddObject("lbl_4c_LblBcICMS", "Label")
+        WITH loc_oAba.lbl_4c_LblBcICMS
+            .Caption   = "Base de C" + CHR(225) + "lculo ICMS"
+            .Top       = 19
+            .Left      = 28
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_BcICMSL", "TextBox")
+        WITH loc_oAba.txt_4c_BcICMSL
+            .ControlSource = "crSigCnFNf.lbicm"
+            .Top = 31
+            .Left = 39
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_BcICMSX", "Label")
+        WITH loc_oAba.lbl_4c_BcICMSX
+            .Caption = "x"
+            .Top = 33
+            .Left = 82
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_BcICMSC", "TextBox")
+        WITH loc_oAba.txt_4c_BcICMSC
+            .ControlSource = "crSigCnFNf.cbicm"
+            .Top = 31
+            .Left = 88
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        *-- Valor do ICMS (top=19)
+        loc_oAba.AddObject("lbl_4c_LblValICMS", "Label")
+        WITH loc_oAba.lbl_4c_LblValICMS
+            .Caption = "Valor do ICMS"
+            .Top = 19
+            .Left = 155
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_ValICMSL", "TextBox")
+        WITH loc_oAba.txt_4c_ValICMSL
+            .ControlSource = "crSigCnFNf.lticm"
+            .Top = 31
+            .Left = 147
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_ValICMSX", "Label")
+        WITH loc_oAba.lbl_4c_ValICMSX
+            .Caption = "x"
+            .Top = 33
+            .Left = 190
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_ValICMSC", "TextBox")
+        WITH loc_oAba.txt_4c_ValICMSC
+            .ControlSource = "crSigCnFNf.cticm"
+            .Top = 31
+            .Left = 196
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        *-- Valor do Frete (top=53)
+        loc_oAba.AddObject("lbl_4c_LblValFret", "Label")
+        WITH loc_oAba.lbl_4c_LblValFret
+            .Caption = "Valor do Frete"
+            .Top = 53
+            .Left = 39
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_ValFretL", "TextBox")
+        WITH loc_oAba.txt_4c_ValFretL
+            .ControlSource = "crSigCnFNf.lfrete"
+            .Top = 65
+            .Left = 39
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_ValFretX", "Label")
+        WITH loc_oAba.lbl_4c_ValFretX
+            .Caption = "x"
+            .Top = 67
+            .Left = 82
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_ValFretC", "TextBox")
+        WITH loc_oAba.txt_4c_ValFretC
+            .ControlSource = "crSigCnFNf.cfrete"
+            .Top = 65
+            .Left = 88
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        *-- Valor do Seguro (top=53)
+        loc_oAba.AddObject("lbl_4c_LblValSeg", "Label")
+        WITH loc_oAba.lbl_4c_LblValSeg
+            .Caption = "Valor do Seguro"
+            .Top = 53
+            .Left = 147
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_ValSegL", "TextBox")
+        WITH loc_oAba.txt_4c_ValSegL
+            .ControlSource = "crSigCnFNf.lseguro"
+            .Top = 65
+            .Left = 147
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_ValSegX", "Label")
+        WITH loc_oAba.lbl_4c_ValSegX
+            .Caption = "x"
+            .Top = 67
+            .Left = 190
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_ValSegC", "TextBox")
+        WITH loc_oAba.txt_4c_ValSegC
+            .ControlSource = "crSigCnFNf.cseguro"
+            .Top = 65
+            .Left = 196
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        *-- Outras Despesas (top=53)
+        loc_oAba.AddObject("lbl_4c_LblOutDesp", "Label")
+        WITH loc_oAba.lbl_4c_LblOutDesp
+            .Caption = "Outras Despesas"
+            .Top = 53
+            .Left = 255
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_OutDespL", "TextBox")
+        WITH loc_oAba.txt_4c_OutDespL
+            .ControlSource = "crSigCnFNf.coutras"
+            .Top = 65
+            .Left = 255
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_OutDespX", "Label")
+        WITH loc_oAba.lbl_4c_OutDespX
+            .Caption = "x"
+            .Top = 67
+            .Left = 298
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_OutDespC", "TextBox")
+        WITH loc_oAba.txt_4c_OutDespC
+            .ControlSource = "crSigCnFNf.coutras"
+            .Top = 65
+            .Left = 304
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        *-- Valor dos Produtos (top=89)
+        loc_oAba.AddObject("lbl_4c_LblValProd", "Label")
+        WITH loc_oAba.lbl_4c_LblValProd
+            .Caption = "Valor dos Produtos"
+            .Top = 89
+            .Left = 35
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_ValProdL", "TextBox")
+        WITH loc_oAba.txt_4c_ValProdL
+            .ControlSource = "crSigCnFNf.lvltot"
+            .Top = 101
+            .Left = 39
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_ValProdX", "Label")
+        WITH loc_oAba.lbl_4c_ValProdX
+            .Caption = "x"
+            .Top = 103
+            .Left = 82
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_ValProdC", "TextBox")
+        WITH loc_oAba.txt_4c_ValProdC
+            .ControlSource = "crSigCnFNf.cvltot"
+            .Top = 101
+            .Left = 88
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        *-- Base de Calculo do IPI (top=89)
+        loc_oAba.AddObject("lbl_4c_LblBcIPI", "Label")
+        WITH loc_oAba.lbl_4c_LblBcIPI
+            .Caption = "Base de C" + CHR(225) + "lculo do IPI"
+            .Top = 89
+            .Left = 137
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_BcIPIL", "TextBox")
+        WITH loc_oAba.txt_4c_BcIPIL
+            .ControlSource = "crSigCnFNf.lbicm"
+            .Top = 101
+            .Left = 147
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_BcIPIX", "Label")
+        WITH loc_oAba.lbl_4c_BcIPIX
+            .Caption = "x"
+            .Top = 104
+            .Left = 190
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_BcIPIC", "TextBox")
+        WITH loc_oAba.txt_4c_BcIPIC
+            .ControlSource = "crSigCnFNf.cbicm"
+            .Top = 101
+            .Left = 196
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        *-- Valor Total do IPI (top=89)
+        loc_oAba.AddObject("lbl_4c_LblVlTIPI", "Label")
+        WITH loc_oAba.lbl_4c_LblVlTIPI
+            .Caption = "Valor Total do IPI"
+            .Top = 89
+            .Left = 255
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_VlTIPIL", "TextBox")
+        WITH loc_oAba.txt_4c_VlTIPIL
+            .ControlSource = "crSigCnFNf.ctipi"
+            .Top = 101
+            .Left = 255
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_VlTIPIX", "Label")
+        WITH loc_oAba.lbl_4c_VlTIPIX
+            .Caption = "x"
+            .Top = 103
+            .Left = 298
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_VlTIPIC", "TextBox")
+        WITH loc_oAba.txt_4c_VlTIPIC
+            .ControlSource = "crSigCnFNf.ctipi"
+            .Top = 101
+            .Left = 304
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        *-- Valor Total da Nota (top=89)
+        loc_oAba.AddObject("lbl_4c_LblVlTNota", "Label")
+        WITH loc_oAba.lbl_4c_LblVlTNota
+            .Caption = "Valor Total da Nota"
+            .Top = 89
+            .Left = 357
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_VlTNotaL", "TextBox")
+        WITH loc_oAba.txt_4c_VlTNotaL
+            .ControlSource = "crSigCnFNf.ltnota"
+            .Top = 101
+            .Left = 363
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_VlTNotaX", "Label")
+        WITH loc_oAba.lbl_4c_VlTNotaX
+            .Caption = "x"
+            .Top = 103
+            .Left = 406
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_VlTNotaC", "TextBox")
+        WITH loc_oAba.txt_4c_VlTNotaC
+            .ControlSource = "crSigCnFNf.ctnota"
+            .Top = 101
+            .Left = 412
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        *-- Fonte (top=89)
+        loc_oAba.AddObject("lbl_4c_LblFonte", "Label")
+        WITH loc_oAba.lbl_4c_LblFonte
+            .Caption = "Fonte"
+            .Top = 89
+            .Left = 461
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_FonteL", "TextBox")
+        WITH loc_oAba.txt_4c_FonteL
+            .ControlSource = "crSigCnFNf.ltpfrete"
+            .Top = 101
+            .Left = 461
+            .Width = 23
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        *-- Base do ICMS ST (top=125)
+        loc_oAba.AddObject("lbl_4c_LblBcST", "Label")
+        WITH loc_oAba.lbl_4c_LblBcST
+            .Caption = "Base do ICMS ST"
+            .Top = 125
+            .Left = 38
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_BcSTL", "TextBox")
+        WITH loc_oAba.txt_4c_BcSTL
+            .ControlSource = "crSigCnFNf.lbicm"
+            .Top = 137
+            .Left = 39
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_BcSTX", "Label")
+        WITH loc_oAba.lbl_4c_BcSTX
+            .Caption = "x"
+            .Top = 139
+            .Left = 82
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_BcSTC", "TextBox")
+        WITH loc_oAba.txt_4c_BcSTC
+            .ControlSource = "crSigCnFNf.cbicm"
+            .Top = 137
+            .Left = 88
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        *-- Valor do ICMS ST (top=125)
+        loc_oAba.AddObject("lbl_4c_LblValST", "Label")
+        WITH loc_oAba.lbl_4c_LblValST
+            .Caption = "Valor do ICMS ST"
+            .Top = 125
+            .Left = 146
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_ValSTL", "TextBox")
+        WITH loc_oAba.txt_4c_ValSTL
+            .ControlSource = "crSigCnFNf.lticm"
+            .Top = 137
+            .Left = 147
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_ValSTX", "Label")
+        WITH loc_oAba.lbl_4c_ValSTX
+            .Caption = "x"
+            .Top = 139
+            .Left = 190
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_ValSTC", "TextBox")
+        WITH loc_oAba.txt_4c_ValSTC
+            .ControlSource = "crSigCnFNf.cticm"
+            .Top = 137
+            .Left = 196
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        *-- IR e ISS (top=180 shape, top=166 %, top=180 labels)
+        loc_oAba.AddObject("shp_4c_IRShape", "Shape")
+        WITH loc_oAba.shp_4c_IRShape
+            .Top = 171
+            .Left = 39
+            .Width = 105
+            .Height = 45
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_LblPct", "Label")
+        WITH loc_oAba.lbl_4c_LblPct
+            .Caption = "%"
+            .Top = 166
+            .Left = 44
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_LblIR", "Label")
+        WITH loc_oAba.lbl_4c_LblIR
+            .Caption = "I.R."
+            .Top = 180
+            .Left = 44
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_IRVal", "TextBox")
+        WITH loc_oAba.txt_4c_IRVal
+            .ControlSource = "crSigCnFNf.pirs"
+            .Top = 193
+            .Left = 44
+            .Width = 46
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_LblISS", "Label")
+        WITH loc_oAba.lbl_4c_LblISS
+            .Caption = "I.S.S."
+            .Top = 180
+            .Left = 93
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_ISSVal", "TextBox")
+        WITH loc_oAba.txt_4c_ISSVal
+            .ControlSource = "crSigCnFNf.piss"
+            .Top = 193
+            .Left = 93
+            .Width = 46
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConfigurarTransporteTab()
+        LOCAL loc_oAba
+        loc_oAba = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page6
+
+        *-- Shape Transportador (top=7)
+        loc_oAba.AddObject("shp_4c_Transp", "Shape")
+        WITH loc_oAba.shp_4c_Transp
+            .Top = 7
+            .Left = 12
+            .Width = 315
+            .Height = 119
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_LblTransp", "Label")
+        WITH loc_oAba.lbl_4c_LblTransp
+            .Caption = " Transportador "
+            .Top = 10
+            .Left = 19
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        *-- Nome/Razao Social transportador (top=24)
+        loc_oAba.AddObject("lbl_4c_LblTrNome", "Label")
+        WITH loc_oAba.lbl_4c_LblTrNome
+            .Caption = "Nome / Raz" + CHR(227) + "o Social"
+            .Top = 24
+            .Left = 17
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_TrNomeL", "TextBox")
+        WITH loc_oAba.txt_4c_TrNomeL
+            .ControlSource = "crSigCnFNf.ltrnome"
+            .Top = 36
+            .Left = 17
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_TrNomeX", "Label")
+        WITH loc_oAba.lbl_4c_TrNomeX
+            .Caption = "x"
+            .Top = 38
+            .Left = 60
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_TrNomeC", "TextBox")
+        WITH loc_oAba.txt_4c_TrNomeC
+            .ControlSource = "crSigCnFNf.ctrnome"
+            .Top = 36
+            .Left = 66
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        *-- CGC/CPF transportador (top=24)
+        loc_oAba.AddObject("lbl_4c_LblTrCgc", "Label")
+        WITH loc_oAba.lbl_4c_LblTrCgc
+            .Caption = "C.G.C. / C.P.F."
+            .Top = 24
+            .Left = 128
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_TrCgcL", "TextBox")
+        WITH loc_oAba.txt_4c_TrCgcL
+            .ControlSource = "crSigCnFNf.ltrcgc"
+            .Top = 36
+            .Left = 125
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_TrCgcX", "Label")
+        WITH loc_oAba.lbl_4c_TrCgcX
+            .Caption = "x"
+            .Top = 38
+            .Left = 168
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_TrCgcC", "TextBox")
+        WITH loc_oAba.txt_4c_TrCgcC
+            .ControlSource = "crSigCnFNf.ctrcgc"
+            .Top = 36
+            .Left = 174
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        *-- Insc.Estadual transportador (top=24)
+        loc_oAba.AddObject("lbl_4c_LblTrIest", "Label")
+        WITH loc_oAba.lbl_4c_LblTrIest
+            .Caption = "Insc. Estadual"
+            .Top = 24
+            .Left = 233
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_TrIestL", "TextBox")
+        WITH loc_oAba.txt_4c_TrIestL
+            .ControlSource = "crSigCnFNf.ltrie"
+            .Top = 36
+            .Left = 233
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_TrIestX", "Label")
+        WITH loc_oAba.lbl_4c_TrIestX
+            .Caption = "x"
+            .Top = 38
+            .Left = 276
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_TrIestC", "TextBox")
+        WITH loc_oAba.txt_4c_TrIestC
+            .ControlSource = "crSigCnFNf.ctrie"
+            .Top = 36
+            .Left = 282
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        *-- Endereco transportador (top=57)
+        loc_oAba.AddObject("lbl_4c_LblTrEnder", "Label")
+        WITH loc_oAba.lbl_4c_LblTrEnder
+            .Caption = "Endere" + CHR(231) + "o"
+            .Top = 57
+            .Left = 17
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_TrEnderL", "TextBox")
+        WITH loc_oAba.txt_4c_TrEnderL
+            .ControlSource = "crSigCnFNf.ltrend"
+            .Top = 69
+            .Left = 17
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_TrEnderX", "Label")
+        WITH loc_oAba.lbl_4c_TrEnderX
+            .Caption = "x"
+            .Top = 71
+            .Left = 60
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_TrEnderC", "TextBox")
+        WITH loc_oAba.txt_4c_TrEnderC
+            .ControlSource = "crSigCnFNf.ctrend"
+            .Top = 69
+            .Left = 66
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        *-- Municipio transportador (top=57)
+        loc_oAba.AddObject("lbl_4c_LblTrMuni", "Label")
+        WITH loc_oAba.lbl_4c_LblTrMuni
+            .Caption = "Munic" + CHR(237) + "pio"
+            .Top = 57
+            .Left = 124
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_TrMuniL", "TextBox")
+        WITH loc_oAba.txt_4c_TrMuniL
+            .ControlSource = "crSigCnFNf.ltrmun"
+            .Top = 69
+            .Left = 124
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_TrMuniX", "Label")
+        WITH loc_oAba.lbl_4c_TrMuniX
+            .Caption = "x"
+            .Top = 71
+            .Left = 167
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_TrMuniC", "TextBox")
+        WITH loc_oAba.txt_4c_TrMuniC
+            .ControlSource = "crSigCnFNf.ctrmun"
+            .Top = 69
+            .Left = 173
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        *-- Estado transportador (top=57)
+        loc_oAba.AddObject("lbl_4c_LblTrEst", "Label")
+        WITH loc_oAba.lbl_4c_LblTrEst
+            .Caption = "Estado"
+            .Top = 57
+            .Left = 232
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_TrEstL", "TextBox")
+        WITH loc_oAba.txt_4c_TrEstL
+            .ControlSource = "crSigCnFNf.ltrest"
+            .Top = 69
+            .Left = 232
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_TrEstX", "Label")
+        WITH loc_oAba.lbl_4c_TrEstX
+            .Caption = "x"
+            .Top = 71
+            .Left = 275
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_TrEstC", "TextBox")
+        WITH loc_oAba.txt_4c_TrEstC
+            .ControlSource = "crSigCnFNf.ctrest"
+            .Top = 69
+            .Left = 281
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        *-- Tipo de Frete (top=91)
+        loc_oAba.AddObject("lbl_4c_LblTpFret", "Label")
+        WITH loc_oAba.lbl_4c_LblTpFret
+            .Caption = "Tipo de Frete"
+            .Top = 91
+            .Left = 17
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_TpFretL", "TextBox")
+        WITH loc_oAba.txt_4c_TpFretL
+            .ControlSource = "crSigCnFNf.ltpfrete"
+            .Top = 103
+            .Left = 17
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_TpFretX", "Label")
+        WITH loc_oAba.lbl_4c_TpFretX
+            .Caption = "x"
+            .Top = 105
+            .Left = 60
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_TpFretC", "TextBox")
+        WITH loc_oAba.txt_4c_TpFretC
+            .ControlSource = "crSigCnFNf.ctpfrete"
+            .Top = 103
+            .Left = 66
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        *-- Placa do Veiculo (top=91)
+        loc_oAba.AddObject("lbl_4c_LblPlaca", "Label")
+        WITH loc_oAba.lbl_4c_LblPlaca
+            .Caption = "Placa do Ve" + CHR(237) + "culo"
+            .Top = 91
+            .Left = 124
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_PlacaL", "TextBox")
+        WITH loc_oAba.txt_4c_PlacaL
+            .ControlSource = "crSigCnFNf.lplaca"
+            .Top = 103
+            .Left = 124
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_PlacaX", "Label")
+        WITH loc_oAba.lbl_4c_PlacaX
+            .Caption = "x"
+            .Top = 105
+            .Left = 167
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_PlacaC", "TextBox")
+        WITH loc_oAba.txt_4c_PlacaC
+            .ControlSource = "crSigCnFNf.cplaca"
+            .Top = 103
+            .Left = 173
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        *-- Estado do Veiculo (top=91)
+        loc_oAba.AddObject("lbl_4c_LblEstVeic", "Label")
+        WITH loc_oAba.lbl_4c_LblEstVeic
+            .Caption = "Estado do Ve" + CHR(237) + "culo"
+            .Top = 91
+            .Left = 232
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_EstVeicL", "TextBox")
+        WITH loc_oAba.txt_4c_EstVeicL
+            .ControlSource = "crSigCnFNf.lplacauf"
+            .Top = 103
+            .Left = 232
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_EstVeicX", "Label")
+        WITH loc_oAba.lbl_4c_EstVeicX
+            .Caption = "x"
+            .Top = 105
+            .Left = 275
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_EstVeicC", "TextBox")
+        WITH loc_oAba.txt_4c_EstVeicC
+            .ControlSource = "crSigCnFNf.cplacauf"
+            .Top = 103
+            .Left = 281
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        *-- Shape Volumes Transportados (top=132)
+        loc_oAba.AddObject("shp_4c_Vols", "Shape")
+        WITH loc_oAba.shp_4c_Vols
+            .Top = 132
+            .Left = 12
+            .Width = 315
+            .Height = 114
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_LblVols", "Label")
+        WITH loc_oAba.lbl_4c_LblVols
+            .Caption = " Volumes Transportados "
+            .Top = 136
+            .Left = 19
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        *-- Quantidade (top=149)
+        loc_oAba.AddObject("lbl_4c_LblQtVol", "Label")
+        WITH loc_oAba.lbl_4c_LblQtVol
+            .Caption = "Quantidade"
+            .Top = 149
+            .Left = 17
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_QtVolL", "TextBox")
+        WITH loc_oAba.txt_4c_QtVolL
+            .ControlSource = "crSigCnFNf.lqtvol"
+            .Top = 161
+            .Left = 17
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_QtVolX", "Label")
+        WITH loc_oAba.lbl_4c_QtVolX
+            .Caption = "x"
+            .Top = 163
+            .Left = 60
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_QtVolC", "TextBox")
+        WITH loc_oAba.txt_4c_QtVolC
+            .ControlSource = "crSigCnFNf.cqtvol"
+            .Top = 161
+            .Left = 66
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        *-- Especie (top=149)
+        loc_oAba.AddObject("lbl_4c_LblEsp", "Label")
+        WITH loc_oAba.lbl_4c_LblEsp
+            .Caption = "Esp" + CHR(233) + "cie"
+            .Top = 149
+            .Left = 124
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_EspL", "TextBox")
+        WITH loc_oAba.txt_4c_EspL
+            .ControlSource = "crSigCnFNf.lesp"
+            .Top = 161
+            .Left = 124
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_EspX", "Label")
+        WITH loc_oAba.lbl_4c_EspX
+            .Caption = "x"
+            .Top = 163
+            .Left = 167
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_EspC", "TextBox")
+        WITH loc_oAba.txt_4c_EspC
+            .ControlSource = "crSigCnFNf.cesp"
+            .Top = 161
+            .Left = 173
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        *-- Marca (top=149)
+        loc_oAba.AddObject("lbl_4c_LblMarca", "Label")
+        WITH loc_oAba.lbl_4c_LblMarca
+            .Caption = "Marca"
+            .Top = 149
+            .Left = 232
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_MarcaL", "TextBox")
+        WITH loc_oAba.txt_4c_MarcaL
+            .ControlSource = "crSigCnFNf.lmarca"
+            .Top = 161
+            .Left = 232
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_MarcaX", "Label")
+        WITH loc_oAba.lbl_4c_MarcaX
+            .Caption = "x"
+            .Top = 163
+            .Left = 275
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_MarcaC", "TextBox")
+        WITH loc_oAba.txt_4c_MarcaC
+            .ControlSource = "crSigCnFNf.cmarca"
+            .Top = 161
+            .Left = 281
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        *-- Numero (top=183)
+        loc_oAba.AddObject("lbl_4c_LblNumVol", "Label")
+        WITH loc_oAba.lbl_4c_LblNumVol
+            .Caption = "N" + CHR(250) + "mero"
+            .Top = 183
+            .Left = 17
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_NumVolL", "TextBox")
+        WITH loc_oAba.txt_4c_NumVolL
+            .ControlSource = "crSigCnFNf.lnumero"
+            .Top = 195
+            .Left = 17
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_NumVolX", "Label")
+        WITH loc_oAba.lbl_4c_NumVolX
+            .Caption = "x"
+            .Top = 197
+            .Left = 60
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_NumVolC", "TextBox")
+        WITH loc_oAba.txt_4c_NumVolC
+            .ControlSource = "crSigCnFNf.cnumero"
+            .Top = 195
+            .Left = 66
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        *-- Peso Bruto (top=183)
+        loc_oAba.AddObject("lbl_4c_LblPBru", "Label")
+        WITH loc_oAba.lbl_4c_LblPBru
+            .Caption = "Peso Bruto"
+            .Top = 183
+            .Left = 124
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_PBruL", "TextBox")
+        WITH loc_oAba.txt_4c_PBruL
+            .ControlSource = "crSigCnFNf.lpbru"
+            .Top = 195
+            .Left = 124
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_PBruX", "Label")
+        WITH loc_oAba.lbl_4c_PBruX
+            .Caption = "x"
+            .Top = 197
+            .Left = 167
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_PBruC", "TextBox")
+        WITH loc_oAba.txt_4c_PBruC
+            .ControlSource = "crSigCnFNf.cpbru"
+            .Top = 195
+            .Left = 173
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        *-- Peso Liquido (top=183)
+        loc_oAba.AddObject("lbl_4c_LblPLiq", "Label")
+        WITH loc_oAba.lbl_4c_LblPLiq
+            .Caption = "Peso L" + CHR(237) + "quido"
+            .Top = 183
+            .Left = 232
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_PLiqL", "TextBox")
+        WITH loc_oAba.txt_4c_PLiqL
+            .ControlSource = "crSigCnFNf.lpliq"
+            .Top = 195
+            .Left = 232
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_PLiqX", "Label")
+        WITH loc_oAba.lbl_4c_PLiqX
+            .Caption = "x"
+            .Top = 197
+            .Left = 275
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_PLiqC", "TextBox")
+        WITH loc_oAba.txt_4c_PLiqC
+            .ControlSource = "crSigCnFNf.cpliq"
+            .Top = 195
+            .Left = 281
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        *-- Un Pesos (top=221)
+        loc_oAba.AddObject("lbl_4c_LblUnPesos", "Label")
+        WITH loc_oAba.lbl_4c_LblUnPesos
+            .Caption = "Un Pesos"
+            .Top = 221
+            .Left = 19
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_UnPesos", "TextBox")
+        WITH loc_oAba.txt_4c_UnPesos
+            .ControlSource = "crSigCnFNf.pesovols"
+            .Top = 219
+            .Left = 66
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConfigurarRodapeTab()
+        LOCAL loc_oAba
+        loc_oAba = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page7
+
+        *-- Classificacao Fiscal header (top=21)
+        loc_oAba.AddObject("lbl_4c_LblClsFis", "Label")
+        WITH loc_oAba.lbl_4c_LblClsFis
+            .Caption   = "Class. Fiscal : "
+            .Top       = 21
+            .Left      = 38
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        *-- OptionGroup para classificacao fiscal (top=22)
+        loc_oAba.AddObject("obj_4c_ClsFisTp", "OptionGroup")
+        WITH loc_oAba.obj_4c_ClsFisTp
+            .Top         = 22
+            .Left        = 115
+            .Width       = 149
+            .Height      = 19
+            .BackStyle   = 0
+            .BorderStyle = 0
+            .Value       = 1
+            .Visible     = .T.
+            WITH .Buttons(1)
+                .Caption = "Impressa"
+                .Left    = 2
+                .Top = 2
+                .AutoSize = .T.
+                .BackStyle = 0
+                .ForeColor = RGB(90,90,90)
+            ENDWITH
+            WITH .Buttons(2)
+                .Caption = "Calculada"
+                .Left    = 60
+                .Top = 2
+                .AutoSize = .T.
+                .BackStyle = 0
+                .FontName = "Tahoma"
+                .FontSize = 7
+                .ForeColor = RGB(90,90,90)
+            ENDWITH
+        ENDWITH
+
+        *-- Shape bloco Codigos 1-7 (top=39, left=17)
+        loc_oAba.AddObject("shp_4c_CodBl1", "Shape")
+        WITH loc_oAba.shp_4c_CodBl1
+            .Top = 39
+            .Left = 17
+            .Width = 345
+            .Height = 155
+            .Visible = .T.
+        ENDWITH
+
+        *-- Cabecalhos do bloco 1-7
+        loc_oAba.AddObject("lbl_4c_LblClsFis2", "Label")
+        WITH loc_oAba.lbl_4c_LblClsFis2
+            .Caption = "Class. Fiscal"
+            .Top = 42
+            .Left = 94
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_LblCodImp", "Label")
+        WITH loc_oAba.lbl_4c_LblCodImp
+            .Caption = "C" + CHR(243) + "digo Impresso"
+            .Top = 41
+            .Left = 222
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_LblImpDir", "Label")
+        WITH loc_oAba.lbl_4c_LblImpDir
+            .Caption = "Imprimir"
+            .Top = 41
+            .Left = 314
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_LblAngulo1", "Label")
+        WITH loc_oAba.lbl_4c_LblAngulo1
+            .Caption = CHR(226) + "ngulo"
+            .Top = 42
+            .Left = 177
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        *-- Codigos 1-7 (linhas top=54,73,92,111,130,149,168)
+        *-- Cada linha: LblCodN, txt ClassFis L, x, txt ClassFis C, combo Angulo, txt CodImp, ChkImp
+        LOCAL loc_nTop, loc_nFat, loc_cFat
+        loc_nFat = 1
+        FOR loc_nTop = 54 TO 168 STEP 19
+                        loc_cFat = ALLTRIM(STR(loc_nFat))
+
+            loc_oAba.AddObject("lbl_4c_Cod" + loc_cFat, "Label")
+            WITH loc_oAba.Controls(loc_oAba.ControlCount)
+                .Caption = "C" + CHR(243) + "digo " + loc_cFat
+                .Top = loc_nTop + 2
+                .Left = 39
+                .FontName = "Tahoma"
+                .FontSize = 7
+                .BackStyle = 0
+                .ForeColor = RGB(90,90,90)
+                .AutoSize = .T.
+                .Visible = .T.
+            ENDWITH
+
+            loc_oAba.AddObject("txt_4c_ClsL" + loc_cFat, "TextBox")
+            WITH loc_oAba.Controls(loc_oAba.ControlCount)
+                .ControlSource = "crSigCnFNf.lclas" + loc_cFat
+                .Top = loc_nTop
+                .Left = 80
+                .Width = 41
+                .Height = 18
+                .FontName = "Tahoma"
+                .FontSize = 8
+                .SpecialEffect = 1
+                .Format = "K"
+                .InputMask = "999.99"
+                .Visible = .T.
+            ENDWITH
+
+            loc_oAba.AddObject("lbl_4c_ClsX" + loc_cFat, "Label")
+            WITH loc_oAba.Controls(loc_oAba.ControlCount)
+                .Caption = "x"
+                .Top = loc_nTop + 2
+                .Left = 123
+                .FontName = "Tahoma"
+                .FontSize = 7
+                .BackStyle = 0
+                .ForeColor = RGB(90,90,90)
+                .AutoSize = .T.
+                .Visible = .T.
+            ENDWITH
+
+            loc_oAba.AddObject("txt_4c_ClsC" + loc_cFat, "TextBox")
+            WITH loc_oAba.Controls(loc_oAba.ControlCount)
+                .ControlSource = "crSigCnFNf.cclas" + loc_cFat
+                .Top = loc_nTop
+                .Left = 129
+                .Width = 41
+                .Height = 18
+                .FontName = "Tahoma"
+                .FontSize = 8
+                .SpecialEffect = 1
+                .Format = "K"
+                .InputMask = "999.99"
+                .Visible = .T.
+            ENDWITH
+
+            loc_oAba.AddObject("cbo_4c_Ang" + loc_cFat, "ComboBox")
+            WITH loc_oAba.Controls(loc_oAba.ControlCount)
+                .Top = loc_nTop
+                .Left = 172
+                .Width = 46
+                .Height = 18
+                .FontName = "Tahoma"
+                .FontSize = 8
+                .Visible = .T.
+                .RowSourceType = 1
+                .RowSource = "0,90,180,270"
+            ENDWITH
+
+            loc_oAba.AddObject("txt_4c_CodImp" + loc_cFat, "TextBox")
+            WITH loc_oAba.Controls(loc_oAba.ControlCount)
+                .ControlSource = "crSigCnFNf.impclas" + loc_cFat
+                .Top = loc_nTop
+                .Left = 221
+                .Width = 100
+                .Height = 18
+                .FontName = "Tahoma"
+                .FontSize = 8
+                .SpecialEffect = 1
+                .Format = "K"
+                .InputMask = ""
+                .Visible = .T.
+            ENDWITH
+
+            loc_oAba.AddObject("chk_4c_Imp" + loc_cFat, "CheckBox")
+            WITH loc_oAba.Controls(loc_oAba.ControlCount)
+                .ControlSource = "crSigCnFNf.impc" + loc_cFat
+                .Caption = ""
+                .Top = loc_nTop
+                .Left = 329
+                .Width = 19
+                .Height = 16
+                .FontName = "Tahoma"
+                .FontSize = 7
+                .Visible = .T.
+                .Sparse = .F.
+                .Alignment = 0
+                .ReadOnly = .F.
+            ENDWITH
+
+            loc_nFat = loc_nFat + 1
+        ENDFOR
+
+        *-- Shape bloco Codigos 8-12 (top=39, left=374)
+        loc_oAba.AddObject("shp_4c_CodBl2", "Shape")
+        WITH loc_oAba.shp_4c_CodBl2
+            .Top = 39
+            .Left = 374
+            .Width = 345
+            .Height = 155
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_LblClsFis3", "Label")
+        WITH loc_oAba.lbl_4c_LblClsFis3
+            .Caption = "Class. Fiscal"
+            .Top = 42
+            .Left = 448
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_LblCodImp2", "Label")
+        WITH loc_oAba.lbl_4c_LblCodImp2
+            .Caption = "C" + CHR(243) + "digo Impresso"
+            .Top = 41
+            .Left = 577
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_LblImpDir2", "Label")
+        WITH loc_oAba.lbl_4c_LblImpDir2
+            .Caption = "Imprimir"
+            .Top = 41
+            .Left = 672
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_LblAngulo2", "Label")
+        WITH loc_oAba.lbl_4c_LblAngulo2
+            .Caption = CHR(226) + "ngulo"
+            .Top = 42
+            .Left = 533
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        *-- Codigos 8-12 (linhas top=54,73,92,111,130)
+        LOCAL loc_nTopB, loc_nFatB, loc_cFatB
+        loc_nFatB = 8
+        FOR loc_nTopB = 54 TO 130 STEP 19
+                        loc_cFatB = ALLTRIM(STR(loc_nFatB))
+
+            loc_oAba.AddObject("lbl_4c_CodB" + loc_cFatB, "Label")
+            WITH loc_oAba.Controls(loc_oAba.ControlCount)
+                .Caption = "C" + CHR(243) + "digo " + loc_cFatB
+                .Top = loc_nTopB + 2
+                .Left = 395
+                .FontName = "Tahoma"
+                .FontSize = 7
+                .BackStyle = 0
+                .ForeColor = RGB(90,90,90)
+                .AutoSize = .T.
+                .Visible = .T.
+            ENDWITH
+
+            loc_oAba.AddObject("txt_4c_ClsLB" + loc_cFatB, "TextBox")
+            WITH loc_oAba.Controls(loc_oAba.ControlCount)
+                .ControlSource = "crSigCnFN2.lclas" + loc_cFatB
+                .Top = loc_nTopB
+                .Left = 436
+                .Width = 41
+                .Height = 18
+                .FontName = "Tahoma"
+                .FontSize = 8
+                .SpecialEffect = 1
+                .Format = "K"
+                .InputMask = "999.99"
+                .Visible = .T.
+            ENDWITH
+
+            loc_oAba.AddObject("lbl_4c_ClsXB" + loc_cFatB, "Label")
+            WITH loc_oAba.Controls(loc_oAba.ControlCount)
+                .Caption = "x"
+                .Top = loc_nTopB + 2
+                .Left = 479
+                .FontName = "Tahoma"
+                .FontSize = 7
+                .BackStyle = 0
+                .ForeColor = RGB(90,90,90)
+                .AutoSize = .T.
+                .Visible = .T.
+            ENDWITH
+
+            loc_oAba.AddObject("txt_4c_ClsCB" + loc_cFatB, "TextBox")
+            WITH loc_oAba.Controls(loc_oAba.ControlCount)
+                .ControlSource = "crSigCnFN2.cclas" + loc_cFatB
+                .Top = loc_nTopB
+                .Left = 485
+                .Width = 41
+                .Height = 18
+                .FontName = "Tahoma"
+                .FontSize = 8
+                .SpecialEffect = 1
+                .Format = "K"
+                .InputMask = "999.99"
+                .Visible = .T.
+            ENDWITH
+
+            loc_oAba.AddObject("cbo_4c_AngB" + loc_cFatB, "ComboBox")
+            WITH loc_oAba.Controls(loc_oAba.ControlCount)
+                .Top = loc_nTopB
+                .Left = 528
+                .Width = 46
+                .Height = 18
+                .FontName = "Tahoma"
+                .FontSize = 8
+                .Visible = .T.
+                .RowSourceType = 1
+                .RowSource = "0,90,180,270"
+            ENDWITH
+
+            loc_oAba.AddObject("txt_4c_CodImpB" + loc_cFatB, "TextBox")
+            WITH loc_oAba.Controls(loc_oAba.ControlCount)
+                .ControlSource = "crSigCnFN2.impclas" + loc_cFatB
+                .Top = loc_nTopB
+                .Left = 577
+                .Width = 100
+                .Height = 18
+                .FontName = "Tahoma"
+                .FontSize = 8
+                .SpecialEffect = 1
+                .Format = "K"
+                .InputMask = ""
+                .Visible = .T.
+            ENDWITH
+
+            IF loc_nFatB <= 12
+                loc_oAba.AddObject("chk_4c_ImpB" + loc_cFatB, "CheckBox")
+                WITH loc_oAba.Controls(loc_oAba.ControlCount)
+                    .ControlSource = "crSigCnFN2.impc" + loc_cFatB
+                    .Caption = ""
+                    .Top = loc_nTopB
+                    .Left = 687
+                    .Width = 19
+                    .Height = 16
+                    .FontName = "Tahoma"
+                    .FontSize = 7
+                    .Visible = .T.
+                    .Sparse = .F.
+                    .Alignment = 0
+                    .ReadOnly = .F.
+                ENDWITH
+            ENDIF
+
+            loc_nFatB = loc_nFatB + 1
+        ENDFOR
+
+        *-- No NF (top=202)
+        loc_oAba.AddObject("lbl_4c_LblNoNF", "Label")
+        WITH loc_oAba.lbl_4c_LblNoNF
+            .Caption = "N" + CHR(186) + " NF"
+            .Top = 202
+            .Left = 68
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_NoNFL", "TextBox")
+        WITH loc_oAba.txt_4c_NoNFL
+            .ControlSource = "crSigCnFNf.lnfsai"
+            .Top = 213
+            .Left = 36
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_NoNFX", "Label")
+        WITH loc_oAba.lbl_4c_NoNFX
+            .Caption = "x"
+            .Top = 215
+            .Left = 79
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_NoNFC", "TextBox")
+        WITH loc_oAba.txt_4c_NoNFC
+            .ControlSource = "crSigCnFNf.cnfsai"
+            .Top = 213
+            .Left = 85
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        *-- Angulo NF (top=202)
+        loc_oAba.AddObject("cbo_4c_AngNF", "ComboBox")
+        WITH loc_oAba.cbo_4c_AngNF
+            .Top = 213
+            .Left = 128
+            .Width = 46
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .Visible = .T.
+            .RowSourceType = 1
+            .RowSource = "0,90,180,270"
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_LblAngNF", "Label")
+        WITH loc_oAba.lbl_4c_LblAngNF
+            .Caption = CHR(226) + "ngulo"
+            .Top = 202
+            .Left = 134
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        *-- Valor Total da Nota (top=202)
+        loc_oAba.AddObject("lbl_4c_LblVlNotaR", "Label")
+        WITH loc_oAba.lbl_4c_LblVlNotaR
+            .Caption = "Valor Total da Nota"
+            .Top = 202
+            .Left = 183
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_VlNotaRL", "TextBox")
+        WITH loc_oAba.txt_4c_VlNotaRL
+            .ControlSource = "crSigCnFNf.ltnota"
+            .Top = 213
+            .Left = 186
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_VlNotaRX", "Label")
+        WITH loc_oAba.lbl_4c_VlNotaRX
+            .Caption = "x"
+            .Top = 215
+            .Left = 229
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_VlNotaRC", "TextBox")
+        WITH loc_oAba.txt_4c_VlNotaRC
+            .ControlSource = "crSigCnFNf.ctnota"
+            .Top = 213
+            .Left = 235
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("cbo_4c_AngVlNota", "ComboBox")
+        WITH loc_oAba.cbo_4c_AngVlNota
+            .Top = 213
+            .Left = 281
+            .Width = 46
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .Visible = .T.
+            .RowSourceType = 1
+            .RowSource = "0,90,180,270"
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_LblAngVlNota", "Label")
+        WITH loc_oAba.lbl_4c_LblAngVlNota
+            .Caption = CHR(226) + "ngulo"
+            .Top = 202
+            .Left = 286
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        *-- No Selo (top=202)
+        loc_oAba.AddObject("lbl_4c_LblNoSelo", "Label")
+        WITH loc_oAba.lbl_4c_LblNoSelo
+            .Caption = "N" + CHR(186) + " Selo"
+            .Top = 202
+            .Left = 374
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_NoSeloL", "TextBox")
+        WITH loc_oAba.txt_4c_NoSeloL
+            .ControlSource = "crSigCnFNf.lcnfselo"
+            .Top = 213
+            .Left = 343
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_NoSeloX", "Label")
+        WITH loc_oAba.lbl_4c_NoSeloX
+            .Caption = "x"
+            .Top = 215
+            .Left = 386
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_NoSeloC", "TextBox")
+        WITH loc_oAba.txt_4c_NoSeloC
+            .ControlSource = "crSigCnFNf.lcselo"
+            .Top = 213
+            .Left = 392
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("cbo_4c_AngSelo", "ComboBox")
+        WITH loc_oAba.cbo_4c_AngSelo
+            .Top = 213
+            .Left = 435
+            .Width = 46
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .Visible = .T.
+            .RowSourceType = 1
+            .RowSource = "0,90,180,270"
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_LblAngSelo", "Label")
+        WITH loc_oAba.lbl_4c_LblAngSelo
+            .Caption = CHR(226) + "ngulo"
+            .Top = 202
+            .Left = 440
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        *-- No NF no Selo (top=202)
+        loc_oAba.AddObject("lbl_4c_LblNFSelo", "Label")
+        WITH loc_oAba.lbl_4c_LblNFSelo
+            .Caption = "N" + CHR(186) + " NF no Selo"
+            .Top = 202
+            .Left = 510
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_NFSeloL", "TextBox")
+        WITH loc_oAba.txt_4c_NFSeloL
+            .ControlSource = "crSigCnFNf.lnfsai"
+            .Top = 213
+            .Left = 499
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_NFSeloX", "Label")
+        WITH loc_oAba.lbl_4c_NFSeloX
+            .Caption = "x"
+            .Top = 215
+            .Left = 542
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_NFSeloC", "TextBox")
+        WITH loc_oAba.txt_4c_NFSeloC
+            .ControlSource = "crSigCnFNf.cnfsai"
+            .Top = 213
+            .Left = 548
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("cbo_4c_AngNFSelo", "ComboBox")
+        WITH loc_oAba.cbo_4c_AngNFSelo
+            .Top = 213
+            .Left = 599
+            .Width = 46
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .Visible = .T.
+            .RowSourceType = 1
+            .RowSource = "0,90,180,270"
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_LblAngNFSelo", "Label")
+        WITH loc_oAba.lbl_4c_LblAngNFSelo
+            .Caption = CHR(226) + "ngulo"
+            .Top = 202
+            .Left = 603
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        *-- Observacoes Shape (top=239)
+        loc_oAba.AddObject("shp_4c_ObsShape", "Shape")
+        WITH loc_oAba.shp_4c_ObsShape
+            .Top = 239
+            .Left = 34
+            .Width = 277
+            .Height = 37
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_LblObs", "Label")
+        WITH loc_oAba.lbl_4c_LblObs
+            .Caption = "Observa" + CHR(231) + CHR(245) + "es"
+            .Top = 242
+            .Left = 44
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_ObsL", "TextBox")
+        WITH loc_oAba.txt_4c_ObsL
+            .ControlSource = "crSigCnFNf.tamlinobs"
+            .Top = 254
+            .Left = 44
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_ObsX", "Label")
+        WITH loc_oAba.lbl_4c_ObsX
+            .Caption = "x"
+            .Top = 256
+            .Left = 87
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_ObsC", "TextBox")
+        WITH loc_oAba.txt_4c_ObsC
+            .ControlSource = "crSigCnFNf.tamcolobs"
+            .Top = 254
+            .Left = 93
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_LblNoCols2", "Label")
+        WITH loc_oAba.lbl_4c_LblNoCols2
+            .Caption = "No. Colunas"
+            .Top = 242
+            .Left = 185
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_ObsNoCol", "TextBox")
+        WITH loc_oAba.txt_4c_ObsNoCol
+            .ControlSource = "crSigCnFNf.nldser"
+            .Top = 254
+            .Left = 194
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_LblNoLins2", "Label")
+        WITH loc_oAba.lbl_4c_LblNoLins2
+            .Caption = "No. Linhas"
+            .Top = 242
+            .Left = 251
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_ObsNoLin", "TextBox")
+        WITH loc_oAba.txt_4c_ObsNoLin
+            .ControlSource = "crSigCnFNf.ncdser"
+            .Top = 254
+            .Left = 256
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        *-- Angulo obs
+        loc_oAba.AddObject("cbo_4c_AngObs", "ComboBox")
+        WITH loc_oAba.cbo_4c_AngObs
+            .Top = 254
+            .Left = 137
+            .Width = 46
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .Visible = .T.
+            .RowSourceType = 1
+            .RowSource = "0,90,180,270"
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_LblAngObs", "Label")
+        WITH loc_oAba.lbl_4c_LblAngObs
+            .Caption = CHR(226) + "ngulo"
+            .Top = 243
+            .Left = 143
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        *-- N Pedidos SubNivel (top=242, left=321 e left=486)
+        loc_oAba.AddObject("lbl_4c_LblNPedSub1", "Label")
+        WITH loc_oAba.lbl_4c_LblNPedSub1
+            .Caption = "N" + CHR(186) + " Pedidos (SubNivel)"
+            .Top = 242
+            .Left = 321
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_NPedSubL1", "TextBox")
+        WITH loc_oAba.txt_4c_NPedSubL1
+            .ControlSource = "crSigCnFNf.ldupnum"
+            .Top = 254
+            .Left = 332
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_NPedSubX1", "Label")
+        WITH loc_oAba.lbl_4c_NPedSubX1
+            .Caption = "x"
+            .Top = 256
+            .Left = 375
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_NPedSubC1", "TextBox")
+        WITH loc_oAba.txt_4c_NPedSubC1
+            .ControlSource = "crSigCnFNf.cdupnum"
+            .Top = 254
+            .Left = 381
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_LblNPedSub2", "Label")
+        WITH loc_oAba.lbl_4c_LblNPedSub2
+            .Caption = "N" + CHR(186) + " Pedidos (SubNivel)"
+            .Top = 242
+            .Left = 486
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_NPedSubL2", "TextBox")
+        WITH loc_oAba.txt_4c_NPedSubL2
+            .ControlSource = "crSigCnFNf.ldupnum"
+            .Top = 254
+            .Left = 499
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_NPedSubX2", "Label")
+        WITH loc_oAba.lbl_4c_NPedSubX2
+            .Caption = "x"
+            .Top = 256
+            .Left = 542
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_NPedSubC2", "TextBox")
+        WITH loc_oAba.txt_4c_NPedSubC2
+            .ControlSource = "crSigCnFNf.cdupnum"
+            .Top = 254
+            .Left = 548
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("cbo_4c_AngNPed2", "ComboBox")
+        WITH loc_oAba.cbo_4c_AngNPed2
+            .Top = 254
+            .Left = 599
+            .Width = 46
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .Visible = .T.
+            .RowSourceType = 1
+            .RowSource = "0,90,180,270"
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_LblAngNPed2", "Label")
+        WITH loc_oAba.lbl_4c_LblAngNPed2
+            .Caption = CHR(226) + "ngulo"
+            .Top = 243
+            .Left = 603
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConfigurarFaturaTab()
+        LOCAL loc_oAba
+        loc_oAba = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page8
+
+        *-- Data de Emissao (top=31)
+        loc_oAba.AddObject("lbl_4c_LblFatDtEmi", "Label")
+        WITH loc_oAba.lbl_4c_LblFatDtEmi
+            .Caption   = "Data de Emiss" + CHR(227) + "o"
+            .Top       = 31
+            .Left      = 99
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_FatDtEmiL", "TextBox")
+        WITH loc_oAba.txt_4c_FatDtEmiL
+            .ControlSource = "crSigCnFNf.ldtemi"
+            .Top = 43
+            .Left = 99
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_FatDtEmiX", "Label")
+        WITH loc_oAba.lbl_4c_FatDtEmiX
+            .Caption = "x"
+            .Top = 45
+            .Left = 142
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_FatDtEmiC", "TextBox")
+        WITH loc_oAba.txt_4c_FatDtEmiC
+            .ControlSource = "crSigCnFNf.cdtemi"
+            .Top = 43
+            .Left = 148
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        *-- No NF Fatura (top=31)
+        loc_oAba.AddObject("lbl_4c_LblNFatNum", "Label")
+        WITH loc_oAba.lbl_4c_LblNFatNum
+            .Caption = "N" + CHR(250) + "mero N.F. Fatura"
+            .Top = 31
+            .Left = 231
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_NFatNumL", "TextBox")
+        WITH loc_oAba.txt_4c_NFatNumL
+            .ControlSource = "crSigCnFNf.lfatnum"
+            .Top = 43
+            .Left = 231
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_NFatNumX", "Label")
+        WITH loc_oAba.lbl_4c_NFatNumX
+            .Caption = "x"
+            .Top = 45
+            .Left = 274
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_NFatNumC", "TextBox")
+        WITH loc_oAba.txt_4c_NFatNumC
+            .ControlSource = "crSigCnFNf.cfatnum"
+            .Top = 43
+            .Left = 280
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        *-- Data de Saida (top=67)
+        loc_oAba.AddObject("lbl_4c_LblFatDtSai", "Label")
+        WITH loc_oAba.lbl_4c_LblFatDtSai
+            .Caption = "Data de Sa" + CHR(237) + "da"
+            .Top = 67
+            .Left = 98
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_FatDtSaiL", "TextBox")
+        WITH loc_oAba.txt_4c_FatDtSaiL
+            .ControlSource = "crSigCnFNf.ldtsaidas"
+            .Top = 79
+            .Left = 98
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_FatDtSaiX", "Label")
+        WITH loc_oAba.lbl_4c_FatDtSaiX
+            .Caption = "x"
+            .Top = 81
+            .Left = 141
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_FatDtSaiC", "TextBox")
+        WITH loc_oAba.txt_4c_FatDtSaiC
+            .ControlSource = "crSigCnFNf.cdtsaidas"
+            .Top = 79
+            .Left = 147
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        *-- Numero Duplicata (top=67)
+        loc_oAba.AddObject("lbl_4c_LblDuplNum", "Label")
+        WITH loc_oAba.lbl_4c_LblDuplNum
+            .Caption = "N" + CHR(250) + "mero Duplicata"
+            .Top = 67
+            .Left = 231
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_DuplNumL", "TextBox")
+        WITH loc_oAba.txt_4c_DuplNumL
+            .ControlSource = "crSigCnFNf.ldupnum"
+            .Top = 79
+            .Left = 231
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_DuplNumX", "Label")
+        WITH loc_oAba.lbl_4c_DuplNumX
+            .Caption = "x"
+            .Top = 81
+            .Left = 274
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_DuplNumC", "TextBox")
+        WITH loc_oAba.txt_4c_DuplNumC
+            .ControlSource = "crSigCnFNf.cdupnum"
+            .Top = 79
+            .Left = 280
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        *-- Valor Total da Nota (top=103)
+        loc_oAba.AddObject("lbl_4c_LblFatVlNota", "Label")
+        WITH loc_oAba.lbl_4c_LblFatVlNota
+            .Caption = "Valor Total da Nota"
+            .Top = 103
+            .Left = 99
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_FatVlNotaL", "TextBox")
+        WITH loc_oAba.txt_4c_FatVlNotaL
+            .ControlSource = "crSigCnFNf.ltnota"
+            .Top = 115
+            .Left = 99
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_FatVlNotaX", "Label")
+        WITH loc_oAba.lbl_4c_FatVlNotaX
+            .Caption = "x"
+            .Top = 117
+            .Left = 142
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_FatVlNotaC", "TextBox")
+        WITH loc_oAba.txt_4c_FatVlNotaC
+            .ControlSource = "crSigCnFNf.ctnota"
+            .Top = 115
+            .Left = 148
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        *-- Valor por Extenso (top=103)
+        loc_oAba.AddObject("lbl_4c_LblValExt", "Label")
+        WITH loc_oAba.lbl_4c_LblValExt
+            .Caption = "Valor por Extenso"
+            .Top = 103
+            .Left = 231
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_ValExtL", "TextBox")
+        WITH loc_oAba.txt_4c_ValExtL
+            .ControlSource = "crSigCnFNf.lvalext"
+            .Top = 115
+            .Left = 231
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_ValExtX", "Label")
+        WITH loc_oAba.lbl_4c_ValExtX
+            .Caption = "x"
+            .Top = 117
+            .Left = 274
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_ValExtC", "TextBox")
+        WITH loc_oAba.txt_4c_ValExtC
+            .ControlSource = "crSigCnFNf.cvalext"
+            .Top = 115
+            .Left = 280
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        *-- Vencimento (top=138)
+        loc_oAba.AddObject("lbl_4c_LblFatVecto", "Label")
+        WITH loc_oAba.lbl_4c_LblFatVecto
+            .Caption = "Vencimento "
+            .Top = 138
+            .Left = 99
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_FatVectoL", "TextBox")
+        WITH loc_oAba.txt_4c_FatVectoL
+            .ControlSource = "crSigCnFNf.lfatvec"
+            .Top = 150
+            .Left = 99
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_FatVectoX", "Label")
+        WITH loc_oAba.lbl_4c_FatVectoX
+            .Caption = "x"
+            .Top = 152
+            .Left = 142
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_FatVectoC", "TextBox")
+        WITH loc_oAba.txt_4c_FatVectoC
+            .ControlSource = "crSigCnFNf.cfatvec"
+            .Top = 150
+            .Left = 148
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConfigurarServicosTab()
+        LOCAL loc_oAba
+        loc_oAba = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page9
+
+        *-- Descricao Servicos (top=30)
+        loc_oAba.AddObject("lbl_4c_LblSrvDesc", "Label")
+        WITH loc_oAba.lbl_4c_LblSrvDesc
+            .Caption   = "Descri" + CHR(231) + CHR(227) + "o Servi" + CHR(231) + "os"
+            .Top       = 30
+            .Left      = 105
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_SrvDescL", "TextBox")
+        WITH loc_oAba.txt_4c_SrvDescL
+            .ControlSource = "crSigCnFNf.ldescser"
+            .Top = 43
+            .Left = 107
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_SrvDescX", "Label")
+        WITH loc_oAba.lbl_4c_SrvDescX
+            .Caption = "x"
+            .Top = 45
+            .Left = 150
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_SrvDescC", "TextBox")
+        WITH loc_oAba.txt_4c_SrvDescC
+            .ControlSource = "crSigCnFNf.cdescser"
+            .Top = 43
+            .Left = 156
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        *-- No. Colunas (top=31)
+        loc_oAba.AddObject("lbl_4c_LblSrvNoCols", "Label")
+        WITH loc_oAba.lbl_4c_LblSrvNoCols
+            .Caption = "No. Colunas"
+            .Top = 31
+            .Left = 206
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_SrvNoCols", "TextBox")
+        WITH loc_oAba.txt_4c_SrvNoCols
+            .ControlSource = "crSigCnFNf.nldser"
+            .Top = 43
+            .Left = 214
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        *-- No. Linhas (top=31)
+        loc_oAba.AddObject("lbl_4c_LblSrvNoLins", "Label")
+        WITH loc_oAba.lbl_4c_LblSrvNoLins
+            .Caption = "No. Linhas"
+            .Top = 31
+            .Left = 273
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_SrvNoLins", "TextBox")
+        WITH loc_oAba.txt_4c_SrvNoLins
+            .ControlSource = "crSigCnFNf.ncdser"
+            .Top = 43
+            .Left = 273
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        *-- Valor I.S.S (top=81)
+        loc_oAba.AddObject("lbl_4c_LblValISS", "Label")
+        WITH loc_oAba.lbl_4c_LblValISS
+            .Caption = "Valor I.S.S"
+            .Top = 81
+            .Left = 107
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_ValISSL", "TextBox")
+        WITH loc_oAba.txt_4c_ValISSL
+            .ControlSource = "crSigCnFNf.lvaliss"
+            .Top = 93
+            .Left = 107
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_ValISSX", "Label")
+        WITH loc_oAba.lbl_4c_ValISSX
+            .Caption = "x"
+            .Top = 95
+            .Left = 150
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_ValISSC", "TextBox")
+        WITH loc_oAba.txt_4c_ValISSC
+            .ControlSource = "crSigCnFNf.cvaliss"
+            .Top = 93
+            .Left = 156
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        *-- Valor Total Servicos (top=113)
+        loc_oAba.AddObject("lbl_4c_LblValSrv", "Label")
+        WITH loc_oAba.lbl_4c_LblValSrv
+            .Caption = "Valor Total Servi" + CHR(231) + "os"
+            .Top = 113
+            .Left = 107
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_ValSrvL", "TextBox")
+        WITH loc_oAba.txt_4c_ValSrvL
+            .ControlSource = "crSigCnFNf.lvalser"
+            .Top = 125
+            .Left = 107
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_ValSrvX", "Label")
+        WITH loc_oAba.lbl_4c_ValSrvX
+            .Caption = "x"
+            .Top = 127
+            .Left = 150
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_ValSrvC", "TextBox")
+        WITH loc_oAba.txt_4c_ValSrvC
+            .ControlSource = "crSigCnFNf.cvalser"
+            .Top = 125
+            .Left = 156
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ConfigurarOutrosTab()
+        LOCAL loc_oAba
+        loc_oAba = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page10
+
+        *-- Shape (top=37, left=399 -- Dados da Operacao)
+        loc_oAba.AddObject("shp_4c_OutShape", "Shape")
+        WITH loc_oAba.shp_4c_OutShape
+            .Top = 37
+            .Left = 399
+            .Width = 226
+            .Height = 119
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_LblDadosOp", "Label")
+        WITH loc_oAba.lbl_4c_LblDadosOp
+            .Caption   = "Dados da Opera" + CHR(231) + CHR(227) + "o"
+            .Top       = 39
+            .Left      = 405
+            .FontName  = "Tahoma"
+            .FontSize  = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90, 90, 90)
+            .AutoSize  = .T.
+            .Visible   = .T.
+        ENDWITH
+
+        *-- Especie Padrao (top=67)
+        loc_oAba.AddObject("lbl_4c_LblEspPad", "Label")
+        WITH loc_oAba.lbl_4c_LblEspPad
+            .Caption = "Esp" + CHR(233) + "cie Padr" + CHR(227) + "o : "
+            .Top = 67
+            .Left = 156
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_EspPad", "TextBox")
+        WITH loc_oAba.txt_4c_EspPad
+            .ControlSource = "crSigCnFNf.esppads"
+            .Top = 65
+            .Left = 243
+            .Width = 92
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = ""
+            .Visible = .T.
+        ENDWITH
+
+        *-- Marca Padrao (top=42)
+        loc_oAba.AddObject("lbl_4c_LblMarPad", "Label")
+        WITH loc_oAba.lbl_4c_LblMarPad
+            .Caption = "Marca Padr" + CHR(227) + "o : "
+            .Top = 42
+            .Left = 163
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_MarPad", "TextBox")
+        WITH loc_oAba.txt_4c_MarPad
+            .ControlSource = "crSigCnFNf.marpads"
+            .Top = 40
+            .Left = 243
+            .Width = 92
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = ""
+            .Visible = .T.
+        ENDWITH
+
+        *-- Fator de Peso Bruto (top=93)
+        loc_oAba.AddObject("lbl_4c_LblFatPBru", "Label")
+        WITH loc_oAba.lbl_4c_LblFatPBru
+            .Caption = "Fator de Peso Bruto : "
+            .Top = 93
+            .Left = 133
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_FatPBru", "TextBox")
+        WITH loc_oAba.txt_4c_FatPBru
+            .ControlSource = "crSigCnFNf.fatbrutos"
+            .Top = 91
+            .Left = 243
+            .Width = 58
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        *-- Peso por Volume (top=117)
+        loc_oAba.AddObject("lbl_4c_LblPesVol", "Label")
+        WITH loc_oAba.lbl_4c_LblPesVol
+            .Caption = "Peso por Volume : "
+            .Top = 117
+            .Left = 150
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_PesVol", "TextBox")
+        WITH loc_oAba.txt_4c_PesVol
+            .ControlSource = "crSigCnFNf.pesovols"
+            .Top = 115
+            .Left = 243
+            .Width = 66
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_LblGrs", "Label")
+        WITH loc_oAba.lbl_4c_LblGrs
+            .Caption = "( grs )"
+            .Top = 117
+            .Left = 314
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        *-- Empresa (top=140)
+        loc_oAba.AddObject("lbl_4c_LblEmpOpc", "Label")
+        WITH loc_oAba.lbl_4c_LblEmpOpc
+            .Caption = "Empresa  : "
+            .Top = 143
+            .Left = 185
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_EmpPad", "TextBox")
+        WITH loc_oAba.txt_4c_EmpPad
+            .ControlSource = "crSigCnFNf.emps"
+            .Top = 140
+            .Left = 243
+            .Width = 31
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = ""
+            .Visible = .T.
+        ENDWITH
+
+        *-- Validar Sequencia de Notas (top=162)
+        loc_oAba.AddObject("chk_4c_ValidSeqNota", "CheckBox")
+        WITH loc_oAba.chk_4c_ValidSeqNota
+            .ControlSource = "crSigCnFNf.vseqnota"
+            .Caption = "Validar Sequ" + CHR(234) + "ncia de Notas :"
+            .Top = 162
+            .Left = 88
+            .Width = 155
+            .Height = 15
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .Visible = .T.
+            .Sparse = .F.
+            .Alignment = 0
+            .ReadOnly = .F.
+        ENDWITH
+
+        *-- Dados da Operacao - Localizacao (top=53, left=405)
+        loc_oAba.AddObject("lbl_4c_LblLoc", "Label")
+        WITH loc_oAba.lbl_4c_LblLoc
+            .Caption = "Localiza" + CHR(231) + CHR(227) + "o"
+            .Top = 53
+            .Left = 405
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_LocL", "TextBox")
+        WITH loc_oAba.txt_4c_LocL
+            .ControlSource = "crSigCnFNf.loploc"
+            .Top = 65
+            .Left = 405
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_LocX", "Label")
+        WITH loc_oAba.lbl_4c_LocX
+            .Caption = "x"
+            .Top = 67
+            .Left = 448
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_LocC", "TextBox")
+        WITH loc_oAba.txt_4c_LocC
+            .ControlSource = "crSigCnFNf.coploc"
+            .Top = 65
+            .Left = 454
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        *-- Vendedor (top=85, left=405)
+        loc_oAba.AddObject("lbl_4c_LblVend", "Label")
+        WITH loc_oAba.lbl_4c_LblVend
+            .Caption = "Vendedor"
+            .Top = 85
+            .Left = 405
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_VendL", "TextBox")
+        WITH loc_oAba.txt_4c_VendL
+            .ControlSource = "crSigCnFNf.lopnvd"
+            .Top = 97
+            .Left = 405
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_VendX", "Label")
+        WITH loc_oAba.lbl_4c_VendX
+            .Caption = "x"
+            .Top = 99
+            .Left = 448
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_VendC", "TextBox")
+        WITH loc_oAba.txt_4c_VendC
+            .ControlSource = "crSigCnFNf.copnvd"
+            .Top = 97
+            .Left = 454
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        *-- Nome do Vendedor (top=85, left=507)
+        loc_oAba.AddObject("lbl_4c_LblNomeVend", "Label")
+        WITH loc_oAba.lbl_4c_LblNomeVend
+            .Caption = "Nome do Vendedor"
+            .Top = 85
+            .Left = 507
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_NomeVendL", "TextBox")
+        WITH loc_oAba.txt_4c_NomeVendL
+            .ControlSource = "crSigCnFNf.lopcvd"
+            .Top = 97
+            .Left = 507
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_NomeVendX", "Label")
+        WITH loc_oAba.lbl_4c_NomeVendX
+            .Caption = "x"
+            .Top = 99
+            .Left = 550
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_NomeVendC", "TextBox")
+        WITH loc_oAba.txt_4c_NomeVendC
+            .ControlSource = "crSigCnFNf.copcvd"
+            .Top = 97
+            .Left = 556
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        *-- Responsavel (top=117, left=405)
+        loc_oAba.AddObject("lbl_4c_LblResp", "Label")
+        WITH loc_oAba.lbl_4c_LblResp
+            .Caption = "Respons" + CHR(225) + "vel"
+            .Top = 117
+            .Left = 405
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_RespL", "TextBox")
+        WITH loc_oAba.txt_4c_RespL
+            .ControlSource = "crSigCnFNf.lopnrp"
+            .Top = 129
+            .Left = 405
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_RespX", "Label")
+        WITH loc_oAba.lbl_4c_RespX
+            .Caption = "x"
+            .Top = 131
+            .Left = 448
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_RespC", "TextBox")
+        WITH loc_oAba.txt_4c_RespC
+            .ControlSource = "crSigCnFNf.copnrp"
+            .Top = 129
+            .Left = 454
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        *-- Nome do Responsavel (top=117, left=507)
+        loc_oAba.AddObject("lbl_4c_LblNomeResp", "Label")
+        WITH loc_oAba.lbl_4c_LblNomeResp
+            .Caption = "Nome do Respons" + CHR(225) + "vel"
+            .Top = 117
+            .Left = 507
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_NomeRespL", "TextBox")
+        WITH loc_oAba.txt_4c_NomeRespL
+            .ControlSource = "crSigCnFNf.lopcvd"
+            .Top = 129
+            .Left = 507
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("lbl_4c_NomeRespX", "Label")
+        WITH loc_oAba.lbl_4c_NomeRespX
+            .Caption = "x"
+            .Top = 131
+            .Left = 550
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_NomeRespC", "TextBox")
+        WITH loc_oAba.txt_4c_NomeRespC
+            .ControlSource = "crSigCnFNf.copcvd"
+            .Top = 129
+            .Left = 556
+            .Width = 41
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+
+        *-- N Vias (top=184)
+        loc_oAba.AddObject("lbl_4c_LblNVias", "Label")
+        WITH loc_oAba.lbl_4c_LblNVias
+            .Caption = "N" + CHR(186) + " Vias : "
+            .Top = 187
+            .Left = 195
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_NVias", "TextBox")
+        WITH loc_oAba.txt_4c_NVias
+            .ControlSource = "crSigCnFNf.tipos"
+            .Top = 184
+            .Left = 243
+            .Width = 31
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = ""
+            .Visible = .T.
+        ENDWITH
+
+        *-- Fator Proporcao Linha (top=205)
+        loc_oAba.AddObject("lbl_4c_LblFatPropLin", "Label")
+        WITH loc_oAba.lbl_4c_LblFatPropLin
+            .Caption = "Fator Propor" + CHR(231) + CHR(227) + "o Linha : "
+            .Top = 205
+            .Left = 123
+            .FontName = "Tahoma"
+            .FontSize = 7
+            .BackStyle = 0
+            .ForeColor = RGB(90,90,90)
+            .AutoSize = .T.
+            .Visible = .T.
+        ENDWITH
+
+        loc_oAba.AddObject("txt_4c_FatPropLin", "TextBox")
+        WITH loc_oAba.txt_4c_FatPropLin
+            .ControlSource = "crSigCnFNf.tamanhos"
+            .Top = 203
+            .Left = 243
+            .Width = 66
+            .Height = 18
+            .FontName = "Tahoma"
+            .FontSize = 8
+            .SpecialEffect = 1
+            .Format = "K"
+            .InputMask = "999.99"
+            .Visible = .T.
+        ENDWITH
+    ENDPROC
+
+
+
+
+    *--------------------------------------------------------------------------
+    PROCEDURE Destroy()
+        IF USED("crSigCnFNf")
+            USE IN crSigCnFNf
+        ENDIF
+        IF USED("crSigCnFN2")
+            USE IN crSigCnFN2
+        ENDIF
+        IF USED("cursor_4c_Dados")
+            USE IN cursor_4c_Dados
+        ENDIF
+        IF VARTYPE(THIS.this_oBusinessObject) = "O"
+            THIS.this_oBusinessObject = .NULL.
+        ENDIF
+        DODEFAULT()
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    PROTECTED FUNCTION ObterControle(par_oConteiner, par_cNome)
+        LOCAL loc_nI, loc_oAchado
+        loc_oAchado = .NULL.
+        FOR loc_nI = 1 TO par_oConteiner.ControlCount
+            IF UPPER(par_oConteiner.Controls(loc_nI).Name) = UPPER(par_cNome)
+                loc_oAchado = par_oConteiner.Controls(loc_nI)
+                EXIT
+            ENDIF
+        ENDFOR
+        RETURN loc_oAchado
+    ENDPROC
+
+ENDDEFINE
+
+
+### BO (C:\4c\projeto\app\classes\NflBO.prg):
+*==============================================================================
+* NflBO.prg - Business Object de Configuracao de Nota Fiscal
+* Tabela principal: SigCnFN2 (PK: cidchaves)
+* Tabela auxiliar:  SigCnFNf (posicoes de colunas)
+*==============================================================================
+
+DEFINE CLASS NflBO AS BusinessBase
+
+    *-- =========================================================================
+    *-- Identificacao / chave primaria
+    *-- =========================================================================
+    this_cCidchaves    = ""   && char(20) PK
+    this_cEmps         = ""   && char(3)  empresa
+    this_cSeries       = ""   && char(3)  serie da NF
+
+    *-- =========================================================================
+    *-- Cabecalho - Destinatario (posicoes de coluna no formulario impresso)
+    *-- =========================================================================
+    this_cCtitent      = ""   && char(20)    titulo (ex. "Destinatario/Remetente")
+    this_nLendent      = 0    && numeric(9,2) col. inicio logradouro
+    this_nCendent      = 0    && numeric(9,2) col. comprimento logradouro
+    this_nLbaient      = 0    && numeric(9,2) col. inicio bairro
+    this_nCbaient      = 0    && numeric(9,2) col. comprimento bairro
+    this_nLmunent      = 0    && numeric(9,2) col. inicio municipio
+    this_nCmunent      = 0    && numeric(9,2) col. comprimento municipio
+    this_nLestent      = 0    && numeric(9,2) col. inicio estado
+    this_nCestent      = 0    && numeric(9,2) col. comprimento estado
+    this_nLcepent      = 0    && numeric(9,2) col. inicio CEP
+    this_nCcepent      = 0    && numeric(9,2) col. comprimento CEP
+    this_nLfoneent     = 0    && numeric(9,2) col. inicio fone
+    this_nCfoneent     = 0    && numeric(9,2) col. comprimento fone
+    this_nLiniped      = 0    && numeric(9,2) col. inicio inscricao estadual
+    this_nCiniped      = 0    && numeric(9,2) col. comprimento inscricao estadual
+    this_nLendtite     = 0    && numeric(11,2) col. inicio endereco titulo
+    this_nCendtite     = 0    && numeric(11,2) col. comprimento endereco titulo
+
+    *-- =========================================================================
+    *-- Empresa emitente (posicoes de coluna no formulario impresso)
+    *-- =========================================================================
+    this_nLempnome     = 0    && numeric(9,2) col. inicio nome empresa
+    this_nCempnome     = 0    && numeric(9,2) col. comprimento nome empresa
+    this_nLempcgc      = 0    && numeric(9,2) col. inicio CGC/CNPJ
+    this_nCempcgc      = 0    && numeric(9,2) col. comprimento CGC/CNPJ
+    this_nLempiest     = 0    && numeric(9,2) col. inicio insc. estadual
+    this_nCempiest     = 0    && numeric(9,2) col. comprimento insc. estadual
+    this_nLempender    = 0    && numeric(9,2) col. inicio endereco
+    this_nCempender    = 0    && numeric(9,2) col. comprimento endereco
+    this_nLempbair     = 0    && numeric(9,2) col. inicio bairro
+    this_nCempbair     = 0    && numeric(9,2) col. comprimento bairro
+    this_nLempmuni     = 0    && numeric(9,2) col. inicio municipio
+    this_nCempmuni     = 0    && numeric(9,2) col. comprimento municipio
+    this_nLempcep      = 0    && numeric(9,2) col. inicio CEP
+    this_nCempcep      = 0    && numeric(9,2) col. comprimento CEP
+    this_nLempesta     = 0    && numeric(9,2) col. inicio UF
+    this_nCempesta     = 0    && numeric(9,2) col. comprimento UF
+    this_nLempfone     = 0    && numeric(9,2) col. inicio fone
+    this_nCempfone     = 0    && numeric(9,2) col. comprimento fone
+
+    *-- =========================================================================
+    *-- Configuracao geral de impressao
+    *-- =========================================================================
+    this_nNvias        = 0    && int          numero de vias
+    this_nNtpmargems   = 0    && int          tipo de margens
+    this_lVseqnota     = .F.  && bit          usa sequencia de nota
+    this_cContsac      = ""   && char(20)     contador SAC
+    this_nLsac         = 0    && numeric(9,2) col. inicio SAC
+    this_nCsac         = 0    && numeric(9,2) col. comprimento SAC
+    this_nLxinc        = 0    && numeric(9,2) col. inicio excl. inc.
+    this_nCxinc        = 0    && numeric(9,2) col. comprimento excl. inc.
+    this_nLenxinc      = 0    && numeric(9,2) col. extensao excl. inc.
+    this_nNftgdi1s     = 0    && numeric(9,3) configuracao GDI
+    this_nTotfsize     = 0    && numeric(2,0) tamanho total folha
+    this_nAtnotar      = 0    && int          campo adicional nota rodape
+
+    *-- =========================================================================
+    *-- Desdobramento
+    *-- =========================================================================
+    this_nCopcrp       = 0    && numeric(9,2) col. posicao corpro
+    this_nLopcrp       = 0    && numeric(9,2) col. largura corpro
+    this_nCopcvd       = 0    && numeric(9,2) col. posicao covenda
+    this_nLopcvd       = 0    && numeric(9,2) col. largura covenda
+    this_nCoploc       = 0    && numeric(9,2) col. posicao local
+    this_nLoploc       = 0    && numeric(9,2) col. largura local
+    this_nCopnrp       = 0    && numeric(9,2) col. posicao nrpro
+    this_nLopnrp       = 0    && numeric(9,2) col. largura nrpro
+    this_nCopnvd       = 0    && numeric(9,2) col. posicao nvenda
+    this_nLopnvd       = 0    && numeric(9,2) col. largura nvenda
+    this_nLbipi        = 0    && numeric(9,2) col. inicio base IPI
+    this_nCbipi        = 0    && numeric(9,2) col. comprimento base IPI
+
+    *-- =========================================================================
+    *-- Produtos - colunas aclas1..aclas7 (posicoes standard)
+    *-- =========================================================================
+    this_nA2nf         = 0    && int          posicao 2a NF
+    this_nAclas1       = 0    && int          posicao coluna classe 1
+    this_nAclas2       = 0    && int          posicao coluna classe 2
+    this_nAclas3       = 0    && int          posicao coluna classe 3
+    this_nAclas4       = 0    && int          posicao coluna classe 4
+    this_nAclas5       = 0    && int          posicao coluna classe 5
+    this_nAclas6       = 0    && int          posicao coluna classe 6
+    this_nAclas7       = 0    && int          posicao coluna classe 7
+    this_nAiniped      = 0    && int          posicao coluna inscr. ped.
+    this_nAiniped2     = 0    && int          posicao coluna inscr. ped. 2
+    this_nAnfselo      = 0    && int          posicao coluna NF selo
+    this_nAobs         = 0    && int          posicao coluna observacoes
+    this_nAselo        = 0    && int          posicao coluna selo
+
+    *-- =========================================================================
+    *-- Produtos - colunas adicionais aclas8..aclas12 (posicoes/larguras)
+    *-- =========================================================================
+    this_nAclas8       = 0    && int          posicao coluna classe 8
+    this_nAclas9       = 0    && int          posicao coluna classe 9
+    this_nAclas10      = 0    && int          posicao coluna classe 10
+    this_nAclas11      = 0    && int          posicao coluna classe 11
+    this_nAclas12      = 0    && int          posicao coluna classe 12
+    this_nCclas8       = 0    && numeric(9,2) comprimento classe 8
+    this_nCclas9       = 0    && numeric(9,2) comprimento classe 9
+    this_nCclas10      = 0    && numeric(9,2) comprimento classe 10
+    this_nCclas11      = 0    && numeric(9,2) comprimento classe 11
+    this_nCclas12      = 0    && numeric(9,2) comprimento classe 12
+    this_nLclas8       = 0    && numeric(9,2) inicio classe 8
+    this_nLclas9       = 0    && numeric(9,2) inicio classe 9
+    this_nLclas10      = 0    && numeric(9,2) inicio classe 10
+    this_nLclas11      = 0    && numeric(9,2) inicio classe 11
+    this_nLclas12      = 0    && numeric(9,2) inicio classe 12
+    this_lImpc8        = .F.  && bit          imprimir classe 8
+    this_lImpc9        = .F.  && bit          imprimir classe 9
+    this_lImpc10       = .F.  && bit          imprimir classe 10
+    this_lImpc11       = .F.  && bit          imprimir classe 11
+    this_lImpc12       = .F.  && bit          imprimir classe 12
+    this_cImpclas8     = ""   && char(10)     label coluna classe 8
+    this_cImpclas9     = ""   && char(10)     label coluna classe 9
+    this_cImpclas10    = ""   && char(10)     label coluna classe 10
+    this_cImpclas11    = ""   && char(10)     label coluna classe 11
+    this_cImpclas12    = ""   && char(10)     label coluna classe 12
+
+    *-- =========================================================================
+    *-- Impostos adicionais (ICMS-ST / CFOP substituto)
+    *-- =========================================================================
+    this_nLbicmss      = 0    && numeric(9,2) inicio base ICMS-ST
+    this_nCbicmss      = 0    && numeric(9,2) comprimento base ICMS-ST
+    this_nLvicmss      = 0    && numeric(9,2) inicio valor ICMS-ST
+    this_nCvicmss      = 0    && numeric(9,2) comprimento valor ICMS-ST
+    this_nLcfopsub     = 0    && numeric(9,2) inicio CFOP substituto
+    this_nCcfopsub     = 0    && numeric(9,2) comprimento CFOP substituto
+    this_nCcfoppro     = 0    && numeric(9,2) col. CFOP proprio
+    this_nLnatopsub    = 0    && numeric(9,2) inicio nat. op. substituto
+    this_nCnatopsub    = 0    && numeric(9,2) comprimento nat. op. substituto
+
+    *-- =========================================================================
+    *-- Transporte / peso
+    *-- =========================================================================
+    this_nCpesomet     = 0    && numeric(9,2) comprimento coluna peso liq. metro
+    this_cCunipesos    = ""   && char(3)      unidade de peso
+
+    *-- =========================================================================
+    *-- Inscricao/pedido adicional
+    *-- =========================================================================
+    this_nLiniped2     = 0    && numeric(9,2) inicio inscr./pedido 2
+    this_nCiniped2     = 0    && numeric(9,2) comprimento inscr./pedido 2
+
+    *===========================================================================
+    * Init - Inicializa Business Object
+    *===========================================================================
+    PROCEDURE Init()
+        LOCAL loc_lSucesso
+        loc_lSucesso = .F.
+        TRY
+            DODEFAULT()
+            THIS.this_cTabela     = "SigCnFN2"
+            THIS.this_cCampoChave = "CidChaves"
+            loc_lSucesso = .T.
+        CATCH TO loException
+            MostrarErro(loException, "NflBO.Init")
+        ENDTRY
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *===========================================================================
+    * ObterChavePrimaria - Retorna chave primaria para auditoria
+    *===========================================================================
+    FUNCTION ObterChavePrimaria()
+        RETURN ALLTRIM(THIS.this_cCidchaves)
+    ENDFUNC
+
+    *===========================================================================
+    * Buscar - Lista configuracoes NF de SigCnFNf
+    *===========================================================================
+    FUNCTION Buscar(par_cFiltro)
+        LOCAL loc_lResultado, loc_cSQL
+        loc_lResultado = .F.
+        TRY
+            loc_cSQL = "SELECT n.emps, ISNULL(e.Razas,'') AS Razas, n.series, n.cidchaves " + ;
+                       "FROM SigCnFNf n " + ;
+                       "LEFT JOIN SigCdEmp e ON e.CEMPs = n.emps " + ;
+                       "ORDER BY n.emps, n.series"
+            *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
+            IF USED("cursor_4c_Dados")
+                TABLEREVERT(.T., "cursor_4c_Dados")
+                USE IN cursor_4c_Dados
+            ENDIF
+
+            IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Dados") > 0
+                loc_lResultado = .T.
+            ELSE
+                MsgErro("Erro ao carregar lista de NF.", "NflBO.Buscar")
+            ENDIF
+        CATCH TO loException
+            MostrarErro(loException, "NflBO.Buscar")
+        ENDTRY
+        RETURN loc_lResultado
+    ENDFUNC
+
+    *===========================================================================
+    * CarregarPorCodigo - Carrega SigCnFN2 por cidchaves
+    *===========================================================================
+    FUNCTION CarregarPorCodigo(par_cCidchaves)
+        LOCAL loc_lResultado, loc_cSQL
+        loc_lResultado = .F.
+        TRY
+            loc_cSQL = "SELECT cidchaves,emps,series,ctitent," + ;
+                       "lendent,cendent,lbaient,cbaient,lmunent,cmunent," + ;
+                       "lestent,cestent,lcepent,ccepent,lfoneent,cfoneent," + ;
+                       "liniped,ciniped,lendtite,cendtite," + ;
+                       "lempnome,cempnome,lempcgc,cempcgc,lempiest,cempiest," + ;
+                       "lempender,cempender,lempbair,cempbair,lempmuni,cempmuni," + ;
+                       "lempcep,cempcep,lempesta,cempesta,lempfone,cempfone," + ;
+                       "nvias,ntpmargems,vseqnota,contsac," + ;
+                       "lsac,csac,lxinc,cxinc,lenxinc,nftgdi1s,totfsize,atnotar," + ;
+                       "copcrp,lopcrp,copcvd,lopcvd,coploc,loploc," + ;
+                       "copnrp,lopnrp,copnvd,lopnvd,lbipi,cbipi," + ;
+                       "a2nf,aclas1,aclas2,aclas3,aclas4,aclas5,aclas6,aclas7," + ;
+                       "ainiped,ainiped2,anfselo,aobs,aselo," + ;
+                       "aclas8,aclas9,aclas10,aclas11,aclas12," + ;
+                       "cclas8,cclas9,cclas10,cclas11,cclas12," + ;
+                       "lclas8,lclas9,lclas10,lclas11,lclas12," + ;
+                       "impc8,impc9,impc10,impc11,impc12," + ;
+                       "impclas8,impclas9,impclas10,impclas11,impclas12," + ;
+                       "lbicmss,cbicmss,lvicmss,cvicmss," + ;
+                       "lcfopsub,ccfopsub,ccfoppro,lnatopsub,cnatopsub," + ;
+                       "cpesomet,cunipesos,liniped2,ciniped2" + ;
+                       " FROM SigCnFN2 WHERE cidchaves = " + EscaparSQL(par_cCidchaves)
+            *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
+            IF USED("cursor_4c_Registro")
+                TABLEREVERT(.T., "cursor_4c_Registro")
+                USE IN cursor_4c_Registro
+            ENDIF
+
+            IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Registro") > 0
+                IF RECCOUNT("cursor_4c_Registro") > 0
+                    loc_lResultado = THIS.CarregarDoCursor("cursor_4c_Registro")
+                ELSE
+                    MsgErro("Configura" + CHR(231) + CHR(227) + "o de NF n" + CHR(227) + "o encontrada.", "NflBO.CarregarPorCodigo")
+                ENDIF
+            ELSE
+                MsgErro("Erro ao carregar configura" + CHR(231) + CHR(227) + "o de NF.", "NflBO.CarregarPorCodigo")
+            ENDIF
+        CATCH TO loException
+            MostrarErro(loException, "NflBO.CarregarPorCodigo")
+        ENDTRY
+        RETURN loc_lResultado
+    ENDFUNC
+
+    *===========================================================================
+    * CarregarDoCursor - Mapeia cursor SigCnFN2 para propriedades
+    *===========================================================================
+    PROTECTED FUNCTION CarregarDoCursor(par_cAliasCursor)
+        LOCAL loc_lResultado
+        loc_lResultado = .F.
+        TRY
+            SELECT (par_cAliasCursor)
+            THIS.this_cCidchaves    = ALLTRIM(cidchaves)
+            THIS.this_cEmps         = ALLTRIM(emps)
+            THIS.this_cSeries       = ALLTRIM(series)
+            THIS.this_cCtitent      = ALLTRIM(ctitent)
+            THIS.this_nLendent      = lendent
+            THIS.this_nCendent      = cendent
+            THIS.this_nLbaient      = lbaient
+            THIS.this_nCbaient      = cbaient
+            THIS.this_nLmunent      = lmunent
+            THIS.this_nCmunent      = cmunent
+            THIS.this_nLestent      = lestent
+            THIS.this_nCestent      = cestent
+            THIS.this_nLcepent      = lcepent
+            THIS.this_nCcepent      = ccepent
+            THIS.this_nLfoneent     = lfoneent
+            THIS.this_nCfoneent     = cfoneent
+            THIS.this_nLiniped      = liniped
+            THIS.this_nCiniped      = ciniped
+            THIS.this_nLendtite     = lendtite
+            THIS.this_nCendtite     = cendtite
+            THIS.this_nLempnome     = lempnome
+            THIS.this_nCempnome     = cempnome
+            THIS.this_nLempcgc      = lempcgc
+            THIS.this_nCempcgc      = cempcgc
+            THIS.this_nLempiest     = lempiest
+            THIS.this_nCempiest     = cempiest
+            THIS.this_nLempender    = lempender
+            THIS.this_nCempender    = cempender
+            THIS.this_nLempbair     = lempbair
+            THIS.this_nCempbair     = cempbair
+            THIS.this_nLempmuni     = lempmuni
+            THIS.this_nCempmuni     = cempmuni
+            THIS.this_nLempcep      = lempcep
+            THIS.this_nCempcep      = cempcep
+            THIS.this_nLempesta     = lempesta
+            THIS.this_nCempesta     = cempesta
+            THIS.this_nLempfone     = lempfone
+            THIS.this_nCempfone     = cempfone
+            THIS.this_nNvias        = nvias
+            THIS.this_nNtpmargems   = ntpmargems
+            THIS.this_lVseqnota     = (vseqnota = 1)
+            THIS.this_cContsac      = ALLTRIM(contsac)
+            THIS.this_nLsac         = lsac
+            THIS.this_nCsac         = csac
+            THIS.this_nLxinc        = lxinc
+            THIS.this_nCxinc        = cxinc
+            THIS.this_nLenxinc      = lenxinc
+            THIS.this_nNftgdi1s     = nftgdi1s
+            THIS.this_nTotfsize     = totfsize
+            THIS.this_nAtnotar      = atnotar
+            THIS.this_nCopcrp       = copcrp
+            THIS.this_nLopcrp       = lopcrp
+            THIS.this_nCopcvd       = copcvd
+            THIS.this_nLopcvd       = lopcvd
+            THIS.this_nCoploc       = coploc
+            THIS.this_nLoploc       = loploc
+            THIS.this_nCopnrp       = copnrp
+            THIS.this_nLopnrp       = lopnrp
+            THIS.this_nCopnvd       = copnvd
+            THIS.this_nLopnvd       = lopnvd
+            THIS.this_nLbipi        = lbipi
+            THIS.this_nCbipi        = cbipi
+            THIS.this_nA2nf         = a2nf
+            THIS.this_nAclas1       = aclas1
+            THIS.this_nAclas2       = aclas2
+            THIS.this_nAclas3       = aclas3
+            THIS.this_nAclas4       = aclas4
+            THIS.this_nAclas5       = aclas5
+            THIS.this_nAclas6       = aclas6
+            THIS.this_nAclas7       = aclas7
+            THIS.this_nAiniped      = ainiped
+            THIS.this_nAiniped2     = ainiped2
+            THIS.this_nAnfselo      = anfselo
+            THIS.this_nAobs         = aobs
+            THIS.this_nAselo        = aselo
+            THIS.this_nAclas8       = aclas8
+            THIS.this_nAclas9       = aclas9
+            THIS.this_nAclas10      = aclas10
+            THIS.this_nAclas11      = aclas11
+            THIS.this_nAclas12      = aclas12
+            THIS.this_nCclas8       = cclas8
+            THIS.this_nCclas9       = cclas9
+            THIS.this_nCclas10      = cclas10
+            THIS.this_nCclas11      = cclas11
+            THIS.this_nCclas12      = cclas12
+            THIS.this_nLclas8       = lclas8
+            THIS.this_nLclas9       = lclas9
+            THIS.this_nLclas10      = lclas10
+            THIS.this_nLclas11      = lclas11
+            THIS.this_nLclas12      = lclas12
+            THIS.this_lImpc8        = (impc8 = 1)
+            THIS.this_lImpc9        = (impc9 = 1)
+            THIS.this_lImpc10       = (impc10 = 1)
+            THIS.this_lImpc11       = (impc11 = 1)
+            THIS.this_lImpc12       = (impc12 = 1)
+            THIS.this_cImpclas8     = ALLTRIM(impclas8)
+            THIS.this_cImpclas9     = ALLTRIM(impclas9)
+            THIS.this_cImpclas10    = ALLTRIM(impclas10)
+            THIS.this_cImpclas11    = ALLTRIM(impclas11)
+            THIS.this_cImpclas12    = ALLTRIM(impclas12)
+            THIS.this_nLbicmss      = lbicmss
+            THIS.this_nCbicmss      = cbicmss
+            THIS.this_nLvicmss      = lvicmss
+            THIS.this_nCvicmss      = cvicmss
+            THIS.this_nLcfopsub     = lcfopsub
+            THIS.this_nCcfopsub     = ccfopsub
+            THIS.this_nCcfoppro     = ccfoppro
+            THIS.this_nLnatopsub    = lnatopsub
+            THIS.this_nCnatopsub    = cnatopsub
+            THIS.this_nCpesomet     = cpesomet
+            THIS.this_cCunipesos    = ALLTRIM(cunipesos)
+            THIS.this_nLiniped2     = liniped2
+            THIS.this_nCiniped2     = ciniped2
+            loc_lResultado = .T.
+        CATCH TO loException
+            MostrarErro(loException, "NflBO.CarregarDoCursor")
+        ENDTRY
+        RETURN loc_lResultado
+    ENDFUNC
+
+    *===========================================================================
+    * Inserir - INSERT em SigCnFNf (defaults) e SigCnFN2 (dados completos)
+    *===========================================================================
+    PROTECTED FUNCTION Inserir()
+        LOCAL loc_lResultado, loc_cSQL, loc_cNovaChave
+        LOCAL loc_cColsNf1, loc_cColsNf2, loc_cColsNf3, loc_cColsNf4
+        LOCAL loc_cValsNf, loc_cColsN2, loc_cValsN2a, loc_cValsN2b, loc_cValsN2c
+        loc_lResultado = .F.
+        TRY
+            loc_cNovaChave = PADR(ALLTRIM(THIS.this_cEmps) + ALLTRIM(THIS.this_cSeries), 20)
+            THIS.this_cCidchaves = loc_cNovaChave
+
+            *-- Colunas SigCnFNf em ordem esquematica (255 colunas)
+            loc_cColsNf1 = "c1nf,c2nf,caicm,caipi,cbaicob,cbairr,cbicm,ccep,ccepcob,ccfop,ccgc," + ;
+                           "cclas1,cclas2,cclas3,cclas4,cclas5,cclas6,cclas7,cclfis,ccodpro," + ;
+                           "cdesconto,cdescser,cdespro,cdtemi,cdtemif,cdtsaidas,cdupnum," + ;
+                           "cendcob,cender,cesp,cesta,cestcob," + ;
+                           "cfat10num,cfat10val,cfat10vec,cfat1num,cfat1val,cfat1vec," + ;
+                           "cfat2num,cfat2val,cfat2vec,cfat3num,cfat3val,cfat3vec," + ;
+                           "cfat4num,cfat4val,cfat4vec,cfat5num,cfat5val,cfat5vec," + ;
+                           "cfat6num,cfat6val,cfat6vec,cfat7num,cfat7val,cfat7vec," + ;
+                           "cfat8num,cfat8val,cfat8vec,cfat9num,cfat9val,cfat9vec," + ;
+                           "cfatnum,cfatvec,cfone,cfrete,cidchaves,ciest,cmarca,cmuncob,cmuni," + ;
+                           "cnatop,cnfent,cnfsai,cnome,cnumero,cobs,cobsi,corigem,coutras," + ;
+                           "cpbru,cpespro,cplaca,cplacauf,cpliq,cposfis,cqtde,cqtvol," + ;
+                           "cseguro,cstrib,csufras,ctamfolhas,"
+            loc_cColsNf2 = "cticm,ctipi,ctnota,ctnotaf,ctnotar,ctpfrete,ctprod,ctqtde," + ;
+                           "ctrcgc,ctrend,ctrest,ctrie,ctrmun,ctrnome,cunid," + ;
+                           "cvalext,cvaliss,cvalser,cvipi,cvltot,cvluni,emps,esppads," + ;
+                           "fatbrutos,impc1,impc2,impc3,impc4,impc5,impc6,impc7," + ;
+                           "impclas1,impclas2,impclas3,impclas4,impclas5,impclas6,impclas7,imppads," + ;
+                           "l1nf,l2nf,lbaicob,lbairr,lbicm,lcendemp,lcep,lcepcob,lcfop,lcgc," + ;
+                           "lclas1,lclas2,lclas3,lclas4,lclas5,lclas6,lclas7,lcrazemp,"
+            loc_cColsNf3 = "ldesconto,ldescser,ldtemi,ldtemif,ldtsaidas,ldupnum," + ;
+                           "lendcob,lender,lesp,lesta,lestcob,letras," + ;
+                           "lfat10num,lfat10val,lfat10vec,lfat1num,lfat1val,lfat1vec," + ;
+                           "lfat2num,lfat2val,lfat2vec,lfat3num,lfat3val,lfat3vec," + ;
+                           "lfat4num,lfat4val,lfat4vec,lfat5num,lfat5val,lfat5vec," + ;
+                           "lfat6num,lfat6val,lfat6vec,lfat7num,lfat7val,lfat7vec," + ;
+                           "lfat8num,lfat8val,lfat8vec,lfat9num,lfat9val,lfat9vec," + ;
+                           "lfatnum,lfatvec,lfone,lfrete,liest,linprod,lmarca,lmuncob,lmuni," + ;
+                           "lnatop,lnfent,lnfsai,lnome,lnumero,lobs,loutras," + ;
+                           "lpbru,lplaca,lplacauf,lpliq,lposfis,lqtvol," + ;
+                           "lseguro,lsufras,lticm,ltipi,ltnota,ltnotaf,ltnotar," + ;
+                           "ltpfrete,ltprod,ltqtde,ltrcgc,ltrend,ltrest,ltrie,ltrmun,ltrnome," + ;
+                           "lvalext,lvaliss,lvalser,marpads,"
+            loc_cColsNf4 = "ncdser,nldser,oaden,ocor,oemb,oorig,otam,pesovols,pirs,piss,series," + ;
+                           "tamanhos,tamcolobs,tamcolobsi,tamdesc,tamlinobs,tamlinobsi," + ;
+                           "tipos,tpcasas,lcnfselo,lcselo,vseqnota"
+
+            *-- Valores SigCnFNf: key columns com valor real, resto = 0 ou ''
+            *   Ordem exata igual ao lista de colunas acima
+            loc_cValsNf = REPLICATE("0,", 66) + ;                     && cols 1-66: c1nf..cfrete
+                          EscaparSQL(loc_cNovaChave) + "," + ;         && col 67: cidchaves
+                          REPLICATE("0,", 24) + ;                      && cols 68-91: ciest..csufras
+                          "''," + ;                                    && col 92: ctamfolhas
+                          REPLICATE("0,", 21) + ;                      && cols 93-113: cticm..cvluni
+                          EscaparSQL(THIS.this_cEmps) + "," + ;        && col 114: emps
+                          "''," + ;                                    && col 115: esppads
+                          "0," + ;                                     && col 116: fatbrutos
+                          REPLICATE("0,", 7) + ;                       && cols 117-123: impc1-7
+                          "'','','','','','','',''," + ;               && cols 124-131: impclas1-7,imppads
+                          REPLICATE("0,", 5) + ;                       && cols 132-136: l1nf-lbicm
+                          "''," + ;                                    && col 137: lcendemp
+                          REPLICATE("0,", 11) + ;                      && cols 138-148: lcep-lclas7
+                          "''," + ;                                    && col 149: lcrazemp
+                          REPLICATE("0,", 44) + ;                      && cols 150-193: ldesconto-lfatvec
+                          REPLICATE("0,", 39) + ;                      && cols 194-232: lfone-lvalser
+                          "''," + ;                                    && col 233: marpads
+                          REPLICATE("0,", 10) + ;                      && cols 234-243: ncdser-piss
+                          EscaparSQL(THIS.this_cSeries) + "," + ;      && col 244: series
+                          REPLICATE("0,", 6) + ;                       && cols 245-250: tamanhos-tamlinobsi
+                          "''," + ;                                    && col 251: tipos
+                          "0," + ;                                     && col 252: tpcasas
+                          "'','',0"                                    && cols 253-255: lcnfselo,lcselo,vseqnota
+
+            loc_cSQL = "INSERT INTO SigCnFNf (" + ;
+                       loc_cColsNf1 + loc_cColsNf2 + loc_cColsNf3 + loc_cColsNf4 + ") " + ;
+                       "VALUES (" + loc_cValsNf + ")"
+            IF SQLEXEC(gnConnHandle, loc_cSQL) <= 0
+                MsgErro("Erro ao inserir cabe" + CHR(231) + "alho de NF.", "NflBO.Inserir")
+            ELSE
+                *-- Colunas SigCnFN2 (113 colunas)
+                loc_cColsN2 = "cidchaves,emps,series,ctitent," + ;
+                              "lendent,cendent,lbaient,cbaient,lmunent,cmunent," + ;
+                              "lestent,cestent,lcepent,ccepent,lfoneent,cfoneent," + ;
+                              "liniped,ciniped,lendtite,cendtite," + ;
+                              "lempnome,cempnome,lempcgc,cempcgc,lempiest,cempiest," + ;
+                              "lempender,cempender,lempbair,cempbair,lempmuni,cempmuni," + ;
+                              "lempcep,cempcep,lempesta,cempesta,lempfone,cempfone," + ;
+                              "nvias,ntpmargems,vseqnota,contsac," + ;
+                              "lsac,csac,lxinc,cxinc,lenxinc,nftgdi1s,totfsize,atnotar," + ;
+                              "copcrp,lopcrp,copcvd,lopcvd,coploc,loploc," + ;
+                              "copnrp,lopnrp,copnvd,lopnvd,lbipi,cbipi," + ;
+                              "a2nf,aclas1,aclas2,aclas3,aclas4,aclas5,aclas6,aclas7," + ;
+                              "ainiped,ainiped2,anfselo,aobs,aselo," + ;
+                              "aclas8,aclas9,aclas10,aclas11,aclas12," + ;
+                              "cclas8,cclas9,cclas10,cclas11,cclas12," + ;
+                              "lclas8,lclas9,lclas10,lclas11,lclas12," + ;
+                              "impc8,impc9,impc10,impc11,impc12," + ;
+                              "impclas8,impclas9,impclas10,impclas11,impclas12," + ;
+                              "lbicmss,cbicmss,lvicmss,cvicmss," + ;
+                              "lcfopsub,ccfopsub,ccfoppro,lnatopsub,cnatopsub," + ;
+                              "cpesomet,cunipesos,liniped2,ciniped2"
+                *-- Valores SigCnFN2
+                loc_cValsN2a = EscaparSQL(THIS.this_cCidchaves) + "," + ;
+                               EscaparSQL(THIS.this_cEmps) + "," + ;
+                               EscaparSQL(THIS.this_cSeries) + "," + ;
+                               EscaparSQL(THIS.this_cCtitent) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nLendent) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nCendent) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nLbaient) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nCbaient) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nLmunent) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nCmunent) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nLestent) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nCestent) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nLcepent) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nCcepent) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nLfoneent) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nCfoneent) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nLiniped) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nCiniped) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nLendtite) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nCendtite) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nLempnome) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nCempnome) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nLempcgc) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nCempcgc) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nLempiest) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nCempiest) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nLempender) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nCempender) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nLempbair) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nCempbair) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nLempmuni) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nCempmuni) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nLempcep) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nCempcep) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nLempesta) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nCempesta) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nLempfone) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nCempfone) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nNvias) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nNtpmargems) + "," + ;
+                               IIF(THIS.this_lVseqnota, "1", "0") + "," + ;
+                               EscaparSQL(THIS.this_cContsac) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nLsac) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nCsac) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nLxinc) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nCxinc) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nLenxinc) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nNftgdi1s) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nTotfsize) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nAtnotar) + ","
+                loc_cValsN2b = FormatarNumeroSQL(THIS.this_nCopcrp) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nLopcrp) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nCopcvd) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nLopcvd) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nCoploc) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nLoploc) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nCopnrp) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nLopnrp) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nCopnvd) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nLopnvd) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nLbipi) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nCbipi) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nA2nf) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nAclas1) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nAclas2) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nAclas3) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nAclas4) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nAclas5) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nAclas6) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nAclas7) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nAiniped) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nAiniped2) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nAnfselo) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nAobs) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nAselo) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nAclas8) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nAclas9) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nAclas10) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nAclas11) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nAclas12) + ","
+                loc_cValsN2c = FormatarNumeroSQL(THIS.this_nCclas8) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nCclas9) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nCclas10) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nCclas11) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nCclas12) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nLclas8) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nLclas9) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nLclas10) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nLclas11) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nLclas12) + "," + ;
+                               IIF(THIS.this_lImpc8,  "1", "0") + "," + ;
+                               IIF(THIS.this_lImpc9,  "1", "0") + "," + ;
+                               IIF(THIS.this_lImpc10, "1", "0") + "," + ;
+                               IIF(THIS.this_lImpc11, "1", "0") + "," + ;
+                               IIF(THIS.this_lImpc12, "1", "0") + "," + ;
+                               EscaparSQL(THIS.this_cImpclas8)  + "," + ;
+                               EscaparSQL(THIS.this_cImpclas9)  + "," + ;
+                               EscaparSQL(THIS.this_cImpclas10) + "," + ;
+                               EscaparSQL(THIS.this_cImpclas11) + "," + ;
+                               EscaparSQL(THIS.this_cImpclas12) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nLbicmss)   + "," + ;
+                               FormatarNumeroSQL(THIS.this_nCbicmss)   + "," + ;
+                               FormatarNumeroSQL(THIS.this_nLvicmss)   + "," + ;
+                               FormatarNumeroSQL(THIS.this_nCvicmss)   + "," + ;
+                               FormatarNumeroSQL(THIS.this_nLcfopsub)  + "," + ;
+                               FormatarNumeroSQL(THIS.this_nCcfopsub)  + "," + ;
+                               FormatarNumeroSQL(THIS.this_nCcfoppro)  + "," + ;
+                               FormatarNumeroSQL(THIS.this_nLnatopsub) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nCnatopsub) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nCpesomet)  + "," + ;
+                               EscaparSQL(THIS.this_cCunipesos) + "," + ;
+                               FormatarNumeroSQL(THIS.this_nLiniped2)  + "," + ;
+                               FormatarNumeroSQL(THIS.this_nCiniped2)
+
+                loc_cSQL = "INSERT INTO SigCnFN2 (" + loc_cColsN2 + ") VALUES (" + ;
+                           loc_cValsN2a + loc_cValsN2b + loc_cValsN2c + ")"
+                IF SQLEXEC(gnConnHandle, loc_cSQL) > 0
+                    THIS.RegistrarAuditoria("INSERT")
+                    loc_lResultado = .T.
+                ELSE
+                    SQLEXEC(gnConnHandle, "DELETE FROM SigCnFNf WHERE cidchaves = " + EscaparSQL(loc_cNovaChave))
+                    MsgErro("Erro ao inserir configura" + CHR(231) + CHR(227) + "o de NF.", "NflBO.Inserir")
+                ENDIF
+            ENDIF
+        CATCH TO loException
+            MostrarErro(loException, "NflBO.Inserir")
+        ENDTRY
+        RETURN loc_lResultado
+    ENDFUNC
+
+    *===========================================================================
+    * Atualizar - UPDATE em SigCnFN2 com todos os campos (exceto cidchaves)
+    *===========================================================================
+    PROTECTED FUNCTION Atualizar()
+        LOCAL loc_lResultado, loc_cSQL, loc_cSeta, loc_cSetb, loc_cSetc, loc_cWhere
+        loc_lResultado = .F.
+        TRY
+            loc_cWhere = " WHERE cidchaves = " + EscaparSQL(THIS.this_cCidchaves)
+            loc_cSeta = "UPDATE SigCnFN2 SET " + ;
+                        "emps = " + EscaparSQL(THIS.this_cEmps) + "," + ;
+                        "series = " + EscaparSQL(THIS.this_cSeries) + "," + ;
+                        "ctitent = " + EscaparSQL(THIS.this_cCtitent) + "," + ;
+                        "lendent = " + FormatarNumeroSQL(THIS.this_nLendent) + "," + ;
+                        "cendent = " + FormatarNumeroSQL(THIS.this_nCendent) + "," + ;
+                        "lbaient = " + FormatarNumeroSQL(THIS.this_nLbaient) + "," + ;
+                        "cbaient = " + FormatarNumeroSQL(THIS.this_nCbaient) + "," + ;
+                        "lmunent = " + FormatarNumeroSQL(THIS.this_nLmunent) + "," + ;
+                        "cmunent = " + FormatarNumeroSQL(THIS.this_nCmunent) + "," + ;
+                        "lestent = " + FormatarNumeroSQL(THIS.this_nLestent) + "," + ;
+                        "cestent = " + FormatarNumeroSQL(THIS.this_nCestent) + "," + ;
+                        "lcepent = " + FormatarNumeroSQL(THIS.this_nLcepent) + "," + ;
+                        "ccepent = " + FormatarNumeroSQL(THIS.this_nCcepent) + "," + ;
+                        "lfoneent = " + FormatarNumeroSQL(THIS.this_nLfoneent) + "," + ;
+                        "cfoneent = " + FormatarNumeroSQL(THIS.this_nCfoneent) + "," + ;
+                        "liniped = " + FormatarNumeroSQL(THIS.this_nLiniped) + "," + ;
+                        "ciniped = " + FormatarNumeroSQL(THIS.this_nCiniped) + "," + ;
+                        "lendtite = " + FormatarNumeroSQL(THIS.this_nLendtite) + "," + ;
+                        "cendtite = " + FormatarNumeroSQL(THIS.this_nCendtite) + "," + ;
+                        "lempnome = " + FormatarNumeroSQL(THIS.this_nLempnome) + "," + ;
+                        "cempnome = " + FormatarNumeroSQL(THIS.this_nCempnome) + "," + ;
+                        "lempcgc = " + FormatarNumeroSQL(THIS.this_nLempcgc) + "," + ;
+                        "cempcgc = " + FormatarNumeroSQL(THIS.this_nCempcgc) + "," + ;
+                        "lempiest = " + FormatarNumeroSQL(THIS.this_nLempiest) + "," + ;
+                        "cempiest = " + FormatarNumeroSQL(THIS.this_nCempiest) + "," + ;
+                        "lempender = " + FormatarNumeroSQL(THIS.this_nLempender) + "," + ;
+                        "cempender = " + FormatarNumeroSQL(THIS.this_nCempender) + "," + ;
+                        "lempbair = " + FormatarNumeroSQL(THIS.this_nLempbair) + "," + ;
+                        "cempbair = " + FormatarNumeroSQL(THIS.this_nCempbair) + "," + ;
+                        "lempmuni = " + FormatarNumeroSQL(THIS.this_nLempmuni) + "," + ;
+                        "cempmuni = " + FormatarNumeroSQL(THIS.this_nCempmuni) + "," + ;
+                        "lempcep = " + FormatarNumeroSQL(THIS.this_nLempcep) + "," + ;
+                        "cempcep = " + FormatarNumeroSQL(THIS.this_nCempcep) + "," + ;
+                        "lempesta = " + FormatarNumeroSQL(THIS.this_nLempesta) + "," + ;
+                        "cempesta = " + FormatarNumeroSQL(THIS.this_nCempesta) + "," + ;
+                        "lempfone = " + FormatarNumeroSQL(THIS.this_nLempfone) + "," + ;
+                        "cempfone = " + FormatarNumeroSQL(THIS.this_nCempfone) + ","
+            loc_cSetb = "nvias = " + FormatarNumeroSQL(THIS.this_nNvias) + "," + ;
+                        "ntpmargems = " + FormatarNumeroSQL(THIS.this_nNtpmargems) + "," + ;
+                        "vseqnota = " + IIF(THIS.this_lVseqnota, "1", "0") + "," + ;
+                        "contsac = " + EscaparSQL(THIS.this_cContsac) + "," + ;
+                        "lsac = " + FormatarNumeroSQL(THIS.this_nLsac) + "," + ;
+                        "csac = " + FormatarNumeroSQL(THIS.this_nCsac) + "," + ;
+                        "lxinc = " + FormatarNumeroSQL(THIS.this_nLxinc) + "," + ;
+                        "cxinc = " + FormatarNumeroSQL(THIS.this_nCxinc) + "," + ;
+                        "lenxinc = " + FormatarNumeroSQL(THIS.this_nLenxinc) + "," + ;
+                        "nftgdi1s = " + FormatarNumeroSQL(THIS.this_nNftgdi1s) + "," + ;
+                        "totfsize = " + FormatarNumeroSQL(THIS.this_nTotfsize) + "," + ;
+                        "atnotar = " + FormatarNumeroSQL(THIS.this_nAtnotar) + "," + ;
+                        "copcrp = " + FormatarNumeroSQL(THIS.this_nCopcrp) + "," + ;
+                        "lopcrp = " + FormatarNumeroSQL(THIS.this_nLopcrp) + "," + ;
+                        "copcvd = " + FormatarNumeroSQL(THIS.this_nCopcvd) + "," + ;
+                        "lopcvd = " + FormatarNumeroSQL(THIS.this_nLopcvd) + "," + ;
+                        "coploc = " + FormatarNumeroSQL(THIS.this_nCoploc) + "," + ;
+                        "loploc = " + FormatarNumeroSQL(THIS.this_nLoploc) + "," + ;
+                        "copnrp = " + FormatarNumeroSQL(THIS.this_nCopnrp) + "," + ;
+                        "lopnrp = " + FormatarNumeroSQL(THIS.this_nLopnrp) + "," + ;
+                        "copnvd = " + FormatarNumeroSQL(THIS.this_nCopnvd) + "," + ;
+                        "lopnvd = " + FormatarNumeroSQL(THIS.this_nLopnvd) + "," + ;
+                        "lbipi = " + FormatarNumeroSQL(THIS.this_nLbipi) + "," + ;
+                        "cbipi = " + FormatarNumeroSQL(THIS.this_nCbipi) + "," + ;
+                        "a2nf = " + FormatarNumeroSQL(THIS.this_nA2nf) + "," + ;
+                        "aclas1 = " + FormatarNumeroSQL(THIS.this_nAclas1) + "," + ;
+                        "aclas2 = " + FormatarNumeroSQL(THIS.this_nAclas2) + "," + ;
+                        "aclas3 = " + FormatarNumeroSQL(THIS.this_nAclas3) + "," + ;
+                        "aclas4 = " + FormatarNumeroSQL(THIS.this_nAclas4) + "," + ;
+                        "aclas5 = " + FormatarNumeroSQL(THIS.this_nAclas5) + "," + ;
+                        "aclas6 = " + FormatarNumeroSQL(THIS.this_nAclas6) + "," + ;
+                        "aclas7 = " + FormatarNumeroSQL(THIS.this_nAclas7) + "," + ;
+                        "ainiped = " + FormatarNumeroSQL(THIS.this_nAiniped) + "," + ;
+                        "ainiped2 = " + FormatarNumeroSQL(THIS.this_nAiniped2) + "," + ;
+                        "anfselo = " + FormatarNumeroSQL(THIS.this_nAnfselo) + "," + ;
+                        "aobs = " + FormatarNumeroSQL(THIS.this_nAobs) + "," + ;
+                        "aselo = " + FormatarNumeroSQL(THIS.this_nAselo) + "," + ;
+                        "aclas8 = " + FormatarNumeroSQL(THIS.this_nAclas8) + "," + ;
+                        "aclas9 = " + FormatarNumeroSQL(THIS.this_nAclas9) + "," + ;
+                        "aclas10 = " + FormatarNumeroSQL(THIS.this_nAclas10) + "," + ;
+                        "aclas11 = " + FormatarNumeroSQL(THIS.this_nAclas11) + "," + ;
+                        "aclas12 = " + FormatarNumeroSQL(THIS.this_nAclas12) + ","
+            loc_cSetc = "cclas8 = " + FormatarNumeroSQL(THIS.this_nCclas8) + "," + ;
+                        "cclas9 = " + FormatarNumeroSQL(THIS.this_nCclas9) + "," + ;
+                        "cclas10 = " + FormatarNumeroSQL(THIS.this_nCclas10) + "," + ;
+                        "cclas11 = " + FormatarNumeroSQL(THIS.this_nCclas11) + "," + ;
+                        "cclas12 = " + FormatarNumeroSQL(THIS.this_nCclas12) + "," + ;
+                        "lclas8 = " + FormatarNumeroSQL(THIS.this_nLclas8) + "," + ;
+                        "lclas9 = " + FormatarNumeroSQL(THIS.this_nLclas9) + "," + ;
+                        "lclas10 = " + FormatarNumeroSQL(THIS.this_nLclas10) + "," + ;
+                        "lclas11 = " + FormatarNumeroSQL(THIS.this_nLclas11) + "," + ;
+                        "lclas12 = " + FormatarNumeroSQL(THIS.this_nLclas12) + "," + ;
+                        "impc8 = " + IIF(THIS.this_lImpc8,  "1", "0") + "," + ;
+                        "impc9 = " + IIF(THIS.this_lImpc9,  "1", "0") + "," + ;
+                        "impc10 = " + IIF(THIS.this_lImpc10, "1", "0") + "," + ;
+                        "impc11 = " + IIF(THIS.this_lImpc11, "1", "0") + "," + ;
+                        "impc12 = " + IIF(THIS.this_lImpc12, "1", "0") + "," + ;
+                        "impclas8 = " + EscaparSQL(THIS.this_cImpclas8) + "," + ;
+                        "impclas9 = " + EscaparSQL(THIS.this_cImpclas9) + "," + ;
+                        "impclas10 = " + EscaparSQL(THIS.this_cImpclas10) + "," + ;
+                        "impclas11 = " + EscaparSQL(THIS.this_cImpclas11) + "," + ;
+                        "impclas12 = " + EscaparSQL(THIS.this_cImpclas12) + "," + ;
+                        "lbicmss = " + FormatarNumeroSQL(THIS.this_nLbicmss) + "," + ;
+                        "cbicmss = " + FormatarNumeroSQL(THIS.this_nCbicmss) + "," + ;
+                        "lvicmss = " + FormatarNumeroSQL(THIS.this_nLvicmss) + "," + ;
+                        "cvicmss = " + FormatarNumeroSQL(THIS.this_nCvicmss) + "," + ;
+                        "lcfopsub = " + FormatarNumeroSQL(THIS.this_nLcfopsub) + "," + ;
+                        "ccfopsub = " + FormatarNumeroSQL(THIS.this_nCcfopsub) + "," + ;
+                        "ccfoppro = " + FormatarNumeroSQL(THIS.this_nCcfoppro) + "," + ;
+                        "lnatopsub = " + FormatarNumeroSQL(THIS.this_nLnatopsub) + "," + ;
+                        "cnatopsub = " + FormatarNumeroSQL(THIS.this_nCnatopsub) + "," + ;
+                        "cpesomet = " + FormatarNumeroSQL(THIS.this_nCpesomet) + "," + ;
+                        "cunipesos = " + EscaparSQL(THIS.this_cCunipesos) + "," + ;
+                        "liniped2 = " + FormatarNumeroSQL(THIS.this_nLiniped2) + "," + ;
+                        "ciniped2 = " + FormatarNumeroSQL(THIS.this_nCiniped2)
+
+            loc_cSQL = loc_cSeta + loc_cSetb + loc_cSetc + loc_cWhere
+            IF SQLEXEC(gnConnHandle, loc_cSQL) > 0
+                THIS.RegistrarAuditoria("UPDATE")
+                loc_lResultado = .T.
+            ELSE
+                MsgErro("Erro ao atualizar configura" + CHR(231) + CHR(227) + "o de NF.", "NflBO.Atualizar")
+            ENDIF
+        CATCH TO loException
+            MostrarErro(loException, "NflBO.Atualizar")
+        ENDTRY
+        RETURN loc_lResultado
+    ENDFUNC
+
+    *===========================================================================
+    * ExecutarExclusao - DELETE em SigCnFN2 e SigCnFNf por cidchaves
+    *===========================================================================
+    PROTECTED FUNCTION ExecutarExclusao()
+        LOCAL loc_lResultado, loc_cWhere
+        loc_lResultado = .F.
+        TRY
+            loc_cWhere = " WHERE cidchaves = " + EscaparSQL(THIS.this_cCidchaves)
+            IF SQLEXEC(gnConnHandle, "DELETE FROM SigCnFN2" + loc_cWhere) > 0
+                IF SQLEXEC(gnConnHandle, "DELETE FROM SigCnFNf" + loc_cWhere) > 0
+                    THIS.RegistrarAuditoria("DELETE")
+                    loc_lResultado = .T.
+                ELSE
+                    MsgErro("Erro ao excluir cabe" + CHR(231) + "alho de NF.", "NflBO.ExecutarExclusao")
+                ENDIF
+            ELSE
+                MsgErro("Erro ao excluir configura" + CHR(231) + CHR(227) + "o de NF.", "NflBO.ExecutarExclusao")
+            ENDIF
+        CATCH TO loException
+            MostrarErro(loException, "NflBO.ExecutarExclusao")
+        ENDTRY
+        RETURN loc_lResultado
+    ENDFUNC
+
+    *===========================================================================
+    * SalvarSigCnFNf - Persiste cursor crSigCnFNf em SigCnFNf via UPDATE dinamico
+    *===========================================================================
+    FUNCTION SalvarSigCnFNf()
+        LOCAL loc_lResultado, loc_cSQL, loc_cSet, loc_cType, loc_cVal, loc_cField
+        LOCAL loc_nI, loc_nTotal
+        loc_lResultado = .F.
+        TRY
+            IF USED("crSigCnFNf") AND RECCOUNT("crSigCnFNf") > 0
+                SELECT crSigCnFNf
+                loc_cSet   = ""
+                loc_nTotal = FCOUNT("crSigCnFNf")
+                FOR loc_nI = 1 TO loc_nTotal
+                    loc_cField = LOWER(FIELD(loc_nI, "crSigCnFNf"))
+                    IF loc_cField = "cidchaves"
+                        LOOP
+                    ENDIF
+                    loc_cType = VARTYPE(EVALUATE(loc_cField))
+                    DO CASE
+                        CASE loc_cType = "C"
+                            loc_cVal = EscaparSQL(ALLTRIM(EVALUATE(loc_cField)))
+                        CASE loc_cType = "N"
+                            loc_cVal = FormatarNumeroSQL(EVALUATE(loc_cField))
+                        CASE loc_cType = "L"
+                            loc_cVal = IIF(EVALUATE(loc_cField), "1", "0")
+                        OTHERWISE
+                            loc_cVal = ""
+                    ENDCASE
+                    IF !EMPTY(loc_cVal)
+                        loc_cSet = loc_cSet + loc_cField + "=" + loc_cVal + ","
+                    ENDIF
+                ENDFOR
+                IF !EMPTY(loc_cSet)
+                    loc_cSet = LEFT(loc_cSet, LEN(loc_cSet) - 1)
+                    loc_cSQL = "UPDATE SigCnFNf SET " + loc_cSet + ;
+                               " WHERE cidchaves = " + EscaparSQL(THIS.this_cCidchaves)
+                    IF SQLEXEC(gnConnHandle, loc_cSQL) > 0
+                        loc_lResultado = .T.
+                    ELSE
+                        MsgErro("Erro ao salvar posi" + CHR(231) + CHR(245) + "es de NF.", ;
+                                "NflBO.SalvarSigCnFNf")
+                    ENDIF
+                ELSE
+                    loc_lResultado = .T.
+                ENDIF
+            ELSE
+                loc_lResultado = .T.
+            ENDIF
+        CATCH TO loException
+            MostrarErro(loException, "NflBO.SalvarSigCnFNf")
+        ENDTRY
+        RETURN loc_lResultado
+    ENDFUNC
+
+ENDDEFINE
+

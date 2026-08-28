@@ -1,0 +1,25 @@
+﻿Os 4 problemas s├úo **falsos positivos** do detector. Aqui est├í a an├ílise:
+
+| Coluna flagada | Tabela da query | Tabela original | Diagn├│stico |
+|---|---|---|---|
+| `cods` | **SigCdSer** | SigCnFNf/SigCnFN2 | Lookup de S├®rie ÔÇö tabela diferente |
+| `CEmps` | **SigCdEmp** | SigCnFNf/SigCnFN2 | Lookup de Empresa ÔÇö tabela diferente |
+| `CUnis` | **SigCdUni** | SigCnFNf/SigCnFN2 | Lookup de Unidade ÔÇö tabela diferente |
+| `codigos` | **SigCdClf** | SigCnFNf/SigCnFN2 | Lookup de Classifica├º├úo Fiscal ÔÇö tabela diferente |
+
+**Por que s├úo falsos positivos:**
+
+O detector comparou **todos** os `WHERE` do arquivo migrado contra as colunas do `WHERE` original de `SigCnFNf` (`CIDCHAVES, LNCODIGO, EMPS, PCESCOLHA, VALOR, SERIES, _CONT, PNVOLUME`). Mas as 4 queries flagadas s├úo de **validadores de campos lookup** que consultam tabelas auxiliares completamente diferentes ÔÇö n├úo `SigCnFNf`. O padr├úo ├® can├┤nico:
+
+```foxpro
+* ValidarSeries -> SELECT cods FROM SigCdSer   (valida serie contra SigCdSer)
+* EmpPadValid  -> SELECT CEmps FROM SigCdEmp   (valida empresa contra SigCdEmp)
+* UnPesosValid -> SELECT CUnis FROM SigCdUni   (valida unidade contra SigCdUni)
+* ValidarClsFis-> SELECT codigos FROM SigCdClf (valida classif. fiscal contra SigCdClf)
+```
+
+Cada WHERE usa a **chave prim├íria da tabela destino** (confirmado em schema.sql), e o padr├úo `if !found ÔåÆ AbrirLookup*` ├® exatamente o can├┤nico descrito na mem├│ria do projeto (feedback_formbuscaauxiliar_pattern_b_broken.md). Nenhuma dessas queries filtra `SigCnFNf` ou `SigCnFN2`.
+
+**Nenhuma altera├º├úo ├® necess├íria.** Remover ou modificar esses WHERE quebraria a valida├º├úo de entrada dos campos S├®rie, Empresa, Unidade de Peso e Classifica├º├úo Fiscal ÔÇö violando a regra "NAO remover funcionalidades ou lookups".
+
+O arquivo `FormNfl.prg` est├í correto para esses 4 pontos.

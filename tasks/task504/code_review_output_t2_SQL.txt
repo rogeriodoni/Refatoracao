@@ -1,0 +1,15 @@
+﻿All fixes look correct. Here's a summary of all 11 edits applied to `FormProduto.prg`:
+
+| # | Location | Fix |
+|---|----------|-----|
+| 1 | `AbrirBuscaMoeda` (~6972) | CMOEDS ÔÇö collapsed `WHERE cmoeds LIKE` + fallback ÔåÆ single `SELECT ÔÇª FROM SigCdMoe ORDER BY cmoeds` |
+| 2 | `GrdFaseCol4UniPrdtValid` (~8424) | UNIPRDTS ÔÇö removed `AND uniprdts = val` from WHERE; added `LOCATE FOR ALLTRIM(...) == ALLTRIM(loc_cValAtual)` after load |
+| 3a | `ValidarConquilhaFaseP` (~8782) | CONQUILHAS validation ÔÇö replaced `WHERE conquilhas = val` with full `SELECT DISTINCT ÔÇª ORDER BY` + LOCATE |
+| 3b | `ValidarConquilhaFaseP` (~8795) | CONQUILHAS lookup ÔÇö collapsed `WHERE conquilhas LIKE` + fallback ÔåÆ single full-table query |
+| 4a | `ValidarDclfiscal` (~9319) | DESCRICAOS ÔÇö removed `WHERE descricaos LIKE`; full table + `LOCATE FOR LIKE(UPPERÔÇª)` before the IF |
+| 4b | `ValidarDorigmerc` (~9427) | DESCRICAOS ÔÇö same pattern for SIGCDORG |
+| 4c | `ValidarDsittricm` (~9536) | DESCRICAOS ÔÇö same pattern for SIGCDICM |
+| 5a | `ValidarDesLacto` (~11014) | CATIVOS ÔÇö removed `AND cativos <> 'N'` from `WHERE usuarios = val` |
+| 5b | `AbrirBuscaDesLacto` (~11049) | CATIVOS ÔÇö collapsed `WHERE cativos <> 'N' AND usuarios LIKE` + fallback ÔåÆ `SELECT ÔÇª FROM SigCdUsu ORDER BY usuarios` |
+| 5c | `ValidarCriaLacto` (~11100) | CATIVOS ÔÇö removed `AND cativos <> 'N'` from `WHERE usuarios = val` |
+| 5d | `AbrirBuscaCriaLacto` (~11135) | CATIVOS ÔÇö collapsed `WHERE cativos <> 'N' AND usuarios LIKE` + fallback ÔåÆ `SELECT ÔÇª FROM SigCdUsu ORDER BY usuarios` |

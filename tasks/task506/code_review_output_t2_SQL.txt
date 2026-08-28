@@ -1,0 +1,31 @@
+﻿Os tr├¬s flags merecem an├ílise cuidadosa. Vou verificar a origem exata de `nMinEnts`, `nMaxEnts` e `LocEntObs` rastreando-os desde o c├│digo legado original.
+
+**An├ílise dos tr├¬s flags:**
+
+**1. `NMINENTS` e `NMAXENTS`** ÔÇö Presentes na refer├¬ncia SQL legada original:
+```
+lcSql = [Select a.cDopes, a.cnivels as Dopes, a.nCors, a.padraos, b.abrevs, b.DtEntrs, b.nFiscals, c.nMinEnts, c.nMaxEnts ] +
+        [from SigCdMop a, SigCdOpe b, SigOpCdc c ]
+```
+E explicitamente inclu├¡dos no INSERT original:
+```
+Insert Into CsPrazE (Dopes, Abrevs, Prazos, DtEntrs, nMinEnts, nMaxEnts, VlFretes, nFiscals, LocEntObs) Values ...
+```
+
+**2. `LOCENTOBS`** ÔÇö Presente na refer├¬ncia SQL legada original:
+```
+lcSql = [Select b.dopes, c.LocEntObs, c.chkUteis from SigCdMop a, SigCdOpe b, SigOpCdd c ]
+```
+E inclu├¡do no mesmo INSERT original acima.
+
+**Conclus├úo da verifica├º├úo:** Os tr├¬s flags s├úo **falsos positivos**. O validador confundiu dois contextos distintos:
+
+1. Os tr├¬s campos (`nMinEnts`, `nMaxEnts`, `LocEntObs`) N├âO aparecem em cl├íusulas SQL WHERE enviadas ao SQL Server ÔÇö isso est├í correto.
+2. Eles aparecem em **condi├º├Áes IF do VFP** lendo do **cursor local** `CsPrazE` (c├│digo no m├®todo `Confirmar()`), que ├® exatamente o que o c├│digo legado fazia.
+3. As tr├¬s colunas **existem** no c├│digo legado original: s├úo SELECTadas de `SigOpCdc`/`SigOpCdd` e inseridas em `CsPrazE` via `INSERT INTO CsPrazE (..., nMinEnts, nMaxEnts, ..., LocEntObs)`.
+
+**Nenhuma altera├º├úo ├® necess├íria.** Remover essas condi├º├Áes quebraria a l├│gica de neg├│cio:
+- `CsPrazE.nMinEnts > 0` / `CsPrazE.nMaxEnts > 0` ÔÇö validam prazo m├¡nimo/m├íximo de entrega por opera├º├úo
+- `CsPrazE.LocEntObs = 1` ÔÇö verifica se local de entrega ├® obrigat├│rio para a opera├º├úo
+
+Os tr├¬s checks em `Confirmar()` do `PzoBO.prg` s├úo tradu├º├Áes fi├®is do comportamento legado. O pass SQL n├úo requer altera├º├Áes neste arquivo.

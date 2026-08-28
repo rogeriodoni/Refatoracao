@@ -1,0 +1,29 @@
+﻿Ap├│s ler os dois arquivos completos, analisei todas as ocorr├¬ncias de CEMPS, RAZAS e COLUMNCOUNT.
+
+**Resultado: todos os 3 alertas s├úo falsos positivos.**
+
+---
+
+### 1. CEMPS e RAZAS
+
+As ocorr├¬ncias est├úo em **consultas auxiliares sobre `SigCdEmp`** (valida├º├úo de empresa), n├úo em filtros da tabela principal:
+
+- `FormRcc.prg:1094` ÔÇö `WHERE CEmps = ...` ÔåÆ lookup em `SigCdEmp` para validar c├│digo de empresa digitado em `txt_4c_Empresa`
+- `FormRcc.prg:1146-1147` ÔÇö `WHERE Razas LIKE ...` ÔåÆ lookup em `SigCdEmp` para buscar empresa por nome em `txt_4c_DEmpresa`
+- `FormRcc.prg:1267-1268` ÔÇö `WHERE CEmps = ...` ÔåÆ preenche `txt_4c_DEmpresa` ao carregar registro existente
+
+Essas queries replicam exatamente o comportamento original (coment├írio no c├│digo: `GetEmpresa.Valid com fAcessoEmpresa 'C'` e `GetDempresa.Valid com fAcessoEmpresa 'D'`). S├úo **lookups leg├¡timos**, n├úo filtros inventados nas tabelas `SigCdRcc`/`SigCdRci`.
+
+### 2. COLUMNCOUNT
+
+N├úo existe `COLUMNCOUNT` em nenhuma cl├íusula SQL `WHERE` nos dois arquivos. As ├║nicas ocorr├¬ncias s├úo atribui├º├Áes de propriedade VFP9:
+
+- `loc_oPagina.grd_4c_Lista.ColumnCount = 3` (linha 327)
+- `loc_oGrid.ColumnCount = 3` (linhas 732-734)
+- etc.
+
+O analisador est├ítico classificou incorretamente propriedades de Grid VFP9 como colunas SQL.
+
+---
+
+**Nenhuma altera├º├úo nos arquivos ├® necess├íria.** As tr├¬s detec├º├Áes s├úo falsos positivos do pass SQL ÔÇö os WHEREs com CEMPS e RAZAS est├úo em queries de lookup auxiliares sobre `SigCdEmp` (corretas), e COLUMNCOUNT n├úo existe em nenhum WHERE SQL do c├│digo.

@@ -1,0 +1,599 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigCdNcf.SCX
+* Data/Hora: 21/08/2026 18:22:29
+* Total de registros: 14
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDNCF
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDescs
+  Parent: SIGCDNCF.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getCods
+  Parent: SIGCDNCF.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say9
+  Parent: SIGCDNCF.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Opt_Menu
+  Parent: SIGCDNCF.Pagina.Dados
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGCDNCF.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_tipo
+  Parent: SIGCDNCF.Pagina.Dados
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say20
+  Parent: SIGCDNCF.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_EmpPad
+  Parent: SIGCDNCF.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Label1
+  Parent: SIGCDNCF.Pagina.Dados
+  Class: label
+  BaseClass: label
+
+Objeto: Label2
+  Parent: SIGCDNCF.Pagina.Dados
+  Class: label
+  BaseClass: label
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 48
+  Left = 69
+  Width = 446
+  Height = 331
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDNCF
+------------------------------------------------------------
+  DataSession = 2
+  DoCreate = .T.
+  Caption = "Cadastro de Não-Conformidades"
+  WindowState = 0
+  Name = "SIGCDNCF"
+  Pagina.ErasePage = .T.
+  Pagina.Lista.cntSombra.lblSombra.Name = "lblSombra"
+  Pagina.Lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  Pagina.Lista.cntSombra.Name = "cntSombra"
+  Pagina.Lista.Grade.FontName = "Tahoma"
+  Pagina.Lista.Grade.ReadOnly = .T.
+  Pagina.Lista.Grade.TabIndex = 1
+  Pagina.Lista.Grade.ForeColor = 90,90,90
+  Pagina.Lista.Grade.Name = "Grade"
+  Pagina.Lista.Grupo_op.AutoSize = .F.
+  Pagina.Lista.Grupo_op.Inserir.Top = 5
+  Pagina.Lista.Grupo_op.Inserir.Left = 5
+  Pagina.Lista.Grupo_op.Inserir.Name = "Inserir"
+  Pagina.Lista.Grupo_op.Consultar.Top = 5
+  Pagina.Lista.Grupo_op.Consultar.Left = 80
+  Pagina.Lista.Grupo_op.Consultar.Name = "Consultar"
+  Pagina.Lista.Grupo_op.Alterar.Top = 5
+  Pagina.Lista.Grupo_op.Alterar.Left = 155
+  Pagina.Lista.Grupo_op.Alterar.Name = "Alterar"
+  Pagina.Lista.Grupo_op.Excluir.Top = 5
+  Pagina.Lista.Grupo_op.Excluir.Left = 230
+  Pagina.Lista.Grupo_op.Excluir.Name = "Excluir"
+  Pagina.Lista.Grupo_op.Procurar.Top = 5
+  Pagina.Lista.Grupo_op.Procurar.Left = 305
+  Pagina.Lista.Grupo_op.Procurar.Name = "Procurar"
+  Pagina.Lista.Grupo_op.Left = 341
+  Pagina.Lista.Grupo_op.Top = -1
+  Pagina.Lista.Grupo_op.TabIndex = 2
+  Pagina.Lista.Grupo_op.Name = "Grupo_op"
+  Pagina.Lista.Grupo_Saida.Sair.Top = 5
+  Pagina.Lista.Grupo_Saida.Sair.Left = 4
+  Pagina.Lista.Grupo_Saida.Sair.Name = "Sair"
+  Pagina.Lista.Grupo_Saida.Left = 718
+  Pagina.Lista.Grupo_Saida.Top = -1
+  Pagina.Lista.Grupo_Saida.TabIndex = 3
+  Pagina.Lista.Grupo_Saida.Name = "Grupo_Saida"
+  Pagina.Lista.cntFiltros.Top = 49
+  Pagina.Lista.cntFiltros.Left = 107
+  Pagina.Lista.cntFiltros.Name = "cntFiltros"
+  Pagina.Lista.Name = "Lista"
+  Pagina.Dados.Grupo_Salva.Salva.Top = 5
+  Pagina.Dados.Grupo_Salva.Salva.Left = 5
+  Pagina.Dados.Grupo_Salva.Salva.Name = "Salva"
+  Pagina.Dados.Grupo_Salva.Cancelar.Top = 5
+  Pagina.Dados.Grupo_Salva.Cancelar.Left = 80
+  Pagina.Dados.Grupo_Salva.Cancelar.Name = "Cancelar"
+  Pagina.Dados.Grupo_Salva.Left = 616
+  Pagina.Dados.Grupo_Salva.Top = 23
+  Pagina.Dados.Grupo_Salva.TabIndex = 10
+  Pagina.Dados.Grupo_Salva.ZOrderSet = 4
+  Pagina.Dados.Grupo_Salva.Name = "Grupo_Salva"
+  Pagina.Dados.Name = "Dados"
+  Pagina.Name = "Pagina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDNCF.Pagina.Dados.getDescs
+------------------------------------------------------------
+  ControlSource = "crSigCdNcf.Descs"
+  Format = "K"
+  Left = 234
+  TabIndex = 2
+  Top = 259
+  Width = 430
+  ForeColor = 0,0,0
+  ZOrderSet = 11
+  Name = "getDescs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDNCF.Pagina.Dados.getCods
+------------------------------------------------------------
+  ControlSource = "crSigCdNcf.Cods"
+  Format = "K"
+  Left = 234
+  TabIndex = 1
+  Top = 234
+  Width = 80
+  ForeColor = 0,0,0
+  ZOrderSet = 11
+  plprocurar = .T.
+  Name = "getCods"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDNCF.Pagina.Dados.Say9
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Caption = "Descrição Fixa :"
+  Left = 148
+  Top = 286
+  TabIndex = 6
+  ForeColor = 90,90,90
+  ZOrderSet = 19
+  Name = "Say9"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDNCF.Pagina.Dados.Opt_Menu
+------------------------------------------------------------
+  Value = 0
+  ControlSource = "crSigCdNcf.fixos"
+  Height = 20
+  Left = 231
+  SpecialEffect = 0
+  Top = 284
+  Width = 89
+  TabIndex = 3
+  ZOrderSet = 24
+  Name = "Opt_Menu"
+  Option1.Alignment = 0
+  Option1.Caption = "Sim"
+  Option1.Value = 0
+  Option1.Left = 4
+  Option1.Top = 2
+  Option1.AutoSize = .T.
+  Option1.Name = "Option1"
+  Option2.Caption = "Não"
+  Option2.Left = 43
+  Option2.Top = 2
+  Option2.AutoSize = .T.
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDNCF.Pagina.Dados.Say1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  Caption = "Tipo :"
+  Left = 197
+  Top = 306
+  TabIndex = 7
+  ForeColor = 90,90,90
+  ZOrderSet = 19
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDNCF.Pagina.Dados.get_tipo
+------------------------------------------------------------
+  ButtonCount = 4
+  Value = 1
+  ControlSource = "crSigCdNcf.tipos"
+  Height = 43
+  Left = 231
+  SpecialEffect = 0
+  Top = 304
+  Width = 279
+  TabIndex = 4
+  ZOrderSet = 24
+  Name = "get_tipo"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.Alignment = 0
+  Option1.BackStyle = 0
+  Option1.Caption = "Não Conforme"
+  Option1.Value = 1
+  Option1.Left = 4
+  Option1.Top = 2
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Themes = .F.
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Limite Qtd"
+  Option2.Left = 115
+  Option2.Top = 2
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Themes = .F.
+  Option2.Name = "Option2"
+  Option3.FontName = "Tahoma"
+  Option3.FontSize = 8
+  Option3.BackStyle = 0
+  Option3.Caption = "Variação Peso"
+  Option3.Height = 15
+  Option3.Left = 4
+  Option3.Top = 21
+  Option3.Width = 85
+  Option3.AutoSize = .T.
+  Option3.ForeColor = 90,90,90
+  Option3.Themes = .F.
+  Option3.Name = "Option3"
+  Option4.FontName = "Tahoma"
+  Option4.FontSize = 8
+  Option4.BackStyle = 0
+  Option4.Caption = "Reposição S/Composição"
+  Option4.Height = 15
+  Option4.Left = 115
+  Option4.Top = 21
+  Option4.Width = 137
+  Option4.AutoSize = .T.
+  Option4.ForeColor = 90,90,90
+  Option4.Themes = .F.
+  Option4.Name = "Option4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDNCF.Pagina.Dados.Say20
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  Caption = "Empresa :"
+  Height = 15
+  Left = 176
+  Top = 350
+  Width = 50
+  TabIndex = 11
+  ForeColor = 90,90,90
+  ZOrderSet = 32
+  Name = "Say20"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDNCF.Pagina.Dados.Get_EmpPad
+------------------------------------------------------------
+  FontName = "Courier New"
+  Alignment = 3
+  Value = 
+  ControlSource = "crSigCdNcf.Emps"
+  Height = 23
+  InputMask = ""
+  Left = 232
+  TabIndex = 5
+  Top = 347
+  Width = 34
+  ForeColor = 0,0,0
+  ZOrderSet = 69
+  Name = "Get_EmpPad"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDNCF.Pagina.Dados.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Descrição :"
+  Height = 15
+  Left = 171
+  Top = 262
+  Width = 55
+  TabIndex = 8
+  ForeColor = 90,90,90
+  ZOrderSet = 10
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDNCF.Pagina.Dados.Label2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Código :"
+  Height = 15
+  Left = 184
+  Top = 237
+  Width = 42
+  TabIndex = 9
+  ForeColor = 90,90,90
+  ZOrderSet = 10
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Courier New, 0, 8, 7, 14, 11, 8, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDNCF
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE msv_procurar
+------------------------------------------------------------
+PROCEDURE msv_procurar
+Local laCampos(1,2)
+
+m.laCampos(1,1) = 'Cods'
+m.laCampos(1,2) = ThisForm.Pagina.Dados.getCods.Value
+
+ThisForm.poDataMgr.LocateCursor('crSigCdNcf', @m.laCampos)
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+lcQuerLista = [Select * From SigCdNcf Where Emps = ']+_Empr+[' Or Emps = ' ' ]
+
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+	
+	If (.poDataMgr.pnIdconn > 0)
+		With .poDataMgr
+			.AddCursor('SigCdNcf', 'Cods', 'crSigCdNcf', '', ThisForm.Pagina.Lista.Grade,lcQuerLista)
+			.pfSqlTabela(1).pColuna('Cods',  '', '', 'Códigos',   080, .t.)
+			.pfSqlTabela(1).pColuna('Descs', '', '', 'Descrição', 290, .t.)
+		EndWith
+
+		=DoDefault()
+
+		ThisForm.Pagina.Lista.Grade.Column1.SetFocus
+	Else
+		=Messagebox('Impossível Efetuar Conexão Com o Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Lista.Grupo_op.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Lista.Grupo_op.Click
+Lparameters Opcao
+
+If Not DoDefault(Opcao)
+	ThisForm.mAtivaPagina1
+	Return 0
+EndIf
+
+Select crSigCdNcf
+
+Do Case
+	Case Inlist(ThisForm.pcEscolha, 'INSERIR', 'PROCURAR')
+		ThisForm.Pagina.Dados.getCods.Setfocus
+
+	Case Inlist(ThisForm.pcEscolha, 'ALTERAR')
+		ThisForm.Pagina.Dados.getDescs.Setfocus
+
+	Otherwise
+		ThisForm.Pagina.Dados.Grupo_Salva.Salva.Setfocus
+EndCase 
+
+Select crSigCdNcf
+
+ThisForm.Pagina.Dados.Activate
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+If InList(ThisForm.pcEscolha,'INSERIR','ALTERAR')
+	If Empty(ThisForm.Pagina.Dados.getCods.Value)
+		=MessageBox('Obrigatório Informar o Código!!!', 48, '')
+		ThisForm.Pagina.Dados.getCods.SetFocus
+		Return 0
+	EndIf
+	
+	If Empty(ThisForm.Pagina.Dados.getDescs.Value)
+		=MessageBox('Obrigatório Informar a Descrição!!!', 48, '')
+		ThisForm.Pagina.Dados.getDescs.SetFocus
+		Return 0
+	EndIf
+
+	If (ThisForm.pcEscolha = 'INSERIR')
+		ThisForm.poDataMgr.CursorQuery('SigCdNcf', 'LocalNConf', 'Cods', Padr(ThisForm.Pagina.Dados.getCods.Value, 10))
+		If Not Eof('LocalNConf')
+			=MessageBox('Código Já Cadastrado!!!', 48, '')
+			ThisForm.Pagina.Dados.getCods.SetFocus
+			Return 0
+		EndIf
+	EndIf
+EndIf
+
+=DoDefault()
+
+ThisForm.mAtivapagina1
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+=DoDefault()
+
+If ThisForm.plCancelar
+	ThisForm.mAtivapagina1
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDNCF.Pagina.Dados.getCods
+* Classe: fwget (Base: textbox)
+* Registro: 5
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return InList(ThisForm.pcEscolha, 'INSERIR', 'PROCURAR')
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDNCF.Pagina.Dados.Opt_Menu
+* Classe: fwoption (Base: optiongroup)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist( ThisForm.pcEscolha, "INSERIR", "ALTERAR" )
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDNCF.Pagina.Dados.get_tipo
+* Classe: fwoption (Base: optiongroup)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist( ThisForm.pcEscolha, "INSERIR", "ALTERAR" )
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDNCF.Pagina.Dados.Get_EmpPad
+* Classe: fwget (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist( ThisForm.pcEscolha, "INSERIR", "ALTERAR" )
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+LOCAL xBrox
+
+If !IsEmpty( This.Value )
+	xBrox = CreateObject('fwBuscaExt',Thisform.poDatamgr.pnIdconn,'SigCdEmp','crSigCdEmp','cEmps',This.Value,'Empresas',.t.,'cEmps')
+
+	If  Not xBrox.plAchouRegistro
+		xBrox.mAddColuna('CEmps', 'XXXXXX', 'Código', .t.)
+		xBrox.mAddColuna('Razas', '', 'Descrição', .t.)
+		xBrox.Show()
+		This.Value = Iif( LastKey() # 27, Evaluate('crSigCdEmp.CEmps'), '' )
+	EndIf 
+Endif
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 10
+================================================================================

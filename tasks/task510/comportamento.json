@@ -1,0 +1,488 @@
+{
+  "resumo": {
+    "totalMetodos": 27,
+    "metodosComSQL": 10,
+    "metodosComValidacao": 8,
+    "totalQueries": 5,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fUniqueIds", "fwBuscaExt", "fwBuscaInt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDREG",
+      "evento": "Init",
+      "linhas": 37,
+      "codigoOriginal": "LPARAMETERS lcacesso\n\nWith ThisForm\n\t.poDatamgr = CreateObject('fSqlConector')\n\tWith .poDatamgr\n\t\t.AddCursor('SigCdReg','regiaos','crSigCdReg','',ThisForm.pagina.lista.grade)\n\t\t.pfSqlTabela(1).pColuna('regiaos','','','Regiãos',80,.T.)\n\t\t.pfSqlTabela(1).pColuna('descs','','','Descrição',160,.T.)\n\t\t.AddCursor('SigCdRgi','pkChaves','crSigCdRgi','','')\n\tEndWith\nENDWITH\n\nSELECT *, SPACE(40) as munici, SPACE(2) as uf from crSigcdRgi into cursor crMuni readwrite\n\nSELECT crMuni\n\nWith ThisForm.Pagina.Dad... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDREG",
+      "evento": "Procedure",
+      "linhas": 10,
+      "codigoOriginal": "Local lcBusca\n\nIf .Not.IsEmpty(ThisForm.Pagina.Dados.get_codigo.Value)\n\tThisForm.poDataMgr.LocateCursor('crSigCdReg','regiaos',ThisForm.Pagina.Dados.get_codigo.Value)\nElse\n\tIf .Not.IsEmpty(ThisForm.Pagina.Dados.Get_desc.Value)\n\t\tThisForm.poDataMgr.LocateCursor('crSigCdReg','descs',ThisForm.Pagina.Dados.Get_desc.Value)\n\tEndIf\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "LocateCursor",
+        "controlesReferenciados": "get_codigo,Get_desc",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDREG",
+      "evento": "Click",
+      "linhas": 85,
+      "codigoOriginal": "LParameters opcao\nLOCAL lcSK\n\n=DODEFAULT()\n\n*** pega chave secundária se houver ***\nlcSK = IIF(ThisForm.PcEscolha='INSERIR', '', crsigcdreg.skchaves)\n\n*** Prepara Grade de Municipio ***\nSelect crMuni\nZap\n\nlcSql = [Select distinct a.skchaves as skchaves, pkchaves, codibges, tipos, ] +;\n\t\t[c.descs as munici, d.estados as uf From SigCdRgi a ] + ;\n\t\t[left Join SigCdReg b On a.skChaves = b.skchaves ] +  ;\n\t\t[left join sigcdmun c on c.codigos = a.codibges ] +;\n\t\t[left join sigcdufs d on d.ufibges = c.... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "Get_Codigo,Get_Desc",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDREG",
+      "evento": "Click",
+      "linhas": 69,
+      "codigoOriginal": "Local llOks\nllOks = .t.\n\nIf ThisForm.PcEscolha = 'INSERIR'\n\tIf ThisForm.poDataMgr.ChkRegister('SigCdReg','regiaos',ThisForm.Pagina.Dados.Get_Codigo.Value)\n\t\tMessagebox( 'Região já Cadastrada!', 48, '' )\n\t\tThisForm.Pagina.Dados.Get_Codigo.SetFocus\n\t\tReturn\n\tEndif\n\treplace skChaves With fUniqueIds() in crSigCdReg\nEndif\n\n\n**** atualiza sigcdrgi com municipios e vendedores ****\nSET delete off\nIf InList(ThisForm.pcescolha,'INSERIR','ALTERAR')\n*** Atualiza tabela de municipios ***\t\n\tSelect CrSigCdRgi\n... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "ChkRegister,Update,Rollback",
+        "controlesReferenciados": "Get_Codigo,ChkRegister('SigCdReg'",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDREG",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "=DoDefault()\nIf ThisForm.PlCancelar\n\tThisForm.MAtivaPagina1\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDREG.Pagina.Dados.Get_Desc",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "return( !thisform.Pcescolha $ 'EXCLUIR/CONSULTAR' )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDREG.Pagina.Dados.Get_codigo",
+      "evento": "When",
+      "linhas": 7,
+      "codigoOriginal": "LOCAL Ret\n\nRet=DoDefault()\nIf Thisform.pcEscolha='ALTERAR'\n\tRet=.F.\nEndif\nReturn(Ret)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDREG.Pagina.Dados.inserir",
+      "evento": "Click",
+      "linhas": 17,
+      "codigoOriginal": "ThisForm.LockScreen = .t.\nSelect crMuni\nLocate For codibges=' '\nIf Eof()\n\tAppend Blank\nENDIF\n\nThisform.Pagina.Dados.gradMuni.Column1.SetFocus\nreplace crMuni.tipos With 'M'\nreplace crMuni.PkChaves With fUniqueIds()\nreplace crMuni.munici With SPACE(40)\nreplace crMuni.codibges With SPACE(7)\n\nThisform.Pagina.Dados.gradMuni.column2.text1.Value= ''\nThisform.Pagina.Dados.gradMuni.Refresh\nThisForm.LockScreen = .f.\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDREG.Pagina.Dados.inserir",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDREG.Pagina.Dados.excluir",
+      "evento": "Click",
+      "linhas": 12,
+      "codigoOriginal": "Select crMuni\nIf Eof() Or Bof()\n\tReturn\nEndIf\nThisForm.LockScreen = .t.\n\nSELECT crMuni\nDelete\nThisForm.pagina.Dados.gradMuni.Refresh\nThisForm.Pagina.Dados.GradMuni.Column2.SetFocus\nThisForm.LockScreen = .f.\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDREG.Pagina.Dados.excluir",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDREG.Pagina.Dados.GradMuni",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "If Not Eof()\n\tSkip\n\tSkip -1\nEndIf\n* Fim *********************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDREG.Pagina.Dados.GradMuni.Column1.Text1",
+      "evento": "Valid",
+      "linhas": 22,
+      "codigoOriginal": "Local loLista\n\nIf Not IsEmpty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdUfs', ;\n\t\t\t\t\t\t   'crListaRemota', 'Estados', Padr(This.Value,2), 'Seleção', .T.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Estados', '', 'UF')\n\t\tloLista.mAddColuna('Descrs',  '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\tIf Lastkey() <> 27\n\t\tThis.Value = crListaRemota.Estados\n\tElse\n\t\tThis.Value = ''\n\tEndif\n\tUse In crListaRemota\nElse\n\tThis.Value = ''\nEndIf\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDREG.Pagina.Dados.GradMuni.Column1.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDREG.Pagina.Dados.GradMuni.Column2.Text1",
+      "evento": "LostFocus",
+      "linhas": 10,
+      "codigoOriginal": "Select uf, munici from crMuni into cursor Duplica group by uf, munici  having sum(1) > 1 \nSelect Duplica\nIf Reccount() > 0\n\t=MessageBox('Município já lançado!!!',0+32,'')\n\tSelect crMuni\n\treplace uf with ' '\n\tThisForm.Pagina.Dados.gradMuni.Column1.SetFocus\nEndIf\nSelect crMuni\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDREG.Pagina.Dados.GradMuni.Column2.Text1",
+      "evento": "Valid",
+      "linhas": 30,
+      "codigoOriginal": "Local loLista, lcQuery\n\n*** Mostra lista de municipios ***\nIf Not Empty(crMuni.uf)\n\tlcQuery = \t[Select b.estados as estados, a.descs as munici, a.codigos as codibges From SigCdMun a, SigcdUfs b where b.estados = '] + ;\n\t\tcrMuni.uf + [' and a.ufibges = b.ufibges order by descs]\n\n\tIf (Thisform.poDataMgr.SqlExecute(lcQuery, [crLocal])) >0\n\t\tSelect crlocal\n\t\tIndex On munici Tag munici\n\t\tIf Not Seek(Padr(This.Value, 40), [crLocal], [munici])\n\t\t\tloLista = Createobject([fwBuscaInt], [crLocal], [munici]... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDREG.Pagina.Dados.GradMuni.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDREG.Pagina.Dados.InserirV",
+      "evento": "Click",
+      "linhas": 14,
+      "codigoOriginal": "ThisForm.LockScreen = .t.\nSelect crVend\nLocate For iclis=' '\nIf Eof()\n\tAppend Blank\nENDIF\nThisform.Pagina.Dados.gradVend.Column1.SetFocus\nreplace crVend.tipos With 'C'\nreplace crVend.PkChaves With fUniqueIds()\nreplace crVend.iclis With SPACE(10)\nreplace crVend.vend With SPACE(50)\n\nThisForm.LockScreen = .f.\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDREG.Pagina.Dados.InserirV",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDREG.Pagina.Dados.ExcluirV",
+      "evento": "Click",
+      "linhas": 12,
+      "codigoOriginal": "Select crVend\nIf Eof() Or Bof()\n\tReturn\nEndIf\nThisForm.LockScreen = .t.\n\nSELECT crVend\nDelete\nThisForm.pagina.Dados.gradVend.Refresh\nThisForm.Pagina.Dados.GradVend.Column2.SetFocus\nThisForm.LockScreen = .f.\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDREG.Pagina.Dados.ExcluirV",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDREG.Pagina.Dados.GradVend",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "If Not Eof()\n\tSkip\n\tSkip -1\nEndIf\n* Fim *********************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDREG.Pagina.Dados.GradVend.Column1.Text1",
+      "evento": "Valid",
+      "linhas": 21,
+      "codigoOriginal": "Local loLista\n\nIF not EMPTY(this.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'sigcdcli', ;\n\t\t\t\t\t\t   'CrListaRemota', 'iclis', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('iclis', '', 'Código')\n\t\tloLista.mAddColuna('razaos', '', 'Nome Vendedor')\n\t\tloLista.Show()\n\tEndIf\n\n\tThis.Value = CrListaRemota.iclis\n\tReplace crVend.iclis With CrListaRemota.iclis in crVend\n\tReplace crVend.vend With CrListaRemota.razaos in crVend\n\n\tThis.Refresh... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDREG.Pagina.Dados.GradVend.Column1.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDREG.Pagina.Dados.GradVend.Column2.Text1",
+      "evento": "LostFocus",
+      "linhas": 10,
+      "codigoOriginal": "Select iclis from crVend into cursor Duplica group by iclis  having sum(1) > 1 \nSelect Duplica\nIf Reccount() > 0\n\t=MessageBox('Vendedor já lançado!!!',0+32,'')\n\tSelect crVend\n\treplace iclis with ' '\n\tThisForm.Pagina.Dados.gradVend.Column2.SetFocus\nEndIf\nSelect crVend\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDREG.Pagina.Dados.GradVend.Column2.Text1",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "&&Local loLista\n&&\n&&IF not EMPTY(this.Value)\n&&\n&&\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdCli', ;\n&&\t\t\t\t\t\t   'CrListaRemota', 'razaos', This.Value, 'Seleção', .t.)\n&&\n&&\tIf Not loLista.plAchouRegistro\n&&\t\tloLista.mAddColuna('iclis', '', 'Código')\n&&\t\tloLista.mAddColuna('razaos', '', 'Nome Vendedor')\n&&\t\tloLista.Show()\n&&\tEndIf\n&&\n&&\tThis.Value = CrListaRemota.iclis\n&&\tReplace crVend.iclis With CrListaRemota.iclis in crVend\n&&\tReplace crVend.vend With CrListaRemo... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDREG.Pagina.Dados.GradVend.Column2.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR') )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDREG.Init",
+      "queryOriginal": "SELECT *, SPACE(40) as munici, SPACE(2) as uf from crSigcdRgi into cursor crMuni readwrite",
+      "tabelas": "crSigcdRgi",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDREG.Click",
+      "queryOriginal": "lcSql = [Select distinct a.skchaves as skchaves, pkchaves, codibges, tipos, ] +; \t\t[c.descs as munici, d.estados as uf From SigCdRgi a ] + ; \t\t[left Join SigCdReg b On a.skChaves = b.skchaves ] +  ; \t\t[left join sigcdmun c on c.codigos = a.codibges ] +; \t\t[left join sigcdufs d on d.ufibges = c.... [TRUNCADO]",
+      "tabelas": "SigCdRgi,SigCdReg,sigcdmun,sigcdufs",
+      "colunas": "skchaves,pkchaves,codibges,tipos,descs,estados",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDREG.Pagina.Dados.GradMuni.Column2.Text1.LostFocus",
+      "queryOriginal": "Select uf, munici from crMuni into cursor Duplica group by uf, munici  having sum(1) > 1",
+      "tabelas": "crMuni",
+      "colunas": "uf,munici",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDREG.Pagina.Dados.GradMuni.Column2.Text1.Valid",
+      "queryOriginal": "\tlcQuery = \t[Select b.estados as estados, a.descs as munici, a.codigos as codibges From SigCdMun a, SigcdUfs b where b.estados = '] + ; \t\tcrMuni.uf + [' and a.ufibges = b.ufibges order by descs]",
+      "tabelas": "SigCdMun",
+      "colunas": "estados,descs,codigos,ufibges",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDREG.Pagina.Dados.GradVend.Column2.Text1.LostFocus",
+      "queryOriginal": "Select iclis from crVend into cursor Duplica group by iclis  having sum(1) > 1",
+      "tabelas": "crVend",
+      "colunas": "iclis",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["crSigcdRgi", "SigCdRgi", "SigCdReg", "sigcdmun", "sigcdufs", "crMuni", "crVend"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

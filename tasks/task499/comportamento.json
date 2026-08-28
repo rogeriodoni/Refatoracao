@@ -1,0 +1,3852 @@
+{
+  "resumo": {
+    "totalMetodos": 232,
+    "metodosComSQL": 77,
+    "metodosComValidacao": 117,
+    "totalQueries": 17,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fRecalculaS", "fGerUniqueKey", "fCarregarCambio", "From TmpConta Where Flag Or", "fUniqueIds", "For", "For Empty", "fDtoSQL", "Ordena", "fCarregaGrade", "fChecaAcesso", "from crRetA union", "fConfigGeral", "fBloqueioPorPeriodo", "fVerificaBloqueio", "fLerFiscal", "fCanUniqueKey", "For Recno", "fAcessoContas", "fChecarInativas", "fAcessoContab", "fwBuscaSel", "Form SigCdPgr With Left", "Form SigCdLch with .t.", "Left", "for !IsEmpty", "For Alltrim", "fVerificaVencimento", "fChkDigitos", "Flag with", "From CrSigOpFp Where InList", "fAcessoGrupos", "fwBuscaInt", "fwBuscaExt", "fValidarCPF", "fValidarCNPJ", "From TmpCliente Where Empty"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDPGR",
+      "evento": "Procedure",
+      "linhas": 420,
+      "codigoOriginal": "Select TmpTot\n \nThisForm.CalcTotal()\n\nSelect TmpTot\nDelete All For ValorPend = 0 And ValorAce = 0\n\nSelect TmpConta\n_RegisConta = 0\nIf !Eof()\n\t_RegisConta = Recno()\nEndif\nSet Order to \nReplace All Baixa With 0\n\nSelect xPar\n_RecnoxPar = 0\nIf !Eof()\n\t_RecnoxPar = Recno()\nEndif\nReplace all vpags with 0\n\nSelect TmpBaixa\nDele all for !autos\n_Autos = .f.\nScan for Autos\n\t_Autos = .t.\n\tExit\nEndscan\nThisForm.Pagina.Dados.Pagina.Pendencias.BaixaAut.Value = _Autos\n\nSelect TmpConta\nSet Order to CrVencs\nScan ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CalcTotal,CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR",
+      "evento": "Procedure",
+      "linhas": 39,
+      "codigoOriginal": "Lparameters lnAgBanco \n\nDo Case\n\tCase Inlist(lnAgBanco,1,2) && Bradesco / Itaú\n\t\tnpos = Ascan(thisform.aLiquida,crRetorno.liquida,1,Alen(thisform.aLiquida,1),1,8)\n\t\tcobsliq = Iif(npos>0,'/Liquidado: ' + thisform.aLiquida[npos,2],'')\n\t\tnpos = Iif(lnAgBanco = 1,Ascan(thisform.aRejeitaBd,Left(crRetorno.erros,2),1,Alen(thisform.aRejeitaBd,1),1,8), ;\n\t\t\t\t\tAscan(thisform.aRejeita,crRetorno.erros,1,Alen(thisform.aRejeita,1),1,8))\n\t\tcobsliq = cobsliq + Iif(npos>0,'/ Rejeitado: ' + thisform.aLiquida[npos... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "liquida,1,Alen,aRejeitaBd,Left,erros,1,Alen,comando,1,Alen,aRejeitaBb,lcBusca,1,Alen,CODOCOR,1,Alen",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR",
+      "evento": "Procedure",
+      "linhas": 28,
+      "codigoOriginal": "Select TmpTot\nZap\n\nSelect TmpConta\n_Order = Order()\nIf Eof()\n\t_Recno = -1\nElse\n\t_Recno = Recno()\nEndif\n\nSet Order to DbVencs\nScan For Flag\n\tIf !Seek( TmpConta.Moedas, \"TmpTot\" )\n\t\tInsert Into TmpTot ( Moeda ) Values ( TmpConta.Moedas )\n\tEndif\n\t\n\tReplace TmpTot.ValorPend With TmpTot.ValorPend + TmpConta.Acerto,;\n\t\t\t TmpTot.ValorAce With TmpTot.ValorAce + TmpConta.BaixaAut\nEndscan\n\nSelect TmpConta\nSet Order to &_Order\nIf _Recno > 0\n\tGo _Recno\nEndif\n\nReturn",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "Local Ret\nRet = fRecalculaS( .t., ThisForm.Podatamgr )\nReturn Ret\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fRecalculaS",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR",
+      "evento": "Procedure",
+      "linhas": 35,
+      "codigoOriginal": "LParameters _Volta\n\nSelect TmpConta\nIf !Eof()\n\t_Recno = Recno()\nElse\t\n\t_Recno = -1\nEndif\nSet Order to\nWait Window 'Cancelando Baixa Automática... Aguarde...' Nowait\nScan\n\tIf BaixaAut # 0\n\t\tReplace Acerto with Acerto - BaixaAut\n\t\tReplace BaixaAut with 0\n\t\tIf Acerto = 0\n\t\t\tReplace Flag with .f.\n\t\tElse\n\t\t\tReplace Flag with .t.\n\t\tEndif\n\tEndif\nEndscan\nSelect TmpBaixa\nDelete all for Autos\n\nThisform.mOrdemConta()\nIf _Recno = -1\n\tGo Bott\nElse\n\tGo _Recno\nEndif\n\nThisForm.Pagina.Dados.Pagina.Pendencias.Ref... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "mOrdemConta,BaixaTotal",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR",
+      "evento": "Procedure",
+      "linhas": 404,
+      "codigoOriginal": "LParameters llvoper\n*** Mena 09/10/2016 - copiado do sigmvcab e adapatado ***\nLocal ldDtContab, lcRclis, lcGrupoCob, lcContaCob, _pData, lnCont, _lcOcorSv, _lcNota, _lcObs, lcContaPar, ldDtEmis, lcRclis, lnCont\nLOCAL _GrupoOrig, _ContaOrig, _GrupoDest, _ContaDest, _GrupoTx, ContaTx, _Titulo, _doc, _departamento, _Numc, _Dopc, _hist, _Noper, _Voper\nLOCAL _Opers,_SOpers, lcEDNcs\n\nWait Window 'Aguarde. Processando Lancamentos de Conta Corrente!!! ' Nowait\n\n_pData = Datetime() &&ThisForm.poDataMgr.G... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fGerUniqueKey",
+        "metodosFormChamados": "GetDatetime,GeraNrTitulo,CursorQuery",
+        "controlesReferenciados": "get_nota",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR",
+      "evento": "Procedure",
+      "linhas": 36,
+      "codigoOriginal": "Select * From CrSigMvSlc Where 1=0 Into Cursor CsTmpSccr ReadWrite\n\nSelect *, 0000000.0000 as CotOrigs From CrSigMvPar Where 0=1 Into Cursor xPar ReadWrite\nSelect xPar\nindex on vencs tag vencs\nindex on bancos+agencias+contas+numeros tag chq\n\nSelect * From CrSigCdPbx Where 0=1 Into Cursor TmpBaixa ReadWrite\nSelect TmpBaixa\nIndex on Grupos + Contas + Moedas + Tipos Tag GruConMoe\nIndex on Tipos + Str( Nopers, 7 ) Tag BxNoper\nIndex on Tipocs + Str( Nopercs, 7 ) Tag BxNoperc\n\nSelect *, '   ' as MoeCo... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Grd_Saldo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR",
+      "evento": "Procedure",
+      "linhas": 573,
+      "codigoOriginal": "Local _Numes, _Dopes, _Chave, lcTransacao, _pData\n\nPrivate ldData\n\nDeclare LaCampo(4,2), LaCampo3(2,2), LaCampo4(4,2)\n\n_pData = ThisForm.PodataMgr.GetDatetime()\n\nllDatetime = _pData\n_Numes = crSigCdPgr.Numes\n_Dopes = crSigCdPgr.Dopes\n_Chave = crSigCdPgr.Emps + _Dopes + Str( _Numes, 6 )\nlcEDN  = crSigCdPgr.Emps + _Dopes + Str( _Numes, 6 )\nllFalse= .f.\n\nlcSql = [Select nFechas From SigCdPgc Where EmpDopNums = ']+lcEdn+[' And nFechas > 0]\nThisForm.Podatamgr.Sqlexecute(lcSql,'TmpPgCli')\nSelect TmpPg... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fCarregarCambio",
+        "metodosFormChamados": "GetDatetime,Sqlexecute,CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDPGR",
+      "evento": "Procedure",
+      "linhas": 89,
+      "codigoOriginal": "LParameters _Volta\nWait Window 'Aguarde... Calculando Baixas Automáticas...' Nowait\nSelect TmpBaixa\nDelete All for Autos\nSelect TmpConta\nSet Order to \nReplace all Acerto With 0, BaixaAut With 0\n\nSet Order to CrVencs\nScan\n\t_Recno = Recno()\n\t_Dopecs = Dopes\n\t_Numecs = Numes\n\t_Grupocs = Grupos\n\t_Contacs = Contas\n\t_Empcs = Emps\n\t_Nopercs = Nopers\n\t_Tipocs = Tipos\n\t_ValorCred = Valos\n\t_MoedaCred = Moedas\n\t_CotaCred = Cotacaos\n\n\tSet Order to DbVencs\n\tScan For Valos # Acerto And _ValorCred # 0\n\n\t\t_Cota... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "BaixaTotal,mOrdemConta",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR",
+      "evento": "Procedure",
+      "linhas": 43,
+      "codigoOriginal": "Select crSigMvCcr\nnoper  = crSigMvCcr.nopers\nvoper  = crSigMvCcr.vopers\noper   = crSigMvCcr.sopers\ngrupo  = crSigMvCcr.sgrupos\nconta  = crSigMvCcr.scontas\nmoed   = crSigMvCcr.smoedas\ncot    = crSigMvCcr.scotacaos\nvalor  = crSigMvCcr.svalors\nsoper  = crSigMvCcr.opers\nsgrupo = crSigMvCcr.grupos\nsconta = crSigMvCcr.contas\nsmoed  = crSigMvCcr.moedas\nscot   = crSigMvCcr.cotacaos\nsvalor = crSigMvCcr.valors\nnlanc  = crSigMvCcr.nlancs\nvlanc  = crSigMvCcr.vlancs\ndata   = crSigMvCcr.datas\ndataa  = crSigMv... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fRecalculaS",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR",
+      "evento": "Procedure",
+      "linhas": 14,
+      "codigoOriginal": "Lparameters pNot, pFpg\n\n*** mena - 09/10/2016 - copiado do sigmvcab ***\nlcTit = Alltrim(pNot)\n\nIf Empty(lcTit) And Not Empty(crSigCdOpe.DopCs)\n\tIf ThisForm.poDataMgr.CursorQuery([SigOpFp], [LocalOpFp], [Fpags], pFpg) And (LocalOpFp.ValPends = 1)\n\t\tThisForm.poDataMgr.CursorQuery([SigOpOpe], [LocalOpOpe], [Dopes], crSigCdOpe.DopCs, [Identifics])\n\t\tlcTit = LocalOpOpe.Identifics + Transform(fGerUniqueKey(crSigCdOpe.DopCs), [@L 999999])\n\tEndIf\nEndIf\n\nReturn lcTit\n* Fim *******************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR",
+      "evento": "Procedure",
+      "linhas": 14,
+      "codigoOriginal": "LOCAL lnTpB\nlnTpB = 4\n\n*** mena 01/08/2016 - incluidos outros tipos de boleto\n=ThisForm.poDataMgr.CursorQuery('SigOpCdc','crSigOpCdc','Dopes',crSigCdPgr.Dopes)\nif !EMPTY(substr(crSigOpCdd.ConfigGers,233,2))\t&& mena - 01/08/2016 - Pega tipo de boleto para Rosana\n\tlnTpB = VAL(substr(crSigOpCdd.ConfigGers,233,2))\nENDIF\n***********************************************************\n\nDo Form SigOpIbo With Thisform, lnTpB,,crSigCdPgr.Emps, crSigCdPgr.Dopes, crSigCdPgr.Numes,0, crSigOpCdc.qvias, crSigOpCd... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR",
+      "evento": "Procedure",
+      "linhas": 121,
+      "codigoOriginal": "Lparameters _Recibo\n\n=ThisForm.Podatamgr.CursorQuery('SigCdOpe','CrOpe','Dopes',CrSigCdPgr.Dopes )\n\n******* impressao boleto\nIf crSigCdPgr.PgUnicos = 1\n\n\tcoper = Iif( ThisForm.Tipo = \"C\", \"D\", \"C\" )\n\n\tCreate Cursor TmpLanca ( Grupos c(10), Contas c(10), Moeda c(3), Cotacaos n(14,4),;\n\t\t\t\t\t\t\t   GrupoC c(10), ContaC c(10), MoedaC c(3), CotacaoC n(14,4),;\n\t\t\t\t\t\t\t    Hists c(40), Valor n(12,2), ValPag n(12,2), Tipos c(1), Rclis c(40), ;\n\t\t\t\t\t\t\t    ValorC n(12,2), ValPagC n(12,2), MoeFpgs c(3), Emps ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fCarregarCambio",
+        "metodosFormChamados": "CursorQuery,Sqlexecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR",
+      "evento": "Procedure",
+      "linhas": 24,
+      "codigoOriginal": "If Thisform.ReadComm.Enabled\n\tthisform.Leitor = .F.\n\tThisform.ReadComm.leitura()\n\tthisform.LeituraSerial=Thisform.readcomm.campo\n\tThisform.ReadComm.Enabled = .F.\n\tKeyBoard \"{ENTER}\"\n\tthisform.Pagina.Dados.pagina.pagamento.cheque.get_bco.valid()\n\tif thisform.leitor\n\t\tif !ThisForm.VerifCheq(xpar.bancos,xpar.agencias,xpar.contas,xpar.numeros)\n\t\t\tthisform.Pagina.Dados.pagina.pagamento.cheque.Get_Bco.Value = ''\n\t\t\tthisform.Pagina.Dados.pagina.pagamento.cheque.Get_Age.Value = ''\n\t\t\tthisform.Pagina.Dad... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "leitura,VerifCheq",
+        "controlesReferenciados": "get_bco,Get_Age,Get_Num,Get_Conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR",
+      "evento": "Procedure",
+      "linhas": 1774,
+      "codigoOriginal": "Local lnErro, lcTransacao, llRetorno, _pData, lcVerso, _lcNota\n\nPrivate ldData\n\n_pData = ThisForm.PodataMgr.GetDatetime()\n\nGo Top In PgRecParam\n\nDeclare LaCampo3(2,2), LaCampo(4,2)\n\nCOper = Iif( ThisForm.Tipo = \"C\", \"D\", \"C\" )\n\nlnLote  = 99999999\nlnNum   = '99999999'\nCidchav = Space(20)\n\nloBarra = CreateObject( 'fwprogressbar', 'Aguarde. Preparando Cursores...', 1 )\nloBarra.Show\nloBarra.Update( .t. )\n\nSelect CrSigCdPgc\nZap\nSelect CrSigPrTtl\nZap\nSelect CrSigMvCcr\nZap\nSelect CrSigCdPit\nZap\nSelect ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "From TmpConta Where Flag Or,fUniqueIds",
+        "metodosFormChamados": "GetDatetime,Sqlexecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR",
+      "evento": "Procedure",
+      "linhas": 65,
+      "codigoOriginal": "Local lcGru, lcCta, ltDat, lnNop\n\nlcGru = []\nlcCta = []\n\n* Checando Se Tem Cálculo de Juros Realizado\nSelect crTmpJuros\nGo Top In crTmpJuros\nLocate For (Juros > 0)\nIf Eof([crTmpJuros])\n\tReturn .f.\nElse\n\tSelect crTmpJuros\n\tGo Top In crTmpJuros\n\tLocate For Empty(Grupos) Or Empty(Contas)\n\tIf Not Eof([crTmpJuros])\n\t\tReturn .f.\n\tEndIf\n\n\tIf Empty(crSigCdPam.GrupoPart) Or Empty(crSigCdPam.ContaPart)\n\t\t=MessageBox([Grupo/Conta de Juros (Condições de Pagamento) Não Está ] + ;\n\t\t\t\t\t[Preenchido Nos Parâmet... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "For,For Empty,fGerUniqueKey,fRecalculaS",
+        "metodosFormChamados": "GetDatetime",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDPGR",
+      "evento": "Procedure",
+      "linhas": 37,
+      "codigoOriginal": "LParameters plTipo\n\nLocal lcOrdemConta\n\nlcOrdemConta = Upper( Iif( Type('Thisform.cOrdConta') = 'C', Thisform.cOrdConta, '' ) )\n\nSelect TmpConta\nIf Not IsEmpty(lcOrdemConta) And InList(lcOrdemConta, 'VENCS', 'MOEDATAS' )\n\tSet Order to &lcOrdemConta.\nElse\n\tSet Order To Vencs\n\tThisform.cOrdConta = Order('TmpConta')\nEndIf\n\nIf plTipo And InList( Thisform.pcEscolha, 'INSERIR', 'ALTERAR' )\n\tlnRGB4 = RGB(192,192,192)\n\tlnRGB7 = RGB(192,192,192)\n\tlnRGBD = RGB(192,192,192)\n\tDo Case\n\t\tCase Upper(Thisform.c... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "cOrdConta = Order",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR",
+      "evento": "Procedure",
+      "linhas": 75,
+      "codigoOriginal": "local lcInf, lcEmi, lcBan, lcAge, lcCon, lcChq\n\n=ThisForm.PodataMgr.CursorQuery('SigOpFp','CrFpag','Fpags',xPar.Fpags)\n\nlcInf = crFpag.Infos\nlcBan = crFpag.Bancos\nlcAge = crFpag.Agencias\nlcCon = crFpag.NContas\nlcChq = ThisForm.NewChq\nlcEmi = (crFpag.EmiChqs = 1) .and. (ThisForm.EntraCheque) .and. ;\n\t\t!IsEmpty(lcBan) .and. !IsEmpty(lcAge) .and. !IsEmpty(lcCon)\nlnTpc = crFpag.tpcheques\t&& mena 10/09/2014 - se le por cmc7\nThisForm.EntraCheque = (lcEmi) .and. (lcInf='C')\n\nWith This.Pagina.Dados.Pagi... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery,EntraCheque =",
+        "controlesReferenciados": "get_cheque,get_age,get_bco,get_conta,get_num",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR",
+      "evento": "Procedure",
+      "linhas": 77,
+      "codigoOriginal": "lcDope  = This.Dopes\nllDatai = ThisForm.Pagina.Lista.cntFiltros.Cnt_periodo.Dt_inicial.Value\nllDataf = ThisForm.Pagina.Lista.cntFiltros.Cnt_periodo.Dt_final.Value\nllDatai = fDtoSQL(llDatai)\nllDataf = fDtoSQL(llDataf,'23:59:59')\nlcUsuar = Iif(ThisForm.Pagina.Lista.TodosLanc.Value = 0,Usuar,Null)\n\nIf This.ConsultaExterna Or This.EntrouExcluindo\n\tlcEDNSS = Thisform.cEmps + ThisForm.Dopes + Str(ThisForm.Numes, 6)\nElse\n\tWith ThisForm.Pagina.Lista\n\t\tIf .Cmb_Concilia.Value = 1\n\t\t\tllCmbt = .t.\n\t\t\tllCmbf... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fDtoSQL,Ordena,fCarregaGrade",
+        "metodosFormChamados": "Dopes + Str,Requery,emps, RGB,ordenação = Order",
+        "controlesReferenciados": "Cmb_Concilia",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR",
+      "evento": "Procedure",
+      "linhas": 108,
+      "codigoOriginal": "Parameter wbanco, wagenc, wconta, wnunch\nLocal _Order, _RecAnt, lcTpErr, sd, Correto\nlcTpErr = ''\n\nDeclare LaCampo(4,2)\n\nSelect xpar\n_order  = order()\n_recant = recno()\nsd = .t.\ncorreto = .t.\nif correto\n\tbanco = wbanco\n\tagencia = wagenc\n\tnumero = wconta\n\tconta = wnunch\nendif\n\nif correto\n\tif !fChkDigitos(banco)\n\t\tcorreto = .f.\n\tendif\nendif\nif correto\n\tif !fChkDigitos(agencia)\n\t\tcorreto = .f.\n\tendif\nendif\nif correto\n\tif !fChkDigitos(numero)\n\t\tcorreto = .f.\n\tendif\nendif\nif correto\n\tif !fChkDigitos(... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChkRegister,CursorQuery",
+        "controlesReferenciados": "ChkDigitos(banco,ChkDigitos(agencia,ChkDigitos(numero,ChkDigitos(conta,ChkRegister('SigCqChi',Opt\"",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR",
+      "evento": "Procedure",
+      "linhas": 20,
+      "codigoOriginal": "If Used('TmpTot')\n\tZap in TmpTot\nEndIf\n\nIf Used('xPar')\n\tZap in xPar\nEndIf\n\nIf Used('TmpBaixa')\n\tZap in TmpBaixa\nEndI\n\nIf Used('TmpLanca')\n\tZap in TmpLanca\nEndIf\n\nIf Used('TmpCliente')\n\tZap in TmpCliente\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR",
+      "evento": "Init",
+      "linhas": 103,
+      "codigoOriginal": "LParameters pAce, pTit\n\nLocal lnCnt1, lnMax, lnRc1, lnRc2, llLok\n\nWith ThisForm\n\tpAce = Iif(Type([pAce])=[C], pAce, .Name)\n\tpTit = Iif(Type([pTit])=[C], pTit, .Caption)\n\n\tllLok = .LockScreen\n\t\n\t.LockScreen = .t.\n\t.ShowTips   = .t.\n\t\n\t.plAcInserir = (.plAcInserir And fChecaAcesso(pAce, [INSERIR]))\n\t.plAcAlterar = (.plAcAlterar And fChecaAcesso(pAce, [ALTERAR]))\n\t.plAcExcluir = (.plAcExcluir And fChecaAcesso(pAce, [EXCLUIR]))\n\t.plAcListar  = .f.\n\t\n\tWith .Pagina.Lista.Grade\n\t\t.Enabled \t\t\t= .t.\n\t\t.V... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR",
+      "evento": "Procedure",
+      "linhas": 125,
+      "codigoOriginal": "Create Cursor crRet (campo c(240))\n\nAppend From &lcarq  Type Sdf\t\t\t\t\t\t\t\t \n\nSELECT crRet\nGO top\n\n*** Bradesco/Santader\ttipo A chave 74a93\n***\t\t\t\t\t\ttipo J chave 183a202\n***\t\t\t\t\t\ttipo O chave 123a142\n\n*** Itau\t\t\t\ttipo A chave 74a93\n***\t\t\t\t\t\ttipo J chave 183a202\n***\t\t\t\t\t\ttipo O chave 175a194\n\nDo Case\n\tCase SUBSTR(campo,1,3) = \"237\" && Bradesco\n\n\t\tSELECT SUBSTR(campo,1,3) as banco, SUBSTR(campo,14,1) as tipoReg, SUBSTR(campo, 74, 10) as cidchaves, SUBSTR(campo, 84, 10) as nopers, ;\n\t\tSUBSTR(campo, 12... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "from crRetA union",
+        "metodosFormChamados": "sqlexecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR",
+      "evento": "Procedure",
+      "linhas": 9,
+      "codigoOriginal": "If ThisForm.llObjForm\n\tIf Upper(ThisForm.ObjForm.Name) = 'SIGPRCHR'\n\t\tThisForm.ObjForm.Enabled = .T.\n\t\tThisForm.ObjForm.MontaChq(.T.)\n\tEndIf\nEndIf\n\nThisForm.poDataMgr.Release\ndodefault()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "MontaChq",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR",
+      "evento": "Procedure",
+      "linhas": 17,
+      "codigoOriginal": "ThisForm.Pagina.Lista.Cmb_Concilia.Value = 1\n_ProcCodigo = This.Pagina.Dados.cntCadastro.Get_Numes.Value\n_ProcClient = This.Pagina.Dados.cntCadastro.Get_conta.Value\n\nSelect crSigCdPgr\nIf !IsEmpty(_ProcCodigo)\n\tSet Order to Numes\n\t_Proc = _ProcCodigo\nElse\n\tSet Order to Contas\n\t_Proc = _ProcClient\nEndif\nSet Near On\nSeek _Proc\nSet Near Off\nThisForm.LocRegister = Numes\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Cmb_Concilia,Get_Numes,Get_conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR",
+      "evento": "Procedure",
+      "linhas": 62,
+      "codigoOriginal": "Select CrSigCdPgr\nIF Thisform.Inserir() And ThisForm.CalculaSaldo()\n\n\tDoDefault()\n\tThisform.Podatamgr.Commit()\n\n\tlcChave = crSigCdPgr.Emps + crSigCdPgr.Dopes + Str(crSigCdPgr.Numes,6)\n\tDeclare LaCampo(4,2)\n\n\tThisForm.Podatamgr.CursorQuery('SigCqChi','CrChi','EmpDopNums', lcChave )\n\n\tSelect CrChi\n\tGo Top\n\tDo While !Eof()\n\t\tIf !IsEmpty(CrChi.nCheques)\n\t\t\tIf ThisForm.Podatamgr.CursorQuery('SigMvPar','CrPar','Numeros',CrChi.nCheques)\n\t\t\t\tSelect CrPar\n\t\t\t\tIndex On Bancos + Agencias + Contas + Numeros... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Inserir,Commit,CursorQuery,ImpRc,RollBack",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR",
+      "evento": "Procedure",
+      "linhas": 9,
+      "codigoOriginal": "IF ThisForm.Excluir() And ThisForm.calculasaldo()\n\tDoDefault()\n\tThisform.Podatamgr.Commit()\nElse\n\tThisForm.Podatamgr.RollBack()\n\tMessageBox('Nao foi possivel completar a alteracao. tente novamente!!',16,'Falha na Conexão')\n\tThisForm.retorna = .f.\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Excluir,Commit,RollBack",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR",
+      "evento": "Procedure",
+      "linhas": 51,
+      "codigoOriginal": "IF ThisForm.Excluir() AND ThisForm.Inserir() And ThisForm.CalculaSaldo()\n\tDoDefault()\n\tThisform.Podatamgr.Commit()\n\tlcChave = crSigCdPgr.Emps + crSigCdPgr.Dopes + Str(crSigCdPgr.Numes,6)\n\tDeclare LaCampo(4,2)\n\n\tThisForm.Podatamgr.CursorQuery('SigCqChi','CrChi','EmpDopNums', lcChave )\n\n\tSelect CrChi\n\tGo Top\n\tDo While !Eof()\n\t\tIf !IsEmpty(CrChi.nCheques)\n\t\t\tIf ThisForm.Podatamgr.CursorQuery('SigMvPar','CrPar','Numeros',CrChi.nCheques)\n\t\t\t\tSelect CrPar\n\t\t\t\tIndex On Bancos + Agencias + Contas + Nume... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Excluir,Commit,CursorQuery,ImpRc,RollBack",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR",
+      "evento": "Procedure",
+      "linhas": 70,
+      "codigoOriginal": "lcDope  = This.Dopes\nllDatai = ThisForm.Pagina.Lista.cntFiltros.Cnt_periodo.Dt_inicial.Value\nllDataf = ThisForm.Pagina.Lista.cntFiltros.Cnt_periodo.Dt_final.Value\nllDatai = fDtoSQL(llDatai)\nllDataf = fDtoSQL(llDataf,'23:59:59')\nlcUsuar = Iif(ThisForm.Pagina.Lista.TodosLanc.Value = 0,Usuar,Null)\n\nIf This.ConsultaExterna Or This.EntrouExcluindo\n\tlcEDNSS = Thisform.cEmps + ThisForm.Dopes + Str(ThisForm.Numes, 6)\nEndif\nWith ThisForm.Pagina.Lista\n\tIf .Cmb_Concilia.Value = 1\n\t\tllCmbt = .t.\n\t\tllCmbf = ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fDtoSQL,Ordena",
+        "metodosFormChamados": "Dopes + Str",
+        "controlesReferenciados": "Cmb_Concilia",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR",
+      "evento": "Procedure",
+      "linhas": 652,
+      "codigoOriginal": "=fConfigGeral()\n\nCreate Cursor xPar ( Fpags c(12), valos n(12,2), moefpgs c(3), vencs d Null)\n\nCreate Cursor CsTmpSccr ( Grupos c(10), Contas c(10), Moedas c(3), saldos n(12,2))\n\nCreate Cursor TmpTot ( Moeda C(3), ValorPend N(12,2), ValorAce N(12,2), cotacaos n(12,4))\nIndex on Moeda Tag Moeda\n\nCreate Cursor TmpCot ( Moedas C(3), Cotacaos n(12,4) )\nIndex on Moedas Tag Moedas\n\n*** mena 20/06/2016 - o campo OrdCopChs e a mascara no grid foram aumentados para 4posicoes - estava dando estouro de camp... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "cOrdConta = Order",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR",
+      "evento": "Init",
+      "linhas": 330,
+      "codigoOriginal": "LParameters pTipo, _pConsulta, _pEmps, _pDopes, _pNumes, _pExcluir, _pObjForm, pJustDel\nLocal lnTpLeCheques, lcEDN\n\nThisForm.llObjForm = (Type('_pObjForm') == 'O')\nIf ThisForm.llObjForm\n\tThisForm.ObjForm = _pObjForm\nEndIf\n\nThisForm.pcescolha = ''\nThisForm.Limpacursor = .t.\nThisForm.Matriz = .f.\n\nIf (Type('pJustDel')='C')\n\tthisform.pjustdel=pJustDel\nElse\n\tthisform.pjustdel=''\nEndIf \n\nlcEDN  = (Type('_pEmps')='C') .and. (Type('_pDopes')='C') .and. (Type('_pNumes')='N')\nThis.cEmps  = Iif( Type('_pE... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso,fDtoSQL,Ordena",
+        "metodosFormChamados": "llObjForm =,BaixaPend = fChecaAcesso,BloqDatas = fChecaAcesso,podatamgr = CreateObject,GetDatetime,Datapadrao) <> Date,Dopes + Str",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR",
+      "evento": "Click",
+      "linhas": 684,
+      "codigoOriginal": "LParameters _Oper\n\nDeclare LaCampo(4,2)\n\nIf Type('_Oper') = 'N'\n\tThis.Value = _Oper\nEndIf\n\n*** Mena - 28/11/2017 - não entra se nao for empresa padrao ***\nIf crSigCdPgr.emps <> ThisForm.cEmps and !INLIST(this.value,1,2)\n\tMessagebox('Empresa não padrão',0+48,'')\n\treturn\nEndIf\n\nSelect CrSigCdPgr\nThisForm.Ordenação = Order()\nSet Order To\n\nIf !DoDefault( _Oper )\n\tthisform.mAtivapagina1\n\treturn\nEndIf\n\nThisForm.LocRegister = CrSigCdPgr.Numes\nThisForm.OrdemMarca  = 0\nThisForm.Matriz = .f.\nthisform.Cnab... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "Ordena,fBloqueioPorPeriodo,fVerificaBloqueio",
+        "metodosFormChamados": "cEmps and !INLIST,Ordenação = Order,CursorQuery,Sqlexecute",
+        "controlesReferenciados": "Get_ValConv,optSNA,option1,option2,option3",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Release",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR",
+      "evento": "Activate",
+      "linhas": 4,
+      "codigoOriginal": "Thisform.pcescolha = ''\nThis.Grade.setfocus\nThisForm.Pagina.Lista.TodosLanc.Click()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Click",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR",
+      "evento": "Click",
+      "linhas": 613,
+      "codigoOriginal": "Local llLancInvalido, lnRecNo\n\nThisForm.retorna = .t.\nPrivate _titpag, _Especie\n\n*--Rafael - 01/08/2016 - Historico do Banco igual ao do Cliente\nThisForm.HistoricoCliente = []\n\nIf ThisForm.Concilia\n\tIf crSigCdPgr.Concs\n\t\tlcMsg = 'Deseja Cancelar a Conciliação da Operação ?'\n\t\tllData = .Null.\n\t\tlcUsu  = Space(10)\n\tElse\n\t\tlcMsg = 'Confirma a Conciliação da Operação ?'\n\t\tpData = ThisForm.PodataMgr.GetDatetime()\n\t\tllData = pData\n\t\tlcUsu  = Usuar\n\tEndif\n\tllConc = !CrSigCdPgr.Concs\n\tIf Messagebox( lcM... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fRecalculaS",
+        "metodosFormChamados": "GetDatetime,SqlExecute,CursorQuery,Commit",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR",
+      "evento": "Click",
+      "linhas": 53,
+      "codigoOriginal": "_Numes = crSigCdPgr.Numes\n_DopEmps = Alltrim( crSigCdPgr.Dopes ) + crSigCdPgr.Emps\n\n*** mena - 11/09/2016 - verifica se tef pendente ***\nIf crSigCdPam.Sistef = 1 and crSigCdOpe.cupfis=3 and ALLTRIM(CrSigOpCdd.NomEcfs) = 'S/IMPRESSORA'\n\t=fLerFiscal(CrSigOpCdd.NomEcfs)\n\t=verifTEF(Thisform)\nENDIF\n\n=DoDefault()\nIf Thisform.plCancelar\n\tIf Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' )\n\t\tIf ThisForm.pcEscolha = 'INSERIR'\n\t\t\t=fCanUniqueKey( _Numes, _DopEmps )\n\t\tEndif\n\tEndif\n\t\n\tThisForm.ZapCursores(... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fLerFiscal,fCanUniqueKey",
+        "metodosFormChamados": "ZapCursores",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Lista.Conciliação",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.Concilia = .t.\nThisForm.Pagina.Lista.Grupo_Op.Click( 2 )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Click",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Lista.Cmb_Concilia",
+      "evento": "InteractiveChange",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.SqlDados\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Lista.TodosLanc",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "This.Parent.Grade.Column1.SetFocus",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Lista.TodosLanc",
+      "evento": "Click",
+      "linhas": 13,
+      "codigoOriginal": "Select crSigCdPgr\n\nThisForm.LockScreen = .t.\n\nIf ThisForm.Pagina.Lista.TodosLanc.Value = 0\n\tThis.Parent.Usuario.Value = Usuar\nElse\n\tThis.Parent.Usuario.Value = Padr('TODOS',10)\nEndIf\nThisForm.Sqldados()\n\nThisForm.LockScreen = .F.\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Sqldados",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Lista.Usuario",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Lista.cntFiltros.Cnt_periodo.Dt_inicial",
+      "evento": "Valid",
+      "linhas": 4,
+      "codigoOriginal": "If This.Value > This.Parent.Dt_final.Value\n\tThis.Parent.Dt_Final.Value = This.Value\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Lista.cntFiltros.Cnt_periodo.Dt_inicial",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "This.Parent.Dt_final.SetFocus",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Lista.cntFiltros.Cnt_periodo.Dt_final",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "If This.Value < This.Parent.Dt_Inicial.Value\n\tThis.Parent.Dt_Inicial.Value = This.Value\nEndIf\nThisForm.LocRegister = 0\nThisForm.SqlDados\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Lista.cntFiltros.Cnt_periodo.Dt_final",
+      "evento": "LostFocus",
+      "linhas": 3,
+      "codigoOriginal": "Thisform.Pagina.Lista.Grade.Column1.SetFocus\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina",
+      "evento": "Click",
+      "linhas": 3,
+      "codigoOriginal": "Thisform.mOrdemConta( .T. )\nThis.ContaCorrente.Refresh\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "mOrdemConta",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina",
+      "evento": "Activate",
+      "linhas": 2,
+      "codigoOriginal": "Thisform.mOrdemConta( .T. )\nThis.ContaCorrente.Refresh",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "mOrdemConta",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina",
+      "evento": "Activate",
+      "linhas": 4,
+      "codigoOriginal": "This.Total.Refresh\nIf Inlist( ThisForm.pcEscolha, \"INSERIR\", \"ALTERAR\" ) And IsEmpty( This.Get_Fpg.Value )\n\tThis.Get_Fpg.SetFocus\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Fpg",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.ContaCorrente",
+      "evento": "Procedure",
+      "linhas": 54,
+      "codigoOriginal": "LPARAMETERS nColIndex\nThis.Parent.Get_NomeGrupo.Refresh()\nThis.Parent.Get_NomeConta.Refresh()\nThis.Parent.Get_Grupo.Refresh()\nThis.Parent.Get_Conta.Refresh()\nThis.Parent.Get_NomeConta.Refresh()\nThis.Parent.Get_Cotação.Refresh()\nThis.Parent.Get_Nota.Refresh()\nThis.Parent.Get_Historico.Refresh()\nlcHist = Left(TmpConta.HistPgs,40)\nlcHist = Strtran(lcHist,Chr(10),'')\nlcHist = Strtran(lcHist,Chr(13),'')\nThis.Parent.Get_DadosPg.Value = lcHist\nThis.Parent.Get_DadosPg.Refresh()\n\nlcObsD = Left(TmpConta.O... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "Get_NomeGrupo,Get_NomeConta,Get_Grupo,Get_Conta,Get_Cotação,Get_Nota,Get_Historico,Get_DadosPg,Get_HistTit",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.ContaCorrente.Column1.Check1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return ThisForm.pcEscolha = \"INSERIR\"",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.ContaCorrente.Column1.Check1",
+      "evento": "InteractiveChange",
+      "linhas": 155,
+      "codigoOriginal": "Local _Chave, lnVal, lcOrd\n\nReplace TmpConta.Flag With This.Value\nNoDefault\n\nIf This.Value And !( TmpConta.Tipos = 'M' And ThisForm.pcEscolha = 'INSERIR' )\n\tIf TmpConta.Tipos = \"P\"\n\t\tlcQuery = [Select empdopnums, emps, Dopes, nopers, cidchaves, Valos, Vpags, 0 as Valors, 0 as Valpags From SigMvPar ]+;\n\t\t\t\t  [Where Nopers = ]+Str(TmpConta.Nopers)+[ Order by Emps ]\n\tElse\n\t\tlcQuery = [Select empdopnums, emps, Dopes, nopers, cidchaves, Valors, ValPags, Grupos, Contas, Moedas, 0 as Valos, 0 as Vpags,... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute,cursorQuery,CanBaixaAut,mOrdemConta",
+        "controlesReferenciados": "optOcorrencias",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.ContaCorrente.Col_Débito.Header1",
+      "evento": "Click",
+      "linhas": 17,
+      "codigoOriginal": "If Upper(Order('TmpConta')) # 'VALOS'\n\tSelect TmpConta\n\tSet Order to VALOS\n\tThisform.cOrdConta = Upper(Order('TmpConta'))\n\tWith Thisform.Pagina.Dados.Pagina.Pendencias.ContaCorrente\n\t\t.Col_débito.Header1.BackColor  = RGB(251,253,176)\n\t\t.Col_Crédito.Header1.BackColor = RGB(251,253,176)\n\t\t.Column2.Header1.BackColor = RGB(192,192,192)\n\t\t.Column4.Header1.BackColor = RGB(192,192,192)\n\t\t.Column7.Header1.BackColor = RGB(192,192,192)\n\t\t.Column8.Header1.BackColor = RGB(192,192,192)\n\t\t.Column6.Header1.Bac... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "cOrdConta = Upper",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.ContaCorrente.Col_Débito.Text1",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "This.Parent.Parent.Column5.SetFocus",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.ContaCorrente.Column4.Header1",
+      "evento": "Click",
+      "linhas": 15,
+      "codigoOriginal": "If Upper(Order('TmpConta')) # 'MOEDATAS'\n\tSelect TmpConta\n\tSet Order to MoeDatas\n\tThisform.cOrdConta = Upper(Order('TmpConta'))\n\tWith Thisform.Pagina.Dados.Pagina.Pendencias.ContaCorrente\n\t\t.Column4.Header1.BackColor = RGB(251,253,176)\n\t\t.Column6.Header1.BackColor = RGB(192,192,192)\n\t\t.Column7.Header1.BackColor = RGB(192,192,192)\n\t\t.Column8.Header1.BackColor = RGB(192,192,192)\n\t\t.Column3.Header1.BackColor = RGB(192,192,192)\n\t\t.Col_débito.Header1.BackColor = RGB(192,192,192)\n\t\t.Col_Crédito.Header... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "cOrdConta = Upper",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.ContaCorrente.Column4.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.ContaCorrente.Column5.Text1",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "ThisForm.OldValue = This.Value\nReturn ThisForm.pcEscolha = \"INSERIR\" And TmpConta.Tipos # 'M'\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.ContaCorrente.Column5.Text1",
+      "evento": "Valid",
+      "linhas": 31,
+      "codigoOriginal": "If crSigCdPgr.Autos \n\tReturn\nEndif\n\nIf This.Value < TmpConta.BaixaAut\n\t=Messagebox( \"O Valor Acertado não pode ser menor do que o valor Baixado Automaticamente...\" + Chr( 13) + ;\n\t\t\t\t\t\"Para cancelar este valor, desmarque a caixa à sua esquerda.\", 48, \"Valor Inválido\" )\n\tThis.Value = ThisForm.OldValue\n\tReturn 0\nEndif\n\n*!*\tIf This.Value > TmpConta.Valos\n*!*\t\t=Messagebox( \"O Valor Acertado não pode ser maior do que o Valor Pendente...\",;\n*!*\t\t\t\t\t 48, \"Valor Inválido\" )\n*!*\t\tThis.Value = ThisForm.Ol... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "BaixaTotal",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.ContaCorrente.Column6.Header1",
+      "evento": "Click",
+      "linhas": 16,
+      "codigoOriginal": "If Upper(Order('TmpConta')) # 'DATAS'\n\tSelect TmpConta\n\tSet Order to Datas\n\tThisform.cOrdConta = Upper(Order('TmpConta'))\n\tWith Thisform.Pagina.Dados.Pagina.Pendencias.ContaCorrente\n\t\t.Column6.Header1.BackColor = RGB(251,253,176)\n\t\t.Column2.Header1.BackColor = RGB(192,192,192)\n\t\t.Column7.Header1.BackColor = RGB(192,192,192)\n\t\t.Column8.Header1.BackColor = RGB(192,192,192)\n\t\t.Column4.Header1.BackColor = RGB(192,192,192)\n\t\t.Col_débito.Header1.BackColor = RGB(192,192,192)\n\t\t.Col_Crédito.Header1.Back... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "cOrdConta = Upper",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.ContaCorrente.Column6.Text1",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "This.Parent.Parent.Column1.SetFocus",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.ContaCorrente.Column7.Header1",
+      "evento": "Click",
+      "linhas": 16,
+      "codigoOriginal": "If Upper(Order('TmpConta')) # 'VENCS'\n\tSelect TmpConta\n\tSet Order to Vencs\n\tThisform.cOrdConta = Upper(Order('TmpConta'))\n\tWith Thisform.Pagina.Dados.Pagina.Pendencias.ContaCorrente\n\t\t.Column7.Header1.BackColor = RGB(251,253,176)\n\t\t.Column8.Header1.BackColor = RGB(192,192,192)\n\t\t.Column2.Header1.BackColor = RGB(192,192,192)\n\t\t.Column6.Header1.BackColor = RGB(192,192,192)\n\t\t.Column4.Header1.BackColor = RGB(192,192,192)\n\t\t.Col_débito.Header1.BackColor = RGB(192,192,192)\n\t\t.Col_Crédito.Header1.Back... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "cOrdConta = Upper",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.ContaCorrente.Column7.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return( .F. )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.ContaCorrente.Column7.Text1",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "This.Parent.Parent.Column1.SetFocus",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.ContaCorrente.Column8.Header1",
+      "evento": "Click",
+      "linhas": 16,
+      "codigoOriginal": "If Upper(Order('TmpConta')) # 'VENCS'\n\tSelect TmpConta\n\tSet Order to Hists\n\tThisform.cOrdConta = Upper(Order('TmpConta'))\n\tWith Thisform.Pagina.Dados.Pagina.Pendencias.ContaCorrente\n\t\t.Column8.Header1.BackColor = RGB(251,253,176)\n\t\t.Column7.Header1.BackColor = RGB(192,192,192)\n\t\t.Column2.Header1.BackColor = RGB(192,192,192)\n\t\t.Column6.Header1.BackColor = RGB(192,192,192)\n\t\t.Column4.Header1.BackColor = RGB(192,192,192)\n\t\t.Col_débito.Header1.BackColor = RGB(192,192,192)\n\t\t.Col_Crédito.Header1.Back... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "cOrdConta = Upper",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.ContaCorrente.Column8.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.ContaCorrente.Col_Crédito.Header1",
+      "evento": "Click",
+      "linhas": 16,
+      "codigoOriginal": "If Upper(Order('TmpConta')) # 'VALOS'\n\tSelect TmpConta\n\tSet Order to VALOS\n\tThisform.cOrdConta = Upper(Order('TmpConta'))\n\tWith Thisform.Pagina.Dados.Pagina.Pendencias.ContaCorrente\n\t\t.Col_Crédito.Header1.BackColor = RGB(251,253,176)\n\t\t.Col_débito.Header1.BackColor = RGB(251,253,176)\n\t\t.Column4.Header1.BackColor = RGB(192,192,192)\n\t\t.Column7.Header1.BackColor = RGB(192,192,192)\n\t\t.Column8.Header1.BackColor = RGB(192,192,192)\n\t\t.Column6.Header1.BackColor = RGB(192,192,192)\n\t\t.Column3.Header1.Back... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "cOrdConta = Upper",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.ContaCorrente.Col_Crédito.Text1",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "This.Parent.Parent.Column5.SetFocus",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.ContaCorrente.Column2.Header1",
+      "evento": "Click",
+      "linhas": 16,
+      "codigoOriginal": "If Upper(Order('TmpConta')) # 'EMPNOPER'\n\tSelect TmpConta\n\tSet Order to EmpNoper\n\tThisform.cOrdConta = Upper(Order('TmpConta'))\n\tWith Thisform.Pagina.Dados.Pagina.Pendencias.ContaCorrente\n\t\t.Column2.Header1.BackColor = RGB(251,253,176)\n\t\t.Column6.Header1.BackColor = RGB(192,192,192)\n\t\t.Column7.Header1.BackColor = RGB(192,192,192)\n\t\t.Column8.Header1.BackColor = RGB(192,192,192)\n\t\t.Column4.Header1.BackColor = RGB(192,192,192)\n\t\t.Col_débito.Header1.BackColor = RGB(192,192,192)\n\t\t.Col_Crédito.Header... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "cOrdConta = Upper",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.ContaCorrente.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.ContaCorrente.Column3.Header1",
+      "evento": "Click",
+      "linhas": 21,
+      "codigoOriginal": "Local lnReg\nIf Upper(Order('TmpConta')) # 'ORDCOPCHS'\n\tSelect TmpConta\n\tSet Order To \n\tlnReg = Recno()\n\tGo Top\n\tWith Thisform.Pagina.Dados.Pagina.Pendencias.ContaCorrente\n\t\t.Refresh\n\t\tSet Order to OrdCopchs\n\t\tLocate For Recno() = lnReg\n\t\tThisform.cOrdConta = Upper(Order('TmpConta'))\n\t\t.Column3.Header1.BackColor = RGB(251,253,176)\n\t\t.Column7.Header1.BackColor = RGB(192,192,192)\n\t\t.Column8.Header1.BackColor = RGB(192,192,192)\n\t\t.Column4.Header1.BackColor = RGB(192,192,192)\n\t\t.Column6.Header1.BackC... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "For Recno",
+        "metodosFormChamados": "cOrdConta = Upper",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.ContaCorrente.Column3.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return (TmpConta.Flag)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.ContaCorrente.Column3.Text1",
+      "evento": "LostFocus",
+      "linhas": 14,
+      "codigoOriginal": "Local lnReg\nIf Upper(Order('TmpConta')) = 'ORDCOPCHS'\n\tSelect TmpConta\n\tSet Order To \n\tlnReg = Recno()\n\tGo Top\n\tWith Thisform.Pagina.Dados.Pagina.Pendencias.ContaCorrente\n\t\t.Refresh\n\t\tSet Order to OrdCopchs\n\t\tLocate For Recno() = lnReg\n\t\t.Refresh\n\tEndWith\nEndIf\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "For Recno",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.NovaPendencia.Get_NConta",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return( IsEmpty( This.Parent.Get_Conta.Value ))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Conta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.NovaPendencia.Get_NConta",
+      "evento": "Valid",
+      "linhas": 19,
+      "codigoOriginal": "If !IsEmpty(This.Value)\n\tIf !fAcessoContas( Usuar, '', 'D', This.Value, This.Parent.get_Conta, This.Parent.Get_Nconta)\n\t\t=MessageBox('Acesso Negado!!!', 0+48, '')\n\t\tThis.Parent.get_Conta.Value  = ''\n\t\tThis.Parent.Get_Nconta.Value = ''\n\tEndIf\n\t\n\tIf not fChecarInativas(This.Parent.get_Conta.Value,ThisForm.podatamgr)\n\t\tMessageBox('Conta Inativa ...',0+48,'')\n\t\tThis.Value=''\n\t\tThis.Refresh\n\t\tthis.parent.get_conta.Value = ''\n\t\tthis.parent.get_conta.Refresh\n\t\tReturn(.F.)\t\t\n\tEndif \nElse\n\tThis.Parent.Ge... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas,fChecarInativas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Conta,Get_Nconta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.NovaPendencia.Get_NGrupo",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return IsEmpty( This.Parent.Get_Grupo.Value )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Grupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.NovaPendencia.Get_NGrupo",
+      "evento": "Valid",
+      "linhas": 7,
+      "codigoOriginal": "If !IsEmpty(this.value)\n\t=fAcessoContab(Usuar,'D',this.value,This.Parent.Get_grupo,this,This.parent.get_conta.value,.f.,ThisForm.Pagina.Dados.cntCadastro.get_Data.Value)\nElse\n\tThis.Parent.Get_grupo.value = ''\n\tThis.Parent.Get_grupo.refresh\nendif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_grupo,get_conta,get_Data",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.NovaPendencia.Get_Valor",
+      "evento": "Valid",
+      "linhas": 20,
+      "codigoOriginal": "lcMoeda = This.Parent.Get_Moeda.Value\nlcMoedac = This.Parent.Get_Moedac.Value\n\nIf !Seek( lcMoeda, 'TmpCot' )\n\tm.Moedas = lcMoeda\n\tm.Cotacaos = fCarregarCambio( m.Moedas, crSigCdPgr.Datarcs )\n\tInsert Into TmpCot From Memvar\nEndif\nlnCota1 = TmpCot.Cotacaos\n\nIf !Seek( lcMoedac, 'TmpCot' )\n\tm.Moedas = lcMoedac\n\tm.Cotacaos = fCarregarCambio( m.Moedas, crSigCdPgr.Datarcs )\n\tInsert Into TmpCot From Memvar\nEndif\nlnCota2 = TmpCot.Cotacaos\n\nThis.Parent.Get_Valorc.Value = Round( This.Parent.Get_Valor.Value... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fCarregarCambio",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Moeda,Get_Moedac,Get_Valorc",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.NovaPendencia.Get_Grupo",
+      "evento": "Valid",
+      "linhas": 7,
+      "codigoOriginal": "If !IsEmpty(this.value)\n\t=fAcessoContab(Usuar,'C',This.value,This,This.parent.GET_nGRUPO,This.Parent.get_conta.value,.f.,ThisForm.Pagina.Dados.cntCadastro.get_Data.Value)\nElse\n\tThis.parent.GET_nGRUPO.value = ''\n\tThis.parent.GET_nGRUPO.refresh\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "GET_nGRUPO,get_conta,get_Data",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.NovaPendencia.Get_ValorC",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "return .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.NovaPendencia.Get_NContaC",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return( IsEmpty( This.Parent.Get_ContaC.Value ))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_ContaC",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.NovaPendencia.Get_NContaC",
+      "evento": "Valid",
+      "linhas": 20,
+      "codigoOriginal": "If !IsEmpty(This.Value)\n\tIf !fAcessoContas( Usuar, '', 'D', This.Value, This.Parent.get_Contac, This.Parent.Get_Ncontac)\n\t\t=MessageBox('Acesso Negado!!!', 0+48, '')\n\t\tThis.Parent.get_Contac.Value  = ''\n\t\tThis.Parent.Get_Ncontac.Value = ''\n\tEndIf\n\t\n\tIf not fChecarInativas(This.Parent.get_Contac.Value,ThisForm.podatamgr)\n\t\tMessageBox('Conta Inativa ...',0+48,'')\n\t\tThis.Value=''\n\t\tThis.Refresh\n\t\tthis.parent.get_contac.Value = ''\n\t\tthis.parent.get_contac.Refresh\n\t\tReturn(.F.)\t\t\n\tEndif \nElse\n\tThis.Pa... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas,fChecarInativas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Contac,Get_Ncontac",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.NovaPendencia.Get_ContaC",
+      "evento": "Valid",
+      "linhas": 25,
+      "codigoOriginal": "Local Grupo\nGrupo = this.Parent.Get_Grupoc.value\nIf !IsEmpty(this.value)\n\tIf !fAcessoContas(Usuar,grupo,'C',this.value,This,this.parent.get_ncontac)\n\t\tMessagebox('Acesso Negado !!',0+48,'')\n\t\tThis.Value=''\n\t\tThis.Refresh\n\t\tthis.parent.get_ncontac.Value = ''\n\t\tthis.parent.get_ncontac.Refresh\n\t\treturn 0 \n\tEndIf\n\tIf not fChecarInativas(This.Value,ThisForm.podatamgr)\n\t\tMessageBox('Conta Inativa ...',0+48,'')\n\t\tThis.Value=''\n\t\tThis.Refresh\n\t\tthis.parent.get_ncontac.Value = ''\n\t\tthis.parent.get_nconta... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas,fChecarInativas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Grupoc,get_ncontac",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.NovaPendencia.Get_NGrupoC",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return IsEmpty( This.Parent.Get_GrupoC.Value )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_GrupoC",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.NovaPendencia.Get_NGrupoC",
+      "evento": "Valid",
+      "linhas": 7,
+      "codigoOriginal": "If !IsEmpty(this.value)\n\t=fAcessoContab(Usuar,'D',this.value,This.Parent.Get_grupoc,this,This.parent.get_contac.value,.f.,ThisForm.Pagina.Dados.cntCadastro.get_Data.Value)\nElse\n\tThis.Parent.Get_grupoc.value = ''\n\tThis.Parent.Get_grupoc.refresh\nendif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_grupoc,get_contac,get_Data",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.NovaPendencia.Get_GrupoC",
+      "evento": "Valid",
+      "linhas": 7,
+      "codigoOriginal": "If !IsEmpty(this.value)\n\t=fAcessoContab(Usuar,'C',This.value,This,This.parent.GET_nGRUPOc,This.Parent.get_contac.value,.f.,ThisForm.Pagina.Dados.cntCadastro.get_Data.Value)\nElse\n\tThis.parent.GET_nGRUPOc.value = ''\n\tThis.parent.GET_nGRUPOc.refresh\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "GET_nGRUPOc,get_contac,get_Data",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.NovaPendencia.Get_Conta",
+      "evento": "Valid",
+      "linhas": 26,
+      "codigoOriginal": "Local Grupo\nGrupo = this.Parent.Get_Grupo.value\nIf !IsEmpty(this.value)\n\tIf !fAcessoContas(Usuar,grupo,'C',this.value,This,this.parent.get_nconta)\n\t\tMessagebox('Acesso Negado !!',0+48,'')\n\t\tThis.Value=''\n\t\tThis.Refresh\n\t\tthis.parent.get_nconta.Value = ''\n\t\tthis.parent.get_nconta.Refresh\n\t\treturn 0 \n\tEndIf\n\t\n\tIf not fChecarInativas(This.Value,ThisForm.podatamgr)\n\t\tMessageBox('Conta Inativa ...',0+48,'')\n\t\tThis.Value=''\n\t\tThis.Refresh\n\t\tthis.parent.get_nconta.Value = ''\n\t\tthis.parent.get_nconta.Re... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas,fChecarInativas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Grupo,get_nconta",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.NovaPendencia.Get_OPER",
+      "evento": "Valid",
+      "linhas": 9,
+      "codigoOriginal": "If Lastkey()#27\n\tIf !InList(This.Value, 'D', 'C')\n\t\tMessagebox('Digite (D)ébito ou (C)rédito !!!', 48, '' )\n\t\tReturn 0\n\tEndif\n\tThis.parent.Get_SOPER.Value = Iif(This.Value = [D],[C],[D])\n\tThis.Parent.Get_sOper.Refresh\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_SOPER",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.NovaPendencia.Confirma",
+      "evento": "Click",
+      "linhas": 105,
+      "codigoOriginal": "With ThisForm.Pagina.Dados.Pagina.Pendencias.NovaPendencia\n\tIf IsEmpty( .Get_Grupo.Value )\n\t\tMessagebox( 'O Grupo deve ser informado...', 32, '' )\n\t\t.Get_Grupo.SetFocus\n\t\tReturn\n\tEndif\n\tIf IsEmpty( .Get_Conta.Value )\n\t\tMessagebox( 'A Conta deve ser informada...', 32, '' )\n\t\t.Get_Conta.SetFocus\n\t\tReturn\n\tEndif\n\tIf IsEmpty( .Get_Valor.Value )\n\t\tMessagebox( 'O Valor deve ser informado...', 32, '' )\n\t\t.Get_Valor.SetFocus\n\t\tReturn\n\tEndif\n\tIf .Get_Valor.Value < 0\n\t\tMessagebox( 'O Valor deve ser positi... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "BaixaTotal",
+        "controlesReferenciados": "Get_Grupo,Get_Conta,Get_Valor,Get_Moeda,Get_GrupoC,Get_ContaC,Get_MoedaC,Get_Hist,Get_Oper,Get_NConta,Get_nGrupo,Get_Nota,Get_docu,Get_Cotação",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.NovaPendencia.Cancelar",
+      "evento": "Click",
+      "linhas": 14,
+      "codigoOriginal": "With Thisform.Pagina.Dados.Pagina\n\t.Pendencias.ContaCorrente.Enabled = .t.\n\t.Pendencias.Total.Enabled = .t.\n\t.Pendencias.Get_Cotação.Enabled = .t.\n\t.Pendencias.AltCotação.Enabled = .t.\n\t.Pendencias.NovoLacto.Enabled = .t.\n\t.Pendencias.BaixaAut.Enabled = .t.\n\t.Pendencias.PagamentoUnico.Enabled = .t.\n\t.Pagamento.Enabled = .t.\n\tThisForm.Pagina.Dados.Grupo_Salva.Enabled = .t.\n\t.Pendencias.NovaPendencia.Visible = .f.\n\t.Pendencias.ContaCorrente.Column6.Text1.SetFocus\nEndwith\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Cotação",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.NovaPendencia.Get_moedaC",
+      "evento": "Valid",
+      "linhas": 31,
+      "codigoOriginal": "Select CrSigCdMoe\nSet Order to CMoes\nSet Near On\nIf !Seek( This.Value )\n\tloBrowse = CreateObject( 'fwbuscasel', 'CrSigCdMoe', 'CMoes', This.Value, 'Moedas' )\n\tloBrowse.AddColuna( 'CMoes', 'XXX', 'Cód', .t., 'CMoes' )\n\tloBrowse.AddColuna( 'DMoes', '', 'Descrição', .t., 'DMoes' )\n\tloBrowse.Show\nEndif\nThis.Value = CrSigCdMoe.CMoes\nSet Near Off\nlcMoeda = This.Parent.Get_Moeda.Value\nlcMoedac = This.Parent.Get_Moedac.Value\n\nIf !Seek( lcMoeda, 'TmpCot' )\n\tm.Moedas = lcMoeda\n\tm.Cotacaos = fCarregarCambi... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel,fCarregarCambio",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Moeda,Get_Moedac,Get_Valorc",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.NovaPendencia.Get_moeda",
+      "evento": "Valid",
+      "linhas": 31,
+      "codigoOriginal": "Select CrSigCdMoe\nSet Order to CMoes\nSet Near On\nIf !Seek( This.Value )\n\tloBrowse = CreateObject( 'fwbuscasel', 'CrSigCdMoe', 'CMoes', This.Value, 'Moedas' )\n\tloBrowse.AddColuna( 'CMoes', 'XXX', 'Cód', .t., 'CMoes' )\n\tloBrowse.AddColuna( 'DMoes', '', 'Descrição', .t., 'DMoes' )\n\tloBrowse.Show\nEndif\nThis.Value = CrSigCdMoe.CMoes\nSet Near Off\nlcMoeda = This.Parent.Get_Moeda.Value\nlcMoedac = This.Parent.Get_Moedac.Value\n\nIf !Seek( lcMoeda, 'TmpCot' )\n\tm.Moedas = lcMoeda\n\tm.Cotacaos = fCarregarCambi... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel,fCarregarCambio",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Moeda,Get_Moedac,Get_Valorc",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.NovaPendencia.Get_SOPER",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "RETURN(.F.)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.btnBusNFs",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "ThisForm.BuscaNFs = .t.\nThis.Parent.get_Nota.Value = []\nThis.Parent.get_Nota.Refresh \nThis.Parent.get_Nota.SetFocus",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Nota",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.Anexa",
+      "evento": "Click",
+      "linhas": 77,
+      "codigoOriginal": "Local lcEmpr, lcDope, lnNume, lnNumc, lnVoper, lnOper, lcEmpo, lcVope\nLocal laCampo1(3,2), laCampo2(2,2), laCampo3(1,2)\nPrivate lcDopc\n\nthisform.Grupooper = []\n\nlcSql = [select emps,dopes,numes,dopcs,numcs,vopers,nopers from SigMvCcr where nopers = ]+STR(tmpconta.nopers)\nthisform.Podatamgr.sqlexecute(lcSql,'crTmpCcr')\n\nIf This.Enabled\n\t_MAnexa = .f.\n\tlcEmpr = crTmpCcr.Emps\n\tlcDope = crTmpCcr.Dopes\n\tlnNume = crTmpCcr.Numes\n\tlcDopc = crTmpCcr.Dopcs\n\tlnNumc = crTmpCcr.Numcs\n\tlnVoper= crTmpCcr.VOper... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fChecaAcesso,Form SigCdPgr With Left,Form SigCdLch with .t., Left",
+        "metodosFormChamados": "sqlexecute,ChkRegister",
+        "controlesReferenciados": "ChkRegister('SigCdPgr',ChkRegister('SigMvCab',ChkRegister('SigCqChm',ChkRegister('SigPrCtb',ChkRegister('SigCdNec'",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.Pagamento.Confirma",
+      "evento": "Click",
+      "linhas": 407,
+      "codigoOriginal": "With ThisForm.Pagina.Dados.Pagina.Pendencias.Pagamento\n\tIf IsEmpty( .Get_Perc.Value )\n\t\tMessagebox( 'O Percentual deve ser informado...', 32, '' )\n\t\t.Get_Perc.SetFocus\n\t\tReturn\n\tEndif\nEndwith\n\n**************************************************\nSelect TmpTot\nThisForm.CalcTotal()\n\nSelect TmpTot\nDelete All For ValorPend = 0 And ValorAce = 0\n\nSelect TmpConta\n_RegisConta = 0\nIf !Eof()\n\t_RegisConta = Recno()\nEndif\nSet Order to \nReplace All Baixa With 0\n\nSelect xPar\n_RecnoxPar = 0\nIf !Eof()\n\t_RecnoxPar... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "for !IsEmpty,fCarregarCambio",
+        "metodosFormChamados": "CalcTotal,CursorQuery",
+        "controlesReferenciados": "Get_Perc",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.Pagamento.Cancelar",
+      "evento": "Click",
+      "linhas": 14,
+      "codigoOriginal": "With Thisform.Pagina.Dados.Pagina\n\t.Pendencias.ContaCorrente.Enabled = .t.\n\t.Pendencias.Total.Enabled = .t.\n\t.Pendencias.Get_Cotação.Enabled = .t.\n\t.Pendencias.AltCotação.Enabled = .t.\n\t.Pendencias.NovoLacto.Enabled = .t.\n\t.Pendencias.BaixaAut.Enabled = .t.\n\t.Pendencias.PagamentoUnico.Enabled = .t.\n\t.Pagamento.Enabled = .t.\n\tThisForm.Pagina.Dados.Grupo_Salva.Enabled = .t.\n\t.Pendencias.Pagamento.Visible = .f.\n\t.Pendencias.ContaCorrente.Column6.Text1.SetFocus\nEndwith\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Cotação",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.Pagamento.Get_Perc",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return ThisForm.pcEscolha $ \"INSERIR/ALTERAR\"\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.Pagamento.Get_Perc",
+      "evento": "Valid",
+      "linhas": 41,
+      "codigoOriginal": "If This.Value <= 0 Or This.Value > 100\n\tMessagebox( 'Informe um valor entre 1 e 100...', 32 , '' )\n\tReturn 0\nEndif\n\nSelect TmpConta\nReplace all Flag with .f., Acerto with 0\n\nReplace all Flag with .t., Acerto with Round( Valos * This.Value / 100, 2 )\n\nlnValor = 0\nSet Order to GruVencs\nScan\n\tlcChave = Grupos + Contas\n\tllTemDebito = .f.\n\tlnValorConta = 0\n\tScan While lcChave = Grupos + Contas\n\t\tIf Opers = ThisForm.Tipo\n\t\t\tlnValorConta = lnValorConta + Round( Acerto * Cotacaos, 2 )\n\t\t\tllTemDebito = .... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.Pagamento.Grade.Column1.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return ThisForm.pcEscolha $ \"INSERIR/ALTERAR\"\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.Pagamento.Grade.Column1.Text1",
+      "evento": "Valid",
+      "linhas": 18,
+      "codigoOriginal": "if lastkey()=9\n\tkeyboard\"{CTRL+TAB}\"\nelse\n\tif !IsEmpty(this.value)\n\t\tselect crSigOpFp\n\t\tset order to fpagsgru\n\t\tset near on\n\t\tif !seek(this.value)\n\t\t\tloBrow = CreateObject( 'fwbuscasel', 'crSigOpFp', 'FPagsGru', This.Value, 'Formas de Pagamento' )\n\t\t\tloBrow.AddColuna( 'FPags', Repl( 'X', 12 ), 'Código' , .T., 'FPagsGru' )\n\t\t\tloBrow.AddColuna( 'FParcs', Repl( '9', 2 ), 'Parc', .F. )\n\t\t\tloBrow.Show\n\t\tendif\n\t\tset near off\n\t\tthis.value = crSigOpFp.FPags\n\tendif\nendif\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.Pagamento.Grade.Column1.Text1",
+      "evento": "LostFocus",
+      "linhas": 3,
+      "codigoOriginal": "If IsEmpty( This.Value ) And Lastkey() = 13\n\tThis.Parent.Parent.Parent.Confirma.SetFocus\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.Pagamento.Grade.Column2.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return ThisForm.pcEscolha $ \"INSERIR/ALTERAR\"\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.Pagamento.Grade.Column2.Text1",
+      "evento": "Valid",
+      "linhas": 8,
+      "codigoOriginal": "If !IsEmpty( xForma.Valors ) And !IsEmpty( xForma.FPags )\n\tSkip\n\tIf Eof()\n\t\tGo Bottom \n\t\tAppend Blank\n\tEndif\n\tKeyboard \"{DnArrow}\"\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.Pagamento.GetValor",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .F.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.Get_HistTit",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "If Not IsEmpty(TmpConta.Obsd)\n\tThisForm.Enabled = .f.\n\tDo Form SigOpRob With [Histórico], TmpConta.Obsd, ThisForm\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.Get_HistTit",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "If Not IsEmpty(TmpConta.Obsd)\n\tThisForm.Enabled = .f.\n\tDo Form SigOpRob With [Histórico], TmpConta.Obsd, ThisForm\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.PagamentoUnico",
+      "evento": "Click",
+      "linhas": 20,
+      "codigoOriginal": "With Thisform.Pagina.Dados.Pagina\n\t.Pendencias.ContaCorrente.Enabled = .f.\n\t.Pendencias.Total.Enabled = .f.\n\t.Pendencias.Get_Cotação.Enabled = .f.\n\t.Pendencias.AltCotação.Enabled = .f.\n\t.Pendencias.NovoLacto.Enabled = .f.\n\t.Pendencias.BaixaAut.Enabled = .f.\n\t.Pendencias.PagamentoUnico.Enabled = .f.\n\t.Pagamento.Enabled = .f.\n\tThisForm.Pagina.Dados.Grupo_Salva.Enabled = .f.\n\tSelect xForma\n\tGo Bottom \n\tIf Eof()\n\t\tAppend Blank\n\tEndif\n\t.Pendencias.Pagamento.Visible = .t.\n\t.Pendencias.Pagamento.Get_Pe... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Cotação,Get_Perc",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.Get_NomeGrupo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.NovoLacto",
+      "evento": "Click",
+      "linhas": 51,
+      "codigoOriginal": "If crSigCdPgr.Autos\n\tReturn \nEndif\n\nWith Thisform.Pagina.Dados.Pagina\n\t.Pendencias.ContaCorrente.Enabled = .f.\n\t.Pendencias.Total.Enabled = .f.\n\t.Pendencias.Get_Cotação.Enabled = .f.\n\t.Pendencias.AltCotação.Enabled = .f.\n\t.Pendencias.NovoLacto.Enabled = .f.\n\t.Pendencias.BaixaAut.Enabled = .f.\n\t.Pendencias.PagamentoUnico.Enabled = .f.\n\t.Pagamento.Enabled = .f.\n\tThisForm.Pagina.Dados.Grupo_Salva.Enabled = .f.\n\tWith .Pendencias.NovaPendencia\n\t\tSelect TmpCliente\n\t\t_ContaCli = 0\n\t\tScan\n\t\t\tIf !IsEmpty... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Cotação,Get_Grupo,Get_Conta,Get_NConta,Get_nGrupo,Get_GrupoC,Get_NGrupoC,Get_ContaC,Get_NContaC,Get_Hist,Get_Valor,Get_ValorC,Get_Moeda,Get_MoedaC,Get_Oper,Get_sOper,Get_Nota,Get_Docu",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.Get_NomeConta",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.Get_Grupo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.Get_Conta",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.BaixaAut",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' ) And !crSigCdPgr.Autos",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.BaixaAut",
+      "evento": "InteractiveChange",
+      "linhas": 8,
+      "codigoOriginal": "=DoDefault()\n\nIf This.Value\n\tThisForm.FazBaixaAut( 'D' )\nElse\n\tThisForm.CanBaixaAut( 'D' )\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "FazBaixaAut,CanBaixaAut",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.Get_Cotação",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "This.peAntvalue = This.Value\n=Seek( TmpConta.Moedas, 'crSigCdMoe', 'CMoes' )\nReturn( ThisForm.AcCotação And Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' ) And crSigCdMoe.Cotas )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "AcCotação And Inlist",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.Get_Cotação",
+      "evento": "Valid",
+      "linhas": 30,
+      "codigoOriginal": "If This.Value # This.peAntvalue\n\n\tSelect TmpCot\n\tIf Seek( TmpConta.Moedas )\n\t\tReplace Cotacaos with This.Value\n\n\t\tlcMoeda = TmpConta.Moedas\n\t\tlnCotac = This.Value\n\t\tSelect TmpConta\n\t\tSet Order to \n\t\tScan for Moedas = lcMoeda\n\t\t\tReplace Cotacaos with lnCotac\n\t\tEndscan\n\n\t\tScan for MoedaCs = lcMoeda\n\t\t\tReplace CotacaoCs With lnCotac, ;\n\t\t\t\t\tValoCs    With Round((TmpConta.Cotacaos * TmpConta.Valos) / lnCotac, 2)\n\t\tEndscan\n\n\t\tSelect xPar\n\t\tScan for MoeFpgs = lcMoeda\n\t\t\tReplace CotFpgs with lnCotac\n\t\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "BaixaTotal",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.AltCotação",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.AltCotação",
+      "evento": "Click",
+      "linhas": 28,
+      "codigoOriginal": "With This.Parent\n\t.Get_Cotação.peAntvalue = .Get_Cotação.Value\n\tDo Form SigOpAlC with TmpConta.Moedas, .Get_Cotação.Value, crSigCdPgr.Datarcs to lcRetorno\n\tIf MLine( lcRetorno, 1 ) = 'OK'\n\t\t.Get_Cotação.Value = Val( MLine( lcRetorno, 2 ) )\n\t\tReplace TmpConta.CotUsus with MLine( lcRetorno, 3 )\n\t\tIf .Get_Cotação.peAntvalue # .Get_Cotação.Value \n\t\t\tSelect TmpCot\n\t\t\t=Seek( TmpConta.Moedas )\n\t\t\tReplace Cotacaos with .Get_Cotação.Value\n\n\t\t\tlcMoeda = TmpConta.Moedas\n\t\t\tlnCotac = .Get_Cotação.Value\n\t\t\tS... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Cotação",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.Get_ValConv",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .F.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.Get_Historico",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.Get_Nota",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return ThisForm.BuscaNFs",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.Get_Nota",
+      "evento": "LostFocus",
+      "linhas": 11,
+      "codigoOriginal": "If Not Empty(Alltrim(This.Value))\n\tSelect TmpConta\n\tGo Top In TmpConta\n\tLocate For Alltrim(NFs) = Alltrim(This.Value)\nEndIf\n\nThis.Parent.ContaCorrente.Refresh \nThis.Parent.ContaCorrente.Column1.SetFocus \nThis.Parent.ContaCorrente.AfterRowColChange()\nThisForm.BuscaNFs = .f.\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "For Alltrim",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.btnCadastros",
+      "evento": "Click",
+      "linhas": 3,
+      "codigoOriginal": "Go Top in TmpCliente\nDO Form SIGCDCTA With 0,'SIGCDCTA',TmpCliente.conta\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.Get_DadosPg",
+      "evento": "Click",
+      "linhas": 4,
+      "codigoOriginal": "If Not IsEmpty(TmpConta.HistPgs)\n\tThisForm.Enabled = .f.\n\tDo Form SigOpRob With [Dados Pagamento], TmpConta.HistPgs, ThisForm\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.Get_DadosPg",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "If Not IsEmpty(TmpConta.HistPgs)\n\tThisForm.Enabled = .f.\n\tDo Form SigOpRob With [Dados Pagamento], TmpConta.HistPgs,ThisForm\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.getNomCob",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.getCtaCob",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.cntMulta.getJuros",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "This.Tag = Str(This.Value, 5,2)\nReturn Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.cntMulta.getJuros",
+      "evento": "Valid",
+      "linhas": 44,
+      "codigoOriginal": "LOCAL lnVal\nIf This.Tag <> Str(This.Value, 5,2) and thisform.tipo = 'D'\t\t&& mena 19/10/2016 - faz calculo de juros se recebimento\n\n\t*** mena - 13/10/2016 - pega autorização para trocar % de juros ***\n\tDo Form SigOpSen With 'LIBERAFPG','Libera Troca de Juros','' To _Retorno\n\tllOk = ( Left( _Retorno, 1 ) = \"*\" )\n\tIf !llOk\n\t\tMessageBox('Autorização não Confirmada!!',0+48,'')\n\t\tThis.Value = this.tag\n\t\tReturn 0\n\tEndIf\n\n\tIf this.Value = 0 and this.parent.getmulta.value = 0\n\t\tSelect TmpConta\n\t\tlnReg = ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "BaixaTotal",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.cntMulta.getMulta",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "This.Tag = Str(This.Value, 5,2)\nReturn Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.cntMulta.getMulta",
+      "evento": "Valid",
+      "linhas": 42,
+      "codigoOriginal": "LOCAL lnVal\nIf This.Tag <> Str(This.Value, 5,2) and thisform.tipo = 'D'\t\t&& mena 19/10/2016 - faz calculo de juros se recebimento\n\n\t*** mena - 12/10/2016 - pega autorização para trocar % de multa ***\n\tDo Form SigOpSen With 'LIBERAFPG','Libera Troca de Multa','' To _Retorno\n\tllOk = ( Left( _Retorno, 1 ) = \"*\" )\n\tIf !llOk\n\t\tMessageBox('Autorização não Confirmada!!',0+48,'')\n\t\tThis.Value = this.tag\n\t\tReturn 0\n\tEndIf\n\n\tIf this.Value = 0 and this.parent.getmulta.value = 0\n\t\tSelect TmpConta\n\t\tlnReg = ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "BaixaTotal",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.apaga",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.apaga",
+      "evento": "Click",
+      "linhas": 28,
+      "codigoOriginal": "Local lcOrdem, _Chave, lnVal, lcOrd\n\nIf Inlist(Thisform.pcEscolha, [INSERIR], [ALTERAR])\n\tSelect TmpConta\n\tlcOrdem = Order('TmpConta')\n\tSet Order To Vencs\n\tGo Top\n\tScan For Flag\n\t\tReplace TmpConta.Flag With .F.\n\t\tSelect TmpConta\n\t\tIf TmpConta.BaixaAut # 0\n\t\t\tSelect TmpConta\n\t\t\t_Recno = Recno()\n\t\t\tThisForm.CanBaixaAut( 'D' )\n\t\t\tThisform.mOrdemConta()\n\t\t\tGo _Recno\n\t\tElse\n\t\t\tReplace TmpConta.Acerto    With 0 ,;\n\t\t\t\t\tTmpConta.OrdCopChs With 0 In TmpConta\n\t\tEndif\n\tEndscan\n\n\tThisform.BaixaTotal()\n\tSet... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CanBaixaAut,mOrdemConta,BaixaTotal",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.SelTudo",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return(INLIST(Thisform.pcEscolha,'INSERIR','ALTERAR'))\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.SelTudo",
+      "evento": "Click",
+      "linhas": 142,
+      "codigoOriginal": "Local _Chave, lnVal, lcOrd, lcOrdem\n\nIf Inlist(Thisform.pcEscolha, [INSERIR], [ALTERAR])\n\tSelect TmpConta\n\tlcOrdem = Order('TmpConta')\n\tSet Order To Vencs\n\tGo Top\n\tScan For Not Flag\n\n\t\tReplace TmpConta.Flag With .t.\n\n\t\tIf !( TmpConta.Tipos = 'M' And Thisform.pcEscolha = 'INSERIR' )\n\t\t\tIf TmpConta.Tipos = \"P\"\n\t\t\t\tlcQuery = [Select empdopnums, emps, Dopes, nopers, cidchaves, Valos, Vpags, 0 as Valors, 0 as Valpags From SigMvPar ]+;\n\t\t\t\t\t[Where Nopers = ]+Str(TmpConta.Nopers)+[ Order by Emps ]\n\t\t\tE... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute,cursorQuery",
+        "controlesReferenciados": "optOcorrencias",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pagamento.Grade",
+      "evento": "Procedure",
+      "linhas": 13,
+      "codigoOriginal": "LPARAMETERS nColIndex\nthisform.mostraobs\n\n=Seek('ENTRADA','crSigCdOpt','Operacao')\n=ThisForm.PoDatamgr.CursorQuery('SigOpFp','CrFpag','Fpags',xPar.FPags)\nThisForm.Pagina.Dados.pagina.Pagamento.CntfollowUp.Get_OBS.Value = Left(xPar.Obs,76)\n\nIf crSigCdOpt.Obs = [S] And crFpag.Infos = [C] And ThisForm.Tipo = 'D'\n\tThisForm.Pagina.Dados.pagina.Pagamento.CntfollowUp.Visible = .t.\nElse\n\tThisForm.Pagina.Dados.pagina.Pagamento.CntfollowUp.Visible = .f.\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "Opt',Get_OBS",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pagamento.Grade.fpagto.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "return(.f.)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pagamento.Grade.valor.Text1",
+      "evento": "When",
+      "linhas": 12,
+      "codigoOriginal": "wait window 'TAB para preenchimento de dados' nowait\nfpg = xpar.FPags\nThisForm.Podatamgr.Cursorquery(\"SigOpFp\",\"CrPag\",\"Fpags\",fpg)\nIf ThisForm.Tipo = \"C\" And crPag.Infos = \"C\" And crPag.EmiChqs # 1\n\tThis.ReadOnly = .t.\n\tThis.Parent.ReadOnly = .t.\nElse\n\tThis.ReadOnly = .f.\n\tThis.Parent.ReadOnly = .f.\nEndif\nReturn ThisForm.pcEscolha $ \"INSERIR/ALTERAR\" And !crSigCdPgr.Autos\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Cursorquery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pagamento.Grade.valor.Text1",
+      "evento": "Valid",
+      "linhas": 10,
+      "codigoOriginal": "local ctotal,rec,cotacao\n\nIf This.Value < 0\n\tMessagebox( 'Esta forma de pagamento não pode ser negativa...', 32 , '' )\n\tThis.Value = Abs( This.Value )\n\tReturn 0\nEndif\n\nthisform.baixatotal\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pagamento.Grade.valor.Text1",
+      "evento": "LostFocus",
+      "linhas": 17,
+      "codigoOriginal": "if lastkey()=9\n\tthisform.leitor=.f.\n\tThisForm.Podatamgr.Cursorquery(\"SigOpFp\",\"CrPag\",\"Fpags\",xPar.Fpags)\n\tinfo=CrPag.infos\n\tDo Case\n\t\tCase info='N'\n\t\t\tthisform.Pagina.Dados.pagina.pagamento.carne.get_carne.setfocus\n\t\tCase info='C'\n\t\t\tthisform.Pagina.Dados.pagina.pagamento.cheque.get_bco.setfocus\n\tOther\n\t\tthisform.Pagina.Dados.Grupo_Salva.Salva.SetFocus\n\tEndcase\nendif\nif lastkey()=15 && shift-tab\n\tthisform.pagina.dados.pagina.pagamento.get_fpg.setfocus\nendif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Cursorquery",
+        "controlesReferenciados": "get_carne,get_bco,get_fpg",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pagamento.Grade.venc.Text1",
+      "evento": "When",
+      "linhas": 12,
+      "codigoOriginal": "fpg = xpar.FPags\nThisForm.Podatamgr.Cursorquery(\"SigOpFp\",\"CrPag\",\"Fpags\",fpg)\nIf ThisForm.Tipo = \"C\" And crPag.Infos = \"C\"\n\tThis.ReadOnly = .t.\n\tThis.Parent.ReadOnly = .t.\n\tReturn .f.\nElse\n\tThis.ReadOnly = .f.\n\tThis.Parent.ReadOnly = .f.\nEndif\nReturn ThisForm.pcEscolha $ \"INSERIR/ALTERAR\"\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Cursorquery",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pagamento.Grade.venc.Text1",
+      "evento": "Valid",
+      "linhas": 11,
+      "codigoOriginal": "If This.Value < crSigCdPgr.Datarcs\n\tIf Messagebox( 'Vencimento menor que a Data do Recebimento... Continuar?',4+32+256, '' ) = 7\n\t\tReturn .f.\n\tEndif\nEndif\nIf fVerificaVencimento( This.Value, ThisForm.podatamgr ) # 0\n\tMessagebox( 'Vencimento Bloqueado !!!',0+48,'')\n\tThis.Value = Date()\n\tReturn .f.\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fVerificaVencimento",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pagamento.Grade.venc.Text1",
+      "evento": "LostFocus",
+      "linhas": 7,
+      "codigoOriginal": "if lastkey()=9\n\tthisform.Pagina.Dados.Grupo_Salva.Salva.SetFocus\nendif\nif lastkey()=15 && shift-tab\n\tthisform.pagina.dados.pagina.pagamento.get_fpg.setfocus\nendif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_fpg",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pagamento.Grade.moeda.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "return(.f.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pagamento.CntFollowUp.Get_Obs",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha,'INSERIR','ALTERAR') And !Empty(xpar.Bancos)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pagamento.CntFollowUp.Get_Obs",
+      "evento": "Valid",
+      "linhas": 3,
+      "codigoOriginal": "Replace xPar.Obs With This.Value In xPar\nThisForm.FollowUp=This.Value\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pagamento.CntFollowUp.Get_Obs",
+      "evento": "LostFocus",
+      "linhas": 2,
+      "codigoOriginal": "Thisform.Pagina.Dados.pagina.pagamento.grade.valor.text1.setfocus\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pagamento.cntApanhaChq.btnOK",
+      "evento": "Click",
+      "linhas": 79,
+      "codigoOriginal": "Local lcFpg\nWith ThisForm.Pagina.Dados.Pagina.Pagamento\n\t**  Verifica Banco  **\n\tIf !fChkDigitos(xpar.Bancos) \n\t\tMessageBox('Banco Inválido !',0+48,'')\n\t\t.cntApanhaChq.getBanco.SetFocus\n\t\tReturn\n\tEndif\n\n\t**  Verifica Agência  **\n\tIf (!IsEmpty(.cntApanhaChq.getAgencia.Value) .and. !fChkDigitos(xpar.Agencias)) .or. ;\n\t   (!IsEmpty(.cntApanhaChq.getBanco.Value)   .and. IsEmpty(.cntApanhaChq.getAgencia.Value))\n\t\tMessageBox('Agencia Inválida !',0+48,'')\n\t\t.cntApanhaChq.getAgencia.SetFocus\n\t\tReturn 0\n... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Verifcheq,Cursorquery",
+        "controlesReferenciados": "ChkDigitos(xpar,get_Bco,get_Age,get_Num,get_Conta,Get_Fpg",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pagamento.Carne.Get_carne",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "return(.F.)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pagamento.Cartao.Get_cred",
+      "evento": "When",
+      "linhas": 9,
+      "codigoOriginal": "if IsEmpty(thisform.pagina.Dados.Pagina.pagamento.cartao.get_cartao.value)\n\treturn(.f.)\nelse\n\tif crfpag.carauts='S'\n\t\treturn(.f.)\n\telse\n\t\treturn(.T.)\n\tendif\nendif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cartao",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pagamento.Cartao.Get_cred",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "thisform.pagina.Dados.Pagina.pagamento.grade.valor.text1.setfocus",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pagamento.Cartao.Get_cartao",
+      "evento": "When",
+      "linhas": 6,
+      "codigoOriginal": "if crfpag.carauts='S'\n\treturn(.f.)\nelse\n\treturn(.T.)\nendif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pagamento.Cartao.Get_cartao",
+      "evento": "Valid",
+      "linhas": 4,
+      "codigoOriginal": "if !IsEmpty(this.value) And !fValidaCards(this.value)\n\tmessagebox('Número Cartão Inválido !!',0+48,'')\n\treturn 0\nendif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pagamento.Cheque.Get_bco",
+      "evento": "When",
+      "linhas": 19,
+      "codigoOriginal": "if thisform.pcEscolha='INSERIR' or ;\n\tthisform.pcEscolha='ALTERAR'\n\tif xPar.NCopias = 0\n\t\tIf Thisform.TipoLeitora = 'S'\n\t\t\tThisform.ReadComm.Enabled = ( Not Thisform.ReadComm.PortaError ) And ;\n\t\t\t\t\t\t\t\t\t\tInList( Thisform.pcEscolha, 'INSERIR', 'ALTERAR' ) \n\t\t\tIF !Thisform.ReadComm.Ole_Comm.PortOpen and !Thisform.ReadComm.PortaError\n\t\t\t\t\tThisform.ReadComm.Ole_Comm.PortOpen = .t.\n\t\t\tENDIF\n\t\t\tWait Window 'Passe o cheque pela leitora !' nowait\n\t\tEndif\n\t\treturn(.t.)\n\tElse\n\t\tReturn(.f.)\n\tendif\nelse\n\tre... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Enabled =",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pagamento.Cheque.Get_bco",
+      "evento": "Valid",
+      "linhas": 73,
+      "codigoOriginal": "leitor = ''\nif thisform.leitor=.f.\n\tIf Thisform.TipoLeitora = 'S'\n\t\tIf IsEmpty(Thisform.LeituraSerial)\n\t\t\tIF !Thisform.ReadComm.Ole_Comm.PortOpen and !Thisform.ReadComm.PortaError\n\t\t\t\t\tThisform.ReadComm.Ole_Comm.PortOpen = .t.\n\t\t\tENDIF\n\t\t\tWait Window 'Passe o cheque pela leitora !' nowait\n\t\tElse\n\t\t\tLeitor= Thisform.LeituraSerial\n\t\t\tThisform.LeituraSerial = ''\n\t\tEndif\n\tElse\n\t\tleitor=this.value\n\t\tcont = 0\n\t\tdo while lastkey()<>27 and len(leitor)<33 and ;\n\t\t\t\tlastkey()<>13 and lastkey()<>03 and ;\n\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fChkDigitos",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_bco,get_age,get_conta,get_num,ChkDigitos(xpar",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pagamento.Cheque.Get_bco",
+      "evento": "LostFocus",
+      "linhas": 18,
+      "codigoOriginal": "Thisform.ReadComm.Enabled = .F.\n\nif lastkey()=9\n\tthisform.Pagina.Dados.pagina.pagamento.grade.valor.text1.setfocus\nelse\n\tif thisform.leitor\n\t\tif !ThisForm.VerifCheq(xpar.bancos,xpar.agencias,xpar.contas,xpar.numeros)\n\t\t\tthisform.Pagina.Dados.pagina.pagamento.cheque.get_bco.setfocus\n\t\telse\n\t\t\tthisform.Pagina.Dados.pagina.pagamento.cheque.get_num.setfocus\t\n\t\tendif\t\t\n\telse\n\t\tthisform.Pagina.Dados.pagina.pagamento.cheque.get_age.setfocus\n\tendif\nendif\n\nthisform.leitor = .F.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "VerifCheq",
+        "controlesReferenciados": "get_bco,get_num,get_age",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pagamento.Cheque.Get_age",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist( ThisForm.pcEscolha, \"INSERIR\", \"ALTERAR\" ) And xPar.NCopias = 0 ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pagamento.Cheque.Get_age",
+      "evento": "Valid",
+      "linhas": 8,
+      "codigoOriginal": "if ( !IsEmpty(this.value) And !fChkDigitos(xpar.agencias) ) && Or ( IsEmpty( This.Value ) And !IsEmpty( This.Parent.Get_Bco.Value ) )\n\tmessagebox('Agencia Inválida !',0+48,'')\n\treturn 0\nendif\nIf Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' )\n\tThisForm.BaixaTotal\t\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Bco,ChkDigitos(xpar",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pagamento.Cheque.Get_num",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist( ThisForm.pcEscolha, \"INSERIR\", \"ALTERAR\" ) And xPar.NCopias = 0 ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pagamento.Cheque.Get_num",
+      "evento": "Valid",
+      "linhas": 8,
+      "codigoOriginal": "if ( !IsEmpty(this.value) And !fChkDigitos(xpar.numeros)) &&Or ( IsEmpty( This.Value ) And !IsEmpty( This.Parent.Get_Bco.Value ) )\n\tmessagebox('Número Inválido !',0+48,'')\n\treturn 0\nendif\nIf Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' )\n\tThisForm.BaixaTotal\t\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Bco,ChkDigitos(xpar",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pagamento.Cheque.Get_num",
+      "evento": "LostFocus",
+      "linhas": 24,
+      "codigoOriginal": "select xpar\nif !ThisForm.Verifcheq(xpar.bancos,xpar.agencias,xpar.contas,xpar.numeros)\n\tThis.Parent.Get_Bco.Value = ''\n\tThis.Parent.Get_Age.Value = ''\n\tThis.Parent.Get_Num.Value = ''\n\tThis.Parent.Get_Conta.Value = ''\n\tThis.Parent.Get_Bco.setfocus\nelse\n\tfpg = xpar.FPags\n\tThisForm.Podatamgr.Cursorquery(\"SigOpFp\",\"CrfPag\",\"Fpags\",fpg)\n\tIf ThisForm.Tipo = \"C\" And crFPag.Infos = \"C\" \n\t\tIf crFPag.EmiChqs # 1\n\t\t\tReplace xPar.Valos With crCheque.Valors, xPar.Vencs With crCheque.Vencs\n\t\tEndif\n\t\tthisform.... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Verifcheq,Cursorquery",
+        "controlesReferenciados": "Get_Bco,Get_Age,Get_Num,Get_Conta,Opt',Get_obs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pagamento.Cheque.Get_conta",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist( ThisForm.pcEscolha, \"INSERIR\", \"ALTERAR\" ) And xPar.NCopias = 0 ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pagamento.Cheque.Get_conta",
+      "evento": "Valid",
+      "linhas": 9,
+      "codigoOriginal": "this.Value = Transform(Val(this.Value),'@L 9999999999')\nif ( !IsEmpty(this.value) And !fChkDigitos(xpar.contas)) && Or ( IsEmpty( This.Value ) And !IsEmpty( This.Parent.Get_Bco.Value ) )\n\tmessagebox('Conta Inválida !',0+48,'')\n\treturn 0\nendif\nIf Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' )\n\tThisForm.BaixaTotal\t\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Bco,ChkDigitos(xpar",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pagamento.Cheque.Get_Cheque",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist( ThisForm.pcEscolha, \"INSERIR\", \"ALTERAR\" ) And xPar.NCopias = 0 ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pagamento.Cheque.Get_Cheque",
+      "evento": "Valid",
+      "linhas": 48,
+      "codigoOriginal": "*** mena - 10/09/2014 - este campo foi incluido para leitura de cheque por cmc7 ***\nLOCAL leitor\nleitor = this.value\nif len (leitor)>=33\n\tthis.value=''\n\tban = substr(leitor,2,3)\n\tage=substr(leitor,5,4)\n\tcon=substr(leitor,23,10)\n\tche=substr(leitor,14,6)\n\treplace ;\n\t\txpar.bancos   with ban ;\n\t\txpar.agencias with age ;\n\t\txpar.contas   with con ;\n\t\txpar.numeros  with che\n\twith thisform.Pagina.Dados.pagina.pagamento.cheque\n\t\twith .get_bco\n\t\t\t.value=ban\n\t\t\t.refresh\n\t\tendwith\n\t\twith .get_age\n\t\t\t.value=... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fChkDigitos",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_bco,get_age,get_conta,get_num,ChkDigitos(xpar",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pagamento.Command1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return ThisForm.pcEscolha = 'INSERIR' And !crSigCdPgr.Autos",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pagamento.Command1",
+      "evento": "Click",
+      "linhas": 384,
+      "codigoOriginal": "Select TmpConta\n_RegisConta = 0\nIf !Eof()\n\t_RegisConta = Recno()\nEndif\nSet Order to DbVencs\nReplace All Baixa With 0, Acerto With BaixaAut\nSet Order to CrVencs\nReplace All Baixa With 0\nSet Order to \n\nSelect TmpTot\nThisForm.CalcTotal\n\nSelect TmpTot\nDelete All For ValorPend = 0 And ValorAce = 0\n\nSelect xPar\n_RecnoxPar = 0\nIf !Eof()\n\t_RecnoxPar = Recno()\nEndif\nReplace all vpags with 0\n\nSelect TmpBaixa\nDele all for !autos\n\nFor _ContArq = 1 to 4   && 1 - Marcado na mesma moeda  /  2 - Desmarcado na m... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "Flag with",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pagamento.Get_fpg",
+      "evento": "When",
+      "linhas": 6,
+      "codigoOriginal": "This.Parent.Get_Cotacao.Visible = .f.\nThis.Parent.Say_Cotacao.Visible = .f.\nThis.Parent.AltCotação.Visible = .f.\n\nReturn InList(ThisForm.pcEscolha,\"INSERIR\",\"ALTERAR\") And !crSigCdPgr.Autos\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Cotacao",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pagamento.Get_fpg",
+      "evento": "Valid",
+      "linhas": 75,
+      "codigoOriginal": "local codcor,xobj, _Return\nIf ThisForm.pcEscolha = 'CONSULTAR'\n\tReturn .t.\nEndif\n_Return = .t.\nif lastkey()=9\n\tkeyboard\"{CTRL+TAB}\"\nELSE\n\tIf !IsEmpty(this.value)\n\n\t\tSelect * From CrSigOpFp Where InList(Opcsnas,CrSigCdPgr.cNotas,0,3) ;\n\t\tInto Cursor LocalFpag ReadWrite\n\n\t\tSelect LocalFpag\n\t\tIndex On Fpags Tag FpagSgru\n\t\tset near on\n\t\tif !seek(this.value)\n\t\t\tloBrow = CreateObject( 'fwbuscasel', 'LocalFPag', 'FPagsGru', This.Value, 'Formas de Pagamento' )\n\t\t\tloBrow.AddColuna( 'FPags', Repl( 'X', 12... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fwBuscaSel,From CrSigOpFp Where InList,fAcessoGrupos,fCarregarCambio",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_npar,Get_Data,get_cotacao",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pagamento.Get_npar",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "if IsEmpty(thisform.pagina.Dados.Pagina.Pagamento.get_fpg.value) or !thisform.digpar\n\treturn(.f.)\nendif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_fpg",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pagamento.Get_npar",
+      "evento": "Valid",
+      "linhas": 4,
+      "codigoOriginal": "if IsEmpty(this.value)\n\treturn(.F.)\nendif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pagamento.Get_vpar",
+      "evento": "When",
+      "linhas": 6,
+      "codigoOriginal": "Fpg = thisform.pagina.Dados.Pagina.Pagamento.get_fpg.value\nIf IsEmpty( Fpg )\n\tReturn .f.\nEndif\nReturn ThisForm.pcEscolha $ \"INSERIR/ALTERAR\"\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_fpg",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pagamento.Get_vpar",
+      "evento": "Valid",
+      "linhas": 6,
+      "codigoOriginal": "If This.Value < 0\n\tMessagebox( 'Esta forma de pagamento não pode ser negativa...', 32 , '' )\n\tThis.Value = Abs( This.Value )\n\tReturn 0\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pagamento.fweditdata_venc",
+      "evento": "When",
+      "linhas": 11,
+      "codigoOriginal": "If (Empty(This.Value) And Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR') And ;\n\tNot Empty(ThisForm.Pagina.Dados.Pagina.Pagamento.get_Fpg.Value))\n\tThis.Value = Dtot(Ttod(ThisForm.Datapadrao) + crSigOpFp.Entradas)\nEndIf\n\nIf Empty(ThisForm.Pagina.Dados.Pagina.Pagamento.get_Fpg.Value) \n\tReturn .f.\nEndIf\n\nReturn Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Fpg",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pagamento.fweditdata_venc",
+      "evento": "Valid",
+      "linhas": 146,
+      "codigoOriginal": "Local ValTot, NParc, AntTot, NDia, TVen, Total, ValPar, NCarne, x, DCart, lnParcs\n\nIf This.Value < crSigCdPgr.Datarcs And !IsEmpty( This.Value )\n\tMessagebox( 'Vencimento não pode ser menor que a Data do Recebimento...', 32, '' )\n\tReturn 0\nEndif\nIf fVerificaVencimento( This.Value, ThisForm.podatamgr ) # 0\n\tMessagebox( 'Vencimento Bloqueado !!!',0+48,'')\n\tThis.Value = Date()\n\tReturn 0\nEndif\n\nnparc  = thisform.pagina.Dados.Pagina.Pagamento.get_npar.value\nvalpar = thisform.pagina.Dados.Pagina.Pagame... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fVerificaVencimento,fCarregarCambio",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_npar,get_vpar,get_fpg,Get_COTACAO,get_cartao,get_cred",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pagamento.fweditdata_venc",
+      "evento": "LostFocus",
+      "linhas": 38,
+      "codigoOriginal": "Local lcNewChq\n\nWait Window 'TAB para alterar valor' NoWait\n\nIf crSigCdPam.Sistef = 1 and crSigCdOpe.cupfis=3 and ALLTRIM(CrSigOpCdd.NomEcfs) = 'S/IMPRESSORA'\n\tIF !enviatef(thisform, 'crSigcdPgr')\t&& mena 09/09/2016 - envia solicitacao para tef\n\t\tSELECT xpar\n\t\tDELETE ALL\n\t\t=thisform.pagina.dados.grupo_Salva.cancelar.Click()\t\t\t&& mena - 06/10/2016 cancela caso cartão não seja validado  \n\t\treturn\n\tENDIF\nENDIF\n\nWith ThisForm.Pagina.Dados.pagina.pagamento\n\tIf ThisForm.EntraCheque\n\t\tlcNewChq = ''\n\t\tI... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "NewChq = PadL",
+        "controlesReferenciados": "get_fpg",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pagamento.Total.Column1.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pagamento.Get_COTACAO",
+      "evento": "When",
+      "linhas": 4,
+      "codigoOriginal": "This.peAntvalue = This.Value\n=Seek( crSigOpFp.Moefpgs, 'crSigCdMoe', 'CMoes' )\nReturn Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' ) And !IsEmpty( This.Parent.Get_fpg.Value) And ThisForm.AcCotação And crSigCdMoe.Cotas \n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_fpg",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pagamento.Get_COTACAO",
+      "evento": "Valid",
+      "linhas": 26,
+      "codigoOriginal": "If This.peAntvalue # This.Value \n\n\tlcMoeda = crSigOpFp.Moefpgs\n\n\tSelect TmpCot\n\t=Seek( lcMoeda )\n\tReplace Cotacaos with This.Value\n\n\tlnCotac = This.Value\n\tSelect TmpConta\n\tSet Order to\n\tScan for Moedas = lcMoeda\n\t\tReplace Cotacaos with lnCotac\n\tEndscan\n\n\tScan for MoedaCs = lcMoeda\n\t\tReplace CotacaoCs With lnCotac, ;\n\t\t\t\tValoCs    With Round((TmpConta.Cotacaos * TmpConta.Valos) / lnCotac, 2)\n\tEndscan\n\n\tSelect xPar\n\tScan for MoeFpgs = lcMoeda\n\t\tReplace CotFpgs with lnCotac\n\tEndscan\nEndif\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pagamento.AltCotação",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' ) And !IsEmpty( This.Parent.Get_fpg.Value) And !ThisForm.AcCotação\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_fpg",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pagamento.AltCotação",
+      "evento": "Click",
+      "linhas": 31,
+      "codigoOriginal": "With This.Parent\n\t.Get_Cotacao.peAntvalue = .Get_Cotacao.Value\n\tDo Form SigOpAlC with crSigOpFp.Moefpgs, .Get_Cotacao.Value, crSigCdPgr.Datarcs to lcRetorno\n\tIf MLine( lcRetorno, 1 ) = 'OK'\n\t\t.Get_Cotacao.Value = Val( MLine( lcRetorno, 2 ) )\n\t\tThisForm.CotUsu = MLine( lcRetorno, 3 )\n\t\tIf .Get_Cotacao.peAntvalue # .Get_Cotacao.Value \n\t\t\n\t\t\tlcMoeda = crSigOpFp.Moefpgs\n\t\t\t\n\t\t\tSelect TmpCot\n\t\t\t=Seek( lcMoeda )\n\t\t\tReplace Cotacaos with .Get_Cotacao.Value\n\t\t\t\n\t\t\tlnCotac = .Get_Cotacao.Value\n\t\t\tSelect ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CotUsu = MLine",
+        "controlesReferenciados": "Get_Cotacao,Get_VPar",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pagamento.LerCheques",
+      "evento": "Click",
+      "linhas": 20,
+      "codigoOriginal": "Local _LibChq\n_LibChq = .f.\nSelect xPar\nScan\n\tIf ThisForm.PodataMgr.CursorQuery('SigOpFp','CrFpag','Fpags',xPar.Fpags ) And crfpag.infos= 'C'\n\t\t_LibChq = .t.\n\t\tExit\n\tEndif\nEndscan\nIf _LibChq \n\tIf Thisform.ReadComm.Ole_Comm.PortOpen \n\t\tThisform.ReadComm.Ole_Comm.PortOpen = .f.\n\tEndif\n\tDo Form SigLeChe With ThisForm, xPar.Fpags, Iif( ThisForm.Tipo = 'D', 'R', 'P' ), ThisForm.DataSessionId\nElse\n\t=Messagebox( 'Entre com pelo menos uma forma de pagamento em cheque...', 48, '' )\n\tGo Top\nEndif\nThis.Par... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "Get_fpg",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pagamento.BaixaPend",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return ThisForm.pcEscolha = 'INSERIR' And !crSigCdPgr.Autos",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pagamento.BaixaPend",
+      "evento": "Click",
+      "linhas": 387,
+      "codigoOriginal": "Select TmpConta\n_RegisConta = 0\nIf !Eof()\n\t_RegisConta = Recno()\nEndif\nSet Order to DbVencs\nReplace All Baixa With 0, Acerto With BaixaAut\nSet Order to CrVencs\nReplace All Baixa With 0\nSet Order to \n\nSelect TmpTot\nThisForm.CalcTotal()\n\nSelect TmpTot\nDelete All For ValorPend = 0 And ValorAce = 0\n\nSelect xPar\n_RecnoxPar = 0\nIf !Eof()\n\t_RecnoxPar = Recno()\nEndif\nReplace all vpags with 0\n\nSelect TmpBaixa\nDele all for !autos\n\nFor _ContArq = 1 to 4 && 1 - Marcado na mesma moeda  /  2 - Desmarcado na m... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "Flag with",
+        "metodosFormChamados": "CalcTotal",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pagamento.Apaga",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha,\"INSERIR\",\"ALTERAR\") And !crSigCdPgr.Autos",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pagamento.Apaga",
+      "evento": "Click",
+      "linhas": 36,
+      "codigoOriginal": "If ThisForm.pcEscolha $ \"INSERIR/ALTERAR\" \n\tSelect TmpTot\n\tDelete All for ValorPend = 0 And ValorAce = 0\n\tSelect xpar\n\tZap\n\tWith thisform.Pagina.Dados.pagina.pagamento\n\t\t.grade.refresh\n\t\t.cheque.Visible = .F.\n\t\t.cartao.Visible = .F.\n\t\t.cntnsu.Visible = .F.\n\t\t.Carne.Visible  = .F.\n\t\t.CntfollowUp.Visible = .F.\n\t\twith .get_npar\n\t\t\t.value=0\n\t\t\t.refresh\n\t\tendwith\n\t\twith .get_vpar\n\t\t\t.value=0\t\n\t\t\t.refresh\n\t\tendwith\n\t\twith .fweditdata_venc\n\t\t\t.value={}\n\t\t\t.refresh\n\t\tendwith\n\t\twith .get_Cotacao\n\t\t\t.valu... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_npar,get_vpar,get_Cotacao,get_fpg",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pagamento.cntnsu",
+      "evento": "LostFocus",
+      "linhas": 2,
+      "codigoOriginal": "",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pagamento.cntnsu.Get_Nsu",
+      "evento": "Valid",
+      "linhas": 24,
+      "codigoOriginal": "Local lnRec, lcFpags\n\n*** mena - 14/03/2016 - replica autorizacao pelas parcelas ***\nSelect xpar\nlnReg = Recno()\nlnId = xpar.cnidtefs\nlcFpg = xpar.fPags\n\nIf Thisform.pcEscolha='INSERIR'\n\t*** posiciona na primeira parcela - preve mesma forma de pagamento com nsu diferente ***\n\tDo While xpar.parcs > 1\n\t\tSkip -1\n\tEnddo\n\tlnIni = Recno()\n\tlnFin = Recno()+xpar.tparcs-1\n\tReplace All nsu With This.Value For fPags = lcFpg In xpar\nEndif\nIf Thisform.pcEscolha='ALTERAR'\n\tReplace All nsu With This.Value For ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pagamento.cntnsu.Get_Nsu",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist( ThisForm.pcEscolha, \"INSERIR\", \"ALTERAR\" )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pagamento.cntnsu.Get_Autoriza",
+      "evento": "Valid",
+      "linhas": 22,
+      "codigoOriginal": "Local lnRec, lcFpags\n\n*** mena - 14/03/2016 - replica autorizacao pelas parcelas ***\nSelect xpar\nlnReg = Recno()\nlnId = xpar.cnidtefs\nlcFpg = xpar.fPags\nIf Thisform.pcEscolha='INSERIR'\n\t*** posiciona na primeira parcela - preve mesma forma de pagamento com nsu diferente ***\n\tDo While xpar.parcs > 1\n\t\tSkip -1\n\tEnddo\n\tlnIni = Recno()\n\tlnFin = Recno()+xpar.tparcs-1\n\tReplace All autoriza With This.Value For fPags = lcFpg In xpar\nEndif\nIf Thisform.pcEscolha='ALTERAR'\n\tReplace All autoriza With This.V... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pagamento.cntnsu.Get_Autoriza",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist( ThisForm.pcEscolha, \"INSERIR\", \"ALTERAR\" )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pagamento.cntnsu.get_adquire",
+      "evento": "Valid",
+      "linhas": 42,
+      "codigoOriginal": "*** mena - 02/03/2016 - este campo foi criado para ser utilizado no recebimento da operação ***\nLocal lnRec, lcFpags\nIf !Empty(This.Value)\n\tThisform.podatamgr.sqlexecute([Select * from SigcdCad Where tipocads = 'ADQUIRENTE'],\"crCad\")\n\tSelect CrCad\n\tIndex On descads Tag descads\n\tSet Near On\n\tIf Not Seek(This.Value)\n\t\txBrow=Createobject('fwbuscaint','crCad','descads',This.Value,'Seleção',.T.)\n\t\txBrow.mAddColuna('DESCADS','','Descrição',.T.)\n\t\txBrow.Show\n\tEndif\n\tThis.Value = CrCad.descads\n\tThis.Ref... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt",
+        "metodosFormChamados": "sqlexecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Pagamento.cntnsu.get_adquire",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist( ThisForm.pcEscolha, \"INSERIR\", \"ALTERAR\" )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Cadastro.Grd_Clientes.Column1.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.OldValue = This.Value\nReturn ThisForm.pcEscolha = 'INSERIR' ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Cadastro.Grd_Clientes.Column1.Text1",
+      "evento": "Valid",
+      "linhas": 11,
+      "codigoOriginal": "If !IsEmpty(This.Value)\n\tfAcessoContab(Usuar, 'C', This.Value, This, This.Parent.Parent.Column4.Text1,.f.,.f.,ThisForm.Pagina.Dados.cntCadastro.get_Data.Value)\nElse\n\tThis.Parent.Parent.Column4.Text1.Value = ''\n\tThis.Parent.Parent.Column2.Text1.Value = ''\n\tThis.Parent.Parent.Column3.Text1.Value = ''\n\tThis.Parent.Parent.Column4.Text1.Refresh\n\tThis.Parent.Parent.Column2.Text1.Refresh\n\tThis.Parent.Parent.Column3.Text1.Refresh\nEndif\nReturn(.t.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Data",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Cadastro.Grd_Clientes.Column1.Text1",
+      "evento": "LostFocus",
+      "linhas": 7,
+      "codigoOriginal": "If Lastkey() = 13 And Empty(This.Value)\n\tSelect * From TmpCliente Where Grupo <> ' ' Into Cursor TmpPula\n\tSelect TmpCliente\n\tIf Reccount('TmpPula') > 0\n\t\tThis.Parent.Parent.Parent.Processa.Setfocus\n\tEndif\nEndif",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Cadastro.Grd_Clientes.Column1.Text1",
+      "evento": "InteractiveChange",
+      "linhas": 1,
+      "codigoOriginal": "This.parent.parent.parent.Reprocessa.Visible = .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Cadastro.Grd_Clientes.Column2.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.OldValue = This.Value\nReturn (ThisForm.pcEscolha=\"INSERIR\")",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Cadastro.Grd_Clientes.Column2.Text1",
+      "evento": "Valid",
+      "linhas": 83,
+      "codigoOriginal": "Local lcGru, llVin\n\nlcGru = This.Parent.Parent.Column1.Text1.Value\n\nIf (This.Value <> ThisForm.OldValue) And Not Empty(This.Value)\n\t* Richard em 10/05/2013 Para Vincular as contas ao grupo digitado caso ele esteja configurado para isso\n\tllVin = .f.\n\tIf Not Empty(lcGru)\n\t\tlcQuery = [Select CfgCdGcr ] + ;\n\t\t\t\t    [From SigCdGcr ] + ;\n\t\t\t\t   [Where Codigos = '] + Padr(lcGru, 10) + [']\n\n\t\tIf (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalGcr]) < 1)\n\t\t\t=MessageBox([Favor Reinicializar o Processo!!!], ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas,fChecarInativas",
+        "metodosFormChamados": "OldValue) And Not Empty,SqlExecute,CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Cadastro.Grd_Clientes.Column2.Text1",
+      "evento": "InteractiveChange",
+      "linhas": 1,
+      "codigoOriginal": "This.parent.parent.parent.Reprocessa.Visible = .F.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Cadastro.Grd_Clientes.Column3.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.OldValue = This.Value\nReturn IsEmpty( tmpCliente.Conta ) And ThisForm.pcEscolha=\"INSERIR\"",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Cadastro.Grd_Clientes.Column3.Text1",
+      "evento": "Valid",
+      "linhas": 85,
+      "codigoOriginal": "Local lcGru, llVin\n\nlcGru = This.Parent.Parent.Column1.Text1.Value\n\nIf This.Value # ThisForm.OldValue And !IsEmpty( This.Value )\n\t* Richard em 10/05/2013 Para Vincular as contas ao grupo digitado caso ele esteja configurado para isso\n\tllVin = .f.\n\tIf Not Empty(lcGru)\n\t\tlcQuery = [Select CfgCdGcr ] + ;\n\t\t\t\t    [From SigCdGcr ] + ;\n\t\t\t\t   [Where Codigos = '] + Padr(lcGru, 10) + [']\n\n\t\tIf (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalGcr]) < 1)\n\t\t\t=MessageBox([Favor Reinicializar o Processo!!!], 16... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas,fChecarInativas",
+        "metodosFormChamados": "OldValue And !IsEmpty,SqlExecute,CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Cadastro.Grd_Clientes.Column3.Text1",
+      "evento": "LostFocus",
+      "linhas": 5,
+      "codigoOriginal": "If IsEmpty( This.Value ) And IsEmpty( TmpCliente.Grupo ) And IsEmpty( TmpCliente.Conta ) And LastKey() = 13 \n\tThisForm.Pagina.Dados.Pagina.Cadastro.Processa.Setfocus\n\tReturn\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Cadastro.Grd_Clientes.Column3.Text1",
+      "evento": "KeyPress",
+      "linhas": 5,
+      "codigoOriginal": "LPARAMETERS nKeyCode, nShiftAltCtrl\n\nIf (nKeyCode = -7) && Tiago - 01/02/2016 - F8 - Ativa busca por like na classe fwlistaremota\n\tgoSistema.BuscaP = .t.\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Cadastro.Grd_Clientes.Column4.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.OldValue = This.Value\nReturn IsEmpty( TmpCliente.Grupo ) And ThisForm.pcEscolha=\"INSERIR\"",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Cadastro.Grd_Clientes.Column4.Text1",
+      "evento": "Valid",
+      "linhas": 8,
+      "codigoOriginal": "If !IsEmpty(This.Value)\n\t=fAcessoContab( Usuar, 'D', This.Value, This.Parent.Parent.Column1.Text1, This,.f.,.f.,ThisForm.Pagina.Dados.cntCadastro.get_Data.Value)\nElse\n\tThis.Parent.Parent.Column1.Text1.Value = ''\n\tThis.Parent.Parent.Column1.Text1.Refresh\nEndif\nReturn(.t.)\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Data",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Cadastro.Grd_Clientes.Column5.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.OldValue = This.Value\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Cadastro.Grd_Clientes.Column5.Text1",
+      "evento": "Valid",
+      "linhas": 18,
+      "codigoOriginal": "If This.Value > 0 And This.Value # ThisForm.Oldvalue \n\tllFalse = .f.\n\tlcSql = [Select Numes,Substring(Obs,1,40) as Obs From SigCdPgr Where Dopes='ANTECIPAÇÃO' And Grupos = ']+TmpCliente.grupo+[' ]+;\n\t\t\tIif(Empty(TmpCliente.Conta),[],[And Contas = ']+TmpCliente.Conta+[']) + [ And Concs = ?llFalse ]\n\tThisForm.PodataMgr.Sqlexecute(lcsql,'TmpPgRec')\n\tSelect TmpPgRec\n\tIndex On Numes tag Numes\n\tSet Near On\n\tIf !Seek( This.Value )\n\t\tloBrowse = CreateObject( 'fwbuscasel', 'TmpPgRec', 'Numes', This.Value... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel",
+        "metodosFormChamados": "Sqlexecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Cadastro.Grd_Clientes.Column5.Text1",
+      "evento": "LostFocus",
+      "linhas": 11,
+      "codigoOriginal": "If ( Lastkey() = 13 Or This.Value # ThisForm.OldValue )\n\tSelect TmpCliente\n\tSkip \n\tIf Eof()\n\t\tGo Bott\n\t\tAppend Blank\n\tEndif\n\tKeyboard '{DnArrow}'\n\tThis.Parent.Parent.Column1.SetFocus\nEndif\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Cadastro.Boleto",
+      "evento": "Click",
+      "linhas": 9,
+      "codigoOriginal": "******* impressao boleto\nIf CrSigOpCdc.venbols=1\n\tresp=messagebox('Confirma impressão do Boleto ?(S/N)',4+32+256,'')\n\tif resp =6\n\t\tthisform.impbol\n\tendif\nendif\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Cadastro.Documento",
+      "evento": "Click",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ImpRc()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ImpRc",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Cadastro.btnCNAB",
+      "evento": "Click",
+      "linhas": 143,
+      "codigoOriginal": "Local _Todos, lcSNT, _TodosGrupos\n\nlcArq = GetFile('RET','Arquivo retorno:')\nIf Empty(lcArq)\n\tReturn .f.\nEndIf\n\n*** Tiago - 26/10/2015 - Checagem de espaço no caminho do arquivo para não dar erro\nIf At([ ],lcArq) > 0\n\t=MessageBox([Arquivo Inválido!!! Verifique se o caminho possui espaços em branco!!!], 0+16, [Seleção de Arquivo])\n\tReturn .f.\nEndif\n\nlnAgBanco = thisform.pagina.dados.pagina.cadastro.cmbCnab.ListIndex\n\nIF ALLTRIM(thisform.dopes) = 'PAGAMENTO'\n\tthisform.cnabpagamento()\n\tRETURN .t.\nE... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "cnabpagamento",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Cadastro.Processa",
+      "evento": "Click",
+      "linhas": 742,
+      "codigoOriginal": "Local _Todos, lcSNT, _TodosGrupos, lcGrue, lcBand, lcAdqu, lcChe\n\nlcSNT = Iif(This.Parent.optSNA.Value = 1, '!IsEmpty(crMccr.NFS)', ;\n\t\tIif(This.Parent.optSNA.Value = 2, 'IsEmpty(crMccr.NFS)', '.t.'))\n\nlcSN2 = Iif(This.Parent.optSNA.Value = 1, '!IsEmpty(crMccr2.NFS)', ;\n\t\tIif(This.Parent.optSNA.Value = 2, 'IsEmpty(crMccr2.NFS)', '.t.'))\n\nIf IsEmpty(crSigCdPgr.datarcs)\n\t=MessageBox([A Data de Lançamento Não Pode Ficar em Branco!], 0+48, [Atenção])\n\tThisForm.Pagina.Dados.cntCadastro.get_Data.SetFo... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Matriz And Not Empty,CursorQuery,SqlExecute",
+        "controlesReferenciados": "optSNA,get_Data,get_Grupo,get_adquire,Grd_Clientes",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Cadastro.Reprocessa",
+      "evento": "Click",
+      "linhas": 72,
+      "codigoOriginal": "Local _Todos, lcSNT, _TodosGrupos\n\nSelect xPar\nZap\n\nSelect TmpCliente2\nZap\n\nSelect CsTmpSccr\nZap\n\nSelect TmpConta\nSet Order to\nDelete For flag\nGo Top\nCount to lnRegisters\n\nIf lnRegisters = 0\n\tMessagebox( \"Não há nada pendente nesta conta!\", 0+48, \"ATENÇÃO!!\" )\n\tThis.Parent.Grd_Clientes.ReadOnly = .F.\n\tThisForm.Pagina.Dados.Pagina.Cadastro.Reprocessa.Visible = .f.\n\tReturn\nEndif\n\nSelect TmpCliente\nZap\n\nSelect Grupos As Grupo, Contas As Conta From TmpConta Group By 1,2 Into Cursor csTmpCli\nSelect c... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute,cOrdConta = Order",
+        "controlesReferenciados": "Grd_Clientes",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Cadastro.get_ds_estoque",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(This.Parent.get_cd_estoque.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_estoque",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Cadastro.get_ds_estoque",
+      "evento": "Valid",
+      "linhas": 19,
+      "codigoOriginal": "If Not Empty(This.Value)\n\tIf Not fAcessoContas(Usuar, This.Parent.get_Cd_GrEstoque.Value, 'D', This.Value, This.Parent.get_Cd_Estoque, This.Parent.get_Ds_Estoque)\n\t\t=MessageBox('Acesso Negado!!!', 16, '')\n\t\tThis.Parent.get_Cd_Estoque.Value = ''\n\t\tThis.Parent.get_Ds_Estoque.Value = ''\n\t\tThis.Parent.get_Cd_Estoque.Refresh\n\t\tThis.Parent.get_Ds_Estoque.Refresh\n\t\tReturn .f.\n\tEndIf\n\t\n\tIf not fChecarInativas(This.Parent.get_Cd_Estoque.Value,ThisForm.podatamgr)\n\t\tMessageBox('Conta Inativa ...',0+48,'')\n... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas,fChecarInativas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Cd_GrEstoque,get_Cd_Estoque,get_Ds_Estoque",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Cadastro.get_cd_estoque",
+      "evento": "Valid",
+      "linhas": 19,
+      "codigoOriginal": "If Not Empty(This.Value)\n\tIf Not fAcessoContas(Usuar, This.Parent.get_Cd_GrEstoque.Value, 'C', This.Value, This.Parent.get_Cd_Estoque, This.Parent.get_Ds_Estoque)\n\t\t=MessageBox('Acesso Negado!!!', 16, '')\n\t\tThis.parent.get_Cd_Estoque.Value = ''\n\t\tThis.Parent.get_Ds_Estoque.Value = ''\n\t\tThis.parent.get_Cd_Estoque.Refresh\n\t\tThis.parent.get_Ds_Estoque.Refresh\n\t\tReturn .f.\n\tEndIf\n\t\n\tIf not fChecarInativas(This.Value,ThisForm.podatamgr)\n\t\tMessageBox('Conta Inativa ...',0+48,'')\n\t\tThis.parent.get_Cd_E... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas,fChecarInativas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Cd_GrEstoque,get_Cd_Estoque,get_Ds_Estoque",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Cadastro.getFilEmps",
+      "evento": "Valid",
+      "linhas": 17,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigCdEmp', ;\n\t\t\t\t\t\t   'crListaRemota', 'Cemps', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Cemps', '', 'Cód')\n\t\tloLista.mAddColuna('Razas', '', 'Razão Social')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value = crListaRemota.Cemps\n\tUse In crListaRemota\nEndIf\nThis.Refresh\n* Fim *************************************************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Cadastro.get_Cd_GrEstoque",
+      "evento": "Valid",
+      "linhas": 19,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigCdGcr', ;\n\t\t\t\t\t\t   'crListaRemota', 'Codigos', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Codigos', '', 'Código')\n\t\tloLista.mAddColuna('Descrs',  '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Parent.get_Cd_GrEstoque.Value = crListaRemota.Codigos\n\tUse In crListaRemota\nElse\n\tThis.Parent.get_Cd_GrEstoque.Value = ''\nEndIf\nThis.Parent.get_Cd_GrEstoq... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Cd_GrEstoque",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Cadastro.Recibo",
+      "evento": "Click",
+      "linhas": 6,
+      "codigoOriginal": "If crSigCdPgr.PgUnicos = 1\n\tThisForm.ImpRc(.t.)\nElse\n\tDo Form SigReRec With ThisForm, 'RECIBO'\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ImpRc",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Cadastro.optOperadora",
+      "evento": "Click",
+      "linhas": 8,
+      "codigoOriginal": "IF this.Value = 1\n\tthis.Parent.cntFiltroOp.Visible = .t.\n\tthis.Parent.cntFiltroOp.Enabled = .t.\nELSE\n\tthis.Parent.cntFiltroOp.Visible = .f.\n\tthis.Parent.cntFiltroOp.Enabled = .f.\nENDIF\nthis.Parent.cntFiltroOp.Refresh ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Cadastro.Get_cpf",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .t.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Cadastro.Get_cpf",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "LOCAL cgc, cgc1\nCgc1  = This.Value\nIf Type([Cgc])<>[C]\n\tCgc = []\nEndIf \t\nCgc = Strt( Strt( Strt( Cgc1, \".\", \"\" ), \"-\", \"\" ), \"/\", \"\" )\nIF !EMPTY(cgc)\n\tIf Len(Alltrim(Cgc))<>14\n\t\tCgc1 = TransForm( Cgc, \"@R 999.999.999-99\" )\n\t\tIf Not fValidarCPF(Cgc1)\n\t\t\t=MessageBox('CPF Inválido!!!', 16, ' ')\n\t\t\tReturn 0\n\t\tEndIf\n\tElse\n\t\tCgc1 = TransForm( Cgc, \"@R 99.999.999/9999-99\" )\n\t\tIf Not fValidarCNPJ(Cgc1) \n\t\t\t=MessageBox('CNPJ Inválido!!!', 16, ' ')\n\t\t\tReturn 0\n\t\tEndIf\n\tEndIf\nENDIF\n\nThis.Value = Cgc1",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fValidarCPF,fValidarCNPJ",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Cadastro.btnCarregar",
+      "evento": "Click",
+      "linhas": 43,
+      "codigoOriginal": "Local lcCpf \n\nlcCpf = Padr(ThisForm.Pagina.Dados.Pagina.Cadastro.get_cpf.Value, 20)\nlcVaz = Alltrim(Strtran(Strtran(Strtran(lcCpf, [.], []), [-], []), [/], []))\nIf Empty(lcVaz)\n\tThis.Parent.get_cpf.SetFocus \n\tReturn .f.\nEndIf\n\nlcQuery = [Select a.Grupos, a.IClis, a.RClis, b.Descrs ] + ;\n\t\t\t[From SigCdCli a, SigCdGcr b ] + ;\n\t\t   [Where a.Cpfs = '] + lcCpf + [' And a.Grupos = b.Codigos]\n\nIf (ThisForm.poDataMgr.SqlExecute(lcQuery,'LocalCli') < 1)\n\tMessageBox('Favor reinicializar o processo.',16,'F... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "From TmpCliente Where Empty",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "get_cpf,grd_Clientes",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Cadastro.cntFiltroOp.GetBand",
+      "evento": "Valid",
+      "linhas": 18,
+      "codigoOriginal": "If !empty(this.value)\n\tThisForm.podatamgr.SqlExecute([Select * from SigCdCrt ],\"crBan\")\n\tSELECT CrBan\n\tindex on descs tag descs\n\tset near on\n\tif not seek(this.value)\n\t\txBrow=CreateObject('fwbuscaint','crBan','descs',This.Value,'Seleção',.t.)\n\t\txBrow.mAddColuna('DESCS','','Bandeira',.T.)\n\t\txBrow.Show\n\tendif\n\tThis.value = crBan.descs\n\tThis.refresh\nElse\n\tThis.value = ''\n\tThis.refresh\nEndif\nReturn(.t.)\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Cadastro.cntFiltroOp.get_adquire",
+      "evento": "Valid",
+      "linhas": 18,
+      "codigoOriginal": "LOCAL lnRec, lcFpags\nIf !empty(this.value)\n\tThisForm.podatamgr.sqlexecute([Select * from SigcdCad Where tipocads = 'ADQUIRENTE'],\"crCad\")\n\tSELECT CrCad\n\tindex on descads tag descads\n\tset near on\n\tif not seek(this.value)\n\t\txBrow=CreateObject('fwbuscaint','crCad','descads',This.Value,'Seleção',.t.)\n\t\txBrow.mAddColuna('DESCADS','','Descrição',.T.)\n\t\txBrow.Show\n\tendif\n\tThis.value = crCad.descads\n\tThis.refresh\nElse\n\tThis.value = ''\n\tThis.refresh\nEndif\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt",
+        "metodosFormChamados": "sqlexecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.Pagina.Cadastro.cntFiltroOp.Get_Grupo",
+      "evento": "Valid",
+      "linhas": 21,
+      "codigoOriginal": "Local xBrox\n\nIf !IsEmpty(This.Value)\n\n\txBrox = CreateObject('fwbuscaext', ThisForm.poDataMgr.pnIdConn, 'SigCdGre', ;\n\t\t\t\t\t\t   'crListaRemota', 'Grupo', This.Value, 'Grupo Empresarial', .T.)\n\tIf  Not xBrox.plAchouRegistro\n\t\txBrox.mAddColuna('Grupo','XXXXXXXXXXXXXXX','Grupo',.T.)\n\t\txBrox.mAddColuna('Class','XXXXXXXXXXXXXXX','Classificação',.T.)\n\t\txBrox.Show()\n\tEndIf \n\tIf LastKey()==27\n\t\tThis.Value=''\n\tElse\n\t\tThis.Value = crListaRemota.Grupo\n\tEndIf\n\tUSE in crListaRemota\n\tThis.Refresh\nElse\n\tThis.Ref... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.cntCadastro.Get_Data",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "&&Return ThisForm.pcEscolha = 'INSERIR' And Not ThisForm.BloqDatas And (ThisForm.Pagina.Dados.Pagina.ActivePage = 1)\nReturn ThisForm.pcEscolha = 'INSERIR' And (ThisForm.Pagina.Dados.Pagina.ActivePage = 1)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "pcEscolha = 'INSERIR' And",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.cntCadastro.Get_Data",
+      "evento": "Valid",
+      "linhas": 11,
+      "codigoOriginal": "If fVerificaBloqueio( This.Value, ThisForm.poDataMgr ) # 0\n\tMessagebox( 'Periodo Bloqueado !!!',0+48,'')\n\tThis.Value = This.peAntvalue\n\tReturn 0\nEndif\n\nIf fBloqueioPorPeriodo( This.Value, ThisForm.poDataMgr ) # 0\n\tMessagebox( 'Periodo Bloqueado !!!',0+48,'')\n\tThis.Value = This.peAntvalue\n\tReturn 0\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fVerificaBloqueio,fBloqueioPorPeriodo",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.cntCadastro.Get_Inicial",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return ThisForm.pcEscolha = 'INSERIR' And (ThisForm.Pagina.Dados.Pagina.ActivePage = 1)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "pcEscolha = 'INSERIR' And",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.cntCadastro.Get_Limite",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return ThisForm.pcEscolha = 'INSERIR' And (ThisForm.Pagina.Dados.Pagina.ActivePage = 1)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "pcEscolha = 'INSERIR' And",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.cntCadastro.Get_Conta",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return ThisForm.pcEscolha = 'PROCURAR' And (ThisForm.Pagina.Dados.Pagina.ActivePage = 1)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "pcEscolha = 'PROCURAR' And",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPGR.Pagina.Dados.cntCadastro.Get_Numes",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return ThisForm.pcEscolha = [PROCURAR] And (ThisForm.Pagina.Dados.Pagina.ActivePage = 1)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "pcEscolha = [PROCURAR] And",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDPGR.Procedure",
+      "queryOriginal": "\t\tInsert Into TmpTot ( Moeda ) Values ( TmpConta.Moedas )",
+      "tabelas": "TmpTot",
+      "colunas": "Moeda",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDPGR.Procedure",
+      "queryOriginal": "Select * From CrSigMvSlc Where 1=0 Into Cursor CsTmpSccr ReadWrite",
+      "tabelas": "CrSigMvSlc",
+      "colunas": "CsTmpSccr,ReadWrite",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDPGR.Procedure",
+      "queryOriginal": "Select *, 0000000.0000 as CotOrigs From CrSigMvPar Where 0=1 Into Cursor xPar ReadWrite",
+      "tabelas": "CrSigMvPar",
+      "colunas": "0000,xPar,ReadWrite",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDPGR.Procedure",
+      "queryOriginal": "Select * From CrSigCdPbx Where 0=1 Into Cursor TmpBaixa ReadWrite",
+      "tabelas": "CrSigCdPbx",
+      "colunas": "TmpBaixa,ReadWrite",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDPGR.Procedure",
+      "queryOriginal": "lcSql = [Select nFechas From SigCdPgc Where EmpDopNums = ']+lcEdn+[' And nFechas > 0] ThisForm.Podatamgr.Sqlexecute(lcSql,'TmpPgCli')",
+      "tabelas": "SigCdPgc",
+      "colunas": "nFechas,EmpDopNums,SqlexecutelcSql,TmpPgCli",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.ContaCorrente.Column1.Check1.InteractiveChange",
+      "queryOriginal": "\t\tlcQuery = [Select empdopnums, emps, Dopes, nopers, cidchaves, Valos, Vpags, 0 as Valors, 0 as Valpags From SigMvPar ]+; \t\t\t\t  [Where Nopers = ]+Str(TmpConta.Nopers)+[ Order by Emps ] \tElse",
+      "tabelas": "SigMvPar",
+      "colunas": "empdopnums,emps,Dopes,nopers,cidchaves,Valos,Vpags",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.NovaPendencia.Get_Valor.Valid",
+      "queryOriginal": "\tInsert Into TmpCot From Memvar",
+      "tabelas": "TmpCot",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.NovaPendencia.Get_Valor.Valid",
+      "queryOriginal": "\tInsert Into TmpCot From Memvar",
+      "tabelas": "TmpCot",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.Anexa.Click",
+      "queryOriginal": "lcSql = [select emps,dopes,numes,dopcs,numcs,vopers,nopers from SigMvCcr where nopers = ]+STR(tmpconta.nopers) thisform.Podatamgr.sqlexecute(lcSql,'crTmpCcr')",
+      "tabelas": "SigMvCcr",
+      "colunas": "emps,dopes,numes,dopcs,numcs,vopers,nopers,sqlexecutelcSql,crTmpCcr",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDPGR.Pagina.Dados.Pagina.Pendencias.SelTudo.Click",
+      "queryOriginal": "\t\t\t\tlcQuery = [Select empdopnums, emps, Dopes, nopers, cidchaves, Valos, Vpags, 0 as Valors, 0 as Valpags From SigMvPar ]+; \t\t\t\t\t[Where Nopers = ]+Str(TmpConta.Nopers)+[ Order by Emps ] \t\t\tE... [TRUNCADO]",
+      "tabelas": "SigMvPar",
+      "colunas": "empdopnums,emps,Dopes,nopers,cidchaves,Valos,Vpags",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDPGR.Pagina.Dados.Pagina.Pagamento.Get_fpg.Valid",
+      "queryOriginal": "\t\tSelect * From CrSigOpFp Where InList(Opcsnas,CrSigCdPgr.cNotas,0,3) ; \t\tInto Cursor LocalFpag ReadWrite",
+      "tabelas": "CrSigOpFp",
+      "colunas": "cNotas,0,3,LocalFpag,ReadWrite",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDPGR.Pagina.Dados.Pagina.Pagamento.cntnsu.get_adquire.Valid",
+      "queryOriginal": "\tThisform.podatamgr.sqlexecute([Select * from SigcdCad Where tipocads = 'ADQUIRENTE'],\"crCad\")",
+      "tabelas": "SigcdCad",
+      "colunas": "tipocads,ADQUIRENTE],\"crCad\"",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDPGR.Pagina.Dados.Pagina.Cadastro.Grd_Clientes.Column1.Text1.LostFocus",
+      "queryOriginal": "\tSelect * From TmpCliente Where Grupo <> ' ' Into Cursor TmpPula",
+      "tabelas": "TmpCliente",
+      "colunas": "Grupo,TmpPula",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDPGR.Pagina.Dados.Pagina.Cadastro.Grd_Clientes.Column5.Text1.Valid",
+      "queryOriginal": "\tlcSql = [Select Numes,Substring(Obs,1,40) as Obs From SigCdPgr Where Dopes='ANTECIPAÇÃO' And Grupos = ']+TmpCliente.grupo+[' ]+; \t\t\tIif(Empty(TmpCliente.Conta),[],[And Contas = ']+TmpCliente.Conta+[']) + [ And Concs = ?llFalse ] \tThisForm.PodataMgr.Sqlexecute(lcsql,'TmpPgRec')",
+      "tabelas": "SigCdPgr",
+      "colunas": "Numes,40),Dopes,ANTECIPAÇÃO,Grupos,grupo+[,Conta,[],[And,Contas,Conta+[],Concs,Sqlexecutelcsql,TmpPgRec",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDPGR.Pagina.Dados.Pagina.Cadastro.Reprocessa.Click",
+      "queryOriginal": "Select Grupos As Grupo, Contas As Conta From TmpConta Group By 1,2 Into Cursor csTmpCli",
+      "tabelas": "TmpConta",
+      "colunas": "Grupos,Contas",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDPGR.Pagina.Dados.Pagina.Cadastro.cntFiltroOp.GetBand.Valid",
+      "queryOriginal": "\tThisForm.podatamgr.SqlExecute([Select * from SigCdCrt ],\"crBan\")",
+      "tabelas": "SigCdCrt",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDPGR.Pagina.Dados.Pagina.Cadastro.cntFiltroOp.get_adquire.Valid",
+      "queryOriginal": "\tThisForm.podatamgr.sqlexecute([Select * from SigcdCad Where tipocads = 'ADQUIRENTE'],\"crCad\")",
+      "tabelas": "SigcdCad",
+      "colunas": "tipocads,ADQUIRENTE],\"crCad\"",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["TmpTot", "CrSigMvSlc", "CrSigMvPar", "CrSigCdPbx", "SigCdPgc", "SigMvPar", "TmpCot", "SigMvCcr", "CrSigOpFp", "SigcdCad", "TmpCliente", "SigCdPgr", "TmpConta", "SigCdCrt"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

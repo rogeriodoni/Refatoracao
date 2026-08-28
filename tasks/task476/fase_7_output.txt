@@ -1,0 +1,18 @@
+﻿O arquivo est├í correto. A fase 7/8 foi implementada com sucesso. Todos os m├®todos foram adicionados antes do `ENDDEFINE`.
+
+**Resumo do que foi implementado:**
+
+| M├®todo | Fun├º├úo |
+|--------|--------|
+| `FormParaBO()` | Transfere Form ÔåÆ BO (todos os 8 campos incluindo OptionGroups) |
+| `BOParaForm()` | Transfere BO ÔåÆ Form com mapeamento Comiss/Classifs para OptionGroup.Value |
+| `LimparCampos()` | Zera todos os campos; OptionGroups voltam ao valor 1 |
+| `HabilitarCampos(par_l)` | Codigo edit├ível s├│ em INCLUIR; demais campos via par_lHabilitar; Confirmar desabilitado em VISUALIZAR |
+| `AjustarBotoesPorModo()` | Visualizar/Alterar/Excluir desabilitados quando grid est├í vazio |
+| `BtnIncluirClick()` | NovoRegistro ÔåÆ LimparCampos ÔåÆ INCLUIR ÔåÆ HabilitarCampos(.T.) ÔåÆ foco em Codigos |
+| `BtnAlterarClick()` | CarregarPorCodigo ÔåÆ EditarRegistro ÔåÆ BOParaForm ÔåÆ ALTERAR ÔåÆ foco em Observas (replica original) |
+| `BtnVisualizarClick()` | CarregarPorCodigo ÔåÆ BOParaForm ÔåÆ VISUALIZAR ÔåÆ HabilitarCampos(.F.) ÔåÆ foco em Cancelar |
+| `BtnExcluirClick()` | MsgConfirma ÔåÆ CarregarPorCodigo ÔåÆ Excluir() ÔåÆ recarrega lista |
+| `BtnBuscarClick()` | Modo PROCURAR: s├│ Codigos edit├ível (replica legado pcEscolha='PROCURAR') |
+| `BtnSalvarClick()` | Trata PROCURAR (LOCATE no grid), VISUALIZAR (redireciona p/ Cancelar) e INCLUIR/ALTERAR (valida + salva) |
+| `BtnCancelarClick()` | LimparCampos ÔåÆ AlternarPagina(1) ÔåÆ AjustarBotoesPorModo |

@@ -1,0 +1,5 @@
+﻿**Fix aplicado:** `ColumnCount = 13` ÔåÆ `ColumnCount = 28` em `AlternarGradeDetalhe()` (linha 1637).
+
+**Resumo do pass SQL:**
+- **1 bug real corrigido:** `ColumnCount` inconsistente com 28 colunas definidas na inicializa├º├úo ÔÇö destru├¡a Column14-Column28 em runtime ao acionar Visualizar/Alterar.
+- **37 falsos positivos** (analisador est├ítico n├úo rastreia SQL entre arquivos FormÔåöBO): todos os campos referenciados nos ControlSources existem nos SELECTs do `mtzBO.prg`; as condi├º├Áes WHERE "inventadas" s├úo queries de lookup leg├¡timas (SigCdGcr, SigCdCli, SigCdMoe), n├úo filtros injetados no SigCdMtz.

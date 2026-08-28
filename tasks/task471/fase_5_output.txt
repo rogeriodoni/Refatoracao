@@ -1,0 +1,20 @@
+﻿O arquivo est├í correto e completo. Fase 5 conclu├¡da com sucesso.
+
+**O que foi feito:**
+
+`ConfigurarPaginaDados()` foi completamente reescrita com:
+- `cmd_4c_Confirmar` + `cmd_4c_Cancelar` dentro de `cnt_4c_BotoesAcao` (posi├º├Áes corretas do SIGCDMTV: Top=24+29=53, Left=812)
+- `lbl_4c_Label1` ("C├│digo :") ÔÇö Top=141+29=170, Left=393
+- `txt_4c_Codigo` ÔÇö Top=137+29=166, Left=443, Width=96, MaxLength=3, Format="K!"
+- `lbl_4c_Label2` ("Descri├º├úo :") ÔÇö Top=167+29=196, Left=377
+- `txt_4c_Descricao` ÔÇö Top=163+29=192, Left=443, Width=179, Format="K!"
+
+**Novos m├®todos adicionados:**
+- `BtnSalvarClick()` ÔÇö valida Codigo/Descricao (replica l├│gica do legado), chama FormParaBO() + Salvar()
+- `BtnCancelarClick()` ÔÇö retorna para lista via AlternarPagina(1)
+- `FormParaBO()` ÔÇö form ÔåÆ BO
+- `BOParaForm()` ÔÇö BO ÔåÆ form
+- `LimparCampos()` ÔÇö zera os dois campos
+- `HabilitarCampos(par_lHabilitar)` ÔÇö txt_4c_Codigo habilitado s├│ em INCLUIR (replicando `getCods.When = InList(INSERIR, PROCURAR)` do legado)
+
+**M├®todos existentes atualizados:** `BtnIncluirClick`, `BtnAlterarClick`, `BtnVisualizarClick` ÔÇö agora chamam LimparCampos/BOParaForm/HabilitarCampos e SetFocus no campo correto por modo.

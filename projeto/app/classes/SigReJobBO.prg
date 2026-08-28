@@ -44,6 +44,9 @@ DEFINE CLASS SigReJobBO AS RelatorioBase
     this_cDtEntrada      = ""
     this_cExtLinha       = ""
 
+    *-- Pattern #142: injetado pelo CorretorAutomatico (default vazio) - REVISAR e substituir pelo alias do cursor binding do FRX
+    this_cCursorDados = ""     && FIXME Pattern #142 pos-Erro51
+
     *--------------------------------------------------------------------------
     * Init - Configura BO e caminho do FRX
     *--------------------------------------------------------------------------

@@ -1,0 +1,21 @@
+﻿Tudo correto. A Fase 6 est├í conclu├¡da.
+
+**Resumo das mudan├ºas (Fase 6/8):**
+
+Adicionei ao `FormRec.prg`:
+
+1. **2 BINDEVENTs em `txt_4c_CdGrupo`** (linha 477-478):
+   - `KeyPress` ÔåÆ `CdGrupoKeyPress` (F4 abre lookup)
+   - `DblClick` ÔåÆ `CdGrupoDblClick` (clique duplo abre lookup)
+
+2. **2 BINDEVENTs em `txt_4c_DsGrupo`** (linha 496-497):
+   - `KeyPress` ÔåÆ `DsGrupoKeyPress` (F4 abre lookup pela descri├º├úo)
+   - `DblClick` ÔåÆ `DsGrupoDblClick` (clique duplo abre lookup pela descri├º├úo)
+
+3. **4 m├®todos handler PUBLIC** (linhas 815-852):
+   - `CdGrupoKeyPress(par_nKeyCode, par_nShiftAltCtrl)` ÔÇö abre `AbrirBuscaGrupo("")` quando F4
+   - `CdGrupoDblClick()` ÔÇö abre `AbrirBuscaGrupo("")`
+   - `DsGrupoKeyPress(par_nKeyCode, par_nShiftAltCtrl)` ÔÇö passa o valor atual da descri├º├úo como filtro
+   - `DsGrupoDblClick()` ÔÇö passa o valor atual da descri├º├úo como filtro
+
+Todos os lookups est├úo completamente implementados ÔÇö `AbrirBuscaGrupo()` j├í existia com implementa├º├úo completa (FormBuscaAuxiliar + mAddColuna + Show + leitura do cursor + Release). Pr├│xima fase: 7/8 (integra├º├úo com menu.prg e config.prg).

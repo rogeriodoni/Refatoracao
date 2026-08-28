@@ -1,0 +1,10 @@
+﻿A Fase 5 est├í completa. Resumo das mudan├ºas feitas em `FormRec.prg`:
+
+**`ConfigurarPaginaDados()` agora inclui:**
+- `cmd_4c_Confirmar` (ÔåÆ `BtnSalvarClick`) e `cmd_4c_Cancelar` (ÔåÆ `BtnCancelarClick`) dentro de `cnt_4c_BotoesAcao`, com todos os atributos visuais can├┤nicos (Comic Sans MS, icones corretos: `cadastro_salvar_60.jpg` e `cadastro_cancelar_60.jpg`)
+- `lbl_4c_Cadastro` ÔÇö "Cadastro de Contas a Receber" (top=204, left=255, equivalente ao `lbl_cadastro` legado)
+- `lbl_4c_Grupo` ÔÇö "Grupo :" (top=227, left=206, width=38, fiel ao legado)
+- `txt_4c_CdGrupo` ÔÇö c├│digo do grupo (top=222, left=253, width=79, MaxLength=10, SigCdGcr.codigos char(10)) + BINDEVENT LostFocus ÔåÆ `ValidarCodigo`
+- `txt_4c_DsGrupo` ÔÇö descri├º├úo do grupo (top=222, left=335, width=150, MaxLength=40, SigCdGcr.descrs char(40)) + BINDEVENT LostFocus ÔåÆ `ValidarDescricao`
+
+**Corre├º├úo cr├¡tica:** `ValidarCodigo` e `ValidarDescricao` alterados de `PROTECTED PROCEDURE` para `PROCEDURE` (PUBLIC) ÔÇö BINDEVENT falha silenciosamente com m├®todos PROTECTED (CLAUDE.md regra #3). A Page2 est├í agora funcionalmente completa com todos os 2 campos do formul├írio original.

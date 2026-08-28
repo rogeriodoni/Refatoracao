@@ -1,0 +1,13 @@
+﻿O arquivo est├í completo e correto. Todas as altera├º├Áes da Fase 4 foram aplicadas:
+
+**O que foi adicionado/modificado:**
+
+1. **`txt_4c_Cpf.ReadOnly = .F.`** ÔÇö campo CPF agora ├® edit├ível para busca por CPF/CNPJ
+2. **`txt_4c_DConta.ReadOnly = .F.`** ÔÇö campo Nome agora ├® edit├ível para busca por nome
+3. **`BindEventos()`** ÔÇö adicionados dois `BINDEVENT` com `KeyPress` para `txt_4c_Cpf` e `txt_4c_DConta`
+4. **`ValidarCpf(par_nKeyCode, par_nShiftAltCtrl)`** ÔÇö handler que dispara em Enter/Tab/F4, normaliza CPF/CNPJ, faz SELECT TOP 1 exato em `SigCdCli.Cpfs`, preenche Conta+Nome ou chama picker
+5. **`AbrirBuscaCpf(par_cFiltro)`** ÔÇö abre `FormBuscaAuxiliar` (Pattern A can├┤nico) filtrado por CPF starts-with, com fallback lista completa
+6. **`ValidarDConta(par_nKeyCode, par_nShiftAltCtrl)`** ÔÇö handler que busca por nome exato, depois parcial (starts-with), abre picker se necess├írio
+7. **`Destroy()`** ÔÇö cleanup dos novos cursores `cursor_4c_BuscaCpf` e `cursor_4c_BuscaDConta`
+
+O m├®todo `AlternarPagina()` j├í existia no arquivo (criado em fase anterior). A fase 4 est├í conclu├¡da para este form OPERACIONAL.

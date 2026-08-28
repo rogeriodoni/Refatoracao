@@ -1,0 +1,16 @@
+﻿Implementa├º├úo correta. A fase 7 est├í conclu├¡da. Aqui est├í o resumo do que foi feito:
+
+**Fase 7/8 ÔÇö Resultado:**
+
+Os 4 eventos principais (`BtnIncluirClick`, `BtnAlterarClick`, `BtnVisualizarClick`, `BtnExcluirClick`) j├í estavam implementados desde uma fase anterior com l├│gica completa. O que faltava ÔÇö e foi implementado agora ÔÇö foram os dois m├®todos de data binding que esses eventos dependem:
+
+- **`FormParaBO()`** ÔÇö transfere todos os campos do Form para o BO antes de salvar:
+  - TextBoxes: `ALLTRIM(.Value)` para campos char, `.Value` direto para num├®rico
+  - OptionGroups: `.Value` direto (1..N = valor num├®rico do banco)
+  - CheckBox Inativa: `IIF(.Value = .T., 1, 0)` para o campo num├®rico `Inativas`
+  - 24 campos mapeados (todos os controles existentes na Page2)
+
+- **`BOParaForm()`** ÔÇö transfere do BO para o Form ap├│s `CarregarPorCodigo()`:
+  - Guard IIF para OptionGroups (garante valor v├ílido no range 1..N)
+  - Limpa campos de descri├º├úo (DCentral, DGrupoOs, etc.) que ser├úo preenchidos pelos BINDEVENTs de LostFocus
+  - Chama `AjustarBotoesPorModo()` ao final para ajustar bot├Áes conforme modo atual

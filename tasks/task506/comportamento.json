@@ -1,0 +1,465 @@
+{
+  "resumo": {
+    "totalMetodos": 26,
+    "metodosComSQL": 8,
+    "metodosComValidacao": 15,
+    "totalQueries": 4,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["For Recno", "fDtoSQL", "fChkDiaUteis", "fChkDiasEnts", "fAcessoContas", "fMensagemFixa", "fwBuscaExt", "From SigCdCli Where ]+Iif", "fEndEntrega", "fwBuscaSel"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDPZO",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "Create Cursor CsPrazE (Dopes c(20), Abrevs c(3), Prazos T, DtEntrs n(1), nMinEnts n(3), ;\n\t\t\t\t\t\tnMaxEnts n(3), VlFretes n(12,2), nFiscals n(1), LocalEnts n(10), ;\n\t\t\t\t\t\tContaEs c(10), LocEntObs n(1), DespAces n(12,2), VlSeguros n(12,2))\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPZO",
+      "evento": "Init",
+      "linhas": 125,
+      "codigoOriginal": "Parameters poform\n\nThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption\nThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption\n\nThisForm.Parentform = poform\nThisForm.PcEscolha = ThisForm.ParentForm.pcEscolha\n\nlcEmpDopNum2 = TprMvCab.Emps + TprMvCab.Dopes + Str(TprMvCab.Numes,6)\nlcSql = [Select Dopes, PrazoEnts, LocalEnts, ContaEs, CodObs, ObsEs From SigMvCab Where EmpDnCrds = ']+lcEmpDopNum2+[']\nIf (ThisForm.ParentForm.poDataMgr.SqlExecute(lcSql, 'CsPedAnt') < 1)\n\t=MessageBox('Favor Reinicia... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "chkUteis,Get_FrtT,Get_Despat,Get_SegT",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDPZO.Grd",
+      "evento": "Procedure",
+      "linhas": 24,
+      "codigoOriginal": "LPARAMETERS nColIndex\n\nlcSql = [Select a.Dopes, a.ExibSits, b.ChCtEntrs, DtEntrs, DigObs From SigCdOpe a, SigOpCdc b ]+;\n\t\t[Where a.Dopes = ']+CsPrazE.Dopes+[' And a.dopes = b.dopes ]\nThisForm.ParentForm.PodataMgr.SqlExecute(lcSql,'LocTmpOpe')\n\nThisForm.cntEntrega.Visible    = InList(LocTmpOpe.DtEntrs, 3, 4, 5, 6)\n\nlcConta = CsPrazE.ContaEs\nlcSql = [Select Cpfs, Rclis From SigCdCli Where Iclis = ']+lcConta+[']\nThisForm.parentForm.PodataMgr.SqlExecute(lcSql,'CrTmpCli')\n\nThisForm.CntEntrega.GetCpf... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute,Visible    = InList,Visible = InList",
+        "controlesReferenciados": "Get_CodObs,Get_Obs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPZO.Grd.Column3.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDPZO.Grd.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (InList(CsPrazE.DtEntrs,1,4,6) )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPZO.Grd.Column1.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (InList(CsPrazE.nFiscals,1,2))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPZO.Grd.Column1.Text1",
+      "evento": "LostFocus",
+      "linhas": 7,
+      "codigoOriginal": "Local _Reg\nSelect CsPrazE\n_Reg = Recno()\nSum VlFretes to _TotFrete\nLocate For Recno() = _Reg\nThisForm.Get_FrtI.Value = _totFrete\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "For Recno",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_FrtI",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPZO.Grd.Column4.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (InList(CsPrazE.nFiscals,1,2))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPZO.Grd.Column4.Text1",
+      "evento": "LostFocus",
+      "linhas": 7,
+      "codigoOriginal": "Local _Reg\nSelect CsPrazE\n_Reg = Recno()\nSum DespAces to _TotDespA\nLocate For Recno() = _Reg\nThisForm.Get_DespAI.Value = _TotDespA\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "For Recno",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_DespAI",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPZO.Grd.Column5.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (InList(CsPrazE.nFiscals,1,2))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPZO.Grd.Column5.Text1",
+      "evento": "LostFocus",
+      "linhas": 7,
+      "codigoOriginal": "Local _Reg\nSelect CsPrazE\n_Reg = Recno()\nSum VlSeguros to _TotSegA\nLocate For Recno() = _Reg\nThisForm.Get_SegI.Value = _TotSegA\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "For Recno",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_SegI",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPZO.Sair",
+      "evento": "Click",
+      "linhas": 116,
+      "codigoOriginal": "*!*\tIf ThisForm.Get_FrtI.Value <> ThisForm.Get_FrtT.Value\n*!*\t\tMessageBox('A Soma do Valor do Frete Informado não confere com Total do Frete!!!',0+16,'')\n*!*\t\tReturn .f.\n*!*\tEndif\n*!*\tIf ThisForm.Get_Despai.Value <> ThisForm.Get_Despat.Value\n*!*\t\tMessageBox('A Soma do Valor das Despesas Acessórias Informado não confere com Total !!!',0+16,'')\n*!*\t\tReturn .f.\n*!*\tEndif\n*!*\tIf ThisForm.Get_SegI.Value <> ThisForm.Get_SegT.Value\n*!*\t\tMessageBox('A Soma do Valor do Seguro Informado não confere com To... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fDtoSQL,fChkDiaUteis,fChkDiasEnts",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "chkUteis,ChkDiaUteis(TprMvCab,ChkDiasEnts(ldDat",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDPZO.Get_FrtT",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDPZO.Get_FrtI",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDPZO.cntEntrega.getConta",
+      "evento": "Valid",
+      "linhas": 63,
+      "codigoOriginal": "If Not Empty(This.Value)\n\tIf Not fAcessoContas(Usuar, '', 'C', This.Value, This, ThisForm.cntEntrega.getDConta)\n\t\tThisForm.cntEntrega.getDConta.Value = ''\n\t\tThisForm.cntEntrega.getCpf.Value = ''\n\t\t=MessageBox('Acesso Negado!!!', 32, '')\n\t\tThis.Value = ''\n\t\tReturn 0\n\tEndIf\n\t\n\tlcCliente = This.Value\n\tIf Not ThisForm.ParentForm.poDataMgr.Cursorquery('SigCdCli','CrTmpCli','Iclis',lcCliente)\n\t\tMessageBox('Favor reinicializar o processo.',16,'Falha na Conexão (TSigPrze - 2)')\n\t\tReturn .f.\n\tEndIf\n\tIf L... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas,fMensagemFixa",
+        "metodosFormChamados": "Cursorquery",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDPZO.cntEntrega.getDConta",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.cntEntrega.getConta.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPZO.cntEntrega.getDConta",
+      "evento": "Valid",
+      "linhas": 64,
+      "codigoOriginal": "If Not Empty(This.Value)\n\tIf Not fAcessoContas(Usuar, '', 'D', This.Value, ThisForm.cntEntrega.getConta, This)\n\t\tThisForm.cntEntrega.getConta.Value = ''\n\t\tThisForm.cntEntrega.getCpf.Value = ''\n\t\t=MessageBox('Acesso Negado!!!', 32, '')\n\t\tThis.Value = ''\n\t\tReturn 0\n\tEndIf\n\n\tlcCliente = This.Value\n\tIf Not ThisForm.ParentForm.poDataMgr.Cursorquery('SigCdCli','CrTmpCli','Rclis',lcCliente)\n\t\tMessageBox('Favor reinicializar o processo.',16,'Falha na Conexão (TSigPrze - 3)')\n\t\tReturn .f.\n\tEndIf\n\n\tIf Loc... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas,fMensagemFixa",
+        "metodosFormChamados": "Cursorquery",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDPZO.cntEntrega.getCpf",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.cntEntrega.getConta.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPZO.cntEntrega.getCpf",
+      "evento": "LostFocus",
+      "linhas": 127,
+      "codigoOriginal": "Local lcTpFat, lcCadGrupo\n\nlcTpFat = ''\nCgc  = This.Value\nCgc1 = ''\nRetCli = ''\n\nIf Not Empty(This.Value)\n\tCgc = Strt(Strt(Strt(Cgc, \".\", \"\"), \"-\", \"\"), \"/\", \"\")\n\tIf (Len(Alltrim(Cgc)) <> 14)\n\t\tCgc1 = Transform(Cgc, \"@R 999.999.999-99\")\n\tElse\n\t\tCgc1 = Transform(Cgc, \"@R 99.999.999/9999-99\")\n\tEndIf\n\t\n\tThis.Value = Cgc1\n\t\n\tlcQuery = [Select * From SigCdCli Where Cpfs = ?Cgc1 ]\n\n\tlnErro = ThisForm.parentForm.poDataMgr.SqlExecute(lcQuery,'CrTmpCli')\n\t\n\tIf lnErro < 1\n\t\tMessageBox('Favor reinicializar... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas,fwBuscaExt,From SigCdCli Where ]+Iif,fMensagemFixa",
+        "metodosFormChamados": "SqlExecute,pcEscolha = 'INSERIR') And MessageBox,CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPZO.cntEntrega.cmdEntrega",
+      "evento": "Valid",
+      "linhas": 15,
+      "codigoOriginal": "ThisForm.ParentForm.PodataMgr.Cursorquery('SigCdCli', 'crTSigDCompCli', 'Iclis', CsPraze.ContaEs, 'Grupos, IClis, RClis')\n\nDo Form SigCdEnd With crTSigDCompCli.Grupos, crTSigDCompCli.IClis, crTSigDCompCli.RClis, ThisForm.pcEscolha, ThisForm.ParentForm.PodataMgr, CsPraze.LocalEnts\n\nDimension laArray(1)\nlaArray(1) = crTSigDCompCli.IClis\n\nIf fEndEntrega(@laArray, ThisForm.ParentForm.PodataMgr)\n\tReplace LocalEnts With laArray(02) In CsPraze\nEndIf\n\nIf Used('crTSigDCompCli')\n\tUse In crTSigDCompCli\nEnd... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fEndEntrega",
+        "metodosFormChamados": "Cursorquery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPZO.cntObservacao.Get_CodObs",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "This.peAntvalue = This.Value\nReturn Inlist( ThisForm.pcEscolha, 'INSERIR', 'ALTERAR' )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPZO.cntObservacao.Get_CodObs",
+      "evento": "Valid",
+      "linhas": 54,
+      "codigoOriginal": "Private pIni, pFim\n\nIf Not Empty(This.Value) And (This.peAntvalue <> This.Value)\n\tThisForm.Parentform.Podatamgr.CursorQuery('SigCdOpe', 'LocalOpe', 'Dopes', TprMvCab.Dopes, 'ObsPads, ObsInis, ObsFins')\n\tpIni = Iif(Not Eof('LocalOpe') And Not Empty(LocalOpe.ObsInis), LocalOpe.ObsInis, 000)\n\tpFim = Iif(Not Eof('LocalOpe') And Not Empty(LocalOpe.ObsFins), LocalOpe.ObsFins, 999)\n\n\tlcQuery = [Select Codigos, Descrs ] + ;\n\t\t\t    [From SigCdObs ] + ;\n\t\t\t   [Where Codigos BetWeen ?pIni And ?pFim]\n\n\tIf (... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel",
+        "metodosFormChamados": "CursorQuery,SqlExecute",
+        "controlesReferenciados": "Get_CodObs,get_Obs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPZO.Get_Despat",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDPZO.get_Despai",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDPZO.Get_SegT",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDPZO.get_SegI",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return .f.\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDPZO.Init",
+      "queryOriginal": "lcSql = [Select Dopes, PrazoEnts, LocalEnts, ContaEs, CodObs, ObsEs From SigMvCab Where EmpDnCrds = ']+lcEmpDopNum2+['] If (ThisForm.ParentForm.poDataMgr.SqlExecute(lcSql, 'CsPedAnt') < 1)",
+      "tabelas": "SigMvCab",
+      "colunas": "Dopes,PrazoEnts,LocalEnts,ContaEs,CodObs,ObsEs,EmpDnCrds,SqlExecutelcSql,CsPedAnt",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDPZO.Grd.Procedure",
+      "queryOriginal": "lcSql = [Select a.Dopes, a.ExibSits, b.ChCtEntrs, DtEntrs, DigObs From SigCdOpe a, SigOpCdc b ]+; \t\t[Where a.Dopes = ']+CsPrazE.Dopes+[' And a.dopes = b.dopes ] ThisForm.ParentForm.PodataMgr.SqlExecute(lcSql,'LocTmpOpe')",
+      "tabelas": "SigCdOpe",
+      "colunas": "Dopes,ExibSits,ChCtEntrs,DtEntrs,DigObs",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDPZO.Grd.Procedure",
+      "queryOriginal": "lcSql = [Select Cpfs, Rclis From SigCdCli Where Iclis = ']+lcConta+['] ThisForm.parentForm.PodataMgr.SqlExecute(lcSql,'CrTmpCli')",
+      "tabelas": "SigCdCli",
+      "colunas": "Cpfs,Rclis,Iclis,SqlExecutelcSql,CrTmpCli",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDPZO.cntEntrega.getCpf.LostFocus",
+      "queryOriginal": "\tlcQuery = [Select * From SigCdCli Where Cpfs = ?Cgc1 ]",
+      "tabelas": "SigCdCli",
+      "colunas": "Cpfs",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigMvCab", "SigCdOpe", "SigCdCli"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

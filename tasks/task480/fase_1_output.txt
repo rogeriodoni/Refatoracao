@@ -1,0 +1,10 @@
+﻿**Fase 1/8 conclu├¡da.** `C:\4c\projeto\app\classes\OCSBO.prg` criado com:
+
+- **3 propriedades** inferidas do fonte SIGCDOCS.SCX:
+  - `this_cCidchaves` ÔÇö PK t├®cnica char(20), gerada por `fUniqueIds()` (padr├úo Fortyus)
+  - `this_cCods` ÔÇö c├│digo de ocasi├úo char(10), chave de neg├│cio (validada via `ChkRegister`)
+  - `this_cDescs` ÔÇö descri├º├úo char(40)
+- **`Init()`** configurando `this_cTabela = "SigCdOcs"` e `this_cCampoChave = "cidchaves"`
+- **`ObterChavePrimaria()`** retornando `this_cCidchaves` para o sistema de auditoria
+
+> **Nota:** SigCdOcs n├úo consta no schema.sql snapshot. Os tipos foram inferidos do c├│digo legado: `cidchaves` pelo padr├úo `fUniqueIds()`, `cods`/`descs` pelas larguras dos controles (72px/240px TextBox). Na Fase 2 ajuste os tamanhos se o DBA confirmar os DDLs reais.

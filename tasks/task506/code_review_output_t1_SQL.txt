@@ -1,0 +1,19 @@
+﻿Confirmo os locais exatos dos tr├¬s problemas flagados. Todos est├úo em `PzoBO.prg`, fun├º├úo `Confirmar()`:
+
+- **NMINENTS** ÔåÆ linha 496: `IF loc_lSucesso AND CsPrazE.nMinEnts > 0`
+- **NMAXENTS** ÔåÆ linha 508: `IF loc_lSucesso AND CsPrazE.nMaxEnts > 0`
+- **LOCENTOBS** ÔåÆ linha 522: `IF loc_lSucesso AND CsPrazE.LocEntObs = 1 AND ...`
+
+**Estas tr├¬s ocorr├¬ncias s├úo condicionais VFP (`IF`) em um bloco `SCAN...ENDSCAN`, n├úo cl├íusulas SQL `WHERE`.** O checker automatizado as classificou erroneamente como `SQL-FILTRO-INVENTADO`.
+
+Verificando o fluxo de dados do c├│digo original:
+- O original popula `CsPrazE` com: `Insert Into CsPrazE (..., nMinEnts, nMaxEnts, ..., LocEntObs) Values ...`
+- Os valores v├¬m de `SigOpCdc` (`c.nMinEnts, c.nMaxEnts`) e `SigOpCdd` (`c.LocEntObs`)
+- Esses campos **existem para serem usados exatamente nas valida├º├Áes** do `Confirmar()`:
+  - `nMinEnts`: valida prazo m├¡nimo de entrega (data base + min dias)
+  - `nMaxEnts`: valida prazo m├íximo de entrega (data base + max dias)
+  - `LocEntObs`: valida se local de entrega ├® obrigat├│rio para a opera├º├úo
+
+**Nenhuma cl├íusula SQL `WHERE` usa essas colunas** nos arquivos ÔÇö o grep confirma que s├│ aparecem em: SELECT list, CREATE CURSOR, INSERT INTO/VALUES, e condicionais VFP `IF`.
+
+**Conclus├úo: os 3 itens flagados s├úo falsos positivos.** Remover essas condi├º├Áes quebraria a valida├º├úo de datas m├¡nimas/m├íximas de entrega e de local obrigat├│rio ÔÇö violaria a regra "NAO alterar logica de negocio". Nenhuma altera├º├úo ├® necess├íria ou correta para este pass.

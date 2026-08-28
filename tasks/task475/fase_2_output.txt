@@ -1,0 +1,9 @@
+﻿RETURN is correctly after ENDTRY. FASE 2/8 complete.
+
+**Summary:** `NflBO.prg` now has all 6 CRUD methods (772 lines total):
+- `Buscar()` ÔÇö SELECT from SigCnFNf for the list grid
+- `CarregarPorCodigo()` ÔÇö SELECT all 113 SigCnFN2 columns by cidchaves
+- `CarregarDoCursor()` (PROTECTED) ÔÇö maps all 113 fields from cursor to `this_*` properties
+- `Inserir()` (PROTECTED) ÔÇö INSERT into SigCnFNf (255 columns, all defaults except key) then SigCnFN2 (full data); PK generated as `PADR(emps+series, 20)`; rollback SigCnFNf on SigCnFN2 failure; calls `RegistrarAuditoria("INSERT")`
+- `Atualizar()` (PROTECTED) ÔÇö UPDATE SigCnFN2 with all 112 non-key columns; calls `RegistrarAuditoria("UPDATE")`
+- `ExecutarExclusao()` (PROTECTED) ÔÇö DELETE from SigCnFN2 then SigCnFNf; calls `RegistrarAuditoria("DELETE")`
