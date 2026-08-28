@@ -1,0 +1,1401 @@
+{
+  "resumo": {
+    "totalMetodos": 81,
+    "metodosComSQL": 14,
+    "metodosComValidacao": 33,
+    "totalQueries": 12,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["MontaGrade", "fConfigGeral", "fwBuscaExt", "fAcessoEmpresa", "fAcessoContas", "fUniqueIds"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDPRC",
+      "evento": "Procedure",
+      "linhas": 91,
+      "codigoOriginal": "* Acertando a Grade Da Página Dados e Os 'ControlSources'\nWith ThisForm.Pagina.Dados.grdDestinos\n\t.ColumnCount = 18\n\t.AllowHeaderSizing = .F.\n\t.AllowRowSizing = .F.\n\t.DeleteMark = .F.\n\t.RecordSource = 'csDestinos'\n\t.Name = 'grdDestinos'\n\n\t.Column1.ControlSource  = 'csDestinos.EmpDs'\n\t.Column2.ControlSource  = 'csDestinos.Drives'\n\t.Column3.ControlSource  = 'csDestinos.DopeDs'\n\t.Column4.Alignment      = 2\n\t.Column4.ControlSource  = 'csDestinos.TpProdutos'\n\t.Column4.InputMask      = '99'\n\t.Column5.... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "optGruConOs,optGruConDs,optEmpDests,optAgrupar,optNovoCodigo,optCorTamanho,optMoeVals,optSituas,optFranquia,optCustos,optImpostos,optImagem,optMantProds,optOriCompos,optBarras,optGlobaliza,optMccrs,optCheques,optRecalculos,optDelets,optDesItens,optMontaObs,optChkCons,ChkCons',optMantemMats,optMantDPros,optMovMZeros,optMovcParc",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC",
+      "evento": "Init",
+      "linhas": 39,
+      "codigoOriginal": "LParameters lcAcesso\n\nPrivate pPro, pKey\n\npPro = Replicate(Chr(254), 20)\npKey = Replicate(Chr(254), 20)\n\nlcQryCopOp = 'Select * From SigPcOop'\nlcQryCopOI = 'Select * From SigPcOoI Where Processos = ?pPro'\nlcQryCopOG = 'Select * From SigPcOoG Where Processos = ?pPro And fkChaves = ?pKey'\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\t\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tWith .poDataMgr\n\t\t\t* Cursor Principal Para Montagem da Lista (Tabela Grande)\n\t\t\t.AddCursor('SigPcOop', 'P... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "MontaGrade",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDPRC",
+      "evento": "Procedure",
+      "linhas": 16,
+      "codigoOriginal": "=fConfigGeral()\n\nCreate Cursor csDestinos (Processos c(20), Codigos n(6), Drives c(10), Emps c(3), Dopes  c(20), EmpDs c(3), ;\n\t\t\t\t\t\t  DopeDs c(20), TpProdutos n(2), Dias n(3), GruconOs n(1), GruconDs n(1), EmpDests n(1), ;\n\t\t\t\t\t\t  Agrupar n(1), NovoCods n(1), CorTams n(1), MoeVals n(1), Situas n(1), Franquias n(1), PctMins n(12,2), ;\n\t\t\t\t\t\t  PctMaxs n(12,2), Custos n(1), Impostos n(1), Imagem n(1), MantProds n(1), Barras n(1), ;\n\t\t\t\t\t\t  Mccrs n(1), Cheques n(1), Delets n(1), DesItens n(1), Mont... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkCons",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC",
+      "evento": "Procedure",
+      "linhas": 7,
+      "codigoOriginal": "Private pPro\n\nSelect crSigPcOop\npPro = crSigPcOop.Processos\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC",
+      "evento": "Procedure",
+      "linhas": 26,
+      "codigoOriginal": "Private pPro\n\npPro = crSigPcOop.Processos\n\n* Eliminando os Registros\nIf (ThisForm.poDataMgr.SQLExecute([Delete From SigPcOoI Where Processos = ?pPro], '') < 1)\n\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (msv_Alterar - 1)')\n\tReturn 0\nEndIf\nIf (ThisForm.poDataMgr.SQLExecute([Delete From SigPcOoG Where Processos = ?pPro], '') < 1)\n\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (msv_Alterar - 2)')\n\tReturn 0\nEndIf\n\n* Incluindo os Registros\nIf Not ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SQLExecute,Update",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC",
+      "evento": "Procedure",
+      "linhas": 16,
+      "codigoOriginal": "Private pPro\n\npPro = crSigPcOop.Processos\n\n* Eliminando os Registros\nIf (ThisForm.poDataMgr.SQLExecute([Delete From SigPcOoI Where Processos = ?pPro], '') < 1)\n\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (msv_Excluir - 1)')\n\tReturn 0\nEndIf\nIf (ThisForm.poDataMgr.SQLExecute([Delete From SigPcOoG Where Processos = ?pPro], '') < 1)\n\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (msv_Excluir - 2)')\n\tReturn 0\nEndIf\n\n=DoDefault()\n* Fim *************... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SQLExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC",
+      "evento": "Procedure",
+      "linhas": 18,
+      "codigoOriginal": "Private pPro\n\npPro = crSigPcOop.Processos\n\n* Incluindo os Registros\nIf Not ThisForm.poDataMgr.Update('crSigPcOoI')\n\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (msv_Inserir - 1)')\n\tReturn 0\nEndIf\nIf Not ThisForm.poDataMgr.Update('crSigPcOoG')\n\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (msv_Inserir - 2)')\n\tReturn 0\nEndIf\n\n=DoDefault()\n\nThisForm.msv_Procurar\n* Fim *******************************************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Update",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC",
+      "evento": "Procedure",
+      "linhas": 8,
+      "codigoOriginal": "Select crSigPcOop\nSet Order To Processos\nSet Near On\nIf Not Empty(ThisForm.Pagina.Dados.getProcesso.Value)\n\tSeek Alltrim(ThisForm.Pagina.Dados.getProcesso.Value)\nEndIf\nSet Near Off\n* Fim *********************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC",
+      "evento": "Click",
+      "linhas": 123,
+      "codigoOriginal": "LParameters Opcao\n\nPrivate pPro, pKey\n\nIf (Type('Opcao') = 'N')\n\tThis.Value = Opcao\nEndIf\n\nSelect crSigPcOop\npPro = crSigPcOop.Processos\n\nIf Not DoDefault(Opcao)\n\tThisForm.mAtivapagina1\n\tReturn 0\nEndIf \n\nZap In csDestinos\nZap In csDestinoG\nSelect csDestinoG\nSet Key To [] In csDestinoG\n\nWith ThisForm.Pagina.Dados\n\t.lblNotas.Caption     = ''\n\t.getProcesso.Enabled  = InList(Thisform.pcEscolha, 'INSERIR', 'PROCURAR')\n\t.cmdgCompo.Visible    = InList(Thisform.pcEscolha, 'INSERIR', 'ALTERAR')\n\t.cmdgCom... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Requery",
+        "controlesReferenciados": "ChkCons,optGruConOs,optGruConDs,optEmpDests,optAgrupar,optNovoCodigo,optCorTamanho,optMoeVals,optSituas,optFranquia,optCustos,optImpostos,optImagem,optMantProds,optOriCompos,optBarras,optGlobaliza,optMccrs,optCheques,optRecalculos,optDelets,optDesItens,optMontaObs,optChkCons,optMantemMats,optMantDPros,optMovMZeros,optMovcParc",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC",
+      "evento": "Click",
+      "linhas": 246,
+      "codigoOriginal": "Private pPro, pKey\n\npPro = crSigPcOop.Processos\n\nIf InList(Thisform.pcEscolha, 'INSERIR', 'ALTERAR')\n\tIf Empty(pPro)\n\t\t=Messagebox('O Nome do Processo Tem Que Ser Preenchido!!!', 0+48, 'Nome do Processo Inválido!!!')\n\t\tReturn 0\t\t\n\tEndIf\n\n\tIf (crSigPcOop.Fiscal = 1)\n\t\tSelect Processos ;\n\t\t  From csDestinos ;\n\t\t Where Fiscais = 1 ;\n\t\t  Into Cursor crBusca\n\n\t\tSelect crBusca\n\t\tGo Top In crBusca\n\t\tIf Eof([crBusca])\n\t\t\t=Messagebox([Selecione a Conexão de Destino Dos Dados Fiscais!!!], 0+48, [Dados Inv... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkCons",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDPRC",
+      "evento": "Click",
+      "linhas": 12,
+      "codigoOriginal": "Private pPro, pKey\n\npPro = crSigPcOop.Processos\npKey = Replicate(Chr(254), 20)\n\n=DoDefault()\n\nIf ThisForm.plCancelar\n\tThisForm.mAtivapagina1\nEndIf\n* Fim **************************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC.Pagina.Lista.btnCopiar",
+      "evento": "Click",
+      "linhas": 15,
+      "codigoOriginal": "If Not Empty(crSigPcOop.Processos)\n\tThisForm.LockScreen = .t.\n\n\tDo Form SigOpCpr With ThisForm, crSigPcOop.Processos\n\n\tlcDes = crSigPcOop.Processos\n\n\tThisForm.mAtivaPagina1\n\n\tSelect crSigPcOop\n\tLocate For Processos = lcDes\n\n\tThisForm.LockScreen = .f.\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC.Pagina.Dados.cmdgCompo",
+      "evento": "Click",
+      "linhas": 52,
+      "codigoOriginal": "Insert Into csDestinos (Processos, Emps, Dopes, Codigos, Drives, EmpDs, DopeDs, TpProdutos, Dias, GruConOs, ;\n\t\t\t\t\t\tGruConDs, EmpDests, Agrupar, NovoCods, CorTams, MoeVals, Situas, Franquias, PctMins, PctMaxs, ;\n\t\t\t\t\t\tCustos, Impostos, Imagem, MantProds, Barras, Mccrs, Cheques, Delets, DesItens, MontaObs, ;\n\t\t\t\t\t\tChkCons, MantemMats, MantDPros, GdeGrupos, CUnis, OriCompos, Origems, Destinos, SemItens, ;\n\t\t\t\t\t\tFiscais, Recalculos, PctCopias, OpItens, MovMZeros, MovCParc, cIdChaves, pctcomps, Glob... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "ChkCons,optGruConOs,optGruConDs,optEmpDests,optAgrupar,optNovoCodigo,optCorTamanho,optMoeVals,optSituas,optFranquia,optCustos,optImpostos,optImagem,optMantProds,optOriCompos,optBarras,optGlobaliza,optMccrs,optCheques,optRecalculos,optDelets,optDesItens,optMontaObs,optChkCons,optMantemMats,optMovMZeros,optMovcParc,optMantDPros",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC.Pagina.Dados.cmdgCompo",
+      "evento": "Click",
+      "linhas": 48,
+      "codigoOriginal": "Select csDestinos\nIf Not Eof() And Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')\n\tIf Messagebox('Deseja Excluir Esta Operação?', 4+32+256, '')=6\n\t\tSelect csDestinoG\n\t\tSet Key To csDestinos.cIdChaves In csDestinoG\n\t\tGo Top In csDestinoG\n\t\tGo Bottom In csDestinoG\n\t\tScan\n\t\t\tDelete\n\t\tEndScan\n\t\t\t\n\t\tDelete In CsDestinos\n\t\tWith ThisForm.Pagina.Dados\n\t\t\t.grdDestinos.Refresh\n\t\t\t.optGruConOs.Refresh\n\t\t\t.optGruConDs.Refresh\n\t\t\t.optEmpDests.Refresh\n\t\t\t.optAgrupar.Refresh\n\t\t\t.optNovoCodigo.Refresh\n\t\t\t.opt... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "optGruConOs,optGruConDs,optEmpDests,optAgrupar,optNovoCodigo,optCorTamanho,optMoeVals,optSituas,optFranquia,optCustos,optImpostos,optImagem,optMantProds,optOriCompos,optBarras,optGlobaliza,optMccrs,optCheques,optRecalculos,optDelets,optDesItens,optMontaObs,optChkCons,optMantemMats,optMovMZeros,optMovcParc,optMantDPros",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC.Pagina.Dados.getCodOrigem",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return .f.",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDPRC.Pagina.Dados.chkHelp",
+      "evento": "InteractiveChange",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.ShowTips = (This.Value = 1)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ShowTips =",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC.Pagina.Dados.grdDestinos",
+      "evento": "Procedure",
+      "linhas": 37,
+      "codigoOriginal": "Lparameters nColIndex\n\nSet Key To csDestinos.cIdChaves In csDestinoG\nGo Bottom In csDestinoG\nGo Top In csDestinoG\n\nWith ThisForm.Pagina.Dados\n\t.optGruConOs.Refresh\n\t.optGruConDs.Refresh\n\t.optEmpDests.Refresh\n\t.optAgrupar.Refresh\n\t.optNovoCodigo.Refresh\n\t.optCorTamanho.Refresh\n\t.optMoeVals.Refresh\n\t.optSituas.Refresh\n\t.optFranquia.Refresh\n\t.optCustos.Refresh\n\t.optImpostos.Refresh\n\t.optImagem.Refresh\n\t.optMantProds.Refresh\n\t.optOriCompos.Refresh\n\t.optBarras.Refresh\n\t.optGlobaliza.Refresh\t\n\t.optMcc... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "optGruConOs,optGruConDs,optEmpDests,optAgrupar,optNovoCodigo,optCorTamanho,optMoeVals,optSituas,optFranquia,optCustos,optImpostos,optImagem,optMantProds,optOriCompos,optBarras,optGlobaliza,optMccrs,optCheques,optRecalculos,optDelets,optDesItens,optMontaObs,optChkCons,optMantemMats,optMovMZeros,optMovCParc,optMantDPros",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC.Pagina.Dados.grdDestinos.Column1.Text1",
+      "evento": "GotFocus",
+      "linhas": 3,
+      "codigoOriginal": "ThisForm.Pagina.Dados.lblNotas.Caption = 'Empresa de Destino Para Geração da Cópia.'\nThis.Tag = This.Value\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC.Pagina.Dados.grdDestinos.Column1.Text1",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Pagina.Dados.lblNotas.Caption = ''",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC.Pagina.Dados.grdDestinos.Column1.Text1",
+      "evento": "Valid",
+      "linhas": 39,
+      "codigoOriginal": "Local lcLoc\n\nlcLoc = Thisform.Pagina.Dados.grdDestinos.Column2.Text1.Value\n\nIf (This.Tag <> This.Value) \n\tIf Not Empty(This.Value) And ThisForm.poDataMgr.CursorQuery('SigCdLoc', 'crTmp', 'Cods', lcLoc)\n\t\tGo Top In crTmp\n\n\t\tlcConexao = Alltrim(crTmp.cIdConns)\n\n\t\tThisForm.poDataTmp = CreateObject('fSqlConector', lcConexao)\n\t\t\n\t\tIf (ThisForm.poDataTmp.pnIdconn > 0)\n\t\t\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataTmp.pnIdConn, 'SigCdEmp', ;\n\t\t\t\t\t\t\t\t   'crListaRemota', 'Cemps', This.Value, 'Em... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "CursorQuery,poDataTmp = CreateObject",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDPRC.Pagina.Dados.grdDestinos.Column1.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC.Pagina.Dados.grdDestinos.Column2.Text1",
+      "evento": "GotFocus",
+      "linhas": 4,
+      "codigoOriginal": "ThisForm.Pagina.Dados.lblNotas.Caption = 'Unidade/Drive de Destino da Cópia. (Cadastro de Locais)'\nThis.Tag = This.Value\n* Fim *********************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC.Pagina.Dados.grdDestinos.Column2.Text1",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Pagina.Dados.lblNotas.Caption = ''",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC.Pagina.Dados.grdDestinos.Column2.Text1",
+      "evento": "Valid",
+      "linhas": 21,
+      "codigoOriginal": "Local loLista\n\nIf (This.Tag <> This.Value) \n\tIf Not Empty(This.Value)\n\t\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdLoc', ;\n\t\t\t\t\t\t\t   'crListaRemota', 'Cods', This.Value, 'Seleção', .t.)\n\n\t\tIf Not loLista.plAchouRegistro\n\t\t\tloLista.mAddColuna('Cods', '', 'Códigos')\n\t\t\tloLista.Show()\n\t\tEndIf\n\t\t\n\t\tThis.Value = crListaRemota.Cods\n\t\tUse In crListaRemota\n\tElse\n\t\tThis.Value = ''\n\tEndIf\n\tThis.Refresh\nEndIf\n* Fim ***************************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC.Pagina.Dados.grdDestinos.Column2.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "* Coluna Unidade / Drive\nReturn InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC.Pagina.Dados.grdDestinos.Column3.Text1",
+      "evento": "GotFocus",
+      "linhas": 4,
+      "codigoOriginal": "ThisForm.Pagina.Dados.lblNotas.Caption = 'Operação de Destino da Cópia (Existente no Drive de Destino)'\nThis.Tag = This.Value\n* Fim *********************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC.Pagina.Dados.grdDestinos.Column3.Text1",
+      "evento": "LostFocus",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.Pagina.Dados.lblNotas.Caption = ''\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC.Pagina.Dados.grdDestinos.Column3.Text1",
+      "evento": "Valid",
+      "linhas": 37,
+      "codigoOriginal": "Local lcLoc\n\nlcLoc = Thisform.Pagina.Dados.grdDestinos.Column2.Text1.Value\n\nIf (This.Tag <> This.Value) \n\tIf Not Empty(This.Value) And ThisForm.poDataMgr.CursorQuery('SigCdLoc', 'crTmp', 'Cods', lcLoc)\n\t\tGo Top In crTmp\n\n\t\tlcConexao = Alltrim(crTmp.cIdConns)\n\n\t\tThisForm.poDataTmp = CreateObject('fSqlConector', lcConexao)\n\n\t\tIf (ThisForm.poDataTmp.pnIdconn > 0)\n\t\t\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataTmp.pnIdConn, 'SigCdOpe', ;\n\t\t\t\t\t\t\t\t   'crListaRemota', 'Dopes', This.Value, 'Oper... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "CursorQuery,poDataTmp = CreateObject",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDPRC.Pagina.Dados.grdDestinos.Column3.Text1",
+      "evento": "When",
+      "linhas": 5,
+      "codigoOriginal": "* Coluna Operação\nReturn InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR') And ;\n   Not Empty(ThisForm.Pagina.Dados.grdDestinos.Column2.Text1.Value)\n* Fim *********************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC.Pagina.Dados.grdDestinos.Column4.Text1",
+      "evento": "GotFocus",
+      "linhas": 11,
+      "codigoOriginal": "ThisForm.Pagina.Dados.lblNotas.Caption = 'Tipo de Produto no Destino ' + ;\n\t\t\t\t\t\t\t\t\t\t '(1-Cód.; 2-Descr.; ' + ;\n\t\t\t\t\t\t\t\t\t\t '3-Estoq.; 4-C/Casamento; ' + ;\n\t\t\t\t\t\t\t\t\t\t '5-Barra; 6-Cód. Exato; ' + ;\n\t\t\t\t\t\t\t\t\t\t '7-Cód. Exato/Nova Descr.; ' + ;\n\t\t\t\t\t\t\t\t\t\t '8-Descr. + Peso; ' + ;\n\t\t\t\t\t\t\t\t\t\t '9-Cód. + Grupo + Subgrupo + Valor; ' + ;\n\t\t\t\t\t\t\t\t\t\t '10-Identidade; 11-Ident./Produto; ' + ;\n\t\t\t\t\t\t\t\t\t\t '12-Ident.Compos).'\n* Fim *********************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC.Pagina.Dados.grdDestinos.Column4.Text1",
+      "evento": "LostFocus",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.Pagina.Dados.lblNotas.Caption = ''\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC.Pagina.Dados.grdDestinos.Column4.Text1",
+      "evento": "Valid",
+      "linhas": 35,
+      "codigoOriginal": "* Coluna de Tipo de Produto\n* 1 - Busca Por Código\n* 2 - Busca Por Descrição\n* 3 - Busca Por Estoque\n* 4 - Busca Com Casamento\n* 5 - Busca Por Barra\n* 6 - Busca Código Exato\n* 7 - Busca Código Exato Com Nova Descrição\n* 8 - Busca Por Descrição + Peso\n* 9 - Código + Grupo + Subgrupo + Valor\n*10 - Identidade do Produto\n*11 - Busca Identidade e Lança Produto\n*12 - Identidade e Compos\n\nIf InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')\n\tIf Not InList(This.Value, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 1... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC.Pagina.Dados.grdDestinos.Column4.Text1",
+      "evento": "When",
+      "linhas": 6,
+      "codigoOriginal": "* Coluna Produto\nReturn InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR') And ;\n   Not Empty(ThisForm.Pagina.Dados.grdDestinos.Column2.Text1.Value) And ;\n   Not Empty(ThisForm.Pagina.Dados.grdDestinos.Column3.Text1.Value)\n* Fim *********************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC.Pagina.Dados.grdDestinos.Column5.Text1",
+      "evento": "GotFocus",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.Pagina.Dados.lblNotas.Caption = 'Número de Dias a Serem Acrescentados no Destino, Com Base na Data de Origem.'\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC.Pagina.Dados.grdDestinos.Column5.Text1",
+      "evento": "LostFocus",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.Pagina.Dados.lblNotas.Caption = ''\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC.Pagina.Dados.grdDestinos.Column5.Text1",
+      "evento": "When",
+      "linhas": 7,
+      "codigoOriginal": "* Coluna Dias\nReturn InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR') And ;\n   Not Empty(ThisForm.Pagina.Dados.grdDestinos.Column2.Text1.Value) And ;\n   Not Empty(ThisForm.Pagina.Dados.grdDestinos.Column3.Text1.Value) And ;\n   Not Empty(ThisForm.Pagina.Dados.grdDestinos.Column4.Text1.Value)\n* Fim *********************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC.Pagina.Dados.grdDestinos.Column6.Text1",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Pagina.Dados.lblNotas.Caption = 'Margem Mínima Para Apanhar os Produtos.'",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC.Pagina.Dados.grdDestinos.Column6.Text1",
+      "evento": "LostFocus",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.Pagina.Dados.lblNotas.Caption = ''\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC.Pagina.Dados.grdDestinos.Column6.Text1",
+      "evento": "When",
+      "linhas": 7,
+      "codigoOriginal": "* Coluna Margem Mínima\nReturn InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR') And ;\n   Not Empty(ThisForm.Pagina.Dados.grdDestinos.Column2.Text1.Value) And ;\n   Not Empty(ThisForm.Pagina.Dados.grdDestinos.Column3.Text1.Value) And ;\n   Not Empty(ThisForm.Pagina.Dados.grdDestinos.Column4.Text1.Value)\n* Fim *********************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC.Pagina.Dados.grdDestinos.Column7.Text1",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Pagina.Dados.lblNotas.Caption = 'Margem Máxima Para Apanhar os Produtos.'",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC.Pagina.Dados.grdDestinos.Column7.Text1",
+      "evento": "LostFocus",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.Pagina.Dados.lblNotas.Caption = ''\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC.Pagina.Dados.grdDestinos.Column7.Text1",
+      "evento": "When",
+      "linhas": 7,
+      "codigoOriginal": "* Coluna Margem Máxima\nReturn InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR') And ;\n   Not Empty(ThisForm.Pagina.Dados.grdDestinos.Column2.Text1.Value) And ;\n   Not Empty(ThisForm.Pagina.Dados.grdDestinos.Column3.Text1.Value) And ;\n   Not Empty(ThisForm.Pagina.Dados.grdDestinos.Column4.Text1.Value)\n* Fim *********************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC.Pagina.Dados.grdDestinos.Column8.Text1",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Pagina.Dados.lblNotas.Caption = 'Grande Grupo Para Filtro dos Produtos.'",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC.Pagina.Dados.grdDestinos.Column8.Text1",
+      "evento": "LostFocus",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.Pagina.Dados.lblNotas.Caption = ''\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC.Pagina.Dados.grdDestinos.Column8.Text1",
+      "evento": "Valid",
+      "linhas": 20,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdGpr', ;\n\t\t\t\t\t\t   'crListaRemota', 'Codigos', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Codigos', '', 'Código')\n\t\tloLista.mAddColuna('Descs',   '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value = crListaRemota.Codigos\n\tUse In crListaRemota\nElse\n\tThis.Value = ''\nEndIf\nThis.Refresh\n* Fim *******************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC.Pagina.Dados.grdDestinos.Column8.Text1",
+      "evento": "When",
+      "linhas": 6,
+      "codigoOriginal": "* Coluna Grande Grupo\nReturn InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR') And ;\n   Not Empty(ThisForm.Pagina.Dados.grdDestinos.Column2.Text1.Value) And ;\n   Not Empty(ThisForm.Pagina.Dados.grdDestinos.Column3.Text1.Value)\n* Fim *********************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC.Pagina.Dados.grdDestinos.Column9.Text1",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Pagina.Dados.lblNotas.Caption = 'Empresa de Origem de Geração da Cópia.'",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC.Pagina.Dados.grdDestinos.Column9.Text1",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Pagina.Dados.lblNotas.Caption = ''",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC.Pagina.Dados.grdDestinos.Column9.Text1",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "=fAcessoEmpresa(Usuar, 'C', This.Value, This)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC.Pagina.Dados.grdDestinos.Column9.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC.Pagina.Dados.grdDestinos.Column10.Text1",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Pagina.Dados.lblNotas.Caption = 'Operação de Origem da Cópia'",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC.Pagina.Dados.grdDestinos.Column10.Text1",
+      "evento": "LostFocus",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.Pagina.Dados.lblNotas.Caption = ''\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC.Pagina.Dados.grdDestinos.Column10.Text1",
+      "evento": "Valid",
+      "linhas": 19,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdOpe', ;\n\t\t\t\t\t\t   'crListaRemota', 'Dopes', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Dopes', '', 'Operações')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value = crListaRemota.Dopes\n\tUse In crListaRemota\nElse\n\tThis.Value = ''\nEndIf\nThis.Refresh\n* Fim *********************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC.Pagina.Dados.grdDestinos.Column10.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC.Pagina.Dados.grdDestinos.Column11.Text1",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Pagina.Dados.lblNotas.Caption = 'Unidade Para Filtro dos Produtos.'",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC.Pagina.Dados.grdDestinos.Column11.Text1",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Pagina.Dados.lblNotas.Caption = ''",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC.Pagina.Dados.grdDestinos.Column11.Text1",
+      "evento": "Valid",
+      "linhas": 20,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdUni', ;\n\t\t\t\t\t\t   'crListaRemota', 'CUnis', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('CUnis', '', 'Código')\n\t\tloLista.mAddColuna('DUnis', '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value = crListaRemota.CUnis\n\tUse In crListaRemota\nElse\n\tThis.Value = ''\nEndIf\nThis.Refresh\n* Fim ***************************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC.Pagina.Dados.grdDestinos.Column11.Text1",
+      "evento": "When",
+      "linhas": 6,
+      "codigoOriginal": "* Coluna Unidade\nReturn InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR') And ;\n\t   Not Empty(ThisForm.Pagina.Dados.grdDestinos.Column2.Text1.Value) And ;\n\t   Not Empty(ThisForm.Pagina.Dados.grdDestinos.Column3.Text1.Value)\n* Fim *********************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC.Pagina.Dados.grdDestinos.Column12.Text1",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Pagina.Dados.lblNotas.Caption = 'Conta de Origem Para Filtro dos Produtos.'",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC.Pagina.Dados.grdDestinos.Column12.Text1",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Pagina.Dados.lblNotas.Caption = ''",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC.Pagina.Dados.grdDestinos.Column12.Text1",
+      "evento": "Valid",
+      "linhas": 14,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tIf !fAcessoContas( Usuar, [], 'C', This.Value, This, .F.)\n\t\tMessageBox( 'Acesso Negado...', 48, '' )\n\t\tThis.Value = ' '\n\t\tReturn(.F.)\n\tEndIf\t\nElse\n\tThis.Value = ''\nEndIf\nThis.Refresh\n* Fim *********************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC.Pagina.Dados.grdDestinos.Column12.Text1",
+      "evento": "When",
+      "linhas": 6,
+      "codigoOriginal": "* Coluna Unidade\nReturn InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR') And ;\n\t   Not Empty(ThisForm.Pagina.Dados.grdDestinos.Column2.Text1.Value) And ;\n\t   Not Empty(ThisForm.Pagina.Dados.grdDestinos.Column3.Text1.Value)\n* Fim *********************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC.Pagina.Dados.grdDestinos.Column13.Text1",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Pagina.Dados.lblNotas.Caption = 'Conta de Destino Para Filtro dos Produtos.'",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC.Pagina.Dados.grdDestinos.Column13.Text1",
+      "evento": "LostFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Pagina.Dados.lblNotas.Caption = ''",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC.Pagina.Dados.grdDestinos.Column13.Text1",
+      "evento": "Valid",
+      "linhas": 14,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tIf !fAcessoContas( Usuar, [], 'C', This.Value, This, .F.)\n\t\tMessageBox( 'Acesso Negado...', 48, '' )\n\t\tThis.Value = ' '\n\t\tReturn(.F.)\n\tEndIf\t\nElse\n\tThis.Value = ''\nEndIf\nThis.Refresh\n* Fim *********************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC.Pagina.Dados.grdDestinos.Column13.Text1",
+      "evento": "When",
+      "linhas": 6,
+      "codigoOriginal": "* Coluna Unidade\nReturn InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR') And ;\n\t   Not Empty(ThisForm.Pagina.Dados.grdDestinos.Column2.Text1.Value) And ;\n\t   Not Empty(ThisForm.Pagina.Dados.grdDestinos.Column3.Text1.Value)\n* Fim *********************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC.Pagina.Dados.grdDestinos.Column16.Text1",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.Pagina.Dados.lblNotas.Caption = 'Percentual de Produtos Transferidos'",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC.Pagina.Dados.grdDestinos.Column16.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "* Coluna % Produtos\nReturn InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC.Pagina.Dados.grdDestinos.Column17.Text1",
+      "evento": "GotFocus",
+      "linhas": 4,
+      "codigoOriginal": "ThisForm.Pagina.Dados.lblNotas.Caption = 'Operação a ser Transferida :' + CHR(13) + CHR(10) + ;\n\t\t\t\t\t\t\t\t\t\t 'E - Somente Entradas' + CHR(13) + CHR(10) + ;\n\t\t\t\t\t\t\t\t\t\t 'S - Somente Saídas' + CHR(13) + CHR(10) + ;\n\t\t\t\t\t\t\t\t\t\t 'Em Branco - Ambas'",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC.Pagina.Dados.grdDestinos.Column17.Text1",
+      "evento": "Valid",
+      "linhas": 9,
+      "codigoOriginal": "If InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')\n\tIf Not InList(This.Value, 'E', 'S', ' ')\n\t\t=Messagebox('Operação de Item Inválida!!! Utilize: ' + Chr(13) + ;\n\t\t\t\t\t'E - Somente Entradas; ' + Chr(13) + ;\n\t\t\t\t\t'S - Somente Saídas; ' + Chr(13) + ;\n\t\t\t\t\t'Em branco - Ambas.', 0+48, '')\n\t\tReturn 0\n\tEndIf\nEndIf",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC.Pagina.Dados.grdDestinos.Column17.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(INLIST(ThisForm.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC.Pagina.Dados.getProcesso",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, 'INSERIR', 'PROCURAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC.Pagina.Dados.btnCopOpe",
+      "evento": "Click",
+      "linhas": 31,
+      "codigoOriginal": "If (Not Empty(csDestinos.Dopes) And Not Empty(csDestinos.Drives) And Not Empty(csDestinos.DopeDs))\n\tThisForm.LockScreen = .t.\n\tSelect csDestinos\n\tlcKey = csDestinos.cIdChaves\n\tScatter Memvar Memo\n\tm.cIdChaves = fUniqueIds()\n\tInsert Into csDestinos From Memvar\n\tSelect csDestinos\n\tGo Bottom In csDestinos\n\n\tSelect csDestinoG\n\tSet Key To lcKey In csDestinoG\n\tScan\n\t\tScatter Memvar Memo\n\t\tm.fkChaves = csDestinos.cIdChaves\n\t\tInsert Into csDestinoG From Memvar\n\tEndScan\n\tSelect csDestinoG\n\tSet Key To csD... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "ZOrder",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC.Pagina.Dados.grdDestinoG.Column1.Text1",
+      "evento": "Valid",
+      "linhas": 16,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject([fwBuscaExt], ThisForm.poDataMgr.pnIdConn, [SigCdGpr], ;\n\t\t\t\t\t\t   [crListaRemota], [Codigos], This.Value, [Seleção], .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna([Codigos], [], [Cód.])\n\t\tloLista.mAddColuna([Descs],   [], [Descrição])\n\t\tloLista.Show()\n\tEndIf\n\tThis.Value = crListaRemota.Codigos\n\tUse In crListaRemota\nEndIf\nThis.Refresh\n* Fim *********************************************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC.Pagina.Dados.grdDestinoG.Column1.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC.Pagina.Dados.grdDestinoG.Column2.Text1",
+      "evento": "Valid",
+      "linhas": 34,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject([fwBuscaExt], ThisForm.poDataMgr.pnIdConn, [SigCdUni], ;\n\t\t\t\t\t\t   [crListaRemota], [CUnis], This.Value, [Seleção], .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna([CUnis], [], [Uni])\n\t\tloLista.mAddColuna([DUnis], [], [Descrição])\n\t\tloLista.Show()\n\tEndIf\n\tThis.Value = crListaRemota.CUnis\n\tUse In crListaRemota\nEndIf\nThis.Refresh\n\nIf (Lastkey() = 13) And ( Not Empty(csDestinoG.Mercs)  Or Not Empty(CsDestinoG.Cgrus) )And Not ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC.Pagina.Dados.grdDestinoG.Column2.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC.Pagina.Dados.grdDestinoG.Column3.Text1",
+      "evento": "Valid",
+      "linhas": 16,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject([fwBuscaExt], ThisForm.poDataMgr.pnIdConn, [SigCdGrp], ;\n\t\t\t\t\t\t   [crListaRemota], [cgrus], This.Value, [Seleção], .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna([Cgrus], [], [Grupo])\n\t\tloLista.mAddColuna([Dgrus],   [], [Descrição])\n\t\tloLista.Show()\n\tEndIf\n\tThis.Value = crListaRemota.Cgrus\n\tUse In crListaRemota\nEndIf\nThis.Refresh\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC.Pagina.Dados.grdDestinoG.Column3.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC.Pagina.Dados.cmdgCompoG",
+      "evento": "Click",
+      "linhas": 11,
+      "codigoOriginal": "With ThisForm.Pagina.Dados\n\tInsert Into csDestinoG (Processos, Mercs, CUnis, Cgrus, fkChaves) ;\n\t\t\t\t\tValues (crSigPcOop.Processos, [], [], [], csDestinos.cIdChaves)\n\tSelect csDestinoG\n\tSet Key To csDestinos.cIdChaves In csDestinoG\n\tGo Top In csDestinoG\n\tGo Bottom In csDestinoG\n\t.grdDestinoG.Refresh\n\t.grdDestinoG.Column1.SetFocus\nEndWith\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDPRC.Pagina.Dados.cmdgCompoG",
+      "evento": "Click",
+      "linhas": 9,
+      "codigoOriginal": "Select csDestinoG\nIf Not Eof() And Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')\n\tIf Messagebox('Deseja Excluir Este Grande Grupo?', 4+32+256, '')=6\n\t\tSelect csDestinoG\n\t\tDelete\n\t\tThisForm.Pagina.Dados.grdDestinoG.Refresh\n\tEndIf\nEndIf \n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDPRC.Init",
+      "queryOriginal": "lcQryCopOp = 'Select * From SigPcOop'",
+      "tabelas": "SigPcOop",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDPRC.Init",
+      "queryOriginal": "lcQryCopOI = 'Select * From SigPcOoI Where Processos = ?pPro'",
+      "tabelas": "SigPcOoI",
+      "colunas": "Processos",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDPRC.Init",
+      "queryOriginal": "lcQryCopOG = 'Select * From SigPcOoG Where Processos = ?pPro And fkChaves = ?pKey'",
+      "tabelas": "SigPcOoG",
+      "colunas": "Processos,fkChaves",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDPRC.Procedure",
+      "queryOriginal": "If (ThisForm.poDataMgr.SQLExecute([Delete From SigPcOoI Where Processos = ?pPro], '') < 1)",
+      "tabelas": "SigPcOoI",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDPRC.Procedure",
+      "queryOriginal": "If (ThisForm.poDataMgr.SQLExecute([Delete From SigPcOoG Where Processos = ?pPro], '') < 1)",
+      "tabelas": "SigPcOoG",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDPRC.Procedure",
+      "queryOriginal": "If (ThisForm.poDataMgr.SQLExecute([Delete From SigPcOoI Where Processos = ?pPro], '') < 1)",
+      "tabelas": "SigPcOoI",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDPRC.Procedure",
+      "queryOriginal": "If (ThisForm.poDataMgr.SQLExecute([Delete From SigPcOoG Where Processos = ?pPro], '') < 1)",
+      "tabelas": "SigPcOoG",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDPRC.Click",
+      "queryOriginal": "\t\tSelect Processos ; \t\t  From csDestinos ; \t\t Where Fiscais = 1 ; \t\t  Into Cursor crBusca",
+      "tabelas": "csDestinos",
+      "colunas": "Fiscais,crBusca",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDPRC.Pagina.Dados.cmdgCompo.Click",
+      "queryOriginal": "Insert Into csDestinos (Processos, Emps, Dopes, Codigos, Drives, EmpDs, DopeDs, TpProdutos, Dias, GruConOs, ; \t\t\t\t\t\tGruConDs, EmpDests, Agrupar, NovoCods, CorTams, MoeVals, Situas, Franquias, PctMins, PctMaxs, ; \t\t\t\t\t\tCustos, Impostos, Imagem, MantProds, Barras, Mccrs, Cheques, Delets, DesItens, MontaObs, ; \t\t\t\t\t\tChkCons, MantemMats, MantDPros, GdeGrupos, CUnis, OriCompos, Origems, Destinos, SemItens, ; \t\t\t\t\t\tFiscais, Recalculos, PctCopias, OpItens, MovMZeros, MovCParc, cIdChaves, pctcomps, Glob",
+      "tabelas": "csDestinos",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDPRC.Pagina.Dados.btnCopOpe.Click",
+      "queryOriginal": "\tInsert Into csDestinos From Memvar",
+      "tabelas": "csDestinos",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDPRC.Pagina.Dados.btnCopOpe.Click",
+      "queryOriginal": "\t\tInsert Into csDestinoG From Memvar",
+      "tabelas": "csDestinoG",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDPRC.Pagina.Dados.cmdgCompoG.Click",
+      "queryOriginal": "\tInsert Into csDestinoG (Processos, Mercs, CUnis, Cgrus, fkChaves) ; \t\t\t\t\tValues (crSigPcOop.Processos, [], [], [], csDestinos.cIdChaves)",
+      "tabelas": "csDestinoG",
+      "colunas": "Processos,Mercs,CUnis,Cgrus,fkChaves",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigPcOop", "SigPcOoI", "SigPcOoG", "csDestinos", "csDestinoG"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

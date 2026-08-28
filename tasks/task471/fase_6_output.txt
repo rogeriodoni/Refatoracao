@@ -1,0 +1,9 @@
+﻿Corre├º├Áes aplicadas com sucesso. **Fase 6/8 conclu├¡da.**
+
+**O que foi feito:**
+
+1. **MTVBO.prg ÔÇö Bug cr├¡tico corrigido** (`RETURN .F.` dentro de TRY, linha 129): substitu├¡do por flag `loc_lDuplicado = .T.` + `IF !loc_lDuplicado` para guardar o INSERT. Viola├º├úo da Regra #1 do VFP9 eliminada.
+
+2. **FormMTV.prg ÔÇö Grid Descs.Width corrigido** de 300 ÔåÆ 150 (dois lugares: `CarregarLista` e `BtnBuscarClick`) para corresponder ao original `pColuna([Descs], [], [], [Descri├º├úo], 150, .t.)`.
+
+**Estado da Fase 6:** o form SIGCDMTV tem apenas 2 campos (Cods/Descs) e zero lookups ÔÇö os campos e `cnt_4c_BotoesAcao` j├í estavam presentes das fases anteriores, ent├úo Phase 6 consistiu em valida├º├úo + corre├º├úo dos dois bugs acima.

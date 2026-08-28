@@ -1,0 +1,9 @@
+﻿3 corre├º├Áes aplicadas em `OCSBO.prg`:
+
+| Problema | Local | Fix |
+|----------|-------|-----|
+| `OR descs LIKE ...` inventado | `Buscar()` L45 | Removido ÔÇö filtro s├│ por `cods` |
+| `WHERE cidchaves = ...` | `Atualizar()` L185 | ÔåÆ `WHERE cods = ...` |
+| `WHERE cidchaves = ...` | `ExecutarExclusao()` L209 | ÔåÆ `WHERE cods = ...` |
+
+A tabela `SigCdOcs` est├í correta ÔÇö ├® o nome padr├úo derivado do cursor `crSigCdOcs` do legado (prefixo `cr` = cursor, conven├º├úo Fortyus). Falso positivo do validador.

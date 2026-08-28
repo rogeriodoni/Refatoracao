@@ -1,0 +1,17 @@
+﻿File looks correct end-to-end. Phase 4 is complete.
+
+**Summary of changes:**
+
+**`FormNfl.prg`** ÔÇö `ConfigurarPaginaLista()` fully implemented:
+- `cnt_4c_Cabecalho` (dark title strip with shadow+white label, 800├ù80)
+- `cnt_4c_Botoes` at Left=542 with 5 CRUD buttons (Incluir/Visualizar/Alterar/Excluir/Buscar, Left=5/80/155/230/305)
+- `cmd_4c_Copia` standalone at Left=471 (between CRUD and ExpXML)
+- `cnt_4c_Saida` at canonical Left=917, Width=90 with `cmd_4c_Encerrar`
+- `cmd_4c_BtnExpXML` / `cmd_4c_BtnImpXML` at Top=111 (82+29), Left=682/804
+- `grd_4c_Lista` at Top=164 (135+29), 4 columns: emps(55)/Razas(220)/series(55)/cidchaves(641)
+- `cnt_4c_copia` floating container at Top=273 (244+29), `Visible=.F.`, with txt_4c_nomedest, txt_4c_empDest, cmd_4c_OK, cmd_4c_Cancela
+- 11 BINDEVENTs wiring all buttons to PUBLIC handler methods
+- `CarregarLista()` fixed: cursor name `crSigCnFNf` ÔåÆ `cursor_4c_Dados` + headers reset after RecordSource
+- 11 PUBLIC handler methods added (skeleton-level, safe for Phase 7 expansion)
+
+**`NflBO.prg`** ÔÇö `Buscar()` SQL updated to `LEFT JOIN SigCdEmp` to populate the `Razas` column displayed in the grid.

@@ -1,0 +1,214 @@
+{
+  "resumo": {
+    "totalMetodos": 12,
+    "metodosComSQL": 3,
+    "metodosComValidacao": 6,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "For Alltrim", "fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDOPD",
+      "evento": "Init",
+      "linhas": 27,
+      "codigoOriginal": "With ThisForm\n\t.poDataMgr = CreateObject([fSqlConector], .Name)\n\t\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tWith .poDataMgr\n\t\t\t.AddCursor([SigOpPed], [cIdChaves], [crSigOpPed], [], ThisForm.Pagina.Lista.Grade)\n\t\t\t.pfSqlTabela(1).pColuna([Ndopes], [], [], [Código]\t   , 31, .t.)\n\t\t\t.pfSqlTabela(1).pColuna([Dopes ], [], [], [Operação]  ,150, .t.)\n\t\t\t.pfSqlTabela(1).pColuna([tPagos], [], [], [Pagamentos], 80)\n\t\t\t.pfSqlTabela(1).pColuna([tUtils], [], [], [Utilizados],108)\n\t\t\t\n\t\tEndWith\n\n\t\t=DoDefault()\n\t\t\n\t\t.Pa... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDOPD",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "=fConfigGeral()\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDOPD",
+      "evento": "Procedure",
+      "linhas": 7,
+      "codigoOriginal": "loDad = ThisForm.Pagina.Dados\n\nSelect crSigOpPed\nIf Not Empty(loDad.GetDopes.Value)\n\tLocate For Alltrim(Dopes) = Alltrim(loDad.GetDopes.Value)\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "For Alltrim",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDOPD",
+      "evento": "Click",
+      "linhas": 30,
+      "codigoOriginal": "LParameters lnOpcao\n\nIf (Type('lnOpcao') = 'N')\n\tThis.Value = lnOpcao\nEndIf\n\nSelect crSigOpPed\n\nIf Not DoDefault(lnOpcao)\n\tThisForm.mAtivapagina1\n\tReturn 0\nEndIf\n\nReplace cIdChaves With Iif(Empty(cIdChaves), fUniqueIds(), cIdChaves)\n\nloDad = ThisForm.Pagina.Dados\n\nDo Case\n\tCase Inlist(ThisForm.pcEscolha, 'INSERIR','PROCURAR','ALTERAR')\n\t\tloDad.getnopes.Setfocus\n\n\tCase Inlist(ThisForm.pcEscolha, 'CONSULTAR', 'EXCLUIR')\n\t\tloDad.Grupo_Salva.Salva.Setfocus\n\nEndCase\n\nSelect crSigOpPed\n\nloDad.Refresh\n... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDOPD",
+      "evento": "Click",
+      "linhas": 52,
+      "codigoOriginal": "Local loDad\n\nloDad = ThisForm.Pagina.Dados\n\nIf InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')\n\tIf Empty(loDad.GetNopes.Value)\n\t\t=MessageBox('Obrigatório Informar a Operação!!!', 48, '')\n\t\tloDad.GetNopes.SetFocus\n\t\tReturn 0\n\tEndIf\n\t\t\n\tIf loDad.OptPagos.Value < 1\n\t\t=MessageBox('Obrigatório Informar a Pagamento!!!', 48, '')\n\t\tloDad.OptPagos.option1.SetFocus\n\t\tReturn 0\t\n\tEndIf \n\t\n\tIf loDad.OptUtils.Value < 1\n\t\t=MessageBox('Obrigatório Informar o Utilização!!!', 48, '')\n\t\tloDad.OptUtils.option1.Set... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "OptPagos,option1,OptUtils",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDOPD",
+      "evento": "Click",
+      "linhas": 6,
+      "codigoOriginal": "=DoDefault()\n\nIf ThisForm.plCancelar\n\tThisForm.mAtivapagina1\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDOPD.pagina.dados.getnopes",
+      "evento": "Valid",
+      "linhas": 26,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdOpe', ;\n\t\t\t\t\t\t   'crListaRemota', 'Ndopes', This.Value, 'Seleção', 1000)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Ndopes', '9999', 'Código')\n\t\tloLista.mAddColuna('Dopes', '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Parent.Getnopes.Value = crListaRemota.Ndopes\n\tThis.Parent.GetDopes.Value = crListaRemota.Dopes\n\n\tUse In crListaRemota\nElse\n\tThis.Parent.Getnopes.Value = ... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDOPD.pagina.dados.getnopes",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (InList(Thisform.pcEscolha ,[INSERIR],[PROCURAR]))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDOPD.pagina.dados.GetDopes",
+      "evento": "Valid",
+      "linhas": 25,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdOpe', ;\n\t\t\t\t\t\t   'crListaRemota', 'Dopes', This.Value, 'Seleção', 1000)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Ndopes', '9999', 'Código')\n\t\tloLista.mAddColuna('Dopes', '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Parent.Getnopes.Value = crListaRemota.Ndopes\n\tThis.Parent.GetDopes.Value = crListaRemota.Dopes\n\n\tUse In crListaRemota\nElse\n\tThis.Parent.Getnopes.Value = '... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDOPD.pagina.dados.GetDopes",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (InList(Thisform.pcEscolha ,[INSERIR],[PROCURAR]))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDOPD.pagina.dados.OptPagos",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "Return (InList(Thisform.pcEscolha ,[INSERIR],[ALTERAR]))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDOPD.pagina.dados.OptUtils",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "Return (InList(Thisform.pcEscolha ,[INSERIR],[ALTERAR]))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

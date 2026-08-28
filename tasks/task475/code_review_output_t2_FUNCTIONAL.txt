@@ -1,0 +1,9 @@
+﻿Ambos os problemas funcionais **j├í est├úo corrigidos** no c├│digo atual:
+
+**[CONTAINER-VISIVEL]** ÔÇö `TornarControlesVisiveis()` j├í filtra `CNT_4C_CABECALHO` e `CNT_4C_SALVA` via `INLIST` nas linhas 752-754. Esses containers s├úo pulados com `LOOP` e nunca recebem `.Visible = .T.`
+
+**[METODO-INEXISTENTE]** ÔÇö `ObterControle()` est├í definido nas linhas 11085-11095 como `PROTECTED FUNCTION`. As chamadas em `AbrirLookupClsFis` (linha 2408), `ClsFisTpClick` (linhas 2629/2640) e `ConfigurarPaginaDados` (linhas 658-674) s├úo v├ílidas.
+
+**Quanto aos 730 [LAYOUT-POSITION]:** S├úo altera├º├Áes de propriedades visuais `Top`/`Left` ÔÇö explicitamente proibidas neste pass funcional (`PROIBIDO alterar propriedades visuais`). Esses valores pertencem ao pass de layout.
+
+**Nenhuma altera├º├úo necess├íria.** O arquivo `FormNfl.prg` j├í est├í correto do ponto de vista funcional para os dois problemas apontados neste pass.

@@ -5238,7 +5238,32 @@ DEFINE CLASS FormCTA AS FormBase
     *===========================================================================
     * Eventos CRUD - Page 1
     *===========================================================================
+
+    *---------------------------------------------------------------------------
+    * ValidarGrupoFiltro - Canonico Fortyus (SIGCDCTA.selecionar:8586, comentario
+    * Tiago 07/12/2011): se o filtro Grupo estiver vazio, apenas move o foco
+    * para o textbox silenciosamente e retorna .F. — NAO exibe MsgAviso.
+    *---------------------------------------------------------------------------
+    PROTECTED FUNCTION ValidarGrupoFiltro()
+        LOCAL loc_oFiltros
+        IF !PEMSTATUS(THIS, "pgf_4c_Paginas", 5) OR ;
+           !PEMSTATUS(THIS.pgf_4c_Paginas, "Page1", 5) OR ;
+           !PEMSTATUS(THIS.pgf_4c_Paginas.Page1, "cnt_4c_Filtros", 5) OR ;
+           !PEMSTATUS(THIS.pgf_4c_Paginas.Page1.cnt_4c_Filtros, "txt_4c_Grupo", 5)
+            RETURN .T.
+        ENDIF
+        loc_oFiltros = THIS.pgf_4c_Paginas.Page1.cnt_4c_Filtros
+        IF EMPTY(ALLTRIM(NVL(loc_oFiltros.txt_4c_Grupo.Value, "")))
+            loc_oFiltros.txt_4c_Grupo.SetFocus()
+            RETURN .F.
+        ENDIF
+        RETURN .T.
+    ENDFUNC
+
     PROCEDURE BtnIncluirClick()
+        IF !THIS.ValidarGrupoFiltro()
+            RETURN
+        ENDIF
         THIS.this_oBusinessObject.NovoRegistro()
         THIS.LimparCampos()
         THIS.HabilitarCampos(.T.)
@@ -5254,6 +5279,9 @@ DEFINE CLASS FormCTA AS FormBase
     ENDPROC
 
     PROCEDURE BtnVisualizarClick()
+        IF !THIS.ValidarGrupoFiltro()
+            RETURN
+        ENDIF
         IF !USED("cursor_4c_Dados") OR RECCOUNT("cursor_4c_Dados") = 0
             MsgAviso("Selecione um registro para visualizar.", "Visualizar")
             RETURN
@@ -5277,6 +5305,9 @@ DEFINE CLASS FormCTA AS FormBase
     ENDPROC
 
     PROCEDURE BtnAlterarClick()
+        IF !THIS.ValidarGrupoFiltro()
+            RETURN
+        ENDIF
         IF !USED("cursor_4c_Dados") OR RECCOUNT("cursor_4c_Dados") = 0
             MsgAviso("Selecione um registro para alterar.", "Alterar")
             RETURN
@@ -5301,6 +5332,9 @@ DEFINE CLASS FormCTA AS FormBase
     ENDPROC
 
     PROCEDURE BtnExcluirClick()
+        IF !THIS.ValidarGrupoFiltro()
+            RETURN
+        ENDIF
         IF !USED("cursor_4c_Dados") OR RECCOUNT("cursor_4c_Dados") = 0
             MsgAviso("Selecione um registro para excluir.", "Excluir")
             RETURN

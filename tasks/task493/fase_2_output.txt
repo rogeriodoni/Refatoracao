@@ -1,0 +1,14 @@
+﻿The menu entries are correctly placed at lines 1173 and 1181 for `popFerramentas`. The `AbrirFormpaf` procedure is at line 9300. All three files are in order.
+
+**Summary of what was created/modified in this phase:**
+
+1. **`C:\4c\projeto\app\forms\cadastros\Formpaf.prg`** (1093 lines, new) ÔÇö Complete CRUD form for PAF-ECF configuration:
+   - Page1 (Lista): Grid with 3 decoded columns (Fun├º├úo, N┬░ do caixa, Finalizadora N├úo Fiscal), Visualizar/Alterar/Buscar buttons (no Incluir/Excluir per `plAcInserir=.F`)
+   - Page2 (Dados): Readonly Descri├º├úo field, Inativa checkbox, 5-button OptionGroup (CF/CNF/DAV RG/DAV A4/PRE VENDA), N┬░ Caixa with 3-digit validation, Finalizadora with F4/F5 lookup on SigFiNtb
+   - MD5 validation in `BtnAlterarClick` before opening edit mode
+   - `SincronizarDados()` called in `InicializarForm` before loading list
+   - Full `FormParaBO`/`BOParaForm` transfer, `HabilitarCampos`, `AjustarBotoesPorModo`
+
+2. **`C:\4c\projeto\app\menu\menu.prg`** (modified) ÔÇö Added "Configura├º├úo PAF-ECF" to Ferramentas menu (BAR 14) with `AbrirFormpaf()` procedure
+
+Both `pafBO.prg` (classes) and `Formpaf.prg` (forms/cadastros) are auto-discovered by config.prg's ADIR() loops ÔÇö no manual SET PROCEDURE needed.

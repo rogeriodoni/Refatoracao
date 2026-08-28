@@ -1,0 +1,17 @@
+﻿Ap├│s verifica├º├úo manual, ambos os alertas s├úo **falsos positivos**. Aqui est├í a an├ílise:
+
+**[SQL-FILTRO-INVENTADO] COLECAO** ÔÇö linha 1503:
+```
+SELECT COUNT(*) AS qtd FROM SigCdCol WHERE Colecao = ...
+```
+Esta ├® uma query de valida├º├úo contra a **tabela de lookup `SigCdCol`** (n├úo contra `SigCdRga`). O `WHERE Colecao = X` ├® a chave prim├íria dessa tabela e ├® essencial: sem ele, o COUNT retornaria o total de registros e jamais seria 0, tornando a valida├º├úo in├║til.
+
+**[SQL-FILTRO-INVENTADO] CGRUS** ÔÇö linha 1533:
+```
+SELECT COUNT(*) AS qtd FROM SigCdGrp WHERE CGrus = ...
+```
+Idem: query de valida├º├úo contra a **tabela de lookup `SigCdGrp`**. O `WHERE CGrus = X` ├® a chave prim├íria dessa tabela.
+
+**Por que o detector errou:** A lista de colunas "originais" (`CODIGO, PRIORIDADE, QUANTIDADE, CODREGRA, INATIVAS, LNMAX, CIDCHAVES`) refere-se aos `WHERE` das queries principais de `SigCdRga`/`SigCdRGR`. O detector comparou *todas* as colunas usadas em `WHERE` no c├│digo migrado contra essa lista ÔÇö sem distinguir que `ValidarColecaoGrid` e `ValidarGrupoProdutoGrid` consultam tabelas de lookup diferentes.
+
+**Conclus├úo:** Nenhuma altera├º├úo necess├íria. Remover o `WHERE` dessas queries quebraria a l├│gica de valida├º├úo completamente (COUNT sem filtro retorna sempre > 0). As instru├º├Áes tamb├®m pro├¡bem remover funcionalidades e lookups. Ambos os alertas s├úo falsos positivos do pass SQL autom├ítico.

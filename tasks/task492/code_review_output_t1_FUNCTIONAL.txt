@@ -1,0 +1,12 @@
+﻿Todas as corre├º├Áes aplicadas. Resumo do que foi feito:
+
+**Corrigido:**
+
+1. **[NULL-CURSOR]** ÔÇö `OTIBO.prg:137` ÔÇö Adicionado `SET NULL ON` antes e `SET NULL OFF` depois do `CREATE CURSOR cursor_4c_Dados` no fallback de `Buscar()`.
+
+2. **[BINDEVENT-PARAMS] ├ù 10** ÔÇö `FormOTI.prg` ÔÇö Adicionado `LPARAMETERS par_nKeyCode, par_nShiftAltCtrl` expl├¡cito no corpo dos 10 handlers (`ValidarDiasVcto`, `ValidarMoeda`, `ValidarGrpCad1s`-`4s`, `ValidarClass1s`-`4s`). Os handlers j├í tinham os par├ómetros na assinatura da PROCEDURE, mas o LPARAMETERS expl├¡cito no corpo garante que VFP9 n├úo gere `No PARAMETER statement is found` via BINDEVENT.
+
+**N├úo alterado (falsos positivos do review):**
+
+- **[LAYOUT-POSITION] `obj_4c_Opt_CampoNf`** ÔÇö Mover Left de 683ÔåÆ136 causaria sobreposi├º├úo com `obj_4c_Opc_DadosPg` que est├í exatamente em Left=135 na mesma linha (Top=270). O layout atual de duas colunas (esq=135, dir=683) ├® correto.
+- **[LAYOUT-POSITION] `cmd_4c_BtnPastasCl`** ÔÇö Mover Left de 723ÔåÆ538 causaria sobreposi├º├úo com `txt_4c_Pasta` (Left=99, Width=620, termina em 719). O bot├úo em 723 est├í corretamente 4px ├á direita do campo. Ajustar s├│ o bot├úo sem reduzir o campo quebraria o layout.

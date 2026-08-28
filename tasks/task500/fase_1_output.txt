@@ -1,0 +1,13 @@
+﻿Fase 1 conclu├¡da. O arquivo `C:\4c\projeto\app\classes\PMCBO.prg` foi criado com:
+
+- **8 propriedades** declaradas com tipos corretos do schema:
+  - `this_cCodigo` (char 10, PK auto-gerada)
+  - `this_cCpros` (char 14, FK SigCdPro)
+  - `this_nTppro` (numeric 2,0 ÔÇö **n├úo char**, conforme schema)
+  - `this_tDtini` / `this_tDtfin` (datetime)
+  - `this_nValmin` (numeric 9,2)
+  - `this_cUsualts` / `this_tDtalts` (auditoria)
+
+- **Init()** configurando `this_cTabela = "SigCdPmc"` e `this_cCampoChave = "codigo"`
+
+- Todos os m├®todos obrigat├│rios com l├│gica completa: `Buscar`, `CarregarPorCodigo`, `CarregarDoCursor`, `GerarCodigo` (replica a l├│gica original PMC+AAMM+SEQ), `ValidarPeriodo` (valida├º├úo de sobreposi├º├úo de datas), `Inserir`, `Atualizar`, `ExecutarExclusao`.

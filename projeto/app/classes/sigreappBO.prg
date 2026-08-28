@@ -53,6 +53,9 @@ DEFINE CLASS sigreappBO AS RelatorioBase
     this_cSaldos1       = ""    && Label do saldo para cabecalho do relatorio
     this_cSaldos2       = ""    && Valor do saldo para cabecalho do relatorio
 
+    *-- Pattern #142: injetado pelo CorretorAutomatico (default vazio) - REVISAR e substituir pelo alias do cursor binding do FRX
+    this_cCursorDados = ""     && FIXME Pattern #142 pos-Erro51
+
     *--------------------------------------------------------------------------
     * Init - Inicializa BO com valores padrao dos filtros
     *--------------------------------------------------------------------------

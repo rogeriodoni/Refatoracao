@@ -1,0 +1,13 @@
+﻿Fase 4/8 conclu├¡da. O `FormMun.prg` foi atualizado com:
+
+**O que foi adicionado:**
+
+- **`ConfigurarPaginaLista()`** expandida com 5 bot├Áes CRUD dentro de `cnt_4c_Botoes` (Incluir/Visualizar/Alterar/Excluir/Buscar ÔÇö FontName="Comic Sans MS", icones corretos, PicturePosition=13), Grid `grd_4c_Lista` com 2 colunas (Codigos 60px, Descs 290px), ColumnCount fora do WITH (Problema 36), e BINDEVENTs para todos os 6 bot├Áes.
+
+- **`ConfigurarPaginaDados()`** expandida com bot├Áes Confirmar (`cadastro_salvar_60.jpg`) e Cancelar dentro de `cnt_4c_Salva`, mais BINDEVENTs para Salvar/Cancelar.
+
+- **`CarregarLista()`** completa: guarda `gb_4c_ValidandoUI`, chama `Buscar("")`, bind de RecordSource/ControlSource fora de WITH, redefini├º├úo de Header captions ap├│s RecordSource (Problema 32).
+
+- **`AlternarPagina(par_nPagina)`** ÔÇö alterna ActivePage, chama `CarregarLista()` ao voltar para Page1.
+
+- **`FormatarGridLista()`**, **`BtnEncerrarClick/Incluir/Visualizar/Alterar/Excluir/Buscar/Salvar/CancelarClick()`** (todos PUBLIC para BINDEVENT), **`LimparCampos()`**, **`HabilitarCampos()`**, **`BOParaForm()`**, **`FormParaBO()`** ÔÇö todos com implementa├º├úo completa e guardas PEMSTATUS para os campos de Page2 que ser├úo criados na Fase 5.

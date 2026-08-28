@@ -1,0 +1,13 @@
+﻿`RecBO.prg` est├í completo com todos os m├®todos CRUD. Resumo do que foi adicionado ├á Fase 2:
+
+- **`ObterChavePrimaria()`** ÔÇö retorna `this_cGrupos` para auditoria (PROTECTED)
+- **`Buscar()`** ÔÇö SELECT grupos, descrs FROM SIGCDREC ORDER BY grupos
+- **`CarregarPorCodigo()`** ÔÇö SELECT por PK + seta `this_lNovoRegistro = .F.`
+- **`CarregarDoCursor()`** ÔÇö usa `SELECT (par_cAliasCursor)` antes de acessar campos (padr├úo can├┤nico)
+- **`Inserir()`** ÔÇö INSERT com auditoria (PROTECTED)
+- **`Atualizar()`** ÔÇö UPDATE s├│ `descrs` (grupos ├® PK imut├ível) com auditoria (PROTECTED)
+- **`ExecutarExclusao()`** ÔÇö DELETE por grupos com auditoria (PROTECTED)
+- **`ValidarDados()`** ÔÇö valida grupos n├úo vazio (equivalente ao legado)
+- **`VerificarCodigoExiste()`** ÔÇö equivalente ao `ChkRegister('SigCdRec','grupos',...)` do legado
+- **`BuscarGrupoGcr()`** ÔÇö substitui `fAcessoContab()`, busca em SigCdGcr por c├│digo ('C') ou descri├º├úo ('D')
+- **`Destroy()`** ÔÇö fecha todos os cursores

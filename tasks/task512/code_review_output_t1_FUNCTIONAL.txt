@@ -1,0 +1,18 @@
+﻿Todas as corre├º├Áes foram aplicadas corretamente. Resumo do que foi feito:
+
+---
+
+**Corre├º├Áes aplicadas em `FormRPT.prg`:**
+
+**[GRID-SQLEXEC] ÔÇö 3 m├®todos corrigidos:**
+- `BtnProcessarClick`: SQLEXEC agora usa `cursor_4c_SqlResultTemp` ÔåÆ `SELECT * FROM temp INTO CURSOR cursor_4c_SqlResult READWRITE` ÔåÆ grid atualizado sem destruir colunas
+- `BtnVisualizarRptClick`: mesma estrat├®gia antes do `REPORT FORM`
+- `BtnLayoutClick`: mesma estrat├®gia antes de popular `CrsProps_Campos`
+- `Destroy()`: adicionado cleanup de `cursor_4c_SqlResultTemp`
+
+**[GRID-HEADER] ÔÇö 10 captions corrigidos:**
+- `grd_4c_Lista` (CarregarLista + BtnBuscarClick ÔÇö 2 ocorr├¬ncias): `"Nome do Relat├│rio/Descri├º├úo/Cria├º├úo/Altera├º├úo/Ativo"` ÔåÆ `"Titulo/Descr/DtCriacao/DtAlteracao/Ativo"` (alinhado com legado)
+- `grd_4c_TIT` Col1: `"T" + CHR(237) + "tulo"` ÔåÆ `"Titulo"`
+- `grd_4c_CMPs` Col7 + `grd_4c_GRP` Col2: `"T" + CHR(237) + "tulo do Campo"` ÔåÆ `"Titulo do Campo"`
+
+**[BINDEVENT-PARAMS]:** `NmReportLostFocus` j├í declarava `(par_nKeyCode, par_nShiftAltCtrl)` na assinatura ÔÇö nenhuma altera├º├úo necess├íria.

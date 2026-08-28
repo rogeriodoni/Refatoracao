@@ -1,0 +1,10 @@
+﻿Phase 2 complete. OTIBO.prg now has 492 lines with all 6 business methods implemented:
+
+- **`Buscar(par_cFiltro)`** ÔÇö SELECT Ndopes, Dopes, Opers FROM SigOpOpe ORDER BY Dopes into cursor_4c_Dados
+- **`CarregarDoCursor(par_cAliasCursor)`** (PROTECTED) ÔÇö maps all 61 SigOpOpe columns to `this_*` properties; uses `!EMPTY(field)` for logical fields to handle both logical and numeric BIT returns from SQLEXEC
+- **`CarregarPorCodigo(par_nNdope)`** ÔÇö SELECT * FROM SigOpOpe WHERE Ndopes = X, delegates to CarregarDoCursor
+- **`Inserir()`** (PROTECTED) ÔÇö INSERT INTO SigOpOpe with all 61 columns; ndopes pre-set by form via fGerUniqueKey
+- **`Atualizar()`** (PROTECTED) ÔÇö UPDATE SigOpOpe SET all 61 columns WHERE Ndopes = X
+- **`ExecutarExclusao()`** (PROTECTED) ÔÇö DELETE FROM SigOpOpe WHERE Ndopes = X; SigCdPrg not touched (it's framework program registration, no ControlSource bindings)
+
+Next phase is **Phase 3/8**: create `FormOTI.prg` (the form skeleton with Init, InicializarForm, ConfigurarPageFrame, and the PageFrame structure).

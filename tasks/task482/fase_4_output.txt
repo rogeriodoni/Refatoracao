@@ -1,0 +1,13 @@
+﻿Fase 4 conclu├¡da. O `FormOpd.prg` foi atualizado com:
+
+**Adicionado em `ConfigurarPaginaLista()`:**
+- `cnt_4c_Botoes` (Left=542) com 5 bot├Áes CRUD: Incluir, Visualizar, Alterar, Excluir, Buscar ÔÇö cada um com ├¡cone, Comic Sans MS, PicturePosition=13
+- `cnt_4c_Saida` (Left=917, padr├úo can├┤nico) com `cmd_4c_Encerrar`
+- `grd_4c_Lista` (Top=150=121+29, Left=12, Width=940, Height=470) com 4 colunas ÔÇö `ColumnCount` definido fora do `WITH`
+- BINDEVENTs para todos os 6 bot├Áes
+
+**`CarregarLista()` atualizado** com binding completo: `RecordSource`, `ControlSource` de cada coluna, larguras e `Header1.Caption` ÔÇö todos re-definidos ap├│s o `RecordSource` para evitar o reset autom├ítico do VFP9.
+
+**Novos m├®todos:**
+- `AlternarPagina(par_nPagina)` ÔÇö navega entre p├íginas, recarrega lista ao voltar para Page1
+- `BtnIncluirClick/VisualizarClick/AlterarClick/ExcluirClick/BuscarClick/EncerrarClick` ÔÇö todos com l├│gica real e sem `RETURN` dentro de TRY/CATCH

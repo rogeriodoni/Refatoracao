@@ -175,7 +175,7 @@ DEFINE CLASS FormFAPF AS FormBase
                 WITH .cmd_4c_Encerrar
                     .Top             = 5
                     .Left            = 917
-                    .Width           = 90
+                    .Width           = 75
                     .Height          = 75
                     .Caption         = "Encerrar"
                     .FontBold        = .T.

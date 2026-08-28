@@ -1,0 +1,861 @@
+{
+  "resumo": {
+    "totalMetodos": 49,
+    "metodosComSQL": 9,
+    "metodosComValidacao": 16,
+    "totalQueries": 8,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fGravarLog", "fUniqueIds", "fAcessoEmpresa", "fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDORC",
+      "evento": "Procedure",
+      "linhas": 33,
+      "codigoOriginal": "Local cArea\n\nThisForm.LockScreen = .T.\n\ncArea = Alias()\n\nSelect crGrupos\nGo Top in crGrupos\nScan\n\tIf( crGrupos.Perc <> 0 ) Then\n\t\tReplace Valor With Round(ThisForm.Pagina.Dados.Get_nVlTots.Value * (crGrupos.Perc/100),2) in crGrupos\t\t\n\tEndif\nEndScan\n\nSelect crContas\nSet Key To ('') in crContas\nGo Top in crContas\nScan\n\tIf( crContas.Perc <> 0 ) Then\n\t\tReplace Valor With Round(ThisForm.Pagina.Dados.Get_nVlTots.Value * (crContas.Perc/100),2) in crContas\n\tEndif\nEndScan\n\nSelect (cArea)\n\nGo Top in crGru... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value *",
+        "controlesReferenciados": "Get_nVlTots,Grd_Grupos,Grd_Contas",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDORC",
+      "evento": "Procedure",
+      "linhas": 10,
+      "codigoOriginal": "Local nVlLancado\n\nnVlLancado = 0\n\nSelect Sum(Valor) as TotLancado from crGrupos into cursor crTotGrupos\nSelect Sum(Valor) as TotLancado from crContas into cursor crTotContas\n\nnVlLancado = crTotGrupos.TotLancado + crTotContas.TotLancado\n\nThisForm.Pagina.Dados.getTotLancado.Value = nVlLancado ",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDORC",
+      "evento": "Init",
+      "linhas": 45,
+      "codigoOriginal": "LPARAMETERS _acesso\nSet Step On \nWITH Thisform\n\t.poDatamgr = CreateObject('fSqlConector',Thisform.Name)\n\n\tIf Not .poDatamgr.pnIdconn>0\n\t\tMessagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),'Erro')\n\t\tReturn(.f.)\n\tEndif\n\n\tlcQryCdmp  = [Select cEmps, cMes, cAno, cTitulo, Moeda, nVlTots, Max(cIdChaves) as cIdChaves from SigCdMrp Group by cEmps, cMes, cAno, cTitulo, Moeda, nVlTots]\n\tlcQryCdmpD = [Select * From SigCdMrp Where cEmps = ?crSigCdMrp.cEmps and cMes = ?crSigCdMrp.... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Grd_Grupos",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDORC",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.msv_Inserir()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "msv_Inserir",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDORC",
+      "evento": "Procedure",
+      "linhas": 16,
+      "codigoOriginal": "Local lnErro1,lcMcrcampos,lcMcrsql1,lcEmpMesAno\n\nlcEmpMesAno = Padr(ThisForm.Pagina.Dados.Get_Emps.Value,3) + ;\n\t\t\t  ThisForm.Pagina.Dados.get_Mes.Value + ;\n\t\t\t  ThisForm.Pagina.Dados.get_Ano.Value \n\nWith ThisForm\n\t.poDataMgr.Delete(1)\n\t.poDataMgr.Commit()\n\t= fGravarLog('C',ThisForm.Name,'EXCLUIR',;\n\t\t\t\t\t 'Tabela('+.poDataMgr.pfSqlTabela(1).pcTabela+;\n\t\t\t\t\t ') C.P.(CEMPS+CMES+CANO)= '+;\n\t\t\t\t\t lcEmpMesAno,;\n\t\t\t\t\t Iif(Type('m.usuar')=='C',m.usuar,''))\nEndWith\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fGravarLog",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Emps,get_Mes,get_Ano",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDORC",
+      "evento": "Procedure",
+      "linhas": 25,
+      "codigoOriginal": "Local lnErro1,lcQuery,lcLog,lcEmpMesAno\n\nm.lnErro1 = ThisForm.poDataMgr.pnIdConn\nIf m.lnErro1>0 \n\tm.lnErro1 = Iif(ThisForm.poDatamgr.Update('crCdmpDados'),1,-1)\nEndIf\nIf m.lnErro1>0 \n\tm.lnErro1 = ThisForm.poDatamgr.Commit()\nEndIf \n\nlcEmpMesAno = Padr(ThisForm.Pagina.Dados.Get_Emps.Value,3) + ;\n\t\t\t  ThisForm.Pagina.Dados.get_Mes.Value + ;\n\t\t\t  ThisForm.Pagina.Dados.get_Ano.Value\n\nIf Not m.lnErro1>0 \n\tThisForm.poDatamgr.RollBack()\n\t= MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Co... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fGravarLog",
+        "metodosFormChamados": "Update,Commit,RollBack",
+        "controlesReferenciados": "Get_Emps,get_Mes,get_Ano",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDORC",
+      "evento": "Procedure",
+      "linhas": 11,
+      "codigoOriginal": "Local lcBusca\n\nWith ThisForm.Pagina.Dados\n\tm.lcBusca = .Get_Emps.Value+.Get_Mes.Value+.Get_Ano.Value+.Get_Titulo.Value+.Get_Cd_Moeda.Value\nEndWith\n\nSELECT crSigCdMrp\nLocate for cEmps+cMes+cAno+cTitulo+Moeda >= m.lcBusca\n\n\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Emps,Get_Mes,Get_Ano,Get_Titulo,Get_Cd_Moeda",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDORC",
+      "evento": "Click",
+      "linhas": 126,
+      "codigoOriginal": "LParameters opcao\n\nSelect crSigCdMrp\n\nIf !dodefault( OPCAO )\n\tThisForm.mAtivapagina1\n\tReturn\nEndIf\n\nThisForm.LockScreen = .T.\n\nIf not Used('crContas') Then\n\tIf ThisForm.podatamgr.SQLExecute([Select Grupos, iClis, rClis, 999999999.99 as Valor, 999.999999 as Perc from SigCdCli],'crContas') < 1 Then\n\t\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crContas)')\n\t\tThisForm.LockScreen = .F.\n\t\tReturn\n\tEndif  \n\tSelect crContas\n\tIndex on Grupos Tag Grupos\n\t\n\tThisForm.Pagina.Dados.... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SQLExecute,Requery,Refresh",
+        "controlesReferenciados": "Grd_Contas,Get_Emps,Get_Mes,Get_Ano,Get_Titulo,Get_Cd_Moeda,Get_Ds_Moeda,Grd_Grupos,get_nVlTots",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDORC",
+      "evento": "Click",
+      "linhas": 104,
+      "codigoOriginal": "Local Array laCampos(5,2)\n\nGo Top in crGrupos\nGo Top in crContas\n\nIf InList(ThisForm.pcEscolha,'INSERIR','ALTERAR')\n\tIf Thisform.pcEscolha='INSERIR'\n\t\tm.laCampos(1,1) = 'cEmps'\n\t\tm.laCampos(1,2) = ThisForm.Pagina.Dados.Get_Emps.Value\n\t\tm.laCampos(2,1) = 'cMes'\n\t\tm.laCampos(2,2) = ThisForm.Pagina.Dados.Get_Mes.Value\n\t\tm.laCampos(3,1) = 'cAno'\n\t\tm.laCampos(3,2) = ThisForm.Pagina.Dados.Get_Ano.Value\n\t\tm.laCampos(4,1) = 'cTitulo'\n\t\tm.laCampos(4,2) = ThisForm.Pagina.Dados.Get_Titulo.Value\n\t\tm.laCampo... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "ChkRegister",
+        "controlesReferenciados": "Get_Emps,Get_Mes,Get_Ano,Get_Titulo,Get_Cd_Moeda,ChkRegister('SigCdMrp',Get_nVlTots",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDORC",
+      "evento": "Click",
+      "linhas": 6,
+      "codigoOriginal": "=DoDefault()\n\nIf ThisForm.plCancelar\n\tThisForm.mAtivapagina1\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDORC.Pagina.Lista.cmdCopiar",
+      "evento": "Click",
+      "linhas": 72,
+      "codigoOriginal": "LParameters lnOpcao\n\nIf (Type('lnOpcao') = 'N')\n\tThis.Value = lnOpcao\nEndIf\n\nThisForm.LockScreen = .T.\n\nSelect crSigCdMrp\nThisForm.poDatamgr.Requery('crCdMpDados') \nSet Order To \n\nAppend Blank In crSigCdMrp\n*Go Bottom In crSigCdMrp\n\nIf not Used('crContas') Then\n\tIf ThisForm.podatamgr.SQLExecute([Select Grupos, iClis, rClis, 999999999.99 as Valor, 999.999999 as Perc from SigCdCli],'crContas') < 1 Then\n\t\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crContas)')\n\t\tThisForm... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Requery,SQLExecute,mObjEnabled,pfSqlTabela",
+        "controlesReferenciados": "Grd_Contas,get_Emps",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDORC.Pagina.Dados.get_nVlTots",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "This.Tag = Str(This.Value,15,2)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDORC.Pagina.Dados.get_nVlTots",
+      "evento": "LostFocus",
+      "linhas": 7,
+      "codigoOriginal": "ThisForm.Pagina.Dados.Grd_Grupos.Enabled = .T.\nThisForm.Pagina.Dados.Grd_Contas.Enabled = .T.\nThisForm.Pagina.Dados.Grd_Grupos.SetFocus() \nIf( This.Value <> 0 ) and (This.Tag <> Str(This.Value,15,2)) Then\n\tThisForm.RecalculaValores()\nEndif\t\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SetFocus,RecalculaValores",
+        "controlesReferenciados": "Grd_Grupos,Grd_Contas",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDORC.Pagina.Dados.get_nVlTots",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Inlist(Thisform.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDORC.Pagina.Dados.Get_Mes",
+      "evento": "Valid",
+      "linhas": 9,
+      "codigoOriginal": "If not IsEmpty(This.Value) Then\n\tIf not Between(Val(This.Value),1,12) Then\n\t\tMessageBox('Mês inválido, verifique!',48,'Atenção')\n\t\tReturn(.F.)\n\tEndIf\n\tThis.Value = Transform(Val(This.Value),\"@L 99\")\nEndif\n\nReturn(.T.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDORC.Pagina.Dados.Get_Mes",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Inlist(Thisform.pcEscolha,'INSERIR','PROCURAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDORC.Pagina.Dados.Get_Emps",
+      "evento": "Valid",
+      "linhas": 3,
+      "codigoOriginal": "=fAcessoEmpresa(Usuar, [C], This.Value, ThisForm.Pagina.Dados.Get_Emps, [],ThisForm.poDataMgr, .T.)\nThis.Refresh\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoEmpresa",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Emps",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDORC.Pagina.Dados.Get_Emps",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Inlist(Thisform.pcEscolha,'INSERIR','PROCURAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDORC.Pagina.Dados.Get_Ano",
+      "evento": "Valid",
+      "linhas": 10,
+      "codigoOriginal": "If not IsEmpty(This.Value) Then\n\tIf( Val(This.Value) < 100 ) Then\n\t\tThis.Value = Str(2000 + Val(This.Value),4)\n\tEndif\nEndIf\nIf Val(This.Value) < 1900 Then\n\tMessageBox('Ano inválido, verifique!',48,'Atenção')\n\tReturn(.F.)\nEndIf\nReturn(.T.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDORC.Pagina.Dados.Get_Ano",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Inlist(Thisform.pcEscolha,'INSERIR','PROCURAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDORC.Pagina.Dados.Get_Titulo",
+      "evento": "Valid",
+      "linhas": 1,
+      "codigoOriginal": "Return( Iif( ThisForm.pcEscolha <> 'PROCURAR', not IsEmpty(This.Value), .T.) )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "pcEscolha <> 'PROCURAR', not IsEmpty",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDORC.Pagina.Dados.Get_Titulo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Inlist(Thisform.pcEscolha,'INSERIR','PROCURAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDORC.Pagina.Dados.get_ds_moeda",
+      "evento": "LostFocus",
+      "linhas": 3,
+      "codigoOriginal": "*If not IsEmpty(This.Value) Then\n\n*Endif\t",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDORC.Pagina.Dados.get_ds_moeda",
+      "evento": "Valid",
+      "linhas": 25,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;\n\t\t\t\t\t\t   'crListaRemota', 'DMoes', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('DMoes', '', 'Descrição')\n\t\tloLista.mAddColuna('CMoes', '', 'Código')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Parent.get_Cd_Moeda.Value = crListaRemota.CMoes\n\tThis.Parent.get_Ds_Moeda.Value = crListaRemota.DMoes\n\tUse In crListaRemota\nElse\n\tThis.Parent.get_Cd_Moeda.Value... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "pcEscolha <> 'PROCURAR', not IsEmpty",
+        "controlesReferenciados": "get_Cd_Moeda,get_Ds_Moeda",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDORC.Pagina.Dados.get_ds_moeda",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return( Inlist(Thisform.pcEscolha,'INSERIR','PROCURAR') and Empty(This.Parent.get_cd_moeda.Value) )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_cd_moeda",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDORC.Pagina.Dados.Get_cd_Moeda",
+      "evento": "LostFocus",
+      "linhas": 3,
+      "codigoOriginal": "*If not IsEmpty(This.Value) Then\n\n*Endif\t",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDORC.Pagina.Dados.Get_cd_Moeda",
+      "evento": "Valid",
+      "linhas": 21,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;\n\t\t\t\t\t\t   'crListaRemota', 'CMoes', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('CMoes', '', 'Código')\n\t\tloLista.mAddColuna('DMoes', '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Parent.get_Cd_Moeda.Value = crListaRemota.CMoes\n\tThis.Parent.get_Ds_Moeda.Value = crListaRemota.DMoes\n\tUse In crListaRemota\t\t\nElse\n\tThis.Parent.get_Cd_Moeda.Val... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Cd_Moeda,get_Ds_Moeda",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDORC.Pagina.Dados.Get_cd_Moeda",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(Inlist(Thisform.pcEscolha,'INSERIR','PROCURAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDORC.Pagina.Dados.grd_Grupos",
+      "evento": "Procedure",
+      "linhas": 8,
+      "codigoOriginal": "LPARAMETERS nColIndex\n\nSet Key To crGrupos.Codigos in crContas\nGo Top in crContas\n\nThisForm.RetTotLancado()\n\nThisForm.Pagina.Dados.Grd_Contas.Refresh() ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "RetTotLancado,Refresh",
+        "controlesReferenciados": "Grd_Contas",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDORC.Pagina.Dados.grd_Grupos.Column1.Text1",
+      "evento": "GotFocus",
+      "linhas": 3,
+      "codigoOriginal": "If( Lastkey() == 13 ) Then\n\tKeyboard '{LEFTARROW}'\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDORC.Pagina.Dados.grd_Grupos.Column3.Text1",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.pnoldvalue = This.Value",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDORC.Pagina.Dados.grd_Grupos.Column3.Text1",
+      "evento": "KeyPress",
+      "linhas": 7,
+      "codigoOriginal": "LPARAMETERS nKeyCode, nShiftAltCtrl\n\nIf( nKeyCode = 13 ) and not Eof('crGrupos') Then\n\tSkip 1 in crGrupos\n\tThisForm.Pagina.Dados.grd_Grupos.Refresh() \n\tThisForm.Pagina.Dados.grd_Grupos.Column3.Text1.SetFocus()\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Refresh",
+        "controlesReferenciados": "grd_Grupos",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDORC.Pagina.Dados.grd_Grupos.Column3.Text1",
+      "evento": "Valid",
+      "linhas": 19,
+      "codigoOriginal": "Local nPercPrev\n\n*!*\tIf( This.Value > ThisForm.Pagina.Dados.Get_nVlTots.Value ) Then\n*!*\t\tMessageBox('Valor informado maior que a previsão total!',48,'')\n*!*\t\tReturn(.F.)\n*!*\tEndif \n\nIf(( ThisForm.pnoldvalue <> This.Value ) or (crGrupos.Perc = 0)) and (ThisForm.Pagina.Dados.Get_nVlTots.Value <> 0) Then\n\tnPercPrev = Round((This.Value / ThisForm.Pagina.DAdos.Get_nVlTots.Value)*100,6)\n\tIf not Between(nPercPrev,-99.9999,999.9999)\n\t\tMessageBox('Valor inválido, verifique!',16,'')\n\t\tThis.Value = ThisFo... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value ) or,Refresh",
+        "controlesReferenciados": "Get_nVlTots,Grd_Grupos",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDORC.Pagina.Dados.grd_Grupos.Column3.Text1",
+      "evento": "When",
+      "linhas": 10,
+      "codigoOriginal": "Local bPodeDig\n\nSelect crContas\nLocate\n\nSelect Count(*) as QTD from crContas where Valor <> 0 and Grupos = crGrupos.Codigos into cursor crAux\nSelect crAux\n\nbPodeDig = (crAux.QTD <= 0)\nReturn(bPodeDig)",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDORC.Pagina.Dados.grd_Grupos.Column4.Text1",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.pnoldvalue = This.Value",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDORC.Pagina.Dados.grd_Grupos.Column4.Text1",
+      "evento": "KeyPress",
+      "linhas": 7,
+      "codigoOriginal": "LPARAMETERS nKeyCode, nShiftAltCtrl\n\nIf( nKeyCode = 13 ) and not Eof('crGrupos') Then\n\tSkip 1 in crGrupos\n\tThisForm.Pagina.Dados.grd_Grupos.Refresh() \n\tThisForm.Pagina.Dados.grd_Grupos.Column4.Text1.SetFocus()\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Refresh",
+        "controlesReferenciados": "grd_Grupos",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDORC.Pagina.Dados.grd_Grupos.Column4.Text1",
+      "evento": "Valid",
+      "linhas": 14,
+      "codigoOriginal": "Local nVlPrev\n\n*!*\tIf( This.Value > 100 ) Then\n*!*\t\tMessageBox('Valor informado maior que a previsão total!',48,'')\n*!*\t\tReturn(.F.)\n*!*\tEndif \n\nIf( ThisForm.pnoldvalue <> This.Value ) Then\n\tnVlPrev = Round(ThisForm.Pagina.Dados.Get_nVlTots.Value * (This.Value/100),2) \n\tReplace Valor with nVlPrev in crGrupos\nEndif\t\nThisForm.Pagina.Dados.Grd_Grupos.Refresh()\n\nReturn(.T.)  ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value *,Refresh",
+        "controlesReferenciados": "Get_nVlTots,Grd_Grupos",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDORC.Pagina.Dados.grd_Grupos.Column4.Text1",
+      "evento": "When",
+      "linhas": 10,
+      "codigoOriginal": "Local bPodeDig\n\nSelect crContas\nLocate\n\nSelect Count(*) as QTD from crContas where Valor <> 0 and Grupos = crGrupos.Codigos into cursor crAux\nSelect crAux\n\nbPodeDig = (crAux.QTD <= 0)\nReturn(bPodeDig)",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDORC.Pagina.Dados.grd_Contas",
+      "evento": "Procedure",
+      "linhas": 3,
+      "codigoOriginal": "LPARAMETERS nColIndex\n\nThisForm.RetTotLancado()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "RetTotLancado",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDORC.Pagina.Dados.grd_Contas.Column1.Text1",
+      "evento": "GotFocus",
+      "linhas": 3,
+      "codigoOriginal": "If( Lastkey() == 13 ) Then\n\tKeyboard '{LEFTARROW}'\t\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDORC.Pagina.Dados.grd_Contas.Column3.Text1",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.pnoldvalue = This.Value",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDORC.Pagina.Dados.grd_Contas.Column3.Text1",
+      "evento": "KeyPress",
+      "linhas": 7,
+      "codigoOriginal": "LPARAMETERS nKeyCode, nShiftAltCtrl\n\nIf( nKeyCode = 13 ) and not Eof('crContas') Then\n\tSkip 1 in crContas\n\tThisForm.Pagina.Dados.grd_Contas.Refresh() \n\tThisForm.Pagina.Dados.grd_Contas.Column3.Text1.SetFocus()\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Refresh",
+        "controlesReferenciados": "grd_Contas",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDORC.Pagina.Dados.grd_Contas.Column3.Text1",
+      "evento": "Valid",
+      "linhas": 19,
+      "codigoOriginal": "Local nPercPrev\n\n*!*\tIf( This.Value > ThisForm.Pagina.Dados.Get_nVlTots.Value ) Then\n*!*\t\tMessageBox('Valor informado maior que a previsão total!',48,'')\n*!*\t\tReturn(.F.)\n*!*\tEndif \n\nIf(( ThisForm.pnoldvalue <> This.Value ) or (crContas.Perc = 0)) and (ThisForm.Pagina.Dados.Get_nVlTots.Value <> 0) Then\n\tnPercPrev = Round((This.Value / ThisForm.Pagina.Dados.Get_nVlTots.Value)*100,6) \n\tIf not Between(nPercPrev,-99.9999,999.9999)\n\t\tMessageBox('Valor inválido, verifique!',16,'')\n\t\tThis.Value = ThisF... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value ) or,Refresh",
+        "controlesReferenciados": "Get_nVlTots,Grd_Contas",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDORC.Pagina.Dados.grd_Contas.Column3.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return( (crGrupos.Valor = 0))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDORC.Pagina.Dados.grd_Contas.Column4.Text1",
+      "evento": "GotFocus",
+      "linhas": 1,
+      "codigoOriginal": "ThisForm.pnoldvalue = This.Value",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDORC.Pagina.Dados.grd_Contas.Column4.Text1",
+      "evento": "KeyPress",
+      "linhas": 7,
+      "codigoOriginal": "LPARAMETERS nKeyCode, nShiftAltCtrl\n\nIf( nKeyCode = 13 ) and not Eof('crContas') Then\n\tSkip 1 in crContas\n\tThisForm.Pagina.Dados.grd_Contas.Refresh() \n\tThisForm.Pagina.Dados.grd_Contas.Column4.Text1.SetFocus()\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Refresh",
+        "controlesReferenciados": "grd_Contas",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDORC.Pagina.Dados.grd_Contas.Column4.Text1",
+      "evento": "Valid",
+      "linhas": 9,
+      "codigoOriginal": "Local nVlPrev\n\nIf( ThisForm.pnoldvalue <> This.Value ) Then\n\tnVlPrev = Round(ThisForm.Pagina.Dados.Get_nVlTots.Value * (This.Value/100),2) \n\tReplace Valor with nVlPrev in crContas\nEndif\t\nThisForm.Pagina.Dados.Grd_Contas.Refresh()\n\nReturn(.T.)  ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Value *,Refresh",
+        "controlesReferenciados": "Get_nVlTots,Grd_Contas",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDORC.Pagina.Dados.grd_Contas.Column4.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return( (crGrupos.Valor = 0) )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDORC.Pagina.Dados.getTotLancado",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (.F.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDORC.Procedure",
+      "queryOriginal": "Select Sum(Valor) as TotLancado from crGrupos into cursor crTotGrupos",
+      "tabelas": "crGrupos",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDORC.Procedure",
+      "queryOriginal": "Select Sum(Valor) as TotLancado from crContas into cursor crTotContas",
+      "tabelas": "crContas",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDORC.Init",
+      "queryOriginal": "\tlcQryCdmp  = [Select cEmps, cMes, cAno, cTitulo, Moeda, nVlTots, Max(cIdChaves) as cIdChaves from SigCdMrp Group by cEmps, cMes, cAno, cTitulo, Moeda, nVlTots]",
+      "tabelas": "SigCdMrp",
+      "colunas": "cEmps,cMes,cAno,cTitulo,Moeda,nVlTots",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDORC.Init",
+      "queryOriginal": "\tlcQryCdmpD = [Select * From SigCdMrp Where cEmps = ?crSigCdMrp.cEmps and cMes = ?crSigCdMrp.... [TRUNCADO]",
+      "tabelas": "SigCdMrp",
+      "colunas": "cEmps,cMes",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDORC.Click",
+      "queryOriginal": "\tIf ThisForm.podatamgr.SQLExecute([Select Grupos, iClis, rClis, 999999999.99 as Valor, 999.999999 as Perc from SigCdCli],'crContas') < 1 Then",
+      "tabelas": "SigCdCli",
+      "colunas": "Grupos,iClis,rClis,99,999999",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDORC.Pagina.Lista.cmdCopiar.Click",
+      "queryOriginal": "\tIf ThisForm.podatamgr.SQLExecute([Select Grupos, iClis, rClis, 999999999.99 as Valor, 999.999999 as Perc from SigCdCli],'crContas') < 1 Then",
+      "tabelas": "SigCdCli",
+      "colunas": "Grupos,iClis,rClis,99,999999",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDORC.Pagina.Dados.grd_Grupos.Column3.Text1.When",
+      "queryOriginal": "Select Count(*) as QTD from crContas where Valor <> 0 and Grupos = crGrupos.Codigos into cursor crAux",
+      "tabelas": "crContas",
+      "colunas": "Valor,Grupos,Codigos,crAux",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDORC.Pagina.Dados.grd_Grupos.Column4.Text1.When",
+      "queryOriginal": "Select Count(*) as QTD from crContas where Valor <> 0 and Grupos = crGrupos.Codigos into cursor crAux",
+      "tabelas": "crContas",
+      "colunas": "Valor,Grupos,Codigos,crAux",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["crGrupos", "crContas", "SigCdMrp", "SigCdCli"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

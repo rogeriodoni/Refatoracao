@@ -1,0 +1,1338 @@
+{
+  "resumo": {
+    "totalMetodos": 81,
+    "metodosComSQL": 22,
+    "metodosComValidacao": 18,
+    "totalQueries": 3,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["For Upper", "Found", "FontMetric", "F8 SIGCDRPT.Ativar_Listas", "F9 SIGCDRPT.Ativar_Listas", "ForceExt", "File", "fsize"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDRPT",
+      "evento": "Procedure",
+      "linhas": 313,
+      "codigoOriginal": "**\n**Thisform.Pagina.ActivePage = 3\n\nLocal lcNmRPT As String, lcRPT_ID As String, lcSqlQuery As String, lcArqReport As String, lcLblCaption As String\n\nIf Used( \"crSIGCDRLC\" ) And RecCount( \"crSIGCDRLC\" ) > 0\n\t** Ok, há relatórios na Lista\nElse\n\tSelect crSIGCDRLC\n\tMessageBox( \"Selecione um Relatório para \" + Iif( Thisform.pcEscolha = [ALTERAR], \"Alterar\", \"Visualizar\" ), 48, \"Atenção\" )\n\tReturn\nEndIf\n\nlcNmRPT = AllTrim( crSIGCDRLC.NmReport )\n\nIf Used( \"Crs_RPT_C\" )\n\t** Ok, Cursor com os Relatório... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "For Upper,Found",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Txt_NmReport,Chk_Ativo,Edt_Descricao,Txt_DtCriacao,Txt_DtAlteracao",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT",
+      "evento": "Procedure",
+      "linhas": 46,
+      "codigoOriginal": "**\nLparameters tcoWLST As String\n\nloWLst = Iif( tcoWLST = \"oWLstTABs\", This.oWLstTABs, This.oWLstVARs )\n\n\nIf loWLst.Visible = .T.\n\n\tloWLst.Hide()\n\nElse\n\n\tIf Type( \"This.ActiveControl\" ) # \"O\" OR Upper( This.ActiveControl.Name ) # \"OLERTF_SQLCMD\"\n\t\tReturn\n\tEndIf\n\n\tStore This.Pagina.Dados.pageframe1.Page1.OleRTF_SqlCMD.SelStart To _oRTF.nSelPosA, _oRTF.nSelPosI, _oRTF.nSelPosF\n\tStore This.Pagina.Dados.pageframe1.Page1.OleRTF_SqlCMD.GetLineFromChar( _oRTF.nSelPosA ) To _oRTF.nLineI, _oRTF.nLineFrom... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT",
+      "evento": "Procedure",
+      "linhas": 129,
+      "codigoOriginal": "** \nLparameters tcTab As String, tcOpcao As String, tcNmRPT As String, tcRPT_ID As String\n**\n** tcTab = \t\"C\" - SIGCDRLC - Cabeçalho\n**\t\t\t\"D\" - SIGCDRLD - Detalhes\n**\n** TcOpcao = \"I\"- Incluir / \"A\"-Atualizar \n**\n** tcNmRPT = .\\TMP\\TmpArqRPT.Frx\n** \n** tcRPT_ID = Dtos(Date()) + \"_\" + StrTran(Time(),\":\",\"\") -> 20130101_120505\n**\nLocal lcSQL As String, lnConnHnd As Integer, lcTAB As String, lcMSG As String, lcNmReport As String\n\nlcTAB = Iif( tcTab   = \"C\", \"SIGCDRLC\", \"SIGCDRLD\" )\nlcMSG = Iif( tcOp... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDRPT",
+      "evento": "Procedure",
+      "linhas": 60,
+      "codigoOriginal": "**\nLocal i As Integer\n\nDimension aLstCMDs(33)\n\naLstCMDs[01] = \"SELECT\"\naLstCMDs[02] = \"DISTINCT\"\naLstCMDs[03] = \"FROM\"\naLstCMDs[04] = \"UNION\"\naLstCMDs[05] = \"EXCEPT\"\naLstCMDs[06] = \"INTERSECT\"\naLstCMDs[07] = \"PERCENT\"\naLstCMDs[08] = \"GROUP\"\naLstCMDs[09] = \"HAVING\"\naLstCMDs[10] = \"DESC\"\naLstCMDs[11] = \"CASE\"\naLstCMDs[12] = \"WHEN\"\naLstCMDs[13] = \"WHERE\"\naLstCMDs[14] = \"THEN\"\naLstCMDs[15] = \"ELSE\"\naLstCMDs[16] = \"LEFT\"\naLstCMDs[17] = \"RIGHT\"\naLstCMDs[18] = \"INNER\"\naLstCMDs[19] = \"OUTER\"\naLstCMDs[20... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT",
+      "evento": "Procedure",
+      "linhas": 60,
+      "codigoOriginal": "**\nLparameters tcTpCampo As String, tcFonte As String\n\nLocal lnTam As Integer, lcTipo As String, lnFieldWidth As Number\nLocal lcFontName As String, lnFontSize As Integer, lcFontStyle As String\n\nlcTipo = Upper( Left( AllTrim( tcTpCampo ), 1 ) )\ntcTpCampo = StrTran( tcTpCampo, lcTipo, \"\" )\ntcTpCampo = StrTran( tcTpCampo, \"(\", \"\" )\ntcTpCampo = StrTran( tcTpCampo, \")\", \"\" )\n\nlnTam = Int( Val( tcTpCampo ) )\n\nlcFontName = Left( tcFonte, At( \",\", tcFonte, 1 )-1 )\ntcFonte    = StrTran( tcFonte, lcFontNa... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "FontMetric",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT",
+      "evento": "Procedure",
+      "linhas": 63,
+      "codigoOriginal": "** \n_oRTF.cCMD = Upper( _oRTF.cPalavra )\n_oRTF.nLen = Len( _oRTF.cCMD )\n\n\nDo Case\n\n******************************************************************\nCase _oRTF.nLen = 2\n\n\tIf InList( _oRTF.cCMD, \"AS\", \"BY\" )\n\t\t_oRTF.lMudaCor = .T.\n\t\t_oRTF.nForeColor = _oRTF.nCorAzul1\n\tEndIf\n\n\tIf InList( _oRTF.cCMD, \"OR\", \"IN\" )\n\t\t_oRTF.lMudaCor = .T.\n\t\t_oRTF.nForeColor = _oRTF.nCorCinza1\n\tEndIf\n\n\n******************************************************************\nCase _oRTF.nLen = 3 \n\n\tIf InList( _oRTF.cCMD, \"AVG... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "** \n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT",
+      "evento": "Procedure",
+      "linhas": 65,
+      "codigoOriginal": "**\nLparameters tcCRS As String\n\ntcCRS = Upper( AllTrim( tcCRS ) )\n\nDo Case\n*************************************************************************************\nCase tcCRS = \"CRSPROPS_TITULO\"\n\n\tSelect CrsProps_Titulo\n\tGo Top\n\n\tThisForm.Pagina.Dados.pageframe1.Page2.Lbl_Nm_Relatorio.Caption = CrsProps_Titulo.LblCaption\n\n\tThisForm.Pagina.Dados.pageframe1.Page2.FwGrade1_TIT.RecordSourceType = 1\n\tThisForm.Pagina.Dados.pageframe1.Page2.FwGrade1_TIT.RecordSource \t= \"CrsProps_Titulo\"\n\n\t**ThisForm.Pagin... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "OptGrp_Orientacao",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT",
+      "evento": "Procedure",
+      "linhas": 91,
+      "codigoOriginal": "** \nLparameters tnAcao As Integer\n\nLocal lcCampos1 As String, lcCampos2 As String, lcCampos3 As String, lcLstCmps As String\n\nlcCampos1 =\t\"NmCampo    C(40), \"\nlcCampos2 =\t\"TpCampo    C(10), \" +;\n\t\t\t\"CkOutRPT   I(1), \"  +;\n\t\t\t\"CkFiltro   I(1), \"  +;\n\t\t\t\"CkSubTot   I(1), \"  +;\n\t\t\t\"CkTotal    I(1), \"\nlcCampos3 = \"LblCaption M(4), \"  +;\n\t\t\t\"LblFonte   M(4), \"  +;\n\t\t\t\"LblBtFonte C(1), \"  +;\n\t\t\t\"LblBtCor   I(10), \" +;\n\t\t\t\"LblAlinhar C(6), \"  +;\n\t\t\t\"LblTamCmp  I(5), \"  +;\n\t\t\t\"LblTipoCmp C(1),\"   +;\n\t\t\t\"... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT",
+      "evento": "Procedure",
+      "linhas": 49,
+      "codigoOriginal": "** \nLocal lcChr13 As String, lcChr10 As String\nlcChr13 = Chr(13)\nlcChr10 = Chr(10)\n\nStore \"\" To _oRTF.cLetra, _oRTF.cPalavra, _oRTF.cCMD \nStore 0 To _oRTF.nSelStart, _oRTF.nSelPosA, _oRTF.nSelPosI, _oRTF.nSelPosF\nStore 0 To _oRTF.nLineI, _oRTF.nLineFromChar\n\n_oRTF.lMudaCor \t= .F.\n_oRTF.nForeColor = 0\n_oRTF.nRet\t\t= 0\n\nFor _oRTF.nSelPosF = 0 To Len( This.Pagina.Dados.pageframe1.Page1.OleRTF_SqlCMD.Text )\n\n\t_oRTF.cLetra = SubStr( This.Pagina.Dados.pageframe1.Page1.OleRTF_SqlCMD.Text, _oRTF.nSelPosF... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Color_CMD",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT",
+      "evento": "Procedure",
+      "linhas": 43,
+      "codigoOriginal": "** \nParameters tcFonte As String, tcFontName As String, tnFontSize As Integer, tcFontStyle As String, tnFontStyle As Integer\n\nIf Type( \"tnFontStyle\" ) # \"N\"\n\ttnFontStyle = 0\nEndIf\n\ntcFontName = Left( tcFonte, At( \",\", tcFonte, 1 )-1 )\ntcFonte    = AllTrim( StrTran( tcFonte, tcFontName+\",\", \"\" ) )\n\ntnFontSize = Left( tcFonte, At( \",\", tcFonte, 1 )-1 )\ntcFonte    = AllTrim( StrTran( tcFonte, tnFontSize+\",\", \"\" ) )\n\ntcFontStyle = tcFonte\ntnFontSize  = Val( tnFontSize )\n\n**\nDo Case\nCase tcFontStyle ... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT",
+      "evento": "Procedure",
+      "linhas": 107,
+      "codigoOriginal": "**\nLocal lcNmRPT As String, lcRPT_ID As String, lnConnHnd As Integer\n\nIf Used( \"crSIGCDRLC\" ) And RecCount( \"crSIGCDRLC\" ) > 0\n\t** Ok, há relatórios na Lista\nElse\n\tSelect crSIGCDRLC\n\tMessageBox( \"Selecione um Relatório para Excluir\", 48, \"Atenção\" )\n\tReturn\nEndIf\nThis.poDataMgr.Commit()\n\nlcNmRPT = AllTrim( crSIGCDRLC.NmReport )\n\nIf Used( \"Crs_RPT_C\" )\n\t** Ok, Cursor com os Relatórios Carregado\nElse\n\tSelect crSIGCDRLC\n\tMessageBox( \"Problemas no cursor Crs_RPT_C - Excluir_RPT()\", 48, \"Atenção\" )\n\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "For Upper,Found",
+        "metodosFormChamados": "SqlExecute,Refresh",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT",
+      "evento": "Procedure",
+      "linhas": 37,
+      "codigoOriginal": "** \nDo Case\nCase Thisform.Pagina.ActivePage = 1\n\tThis.Pagina.Lista.Grupo_Saida.Sair.Click()\n\n\nCase This.Pagina.ActivePage = 2\n\n\tIf This.oWLstTABs.Visible = .T. OR This.oWLstVARs.Visible = .T.\n\n\t\tDo Case\n\t\tCase This.oWLstTABs.Visible = .T.\n\t\t\tThis.oWLstTABs.Hide()\n\n\t\tCase This.oWLstVARs.Visible = .T.\n\t\t\tThis.oWLstVARs.Hide()\n\n\t\tEndCase\n\n\t\tThis.Pagina.Dados.pageframe1.Page1.OleRTF_SqlCMD.SetFocus()\n\t\tThis.Pagina.Dados.pageframe1.Page1.OleRTF_SqlCMD.Refresh()\n\n\tElse\n\n\t\tThis.Pagina.Dados.pageframe1.... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Cmd_Cancela",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT",
+      "evento": "Click",
+      "linhas": 11,
+      "codigoOriginal": "**\nLocal lcTABLE As String\n\nlcTABLE = This.oWLstTABs.Lst_TABs.DisplayValue\n\nThis.Pagina.Dados.pageframe1.Page1.OleRTF_SqlCMD.SelText = lcTABLE\n\nThis.Pagina.Dados.pageframe1.Page1.OleRTF_SqlCMD.Refresh()\n\nThis.oWLstTABs.Hide()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT",
+      "evento": "Click",
+      "linhas": 12,
+      "codigoOriginal": "**\nLocal lcVAR As String\n\nlcVAR = This.oWLstVARs.Lst_VARs.DisplayValue\n\nThis.Pagina.Dados.pageframe1.Page1.OleRTF_SqlCMD.SelText = lcVAR\n\nThis.Pagina.Dados.pageframe1.Page1.OleRTF_SqlCMD.Refresh()\n\nThis.oWLstVARs.Hide()\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT",
+      "evento": "Procedure",
+      "linhas": 83,
+      "codigoOriginal": "**\n* Array \"De Para\" dos campos da Tab SIGCDRLD\n**\n\nDimension This.aRPT_D(75)\n\nThis.aRPT_D[01] = \"PLATFORM  PLATFORM  \"\nThis.aRPT_D[02] = \"UNIQUEID  UNIQUEID  \"\nThis.aRPT_D[03] = \"TIMESTAMP TIMESTAMP \"\nThis.aRPT_D[04] = \"OBJTYPE   OBJTYPE   \"\nThis.aRPT_D[05] = \"OBJCODE   OBJCODE   \"\nThis.aRPT_D[06] = \"NAME      NAME      \"\nThis.aRPT_D[07] = \"EXPR      EXPR      \"\nThis.aRPT_D[08] = \"VPOS      VPOS      \"\nThis.aRPT_D[09] = \"HPOS      HPOS      \"\nThis.aRPT_D[10] = \"HEIGHT    HEIGHT    \"\nThis.aRPT_D... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT",
+      "evento": "Procedure",
+      "linhas": 29,
+      "codigoOriginal": "**\nloCboReport = Thisform.Pagina.Dados.pageframe1.Page1.Cbo_NmReports\nloCboReport.Clear()\n\nIf Used( \"crSIGCDRLC\" )\n\n\tLocal lnItem As Integer\n\tlnItem = 2\n\n\tSelect crSIGCDRLC\n\tGo Top\n\tScan\n\t\tlnItem = lnItem +1\n\t\t\n\t\tloCboReport.AddListItem( PadR( crSIGCDRLC.NmReport, 50, \" \" ), lnItem, 1 )\n\t\tloCboReport.AddListItem( PadR( Nvl(crSIGCDRLC.Descr,\"\"), 100, \" \" ), lnItem, 2 )\n\t\tloCboReport.AddListItem( PadR( Nvl(crSIGCDRLC.RPT_ID,\"\"), 30, \" \" ), lnItem, 3 )\n\n\tEndScan\n\tGo Top\n\n\tIf Used( \"CrsTmp_SqlResult... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT",
+      "evento": "Procedure",
+      "linhas": 46,
+      "codigoOriginal": "** \nWith ThisForm\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\n\t\t.poDataMgr.Commit()\n\n\t\t.Pagina.Lista.Grade.RecordSource = \"\"\n\n\t\tIf Used( .oTabelaPadrao.cNomeCursor )\n*!*\t\t\t\tSelect (.oTabelaPadrao.cNomeCursor)\n*!*\t\t\t\tSet Order To \n*!*\t\t\t\tSET INDEX TO \n*!*\t\t\t\tDelete Tag All \n\t\t\t\n\t\t\tUse IN (.oTabelaPadrao.cNomeCursor)\n\t\tEndIf\n\n\t\tIf Thisform.podatamgr.SqlExecute( .oTabelaPadrao.cStrQuery, .oTabelaPadrao.cNomeCursor ) > 0\n\t\t\n\t\t\tSelect (.oTabelaPadrao.cNomeCursor)\n\t\t\t\tIndex On NmReport Tag \"NmReport\"\n\t\t\t\tIndex O... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDRPT",
+      "evento": "Procedure",
+      "linhas": 32,
+      "codigoOriginal": "**\nLparameters tvFontStyle As Variant \n\nLocal lcType As String, lvFontStyle As Variant \nlcType = Type( \"tvFontStyle\" )\n\nDo Case\nCase (lcType = \"C\" And tvFontStyle = \"N\") OR (lcType = \"N\" And tvFontStyle = 0)\t\t&& Normal\n\tlvFontStyle = Iif( lcType = \"C\", 0, \"N\" )\n\nCase (lcType = \"C\" And tvFontStyle = \"B\") OR (lcType = \"N\" And tvFontStyle = 1) \t&& Bold\n\tlvFontStyle = Iif( lcType = \"C\", 1, \"B\" )\n\nCase (lcType = \"C\" And tvFontStyle = \"I\") OR (lcType = \"N\" And tvFontStyle = 2) \t&& Italic\n\tlvFontStyle ... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT",
+      "evento": "Procedure",
+      "linhas": 53,
+      "codigoOriginal": "** \nParameters tnLen, toCmpFonte As Object, toCmpTamFt As Object\n\nLocal lcFonte As String, lcFonteSelec As String, lcFontName As String, lnFontSize As Integer, lcFontStyle As String\nLocal lnTamSp As Number, lnTamAt As Number, lnMtrcAt As Number, lnTamNv As Number, lnMtrcNv As Number\n\nlcFonte = AllTrim( toCmpFonte.Value )\n\nlcFontName = Left( lcFonte, At( \",\", lcFonte, 1 )-1 )\nlcFonte    = StrTran( lcFonte, lcFontName+\",\", \"\" )\n\nlnFontSize = Left( lcFonte, At( \",\", lcFonte, 1 )-1 )\nlcFonte    = St... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "FontMetric",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT",
+      "evento": "Procedure",
+      "linhas": 27,
+      "codigoOriginal": "** \nParameters toCol As Object, toEdtFont As Object \n\nLocal lcCrs As String, lcCmp As String, lnNrCor As Integer, lcIIF As String, lcBtCor As String\n\nlnNrCor = 0\n\nlcCrs = Left( toCol.ControlSource, At( \".\", toCol.ControlSource )-1 )\nlcCmp = AllTrim( toCol.ControlSource )\n\nlcCrs = Upper( lcCrs )\n\nlnNrCor = GetColor()\n\nIf lnNrCor <= 0\n\tReturn\nEndIf\n\nSelect &lcCrs.\nReplace (lcCmp) With lnNrCor\n\nlcIIF = \"IIF( RecNo('\" + lcCrs + \"')=\" + AllTrim( Str( RecNo() ) ) + \",\" + AllTrim( Str( lnNrCor ) ) + \",... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT",
+      "evento": "Procedure",
+      "linhas": 70,
+      "codigoOriginal": "** \nLparameters taMenu,tcOnSelection\n\nLocal lcOnSelection, lnMenuCount, lnCount, llDoubleArray\nLocal lcMenuItem, lcMenuSelection\n\nExternal Array taMenu\n\nIf Parameters() = 0 Or Type( \"taMenu\" ) # \"C\"\n\tReturn .F.\nEndIf\n\nlnMenuCount = 0\nlnMenuCount = Alen( taMenu, 1 )\n\nIf lnMenuCount = 0\n\tReturn .F.\nEndIf\n\nllDoubleArray = ( Alen( taMenu, 2 ) > 0 )\n\nActivate Screen\n\nDeactivate Popup _popShortcutMenu\n\nDefine Popup _popShortcutMenu ;\n\tFROM Mrow(),Mcol() ;\n\tMARGIN ;\n\tRELATIVE ;\n\tSHORTCUT\nFor lnCount = ... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDRPT",
+      "evento": "Procedure",
+      "linhas": 56,
+      "codigoOriginal": "**\nLocal lcNmRPT As String, lcRPT_ID As String, lcSqlQuery As String, lcArqReport As String\n\nIf Used( \"crSIGCDRLC\" ) And RecCount( \"crSIGCDRLC\" ) > 0\n\n\tlcNmRPT = AllTrim( crSIGCDRLC.NmReport )\n\n\tIf Used( \"Crs_RPT_C\" )\n\n\t\tSelect Crs_RPT_C\n\t\tLocate For Crs_RPT_C.NmReport = lcNmRPT \n\t\t\n\t\tIf Found( \"Crs_RPT_C\" ) \n\n\t\t\tlcRPT_ID   = AllTrim( Nvl( Crs_RPT_C.RPT_ID, \"null\" ) )\n\t\t\tlcSqlQuery = AllTrim( Nvl( Crs_RPT_C.SqlQuery, \"\" ) )\n\n\t\t\tIf Empty( lcSqlQuery )\n\t\t\t\tMessageBox( \"Problemas no Script do SQL. ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "Found",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT",
+      "evento": "Procedure",
+      "linhas": 3,
+      "codigoOriginal": "Select crSigPrCpl\nLocate for Codigos >= ThisForm.Pagina.Dados.pageframe1.Page1.GetCodigos.Value\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT",
+      "evento": "Procedure",
+      "linhas": 22,
+      "codigoOriginal": "* Incluindo os Registros\nllOK = .t.\nIf llOK\n\tIf Not ThisForm.poDataMgr.Update('TmpCdRlc')\n\t\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (msv_Alterar - 3.0)')\n\t\tllOK = .f.\n\tEndIf\nEndIf\nIf llOK\n\tIf Not ThisForm.poDataMgr.Update('TmpCdRld')\n\t\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (msv_Alterar - 4.0)')\n\t\tllOK = .f.\n\tEndIf\nEndIf\n\nIf llOK\n\tThisForm.poDataMgr.Commit()\nElse\n\tThisForm.poDataMgr.Rollback()\n\tReturn .f.\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Update,Commit,Rollback",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDRPT",
+      "evento": "Procedure",
+      "linhas": 60,
+      "codigoOriginal": "lcNmRPT = AllTrim( crSIGCDRLC.NmReport )\n\nSelect Crs_RPT_C\nLocate For Upper( Crs_RPT_C.NmReport ) = Upper( lcNmRPT )\nIf Eof()\n\tSelect crSIGCDRLC\n\tMessageBox( \"Não foi Encontrado o cabeçalho do Rel. - Excluir_RPT() \" +Chr(13)+ lcNmRPT, 48, \"Atenção\" )\n\tReturn\nEndIf\n\nlcRPT_ID  = AllTrim( Crs_RPT_C.RPT_ID )\n\nllOK = .t.\n* Eliminando os Registros\nIf llOK\n\tIf (ThisForm.poDataMgr.SQLExecute([Delete From SIGCDRLC Where RPT_ID = ?lcRPT_ID], '') < 1)\n\t\t=MessageBox('Favor Reinicializar o Processo!!!', 16, ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "For Upper",
+        "metodosFormChamados": "SQLExecute,Commit,Rollback",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDRPT",
+      "evento": "Procedure",
+      "linhas": 37,
+      "codigoOriginal": "lcReport_ID = Crs_RPT_C.RPT_ID\n\nllOK = .t.\n\nIf Thisform.podatamgr.SqlExecute([Delete From SIGCDRLC Where RPT_ID = ?lcReport_ID]) < 1\n\t\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (msv_Alterar - 1.0)')\n\tllOK = .f.\nEndIf\nIf llOK\n\tIf Thisform.podatamgr.SqlExecute([Delete From SIGCDRLD Where RPT_ID = ?lcReport_ID]) < 1\n\t\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (msv_Alterar - 2.0)')\n\t\tllOK = .f.\n\tEndif\nEndIf\n\n* Incluindo os Registros\nIf llOK\n\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute,Update,Commit,Rollback",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDRPT",
+      "evento": "Procedure",
+      "linhas": 17,
+      "codigoOriginal": "**\nDoDefault()\n\nLocal lcDirReports As String\n\nlcDirReports = \".\\Tmp\"\n\nIf Directory( lcDirReports )\n\t** Ok, Diretório existe\nElse\n\t** Criar o Diretório antes de gravar os Arquivos de Report\n\tMkDir (lcDirReports)\nEndIf\n\nThis.CriaCursores(1)\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT",
+      "evento": "Init",
+      "linhas": 260,
+      "codigoOriginal": "This.cSetExact = Set(\"Exact\")\nSet Exact ON\n\n*!*\tPush Key && Places all current ON KEY LABEL command settings on a stack in memory.\n*!*\t\t\t && PUSH KEY, when used with POP KEY, makes it possible for you to save key assignments defined with ON KEY LABEL commands, \n*!*\t\t\t && change these assignments, and then restore the previous assignments.\n\n*!*\tON Key Label ALT+F1 SIGCDRPT.Cmd_Estrutura.Click()\n*!*\tON Key Label m SIGCDRPT.Pagina.Dados.pageframe1.Page1.CmdGrp_Acoes.Cmd_Processar.Click()\n\n*!*\tON Ke... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "F8 SIGCDRPT.Ativar_Listas,F9 SIGCDRPT.Ativar_Listas",
+        "metodosFormChamados": "Ativar_Listas",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDRPT",
+      "evento": "Destroy",
+      "linhas": 55,
+      "codigoOriginal": "**\nLocal lcSetExact As String\nlcSetExact = This.cSetExact\nSet Exact &lcSetExact.\n\nPOP KEY\t\t&& Restores ON KEY LABEL assignments that were placed on the stack with PUSH KEY.\n\t\t\t&& when used with PUSH KEY, lets you save a set of key assignments created with ON KEY LABEL commands, \n\t\t\t&& make changes to the key assignments with more ON KEY LABEL commands, and then restore the original key assignments.\n\n\nThis.oWLstTABs = NULL\nThis.oWLstVARs = NULL\n\nThis.CriaCursores(0)\n\nIf Used( \"CrsTmp_SqlResult\" )... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT",
+      "evento": "Click",
+      "linhas": 52,
+      "codigoOriginal": "Lparameters Opcao\n\nIf Not DoDefault(Opcao)\n\tThisForm.mAtivaPagina1\n\tReturn 0\nEndIf\n\n*!*\tDo Case\n*!*\t\tCase InList(Thisform.pcEscolha, 'INSERIR', 'PROCURAR')\n*!*\t\t\tThisform.Pagina.Dados.pageframe1.Page1.getCodigos.Setfocus\n*!*\t\tCase (Thisform.pcEscolha = 'ALTERAR')\n*!*\t\t\tThisform.Pagina.Dados.pageframe1.Page1.getDescrs.Setfocus\n*!*\t\tCase InList(Thisform.pcEscolha, 'CONSULTAR', 'EXCLUIR')\n*!*\t\t\tThisform.Pagina.Dados.pageframe1.Page1.Grupo_Salva.Salva.Setfocus\n*!*\tEndCase\n\nSelect TmpCdRlc\nZap\nSelect... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Alterar_RPT",
+        "controlesReferenciados": "Txt_NmReport,Chk_Ativo,Edt_Descricao,Txt_DtCriacao,Txt_DtAlteracao",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT",
+      "evento": "Click",
+      "linhas": 231,
+      "codigoOriginal": "If thisform.pagina.dados.pageframe1.ActivePage = 1\n\tLocal lcNmRPT As String, loAba As Page \n\n\tloAba \t= Thisform.pagina.dados.pageframe1.page1\n\tlcNmRPT = loAba.Txt_NmReport.Value\n\n\tIf IsNull( lcNmRPT ) OR Empty( lcNmRPT )\n\t\tloAba.Txt_NmReport.SetFocus()\n\t\tMessageBox( \"Campo NOME do Report não preenchido!\", 48, \"Atenção\" )\n\t\tReturn\n\tEndIf\n\n\tIf IsNull( loAba.OleRTF_SqlCMD.Text ) OR Empty( loAba.OleRTF_SqlCMD.Text )\n\t\tloAba.OleRTF_SqlCMD.SetFocus()\n\t\tMessageBox( \"Campo SQL do Report não preenchido!\"... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "For Upper,Found",
+        "metodosFormChamados": "CriaCursores,Configura_Controle",
+        "controlesReferenciados": "Txt_NmReport,Txt_DtCriacao,Txt_DtAlteracao,Cmd_Processar",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT",
+      "evento": "Click",
+      "linhas": 9,
+      "codigoOriginal": "=DoDefault()\n\nIf ThisForm.plCancelar\n\tThisForm.mAtivaPagina1\n\tThisForm.Pagina.Lista.Enabled = .T. \n\tThisForm.Pagina.ActivePage = 1\nEndIf\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT",
+      "evento": "Activate",
+      "linhas": 37,
+      "codigoOriginal": "**\nThisForm.Pagina.Lista.Enabled = .F.\n\nLocal lcToolTipText1 As String, lcToolTipText2 As String, llEnabled As Boolean \n\nDo Case\nCase ThisForm.pcEscolha = [INSERIR]\n\n\tllEnabled \t   = .F. \n\tlcToolTipText1 = \"Acessa a tela de parâmetros do Relatório.\"\t&& \"Habita somente em Modo de Alteração.\"\n\tlcToolTipText2 = \"Salva SQL e habilita tela de Relatório.\"\n\nCase InList( ThisForm.pcEscolha, [CONSULTAR], [ALTERAR], [EXCLUIR] )\n\n\tllEnabled \t   = .T. \n\tlcToolTipText1 = \"Acessa a tela de parâmetros do Relat... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Cmd_LayOutRPT",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT.Pagina.Lista.CmdGrp_Acoes",
+      "evento": "Click",
+      "linhas": 89,
+      "codigoOriginal": "**\nLocal lcNmRPT As String, lcRPT_ID As String, lcSqlQuery As String, lcArqReport As String, lcNmArqExp As String, lcLstArqEXPORTADOS As String\n\nIf Used( \"crSIGCDRLC\" ) And RecCount( \"crSIGCDRLC\" ) > 0\n\t** Ok, Cursor com Relatórios\nElse\n\tMessageBox( \"Selecione um Relatório para Exportação\", 48, \"Atenção\" )\n\tReturn\nEndIf\n\nIf Bof( \"crSIGCDRLC\" ) OR Eof( \"crSIGCDRLC\" )\n\tMessageBox( \"Selecione um Relatório para Exportação\", 48, \"Atenção\" )\n\tReturn\nEndIf\n\nlcNmRPT = AllTrim( crSIGCDRLC.NmReport )\n\nIf ... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "For Upper,Found",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Cmd_Exportar]\"",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT.Pagina.Lista.CmdGrp_Acoes",
+      "evento": "Click",
+      "linhas": 89,
+      "codigoOriginal": "**\nLocal lcArqImp As String, lcNmArq_RPT As String, lcRPT_ID As String, ldDateTime As Datetime, lcDescricao As String, lcSqlQuery As String, llNmJaExiste As Boolean, lcNovoNmRPT As String   \nlcNmArq_RPT = \"\"\nllNmJaExiste = .T.\nlcNovoNmRPT  = \"\"\n\nlcArqImp = GetFile( \"DBF\", \"Arq. p/ Importar\", \"Abrir\", 0, \"Selecione o arquivo para Importar:\" )\n\nIf IsNull( lcArqImp ) OR Empty( lcArqImp )\n\tReturn\nEndIf\n\nSelect 0\nUse (lcArqImp) Alias \"Tmp_ExpRPT\"\n\nlcNmArq_RPT = AllTrim( Tmp_ExpRPT.NmReport )\nlcDescri... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "For Upper,Found,ForceExt",
+        "metodosFormChamados": "Atualizar_RPT,mAtivaPagina1",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT.Pagina.Dados.Pageframe1.Page1.CmdGrp_Acoes",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "**\nThis.DisabledBackColor = This.BackColor \nThis.DisabledPicture   = This.Picture \n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT.Pagina.Dados.Pageframe1.Page1.CmdGrp_Acoes",
+      "evento": "Click",
+      "linhas": 3,
+      "codigoOriginal": "thisform.pagina.dados.Grupo_Salva.Salva.Click()\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Click",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT.Pagina.Dados.Pageframe1.Page1.CmdGrp_Acoes",
+      "evento": "Click",
+      "linhas": 57,
+      "codigoOriginal": "**\nLocal lc_NomeTabela As String\n\nlc_NomeTabela = AllTrim( This.Parent.Parent.OleRTF_SqlCMD.SelText )\n\nIf Empty( lc_NomeTabela )\n\tThis.Parent.Parent.OleRTF_SqlCMD.SetFocus()\n\tMessageBox( \"Selecione o nome da tabela.\", 48, \"Solution\" )\n\tReturn\nEndIf\n\nIf GetWordCount( lc_NomeTabela ) > 1\n\tThis.Parent.Parent.OleRTF_SqlCMD.SetFocus()\n\tMessageBox( \"Selecione Apenas o nome da tabela.\", 48, \"Solution\" )\n\tReturn\nEndIf\n\nThis.Parent.Parent.FwGrade1_Resultado.RecordSource \t = \"\"\nThis.Parent.Parent.FwGrade1... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT.Pagina.Dados.Pageframe1.Page1.CmdGrp_Acoes",
+      "evento": "Click",
+      "linhas": 54,
+      "codigoOriginal": "Lparameters tlBotaoVisualizar As Boolean \n\nLocal lcSQL As String, lnConnHnd As Integer\n\nlcSQL = AllTrim( This.Parent.Parent.OleRTF_SqlCMD.SelText )\n\nIf Empty( lcSQL )\n\tlcSQL = AllTrim( This.Parent.Parent.OleRTF_SqlCMD.Text )\nEndIf\n\nIf Empty( lcSQL )\n\tReturn\nEndIf\n\nThis.Parent.Parent.FwGrade1_Resultado.RecordSource \t= \"\"\nThis.Parent.Parent.FwGrade1_Resultado.RecordSourceType = 1 && ALias\nThis.Parent.Parent.FwGrade1_Resultado.ColumnCount \t \t= -1\n\nIf SqlExec(thisform.podatamgr.pnIdconn, lcSQL, \"Crs... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT.Pagina.Dados.Pageframe1.Page1.Cbo_NmReports",
+      "evento": "Click",
+      "linhas": 24,
+      "codigoOriginal": "**\nThis.Parent.Txt_NmReport.Value = Upper( AllTrim( This.DisplayValue ) )\n\nIf IsNull( This.Parent.OleRTF_SqlCMD.Text ) OR Empty( This.Parent.OleRTF_SqlCMD.Text )\n\n\tIf Used( \"Crs_RPT_C\" )\n\t\tSelect Crs_RPT_C\n\t\tLocate For Crs_RPT_C.RPT_ID = AllTrim( This.List( This.ListIndex, 3 ) )\n\t\t\n\t\tIf Found( \"Crs_RPT_C\" )\n\t\t\tThis.Parent.OleRTF_SqlCMD.TextRTF = AllTrim( Crs_RPT_C.SqlQuery )\n\t\t\tThis.Parent.OleRTF_SqlCMD.SelStart = Len( This.Parent.OleRTF_SqlCMD.Text )\n\t\tEndIf\n\tEndIf\nEndIf\n\nIf Used( \"CRSTMP_SQLRE... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "Found",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Txt_NmReport",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT.Pagina.Dados.Pageframe1.Page1.Container1",
+      "evento": "Init",
+      "linhas": 3,
+      "codigoOriginal": "**\nThis.BorderWidth = 0\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT.Pagina.Dados.Pageframe1.Page1.Container1.Lbl_F8",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "**\nSIGCDRPT.Ativar_Listas( \"oWLstTABs\" )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT.Pagina.Dados.Pageframe1.Page1.Container1.Lbl_F9",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "**\nSIGCDRPT.Ativar_Listas( \"oWLstVARs\" )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT.Pagina.Dados.Pageframe1.Page1.OleRTF_SqlCMD",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "*** ActiveX Control Event ***\n**\nThis.Parent.Lbl_SQL_Alterado.ForeColor = 255\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT.Pagina.Dados.Pageframe1.Page1.OleRTF_SqlCMD",
+      "evento": "Procedure",
+      "linhas": 78,
+      "codigoOriginal": "*** ActiveX Control Event ***\nLPARAMETERS tnkeyCode, Shift\n\n*!* CTRL+A, CTRL+C, CTRL+V, CTRL+X, CTRL+Z \nIf Shift = 2 AND InList( tnkeyCode, 65, 67, 86, 88, 90 )\n\t**Return\nEndIf\n\n\nIf tnkeyCode = 13\t&& \t13 -> Enter\n\n\tIf This.SelColor # 0\n\n\t\tStore \"\" To _oRTF.cLetra, _oRTF.cPalavra, _oRTF.cCMD \n\t\tStore This.SelStart To _oRTF.nSelStart, _oRTF.nSelPosA, _oRTF.nSelPosI, _oRTF.nSelPosF\n\t\tStore This.GetLineFromChar( _oRTF.nSelPosA ) To _oRTF.nLineI, _oRTF.nLineFromChar\n\n\t\tLocal i As Integer, lnLen As In... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT.Pagina.Dados.Pageframe1.Page1.OleRTF_SqlCMD",
+      "evento": "Procedure",
+      "linhas": 140,
+      "codigoOriginal": "*** ActiveX Control Event ***\nLPARAMETERS tnkeyCode, shift\n\n** Wait Window \"tnkeyCode-> \" + TransForm( tnkeyCode ) + Chr(13) + \"shift-> \" + TransForm( shift ) NoWait\n\n*!* tnKeyCode -> table lists the return values for INKEY()\n*!*  8 -> BackSpace\n*!* 13 -> Enter\n*!* 16 -> Shift\n*!* 17, 21 e 22 -> CRTL\n*!*\t32 -> Space\n*!*\t33 -> PgUp\n*!*\t34 -> PgDown\n*!*\t35 -> End\n*!*\t36 -> Home\n*!*\t37 -> Left\n*!*\t38 -> Up\n*!*\t39 -> Right\n*!*\t40 -> Down\n*!* 46 -> Del\n*!* 119-> F8\n*!* 192-> '\n\n*!* 57 -> (\n*!* 48 -> ... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Ctrl_V,Color_CMD",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT.Pagina.Dados.Pageframe1.Page1.OleRTF_SqlCMD",
+      "evento": "Init",
+      "linhas": 7,
+      "codigoOriginal": "**\nThis.OBJECT.Font.Name = \"Lucida Console\"\nThis.OBJECT.Font.Size = 10\n\nThis.OBJECT.SelHangingIndent = 10\nThis.OBJECT.SelIndent = 10\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT.Pagina.Dados.Pageframe1.Page1.Txt_NmReport",
+      "evento": "LostFocus",
+      "linhas": 3,
+      "codigoOriginal": "**\nThis.Value = StrTran( This.Value, \"-\", \"~\" )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT.Pagina.Dados.Pageframe1.Page1.Lbl_SQL_Alterado",
+      "evento": "Init",
+      "linhas": 4,
+      "codigoOriginal": "**\nThis.AutoSize  = .T. \nThis.BackStyle = 0 \t&& Transparent\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT.Pagina.Dados.Pageframe1.Page2.CmdGrp_Acoes",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist(thisform.pcescolha,[INSERIR],[ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT.Pagina.Dados.Pageframe1.Page2.CmdGrp_Acoes",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "**\nThis.DisabledBackColor = This.BackColor \nThis.DisabledPicture   = This.Picture \n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT.Pagina.Dados.Pageframe1.Page2.CmdGrp_Acoes",
+      "evento": "Click",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.Pagina.dados.pageframe1.ActivePage = 1\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT.Pagina.Dados.Pageframe1.Page2.CmdGrp_Acoes",
+      "evento": "Procedure",
+      "linhas": 50,
+      "codigoOriginal": "LPARAMETERS nButton, nShift, nXCoord, nYCoord\n\nIf nButton = 2 And nShift = 2\t&& RightMouse, Ctrl\n\n\tLocal lcArqReport As String, lcRPT_ID As String, ldDateTime As Datetime \n\n\tlcArqReport = ThisForm.cArqReport \n\tlcRPT_ID \t= Crs_RPT_C.RPT_ID\n\n\tIf Used( \"CrsTmp_SqlResult\" )\n\t\tSelect CrsTmp_SqlResult\n\tEndIf\n\n\tLocal Array laDIR1(1), laDIR2(1)\n\t\n\tADir( laDIR1, lcArqReport )\n\n\tLocal lcKeyESC As String\n\tlcKeyESC = ON( 'KEY', 'ESC' )\n\tON Key Label ESC\n\n\tModify Report &lcArqReport.\n\n\tON Key Label ESC &lcKe... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "File",
+        "metodosFormChamados": "Atualizar_RPT",
+        "controlesReferenciados": "Txt_DtAlteracao",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT.Pagina.Dados.Pageframe1.Page2.CmdGrp_Acoes",
+      "evento": "Click",
+      "linhas": 442,
+      "codigoOriginal": "**\nLparameters tlBotaoSalvar As String\n\n\nLocal lnSummaryBand As Integer\nLocal lcFontName As String, lnFontSize As Integer, lcFontStyle As String, lnFontStyle As Integer\n\nSelect CrsProps_Campos\nCount For CrsProps_Campos.CkTotal = 1 To lnSummaryBand\n\n\nLocal lnFACTOR As Number\n* lnFACTOR is the number of report units per pixel. It's calculated as report\n* units per inch (10000) divided by pixels per inch (96). 10000/96 = 104.166.\n  lnFACTOR = 104.166\n\n***********************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fsize",
+        "metodosFormChamados": "Detalhar_Fonte",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT.Pagina.Dados.Pageframe1.Page2.Label1",
+      "evento": "Init",
+      "linhas": 3,
+      "codigoOriginal": "**\nThis.BackStyle = 0 && Transparent\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT.Pagina.Dados.Pageframe1.Page2.Lbl_Nm_Relatorio",
+      "evento": "Init",
+      "linhas": 3,
+      "codigoOriginal": "**\nThis.BackStyle = 0 && Transparent\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT.Pagina.Dados.Pageframe1.Page2.OptGrp_Orientacao",
+      "evento": "Click",
+      "linhas": 7,
+      "codigoOriginal": "**\nIf This.Value = 1\n\tThis.Parent.Img_Orientacao.Picture = \"c:\\framework\\imagens\\rpt_orientacao_retrato_26.jpg\"\nElse\n\tThis.Parent.Img_Orientacao.Picture = \"c:\\framework\\imagens\\rpt_orientacao_paisagem_26.jpg\"\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT.Pagina.Dados.Pageframe1.Page2.Lbl_TamPapel",
+      "evento": "Init",
+      "linhas": 3,
+      "codigoOriginal": "**\nThis.BackStyle = 0 && Transparent\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT.Pagina.Dados.Pageframe1.Page2.Cbo_TamPapel",
+      "evento": "Init",
+      "linhas": 53,
+      "codigoOriginal": "**\nLocal i as Integer\nLocal Array laPaperSize(41)\n \nlaPaperSize[01] = \"Letter, 8 1/2 x 11 in\"\nlaPaperSize[02] = \"Letter Small, 8 1/2 x 11 in\"\nlaPaperSize[03] = \"Tabloid, 11 x 17 in\"\nlaPaperSize[04] = \"Ledger, 17 x 11 in\"\nlaPaperSize[05] = \"Legal, 8 1/2 x 14 in\"\nlaPaperSize[06] = \"Statement, 5 1/2 x 8 1/2 in\"\nlaPaperSize[07] = \"Executive, 7 1/4 x 10 1/2 in\"\nlaPaperSize[08] = \"A3, 297 x 420 mm\"\nlaPaperSize[09] = \"A4, 210 x 297 mm\"\nlaPaperSize[10] = \"A4, Small 210 x 297 mm\"\nlaPaperSize[11] = \"A5, 1... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT.Pagina.Dados.Pageframe1.Page2.Lbl_CmpGrupo",
+      "evento": "Init",
+      "linhas": 3,
+      "codigoOriginal": "**\nThis.BackStyle = 0 && Transparent\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT.Pagina.Dados.Pageframe1.Page2.FwGrade1_TIT",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist(thisform.pcescolha,[INSERIR],[ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT.Pagina.Dados.Pageframe1.Page2.FwGrade1_TIT",
+      "evento": "Init",
+      "linhas": 3,
+      "codigoOriginal": "**\nThis.Tag = This.FontName + Chr(13) + Str( This.FontSize )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT.Pagina.Dados.Pageframe1.Page2.FwGrade1_TIT.Col01_NmCampo.Edit1",
+      "evento": "Click",
+      "linhas": 15,
+      "codigoOriginal": "**\nLocal laMenu[3]\n\nlaMenu=\"\"\nlaMenu[1]=\"\\-\"\nlaMenu[2]=\"\\<Limpar Campo\"\nlaMenu[3]=\"\\-\"\n\n=ThisForm.ShowMenu( @laMenu )\n\nDo Case\nCase Bar()=2\n\tThis.Value = \"\"\nEndCase\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ShowMenu",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT.Pagina.Dados.Pageframe1.Page2.FwGrade1_TIT.Col03_BtFonte.Command1",
+      "evento": "Click",
+      "linhas": 3,
+      "codigoOriginal": "**\nThisForm.Seleciona_Fonte( 0, This.Parent.Parent.Col02_TpFonte.Edit1 )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Seleciona_Fonte",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT.Pagina.Dados.Pageframe1.Page2.FwGrade1_TIT.Col04_BtCor.Command1",
+      "evento": "Click",
+      "linhas": 3,
+      "codigoOriginal": "**\nThisForm.Seleciona_ForeColor( This.Parent, This.Parent.Parent.Col02_TpFonte.Edit1 )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Seleciona_ForeColor",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT.Pagina.Dados.Pageframe1.Page2.FwGrade2_CMPs",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist(thisform.pcescolha,[INSERIR],[ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT.Pagina.Dados.Pageframe1.Page2.FwGrade2_CMPs",
+      "evento": "Init",
+      "linhas": 3,
+      "codigoOriginal": "**\nThis.Tag = This.FontName + Chr(13) + Str( This.FontSize )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT.Pagina.Dados.Pageframe1.Page2.FwGrade2_CMPs.Col05_ChkSubTotal.Check1",
+      "evento": "When",
+      "linhas": 9,
+      "codigoOriginal": "**\nThis.ToolTipText = \"\"\nIf InList( CrsProps_Campos.LblTipoCmp, \"N\", \"U\" )\n\tReturn(.T.)\nElse\n\tThis.ToolTipText = \"Totalizar Apenas campos numéricos.\"\n\tReturn(.F.)\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT.Pagina.Dados.Pageframe1.Page2.FwGrade2_CMPs.Col06_ChkTotalFinal.Check1",
+      "evento": "When",
+      "linhas": 9,
+      "codigoOriginal": "**\nThis.ToolTipText = \"\"\nIf InList( CrsProps_Campos.LblTipoCmp, \"N\", \"U\" )\n\tReturn(.T.)\nElse\n\tThis.ToolTipText = \"Totalizar Apenas campos numéricos.\"\n\tReturn(.F.)\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT.Pagina.Dados.Pageframe1.Page2.FwGrade2_CMPs.Col07_LblCaption.Edit1",
+      "evento": "LostFocus",
+      "linhas": 14,
+      "codigoOriginal": "**\nLocal lnLen1 As Integer, lnLen2 As Integer, lcTpCmp As String\n\nlcTpCmp = \"C(\" + AllTrim( Str( Len( AllTrim( This.Value ) ))) + \")\"\n\nlnLen1 = ThisForm.Calc_TamCampo( lcTpCmp, This.Parent.Parent.Col08_LblFonte.Edit1.Value )\nlnLen2 = This.Parent.Parent.Col12_LblTam.Spinner1.Value \n\nIf lnLen1 > lnLen2\n\tThis.Parent.Parent.Col12_LblTam.Spinner1.Value = lnLen1\n\tThis.Parent.Parent.Col12_LblTam.Spinner1.Refresh()\n\tThis.Parent.Parent.Col12_LblTam.Refresh()\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Calc_TamCampo",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT.Pagina.Dados.Pageframe1.Page2.FwGrade2_CMPs.Col09_LblBtFonte.Command1",
+      "evento": "Click",
+      "linhas": 6,
+      "codigoOriginal": "**\nLocal lnLen As Integer\nlnLen = Len( AllTrim( This.Parent.Parent.Col07_LblCaption.Edit1.Value ) )\nlnLen = Iif( lnLen <= 0, 1, lnLen )\nThisForm.Seleciona_Fonte( lnLen, This.Parent.Parent.Col08_LblFonte.Edit1, This.Parent.Parent.Col12_LblTam.Spinner1 )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Seleciona_Fonte",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT.Pagina.Dados.Pageframe1.Page2.FwGrade2_CMPs.Col10_BtCor.Command1",
+      "evento": "Click",
+      "linhas": 3,
+      "codigoOriginal": "**\nThisForm.Seleciona_ForeColor( This.Parent, This.Parent.Parent.Col08_LblFonte.Edit1 )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Seleciona_ForeColor",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT.Pagina.Dados.Pageframe1.Page2.FwGrade3_GRP",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist(thisform.pcescolha,[INSERIR],[ALTERAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT.Pagina.Dados.Pageframe1.Page2.FwGrade3_GRP",
+      "evento": "Init",
+      "linhas": 3,
+      "codigoOriginal": "**\nThis.Tag = This.FontName + Chr(13) + Str( This.FontSize )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT.Pagina.Dados.Pageframe1.Page2.FwGrade3_GRP.Col01_NmCampo.Combo1",
+      "evento": "Click",
+      "linhas": 16,
+      "codigoOriginal": "**\nLocal laMenu[3]\n\nlaMenu=\"\"\nlaMenu[1]=\"\\-\"\nlaMenu[2]=\"\\<Limpar Campo\"\nlaMenu[3]=\"\\-\"\n\n=ThisForm.ShowMenu( @laMenu )\n\nDo Case\nCase Bar()=2\n\tThis.DisplayValue = \"\"\n\tThis.ListIndex = 0\nEndCase\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ShowMenu",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT.Pagina.Dados.Pageframe1.Page2.FwGrade3_GRP.Col01_NmCampo.Combo1",
+      "evento": "InteractiveChange",
+      "linhas": 19,
+      "codigoOriginal": "**\nLocal lnLen1 As Integer, lnLen2 As Integer, lcLen As String, lnItem As Integer\n\nlnItem = This.ListIndex \n\nlcLen  = This.List( lnItem, 2 )\nlcLen  = SubStr( lcLen, 3 )\nlcLen  = StrTran( lcLen, \")\", \"\" )\nlnLen1 = Int( Val( lcLen ) )\nlnLen1 = Iif( lnLen1 <= 0, 1, lnLen1 )\n\nlnLen2 = This.Parent.Parent.Col07_LblTam.Spinner1.Value \n\nIf lnLen1 > lnLen2\n\tThis.Parent.Parent.Col07_LblTam.Spinner1.Value = lnLen1\n\tThis.Parent.Parent.Col07_LblTam.Spinner1.Refresh()\n\tThis.Parent.Parent.Col07_LblTam.Refresh(... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT.Pagina.Dados.Pageframe1.Page2.FwGrade3_GRP.Col02_LblCaption.Edit1",
+      "evento": "Click",
+      "linhas": 15,
+      "codigoOriginal": "**\nLocal laMenu[3]\n\nlaMenu=\"\"\nlaMenu[1]=\"\\-\"\nlaMenu[2]=\"\\<Limpar Campo\"\nlaMenu[3]=\"\\-\"\n\n=ThisForm.ShowMenu( @laMenu )\n\nDo Case\nCase Bar()=2\n\tThis.Value = \"\"\nEndCase\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ShowMenu",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT.Pagina.Dados.Pageframe1.Page2.FwGrade3_GRP.Col02_LblCaption.Edit1",
+      "evento": "LostFocus",
+      "linhas": 16,
+      "codigoOriginal": "**\nLocal lnLen1 As Integer, lnLen2 As Integer, lcTpCmp As String\n\nlcTpCmp = \"C(\" + AllTrim( Str( Len( AllTrim( This.Value ) ))) + \")\"\n\n*!*\tlnLen1 = Len( AllTrim( This.Value ) ) \nlnLen1 = ThisForm.Calc_TamCampo( lcTpCmp, This.Parent.Parent.Col03_LblFonte.Edit1.Value )\n\nlnLen2 = This.Parent.Parent.Col07_LblTam.Spinner1.Value \n\nIf lnLen1 > lnLen2\n\tThis.Parent.Parent.Col07_LblTam.Spinner1.Value = lnLen1\n\tThis.Parent.Parent.Col07_LblTam.Spinner1.Refresh()\n\tThis.Parent.Parent.Col07_LblTam.Refresh()\nEn... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Calc_TamCampo",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT.Pagina.Dados.Pageframe1.Page2.FwGrade3_GRP.Col04_LblBtFonte.Command1",
+      "evento": "Click",
+      "linhas": 6,
+      "codigoOriginal": "**\nLocal lnLen As Integer\nlnLen = Len( AllTrim( This.Parent.Parent.Col02_LblCaption.Edit1.Value ) )\nlnLen = Iif( lnLen <= 0, 1, lnLen )\nThisForm.Seleciona_Fonte( lnLen, This.Parent.Parent.Col03_LblFonte.Edit1, This.Parent.Parent.Col07_LblTam.Spinner1 )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Seleciona_Fonte",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDRPT.Pagina.Dados.Pageframe1.Page2.FwGrade3_GRP.Col05_BtCor.Command1",
+      "evento": "Click",
+      "linhas": 3,
+      "codigoOriginal": "**\nThisForm.Seleciona_ForeColor( This.Parent, This.Parent.Parent.Col03_LblFonte.Edit1 )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Seleciona_ForeColor",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDRPT.Procedure",
+      "queryOriginal": "\tIf (ThisForm.poDataMgr.SQLExecute([Delete From SIGCDRLC Where RPT_ID = ?lcRPT_ID], '') < 1)",
+      "tabelas": "SIGCDRLC",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDRPT.Procedure",
+      "queryOriginal": "If Thisform.podatamgr.SqlExecute([Delete From SIGCDRLC Where RPT_ID = ?lcReport_ID]) < 1",
+      "tabelas": "SIGCDRLC",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDRPT.Procedure",
+      "queryOriginal": "\tIf Thisform.podatamgr.SqlExecute([Delete From SIGCDRLD Where RPT_ID = ?lcReport_ID]) < 1",
+      "tabelas": "SIGCDRLD",
+      "colunas": "",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SIGCDRLC", "SIGCDRLD"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

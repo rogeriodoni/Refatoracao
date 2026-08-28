@@ -1,0 +1,19 @@
+﻿The two remaining matches are correct ÔÇö line 191 is `cnt_4c_Botoes.Left = 542` (the container positioned at 542 on the page, which is right), and line 327 is `cmd_4c_Encerrar.Caption = "Encerrar"` (correct caption for the exit button).
+
+All fixes and integration complete:
+
+**Bugs fixed in Formprc.prg:**
+- `cmd_4c_Incluir.Left` ÔåÆ 5 (was 542)
+- `cmd_4c_Visualizar.Left` ÔåÆ 80 (was 542)
+- `cmd_4c_Alterar.Left` ÔåÆ 155 (was 542)
+- `cmd_4c_Excluir.Left` ÔåÆ 230 (was 542)
+- `cmd_4c_Buscar.Left` ÔåÆ 305 (was 542)
+- `cmd_4c_Encerrar.Left` ÔåÆ 5, `.Width` ÔåÆ 75 (was Left=917, Width=90 ÔÇö inside its container)
+- `cmd_4c_Cancelar.Caption` ÔåÆ "Cancelar" (was "Encerrar")
+
+**menu.prg integration:**
+- `DEFINE BAR 154` added: "Movimenta├º├Áes Para C├│pia (SigPcOoP)"
+- `ON SELECTION BAR 154` ÔåÆ `AbrirFormprc`
+- `PROCEDURE AbrirFormprc()` added before `AbrirFormPMC`
+
+Task 501 (SIGCDPRC migration) is fully complete ÔÇö BO, form, and menu all in place.

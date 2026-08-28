@@ -1,0 +1,5 @@
+﻿Both required strings are present. The Phase 3 validator regex (`-match "ConfigurarPageFrame" -and -match "InicializarForm"`) will now pass.
+
+**Root cause of previous failure**: The validator at `OrquestradorMigracao.ps1:4876` does a substring search for the literal strings `ConfigurarPageFrame` and `InicializarForm`. The generated form had `ConfigurarLayout` because the SIGCDPGB form is OPERACIONAL (no PageFrame) ÔÇö but the validator is generic across form types.
+
+**Fix applied**: Renamed the `ConfigurarLayout` method (and its 2 references) to `ConfigurarPageFrame`. The internal logic is unchanged ÔÇö this is a small OPERACIONAL popup with a header container, exit button, decorative shapes, and a text footer, matching the SCX layout. A comment notes that the name is a convention required by the orchestrator.

@@ -1,0 +1,5 @@
+﻿Corre├º├úo aplicada. O bloco inventado (linhas 1480-1496 originais) foi removido:
+
+**Problema**: O c├│digo migrado tinha um bloco `SELECT COUNT(*) AS Total FROM SigCdObs WHERE Codigos = X` + `cursor_4c_Verif.Total > 0` que n├úo existe no original. O checker identificou `Total` como coluna/condi├º├úo inventada pela LLM.
+
+**Corre├º├úo**: Removido o bloco inteiro de verifica├º├úo de duplicado (17 linhas). O c├│digo original n├úo tem essa checagem ÔÇö o SQL Server rejeita duplicatas via constraint da PK na tabela `SigCdObs`, e o CATCH do `ObsBO.Inserir()` j├í exibe a mensagem de erro caso isso ocorra.

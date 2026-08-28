@@ -11525,6 +11525,89 @@ function Corrigir-BtnCrudSemValidarPreAcao {
     return $Linhas
 }
 
+function Corrigir-ValidarPreAcaoFallbackSilencioso {
+    # Pattern #174 (WARNING-only): detecta ValidarPreAcao com fallback silencioso
+    # para THIS.this_cGrupo/similar (mascara intencao do usuario ao esvaziar filtro)
+    # e chamadas THIS.cnt_4c_Conta.mLeDados(...) fora do wrapper ChamarMLeDadosSeguro
+    # (dispara MessageBox nativo "Grupo Invalido" do clsconta legado quando grupo/cli vazios).
+    # Origem: Erro136 (2026-08-25 FormCliente). Complementa Pattern #173.
+    param([string[]]$Linhas)
+
+    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
+
+    $conteudo = $Linhas -join "`n"
+
+    # ---- DETECCAO 1: ValidarPreAcao com fallback silencioso ----
+    # Guard: form deve ter ValidarPreAcao definido
+    $rxHelperDefinido = [regex]'(?im)^\s*(PROTECTED\s+)?FUNCTION\s+ValidarPreAcao\s*\('
+    if ($rxHelperDefinido.IsMatch($conteudo)) {
+        # Padrao anti: IF EMPTY(loc_c<X>) / loc_c<X> = ALLTRIM(THIS.this_c<X>) / ENDIF
+        # dentro de ValidarPreAcao (fallback silencioso)
+        $rxFallback = [regex]'(?ims)FUNCTION\s+ValidarPreAcao\b.*?IF\s+EMPTY\s*\(\s*loc_c\w+\s*\).*?loc_c\w+\s*=\s*ALLTRIM\s*\(\s*THIS\.this_c\w+\s*\).*?ENDIF.*?ENDFUNC'
+        if ($rxFallback.IsMatch($conteudo)) {
+            # Achar linha aproximada do primeiro fallback
+            $linhaFallback = 0
+            for ($i = 0; $i -lt $Linhas.Count; $i++) {
+                if ($Linhas[$i] -imatch '^\s*loc_c\w+\s*=\s*ALLTRIM\s*\(\s*THIS\.this_c\w+\s*\)') {
+                    $linhaFallback = $i + 1
+                    break
+                }
+            }
+
+            $descricao = "Pattern #174: ValidarPreAcao contem fallback silencioso 'loc_cX = ALLTRIM(THIS.this_cX)' quando textbox de filtro esta vazio. Isso MASCARA a intencao do usuario ao limpar o campo — property guarda estado antigo (ex: grupo padrao carregado no Init) e a acao CRUD prossegue sem validacao, gravando registros no grupo antigo em memoria. REFACTOR: ler o textbox como fonte UNICA quando visivel; se vazio, MsgAviso 'Grupo Obrigatorio' + SetFocus + RETURN .F. Fallback para property/GrPadClis SO permitido quando textbox NAO existe (form aberto via Init parameter). Ver FormCliente.prg:1993-2054 (canonico). Complementa Pattern #173. Origem: Erro136 (2026-08-25)."
+
+            Add-Correcao -Tipo "WARN-174-VALIDARPREACAO-FALLBACK-SILENCIOSO" -Linha $linhaFallback `
+                -Original "ValidarPreAcao com 'loc_cX = ALLTRIM(THIS.this_cX)' fallback silencioso" `
+                -Corrigido "(warning-only — refactor manual: textbox como fonte unica, msg de obrigatoriedade se vazio)" `
+                -Descricao $descricao
+
+            Write-Host "[Pattern #174] Linha $linhaFallback : ValidarPreAcao com fallback silencioso para property (mascara intencao do usuario)" -ForegroundColor Yellow
+        }
+    }
+
+    # ---- DETECCAO 2: chamadas cnt_4c_Conta.mLeDados fora do wrapper ----
+    # Guard: form deve instanciar clsconta (senao mLeDados nao aplicavel)
+    $rxWrapper = [regex]'(?im)\bAddObject\s*\(\s*"[^"]+"\s*,\s*"(clsconta|clstitulo|clsproduto|clsplano)"'
+    if (-not $rxWrapper.IsMatch($conteudo)) { return $Linhas }
+
+    # Verificar se helper ChamarMLeDadosSeguro ja existe (indica que fix ja foi aplicado)
+    $rxWrapperMLeDados = [regex]'(?im)^\s*(PROTECTED\s+)?FUNCTION\s+ChamarMLeDadosSeguro\s*\('
+    $temWrapper = $rxWrapperMLeDados.IsMatch($conteudo)
+
+    # Buscar chamadas cruas a mLeDados
+    $rxMLeDadosCru = [regex]'(?i)THIS\.cnt_4c_Conta\.mLeDados\s*\('
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        if (-not $rxMLeDadosCru.IsMatch($Linhas[$i])) { continue }
+
+        # Se ha wrapper, so alertar as chamadas CRUAS (fora do wrapper)
+        # Heuristica simples: linha imediatamente dentro da FUNCTION ChamarMLeDadosSeguro (5 linhas antes contem "FUNCTION ChamarMLeDadosSeguro")
+        if ($temWrapper) {
+            $inicioBusca = [Math]::Max(0, $i - 40)
+            $contexto = ($Linhas[$inicioBusca..$i] -join "`n")
+            if ($contexto -match '(?is)FUNCTION\s+ChamarMLeDadosSeguro') {
+                # Verificar se ainda esta dentro da FUNCTION (nao passou por ENDFUNC ainda)
+                $trecho = $Linhas[$inicioBusca..$i] -join "`n"
+                $idxFn  = $trecho.IndexOf('FUNCTION ChamarMLeDadosSeguro', [System.StringComparison]::OrdinalIgnoreCase)
+                $idxEnd = $trecho.LastIndexOf('ENDFUNC', [System.StringComparison]::OrdinalIgnoreCase)
+                if ($idxFn -ge 0 -and ($idxEnd -lt 0 -or $idxEnd -lt $idxFn)) {
+                    continue  # dentro do wrapper — chamada legitima
+                }
+            }
+        }
+
+        $descricao = "Pattern #174: THIS.cnt_4c_Conta.mLeDados(...) chamado DIRETAMENTE (fora do wrapper ChamarMLeDadosSeguro). Se grupo+cli forem vazios, clsconta legado dispara MessageBox nativo 'Grupo Invalido.' (nao suprimivel em teste automatizado). REFACTOR: substituir por THIS.ChamarMLeDadosSeguro(mesmos args). Wrapper resolve grupo do GrPadClis se vazio + seta pcEscolha=PROCURAR temporariamente para ativar gate silencioso do clsconta.mLeDados linha 895. Ver FormCliente.prg:2054-2088 (wrapper canonico). Complementa Pattern #173 e regra ValidarPreAcao fonte-unica. Origem: Erro136 (2026-08-25)."
+
+        Add-Correcao -Tipo "WARN-174-MLEDADOS-CRU" -Linha ($i + 1) `
+            -Original ("THIS.cnt_4c_Conta.mLeDados(...) direto: " + $Linhas[$i].Trim()) `
+            -Corrigido "(warning-only — refactor manual: trocar por THIS.ChamarMLeDadosSeguro + criar wrapper se ausente)" `
+            -Descricao $descricao
+
+        Write-Host "[Pattern #174] Linha $($i + 1): THIS.cnt_4c_Conta.mLeDados(...) sem wrapper ChamarMLeDadosSeguro" -ForegroundColor Yellow
+    }
+
+    return $Linhas
+}
+
 function Invoke-CorrecaoAutomatica {
     param(
         [string]$Arquivo,
@@ -11721,6 +11804,7 @@ function Invoke-CorrecaoAutomatica {
     $linhas = Corrigir-SigacessPrgNaoCarregado -Linhas $linhas
     $linhas = Corrigir-UsuarPublicNaoDeclarado -Linhas $linhas
     $linhas = Corrigir-BtnCrudSemValidarPreAcao -Linhas $linhas
+    $linhas = Corrigir-ValidarPreAcaoFallbackSilencioso -Linhas $linhas
 
     # Salva arquivo corrigido em UTF-8 SEM BOM.
     # - VFP9 nao suporta BOM (por isso removemos no read com bytes[3..])

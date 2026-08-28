@@ -1,0 +1,16 @@
+﻿Confirmado. Os 4 casos flaggeados s├úo:
+
+| Flag | Linha | Tabela alvo | Coluna WHERE |
+|---|---|---|---|
+| CODS | 2036 | `SigCdSer` | `cods` = PK da tabela |
+| CEMPS | 2231 | `SigCdEmp` | `CEmps` = PK da tabela |
+| CUNIS | 2310 | `SigCdUni` | `CUnis` = PK da tabela |
+| CODIGOS | 2422 | `SigCdClf` | `codigos` = PK da tabela |
+
+**Resultado da verifica├º├úo: todos os 4 s├úo falsos positivos.**
+
+**Por qu├¬:** O detector comparou as colunas WHERE do c├│digo migrado com a lista `CIDCHAVES, LNCODIGO, EMPS, PCESCOLHA, VALOR, SERIES, _CONT, PNVOLUME` ÔÇö que s├úo as colunas WHERE das **queries das tabelas principais** (`SigCnFNf`, `SigCnFN2`, `SigSySeq`). As 4 ocorr├¬ncias flaggeadas n├úo s├úo sobre essas tabelas; s├úo queries de **valida├º├úo lookup em tabelas de refer├¬ncia auxiliares** (`SigCdSer`, `SigCdEmp`, `SigCdUni`, `SigCdClf`), cada uma usando a pr├│pria PK da tabela consultada.
+
+Este padr├úo ├® id├¬ntico ao usado em todo o sistema (FormCor valida `SigCdCor.cods`, FormMoe valida `SigCdMoe.cods`, etc.) e ├® necess├írio para integridade dos dados. Remover essas condi├º├Áes deixaria as valida├º├Áes sempre aprovando qualquer valor digitado.
+
+**Nenhuma altera├º├úo necess├íria.** O arquivo `FormNfl.prg` est├í correto nestes 4 pontos.

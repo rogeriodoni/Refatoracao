@@ -1,0 +1,261 @@
+﻿{
+    "taskId":  "task494",
+    "arquivoOriginal":  "",
+    "tipoArquivo":  "SCX",
+    "comentario_tipoArquivo":  "SCX=Form, FRX=Report, VCX=ClassLib",
+    "status":  "COMPLETED",
+    "statusComentario":  "PENDING | IN_PROGRESS | COMPLETED | FAILED | BLOCKED",
+    "criadoEm":  "2026-08-22T16:02:25",
+    "atualizadoEm":  "2026-08-22T19:08:14",
+    "etapas":  {
+                   "01_moverArquivos":  {
+                                            "status":  "COMPLETED",
+                                            "inicio":  "2026-08-22T16:02:25",
+                                            "fim":  "2026-08-22T16:02:25",
+                                            "tentativas":  1,
+                                            "erro":  null,
+                                            "sctFile":  "C:\\4c\\tasks\\task494\\sigcdpag.sct",
+                                            "baseName":  "sigcdpag",
+                                            "scxFile":  "C:\\4c\\tasks\\task494\\sigcdpag.scx"
+                                        },
+                   "02_extractCode":  {
+                                          "status":  "COMPLETED",
+                                          "inicio":  "2026-08-22T16:02:25",
+                                          "fim":  "2026-08-22T16:02:26",
+                                          "tentativas":  1,
+                                          "arquivoGerado":  "SIGCDCOR_codigo_fonte.txt",
+                                          "erro":  null,
+                                          "baseNameNormalizado":  "sigcdpag",
+                                          "txtFile":  "C:\\4c\\tasks\\task494\\sigcdpag_form_codigo_fonte.txt"
+                                      },
+                   "02b_analisarTarefa":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-08-22T16:02:26",
+                                              "fim":  "2026-08-22T16:02:26",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "analise.json",
+                                              "erro":  null,
+                                              "comentario":  "NOVO - Analise inteligente do codigo fonte",
+                                              "analiseFile":  "C:\\4c\\tasks\\task494\\analise.json"
+                                          },
+                   "03_gerarMetaPrompt":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-08-22T16:02:27",
+                                              "fim":  "2026-08-22T16:02:36",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "meta_prompt.md",
+                                              "erro":  null,
+                                              "formType":  "CRUD",
+                                              "phaseBFile":  "C:\\4c\\tasks\\task494\\meta_prompt_phaseB.md",
+                                              "metaPromptFile":  "C:\\4c\\tasks\\task494\\meta_prompt.md",
+                                              "boClass":  "pagBO",
+                                              "formClass":  "Formpag",
+                                              "phaseAFile":  "C:\\4c\\tasks\\task494\\meta_prompt_phaseA.md"
+                                          },
+                   "04_gerarMapeamento":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-08-22T16:02:36",
+                                              "fim":  "2026-08-22T16:02:36",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "mapeamento.json",
+                                              "erro":  null,
+                                              "jsonFile":  "C:\\4c\\tasks\\task494\\mapeamento.json"
+                                          },
+                   "04b_gerarEsqueletos":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-08-22T16:02:36",
+                                               "fim":  "2026-08-22T16:02:37",
+                                               "tentativas":  1,
+                                               "arquivosGerados":  [
+
+                                                                   ],
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Geracao de codigo base ~70% completo",
+                                               "esqueletosDir":  "C:\\4c\\tasks\\task494\\esqueletos",
+                                               "arquivos":  [
+                                                                "Formpag_esqueleto.prg",
+                                                                "pagBO_esqueleto.prg"
+                                                            ]
+                                           },
+                   "05_migracao":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-08-22T17:17:09",
+                                       "fim":  "2026-08-22T18:14:14",
+                                       "tentativas":  3,
+                                       "maxTentativas":  3,
+                                       "arquivosGerados":  [
+
+                                                           ],
+                                       "comentario":  "FormXXX.prg, XXXBO.prg",
+                                       "erro":  "Erro interno \"NÃ£o hÃ¡ processo no outro extremo do pipe\" 0xE9 do Win32 ao obter informaÃ§Ãµes do buffer de saÃ­da do console. Contate o Microsoft Customer Support Services.",
+                                       "boExists":  true,
+                                       "boFile":  "C:\\4c\\projeto\\app\\classes\\pagBO.prg",
+                                       "formExists":  true,
+                                       "tamanhoKB":  232.57,
+                                       "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\Formpag.prg",
+                                       "complexidade":  "COMPLEXO",
+                                       "linhas":  8739
+                                   },
+                   "05b_corrigirAutomatico":  {
+                                                  "status":  "COMPLETED",
+                                                  "inicio":  "2026-08-22T18:14:14",
+                                                  "fim":  "2026-08-22T18:14:26",
+                                                  "tentativas":  1,
+                                                  "correcoesAplicadas":  0,
+                                                  "erro":  null,
+                                                  "comentario":  "NOVO - Correcao automatica de anti-padroes",
+                                                  "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\Formpag.prg",
+                                                  "boFile":  "C:\\4c\\projeto\\app\\classes\\pagBO.prg"
+                                              },
+                   "05c_validarCompilacao":  {
+                                                 "status":  "COMPLETED",
+                                                 "inicio":  "2026-08-22T18:14:27",
+                                                 "fim":  "2026-08-22T18:30:22",
+                                                 "tentativas":  1,
+                                                 "errosCompilacao":  [
+
+                                                                     ],
+                                                 "erro":  null,
+                                                 "comentario":  "NOVO - Valida compilacao dos .prg antes de testar",
+                                                 "tentativasUsadas":  1,
+                                                 "sucesso":  true,
+                                                 "corrigidoPorClaude":  true,
+                                                 "arquivosValidados":  2
+                                             },
+                   "06_testForm":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-08-22T18:54:11",
+                                       "fim":  "2026-08-22T18:54:17",
+                                       "tentativas":  2,
+                                       "maxTentativas":  5,
+                                       "errosEncontrados":  [
+
+                                                            ],
+                                       "erro":  null,
+                                       "tentativasUsadas":  1
+                                   },
+                   "06b_testeAutomatico":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-08-22T18:54:17",
+                                               "fim":  "2026-08-22T19:07:41",
+                                               "tentativas":  2,
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Testes CRUD automaticos",
+                                               "threshold":  100,
+                                               "falhou":  0,
+                                               "passou":  9,
+                                               "total":  9,
+                                               "percentual":  100,
+                                               "tentativasUsadas":  2,
+                                               "resultFile":  "C:\\4c\\tasks\\task494\\teste_resultado.json"
+                                           },
+                   "07_validarUI":  {
+                                        "status":  "COMPLETED",
+                                        "inicio":  "2026-08-22T19:07:43",
+                                        "fim":  "2026-08-22T19:08:14",
+                                        "tentativas":  2,
+                                        "maxTentativas":  5,
+                                        "problemas":  {
+                                                          "erros":  0,
+                                                          "avisos":  0,
+                                                          "diferencas":  0,
+                                                          "total":  0
+                                                      },
+                                        "limiteProblemas":  10,
+                                        "autoSkipped":  true,
+                                        "erro":  "ValidarUIFidelity nao gerou relatorio HTML"
+                                    },
+                   "08_gerarTestManual":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-08-22T19:08:14",
+                                              "fim":  "2026-08-22T19:08:14",
+                                              "tentativas":  2,
+                                              "arquivoGerado":  null,
+                                              "erro":  null,
+                                              "testManualFile":  "C:\\4c\\SolicitacaoTesteManual\\task494_sigcdpag.md"
+                                          },
+                   "02c_analisarComportamento":  {
+                                                     "inicio":  "2026-08-22T16:02:26",
+                                                     "tentativas":  1,
+                                                     "erro":  null,
+                                                     "fim":  "2026-08-22T16:02:27",
+                                                     "comportamentoFile":  "C:\\4c\\tasks\\task494\\comportamento.json",
+                                                     "status":  "COMPLETED"
+                                                 },
+                   "02d_extrairLayout":  {
+                                             "inicio":  "2026-08-22T16:02:27",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-08-22T16:02:27"
+                                         },
+                   "05b2_atualizarMapeamento":  {
+                                                    "inicio":  "2026-08-22T18:14:26",
+                                                    "status":  "COMPLETED",
+                                                    "tentativas":  1,
+                                                    "erro":  null,
+                                                    "fim":  "2026-08-22T18:14:27",
+                                                    "destFile":  "C:\\4c\\projeto\\app\\utils\\mapeamentos\\Formpag_mapeamento.json",
+                                                    "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\Formpag.prg",
+                                                    "mapeamentoFile":  "C:\\4c\\tasks\\task494\\mapeamento.json"
+                                                },
+                   "05d_validarCompletude":  {
+                                                 "inicio":  "2026-08-22T18:30:22",
+                                                 "status":  "COMPLETED",
+                                                 "tentativas":  2,
+                                                 "erro":  null,
+                                                 "fim":  "2026-08-22T18:30:23",
+                                                 "arquivosComProblema":  0,
+                                                 "sucesso":  true,
+                                                 "tentativasCorrecao":  1,
+                                                 "mensagem":  "Corrigido automaticamente apos 1 tentativa(s)."
+                                             },
+                   "05e_codeReview":  {
+                                          "inicio":  "2026-08-22T18:30:23",
+                                          "status":  "COMPLETED",
+                                          "erro":  null,
+                                          "fim":  "2026-08-22T18:53:54",
+                                          "passes":  5,
+                                          "problemas":  "[CONTAINER-VISIVEL] TornarControlesVisiveis() NAO filtra containers ocultos: CNT_4C_BOTOES. Estes containers tem Visible=.F. mas serao forcados a Visible=.T. pelo metodo recursivo.; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027CONTROLCOUNT\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: FPAGS, ICLIS, PENDENTE, IMPS, TIPOCADS, NFPAGS, VENCS, FORMAS; [LAYOUT-POSITION] Controle \u0027cmdfpMin\u0027 (parent: SIGCDPAG.Pagina.Lista): Top original=84 vs migrado \u0027cmd_4c_CmdfpMin\u0027 Top=5 (diff=79px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027cmdfpdpar\u0027 (parent: SIGCDPAG.Pagina.Lista): Top original=84 vs migrado \u0027cmd_4c_Cmdfpdpar\u0027 Top=5 (diff=79px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Bot_BIN\u0027 (parent: SIGCDPAG.Pagina.Lista): Top original=84 vs migrado \u0027cmd_4c_Bot_BIN\u0027 Top=5 (diff=79px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027btnExpXML\u0027 (parent: SIGCDPAG.Pagina.Lista): Top original=84 vs migrado \u0027cmd_4c_BtnExpXML\u0027 Top=5 (diff=79px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027CmdCopia\u0027 (parent: SIGCDPAG.Pagina.Lista): Top original=84 vs migrado \u0027cmd_4c_CmdCopia\u0027 Top=5 (diff=79px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027btnImpXML\u0027 (parent: SIGCDPAG.Pagina.Lista): Top original=84 vs migrado \u0027cmd_4c_BtnImpXML\u0027 Top=5 (diff=79px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027optImpBols\u0027 (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Top original=356 vs migrado \u0027obj_4c_OptImpBols\u0027 Top=2 (diff=354px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027optImpBols\u0027 (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Left original=479 vs migrado \u0027obj_4c_OptImpBols\u0027 Left=0 (diff=479px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027OptImpDups\u0027 (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Top original=381 vs migrado \u0027obj_4c_OptImpDups\u0027 Top=2 (diff=379px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027OptImpDups\u0027 (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Left original=479 vs migrado \u0027obj_4c_OptImpDups\u0027 Left=0 (diff=479px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Optiongroup13\u0027 (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Top original=407 vs migrado \u0027obj_4c_Optiongroup13\u0027 Top=2 (diff=405px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Optiongroup13\u0027 (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Left original=479 vs migrado \u0027obj_4c_Optiongroup13\u0027 Left=0 (diff=479px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027opt_Liscongv\u0027 (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Top original=433 vs migrado \u0027obj_4c_Opt_Liscongv\u0027 Top=2 (diff=431px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027opt_Liscongv\u0027 (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Left original=479 vs migrado \u0027obj_4c_Opt_Liscongv\u0027 Left=0 (diff=479px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027OpcaoSNA\u0027 (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Top original=80 vs migrado \u0027obj_4c_OpcaoSNA\u0027 Top=2 (diff=78px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027OpcaoSNA\u0027 (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Left original=765 vs migrado \u0027obj_4c_OpcaoSNA\u0027 Left=0 (diff=765px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Optiongroup11\u0027 (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Left original=765 vs migrado \u0027obj_4c_Optiongroup11\u0027 Left=0 (diff=765px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Op_valpend\u0027 (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Left original=479 vs migrado \u0027obj_4c_Op_valpend\u0027 Left=0 (diff=479px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Optiongroup12\u0027 (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Top original=330 vs migrado \u0027obj_4c_Optiongroup12_p2\u0027 Top=2 (diff=328px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Optiongroup12\u0027 (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Left original=479 vs migrado \u0027obj_4c_Optiongroup12_p2\u0027 Left=0 (diff=479px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027OptFechm\u0027 (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Top original=105 vs migrado \u0027obj_4c_OptFechm\u0027 Top=2 (diff=103px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027OptFechm\u0027 (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Left original=479 vs migrado \u0027obj_4c_OptFechm\u0027 Left=0 (diff=479px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Optiongroup4\u0027 (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Top original=305 vs migrado \u0027obj_4c_Optiongroup4_p2\u0027 Top=2 (diff=303px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Optiongroup4\u0027 (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Left original=479 vs migrado \u0027obj_4c_Optiongroup4_p2\u0027 Left=0 (diff=479px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Optiongroup10\u0027 (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Top original=155 vs migrado \u0027obj_4c_Optiongroup10\u0027 Top=2 (diff=153px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Optiongroup10\u0027 (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Left original=479 vs migrado \u0027obj_4c_Optiongroup10\u0027 Left=0 (diff=479px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Optiongroup3\u0027 (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Top original=280 vs migrado \u0027obj_4c_Optiongroup3_p2\u0027 Top=2 (diff=278px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Optiongroup3\u0027 (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Left original=479 vs migrado \u0027obj_4c_Optiongroup3_p2\u0027 Left=0 (diff=479px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Op_ImpChqs\u0027 (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Top original=80 vs migrado \u0027obj_4c_Op_ImpChqs\u0027 Top=2 (diff=78px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Op_ImpChqs\u0027 (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Left original=479 vs migrado \u0027obj_4c_Op_ImpChqs\u0027 Left=0 (diff=479px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Optiongroup8\u0027 (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Top original=255 vs migrado \u0027obj_4c_Optiongroup8\u0027 Top=2 (diff=253px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Optiongroup8\u0027 (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Left original=479 vs migrado \u0027obj_4c_Optiongroup8\u0027 Left=0 (diff=479px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027optTrocos\u0027 (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Top original=180 vs migrado \u0027obj_4c_OptTrocos\u0027 Top=2 (diff=178px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027optTrocos\u0027 (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Left original=479 vs migrado \u0027obj_4c_OptTrocos\u0027 Left=0 (diff=479px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Optiongroup7\u0027 (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Top original=130 vs migrado \u0027obj_4c_Optiongroup7\u0027 Top=2 (diff=128px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Optiongroup7\u0027 (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Left original=479 vs migrado \u0027obj_4c_Optiongroup7\u0027 Left=0 (diff=479px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Op_Emichqs\u0027 (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Top original=55 vs migrado \u0027obj_4c_Op_Emichqs\u0027 Top=2 (diff=53px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Op_Emichqs\u0027 (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Left original=479 vs migrado \u0027obj_4c_Op_Emichqs\u0027 Left=0 (diff=479px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Optiongroup6\u0027 (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Top original=105 vs migrado \u0027obj_4c_Optiongroup6\u0027 Top=2 (diff=103px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Optiongroup6\u0027 (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Left original=765 vs migrado \u0027obj_4c_Optiongroup6\u0027 Left=0 (diff=765px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Optiongroup5\u0027 (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Top original=205 vs migrado \u0027obj_4c_Optiongroup5\u0027 Top=2 (diff=203px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Optiongroup5\u0027 (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Left original=479 vs migrado \u0027obj_4c_Optiongroup5\u0027 Left=0 (diff=479px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Optiongroup1\u0027 (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Top original=155 vs migrado \u0027obj_4c_Optiongroup12_p2\u0027 Top=2 (diff=153px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Optiongroup1\u0027 (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Left original=765 vs migrado \u0027obj_4c_Optiongroup12_p2\u0027 Left=0 (diff=765px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Optiongroup2\u0027 (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Top original=230 vs migrado \u0027obj_4c_Optiongroup2_p2\u0027 Top=2 (diff=228px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Optiongroup2\u0027 (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Left original=479 vs migrado \u0027obj_4c_Optiongroup2_p2\u0027 Left=0 (diff=479px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Op_BxComis\u0027 (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Left original=479 vs migrado \u0027obj_4c_Op_BxComis\u0027 Left=0 (diff=479px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027OptObserva\u0027 (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Top original=130 vs migrado \u0027obj_4c_OptObserva\u0027 Top=2 (diff=128px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027OptObserva\u0027 (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Left original=765 vs migrado \u0027obj_4c_OptObserva\u0027 Left=0 (diff=765px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027fwoption1\u0027 (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Left original=765 vs migrado \u0027obj_4c_Fwoption1\u0027 Left=0 (diff=765px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027OptTpLeituras\u0027 (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Top original=55 vs migrado \u0027obj_4c_OptTpLeituras\u0027 Top=2 (diff=53px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027OptTpLeituras\u0027 (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Left original=765 vs migrado \u0027obj_4c_OptTpLeituras\u0027 Left=0 (diff=765px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Optiongroup14\u0027 (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Top original=231 vs migrado \u0027obj_4c_Optiongroup14\u0027 Top=0 (diff=231px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Optiongroup14\u0027 (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Left original=765 vs migrado \u0027obj_4c_Optiongroup14\u0027 Left=0 (diff=765px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Optiongroup15\u0027 (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Top original=296 vs migrado \u0027obj_4c_Optiongroup15\u0027 Top=2 (diff=294px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Optiongroup15\u0027 (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Left original=765 vs migrado \u0027obj_4c_Optiongroup15\u0027 Left=0 (diff=765px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Optiongroup16\u0027 (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Top original=346 vs migrado \u0027obj_4c_Optiongroup16\u0027 Top=0 (diff=346px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Optiongroup16\u0027 (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Left original=765 vs migrado \u0027obj_4c_Optiongroup16\u0027 Left=0 (diff=765px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Optiongroup17\u0027 (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Top original=321 vs migrado \u0027obj_4c_Optiongroup17\u0027 Top=2 (diff=319px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Optiongroup17\u0027 (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Left original=765 vs migrado \u0027obj_4c_Optiongroup17\u0027 Left=0 (diff=765px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Optiongroup4\u0027 (parent: SIGCDPAG.Pagina.Dados.Dados.Page2): Top original=411 vs migrado \u0027obj_4c_Optiongroup4_p2\u0027 Top=2 (diff=409px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Optiongroup4\u0027 (parent: SIGCDPAG.Pagina.Dados.Dados.Page2): Left original=670 vs migrado \u0027obj_4c_Optiongroup4_p2\u0027 Left=0 (diff=670px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Optiongroup2\u0027 (parent: SIGCDPAG.Pagina.Dados.Dados.Page2): Top original=386 vs migrado \u0027obj_4c_Optiongroup2_p2\u0027 Top=2 (diff=384px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Optiongroup2\u0027 (parent: SIGCDPAG.Pagina.Dados.Dados.Page2): Left original=670 vs migrado \u0027obj_4c_Optiongroup2_p2\u0027 Left=0 (diff=670px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Optiongroup1\u0027 (parent: SIGCDPAG.Pagina.Dados.Dados.Page2): Top original=262 vs migrado \u0027obj_4c_Optiongroup12_p2\u0027 Top=2 (diff=260px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Optiongroup1\u0027 (parent: SIGCDPAG.Pagina.Dados.Dados.Page2): Left original=893 vs migrado \u0027obj_4c_Optiongroup12_p2\u0027 Left=0 (diff=893px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Optiongroup12\u0027 (parent: SIGCDPAG.Pagina.Dados.Dados.Page2): Top original=403 vs migrado \u0027obj_4c_Optiongroup12_p2\u0027 Top=2 (diff=401px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Optiongroup12\u0027 (parent: SIGCDPAG.Pagina.Dados.Dados.Page2): Left original=170 vs migrado \u0027obj_4c_Optiongroup12_p2\u0027 Left=0 (diff=170px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Optiongroup3\u0027 (parent: SIGCDPAG.Pagina.Dados.Dados.Page2): Top original=435 vs migrado \u0027obj_4c_Optiongroup3_p2\u0027 Top=2 (diff=433px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Optiongroup3\u0027 (parent: SIGCDPAG.Pagina.Dados.Dados.Page2): Left original=670 vs migrado \u0027obj_4c_Optiongroup3_p2\u0027 Left=0 (diff=670px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Opt_ContaMov\u0027 (parent: SIGCDPAG.Pagina.Dados): Top original=90 vs migrado \u0027obj_4c_Opt_ContaMov\u0027 Top=2 (diff=88px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Opt_ContaMov\u0027 (parent: SIGCDPAG.Pagina.Dados): Left original=479 vs migrado \u0027obj_4c_Opt_ContaMov\u0027 Left=0 (diff=479px, tolerancia=30px)",
+                                          "tentativas":  3,
+                                          "problemasRestantes":  74
+                                      },
+                   "05f_validarSQLSchema":  {
+                                                "inicio":  "2026-08-22T18:53:54",
+                                                "tentativas":  2,
+                                                "erro":  null,
+                                                "fim":  "2026-08-22T18:54:11",
+                                                "status":  "PASSED",
+                                                "boFile":  "C:\\4c\\projeto\\app\\classes\\pagBO.prg",
+                                                "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\Formpag.prg"
+                                            },
+                   "06c_validarLayout":  {
+                                             "inicio":  "2026-08-22T19:07:41",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  2,
+                                             "erro":  null,
+                                             "fim":  "2026-08-22T19:07:43",
+                                             "thresholdPx":  5,
+                                             "unmatched":  27,
+                                             "errors":  32,
+                                             "matched":  198,
+                                             "warnings":  130,
+                                             "reportFile":  "C:\\4c\\tasks\\task494\\layout_vs_prg_report.json"
+                                         }
+               },
+    "metricas":  {
+                     "tempoTotalSegundos":  0,
+                     "tempoExtracao":  0,
+                     "tempoAnalise":  0,
+                     "tempoEsqueletos":  0,
+                     "tempoMigracao":  0,
+                     "tempoCorrecao":  0,
+                     "tempoCompilacao":  0,
+                     "tempoTesteAuto":  0,
+                     "tempoValidacao":  0,
+                     "linhasCodigoOriginal":  0,
+                     "linhasCodigoGerado":  0,
+                     "correcoesAutomaticas":  0,
+                     "testesAutomaticos":  0
+                 }
+}

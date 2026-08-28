@@ -1,0 +1,279 @@
+Encerrando processos VFP9 anteriores...
+=== ORQUESTRADOR DE MIGRACAO ===
+
+Configuracao carregada:
+  Origem: C:\4c\origem
+  Tasks: C:\4c\tasks
+  Max Problemas (ValidarUI): 10
+
+Processando task especifica: task490
+
+Task ID: task490
+
+BaseName obtido do estado da task: SigCdOrg
+[ETAPA 1] JA COMPLETADA - Pulando...
+[ETAPA 2] JA COMPLETADA - Pulando...
+BaseName recuperado do estado: SigCdOrg
+[ETAPA 2.2] Arquivo (12.27 KB) abaixo do limite (400 KB) - Pulando reducao
+[ETAPA 2.5] JA COMPLETADA - Pulando...
+[ETAPA 2.7] JA COMPLETADA - Pulando...
+[ETAPA 2.8] JA COMPLETADA - Pulando...
+[ETAPA 3] JA COMPLETADA - Pulando...
+[ETAPA 4] JA COMPLETADA - Pulando...
+[ETAPA 4.5] JA COMPLETADA - Pulando...
+[ETAPA 5] JA COMPLETADA - Pulando...
+[ETAPA 5.5] JA COMPLETADA - Pulando...
+[ETAPA 5.5b] JA COMPLETADA - Pulando...
+[ETAPA 5.6] JA COMPLETADA - Pulando...
+[ETAPA 5.7] JA COMPLETADA - Pulando...
+[ETAPA 5.8] JA COMPLETADA - Pulando...
+
+============================================================================
+ [ETAPA 5.9] Validacao SQL Schema (colunas vs schema.sql)
+============================================================================
+
+[TaskManager] Estado atualizado: task490
+[TaskManager] Etapa iniciada: 05f_validarSQLSchema (tentativa 2)
+  [Inferencia] SigCdOrg -> FormOrg
+  [Inferencia] SigCdOrg -> OrgBO
+  [SQL-SCHEMA] Modo DB ativo: 192.168.15.101,1435/DB_MBAHIA (fallback: schema.sql)
+  [SQL-SCHEMA] Schema arquivo parseado: 683 tabelas
+  [SQL-SCHEMA] Statements SQL encontrados: 8
+AVISO: Erro ao consultar DB para tabela 'sigcdorg': Exce‡Æo ao chamar "Open" com "0" argumento(s): "Erro de rede ou 
+espec¡fico … instƒncia ao estabelecer conexÆo com o SQL Server. O servidor nÆo foi encontrado ou nÆo estava acess¡vel. 
+Verifique se o nome da instƒncia est  correto e se o SQL Server est  configurado para permitir conexäes remotas. 
+(provider: TCP Provider, error: 0 - O tempo limite de espera foi atingido.)"
+AVISO: Erro ao consultar DB para tabela 'sigcdpro': Exce‡Æo ao chamar "Open" com "0" argumento(s): "Erro de rede ou 
+espec¡fico … instƒncia ao estabelecer conexÆo com o SQL Server. O servidor nÆo foi encontrado ou nÆo estava acess¡vel. 
+Verifique se o nome da instƒncia est  correto e se o SQL Server est  configurado para permitir conexäes remotas. 
+(provider: TCP Provider, error: 0 - O tempo limite de espera foi atingido.)"
+AVISO: Erro ao consultar DB para tabela 'sigcdprc': Exce‡Æo ao chamar "Open" com "0" argumento(s): "Erro de rede ou 
+espec¡fico … instƒncia ao estabelecer conexÆo com o SQL Server. O servidor nÆo foi encontrado ou nÆo estava acess¡vel. 
+Verifique se o nome da instƒncia est  correto e se o SQL Server est  configurado para permitir conexäes remotas. 
+(provider: TCP Provider, error: 0 - O tempo limite de espera foi atingido.)"
+  [SQL-SCHEMA] PASSOU - Nenhuma coluna invalida detectada
+  [OK] Validacao SQL Schema PASSOU - todas as colunas validas
+[TaskManager] Estado atualizado: task490
+[TaskManager] Etapa completada: 05f_validarSQLSchema
+[ETAPA 6] JA COMPLETADA - Pulando...
+
+============================================================================
+ [ETAPA 6.5] Teste Automatico (TesteAutomatico.prg) com retry automatico
+============================================================================
+
+[TaskManager] Estado atualizado: task490
+[TaskManager] Etapa iniciada: 06b_testeAutomatico (tentativa 2)
+  [Inferencia] SigCdOrg -> FormOrg
+
+--- Tentativa 1/10 ---
+[2026-08-22 13:38:48] [INFO] === VFP EXECUTOR v2.0 ===
+[2026-08-22 13:38:48] [INFO] Config FPW: (nao fornecido)
+[2026-08-22 13:38:48] [INFO] Script PRG: C:\4c\projeto\app\utils\TesteAutomatico.prg
+[2026-08-22 13:38:49] [INFO] Timeout: 300 segundos
+[2026-08-22 13:38:49] [INFO] Wrapper PRG criado para parametros: C:\Users\roger\AppData\Local\Temp\vfp_wrapper_jnsrbc2v.prg
+[2026-08-22 13:38:49] [INFO] Conteudo do wrapper:
+[2026-08-22 13:38:49] [INFO] * Auto-generated wrapper for parameters
+* Script: C:\4c\projeto\app\utils\TesteAutomatico.prg
+* Parameters: 'FormOrg', 'C:\4c\tasks\task490', 'CRUD'
+
+* Anti-dialog protections for unattended execution
+SET SAFETY OFF
+SET RESOURCE OFF
+SET TALK OFF
+SET NOTIFY OFF
+SYS(2335, 0)
+
+DO "C:\4c\projeto\app\utils\TesteAutomatico" WITH 'FormOrg', 'C:\4c\tasks\task490', 'CRUD'
+QUIT
+
+[2026-08-22 13:38:49] [INFO] Comando VFP: C:\Users\roger\AppData\Local\Temp\vfp_wrapper_jnsrbc2v.prg
+[2026-08-22 13:38:49] [INFO] VFP output esperado em: C:\4c\tasks\task490\vfp_output.txt
+[2026-08-22 13:38:49] [INFO] Executando Visual FoxPro 9...
+[2026-08-22 13:38:49] [INFO] Comando completo: VFP9.EXE -T C:\Users\roger\AppData\Local\Temp\vfp_wrapper_jnsrbc2v.prg
+[2026-08-22 13:38:49] [INFO] Executando: VFP9.EXE -T C:\Users\roger\AppData\Local\Temp\vfp_wrapper_jnsrbc2v.prg
+[2026-08-22 13:38:49] [INFO] Timeout configurado: 300 segundos
+[2026-08-22 13:40:23] [INFO] VFP9 finalizou normalmente com exit code: 
+[2026-08-22 13:40:23] [INFO] VFP9 finalizado em 93.9895937 segundos
+[2026-08-22 13:40:23] [INFO] Exit Code: 
+[2026-08-22 13:40:23] [INFO] 
+[2026-08-22 13:40:23] [INFO] Arquivos temporarios preservados para inspecao:
+[2026-08-22 13:40:23] [INFO]   Wrapper.prg: C:\Users\roger\AppData\Local\Temp\vfp_wrapper_jnsrbc2v.prg
+[2026-08-22 13:40:23] [INFO] 
+[2026-08-22 13:40:23] [INFO] === Conteudo do Wrapper.prg temporario ===
+[2026-08-22 13:40:23] [INFO] * Auto-generated wrapper for parameters
+[2026-08-22 13:40:23] [INFO] * Script: C:\4c\projeto\app\utils\TesteAutomatico.prg
+[2026-08-22 13:40:23] [INFO] * Parameters: 'FormOrg', 'C:\4c\tasks\task490', 'CRUD'
+[2026-08-22 13:40:23] [INFO] 
+[2026-08-22 13:40:23] [INFO] * Anti-dialog protections for unattended execution
+[2026-08-22 13:40:23] [INFO] SET SAFETY OFF
+[2026-08-22 13:40:23] [INFO] SET RESOURCE OFF
+[2026-08-22 13:40:23] [INFO] SET TALK OFF
+[2026-08-22 13:40:23] [INFO] SET NOTIFY OFF
+[2026-08-22 13:40:23] [INFO] SYS(2335, 0)
+[2026-08-22 13:40:23] [INFO] 
+[2026-08-22 13:40:23] [INFO] DO "C:\4c\projeto\app\utils\TesteAutomatico" WITH 'FormOrg', 'C:\4c\tasks\task490', 'CRUD'
+[2026-08-22 13:40:23] [INFO] QUIT
+[2026-08-22 13:40:23] [INFO] 
+[2026-08-22 13:40:23] [INFO] === Fim do Wrapper.prg ===
+[2026-08-22 13:40:23] [WARN] AVISO: VFP9 retornou exit code  (normal para VFP9 GUI - validar pelo arquivo de saida)
+
+Resultado dos testes automaticos:
+  Total: 9
+  Passou: 9
+  Falhou: 0
+  Percentual: 100%
+
+Status: TESTES AUTOMATICOS OK - 100% de sucesso (>= 100%)
+[TaskManager] Estado atualizado: task490
+[TaskManager] Etapa completada: 06b_testeAutomatico
+
+============================================================================
+ [ETAPA 6.8] Validar Layout vs PRG (analise estatica)
+============================================================================
+
+[TaskManager] Etapa criada dinamicamente: 06c_validarLayout
+[TaskManager] Estado atualizado: task490
+[TaskManager] Etapa iniciada: 06c_validarLayout (tentativa 1)
+  [Inferencia] SigCdOrg -> FormOrg
+  Layout:    C:\4c\tasks\task490\layout.json
+  PRG:       C:\4c\projeto\app\forms\cadastros\FormOrg.prg
+  Threshold: 5px
+
+
+Carregando mapeamento: C:\4c\tasks\task490\mapeamento.json
+  Entradas no mapeamento: 14
+Parseando layout.json...
+Parseando .prg...
+Comparando...
+
+========================================
+  VALIDAR LAYOUT vs PRG
+========================================
+
+  Layout: layout.json
+  PRG:    FormOrg.prg
+  Threshold: 5px
+
+  Objetos no layout.json: 4
+  Objetos no .prg:        20
+  Matched:                2
+  Sem correspondente:     2
+
+  ERRORS:   2
+  WARNINGS: 2
+  INFOS:    18
+
+--- ERRORS ---
+  [] SIGCDORG.Pagina.Dados.Say1 (label)
+    Objeto do layout.json NAO encontrado no .prg (sem AddObject correspondente)
+  [] SIGCDORG.Pagina.Dados.Say2 (label)
+    Objeto do layout.json NAO encontrado no .prg (sem AddObject correspondente)
+
+--- WARNINGS (posicao divergente) ---
+  [] getDescricao -> txt_4c_Descricao (textbox): Top esperado=157 atual=186 delta=29px
+  [] getCodigo -> txt_4c_Codigo (textbox): Top esperado=129 atual=158 delta=29px
+
+  Relatorio salvo: C:\4c\tasks\task490\layout_vs_prg_report.json
+[TaskManager] Estado atualizado: task490
+[TaskManager] Etapa completada: 06c_validarLayout
+
+  ATENCAO: 2 objetos ausentes no .prg (threshold: 0)
+  2 warnings de posicao divergente
+  Relatorio: C:\4c\tasks\task490\layout_vs_prg_report.json
+  [INFO] Etapa NAO-BLOQUEANTE - prosseguindo para Etapa 7
+
+============================================================================
+ [ETAPA 7] Validar UI Fidelity (ValidarUIFidelity.prg)
+============================================================================
+
+[TaskManager] Estado atualizado: task490
+[TaskManager] Etapa iniciada: 07_validarUI (tentativa 1)
+  [Inferencia] SigCdOrg -> FormOrg
+  Removidos 777 arquivos .fxp (cache)
+[2026-08-22 13:40:24] [INFO] === VFP EXECUTOR v2.0 ===
+[2026-08-22 13:40:24] [INFO] Config FPW: (nao fornecido)
+[2026-08-22 13:40:24] [INFO] Script PRG: C:\4c\projeto\app\utils\ValidarUIFidelity.prg
+[2026-08-22 13:40:24] [INFO] Timeout: 300 segundos
+[2026-08-22 13:40:24] [INFO] Wrapper PRG criado para parametros: C:\Users\roger\AppData\Local\Temp\vfp_wrapper_bjhcfrjh.prg
+[2026-08-22 13:40:24] [INFO] Conteudo do wrapper:
+[2026-08-22 13:40:24] [INFO] * Auto-generated wrapper for parameters
+* Script: C:\4c\projeto\app\utils\ValidarUIFidelity.prg
+* Parameters: 'C:\4c\tasks\task490\SigCdOrg_form_codigo_fonte.txt', 'FormOrg'
+
+* Anti-dialog protections for unattended execution
+SET SAFETY OFF
+SET RESOURCE OFF
+SET TALK OFF
+SET NOTIFY OFF
+SYS(2335, 0)
+
+DO "C:\4c\projeto\app\utils\ValidarUIFidelity" WITH 'C:\4c\tasks\task490\SigCdOrg_form_codigo_fonte.txt', 'FormOrg'
+QUIT
+
+[2026-08-22 13:40:24] [INFO] Comando VFP: C:\Users\roger\AppData\Local\Temp\vfp_wrapper_bjhcfrjh.prg
+[2026-08-22 13:40:24] [INFO] VFP output esperado em: C:\4c\tasks\task490\vfp_output.txt
+[2026-08-22 13:40:24] [INFO] Executando Visual FoxPro 9...
+[2026-08-22 13:40:24] [INFO] Comando completo: VFP9.EXE -T C:\Users\roger\AppData\Local\Temp\vfp_wrapper_bjhcfrjh.prg
+[2026-08-22 13:40:24] [INFO] Executando: VFP9.EXE -T C:\Users\roger\AppData\Local\Temp\vfp_wrapper_bjhcfrjh.prg
+[2026-08-22 13:40:24] [INFO] Timeout configurado: 300 segundos
+[2026-08-22 13:40:24] [INFO] VFP9 finalizou normalmente com exit code: 
+[2026-08-22 13:40:24] [INFO] VFP9 finalizado em 0.642916 segundos
+[2026-08-22 13:40:24] [INFO] Exit Code: 
+[2026-08-22 13:40:24] [INFO] 
+[2026-08-22 13:40:24] [INFO] Arquivos temporarios preservados para inspecao:
+[2026-08-22 13:40:24] [INFO]   Wrapper.prg: C:\Users\roger\AppData\Local\Temp\vfp_wrapper_bjhcfrjh.prg
+[2026-08-22 13:40:24] [INFO] 
+[2026-08-22 13:40:24] [INFO] === Conteudo do Wrapper.prg temporario ===
+[2026-08-22 13:40:24] [INFO] * Auto-generated wrapper for parameters
+[2026-08-22 13:40:24] [INFO] * Script: C:\4c\projeto\app\utils\ValidarUIFidelity.prg
+[2026-08-22 13:40:24] [INFO] * Parameters: 'C:\4c\tasks\task490\SigCdOrg_form_codigo_fonte.txt', 'FormOrg'
+[2026-08-22 13:40:24] [INFO] 
+[2026-08-22 13:40:24] [INFO] * Anti-dialog protections for unattended execution
+[2026-08-22 13:40:24] [INFO] SET SAFETY OFF
+[2026-08-22 13:40:24] [INFO] SET RESOURCE OFF
+[2026-08-22 13:40:24] [INFO] SET TALK OFF
+[2026-08-22 13:40:24] [INFO] SET NOTIFY OFF
+[2026-08-22 13:40:24] [INFO] SYS(2335, 0)
+[2026-08-22 13:40:24] [INFO] 
+[2026-08-22 13:40:24] [INFO] DO "C:\4c\projeto\app\utils\ValidarUIFidelity" WITH 'C:\4c\tasks\task490\SigCdOrg_form_codigo_fonte.txt', 'FormOrg'
+[2026-08-22 13:40:24] [INFO] QUIT
+[2026-08-22 13:40:24] [INFO] 
+[2026-08-22 13:40:24] [INFO] === Fim do Wrapper.prg ===
+[2026-08-22 13:40:24] [WARN] AVISO: VFP9 retornou exit code  (normal para VFP9 GUI - validar pelo arquivo de saida)
+
+Resultado da validacao UI:
+  Total de problemas: 67
+  Erros: 0 (max aceitavel: 4 Dataenvironment)
+  Avisos: 67 (objetos renomeados na nova arquitetura - NAO bloqueiam)
+  Diferencas: 0 (max aceitavel: 0)
+
+  [LAYOUT] Erro ao validar layout: NÆo ‚ poss¡vel associar o argumento ao parƒmetro 'Path' porque ele ‚ nulo.
+Status: UI FIDELITY OK - Apenas diferencas aceitaveis (4 Dataenvironment + 67 FormBase)
+  Relatorio HTML: C:\4c\projeto\app\utils\relatorios\UIFidelity_FormOrg_20260822134024.html
+  Log detalhado: C:\4c\tasks\task490\logs\07_validarUI.log
+[TaskManager] Estado atualizado: task490
+[TaskManager] Etapa completada: 07_validarUI
+
+
+============================================================================
+ [ETAPA 8] Gerar solicitacao de teste manual
+============================================================================
+
+[TaskManager] Estado atualizado: task490
+[TaskManager] Etapa iniciada: 08_gerarTestManual (tentativa 1)
+  [Inferencia] SigCdOrg -> FormOrg
+  [Inferencia] SigCdOrg -> OrgBO
+Solicitacao de teste manual gerada: C:\4c\SolicitacaoTesteManual\task490_SigCdOrg.md
+[TaskManager] Estado atualizado: task490
+[TaskManager] Etapa completada: 08_gerarTestManual
+[TaskManager] Estado atualizado: task490
+
+============================================================================
+ TASK COMPLETA: task490
+============================================================================
+
+Proximos passos:
+  1. Revisar solicitacao de teste manual em: C:\4c\SolicitacaoTesteManual
+  2. Executar testes manuais
+  3. Se aprovado, fazer commit do codigo
+

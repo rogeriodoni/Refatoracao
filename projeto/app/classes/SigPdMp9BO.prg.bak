@@ -73,9 +73,31 @@ DEFINE CLASS SigPdMp9BO AS BusinessBase
     * Init - Configura tabela e campo chave
     *==========================================================================
     PROCEDURE Init()
+        LOCAL loc_nResultPam
         THIS.this_cTabela     = "SigPrCpo"
         THIS.this_cCampoChave = "cIdChaves"
         DODEFAULT()
+
+        *-- Popular crSigCdPam (Erro118). Padrao: Formsigatcrp.prg:1253-1281.
+        TRY
+            IF USED("crSigCdPam")
+                USE IN crSigCdPam
+            ENDIF
+            IF TYPE("gnConnHandle") = "N" AND gnConnHandle > 0
+                loc_nResultPam = SQLEXEC(gnConnHandle, "SELECT * FROM SigCdPam", "cursor_4c_Pam_Temp")
+                IF loc_nResultPam > 0
+                    SELECT * FROM cursor_4c_Pam_Temp INTO CURSOR crSigCdPam READWRITE
+                    IF USED("cursor_4c_Pam_Temp")
+                        USE IN cursor_4c_Pam_Temp
+                    ENDIF
+                    IF RECCOUNT("crSigCdPam") > 0
+                        SELECT crSigCdPam
+                        GO TOP
+                    ENDIF
+                ENDIF
+            ENDIF
+        CATCH
+        ENDTRY
     ENDPROC
 
     *==========================================================================

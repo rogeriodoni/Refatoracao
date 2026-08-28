@@ -48,6 +48,9 @@ DEFINE CLASS SigReIfvBO AS RelatorioBase
     this_cFrxSintetico     = "SigReIf0"
     this_cFrxConsultaBarra = "SigReIf9"
 
+    *-- Pattern #142: injetado pelo CorretorAutomatico (default vazio) - REVISAR e substituir pelo alias do cursor binding do FRX
+    this_cCursorDados = ""     && FIXME Pattern #142 pos-Erro51
+
     *--------------------------------------------------------------------------
     * Init - Inicializa BO do relatorio de fechamento de inventario
     *--------------------------------------------------------------------------

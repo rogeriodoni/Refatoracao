@@ -1,0 +1,24 @@
+﻿Fase 4 completa. O arquivo `FormOET.prg` foi atualizado com:
+
+**Page1 - Grid e Bot├Áes CRUD:**
+- `cnt_4c_Botoes` reposicionado para `Left=542` (can├┤nico ÔÇö era 309, abaixo do m├¡nimo 342)
+- 5 bot├Áes adicionados: Incluir, Visualizar, Alterar, Excluir, Buscar ÔÇö com ├¡cones corretos, Comic Sans MS, PicturePosition=13
+- `grd_4c_Lista` adicionado (Top=123, Width=880, 2 colunas) com `ColumnCount` definido **fora** do WITH (evita Problema 36)
+- BINDEVENTs para todos os 5 bot├Áes
+
+**`CarregarLista()` completo:**
+- RecordSource ÔåÆ cursor_4c_Dados
+- ControlSource: cods/descrs
+- Headers redefinidos AP├ôS RecordSource: "C├│digo" / "Descri├º├úo"
+- FormatarGridLista() chamado
+
+**M├®todos CRUD adicionados:**
+- `BtnIncluirClick` ÔÇö NovoRegistro + LimparCampos + modo INCLUIR + navega Page2
+- `BtnVisualizarClick` ÔÇö CarregarPorCodigo + BOParaForm + modo VISUALIZAR + foco em Confirmar
+- `BtnAlterarClick` ÔÇö CarregarPorCodigo + EditarRegistro + modo ALTERAR + foco em Descrs
+- `BtnExcluirClick` ÔÇö MsgConfirma + Excluir + CarregarLista
+- `BtnBuscarClick` ÔÇö FormBuscaAuxiliar com mAddColuna + LOCATE no cursor para posicionar o grid
+- `BtnSalvarClick` ÔÇö valida├º├Áes FORA do TRY + FormParaBO + Salvar + AlternarPagina(1)
+
+**M├®todos de suporte com guards PEMSTATUS** (seguros at├® os controles de Page2 serem criados na Fase 5):
+- `FormParaBO`, `BOParaForm`, `LimparCampos`, `HabilitarCampos`, `AjustarBotoesPorModo`

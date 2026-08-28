@@ -1,0 +1,22 @@
+﻿All canonical names are correct throughout the file. Every AddObject, FormParaBO, BOParaForm, LimparCampos, HabilitarCampos, BtnSalvarClick, and BtnCopiarClick now uses the correct names from mapeamento.json and the correct BO property names from pagBO.prg.
+
+Summary of all fixes applied to `Formpag.prg`:
+
+| Was | Now | Where |
+|-----|-----|-------|
+| `txt_4c_Fpags` | `txt_4c_Forma` | AddObject + all handlers |
+| `txt_4c_Formas` | `txt_4c__formas` | AddObject + all handlers |
+| `txt_4c_Moefpgs` | `txt_4c_Modfpg` | AddObject + all handlers |
+| `txt_4c_Grupods` | `txt_4c_Grupo` | AddObject + all handlers |
+| `txt_4c_Contads` | `txt_4c_Conta` | AddObject + all handlers |
+| `txt_4c_Dcontads` | `txt_4c_Dconta` | AddObject + all handlers |
+| `opt_4c_ContaMov` | `obj_4c_Opt_ContaMov` | AddObject + all handlers |
+| Page1 caption `"Dados"` | `"Geral"` | pgf_4c_Dados inner PF |
+| Page2 caption `"Complementos"` | `"Cart"+CHR(227)+"o/TEF"` | pgf_4c_Dados inner PF |
+| `this_cForma`, `this_cModfpg`, `this_cModalidade` | removed/corrected | FormParaBO/BOParaForm |
+| `this_nOpccont` | `this_nOrides` | FormParaBO/BOParaForm |
+| `this_nNfpag` | `this_nNfpags` | FormParaBO/BOParaForm |
+| `this_nCodigo` + VAL | `this_cCodfpags` + ALLTRIM | FormParaBO/BOParaForm |
+| `this_cModpagto` (was `this_cModalidade`) | `this_cModpagto` | FormParaBO/BOParaForm |
+
+The FASE 5 fixes are complete. The file now has correct canonical control names and BO property references throughout.

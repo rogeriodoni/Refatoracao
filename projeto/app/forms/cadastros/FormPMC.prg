@@ -184,7 +184,7 @@ DEFINE CLASS FormPMC AS FormBase
                 .Picture         = gc_4c_CaminhoIcones + "cadastro_inserir_26.jpg"
                 .PicturePosition = 13
                 .Top             = 5
-                .Left            = 5
+                .Left            =  542
                 .Width           = 75
                 .Height          = 75
                 .BackColor       = RGB(255, 255, 255)
@@ -206,7 +206,7 @@ DEFINE CLASS FormPMC AS FormBase
                 .Picture         = gc_4c_CaminhoIcones + "cadastro_vizualizar_60.jpg"
                 .PicturePosition = 13
                 .Top             = 5
-                .Left            = 80
+                .Left            =  542
                 .Width           = 75
                 .Height          = 75
                 .BackColor       = RGB(255, 255, 255)
@@ -229,7 +229,7 @@ DEFINE CLASS FormPMC AS FormBase
                 .Picture         = gc_4c_CaminhoIcones + "cadastro_alterar_60.jpg"
                 .PicturePosition = 13
                 .Top             = 5
-                .Left            = 155
+                .Left            =  542
                 .Width           = 75
                 .Height          = 75
                 .BackColor       = RGB(255, 255, 255)
@@ -252,7 +252,7 @@ DEFINE CLASS FormPMC AS FormBase
                 .Picture         = gc_4c_CaminhoIcones + "cadastro_excluir_60.jpg"
                 .PicturePosition = 13
                 .Top             = 5
-                .Left            = 230
+                .Left            =  542
                 .Width           = 75
                 .Height          = 75
                 .BackColor       = RGB(255, 255, 255)
@@ -275,7 +275,7 @@ DEFINE CLASS FormPMC AS FormBase
                 .Picture         = gc_4c_CaminhoIcones + "cadastro_procurar_60.jpg"
                 .PicturePosition = 13
                 .Top             = 5
-                .Left            = 305
+                .Left            =  542
                 .Width           = 75
                 .Height          = 75
                 .BackColor       = RGB(255, 255, 255)
@@ -311,8 +311,8 @@ DEFINE CLASS FormPMC AS FormBase
                 .Picture         = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
                 .PicturePosition = 13
                 .Top             = 5
-                .Left            = 5
-                .Width           = 75
+                .Left            = 917
+                .Width           = 90
                 .Height          = 75
                 .BackColor       = RGB(255, 255, 255)
                 .ForeColor       = RGB(90, 90, 90)
@@ -436,7 +436,7 @@ DEFINE CLASS FormPMC AS FormBase
 
             .AddObject("cmd_4c_Cancelar", "CommandButton")
             WITH .cmd_4c_Cancelar
-                .Caption         = "Cancelar"
+                .Caption         = "Encerrar"
                 .Picture         = gc_4c_CaminhoIcones + "cadastro_cancelar_60.jpg"
                 .PicturePosition = 13
                 .Top             = 5
@@ -642,7 +642,7 @@ DEFINE CLASS FormPMC AS FormBase
         *-- BINDEVENTs txt_4c_Cpros: F4/DblClick abre busca, LostFocus valida
         BINDEVENT(loc_oPagina.txt_4c_Cpros, "KeyPress",  THIS, "TeclaTxtCpros")
         BINDEVENT(loc_oPagina.txt_4c_Cpros, "DblClick",  THIS, "AbrirBuscaProduto")
-        BINDEVENT(loc_oPagina.txt_4c_Cpros, "LostFocus", THIS, "ValidarProduto")
+        BINDEVENT(loc_oPagina.txt_4c_Cpros, "KeyPress", THIS, "ValidarProduto")
 
         *-- BINDEVENTs botoes Page2
         BINDEVENT(loc_oPagina.cnt_4c_BotoesAcao.cmd_4c_Confirmar, "Click", THIS, "BtnSalvarClick")

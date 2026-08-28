@@ -1,0 +1,23 @@
+﻿Fase 2 conclu├¡da. O `mtzBO.prg` agora tem todos os m├®todos CRUD completos:
+
+**M├®todos adicionados:**
+
+| M├®todo | Tipo | Fun├º├úo |
+|--------|------|---------|
+| `NovoRegistro()` | PUBLIC | Override - gera `this_cCodigo` antes de abrir Page2 |
+| `GerarProximoCodigo()` | PROTECTED | `MAX(Codigo)+1` em SigCdMtz via SQL |
+| `Buscar(par_cFiltro)` | PUBLIC | SELECT SigCdMtz+SigCdCli JOIN ÔåÆ `cursor_4c_Dados` (grid Page1) |
+| `CarregarPorCodigo(par_cCodigo)` | PUBLIC | Carrega header SigCdMtz no BO, seta `this_lNovoRegistro=.F.` |
+| `CarregarDoCursor(par_cAlias)` | PUBLIC | Mapeia cursor ÔåÆ propriedades `this_*` (com `SELECT (alias)` antes) |
+| `CarregarDetalhe(par_cCodigo)` | PUBLIC | SELECT SigCdMtI ÔåÆ `cursor_4c_MtI` (grid Page2) |
+| `CriarCursorDetalheVazio(par_cCodigo)` | PUBLIC | Cria `cursor_4c_MtI` vazio com linha em branco para INSERIR |
+| `InserirLinhaDetalhe(par_cCodigo)` | PUBLIC | Equivale ao `cmdInserir.Click` do legado |
+| `ExcluirLinhaDetalhe()` | PUBLIC | Equivale ao `cmdExcluir.Click` do legado |
+| `AtualizarTotal(par_cChave)` | PUBLIC | Recalcula `Total` por linha + `this_nValorTotal` geral |
+| `ValidarDuplicatas()` | PUBLIC | Checa Grupos+Contas duplicados no cursor (valida├º├úo pr├®-save) |
+| `VerificarDuplicado(Ano,Grupo,Conta)` | PUBLIC | Checa se Ano+Grupo+Conta j├í existe em SigCdMtz |
+| `Inserir()` | PROTECTED | INSERT SigCdMtz + `SalvarDetalhe(.T.)` |
+| `Atualizar()` | PROTECTED | UPDATE SigCdMtz + `SalvarDetalhe(.F.)` |
+| `ExecutarExclusao()` | PROTECTED | DELETE SigCdMtI (FK) ÔåÆ DELETE SigCdMtz |
+| `SalvarDetalhe(Codigo, soInserir)` | PROTECTED | Opcional DELETE + INSERT todas as linhas v├ílidas do `cursor_4c_MtI` |
+| `Destroy()` | PUBLIC | Fecha `cursor_4c_MtI` + `DODEFAULT()` |

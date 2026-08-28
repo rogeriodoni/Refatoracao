@@ -701,11 +701,11 @@ DEFINE CLASS FormPEN AS FormBase
 
         loc_oPagina.AddObject("cmd_4c_Cancelar", "CommandButton")
         WITH loc_oPagina.cmd_4c_Cancelar
-            .Caption       = "Cancelar"
+            .Caption       = "Encerrar"
             .Top           = 290
             .Left          = 341
-            .Width         = 90
-            .Height        = 27
+            .Width         = 75
+            .Height        = 75
             .FontName      = "Tahoma"
             .FontSize      = 8
             .Themes        = .F.
@@ -737,6 +737,7 @@ DEFINE CLASS FormPEN AS FormBase
                     IF PEMSTATUS(.Self, "txt_4c_FConta", 5)
                         loc_cConta = ALLTRIM(.txt_4c_FConta.Value)
                     ENDIF
+                    .Visible     = .T.
                 ENDWITH
             ENDIF
 

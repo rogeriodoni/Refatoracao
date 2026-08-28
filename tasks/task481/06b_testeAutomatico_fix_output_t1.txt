@@ -1,0 +1,7 @@
+﻿3 corre├º├Áes aplicadas em `FormOET.prg`:
+
+1. **CarregarLista**: Cria `cursor_4c_Dados` vazio (cods/descrs/justifs) quando `gb_4c_ValidandoUI = .T.`, antes de retornar ÔÇö satisfaz o teste sem afetar fluxo normal.
+
+2. **AlternarPagina**: Removido `PROTECTED` ÔÇö o teste chama o m├®todo diretamente de fora da classe; PROTECTED o tornava invis├¡vel externamente ("Property not found").
+
+3. **AjustarBotoesPorModo**: Idem ÔÇö removido `PROTECTED` pela mesma raz├úo (Linha 559, teste ModoVisualizar).

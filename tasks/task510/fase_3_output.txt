@@ -1,0 +1,19 @@
+﻿Arquivo criado com 328 linhas. Fase 3/8 conclu├¡da.
+
+**FormReg.prg** criado em `C:\4c\projeto\app\forms\cadastros\FormReg.prg` com:
+
+| Elemento | Status |
+|----------|--------|
+| `DEFINE CLASS FormReg AS FormBase` | Ô£ô Height=600, Width=1000, WindowType=1 |
+| `Init()` | Ô£ô Apenas `RETURN DODEFAULT()` |
+| `InicializarForm()` | Ô£ô Cria RegBO, chama ConfigurarPageFrame, propaga Caption com `CHR(245)`, verifica `gb_4c_ValidandoUI` |
+| `ConfigurarPageFrame()` | Ô£ô 2 pages, Top=-29, Tabs=.F., Picture=fundo_cad_1003.jpg |
+| `ConfigurarPaginaLista()` | Ô£ô `cnt_4c_Cabecalho` com labels t├¡tulo, `cnt_4c_Botoes` vazio (Fase 4), `cnt_4c_Saida` com `cmd_4c_Encerrar` can├┤nico |
+| `ConfigurarPaginaDados()` | Ô£ô `cnt_4c_BotoesAcao` vazio (Fase 5) |
+| `CarregarLista()` | Ô£ô Chama `BO.Buscar("")` (sem binding de grid - vem na Fase 4) |
+| `TornarControlesVisiveis()` | Ô£ô Implementa├º├úo completa com recurs├úo Pages + Controls |
+| `FormatarGridLista()` | Ô£ô Verdana/8 |
+| `BtnEncerrarClick()` | Ô£ô `THIS.Release()` |
+| `Destroy()` | Ô£ô Libera BO + cursores `cursor_4c_Dados`, `crMuni`, `crVend` |
+
+**Pontos cr├¡ticos respeitados:** Caption com `CHR(245)` (sem acento literal), sem `RETURN` dentro de `TRY/CATCH`, `cnt_4c_Saida.Left=917` can├┤nico, `BtnEncerrarClick` como `PROCEDURE` (n├úo `PROTECTED`) para funcionar com `BINDEVENT`.

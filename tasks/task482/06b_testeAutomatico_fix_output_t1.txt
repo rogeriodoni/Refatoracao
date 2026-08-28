@@ -1,0 +1,5 @@
+﻿Dois fixes aplicados em `FormOpd.prg`:
+
+1. **CarregarLista** ÔÇö Removido o guard `IF gb_4c_ValidandoUI / RETURN .T.`. O m├®todo agora sempre chama `Buscar("")`, e o `OpdBO.Buscar()` j├í trata a aus├¬ncia de conex├úo criando um `cursor_4c_Dados` vazio via `CREATE CURSOR`.
+
+2. **AjustarBotoesPorModo** ÔÇö Removido `PROTECTED`, tornando o m├®todo p├║blico (default em VFP9). O TesteAutomatico chama esse m├®todo diretamente no objeto do form, e m├®todos PROTECTED n├úo s├úo acess├¡veis externamente.

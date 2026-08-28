@@ -1,0 +1,10 @@
+﻿Tudo correto. A migra├º├úo Fase 8/8 est├í conclu├¡da:
+
+**O que estava pronto (fases 1ÔÇô7):** FormNcf.prg j├í continha todos os m├®todos exigidos na Fase 8 ÔÇö `BtnBuscarClick`, `BtnEncerrarClick`, `BtnSalvarClick`, `BtnCancelarClick`, `FormParaBO`, `BOParaForm`, `HabilitarCampos`, `LimparCampos`, `AjustarBotoesPorModo`.
+
+**O que foi feito agora (integra├º├úo):**
+- `menu.prg` linha 302: `DEFINE BAR 136 OF popCadastros` ÔÇö "N├úo-Conformidades"
+- `menu.prg` linha 425: `ON SELECTION BAR 136 OF popCadastros DO AbrirFormNcf`
+- `menu.prg` linha 8854: `PROCEDURE AbrirFormNcf()` ÔÇö padr├úo can├┤nico com VARTYPE, Show() sem par├ómetro, sem Release()
+
+O config.prg n├úo precisou de altera├º├úo ÔÇö ele usa ADIR() din├ómico que carrega automaticamente `NcfBO.prg` (classes/) e `FormNcf.prg` (forms/cadastros/).

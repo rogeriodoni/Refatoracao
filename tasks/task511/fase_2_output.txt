@@ -1,0 +1,16 @@
+﻿Arquivo correto e completo. A Fase 2/8 est├í conclu├¡da.
+
+**rgrBO.prg** agora cont├®m todos os m├®todos CRUD:
+
+| M├®todo | Descri├º├úo |
+|--------|-----------|
+| `ObterChavePrimaria()` | Retorna `this_cCidChaves` para auditoria |
+| `Buscar(par_cFiltro)` | SELECT em SigCdRGR ÔåÆ `cursor_4c_Dados` para o Grid |
+| `CarregarPorCodigo(par_cCodigo)` | Carrega cabe├ºalho + seta `this_lNovoRegistro=.F.` |
+| `CarregarDoCursor(par_cAlias)` | Mapeia cursor ÔåÆ propriedades `this_*` |
+| `CarregarLinhasRegra(par_cCodigo)` | Cria `csSigCdRga` e popula com linhas do SigCdRga |
+| `InserirLinhasRegra()` | L├¬ `csSigCdRga` e faz INSERT em SigCdRga (pula linhas totalmente vazias) |
+| `Inserir()` | INSERT SigCdRGR (com `SYS(2015)` como `cidchaves`) + `InserirLinhasRegra()` |
+| `Atualizar()` | UPDATE SigCdRGR + DELETE/INSERT SigCdRga + UPDATE SigPrdWb.qtds=0 |
+| `ExecutarExclusao()` | DELETE SigCdRga (detalhe primeiro) + DELETE SigCdRGR |
+| `Destroy()` | Fecha `cursor_4c_Dados` e `csSigCdRga` |

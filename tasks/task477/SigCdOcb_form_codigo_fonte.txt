@@ -1,0 +1,885 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigCdOcb.SCX
+* Data/Hora: 22/08/2026 00:52:20
+* Total de registros: 28
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDOCB
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say15
+  Parent: SIGCDOCB.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say14
+  Parent: SIGCDOCB.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say9
+  Parent: SIGCDOCB.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGCDOCB.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Apura
+  Parent: SIGCDOCB.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGCDOCB.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGCDOCB.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getCodigos
+  Parent: SIGCDOCB.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDescrs
+  Parent: SIGCDOCB.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetTipos
+  Parent: SIGCDOCB.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGCDOCB.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say5
+  Parent: SIGCDOCB.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Lanca
+  Parent: SIGCDOCB.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say6
+  Parent: SIGCDOCB.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetOper
+  Parent: SIGCDOCB.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say7
+  Parent: SIGCDOCB.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say8
+  Parent: SIGCDOCB.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say10
+  Parent: SIGCDOCB.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetAutos
+  Parent: SIGCDOCB.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say11
+  Parent: SIGCDOCB.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say12
+  Parent: SIGCDOCB.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetOperac
+  Parent: SIGCDOCB.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say13
+  Parent: SIGCDOCB.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: GetGrContabil
+  Parent: SIGCDOCB.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 125
+  Left = 35
+  Width = 437
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDOCB
+------------------------------------------------------------
+  DataSession = 2
+  DoCreate = .T.
+  Caption = "Ocorrências do Balanço"
+  Name = "SIGCDOCB"
+  Pagina.ErasePage = .T.
+  Pagina.Lista.cntSombra.lblSombra.Name = "lblSombra"
+  Pagina.Lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  Pagina.Lista.cntSombra.Name = "cntSombra"
+  Pagina.Lista.Grade.FontName = "Tahoma"
+  Pagina.Lista.Grade.FontSize = 8
+  Pagina.Lista.Grade.RowHeight = 16
+  Pagina.Lista.Grade.ForeColor = 90,90,90
+  Pagina.Lista.Grade.Name = "Grade"
+  Pagina.Lista.Grupo_op.AutoSize = .T.
+  Pagina.Lista.Grupo_op.Inserir.Top = 5
+  Pagina.Lista.Grupo_op.Inserir.Left = 5
+  Pagina.Lista.Grupo_op.Inserir.Name = "Inserir"
+  Pagina.Lista.Grupo_op.Consultar.Top = 5
+  Pagina.Lista.Grupo_op.Consultar.Left = 80
+  Pagina.Lista.Grupo_op.Consultar.Name = "Consultar"
+  Pagina.Lista.Grupo_op.Alterar.Top = 5
+  Pagina.Lista.Grupo_op.Alterar.Left = 155
+  Pagina.Lista.Grupo_op.Alterar.Name = "Alterar"
+  Pagina.Lista.Grupo_op.Excluir.Top = 5
+  Pagina.Lista.Grupo_op.Excluir.Left = 230
+  Pagina.Lista.Grupo_op.Excluir.Name = "Excluir"
+  Pagina.Lista.Grupo_op.Procurar.Top = 5
+  Pagina.Lista.Grupo_op.Procurar.Left = 305
+  Pagina.Lista.Grupo_op.Procurar.Name = "Procurar"
+  Pagina.Lista.Grupo_op.Height = 85
+  Pagina.Lista.Grupo_op.Left = 344
+  Pagina.Lista.Grupo_op.Top = -1
+  Pagina.Lista.Grupo_op.Width = 385
+  Pagina.Lista.Grupo_op.TabIndex = 2
+  Pagina.Lista.Grupo_op.Name = "Grupo_op"
+  Pagina.Lista.Grupo_Saida.Sair.Top = 5
+  Pagina.Lista.Grupo_Saida.Sair.Left = 5
+  Pagina.Lista.Grupo_Saida.Sair.Name = "Sair"
+  Pagina.Lista.Grupo_Saida.Left = 719
+  Pagina.Lista.Grupo_Saida.Top = -1
+  Pagina.Lista.Grupo_Saida.TabIndex = 3
+  Pagina.Lista.Grupo_Saida.Name = "Grupo_Saida"
+  Pagina.Lista.cntFiltros.Name = "cntFiltros"
+  Pagina.Lista.Name = "Lista"
+  Pagina.Dados.Grupo_Salva.AutoSize = .T.
+  Pagina.Dados.Grupo_Salva.Salva.Top = 5
+  Pagina.Dados.Grupo_Salva.Salva.Left = 5
+  Pagina.Dados.Grupo_Salva.Salva.Name = "Salva"
+  Pagina.Dados.Grupo_Salva.Cancelar.Top = 5
+  Pagina.Dados.Grupo_Salva.Cancelar.Left = 80
+  Pagina.Dados.Grupo_Salva.Cancelar.Name = "Cancelar"
+  Pagina.Dados.Grupo_Salva.TabIndex = 10
+  Pagina.Dados.Grupo_Salva.Name = "Grupo_Salva"
+  Pagina.Dados.Name = "Dados"
+  Pagina.Name = "Pagina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDOCB.Pagina.Dados.Say15
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Apuração :"
+  Left = 229
+  Top = 268
+  Width = 55
+  TabIndex = 15
+  ForeColor = 90,90,90
+  ZOrderSet = 2
+  Name = "Say15"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDOCB.Pagina.Dados.Say14
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "<S>im  <N>ão"
+  Left = 316
+  Top = 269
+  Width = 75
+  TabIndex = 16
+  ForeColor = 90,90,90
+  ZOrderSet = 2
+  Name = "Say14"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDOCB.Pagina.Dados.Say9
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Gr.Contabil :"
+  Left = 221
+  Top = 347
+  Width = 63
+  TabIndex = 23
+  ForeColor = 90,90,90
+  ZOrderSet = 2
+  Name = "Say9"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDOCB.Pagina.Dados.Say1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Código :"
+  Left = 242
+  Top = 216
+  Width = 42
+  TabIndex = 11
+  ForeColor = 90,90,90
+  ZOrderSet = 2
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDOCB.Pagina.Dados.Get_Apura
+------------------------------------------------------------
+  ControlSource = "crSigBaOco.apuras"
+  Height = 23
+  Left = 288
+  TabIndex = 4
+  Top = 265
+  Width = 17
+  ZOrderSet = 5
+  Name = "Get_Apura"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDOCB.Pagina.Dados.Say2
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Descrição :"
+  Left = 229
+  Top = 242
+  TabIndex = 25
+  ForeColor = 90,90,90
+  ZOrderSet = 3
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDOCB.Pagina.Dados.Say3
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Tipos (O/J) :"
+  Left = 222
+  Top = 190
+  Width = 62
+  TabIndex = 21
+  ForeColor = 90,90,90
+  ZOrderSet = 2
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDOCB.Pagina.Dados.getCodigos
+------------------------------------------------------------
+  ControlSource = "crSigBaOco.codigos"
+  Height = 23
+  Left = 288
+  TabIndex = 2
+  Top = 213
+  Width = 80
+  ZOrderSet = 5
+  Name = "getCodigos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDOCB.Pagina.Dados.getDescrs
+------------------------------------------------------------
+  ControlSource = "crSigBaOco.descrs"
+  Left = 288
+  TabIndex = 3
+  Top = 239
+  Width = 290
+  ZOrderSet = 5
+  Name = "getDescrs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDOCB.Pagina.Dados.GetTipos
+------------------------------------------------------------
+  ControlSource = "crSigBaOco.tipos"
+  Height = 23
+  Left = 288
+  TabIndex = 1
+  Top = 187
+  Width = 17
+  ZOrderSet = 5
+  Name = "GetTipos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDOCB.Pagina.Dados.Say4
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "< O >corrência  < J >ustificativa"
+  Left = 316
+  Top = 190
+  Width = 161
+  TabIndex = 20
+  ForeColor = 90,90,90
+  ZOrderSet = 2
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDOCB.Pagina.Dados.Say5
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Lança C/C :"
+  Left = 226
+  Top = 294
+  Width = 58
+  TabIndex = 14
+  ForeColor = 90,90,90
+  ZOrderSet = 2
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDOCB.Pagina.Dados.Get_Lanca
+------------------------------------------------------------
+  ControlSource = "crSigBaOco.lancas"
+  Height = 23
+  Left = 288
+  TabIndex = 5
+  Top = 291
+  Width = 17
+  ZOrderSet = 5
+  Name = "Get_Lanca"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDOCB.Pagina.Dados.Say6
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Operação :"
+  Left = 228
+  Top = 320
+  Width = 56
+  TabIndex = 22
+  ForeColor = 90,90,90
+  ZOrderSet = 2
+  Name = "Say6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDOCB.Pagina.Dados.GetOper
+------------------------------------------------------------
+  ControlSource = "crSigBaOco.opers"
+  Height = 23
+  Left = 288
+  TabIndex = 6
+  Top = 317
+  Width = 27
+  ZOrderSet = 5
+  Name = "GetOper"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDOCB.Pagina.Dados.Say7
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "<DB>Débito <CR>crédito <DF>Diferença <NL>Nulo"
+  Left = 316
+  Top = 320
+  Width = 258
+  TabIndex = 24
+  ForeColor = 90,90,90
+  ZOrderSet = 2
+  Name = "Say7"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDOCB.Pagina.Dados.Say8
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "<S>im  <N>ão"
+  Left = 316
+  Top = 295
+  Width = 75
+  TabIndex = 17
+  ForeColor = 90,90,90
+  ZOrderSet = 2
+  Name = "Say8"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDOCB.Pagina.Dados.Say10
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Automático :"
+  Left = 221
+  Top = 372
+  Width = 63
+  TabIndex = 13
+  ForeColor = 90,90,90
+  ZOrderSet = 2
+  Name = "Say10"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDOCB.Pagina.Dados.GetAutos
+------------------------------------------------------------
+  ControlSource = "crSigBaOco.autos"
+  Height = 23
+  Left = 288
+  TabIndex = 8
+  Top = 369
+  Width = 17
+  ZOrderSet = 5
+  Name = "GetAutos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDOCB.Pagina.Dados.Say11
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "<S>im  <N>ão"
+  Left = 316
+  Top = 373
+  Width = 75
+  TabIndex = 19
+  ForeColor = 90,90,90
+  ZOrderSet = 2
+  Name = "Say11"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDOCB.Pagina.Dados.Say12
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Operação :"
+  Left = 228
+  Top = 398
+  Width = 56
+  TabIndex = 12
+  ForeColor = 90,90,90
+  ZOrderSet = 2
+  Name = "Say12"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDOCB.Pagina.Dados.GetOperac
+------------------------------------------------------------
+  ControlSource = "crSigBaOco.operacaos"
+  Height = 23
+  Left = 288
+  TabIndex = 9
+  Top = 395
+  Width = 17
+  ZOrderSet = 5
+  Name = "GetOperac"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDOCB.Pagina.Dados.Say13
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "<E>ntrada  <S>aida"
+  Left = 316
+  Top = 399
+  Width = 104
+  TabIndex = 18
+  ForeColor = 90,90,90
+  ZOrderSet = 2
+  Name = "Say13"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDOCB.Pagina.Dados.GetGrContabil
+------------------------------------------------------------
+  Alignment = 3
+  ControlSource = "crSigBaOco.grupos"
+  Height = 23
+  Left = 288
+  TabIndex = 7
+  Top = 343
+  Width = 80
+  ZOrderSet = 35
+  Name = "GetGrContabil"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDOCB
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LPARAMETERS _acesso
+
+ThisForm.Busca=1
+
+WITH Thisform
+	.poDatamgr = CreateObject('fSqlConector',ThisForm.Name)
+
+	If Not .poDatamgr.pnIdconn>0
+		Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),goSistema.TituloSistema)
+		Return(.f.)
+	Endif
+
+	With .poDatamgr
+		.AddCursor('SigBaOco','Codigos','crSigBaOco','Codigos',ThisForm.pagina.lista.grade)
+		.pfSqlTabela(1).pColuna('Tipos','','','Tipo',30,.t.)
+		.pfSqlTabela(1).pColuna('Codigos','','','Código',80,.t.)
+		.pfSqlTabela(1).pColuna('Descrs','','','Descrição',290,.t.)
+		.pfSqlTabela(1).pColuna('Apuras','','','Apuras',45,.t.)
+		.pfSqlTabela(1).pColuna('Operacaos','','','Operação',60,.t.)
+	EndWith
+Endwith	
+
+=DoDefault()
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE mativapagina1
+------------------------------------------------------------
+PROCEDURE mativapagina1
+=DoDefault()
+
+lcCol = Padr(ThisForm.Busca,1)
+ThisForm.Pagina.Lista.Grade.SetFocus
+ThisForm.Pagina.Lista.Grade.Column&lcCol..SetFocus
+ThisForm.Pagina.Lista.Grade.Refresh
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_procurar
+------------------------------------------------------------
+PROCEDURE msv_procurar
+WITH ThisForm
+	WITH .pagina.dados
+		lcCodigo=.GetCodigos.Value
+		lcTipo=.getTipos.Value
+		IF ! EMPTY(.getTipos.Value)
+			SELECT crSigBaOco
+			LOCATE FOR Tipos = lcTipo .AND. codigos = ALLTRIM(lcCodigo)
+			ThisForm.Busca=1
+		ELSE
+			SELECT crSigBaOco
+			SET ORDER TO Codigos
+			SET NEAR on
+			SEEK lcCodigo
+			SET NEAR off
+			Thisform.pagina.lista.grade.columns(2).setfocus
+			ThisForm.Busca=2
+		Endif
+	ENDWITH
+EndWith
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Lista.Grupo_op.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Lista.Grupo_op.Click
+LPARAMETERS opcao
+
+If !DoDefault( Opcao )
+	ThisForm.mAtivaPagina1
+	Return
+Endif
+
+Select crSigBaOco
+
+Do Case
+	Case Inlist( ThisForm.pcEscolha, 'PROCURAR', 'INSERIR' )
+		ThisForm.Pagina.Dados.getTipos.Setfocus	
+
+	Case ThisForm.pcEscolha = 'ALTERAR'
+		ThisForm.Pagina.Dados.getDescrs.Setfocus	
+
+	Case Inlist( ThisForm.pcEscolha, 'CONSULTAR', 'EXCLUIR' )
+		ThisForm.Pagina.Dados.Grupo_Salva.Salva.Setfocus
+Endcase
+
+Select crSigBaOco
+ThisForm.Pagina.Dados.Refresh
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+If ThisForm.pcEscolha = 'INSERIR'
+   If IsEmpty(ThisForm.Pagina.Dados.getCodigos.Value)
+	  MessageBox( 'Obrigatório Informar o Código!!!', 48, '' )
+	  ThisForm.Pagina.Dados.getCodigos.SetFocus
+	  Return
+   Endif
+ENDIF
+
+=DoDefault()
+ThisForm.mAtivaPagina1
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+=DoDefault()
+If ThisForm.PlCancelar
+	ThisForm.mAtivaPagina1
+Endif
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDOCB.Pagina.Dados.Get_Apura
+* Classe: fwget (Base: textbox)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Return (Inlist(This.Value,"S","N"))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDOCB.Pagina.Dados.getCodigos
+* Classe: fwget (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Inlist( ThisForm.pcEscolha, 'PROCURAR', 'INSERIR')
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDOCB.Pagina.Dados.GetTipos
+* Classe: fwget (Base: textbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Return (Inlist(This.Value,"O","J").or.ThisForm.pcEscolha="PROCURA")
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Inlist( ThisForm.pcEscolha, 'PROCURAR', 'INSERIR' )
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDOCB.Pagina.Dados.Get_Lanca
+* Classe: fwget (Base: textbox)
+* Registro: 16
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Return (Inlist(This.Value,"S","N"))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDOCB.Pagina.Dados.GetOper
+* Classe: fwget (Base: textbox)
+* Registro: 18
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Return (Inlist(This.value,"DB","CR","DF","NL"))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDOCB.Pagina.Dados.GetAutos
+* Classe: fwget (Base: textbox)
+* Registro: 22
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Return (Inlist(This.Value,"S","N"))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDOCB.Pagina.Dados.GetOperac
+* Classe: fwget (Base: textbox)
+* Registro: 25
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Return (Inlist(This.Value,"E","S"))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return ( This.Parent.GetAutos.Value = [S] )
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDOCB.Pagina.Dados.GetGrContabil
+* Classe: fwget (Base: textbox)
+* Registro: 27
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+local lcod,lfan,codcor,xobj
+
+If !IsEmpty(this.value)
+	xBrox = CreateObject('fwBuscaExt',Thisform.poDatamgr.pnIdconn,'SigCdGcr','crSigCdGcr','Codigos',This.Value,'Seleção',.t.,'Codigos')
+	If  Not xBrox.plAchouRegistro
+		xBrox.mAddColuna('CODIGOS','','Código',.t.)
+		xBrox.mAddColuna('DESCRS','','Descrição',.t.)
+		xBrox.Show()
+	EndIf 
+	this.value = evaluate('crSigCdGcr.CODIGOS')
+	this.refresh
+endif
+Return(.t.)
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGCDOCB
+RESERVED3 (ClassInfo): busca
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 16
+================================================================================

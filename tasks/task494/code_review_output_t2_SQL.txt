@@ -1,0 +1,10 @@
+﻿Verifiquei os dois arquivos e n├úo encontrei nenhum `WHERE` com `CONTROLCOUNT` em contexto SQL. As duas ocorr├¬ncias em Formpag.prg (linhas 2772 e 2779) s├úo acessos leg├¡timos ├á **propriedade VFP9 `ControlCount`** de containers, n├úo uma coluna SQL:
+
+```foxpro
+FOR loc_nI = 1 TO par_oConteiner.ControlCount          && linha 2772
+IF PEMSTATUS(loc_oCtrl, "ControlCount", 5) AND ...     && linha 2779
+```
+
+Esses s├úo usos corretos para iterar controles UI, n├úo filtros SQL inventados. O scanner detectou `ControlCount` fora de contexto SQL e gerou um **falso positivo**.
+
+N├úo h├í nada a corrigir neste pass ÔÇö ambos os arquivos est├úo corretos em rela├º├úo ao problema apontado.

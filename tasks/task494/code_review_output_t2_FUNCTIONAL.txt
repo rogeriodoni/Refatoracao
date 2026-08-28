@@ -1,0 +1,12 @@
+﻿Todas as corre├º├Áes foram aplicadas. Resumo do que foi feito:
+
+**[CONTAINER-VISIVEL] ÔÇö Corrigido**
+- `TornarControlesVisiveis`: a guarda de recurs├úo agora tamb├®m verifica `!INLIST(LOWER(loc_oCtrl.Name), "cnt_4c_botoes", "cnt_4c_salva")` na linha 2886, impedindo que o m├®todo recursivo entre dentro de containers que deveriam permanecer ocultos.
+
+**[LAYOUT-POSITION] Coordenadas Page1 ÔÇö J├í corretas no arquivo**
+- `obj_4c_Optiongroup3` (Top=280, Left=479), `obj_4c_Optiongroup4` (Top=305, Left=479), `obj_4c_Optiongroup12` (Top=330, Left=479) j├í estavam com as coordenadas corretas no arquivo real (os trechos na tarefa mostravam vers├úo anterior).
+
+**[LAYOUT-POSITION] Controles ausentes em Page2 ÔÇö Adicionados**
+- Adicionados `obj_4c_Optiongroup12_p2` (Top=403, Left=170), `obj_4c_Optiongroup4_p2` (Top=411, Left=670) e `obj_4c_Optiongroup3_p2` (Top=435, Left=670) em `CriarPaginaCartaoTEF` como espelhos de exibi├º├úo (`Enabled=.F.`).
+- `BOParaForm` atualizado para popular os espelhos P2 com os valores do BO.
+- `LimparCampos` atualizado para resetar os espelhos P2 para `Value=1`.

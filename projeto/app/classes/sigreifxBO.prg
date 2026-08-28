@@ -50,6 +50,9 @@ DEFINE CLASS sigreifxBO AS RelatorioBase
     this_nOpers          = 0    && Tipo da operacao (1=Entrada 2=Saida 3=Ambos, de SigCdOpe.Opers)
     this_nNdopes         = 0    && Numero interno da operacao (de SigCdOpe.NDopes)
 
+    *-- Pattern #142: injetado pelo CorretorAutomatico (default vazio) - REVISAR e substituir pelo alias do cursor binding do FRX
+    this_cCursorDados = ""     && FIXME Pattern #142 pos-Erro51
+
     *--------------------------------------------------------------------------
     * Init - Inicializa BO de impressao de documentos
     *--------------------------------------------------------------------------

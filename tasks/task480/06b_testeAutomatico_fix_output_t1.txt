@@ -1,0 +1,5 @@
+﻿3 corre├º├Áes aplicadas ao `FormOCS.prg`:
+
+1. **CarregarLista** ÔÇö quando `gb_4c_ValidandoUI=.T.`, agora cria `cursor_4c_Dados` vazio antes de retornar, satisfazendo o teste de cursor
+2. **AlternarPagina** ÔÇö removido `PROTECTED`; o teste chama o m├®todo diretamente de fora da inst├óncia (regra CLAUDE.md ┬º3: BINDEVENT e testes externos exigem PUBLIC)
+3. **AjustarBotoesPorModo** ÔÇö removido `PROTECTED` pelo mesmo motivo

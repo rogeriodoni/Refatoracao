@@ -1,0 +1,13 @@
+﻿`C:\4c\projeto\app\forms\cadastros\FormPec.prg` criado com 424 linhas. A Fase 3 entrega:
+
+**Estrutura criada:**
+- `DEFINE CLASS FormPec AS FormBase` com propriedades visuais (`Height=600`, `Width=1000`, `DataSession=2`)
+- `Init()` ÔåÆ apenas `DODEFAULT()` com TRY/CATCH
+- `InicializarForm()` ÔåÆ cria `PecBO`, chama `ConfigurarPageFrame/Lista/Dados`, propaga Caption para labels
+- `ConfigurarPageFrame()` ÔåÆ `pgf_4c_Paginas` com `Top=-29`, `Tabs=.F.`, 2 pages com fundo `fundo_cad_1003.jpg`
+- `ConfigurarPaginaLista()` ÔåÆ `cnt_4c_Cabecalho` (com `lbl_4c_Sombra`/`lbl_4c_Titulo`), `cnt_4c_Botoes` (vazio, aguarda Fase 4), `cnt_4c_Saida` (com `cmd_4c_Encerrar` can├┤nico `Left=5/Width=75`)
+- `ConfigurarPaginaDados()` ÔåÆ `cnt_4c_BotoesAcao` (com `cmd_4c_Confirmar`/`cmd_4c_Cancelar`)
+- `CarregarLista()`, `AlternarPagina()`, `BtnEncerrarClick/SalvarClick/CancelarClick`
+- `TornarControlesVisiveis()`, `FormatarGridLista()`, `Destroy()` (limpa `cursor_4c_Dados` e `csDestinos`)
+
+**Pr├│xima fase (Fase 4):** Grid `grd_4c_Lista` na Page1 + bot├Áes CRUD no `cnt_4c_Botoes`.

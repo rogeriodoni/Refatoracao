@@ -1,0 +1,118 @@
+{
+  "resumo": {
+    "totalMetodos": 6,
+    "metodosComSQL": 0,
+    "metodosComValidacao": 3,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": []
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDOET",
+      "evento": "Init",
+      "linhas": 20,
+      "codigoOriginal": "LParameters _Acesso\n\nWITH Thisform\n\n\t.poDatamgr = CreateObject('fSqlConector')\n\n\tIf Not .poDatamgr.pnIdconn>0\n\t\tMessagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),goSistema.TituloSistema)\n\t\tReturn(.f.)\n\tEndif\n\n\tWith .poDatamgr\n\t\t.AddCursor('SigEtOco','Cods','crSigEtOco','Cods',ThisForm.pagina.lista.grade)\n\t\t.pfSqlTabela(1).pColuna('Cods','','','Código',50,.t.)\n\t\t.pfSqlTabela(1).pColuna('Descrs','','','Descrição',290,.t.)\n\tEndWith\nEndwith\t\n\n=DoDefault()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDOET",
+      "evento": "Click",
+      "linhas": 21,
+      "codigoOriginal": "LPARAMETERS opcao\n\nIf !DoDefault( Opcao )\n\tThisForm.mAtivapagina1\n\tReturn\nEndif\n\nDo Case\n\tCase ThisForm.pcEscolha = 'INSERIR'\n\t\tThisForm.Pagina.Dados.getCods.SetFocus\n\n\tCase ThisForm.pcEscolha = 'PROCURAR'\n\t\tThisForm.Pagina.Dados.getCods.SetFocus\n\n\tCase Inlist( ThisForm.pcEscolha, 'EXCLUIR', 'CONSULTAR' )\n\t\tThisForm.Pagina.Dados.Grupo_Salva.Salva.SetFocus\n\n\tCase ThisForm.pcEscolha = 'ALTERAR'\n\t\tThisForm.Pagina.Dados.getDescrs.SetFocus\nEndcase\n* Fim ***********************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDOET",
+      "evento": "Click",
+      "linhas": 8,
+      "codigoOriginal": "If Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR') .And. IsEmpty(Descrs)\n\t=MessageBox('Descrição Inválida!!!', 48, '')\n\tThisForm.Pagina.Dados.getDescrs.SetFocus\n\tReturn\nEndif\n=DoDefault()\nThisForm.mAtivapagina1\n* Fim ********************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDOET",
+      "evento": "Click",
+      "linhas": 6,
+      "codigoOriginal": "=DoDefault()\n\nIf ThisForm.plCancelar\n\tThisForm.mAtivapagina1\nEndif\n* Fim ********************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDOET.Pagina.Dados.getCods",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist(ThisForm.pcEscolha, 'INSERIR', 'PROCURAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDOET.Pagina.Dados.getCods",
+      "evento": "Valid",
+      "linhas": 12,
+      "codigoOriginal": "If (ThisForm.pcEscolha = 'INSERIR')\n\tIf IsEmpty(This.Value)\n\t\tThisform.Pagina.Dados.getCods.Refresh\n\tElse\n\t\tIf ThisForm.podatamgr.ChkRegister('SigEtOco', 'Cods', This.Value)\n\t\t\t=MessageBox('Código Já Cadastrado!!!', 48, '')\n\t\t\tThis.Value = ''\n\t\t\tReturn 0\n\t\tEndif\n\tEndif\nEndif\n* Fim ********************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChkRegister",
+        "controlesReferenciados": "ChkRegister('SigEtOco'",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

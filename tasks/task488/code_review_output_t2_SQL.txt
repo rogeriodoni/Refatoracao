@@ -1,0 +1,14 @@
+﻿O schema confirma que `cmoes` ├® a coluna PK v├ílida da tabela `SigCdMoe` (char(3)). O detector flagou `CMOES` porque n├úo aparece nas queries originais do form ÔÇö mas isso ├® um **falso positivo**.
+
+**An├ílise do caso:**
+
+O m├®todo `BuscarDescMoeda` em `OptBO.prg` usa:
+```foxpro
+"SELECT DMoes FROM SigCdMoe WHERE CMoes = " + EscaparSQL(ALLTRIM(par_cCodigo))
+```
+
+- `cmoes` ├® a chave prim├íria real de `SigCdMoe` (confirmado no schema.sql linha 4943)
+- O original n├úo mostra query expl├¡cita a SigCdMoe porque o form legado usava controle `GET_MOEDAS` do framework VCX, que internamente executava sua pr├│pria SQL ÔÇö esse detalhe de implementa├º├úo ficou invis├¡vel para o detector
+- Remover o `WHERE CMoes = ...` tornaria o SELECT sem filtro, retornando todas as moedas ÔÇö funcionalmente errado
+
+**Conclus├úo:** Nenhuma altera├º├úo necess├íria. O c├│digo est├í correto. O `[SQL-FILTRO-INVENTADO]` ├® falso positivo gerado porque a query a SigCdMoe n├úo aparecia explicitamente no c├│digo legado referenciado (era encapsulada pelo framework VCX), mas a coluna `CMoes` ├® v├ílida e o WHERE ├® semanticamente obrigat├│rio para lookup por c├│digo.

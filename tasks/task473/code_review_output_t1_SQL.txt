@@ -1,0 +1,8 @@
+﻿3 corre├º├Áes aplicadas no `MunBO.prg`. Resumo do que foi feito e por qu├¬:
+
+**CIDCHAVES (3 ocorr├¬ncias removidas):**
+- `Atualizar()`: `WHERE cidchaves = ...` ÔåÆ `WHERE codigos = ...`. Tamb├®m removido `codigos = ...` do SET (chave de neg├│cio n├úo deve ser alterada no UPDATE). O original VFP9 identificava registros por `codigos`, n├úo por cidchaves.
+- `ExecutarExclusao()`: `WHERE cidchaves = ...` ÔåÆ `WHERE codigos = ...`. Mesma raz├úo.
+- `ValidarDuplicidade()`: Removido o bloco `AND cidchaves <> ...`. Adicionado guard `IF !THIS.this_lNovoRegistro / RETURN .F.` ÔÇö como `codigos` fica desabilitado no modo ALTERAR (ver `HabilitarCampos`), a verifica├º├úo de duplicidade s├│ faz sentido no INSERT.
+
+**UFIBGES (n├úo alterado):** O `WHERE UFIBGEs = ...` em FormMun.prg linha 971 ├® a migra├º├úo correta do `fwBuscaExt SigCdUfs / UFIBGEs` original (confirmado pelo coment├írio na linha 951). N├úo ├® filtro inventado.

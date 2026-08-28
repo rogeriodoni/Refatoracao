@@ -1,0 +1,172 @@
+{
+  "resumo": {
+    "totalMetodos": 9,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 3,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": []
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDOCO",
+      "evento": "Procedure",
+      "linhas": 3,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n\n=DoDefault()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDOCO",
+      "evento": "Procedure",
+      "linhas": 13,
+      "codigoOriginal": "=DoDefault()\nIf .Not. Empty(ThisForm.Pagina.Dados.Get_Cods.Value)\n\tThisForm.pCol = 1\n\tThisForm.poDataMgr.LocateCursor('crSigCcCco','cods',ThisForm.Pagina.Dados.Get_Cods.Value)\nElse\n\tIf .Not.IsEmpty(ThisForm.Pagina.Dados.Get_Descs.Value)\n\t\tThisForm.pCol = 2\n\t\tThisForm.poDataMgr.LocateCursor('crSigCcCco','descs',ThisForm.Pagina.Dados.Get_Descs.Value)\n\tEndIf\nEndIf\n\n\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "LocateCursor",
+        "controlesReferenciados": "Get_Cods,Get_Descs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDOCO",
+      "evento": "Procedure",
+      "linhas": 12,
+      "codigoOriginal": "=DoDefault()\n\nThisForm.Pagina.Lista.Grade.SetFocus\nDo Case\n\tCase (ThisForm.pCol = 1)\n\t\tThisForm.Pagina.Lista.Grade.Column1.SetFocus\n\n\tCase (ThisForm.pCol = 2)\n\t\tThisForm.Pagina.Lista.Grade.Column2.SetFocus\nEndCase\nThisForm.Pagina.Lista.Grade.Refresh",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDOCO",
+      "evento": "Init",
+      "linhas": 27,
+      "codigoOriginal": "&&=fConfigGeral()\n\nlcQryCCoCo = [Select * From SigCcCCo]\n\nThisForm.pCol = 1\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tWith .poDataMgr\n\t\t\t.AddCursor('SigCcCCo', 'Cods', 'crSigCcCCo', '', ThisForm.Pagina.Lista.Grade, lcQryCCoCo)\n\t\t\t.pfSqlTabela(1).pColuna('Cods', '', '', 'Códigos',  150, .t.)\n\t\t\t.pfSqlTabela(1).pColuna('descs','', '','Descrição', 220, .t.)\n\t\tEndWith\n\n\t\t=DoDefault()\n\n\t\tThisForm.Pagina.Lista.Grade.Column1.SetFocus\n\tElse... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDOCO",
+      "evento": "Click",
+      "linhas": 16,
+      "codigoOriginal": "LParameters opcao\n\nIf !dodefault( opcao )\n\tThisForm.mAtivaPagina1\n\tReturn\nEndif\n\nDo Case\n\tCase Inlist( ThisForm.pcEscolha, 'PROCURAR', 'INSERIR' )\n\t\tthisform.pagina.dados.Get_Cods.setfocus\t\n\tCase ThisForm.pcEscolha = 'ALTERAR'\n\t\tthisform.pagina.dados.Get_Descs.setfocus\n\tCase Inlist( ThisForm.pcEscolha, 'CONSULTAR', 'EXCLUIR' )\n\t\tthisform.pagina.dados.grupo_salva.salva.setfocus\nEndcase\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Cods,Get_Descs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDOCO",
+      "evento": "Click",
+      "linhas": 24,
+      "codigoOriginal": "If ThisForm.pcEscolha = 'INSERIR'\n   If Empty(ThisForm.Pagina.Dados.Get_Cods.Value)\n\t    MessageBox( 'Obrigatório Informar o Código.', 48, '' )\n        ThisForm.Pagina.Dados.Get_Cods.SetFocus\n\t\tReturn\n\tEndif\n\tIf ThisForm.poDataMgr.ChkRegister('SigCcCco','cods',ThisForm.Pagina.Dados.Get_Cods.Value)\n\t\tMessageBox( 'Código já cadastrado...', 48, '' )\n\t\tThisForm.Pagina.Dados.Get_Cods.SetFocus\n\t\tReturn\n\tEndif\nEndif\nIf ThisForm.pcEscolha = 'INSERIR' or ThisForm.pcEscolha = 'ALTERAR'\n  If IsEmpty(ThisFo... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChkRegister",
+        "controlesReferenciados": "Get_Cods,ChkRegister('SigCcCco',Get_Descs",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDOCO",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "=DoDefault()\nIf ThisForm.plCancelar\n\tThisForm.mAtivapagina1\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDOCO.Pagina.Dados.Get_Cods",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "RETURN(!Inlist( ThisForm.pcEscolha, 'ALTERAR', 'CONSULTAR', 'EXCLUIR' ))\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDOCO.Pagina.Dados.Get_Descs",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Inlist(ThisForm.pcEscolha, \"INSERIR\", \"PROCURAR\", \"ALTERAR\")\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDOCO.Init",
+      "queryOriginal": "lcQryCCoCo = [Select * From SigCcCCo]",
+      "tabelas": "SigCcCCo",
+      "colunas": "",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCcCCo"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

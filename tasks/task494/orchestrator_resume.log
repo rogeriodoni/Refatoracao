@@ -1,0 +1,1109 @@
+=== ORQUESTRADOR DE MIGRACAO ===
+
+Configuracao carregada:
+  Origem: C:\4c\origem
+  Tasks: C:\4c\tasks
+  Max Problemas (ValidarUI): 10
+
+Processando task especifica: task494
+
+Task ID: task494
+
+BaseName obtido do estado da task: sigcdpag
+[ETAPA 1] JA COMPLETADA - Pulando...
+[ETAPA 2] JA COMPLETADA - Pulando...
+BaseName recuperado do estado: sigcdpag
+[ETAPA 2.2] Arquivo (232.57 KB) abaixo do limite (400 KB) - Pulando reducao
+[ETAPA 2.5] JA COMPLETADA - Pulando...
+[ETAPA 2.7] JA COMPLETADA - Pulando...
+[ETAPA 2.8] JA COMPLETADA - Pulando...
+[ETAPA 3] JA COMPLETADA - Pulando...
+[ETAPA 4] JA COMPLETADA - Pulando...
+[ETAPA 4.5] JA COMPLETADA - Pulando...
+[ETAPA 5] JA COMPLETADA - Pulando...
+[ETAPA 5.5] JA COMPLETADA - Pulando...
+[ETAPA 5.5b] JA COMPLETADA - Pulando...
+[ETAPA 5.6] JA COMPLETADA - Pulando...
+
+============================================================================
+ [ETAPA 5.7] Validar Completude (TODO/stubs/procedures vazias)
+============================================================================
+
+[TaskManager] Etapa criada dinamicamente: 05d_validarCompletude
+[TaskManager] Estado atualizado: task494
+[TaskManager] Etapa iniciada: 05d_validarCompletude (tentativa 1)
+  [Inferencia] sigcdpag -> Formpag
+  [Inferencia] sigcdpag -> pagBO
+  [OK] BO (pagBO) - nenhum TODO/stub/procedure vazia detectado
+  [COMPLETUDE] Form (Formpag) tem 5 problema(s):
+    - Metodo stub com MsgAviso placeholder: BtnExportarClick - deve ter logica FUNCIONAL, nao mensagem 'sera implementado'
+    - Metodo stub com MsgAviso placeholder: BtnImportarClick - deve ter logica FUNCIONAL, nao mensagem 'sera implementado'
+    - Metodo stub com MsgAviso placeholder: BtnMinimoClick - deve ter logica FUNCIONAL, nao mensagem 'sera implementado'
+    - Metodo stub com MsgAviso placeholder: BtnDescontoClick - deve ter logica FUNCIONAL, nao mensagem 'sera implementado'
+    - Metodo stub com MsgAviso placeholder: BtnBINClick - deve ter logica FUNCIONAL, nao mensagem 'sera implementado'
+
+========================================================================
+  COMPLETUDE FALHOU: 1 arquivo(s) com TODO/stubs
+========================================================================
+
+Iniciando correcao automatica via Claude...
+
+--- Tentativa de correcao 1/10 ---
+
+  COMPLETUDE OK (apos correcao automatica): Nenhum TODO/stub/procedure vazia
+
+[TaskManager] Estado atualizado: task494
+[TaskManager] Etapa completada: 05d_validarCompletude
+
+============================================================================
+ [ETAPA 5.8] Code Review Automatizado (Multi-Pass Focado)
+============================================================================
+
+[TaskManager] Etapa criada dinamicamente: 05e_codeReview
+[TaskManager] Estado atualizado: task494
+[TaskManager] Etapa iniciada: 05e_codeReview (tentativa 1)
+  [Inferencia] sigcdpag -> Formpag
+  [Inferencia] sigcdpag -> pagBO
+  Backup pre-review: C:\4c\projeto\app\forms\cadastros\Formpag.prg.pre_review
+
+--- Code Review (Tentativa 1/5) ---
+  [AVISO] Erro na validacao de colunas SQL: Sqlcmd: Error: Microsoft ODBC Driver 17 for SQL Server : Provedor TCP: O tempo limite de espera foi atingido.
+  [LAYOUT] 19 divergencia(s) de posicao detectada(s)
+  [REVIEW] Total: 58 problema(s)
+  Passes necessarios: 3 (SQL:1, GRID:2, FUNCTIONAL:55)
+
+  === PASS SQL (1 problemas) ===
+    - [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna 'CONTROLCOUNT' existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: FPAGS, ICLIS, PENDENTE, IMPS, TIPOCADS, NFPAGS, VENCS, FORMAS
+    Prompt size: 61KB
+[2026-08-22 18:19:04] [INFO] === CLAUDE CLI INVOKER ===
+[2026-08-22 18:19:04] [INFO] Prompt File: C:\4c\tasks\task494\code_review_prompt_t1_SQL.md
+[2026-08-22 18:19:04] [INFO] Output File: C:\4c\tasks\task494\code_review_output_t1_SQL.txt
+[2026-08-22 18:19:04] [INFO] Model: sonnet
+[2026-08-22 18:19:04] [INFO] Timeout: 3600 segundos
+[2026-08-22 18:19:04] [INFO] Max Output Tokens: 128000
+[2026-08-22 18:19:04] [INFO] Context Files: 0 arquivo(s)
+[2026-08-22 18:19:04] [INFO] Invocando Claude CLI...
+[2026-08-22 18:19:04] [INFO] Prompt carregado: 63958 caracteres
+[2026-08-22 18:19:04] [INFO] Executando: claude --model sonnet --dangerously-skip-permissions --add-dir C:\4c
+[2026-08-22 18:19:04] [INFO] Tamanho total do prompt: 63958 caracteres
+[2026-08-22 18:19:04] [INFO] Invocando Claude CLI (tentativa 1/7)...
+[2026-08-22 18:19:54] [INFO] Claude CLI finalizado em 50.062801 segundos
+[2026-08-22 18:19:54] [INFO] Exit Code: 0
+[2026-08-22 18:19:54] [INFO] Output salvo em: C:\4c\tasks\task494\code_review_output_t1_SQL.txt
+[2026-08-22 18:19:54] [INFO] Output size: 801 bytes
+[2026-08-22 18:19:54] [INFO] SUCESSO: Claude CLI executado com sucesso
+[2026-08-22 18:19:54] [INFO] Preview do output:
+[2026-08-22 18:19:54] [INFO] **Nenhuma correÃ§Ã£o necessÃ¡ria.** O problema reportado Ã© um falso positivo.
+
+As duas ocorrÃªncias de `ControlCount` em `Formpag.prg` (linhas 2298 e 2303) sÃ£o acesso Ã  propriedade VFP9 `.ControlCount` de objetos visuais dentro de um loop de controles â€” cÃ³digo completamente correto:
+
+```foxpro
+FOR loc_nI = 1 TO par_oConteiner.ControlCount
+    ...
+    IF PEMSTATUS(loc_oCtrl, "ControlCount", 5) AND loc_oCtrl.ControlCount > 0
+```
+
+NÃ£o existe nenhum `WHERE ControlCount = ...` em str
+=== CORRETOR AUTOMATICO ===
+
+Arquivo: C:\4c\projeto\app\forms\cadastros\Formpag.prg
+
+Backup criado: C:\4c\projeto\app\forms\cadastros\Formpag.prg.bak
+Linhas originais: 3121
+
+Aplicando correcoes...
+  Schema BIT columns carregadas: 202 colunas
+[Pattern #168] AVISO: forma REPORT sem 'fundo_cad_1003.jpg' - considerar injetar THIS.Picture no InicializarForm
+
+Correcoes aplicadas: 2
+
+Detalhes:
+  Linha 499: [CONTAINER_VISIBLE_AUSENTE]
+    Original:  (ausente)
+    Corrigido: .Visible = .T.
+
+  Linha 0: [WARN-168-MISSING-PICTURE]
+    Original:  (sem fundo_cad_1003.jpg no arquivo)
+    Corrigido: (REVISAR MANUAL - injetar THIS.Picture no InicializarForm)
+
+Log de correcoes salvo: C:\4c\tasks\task494\correcoes_Formpag.prg.json
+
+=== CORRECAO CONCLUIDA ===
+2 correcao(oes) aplicada(s).
+=== CORRETOR AUTOMATICO ===
+
+Arquivo: C:\4c\projeto\app\classes\pagBO.prg
+
+Backup criado: C:\4c\projeto\app\classes\pagBO.prg.bak
+Linhas originais: 864
+
+Aplicando correcoes...
+  Schema BIT columns carregadas: 202 colunas
+
+Correcoes aplicadas: 0
+
+Log de correcoes salvo: C:\4c\tasks\task494\correcoes_pagBO.prg.json
+
+=== CORRECAO CONCLUIDA ===
+Nenhuma correcao necessaria.
+    Pass SQL concluido.
+
+  === PASS GRID (2 problemas) ===
+    - [GRID-RECORDSOURCE-AUTOBIND] Linha 2781: RecordSource reatribuido mas ControlSource NAO redefinido nas proximas linhas. VFP faz auto-bind pela ordem dos campos do cursor, ignorando ControlSource anterior. CORRIGIR: Re-definir .ControlSource de TODAS as colunas APOS .RecordSource = ...
+    - [GRID-RECORDSOURCE-AUTOBIND] Linha 2909: RecordSource reatribuido mas ControlSource NAO redefinido nas proximas linhas. VFP faz auto-bind pela ordem dos campos do cursor, ignorando ControlSource anterior. CORRIGIR: Re-definir .ControlSource de TODAS as colunas APOS .RecordSource = ...
+    Prompt size: 5KB
+[2026-08-22 18:20:15] [INFO] === CLAUDE CLI INVOKER ===
+[2026-08-22 18:20:15] [INFO] Prompt File: C:\4c\tasks\task494\code_review_prompt_t1_GRID.md
+[2026-08-22 18:20:15] [INFO] Output File: C:\4c\tasks\task494\code_review_output_t1_GRID.txt
+[2026-08-22 18:20:15] [INFO] Model: sonnet
+[2026-08-22 18:20:15] [INFO] Timeout: 3600 segundos
+[2026-08-22 18:20:15] [INFO] Max Output Tokens: 128000
+[2026-08-22 18:20:15] [INFO] Context Files: 0 arquivo(s)
+[2026-08-22 18:20:15] [INFO] Invocando Claude CLI...
+[2026-08-22 18:20:15] [INFO] Prompt carregado: 7403 caracteres
+[2026-08-22 18:20:15] [INFO] Executando: claude --model sonnet --dangerously-skip-permissions --add-dir C:\4c
+[2026-08-22 18:20:15] [INFO] Tamanho total do prompt: 7403 caracteres
+[2026-08-22 18:20:15] [INFO] Invocando Claude CLI (tentativa 1/7)...
+[2026-08-22 18:20:42] [INFO] Claude CLI finalizado em 27.6973762 segundos
+[2026-08-22 18:20:42] [INFO] Exit Code: 0
+[2026-08-22 18:20:42] [INFO] Output salvo em: C:\4c\tasks\task494\code_review_output_t1_GRID.txt
+[2026-08-22 18:20:42] [INFO] Output size: 506 bytes
+[2026-08-22 18:20:42] [INFO] SUCESSO: Claude CLI executado com sucesso
+[2026-08-22 18:20:42] [INFO] Preview do output:
+[2026-08-22 18:20:42] [INFO] Ambos os problemas `GRID-RECORDSOURCE-AUTOBIND` corrigidos em `Formpag.prg`:
+
+- **Linha 2782** (`CarregarLista`): apÃ³s `RecordSource = "cursor_4c_Dados"`, adicionados os 5 `ControlSource` explÃ­citos (fpags, descrs, moefpgs, dias, tvens).
+- **Linha 2910** (`BtnBuscarClick`): mesma correÃ§Ã£o aplicada apÃ³s o `Buscar()` filtrado por cÃ³digo.
+
+O padrÃ£o garante que o VFP9 use o binding correto por nome de campo em vez de auto-bind por posiÃ§Ã£o ordinal do cursor.
+=== CORRETOR AUTOMATICO ===
+
+Arquivo: C:\4c\projeto\app\forms\cadastros\Formpag.prg
+
+Backup criado: C:\4c\projeto\app\forms\cadastros\Formpag.prg.bak
+Linhas originais: 3136
+
+Aplicando correcoes...
+  Schema BIT columns carregadas: 202 colunas
+[Pattern #168] AVISO: forma REPORT sem 'fundo_cad_1003.jpg' - considerar injetar THIS.Picture no InicializarForm
+
+Correcoes aplicadas: 3
+
+Detalhes:
+  Linha 2784: [GRID-COLUMNCOUNT-ANTES-RECORDSOURCE]
+    Original:  (auto-fix)
+    Corrigido: (auto-fix)
+
+  Linha 2919: [GRID-COLUMNCOUNT-ANTES-RECORDSOURCE]
+    Original:  (auto-fix)
+    Corrigido: (auto-fix)
+
+  Linha 0: [WARN-168-MISSING-PICTURE]
+    Original:  (sem fundo_cad_1003.jpg no arquivo)
+    Corrigido: (REVISAR MANUAL - injetar THIS.Picture no InicializarForm)
+
+Log de correcoes salvo: C:\4c\tasks\task494\correcoes_Formpag.prg.json
+
+=== CORRECAO CONCLUIDA ===
+3 correcao(oes) aplicada(s).
+=== CORRETOR AUTOMATICO ===
+
+Arquivo: C:\4c\projeto\app\classes\pagBO.prg
+
+Backup criado: C:\4c\projeto\app\classes\pagBO.prg.bak
+Linhas originais: 864
+
+Aplicando correcoes...
+  Schema BIT columns carregadas: 202 colunas
+
+Correcoes aplicadas: 0
+
+Log de correcoes salvo: C:\4c\tasks\task494\correcoes_pagBO.prg.json
+
+=== CORRECAO CONCLUIDA ===
+Nenhuma correcao necessaria.
+    Pass GRID concluido.
+
+  === PASS FUNCTIONAL (55 problemas) ===
+    - [CONTAINER-VISIVEL] TornarControlesVisiveis() NAO filtra containers ocultos: CNT_4C_BOTOES. Estes containers tem Visible=.F. mas serao forcados a Visible=.T. pelo metodo recursivo.
+    - [BUSCA-CURSOR] CREATEOBJECT('FormBuscaAuxiliar') sem parametros mas NAO define this_cCursorDestino. No Modo 2 (sem params), DEVE definir this_cCursorDestino com o cursor local pre-existente ANTES de chamar Show().
+    - [OPTIONGROUP-LEFT] OptionGroup com ButtonCount=4 mas Buttons(2) NAO tem .Left definido. Sem .Left, todos os Buttons ficam sobrepostos no Left=0 e usuario so ve o primeiro. OBRIGATORIO definir .Left, .Top, .AutoSize, .ForeColor, .Themes em CADA Button.
+    - [OPTIONGROUP-LEFT] OptionGroup com ButtonCount=2 mas Buttons(2) NAO tem .Left definido. Sem .Left, todos os Buttons ficam sobrepostos no Left=0 e usuario so ve o primeiro. OBRIGATORIO definir .Left, .Top, .AutoSize, .ForeColor, .Themes em CADA Button.
+    - [OPTIONGROUP-LEFT] OptionGroup com ButtonCount=2 mas Buttons(2) NAO tem .Left definido. Sem .Left, todos os Buttons ficam sobrepostos no Left=0 e usuario so ve o primeiro. OBRIGATORIO definir .Left, .Top, .AutoSize, .ForeColor, .Themes em CADA Button.
+    - [OPTIONGROUP-LEFT] OptionGroup com ButtonCount=2 mas Buttons(2) NAO tem .Left definido. Sem .Left, todos os Buttons ficam sobrepostos no Left=0 e usuario so ve o primeiro. OBRIGATORIO definir .Left, .Top, .AutoSize, .ForeColor, .Themes em CADA Button.
+    - [OPTIONGROUP-LEFT] OptionGroup com ButtonCount=2 mas Buttons(2) NAO tem .Left definido. Sem .Left, todos os Buttons ficam sobrepostos no Left=0 e usuario so ve o primeiro. OBRIGATORIO definir .Left, .Top, .AutoSize, .ForeColor, .Themes em CADA Button.
+    - [OPTIONGROUP-LEFT] OptionGroup com ButtonCount=2 mas Buttons(2) NAO tem .Left definido. Sem .Left, todos os Buttons ficam sobrepostos no Left=0 e usuario so ve o primeiro. OBRIGATORIO definir .Left, .Top, .AutoSize, .ForeColor, .Themes em CADA Button.
+    - [OPTIONGROUP-LEFT] OptionGroup com ButtonCount=2 mas Buttons(2) NAO tem .Left definido. Sem .Left, todos os Buttons ficam sobrepostos no Left=0 e usuario so ve o primeiro. OBRIGATORIO definir .Left, .Top, .AutoSize, .ForeColor, .Themes em CADA Button.
+    - [OPTIONGROUP-LEFT] OptionGroup com ButtonCount=2 mas Buttons(2) NAO tem .Left definido. Sem .Left, todos os Buttons ficam sobrepostos no Left=0 e usuario so ve o primeiro. OBRIGATORIO definir .Left, .Top, .AutoSize, .ForeColor, .Themes em CADA Button.
+    - [OPTIONGROUP-LEFT] OptionGroup com ButtonCount=2 mas Buttons(2) NAO tem .Left definido. Sem .Left, todos os Buttons ficam sobrepostos no Left=0 e usuario so ve o primeiro. OBRIGATORIO definir .Left, .Top, .AutoSize, .ForeColor, .Themes em CADA Button.
+    - [OPTIONGROUP-LEFT] OptionGroup com ButtonCount=2 mas Buttons(2) NAO tem .Left definido. Sem .Left, todos os Buttons ficam sobrepostos no Left=0 e usuario so ve o primeiro. OBRIGATORIO definir .Left, .Top, .AutoSize, .ForeColor, .Themes em CADA Button.
+    - [OPTIONGROUP-LEFT] OptionGroup com ButtonCount=2 mas Buttons(2) NAO tem .Left definido. Sem .Left, todos os Buttons ficam sobrepostos no Left=0 e usuario so ve o primeiro. OBRIGATORIO definir .Left, .Top, .AutoSize, .ForeColor, .Themes em CADA Button.
+    - [OPTIONGROUP-LEFT] OptionGroup com ButtonCount=2 mas Buttons(2) NAO tem .Left definido. Sem .Left, todos os Buttons ficam sobrepostos no Left=0 e usuario so ve o primeiro. OBRIGATORIO definir .Left, .Top, .AutoSize, .ForeColor, .Themes em CADA Button.
+    - [OPTIONGROUP-LEFT] OptionGroup com ButtonCount=2 mas Buttons(2) NAO tem .Left definido. Sem .Left, todos os Buttons ficam sobrepostos no Left=0 e usuario so ve o primeiro. OBRIGATORIO definir .Left, .Top, .AutoSize, .ForeColor, .Themes em CADA Button.
+    - [OPTIONGROUP-LEFT] OptionGroup com ButtonCount=2 mas Buttons(2) NAO tem .Left definido. Sem .Left, todos os Buttons ficam sobrepostos no Left=0 e usuario so ve o primeiro. OBRIGATORIO definir .Left, .Top, .AutoSize, .ForeColor, .Themes em CADA Button.
+    - [OPTIONGROUP-LEFT] OptionGroup com ButtonCount=2 mas Buttons(2) NAO tem .Left definido. Sem .Left, todos os Buttons ficam sobrepostos no Left=0 e usuario so ve o primeiro. OBRIGATORIO definir .Left, .Top, .AutoSize, .ForeColor, .Themes em CADA Button.
+    - [OPTIONGROUP-LEFT] OptionGroup com ButtonCount=2 mas Buttons(2) NAO tem .Left definido. Sem .Left, todos os Buttons ficam sobrepostos no Left=0 e usuario so ve o primeiro. OBRIGATORIO definir .Left, .Top, .AutoSize, .ForeColor, .Themes em CADA Button.
+    - [OPTIONGROUP-LEFT] OptionGroup com ButtonCount=2 mas Buttons(2) NAO tem .Left definido. Sem .Left, todos os Buttons ficam sobrepostos no Left=0 e usuario so ve o primeiro. OBRIGATORIO definir .Left, .Top, .AutoSize, .ForeColor, .Themes em CADA Button.
+    - [OPTIONGROUP-LEFT] OptionGroup com ButtonCount=2 mas Buttons(2) NAO tem .Left definido. Sem .Left, todos os Buttons ficam sobrepostos no Left=0 e usuario so ve o primeiro. OBRIGATORIO definir .Left, .Top, .AutoSize, .ForeColor, .Themes em CADA Button.
+    - [OPTIONGROUP-LEFT] OptionGroup com ButtonCount=2 mas Buttons(2) NAO tem .Left definido. Sem .Left, todos os Buttons ficam sobrepostos no Left=0 e usuario so ve o primeiro. OBRIGATORIO definir .Left, .Top, .AutoSize, .ForeColor, .Themes em CADA Button.
+    - [OPTIONGROUP-LEFT] OptionGroup com ButtonCount=2 mas Buttons(2) NAO tem .Left definido. Sem .Left, todos os Buttons ficam sobrepostos no Left=0 e usuario so ve o primeiro. OBRIGATORIO definir .Left, .Top, .AutoSize, .ForeColor, .Themes em CADA Button.
+    - [OPTIONGROUP-LEFT] OptionGroup com ButtonCount=2 mas Buttons(2) NAO tem .Left definido. Sem .Left, todos os Buttons ficam sobrepostos no Left=0 e usuario so ve o primeiro. OBRIGATORIO definir .Left, .Top, .AutoSize, .ForeColor, .Themes em CADA Button.
+    - [OPTIONGROUP-LEFT] OptionGroup com ButtonCount=3 mas Buttons(2) NAO tem .Left definido. Sem .Left, todos os Buttons ficam sobrepostos no Left=0 e usuario so ve o primeiro. OBRIGATORIO definir .Left, .Top, .AutoSize, .ForeColor, .Themes em CADA Button.
+    - [OPTIONGROUP-LEFT] OptionGroup com ButtonCount=3 mas Buttons(2) NAO tem .Left definido. Sem .Left, todos os Buttons ficam sobrepostos no Left=0 e usuario so ve o primeiro. OBRIGATORIO definir .Left, .Top, .AutoSize, .ForeColor, .Themes em CADA Button.
+    - [OPTIONGROUP-LEFT] OptionGroup com ButtonCount=3 mas Buttons(2) NAO tem .Left definido. Sem .Left, todos os Buttons ficam sobrepostos no Left=0 e usuario so ve o primeiro. OBRIGATORIO definir .Left, .Top, .AutoSize, .ForeColor, .Themes em CADA Button.
+    - [OPTIONGROUP-LEFT] OptionGroup com ButtonCount=3 mas Buttons(2) NAO tem .Left definido. Sem .Left, todos os Buttons ficam sobrepostos no Left=0 e usuario so ve o primeiro. OBRIGATORIO definir .Left, .Top, .AutoSize, .ForeColor, .Themes em CADA Button.
+    - [OPTIONGROUP-LEFT] OptionGroup com ButtonCount=3 mas Buttons(2) NAO tem .Left definido. Sem .Left, todos os Buttons ficam sobrepostos no Left=0 e usuario so ve o primeiro. OBRIGATORIO definir .Left, .Top, .AutoSize, .ForeColor, .Themes em CADA Button.
+    - [OPTIONGROUP-LEFT] OptionGroup com ButtonCount=3 mas Buttons(2) NAO tem .Left definido. Sem .Left, todos os Buttons ficam sobrepostos no Left=0 e usuario so ve o primeiro. OBRIGATORIO definir .Left, .Top, .AutoSize, .ForeColor, .Themes em CADA Button.
+    - [OPTIONGROUP-LEFT] OptionGroup com ButtonCount=2 mas Buttons(2) NAO tem .Left definido. Sem .Left, todos os Buttons ficam sobrepostos no Left=0 e usuario so ve o primeiro. OBRIGATORIO definir .Left, .Top, .AutoSize, .ForeColor, .Themes em CADA Button.
+    - [OPTIONGROUP-LEFT] OptionGroup com ButtonCount=2 mas Buttons(2) NAO tem .Left definido. Sem .Left, todos os Buttons ficam sobrepostos no Left=0 e usuario so ve o primeiro. OBRIGATORIO definir .Left, .Top, .AutoSize, .ForeColor, .Themes em CADA Button.
+    - [OPTIONGROUP-LEFT] OptionGroup com ButtonCount=3 mas Buttons(2) NAO tem .Left definido. Sem .Left, todos os Buttons ficam sobrepostos no Left=0 e usuario so ve o primeiro. OBRIGATORIO definir .Left, .Top, .AutoSize, .ForeColor, .Themes em CADA Button.
+    - [OPTIONGROUP-LEFT] OptionGroup com ButtonCount=2 mas Buttons(2) NAO tem .Left definido. Sem .Left, todos os Buttons ficam sobrepostos no Left=0 e usuario so ve o primeiro. OBRIGATORIO definir .Left, .Top, .AutoSize, .ForeColor, .Themes em CADA Button.
+    - [OPTIONGROUP-LEFT] OptionGroup com ButtonCount=2 mas Buttons(2) NAO tem .Left definido. Sem .Left, todos os Buttons ficam sobrepostos no Left=0 e usuario so ve o primeiro. OBRIGATORIO definir .Left, .Top, .AutoSize, .ForeColor, .Themes em CADA Button.
+    - [NULL-CURSOR] CREATE CURSOR 'cursor_4c_Busca' sem SET NULL ON antes. SQL Server retorna NULLs em muitos campos. Sem SET NULL ON, APPEND FROM falha com 'Field XXX does not accept null values'. Adicionar SET NULL ON antes e SET NULL OFF depois.
+    - [NULL-CURSOR] CREATE CURSOR 'cursor_4c_Dados' sem SET NULL ON antes. SQL Server retorna NULLs em muitos campos. Sem SET NULL ON, APPEND FROM falha com 'Field XXX does not accept null values'. Adicionar SET NULL ON antes e SET NULL OFF depois.
+    - [LAYOUT-POSITION] Controle 'cmdfpMin' (parent: SIGCDPAG.Pagina.Lista): Top original=84 vs migrado 'cmd_4c_CmdfpMin' Top=5 (diff=79px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'cmdfpdpar' (parent: SIGCDPAG.Pagina.Lista): Top original=84 vs migrado 'cmd_4c_Cmdfpdpar' Top=5 (diff=79px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'Bot_BIN' (parent: SIGCDPAG.Pagina.Lista): Top original=84 vs migrado 'cmd_4c_Bot_BIN' Top=5 (diff=79px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'btnExpXML' (parent: SIGCDPAG.Pagina.Lista): Top original=84 vs migrado 'cmd_4c_BtnExpXML' Top=5 (diff=79px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'CmdCopia' (parent: SIGCDPAG.Pagina.Lista): Top original=84 vs migrado 'cmd_4c_CmdCopia' Top=5 (diff=79px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'btnImpXML' (parent: SIGCDPAG.Pagina.Lista): Top original=84 vs migrado 'cmd_4c_BtnImpXML' Top=5 (diff=79px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'Optiongroup1' (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Left original=765 vs migrado 'obj_4c_Optiongroup10' Left=479 (diff=286px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'Optiongroup2' (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Top original=230 vs migrado 'obj_4c_Optiongroup2_p2' Top=311 (diff=81px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'Optiongroup2' (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Left original=479 vs migrado 'obj_4c_Optiongroup2_p2' Left=650 (diff=171px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'Optiongroup4' (parent: SIGCDPAG.Pagina.Dados.Dados.Page2): Top original=411 vs migrado 'obj_4c_Optiongroup4' Top=305 (diff=106px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'Optiongroup4' (parent: SIGCDPAG.Pagina.Dados.Dados.Page2): Left original=670 vs migrado 'obj_4c_Optiongroup4' Left=479 (diff=191px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'Optiongroup2' (parent: SIGCDPAG.Pagina.Dados.Dados.Page2): Top original=386 vs migrado 'obj_4c_Optiongroup2_p2' Top=311 (diff=75px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'Optiongroup1' (parent: SIGCDPAG.Pagina.Dados.Dados.Page2): Top original=262 vs migrado 'obj_4c_Optiongroup10' Top=155 (diff=107px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'Optiongroup1' (parent: SIGCDPAG.Pagina.Dados.Dados.Page2): Left original=893 vs migrado 'obj_4c_Optiongroup10' Left=479 (diff=414px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'Optiongroup12' (parent: SIGCDPAG.Pagina.Dados.Dados.Page2): Top original=403 vs migrado 'obj_4c_Optiongroup12' Top=330 (diff=73px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'Optiongroup12' (parent: SIGCDPAG.Pagina.Dados.Dados.Page2): Left original=170 vs migrado 'obj_4c_Optiongroup12' Left=479 (diff=309px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'Optiongroup3' (parent: SIGCDPAG.Pagina.Dados.Dados.Page2): Top original=435 vs migrado 'obj_4c_Optiongroup3' Top=280 (diff=155px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'Optiongroup3' (parent: SIGCDPAG.Pagina.Dados.Dados.Page2): Left original=670 vs migrado 'obj_4c_Optiongroup3' Left=479 (diff=191px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'Opt_ContaMov' (parent: SIGCDPAG.Pagina.Dados): Left original=479 vs migrado 'obj_4c_Opt_ContaMov' Left=690 (diff=211px, tolerancia=30px)
+    Prompt size: 141KB
+[2026-08-22 18:21:02] [INFO] === CLAUDE CLI INVOKER ===
+[2026-08-22 18:21:02] [INFO] Prompt File: C:\4c\tasks\task494\code_review_prompt_t1_FUNCTIONAL.md
+[2026-08-22 18:21:02] [INFO] Output File: C:\4c\tasks\task494\code_review_output_t1_FUNCTIONAL.txt
+[2026-08-22 18:21:02] [INFO] Model: sonnet
+[2026-08-22 18:21:02] [INFO] Timeout: 3600 segundos
+[2026-08-22 18:21:02] [INFO] Max Output Tokens: 128000
+[2026-08-22 18:21:02] [INFO] Context Files: 0 arquivo(s)
+[2026-08-22 18:21:02] [INFO] Invocando Claude CLI...
+[2026-08-22 18:21:02] [INFO] Prompt carregado: 157800 caracteres
+[2026-08-22 18:21:02] [INFO] Executando: claude --model sonnet --dangerously-skip-permissions --add-dir C:\4c
+[2026-08-22 18:21:02] [INFO] Tamanho total do prompt: 157800 caracteres
+[2026-08-22 18:21:02] [INFO] Invocando Claude CLI (tentativa 1/7)...
+[2026-08-22 18:39:04] [INFO] Claude CLI finalizado em 1081.8687544 segundos
+[2026-08-22 18:39:04] [INFO] Exit Code: 0
+[2026-08-22 18:39:04] [INFO] Output salvo em: C:\4c\tasks\task494\code_review_output_t1_FUNCTIONAL.txt
+[2026-08-22 18:39:04] [INFO] Output size: 1484 bytes
+[2026-08-22 18:39:04] [INFO] SUCESSO: Claude CLI executado com sucesso
+[2026-08-22 18:39:04] [INFO] Preview do output:
+[2026-08-22 18:39:04] [INFO] Todos os 55 problemas foram corrigidos nos dois arquivos. Resumo das correÃ§Ãµes aplicadas:
+
+**Formpag.prg:**
+
+| Problema | CorreÃ§Ã£o |
+|---|---|
+| `[CONTAINER-VISIVEL]` | `TornarControlesVisiveis` agora filtra `cnt_4c_salva` via `INLIST` e nÃ£o recursiona em containers ocultos |
+| `[BUSCA-CURSOR]` | Adicionado `loc_oBusca.this_cCursorDestino = "cursor_4c_Busca"` antes de `DefinirCursor` |
+| `[NULL-CURSOR] cursor_4c_Busca` | `SET NULL ON/OFF` envolvendo o `CREATE CURSOR` de fallback |
+
+=== CORRETOR AUTOMATICO ===
+
+Arquivo: C:\4c\projeto\app\forms\cadastros\Formpag.prg
+
+Backup criado: C:\4c\projeto\app\forms\cadastros\Formpag.prg.bak
+Linhas originais: 3612
+
+Aplicando correcoes...
+  Schema BIT columns carregadas: 202 colunas
+[Pattern #168] AVISO: forma REPORT sem 'fundo_cad_1003.jpg' - considerar injetar THIS.Picture no InicializarForm
+
+Correcoes aplicadas: 1
+
+Detalhes:
+  Linha 0: [WARN-168-MISSING-PICTURE]
+    Original:  (sem fundo_cad_1003.jpg no arquivo)
+    Corrigido: (REVISAR MANUAL - injetar THIS.Picture no InicializarForm)
+
+Log de correcoes salvo: C:\4c\tasks\task494\correcoes_Formpag.prg.json
+
+=== CORRECAO CONCLUIDA ===
+1 correcao(oes) aplicada(s).
+=== CORRETOR AUTOMATICO ===
+
+Arquivo: C:\4c\projeto\app\classes\pagBO.prg
+
+Backup criado: C:\4c\projeto\app\classes\pagBO.prg.bak
+Linhas originais: 868
+
+Aplicando correcoes...
+  Schema BIT columns carregadas: 202 colunas
+
+Correcoes aplicadas: 0
+
+Log de correcoes salvo: C:\4c\tasks\task494\correcoes_pagBO.prg.json
+
+=== CORRECAO CONCLUIDA ===
+Nenhuma correcao necessaria.
+    Pass FUNCTIONAL concluido.
+
+  Todos os passes concluidos. Re-verificando...
+
+--- Code Review (Tentativa 2/5) ---
+  [AVISO] Erro na validacao de colunas SQL: Sqlcmd: Error: Microsoft ODBC Driver 17 for SQL Server : Provedor TCP: O tempo limite de espera foi atingido.
+  [LAYOUT] 72 divergencia(s) de posicao detectada(s)
+  [REVIEW] Total: 74 problema(s)
+  Passes necessarios: 2 (SQL:1, FUNCTIONAL:73)
+
+  === PASS SQL (1 problemas) ===
+    - [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna 'CONTROLCOUNT' existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: FPAGS, ICLIS, PENDENTE, IMPS, TIPOCADS, NFPAGS, VENCS, FORMAS
+    Prompt size: 64KB
+[2026-08-22 18:39:37] [INFO] === CLAUDE CLI INVOKER ===
+[2026-08-22 18:39:37] [INFO] Prompt File: C:\4c\tasks\task494\code_review_prompt_t2_SQL.md
+[2026-08-22 18:39:37] [INFO] Output File: C:\4c\tasks\task494\code_review_output_t2_SQL.txt
+[2026-08-22 18:39:37] [INFO] Model: sonnet
+[2026-08-22 18:39:37] [INFO] Timeout: 3600 segundos
+[2026-08-22 18:39:37] [INFO] Max Output Tokens: 128000
+[2026-08-22 18:39:37] [INFO] Context Files: 0 arquivo(s)
+[2026-08-22 18:39:37] [INFO] Invocando Claude CLI...
+[2026-08-22 18:39:37] [INFO] Prompt carregado: 67510 caracteres
+[2026-08-22 18:39:37] [INFO] Executando: claude --model sonnet --dangerously-skip-permissions --add-dir C:\4c
+[2026-08-22 18:39:37] [INFO] Tamanho total do prompt: 67510 caracteres
+[2026-08-22 18:39:37] [INFO] Invocando Claude CLI (tentativa 1/7)...
+[2026-08-22 18:40:12] [INFO] Claude CLI finalizado em 35.3184079 segundos
+[2026-08-22 18:40:12] [INFO] Exit Code: 0
+[2026-08-22 18:40:12] [INFO] Output salvo em: C:\4c\tasks\task494\code_review_output_t2_SQL.txt
+[2026-08-22 18:40:12] [INFO] Output size: 787 bytes
+[2026-08-22 18:40:12] [INFO] SUCESSO: Claude CLI executado com sucesso
+[2026-08-22 18:40:12] [INFO] Preview do output:
+[2026-08-22 18:40:12] [INFO] O `ControlCount` nos arquivos **nÃ£o estÃ¡ em nenhuma clÃ¡usula SQL WHERE** - aparece apenas como propriedade VFP9 em loops de iteraÃ§Ã£o de controles:
+
+- `Formpag.prg:2772` â€” `FOR loc_nI = 1 TO par_oConteiner.ControlCount` (loop padrÃ£o VFP9)
+- `Formpag.prg:2779` â€” `PEMSTATUS(loc_oCtrl, "ControlCount", 5)` (verifica se objeto tem controles filhos)
+
+Ambos sÃ£o usos legÃ­timos de `ControlCount` como propriedade de container VFP9, **nÃ£o como coluna SQL**. O problema reportado pelo pass Ã
+=== CORRETOR AUTOMATICO ===
+
+Arquivo: C:\4c\projeto\app\forms\cadastros\Formpag.prg
+
+Backup criado: C:\4c\projeto\app\forms\cadastros\Formpag.prg.bak
+Linhas originais: 3612
+
+Aplicando correcoes...
+  Schema BIT columns carregadas: 202 colunas
+[Pattern #168] AVISO: forma REPORT sem 'fundo_cad_1003.jpg' - considerar injetar THIS.Picture no InicializarForm
+
+Correcoes aplicadas: 1
+
+Detalhes:
+  Linha 0: [WARN-168-MISSING-PICTURE]
+    Original:  (sem fundo_cad_1003.jpg no arquivo)
+    Corrigido: (REVISAR MANUAL - injetar THIS.Picture no InicializarForm)
+
+Log de correcoes salvo: C:\4c\tasks\task494\correcoes_Formpag.prg.json
+
+=== CORRECAO CONCLUIDA ===
+1 correcao(oes) aplicada(s).
+=== CORRETOR AUTOMATICO ===
+
+Arquivo: C:\4c\projeto\app\classes\pagBO.prg
+
+Backup criado: C:\4c\projeto\app\classes\pagBO.prg.bak
+Linhas originais: 868
+
+Aplicando correcoes...
+  Schema BIT columns carregadas: 202 colunas
+
+Correcoes aplicadas: 0
+
+Log de correcoes salvo: C:\4c\tasks\task494\correcoes_pagBO.prg.json
+
+=== CORRECAO CONCLUIDA ===
+Nenhuma correcao necessaria.
+    Pass SQL concluido.
+
+  === PASS FUNCTIONAL (73 problemas) ===
+    - [CONTAINER-VISIVEL] TornarControlesVisiveis() NAO filtra containers ocultos: CNT_4C_BOTOES. Estes containers tem Visible=.F. mas serao forcados a Visible=.T. pelo metodo recursivo.
+    - [LAYOUT-POSITION] Controle 'cmdfpMin' (parent: SIGCDPAG.Pagina.Lista): Top original=84 vs migrado 'cmd_4c_CmdfpMin' Top=5 (diff=79px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'cmdfpdpar' (parent: SIGCDPAG.Pagina.Lista): Top original=84 vs migrado 'cmd_4c_Cmdfpdpar' Top=5 (diff=79px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'Bot_BIN' (parent: SIGCDPAG.Pagina.Lista): Top original=84 vs migrado 'cmd_4c_Bot_BIN' Top=5 (diff=79px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'btnExpXML' (parent: SIGCDPAG.Pagina.Lista): Top original=84 vs migrado 'cmd_4c_BtnExpXML' Top=5 (diff=79px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'CmdCopia' (parent: SIGCDPAG.Pagina.Lista): Top original=84 vs migrado 'cmd_4c_CmdCopia' Top=5 (diff=79px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'btnImpXML' (parent: SIGCDPAG.Pagina.Lista): Top original=84 vs migrado 'cmd_4c_BtnImpXML' Top=5 (diff=79px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'optImpBols' (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Top original=356 vs migrado 'obj_4c_OptImpBols' Top=2 (diff=354px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'optImpBols' (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Left original=479 vs migrado 'obj_4c_OptImpBols' Left=0 (diff=479px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'OptImpDups' (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Top original=381 vs migrado 'obj_4c_OptImpDups' Top=2 (diff=379px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'OptImpDups' (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Left original=479 vs migrado 'obj_4c_OptImpDups' Left=0 (diff=479px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'Optiongroup13' (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Top original=407 vs migrado 'obj_4c_Optiongroup13' Top=2 (diff=405px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'Optiongroup13' (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Left original=479 vs migrado 'obj_4c_Optiongroup13' Left=0 (diff=479px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'opt_Liscongv' (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Top original=433 vs migrado 'obj_4c_Opt_Liscongv' Top=2 (diff=431px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'opt_Liscongv' (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Left original=479 vs migrado 'obj_4c_Opt_Liscongv' Left=0 (diff=479px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'OpcaoSNA' (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Top original=80 vs migrado 'obj_4c_OpcaoSNA' Top=2 (diff=78px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'OpcaoSNA' (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Left original=765 vs migrado 'obj_4c_OpcaoSNA' Left=0 (diff=765px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'Optiongroup11' (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Left original=765 vs migrado 'obj_4c_Optiongroup11' Left=0 (diff=765px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'Op_valpend' (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Left original=479 vs migrado 'obj_4c_Op_valpend' Left=0 (diff=479px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'Optiongroup12' (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Top original=330 vs migrado 'obj_4c_Optiongroup12' Top=2 (diff=328px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'Optiongroup12' (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Left original=479 vs migrado 'obj_4c_Optiongroup12' Left=0 (diff=479px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'OptFechm' (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Top original=105 vs migrado 'obj_4c_OptFechm' Top=2 (diff=103px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'OptFechm' (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Left original=479 vs migrado 'obj_4c_OptFechm' Left=0 (diff=479px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'Optiongroup4' (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Top original=305 vs migrado 'obj_4c_Optiongroup4' Top=2 (diff=303px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'Optiongroup4' (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Left original=479 vs migrado 'obj_4c_Optiongroup4' Left=0 (diff=479px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'Optiongroup10' (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Top original=155 vs migrado 'obj_4c_Optiongroup10' Top=2 (diff=153px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'Optiongroup10' (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Left original=479 vs migrado 'obj_4c_Optiongroup10' Left=0 (diff=479px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'Optiongroup3' (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Top original=280 vs migrado 'obj_4c_Optiongroup3' Top=2 (diff=278px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'Optiongroup3' (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Left original=479 vs migrado 'obj_4c_Optiongroup3' Left=0 (diff=479px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'Op_ImpChqs' (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Top original=80 vs migrado 'obj_4c_Op_ImpChqs' Top=2 (diff=78px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'Op_ImpChqs' (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Left original=479 vs migrado 'obj_4c_Op_ImpChqs' Left=0 (diff=479px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'Optiongroup8' (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Top original=255 vs migrado 'obj_4c_Optiongroup8' Top=2 (diff=253px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'Optiongroup8' (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Left original=479 vs migrado 'obj_4c_Optiongroup8' Left=0 (diff=479px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'optTrocos' (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Top original=180 vs migrado 'obj_4c_OptTrocos' Top=2 (diff=178px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'optTrocos' (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Left original=479 vs migrado 'obj_4c_OptTrocos' Left=0 (diff=479px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'Optiongroup7' (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Top original=130 vs migrado 'obj_4c_Optiongroup7' Top=2 (diff=128px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'Optiongroup7' (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Left original=479 vs migrado 'obj_4c_Optiongroup7' Left=0 (diff=479px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'Op_Emichqs' (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Top original=55 vs migrado 'obj_4c_Op_Emichqs' Top=2 (diff=53px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'Op_Emichqs' (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Left original=479 vs migrado 'obj_4c_Op_Emichqs' Left=0 (diff=479px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'Optiongroup6' (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Top original=105 vs migrado 'obj_4c_Optiongroup6' Top=2 (diff=103px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'Optiongroup6' (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Left original=765 vs migrado 'obj_4c_Optiongroup6' Left=0 (diff=765px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'Optiongroup5' (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Top original=205 vs migrado 'obj_4c_Optiongroup5' Top=2 (diff=203px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'Optiongroup5' (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Left original=479 vs migrado 'obj_4c_Optiongroup5' Left=0 (diff=479px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'Optiongroup1' (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Top original=155 vs migrado 'obj_4c_Optiongroup10' Top=2 (diff=153px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'Optiongroup1' (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Left original=765 vs migrado 'obj_4c_Optiongroup10' Left=0 (diff=765px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'Optiongroup2' (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Top original=230 vs migrado 'obj_4c_Optiongroup2_p2' Top=2 (diff=228px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'Optiongroup2' (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Left original=479 vs migrado 'obj_4c_Optiongroup2_p2' Left=0 (diff=479px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'Op_BxComis' (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Left original=479 vs migrado 'obj_4c_Op_BxComis' Left=0 (diff=479px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'OptObserva' (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Top original=130 vs migrado 'obj_4c_OptObserva' Top=2 (diff=128px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'OptObserva' (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Left original=765 vs migrado 'obj_4c_OptObserva' Left=0 (diff=765px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'fwoption1' (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Left original=765 vs migrado 'obj_4c_Fwoption1' Left=0 (diff=765px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'OptTpLeituras' (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Top original=55 vs migrado 'obj_4c_OptTpLeituras' Top=2 (diff=53px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'OptTpLeituras' (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Left original=765 vs migrado 'obj_4c_OptTpLeituras' Left=0 (diff=765px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'Optiongroup14' (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Top original=231 vs migrado 'obj_4c_Optiongroup14' Top=0 (diff=231px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'Optiongroup14' (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Left original=765 vs migrado 'obj_4c_Optiongroup14' Left=0 (diff=765px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'Optiongroup15' (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Top original=296 vs migrado 'obj_4c_Optiongroup15' Top=2 (diff=294px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'Optiongroup15' (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Left original=765 vs migrado 'obj_4c_Optiongroup15' Left=0 (diff=765px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'Optiongroup16' (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Top original=346 vs migrado 'obj_4c_Optiongroup16' Top=0 (diff=346px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'Optiongroup16' (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Left original=765 vs migrado 'obj_4c_Optiongroup16' Left=0 (diff=765px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'Optiongroup17' (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Top original=321 vs migrado 'obj_4c_Optiongroup17' Top=2 (diff=319px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'Optiongroup17' (parent: SIGCDPAG.Pagina.Dados.Dados.Page1): Left original=765 vs migrado 'obj_4c_Optiongroup17' Left=0 (diff=765px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'Optiongroup4' (parent: SIGCDPAG.Pagina.Dados.Dados.Page2): Top original=411 vs migrado 'obj_4c_Optiongroup4' Top=2 (diff=409px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'Optiongroup4' (parent: SIGCDPAG.Pagina.Dados.Dados.Page2): Left original=670 vs migrado 'obj_4c_Optiongroup4' Left=0 (diff=670px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'Optiongroup2' (parent: SIGCDPAG.Pagina.Dados.Dados.Page2): Top original=386 vs migrado 'obj_4c_Optiongroup2_p2' Top=2 (diff=384px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'Optiongroup2' (parent: SIGCDPAG.Pagina.Dados.Dados.Page2): Left original=670 vs migrado 'obj_4c_Optiongroup2_p2' Left=0 (diff=670px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'Optiongroup1' (parent: SIGCDPAG.Pagina.Dados.Dados.Page2): Top original=262 vs migrado 'obj_4c_Optiongroup10' Top=2 (diff=260px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'Optiongroup1' (parent: SIGCDPAG.Pagina.Dados.Dados.Page2): Left original=893 vs migrado 'obj_4c_Optiongroup10' Left=0 (diff=893px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'Optiongroup12' (parent: SIGCDPAG.Pagina.Dados.Dados.Page2): Top original=403 vs migrado 'obj_4c_Optiongroup12' Top=2 (diff=401px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'Optiongroup12' (parent: SIGCDPAG.Pagina.Dados.Dados.Page2): Left original=170 vs migrado 'obj_4c_Optiongroup12' Left=0 (diff=170px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'Optiongroup3' (parent: SIGCDPAG.Pagina.Dados.Dados.Page2): Top original=435 vs migrado 'obj_4c_Optiongroup3' Top=2 (diff=433px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'Optiongroup3' (parent: SIGCDPAG.Pagina.Dados.Dados.Page2): Left original=670 vs migrado 'obj_4c_Optiongroup3' Left=0 (diff=670px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'Opt_ContaMov' (parent: SIGCDPAG.Pagina.Dados): Top original=90 vs migrado 'obj_4c_Opt_ContaMov' Top=2 (diff=88px, tolerancia=30px)
+    - [LAYOUT-POSITION] Controle 'Opt_ContaMov' (parent: SIGCDPAG.Pagina.Dados): Left original=479 vs migrado 'obj_4c_Opt_ContaMov' Left=0 (diff=479px, tolerancia=30px)
+    Prompt size: 159KB
+[2026-08-22 18:40:36] [INFO] === CLAUDE CLI INVOKER ===
+[2026-08-22 18:40:36] [INFO] Prompt File: C:\4c\tasks\task494\code_review_prompt_t2_FUNCTIONAL.md
+[2026-08-22 18:40:36] [INFO] Output File: C:\4c\tasks\task494\code_review_output_t2_FUNCTIONAL.txt
+[2026-08-22 18:40:36] [INFO] Model: sonnet
+[2026-08-22 18:40:36] [INFO] Timeout: 3600 segundos
+[2026-08-22 18:40:36] [INFO] Max Output Tokens: 128000
+[2026-08-22 18:40:36] [INFO] Context Files: 0 arquivo(s)
+[2026-08-22 18:40:36] [INFO] Invocando Claude CLI...
+[2026-08-22 18:40:36] [INFO] Prompt carregado: 177525 caracteres
+[2026-08-22 18:40:36] [INFO] Executando: claude --model sonnet --dangerously-skip-permissions --add-dir C:\4c
+[2026-08-22 18:40:36] [INFO] Tamanho total do prompt: 177525 caracteres
+[2026-08-22 18:40:36] [INFO] Invocando Claude CLI (tentativa 1/7)...
+[2026-08-22 18:45:10] [INFO] Claude CLI finalizado em 273.8099353 segundos
+[2026-08-22 18:45:10] [INFO] Exit Code: 0
+[2026-08-22 18:45:10] [INFO] Output salvo em: C:\4c\tasks\task494\code_review_output_t2_FUNCTIONAL.txt
+[2026-08-22 18:45:10] [INFO] Output size: 1163 bytes
+[2026-08-22 18:45:10] [INFO] SUCESSO: Claude CLI executado com sucesso
+[2026-08-22 18:45:10] [INFO] Preview do output:
+[2026-08-22 18:45:10] [INFO] 4 correÃ§Ãµes aplicadas em `Formpag.prg`:
+
+- **[CONTAINER-VISIVEL]**: JÃ¡ estava correto â€” linha 2775 jÃ¡ continha `"cnt_4c_botoes"` no INLIST, nenhuma alteraÃ§Ã£o necessÃ¡ria.
+- **[LAYOUT-POSITION] obj_4c_Optiongroup3** (Itens ObrigatÃ³rios): `(435,670)` â†’ `(280,479)` â€” era a posiÃ§Ã£o de Page2 erroneamente colocada em Page1.
+- **[LAYOUT-POSITION] obj_4c_Optiongroup4** (AprovaÃ§Ã£o): `(411,670)` â†’ `(305,479)` â€” mesmo problema.
+- **[LAYOUT-POSITION] obj_4c_Optiongroup12** (Detalha
+=== CORRETOR AUTOMATICO ===
+
+Arquivo: C:\4c\projeto\app\forms\cadastros\Formpag.prg
+
+Backup criado: C:\4c\projeto\app\forms\cadastros\Formpag.prg.bak
+Linhas originais: 3612
+
+Aplicando correcoes...
+  Schema BIT columns carregadas: 202 colunas
+[Pattern #168] AVISO: forma REPORT sem 'fundo_cad_1003.jpg' - considerar injetar THIS.Picture no InicializarForm
+
+Correcoes aplicadas: 1
+
+Detalhes:
+  Linha 0: [WARN-168-MISSING-PICTURE]
+    Original:  (sem fundo_cad_1003.jpg no arquivo)
+    Corrigido: (REVISAR MANUAL - injetar THIS.Picture no InicializarForm)
+
+Log de correcoes salvo: C:\4c\tasks\task494\correcoes_Formpag.prg.json
+
+=== CORRECAO CONCLUIDA ===
+1 correcao(oes) aplicada(s).
+=== CORRETOR AUTOMATICO ===
+
+Arquivo: C:\4c\projeto\app\classes\pagBO.prg
+
+Backup criado: C:\4c\projeto\app\classes\pagBO.prg.bak
+Linhas originais: 868
+
+Aplicando correcoes...
+  Schema BIT columns carregadas: 202 colunas
+
+Correcoes aplicadas: 0
+
+Log de correcoes salvo: C:\4c\tasks\task494\correcoes_pagBO.prg.json
+
+=== CORRECAO CONCLUIDA ===
+Nenhuma correcao necessaria.
+    Pass FUNCTIONAL concluido.
+
+  Todos os passes concluidos. Re-verificando...
+
+--- Code Review (Tentativa 3/5) ---
+  [AVISO] Erro na validacao de colunas SQL: Sqlcmd: Error: Microsoft ODBC Driver 17 for SQL Server : Provedor TCP: O tempo limite de espera foi atingido.
+  [LAYOUT] 72 divergencia(s) de posicao detectada(s)
+  [REVIEW] Total: 74 problema(s)
+  [AVISO] Mesmos 74 problemas detectados na tentativa anterior - provavelmente falsos positivos do validador. Prosseguindo.
+  [AVISO] Erro na validacao de colunas SQL: Sqlcmd: Error: Microsoft ODBC Driver 17 for SQL Server : Provedor TCP: O tempo limite de espera foi atingido.
+  [LAYOUT] 72 divergencia(s) de posicao detectada(s)
+
+  [REGRESSAO VISUAL] Code Review alterou propriedades visuais! Restaurando apenas linhas visuais do pre-review...
+  [INFO] Passes VISUAL agora rodam por ultimo - regressao visual improvavel. Mantendo Form atual.
+  [INFO] Se houver problemas visuais, ValidarUIFidelity na Etapa 7 detectara.
+[TaskManager] Estado atualizado: task494
+[TaskManager] Etapa completada: 05e_codeReview
+
+  [AVISO] Code Review encerrado com 74 problema(s) pendente(s)
+
+============================================================================
+ [ETAPA 5.9] Validacao SQL Schema (colunas vs schema.sql)
+============================================================================
+
+[TaskManager] Etapa criada dinamicamente: 05f_validarSQLSchema
+[TaskManager] Estado atualizado: task494
+[TaskManager] Etapa iniciada: 05f_validarSQLSchema (tentativa 1)
+  [Inferencia] sigcdpag -> Formpag
+  [Inferencia] sigcdpag -> pagBO
+  [SQL-SCHEMA] Modo DB ativo: 192.168.15.101,1435/DB_MBAHIA (fallback: schema.sql)
+  [SQL-SCHEMA] Schema arquivo parseado: 683 tabelas
+  [SQL-SCHEMA] Statements SQL encontrados: 11
+AVISO: Erro ao consultar DB para tabela 'sigopfp': Exce‡Æo ao chamar "Open" com "0" argumento(s): "Erro de rede ou 
+espec¡fico … instƒncia ao estabelecer conexÆo com o SQL Server. O servidor nÆo foi encontrado ou nÆo estava acess¡vel. 
+Verifique se o nome da instƒncia est  correto e se o SQL Server est  configurado para permitir conexäes remotas. 
+(provider: TCP Provider, error: 0 - O tempo limite de espera foi atingido.)"
+AVISO: Erro ao consultar DB para tabela 'sigopfpi': Exce‡Æo ao chamar "Open" com "0" argumento(s): "Erro de rede ou 
+espec¡fico … instƒncia ao estabelecer conexÆo com o SQL Server. O servidor nÆo foi encontrado ou nÆo estava acess¡vel. 
+Verifique se o nome da instƒncia est  correto e se o SQL Server est  configurado para permitir conexäes remotas. 
+(provider: TCP Provider, error: 0 - O tempo limite de espera foi atingido.)"
+AVISO: Erro ao consultar DB para tabela 'sigopfpp': Exce‡Æo ao chamar "Open" com "0" argumento(s): "Erro de rede ou 
+espec¡fico … instƒncia ao estabelecer conexÆo com o SQL Server. O servidor nÆo foi encontrado ou nÆo estava acess¡vel. 
+Verifique se o nome da instƒncia est  correto e se o SQL Server est  configurado para permitir conexäes remotas. 
+(provider: TCP Provider, error: 0 - O tempo limite de espera foi atingido.)"
+  [SQL-SCHEMA] PASSOU - Nenhuma coluna invalida detectada
+  [OK] Validacao SQL Schema PASSOU - todas as colunas validas
+[TaskManager] Estado atualizado: task494
+[TaskManager] Etapa completada: 05f_validarSQLSchema
+
+============================================================================
+ [ETAPA 6] Testar formulario (TestFormWrapper.prg) com retry automatico
+============================================================================
+
+[TaskManager] Estado atualizado: task494
+[TaskManager] Etapa iniciada: 06_testForm (tentativa 1)
+  [Inferencia] sigcdpag -> Formpag
+
+--- Tentativa 1/10 ---
+[2026-08-22 18:46:08] [INFO] === VFP EXECUTOR v2.0 ===
+[2026-08-22 18:46:08] [INFO] Config FPW: (nao fornecido)
+[2026-08-22 18:46:08] [INFO] Script PRG: C:\4c\automation\vfp_helpers\TestFormWrapper.prg
+[2026-08-22 18:46:08] [INFO] Timeout: 300 segundos
+[2026-08-22 18:46:08] [INFO] Wrapper PRG criado para parametros: C:\Users\roger\AppData\Local\Temp\vfp_wrapper_aweds4ik.prg
+[2026-08-22 18:46:08] [INFO] Conteudo do wrapper:
+[2026-08-22 18:46:08] [INFO] * Auto-generated wrapper for parameters
+* Script: C:\4c\automation\vfp_helpers\TestFormWrapper.prg
+* Parameters: 'Formpag', 'C:\4c\tasks\task494\logs\06_testForm.log'
+
+* Anti-dialog protections for unattended execution
+SET SAFETY OFF
+SET RESOURCE OFF
+SET TALK OFF
+SET NOTIFY OFF
+SYS(2335, 0)
+
+DO "C:\4c\automation\vfp_helpers\TestFormWrapper" WITH 'Formpag', 'C:\4c\tasks\task494\logs\06_testForm.log'
+QUIT
+
+[2026-08-22 18:46:08] [INFO] Comando VFP: C:\Users\roger\AppData\Local\Temp\vfp_wrapper_aweds4ik.prg
+[2026-08-22 18:46:08] [INFO] VFP output esperado em: C:\4c\tasks\task494\vfp_output.txt
+[2026-08-22 18:46:08] [INFO] Executando Visual FoxPro 9...
+[2026-08-22 18:46:08] [INFO] Comando completo: VFP9.EXE -T C:\Users\roger\AppData\Local\Temp\vfp_wrapper_aweds4ik.prg
+[2026-08-22 18:46:08] [INFO] Executando: VFP9.EXE -T C:\Users\roger\AppData\Local\Temp\vfp_wrapper_aweds4ik.prg
+[2026-08-22 18:46:08] [INFO] Timeout configurado: 300 segundos
+[2026-08-22 18:47:43] [INFO] VFP9 finalizou normalmente com exit code: 
+[2026-08-22 18:47:43] [INFO] VFP9 finalizado em 95.357804 segundos
+[2026-08-22 18:47:43] [INFO] Exit Code: 
+[2026-08-22 18:47:43] [INFO] 
+[2026-08-22 18:47:43] [INFO] Arquivos temporarios preservados para inspecao:
+[2026-08-22 18:47:43] [INFO]   Wrapper.prg: C:\Users\roger\AppData\Local\Temp\vfp_wrapper_aweds4ik.prg
+[2026-08-22 18:47:43] [INFO] 
+[2026-08-22 18:47:43] [INFO] === Conteudo do Wrapper.prg temporario ===
+[2026-08-22 18:47:43] [INFO] * Auto-generated wrapper for parameters
+[2026-08-22 18:47:43] [INFO] * Script: C:\4c\automation\vfp_helpers\TestFormWrapper.prg
+[2026-08-22 18:47:43] [INFO] * Parameters: 'Formpag', 'C:\4c\tasks\task494\logs\06_testForm.log'
+[2026-08-22 18:47:43] [INFO] 
+[2026-08-22 18:47:43] [INFO] * Anti-dialog protections for unattended execution
+[2026-08-22 18:47:43] [INFO] SET SAFETY OFF
+[2026-08-22 18:47:43] [INFO] SET RESOURCE OFF
+[2026-08-22 18:47:43] [INFO] SET TALK OFF
+[2026-08-22 18:47:43] [INFO] SET NOTIFY OFF
+[2026-08-22 18:47:43] [INFO] SYS(2335, 0)
+[2026-08-22 18:47:43] [INFO] 
+[2026-08-22 18:47:43] [INFO] DO "C:\4c\automation\vfp_helpers\TestFormWrapper" WITH 'Formpag', 'C:\4c\tasks\task494\logs\06_testForm.log'
+[2026-08-22 18:47:43] [INFO] QUIT
+[2026-08-22 18:47:43] [INFO] 
+[2026-08-22 18:47:43] [INFO] === Fim do Wrapper.prg ===
+[2026-08-22 18:47:43] [WARN] AVISO: VFP9 retornou exit code  (normal para VFP9 GUI - validar pelo arquivo de saida)
+Formulario testado com sucesso (sem erros)
+[TaskManager] Estado atualizado: task494
+[TaskManager] Etapa completada: 06_testForm
+
+============================================================================
+ [ETAPA 6.5] Teste Automatico (TesteAutomatico.prg) com retry automatico
+============================================================================
+
+[TaskManager] Estado atualizado: task494
+[TaskManager] Etapa iniciada: 06b_testeAutomatico (tentativa 1)
+  [Inferencia] sigcdpag -> Formpag
+
+--- Tentativa 1/10 ---
+[2026-08-22 18:47:43] [INFO] === VFP EXECUTOR v2.0 ===
+[2026-08-22 18:47:43] [INFO] Config FPW: (nao fornecido)
+[2026-08-22 18:47:43] [INFO] Script PRG: C:\4c\projeto\app\utils\TesteAutomatico.prg
+[2026-08-22 18:47:43] [INFO] Timeout: 300 segundos
+[2026-08-22 18:47:43] [INFO] Wrapper PRG criado para parametros: C:\Users\roger\AppData\Local\Temp\vfp_wrapper_3aavb1b0.prg
+[2026-08-22 18:47:43] [INFO] Conteudo do wrapper:
+[2026-08-22 18:47:43] [INFO] * Auto-generated wrapper for parameters
+* Script: C:\4c\projeto\app\utils\TesteAutomatico.prg
+* Parameters: 'Formpag', 'C:\4c\tasks\task494', 'CRUD'
+
+* Anti-dialog protections for unattended execution
+SET SAFETY OFF
+SET RESOURCE OFF
+SET TALK OFF
+SET NOTIFY OFF
+SYS(2335, 0)
+
+DO "C:\4c\projeto\app\utils\TesteAutomatico" WITH 'Formpag', 'C:\4c\tasks\task494', 'CRUD'
+QUIT
+
+[2026-08-22 18:47:43] [INFO] Comando VFP: C:\Users\roger\AppData\Local\Temp\vfp_wrapper_3aavb1b0.prg
+[2026-08-22 18:47:43] [INFO] VFP output esperado em: C:\4c\tasks\task494\vfp_output.txt
+[2026-08-22 18:47:43] [INFO] Executando Visual FoxPro 9...
+[2026-08-22 18:47:43] [INFO] Comando completo: VFP9.EXE -T C:\Users\roger\AppData\Local\Temp\vfp_wrapper_3aavb1b0.prg
+[2026-08-22 18:47:43] [INFO] Executando: VFP9.EXE -T C:\Users\roger\AppData\Local\Temp\vfp_wrapper_3aavb1b0.prg
+[2026-08-22 18:47:43] [INFO] Timeout configurado: 300 segundos
+[2026-08-22 18:49:11] [INFO] VFP9 finalizou normalmente com exit code: 
+[2026-08-22 18:49:11] [INFO] VFP9 finalizado em 87.5984851 segundos
+[2026-08-22 18:49:11] [INFO] Exit Code: 
+[2026-08-22 18:49:11] [INFO] 
+[2026-08-22 18:49:11] [INFO] Arquivos temporarios preservados para inspecao:
+[2026-08-22 18:49:11] [INFO]   Wrapper.prg: C:\Users\roger\AppData\Local\Temp\vfp_wrapper_3aavb1b0.prg
+[2026-08-22 18:49:11] [INFO] 
+[2026-08-22 18:49:11] [INFO] === Conteudo do Wrapper.prg temporario ===
+[2026-08-22 18:49:11] [INFO] * Auto-generated wrapper for parameters
+[2026-08-22 18:49:11] [INFO] * Script: C:\4c\projeto\app\utils\TesteAutomatico.prg
+[2026-08-22 18:49:11] [INFO] * Parameters: 'Formpag', 'C:\4c\tasks\task494', 'CRUD'
+[2026-08-22 18:49:11] [INFO] 
+[2026-08-22 18:49:11] [INFO] * Anti-dialog protections for unattended execution
+[2026-08-22 18:49:11] [INFO] SET SAFETY OFF
+[2026-08-22 18:49:11] [INFO] SET RESOURCE OFF
+[2026-08-22 18:49:11] [INFO] SET TALK OFF
+[2026-08-22 18:49:11] [INFO] SET NOTIFY OFF
+[2026-08-22 18:49:11] [INFO] SYS(2335, 0)
+[2026-08-22 18:49:11] [INFO] 
+[2026-08-22 18:49:11] [INFO] DO "C:\4c\projeto\app\utils\TesteAutomatico" WITH 'Formpag', 'C:\4c\tasks\task494', 'CRUD'
+[2026-08-22 18:49:11] [INFO] QUIT
+[2026-08-22 18:49:11] [INFO] 
+[2026-08-22 18:49:11] [INFO] === Fim do Wrapper.prg ===
+[2026-08-22 18:49:11] [WARN] AVISO: VFP9 retornou exit code  (normal para VFP9 GUI - validar pelo arquivo de saida)
+
+Resultado dos testes automaticos:
+  Total: 9
+  Passou: 8
+  Falhou: 1
+  Percentual: 89%
+  FALHOU: ModoVisualizar: Property AJUSTARBOTOESPORMODO is not found.
+
+Acionando correcao automatica via Claude...
+
+------------------------------------------------------------------------
+CORRECAO AUTOMATICA (Tentativa 1/10)
+Etapa: 06b_testeAutomatico
+Erro: Testes automaticos: 89% < 100%. Falhas: Teste 'ModoVisualizar': Property AJUSTARBOTOESPORMODO is not found. | Detalhes: Linha: 559
+------------------------------------------------------------------------
+  [Inferencia] sigcdpag -> Formpag
+  [Inferencia] sigcdpag -> pagBO
+Prompt de correcao: C:\4c\tasks\task494\runtime_fix_prompt_06b_testeAutomatico_t1.md
+Chamando Claude para corrigir...
+[2026-08-22 18:49:11] [INFO] === CLAUDE CLI INVOKER ===
+[2026-08-22 18:49:11] [INFO] Prompt File: C:\4c\tasks\task494\runtime_fix_prompt_06b_testeAutomatico_t1.md
+[2026-08-22 18:49:11] [INFO] Output File: C:\4c\tasks\task494\06b_testeAutomatico_fix_output_t1.txt
+[2026-08-22 18:49:11] [INFO] Model: sonnet
+[2026-08-22 18:49:11] [INFO] Timeout: 3600 segundos
+[2026-08-22 18:49:11] [INFO] Max Output Tokens: 128000
+[2026-08-22 18:49:11] [INFO] Context Files: 0 arquivo(s)
+[2026-08-22 18:49:11] [INFO] Invocando Claude CLI...
+[2026-08-22 18:49:11] [INFO] Prompt carregado: 201379 caracteres
+[2026-08-22 18:49:11] [INFO] Executando: claude --model sonnet --dangerously-skip-permissions --add-dir C:\4c
+[2026-08-22 18:49:11] [INFO] Tamanho total do prompt: 201379 caracteres
+[2026-08-22 18:49:11] [INFO] Invocando Claude CLI (tentativa 1/7)...
+[2026-08-22 18:50:43] [INFO] Claude CLI finalizado em 91.7732835 segundos
+[2026-08-22 18:50:43] [INFO] Exit Code: 0
+[2026-08-22 18:50:43] [INFO] Output salvo em: C:\4c\tasks\task494\06b_testeAutomatico_fix_output_t1.txt
+[2026-08-22 18:50:43] [INFO] Output size: 489 bytes
+[2026-08-22 18:50:43] [INFO] SUCESSO: Claude CLI executado com sucesso
+[2026-08-22 18:50:43] [INFO] Preview do output:
+[2026-08-22 18:50:43] [INFO] CorreÃ§Ã£o aplicada: `PROTECTED PROCEDURE AjustarBotoesPorModo` â†’ `PROCEDURE AjustarBotoesPorModo`.
+
+O teste `ModoVisualizar` chamava `oForm.AjustarBotoesPorModo("VISUALIZAR")` de fora do objeto, mas mÃ©todos `PROTECTED` nÃ£o sÃ£o acessÃ­veis externamente â€” VFP9 retorna "Property not found". Tornando o mÃ©todo pÃºblico, o teste passa. Internamente o mÃ©todo continua funcionando igual (as chamadas com `THIS.` dentro da classe nÃ£o mudam).
+Claude finalizou correcao.
+Executando CorretorAutomatico.ps1...
+=== CORRETOR AUTOMATICO ===
+
+Arquivo: C:\4c\projeto\app\forms\cadastros\Formpag.prg
+
+Backup criado: C:\4c\projeto\app\forms\cadastros\Formpag.prg.bak
+Linhas originais: 3612
+
+Aplicando correcoes...
+  Schema BIT columns carregadas: 202 colunas
+[Pattern #168] AVISO: forma REPORT sem 'fundo_cad_1003.jpg' - considerar injetar THIS.Picture no InicializarForm
+
+Correcoes aplicadas: 1
+
+Detalhes:
+  Linha 0: [WARN-168-MISSING-PICTURE]
+    Original:  (sem fundo_cad_1003.jpg no arquivo)
+    Corrigido: (REVISAR MANUAL - injetar THIS.Picture no InicializarForm)
+
+Log de correcoes salvo: C:\4c\tasks\task494\correcoes_Formpag.prg.json
+
+=== CORRECAO CONCLUIDA ===
+1 correcao(oes) aplicada(s).
+=== CORRETOR AUTOMATICO ===
+
+Arquivo: C:\4c\projeto\app\classes\pagBO.prg
+
+Backup criado: C:\4c\projeto\app\classes\pagBO.prg.bak
+Linhas originais: 868
+
+Aplicando correcoes...
+  Schema BIT columns carregadas: 202 colunas
+
+Correcoes aplicadas: 0
+
+Log de correcoes salvo: C:\4c\tasks\task494\correcoes_pagBO.prg.json
+
+=== CORRECAO CONCLUIDA ===
+Nenhuma correcao necessaria.
+Revalidando compilacao...
+Deletando .fxp...
+Correcao aplicada com sucesso! Pronto para re-teste.
+
+--- Tentativa 2/10 ---
+[2026-08-22 18:51:13] [INFO] === VFP EXECUTOR v2.0 ===
+[2026-08-22 18:51:13] [INFO] Config FPW: (nao fornecido)
+[2026-08-22 18:51:13] [INFO] Script PRG: C:\4c\projeto\app\utils\TesteAutomatico.prg
+[2026-08-22 18:51:13] [INFO] Timeout: 300 segundos
+[2026-08-22 18:51:13] [INFO] Wrapper PRG criado para parametros: C:\Users\roger\AppData\Local\Temp\vfp_wrapper_brbhup1t.prg
+[2026-08-22 18:51:13] [INFO] Conteudo do wrapper:
+[2026-08-22 18:51:13] [INFO] * Auto-generated wrapper for parameters
+* Script: C:\4c\projeto\app\utils\TesteAutomatico.prg
+* Parameters: 'Formpag', 'C:\4c\tasks\task494', 'CRUD'
+
+* Anti-dialog protections for unattended execution
+SET SAFETY OFF
+SET RESOURCE OFF
+SET TALK OFF
+SET NOTIFY OFF
+SYS(2335, 0)
+
+DO "C:\4c\projeto\app\utils\TesteAutomatico" WITH 'Formpag', 'C:\4c\tasks\task494', 'CRUD'
+QUIT
+
+[2026-08-22 18:51:13] [INFO] Comando VFP: C:\Users\roger\AppData\Local\Temp\vfp_wrapper_brbhup1t.prg
+[2026-08-22 18:51:13] [INFO] VFP output esperado em: C:\4c\tasks\task494\vfp_output.txt
+[2026-08-22 18:51:13] [INFO] Executando Visual FoxPro 9...
+[2026-08-22 18:51:13] [INFO] Comando completo: VFP9.EXE -T C:\Users\roger\AppData\Local\Temp\vfp_wrapper_brbhup1t.prg
+[2026-08-22 18:51:13] [INFO] Executando: VFP9.EXE -T C:\Users\roger\AppData\Local\Temp\vfp_wrapper_brbhup1t.prg
+[2026-08-22 18:51:13] [INFO] Timeout configurado: 300 segundos
+[2026-08-22 18:52:55] [INFO] VFP9 finalizou normalmente com exit code: 
+[2026-08-22 18:52:55] [INFO] VFP9 finalizado em 102.1178424 segundos
+[2026-08-22 18:52:55] [INFO] Exit Code: 
+[2026-08-22 18:52:55] [INFO] 
+[2026-08-22 18:52:55] [INFO] Arquivos temporarios preservados para inspecao:
+[2026-08-22 18:52:55] [INFO]   Wrapper.prg: C:\Users\roger\AppData\Local\Temp\vfp_wrapper_brbhup1t.prg
+[2026-08-22 18:52:55] [INFO] 
+[2026-08-22 18:52:55] [INFO] === Conteudo do Wrapper.prg temporario ===
+[2026-08-22 18:52:55] [INFO] * Auto-generated wrapper for parameters
+[2026-08-22 18:52:55] [INFO] * Script: C:\4c\projeto\app\utils\TesteAutomatico.prg
+[2026-08-22 18:52:55] [INFO] * Parameters: 'Formpag', 'C:\4c\tasks\task494', 'CRUD'
+[2026-08-22 18:52:55] [INFO] 
+[2026-08-22 18:52:55] [INFO] * Anti-dialog protections for unattended execution
+[2026-08-22 18:52:55] [INFO] SET SAFETY OFF
+[2026-08-22 18:52:55] [INFO] SET RESOURCE OFF
+[2026-08-22 18:52:55] [INFO] SET TALK OFF
+[2026-08-22 18:52:55] [INFO] SET NOTIFY OFF
+[2026-08-22 18:52:55] [INFO] SYS(2335, 0)
+[2026-08-22 18:52:55] [INFO] 
+[2026-08-22 18:52:55] [INFO] DO "C:\4c\projeto\app\utils\TesteAutomatico" WITH 'Formpag', 'C:\4c\tasks\task494', 'CRUD'
+[2026-08-22 18:52:55] [INFO] QUIT
+[2026-08-22 18:52:55] [INFO] 
+[2026-08-22 18:52:55] [INFO] === Fim do Wrapper.prg ===
+[2026-08-22 18:52:55] [WARN] AVISO: VFP9 retornou exit code  (normal para VFP9 GUI - validar pelo arquivo de saida)
+
+Resultado dos testes automaticos:
+  Total: 9
+  Passou: 9
+  Falhou: 0
+  Percentual: 100%
+
+Status: TESTES AUTOMATICOS OK - 100% de sucesso (>= 100%)
+[TaskManager] Estado atualizado: task494
+[TaskManager] Etapa completada: 06b_testeAutomatico
+
+============================================================================
+ [ETAPA 6.8] Validar Layout vs PRG (analise estatica)
+============================================================================
+
+[TaskManager] Etapa criada dinamicamente: 06c_validarLayout
+[TaskManager] Estado atualizado: task494
+[TaskManager] Etapa iniciada: 06c_validarLayout (tentativa 1)
+  [Inferencia] sigcdpag -> Formpag
+  Layout:    C:\4c\tasks\task494\layout.json
+  PRG:       C:\4c\projeto\app\forms\cadastros\Formpag.prg
+  Threshold: 5px
+
+
+Carregando mapeamento: C:\4c\tasks\task494\mapeamento.json
+  Entradas no mapeamento: 405
+Parseando layout.json...
+Parseando .prg...
+Comparando...
+
+========================================
+  VALIDAR LAYOUT vs PRG
+========================================
+
+  Layout: layout.json
+  PRG:    Formpag.prg
+  Threshold: 5px
+
+  Objetos no layout.json: 225
+  Objetos no .prg:        224
+  Matched:                198
+  Sem correspondente:     27
+
+  ERRORS:   32
+  WARNINGS: 126
+  INFOS:    26
+
+--- ERRORS ---
+  [] SIGCDPAG.Pagina.Dados.Dados.Page1.Optiongroup9 (optiongroup)
+    ButtonCount divergente: esperado=2 atual=3
+    Linha .prg: 2116
+  [] SIGCDPAG.Pagina.Dados.Dados.Page1.Optiongroup16 (optiongroup)
+    ButtonCount divergente: esperado=3 atual=2
+    Linha .prg: 2082
+  [] SIGCDPAG.Pagina.Dados.Dados.Page2.Optiongroup4 (optiongroup)
+    ButtonCount divergente: esperado=3 atual=2
+    Linha .prg: 2806
+  [] SIGCDPAG.Pagina.Dados.Dados.Page2.Optiongroup2 (optiongroup)
+    ButtonCount divergente: esperado=3 atual=2
+    Linha .prg: 2841
+  [] SIGCDPAG.Pagina.Dados.Dados.Page2.get_acvchq (optiongroup)
+    ButtonCount divergente: esperado=3 atual=2
+    Linha .prg: 2771
+  [] SIGCDPAG.Pagina.Dados.Dados.Page2.Opt_Gaveta (optiongroup)
+    Objeto do layout.json NAO encontrado no .prg (sem AddObject correspondente)
+  [] SIGCDPAG.Pagina.Dados.Dados.Page2.Opt_LibSen (optiongroup)
+    Objeto do layout.json NAO encontrado no .prg (sem AddObject correspondente)
+  [] SIGCDPAG.Pagina.Dados.Dados.Page2.OptImpNotas (optiongroup)
+    Objeto do layout.json NAO encontrado no .prg (sem AddObject correspondente)
+  [] SIGCDPAG.Pagina.Dados.Dados.Page2.Say27 (label)
+    Objeto do layout.json NAO encontrado no .prg (sem AddObject correspondente)
+  [] SIGCDPAG.Pagina.Dados.Dados.Page2.Say58 (label)
+    Objeto do layout.json NAO encontrado no .prg (sem AddObject correspondente)
+  [] SIGCDPAG.Pagina.Dados.Dados.Page2.optFinanc (optiongroup)
+    Objeto do layout.json NAO encontrado no .prg (sem AddObject correspondente)
+  [] SIGCDPAG.Pagina.Dados.Dados.Page2.Optiongroup12 (optiongroup)
+    Objeto do layout.json NAO encontrado no .prg (sem AddObject correspondente)
+  [] SIGCDPAG.Pagina.Dados.Dados.Page2.OpTpHists (optiongroup)
+    Objeto do layout.json NAO encontrado no .prg (sem AddObject correspondente)
+  [] SIGCDPAG.Pagina.Dados.Dados.Page2.Say34 (label)
+    Objeto do layout.json NAO encontrado no .prg (sem AddObject correspondente)
+  [] SIGCDPAG.Pagina.Dados.Dados.Page2.Optiongroup3 (optiongroup)
+    Objeto do layout.json NAO encontrado no .prg (sem AddObject correspondente)
+  [] SIGCDPAG.Pagina.Dados.Dados.Page2.Say6 (label)
+    Objeto do layout.json NAO encontrado no .prg (sem AddObject correspondente)
+  [] SIGCDPAG.Pagina.Dados.Dados.Page2.fwcombo1 (combobox)
+    Objeto do layout.json NAO encontrado no .prg (sem AddObject correspondente)
+  [] SIGCDPAG.Pagina.Dados.Dados.Page2.Say38 (label)
+    Objeto do layout.json NAO encontrado no .prg (sem AddObject correspondente)
+  [] SIGCDPAG.Pagina.Dados.Dados.Page2.getVlrMinPar (textbox)
+    Objeto do layout.json NAO encontrado no .prg (sem AddObject correspondente)
+  [] SIGCDPAG.Pagina.Dados.Say39 (label)
+    Objeto do layout.json NAO encontrado no .prg (sem AddObject correspondente)
+  [] SIGCDPAG.Pagina.Dados.Say47 (label)
+    Objeto do layout.json NAO encontrado no .prg (sem AddObject correspondente)
+  [] SIGCDPAG.Pagina.Dados.Say38 (label)
+    Objeto do layout.json NAO encontrado no .prg (sem AddObject correspondente)
+  [] SIGCDPAG.Pagina.Dados.Say37 (label)
+    Objeto do layout.json NAO encontrado no .prg (sem AddObject correspondente)
+  [] SIGCDPAG.Pagina.Dados.Say15 (label)
+    Objeto do layout.json NAO encontrado no .prg (sem AddObject correspondente)
+  [] SIGCDPAG.Pagina.Dados.Say40 (label)
+    Objeto do layout.json NAO encontrado no .prg (sem AddObject correspondente)
+  [] SIGCDPAG.Pagina.Dados.Say1 (label)
+    Objeto do layout.json NAO encontrado no .prg (sem AddObject correspondente)
+  [] SIGCDPAG.Pagina.Dados.Say19 (label)
+    Objeto do layout.json NAO encontrado no .prg (sem AddObject correspondente)
+  [] SIGCDPAG.Pagina.Dados.Get_modfpg (textbox)
+    Objeto do layout.json NAO encontrado no .prg (sem AddObject correspondente)
+  [] SIGCDPAG.Pagina.Dados.Say14 (label)
+    Objeto do layout.json NAO encontrado no .prg (sem AddObject correspondente)
+  [] SIGCDPAG.Pagina.Dados.Get_grupo (textbox)
+    Objeto do layout.json NAO encontrado no .prg (sem AddObject correspondente)
+  [] SIGCDPAG.Pagina.Dados.Say9 (label)
+    Objeto do layout.json NAO encontrado no .prg (sem AddObject correspondente)
+  [] SIGCDPAG.Pagina.Dados.get_formas (textbox)
+    Objeto do layout.json NAO encontrado no .prg (sem AddObject correspondente)
+
+--- WARNINGS (posicao divergente) ---
+  [] Get_DCnTxCart -> txt_4c_DCnTxCart (textbox): Left esperado=189 atual=870 delta=681px
+  [] Get_dcontao -> txt_4c_Dcontao (textbox): Left esperado=189 atual=850 delta=661px
+  [] Get_forma -> txt_4c_Forma (textbox): Left esperado=15 atual=650 delta=635px
+  [] Get_CnTxCart -> txt_4c_CnTxCart (textbox): Left esperado=106 atual=740 delta=634px
+  [] Get_contao -> txt_4c_Contao (textbox): Left esperado=106 atual=720 delta=614px
+  [] Say26 -> lbl_g_Situa (label): Left esperado=27 atual=640 delta=613px
+  [] Get_GrTxCart -> txt_4c_GrTxCart (textbox): Left esperado=23 atual=610 delta=587px
+  [] get_Situa -> txt_4c__Situa (textbox): Left esperado=144 atual=700 delta=556px
+  [] GetHists -> txt_4c_Hists (textbox): Left esperado=670 atual=115 delta=555px
+  [] Say25 -> lbl_t_Cupom (label): Left esperado=60 atual=529 delta=469px
+  [] GetSaque -> txt_4c_Grupo2 (textbox): Left esperado=170 atual=590 delta=420px
+  [] GetItem -> txt_4c_Item (textbox): Left esperado=899 atual=590 delta=309px
+  [] Get_grupoo -> txt_4c_Saque (textbox): Top esperado=20 atual=299 delta=279px
+  [] Say50 -> lbl_t_DCnTxCart (label): Top esperado=454 atual=200 delta=254px
+  [] Optiongroup1 -> obj_4c_Optiongroup1_p2 (optiongroup): Left esperado=893 atual=670 delta=223px
+  [] Say23 -> lbl_t_VlrMinPar (label): Top esperado=5 atual=220 delta=215px
+  [] Get_DCnTxCart -> txt_4c_DCnTxCart (textbox): Width esperado=318 atual=110 delta=208px
+  [] Say4 -> lbl_t_DigCartao (label): Top esperado=45 atual=250 delta=205px
+  [] Get_dconta -> txt_4c_Dconta (textbox): Left esperado=188 atual=390 delta=202px
+  [] Get_Dfinalz -> txt_4c_Dfinalz (textbox): Width esperado=290 atual=100 delta=190px
+  ... e mais 106 warnings
+
+  Relatorio salvo: C:\4c\tasks\task494\layout_vs_prg_report.json
+[TaskManager] Estado atualizado: task494
+[TaskManager] Etapa completada: 06c_validarLayout
+
+  ATENCAO: 32 objetos ausentes no .prg (threshold: 0)
+  126 warnings de posicao divergente
+  Relatorio: C:\4c\tasks\task494\layout_vs_prg_report.json
+  [INFO] Etapa NAO-BLOQUEANTE - prosseguindo para Etapa 7
+
+============================================================================
+ [ETAPA 7] Validar UI Fidelity (ValidarUIFidelity.prg)
+============================================================================
+
+[TaskManager] Estado atualizado: task494
+[TaskManager] Etapa iniciada: 07_validarUI (tentativa 1)
+  [Inferencia] sigcdpag -> Formpag
+  Removidos 779 arquivos .fxp (cache)
+[2026-08-22 18:52:58] [INFO] === VFP EXECUTOR v2.0 ===
+[2026-08-22 18:52:58] [INFO] Config FPW: (nao fornecido)
+[2026-08-22 18:52:58] [INFO] Script PRG: C:\4c\projeto\app\utils\ValidarUIFidelity.prg
+[2026-08-22 18:52:58] [INFO] Timeout: 300 segundos
+[2026-08-22 18:52:58] [INFO] Wrapper PRG criado para parametros: C:\Users\roger\AppData\Local\Temp\vfp_wrapper_ptjp3x31.prg
+[2026-08-22 18:52:58] [INFO] Conteudo do wrapper:
+[2026-08-22 18:52:58] [INFO] * Auto-generated wrapper for parameters
+* Script: C:\4c\projeto\app\utils\ValidarUIFidelity.prg
+* Parameters: 'C:\4c\tasks\task494\sigcdpag_form_codigo_fonte.txt', 'Formpag'
+
+* Anti-dialog protections for unattended execution
+SET SAFETY OFF
+SET RESOURCE OFF
+SET TALK OFF
+SET NOTIFY OFF
+SYS(2335, 0)
+
+DO "C:\4c\projeto\app\utils\ValidarUIFidelity" WITH 'C:\4c\tasks\task494\sigcdpag_form_codigo_fonte.txt', 'Formpag'
+QUIT
+
+[2026-08-22 18:52:58] [INFO] Comando VFP: C:\Users\roger\AppData\Local\Temp\vfp_wrapper_ptjp3x31.prg
+[2026-08-22 18:52:58] [INFO] VFP output esperado em: C:\4c\tasks\task494\vfp_output.txt
+[2026-08-22 18:52:58] [INFO] Executando Visual FoxPro 9...
+[2026-08-22 18:52:58] [INFO] Comando completo: VFP9.EXE -T C:\Users\roger\AppData\Local\Temp\vfp_wrapper_ptjp3x31.prg
+[2026-08-22 18:52:58] [INFO] Executando: VFP9.EXE -T C:\Users\roger\AppData\Local\Temp\vfp_wrapper_ptjp3x31.prg
+[2026-08-22 18:52:58] [INFO] Timeout configurado: 300 segundos
+[2026-08-22 18:57:58] [ERROR] TIMEOUT: VFP9 nao finalizou em 300 segundos. Encerrando processo (PID: 3696)...
+[2026-08-22 18:58:01] [WARN] Encerrando 1 processo(s) VFP9 residual(is)...
+[2026-08-22 18:58:02] [INFO] VFP9 finalizado em 303.1011192 segundos
+[2026-08-22 18:58:02] [INFO] Exit Code: 4
+[2026-08-22 18:58:02] [INFO] 
+[2026-08-22 18:58:02] [INFO] Arquivos temporarios preservados para inspecao:
+[2026-08-22 18:58:02] [INFO]   Wrapper.prg: C:\Users\roger\AppData\Local\Temp\vfp_wrapper_ptjp3x31.prg
+[2026-08-22 18:58:02] [INFO] 
+[2026-08-22 18:58:02] [INFO] === Conteudo do Wrapper.prg temporario ===
+[2026-08-22 18:58:02] [INFO] * Auto-generated wrapper for parameters
+[2026-08-22 18:58:02] [INFO] * Script: C:\4c\projeto\app\utils\ValidarUIFidelity.prg
+[2026-08-22 18:58:02] [INFO] * Parameters: 'C:\4c\tasks\task494\sigcdpag_form_codigo_fonte.txt', 'Formpag'
+[2026-08-22 18:58:02] [INFO] 
+[2026-08-22 18:58:02] [INFO] * Anti-dialog protections for unattended execution
+[2026-08-22 18:58:02] [INFO] SET SAFETY OFF
+[2026-08-22 18:58:02] [INFO] SET RESOURCE OFF
+[2026-08-22 18:58:02] [INFO] SET TALK OFF
+[2026-08-22 18:58:02] [INFO] SET NOTIFY OFF
+[2026-08-22 18:58:02] [INFO] SYS(2335, 0)
+[2026-08-22 18:58:02] [INFO] 
+[2026-08-22 18:58:02] [INFO] DO "C:\4c\projeto\app\utils\ValidarUIFidelity" WITH 'C:\4c\tasks\task494\sigcdpag_form_codigo_fonte.txt', 'Formpag'
+[2026-08-22 18:58:02] [INFO] QUIT
+[2026-08-22 18:58:02] [INFO] 
+[2026-08-22 18:58:02] [INFO] === Fim do Wrapper.prg ===
+[2026-08-22 18:58:02] [ERROR] TIMEOUT: VFP9 excedeu o tempo limite de 300 segundos e foi encerrado forcadamente
+TIMEOUT: VFP9 travou durante validacao UI e foi encerrado forcadamente!
+
+AVISO na validacao UI (erro de execucao): TIMEOUT: ValidarUIFidelity.prg excedeu 300 segundos. VFP9 foi encerrado.
+
+Auto-continuando (erro de execucao nao bloqueia pipeline)...
+O teste manual final validara a UI fidelity.
+[TaskManager] Estado atualizado: task494
+[TaskManager] Etapa completada: 07_validarUI
+
+============================================================================
+ [ETAPA 8] Gerar solicitacao de teste manual
+============================================================================
+
+[TaskManager] Estado atualizado: task494
+[TaskManager] Etapa iniciada: 08_gerarTestManual (tentativa 1)
+  [Inferencia] sigcdpag -> Formpag
+  [Inferencia] sigcdpag -> pagBO
+Solicitacao de teste manual gerada: C:\4c\SolicitacaoTesteManual\task494_sigcdpag.md
+[TaskManager] Estado atualizado: task494
+[TaskManager] Etapa completada: 08_gerarTestManual
+[TaskManager] Estado atualizado: task494
+
+============================================================================
+ TASK COMPLETA: task494
+============================================================================
+
+Proximos passos:
+  1. Revisar solicitacao de teste manual em: C:\4c\SolicitacaoTesteManual
+  2. Executar testes manuais
+  3. Se aprovado, fazer commit do codigo
+

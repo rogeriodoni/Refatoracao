@@ -1,0 +1,32 @@
+﻿92 PROCEDUREs and 92 ENDPROCs ÔÇö perfectly balanced.
+
+FASE 6/8 is complete. Here's a summary of what was implemented:
+
+**Added to `ConfigurarPaginaLista()`:**
+- 4 BINDEVENTs for `cnt_4c_copia` fields: `txt_4c_nomedest` (KeyPress/DblClick) and `txt_4c_empDest` (KeyPress/DblClick)
+
+**Added to `ConfigurarPaginaDados()`:**
+- Series: `Valid` + `KeyPress` + `DblClick`
+- EmpPad (Outros tab): `KeyPress` + `DblClick` + `Valid`
+- UnPesos (Transporte tab): `KeyPress` + `DblClick` + `Valid`
+- CodImp 1-7 (Rodap├® bloco 1): `KeyPress`+`DblClick`+`Valid` ├ù 7 = 21 BINDEVENTs via loop
+- CodImpB 8-12 (Rodap├® bloco 2): `KeyPress`+`DblClick`+`Valid` ├ù 5 = 15 BINDEVENTs via loop
+- `obj_4c_ClsFisTp` Click for dynamic label update
+
+**New methods added (57 total):**
+- `SeriesDadosValid()` ÔÇö complete implementation (was stub)
+- `SeriesKeyPress/SeriesDblClick/AbrirLookupSeries` ÔÇö SigCdSer F4/DblClick
+- `NomedestKeyPress/NomedestDblClick/AbrirLookupNomedest` ÔÇö SigCdSer for cntcopia s├®rie
+- `EmpDestKeyPress/EmpDestDblClick/AbrirLookupEmpDest` ÔÇö SigCdEmp for cntcopia empresa
+- `EmpPadKeyPress/EmpPadDblClick/EmpPadValid/AbrirLookupEmpPad` ÔÇö SigCdEmp para Outros tab
+- `UnPesosKeyPress/UnPesosDblClick/UnPesosValid/AbrirLookupUnPesos` ÔÇö SigCdUni para Transporte tab
+- `AbrirLookupClsFis(par_cNomeCampo)` + `ValidarClsFis(par_cNomeCampo)` ÔÇö shared SigCdClf helpers
+- 12 ├ù 3 = 36 individual handlers for CodImp1-7 and CodImpB8-12
+- `ClsFisTpClick()` ÔÇö updates label captions A-L or C├│digo 1-12 based on OptionGroup
+- `FormParaBO()` / `BOParaForm()` ÔÇö stubs mapping series and emps fields
+
+**Updated existing handlers:**
+- `BtnIncluirClick` ÔÇö calls `NovoRegistro()` + sets `this_cModoAtual = "INCLUIR"`
+- `BtnVisualizarClick` ÔÇö calls `BOParaForm()` + sets `this_cModoAtual = "VISUALIZAR"`
+- `BtnAlterarClick` ÔÇö calls `BOParaForm()` + sets `this_cModoAtual = "ALTERAR"`
+- `ConfirmarClick` ÔÇö calls `FormParaBO()` before Inserir/Atualizar

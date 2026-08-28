@@ -1,0 +1,7 @@
+﻿Todas as 3 ocorr├¬ncias foram corrigidas. Os 18 problemas [GRID-HEADER] est├úo resolvidos:
+
+- **ConfigurarPaginaLista** (linha 345): `ColumnCount = 4`, cabe├ºalhos: "Empresa", "M├¬s/Ano", "Titulo", "Moeda"
+- **CarregarLista** (linha 808): mesmas 4 colunas + ControlSources corretos (coluna 2 com express├úo `cmes+"/"+cano`)
+- **BtnBuscarClick** (linha 997): mesmas 4 colunas id├¬nticas
+
+A corre├º├úo foi baseada no c├│digo legado extra├¡do (`SigCdOrc_form_codigo_fonte.txt`), onde o grid "Grade" da p├ígina Lista tinha exatamente 4 colunas via `pColuna`: "Empresa" (cEmps/45px), "M├¬s/Ano" (cano+cmes combinados/59px), "Titulo" (cTitulo/290px), "Moeda" (Moeda/40px). As 6 colunas do c├│digo migrado ("Emp", "M├¬s", "Ano", "T├¡tulo", "Moeda", "Total Or├ºado") foram inventadas pelo Claude e n├úo existiam no legado.

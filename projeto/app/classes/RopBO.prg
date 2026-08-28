@@ -74,6 +74,12 @@ DEFINE CLASS RopBO AS BusinessBase
 
             loc_cSQL = loc_cSQL + " ORDER BY Dopps, TpOps, Cgrus"
 
+            *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
+            IF USED("cursor_4c_Dados")
+                TABLEREVERT(.T., "cursor_4c_Dados")
+                USE IN cursor_4c_Dados
+            ENDIF
+
             loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Dados")
 
             IF loc_nResultado >= 0
@@ -278,6 +284,12 @@ DEFINE CLASS RopBO AS BusinessBase
             IF !THIS.this_lNovoRegistro AND !EMPTY(ALLTRIM(THIS.this_cIdChaves))
                 loc_cSQL = loc_cSQL + ;
                            "   AND cIdChaves <> " + EscaparSQL(THIS.this_cIdChaves)
+            ENDIF
+
+            *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
+            IF USED("cursor_4c_ChkDup")
+                TABLEREVERT(.T., "cursor_4c_ChkDup")
+                USE IN cursor_4c_ChkDup
             ENDIF
 
             loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_ChkDup")

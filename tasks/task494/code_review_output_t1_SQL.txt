@@ -1,0 +1,13 @@
+﻿Ap├│s busca completa, o problema reportado ├® um **falso positivo**.
+
+As ocorr├¬ncias de `ControlCount` em `Formpag.prg` (linhas 2261 e 2266) est├úo dentro do procedimento `TornarControlesVisiveis` ÔÇö s├úo acessos ├á **propriedade VFP9** de containers UI (`par_oConteiner.ControlCount`), n├úo colunas SQL em cl├íusula WHERE:
+
+```foxpro
+FOR loc_nI = 1 TO par_oConteiner.ControlCount        && propriedade VFP9, n├úo SQL
+    ...
+    IF PEMSTATUS(loc_oCtrl, "ControlCount", 5) AND loc_oCtrl.ControlCount > 0
+```
+
+N├úo existe nenhum `CONTROLCOUNT` em cl├íusula `WHERE` de SQL em `Formpag.prg` nem em `pagBO.prg`. O detector confundiu a propriedade VFP9 `ControlCount` (itera├º├úo de controles UI) com uma coluna de banco de dados.
+
+**Nenhuma altera├º├úo necess├íria.** Os arquivos est├úo corretos.

@@ -1,0 +1,17 @@
+﻿O schema confirma todas as colunas. O PMCBO.prg **j├í est├í completo** ÔÇö os m├®todos CRUD foram inclu├¡dos durante a Fase 1, n├úo apenas as propriedades e Init. Verificando o conte├║do:
+
+| M├®todo | Status |
+|--------|--------|
+| `ObterChavePrimaria()` | Ô£à linha 46 |
+| `CarregarDoCursor()` | Ô£à linha 52 ÔÇö todas as 7 colunas mapeadas |
+| `Buscar()` | Ô£à linha 78 ÔÇö SELECT com ORDER BY codigo |
+| `CarregarPorCodigo()` | Ô£à linha 117 ÔÇö reset `this_lNovoRegistro = .F.` |
+| `GerarCodigo()` | Ô£à linha 154 ÔÇö l├│gica PMC+AAMM+SEQ do legado |
+| `ValidarPeriodo()` | Ô£à linha 201 ÔÇö valida├º├úo de sobreposi├º├úo de per├¡odo |
+| `Inserir()` | Ô£à linha 268 ÔÇö INSERT com todas as colunas + `RegistrarAuditoria("INSERT")` |
+| `Atualizar()` | Ô£à linha 305 ÔÇö UPDATE + `RegistrarAuditoria("UPDATE")` |
+| `ExecutarExclusao()` | Ô£à linha 336 ÔÇö DELETE + `RegistrarAuditoria("DELETE")` |
+
+Schema validado: todas as colunas do BO (`codigo`, `cpros`, `tppro`, `dtini`, `dtfin`, `valmin`, `usualts`, `dtalts`) existem em `sigcdpmc` com os tipos corretos.
+
+**Fase 2/8 j├í conclu├¡da.** O PMCBO.prg foi gerado completo na Fase 1. Nenhuma modifica├º├úo necess├íria.

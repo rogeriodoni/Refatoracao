@@ -1,0 +1,13 @@
+﻿Todas as 7 corre├º├Áes foram aplicadas com sucesso:
+
+1. **[BUSCA-CURSOR] AbrirLookupColecao** (linha 1717): `loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaCol"` adicionado antes de `DefinirCursor()`.
+
+2. **[BUSCA-CURSOR] AbrirLookupGrupoProduto** (linha 1763): `loc_oBusca.this_cCursorDestino = "cursor_4c_BuscaGrp"` adicionado antes de `DefinirCursor()`.
+
+3. **[BINDEVENT-PARAMS] DescricaoLostFocus** (linha 1789-1790): Params movidos do signature para `LPARAMETERS` no corpo do m├®todo.
+
+4-7. **[GRID-HEADER] grd_4c_Lista** (linhas 342, 361-364, 914-930):
+   - `ColumnCount` reduzido de 4 ÔåÆ 2 (legado tinha apenas 2 colunas: Codigo + Descricao)
+   - Column2 caption corrigido: `"Descri" + CHR(231) + CHR(227) + "o."` (ponto final conforme legado `pColuna`)
+   - Column3 ("Valor M├¡n.") e Column4 ("Inativa") removidos (inexistentes no legado)
+   - Widths ajustados para 100/250 (valores do legado: `.pColuna('Codigo','','','C├│digo',100,.T.)` e `pColuna('Descricao','','','Descri├º├úo.',250,.T.)`)

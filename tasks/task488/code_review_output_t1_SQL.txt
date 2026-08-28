@@ -1,0 +1,9 @@
+﻿Todas as corre├º├Áes aplicadas corretamente em `OptBO.prg`:
+
+| Problema | Corre├º├úo |
+|---|---|
+| **[SQL-TABELA]** `SigMvChe` inexistente | ÔåÆ `SIGCQDEV` (existe no schema, tem `operacaos char(15)` como FK para `SigCdOpt`) |
+| **[SQL-TABELA]** coluna `Dopes` errada no WHERE de exclus├úo | ÔåÆ `Operacaos` (coluna correta para verificar uso da opera├º├úo em `SIGCQDEV`) |
+| **[SQL-FILTRO-INVENTADO]** `AND Dopes LIKE` em `BuscarOpContas` | Removido ÔÇö original s├│ usa `WHERE Congvs = 1` |
+| **[SQL-FILTRO-INVENTADO]** `AND FPags LIKE` em `BuscarCondicaoPagamento` | Removido ÔÇö original s├│ usa `WHERE Infos = 'C' AND EmiChqs <> 1` |
+| **[SQL-FILTRO-INVENTADO]** `WHERE CMoes =` em `BuscarDescMoeda` | Nenhuma altera├º├úo ÔÇö `cmoes` ├® o PK real de `SigCdMoe` confirmado no schema |

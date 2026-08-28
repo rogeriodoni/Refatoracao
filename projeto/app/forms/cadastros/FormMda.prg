@@ -1203,7 +1203,9 @@ DEFINE CLASS FormMda AS FormBase
             .Height    = 17
             .Width     = 22
         ENDWITH
-        loc_oPagina.grd_4c_Emps.Column1.CurrentControl = "Check1"
+        loc_oPagina.grd_4c_Emps.Column1.AddObject("check13", "CheckBox")
+        loc_oPagina.grd_4c_Emps.Column1.check13.Caption = ""
+        loc_oPagina.grd_4c_Emps.Column1.CurrentControl = "check13"
 
         *-- Column2: Codigo empresa (Emps) - ReadOnly
         WITH loc_oPagina.grd_4c_Emps.Column2

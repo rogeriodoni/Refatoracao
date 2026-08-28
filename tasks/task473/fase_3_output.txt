@@ -1,0 +1,20 @@
+﻿O arquivo `FormMun.prg` foi criado com 316 linhas. Aqui est├í o resumo da Fase 3 entregue:
+
+**Estrutura criada em `C:\4c\projeto\app\forms\cadastros\FormMun.prg`:**
+
+| M├®todo | Descri├º├úo |
+|--------|-----------|
+| `DEFINE CLASS FormMun AS FormBase` | Height=600, Width=1000, Caption sem acentos (atualizado em runtime) |
+| `Init()` | Apenas `RETURN DODEFAULT()` ÔÇö padr├úo can├┤nico |
+| `InicializarForm()` | Cria MunBO, chama ConfigurarPageFrame, define Caption com CHR(243)/CHR(237), respeita `gb_4c_ValidandoUI` |
+| `ConfigurarPageFrame()` | PageFrame Top=-29, Tabs=.F., 2 pages com picture fundo_cad_1003.jpg |
+| `ConfigurarPaginaLista()` | cnt_4c_Cabecalho (lbl_4c_Sombra + lbl_4c_Titulo), cnt_4c_Botoes **vazio** (Left=538, Top=28), cnt_4c_Saida com cmd_4c_Encerrar (can├┤nico Left=917) |
+| `ConfigurarPaginaDados()` | cnt_4c_Salva **vazio** (Top=38, Left=817) |
+| `CarregarLista()` | Chama BO.Buscar("") ÔÇö aguarda grid da Fase 4 |
+| `TornarControlesVisiveis()` | Recursivo (Pages + Controls) |
+| `Destroy()` | Libera BO e cursores |
+
+**O que fica para as pr├│ximas fases:**
+- Fase 4: Bot├Áes CRUD em cnt_4c_Botoes, Confirmar/Cancelar em cnt_4c_Salva, Grid (Top=150 = 121+29)
+- Fases 5-6: TextBoxes de dados (get_Codigos/get_Descs/getUFIBGES)
+- Fases 7-8: BINDEVENTs e valida├º├úo de UFIBGEs via FormBuscaAuxiliar (SigCdUfs)

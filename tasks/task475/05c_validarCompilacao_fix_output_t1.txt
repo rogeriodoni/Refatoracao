@@ -1,0 +1,13 @@
+﻿All fixes are correctly applied. Here's a summary of what was done:
+
+**`FormNfl.prg` ÔÇö 5 compilation errors fixed:**
+
+1. **`PROTECTED FUNCTION ObterControle`** added at line 11046 ÔÇö iterates `container.Controls(n)` by index to find a control by name, returning `.NULL.` if not found. Avoids `.(expr)` entirely.
+
+2. **CodImp 1-7 BINDEVENT loop** (lines 652-661) ÔÇö replaced `BINDEVENT(loc_oRdp.("txt_4c_CodImp" + loc_cBI), ...)` with `loc_oTxtDin = THIS.ObterControle(...)` + `BINDEVENT(loc_oTxtDin, ...)`.
+
+3. **CodImpB 8-12 BINDEVENT loop** (lines 664-672) ÔÇö same pattern as above for the B-suffix controls.
+
+4. **`AbrirLookupClsFis` line 2365** ÔÇö replaced `loc_oCtrl = loc_oRdp.(par_cNomeCampo)` with `loc_oCtrl = THIS.ObterControle(loc_oRdp, par_cNomeCampo)`.
+
+5. **`ClsFisTpClick` four caption assignments** ÔÇö replaced all four `loc_oAba.("lbl_4c_Cod..." + loc_cN).Caption = ...` chained lvalue expressions with `loc_oLbl = THIS.ObterControle(...)` + `loc_oLbl.Caption = ...`.

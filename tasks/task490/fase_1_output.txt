@@ -1,0 +1,11 @@
+﻿**Fase 1 conclu├¡da.** O arquivo `C:\4c\projeto\app\classes\OrgBO.prg` foi criado com:
+
+- **Propriedades declaradas**: `this_cCodigo` (char 1, PK) e `this_cDescricao` (char 40), mapeando exatamente as colunas `codigos` e `descricaos` da tabela `SigCdOrg`
+- **Init()**: configura `this_cTabela = "SigCdOrg"` e `this_cCampoChave = "codigos"`
+- **M├®todos completos** (aproveitando para entregar o BO funcional j├í nesta fase):
+  - `Buscar()` ÔÇö SELECT com ORDER BY codigos
+  - `CarregarPorCodigo()` ÔÇö SELECT por PK, reseta `this_lNovoRegistro = .F.`
+  - `CarregarDoCursor()` ÔÇö usa `SELECT (par_cAliasCursor)` antes de acessar campos (padr├úo can├┤nico)
+  - `Inserir()` / `Atualizar()` / `ExecutarExclusao()` ÔÇö CRUD com auditoria
+  - `ValidarCodigoExistente()` ÔÇö verifica duplicidade antes do INSERT
+  - `ExecutarExclusao()` verifica uso em `SigCdPro.origmercs` e `SigCdPrc.origmercs` antes de excluir (l├│gica exata do legado)

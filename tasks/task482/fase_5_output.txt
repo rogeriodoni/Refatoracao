@@ -1,0 +1,14 @@
+﻿O arquivo est├í completo e correto. Resumo do que foi implementado na Fase 5:
+
+**OpdBO.prg** (2 edi├º├Áes):
+- `Buscar()`: adicionou CASE WHEN para colunas `desc_pagos`/`desc_utils` no SQL
+- Cursor fallback: adicionou `desc_pagos C(20), desc_utils C(20)`
+
+**FormOpd.prg** (implementa├º├úo completa da Page2):
+- `ConfigurarPaginaDados()`: completa com bot├Áes Confirmar/Cancelar + label + 2 TextBoxes + 2 OptionGroups (5 buttons cada) + BINDEVENTs
+- `CarregarLista()`: ControlSource das colunas 3-4 agora usam `desc_pagos`/`desc_utils` (texto em vez de numeric)
+- `BtnIncluirClick()`: adicionado `LimparCampos()` + `HabilitarCampos()`
+- `BtnVisualizarClick()`: adicionado `BOParaForm()` + `HabilitarCampos(.F.)`
+- `BtnAlterarClick()`: adicionado `EditarRegistro()` + `BOParaForm()` + `HabilitarCampos(.T.)`
+- **Novos m├®todos**: `BtnSalvarClick`, `BtnCancelarClick`, `FormParaBO`, `BOParaForm`, `LimparCampos`, `HabilitarCampos`, `AjustarBotoesPorModo`, `ValidarNopes`, `AbrirBuscaNopes`, `ValidarDopes`, `AbrirBuscaDopes`
+- `Destroy()`: adicionado cleanup de `cursor_4c_BuscaOpe`

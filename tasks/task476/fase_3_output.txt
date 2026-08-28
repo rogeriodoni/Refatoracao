@@ -1,0 +1,13 @@
+﻿Ambos os `RETURN` est├úo fora do TRY/CATCH. Arquivo v├ílido.
+
+**Fase 3/8 conclu├¡da.** `C:/4c/projeto/app/forms/cadastros/FormObs.prg` criado com:
+
+- `DEFINE CLASS FormObs AS FormBase` ÔÇö propriedades visuais completas (Height=600, Width=1000, DataSession=2, sem TitleBar/ControlBox)
+- `Init()` ÔÇö apenas `DODEFAULT()` em TRY/CATCH, sem chamar `InicializarForm()` explicitamente
+- `InicializarForm()` ÔÇö cria `ObsBO`, chama `ConfigurarPageFrame()`, propaga Caption para os labels (com CHR(231)+CHR(245) para "Observa├º├Áes")
+- `ConfigurarPageFrame()` ÔÇö `pgf_4c_Paginas` com `Top=-29`, 2 pages com `fundo_cad_1003.jpg`
+- `ConfigurarPaginaLista()` ÔÇö `cnt_4c_Cabecalho` com labels sombra/t├¡tulo, `cnt_4c_Botoes` vazio, `cnt_4c_Saida` com `cmd_4c_Encerrar` can├┤nico (Left=917, Width=90) + BINDEVENT
+- `ConfigurarPaginaDados()` ÔÇö `cnt_4c_BotoesAcao` vazio (posi├º├úo Grupo_Salva.Left=819 + Top=7+29=36)
+- `Destroy()` ÔÇö libera BO + cursores + DODEFAULT()
+- `TornarControlesVisiveis()` e `FormatarGridLista()` ÔÇö helpers auxiliares
+- Grid, bot├Áes CRUD e TextBoxes ficam para as Fases 4ÔÇô6

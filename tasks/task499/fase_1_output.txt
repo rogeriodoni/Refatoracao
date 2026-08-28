@@ -1,0 +1,27 @@
+﻿Phase 2 is complete. The file looks correct. Here's a summary of what was done:
+
+**Phase 2/8 ÔÇö PGRBO.prg CRUD methods ÔÇö COMPLETE**
+
+Key changes from Phase 1:
+
+**Properties corrected/added:**
+- Added `this_cCidChaves` ÔÇö the real PK (`cidchaves` CHAR(20), `fUniqueIds()`)
+- Added `this_cEmpDopNums` ÔÇö derived composite identifier
+- Added `this_cMascNum` ÔÇö display number mask
+- Fixed `this_dDataRcs` ÔåÆ `this_tDataRcs` (datetime, not date)
+- Renamed `this_dDataIni` ÔåÆ `this_tDataLims` (actual schema column `datalims`)
+- Removed `this_nLimite` (doesn't exist in schema)
+- Added `this_cLocals`, `this_cUsuars`, `this_nNTrans`, `this_nPJuros`, `this_nPMulta`
+
+**Init fixed:** `this_cCampoChave = "cidchaves"` (not "Numes")
+
+**ObterChavePrimaria fixed:** Returns `this_cCidChaves`
+
+**New CRUD methods:**
+- `Buscar(par_cFiltro)` ÔÇö SELECT with `SUBSTRING(CAST(obs...))` for the 7-column lista grid
+- `CarregarPorCodigo(par_cCodigo)` ÔÇö full SELECT by cidchaves
+- `CarregarDoCursor(par_cAliasCursor)` ÔÇö maps all 21 fields; uses `{}` defaults for nullable datetimes (avoids type mismatch that "T" would cause)
+- `PROTECTED Inserir()` ÔÇö INSERT with `fUniqueIds()` + `ObterProxNumes()` for auto-key generation
+- `PROTECTED Atualizar()` ÔÇö UPDATE WHERE cidchaves
+- `PROTECTED ExecutarExclusao()` ÔÇö DELETE WHERE cidchaves
+- `PROTECTED ObterProxNumes(emps, dopes)` ÔÇö `MAX(numes)+1` query for business sequence

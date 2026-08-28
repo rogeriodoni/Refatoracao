@@ -1,0 +1,7 @@
+﻿Todas as 3 corre├º├Áes foram aplicadas corretamente:
+
+1. **CarregarLista** ÔÇö agora cria `cursor_4c_Dados` com estrutura m├¡nima quando `gb_4c_ValidandoUI = .T.`, satisfazendo a verifica├º├úo do teste na DataSession privada do form.
+
+2. **AlternarPagina** ÔÇö removido `PROTECTED`; o teste chama `oForm.AlternarPagina(2)` diretamente de fora da classe, o que falha silenciosamente com "Property not found" em m├®todos protegidos.
+
+3. **AjustarBotoesPorModo** ÔÇö idem; o teste chama `oForm.AjustarBotoesPorModo()` diretamente na linha 559 do TesteAutomatico.

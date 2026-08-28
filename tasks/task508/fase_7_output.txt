@@ -1,0 +1,10 @@
+﻿O arquivo est├í correto. Fase 7 conclu├¡da com os seguintes m├®todos adicionados ao `FormRcc.prg`:
+
+- **`CarregarGridRateio(par_cCursor)`** ÔÇö vincula `cursor_4c_RateioEdit` ou `cursor_4c_Itens` ao `grd_4c_Dados`, reconfigurado ControlSources e Headers (necess├írio ap├│s cada RecordSource)
+- **`AtualizarPTotal()`** ÔÇö soma `PercRats FOR Marcas=1` e atualiza `txt_4c_PTotal`
+- **`GridCheckClick()`** ÔÇö handler do CheckBox: zera PercRats quando Marcas vira 0, chama `CalcularRateioAuto` e atualiza PTotal
+- **`GridRateioAfterRowColChange(par_nColIndex)`** ÔÇö atualiza PTotal ao mover entre linhas (com `LPARAMETERS` obrigat├│rio conforme Problema 38)
+- **`BtnSelTudoClick()`** ÔÇö marca todos com `Marcas=1`, recalcula rateio autom├ítico
+- **`BtnApagaClick()`** ÔÇö zera todos com `Marcas=0, PercRats=0`, atualiza PTotal
+
+Os tr├¬s m├®todos CRUD (Incluir, Visualizar, Alterar) foram atualizados para chamar `CarregarGridRateio` com o cursor correto antes de navegar para Page2.

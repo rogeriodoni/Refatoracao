@@ -1,0 +1,28 @@
+﻿The file is 3534 lines. Phase 6 is complete. Here's a summary of what was added:
+
+**FASE 6 ÔÇö Changes to `Formprc.prg`:**
+
+1. **`cmd_4c_CopOpe` button** added after grd_4c_Destinos block (Top=325, Left=738, Width=55, Height=59) ÔÇö matches legacy btnCopOpe position exactly.
+
+2. **6 new BINDEVENTs** in ConfigurarPaginaDados:
+   - `grd_4c_Destinos` ÔåÆ `GrdDestinosKeyPress` (F4) + `GrdDestinosDblClick`
+   - `grd_4c_DestinoG` ÔåÆ `GrdDestinoGKeyPress` (F4) + `GrdDestinoGDblClick`
+   - `cmd_4c_CopOpe` ÔåÆ `BtnCopOpeClick`
+
+3. **`fUniqueIds()` ÔåÆ `SYS(2015)`** in BtnGrpInserirClick (legacy unported function removed).
+
+4. **15 new methods** before ENDDEFINE:
+   - `BtnCopOpeClick` ÔÇö SCATTER/GATHER copies row + groups with new `SYS(2015)` FK
+   - `GrdDestinosKeyPress` / `GrdDestinosDblClick` ÔÇö dispatch to lookup by `ActiveColumn` (cols 2,3,8,9,10,11)
+   - `GrdDestinoGKeyPress` / `GrdDestinoGDblClick` ÔÇö dispatch by `ActiveColumn` (cols 1,2,3)
+   - `AbrirLookupDrives` ÔÇö SigCdLoc.cods ÔåÆ csDestinos.Drives
+   - `AbrirLookupOperacaoDestino` ÔÇö SigCdOpe.Dopes ÔåÆ csDestinos.DopeDs
+   - `AbrirLookupGrandeGrupoDestino` ÔÇö SigCdGpr.codigos ÔåÆ csDestinos.GdeGrupos
+   - `AbrirLookupEmpresaDestino` ÔÇö SigCdEmp.Cemps ÔåÆ csDestinos.Emps
+   - `AbrirLookupOperacaoOrigem` ÔÇö SigCdOpe.Dopes ÔåÆ csDestinos.Dopes
+   - `AbrirLookupUnidadeDestino` ÔÇö SigCdUni.CUnis ÔåÆ csDestinos.CUnis
+   - `AbrirLookupGrandeGrupoG` ÔÇö SigCdGpr.codigos ÔåÆ csDestinoG.Mercs
+   - `AbrirLookupUnidadeG` ÔÇö SigCdUni.CUnis ÔåÆ csDestinoG.CUnis
+   - `AbrirLookupGrupoG` ÔÇö SigCdGrp.cgrus ÔåÆ csDestinoG.Cgrus
+
+All lookups use **Pattern A** (canonical): SQL in caller ÔåÆ `CREATEOBJECT("FormBuscaAuxiliar")` without params ÔåÆ `DefinirCursor` ÔåÆ `Mostrar()` ÔåÆ read `.cCodigoSelecionado`. Zero TODOs or stubs.

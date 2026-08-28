@@ -1,0 +1,188 @@
+{
+  "resumo": {
+    "totalMetodos": 10,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 3,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDNCF",
+      "evento": "Procedure",
+      "linhas": 7,
+      "codigoOriginal": "Local laCampos(1,2)\n\nm.laCampos(1,1) = 'Cods'\nm.laCampos(1,2) = ThisForm.Pagina.Dados.getCods.Value\n\nThisForm.poDataMgr.LocateCursor('crSigCdNcf', @m.laCampos)\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "LocateCursor",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDNCF",
+      "evento": "Init",
+      "linhas": 21,
+      "codigoOriginal": "lcQuerLista = [Select * From SigCdNcf Where Emps = ']+_Empr+[' Or Emps = ' ' ]\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\t\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tWith .poDataMgr\n\t\t\t.AddCursor('SigCdNcf', 'Cods', 'crSigCdNcf', '', ThisForm.Pagina.Lista.Grade,lcQuerLista)\n\t\t\t.pfSqlTabela(1).pColuna('Cods',  '', '', 'Códigos',   080, .t.)\n\t\t\t.pfSqlTabela(1).pColuna('Descs', '', '', 'Descrição', 290, .t.)\n\t\tEndWith\n\n\t\t=DoDefault()\n\n\t\tThisForm.Pagina.Lista.Grade.Column1.SetFoc... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDNCF",
+      "evento": "Click",
+      "linhas": 24,
+      "codigoOriginal": "Lparameters Opcao\n\nIf Not DoDefault(Opcao)\n\tThisForm.mAtivaPagina1\n\tReturn 0\nEndIf\n\nSelect crSigCdNcf\n\nDo Case\n\tCase Inlist(ThisForm.pcEscolha, 'INSERIR', 'PROCURAR')\n\t\tThisForm.Pagina.Dados.getCods.Setfocus\n\n\tCase Inlist(ThisForm.pcEscolha, 'ALTERAR')\n\t\tThisForm.Pagina.Dados.getDescs.Setfocus\n\n\tOtherwise\n\t\tThisForm.Pagina.Dados.Grupo_Salva.Salva.Setfocus\nEndCase \n\nSelect crSigCdNcf\n\nThisForm.Pagina.Dados.Activate\n* Fim ****************************************************************************... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDNCF",
+      "evento": "Click",
+      "linhas": 27,
+      "codigoOriginal": "If InList(ThisForm.pcEscolha,'INSERIR','ALTERAR')\n\tIf Empty(ThisForm.Pagina.Dados.getCods.Value)\n\t\t=MessageBox('Obrigatório Informar o Código!!!', 48, '')\n\t\tThisForm.Pagina.Dados.getCods.SetFocus\n\t\tReturn 0\n\tEndIf\n\t\n\tIf Empty(ThisForm.Pagina.Dados.getDescs.Value)\n\t\t=MessageBox('Obrigatório Informar a Descrição!!!', 48, '')\n\t\tThisForm.Pagina.Dados.getDescs.SetFocus\n\t\tReturn 0\n\tEndIf\n\n\tIf (ThisForm.pcEscolha = 'INSERIR')\n\t\tThisForm.poDataMgr.CursorQuery('SigCdNcf', 'LocalNConf', 'Cods', Padr(ThisF... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDNCF",
+      "evento": "Click",
+      "linhas": 6,
+      "codigoOriginal": "=DoDefault()\n\nIf ThisForm.plCancelar\n\tThisForm.mAtivapagina1\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDNCF.Pagina.Dados.getCods",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, 'INSERIR', 'PROCURAR')",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDNCF.Pagina.Dados.Opt_Menu",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Inlist( ThisForm.pcEscolha, \"INSERIR\", \"ALTERAR\" )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDNCF.Pagina.Dados.get_tipo",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Inlist( ThisForm.pcEscolha, \"INSERIR\", \"ALTERAR\" )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDNCF.Pagina.Dados.Get_EmpPad",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Inlist( ThisForm.pcEscolha, \"INSERIR\", \"ALTERAR\" )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDNCF.Pagina.Dados.Get_EmpPad",
+      "evento": "Valid",
+      "linhas": 12,
+      "codigoOriginal": "LOCAL xBrox\n\nIf !IsEmpty( This.Value )\n\txBrox = CreateObject('fwBuscaExt',Thisform.poDatamgr.pnIdconn,'SigCdEmp','crSigCdEmp','cEmps',This.Value,'Empresas',.t.,'cEmps')\n\n\tIf  Not xBrox.plAchouRegistro\n\t\txBrox.mAddColuna('CEmps', 'XXXXXX', 'Código', .t.)\n\t\txBrox.mAddColuna('Razas', '', 'Descrição', .t.)\n\t\txBrox.Show()\n\t\tThis.Value = Iif( LastKey() # 27, Evaluate('crSigCdEmp.CEmps'), '' )\n\tEndIf \nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDNCF.Init",
+      "queryOriginal": "lcQuerLista = [Select * From SigCdNcf Where Emps = ']+_Empr+[' Or Emps = ' ' ] ",
+      "tabelas": "SigCdNcf",
+      "colunas": "Emps",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdNcf"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

@@ -1,0 +1,30 @@
+﻿Analisei os dois arquivos completos. Resultado da verifica├º├úo:
+
+## An├ílise Completa ÔÇö Todos os 38 problemas s├úo FALSOS POSITIVOS
+
+### GRID-SQL (34 warnings): Campos presentes nos SQLs
+
+**cursor_4c_Dados** ÔÇö ControlSources referenciam: `Ano, sGrupos, sContas, sDContas, Moeda, Inativas`
+
+`mtzBO.Buscar()` (linha 152) seleciona exatamente: `a.Codigo, a.Ano, a.sGrupos, a.sContas, b.rclis AS sDContas, a.Moeda, a.Inativas` Ô£ô
+
+**cursor_4c_MtI** ÔÇö ControlSources referenciam: `Grupos, Contas, Val_Jan..Val_Dez, Total, Acm_Jan..Acm_Dez, ChkValida`
+
+`mtzBO.CarregarDetalhe()` (linha 270) seleciona todos os 28 campos explicitamente, incluindo `(Val_Jan+...+Val_Dez) AS Total` e `ChkValida` Ô£ô
+
+`mtzBO.CriarCursorDetalheVazio()` (linha 317) tem `CREATE CURSOR` com todos esses campos Ô£ô
+
+### SQL-FILTRO-INVENTADO (4 warnings): WHERE em tabelas auxiliares, n├úo em SigCdMtz
+
+| Coluna flaggada | M├®todo | Tabela REAL | Origem no legado |
+|---|---|---|---|
+| `CODIGOS` | `ValidarGrupoMtz()` / `ValidarGrupoLinhaGrid()` | `SigCdGcr` | `fAcessoContab` do legado |
+| `ICLIS` | `ValidarContaMtz()` / `ValidarContaLinhaGrid()` | `SigCdCli` | `fAcessoContas` do legado |
+| `GRUPOS` | `ValidarContaMtz()` / `ValidarContaLinhaGrid()` | `SigCdCli` (filtro grupo) | `fAcessoContas` filtrava por grupo |
+| `CMOES` | `ValidarMoedaMtz()` | `SigCdMoe` | `fwBuscaExt('SigCdMoe','CMoes','DMoes')` do legado |
+
+O validator comparou essas condi├º├Áes de sub-consultas de valida├º├úo com o WHERE da tabela principal `SigCdMtz`. S├úo lookups auxiliares leg├¡timos ÔÇö id├¬nticos ao comportamento original.
+
+---
+
+**Nenhuma altera├º├úo necess├íria.** O c├│digo SQL est├í correto em ambos os arquivos. O pass SQL n├úo encontrou problemas reais.

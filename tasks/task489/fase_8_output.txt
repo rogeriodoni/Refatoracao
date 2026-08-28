@@ -1,0 +1,15 @@
+﻿Tudo correto. Fase 8 conclu├¡da:
+
+**O que foi adicionado/corrigido:**
+
+1. **`AjustarBotoesPorModo()`** (linha 1707) ÔÇö m├®todo que habilita/desabilita bot├Áes CRUD da Page1 e o bot├úo Confirmar da Page2 conforme `this_cModoAtual` (LISTA / INCLUIR / ALTERAR / VISUALIZAR)
+
+2. **Chamadas ao m├®todo** nas 4 transi├º├Áes de estado:
+   - `BtnIncluirClick()` (linha 889) ÔÇö antes de navegar para Page2
+   - `BtnVisualizarClick()` (linha 917) ÔÇö antes de navegar para Page2
+   - `BtnAlterarClick()` (linha 947) ÔÇö antes de navegar para Page2
+   - `BtnCancelarClick()` (linha 1352) ÔÇö ao retornar para Page1
+
+3. **OrcBO.CarregarPorCodigo()** (linha 173) ÔÇö adicionado `THIS.this_lNovoRegistro = .F.` ap├│s `CarregarDoCursor()`, corrigindo o Problema 22 (evita INSERT duplicado ao Alterar ap├│s ter clicado Incluir)
+
+A integra├º├úo com config.prg e menu.prg j├í estava completa: config.prg usa `ADIR()` para carregar automaticamente todos os `*BO.prg` e `Form*.prg`, e menu.prg j├í tinha `AbrirFormOrc` e o item de menu registrado no `popCadastros`.

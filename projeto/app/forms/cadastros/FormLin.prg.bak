@@ -300,7 +300,7 @@ DEFINE CLASS FormLin AS FormBase
                     .Caption         = "Encerrar"
                     .Top             = 5
                     .Left            = 917
-                    .Width           = 90
+                    .Width           = 75
                     .Height          = 75
                     .Picture         = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
                     .PicturePosition = 13
@@ -1663,6 +1663,15 @@ DEFINE CLASS FormLin AS FormBase
             WITH loc_oAba.grd_4c_Fases.Column4
                 .Width          = 55
                 .Sparse         = .F.
+                .AddObject("Check1", "CheckBox")
+                .Check1.Caption = ""
+                .Check1.Alignment = 0
+                .Check1.ReadOnly  = .F.
+                .Check1.Visible   = .T.
+                .Check1.Top       = 9
+                .Check1.Left      = 2
+                .Check1.Height    = 17
+                .Check1.Width     = 22
                 .CurrentControl = "Check1"
                 .Header1.Caption = ""
                 .AddObject("Check1", "CheckBox")

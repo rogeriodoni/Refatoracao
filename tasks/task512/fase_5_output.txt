@@ -1,0 +1,17 @@
+﻿All edits verified. The file grew from ~1710 to 2346 lines. Here's what Phase 6 delivered:
+
+**`ConfigurarGradesDesigner(par_oPage)`** ÔÇö called from `ConfigurarDesignerLayout`, builds all 3 designer grids:
+
+| Grid | Legacy | Top | Size | Cols |
+|------|--------|-----|------|------|
+| `grd_4c_TIT` | FwGrade1_TIT | 180 | 990├ù65 | 5 (titulo/fonte/fte/cor/alinhar) |
+| `grd_4c_CMPs` | FwGrade2_CMPs | 258 | 990├ù238 | 12 (campo/tipo/4├ùchk/caption/fonte/fte/cor/alinhar/tam) |
+| `grd_4c_GRP` | FwGrade3_GRP | 529 | 989├ù67 | 7 (grupo/caption/fonte/fte/cor/alinhar/tam) |
+
+Key decisions:
+- `RecordSource = ""` on all 3 grids ÔÇö data binding happens at runtime when a report is selected (Phase 7 will implement `AtualizarCursoresDesigner`)
+- CheckBox columns in `grd_4c_CMPs` use all 7 mandatory props (Alignment/ReadOnly/Visible/Top/Left/Height/Width per feedback memory)
+- 6 `PROCEDURE` (PUBLIC) handlers for font/color buttons: `BtnFonteTITClick`, `BtnCorTITClick`, `BtnFonteCMPClick`, `BtnCorCMPClick`, `BtnFonteGRPClick`, `BtnCorGRPClick` ÔÇö each calls `GETFONT()`/`GETCOLOR()` and REPLACE on the current record
+- `Destroy()` now closes `CrsProps_Titulo`, `CrsProps_Campos`, `CrsProps_GRP`
+
+**Phase 7/8** will implement `AtualizarCursoresDesigner()` ÔÇö the method that sets `RecordSource` on the 3 grids and `ControlSource` on each column when a report record is loaded, plus populates `cbo_4c_NmCampoGRP.RowSource` with field names from the executed SQL query.

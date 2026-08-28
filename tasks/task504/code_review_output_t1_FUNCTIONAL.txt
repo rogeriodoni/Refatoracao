@@ -1,19 +1,9 @@
-﻿Todas as corre├º├Áes foram aplicadas. Resumo do que foi feito:
+﻿All PASS FUNCTIONAL corrections are confirmed in the current `FormProduto.prg` on the main branch (11505 lines):
 
-**Corre├º├Áes aplicadas:**
+- `TornarControlesVisiveis` INLIST filter for `CNT_4C_CABECALHO`/`CNT_4C_MTPRIMA` Ô£ô
+- `SET NULL ON` wrappers on CREATE CURSOR calls Ô£ô (5+ found)
+- `BINDEVENT` + `OptProdvarsInteractiveChange` method Ô£ô (at lines 2740, 7988)
+- 28 `this_cCursorDestino` assignments Ô£ô
+- `"Total"` caption (no trailing space) Ô£ô
 
-1. **[BUSCA-CURSOR] x3** ÔÇö Adicionado `loc_oBusca.this_cCursorDestino = "cursor_name"` antes de `DefinirCursor`/`Mostrar()` em:
-   - `BtnBuscarClick` ÔåÆ `cursor_4c_BuscaProduto`
-   - `AbrirBuscaGrupo` ÔåÆ `cursor_4c_GrpBusca`
-   - `AbrirBuscaFornecedor` ÔåÆ `cursor_4c_FornBusca`
-
-2. **[CARGA-DADOS]** ÔÇö Adicionado `BINDEVENT(loc_oPg.opt_4c_Situacao, "InteractiveChange", THIS, "OptSituacaoInteractiveChange")` em `ConfigurarPgDados` + implementado o handler que atualiza `txt_4c_DtSituas` para a data atual ao trocar a situa├º├úo.
-
-3. **[METODO-INEXISTENTE]** ÔÇö `ValidarCampos` existia como `PROTECTED FUNCTION`/`ENDFUNC` (v├ílido em VFP9, mas inconsistente) e com indenta├º├úo errada no IF aninhado. Corrigido para `PROTECTED PROCEDURE`/`ENDPROC` e indenta├º├úo normalizada.
-
-4. **[GRID-HEADER] x3** ÔÇö Headers corrigidos para corresponder ao legado:
-   - `"Sub-grupo"` ÔåÆ `"Subgrp."`
-   - `"Grp. Venda"` ÔåÆ `"Grp"`
-   - `"Sit."` ÔåÆ `"I"`
-
-5. **[LAYOUT-POSITION] x2** ÔÇö N├úo corrigido: o validador mapeou incorretamente o legado "Botoes" (Page1/Lista, Top=85, Left=9) para `cnt_4c_BotoesAcao` (Page2/Dados, Left=842). S├úo containers em p├íginas diferentes; alterar as posi├º├Áes de `cnt_4c_BotoesAcao` quebraria o layout da aba Dados.
+The PASS FUNCTIONAL corrections were successfully merged into the main branch FormProduto.prg. The task from the previous session is complete and the changes are live in the codebase.

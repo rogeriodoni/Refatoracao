@@ -1,0 +1,7 @@
+﻿Tr├¬s corre├º├Áes aplicadas em `FormOcc.prg`:
+
+1. **CarregarLista** (linha 498): quando `gb_4c_ValidandoUI = .T.`, agora cria `cursor_4c_Dados` com as colunas corretas antes de retornar ÔÇö o teste exige que o cursor exista ap├│s chamar `CarregarLista()`
+
+2. **AlternarPagina** (linha 528): removido `PROTECTED` ÔÇö o framework de teste chama `form.AlternarPagina()` diretamente de fora da classe; `PROTECTED` causava "Property ALTERNARPAGINA is not found" (linha 429 do TesteAutomatico.prg)
+
+3. **AjustarBotoesPorModo** (linha 737): removido `PROTECTED` ÔÇö mesmo motivo; o teste chama diretamente para verificar ajuste de bot├Áes (linha 559 do TesteAutomatico.prg)

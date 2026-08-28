@@ -1,0 +1,8 @@
+﻿Tudo integrado corretamente. A Fase 7/8 est├í completa:
+
+- **FormPMC.prg** j├í continha todos os 4 eventos principais (BtnIncluirClick, BtnAlterarClick, BtnVisualizarClick, BtnExcluirClick) implementados nas fases anteriores
+- **config.prg** n├úo precisou de altera├º├úo ÔÇö usa ADIR() para carregar automaticamente `*BO.prg` e `Form*.prg` das pastas corretas
+- **menu.prg** recebeu as 3 adi├º├Áes necess├írias:
+  - `DEFINE BAR 153 OF popCadastros` com prompt "Promo├º├Áes por Per├¡odo"
+  - `ON SELECTION BAR 153 OF popCadastros DO AbrirFormPMC`
+  - Procedure `AbrirFormPMC()` no padr├úo can├┤nico (VARTYPE, Show sem par├ómetro, sem Release)

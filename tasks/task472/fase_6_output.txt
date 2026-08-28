@@ -1,0 +1,8 @@
+﻿All three integration points are confirmed. The migration of Formmtz (Matriz de Saldos por Centro de Custo) is now complete:
+
+- **config.prg**: No changes needed ÔÇö ADIR() already auto-loads all `*BO.prg` from `app/classes/` and all `Form*.prg` from `app/forms/cadastros/`
+- **menu.prg line 298**: `DEFINE BAR 134 OF popCadastros PROMPT "Matrizes de Saldos"` added
+- **menu.prg line 419**: `ON SELECTION BAR 134 OF popCadastros DO AbrirFormmtz` added  
+- **menu.prg line 8794**: `PROCEDURE AbrirFormmtz()` added with full error handling
+
+The form is now accessible via Cadastros ÔåÆ Matrizes de Saldos in the system menu.

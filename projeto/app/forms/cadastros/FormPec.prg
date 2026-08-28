@@ -310,7 +310,7 @@ DEFINE CLASS FormPec AS FormBase
                 .PicturePosition = 13
                 .Top             = 5
                 .Left            = 917
-                .Width           = 90
+                .Width           = 75
                 .Height          = 75
                 .BackColor       = RGB(255, 255, 255)
                 .ForeColor       = RGB(90, 90, 90)
@@ -678,7 +678,7 @@ DEFINE CLASS FormPec AS FormBase
                 .Visible       = .T.
             ENDWITH
             BINDEVENT(loc_oPagina.txt_4c_ProcuraGrupo, "InteractiveChange", THIS, "TxtProcuraGrupoInteractiveChange")
-            BINDEVENT(loc_oPagina.txt_4c_ProcuraGrupo, "LostFocus",          THIS, "TxtProcuraGrupoLostFocus")
+            BINDEVENT(loc_oPagina.txt_4c_ProcuraGrupo, "KeyPress",          THIS, "TxtProcuraGrupoLostFocus")
 
             *-- Label "Conta:" acima da caixa de pesquisa de contas
             loc_oPagina.AddObject("lbl_4c_ProcConta", "Label")
@@ -707,7 +707,7 @@ DEFINE CLASS FormPec AS FormBase
                 .Visible       = .T.
             ENDWITH
             BINDEVENT(loc_oPagina.txt_4c_ProcuraConta, "InteractiveChange", THIS, "TxtProcuraContaInteractiveChange")
-            BINDEVENT(loc_oPagina.txt_4c_ProcuraConta, "LostFocus",          THIS, "TxtProcuraContaLostFocus")
+            BINDEVENT(loc_oPagina.txt_4c_ProcuraConta, "KeyPress",          THIS, "TxtProcuraContaLostFocus")
 
             *-- grdGrupos: lista de grupos (esquerda)
             *-- (orig Top=152+29=181, Left=4, Width=353, Height=443)
@@ -1233,7 +1233,7 @@ DEFINE CLASS FormPec AS FormBase
     *==========================================================================
     * ValidarEmpresa - Lookup de empresa via FormBuscaAuxiliar
     *==========================================================================
-    PROCEDURE ValidarEmpresa()
+    PROCEDURE ValidarEmpresa(par_nKeyCode, par_nShiftAltCtrl)
         LOCAL loc_oPag2, loc_cEmps, loc_oBusca, loc_oErro, loc_lValido
         loc_lValido = .T.
         TRY

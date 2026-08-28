@@ -1,0 +1,27 @@
+﻿Ap├│s ler os arquivos completos, ambas as detec├º├Áes s├úo **falsos positivos** do sistema de code review. Nenhuma altera├º├úo ├® necess├íria.
+
+## An├ílise das 2 detec├º├Áes
+
+### Detec├º├úo 1: `CODS` em WHERE
+
+O c├│digo original de refer├¬ncia (`lcQuerLista`) ├® apenas a **query de lista**. O BO migrado usa `WHERE cods = ...` em tr├¬s contextos completamente leg├¡timos:
+
+- `CarregarPorCodigo` (linha 61): busca por PK ÔÇö padr├úo obrigat├│rio
+- `Atualizar` (linha 155): `UPDATE ... WHERE cods = ...` ÔÇö identifica qual registro atualizar
+- `ExecutarExclusao` (linha 181): `DELETE ... WHERE cods = ...` ÔÇö identifica qual registro excluir
+
+Nenhum desses ├® "filtro inventado" ÔÇö s├úo opera├º├Áes CUD padr├úo que obrigatoriamente usam a PK (`cods`).
+
+### Detec├º├úo 2: `CEMPS` em WHERE
+
+A ocorr├¬ncia est├í em `ValidarEmpPad` (FormNcf.prg:971):
+
+```foxpro
+"SELECT CEmps FROM SigCdEmp WHERE CEmps = " + EscaparSQL(loc_cValor)
+```
+
+Isso **n├úo ├® uma query de SigCdNcf** ÔÇö ├® um lookup de valida├º├úo na tabela `SigCdEmp`, onde `CEmps` ├® o nome correto da coluna PK (padr├úo SigCd* com prefixo C). O tool comparou incorretamente essa query contra o WHERE de SigCdNcf.
+
+---
+
+**Ambos os arquivos est├úo corretos. Nenhuma modifica├º├úo necess├íria.**

@@ -329,8 +329,8 @@ DEFINE CLASS Formprc AS FormBase
                 .Picture         = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
                 .PicturePosition = 13
                 .Top             = 5
-                .Left            = 5
-                .Width           = 75
+                .Left            = 917
+                .Width           = 90
                 .Height          = 75
                 .BackColor       = RGB(255, 255, 255)
                 .ForeColor       = RGB(90, 90, 90)

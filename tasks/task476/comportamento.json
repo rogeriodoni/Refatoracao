@@ -1,0 +1,156 @@
+{
+  "resumo": {
+    "totalMetodos": 8,
+    "metodosComSQL": 3,
+    "metodosComValidacao": 3,
+    "totalQueries": 1,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fCanUniqueKey", "fwBuscaInt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDOBS",
+      "evento": "Init",
+      "linhas": 19,
+      "codigoOriginal": "LPARAMETERS lcacesso\n\nWith ThisForm\n\t.poDatamgr = CreateObject('fSqlConector')\n\tWith .poDatamgr\n\t\t.AddCursor('SIGCDOBS','codigos','crSigCdObs','',ThisForm.pagina.lista.grade)\n\t\t.pfSqlTabela(1).pColuna('Codigos','','','Códigos',50,.t.)\n\t\t.pfSqlTabela(1).pColuna('Descrs','','','Descriçãos',450,.t.)\n\t\t.pfSqlTabela(1).pColuna(\"Iif(CrSigCdObs.comiss=2, 'NÃO', 'SIM')\",'','','Pg.Comissão',90,.t.)\n\t\t.pfSqlTabela(1).pColuna('Grupos','','','Grupo',80,.t.)\n\t\t.pfSqlTabela(1).pColuna('Agrupas','','','Agrupam... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDOBS",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "Local lcBusca\n\nIf !IsEmpty(ThisForm.Pagina.Dados.get_codigos.Value)\n\tThisForm.poDataMgr.LocateCursor('crSigCdObs','codigos',ThisForm.Pagina.Dados.Get_codigos.Value)\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "LocateCursor",
+        "controlesReferenciados": "get_codigos",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDOBS",
+      "evento": "Click",
+      "linhas": 26,
+      "codigoOriginal": "LPARAMETERS opcao\n\nIf !dodefault( Opcao )\n\tThisForm.mAtivapagina1\n\tReturn\nEndif\n\nSelect CrSigCdObs\n\nDo Case\n\tCase ThisForm.pcEscolha = 'PROCURAR'\n      thisform.pagina.dados.get_Codigos.setfocus\t\n\n\tCase ThisForm.pcEscolha = 'ALTERAR'\n\t\tthisform.pagina.dados.fwmemo_Observas.setfocus\t\n\n\tCase ThisForm.pcEscolha = 'INSERIR'\n\t\tthisform.pagina.dados.get_Codigos.Setfocus\n\n\tCase Inlist( ThisForm.pcEscolha, 'CONSULTAR', 'EXCLUIR' )\n\t\tthisform.pagina.dados.grupo_salva.salva.setfocus\nEndcase\n\nSelect CrSigC... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Codigos",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDOBS",
+      "evento": "Click",
+      "linhas": 10,
+      "codigoOriginal": "If ThisForm.pcEscolha = 'INSERIR'\n\tif ThisForm.poDataMgr.ChkRegister('SigCdObs','Codigos',ThisForm.Pagina.Dados.Get_Codigos.Value)\n\t\tMessageBox( 'Código já cadastrado...', 48, '' )\n\t\tThisForm.Pagina.Dados.Get_Codigos.SetFocus\n\t\tReturn\n\tEndif\nEndif\n=DoDefault()\nThisForm.mAtivapagina1\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChkRegister",
+        "controlesReferenciados": "Get_Codigos,ChkRegister('SigCdObs'",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDOBS",
+      "evento": "Click",
+      "linhas": 8,
+      "codigoOriginal": "_Codigo = CrSigCdObs.Codigos\n=DoDefault()\nIf ThisForm.plCancelar\n\tIF ThisForm.pcEscolha = 'INSERIR'\n\t   =fCanUniqueKey(_Codigo, \"SigCdObs\")  \n\tENDIF\n\tThisForm.mAtivapagina1\nEndif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fCanUniqueKey",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDOBS.Pagina.Dados.Get_Codigos",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "RETURN (INLIST(ThisForm.Pcescolha,'INSERIR','PROCURAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDOBS.Pagina.Dados.getMovAutDop",
+      "evento": "Valid",
+      "linhas": 18,
+      "codigoOriginal": "Local xBrow, lCod, lFan, xObj\nPrivate lcDopes, lcDopeETrfs\n\nIf Not IsEmpty(This.Value)\n\tSelect * From Nivel Where Abrevs <> ' ' Into Cursor Selecao ReadWrite\n\tSelect Selecao\n\tIndex on Dopes tag Dopes\n\t\n\tLOCATE FOR Dopes = This.Value\n\tIf EOF()\n\t\txBrow = CreateObject('fwbuscaint','Selecao','Dopes',This.Value,'Operações',.t.)\n\t\txBrow.mAddColuna('Dopes','','Código',.t.)\n\t\txBrow.Show\n\tEndIf\n\tThis.Value = Iif( Lastkey() # 27, Evaluate('Selecao.Dopes'), '' )\n\tThis.Refresh\nEndIf\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaInt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDOBS.Pagina.Dados.getMovAutDop",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return (Inlist(Thisform.Pcescolha,'INSERIR','ALTERAR'))\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDOBS.Pagina.Dados.getMovAutDop.Valid",
+      "queryOriginal": "\tSelect * From Nivel Where Abrevs <> ' ' Into Cursor Selecao ReadWrite",
+      "tabelas": "Nivel",
+      "colunas": "Abrevs,Selecao,ReadWrite",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["Nivel"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

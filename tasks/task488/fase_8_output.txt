@@ -1,0 +1,11 @@
+﻿23 TRY blocks matched by 23 ENDTRY ÔÇö perfectly balanced. The migration for FormOpt is complete.
+
+Here's a summary of the two post-phase-8 fixes applied:
+
+1. **20 BINDEVENTs fixed**: All `"KeyPress"` events for `Validar*` handler methods were changed to `"LostFocus"`. Legacy SIGCDOPT uses the "Valid" event (field-exit validation), not key-by-key triggers. Firing the validator on every keystroke would cause excessive DB roundtrips.
+
+2. **AbrirLookupCanonico rewritten** (Pattern A): Replaced the broken Pattern B (params in FormBuscaAuxiliar constructor) with canonical Pattern A:
+   - SQL runs in the caller (DataSession=2 context) ÔÇö avoids the datasession cursor visibility problem
+   - Exact match ÔåÆ populates controls directly from cursor
+   - No exact match ÔåÆ partial LIKE search ÔåÆ fallback show-all ÔåÆ `CREATEOBJECT("FormBuscaAuxiliar")` with no params ÔåÆ `DefinirCursor` ÔåÆ `Mostrar()` ÔåÆ reads `.cCodigoSelecionado`/`.cDescricaoSelecionada` properties (not cursor)
+   - No `RETURN` inside `TRY` block ÔÇö uses `loc_lResultado` flag, single `RETURN` after `ENDTRY`

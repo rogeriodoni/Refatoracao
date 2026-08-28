@@ -1,0 +1,7 @@
+﻿3 corre├º├Áes aplicadas em `FormOCO.prg`:
+
+1. **CarregarLista**: removido o early-exit `IF gb_4c_ValidandoUI ... RETURN .T.` ÔÇö agora sempre chama `Buscar("")`, que tem fallback sem conex├úo (`CREATE CURSOR cursor_4c_Dados`). A atribui├º├úo do RecordSource no grid fica guardada pelo `IF !gb_4c_ValidandoUI`.
+
+2. **AlternarPagina**: removido `PROTECTED` ÔÇö TesteAutomatico.prg chamava o m├®todo externamente e recebia "Property ALTERNARPAGINA is not found" por ser protegido.
+
+3. **AjustarBotoesPorModo**: removido `PROTECTED` ÔÇö mesmo motivo, linha 559 do TesteAutomatico.prg.

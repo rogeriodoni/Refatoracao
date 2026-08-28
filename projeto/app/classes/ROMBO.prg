@@ -392,7 +392,7 @@ DEFINE CLASS ROMBO AS BusinessBase
 
         TRY
             IF !USED("cursor_4c_Chaves")
-                RETURN .T.
+                loc_lResultado = .T.
             ENDIF
 
             SELECT cursor_4c_Chaves
@@ -420,7 +420,7 @@ DEFINE CLASS ROMBO AS BusinessBase
                     AERROR(loc_aErro)
                     THIS.this_cMensagemErro = "Erro ao salvar chave: " + loc_aErro[1,2]
                     MsgErro(THIS.this_cMensagemErro, "ROMBO.SalvarChaves")
-                    RETURN .F.
+                    loc_lResultado = .F.
                 ENDIF
             ENDSCAN
 
@@ -653,7 +653,7 @@ DEFINE CLASS ROMBO AS BusinessBase
             IF !FILE(loc_cFrx)
                 MsgErro("Arquivo de relat" + CHR(243) + "rio n" + CHR(227) + "o encontrado:" + ;
                     CHR(13) + loc_cFrx, "ROMBO.Imprimir")
-                RETURN .F.
+                loc_lResultado = .F.
             ENDIF
 
             loc_cSQL = "SELECT a.*, " + ;

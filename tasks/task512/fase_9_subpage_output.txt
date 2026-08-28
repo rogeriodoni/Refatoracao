@@ -1,0 +1,15 @@
+﻿After reading the full FormRPT.prg, I can see the form is already marked **"Fase: 9/9 - COMPLETO"** and the designer layout code is fully implemented:
+
+- `ConfigurarDesignerLayout()` (line 1527) ÔÇö adds all top-section controls: action buttons, orientation image, OptionGroup, paper size label/combo, and title labels
+- `ConfigurarGradesDesigner()` (line 1818) ÔÇö adds all 3 grids with all columns:
+  - `grd_4c_TIT` ÔÇö 5 cols (EditBox, EditBox, two CommandButtons, ComboBox)
+  - `grd_4c_CMPs` ÔÇö 12 cols (2├ù TextBox readonly, 4├ù CheckBox, 2├ù EditBox, 2├ù CommandButton, ComboBox, Spinner)
+  - `grd_4c_GRP` ÔÇö 7 cols (ComboBox, EditBox, EditBox, 2├ù CommandButton, ComboBox, Spinner)
+- All BINDEVENT handlers present: `BtnFonteTITClick`, `BtnCorTITClick`, `BtnFonteCMPClick`, `BtnCorCMPClick`, `BtnFonteGRPClick`, `BtnCorGRPClick`, `OptOrientacaoChanged`
+- `BtnLayoutClick()` (line 1304) ÔÇö populates the 3 cursors and binds RecordSource to grids
+- `CriarCursoresDesigner()` (line 2488) ÔÇö creates `CrsProps_Titulo`, `CrsProps_Campos`, `CrsProps_GRP`
+- `PopularCboTamPapel()` (line 1755) ÔÇö 41 paper sizes loaded
+
+The Phase 9 work is already complete. The `ConfigurarPaginaDados()` method calls `THIS.ConfigurarDesignerLayout(loc_oPagina.pgf_4c_Dados.Page2)` which in turn calls `THIS.ConfigurarGradesDesigner(par_oPage)` ÔÇö this is the equivalent of the requested `ConfigurarPgPage2()` call, just split across two well-named methods.
+
+The migration of SIGCDRPT ÔåÆ FormRPT.prg + RPTBO.prg is complete.

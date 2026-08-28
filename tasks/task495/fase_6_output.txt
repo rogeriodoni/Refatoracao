@@ -1,0 +1,17 @@
+﻿O arquivo est├í completo e correto. Fase 6/8 conclu├¡da com sucesso.
+
+**O que foi adicionado:**
+
+- **`lbl_4c_Descricao` + `txt_4c_Descs`** ÔÇö Label e TextBox do campo Pa├¡s (Label1/get_Descs do original), com posi├º├Áes compensadas (+29px): Top=204/201, Left=312/371, Width=55/290, MaxLength=40
+
+- **BINDEVENTs Page2** ÔÇö `cmd_4c_Confirmar ÔåÆ BtnSalvarClick`, `cmd_4c_Cancelar ÔåÆ BtnCancelarClick`
+
+- **M├®todos helper:** `FormParaBO()`, `BOParaForm()`, `LimparCampos()`, `HabilitarCampos()`, `AjustarBotoesPorModo()`
+
+- **M├®todos de evento CRUD (todos PUBLIC):** `BtnIncluirClick`, `BtnVisualizarClick`, `BtnAlterarClick`, `BtnExcluirClick`, `BtnBuscarClick`, `BtnEncerrarClick`, `BtnSalvarClick`, `BtnCancelarClick`
+
+- **Comportamento fiel ao original:**
+  - `txt_4c_Codigos` habilitado s├│ em INCLUIR (replica `get_Codigos.When: InList(INSERIR, PROCURAR)`)
+  - `txt_4c_Descs` habilitado em INCLUIR e ALTERAR (replica `get_Descs.When: InList(INSERIR, ALTERAR, PROCURAR)`)
+  - Valida├º├Áes obrigat├│rias (C├│digo + Nome) fora do TRY com mensagens id├¬nticas ao original
+  - Verifica├º├úo de duplicidade em INCLUIR (replica `ChkRegister` do original via `VerificarDuplicidade()`)

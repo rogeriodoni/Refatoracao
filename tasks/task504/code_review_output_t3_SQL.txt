@@ -1,0 +1,9 @@
+﻿As 2 ocorr├¬ncias restantes s├úo apenas em coment├írios (`*--`), n├úo em c├│digo SQL. Todas as corre├º├Áes foram feitas.
+
+**Resumo da corre├º├úo:**
+
+A coluna `CMOEDS` foi inventada pela LLM ÔÇö a tabela `SigCdMoe` usa `cmoes`/`dmoes` em todo o projeto. Foram corrigidos 6 sites em `FormProduto.prg`:
+
+- `AbrirBuscaMoedaCompo` (linha ~6973): SELECT e DefinirCursor
+- `ValidarMvalorFiscal` (linha ~9931): WHERE de valida├º├úo
+- `AbrirBuscaMvalorFiscal` (linhas ~10460-10474): WHERE LIKE, fallback ORDER BY e DefinirCursor
