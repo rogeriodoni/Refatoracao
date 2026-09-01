@@ -10,7 +10,7 @@ DEFINE CLASS FormSigPrCtc AS FormBase
 
     *-- Propriedades visuais (PILAR 1 - UX Fidelity)
     Height      = 384
-    Width       = 550
+    Width       = 1000
     Caption     = "Cota" + CHR(231) + CHR(245) + "es por Opera" + CHR(231) + CHR(245) + "es"
     AutoCenter  = .T.
     ShowWindow  = 1

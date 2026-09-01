@@ -12,7 +12,7 @@ DEFINE CLASS FormCCJ AS FormBase
 
     *-- Propriedades visuais (PILAR 1 - UX FIDELITY)
     Height      = 600
-    Width       = 801
+    Width       = 1000
     Caption     = "C" + CHR(225) + "lculo de Juros"
     AutoCenter  = .T.
     ShowWindow  = 1

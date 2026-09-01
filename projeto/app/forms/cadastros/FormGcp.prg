@@ -24,7 +24,7 @@ DEFINE CLASS FormGcp AS FormBase
     * Dimensoes originais: Width=592, Height=375
     *--------------------------------------------------------------------------
     Height      = 375
-    Width       = 592
+    Width       = 1000
     Top         = 0
     Left        = 0
     Caption     = "Grupos / Contas Permitidas"

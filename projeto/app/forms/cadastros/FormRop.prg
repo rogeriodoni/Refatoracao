@@ -13,7 +13,7 @@ DEFINE CLASS FormRop AS FormBase
 
     *-- Propriedades visuais (PILAR 1 - UX FIDELITY)
     Height      = 597
-    Width       = 970
+    Width       = 1000
     AutoCenter  = .T.
     ShowWindow  = 1
     WindowType  = 1
