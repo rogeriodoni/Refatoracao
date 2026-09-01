@@ -740,11 +740,11 @@ DEFINE CLASS FormPAT AS FormBase
 
         loc_oPagina.AddObject("cmd_4c_Cancelar", "CommandButton")
         WITH loc_oPagina.cmd_4c_Cancelar
-            .Caption       = "Cancelar"
+            .Caption       = "Encerrar"
             .Top           = 456
             .Left          = 253
-            .Width         = 90
-            .Height        = 27
+            .Width         = 75
+            .Height        = 75
             .FontName      = "Tahoma"
             .FontSize      = 8
             .Themes        = .F.
@@ -803,16 +803,20 @@ DEFINE CLASS FormPAT AS FormBase
                 ENDIF
                 loc_cFiltro = loc_cFiltro + ;
                     "datas >= " + loc_cDtIni + " AND datas < " + loc_cDtFim
-            ELSEIF !EMPTY(loc_cDtIni)
+            ELSE
+                IF !EMPTY(loc_cDtIni)
                 IF !EMPTY(loc_cFiltro)
                     loc_cFiltro = loc_cFiltro + " AND "
                 ENDIF
                 loc_cFiltro = loc_cFiltro + "datas >= " + loc_cDtIni
-            ELSEIF !EMPTY(loc_cDtFim)
+            ELSE
+                IF !EMPTY(loc_cDtFim)
                 IF !EMPTY(loc_cFiltro)
                     loc_cFiltro = loc_cFiltro + " AND "
                 ENDIF
                 loc_cFiltro = loc_cFiltro + "datas < " + loc_cDtFim
+                ENDIF
+                ENDIF
             ENDIF
 
             loc_lSucesso = THIS.this_oBusinessObject.Buscar(loc_cFiltro)
@@ -960,10 +964,12 @@ DEFINE CLASS FormPAT AS FormBase
                 IF PEMSTATUS(.Self, "txt_4c_Datas", 5)
                     IF VARTYPE(loc_oBO.this_tDatas) = "T" AND !EMPTY(loc_oBO.this_tDatas)
                         .txt_4c_Datas.Value = TTOC(loc_oBO.this_tDatas)
-                    ELSEIF VARTYPE(loc_oBO.this_tDatas) = "D" AND !EMPTY(loc_oBO.this_tDatas)
+                    ELSE
+                        IF VARTYPE(loc_oBO.this_tDatas) = "D" AND !EMPTY(loc_oBO.this_tDatas)
                         .txt_4c_Datas.Value = DTOC(loc_oBO.this_tDatas)
                     ELSE
                         .txt_4c_Datas.Value = ""
+                        ENDIF
                     ENDIF
                 ENDIF
                 IF PEMSTATUS(.Self, "txt_4c_Emps", 5)
@@ -1238,6 +1244,7 @@ DEFINE CLASS FormPAT AS FormBase
                     ENDIF
                 ENDIF
             ENDIF
+            .Visible     = .T.
         ENDWITH
         THIS.CarregarLista()
     ENDPROC

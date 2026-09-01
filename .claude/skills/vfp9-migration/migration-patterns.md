@@ -8616,3 +8616,336 @@ loc_lRet = THIS.cnt_4c_Conta.mLeDados(THIS.this_cGrupo, THIS.this_cCli, "1", ...
 - Origem: Erro136 (2026-08-25, FormCliente — user limpa Grupo, clica Incluir, prossegue sem msg gravando registro no grupo antigo em memoria)
 
 
+## 175. TextBox S/N (Sim/Nao) `Format="M"` + `InputMask="S,N, "` OBRIGATORIOS — sem eles TextBox aceita qualquer char (Erro137 FormCargo 2026-09-01)
+
+### Problema
+
+TextBox de 1 caractere semantica Sim/Nao (label vizinha `(S/N)`, ControlSource em coluna char(1) `SigCdCrg.nivels`/`altcots`/`limites`/etc) migrado com apenas `.MaxLength = 1` aceita qualquer caractere (X/A/7/@/etc). Usuario digita valor arbitrario, form salva no banco, e regras de negocio downstream que dependem do `= 'S'` / `= 'N'` falham silenciosamente.
+
+Legado sempre configura TextBox S/N como **lista fixa canonica VFP9**:
+
+```
+Format = "M"
+InputMask = "S,N, "
+```
+
+Em VFP9, `Format = "M"` transforma TextBox em "multiple choice picker": apenas caracteres que sao a primeira letra de algum item do `InputMask` (csv-list) sao aceitos. Espaco cicla entre os items. Qualquer outro char eh silenciosamente descartado — nao ha exception, nao ha beep, o char simplesmente nao aparece.
+
+`InputMask = "S,N, "` (com espaco no fim) define 3 items validos: `S`, `N`, ` ` (blank). Portanto o TextBox aceita apenas essas 3 possibilidades e comporta-se como um "combo box de 3 valores" mas com aparencia de TextBox.
+
+Migrador atual gera apenas `MaxLength=1` (limita tamanho, mas nao tipo/valor).
+
+### Sintoma
+
+Usuario abre FormCargo em Alterar/Incluir, digita "X" no campo Senha (S/N), o char eh aceito e mostrado, salva -> banco fica com `nivels = 'X'`. Depois, `IF crSigCdCar.Nivels = 'S'` no BO retorna `.F.` mesmo o usuario "achando" que marcou como Sim.
+
+### Fix
+
+Adicionar `.Format = "M"` + `.InputMask = "S,N, "` em cada TextBox S/N, antes do `ENDWITH`:
+
+```foxpro
+loc_oPg2.AddObject("txt_4c_Nivels", "TextBox")
+WITH loc_oPg2.txt_4c_Nivels
+    .Value         = ""
+    .Top           = 46
+    .Left          = 619
+    .Width         = 20
+    .Height        = 21
+    .FontName      = "Tahoma"
+    .FontSize      = 8
+    .ForeColor     = RGB(90, 90, 90)
+    .BackColor     = RGB(255, 255, 255)
+    .BorderStyle   = 1
+    .SpecialEffect = 0
+    .MaxLength     = 1
+    .Format        = "M"           && lista fixa VFP9
+    .InputMask     = "S,N, "       && aceita S, N ou espaco — resto descartado
+    .Visible       = .T.
+ENDWITH
+```
+
+### Heuristica de deteccao
+
+TextBox S/N tem 2 marcadores fortes:
+
+1. **Bloco `WITH ... TextBox` com `.MaxLength = 1`** — assinatura de campo char(1).
+2. **`AddObject` de Label imediatamente seguinte** com `.Caption = "(S/N)"` — a label descritiva do padrao Sim/Nao (grep case-sensitive).
+
+Deteccao mais confiavel eh pareamento estrutural (TextBox N + Label N+1 na mesma sequencia `AddObject`), nao ordem de propriedades — o `.Caption = "(S/N)"` pode estar em qualquer linha do WITH da Label.
+
+### Auto-fix (Pattern #175)
+
+Detecta bloco `WITH ... TextBox / .MaxLength = 1 / ... / ENDWITH` cuja proxima `AddObject("lbl_..._SN"|"lbl_...(S/N)", "Label")` tenha `.Caption = "(S/N)"` — injeta `.Format = "M"` + `.InputMask = "S,N, "` antes do `ENDWITH`. Idempotente (skip se `.Format = "M"` ja presente).
+
+Nao muta se Label vizinha nao tem `"(S/N)"` no Caption — evita falso positivo em TextBox `.MaxLength=1` numerico (ex: contador de digitos).
+
+### Referencias
+
+- Legado: `C:\4c\tasks\task354\sigcdcar_form_codigo_fonte.txt` linhas 962-966 (`Get_senha`), 1133-1137 (`Get_altcot`), 1180-1184, etc — 12 blocos identicos em SigCdCar.
+- Migrado corrigido: `C:\4c\projeto\app\forms\cadastros\FormCargo.prg` (12 TextBoxes S/N: `txt_4c_Nivels`, `txt_4c_Altcots`, `txt_4c_Limites`, `txt_4c_Cancitens`, `txt_4c_Libfpags`, `txt_4c_Libsdins`, `txt_4c_Libfpgs`, `txt_4c_Libopes`, `txt_4c_Libexprd`, `txt_4c_Fcomis`, `txt_4c_Libvmovdup`, `txt_4c_ConsSubn`).
+- Origem: Erro137 (2026-09-01, FormCargo — user consegue digitar qualquer char nos 12 campos S/N).
+
+
+## 176. BO CRUD `Buscar()` — NUNCA `ZAP + APPEND FROM DBF()` em `cursor_4c_Dados` compartilhado — sempre `USE IN + SQLEXEC direto` (Erro138 CorBO 2026-09-01)
+
+### Problema
+
+`cursor_4c_Dados` eh o cursor de listagem padrao usado por 163+ BOs CRUD (todos que herdam de BusinessBase e populam Page1.Grid via `Grid.RecordSource = "cursor_4c_Dados"`). Como o cursor eh COMPARTILHADO no namespace de datasession, forms diferentes abertos na mesma sessao reutilizam a mesma estrutura de cursor.
+
+O migrador atual gera o seguinte anti-padrao em `BO.Buscar()`:
+
+```foxpro
+IF USED("cursor_4c_Dados")
+    loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_DadosTmp")
+    IF loc_nResultado >= 0
+        SELECT cursor_4c_Dados
+        ZAP                                    && apaga registros, PRESERVA estrutura
+        SET NULL ON
+        APPEND FROM DBF("cursor_4c_DadosTmp")  && insere na estrutura ANTIGA
+        SET NULL OFF
+        IF USED("cursor_4c_DadosTmp")
+            USE IN cursor_4c_DadosTmp
+        ENDIF
+        loc_lSucesso = .T.
+    ELSE
+        MostrarErro(...)
+    ENDIF
+ELSE
+    loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Dados")
+    IF loc_nResultado >= 0
+        loc_lSucesso = .T.
+    ELSE
+        MostrarErro(...)
+    ENDIF
+ENDIF
+```
+
+A intencao original do `ZAP + APPEND FROM DBF()` era preservar o binding do Grid (`Grid.RecordSource = "cursor_4c_Dados"`) ja setado — evitar rebind visual. Porem `ZAP` preserva **a estrutura do cursor** (colunas + constraints NOT NULL) que outro BO deixou. Quando `APPEND FROM DBF(...)` corre e o cursor origem NAO tem uma coluna que o cursor destino tem como NOT NULL, VFP insere `NULL` e SQL Server rejeita.
+
+### Sequencia toxica reproduzivel
+
+1. Usuario abre **FormCargo** -> `CargoBO.Buscar` faz `SQLEXEC(..., "cursor_4c_Dados")` com `SELECT ccargs, dcargs FROM SIGCDCRG ORDER BY ccargs`. Cursor herda estrutura da tabela: **`ccargs char(10) NOT NULL, dcargs char(20)`** (`ccargs` eh PK).
+2. Usuario fecha FormCargo (grid perde binding mas cursor permanece na datasession).
+3. Usuario abre **FormCor** -> `CorBO.Buscar` detecta `cursor_4c_Dados` USED, faz `SQLEXEC(...,"cursor_4c_DadosTmp")` com `SELECT cods, descs, varias, Pesos FROM SigCdCor` — cursor_4c_DadosTmp tem 4 colunas SEM `ccargs`.
+4. `SELECT cursor_4c_Dados / ZAP` -> ainda tem `ccargs char(10) NOT NULL, dcargs char(20)` (estrutura antiga de CargoBO).
+5. `APPEND FROM DBF("cursor_4c_DadosTmp")` -> VFP tenta inserir 4 colunas nos slots de 2 colunas da estrutura antiga; `ccargs` fica NULL.
+6. SQL Server (ou VFP local, dependendo do driver) rejeita com **"Field CCARGS does not accept null values"**.
+7. CATCH de `Buscar()` mostra o erro; form abre sem dados na lista.
+
+Qualquer par de forms CRUD com esquemas PK diferentes eh vulneravel. `FormCargo -> FormCor` eh apenas um exemplo; `FormCor -> FormCargo` faz outra especie de bug (cursor_4c_Dados fica com 4 cols, novo APPEND tenta preencher 2 -> silent success com colunas erradas).
+
+### Fix canonico
+
+Substituir o bloco `IF USED ... ZAP ... ELSE ... ENDIF` inteiro por:
+
+```foxpro
+IF USED("cursor_4c_Dados")
+    USE IN cursor_4c_Dados
+ENDIF
+loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Dados")
+IF loc_nResultado >= 0
+    loc_lSucesso = .T.
+ELSE
+    MostrarErro("Erro ao buscar ..." + CHR(13) + CapturarErroSQL(), "Erro SQL")
+ENDIF
+```
+
+`USE IN` fecha o cursor antigo (libera datasession slot). `SQLEXEC(..., "cursor_4c_Dados")` cria um cursor NOVO com a estrutura CORRETA para o SELECT atual (colunas e nullability herdadas do server). Grid nao fica orfao porque `Form.CarregarLista()` roda logo apos `Buscar()` e refaz:
+
+```foxpro
+loc_oGrid.ColumnCount = N
+loc_oGrid.RecordSource = "cursor_4c_Dados"     && rebind ao cursor novo
+loc_oGrid.Column1.ControlSource = "cursor_4c_Dados.col1"
+...
+loc_oGrid.Column1.Header1.Caption = "..."
+```
+
+Esse padrao ja eh o canonico do `CargoBO.Buscar:89` — sempre SQLEXEC direto em `cursor_4c_Dados`, sem ZAP+APPEND. Nao ha regressao de UX (o rebind ocorre no mesmo frame do CarregarLista, invisivel ao usuario).
+
+### Padrao alternativo (nao usar)
+
+Alguns pensam em resolver com `cursor_4c_DadosCor`, `cursor_4c_DadosCargo`, etc. (cursor por entidade). Isso funcionaria mas exigiria mudanca em 163 BOs + 163 Forms — refactor arquitetural. O fix minimo `USE IN + SQLEXEC` resolve sem tocar em nenhum Form.
+
+### Heuristica de deteccao (Pattern #176)
+
+Detecta bloco com todas as caracteristicas:
+1. `IF USED("cursor_4c_Dados")` (guard existente)
+2. `SQLEXEC(...,"cursor_4c_DadosTmp")` dentro do THEN branch (cursor Tmp)
+3. `SELECT cursor_4c_Dados` + `ZAP` + `APPEND FROM DBF("cursor_4c_DadosTmp")` sequencial no THEN
+4. `USE IN cursor_4c_DadosTmp` cleanup
+5. `ELSE` branch com `SQLEXEC(...,"cursor_4c_Dados")` direto (sem Tmp)
+
+Substitui todo o bloco IF-ELSE-ENDIF por versao canonica USE IN + SQLEXEC. Idempotente (skip se ja convertido — sem `ZAP` no THEN). Preserva a variavel de SQL e mensagem de erro.
+
+### Referencias
+
+- Legado (padrao canonico correto): `C:\4c\projeto\app\classes\CargoBO.prg:74-100` (`Buscar` sem ZAP+APPEND).
+- Anti-padrao original: `C:\4c\projeto\app\classes\CorBO.prg:251-302` (pre-Erro138 — ZAP+APPEND).
+- Fix aplicado: `C:\4c\projeto\app\classes\CorBO.prg` (pos-2026-09-01 — USE IN + SQLEXEC).
+- Auto-fix: `C:\4c\automation\CorretorAutomatico.ps1` `Corrigir-ZapAppendCursorDadosCompartilhado` (Pattern #176).
+- Origem: Erro138 (2026-09-01, CorBO.Buscar — sequencia FormCargo -> FormCor: `Field CCARGS does not accept null values` no CATCH de Buscar).
+- Escopo: ~163 BOs afetados; sweep retroativo pos-fix.
+
+
+## 177. BO property name DEVE bater EXATAMENTE com uso no Form (FormParaBO/BOParaForm) — naming mismatch causa Property not found + GRAVACAO SILENCIOSAMENTE ERRADA (Erro139 DepartamentoBO 2026-09-01)
+
+### Problema
+
+O migrador nomeia properties do BO com naming SEMANTICO (baseado no significado do campo, ex: `this_nSubclaEncerr` = "Subclasse Encerramento") enquanto o Form referencia as mesmas properties com naming baseado na coluna DB (ex: `this_nChkSubs` = coluna `nchksubs`). O naming mismatch causa erro em runtime + **gravacao silenciosamente errada** — bug pior que o erro visivel.
+
+### Sintoma
+
+Ao clicar Salvar/Alterar em FormCRUD:
+
+1. `FormParaBO` executa `THIS.this_oBusinessObject.this_nChkSubs = IIF(opt_4c_ChkSubs.Value = 1, 1, 0)`.
+2. VFP9 nao encontra property no BO (declaracao esta com nome diferente).
+3. VFP9 dispara **"Property THIS_NCHKSUBS is not found"** — CATCH do `FormParaBO` chama `MostrarErro(...)` que abre MessageBox.
+4. User le mensagem, clica "Ok, Continuar".
+5. **CATCH nao interrompe o fluxo** — a procedure de save continua. INSERT/UPDATE roda com `this_nSubclaEncerr = 0` (valor default nunca atribuido).
+6. Banco recebe SEMPRE valor default. User pensa "erro estranho mas gravou" — nao percebe que o campo foi gravado ERRADO permanentemente.
+
+Este bug eh especialmente perigoso porque campos S/N + OptionGroup + CheckBox custom podem passar meses sem deteccao — user nao verifica cada registro salvo, e o valor default `0`/`""` costuma parecer "normal" no grid da listagem.
+
+### Fix canonico
+
+Nomes de property no BO DEVEM ser IDENTICOS aos nomes usados em `FormParaBO`/`BOParaForm`/`CarregarDoCursor`/`Validar<X>` do Form correspondente.
+
+**PREFERIR NOME DB** (espelhar a coluna do banco):
+
+```foxpro
+* BO — CORRETO (nome DB)
+DEFINE CLASS DepartamentoBO AS BusinessBase
+    this_cCodigo    = ""   && codigos     C(10)
+    this_cDescricao = ""   && descricaos  C(40)
+    this_cDiretor   = ""   && diretors    C(10)
+    this_nChkSubs   = 0    && nchksubs    N(1)  - Obriga Subclas.Encerramento
+    this_nChkTipos  = 0    && nchktipos   N(1)
+    ...
+
+* Form — CORRETO
+PROCEDURE FormParaBO
+    THIS.this_oBusinessObject.this_nChkSubs  = IIF(opt.Value = 1, 1, 0)
+    THIS.this_oBusinessObject.this_nChkTipos = IIF(opt2.Value = 1, 1, 0)
+ENDPROC
+```
+
+**EVITAR NOME SEMANTICO** (`this_nSubclaEncerr`, `this_bObrigaSubclas`, etc): dificulta o cross-check com o Form, aumenta chance de mismatch. Se coluna DB tem nome cripitico, mantenha o nome DB no BO e explique no comentario ao lado:
+
+```foxpro
+this_nChkSubs = 0    && nchksubs N(1) - Obriga Subclas. Encerramento (1=Sim, 2=Nao)
+```
+
+### Regra secundaria (CLAUDE.md)
+
+"Property Naming Sufixo 's'": nome do BO preserva sufixo 's' da coluna (`codigos` -> `this_cCodigos`, `descricaos` -> `this_cDescricaos`, `iclis` -> `this_cIclis`). Esta regra ja evita naming semantico para campos comuns; aplicar tambem a campos custom (S/N, OptionGroup, CheckBox).
+
+### Refactor de codigo existente
+
+Se herdar BO com naming semantico e Form ja usando naming DB (ou vice-versa), refactor SEMPRE em pares:
+
+1. Escolher qual nome vai prevalecer (preferir DB).
+2. No BO: `replace_all` do nome antigo pelo novo — declaracao + CarregarDoCursor + INSERT + UPDATE (~4 ocorrencias).
+3. No Form: `replace_all` do nome antigo pelo novo — FormParaBO + BOParaForm + Validar* + qualquer uso (~2-6 ocorrencias).
+4. Recompilar ambos + testar Salvar/Alterar/Excluir/Visualizar.
+
+### Heuristica de deteccao (Pattern #177)
+
+Auto-fix WARNING-only:
+
+1. Para cada `Form*.prg`, grep por `THIS\.this_oBusinessObject\.this_(\w+)` — extrai nomes das properties usadas.
+2. Identifica o BO correspondente (procura `CREATEOBJECT("<Xxx>BO")` no Init do Form; le `<Xxx>BO.prg`).
+3. Para cada nome extraido, verifica se ha declaracao `^\s*this_<nome>\s*=` no bloco `DEFINE CLASS` do BO (antes da primeira `PROCEDURE`).
+4. Se ausente, emite `WARN-177-BO-PROP-NAO-DECLARADA` com linha do Form + nome + BO analisado.
+
+Nao muta pois renomear demanda contexto: decisao DB-vs-semantico + refactor coordenado em 2 arquivos + confirmar que nao existe outra property com nome parecido (colisao). Manter WARNING permite revisao humana. Falso positivo raro (grep exato).
+
+### Referencias
+
+- Bug: `C:\4c\projeto\app\classes\DepartamentoBO.prg:13` declarava `this_nSubclaEncerr` (naming semantico).
+- Uso no form: `C:\4c\projeto\app\forms\cadastros\FormDepartamento.prg:769` (`FormParaBO`) e `:792` (`BOParaForm`) — usavam `this_nChkSubs`.
+- Fix aplicado: renomeado no BO `this_nSubclaEncerr` -> `this_nChkSubs` (4 ocorrencias: declaracao + CarregarDoCursor + INSERT + UPDATE).
+- Correlato: CLAUDE.md "Propriedades do BO preservam sufixo 's' da coluna do banco" (regra #50 migration-patterns.md).
+- Auto-fix: `C:\4c\automation\CorretorAutomatico.ps1` `Corrigir-BOPropertyNaoDeclarada` (Pattern #177 WARNING-only).
+- Origem: Erro139 (2026-09-01, FormDepartamento Salvar — `Property THIS_NCHKSUBS is not found` MessageBox + INSERT prosseguia gravando 0).
+
+
+## 178. `cmd_4c_Confirmar.Enabled = loc_lEdit*` desabilita Confirmar em modo EXCLUIR — sempre adicionar `OR (THIS.this_cModoAtual = "EXCLUIR")` (Erro140 FormDepartamento 2026-09-01)
+
+### Problema
+
+Em Form CRUD, `BtnExcluirClick` chama `HabilitarCampos(.F.)` para tornar os campos READ-ONLY (user apenas VE o registro antes de confirmar exclusao). Mas o mesmo metodo tambem desabilita o botao Confirmar:
+
+```foxpro
+PROTECTED PROCEDURE HabilitarCampos(par_lHabilitar)
+    LOCAL loc_lEdit
+    loc_lEdit = (VARTYPE(par_lHabilitar) = "L" AND par_lHabilitar)
+
+    loc_oPagina.txt_4c_Campo1.ReadOnly = !loc_lEdit
+    loc_oPagina.txt_4c_Campo2.ReadOnly = !loc_lEdit
+    ...
+    loc_oPagina.cnt_4c_BotoesAcao.cmd_4c_Confirmar.Enabled = loc_lEdit   && <-- BUG
+    loc_oPagina.cnt_4c_BotoesAcao.cmd_4c_Cancelar.Enabled  = .T.
+ENDPROC
+```
+
+Quando `HabilitarCampos(.F.)` roda em modo EXCLUIR, `loc_lEdit=.F.` → `Confirmar.Enabled = .F.`. User ve a tela do registro carregado, botao Confirmar CINZA sem imagem (icone `cadastro_confirmar_60.jpg` nao renderiza em `.Enabled=.F.`), **impossivel confirmar a exclusao** — user forcado a Cancelar.
+
+### Sintoma
+
+1. User seleciona registro no grid da lista.
+2. Clica Excluir.
+3. Form abre a Page2 com dados carregados (`BOParaForm` populou campos).
+4. Botao Confirmar aparece com aparencia disabled: cinza, sem icone, unclickable.
+5. Botao Cancelar habilitado.
+6. User precisa clicar Cancelar (nao consegue Confirmar) → nao consegue excluir.
+
+### Fix canonico
+
+Trocar `= loc_lEdit` por `= loc_lEdit OR (THIS.this_cModoAtual = "EXCLUIR")`:
+
+```foxpro
+loc_oPagina.cnt_4c_BotoesAcao.cmd_4c_Confirmar.Enabled = loc_lEdit OR (THIS.this_cModoAtual = "EXCLUIR")
+```
+
+Semantica: Confirmar habilitado em:
+- **INCLUIR/ALTERAR** — `loc_lEdit=.T.` (campos editaveis, user preenche e Confirmar salva).
+- **EXCLUIR** — `loc_lEdit=.F.` (campos readonly) mas `THIS.this_cModoAtual="EXCLUIR"` → Confirmar precisa clicar para efetivar a exclusao.
+- **VISUALIZAR** — `loc_lEdit=.F.` E `this_cModoAtual="VISUALIZAR"` → Confirmar disabled (nao ha o que confirmar).
+- **LISTA** — nem HabilitarCampos rodou.
+
+### Variantes de nome de flag
+
+O migrador usa 4 nomes diferentes para a mesma flag `loc_l<Edit*>` em diferentes forms:
+
+- `loc_lEdit` (FormDepartamento, FormOrc)
+- `loc_lEditar` (FormCVE, FormLGR, FormIct, Formgpd, ...)
+- `loc_lEditando` (FormEmb, FormCVI, FormCor, FormLOC, FormPub, FormPai, ...)
+- `loc_lEdita` (FormMun, FormSigPrCtr)
+
+Pattern #178 cobre todas via regex `loc_lEdit\w*`.
+
+### Heuristica de deteccao (Pattern #178)
+
+```
+regex: (?i)^(\s*.*?cmd_4c_Confirmar\.Enabled\s*=\s*)(loc_lEdit\w*)\s*$
+```
+
+- Grupo 1: prefixo ate `= ` (preserva indentacao + path do objeto)
+- Grupo 2: nome da flag (`loc_lEdit`/`loc_lEditar`/etc)
+- `\s*$` ancora fim de linha — nao pega expressoes ja com OR/AND (evita re-aplicar)
+
+Substituto: `${prefix}${flag} OR (THIS.this_cModoAtual = "EXCLUIR")`.
+
+Skip idempotente: se linha ja contem `"EXCLUIR"` (case-insensitive), pula (segundo run detecta e nao muta).
+
+Skip falso positivo: regex nao casa `= loc_lEditarContaSeto OR loc_lEditarCodGrp` (FormCES — expressao composta que precisa fix manual analisado caso a caso).
+
+### Referencias
+
+- Bug: `C:\4c\projeto\app\forms\cadastros\FormDepartamento.prg:842` — `cmd_4c_Confirmar.Enabled = loc_lEdit`.
+- Fix pontual: linha 844 pos-2026-09-01 — `= loc_lEdit OR (THIS.this_cModoAtual = "EXCLUIR")`.
+- Auto-fix: `C:\4c\automation\CorretorAutomatico.ps1` `Corrigir-ConfirmarDisabledModoExcluir` (Pattern #178 auto-mutate).
+- Escopo: ~34 forms CRUD com padrao similar; sweep retroativo pos-fix.
+- Origem: Erro140 (2026-09-01, FormDepartamento — user reportou "aparece a tela mas o botao para confirmar fica desabilitado" no modo EXCLUIR).
+
+

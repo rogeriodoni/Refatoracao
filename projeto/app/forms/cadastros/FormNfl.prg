@@ -1059,7 +1059,7 @@ DEFINE CLASS FormNfl AS FormBase
                 IF PEMSTATUS(loc_oPag2, "cnt_4c_Salva", 5)
                     loc_oSal = loc_oPag2.cnt_4c_Salva
                     IF PEMSTATUS(loc_oSal, "cmd_4c_Confirmar", 5)
-                        loc_oSal.cmd_4c_Confirmar.Enabled = loc_lEditando
+                        loc_oSal.cmd_4c_Confirmar.Enabled = loc_lEditando OR (THIS.this_cModoAtual = "EXCLUIR")
                     ENDIF
                     IF PEMSTATUS(loc_oSal, "cmd_4c_Cancelar", 5)
                         loc_oSal.cmd_4c_Cancelar.Enabled  = (loc_lEditando OR loc_lVisualiza)

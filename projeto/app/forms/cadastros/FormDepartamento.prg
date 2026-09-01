@@ -839,7 +839,9 @@ DEFINE CLASS FormDepartamento AS FormBase
             loc_oPagina.opt_4c_Autos.Enabled    = loc_lEdit
 
             *-- Botoes de acao
-            loc_oPagina.cnt_4c_BotoesAcao.cmd_4c_Confirmar.Enabled = loc_lEdit
+            *-- Confirmar habilitado em INCLUIR/ALTERAR (loc_lEdit=.T.) e tambem em EXCLUIR
+            *-- (campos readonly mas user precisa confirmar a exclusao)
+            loc_oPagina.cnt_4c_BotoesAcao.cmd_4c_Confirmar.Enabled = loc_lEdit OR (THIS.this_cModoAtual = "EXCLUIR")
             loc_oPagina.cnt_4c_BotoesAcao.cmd_4c_Cancelar.Enabled  = .T.
         CATCH TO loException
             MostrarErro("Erro em FormDepartamento.HabilitarCampos:" + CHR(13) + loException.Message, "Erro")

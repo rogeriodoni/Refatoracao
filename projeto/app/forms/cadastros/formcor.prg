@@ -666,6 +666,8 @@ DEFINE CLASS FormCor AS FormBase
             .BorderStyle   = 1
             .SpecialEffect = 0
             .Visible       = .T.
+            .Format        = "M"
+            .InputMask     = "S,N, "
         ENDWITH
         BINDEVENT(loc_oPagina.txt_4c_TipoCor, "KeyPress", THIS, "ValidarTipoCor")
 
@@ -1168,7 +1170,7 @@ DEFINE CLASS FormCor AS FormBase
 
         IF PEMSTATUS(loc_oPagina, "cnt_4c_BotoesAcao", 5)
             IF PEMSTATUS(loc_oPagina.cnt_4c_BotoesAcao, "cmd_4c_Confirmar", 5)
-                loc_oPagina.cnt_4c_BotoesAcao.cmd_4c_Confirmar.Enabled = loc_lEditando
+                loc_oPagina.cnt_4c_BotoesAcao.cmd_4c_Confirmar.Enabled = loc_lEditando OR (THIS.this_cModoAtual = "EXCLUIR")
             ENDIF
             IF PEMSTATUS(loc_oPagina.cnt_4c_BotoesAcao, "cmd_4c_Cancelar", 5)
                 loc_oPagina.cnt_4c_BotoesAcao.cmd_4c_Cancelar.Enabled = .T.

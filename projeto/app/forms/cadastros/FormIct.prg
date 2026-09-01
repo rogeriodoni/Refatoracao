@@ -1302,7 +1302,7 @@ DEFINE CLASS FormIct AS FormBase
             loc_lEditar = INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR", "BUSCAR")
 
             WITH loc_oPg2.cnt_4c_Salva
-                .cmd_4c_Confirmar.Enabled = loc_lEditar
+                .cmd_4c_Confirmar.Enabled = loc_lEditar OR (THIS.this_cModoAtual = "EXCLUIR")
                 .cmd_4c_Cancelar.Enabled  = .T.
                 .Visible     = .T.
             ENDWITH

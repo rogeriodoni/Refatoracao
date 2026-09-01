@@ -1494,7 +1494,7 @@ DEFINE CLASS FormPec AS FormBase
     *==========================================================================
     * TxtProcuraGrupoLostFocus - Remove filtro ao sair do campo de pesquisa
     *==========================================================================
-    PROCEDURE TxtProcuraGrupoLostFocus()
+    PROCEDURE TxtProcuraGrupoLostFocus(par_nKeyCode, par_nShiftAltCtrl)
         TRY
             IF USED("csDestinos")
                 SELECT csDestinos
@@ -1538,7 +1538,7 @@ DEFINE CLASS FormPec AS FormBase
     *==========================================================================
     * TxtProcuraContaLostFocus - Remove filtro ao sair do campo de pesquisa
     *==========================================================================
-    PROCEDURE TxtProcuraContaLostFocus()
+    PROCEDURE TxtProcuraContaLostFocus(par_nKeyCode, par_nShiftAltCtrl)
         TRY
             IF USED("csDestinos")
                 SELECT csDestinos

@@ -244,25 +244,13 @@ DEFINE CLASS ColBO AS BusinessBase
                 loc_cSQL = loc_cSQL + " ORDER BY colecoes"
 
                 IF USED("cursor_4c_Dados")
-                    loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_DadosTmp")
-                    IF loc_nResultado >= 0
-                        SELECT cursor_4c_Dados
-                        ZAP
-                        SET NULL ON
-                        APPEND FROM DBF("cursor_4c_DadosTmp")
-                        SET NULL OFF
-                        USE IN cursor_4c_DadosTmp
-                        loc_lSucesso = .T.
-                    ELSE
-                        MostrarErro("Erro ao buscar grupos de venda:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
-                    ENDIF
+                    USE IN cursor_4c_Dados
+                ENDIF
+                loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Dados")
+                IF loc_nResultado >= 0
+                    loc_lSucesso = .T.
                 ELSE
-                    loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Dados")
-                    IF loc_nResultado >= 0
-                        loc_lSucesso = .T.
-                    ELSE
-                        MostrarErro("Erro ao buscar grupos de venda:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
-                    ENDIF
+                    MostrarErro("Erro ao buscar grupos de venda:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
                 ENDIF
             ENDIF
 

@@ -522,6 +522,8 @@ DEFINE CLASS FormCargo AS FormBase
             .BorderStyle   = 1
             .SpecialEffect = 0
             .MaxLength     = 1
+            .Format        = "M"
+            .InputMask     = "S,N, "
             .Visible       = .T.
         ENDWITH
 
@@ -606,6 +608,8 @@ DEFINE CLASS FormCargo AS FormBase
             .BorderStyle   = 1
             .SpecialEffect = 0
             .MaxLength     = 1
+            .Format        = "M"
+            .InputMask     = "S,N, "
             .Visible       = .T.
         ENDWITH
 
@@ -724,6 +728,8 @@ DEFINE CLASS FormCargo AS FormBase
             .BorderStyle   = 1
             .SpecialEffect = 0
             .MaxLength     = 1
+            .Format        = "M"
+            .InputMask     = "S,N, "
             .Visible       = .T.
         ENDWITH
 
@@ -842,6 +848,8 @@ DEFINE CLASS FormCargo AS FormBase
             .BorderStyle   = 1
             .SpecialEffect = 0
             .MaxLength     = 1
+            .Format        = "M"
+            .InputMask     = "S,N, "
             .Visible       = .T.
         ENDWITH
 
@@ -942,6 +950,8 @@ DEFINE CLASS FormCargo AS FormBase
             .BorderStyle   = 1
             .SpecialEffect = 0
             .MaxLength     = 1
+            .Format        = "M"
+            .InputMask     = "S,N, "
             .Visible       = .T.
         ENDWITH
 
@@ -1042,6 +1052,8 @@ DEFINE CLASS FormCargo AS FormBase
             .BorderStyle   = 1
             .SpecialEffect = 0
             .MaxLength     = 1
+            .Format        = "M"
+            .InputMask     = "S,N, "
             .Visible       = .T.
         ENDWITH
 
@@ -1142,6 +1154,8 @@ DEFINE CLASS FormCargo AS FormBase
             .BorderStyle   = 1
             .SpecialEffect = 0
             .MaxLength     = 1
+            .Format        = "M"
+            .InputMask     = "S,N, "
             .Visible       = .T.
         ENDWITH
 
@@ -1242,6 +1256,8 @@ DEFINE CLASS FormCargo AS FormBase
             .BorderStyle   = 1
             .SpecialEffect = 0
             .MaxLength     = 1
+            .Format        = "M"
+            .InputMask     = "S,N, "
             .Visible       = .T.
         ENDWITH
 
@@ -1328,6 +1344,8 @@ DEFINE CLASS FormCargo AS FormBase
             .BorderStyle   = 1
             .SpecialEffect = 0
             .MaxLength     = 1
+            .Format        = "M"
+            .InputMask     = "S,N, "
             .Visible       = .T.
         ENDWITH
 
@@ -1379,6 +1397,8 @@ DEFINE CLASS FormCargo AS FormBase
             .BorderStyle   = 1
             .SpecialEffect = 0
             .MaxLength     = 1
+            .Format        = "M"
+            .InputMask     = "S,N, "
             .Visible       = .T.
         ENDWITH
 
@@ -1833,6 +1853,8 @@ DEFINE CLASS FormCargo AS FormBase
             .BorderStyle   = 1
             .SpecialEffect = 0
             .MaxLength     = 1
+            .Format        = "M"
+            .InputMask     = "S,N, "
             .Visible       = .T.
         ENDWITH
 
@@ -1984,6 +2006,8 @@ DEFINE CLASS FormCargo AS FormBase
             .BorderStyle   = 1
             .SpecialEffect = 0
             .MaxLength     = 1
+            .Format        = "M"
+            .InputMask     = "S,N, "
             .Visible       = .T.
         ENDWITH
 

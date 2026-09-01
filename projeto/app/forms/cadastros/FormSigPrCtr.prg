@@ -1429,7 +1429,7 @@ DEFINE CLASS FormSigPrCtr AS FormBase
         LOCAL loc_oCntAcao
         loc_oCntAcao = THIS.pgf_4c_Paginas.Page2.cnt_4c_BotoesAcao
         IF PEMSTATUS(loc_oCntAcao, "cmd_4c_Confirmar", 5)
-            loc_oCntAcao.cmd_4c_Confirmar.Enabled = loc_lEdita
+            loc_oCntAcao.cmd_4c_Confirmar.Enabled = loc_lEdita OR (THIS.this_cModoAtual = "EXCLUIR")
         ENDIF
     ENDPROC
 
