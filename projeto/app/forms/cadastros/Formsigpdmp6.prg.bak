@@ -1678,7 +1678,7 @@ DEFINE CLASS Formsigpdmp6 AS FormBase
         *-- CAMPO CODIGO DE OBSERVACAO (get_codobs no legado)
         *-- Legado: Top=234+29=263, Left=690, Width=32, Height=23, InputMask="999"
         *-- Label: Top=238+29=267, Left=599 (Say3 no legado)
-        *-- BO: this_cCodObs
+        *-- BO: this_nCodObs (numeric(3,0))
         *-- =====================================================================
         loc_oPagina.AddObject("lbl_4c_LblObs", "Label")
         WITH loc_oPagina.lbl_4c_LblObs
@@ -2370,7 +2370,7 @@ DEFINE CLASS Formsigpdmp6 AS FormBase
             *-- Codigo e texto de observacao
             IF PEMSTATUS(loc_oPg2, "txt_4c_Codobs", 5)
                 loc_nCod = IIF(VARTYPE(loc_oPg2.txt_4c_Codobs.Value) = "N", loc_oPg2.txt_4c_Codobs.Value, 0)
-                loc_oBO.this_cCodObs = IIF(loc_nCod > 0, ALLTRIM(TRANSFORM(loc_nCod)), "")
+                loc_oBO.this_nCodObs = loc_nCod
             ENDIF
             IF PEMSTATUS(loc_oPg2, "edt_4c_Mmobs", 5)
                 loc_oBO.this_cObss = IIF(VARTYPE(loc_oPg2.edt_4c_Mmobs.Value) = "C", loc_oPg2.edt_4c_Mmobs.Value, "")
@@ -2450,7 +2450,7 @@ DEFINE CLASS Formsigpdmp6 AS FormBase
             ENDIF
             *-- Codigo e texto de observacao
             IF PEMSTATUS(loc_oPg2, "txt_4c_Codobs", 5)
-                loc_oPg2.txt_4c_Codobs.Value = IIF(EMPTY(loc_oBO.this_cCodObs), 0, VAL(loc_oBO.this_cCodObs))
+                loc_oPg2.txt_4c_Codobs.Value = loc_oBO.this_nCodObs
             ENDIF
             IF PEMSTATUS(loc_oPg2, "edt_4c_Mmobs", 5)
                 loc_oPg2.edt_4c_Mmobs.Value = loc_oBO.this_cObss
@@ -3893,7 +3893,7 @@ DEFINE CLASS Formsigpdmp6 AS FormBase
 
             IF loc_nCod = 0
                 *-- Campo vazio: limpa BO e EditBox
-                THIS.this_oBusinessObject.this_cCodObs = ""
+                THIS.this_oBusinessObject.this_nCodObs = 0
                 THIS.this_cAntValue = ""
                 IF PEMSTATUS(loc_oPg2, "edt_4c_Mmobs", 5)
                     loc_oPg2.edt_4c_Mmobs.Value = ""
@@ -3901,7 +3901,7 @@ DEFINE CLASS Formsigpdmp6 AS FormBase
             ELSE
                 IF TRANSFORM(loc_nCod) = THIS.this_cAntValue
                 *-- Sem mudanca de valor: nao re-consulta
-                THIS.this_oBusinessObject.this_cCodObs = ALLTRIM(TRANSFORM(loc_nCod))
+                THIS.this_oBusinessObject.this_nCodObs = loc_nCod
             ELSE
                 THIS.this_cAntValue = TRANSFORM(loc_nCod)
 
@@ -3947,7 +3947,7 @@ DEFINE CLASS Formsigpdmp6 AS FormBase
                     USE IN cursor_4c_ObsBusca
                 ENDIF
 
-                THIS.this_oBusinessObject.this_cCodObs = IIF(loc_nCod > 0, ALLTRIM(TRANSFORM(loc_nCod)), "")
+                THIS.this_oBusinessObject.this_nCodObs = loc_nCod
                 THIS.this_oBusinessObject.this_cObss   = loc_cObs
 
                 IF PEMSTATUS(loc_oPg2, "txt_4c_Codobs", 5)

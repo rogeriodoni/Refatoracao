@@ -1569,7 +1569,7 @@ DEFINE CLASS FormLin AS FormBase
             loc_cArquivo = GETPICT("jpg;bmp;png;gif", "Selecionar Imagem da Linha")
             IF !EMPTY(loc_cArquivo) AND FILE(loc_cArquivo)
                 loc_mImagem = FILETOSTR(loc_cArquivo)
-                THIS.this_oBusinessObject.this_mFigTec = loc_mImagem
+                THIS.this_oBusinessObject.this_cFigJpgs = loc_mImagem
                 THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page1.img_4c_FigTec.Picture = loc_cArquivo
             ENDIF
         CATCH TO loException

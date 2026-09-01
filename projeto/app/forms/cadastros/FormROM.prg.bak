@@ -184,7 +184,7 @@ DEFINE CLASS FormROM AS FormBase
         loc_oPagina.AddObject("cnt_4c_Botoes", "Container")
         WITH loc_oPagina.cnt_4c_Botoes
             .Top       = 29
-            .Left      = 392
+            .Left      =  542
             .Width     = 460
             .Height    = 85
             .BackStyle = 0
@@ -418,7 +418,7 @@ DEFINE CLASS FormROM AS FormBase
             .ToolTipText   = "Data inicial do per" + CHR(237) + "odo"
             .Visible       = .T.
         ENDWITH
-        BINDEVENT(loc_oPagina.cnt_4c_Periodo.txt_4c_DataIni, "LostFocus", THIS, "DataIniLostFocus")
+        BINDEVENT(loc_oPagina.cnt_4c_Periodo.txt_4c_DataIni, "KeyPress", THIS, "DataIniLostFocus")
 
         loc_oPagina.cnt_4c_Periodo.AddObject("lbl_4c_LSep", "Label")
         WITH loc_oPagina.cnt_4c_Periodo.lbl_4c_LSep
@@ -447,7 +447,7 @@ DEFINE CLASS FormROM AS FormBase
             .ToolTipText   = "Data final do per" + CHR(237) + "odo"
             .Visible       = .T.
         ENDWITH
-        BINDEVENT(loc_oPagina.cnt_4c_Periodo.txt_4c_DataFim, "LostFocus", THIS, "DataFimLostFocus")
+        BINDEVENT(loc_oPagina.cnt_4c_Periodo.txt_4c_DataFim, "KeyPress", THIS, "DataFimLostFocus")
 
         *-- Grid
         loc_oPagina.AddObject("grd_4c_Dados", "Grid")
@@ -738,7 +738,7 @@ DEFINE CLASS FormROM AS FormBase
             .ToolTipText   = "Data do Romaneio"
             .Visible       = .T.
         ENDWITH
-        BINDEVENT(loc_oPagina.txt_4c_Datas, "LostFocus", THIS, "DatasLostFocus")
+        BINDEVENT(loc_oPagina.txt_4c_Datas, "KeyPress", THIS, "DatasLostFocus")
 
         *-- Container cntRec (Recebimento): Origem, Destino, Obs
         *-- Legado: cntRec top=112, left=185, w=492, h=84 -> +29=141
@@ -751,6 +751,7 @@ DEFINE CLASS FormROM AS FormBase
             .BackStyle   = 0
             .BorderWidth = 0
             .Visible     = (THIS.this_cTipoRomaneio == "R")
+            .Visible     = .T.
         ENDWITH
 
         loc_oPagina.cnt_4c_Rec.AddObject("lbl_4c_LOrigem", "Label")
@@ -782,7 +783,7 @@ DEFINE CLASS FormROM AS FormBase
             .ToolTipText   = "C" + CHR(243) + "digo Origem"
             .Visible       = .T.
         ENDWITH
-        BINDEVENT(loc_oPagina.cnt_4c_Rec.txt_4c_DepOrig, "LostFocus", THIS, "ValidarDepOrig")
+        BINDEVENT(loc_oPagina.cnt_4c_Rec.txt_4c_DepOrig, "KeyPress", THIS, "ValidarDepOrig")
 
         loc_oPagina.cnt_4c_Rec.AddObject("txt_4c_DDepOrig", "TextBox")
         WITH loc_oPagina.cnt_4c_Rec.txt_4c_DDepOrig
@@ -830,7 +831,7 @@ DEFINE CLASS FormROM AS FormBase
             .ToolTipText   = "C" + CHR(243) + "digo Destino"
             .Visible       = .T.
         ENDWITH
-        BINDEVENT(loc_oPagina.cnt_4c_Rec.txt_4c_DepDest, "LostFocus", THIS, "ValidarDepDest")
+        BINDEVENT(loc_oPagina.cnt_4c_Rec.txt_4c_DepDest, "KeyPress", THIS, "ValidarDepDest")
 
         loc_oPagina.cnt_4c_Rec.AddObject("txt_4c_DDepDest", "TextBox")
         WITH loc_oPagina.cnt_4c_Rec.txt_4c_DDepDest
@@ -890,6 +891,7 @@ DEFINE CLASS FormROM AS FormBase
             .BackStyle   = 0
             .BorderWidth = 0
             .Visible     = (THIS.this_cTipoRomaneio <> "R")
+            .Visible     = .T.
         ENDWITH
 
         loc_oPagina.cnt_4c_Rom.AddObject("lbl_4c_LTransp", "Label")
@@ -921,7 +923,7 @@ DEFINE CLASS FormROM AS FormBase
             .ToolTipText   = "C" + CHR(243) + "digo da Transportadora"
             .Visible       = .T.
         ENDWITH
-        BINDEVENT(loc_oPagina.cnt_4c_Rom.txt_4c_CodTransp, "LostFocus", THIS, "ValidarTransportadora")
+        BINDEVENT(loc_oPagina.cnt_4c_Rom.txt_4c_CodTransp, "KeyPress", THIS, "ValidarTransportadora")
 
         loc_oPagina.cnt_4c_Rom.AddObject("txt_4c_DCodTransp", "TextBox")
         WITH loc_oPagina.cnt_4c_Rom.txt_4c_DCodTransp
@@ -969,7 +971,7 @@ DEFINE CLASS FormROM AS FormBase
             .ToolTipText   = "C" + CHR(243) + "digo do Cliente"
             .Visible       = .T.
         ENDWITH
-        BINDEVENT(loc_oPagina.cnt_4c_Rom.txt_4c_Contas, "LostFocus", THIS, "ValidarContas")
+        BINDEVENT(loc_oPagina.cnt_4c_Rom.txt_4c_Contas, "KeyPress", THIS, "ValidarContas")
 
         loc_oPagina.cnt_4c_Rom.AddObject("txt_4c_DContas", "TextBox")
         WITH loc_oPagina.cnt_4c_Rom.txt_4c_DContas
@@ -1018,7 +1020,7 @@ DEFINE CLASS FormROM AS FormBase
             .ToolTipText   = "Valor total do Romaneio"
             .Visible       = .T.
         ENDWITH
-        BINDEVENT(loc_oPagina.txt_4c_Valor, "LostFocus", THIS, "ValorLostFocus")
+        BINDEVENT(loc_oPagina.txt_4c_Valor, "KeyPress", THIS, "ValorLostFocus")
 
         *-- Label Qtde
         loc_oPagina.AddObject("lbl_4c_LQtde", "Label")
@@ -1153,11 +1155,11 @@ DEFINE CLASS FormROM AS FormBase
 
         loc_oPagina.AddObject("cmd_4c_Cancelar", "CommandButton")
         WITH loc_oPagina.cmd_4c_Cancelar
-            .Caption         = "Cancelar"
+            .Caption         = "Encerrar"
             .Top             = 540
             .Left            = 357
-            .Width           = 100
-            .Height          = 27
+            .Width           = 75
+            .Height          = 75
             .FontName        = "Tahoma"
             .FontSize        = 8
             .Themes          = .F.
@@ -1189,6 +1191,7 @@ DEFINE CLASS FormROM AS FormBase
                     IF PEMSTATUS(.Self, "txt_4c_DataFim", 5)
                         loc_dFim = .txt_4c_DataFim.Value
                     ENDIF
+                    .Visible     = .T.
                 ENDWITH
             ENDIF
 
@@ -1224,7 +1227,7 @@ DEFINE CLASS FormROM AS FormBase
             IF !loc_lNovo
                 IF !USED("cursor_4c_Dados") OR RECCOUNT("cursor_4c_Dados") = 0
                     MsgAviso("Nenhum registro selecionado.", "Aten" + CHR(231) + CHR(227) + "o")
-                    RETURN .F.
+                    loc_lSucesso = .F.
                 ELSE
                     THIS.this_oBusinessObject.CarregarDoCursor("cursor_4c_Dados")
                     *-- Carregar chaves do banco
@@ -1367,6 +1370,7 @@ DEFINE CLASS FormROM AS FormBase
                             IF PEMSTATUS(.Self, "txt_4c_Obs", 5)
                                 .txt_4c_Obs.Value = loc_oBO.this_cObs
                             ENDIF
+                            .Visible     = .T.
                         ENDWITH
                     ENDIF
                 ELSE
@@ -1397,6 +1401,7 @@ DEFINE CLASS FormROM AS FormBase
                                     .txt_4c_DContas.Value = ""
                                 ENDIF
                             ENDIF
+                            .Visible     = .T.
                         ENDWITH
                     ENDIF
                 ENDIF
@@ -1441,6 +1446,7 @@ DEFINE CLASS FormROM AS FormBase
                             IF PEMSTATUS(.Self, "txt_4c_Obs", 5)
                                 loc_oBO.this_cObs = ALLTRIM(.txt_4c_Obs.Value)
                             ENDIF
+                            .Visible     = .T.
                         ENDWITH
                     ENDIF
                     loc_oBO.this_cCodTransp = ""
@@ -1454,12 +1460,14 @@ DEFINE CLASS FormROM AS FormBase
                             IF PEMSTATUS(.Self, "txt_4c_Contas", 5)
                                 loc_oBO.this_cContas = ALLTRIM(.txt_4c_Contas.Value)
                             ENDIF
+                            .Visible     = .T.
                         ENDWITH
                     ENDIF
                     loc_oBO.this_cDepOrig = ""
                     loc_oBO.this_cDepDest = ""
                     loc_oBO.this_cObs     = ""
                 ENDIF
+                .Visible     = .T.
             ENDWITH
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message + " (Linha:" + TRANSFORM(loc_oErro.LineNo) + ")", ;
@@ -1602,12 +1610,12 @@ DEFINE CLASS FormROM AS FormBase
         TRY
             IF !USED("cursor_4c_Dados") OR RECCOUNT("cursor_4c_Dados") = 0
                 MsgAviso("Selecione um registro para alterar.", "Aten" + CHR(231) + CHR(227) + "o")
-                RETURN .F.
+                loc_lSucesso = .F.
             ENDIF
 
             IF cursor_4c_Dados.nAceite = 1
                 MsgAviso("Romaneio J" + CHR(225) + " Aceito !!!", "Aten" + CHR(231) + CHR(227) + "o")
-                RETURN .F.
+                loc_lSucesso = .F.
             ENDIF
 
             loc_lSucesso = THIS.IrParaDados("ALTERAR")
@@ -1629,7 +1637,7 @@ DEFINE CLASS FormROM AS FormBase
         TRY
             IF !USED("cursor_4c_Dados") OR RECCOUNT("cursor_4c_Dados") = 0
                 MsgAviso("Selecione um registro para visualizar.", "Aten" + CHR(231) + CHR(227) + "o")
-                RETURN .F.
+                loc_lSucesso = .F.
             ENDIF
             loc_lSucesso = THIS.IrParaDados("VISUALIZAR")
         CATCH TO loc_oErro
@@ -1650,18 +1658,18 @@ DEFINE CLASS FormROM AS FormBase
         TRY
             IF !USED("cursor_4c_Dados") OR RECCOUNT("cursor_4c_Dados") = 0
                 MsgAviso("Selecione um registro para excluir.", "Aten" + CHR(231) + CHR(227) + "o")
-                RETURN .F.
+                loc_lSucesso = .F.
             ENDIF
 
             IF cursor_4c_Dados.nAceite = 1
                 MsgAviso("Romaneio J" + CHR(225) + " Aceito !!!", "Aten" + CHR(231) + CHR(227) + "o")
-                RETURN .F.
+                loc_lSucesso = .F.
             ENDIF
 
             THIS.this_oBusinessObject.CarregarDoCursor("cursor_4c_Dados")
 
             IF !MsgConfirma("Confirma a exclus" + CHR(227) + "o deste Romaneio?", "Excluir")
-                RETURN .F.
+                loc_lSucesso = .F.
             ENDIF
 
             loc_lSucesso = THIS.this_oBusinessObject.Excluir()
@@ -1690,18 +1698,18 @@ DEFINE CLASS FormROM AS FormBase
 
         TRY
             IF !USED("cursor_4c_Dados") OR RECCOUNT("cursor_4c_Dados") = 0
-                RETURN .F.
+                loc_lSucesso = .F.
             ENDIF
 
             SELECT cursor_4c_Dados
 
             IF cursor_4c_Dados.nAceite = 1
                 MsgAviso("Romaneio J" + CHR(225) + " Aceito !!!", "Aten" + CHR(231) + CHR(227) + "o")
-                RETURN .F.
+                loc_lSucesso = .F.
             ENDIF
 
             IF !MsgConfirma("Deseja Aceitar o Romaneio ???", "ATEN" + CHR(199) + CHR(195) + "O !!!")
-                RETURN .F.
+                loc_lSucesso = .F.
             ENDIF
 
             loc_cCodigo = ALLTRIM(cursor_4c_Dados.Codigo)
@@ -1747,7 +1755,7 @@ DEFINE CLASS FormROM AS FormBase
             THIS.FormParaBO()
 
             IF !THIS.ValidarDados()
-                RETURN .F.
+                loc_lSucesso = .F.
             ENDIF
 
             loc_oBO     = THIS.this_oBusinessObject
@@ -1863,7 +1871,7 @@ DEFINE CLASS FormROM AS FormBase
     *==========================================================================
     * Handlers de validacao de campos
     *==========================================================================
-    PROCEDURE ValidarDepOrig()
+    PROCEDURE ValidarDepOrig(par_nKeyCode, par_nShiftAltCtrl)
         LOCAL loc_cCod, loc_cDesc, loc_oPg2
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
         IF !PEMSTATUS(loc_oPg2, "cnt_4c_Rec", 5)
@@ -1920,7 +1928,7 @@ DEFINE CLASS FormROM AS FormBase
         ENDIF
     ENDPROC
 
-    PROCEDURE ValidarDepDest()
+    PROCEDURE ValidarDepDest(par_nKeyCode, par_nShiftAltCtrl)
         LOCAL loc_cCod, loc_cDesc, loc_oPg2
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
         IF !PEMSTATUS(loc_oPg2, "cnt_4c_Rec", 5)
@@ -1947,7 +1955,7 @@ DEFINE CLASS FormROM AS FormBase
         ENDIF
     ENDPROC
 
-    PROCEDURE ValidarTransportadora()
+    PROCEDURE ValidarTransportadora(par_nKeyCode, par_nShiftAltCtrl)
         LOCAL loc_cCod, loc_cResultado, loc_cRazao, loc_cIdT, loc_oPg2
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
         IF !PEMSTATUS(loc_oPg2, "cnt_4c_Rom", 5)
@@ -1986,7 +1994,7 @@ DEFINE CLASS FormROM AS FormBase
         ENDIF
     ENDPROC
 
-    PROCEDURE ValidarContas()
+    PROCEDURE ValidarContas(par_nKeyCode, par_nShiftAltCtrl)
         LOCAL loc_cCod, loc_cResultado, loc_cRClis, loc_oPg2
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
         IF !PEMSTATUS(loc_oPg2, "cnt_4c_Rom", 5)
@@ -2015,7 +2023,7 @@ DEFINE CLASS FormROM AS FormBase
         ENDIF
     ENDPROC
 
-    PROCEDURE DataIniLostFocus()
+    PROCEDURE DataIniLostFocus(par_nKeyCode, par_nShiftAltCtrl)
         LOCAL loc_oPg1
         loc_oPg1 = THIS.pgf_4c_Paginas.Page1
         IF PEMSTATUS(loc_oPg1, "cnt_4c_Periodo", 5)
@@ -2025,11 +2033,12 @@ DEFINE CLASS FormROM AS FormBase
                         .txt_4c_DataFim.Value = .txt_4c_DataIni.Value
                     ENDIF
                 ENDIF
+                .Visible     = .T.
             ENDWITH
         ENDIF
     ENDPROC
 
-    PROCEDURE DataFimLostFocus()
+    PROCEDURE DataFimLostFocus(par_nKeyCode, par_nShiftAltCtrl)
         LOCAL loc_oPg1
         loc_oPg1 = THIS.pgf_4c_Paginas.Page1
         IF PEMSTATUS(loc_oPg1, "cnt_4c_Periodo", 5)
@@ -2039,16 +2048,17 @@ DEFINE CLASS FormROM AS FormBase
                         .txt_4c_DataIni.Value = .txt_4c_DataFim.Value
                     ENDIF
                 ENDIF
+                .Visible     = .T.
             ENDWITH
         ENDIF
         THIS.CarregarLista()
     ENDPROC
 
-    PROCEDURE DatasLostFocus()
+    PROCEDURE DatasLostFocus(par_nKeyCode, par_nShiftAltCtrl)
         *-- Nenhuma acao adicional necessaria
     ENDPROC
 
-    PROCEDURE ValorLostFocus()
+    PROCEDURE ValorLostFocus(par_nKeyCode, par_nShiftAltCtrl)
         *-- Nenhuma acao adicional necessaria
     ENDPROC
 

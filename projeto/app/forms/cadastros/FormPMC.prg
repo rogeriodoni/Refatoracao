@@ -1287,7 +1287,7 @@ DEFINE CLASS FormPMC AS FormBase
     * ValidarProduto - LostFocus de txt_4c_Cpros: verifica codigo em SigCdPro
     * Original: fwbuscaext abre lista se nao achou; campo vazio -> limpa
     *==========================================================================
-    PROCEDURE ValidarProduto()
+    PROCEDURE ValidarProduto(par_nKeyCode, par_nShiftAltCtrl)
         LOCAL loc_oPg2, loc_cCpros, loc_cSQL, loc_nResult
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
 

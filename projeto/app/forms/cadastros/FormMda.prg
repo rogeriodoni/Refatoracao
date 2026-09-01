@@ -1820,7 +1820,7 @@ DEFINE CLASS FormMda AS FormBase
         *-- Botao Confirmar: habilitado apenas em INCLUIR/ALTERAR
         IF PEMSTATUS(loc_oPagina, "cnt_4c_BotoesAcao", 5)
             IF PEMSTATUS(loc_oPagina.cnt_4c_BotoesAcao, "cmd_4c_Confirmar", 5)
-                loc_oPagina.cnt_4c_BotoesAcao.cmd_4c_Confirmar.Enabled = loc_lEditar
+                loc_oPagina.cnt_4c_BotoesAcao.cmd_4c_Confirmar.Enabled = loc_lEditar OR (THIS.this_cModoAtual = "EXCLUIR")
             ENDIF
         ENDIF
 
@@ -1920,7 +1920,7 @@ DEFINE CLASS FormMda AS FormBase
 
         IF PEMSTATUS(loc_oPagina, "cnt_4c_BotoesAcao", 5)
             IF PEMSTATUS(loc_oPagina.cnt_4c_BotoesAcao, "cmd_4c_Confirmar", 5)
-                loc_oPagina.cnt_4c_BotoesAcao.cmd_4c_Confirmar.Enabled = loc_lEditar
+                loc_oPagina.cnt_4c_BotoesAcao.cmd_4c_Confirmar.Enabled = loc_lEditar OR (THIS.this_cModoAtual = "EXCLUIR")
             ENDIF
         ENDIF
     ENDPROC

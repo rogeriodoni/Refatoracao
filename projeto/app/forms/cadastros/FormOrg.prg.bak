@@ -372,6 +372,7 @@ DEFINE CLASS FormOrg AS FormBase
             .Column2.Header1.Alignment = 1
         ENDWITH
 
+        loc_oGrid.ColumnCount = 2
         loc_oGrid.RecordSource          = "cursor_4c_Dados"
         loc_oGrid.Column1.ControlSource = "cursor_4c_Dados.codigos"
         loc_oGrid.Column2.ControlSource = "cursor_4c_Dados.descricaos"

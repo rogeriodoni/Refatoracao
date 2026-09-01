@@ -644,31 +644,13 @@ DEFINE CLASS OptBO AS BusinessBase
                     " ORDER BY a.Operacaos"
 
                 IF USED("cursor_4c_Dados")
-                    loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_DadosTmp")
-                    IF loc_nResultado >= 0
-                        SELECT cursor_4c_Dados
-                        ZAP
-                        SET NULL ON
-                        IF RECCOUNT("cursor_4c_DadosTmp") > 0
-                            APPEND FROM DBF("cursor_4c_DadosTmp")
-                        ENDIF
-                        SET NULL OFF
-                        IF USED("cursor_4c_DadosTmp")
-                            USE IN cursor_4c_DadosTmp
-                        ENDIF
-                        GO TOP IN cursor_4c_Dados
-                        loc_lSucesso = .T.
-                    ELSE
-                        MostrarErro("Erro ao buscar:" + CHR(13) + CapturarErroSQL(), "OptBO.Buscar")
-                    ENDIF
+                    USE IN cursor_4c_Dados
+                ENDIF
+                loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Dados")
+                IF loc_nResultado >= 0
+                    loc_lSucesso = .T.
                 ELSE
-                    loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Dados")
-                    IF loc_nResultado >= 0
-                        GO TOP IN cursor_4c_Dados
-                        loc_lSucesso = .T.
-                    ELSE
-                        MostrarErro("Erro ao buscar:" + CHR(13) + CapturarErroSQL(), "OptBO.Buscar")
-                    ENDIF
+                    MostrarErro("Erro ao buscar:" + CHR(13) + CapturarErroSQL(), "OptBO.Buscar")
                 ENDIF
             ENDIF
         CATCH TO loException

@@ -101,39 +101,13 @@ DEFINE CLASS PubBO AS BusinessBase
                 loc_cSQL = "SELECT cods, descs FROM SigCdFpb ORDER BY cods"
 
                 IF USED("cursor_4c_Dados")
-                    *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
-                    IF USED("cursor_4c_DadosTmp")
-                        TABLEREVERT(.T., "cursor_4c_DadosTmp")
-                        USE IN cursor_4c_DadosTmp
-                    ENDIF
-
-                    loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_DadosTmp")
-                    IF loc_nResult > 0
-                        SELECT cursor_4c_Dados
-                        ZAP
-                        SET NULL ON
-                        APPEND FROM DBF("cursor_4c_DadosTmp")
-                        SET NULL OFF
-                        IF USED("cursor_4c_DadosTmp")
-                            USE IN cursor_4c_DadosTmp
-                        ENDIF
-                        loc_lSucesso = .T.
-                    ELSE
-                        MsgErro("Erro ao buscar publicidades:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
-                    ENDIF
+                    USE IN cursor_4c_Dados
+                ENDIF
+                loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Dados")
+                IF loc_nResultado >= 0
+                    loc_lSucesso = .T.
                 ELSE
-                    *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
-                    IF USED("cursor_4c_Dados")
-                        TABLEREVERT(.T., "cursor_4c_Dados")
-                        USE IN cursor_4c_Dados
-                    ENDIF
-
-                    loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Dados")
-                    IF loc_nResult > 0
-                        loc_lSucesso = .T.
-                    ELSE
-                        MsgErro("Erro ao buscar publicidades:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
-                    ENDIF
+                    MostrarErro("Erro ao buscar:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
                 ENDIF
             ENDIF
         CATCH TO loException

@@ -1871,7 +1871,7 @@ DEFINE CLASS FormROM AS FormBase
     *==========================================================================
     * Handlers de validacao de campos
     *==========================================================================
-    PROCEDURE ValidarDepOrig()
+    PROCEDURE ValidarDepOrig(par_nKeyCode, par_nShiftAltCtrl)
         LOCAL loc_cCod, loc_cDesc, loc_oPg2
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
         IF !PEMSTATUS(loc_oPg2, "cnt_4c_Rec", 5)
@@ -1928,7 +1928,7 @@ DEFINE CLASS FormROM AS FormBase
         ENDIF
     ENDPROC
 
-    PROCEDURE ValidarDepDest()
+    PROCEDURE ValidarDepDest(par_nKeyCode, par_nShiftAltCtrl)
         LOCAL loc_cCod, loc_cDesc, loc_oPg2
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
         IF !PEMSTATUS(loc_oPg2, "cnt_4c_Rec", 5)
@@ -1955,7 +1955,7 @@ DEFINE CLASS FormROM AS FormBase
         ENDIF
     ENDPROC
 
-    PROCEDURE ValidarTransportadora()
+    PROCEDURE ValidarTransportadora(par_nKeyCode, par_nShiftAltCtrl)
         LOCAL loc_cCod, loc_cResultado, loc_cRazao, loc_cIdT, loc_oPg2
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
         IF !PEMSTATUS(loc_oPg2, "cnt_4c_Rom", 5)
@@ -1994,7 +1994,7 @@ DEFINE CLASS FormROM AS FormBase
         ENDIF
     ENDPROC
 
-    PROCEDURE ValidarContas()
+    PROCEDURE ValidarContas(par_nKeyCode, par_nShiftAltCtrl)
         LOCAL loc_cCod, loc_cResultado, loc_cRClis, loc_oPg2
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
         IF !PEMSTATUS(loc_oPg2, "cnt_4c_Rom", 5)
@@ -2023,7 +2023,7 @@ DEFINE CLASS FormROM AS FormBase
         ENDIF
     ENDPROC
 
-    PROCEDURE DataIniLostFocus()
+    PROCEDURE DataIniLostFocus(par_nKeyCode, par_nShiftAltCtrl)
         LOCAL loc_oPg1
         loc_oPg1 = THIS.pgf_4c_Paginas.Page1
         IF PEMSTATUS(loc_oPg1, "cnt_4c_Periodo", 5)
@@ -2038,7 +2038,7 @@ DEFINE CLASS FormROM AS FormBase
         ENDIF
     ENDPROC
 
-    PROCEDURE DataFimLostFocus()
+    PROCEDURE DataFimLostFocus(par_nKeyCode, par_nShiftAltCtrl)
         LOCAL loc_oPg1
         loc_oPg1 = THIS.pgf_4c_Paginas.Page1
         IF PEMSTATUS(loc_oPg1, "cnt_4c_Periodo", 5)
@@ -2054,11 +2054,11 @@ DEFINE CLASS FormROM AS FormBase
         THIS.CarregarLista()
     ENDPROC
 
-    PROCEDURE DatasLostFocus()
+    PROCEDURE DatasLostFocus(par_nKeyCode, par_nShiftAltCtrl)
         *-- Nenhuma acao adicional necessaria
     ENDPROC
 
-    PROCEDURE ValorLostFocus()
+    PROCEDURE ValorLostFocus(par_nKeyCode, par_nShiftAltCtrl)
         *-- Nenhuma acao adicional necessaria
     ENDPROC
 

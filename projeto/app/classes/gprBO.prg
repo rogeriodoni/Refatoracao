@@ -307,31 +307,13 @@ DEFINE CLASS gprBO AS BusinessBase
                 loc_cSQL = loc_cSQL + " ORDER BY a.codigos"
 
                 IF USED("cursor_4c_Dados")
-                    loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_DadosTmp")
-                    IF loc_nResultado >= 0
-                        SELECT cursor_4c_Dados
-                        ZAP
-                        SET NULL ON
-                        APPEND FROM DBF("cursor_4c_DadosTmp")
-                        SET NULL OFF
-                        IF USED("cursor_4c_DadosTmp")
-                            USE IN cursor_4c_DadosTmp
-                        ENDIF
-                        loc_lSucesso = .T.
-                    ELSE
-                        IF !(TYPE("gb_4c_ModoTeste") = "L" AND gb_4c_ModoTeste)
-                            MostrarErro("Erro ao buscar grandes grupos:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
-                        ENDIF
-                    ENDIF
+                    USE IN cursor_4c_Dados
+                ENDIF
+                loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Dados")
+                IF loc_nResultado >= 0
+                    loc_lSucesso = .T.
                 ELSE
-                    loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Dados")
-                    IF loc_nResultado >= 0
-                        loc_lSucesso = .T.
-                    ELSE
-                        IF !(TYPE("gb_4c_ModoTeste") = "L" AND gb_4c_ModoTeste)
-                            MostrarErro("Erro ao buscar grandes grupos:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
-                        ENDIF
-                    ENDIF
+                    MostrarErro("Erro ao buscar grandes grupos:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
                 ENDIF
             ENDIF
 

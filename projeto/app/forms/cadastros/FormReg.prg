@@ -1140,7 +1140,7 @@ DEFINE CLASS FormReg AS FormBase
         loc_lEditando = INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
 
         WITH loc_oPagina2.cnt_4c_BotoesAcao
-            .cmd_4c_Confirmar.Enabled = loc_lEditando
+            .cmd_4c_Confirmar.Enabled = loc_lEditando OR (THIS.this_cModoAtual = "EXCLUIR")
             .cmd_4c_Cancelar.Enabled  = .T.
             .Visible     = .T.
         ENDWITH

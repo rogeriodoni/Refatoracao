@@ -2729,7 +2729,7 @@ DEFINE CLASS FormCLC AS FormBase
         loc_lEditando = INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
 
         IF PEMSTATUS(loc_oPg2, "cnt_4c_BotoesAcao", 5)
-            loc_oPg2.cnt_4c_BotoesAcao.cmd_4c_Confirmar.Enabled = loc_lEditando
+            loc_oPg2.cnt_4c_BotoesAcao.cmd_4c_Confirmar.Enabled = loc_lEditando OR (THIS.this_cModoAtual = "EXCLUIR")
             loc_oPg2.cnt_4c_BotoesAcao.cmd_4c_Cancelar.Enabled  = .T.
         ENDIF
     ENDPROC

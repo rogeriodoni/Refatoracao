@@ -11608,6 +11608,433 @@ function Corrigir-ValidarPreAcaoFallbackSilencioso {
     return $Linhas
 }
 
+function Corrigir-TextBoxSNInputMask {
+    # Pattern #175: TextBox S/N (Sim/Nao) deve ter Format="M" + InputMask="S,N, "
+    # Detecta bloco WITH ... TextBox / .MaxLength = 1 / ... / ENDWITH cuja proxima
+    # AddObject("lbl_...", "Label") tenha .Caption = "(S/N)" e injeta as 2 props
+    # antes do ENDWITH do TextBox.
+    #
+    # Legado sempre gera Format="M" + InputMask="S,N, " nesses campos (lista fixa
+    # canonica VFP9 — apenas S, N e espaco sao aceitos, resto descartado). Migrador
+    # atual gera apenas MaxLength=1 (limita tamanho, nao tipo).
+    # Origem: Erro137 (2026-09-01 FormCargo — 12 TextBoxes S/N aceitavam qualquer char).
+    param([string[]]$Linhas)
+
+    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
+
+    # ---- FASE 1: mapear blocos AddObject("nome", "TextBox"/"Label") -> (inicioWith, endwith)
+    $blocos = @()
+    $rxAdd  = [regex]'(?i)AddObject\s*\(\s*"([^"]+)"\s*,\s*"(TextBox|Label)"\s*\)'
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        $m = $rxAdd.Match($Linhas[$i])
+        if (-not $m.Success) { continue }
+
+        $nome  = $m.Groups[1].Value
+        $tipo  = $m.Groups[2].Value
+
+        # Procurar o WITH correspondente nas proximas linhas
+        $inicioWith = -1
+        for ($j = $i + 1; $j -lt [Math]::Min($i + 5, $Linhas.Count); $j++) {
+            if ($Linhas[$j] -imatch ('^\s*WITH\s+[\w\.]+\.' + [regex]::Escape($nome) + '\s*$')) {
+                $inicioWith = $j
+                break
+            }
+        }
+        if ($inicioWith -lt 0) { continue }
+
+        # Procurar o ENDWITH que fecha esse WITH (proximo ENDWITH balanceado)
+        $endwith = -1
+        $depth = 1
+        for ($j = $inicioWith + 1; $j -lt $Linhas.Count; $j++) {
+            if ($Linhas[$j] -imatch '^\s*WITH\s+')    { $depth++ }
+            if ($Linhas[$j] -imatch '^\s*ENDWITH\s*$'){ $depth--; if ($depth -eq 0) { $endwith = $j; break } }
+        }
+        if ($endwith -lt 0) { continue }
+
+        $blocos += [PSCustomObject]@{
+            Idx        = $i          # linha do AddObject
+            Nome       = $nome
+            Tipo       = $tipo
+            InicioWith = $inicioWith # linha do WITH
+            Endwith    = $endwith    # linha do ENDWITH
+        }
+    }
+
+    # ---- FASE 2: para cada TextBox com MaxLength=1, checar se proximo bloco eh Label com "(S/N)"
+    $offsetAcumulado = 0
+    for ($k = 0; $k -lt $blocos.Count; $k++) {
+        $b = $blocos[$k]
+        if ($b.Tipo -ne 'TextBox') { continue }
+
+        # Coletar corpo do WITH (linhas entre InicioWith+1 e Endwith-1)
+        $iniAtual = $b.InicioWith + $offsetAcumulado
+        $fimAtual = $b.Endwith    + $offsetAcumulado
+
+        $corpo = $Linhas[($iniAtual + 1)..($fimAtual - 1)] -join "`n"
+
+        # Guard 1: TextBox precisa ter .MaxLength = 1
+        if ($corpo -notmatch '(?im)^\s*\.MaxLength\s*=\s*1\s*$') { continue }
+
+        # Guard 2: TextBox NAO pode ja ter .Format = "M" ou .InputMask que contenha S,N (idempotente)
+        if ($corpo -match '(?im)\.Format\s*=\s*"M"' -or
+            $corpo -match '(?im)\.InputMask\s*=\s*"S\s*,\s*N') {
+            continue
+        }
+
+        # Encontrar proximo bloco (deve ser Label vizinha)
+        if ($k + 1 -ge $blocos.Count) { continue }
+        $labelBloco = $blocos[$k + 1]
+        if ($labelBloco.Tipo -ne 'Label') { continue }
+
+        # Guard 3: gap entre ENDWITH do TextBox e AddObject da Label deve ser pequeno (< 5 linhas)
+        if (($labelBloco.Idx - $b.Endwith) -gt 5) { continue }
+
+        # Ler corpo da Label
+        $labelIni = $labelBloco.InicioWith + $offsetAcumulado
+        $labelFim = $labelBloco.Endwith    + $offsetAcumulado
+        if ($labelFim -le $labelIni) { continue }
+        $corpoLabel = $Linhas[($labelIni + 1)..($labelFim - 1)] -join "`n"
+
+        # Guard 4: Label precisa ter .Caption = "(S/N)" exato
+        if ($corpoLabel -notmatch '(?im)^\s*\.Caption\s*=\s*"\(S/N\)"\s*$') { continue }
+
+        # ---- Injetar .Format = "M" + .InputMask = "S,N, " antes do ENDWITH do TextBox
+        # Preservar indentacao das linhas do corpo (usar mesma indent do .MaxLength)
+        $linhaMaxLength = ""
+        for ($j = $iniAtual + 1; $j -lt $fimAtual; $j++) {
+            if ($Linhas[$j] -imatch '^\s*\.MaxLength\s*=\s*1\s*$') {
+                $linhaMaxLength = $Linhas[$j]
+                break
+            }
+        }
+        $indent = ($linhaMaxLength -replace '^(\s*)\..*$', '$1')
+        if ([string]::IsNullOrEmpty($indent)) { $indent = "            " }
+
+        $novasLinhas = @(
+            "${indent}.Format        = ""M"""
+            "${indent}.InputMask     = ""S,N, """
+        )
+
+        # Inserir ANTES do ENDWITH (na posicao fimAtual)
+        $Linhas = $Linhas[0..($fimAtual - 1)] + $novasLinhas + $Linhas[$fimAtual..($Linhas.Count - 1)]
+
+        $offsetAcumulado += $novasLinhas.Count
+
+        $descricao = "Pattern #175: TextBox S/N (label vizinha '(S/N)') com apenas .MaxLength=1 aceita qualquer char. Injetados .Format=""M"" + .InputMask=""S,N, "" (lista fixa canonica VFP9: aceita S, N ou espaco; resto descartado silenciosamente). Legado sempre gera esse par (ex sigcdcar_form_codigo_fonte.txt Get_senha)."
+
+        Add-Correcao -Tipo "AUTO-175-TEXTBOX-SN-INPUTMASK" -Linha ($b.InicioWith + 1) `
+            -Original ("TextBox " + $b.Nome + " (S/N) sem Format=""M""/InputMask=""S,N, """) `
+            -Corrigido "injetado .Format=""M"" + .InputMask=""S,N, "" antes do ENDWITH" `
+            -Descricao $descricao
+
+        Write-Host "[Pattern #175] Linha $($b.InicioWith + 1): TextBox $($b.Nome) — injetado Format='M' + InputMask='S,N, ' (S/N)" -ForegroundColor Green
+    }
+
+    return $Linhas
+}
+
+function Corrigir-ZapAppendCursorDadosCompartilhado {
+    # Pattern #176: BO CRUD Buscar() com ZAP + APPEND FROM DBF("cursor_4c_DadosTmp")
+    # em cursor_4c_Dados compartilhado preserva estrutura antiga (colunas NOT NULL
+    # de outro BO); Erro138 quando abre FormCor apos FormCargo. Fix canonico:
+    # USE IN cursor_4c_Dados + SQLEXEC direto (padrao CargoBO.Buscar:89).
+    # Form.CarregarLista rebinda Grid.RecordSource + ControlSource + Header apos
+    # Buscar — sem regressao de UX.
+    # Origem: Erro138 (2026-09-01 CorBO — sequencia FormCargo -> FormCor).
+    param([string[]]$Linhas)
+
+    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
+
+    # Deteccao: procurar `IF USED("cursor_4c_Dados")` seguido de bloco IF-THEN
+    # com SQLEXEC("cursor_4c_DadosTmp") + SELECT cursor_4c_Dados + ZAP +
+    # APPEND FROM DBF("cursor_4c_DadosTmp") + USE IN cursor_4c_DadosTmp + ELSE
+    # + SQLEXEC("cursor_4c_Dados") + ENDIF.
+
+    $rxIfUsed = [regex]'(?i)^\s*IF\s+USED\s*\(\s*"cursor_4c_Dados"\s*\)\s*$'
+    $modificado = $false
+
+    for ($i = 0; $i -lt $Linhas.Count - 1; $i++) {
+        if (-not $rxIfUsed.IsMatch($Linhas[$i])) { continue }
+
+        # Achar o ENDIF que fecha esse IF (balanceado)
+        $endifIdx = -1
+        $depth = 1
+        for ($j = $i + 1; $j -lt $Linhas.Count; $j++) {
+            $ln = $Linhas[$j]
+            if ($ln -imatch '^\s*IF\s+')      { $depth++ }
+            if ($ln -imatch '^\s*ENDIF\s*$')  { $depth--; if ($depth -eq 0) { $endifIdx = $j; break } }
+        }
+        if ($endifIdx -lt 0) { continue }
+
+        $corpo = $Linhas[$i..$endifIdx] -join "`n"
+
+        # Guard 1: bloco tem SQLEXEC("cursor_4c_DadosTmp") (Tmp cursor no THEN)
+        if ($corpo -notmatch '(?is)SQLEXEC\s*\([^)]*,\s*"cursor_4c_DadosTmp"\s*\)') { continue }
+
+        # Guard 2: bloco tem SELECT cursor_4c_Dados + ZAP
+        if ($corpo -notmatch '(?im)^\s*SELECT\s+cursor_4c_Dados\s*$') { continue }
+        if ($corpo -notmatch '(?im)^\s*ZAP\s*$') { continue }
+
+        # Guard 3: bloco tem APPEND FROM DBF("cursor_4c_DadosTmp")
+        if ($corpo -notmatch '(?is)APPEND\s+FROM\s+DBF\s*\(\s*"cursor_4c_DadosTmp"\s*\)') { continue }
+
+        # Guard 4: bloco tem ELSE com SQLEXEC direto em "cursor_4c_Dados"
+        # Flags ISM: (i)nsensitive + (s)ingle-line-dot + (m)ultiline (^/$ por linha)
+        if ($corpo -notmatch '(?ism)^\s*ELSE\s*$.*?SQLEXEC\s*\([^)]*,\s*"cursor_4c_Dados"\s*\)') { continue }
+
+        # Extrair linha do SQLEXEC direto do ELSE branch (fonte da variavel SQL + mensagem de erro)
+        $sqlExecElseIdx = -1
+        for ($j = $i + 1; $j -lt $endifIdx; $j++) {
+            if ($Linhas[$j] -match '(?i)SQLEXEC\s*\([^)]*,\s*"cursor_4c_Dados"\s*\)') {
+                $sqlExecElseIdx = $j
+                break
+            }
+        }
+        if ($sqlExecElseIdx -lt 0) { continue }
+
+        # Extrair MostrarErro do ELSE branch (variante do erro; se ausente, gerar generico)
+        $mostrarErroIdx = -1
+        for ($j = $sqlExecElseIdx; $j -lt $endifIdx; $j++) {
+            if ($Linhas[$j] -imatch '(?i)MostrarErro\s*\(') {
+                $mostrarErroIdx = $j
+                break
+            }
+        }
+        $linhaMostrarErro = if ($mostrarErroIdx -ge 0) { $Linhas[$mostrarErroIdx] } `
+                            else { '                        MostrarErro("Erro ao buscar:" + CHR(13) + CapturarErroSQL(), "Erro SQL")' }
+
+        # Extrair a linha do SQLEXEC direto e MostrarErro; trim + re-indentar
+        $sqlExecTrimmed    = $Linhas[$sqlExecElseIdx].TrimStart()
+        $mostrarErroTrimmed = $linhaMostrarErro.TrimStart()
+
+        # Indentacao base do bloco IF (mesmo padrao da linha IF USED)
+        $indent = ($Linhas[$i] -replace '^(\s*)IF.*$', '$1')
+
+        # Construir bloco de substituicao canonico
+        $novoBloco = @(
+            "${indent}IF USED(""cursor_4c_Dados"")"
+            "${indent}    USE IN cursor_4c_Dados"
+            "${indent}ENDIF"
+            "${indent}${sqlExecTrimmed}"
+            "${indent}IF loc_nResultado >= 0"
+            "${indent}    loc_lSucesso = .T."
+            "${indent}ELSE"
+            "${indent}    ${mostrarErroTrimmed}"
+            "${indent}ENDIF"
+        )
+
+        # Substituir linhas [i..endifIdx] pelo novo bloco
+        $antes  = if ($i -gt 0) { $Linhas[0..($i - 1)] } else { @() }
+        $depois = if ($endifIdx -lt $Linhas.Count - 1) { $Linhas[($endifIdx + 1)..($Linhas.Count - 1)] } else { @() }
+        $novoTotal = @()
+        $novoTotal += $antes
+        $novoTotal += $novoBloco
+        $novoTotal += $depois
+
+        $descricao = "Pattern #176: BO CRUD Buscar() com ZAP+APPEND FROM DBF em cursor_4c_Dados compartilhado (163+ BOs) preserva estrutura antiga -> Erro138 'Field CCARGS does not accept null values' quando outro BO deixou coluna NOT NULL no cursor. Substituido por USE IN cursor_4c_Dados + SQLEXEC direto (padrao CargoBO.Buscar:89). Form.CarregarLista rebinda Grid.RecordSource + ControlSource + Header apos Buscar — sem regressao de UX."
+
+        Add-Correcao -Tipo "AUTO-176-ZAP-APPEND-CURSOR-DADOS" -Linha ($i + 1) `
+            -Original "IF USED(cursor_4c_Dados) / ... ZAP / APPEND FROM DBF(cursor_4c_DadosTmp) / ... ELSE / SQLEXEC(cursor_4c_Dados) / ENDIF" `
+            -Corrigido "IF USED(cursor_4c_Dados) / USE IN / ENDIF / SQLEXEC(cursor_4c_Dados) direto (canonico)" `
+            -Descricao $descricao
+
+        Write-Host "[Pattern #176] Linha $($i + 1): substituido ZAP+APPEND por USE IN+SQLEXEC direto em cursor_4c_Dados" -ForegroundColor Green
+
+        $Linhas = $novoTotal
+        $modificado = $true
+        # Reiniciar loop porque indices mudaram
+        $i = 0
+    }
+
+    return $Linhas
+}
+
+function Corrigir-BOPropertyNaoDeclarada {
+    # Pattern #177 (WARNING-only): detecta property `THIS.this_oBusinessObject.this_<X>`
+    # usada no Form mas nao declarada em `DEFINE CLASS <Xxx>BO`. Erro139
+    # (`Property THIS_<X> is not found` no MessageBox) mas o CATCH nao interrompe
+    # o fluxo — INSERT/UPDATE roda com property default (nunca atribuida) e grava
+    # valor errado silenciosamente. Nao muta pois renomear demanda contexto
+    # (decisao DB-vs-semantico + refactor em Form + BO simultaneos).
+    # Origem: Erro139 (2026-09-01 DepartamentoBO — this_nSubclaEncerr no BO vs
+    # this_nChkSubs no Form).
+    param([string[]]$Linhas, [string]$Arquivo = "")
+
+    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
+    if ([string]::IsNullOrEmpty($Arquivo)) { return $Linhas }
+
+    # Guard: aplicavel apenas a Form*.prg (nao a BOs ou classes base)
+    $nomeArq = Split-Path -Leaf $Arquivo
+    if ($nomeArq -notlike 'Form*.prg') { return $Linhas }
+
+    # Extrair nome do BO via CREATEOBJECT("<Xxx>BO") no Init do Form
+    $conteudo = $Linhas -join "`n"
+    $mBO = [regex]::Match($conteudo, '(?i)CREATEOBJECT\s*\(\s*"(\w+BO)"\s*\)')
+    if (-not $mBO.Success) { return $Linhas }
+    $nomeBO = $mBO.Groups[1].Value
+
+    # Localizar arquivo do BO (busca em app/classes/)
+    $dirClasses = Join-Path (Split-Path (Split-Path (Split-Path $Arquivo -Parent) -Parent) -Parent) "classes"
+    $arqBO = Join-Path $dirClasses ($nomeBO + ".prg")
+    if (-not (Test-Path $arqBO)) {
+        # Nao ha BO local ou nome diferente — nao emite WARN (evita falso positivo)
+        return $Linhas
+    }
+
+    # Helper v2: extrai properties de um arquivo de classe VFP.
+    # VFP9 aceita `this_X = valor` em qualquer lugar do DEFINE CLASS, nao apenas
+    # antes da 1a PROCEDURE. Fix (2026-09-01): tracking depth de PROC/FUNC via
+    # contador — declaracao only conta se depth=0 (fora de qualquer proc).
+    # Retorna hashtable {nome_lowercase = $true}.
+    function Get-VfpClassProperties {
+        param([string]$arquivoPrg)
+        $props = @{}
+        if (-not (Test-Path $arquivoPrg)) { return $props }
+        $ln = Get-Content $arquivoPrg -Encoding UTF8
+        $rxDeclProc  = [regex]'(?i)^\s*(PROTECTED\s+|HIDDEN\s+)?(PROCEDURE|FUNCTION)\s+\w+'
+        $rxEndProc   = [regex]'(?i)^\s*(ENDPROC|ENDFUNC)\s*$'
+        $rxDeclProp  = [regex]'(?i)^\s*(this_\w+)\s*='
+        $depth = 0
+        foreach ($linha in $ln) {
+            if ($rxDeclProc.IsMatch($linha)) { $depth++; continue }
+            if ($rxEndProc.IsMatch($linha))  { if ($depth -gt 0) { $depth-- }; continue }
+            if ($depth -eq 0) {
+                $m = $rxDeclProp.Match($linha)
+                if ($m.Success) {
+                    $props[$m.Groups[1].Value.ToLower()] = $true
+                }
+            }
+        }
+        return $props
+    }
+
+    # Extrair properties do BO + toda a cadeia de heranca ate FormBase/Custom.
+    # Pattern #177 v2: considera BusinessBase e RelatorioBase (pais canonicos).
+    $propsDeclaradas = @{}
+    $arqsProcessados = @{}
+    $arqAtual = $arqBO
+    $safetyLoop = 0
+    while (-not [string]::IsNullOrEmpty($arqAtual) -and (Test-Path $arqAtual) -and $safetyLoop -lt 8) {
+        if ($arqsProcessados.ContainsKey($arqAtual.ToLower())) { break }
+        $arqsProcessados[$arqAtual.ToLower()] = $true
+
+        $novasProps = Get-VfpClassProperties -arquivoPrg $arqAtual
+        foreach ($k in $novasProps.Keys) { $propsDeclaradas[$k] = $true }
+
+        # Descobrir classe pai: `DEFINE CLASS <X> AS <Parent>`
+        $conteudoBO = Get-Content $arqAtual -Encoding UTF8 -Raw
+        $mParent = [regex]::Match($conteudoBO, '(?im)^\s*DEFINE\s+CLASS\s+\w+\s+AS\s+(\w+)')
+        if (-not $mParent.Success) { break }
+        $nomeParent = $mParent.Groups[1].Value
+
+        # Mapear nomes de classes-pai canonicas para arquivos .prg (lowercase filename)
+        # BusinessBase -> businessbase.prg, RelatorioBase -> relatoriobase.prg, etc.
+        # Custom/Form/Container/etc = classes intrinsecas VFP (parar cadeia)
+        $intrinsicos = @('custom','form','container','commandbutton','textbox','label','object','session','_screen')
+        if ($intrinsicos -contains $nomeParent.ToLower()) { break }
+
+        $arqParent = Join-Path $dirClasses ($nomeParent.ToLower() + ".prg")
+        $arqAtual = $arqParent
+        $safetyLoop++
+    }
+    if ($propsDeclaradas.Count -eq 0) { return $Linhas }
+
+    # Grep no Form por `THIS.this_oBusinessObject.this_<X>` — extrair (linha, nome)
+    $rxUso = [regex]'(?i)THIS\.this_oBusinessObject\.(this_\w+)'
+    $refsAusentes = @()
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        # Skip linhas de comentario (linha inicia com `*` ou `&&`)
+        $trim = $Linhas[$i].TrimStart()
+        if ($trim.StartsWith("*") -or $trim.StartsWith("&&")) { continue }
+
+        # Skip linhas dentro de comentario (padrao `THIS.foo && ...`) — verificar se a ref
+        # aparece antes de `&&` (se && vem depois, ref eh codigo real)
+        $matches = $rxUso.Matches($Linhas[$i])
+        foreach ($m in $matches) {
+            $nomeProp = $m.Groups[1].Value.ToLower()
+            if (-not $propsDeclaradas.ContainsKey($nomeProp)) {
+                # Verificar se ref esta em posicao antes de "&&" na linha
+                $posRef = $m.Index
+                $posComentario = $Linhas[$i].IndexOf("&&")
+                if ($posComentario -gt 0 -and $posRef -gt $posComentario) { continue }
+
+                $refsAusentes += [PSCustomObject]@{
+                    Linha    = $i + 1
+                    NomeProp = $m.Groups[1].Value
+                    LinhaTxt = $Linhas[$i].Trim()
+                }
+            }
+        }
+    }
+
+    if ($refsAusentes.Count -eq 0) { return $Linhas }
+
+    # De-duplicate por nome de property (reporta 1 warning por prop, primeira linha)
+    $dedup = @{}
+    foreach ($r in $refsAusentes) {
+        if (-not $dedup.ContainsKey($r.NomeProp)) {
+            $dedup[$r.NomeProp] = $r
+        }
+    }
+
+    foreach ($nome in $dedup.Keys) {
+        $r = $dedup[$nome]
+        $descricao = "Pattern #177: Form usa 'THIS.this_oBusinessObject.$($r.NomeProp)' mas '$nomeBO' NAO declara '$($r.NomeProp)' no bloco DEFINE CLASS. Runtime dispara 'Property $($r.NomeProp.ToUpper()) is not found' em MessageBox — user clica OK/Continuar mas CATCH nao interrompe fluxo, INSERT/UPDATE prossegue com property default (nunca atribuida) e grava valor errado silenciosamente. REFACTOR: renomear no BO (preferir nome DB — espelhar coluna) OU no Form (menor mudanca). CUIDADO: refactor em pares (Form + BO simultaneos, ~4 sites no BO + ~2-6 no Form). Complementa CLAUDE.md 'Propriedades this_ DECLARAR com nome EXATO do uso'. Origem: Erro139 (2026-09-01 FormDepartamento — this_nChkSubs no Form vs this_nSubclaEncerr no BO)."
+
+        Add-Correcao -Tipo "WARN-177-BO-PROP-NAO-DECLARADA" -Linha $r.Linha `
+            -Original "THIS.this_oBusinessObject.$($r.NomeProp) usada em '$nomeArq' mas nao declarada em '$($nomeBO).prg'" `
+            -Corrigido "(REVISAR MANUAL — refactor coordenado Form+BO: renomear property para nome consistente, preferir nome DB)" `
+            -Descricao $descricao
+
+        Write-Host "[Pattern #177] Linha $($r.Linha): property '$($r.NomeProp)' usada mas NAO declarada em $nomeBO — grava valor default silenciosamente" -ForegroundColor Yellow
+    }
+
+    return $Linhas
+}
+
+function Corrigir-ConfirmarDisabledModoExcluir {
+    # Pattern #178: cmd_4c_Confirmar.Enabled = loc_l<Edit*> em HabilitarCampos
+    # de Form CRUD desabilita o botao Confirmar quando BtnExcluirClick chama
+    # HabilitarCampos(.F.) — user ve tela com registro mas nao consegue clicar
+    # Confirmar. Fix canonico: injetar ` OR (THIS.this_cModoAtual = "EXCLUIR")`
+    # no RHS da atribuicao. Confirmar habilitado em INCLUIR/ALTERAR (loc_lEdit*)
+    # e tambem em EXCLUIR (campos readonly mas Confirmar precisa clicar).
+    # Idempotente (skip se linha ja contem 'EXCLUIR').
+    # Origem: Erro140 (2026-09-01, FormDepartamento — Confirmar disabled em modo EXCLUIR).
+    param([string[]]$Linhas)
+
+    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
+
+    # Regex: <indent>...cmd_4c_Confirmar.Enabled = loc_l<Edit*><EOL>
+    # Cobre variantes: loc_lEdit, loc_lEditar, loc_lEditando, loc_lEdita
+    # Rejeita: linha ja contem "EXCLUIR" ou "OR" apos loc_l (evita re-aplicar)
+    $rx = [regex]'(?i)^(\s*.*?cmd_4c_Confirmar\.Enabled\s*=\s*)(loc_lEdit\w*)\s*$'
+    $modificados = 0
+
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        $m = $rx.Match($Linhas[$i])
+        if (-not $m.Success) { continue }
+
+        # Skip se linha ja contem "EXCLUIR" (idempotente)
+        if ($Linhas[$i] -imatch '"EXCLUIR"') { continue }
+
+        $prefix = $m.Groups[1].Value
+        $flag   = $m.Groups[2].Value
+        $nova   = "${prefix}${flag} OR (THIS.this_cModoAtual = ""EXCLUIR"")"
+
+        Add-Correcao -Tipo "AUTO-178-CONFIRMAR-DISABLED-EXCLUIR" -Linha ($i + 1) `
+            -Original $Linhas[$i].TrimEnd() `
+            -Corrigido $nova.TrimEnd() `
+            -Descricao "Pattern #178: cmd_4c_Confirmar.Enabled = $flag desabilita Confirmar em modo EXCLUIR (BtnExcluirClick chama HabilitarCampos(.F.) -> loc_l<Edit*>=.F. -> Confirmar disabled). Adicionado ' OR (THIS.this_cModoAtual = ""EXCLUIR"")' para manter Confirmar habilitado em modo EXCLUIR (campos ficam readonly mas Confirmar precisa clicar). Origem: Erro140 (2026-09-01 FormDepartamento)."
+
+        $Linhas[$i] = $nova
+        $modificados++
+        Write-Host "[Pattern #178] Linha $($i + 1): Confirmar.Enabled com OR EXCLUIR (fix Erro140)" -ForegroundColor Green
+    }
+
+    return $Linhas
+}
+
 function Invoke-CorrecaoAutomatica {
     param(
         [string]$Arquivo,
@@ -11805,6 +12232,10 @@ function Invoke-CorrecaoAutomatica {
     $linhas = Corrigir-UsuarPublicNaoDeclarado -Linhas $linhas
     $linhas = Corrigir-BtnCrudSemValidarPreAcao -Linhas $linhas
     $linhas = Corrigir-ValidarPreAcaoFallbackSilencioso -Linhas $linhas
+    $linhas = Corrigir-TextBoxSNInputMask -Linhas $linhas
+    $linhas = Corrigir-ZapAppendCursorDadosCompartilhado -Linhas $linhas
+    $linhas = Corrigir-BOPropertyNaoDeclarada -Linhas $linhas -Arquivo $Arquivo
+    $linhas = Corrigir-ConfirmarDisabledModoExcluir -Linhas $linhas
 
     # Salva arquivo corrigido em UTF-8 SEM BOM.
     # - VFP9 nao suporta BOM (por isso removemos no read com bytes[3..])

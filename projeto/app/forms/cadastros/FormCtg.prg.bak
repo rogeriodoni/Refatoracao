@@ -908,11 +908,11 @@ DEFINE CLASS FormCtg AS FormBase
         loc_oPagina = THIS.pgf_4c_Paginas.Page2
 
         IF PEMSTATUS(loc_oPagina, "txt_4c_Codigo", 5)
-            loc_oPagina.txt_4c_Codigo.Value = ALLTRIM(THIS.this_oBusinessObject.this_cCodigo)
+            loc_oPagina.txt_4c_Codigo.Value = ALLTRIM(THIS.this_oBusinessObject.this_cCods)
         ENDIF
 
         IF PEMSTATUS(loc_oPagina, "txt_4c_Descricao", 5)
-            loc_oPagina.txt_4c_Descricao.Value = ALLTRIM(THIS.this_oBusinessObject.this_cDescricao)
+            loc_oPagina.txt_4c_Descricao.Value = ALLTRIM(THIS.this_oBusinessObject.this_cDescs)
         ENDIF
     ENDPROC
 
@@ -924,11 +924,11 @@ DEFINE CLASS FormCtg AS FormBase
         loc_oPagina = THIS.pgf_4c_Paginas.Page2
 
         IF PEMSTATUS(loc_oPagina, "txt_4c_Codigo", 5)
-            THIS.this_oBusinessObject.this_cCodigo = ALLTRIM(loc_oPagina.txt_4c_Codigo.Value)
+            THIS.this_oBusinessObject.this_cCods = ALLTRIM(loc_oPagina.txt_4c_Codigo.Value)
         ENDIF
 
         IF PEMSTATUS(loc_oPagina, "txt_4c_Descricao", 5)
-            THIS.this_oBusinessObject.this_cDescricao = ALLTRIM(loc_oPagina.txt_4c_Descricao.Value)
+            THIS.this_oBusinessObject.this_cDescs = ALLTRIM(loc_oPagina.txt_4c_Descricao.Value)
         ENDIF
     ENDPROC
 

@@ -2697,7 +2697,7 @@ DEFINE CLASS FormGpd AS FormBase
         IF PEMSTATUS(THIS.pgf_4c_Paginas.Page2, "cnt_4c_Salva", 5)
             WITH THIS.pgf_4c_Paginas.Page2.cnt_4c_Salva
                 IF PEMSTATUS(.self, "cmd_4c_Confirmar", 5)
-                    .cmd_4c_Confirmar.Enabled = loc_lEditar
+                    .cmd_4c_Confirmar.Enabled = loc_lEditar OR (THIS.this_cModoAtual = "EXCLUIR")
                 ENDIF
                 .Visible     = .T.
             ENDWITH
