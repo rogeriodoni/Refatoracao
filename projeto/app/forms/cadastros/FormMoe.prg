@@ -9,7 +9,7 @@ DEFINE CLASS FormMoe AS FormBase
 
     *-- Propriedades visuais (PILAR 1 - UX FIDELITY)
     Height      = 591
-    Width       = 823
+    Width       = 1000
     Caption     = "Cadastro de Moedas"
     AutoCenter  = .T.
     ShowWindow  = 1
