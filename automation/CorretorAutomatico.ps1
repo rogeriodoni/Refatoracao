@@ -11850,14 +11850,26 @@ function Corrigir-ZapAppendCursorDadosCompartilhado {
 }
 
 function Corrigir-BOPropertyNaoDeclarada {
-    # Pattern #177 (WARNING-only): detecta property `THIS.this_oBusinessObject.this_<X>`
-    # usada no Form mas nao declarada em `DEFINE CLASS <Xxx>BO`. Erro139
-    # (`Property THIS_<X> is not found` no MessageBox) mas o CATCH nao interrompe
-    # o fluxo — INSERT/UPDATE roda com property default (nunca atribuida) e grava
-    # valor errado silenciosamente. Nao muta pois renomear demanda contexto
-    # (decisao DB-vs-semantico + refactor em Form + BO simultaneos).
-    # Origem: Erro139 (2026-09-01 DepartamentoBO — this_nSubclaEncerr no BO vs
-    # this_nChkSubs no Form).
+    # Pattern #177 v3 (otimizado 2026-09-01): detecta property
+    # `THIS.this_oBusinessObject.this_<X>` usada no Form mas nao declarada em
+    # `DEFINE CLASS <Xxx>BO`. Erro139 (`Property THIS_<X> is not found` no
+    # MessageBox) mas o CATCH nao interrompe o fluxo — INSERT/UPDATE roda com
+    # property default (nunca atribuida) e grava valor errado silenciosamente.
+    # Nao muta pois renomear demanda contexto (decisao DB-vs-semantico +
+    # refactor em Form + BO simultaneos).
+    #
+    # OTIMIZACOES v3 (pos-sweep global travava em forms grandes):
+    # - Guard rapido #1: skip forms sem `this_oBusinessObject.this_` (evita
+    #   I/O do BO + BusinessBase — maioria dos forms operacionais nao usa).
+    # - Get-Content UNIFICADO: 1 leitura por BO (linhas + regex de DEFINE
+    #   CLASS AS na mesma passagem). Antes: 2 Get-Content por BO na cadeia.
+    # - Helper Get-VfpClassProperties inline no loop principal (elimina
+    #   overhead de function call em PS 5.1).
+    # - Guard rapido #2 na iteracao das linhas: `-like '*this_oBusinessObject*'`
+    #   antes do regex custoso.
+    #
+    # Origem: Erro139 (2026-09-01 DepartamentoBO).
+    # Otimizacao: 2026-09-01 pos sweep global travando em forms grandes.
     param([string[]]$Linhas, [string]$Arquivo = "")
 
     if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
@@ -11867,7 +11879,15 @@ function Corrigir-BOPropertyNaoDeclarada {
     $nomeArq = Split-Path -Leaf $Arquivo
     if ($nomeArq -notlike 'Form*.prg') { return $Linhas }
 
+    # GUARD RAPIDO #1: skip form sem `this_oBusinessObject.this_` (evita I/O)
+    $temPadrao = $false
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        if ($Linhas[$i] -like '*this_oBusinessObject.this_*') { $temPadrao = $true; break }
+    }
+    if (-not $temPadrao) { return $Linhas }
+
     # Extrair nome do BO via CREATEOBJECT("<Xxx>BO") no Init do Form
+    # Usa join apenas se guard #1 passou (join eh custoso em forms grandes)
     $conteudo = $Linhas -join "`n"
     $mBO = [regex]::Match($conteudo, '(?i)CREATEOBJECT\s*\(\s*"(\w+BO)"\s*\)')
     if (-not $mBO.Success) { return $Linhas }
@@ -11881,35 +11901,15 @@ function Corrigir-BOPropertyNaoDeclarada {
         return $Linhas
     }
 
-    # Helper v2: extrai properties de um arquivo de classe VFP.
-    # VFP9 aceita `this_X = valor` em qualquer lugar do DEFINE CLASS, nao apenas
-    # antes da 1a PROCEDURE. Fix (2026-09-01): tracking depth de PROC/FUNC via
-    # contador — declaracao only conta se depth=0 (fora de qualquer proc).
-    # Retorna hashtable {nome_lowercase = $true}.
-    function Get-VfpClassProperties {
-        param([string]$arquivoPrg)
-        $props = @{}
-        if (-not (Test-Path $arquivoPrg)) { return $props }
-        $ln = Get-Content $arquivoPrg -Encoding UTF8
-        $rxDeclProc  = [regex]'(?i)^\s*(PROTECTED\s+|HIDDEN\s+)?(PROCEDURE|FUNCTION)\s+\w+'
-        $rxEndProc   = [regex]'(?i)^\s*(ENDPROC|ENDFUNC)\s*$'
-        $rxDeclProp  = [regex]'(?i)^\s*(this_\w+)\s*='
-        $depth = 0
-        foreach ($linha in $ln) {
-            if ($rxDeclProc.IsMatch($linha)) { $depth++; continue }
-            if ($rxEndProc.IsMatch($linha))  { if ($depth -gt 0) { $depth-- }; continue }
-            if ($depth -eq 0) {
-                $m = $rxDeclProp.Match($linha)
-                if ($m.Success) {
-                    $props[$m.Groups[1].Value.ToLower()] = $true
-                }
-            }
-        }
-        return $props
-    }
+    # Regex pre-compiladas (compartilhadas por todas as iteracoes da cadeia)
+    $rxDeclProc  = [regex]'(?i)^\s*(PROTECTED\s+|HIDDEN\s+)?(PROCEDURE|FUNCTION)\s+\w+'
+    $rxEndProc   = [regex]'(?i)^\s*(ENDPROC|ENDFUNC)\s*$'
+    $rxDeclProp  = [regex]'(?i)^\s*(this_\w+)\s*='
+    $rxDefineAs  = [regex]'(?i)^\s*DEFINE\s+CLASS\s+\w+\s+AS\s+(\w+)'
+    $intrinsicos = @{'custom'=$true;'form'=$true;'container'=$true;'commandbutton'=$true;'textbox'=$true;'label'=$true;'object'=$true;'session'=$true;'_screen'=$true}
 
     # Extrair properties do BO + toda a cadeia de heranca ate FormBase/Custom.
-    # Pattern #177 v2: considera BusinessBase e RelatorioBase (pais canonicos).
+    # Uma unica leitura Get-Content por BO — extrai props + nome pai simultaneamente.
     $propsDeclaradas = @{}
     $arqsProcessados = @{}
     $arqAtual = $arqBO
@@ -11918,50 +11918,65 @@ function Corrigir-BOPropertyNaoDeclarada {
         if ($arqsProcessados.ContainsKey($arqAtual.ToLower())) { break }
         $arqsProcessados[$arqAtual.ToLower()] = $true
 
-        $novasProps = Get-VfpClassProperties -arquivoPrg $arqAtual
-        foreach ($k in $novasProps.Keys) { $propsDeclaradas[$k] = $true }
+        # UNICA leitura por BO
+        $lnBO = Get-Content $arqAtual -Encoding UTF8
+        $depth = 0
+        $nomeParent = $null
+        foreach ($linha in $lnBO) {
+            # Detectar DEFINE CLASS AS <Parent> (uma vez por arquivo)
+            if ($null -eq $nomeParent) {
+                $mp = $rxDefineAs.Match($linha)
+                if ($mp.Success) { $nomeParent = $mp.Groups[1].Value }
+            }
+            # Rastrear depth de PROC/FUNC
+            if ($rxDeclProc.IsMatch($linha)) { $depth++; continue }
+            if ($rxEndProc.IsMatch($linha))  { if ($depth -gt 0) { $depth-- }; continue }
+            # Coletar property no nivel de classe
+            if ($depth -eq 0) {
+                $m = $rxDeclProp.Match($linha)
+                if ($m.Success) {
+                    $propsDeclaradas[$m.Groups[1].Value.ToLower()] = $true
+                }
+            }
+        }
 
-        # Descobrir classe pai: `DEFINE CLASS <X> AS <Parent>`
-        $conteudoBO = Get-Content $arqAtual -Encoding UTF8 -Raw
-        $mParent = [regex]::Match($conteudoBO, '(?im)^\s*DEFINE\s+CLASS\s+\w+\s+AS\s+(\w+)')
-        if (-not $mParent.Success) { break }
-        $nomeParent = $mParent.Groups[1].Value
+        # Descer na cadeia de heranca (ate encontrar classe intrinseca)
+        if ([string]::IsNullOrEmpty($nomeParent)) { break }
+        if ($intrinsicos.ContainsKey($nomeParent.ToLower())) { break }
 
-        # Mapear nomes de classes-pai canonicas para arquivos .prg (lowercase filename)
-        # BusinessBase -> businessbase.prg, RelatorioBase -> relatoriobase.prg, etc.
-        # Custom/Form/Container/etc = classes intrinsecas VFP (parar cadeia)
-        $intrinsicos = @('custom','form','container','commandbutton','textbox','label','object','session','_screen')
-        if ($intrinsicos -contains $nomeParent.ToLower()) { break }
-
-        $arqParent = Join-Path $dirClasses ($nomeParent.ToLower() + ".prg")
-        $arqAtual = $arqParent
+        $arqAtual = Join-Path $dirClasses ($nomeParent.ToLower() + ".prg")
         $safetyLoop++
     }
     if ($propsDeclaradas.Count -eq 0) { return $Linhas }
 
     # Grep no Form por `THIS.this_oBusinessObject.this_<X>` — extrair (linha, nome)
+    # GUARD RAPIDO #2: -like antes do regex custoso
     $rxUso = [regex]'(?i)THIS\.this_oBusinessObject\.(this_\w+)'
     $refsAusentes = @()
     for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        $ln = $Linhas[$i]
+        # Guard rapido: skip linhas sem o padrao
+        if ($ln -notlike '*this_oBusinessObject*') { continue }
+
         # Skip linhas de comentario (linha inicia com `*` ou `&&`)
-        $trim = $Linhas[$i].TrimStart()
+        $trim = $ln.TrimStart()
         if ($trim.StartsWith("*") -or $trim.StartsWith("&&")) { continue }
 
         # Skip linhas dentro de comentario (padrao `THIS.foo && ...`) — verificar se a ref
         # aparece antes de `&&` (se && vem depois, ref eh codigo real)
-        $matches = $rxUso.Matches($Linhas[$i])
+        $matches = $rxUso.Matches($ln)
         foreach ($m in $matches) {
             $nomeProp = $m.Groups[1].Value.ToLower()
             if (-not $propsDeclaradas.ContainsKey($nomeProp)) {
                 # Verificar se ref esta em posicao antes de "&&" na linha
                 $posRef = $m.Index
-                $posComentario = $Linhas[$i].IndexOf("&&")
+                $posComentario = $ln.IndexOf("&&")
                 if ($posComentario -gt 0 -and $posRef -gt $posComentario) { continue }
 
                 $refsAusentes += [PSCustomObject]@{
                     Linha    = $i + 1
                     NomeProp = $m.Groups[1].Value
-                    LinhaTxt = $Linhas[$i].Trim()
+                    LinhaTxt = $ln.Trim()
                 }
             }
         }
