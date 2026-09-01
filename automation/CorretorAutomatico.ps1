@@ -12079,82 +12079,112 @@ function Corrigir-FormWidthMenorQueSaida {
 }
 
 function Corrigir-GridRecordSourceResetSemReconfig {
-    # Pattern #180: Grid em CarregarLista faz `RecordSource="" / ColumnCount=N /
-    # RecordSource="cursor" / Column1.ControlSource="..." / ...` mas NAO
-    # re-configura Column.Width nem Header1.Caption. RecordSource=""+re-set
-    # reseta essas propriedades para default -> grid mostra "Header1" e widths
-    # padrao (Problema 48 CLAUDE.md).
+    # Pattern #180 v3 (otimizado 2026-09-01): Grid em CarregarLista faz
+    # `RecordSource="" / ColumnCount=N / RecordSource="cursor" /
+    # Column1.ControlSource="..." / ...` mas NAO re-configura Column.Width nem
+    # Header1.Caption. RecordSource=""+re-set reseta essas propriedades para
+    # default -> grid mostra "Header1" e widths padrao (Problema 48 CLAUDE.md).
     #
-    # Auto-fix: extrair Column.Width e Header1.Caption originais do bloco de
-    # ConfigurarPaginaLista (ou similar) onde o mesmo grid foi configurado
-    # INICIALMENTE, e injetar re-configuracao APOS o ultimo ControlSource.
-    # Fallback WARNING se nao achar valores originais.
+    # OTIMIZACAO v3:
+    # - Pre-pass UNICA extrai TODAS as Column.Width + Header1.Caption de TODOS
+    #   os grids do arquivo em cache indexado por (gridName, colN).
+    # - Regex pre-compilada, sem [regex]::Escape em loop hot.
+    # - Guard rapido via checagem string simples antes do regex custoso.
+    #
     # Origem: Erro141 (2026-09-01 FormSrv grid Servicos + inner grid Produtos).
+    # Otimizacao: 2026-09-01 pos-sweep parcial 84/165 travando em forms grandes.
     param([string[]]$Linhas)
 
     if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
 
-    # Helper: extrair valores originais de Column.Width/Header1.Caption
-    # do bloco de configuracao inicial do mesmo grid (path completo).
-    function Get-GridColumnOriginals {
-        param([string[]]$linhas, [string]$gridPath, [int]$maxCol)
-        # gridPath ex: "THIS.pgf_4c_Paginas.Page1.grd_4c_Dados"
-        # Buscar bloco: WITH <alias>.grd_4c_Dados.ColumnN / .Width = X / ENDWITH
-        # E: WITH <alias>.grd_4c_Dados.ColumnN.Header1 / .Caption = "..." / ENDWITH
-        # <alias> pode ser THIS.pgf_4c_Paginas.Page1 OU loc_oPagina OU par_oPg
-        # Vou extrair sufixo apos ultima '.grd_4c_...' — nome do grid
-        $mGrid = [regex]::Match($gridPath, '(?i)\.(grd_4c_\w+)$')
-        if (-not $mGrid.Success) { return $null }
-        $gridName = $mGrid.Groups[1].Value
+    # Guard rapido: se arquivo nao menciona ".grd_4c_" nem "RecordSource", skip
+    # (evita processar 100+ forms sem grids CRUD)
+    $temGrid = $false
+    for ($k = 0; $k -lt $Linhas.Count; $k++) {
+        if ($Linhas[$k] -like '*.grd_4c_*') { $temGrid = $true; break }
+    }
+    if (-not $temGrid) { return $Linhas }
 
-        $results = @{}
-        for ($col = 1; $col -le $maxCol; $col++) {
-            $wKey  = "Column${col}_Width"
-            $capKey = "Column${col}_Caption"
-            $results[$wKey]  = $null
-            $results[$capKey] = $null
+    # Regex pre-compiladas (nao recompiladas em loop)
+    $rxColOpen  = [regex]'(?i)^\s*WITH\s+\S+\.(grd_4c_\w+)\.Column(\d+)\s*$'
+    $rxHdrOpen  = [regex]'(?i)^\s*WITH\s+\S+\.(grd_4c_\w+)\.Column(\d+)\.Header1\s*$'
+    $rxEnd      = [regex]'(?i)^\s*ENDWITH\s*$'
+    $rxWidthProp = [regex]'(?i)^\s*\.Width\s*=\s*(\d+)\s*$'
+    $rxCaptionProp = [regex]'(?i)^\s*\.Caption\s*=\s*(.+?)\s*$'
+    $rxReset    = [regex]'(?i)^(\s*)(.+?\.grd_4c_\w+)\.RecordSource\s*=\s*""\s*$'
 
-            # Regex para WITH ... .<gridName>.ColumnN (com ou sem .Header1)
-            $rxColOpen  = [regex]("(?i)^\s*WITH\s+.*\." + [regex]::Escape($gridName) + "\.Column" + $col + "\s*$")
-            $rxHdrOpen  = [regex]("(?i)^\s*WITH\s+.*\." + [regex]::Escape($gridName) + "\.Column" + $col + "\.Header1\s*$")
-            $rxEnd      = [regex]'(?i)^\s*ENDWITH\s*$'
-            $rxWidth    = [regex]'(?i)^\s*\.Width\s*=\s*(\d+)\s*$'
-            $rxCaption  = [regex]'(?i)^\s*\.Caption\s*=\s*(.+?)\s*$'
+    # PASSO 1: pre-pass unica extrai TODAS as properties de TODOS os grids
+    # em cache. Chave: "<gridName>_ColumnN_Width" ou "<gridName>_ColumnN_Caption"
+    $cache = @{}
+    $curGrid = $null
+    $curCol  = 0
+    $curInHdr = $false
+    for ($k = 0; $k -lt $Linhas.Count; $k++) {
+        $ln = $Linhas[$k]
 
-            $inCol = $false; $inHdr = $false
-            foreach ($ln in $linhas) {
-                if ($rxColOpen.IsMatch($ln)) { $inCol = $true; continue }
-                if ($rxHdrOpen.IsMatch($ln)) { $inHdr = $true; continue }
-                if ($rxEnd.IsMatch($ln))     { $inCol = $false; $inHdr = $false; continue }
-                if ($inCol) {
-                    $mW = $rxWidth.Match($ln)
-                    if ($mW.Success -and $null -eq $results[$wKey]) { $results[$wKey] = [int]$mW.Groups[1].Value }
-                }
-                if ($inHdr) {
-                    $mC = $rxCaption.Match($ln)
-                    if ($mC.Success -and $null -eq $results[$capKey]) { $results[$capKey] = $mC.Groups[1].Value }
-                }
+        # WITH ...grd_4c_X.ColumnN (bloco de coluna simples)
+        $m = $rxColOpen.Match($ln)
+        if ($m.Success) {
+            $curGrid = $m.Groups[1].Value
+            $curCol  = [int]$m.Groups[2].Value
+            $curInHdr = $false
+            continue
+        }
+        # WITH ...grd_4c_X.ColumnN.Header1 (bloco de header)
+        $m = $rxHdrOpen.Match($ln)
+        if ($m.Success) {
+            $curGrid = $m.Groups[1].Value
+            $curCol  = [int]$m.Groups[2].Value
+            $curInHdr = $true
+            continue
+        }
+        # ENDWITH: sai do bloco atual
+        if ($rxEnd.IsMatch($ln)) {
+            $curGrid = $null
+            $curCol  = 0
+            $curInHdr = $false
+            continue
+        }
+        # Dentro de bloco: capturar Width ou Caption
+        if ($null -eq $curGrid) { continue }
+        $baseKey = "${curGrid}_Column${curCol}"
+        if ($curInHdr) {
+            $mC = $rxCaptionProp.Match($ln)
+            if ($mC.Success -and -not $cache.ContainsKey("${baseKey}_Caption")) {
+                $cache["${baseKey}_Caption"] = $mC.Groups[1].Value
+            }
+        } else {
+            $mW = $rxWidthProp.Match($ln)
+            if ($mW.Success -and -not $cache.ContainsKey("${baseKey}_Width")) {
+                $cache["${baseKey}_Width"] = [int]$mW.Groups[1].Value
             }
         }
-        return $results
     }
 
-    # Detectar blocos: <path>.RecordSource = "" ... <path>.ColumnN.ControlSource = "..."
-    # Marcador de fim: ultima linha ControlSource do bloco (indice max)
-    # Nao muta se ja houver <path>.ColumnN.Header1.Caption ou .Width no mesmo bloco
-    # (idempotente).
-
+    # PASSO 2: detectar blocos RecordSource="" + re-set + ControlSource
+    # e injetar re-config usando cache
     $modificados = 0
     for ($i = 0; $i -lt $Linhas.Count - 1; $i++) {
-        # Detecta RecordSource = "" que inicia o bloco
-        $mReset = [regex]::Match($Linhas[$i], '(?i)^(\s*)(.+?\.grd_4c_\w+)\.RecordSource\s*=\s*""\s*$')
+        # Guard rapido: pula linhas sem "RecordSource" antes do regex
+        if ($Linhas[$i] -notlike '*RecordSource*') { continue }
+        $mReset = $rxReset.Match($Linhas[$i])
         if (-not $mReset.Success) { continue }
 
         $indent    = $mReset.Groups[1].Value
         $gridPath  = $mReset.Groups[2].Value
+        # Extrai apenas o nome do grid (grd_4c_XXX) para lookup no cache
+        $mGridName = [regex]::Match($gridPath, '(?i)\.(grd_4c_\w+)$')
+        if (-not $mGridName.Success) { continue }
+        $gridName = $mGridName.Groups[1].Value
 
-        # Fase 1: varrer 30 linhas SEM break — coletar todos os ControlSource
-        # e detectar re-config existente (guard idempotencia).
+        # Pre-compila regex de ControlSource/Header/Width para ESSE gridPath
+        # (uma unica vez por bloco detectado)
+        $escapedPath = [regex]::Escape($gridPath)
+        $rxCtrlSrc   = [regex]("(?i)^\s*" + $escapedPath + '\.Column(\d+)\.ControlSource\s*=')
+        $rxReconfig  = [regex]("(?i)^\s*" + $escapedPath + '\.Column\d+\.(Header1\.Caption|Width)\s*=')
+        $rxAnyPath   = [regex]("(?i)" + $escapedPath)
+
+        # Fase 1: varrer 30 linhas SEM break — coletar ControlSource e detectar re-config
         $maxCol   = 0
         $jaTemReconfig = $false
         $ultimoControlSource = -1
@@ -12162,29 +12192,36 @@ function Corrigir-GridRecordSourceResetSemReconfig {
         $rangeMax = [Math]::Min($i + 30, $Linhas.Count)
         for ($j = $i + 1; $j -lt $rangeMax; $j++) {
             $ln = $Linhas[$j]
-            if ($ln -imatch [regex]::Escape($gridPath) + '\.Column(\d+)\.ControlSource\s*=') {
-                $cn = [int]$Matches[1]
+            # Guard rapido: se linha nao menciona "Column", skip regexes custosos
+            if ($ln -notlike '*Column*') {
+                if ($rxAnyPath.IsMatch($ln)) { $ultimaLinhaRelacionada = $j }
+                continue
+            }
+            $mCS = $rxCtrlSrc.Match($ln)
+            if ($mCS.Success) {
+                $cn = [int]$mCS.Groups[1].Value
                 if ($cn -gt $maxCol) { $maxCol = $cn }
                 $ultimoControlSource = $j
                 $ultimaLinhaRelacionada = $j
+                continue
             }
-            # Guard idempotencia: se ja tem re-config de Header/Width no bloco
-            if ($ln -imatch [regex]::Escape($gridPath) + '\.Column\d+\.(Header1\.Caption|Width)\s*=') {
+            if ($rxReconfig.IsMatch($ln)) {
                 $jaTemReconfig = $true
                 $ultimaLinhaRelacionada = $j
+                continue
             }
-            # Rastreia ultima linha que menciona o path (para determinar fim do bloco)
-            if ($ln -match [regex]::Escape($gridPath)) {
-                $ultimaLinhaRelacionada = $j
-            }
+            if ($rxAnyPath.IsMatch($ln)) { $ultimaLinhaRelacionada = $j }
         }
         $endBloco = $ultimaLinhaRelacionada
         if ($ultimoControlSource -lt 0) { continue }
         if ($jaTemReconfig) { continue }  # idempotente
 
-        # Extrai valores originais do bloco de configuracao inicial
-        $originais = Get-GridColumnOriginals -linhas $Linhas -gridPath $gridPath -maxCol $maxCol
-        if ($null -eq $originais) { continue }
+        # Extrai valores originais do cache (O(1) por coluna)
+        $originais = @{}
+        for ($col = 1; $col -le $maxCol; $col++) {
+            $originais["Column${col}_Width"]   = $cache["${gridName}_Column${col}_Width"]
+            $originais["Column${col}_Caption"] = $cache["${gridName}_Column${col}_Caption"]
+        }
 
         # Constrói linhas de re-configuracao
         $novasLinhas = @()
