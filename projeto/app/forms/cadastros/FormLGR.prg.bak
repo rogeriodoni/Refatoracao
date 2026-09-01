@@ -1218,7 +1218,7 @@ DEFINE CLASS FormLGR AS FormBase
         loc_oPg2    = THIS.pgf_4c_Paginas.Page2
         loc_lEditar = INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
 
-        loc_oPg2.cnt_4c_Salva.cmd_4c_Confirmar.Enabled = loc_lEditar
+        loc_oPg2.cnt_4c_Salva.cmd_4c_Confirmar.Enabled = loc_lEditar OR (THIS.this_cModoAtual = "EXCLUIR")
         loc_oPg2.cnt_4c_Salva.cmd_4c_Cancelar.Enabled  = .T.
     ENDPROC
 

@@ -2428,7 +2428,7 @@ DEFINE CLASS Formsigprcom AS FormBase
             loc_oPagina.grd_4c_Gradei.Column4.ReadOnly = !THIS.this_lTemCor OR !loc_lEditar
 
             *-- Botoes de acao Page2
-            loc_oPagina.cnt_4c_BotoesAcao.cmd_4c_Confirmar.Enabled = loc_lEditar
+            loc_oPagina.cnt_4c_BotoesAcao.cmd_4c_Confirmar.Enabled = loc_lEditar OR (THIS.this_cModoAtual = "EXCLUIR")
             loc_oPagina.cnt_4c_BotoesAcao.cmd_4c_Cancelar.Enabled  = par_lHabilitar
         CATCH TO loc_oErro
             MsgErro("Erro em HabilitarCampos: " + loc_oErro.Message, "Erro")

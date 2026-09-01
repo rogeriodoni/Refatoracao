@@ -2808,7 +2808,7 @@ DEFINE CLASS Formprc AS FormBase
         *-- Botao confirmar
         IF PEMSTATUS(loc_oPg2, "cnt_4c_BotoesAcao", 5)
             IF PEMSTATUS(loc_oPg2.cnt_4c_BotoesAcao, "cmd_4c_Confirmar", 5)
-                loc_oPg2.cnt_4c_BotoesAcao.cmd_4c_Confirmar.Enabled = loc_lEditar
+                loc_oPg2.cnt_4c_BotoesAcao.cmd_4c_Confirmar.Enabled = loc_lEditar OR (THIS.this_cModoAtual = "EXCLUIR")
             ENDIF
         ENDIF
     ENDPROC

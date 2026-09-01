@@ -9,7 +9,7 @@ DEFINE CLASS FormCrt AS FormBase
 
     *-- Propriedades visuais (PILAR 1 - UX Fidelity)
     Height      = 643
-    Width       = 798
+    Width       = 1000
     Caption     = "Cadastro de Retrabalhos"
     AutoCenter  = .T.
     ShowWindow  = 1

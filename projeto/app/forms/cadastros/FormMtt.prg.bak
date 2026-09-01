@@ -854,7 +854,7 @@ DEFINE CLASS FormMtt AS FormBase
 		loc_oCnt      = THIS.pgf_4c_Paginas.Page2.cnt_4c_Salva
 
 		IF PEMSTATUS(loc_oCnt, "cmd_4c_Confirmar", 5)
-			loc_oCnt.cmd_4c_Confirmar.Enabled = loc_lEditando
+			loc_oCnt.cmd_4c_Confirmar.Enabled = loc_lEditando OR (THIS.this_cModoAtual = "EXCLUIR")
 		ENDIF
 		IF PEMSTATUS(loc_oCnt, "cmd_4c_Cancelar", 5)
 			loc_oCnt.cmd_4c_Cancelar.Enabled = .T.
