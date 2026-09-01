@@ -8949,3 +8949,127 @@ Skip falso positivo: regex nao casa `= loc_lEditarContaSeto OR loc_lEditarCodGrp
 - Origem: Erro140 (2026-09-01, FormDepartamento — user reportou "aparece a tela mas o botao para confirmar fica desabilitado" no modo EXCLUIR).
 
 
+## 179. Form CRUD Width < 1000 + cnt_4c_Saida.Left=917 -> Encerrar/ultimos botoes cortados (Erro141 FormSrv 2026-09-01)
+
+### Problema
+
+Padrao canonico CLAUDE.md #10 fixa `cnt_4c_Saida.Left=917 + Width=90` (Encerrar termina em 1007) e `cnt_4c_Botoes.Left=542 + Width=385` (termina em 927). Se `Form.Width < 1000`, containers transbordam e botoes ficam INVISIVEIS/CORTADOS.
+
+### Sintoma
+
+FormSrv (Cadastro de Servicos) tinha `Width = 812`:
+- `cnt_4c_Saida.Left=917 + Width=90 = 1007` >> 812 → **Encerrar totalmente invisivel**
+- `cmd_4c_Excluir` (Left=230 no cnt_4c_Botoes.Left=542 = absoluto 772) → parcialmente cortado
+- `cmd_4c_Buscar` (Left=305 absoluto 847) → totalmente cortado
+
+### Fix canonico
+
+`Form.Width = 1000` — padrao CRUD universal, mesmo se SCX legado tinha valor menor.
+
+```foxpro
+DEFINE CLASS FormXxx AS FormBase
+    Height       = 620    && ou valor adequado ao form
+    Width        = 1000   && CANONICO CRUD — nunca menor
+    ...
+```
+
+### Alternativa (quando form eh legitimamente pequeno)
+
+Se o form eh dialog pequeno intencional (ex: 400x300), NAO usar `cnt_4c_Saida.Left=917` — ajustar Left para `Width - 90`. Mas isso viola CLAUDE.md #10 canonico universal, precisa justificativa documentada.
+
+### Heuristica de deteccao (Pattern #179)
+
+WARNING-only (nao muta — decisao humana caso a caso):
+
+1. Guard: `DEFINE CLASS \w+ AS FormBase` (Form CRUD).
+2. Guard: `\.Left = 917\s*$` presente no arquivo (assinatura cnt_4c_Saida canonico).
+3. Extrai `Width = N` no bloco de propriedades da classe (indent <=8, antes da 1a PROCEDURE/FUNCTION).
+4. Se N < 1000, emite `WARN-179-FORM-WIDTH-MENOR-SAIDA` com linha + valor.
+
+Sugere: (a) Ampliar Width=1000 (preferido); (b) Ajustar cnt_4c_Saida.Left=Width-90 (viola canonico).
+
+### Referencias
+
+- Padrao canonico: CLAUDE.md #10 "Padrao Canonico Saida/Encerrar".
+- Bug: `C:\4c\projeto\app\forms\cadastros\FormSrv.prg:13` — `Width = 812`.
+- Fix: linha 13 pos-2026-09-01 — `Width = 1000`.
+- Auto-fix: `C:\4c\automation\CorretorAutomatico.ps1` `Corrigir-FormWidthMenorQueSaida` (Pattern #179 WARNING-only).
+- Sweep 2026-09-01: 6 candidatos alem do FormSrv (FormCCJ/FormCrt/FormGcp/FormMoe/FormRop/FormSigPrCtc).
+- Origem: Erro141 (2026-09-01, FormSrv menu Cadastros->Servicos — botoes Excluir/Encerrar cortados).
+
+
+## 180. Grid RecordSource='' + re-set em CarregarLista reseta Column.Width/Header1.Caption — SEMPRE re-configurar (Erro141 FormSrv 2026-09-01)
+
+### Problema
+
+Em Form CRUD, `CarregarLista` faz padrao canonico para trocar cursor do Grid:
+
+```foxpro
+Grid.RecordSource = ""
+Grid.ColumnCount = N
+Grid.RecordSource = "cursor_x"
+Grid.Column1.ControlSource = "cursor_x.col1"
+Grid.Column2.ControlSource = "cursor_x.col2"
+```
+
+Setar `RecordSource = ""` + re-set **reseta silenciosamente**:
+- `Column.Width` → default (~64px, colunas quadradas)
+- `Header1.Caption` → default (`"Header1"` para todas as colunas)
+
+Se `ConfigurarPaginaLista` (setup inicial) definiu Width/Caption, elas se perdem apos o 1o CarregarLista. Este eh o **Problema 48** canonico ja documentado no CLAUDE.md — mas nao havia auto-fix ate agora.
+
+### Sintoma
+
+Grid do FormSrv (Cadastro de Servicos) mostrava:
+- Colunas "Header1" / "Header1" (nao "Codigo" / "Descricao")
+- Widths quadrados default (~64px cada), nao 80/480 configurado
+
+### Fix canonico
+
+Apos o ULTIMO `Grid.ColumnN.ControlSource = ...`, adicionar re-configuracao explicita:
+
+```foxpro
+Grid.RecordSource = ""
+Grid.ColumnCount = 2
+Grid.RecordSource = "cursor_x"
+Grid.Column1.ControlSource = "cursor_x.col1"
+Grid.Column2.ControlSource = "cursor_x.col2"
+*-- Re-configurar Column.Width e Header.Caption APOS RecordSource+ControlSource
+*-- (Problema 48 CLAUDE.md: RecordSource reseta essas propriedades para default)
+Grid.Column1.Width = 80
+Grid.Column2.Width = 480
+Grid.Column1.Header1.Caption = "C" + CHR(243) + "digo"
+Grid.Column2.Header1.Caption = "Descri" + CHR(231) + CHR(227) + "o"
+```
+
+Valores originais estao no bloco `ConfigurarPaginaLista` (setup inicial do mesmo grid path).
+
+### Heuristica de deteccao (Pattern #180)
+
+Auto-mutate com fallback WARNING:
+
+1. **Detector**: linha `<path>.RecordSource = ""` seguida em ate 30 linhas por `<path>.ColumnN.ControlSource = "..."` para cada coluna. Captura path completo (regex `.grd_4c_\w+`).
+2. **Extrator (`Get-GridColumnOriginals`)**: busca `WITH <alias>.<grid_name>.ColumnN` (Width) e `WITH <alias>.<grid_name>.ColumnN.Header1` (Caption) no arquivo. Retorna hashtable {ColumnN_Width, ColumnN_Caption}.
+3. **Injetor**: adiciona re-configuracao apos ultimo ControlSource — 4 linhas por 2-column grid, 6 linhas por 3-column, etc.
+4. **Idempotencia**: varre 30 linhas SEM early break; rastreia `ultimaLinhaRelacionada` do grid; se ja existe `<path>.ColumnN.(Width|Header1.Caption)=` no bloco, skip.
+5. **Fallback WARNING**: `WARN-180-GRID-RECONFIG-AUSENTE` se valores originais nao localizados (grid nao configurado inicialmente no arquivo, ou path diferente).
+
+### Meta-licao (Pattern #180 v1 → v2)
+
+v1 usava early break: `if $j > ultimoControlSource AND $ln notmatch gridPath then break`. Isso interrompia ANTES de detectar re-config manual apos ControlSource → falha idempotencia (segundo run duplicava linhas).
+
+v2 fix: varredura sem break dentro do range i+1..i+30. `endBloco` = `ultimaLinhaRelacionada` (rastreia ultima linha que menciona o grid path, seja ControlSource ou Header/Width existente).
+
+### Referencias
+
+- Padrao canonico: CLAUDE.md "Problema 48" (RecordSource reseta bindings — documentava mas sem auto-fix).
+- Bug: `C:\4c\projeto\app\forms\cadastros\FormSrv.prg:3589-3593` (grid Servicos) + `:3663-3667` (grid Produtos interno).
+- Fix: linhas 3594-3599 + 3668-3673 pos-2026-09-01 (re-config injetada).
+- Auto-fix: `C:\4c\automation\CorretorAutomatico.ps1` `Corrigir-GridRecordSourceResetSemReconfig` (Pattern #180 auto-mutate + WARNING fallback).
+- Origem: Erro141 (2026-09-01, FormSrv menu Cadastros->Servicos — user reportou "grid esta com o nome da coluna incorreto"). Complementa Problema 48 canonico.
+- Meta-licao: idempotencia exige varrer TODA a janela de contexto sem early break — se pattern injeta multiplas linhas apos anchor, segundo run deve DETECTAR essas linhas dentro do range de guard.
+
+
+
+
+

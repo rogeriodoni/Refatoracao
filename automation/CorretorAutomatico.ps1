@@ -12035,6 +12035,209 @@ function Corrigir-ConfirmarDisabledModoExcluir {
     return $Linhas
 }
 
+function Corrigir-FormWidthMenorQueSaida {
+    # Pattern #179 (WARNING-only): Form CRUD (AS FormBase) com Width < 1000
+    # E cnt_4c_Saida.Left = 917 -> Encerrar fica INVISIVEL (Left+Width=1007
+    # transborda). Reporta para decisao manual: (a) Width=1000, (b) Left do
+    # cnt_4c_Saida ajustado se form pequeno intencional.
+    # Origem: Erro141 (2026-09-01 FormSrv Width=812 truncando Excluir+Encerrar).
+    param([string[]]$Linhas)
+
+    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
+
+    # Guard 1: precisa herdar FormBase (Form CRUD)
+    $conteudo = $Linhas -join "`n"
+    if ($conteudo -notmatch '(?im)^\s*DEFINE\s+CLASS\s+\w+\s+AS\s+FormBase') { return $Linhas }
+
+    # Guard 2: precisa ter cnt_4c_Saida.Left = 917 (padrao canonico do container Encerrar)
+    if ($conteudo -notmatch '(?im)^\s*\.Left\s*=\s*917\s*$') { return $Linhas }
+
+    # Extrai Width no bloco de propriedades da classe (antes da 1a PROCEDURE/FUNCTION)
+    $widthLinha = -1
+    $widthVal   = -1
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        if ($Linhas[$i] -imatch '^\s*(PROTECTED\s+|HIDDEN\s+)?(PROCEDURE|FUNCTION)\s+') { break }
+        # Nivel de classe: indent <= 8 espacos, sem . antes (nao eh property de sub-objeto)
+        if ($Linhas[$i] -match '^\s{0,8}Width\s*=\s*(\d+)\s*$') {
+            $widthLinha = $i + 1
+            $widthVal   = [int]$Matches[1]
+            break
+        }
+    }
+    if ($widthVal -lt 0 -or $widthVal -ge 1000) { return $Linhas }
+
+    $descricao = "Pattern #179: Form CRUD com Width=$widthVal < 1000 E cnt_4c_Saida.Left=917 -> cnt_4c_Saida termina em 917+90=1007 (fora do form). Container Encerrar e ultimos botoes do cnt_4c_Botoes ficam INVISIVEIS/CORTADOS. Fixes possiveis (decisao manual): (a) Ampliar Width para 1000 (padrao CRUD canonico) -- pode deixar espaco vazio a direita se form original pequeno; (b) Ajustar cnt_4c_Saida.Left para (Width-90) mantendo form pequeno -- viola CLAUDE.md #10 'Padrao Canonico Saida/Encerrar' que fixa Left=917. Preferir (a) — canonico universal. Origem: Erro141 (2026-09-01 FormSrv Width=812 truncando Excluir+Encerrar)."
+
+    Add-Correcao -Tipo "WARN-179-FORM-WIDTH-MENOR-SAIDA" -Linha $widthLinha `
+        -Original "Width = $widthVal (< 1000, cnt_4c_Saida.Left=917 transborda)" `
+        -Corrigido "(REVISAR MANUAL - preferir Width=1000 padrao CRUD)" `
+        -Descricao $descricao
+
+    Write-Host "[Pattern #179] Linha ${widthLinha}: Width=$widthVal < 1000 com cnt_4c_Saida.Left=917 -> Encerrar invisivel" -ForegroundColor Yellow
+
+    return $Linhas
+}
+
+function Corrigir-GridRecordSourceResetSemReconfig {
+    # Pattern #180: Grid em CarregarLista faz `RecordSource="" / ColumnCount=N /
+    # RecordSource="cursor" / Column1.ControlSource="..." / ...` mas NAO
+    # re-configura Column.Width nem Header1.Caption. RecordSource=""+re-set
+    # reseta essas propriedades para default -> grid mostra "Header1" e widths
+    # padrao (Problema 48 CLAUDE.md).
+    #
+    # Auto-fix: extrair Column.Width e Header1.Caption originais do bloco de
+    # ConfigurarPaginaLista (ou similar) onde o mesmo grid foi configurado
+    # INICIALMENTE, e injetar re-configuracao APOS o ultimo ControlSource.
+    # Fallback WARNING se nao achar valores originais.
+    # Origem: Erro141 (2026-09-01 FormSrv grid Servicos + inner grid Produtos).
+    param([string[]]$Linhas)
+
+    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
+
+    # Helper: extrair valores originais de Column.Width/Header1.Caption
+    # do bloco de configuracao inicial do mesmo grid (path completo).
+    function Get-GridColumnOriginals {
+        param([string[]]$linhas, [string]$gridPath, [int]$maxCol)
+        # gridPath ex: "THIS.pgf_4c_Paginas.Page1.grd_4c_Dados"
+        # Buscar bloco: WITH <alias>.grd_4c_Dados.ColumnN / .Width = X / ENDWITH
+        # E: WITH <alias>.grd_4c_Dados.ColumnN.Header1 / .Caption = "..." / ENDWITH
+        # <alias> pode ser THIS.pgf_4c_Paginas.Page1 OU loc_oPagina OU par_oPg
+        # Vou extrair sufixo apos ultima '.grd_4c_...' — nome do grid
+        $mGrid = [regex]::Match($gridPath, '(?i)\.(grd_4c_\w+)$')
+        if (-not $mGrid.Success) { return $null }
+        $gridName = $mGrid.Groups[1].Value
+
+        $results = @{}
+        for ($col = 1; $col -le $maxCol; $col++) {
+            $wKey  = "Column${col}_Width"
+            $capKey = "Column${col}_Caption"
+            $results[$wKey]  = $null
+            $results[$capKey] = $null
+
+            # Regex para WITH ... .<gridName>.ColumnN (com ou sem .Header1)
+            $rxColOpen  = [regex]("(?i)^\s*WITH\s+.*\." + [regex]::Escape($gridName) + "\.Column" + $col + "\s*$")
+            $rxHdrOpen  = [regex]("(?i)^\s*WITH\s+.*\." + [regex]::Escape($gridName) + "\.Column" + $col + "\.Header1\s*$")
+            $rxEnd      = [regex]'(?i)^\s*ENDWITH\s*$'
+            $rxWidth    = [regex]'(?i)^\s*\.Width\s*=\s*(\d+)\s*$'
+            $rxCaption  = [regex]'(?i)^\s*\.Caption\s*=\s*(.+?)\s*$'
+
+            $inCol = $false; $inHdr = $false
+            foreach ($ln in $linhas) {
+                if ($rxColOpen.IsMatch($ln)) { $inCol = $true; continue }
+                if ($rxHdrOpen.IsMatch($ln)) { $inHdr = $true; continue }
+                if ($rxEnd.IsMatch($ln))     { $inCol = $false; $inHdr = $false; continue }
+                if ($inCol) {
+                    $mW = $rxWidth.Match($ln)
+                    if ($mW.Success -and $null -eq $results[$wKey]) { $results[$wKey] = [int]$mW.Groups[1].Value }
+                }
+                if ($inHdr) {
+                    $mC = $rxCaption.Match($ln)
+                    if ($mC.Success -and $null -eq $results[$capKey]) { $results[$capKey] = $mC.Groups[1].Value }
+                }
+            }
+        }
+        return $results
+    }
+
+    # Detectar blocos: <path>.RecordSource = "" ... <path>.ColumnN.ControlSource = "..."
+    # Marcador de fim: ultima linha ControlSource do bloco (indice max)
+    # Nao muta se ja houver <path>.ColumnN.Header1.Caption ou .Width no mesmo bloco
+    # (idempotente).
+
+    $modificados = 0
+    for ($i = 0; $i -lt $Linhas.Count - 1; $i++) {
+        # Detecta RecordSource = "" que inicia o bloco
+        $mReset = [regex]::Match($Linhas[$i], '(?i)^(\s*)(.+?\.grd_4c_\w+)\.RecordSource\s*=\s*""\s*$')
+        if (-not $mReset.Success) { continue }
+
+        $indent    = $mReset.Groups[1].Value
+        $gridPath  = $mReset.Groups[2].Value
+
+        # Fase 1: varrer 30 linhas SEM break — coletar todos os ControlSource
+        # e detectar re-config existente (guard idempotencia).
+        $maxCol   = 0
+        $jaTemReconfig = $false
+        $ultimoControlSource = -1
+        $ultimaLinhaRelacionada = -1
+        $rangeMax = [Math]::Min($i + 30, $Linhas.Count)
+        for ($j = $i + 1; $j -lt $rangeMax; $j++) {
+            $ln = $Linhas[$j]
+            if ($ln -imatch [regex]::Escape($gridPath) + '\.Column(\d+)\.ControlSource\s*=') {
+                $cn = [int]$Matches[1]
+                if ($cn -gt $maxCol) { $maxCol = $cn }
+                $ultimoControlSource = $j
+                $ultimaLinhaRelacionada = $j
+            }
+            # Guard idempotencia: se ja tem re-config de Header/Width no bloco
+            if ($ln -imatch [regex]::Escape($gridPath) + '\.Column\d+\.(Header1\.Caption|Width)\s*=') {
+                $jaTemReconfig = $true
+                $ultimaLinhaRelacionada = $j
+            }
+            # Rastreia ultima linha que menciona o path (para determinar fim do bloco)
+            if ($ln -match [regex]::Escape($gridPath)) {
+                $ultimaLinhaRelacionada = $j
+            }
+        }
+        $endBloco = $ultimaLinhaRelacionada
+        if ($ultimoControlSource -lt 0) { continue }
+        if ($jaTemReconfig) { continue }  # idempotente
+
+        # Extrai valores originais do bloco de configuracao inicial
+        $originais = Get-GridColumnOriginals -linhas $Linhas -gridPath $gridPath -maxCol $maxCol
+        if ($null -eq $originais) { continue }
+
+        # Constrói linhas de re-configuracao
+        $novasLinhas = @()
+        $novasLinhas += "${indent}*-- Re-configurar Column.Width e Header.Caption APOS RecordSource+ControlSource"
+        $novasLinhas += "${indent}*-- (Problema 48 CLAUDE.md: RecordSource reseta essas propriedades para default)"
+        $temValor = $false
+        for ($col = 1; $col -le $maxCol; $col++) {
+            $w = $originais["Column${col}_Width"]
+            if ($null -ne $w) {
+                $novasLinhas += "${indent}${gridPath}.Column${col}.Width = $w"
+                $temValor = $true
+            }
+        }
+        for ($col = 1; $col -le $maxCol; $col++) {
+            $cap = $originais["Column${col}_Caption"]
+            if ($null -ne $cap) {
+                $novasLinhas += "${indent}${gridPath}.Column${col}.Header1.Caption = $cap"
+                $temValor = $true
+            }
+        }
+        if (-not $temValor) {
+            # WARNING: nao achou valores originais
+            $descricao = "Pattern #180: Grid $gridPath faz RecordSource='' + ColumnCount + ControlSource sem re-configurar Header1.Caption/Width -> grid mostra 'Header1' e widths default (Problema 48). Nao achei valores originais no arquivo (grid nao foi configurado inicialmente ou nomes diferentes). REVISAR MANUAL: adicionar linhas apos ControlSource com Column.Width e Header1.Caption esperados."
+            Add-Correcao -Tipo "WARN-180-GRID-RECONFIG-AUSENTE" -Linha ($i + 1) `
+                -Original "$gridPath.RecordSource reset sem re-config Header/Width" `
+                -Corrigido "(REVISAR MANUAL - valores originais nao localizados no arquivo)" `
+                -Descricao $descricao
+            Write-Host "[Pattern #180] Linha $($i + 1): $gridPath sem re-config Header/Width (valores originais nao localizados)" -ForegroundColor Yellow
+            continue
+        }
+
+        # Auto-injetar apos ultima linha ControlSource
+        $antes  = if ($endBloco -gt 0) { $Linhas[0..$endBloco] } else { @($Linhas[0]) }
+        $depois = if ($endBloco -lt $Linhas.Count - 1) { $Linhas[($endBloco + 1)..($Linhas.Count - 1)] } else { @() }
+        $Linhas = @()
+        $Linhas += $antes
+        $Linhas += $novasLinhas
+        $Linhas += $depois
+
+        $descricao = "Pattern #180: Grid $gridPath faz RecordSource='' + re-set sem re-configurar Header1.Caption/Width -> grid mostra 'Header1' e widths default (Problema 48). Auto-injetadas $($novasLinhas.Count - 2) linhas com Column.Width e Header1.Caption extraidos do bloco de configuracao inicial do mesmo grid no arquivo. Origem: Erro141 (2026-09-01 FormSrv)."
+        Add-Correcao -Tipo "AUTO-180-GRID-RECONFIG-HEADER-WIDTH" -Linha ($i + 1) `
+            -Original "$gridPath.RecordSource reset sem re-config Header/Width" `
+            -Corrigido "$($novasLinhas.Count - 2) linhas injetadas com valores originais" `
+            -Descricao $descricao
+        Write-Host "[Pattern #180] Linha $($i + 1): $gridPath re-config injetada ($($novasLinhas.Count - 2) linhas)" -ForegroundColor Green
+        $modificados++
+        # Nao restart o loop; endBloco+novasLinhas.Count desloca indices mas iteracao continua a partir de i+1
+        $i = $endBloco + $novasLinhas.Count
+    }
+
+    return $Linhas
+}
+
 function Invoke-CorrecaoAutomatica {
     param(
         [string]$Arquivo,
@@ -12236,6 +12439,8 @@ function Invoke-CorrecaoAutomatica {
     $linhas = Corrigir-ZapAppendCursorDadosCompartilhado -Linhas $linhas
     $linhas = Corrigir-BOPropertyNaoDeclarada -Linhas $linhas -Arquivo $Arquivo
     $linhas = Corrigir-ConfirmarDisabledModoExcluir -Linhas $linhas
+    $linhas = Corrigir-FormWidthMenorQueSaida -Linhas $linhas
+    $linhas = Corrigir-GridRecordSourceResetSemReconfig -Linhas $linhas
 
     # Salva arquivo corrigido em UTF-8 SEM BOM.
     # - VFP9 nao suporta BOM (por isso removemos no read com bytes[3..])

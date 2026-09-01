@@ -1276,7 +1276,7 @@ DEFINE CLASS FormEVE AS FormBase
         loc_lEditando = INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
 
         TRY
-            loc_oPg2.cnt_4c_BotoesAcao.cmd_4c_Confirmar.Enabled = loc_lEditando
+            loc_oPg2.cnt_4c_BotoesAcao.cmd_4c_Confirmar.Enabled = loc_lEditando OR (THIS.this_cModoAtual = "EXCLUIR")
             loc_oPg2.cnt_4c_BotoesAcao.cmd_4c_Cancelar.Enabled  = .T.
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "FormEVE.AjustarBotoesPorModo")

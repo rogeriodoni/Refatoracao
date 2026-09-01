@@ -458,7 +458,7 @@ DEFINE CLASS Formacu AS FormBase
                 .PicturePosition = 13
                 .Top             = 5
                 .Left            = 917
-                .Width           = 75
+                .Width           = 90
                 .Height          = 75
                 .FontName        = "Comic Sans MS"
                 .FontBold        = .T.

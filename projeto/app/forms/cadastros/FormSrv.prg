@@ -10,7 +10,7 @@ DEFINE CLASS FormSrv AS FormBase
 
     *-- Propriedades visuais (PILAR 1 - UX FIDELITY)
     Height       = 620
-    Width        = 812
+    Width        = 1000
     AutoCenter   = .T.
     ShowWindow   = 1
     WindowType   = 1
@@ -3591,6 +3591,12 @@ DEFINE CLASS FormSrv AS FormBase
                 THIS.pgf_4c_Paginas.Page1.grd_4c_Dados.RecordSource = "cursor_4c_Dados"
                 THIS.pgf_4c_Paginas.Page1.grd_4c_Dados.Column1.ControlSource = "cursor_4c_Dados.CodServs"
                 THIS.pgf_4c_Paginas.Page1.grd_4c_Dados.Column2.ControlSource = "cursor_4c_Dados.DescServs"
+                *-- Re-configurar Column.Width e Header.Caption APOS RecordSource+ControlSource
+                *-- (Problema 48 CLAUDE.md: RecordSource reseta essas propriedades para default)
+                THIS.pgf_4c_Paginas.Page1.grd_4c_Dados.Column1.Width = 80
+                THIS.pgf_4c_Paginas.Page1.grd_4c_Dados.Column2.Width = 480
+                THIS.pgf_4c_Paginas.Page1.grd_4c_Dados.Column1.Header1.Caption = "C" + CHR(243) + "digo"
+                THIS.pgf_4c_Paginas.Page1.grd_4c_Dados.Column2.Header1.Caption = "Descri" + CHR(231) + CHR(227) + "o"
                 loc_lResultado = .T.
             ELSE
                 THIS.this_cMensagemErro = "Erro ao carregar lista de servi" + CHR(231) + CHR(227) + "os"
@@ -3659,6 +3665,12 @@ DEFINE CLASS FormSrv AS FormBase
             THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page2.grd_4c_Dados.RecordSource = "cursor_4c_Produtos"
             THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page2.grd_4c_Dados.Column1.ControlSource = "cursor_4c_Produtos.cPros"
             THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page2.grd_4c_Dados.Column2.ControlSource = "cursor_4c_Produtos.dPros"
+            *-- Re-configurar Column.Width e Header.Caption APOS RecordSource+ControlSource
+            *-- (Problema 48 CLAUDE.md: RecordSource reseta essas propriedades para default)
+            THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page2.grd_4c_Dados.Column1.Width = 108
+            THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page2.grd_4c_Dados.Column2.Width = 290
+            THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page2.grd_4c_Dados.Column1.Header1.Caption = "C" + CHR(243) + "digo"
+            THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page2.grd_4c_Dados.Column2.Header1.Caption = "Descri" + CHR(231) + CHR(227) + "o"
         CATCH TO loc_oErro
             THIS.this_cMensagemErro = loc_oErro.Message
         ENDTRY

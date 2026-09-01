@@ -907,7 +907,7 @@ DEFINE CLASS FormEvt AS FormBase
         loc_lEditando   = INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
 
         TRY
-            loc_oBotoesAcao.cmd_4c_Confirmar.Enabled = loc_lEditando
+            loc_oBotoesAcao.cmd_4c_Confirmar.Enabled = loc_lEditando OR (THIS.this_cModoAtual = "EXCLUIR")
             loc_oBotoesAcao.cmd_4c_Cancelar.Enabled  = .T.
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "FormEvt.AjustarBotoesPorModo")
