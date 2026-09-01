@@ -9070,6 +9070,80 @@ v2 fix: varredura sem break dentro do range i+1..i+30. `endBloco` = `ultimaLinha
 - Meta-licao: idempotencia exige varrer TODA a janela de contexto sem early break — se pattern injeta multiplas linhas apos anchor, segundo run deve DETECTAR essas linhas dentro do range de guard.
 
 
+## 181. pgf_4c_Paginas.Width hardcoded < Form.Width TRUNCA botoes mesmo com Form.Width canonico (Erro142 FormSrv 2026-09-01)
+
+### Problema
+
+Form CRUD tem PageFrame `pgf_4c_Paginas` como root do layout (contem Page1/Page2). Se `PageFrame.Width` eh hardcoded < Form.Width, o PageFrame ocupa apenas essa largura reduzida — botoes/containers com `Left > PageFrame.Width` ficam CORTADOS pela borda do PageFrame mesmo estando dentro dos limites do Form.
+
+### Sintoma
+
+FormSrv apos Pattern #179 (Form.Width 812 -> 1000):
+- `Form.Width = 1000` ✓
+- `pgf_4c_Paginas.Width = 815` ✗ (hardcoded do SCX legado)
+- `cnt_4c_Saida.Left=917 + Width=90` termina em 1007
+- **Encerrar em Left=917 (>815) → CORTADO pela borda do PageFrame de 815**
+- **cmd_4c_Excluir em Left absoluto 847 (>815) → CORTADO**
+- **cmd_4c_Buscar em Left absoluto 922 (>815) → CORTADO**
+
+User veja: form abre com botoes Incluir/Visualizar/Alterar visiveis + Excluir cortado + Buscar/Encerrar invisiveis. Espaco vazio a direita ate borda do Form.
+
+### Fix canonico
+
+Setar `pgf_4c_Paginas.Width = THIS.Width` (dinamico — sempre segue Form.Width, sem hardcode).
+
+```foxpro
+PROTECTED PROCEDURE ConfigurarPageFrame()
+    THIS.AddObject("pgf_4c_Paginas", "PageFrame")
+    WITH THIS.pgf_4c_Paginas
+        .Top       = -29
+        .Left      = 0
+        .Width     = THIS.Width       && dinamico — segue Form.Width
+        .Height    = THIS.Height + 29 && idem, +29 para compensar Top=-29
+        .PageCount = 2
+        ...
+    ENDWITH
+ENDPROC
+```
+
+Alternativa (aceita mas menos robusta): valor literal >=1000 canonico (`.Width = 1000`). Mas se algum outro fix altera Form.Width, o hardcode fica dessincronizado.
+
+### Meta-licao (par sincronizado)
+
+`Form.Width` + `PageFrame.Width` formam um **par sincronizado**. Ambos devem mudar juntos:
+
+- Pattern #179 (Form.Width < 1000) sozinho: **NAO resolve** — botoes continuam cortados pelo PageFrame limitado.
+- Pattern #181 (PageFrame.Width) resolve **ambos** ao fazer PageFrame.Width dinamico via `THIS.Width`.
+
+Quando corrigir Form.Width manualmente, SEMPRE verificar PageFrame.Width tambem.
+
+### Heuristica de deteccao (Pattern #181)
+
+Auto-mutate:
+
+1. Guard 1: `DEFINE CLASS \w+ AS FormBase` (Form CRUD).
+2. Guard 2: presenca de `AddObject("pgf_4c_Paginas"` (form usa pgf padrao).
+3. Rastrear aliases: `loc_oPgf = THIS.pgf_4c_Paginas` -> adiciona `loc_oPgf` ao mapa.
+4. Detectar entrada em bloco: `WITH THIS.pgf_4c_Paginas` OU `WITH <alias>` (usa mapa).
+5. Sair em `ENDWITH`.
+6. Dentro do bloco: se `.Width = <literal N>` e `N < 1000`, substituir por `.Width = THIS.Width`.
+7. Fora do bloco: `THIS.pgf_4c_Paginas.Width = <literal N>` (assignment direto) com `N < 1000` → substituir por `THIS.pgf_4c_Paginas.Width = THIS.Width`.
+
+Skip idempotencia:
+- Ja eh `THIS.Width` (nao muta segundo run).
+- `N >= 1000` (canonico, nao eh bug — form com Width>=1000 hardcoded eh aceito).
+
+Zero falso positivo: regex ancorado em `\s*$` (linha exata), literal numerico obrigatorio, guards duplos.
+
+### Referencias
+
+- Bug: `C:\4c\projeto\app\forms\cadastros\FormSrv.prg:139` — `.Width = 815`.
+- Fix: linha 139 pos-2026-09-01 — `.Width = 1000` (literal, poderia ser `THIS.Width` mas efeito eh igual).
+- Auto-fix: `C:\4c\automation\CorretorAutomatico.ps1` `Corrigir-PageFramePaginasWidthHardcoded` (Pattern #181).
+- Complementa: Pattern #179 (Form.Width < 1000).
+- Origem: Erro142 (2026-09-01, FormSrv menu Cadastros->Servicos — botoes ainda cortados apos Pattern #179 aplicado — user reportou "form continua cortando").
+
+
 
 
 
