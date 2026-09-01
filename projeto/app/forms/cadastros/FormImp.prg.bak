@@ -2342,7 +2342,7 @@ DEFINE CLASS FormImp AS FormBase
         loc_oCnt     = THIS.pgf_4c_Paginas.Page2.cnt_4c_Salva
         loc_lEditando = INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
 
-        loc_oCnt.cmd_4c_Confirmar.Enabled = loc_lEditando
+        loc_oCnt.cmd_4c_Confirmar.Enabled = loc_lEditando OR (THIS.this_cModoAtual = "EXCLUIR")
         loc_oCnt.cmd_4c_Cancelar.Enabled  = .T.
     ENDPROC
 

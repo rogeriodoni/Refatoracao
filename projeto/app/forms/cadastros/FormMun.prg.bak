@@ -1044,7 +1044,7 @@ DEFINE CLASS FormMun AS FormBase
         *-- Page2: Confirmar habilitado so em INCLUIR/ALTERAR; Cancelar sempre ativo em Page2
         IF PEMSTATUS(loc_oPg2, "cnt_4c_Salva", 5)
             IF PEMSTATUS(loc_oPg2.cnt_4c_Salva, "cmd_4c_Confirmar", 5)
-                loc_oPg2.cnt_4c_Salva.cmd_4c_Confirmar.Enabled = loc_lEdita
+                loc_oPg2.cnt_4c_Salva.cmd_4c_Confirmar.Enabled = loc_lEdita OR (THIS.this_cModoAtual = "EXCLUIR")
             ENDIF
             IF PEMSTATUS(loc_oPg2.cnt_4c_Salva, "cmd_4c_Cancelar", 5)
                 loc_oPg2.cnt_4c_Salva.cmd_4c_Cancelar.Enabled = (loc_lEdita OR loc_lVisualiza)

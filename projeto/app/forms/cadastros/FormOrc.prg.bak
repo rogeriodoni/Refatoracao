@@ -1273,7 +1273,7 @@ DEFINE CLASS FormOrc AS FormBase
             ENDIF
 
             *-- Botoes
-            loc_oPg2.cnt_4c_BotoesAcao.cmd_4c_Confirmar.Enabled = loc_lEdit
+            loc_oPg2.cnt_4c_BotoesAcao.cmd_4c_Confirmar.Enabled = loc_lEdit OR (THIS.this_cModoAtual = "EXCLUIR")
             loc_oPg2.cnt_4c_BotoesAcao.cmd_4c_Cancelar.Enabled  = .T.
         CATCH TO loException
             MostrarErro(loException, "FormOrc.HabilitarCampos")
