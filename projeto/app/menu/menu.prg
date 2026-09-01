@@ -50,8 +50,8 @@ PROCEDURE CriarMenuPrincipal()
     DEFINE BAR 4 OF popCadastros PROMPT "\-"
     DEFINE BAR 5 OF popCadastros PROMPT "Clientes" ;
            MESSAGE "Cadastro de Clientes"
-    DEFINE BAR 6 OF popCadastros PROMPT "Fornecedores" ;
-           MESSAGE "Cadastro de Fornecedores"
+    DEFINE BAR 6 OF popCadastros PROMPT "Formas de Pagamento" ;
+           MESSAGE "Cadastro de Formas de Pagamento"
     DEFINE BAR 7 OF popCadastros PROMPT "Produtos" ;
            MESSAGE "Cadastro de Produtos"
     DEFINE BAR 8 OF popCadastros PROMPT "Tamanhos" ;
