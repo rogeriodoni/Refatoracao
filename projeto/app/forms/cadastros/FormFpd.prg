@@ -93,7 +93,7 @@ DEFINE CLASS FormFpd AS FormBase
                 THIS.AddObject("pgf_4c_Paginas", "PageFrame")
                 THIS.pgf_4c_Paginas.PageCount = 2
                 THIS.pgf_4c_Paginas.Visible   = .T.
-                THIS.pgf_4c_Paginas.Width     = 50
+                THIS.pgf_4c_Paginas.Width = THIS.Width
                 THIS.pgf_4c_Paginas.Height    = 50
                 THIS.pgf_4c_Paginas.Top       = -100
                 THIS.pgf_4c_Paginas.Left      = -100

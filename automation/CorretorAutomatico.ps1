@@ -12275,6 +12275,101 @@ function Corrigir-GridRecordSourceResetSemReconfig {
     return $Linhas
 }
 
+function Corrigir-PageFramePaginasWidthHardcoded {
+    # Pattern #181: pgf_4c_Paginas.Width hardcoded < Form.Width -> botoes com
+    # Left > PageFrame.Width ficam CORTADOS pela borda do PageFrame mesmo
+    # estando dentro do Form.Width canonico. Fix `Form.Width = 1000` sozinho
+    # (Pattern #179) nao resolve — precisa tambem ajustar PageFrame.Width.
+    #
+    # Auto-fix: substitui `.Width = <literal numerico < 1000>` por
+    # `.Width = THIS.Width` no bloco WITH THIS.pgf_4c_Paginas (ou similar).
+    # Guard: apenas em Form CRUD (`AS FormBase`). Idempotente.
+    # Origem: Erro142 (2026-09-01 FormSrv PageFrame.Width=815 truncava botoes
+    # apos fix inicial Form.Width=812->1000 nao resolver).
+    param([string[]]$Linhas)
+
+    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
+
+    # Guard 1: precisa herdar FormBase (Form CRUD)
+    $conteudo = $Linhas -join "`n"
+    if ($conteudo -notmatch '(?im)^\s*DEFINE\s+CLASS\s+\w+\s+AS\s+FormBase') { return $Linhas }
+
+    # Guard 2: precisa ter AddObject de pgf_4c_Paginas
+    if ($conteudo -notmatch '(?im)AddObject\s*\(\s*"pgf_4c_Paginas"') { return $Linhas }
+
+    # Detectar bloco WITH <alias>.pgf_4c_Paginas (WITH THIS.pgf_4c_Paginas ou
+    # WITH loc_oPgf/similar apos loc_oPgf = THIS.pgf_4c_Paginas).
+    # Estrategia: escanear linha a linha, quando entrar em WITH que envolve
+    # pgf_4c_Paginas OU dentro de assignment direto THIS.pgf_4c_Paginas.Width =,
+    # procurar linha `.Width = N` ou `THIS.pgf_4c_Paginas.Width = N` com N literal <1000.
+
+    # v2: SEM tracking de aliases (evita falso positivo por reatribuicao de var
+    # local). Detecta APENAS 2 formas seguras:
+    # A) WITH THIS.pgf_4c_Paginas ... .Width = <N> ... ENDWITH (path literal)
+    # B) THIS.pgf_4c_Paginas.Width = <N> (assignment direto)
+    # Perde cobertura de forms que usam `loc_oPgf = THIS.pgf_4c_Paginas`, mas
+    # elimina risco de mutar sub-PageFrames aninhados (FormCLC bug: loc_oPgf
+    # era reatribuido para outro PageFrame na linha 1256).
+    $modificados = 0
+    $inBlocoPgf = $false
+
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        $ln = $Linhas[$i]
+
+        # Detectar entrada em WITH THIS.pgf_4c_Paginas (path literal apenas)
+        if ($ln -match '(?i)^\s*WITH\s+THIS\.pgf_4c_Paginas\s*$') {
+            $inBlocoPgf = $true
+            continue
+        }
+        # Sair em ENDWITH (nao tratamos WITH aninhado — se houver, primeiro
+        # ENDWITH fecha o bloco pgf; casos raros e nao criticos)
+        if ($inBlocoPgf -and $ln -match '(?i)^\s*ENDWITH\s*$') {
+            $inBlocoPgf = $false
+            continue
+        }
+
+        # Caso A: dentro de WITH THIS.pgf_4c_Paginas + `.Width = <N>` literal
+        if ($inBlocoPgf) {
+            $m = [regex]::Match($ln, '(?i)^(\s*)\.Width\s*=\s*(\d+)\s*$')
+            if ($m.Success) {
+                $indent = $m.Groups[1].Value
+                $val    = [int]$m.Groups[2].Value
+                if ($val -lt 1000) {
+                    $novo = "${indent}.Width = THIS.Width"
+                    $descricao = "Pattern #181: pgf_4c_Paginas.Width = $val < 1000 (hardcoded) trunca botoes/containers com Left > $val (ex: cnt_4c_Saida.Left=917) mesmo com Form.Width canonico. Substituido por `.Width = THIS.Width` (dinamico — sempre segue Form.Width). Origem: Erro142 (2026-09-01 FormSrv PageFrame.Width=815 truncava botoes)."
+                    Add-Correcao -Tipo "AUTO-181-PGF-WIDTH-HARDCODED" -Linha ($i + 1) `
+                        -Original ".Width = $val (hardcoded < 1000 em WITH pgf_4c_Paginas)" `
+                        -Corrigido ".Width = THIS.Width (dinamico)" `
+                        -Descricao $descricao
+                    $Linhas[$i] = $novo
+                    $modificados++
+                    Write-Host "[Pattern #181] Linha $($i + 1): pgf_4c_Paginas.Width $val -> THIS.Width (Erro142)" -ForegroundColor Green
+                }
+            }
+        }
+
+        # Caso B: assignment direto THIS.pgf_4c_Paginas.Width = <N> literal
+        $mDirect = [regex]::Match($ln, '(?i)^(\s*)THIS\.pgf_4c_Paginas\.Width\s*=\s*(\d+)\s*$')
+        if ($mDirect.Success) {
+            $indent = $mDirect.Groups[1].Value
+            $val    = [int]$mDirect.Groups[2].Value
+            if ($val -lt 1000) {
+                $novo = "${indent}THIS.pgf_4c_Paginas.Width = THIS.Width"
+                $descricao = "Pattern #181: THIS.pgf_4c_Paginas.Width = $val < 1000 (hardcoded direto) trunca botoes/containers com Left > $val mesmo com Form.Width canonico. Substituido por dinamico `THIS.Width`. Origem: Erro142 (2026-09-01 FormSrv)."
+                Add-Correcao -Tipo "AUTO-181-PGF-WIDTH-HARDCODED" -Linha ($i + 1) `
+                    -Original "THIS.pgf_4c_Paginas.Width = $val (hardcoded < 1000)" `
+                    -Corrigido "THIS.pgf_4c_Paginas.Width = THIS.Width (dinamico)" `
+                    -Descricao $descricao
+                $Linhas[$i] = $novo
+                $modificados++
+                Write-Host "[Pattern #181] Linha $($i + 1): THIS.pgf_4c_Paginas.Width $val -> THIS.Width (Erro142)" -ForegroundColor Green
+            }
+        }
+    }
+
+    return $Linhas
+}
+
 function Invoke-CorrecaoAutomatica {
     param(
         [string]$Arquivo,
@@ -12478,6 +12573,7 @@ function Invoke-CorrecaoAutomatica {
     $linhas = Corrigir-ConfirmarDisabledModoExcluir -Linhas $linhas
     $linhas = Corrigir-FormWidthMenorQueSaida -Linhas $linhas
     $linhas = Corrigir-GridRecordSourceResetSemReconfig -Linhas $linhas
+    $linhas = Corrigir-PageFramePaginasWidthHardcoded -Linhas $linhas
 
     # Salva arquivo corrigido em UTF-8 SEM BOM.
     # - VFP9 nao suporta BOM (por isso removemos no read com bytes[3..])

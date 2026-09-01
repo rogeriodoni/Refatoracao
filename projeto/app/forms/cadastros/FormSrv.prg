@@ -129,6 +129,7 @@ DEFINE CLASS FormSrv AS FormBase
     *==========================================================================
     * ConfigurarPageFrame - PageFrame principal (outer)
     * Legado: pagina Top=-29, Width=800, Height=631
+    * Fix Erro142: Width=1000 (igual Form.Width) — antes 815 truncava botoes
     *==========================================================================
     PROTECTED PROCEDURE ConfigurarPageFrame()
         THIS.AddObject("pgf_4c_Paginas", "PageFrame")
@@ -136,7 +137,7 @@ DEFINE CLASS FormSrv AS FormBase
         WITH THIS.pgf_4c_Paginas
             .Top       = -29
             .Left      = 0
-            .Width     = 815
+            .Width     = 1000
             .Height    = 651
             .PageCount = 2
             .Tabs      = .F.
