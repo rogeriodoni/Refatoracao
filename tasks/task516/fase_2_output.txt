@@ -1,0 +1,17 @@
+﻿Arquivo completo e correto. Fase 2/8 conclu├¡da.
+
+**rstBO.prg** agora tem todos os m├®todos CRUD:
+
+| M├®todo | Descri├º├úo |
+|--------|-----------|
+| `Buscar()` | SELECT SigCdRst + JOIN SigCdCli ÔåÆ `cursor_4c_Dados` |
+| `CarregarPorCodigo()` | SELECT por skChaves, popula propriedades |
+| `CarregarDoCursor()` | Mapeia cursor ÔåÆ propriedades (padr├úo `SELECT (alias)` + campos sem alias) |
+| `BuscarMunicipios()` | SELECT SigCdRsi tipo 'M' + JOIN SigCdMun/SigCdUfs ÔåÆ `cursor_4c_Munis` |
+| `BuscarProdutos()` | SELECT SigCdRsi tipo 'P' + JOIN SigCdPro ÔåÆ `cursor_4c_Prods` |
+| `VerificarContaCadastrada()` | Checa duplicidade de iclis antes de inserir |
+| `GerarChaveUnica()` | NEWID() via SQL Server ÔåÆ C(20) |
+| `InserirItensSigCdRsi()` | Auxiliar compartilhado: INSERT SigCdRsi de cursor_4c_Munis e cursor_4c_Prods |
+| `Inserir()` | INSERT SigCdRst + itens + auditoria |
+| `Atualizar()` | DELETE SigCdRsi antigos + UPDATE SigCdRst + INSERT itens novos + auditoria |
+| `ExecutarExclusao()` | DELETE SigCdRsi (filho) antes de DELETE SigCdRst (pai) |

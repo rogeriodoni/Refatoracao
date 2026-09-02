@@ -1,0 +1,11 @@
+﻿Todas as altera├º├Áes est├úo corretas. Resumo da Fase 5:
+
+**Modifica├º├Áes realizadas:**
+
+1. **`SedBO.prg` (bug fix)**: Corrigido o SQL de `CarregarSedex` ÔÇö substitu├¡do `EmpDopNums = ''` por `ISNULL(EmpDopNums,'') = ''` (e o inverso para `nLivres`). Sem `ISNULL`, valores NULL no SQL Server retornam FALSE em compara├º├Áes com `''`, fazendo etiquetas sem EmpDopNums contarem erroneamente como "usadas".
+
+2. **`menu.prg` (integra├º├úo)**: Adicionados `DEFINE BAR 120` (separador) e `DEFINE BAR 121` "Etiquetas de Sedex" no `popMovimentos`, com `ON SELECTION` ÔåÆ `AbrirFormSed`. Adicionado o procedure `AbrirFormSed()` no final do arquivo seguindo o padr├úo can├┤nico (`VARTYPE(loForm) = "O"` + `Show()` sem par├ómetro + `MostrarErro` no CATCH).
+
+3. **`FormSed.prg` (header)**: Atualizado o coment├írio de cabe├ºalho documentando o estado completo do form e a integra├º├úo no menu.
+
+O form est├í agora integrado no sistema ÔÇö `config.prg` carrega `SedBO.prg` e `FormSed.prg` automaticamente via ADIR (sem necessidade de entrada manual), e o menu exp├Áe o acesso via Movimentos ÔåÆ Etiquetas de Sedex.

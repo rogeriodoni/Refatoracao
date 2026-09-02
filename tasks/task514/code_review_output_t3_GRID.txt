@@ -1,0 +1,8 @@
+﻿3 corre├º├Áes aplicadas. As flags 1401 e 1542 eram **falsos positivos** ÔÇö o loop de re-defini├º├úo de `ControlSource` j├í existia no c├│digo atual.
+
+**Corre├º├Áes reais (linhas 1894, 1990, 2199):** Removido `ColumnCount = 3` que sobrescrevia incorretamente o valor correto antes de `RecordSource`:
+- `grd_4c_PropsTitulo`: 5ÔåÆ3ÔåÆ5 corrigido para 5 (WITH configura 5 colunas)
+- `grd_4c_PropsCampos`: 12ÔåÆ3ÔåÆ12 corrigido para 12 (WITH configura 12 colunas)
+- `grd_4c_PropsGrp`: 7ÔåÆ3ÔåÆ7 corrigido para 7 (WITH configura 7 colunas)
+
+Com `ColumnCount = 3`, o auto-bind de `RecordSource` criava apenas 3 colunas, tornando `Column4..N` inexistentes quando o WITH block tentava configur├í-las.

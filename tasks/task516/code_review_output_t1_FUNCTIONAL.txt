@@ -1,0 +1,8 @@
+﻿Todos os problemas corrigidos. Resumo:
+
+| # | Problema | Fix aplicado |
+|---|----------|-------------|
+| CONTAINER-VISIVEL | `cnt_4c_Cabecalho` for├ºado `.T.` por recurs├úo | `INLIST` guard na linha 1079 ÔÇö skipa o container pelo nome |
+| BUSCA-CURSOR (├ù4) | 4 `CREATEOBJECT('FormBuscaAuxiliar')` sem `this_cCursorDestino` | Adicionado `.this_cCursorDestino = "cursor_4c_Busca*"` antes de cada `DefinirCursor()` |
+| BINDEVENT-PARAMS (├ù6) | 6 handlers com params no header da PROCEDURE (VFP9 pode n├úo reconhecer) | Convertidos para `LPARAMETERS` dentro do corpo ÔÇö padr├úo can├┤nico VFP9 |
+| GRID-HEADER (├ù6) | `"Nome da Conta"` inventado; legado (SCT git) usa `"Nome"` | Substitu├¡do em 2 lugares (ConfigurarPaginaLista + CarregarLista). `"Conta"` e `"Data"` confirmados corretos pelo legado |

@@ -1,0 +1,3 @@
+﻿**Causa raiz:** Em `ConfigurarSubPaginaLayout`, os tr├¬s grids (`grd_4c_PropsTitulo`, `grd_4c_PropsCampos`, `grd_4c_PropsGrp`) tinham uma segunda linha `ColumnCount = 3` logo ap├│s a linha correta (`ColumnCount = 5/12/7`). Isso destru├¡a as colunas extras antes do `WITH .Column4`, `Column5`, etc. serem acessadas ÔÇö causando `Property COLUMN4 is not found`.
+
+**Fix:** Removidas as tr├¬s linhas `ColumnCount = 3` esp├║rias. O `ColumnCount` correto (5, 12 e 7) j├í estava definido na linha imediatamente anterior.

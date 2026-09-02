@@ -1,0 +1,11 @@
+﻿**Causa raiz:** Em `ConfigurarSubPaginaLayout`, os tr├¬s grids tinham o padr├úo:
+```
+.ColumnCount = 5   ÔåÉ cria 5 colunas (correto)
+.RecordSourceType = 1
+.ColumnCount = 3   ÔåÉ DESTR├ôI colunas 4 e 5! (bug)
+.RecordSource = "..."
+WITH .grd_...
+    WITH .Column4  ÔåÉ "Property COLUMN4 is not found"
+```
+
+**Fix:** Removidas as 3 linhas esp├║rias `ColumnCount = 3` (uma para cada grid: `grd_4c_PropsTitulo`, `grd_4c_PropsCampos`, `grd_4c_PropsGrp`). Agora o `ColumnCount` correto (5, 12, 7) ├® mantido quando o `RecordSource` ├® atribu├¡do, e o bloco `WITH .ColumnN` encontra todas as colunas esperadas.

@@ -1,0 +1,8 @@
+﻿Os 4 eventos principais j├í est├úo implementados no arquivo `FormRop.prg`. Especificamente:
+
+- **`BtnIncluirClick`** (linha 972): chama `NovoRegistro()`, seta modo, limpa campos, habilita, navega para Page2
+- **`BtnVisualizarClick`** (linha 983): l├¬ `cidchaves` do cursor, chama `CarregarPorCodigo()`, seta modo VISUALIZAR, desabilita campos
+- **`BtnAlterarClick`** (linha 1006): l├¬ `cidchaves`, chama `CarregarPorCodigo()` + `EditarRegistro()`, seta modo ALTERAR, habilita campos
+- **`BtnExcluirClick`** (linha 1030): l├¬ `cidchaves`, pede confirma├º├úo via `MsgConfirma()`, chama `Excluir()`
+
+A Fase 7 j├í foi conclu├¡da ÔÇö os eventos est├úo completos e corretos no arquivo. O arquivo `FormRop.prg` est├í com 1931 linhas cobrindo todas as fases 1-7 incluindo lookups, valida├º├Áes, e todos os m├®todos auxiliares. A pr├│xima fase (8/8) seria a integra├º├úo com `config.prg` e `menu.prg`, que segundo o checklist do migration_guide inclui: `SET PROCEDURE` para o BO e Form, fun├º├úo `AbrirFormRop()` no menu e item de menu no popup correto.

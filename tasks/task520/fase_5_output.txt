@@ -1,0 +1,16 @@
+﻿A migra├º├úo do FormSER est├í **completamente pronta**. Ao ler o arquivo, verifico que a Fase 5 j├í estava implementada desde a fase anterior:
+
+**Status atual:**
+
+| Item | Status |
+|------|--------|
+| `SERBO.prg` ÔÇö todos os m├®todos CRUD | Ô£à Completo |
+| `FormSER.prg` ÔÇö `ConfigurarPaginaDados()` com todos os campos | Ô£à Completo |
+| Integra├º├úo `config.prg` | Ô£à ADIR() autom├ítico (carrega `*BO.prg` e `Form*.prg` dinamicamente) |
+| `menu.prg` ÔÇö `AbrirFormSrv()` | Ô£à Linha 1686 |
+| `menu.prg` ÔÇö BAR 9 "Servi├ºos" em popCadastros | Ô£à Linha 59 |
+| `menu.prg` ÔÇö `ON SELECTION BAR 9 ... DO AbrirFormSrv` | Ô£à Linha 379 |
+
+O formul├írio SIGCDSER tem apenas **3 campos** (C├│digo, Descri├º├úo, Dias para entrega), todos j├í implementados em `ConfigurarPaginaDados()` (linhas 387ÔÇô585 do FormSER.prg). Como s├úo poucos campos, a "primeira metade" j├í foi inclu├¡da junto com a estrutura na fase 4, deixando a fase 5 sem nada adicional a fazer.
+
+A migra├º├úo da task520 (FormSER) est├í 100% completa ÔÇö BO, Form, menu e integra├º├úo autom├ítica via ADIR().

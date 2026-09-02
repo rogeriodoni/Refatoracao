@@ -1,0 +1,21 @@
+﻿Conclu├¡ a an├ílise completa. Ap├│s verifica├º├úo cuidadosa de cada um dos 4 flags, todos s├úo **falsos positivos** ÔÇö n├úo h├í condi├º├Áes inventadas a remover.
+
+---
+
+## Resultado da Verifica├º├úo
+
+### CURSOR_4C_MUN
+**Falso positivo.** O revisor confundiu o nome do cursor-destino no `SQLEXEC` (`"cursor_4c_BuscaMun"`) com uma coluna de WHERE. Nenhuma linha do arquivo tem `WHERE cursor_4c_mun`. N├úo existe essa condi├º├úo no c├│digo.
+
+### RCLIS (linha 1184)
+**N├úo inventado.** O `WHERE Rclis LIKE ...` est├í num bloco CATCH como fallback quando `fAcessoContas` est├í indispon├¡vel. Busca `SigCdCli` por nome de cliente ÔÇö `Rclis` ├® exatamente a coluna de nome/raz├úo social da tabela. O original faz a mesma busca por nome via `fAcessoContas("D", ...)`. Remover o WHERE deixaria a query sem filtro, retornando qualquer registro aleat├│rio.
+
+### DESCS (linhas 1589, 1602)
+**N├úo inventado.** `WHERE a.descs = ...` e `WHERE a.descs LIKE ...` est├úo em `GradMuniMunLostFocus`, validando o nome digitado pelo usu├írio na coluna Munic├¡pio da grade. `descs` ├® a coluna de nome/descri├º├úo de `SigCdMun`. O original usava `Seek(PADR(Value,40), crLocal, "munici")` para a mesma busca ÔÇö o migrado faz isso via SQL diretamente. Remover quebraria a pesquisa de munic├¡pios.
+
+### DPROS (linha 1793)
+**N├úo inventado.** `WHERE a.dpros LIKE ...` est├í em `GradProdDescLostFocus` (handler da coluna de descri├º├úo da grade de produtos), no branch onde `cpros` est├í vazio. `dpros` ├® a coluna de descri├º├úo de `SigCdPro`. Buscar por descri├º├úo quando o usu├írio digitou na coluna de descri├º├úo ├® o comportamento correto. Remover quebraria a pesquisa por produto por descri├º├úo.
+
+---
+
+**Nenhuma altera├º├úo nos arquivos ├® necess├íria.** As 4 condi├º├Áes WHERE s├úo v├ílidas e funcionalmente corretas. Remov├¬-las violaria a regra "NAO remover campos, funcionalidades ou lookups" e introduziria regress├úo (queries sem filtro retornando dados errados).

@@ -1,0 +1,15 @@
+﻿Arquivo criado corretamente. Fase 3 conclu├¡da.
+
+**Resumo do que foi gerado em `FormSed.prg`:**
+
+| M├®todo | Responsabilidade |
+|---|---|
+| `Init(par_oParent, par_cModoAtual)` | Guarda refer├¬ncia ao form pai, seta modo INSERIR/ALTERAR, cria SedBO, chama DODEFAULT() |
+| `InicializarForm()` | Define Picture do fundo (Framework legado), chama ConfigurarCabecalho + ConfigurarBotoesAcao + CarregarDados |
+| `ConfigurarCabecalho()` | Container cinza 1000├ù80 com lbl_4c_LblSombra (sombra preta) e lbl_4c_LblTitulo (branco) ÔÇö cntSombra legado |
+| `ConfigurarBotoesAcao()` | Bot├úo Gerar (Left=840, habilitado s├│ em INSERIR/ALTERAR) e Encerrar (Left=920, Cancel=.T.) |
+| `CarregarDados()` | Chama `SedBO.CarregarSedex(empresa)` ÔåÆ popula cursor_4c_Sedex; vincula ao grid se j├í existir |
+| `TornarControlesVisiveis()` | Recursivo, sem exclus├Áes (form flat sem containers flutuantes) |
+| `Destroy()` | USE IN cursor_4c_Sedex/cursor_4c_SedVerif + nulifica BO/Parent + DODEFAULT() |
+
+**Pr├│ximas fases:** Fase 4 adicionar├í o grid (grd_4c_Dados) e o bot├úo excluir; Fases 5-6 adicionar├úo os textboxes de faixa; Fases 7-8 conectar├úo os eventos (BINDEVENT Click nos bot├Áes).

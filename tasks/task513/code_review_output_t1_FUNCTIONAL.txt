@@ -1,0 +1,50 @@
+﻿Ap├│s an├ílise completa do arquivo real (1958 linhas), os resultados s├úo:
+
+## Diagn├│stico dos 19 Problemas Listados
+
+### BINDEVENT-PARAMS (11 problemas) ÔÇö **J├ü CORRIGIDOS**
+
+Todos os 11 handlers j├í t├¬m os par├ómetros declarados na assinatura do procedimento:
+
+| Handler | Linha | Status |
+|---------|-------|--------|
+| `ValidarDopp` | 1220 | `PROCEDURE ValidarDopp(par_nKeyCode, par_nShiftAltCtrl)` Ô£ô |
+| `ValidarTpop` | 1291 | par├ómetros declarados Ô£ô |
+| `ValidarCgru` | 1376 | par├ómetros declarados Ô£ô |
+| `ValidarDsGrupo` | 1441 | par├ómetros declarados Ô£ô |
+| `ValidarOpPad` | 1485 | par├ómetros declarados Ô£ô |
+| `ValidarGde` | 1500 | par├ómetros declarados Ô£ô |
+| `ValidarGrupos` | 1561 | par├ómetros declarados Ô£ô |
+| `ValidarDgrupos` | 1652 | par├ómetros declarados Ô£ô |
+| `ValidarConta` | 1696 | par├ómetros declarados Ô£ô |
+| `ValidarContaOrig` | 1783 | par├ómetros declarados Ô£ô |
+| `ValidarCor` | 1870 | par├ómetros declarados Ô£ô |
+
+O analisador de c├│digo rodou contra uma vers├úo anterior do arquivo. A corre├º├úo j├í foi aplicada.
+
+### LAYOUT-POSITION (8 problemas) ÔÇö **FALSOS POSITIVOS**
+
+O arquivo tem o coment├írio documentando a compensa├º├úo intencional:
+
+```foxpro
+* Compensa├º├úo: PageFrame.Top = -31, todos os controles precisam +31 no Top
+```
+
+Todos os 8 controles flagados t├¬m exatamente `original + 31` no Top:
+
+| Controle | Original | Migrado | Diff | Explica├º├úo |
+|----------|----------|---------|------|------------|
+| `lbl_4c_Say6` | 329 | 360 | 31px | 329 + 31 Ô£ô |
+| `lbl_4c_Lbl_gde_grupo` | 204 | 235 | 31px | 204 + 31 Ô£ô |
+| `lbl_4c_Say4` | 230 | 261 | 31px | 230 + 31 Ô£ô |
+| `lbl_4c_Lbl_grupo` | 154 | 185 | 31px | 154 + 31 Ô£ô |
+| `lbl_4c_Say34` | 255 | 286 | 31px | 255 + 31 Ô£ô |
+| `lbl_4c_Say3` | 279 | 310 | 31px | 279 + 31 Ô£ô |
+| `obj_4c_Opt_Exclusivo` | 325 | 356 | 31px | 325 + 31 Ô£ô |
+| `lbl_4c_Say42` | 304 | 335 | 31px | 304 + 31 Ô£ô |
+
+O validador usa toler├óncia de 30px mas n├úo conhece a compensa├º├úo de `PageFrame.Top = -31`. Remover o offset quebraria o alinhamento visual.
+
+---
+
+**Nenhuma altera├º├úo necess├íria.** O `FormRop.prg` j├í est├í correto para todos os 19 pontos levantados ÔÇö os BINDEVENT-PARAMS foram resolvidos em vers├úo anterior, e os LAYOUT-POSITION s├úo compensa├º├úo intencional documentada do `PageFrame.Top = -31`.

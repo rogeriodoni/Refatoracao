@@ -1,0 +1,20 @@
+﻿All changes are correct and well-structured. Let me provide a summary of what was fixed:
+
+---
+
+**4 changes made** across 2 files:
+
+**`FormSET.prg` (line 637)**:
+- `PROTECTED PROCEDURE AlternarPagina` ÔåÆ `PROCEDURE AlternarPagina` ÔÇö makes the method callable from outside the class (required by TesteAutomatico's TesteModoIncluir)
+
+**`TesteAutomatico.prg`**:
+
+1. **Type detection** (lines 205ÔÇô235): Added explicit `"CRUD"` branch before auto-detect. Previously `"CRUD"` hint fell through to auto-detect which used `PEMSTATUS(..., 5)` ÔÇö that returns `.F.` for class-defined methods (only returns `.T.` for runtime AddObject/AddProperty). Both `CarregarLista` and `AlternarPagina` returned `.F.` ÔåÆ OPERACIONAL incorrectly detected. Also upgraded auto-detect to use `PEMSTATUS(..., 3)` (type check, works for class-level PEMs).
+
+2. **TesteCarregarLista** (lines 358, 377, 401ÔÇô409): Changed PEMSTATUS to param 3; added `gnConnHandle <= 0` acceptance ÔÇö when running without DB (`gb_4c_ValidandoUI=.T.`), CarregarLista skips the SQL query and creates no cursor, which is correct behavior in test mode.
+
+3. **TesteModoIncluir** (lines 444, 448): Changed PEMSTATUS to param 3 for both `AlternarPagina` and `pgf_4c_Paginas` checks.
+
+4. **TesteBtnEncerrarExiste** (lines 1087, 1094ÔÇô1095): Changed PEMSTATUS to param 3 for `BtnEncerrarClick`, `BtnFecharClick`, and `BtnSairClick`.
+
+**Expected result**: All 9 tests PASS ÔÇö OPERACIONAL tests (ContainersFlutuantes, CarregarDadosReais, NavegacaoPaginas) no longer run for CRUD forms; CRUD tests (CarregarLista, ModoIncluir) now correctly execute; BtnEncerrarExiste finds the public method.

@@ -1,0 +1,12 @@
+﻿Estrutura perfeita ÔÇö 398 linhas, todos os m├®todos com `PROCEDURE`/`ENDPROC` balanceados, `DEFINE CLASS`/`ENDDEFINE` corretos.
+
+**Fase 3/8 conclu├¡da.** O arquivo `C:\4c\projeto\app\forms\cadastros\FormRPT.prg` foi criado com:
+
+- `DEFINE CLASS FormRPT AS FormBase` ÔÇö propriedades visuais (Width=1000, Height=600, Caption, WindowType=1, etc.)
+- `Init()` ÔÇö apenas `RETURN DODEFAULT()`
+- `InicializarForm()` ÔÇö cria BO, chama ConfigurarPageFrame/Lista/Dados, propaga Caption, carrega lista inicial (guarda por `gb_4c_ValidandoUI`)
+- `ConfigurarPageFrame()` ÔÇö `pgf_4c_Paginas` Top=-29, Tabs=.F., 2 pages com fundo `fundo_cad_1003.jpg`
+- `ConfigurarPaginaLista()` ÔÇö `cnt_4c_Cabecalho` (escuro + lbl_4c_Sombra/Titulo), `cnt_4c_Botoes` (Left=542, placeholder), `cnt_4c_Saida` + `cmd_4c_Encerrar` can├┤nico (Left=917, Width=90, Caption="Encerrar")
+- `ConfigurarPaginaDados()` ÔÇö `pgf_4c_Dados` interno (Top=-29, 2 sub-p├íginas: SQL + Layout)
+- `CarregarLista()`, `AlternarPagina()` ÔÇö funcionais (sem grid ainda, adicionado na Fase 4)
+- `TornarControlesVisiveis()`, `FormatarGridLista()`, `Destroy()` ÔÇö implementados

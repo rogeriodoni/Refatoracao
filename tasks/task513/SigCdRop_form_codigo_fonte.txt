@@ -1,0 +1,1220 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigCdRop.SCX
+* Data/Hora: 01/09/2026 18:08:22
+* Total de registros: 27
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDROP
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGCDROP.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGCDROP.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say6
+  Parent: SIGCDROP.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_gde_grupo
+  Parent: SIGCDROP.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGCDROP.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_Cgru
+  Parent: SIGCDROP.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Dopp
+  Parent: SIGCDROP.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Tpop
+  Parent: SIGCDROP.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_gde
+  Parent: SIGCDROP.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Grupos
+  Parent: SIGCDROP.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Dgrupos
+  Parent: SIGCDROP.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_grupo
+  Parent: SIGCDROP.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say40
+  Parent: SIGCDROP.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say34
+  Parent: SIGCDROP.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGCDROP.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say39
+  Parent: SIGCDROP.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_OpPad
+  Parent: SIGCDROP.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: opt_Exclusivo
+  Parent: SIGCDROP.Pagina.Dados
+  Class: optiongroup
+  BaseClass: optiongroup
+
+Objeto: get_ds_grupo
+  Parent: SIGCDROP.Pagina.Dados
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Get_Conta
+  Parent: SIGCDROP.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getCor
+  Parent: SIGCDROP.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say42
+  Parent: SIGCDROP.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_ContaOrig
+  Parent: SIGCDROP.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 181
+  Left = 62
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDROP
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 597
+  Width = 970
+  DoCreate = .T.
+  Caption = "Restrições Por Operação"
+  Name = "SIGCDROP"
+  Pagina.ErasePage = .T.
+  Pagina.Lista.cntSombra.lblSombra.Name = "lblSombra"
+  Pagina.Lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  Pagina.Lista.cntSombra.Top = 1
+  Pagina.Lista.cntSombra.Left = -1
+  Pagina.Lista.cntSombra.Width = 1008
+  Pagina.Lista.cntSombra.Height = 80
+  Pagina.Lista.cntSombra.Name = "cntSombra"
+  Pagina.Lista.Grade.FontName = "Tahoma"
+  Pagina.Lista.Grade.Height = 470
+  Pagina.Lista.Grade.Left = 12
+  Pagina.Lista.Grade.Top = 115
+  Pagina.Lista.Grade.Width = 936
+  Pagina.Lista.Grade.ForeColor = 90,90,90
+  Pagina.Lista.Grade.Name = "Grade"
+  Pagina.Lista.Grupo_op.Inserir.Top = 5
+  Pagina.Lista.Grupo_op.Inserir.Left = 5
+  Pagina.Lista.Grupo_op.Inserir.Name = "Inserir"
+  Pagina.Lista.Grupo_op.Consultar.Top = 5
+  Pagina.Lista.Grupo_op.Consultar.Left = 80
+  Pagina.Lista.Grupo_op.Consultar.Name = "Consultar"
+  Pagina.Lista.Grupo_op.Alterar.Top = 5
+  Pagina.Lista.Grupo_op.Alterar.Left = 155
+  Pagina.Lista.Grupo_op.Alterar.Name = "Alterar"
+  Pagina.Lista.Grupo_op.Excluir.Top = 5
+  Pagina.Lista.Grupo_op.Excluir.Left = 230
+  Pagina.Lista.Grupo_op.Excluir.Name = "Excluir"
+  Pagina.Lista.Grupo_op.procurar.Top = 5
+  Pagina.Lista.Grupo_op.procurar.Left = 305
+  Pagina.Lista.Grupo_op.procurar.Name = "procurar"
+  Pagina.Lista.Grupo_op.Left = 515
+  Pagina.Lista.Grupo_op.Top = 0
+  Pagina.Lista.Grupo_op.Name = "Grupo_op"
+  Pagina.Lista.Grupo_Saida.Sair.Top = 5
+  Pagina.Lista.Grupo_Saida.Sair.Left = 5
+  Pagina.Lista.Grupo_Saida.Sair.Name = "Sair"
+  Pagina.Lista.Grupo_Saida.Left = 890
+  Pagina.Lista.Grupo_Saida.Top = 0
+  Pagina.Lista.Grupo_Saida.Name = "Grupo_Saida"
+  Pagina.Lista.cntFiltros.Top = 49
+  Pagina.Lista.cntFiltros.Left = 155
+  Pagina.Lista.cntFiltros.Name = "cntFiltros"
+  Pagina.Lista.Picture = ..\framework\imagens\new_background.jpg
+  Pagina.Lista.Name = "Lista"
+  Pagina.Dados.Grupo_Salva.Salva.Top = 5
+  Pagina.Dados.Grupo_Salva.Salva.Left = 5
+  Pagina.Dados.Grupo_Salva.Salva.Name = "Salva"
+  Pagina.Dados.Grupo_Salva.Cancelar.Top = 5
+  Pagina.Dados.Grupo_Salva.Cancelar.Left = 80
+  Pagina.Dados.Grupo_Salva.Cancelar.Name = "Cancelar"
+  Pagina.Dados.Grupo_Salva.Left = 791
+  Pagina.Dados.Grupo_Salva.Top = 20
+  Pagina.Dados.Grupo_Salva.TabIndex = 24
+  Pagina.Dados.Grupo_Salva.ZOrderSet = 1
+  Pagina.Dados.Grupo_Salva.Name = "Grupo_Salva"
+  Pagina.Dados.Picture = ..\framework\imagens\new_background.jpg
+  Pagina.Dados.Name = "Dados"
+  Pagina.Top = -31
+  Pagina.Left = -2
+  Pagina.Width = 1003
+  Pagina.Height = 635
+  Pagina.Name = "Pagina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDROP.Pagina.Dados.Say1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Tipo de Movimentação :"
+  Left = 204
+  Top = 128
+  TabIndex = 3
+  ForeColor = 90,90,90
+  ZOrderSet = 2
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDROP.Pagina.Dados.Say2
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Movimentação :"
+  Left = 242
+  Top = 102
+  TabIndex = 1
+  ForeColor = 90,90,90
+  ZOrderSet = 2
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDROP.Pagina.Dados.Say6
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Exclusivo :"
+  Height = 15
+  Left = 267
+  Top = 329
+  Visible = .T.
+  Width = 53
+  TabIndex = 22
+  ForeColor = 90,90,90
+  ZOrderSet = 3
+  Name = "Say6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDROP.Pagina.Dados.lbl_gde_grupo
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Grande Grupo :"
+  Height = 15
+  Left = 244
+  Top = 204
+  Width = 76
+  TabIndex = 11
+  ForeColor = 90,90,90
+  ZOrderSet = 5
+  Name = "lbl_gde_grupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDROP.Pagina.Dados.Say4
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Grupo :"
+  Left = 282
+  Top = 230
+  TabIndex = 13
+  ForeColor = 90,90,90
+  ZOrderSet = 5
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDROP.Pagina.Dados.get_Cgru
+------------------------------------------------------------
+  Value = 
+  ControlSource = "crSigCdRpo.cgrus"
+  Format = "K"
+  InputMask = ""
+  Left = 328
+  SpecialEffect = 1
+  TabIndex = 6
+  Top = 150
+  Width = 31
+  BorderColor = 90,90,90
+  ZOrderSet = 7
+  Name = "get_Cgru"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDROP.Pagina.Dados.Get_Dopp
+------------------------------------------------------------
+  Value = 
+  ControlSource = "crSigCdRpo.dopps"
+  Format = "K"
+  InputMask = ""
+  Left = 328
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 98
+  Width = 150
+  BorderColor = 90,90,90
+  ZOrderSet = 7
+  Name = "Get_Dopp"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDROP.Pagina.Dados.Get_Tpop
+------------------------------------------------------------
+  Value = 
+  ControlSource = "crSigCdRpo.TpOps"
+  Format = "K"
+  InputMask = ""
+  Left = 328
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 124
+  Width = 115
+  BorderColor = 90,90,90
+  ZOrderSet = 7
+  Name = "Get_Tpop"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDROP.Pagina.Dados.Get_gde
+------------------------------------------------------------
+  ControlSource = "crSigCdRpo.mercs"
+  Format = "!K"
+  Height = 23
+  Left = 328
+  MaxLength = 3
+  SpecialEffect = 1
+  TabIndex = 12
+  Top = 200
+  Width = 33
+  BorderColor = 90,90,90
+  ZOrderSet = 10
+  Name = "Get_gde"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDROP.Pagina.Dados.Get_Grupos
+------------------------------------------------------------
+  Value = 
+  ControlSource = "crSigCdRpo.Grupos"
+  Format = "K"
+  InputMask = ""
+  Left = 328
+  SpecialEffect = 1
+  TabIndex = 14
+  Top = 226
+  Width = 80
+  BorderColor = 90,90,90
+  ZOrderSet = 10
+  Name = "Get_Grupos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDROP.Pagina.Dados.Get_Dgrupos
+------------------------------------------------------------
+  Value = 
+  Format = "K"
+  Height = 23
+  InputMask = ""
+  Left = 411
+  SpecialEffect = 1
+  TabIndex = 15
+  Top = 226
+  Width = 162
+  BorderColor = 90,90,90
+  ZOrderSet = 12
+  Name = "Get_Dgrupos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDROP.Pagina.Dados.lbl_grupo
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = "Grupo de Produto :"
+  Height = 15
+  Left = 226
+  Top = 154
+  Width = 94
+  TabIndex = 5
+  ForeColor = 90,90,90
+  ZOrderSet = 52
+  Name = "lbl_grupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDROP.Pagina.Dados.Say40
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "(E / S)"
+  Height = 15
+  Left = 352
+  Top = 180
+  Width = 32
+  TabIndex = 10
+  ForeColor = 90,90,90
+  ZOrderSet = 32
+  Name = "Say40"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDROP.Pagina.Dados.Say34
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Conta Destino :"
+  Left = 243
+  Top = 255
+  TabIndex = 16
+  ForeColor = 90,90,90
+  ZOrderSet = 15
+  Name = "Say34"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDROP.Pagina.Dados.Say3
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Conta Origem :"
+  Left = 245
+  Top = 279
+  TabIndex = 18
+  ForeColor = 90,90,90
+  ZOrderSet = 15
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDROP.Pagina.Dados.Say39
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Operação Estoque :"
+  Height = 15
+  Left = 222
+  Top = 180
+  Width = 98
+  TabIndex = 8
+  ForeColor = 90,90,90
+  ZOrderSet = 32
+  Name = "Say39"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDROP.Pagina.Dados.Get_OpPad
+------------------------------------------------------------
+  FontName = "Courier New"
+  Alignment = 3
+  Value = 
+  ControlSource = "crSigCdRpo.Opers"
+  Height = 20
+  InputMask = ""
+  Left = 328
+  SpecialEffect = 1
+  TabIndex = 9
+  Top = 177
+  Width = 17
+  BorderColor = 90,90,90
+  ZOrderSet = 69
+  Name = "Get_OpPad"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDROP.Pagina.Dados.opt_Exclusivo
+------------------------------------------------------------
+  AutoSize = .F.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 2
+  ControlSource = "crSigCdRpo.Exclus"
+  Height = 23
+  Left = 326
+  Top = 325
+  Width = 86
+  TabIndex = 23
+  Name = "opt_Exclusivo"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.BackStyle = 0
+  Option1.Caption = "Sim"
+  Option1.Value = 0
+  Option1.Height = 15
+  Option1.Left = 2
+  Option1.Top = 4
+  Option1.Width = 34
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Não"
+  Option2.Value = 1
+  Option2.Height = 15
+  Option2.Left = 44
+  Option2.Top = 4
+  Option2.Width = 37
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDROP.Pagina.Dados.get_ds_grupo
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Courier New"
+  ControlSource = ""
+  Format = "K!"
+  Height = 23
+  Left = 361
+  MaxLength = 20
+  SpecialEffect = 1
+  TabIndex = 7
+  Top = 150
+  Width = 213
+  BorderColor = 90,90,90
+  Name = "get_ds_grupo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDROP.Pagina.Dados.Get_Conta
+------------------------------------------------------------
+  ControlSource = "crSigCdRpo.Contas"
+  Height = 21
+  Left = 328
+  Margin = 0
+  SpecialEffect = 1
+  TabIndex = 17
+  Top = 252
+  Width = 80
+  BorderColor = 90,90,90
+  ZOrderSet = 36
+  Name = "Get_Conta"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDROP.Pagina.Dados.getCor
+------------------------------------------------------------
+  ControlSource = "crSigCdRpo.CodCors"
+  Left = 328
+  SpecialEffect = 1
+  TabIndex = 21
+  Top = 300
+  Width = 38
+  BorderColor = 90,90,90
+  Name = "getCor"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDROP.Pagina.Dados.Say42
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Cor :"
+  Left = 294
+  Top = 304
+  TabIndex = 20
+  ForeColor = 90,90,90
+  Name = "Say42"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDROP.Pagina.Dados.Get_ContaOrig
+------------------------------------------------------------
+  ControlSource = "crSigCdRpo.ContaOrig"
+  Height = 21
+  Left = 328
+  Margin = 0
+  SpecialEffect = 1
+  TabIndex = 19
+  Top = 276
+  Width = 80
+  BorderColor = 90,90,90
+  ZOrderSet = 36
+  Name = "Get_ContaOrig"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Courier New, 0, 8, 7, 14, 11, 8, 3, 0
+  Courier New, 0, 9, 7, 15, 12, 9, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDROP
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+lcQryOpt = [Select * From SigCdRpo ]
+
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		With .poDataMgr
+			.AddCursor('SigCdRpo', 'cIdChaves', 'crSigCdRpo', '', ThisForm.Pagina.Lista.Grade, lcQryOpt)
+			.pfSqlTabela(1).pColuna('Dopps', '', '', 'Operação', 150, .t.)
+			.pfSqlTabela(1).pColuna('TpOps', '', '', 'Tipo de Material', 120, .t.)
+			.pfSqlTabela(1).pColuna('Cgrus', '', '', 'Grp.Produto', 80, .t.)
+			.pfSqlTabela(1).pColuna('opers', '', '', 'E/S', 30, .f.)
+			.pfSqlTabela(1).pColuna('mercs', '', '', 'Gde.Grupo', 70, .f.)
+			.pfSqlTabela(1).pColuna('Grupos', '', '', 'Grupo', 80, .f.)
+			.pfSqlTabela(1).pColuna('Contas', '', '', 'Conta Destino', 80, .f.)
+			.pfSqlTabela(1).pColuna('ContaOrig', '', '', 'Conta Origem', 80, .f.)
+			.pfSqlTabela(1).pColuna('CodCors', '', '', 'Cor', 44, .f.)
+		EndWith
+
+		=DoDefault()
+		
+		CREATE Cursor TmpOpe (Dopps c(20))
+		INDEX ON Dopps TAG Dopps
+		
+		If ThisForm.poDataMgr.SqlExecute([Select Dopes From SigCdOpe ],'CrOpe') < 1
+			MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (CrOpe)')
+			Return(.F.)
+		EndIf
+		
+		Select CrOpe
+		Scan
+			Insert Into TmpOpe (Dopps ) Values (CrOpe.Dopes )
+		EndScan
+
+		If ThisForm.poDataMgr.SqlExecute([Select Dopps From SigCdOpd ],'Cropp') < 1
+			MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (Cropp)')
+			Return(.F.)
+		EndIf
+		
+		Select CrOpp
+		Scan
+			Insert Into TmpOpe (Dopps ) Values (Cropp.dopps )
+		EndScan
+
+		ThisForm.Pagina.Lista.Grade.Column1.SetFocus
+	Else
+		=Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+=DoDefault()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_procurar
+------------------------------------------------------------
+PROCEDURE msv_procurar
+=DoDefault()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.podatamgr.Release
+=DoDefault()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Lista.Grupo_op.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Lista.Grupo_op.Click
+LPARAMETERS opcao
+If !dodefault( Opcao )
+	ThisForm.mAtivapagina1
+	Return
+Endif
+
+lcSql = [Select Dgrus From SigCdGrp Where Cgrus = ']+CrSigCdRpo.Cgrus+[']
+If ThisForm.Podatamgr.Sqlexecute(lcSql,'LocalGru') < 0
+	MessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (LocalGru)')
+	Return(.F.)
+Endif
+Select crSigCdRpo
+
+ThisForm.Pagina.Dados.Get_ds_grupo.Value = LocalGru.Dgrus
+
+* posiciona o cursor de acordo com a opção
+Do Case
+	Case Inlist( ThisForm.pcEscolha, 'INSERIR', 'PROCURAR' )
+		thisform.pagina.dados.get_Dopp.setfocus	
+	Case ThisForm.pcEscolha = 'ALTERAR'
+		thisform.pagina.dados.get_Dopp.setfocus
+	Case Inlist( ThisForm.pcEscolha, 'CONSULTAR', 'EXCLUIR' )
+		thisform.pagina.dados.grupo_salva.salva.setfocus
+Endcase
+
+ThisForm.Pagina.Dados.Refresh
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+With ThisForm.Pagina.Dados
+	If InList(ThisForm.pcEscolha,'INSERIR','ALTERAR')
+		If IsEmpty(.Get_Dopp.Value)
+			MessageBox( 'Obrigatório Informar o Operação de Produção.', 48, '' )
+			.Get_Dopp.SetFocus
+			Return
+		EndIf
+		If IsEmpty(.Get_TpOp.Value) And IsEmpty(.Get_Cgru.Value) AND IsEmpty(.Get_gde.Value) And IsEmpty(.Get_Grupos.Value)
+			MessageBox( 'Obrigatório Informar o Tipo de Material Ou Grupo de Produto Ou Grande Grupo Ou Grupo Conta', 48, '' )
+			.Get_Gde.SetFocus
+			Return
+		EndIf
+		
+		If ThisForm.pcEscolha = 'INSERIR'
+			Replace cIdChaves With fUniqueIds() In crSigCdRpo
+		Endif
+
+		lcQuery = [Select cIdChaves ] + ;
+				    [From SigCdRpo ] + ;
+				   [Where Dopps = '] + crSigCdRpo.Dopps + [' And ] + ;
+				   		 [TpOps = '] + crSigCdRpo.TpOps + [' And ] + ;
+				   		 [CGrus = '] + crSigCdRpo.CGrus + [' And ] + ;
+				   		 [Mercs = '] + crSigCdRpo.Mercs + [' And ] + ;
+				   		 [Grupos = ']+ crSigCdRpo.Grupos+ [' And ] + ;
+				   		 [Contas = ']+ crSigCdRpo.Contas+ [' And ] + ;
+				   		 [ContaOrig = ']+ crSigCdRpo.ContaOrig+ [' And ] + ;
+				   		 [CodCors= ']+ crSigCdRpo.CodCors+[' And ] + ;
+				   		 [Not cIdChaves = '] + crSigCdRpo.cIdChaves + [']
+
+		If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalBusca]) < 1)
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalBusca)])
+			Return 0
+		EndIf
+		Go Top In LocalBusca
+	 	If Not Eof([LocalBusca])
+			MessageBox( 'Restrição já cadastrada...', 48, '' )
+			ThisForm.Pagina.Dados.Get_dopp.SetFocus
+			Return
+		EndIf 
+		
+		Replace DopTpGrus WITH .Get_Dopp.Value + .Get_TpOp.Value + .Get_Cgru.Value + .Get_Gde.Value + .Get_Grupos.Value In CrSigCdRpo
+	Endif
+EndWith
+=DoDefault()
+ThisForm.mAtivapagina1
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+=DoDefault()
+If ThisForm.plCancelar
+	ThisForm.mAtivapagina1
+Endif
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDROP.Pagina.Dados.get_Cgru
+* Classe: fwget (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !Empty(This.Value)
+	m.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigCdGrp','CrGrupos','CGrus',This.Value,'Grupos',.T.)
+	If !(m.loLista.plAchouRegistro)
+		m.loLista.mAddColuna('CGrus','XXXXXX','Código')
+		m.loLista.mAddColuna('DGrus','','Descrição')
+		m.loLista.Show()
+	EndIf
+	If LastKey() <> 27 And Used('CrGrupos')
+		This.Value = Evaluate('CrGrupos.CGrus')
+		This.parent.get_ds_grupo.Value = Evaluate('CrGrupos.Dgrus')
+	Else
+		This.Value = ' '
+		This.parent.get_ds_grupo.Value = ' '
+	EndIf
+EndIf
+This.Refresh
+This.parent.get_ds_grupo.Refresh
+Return(.T.)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist(ThisForm.pcEscolha, "INSERIR","ALTERAR","PROCURAR")
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDROP.Pagina.Dados.Get_Dopp
+* Classe: fwget (Base: textbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If Empty(This.Value)
+	Return(.T.)
+EndIf
+If Not Seek(This.Value,'TmpOpe','Dopps')
+	loBrowse = CreateObject('fwBuscaSel', 'TmpOpe', 'Dopps', This.Value, 'Cadastro de Tipos de Operação')
+	loBrowse.AddColuna('dopps','','Operação',.t.,'dopps')
+	loBrowse.Show
+	This.Value = TmpOpe.Dopps
+Endif
+This.Refresh
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist(ThisForm.pcEscolha, "INSERIR","ALTERAR","PROCURAR")
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDROP.Pagina.Dados.Get_Tpop
+* Classe: fwget (Base: textbox)
+* Registro: 11
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local lCod, lFan, xObj
+
+If Not Empty(This.Value)
+
+	lcQuery = [Select Cods, Descs, pFalhas, Grupos ] + ;
+				[From SigOpOpt ] + ;
+			   [Where Not Situas = 2]
+
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'TmpOpt') < 1)
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (TmpOpt)')
+		Return 0
+	EndIf
+	Select TmpOpt
+	Index On Cods Tag Cods
+
+	If Not Seek(This.Value)
+		loBrowse = CreateObject('fwBuscaSel', 'TmpOpt', 'Cods', This.Value, 'Cadastro de Tipos de Operação')
+		loBrowse.AddColuna('Cods', 	  '', 'Código', .t., 'Cods')
+		loBrowse.AddColuna('Descs',   '', 'Descrição')
+		loBrowse.Show
+		This.Value = TmpOpt.Cods
+		This.Refresh
+	EndIf
+	Use In TmpOpt
+EndIf
+Return .t.
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist(ThisForm.pcEscolha, "INSERIR","ALTERAR","PROCURAR")
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDROP.Pagina.Dados.Get_gde
+* Classe: fwget (Base: textbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !Empty(This.Value)
+	m.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigCdGpr','CrGdeGrupo','codigos',This.Value,'Grandes Grupos',.T.)
+	If !(m.loLista.plAchouRegistro)
+		m.loLista.mAddColuna('codigos','XXXXXXXXXX','Código')
+		m.loLista.mAddColuna('descs','XXXXXXXXXXXXXXXXXXXX','Descrição')
+		m.loLista.Show()
+	EndIf
+	If LastKey() <> 27 And Used('CrGdeGrupo')
+		This.Value = Evaluate('CrGdeGrupo.codigos')
+	Else
+		This.Value = ''
+	EndIf
+ 	This.Refresh
+EndIf
+Return(.T.)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist(ThisForm.pcEscolha, "INSERIR","ALTERAR")
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDROP.Pagina.Dados.Get_Grupos
+* Classe: fwget (Base: textbox)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !IsEmpty(this.value)
+	fAcessoContab(Usuar,'C',this.value,This,Thisform.pagina.dados.get_Dgrupos)
+Else
+	Thisform.pagina.dados.get_dGrupos.value = ''
+	Thisform.pagina.dados.get_dGrupos.refresh
+endif
+select crSigCdRpo
+return(.t.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDROP.Pagina.Dados.Get_Dgrupos
+* Classe: fwget (Base: textbox)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !IsEmpty(this.value)
+	fAcessoContab(Usuar,'D',this.value,thisform.pagina.dados.get_Grupos,this)
+Else
+	thisform.pagina.dados.get_Grupos.value = ''
+	thisform.pagina.dados.get_Grupos.refresh
+endif
+return(.t.)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(IsEmpty(Thisform.pagina.dados.get_grupos.value) AND ;
+       Inlist(ThisForm.pcEscolha, "INSERIR", "ALTERAR"))
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDROP.Pagina.Dados.Get_OpPad
+* Classe: fwget (Base: textbox)
+* Registro: 20
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !Empty( This.Value ) And !InList(This.Value,'E','S')
+	MessageBox('Opção Inválida. Digite Apenas [E] ou [S] ou [ ] !!!',0+48,'')
+	Return 0
+Endif
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist(ThisForm.pcEscolha, "INSERIR","ALTERAR")
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDROP.Pagina.Dados.opt_Exclusivo
+* Classe: optiongroup (Base: optiongroup)
+* Registro: 21
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(InList(ThisForm.pcEscolha,'INSERIR','ALTERAR'))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDROP.Pagina.Dados.get_ds_grupo
+* Classe: textbox (Base: textbox)
+* Registro: 22
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+With This.parent
+	If Empty(This.Value)
+		.get_Cgru.Value = ''
+		.get_Cgru.Refresh
+	Else
+		m.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigCdGrp','CrGrupos','DGrus',This.Value,'Grupos',.T.)
+		If !(m.loLista.plAchouRegistro)
+			m.loLista.mAddColuna('DGrus','','Descrição')
+			m.loLista.mAddColuna('CGrus','XXXXXX','Código')
+			m.loLista.Show()
+		EndIf
+		If LastKey() <> 27 And Used('CrGrupos')
+			.Get_Cgru.Value     = Evaluate('CrGrupos.cgrus')
+			.Get_Ds_Grupo.Value = Evaluate('CrGrupos.dgrus')
+		Else
+			.Get_Cgru.Value = ''
+			.Get_Ds_Grupo.Value = ''
+		EndIf
+	EndIf
+	.Get_Cgru.Refresh
+	.Get_Ds_Grupo.Refresh
+EndWith
+Return(.T.)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (Empty(This.parent.get_Cgru.Value))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDROP.Pagina.Dados.Get_Conta
+* Classe: fwget (Base: textbox)
+* Registro: 23
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+grupo = ''
+If !IsEmpty(This.value)
+	If !fAcessoContas(Usuar,grupo,'C',This.value,This)
+		Messagebox('Acesso Negado !!',0+48,'')
+		This.Value=''
+		This.Refresh
+		return 0 
+	Endif
+Else
+	return(.t.)
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDROP.Pagina.Dados.getCor
+* Classe: fwget (Base: textbox)
+* Registro: 24
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdCor', ;
+						   'CrListaRemota', 'Cods', This.Value, 'Seleção', .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Cods',  '', 'Código')
+		loLista.mAddColuna('Descs', '', 'Descrição')
+		loLista.Show()
+	EndIf
+	
+	This.Value = CrListaRemota.Cods
+	Use In CrListaRemota
+EndIf
+This.Refresh
+* Fim *********************************************************************************
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDROP.Pagina.Dados.Get_ContaOrig
+* Classe: fwget (Base: textbox)
+* Registro: 26
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+grupo = ''
+If !IsEmpty(This.value)
+	If !fAcessoContas(Usuar,grupo,'C',This.value,This)
+		Messagebox('Acesso Negado !!',0+48,'')
+		This.Value=''
+		This.Refresh
+		return 0 
+	Endif
+Else
+	return(.t.)
+EndIf
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 26
+================================================================================

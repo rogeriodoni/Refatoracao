@@ -1,0 +1,18 @@
+﻿**Fase 3/8 conclu├¡da.** `FormSER.prg` (938 linhas) criado em `projeto\app\forms\cadastros\` com implementa├º├úo **100% completa**:
+
+**Estrutura implementada:**
+- `DEFINE CLASS FormSER AS FormBase` ÔÇö propriedades visuais exatas (Width=1000, Height=600, DataSession=2)
+- `Init()` ÔåÆ apenas `DODEFAULT()` (FormBase.Init chama InicializarForm)
+- `InicializarForm()` ÔÇö cria SERBO, PageFrame, configura p├íginas, carrega lista
+- `ConfigurarPageFrame()` ÔÇö Top=-29, Tabs=.F., 2 pages com fundo canonico
+- `ConfigurarPaginaLista()` ÔÇö cabecalho, 5 bot├Áes CRUD, cnt_4c_Saida canonico (Left=917), grid com 2 colunas (Cods/Descs)
+- `ConfigurarPaginaDados()` ÔÇö bot├Áes Confirmar/Cancelar, 3 labels + 3 TextBoxes com compensa├º├úo +29
+- Todos os m├®todos CRUD: `BtnIncluirClick`, `BtnVisualizarClick`, `BtnAlterarClick`, `BtnExcluirClick`, `BtnBuscarClick`, `BtnSalvarClick`, `BtnCancelarClick`, `BtnEncerrarClick`
+- `FormParaBO/BOParaForm/LimparCampos/HabilitarCampos/AjustarBotoesPorModo/ValidarCampos`
+- `TornarControlesVisiveis` + `FormatarGridLista` + `Destroy`
+
+**Integra├º├úo:**
+- `config.prg` ÔÇö carrega automaticamente via ADIR() `*BO.prg` e `cadastros\Form*.prg`
+- `menu.prg` ÔÇö `AbrirFormSrv` corrigido para `CREATEOBJECT("FormSER")` (BAR 9 j├í estava wired)
+
+**Regras VFP9 aplicadas:** sem RETURN dentro de TRY/CATCH, sem `ISEMPTY()`, sem acentos literais (CHR()), BINDEVENT s├│ em m├®todos PUBLIC, `getCods.When` replicado em `HabilitarCampos` (c├│digo edit├ível s├│ em INCLUIR), foco correto por modo (CodigoÔåÆINCLUIR, DescricaoÔåÆALTERAR, ConfirmarÔåÆVISUALIZAR).

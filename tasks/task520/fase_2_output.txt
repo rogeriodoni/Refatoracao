@@ -1,0 +1,9 @@
+﻿SERBO.prg completo. Fase 2/8 conclu├¡da com todos os m├®todos CRUD implementados:
+
+- **`Buscar(par_cFiltro)`** ÔÇö SELECT com filtro opcional em Cods/Descs, ordena por Cods
+- **`CarregarPorCodigo(par_cCodigo)`** ÔÇö SELECT por `cIdChaves`, reseta `this_lNovoRegistro = .F.`
+- **`CarregarDoCursor(par_cAliasCursor)`** ÔÇö usa `SELECT (alias)` antes de acessar campos (padr├úo correto), mapeia todos os 4 campos
+- **`ObterChavePrimaria()`** ÔÇö retorna `this_cIdChaves` para auditoria
+- **`Inserir()`** (PROTECTED) ÔÇö verifica duplicidade de `Cods` antes do INSERT, gera UUID via `fUniqueIds()`, registra auditoria
+- **`Atualizar()`** (PROTECTED) ÔÇö UPDATE em `Descs` e `qtDias` (Cods n├úo ├® alterado ap├│s insert, conforme padr├úo legado), registra auditoria
+- **`ExecutarExclusao()`** (PROTECTED) ÔÇö DELETE por `cIdChaves`, registra auditoria

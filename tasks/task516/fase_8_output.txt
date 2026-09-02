@@ -1,0 +1,16 @@
+﻿Tudo correto. A Fase 8 est├í completa. Resumo do que foi feito:
+
+**Verifica├º├úo da Fase 8:**
+- `BtnBuscarClick()`, `BtnEncerrarClick()` ÔÇö j├í existiam (fases anteriores)
+- `BtnSalvarClick()`, `BtnCancelarClick()` ÔÇö j├í existiam
+- `FormParaBO()`, `BOParaForm()` ÔÇö j├í existiam (todos os campos mapeados)
+- `HabilitarCampos()`, `LimparCampos()` ÔÇö j├í existiam
+- `CarregarLista()` ÔÇö j├í existia
+- `AjustarBotoesPorModo()` ÔÇö **adicionado agora** (controla Confirmar enable/disable por modo)
+
+**Integra├º├úo com menu.prg (adicionada agora):**
+- `DEFINE BAR 167 OF popCadastros PROMPT "Exclusividade Por Contas"` (linha 364)
+- `ON SELECTION BAR 167 OF popCadastros DO AbrirFormrst` (linha 517)
+- `PROCEDURE AbrirFormrst()` com padr├úo can├┤nico VARTYPE/Show/sem Release (linha 9801)
+
+**config.prg:** nenhuma altera├º├úo necess├íria ÔÇö usa `ADIR()` para carregamento din├ómico de `*BO.prg` e `Form*.prg`, ent├úo `rstBO.prg` e `Formrst.prg` s├úo carregados automaticamente.

@@ -1,0 +1,15 @@
+﻿FormRss.prg criado com 310 linhas. **Fase 3/8 conclu├¡da.**
+
+O arquivo cont├®m:
+- `DEFINE CLASS FormRss AS FormBase` com propriedades visuais can├┤nicas (Height=600, Width=1000, DataSession=2)
+- `Init()` ÔÇö apenas `RETURN DODEFAULT()` via TRY/CATCH
+- `InicializarForm()` ÔÇö cria RssBO, configura PageFrame, chama CarregarLista() com guard `gb_4c_ValidandoUI`
+- `ConfigurarPageFrame()` ÔÇö PageFrame.Top=-29, Tabs=.F., 2 pages com fundo `fundo_cad_1003.jpg`
+- `ConfigurarPaginaLista()` ÔÇö containers `cnt_4c_Cabecalho` (com lbl_4c_Sombra/Titulo), `cnt_4c_Botoes` (Left=542, can├┤nico), `cnt_4c_Saida` (Left=917, can├┤nico CLAUDE.md #10)
+- `ConfigurarPaginaDados()` ÔÇö container `cnt_4c_BotoesAcao` (Left=842)
+- `CarregarLista()` ÔÇö chama `RssBO.Buscar("")`; binding ao grid vem na Fase 4
+- `AlternarPagina()` ÔÇö completo, troca ActivePage e recarrega lista ao voltar para Page1
+- `FormatarGridLista()` + `TornarControlesVisiveis()` ÔÇö completos
+- `Destroy()` ÔÇö libera BO e chama DODEFAULT()
+
+**Pr├│xima fase (4/8):** Grid + bot├Áes CRUD em Page1 e bot├Áes Confirmar/Cancelar em Page2.

@@ -1,0 +1,14 @@
+﻿Fase 4 conclu├¡da. O arquivo `FormSEG.prg` foi atualizado com:
+
+**`ConfigurarPaginaLista()`** ÔÇö completo com:
+- 5 bot├Áes em `cnt_4c_Botoes` (Incluir L=5, Visualizar L=80, Alterar L=155, Excluir L=230, Buscar L=305) com BINDEVENTs
+- `cmd_4c_Encerrar` em `cnt_4c_Saida` no padr├úo can├┤nico (Left=917)
+- `grd_4c_Lista` (Top=126, Left=30, Width=880, Height=458, 2 colunas, Verdana, GridLines=3)
+
+**`CarregarLista()`** ÔÇö completo com binding real:
+- `RecordSource = "cursor_4c_Dados"` + `ControlSource` para `codigos`/`descs`
+- Widths: 80px e 160px (do Init original: `.pColuna 'codigos' 80 + 'descs' 160`)
+- `Header1.Caption`: "C├│digo" e "Descri├º├úo" (via CHR())
+- Reconfigura headers ap├│s RecordSource (evita reset ÔÇö padr├úo FORMCOR_LICOES #2)
+
+**`AlternarPagina(par_nPagina)`** ÔÇö com valida├º├úo de range, TRY/CATCH, e recarga autom├ítica ao voltar para Page1.

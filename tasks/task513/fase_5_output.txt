@@ -1,0 +1,13 @@
+﻿The migration of `FormRop` is now complete across all 8 phases. Here's a summary of what Phase 6 added:
+
+**Phase 6 ÔÇö ConfigurarPaginaDados() additions (5 new field groups):**
+- `txt_4c_Grupo` + `txt_4c_Dgrupos` ÔÇö Grupo Cont├íbil code/description pair (SigCdGcr, bidirectional lookup)
+- `txt_4c_Conta` ÔÇö Conta Destino (SigCdCli.IClis lookup)
+- `txt_4c_ContaOrig` ÔÇö Conta Origem (SigCdCli.IClis lookup)
+- `txt_4c_Cor` ÔÇö Cor (SigCdCor.Cods lookup)
+- `obj_4c_Opt_Exclusivo` ÔÇö OptionGroup Sim/N├úo (Value=2 default = N├úo)
+
+**13 new methods added:**
+ValidarGrupos, TeclaPressionadaGrupos, AbrirBuscaGrupos, ValidarDgrupos, ValidarConta, TeclaPressionadaConta, AbrirBuscaConta, ValidarContaOrig, TeclaPressionadaContaOrig, AbrirBuscaContaOrig, ValidarCor, TeclaPressionadaCor, AbrirBuscaCor
+
+**Also fixed:** `MostrarErro` ÔåÆ `MsgErro` in `menu.prg:AbrirFormRop`, and corrected label name mismatches in `mapeamento.json`.

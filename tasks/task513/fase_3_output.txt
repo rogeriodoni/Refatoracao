@@ -1,0 +1,12 @@
+﻿`FormRop.prg` criado com 296 linhas. A Fase 3 entregou:
+
+- **DEFINE CLASS FormRop AS FormBase** com todas as propriedades visuais (Width=1000, Height=600, DataSession=2, WindowType=1, etc.)
+- **Init()** ÔÇö apenas `DODEFAULT()` dentro de TRY/CATCH
+- **InicializarForm()** ÔÇö cria RopBO, chama `ConfigurarPageFrame()`, guarda contra `gb_4c_ValidandoUI`, ativa Page1
+- **ConfigurarPageFrame()** ÔÇö PageFrame.Top=-31, Width=THIS.Width+4, Height=631, Tabs=.F., chama Paginax
+- **ConfigurarPaginaLista()** ÔÇö containers `cnt_4c_Cabecalho` (com lbl_4c_Sombra/lbl_4c_Titulo e caption corretamente codificado com CHR()), `cnt_4c_Botoes` (Left=520, Height=85), `cnt_4c_Saida` (Left=917 can├┤nico)
+- **ConfigurarPaginaDados()** ÔÇö container `cnt_4c_BotoesAcao` (Left=842, Top=51 = 20+31 compensa├º├úo)
+- **CarregarLista()** ÔÇö chama `BO.Buscar("")` sem tentar acessar o grid (que s├│ existe na Fase 4)
+- **AlternarPagina()**, **TornarControlesVisiveis()**, **FormatarGridLista()**, **Destroy()** ÔÇö implementa├º├Áes completas
+
+Pr├│xima fase (Fase 4): adicionar `grd_4c_Lista` em Page1 + 5 bot├Áes CRUD em `cnt_4c_Botoes` + bot├úo `cmd_4c_Encerrar` em `cnt_4c_Saida`, e completar `CarregarLista()` com o binding do grid.

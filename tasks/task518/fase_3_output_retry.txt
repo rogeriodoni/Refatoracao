@@ -1,0 +1,11 @@
+﻿Fase 3 conclu├¡da. FormSed.prg reescrito com escopo de "estrutura base":
+
+- `DEFINE CLASS FormSed AS FormBase` + propriedades visuais/estado
+- `Init(par_oParent, par_cModoAtual)` ÔÇö cria SedBO, delega ao `DODEFAULT()`
+- `InicializarForm()` ÔÇö Picture do fundo + Cabecalho + Botoes + `TornarControlesVisiveis`, retorna `.T./.F.`
+- `ConfigurarCabecalho()` ÔÇö cnt_4c_Cabecalho (cinza 1000x80) com lbl_4c_LblSombra (preta) + lbl_4c_LblTitulo (branca)
+- `ConfigurarBotoesAcao()` ÔÇö cmd_4c_Cmdprocessar (Gerar, Left=840) + cmd_4c_Sair (Encerrar, Left=920, Cancel=.T.)
+- `TornarControlesVisiveis()` recursivo
+- `Destroy()` ÔÇö libera cursores + nulifica refs + `DODEFAULT()` (rebuild menu)
+
+Removido desta fase: `CarregarDados` (chamada a `SedBO.CarregarSedex` movida para fases posteriores junto com o grid). Sem TODOs, sem stubs, sem m├®todos vazios ÔÇö c├│digo funcional.

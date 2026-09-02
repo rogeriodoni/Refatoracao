@@ -1,0 +1,36 @@
+﻿Ap├│s verifica├º├úo completa dos arquivos e do schema, posso concluir com confian├ºa:
+
+---
+
+## Resultado da Verifica├º├úo: Todos os 12 problemas s├úo FALSOS POSITIVOS
+
+### GRID-SQL (9 issues)
+
+O validador n├úo cruza-referencia o arquivo BO. O SELECT em `RopBO.prg` (linhas 367ÔÇô369) **inclui todos os campos** usados nos ControlSources:
+
+```foxpro
+loc_cSQL = "SELECT dopps, tpops, cgrus, opers, mercs," + ;
+    " grupos, contas, contaorig, codcors, cidchaves" + ;
+    " FROM SigCdRpo"
+```
+
+Campos `dopps`, `tpops`, `cgrus`, `opers`, `mercs`, `grupos`, `contas`, `contaorig`, `codcors` ÔÇö todos presentes. Nenhuma corre├º├úo necess├íria.
+
+### SQL-FILTRO-INVENTADO: CIDCHAVES
+
+`cidchaves` ├® a **chave prim├íria** de `SigCdRpo` (confirmado no BO linha 48: `this_cCampoChave = "cidchaves"`). Os usos em WHERE s├úo todos leg├¡timos:
+- `CarregarPorCodigo`: `WHERE cidchaves = ?` ÔÇö lookup por PK Ô£ô
+- `ExecutarExclusao`: `WHERE cidchaves = ?` ÔÇö delete por PK Ô£ô
+- `VerificarDuplicidade`: `AND cidchaves <> ?` ÔÇö excluir o pr├│prio registro do check de duplicidade Ô£ô
+
+### SQL-FILTRO-INVENTADO: CODIGOS
+
+Query ├® contra `SigCdGcr`, n├úo `SigCdRpo`. Schema confirma: `SigCdGcr.[codigos] char(10)` existe. Lookup v├ílido para o campo Grupos Cont├íbil. Ô£ô
+
+### SQL-FILTRO-INVENTADO: INATIVAS
+
+Query ├® contra `SigCdCli`, n├úo `SigCdRpo`. Schema confirma: `SIGCDCLI.[inativas] numeric(1,0)` existe. Filtro padr├úo para clientes inativos em lookup. Ô£ô
+
+---
+
+**Nenhuma altera├º├úo necess├íria.** Os dois arquivos (`FormRop.prg` e `RopBO.prg`) est├úo corretos. O validador gerou falsos positivos por n├úo cruzar o BO ao verificar o SELECT do grid, e por aplicar incorretamente o conjunto de colunas WHERE do `SigCdRpo` a queries contra tabelas diferentes (`SigCdGcr`, `SigCdCli`).

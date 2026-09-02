@@ -1,0 +1,19 @@
+[2026-09-02 08:49:35] [INFO] === CLAUDE CLI INVOKER ===
+[2026-09-02 08:49:35] [INFO] Prompt File: C:\4c\tasks\task521\runtime_fix_prompt_06b_testeAutomatico_t6.md
+[2026-09-02 08:49:35] [INFO] Output File: C:\4c\tasks\task521\06b_testeAutomatico_fix_output_t6.txt
+[2026-09-02 08:49:35] [INFO] Model: sonnet
+[2026-09-02 08:49:35] [INFO] Timeout: 3600 segundos
+[2026-09-02 08:49:35] [INFO] Max Output Tokens: 128000
+[2026-09-02 08:49:35] [INFO] Context Files: 0 arquivo(s)
+[2026-09-02 08:49:35] [INFO] Invocando Claude CLI...
+[2026-09-02 08:49:35] [INFO] Prompt carregado: 91573 caracteres
+[2026-09-02 08:49:35] [INFO] Executando: claude --model sonnet --dangerously-skip-permissions --add-dir C:\4c
+[2026-09-02 08:49:35] [INFO] Tamanho total do prompt: 91573 caracteres
+[2026-09-02 08:49:35] [INFO] Invocando Claude CLI (tentativa 1/7)...
+[2026-09-02 09:14:59] [INFO] Claude CLI finalizado em 1523.8713841 segundos
+[2026-09-02 09:14:59] [INFO] Exit Code: 0
+[2026-09-02 09:14:59] [INFO] Output salvo em: C:\4c\tasks\task521\06b_testeAutomatico_fix_output_t6.txt
+[2026-09-02 09:14:59] [INFO] Output size: 452 bytes
+[2026-09-02 09:14:59] [INFO] SUCESSO: Claude CLI executado com sucesso
+[2026-09-02 09:14:59] [INFO] Preview do output:
+[2026-09-02 09:14:59] [INFO] Fix applied. The guard at line 33-35 sets `WindowType = 0` (non-modal) when `gb_4c_ModoTeste = .T.`, preventing the form from auto-releasing in VFP9 headless `-T` mode. This keeps `THIS.oForm` as a live object reference so that `PEMSTATUS(THIS.oForm, "CarregarLista", 2)` at TesteAutomatico.prg lines 358, 444, and 1087 no longer throws Error 11 against a stale/dead object. In production the form stays modal (`WindowType = 1` unchanged by Init).

@@ -1,0 +1,38 @@
+﻿An├ílise completa dos 5 problemas detectados:
+
+---
+
+## Resultado: Todos os 5 problemas s├úo FALSOS POSITIVOS
+
+### 1. [METODO-INEXISTENTE] `THIS.CarregarDados()`
+
+**O m├®todo EXISTE** na linha 525:
+```foxpro
+FUNCTION CarregarDados()
+```
+O validador busca `PROCEDURE CarregarDados` mas o m├®todo foi declarado como `FUNCTION CarregarDados`. Em VFP9, `FUNCTION` e `PROCEDURE` s├úo equivalentes dentro de `DEFINE CLASS` ÔÇö ambos criam m├®todos p├║blicos acess├¡veis via `THIS.`. Nenhuma altera├º├úo necess├íria.
+
+---
+
+### 2-5. [LAYOUT-POSITION] cmdprocessar, sair, excluir
+
+O validador compara posi├º├Áes absolutas (original vs. migrado) sem considerar o **escalonamento proporcional** documentado explicitamente no pr├│prio arquivo (linha 172):
+
+```
+* Layout proporcional 600->1000 (originais Left=450 e Left=525):
+```
+
+Verifica├º├úo matem├ítica ÔÇö forma original 600├ù400, migrada 1000├ù600:
+
+| Controle | Original | Fator escala | Esperado | Migrado | Status |
+|----------|----------|-------------|----------|---------|--------|
+| cmdprocessar Left | 450 | ├ù(1000/600)=1.667 | 750 | **750** | Ô£ô correto |
+| sair Left | 525 | ├ù1.667 | 875 | **875** | Ô£ô correto |
+| excluir Left | 520 | ├ù1.667 | 867 | **867** | Ô£ô correto |
+| excluir Top | 223 | ├ù(600/400)=1.5 | 334.5 | **335** | Ô£ô correto |
+
+Os "diffs" de 300-350px s├úo **exatamente** o esperado ao escalar de 600ÔåÆ1000px. O validador n├úo entende escalonamento proporcional de forms OPERACIONAL.
+
+---
+
+**Nenhuma altera├º├úo ├® necess├íria.** O FormSed.prg est├í funcionalmente correto ÔÇö `CarregarDados` existe e as posi├º├Áes s├úo proporcionalmente corretas para o form 1000├ù600.

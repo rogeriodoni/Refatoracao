@@ -1,0 +1,4 @@
+﻿Dois erros corrigidos no `SETBO.prg`:
+
+1. **Linha 63** ÔÇö `DODEFAULT()` movido para dentro de `EditarRegistro()` (estava solto no corpo da `DEFINE CLASS`, causando "Statement is not valid in a class definition").
+2. **Linha 421** ÔÇö `SCAN IN (par_cCursorSei) FOR ...` ÔåÆ `SCAN FOR ...` (VFP9 n├úo aceita `IN` combinado com `FOR` nessa posi├º├úo; o `SELECT (par_cCursorSei)` j├í posiciona o work area correto antes do SCAN).

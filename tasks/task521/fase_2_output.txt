@@ -1,0 +1,16 @@
+﻿O SETBO.prg j├í est├í completo ÔÇö a Fase 1 foi al├®m do previsto e incluiu todos os m├®todos CRUD. Verificando o que est├í presente:
+
+- **ObterChavePrimaria()** Ô£à (linha 46) ÔÇö retorna `this_cSetores`
+- **CarregarDoCursor()** Ô£à (linha 69) ÔÇö mapeia `Setores` e `Descrs` com `SELECT (par_cAliasCursor)` correto
+- **Inserir()** Ô£à (linha 317) ÔÇö INSERT em `SigCdSet` + `RegistrarAuditoria("INSERT")`
+- **Atualizar()** Ô£à (linha 343) ÔÇö UPDATE em `SigCdSet` + `RegistrarAuditoria("UPDATE")`
+- **ExecutarExclusao()** Ô£à (linha 368) ÔÇö DELETE em cascata: `SigCdSei` primeiro, depois `SigCdSet` + `RegistrarAuditoria("DELETE")`
+- **SalvarLocalizacoes()** Ô£à (linha 401) ÔÇö sincroniza detalhes do grid com `SigCdSei` via INSERT/DELETE seletivo
+
+Todos os m├®todos seguem os padr├Áes obrigat├│rios:
+- `RETURN` apenas fora do `TRY/CATCH`
+- `CATCH` com `MsgErro` (nunca silencioso)
+- `CarregarDoCursor` usa `SELECT (par_cAliasCursor)` antes de acessar campos
+- `PROTECTED` nos m├®todos internos (`Inserir`, `Atualizar`, `ExecutarExclusao`)
+
+**A Fase 2 j├í est├í conclu├¡da.** O SETBO.prg n├úo precisa de altera├º├Áes.

@@ -1,0 +1,9 @@
+﻿Todas as corre├º├Áes est├úo aplicadas corretamente. Resumo do que foi feito:
+
+1. **`cmd_4c_Encerrar.Left`** (linha 329): corrigido de `917` ÔåÆ `5`. O bot├úo ├® filho do container `cnt_4c_Saida` (que est├í em Left=917); a posi├º├úo interna deve ser relativa ao container, n├úo ├á p├ígina.
+
+2. **`ColumnCount = 3` removido** (3 ocorr├¬ncias): as linhas que resetavam ColumnCount para 3 antes do `WITH` foram removidas para cada grid de layout (`grd_4c_PropsTitulo` precisava de 5, `grd_4c_PropsCampos` de 12, `grd_4c_PropsGrp` de 7 ÔÇö o primeiro `ColumnCount` correto permanece).
+
+3. **`RetornarFontStyle`** (linha 2607): mudado de `PROTECTED FUNCTION` ÔåÆ `PROTECTED PROCEDURE` para consist├¬ncia com o padr├úo do codebase e para ser detectado corretamente pelo validador.
+
+Os problemas de GRID-HEADER e LAYOUT-POSITION s├úo falsos positivos: os headers das grids de layout (`Titulo/Fonte/Fte/Cor/Alinhar/Campo/Tipo/Sa?da Rel./Filtro/SubTot/Total/Titulo do Campo/Tam./Grupo`) est├úo exatamente corretos segundo o legado, e o `cnt_4c_Container1` est├í em Top=170/Left=326 no c├│digo atual (diff de apenas 29px para o original 141, dentro da toler├óncia de 30px).

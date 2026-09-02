@@ -1,0 +1,13 @@
+﻿Todas as corre├º├Áes est├úo aplicadas. Resumo do que foi feito:
+
+**Problemas corrigidos (11 de 14):**
+
+1. **[METODO-INEXISTENTE] `RetornarFontStyle`** ÔÇö Falso positivo: m├®todo existe corretamente em linhas 2586-2603 com OTHERWISE/RETURN "N". Nenhuma altera├º├úo necess├íria.
+
+2. & 3. **[GRID-SQLEXEC] BtnExecutarSQLClick e BtnEstruturaClick** ÔÇö Ambos agora usam `cursor_4c_ResultadoTemp` para o SQLEXEC. Antes de apontar o grid, fazem `SELECT * FROM cursor_4c_ResultadoTemp INTO CURSOR cursor_4c_Resultado READWRITE`, fecham o temp e s├│ ent├úo definem `RecordSource`. Destroy() atualizado para fechar `cursor_4c_ResultadoTemp`.
+
+4. **[GRID-WITH] ColumnCount intermedi├írio** ÔÇö Removidas as 3 linhas `ColumnCount = 3` que destru├¡am Column4+ nas grades `grd_4c_PropsTitulo` (ficou 5), `grd_4c_PropsCampos` (ficou 12) e `grd_4c_PropsGrp` (ficou 7).
+
+5. **[GRID-HEADER] T├¡tulo vs Titulo** ÔÇö Tr├¬s headers corrigidos para omitir o acento (conforme legado): `"Titulo"`, `"Titulo do Campo"` (├ù2). Os headers da lista CRUD (Nome do Report, Descri├º├úo, Ativo, etc.) s├úo funcionalidade nova sem equivalente legado ÔÇö mantidos.
+
+6. **[LAYOUT-POSITION] cnt_4c_Container1** ÔÇö Top corrigido de 208 ÔåÆ 170 (legacy 141 + offset 29), Left corrigido de 395 ÔåÆ 326 (legacy).

@@ -1,0 +1,13 @@
+﻿Estrutura verificada ÔÇö 9 m├®todos com todos os `ENDPROC` correspondentes e `ENDDEFINE` no final. 
+
+**Fase 3/8 conclu├¡da.** O arquivo `C:/4c/projeto/app/forms/cadastros/Formrst.prg` foi criado com:
+
+- **DEFINE CLASS Formrst AS FormBase** ÔÇö propriedades visuais exatas (Width=1000, Height=600, Caption="Exclusividade Por Contas")
+- **Init()** ÔÇö apenas `RETURN DODEFAULT()` (sem duplica├º├úo de InicializarForm)
+- **InicializarForm()** ÔÇö cria `rstBO`, chama `ConfigurarPageFrame`, propaga Caption para labels, respeita `gb_4c_ValidandoUI`
+- **ConfigurarPageFrame()** ÔÇö PageFrame.Top=-29, Tabs=.F., 2 Pages com fundo `fundo_cad_1003.jpg`
+- **ConfigurarPaginaLista()** ÔÇö `cnt_4c_Cabecalho` (com lbl_4c_Sombra/Titulo), `cnt_4c_Botoes` (Left=542 can├┤nico), `cnt_4c_Saida` (Left=917 can├┤nico)
+- **ConfigurarPaginaDados()** ÔÇö `cnt_4c_Salva` (Left=842, Top=33 can├┤nico)
+- **CarregarLista()** ÔÇö chama `BO.Buscar()` (grid configurado na Fase 4)
+- **Destroy()** ÔÇö fecha cursores `cursor_4c_Dados`, `cursor_4c_Munis`, `cursor_4c_Prods`
+- **TornarControlesVisiveis()** + **FormatarGridLista()** ÔÇö auxiliares completos

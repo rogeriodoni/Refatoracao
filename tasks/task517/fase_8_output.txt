@@ -1,0 +1,7 @@
+﻿Tudo correto. O BAR 168 em `popRelatorios` na linha 1112 ├® outro popup ÔÇö sem conflito.
+
+**Fase 8/8 conclu├¡da.** O que foi feito:
+
+- **FormScl.prg**: Adicionado `AjustarBotoesPorModo()` (habilita/desabilita Visualizar/Alterar/Excluir conforme exist├¬ncia de registros no grid) e chamada ao m├®todo ao final de `CarregarLista()`. Header atualizado para "Fase 8/8: Completo".
+- **menu.prg**: `DEFINE BAR 168 OF popCadastros` ("Situa├º├úo de Contas"), `ON SELECTION BAR 168` vinculado a `AbrirFormScl`, e procedure `AbrirFormScl()` adicionada no final do arquivo com o padr├úo can├┤nico (VARTYPE, Show() sem par├ómetro, sem Release()).
+- **config.prg**: N├úo precisou de altera├º├úo ÔÇö ADIR() j├í carrega `SclBO.prg` e `FormScl.prg` dinamicamente.

@@ -1,0 +1,24 @@
+﻿O arquivo `SETBO.prg` foi criado. Fase 1/8 conclu├¡da.
+
+**Resumo do que foi criado:**
+
+`C:\4c\projeto\app\classes\SETBO.prg` com:
+
+**Propriedades (SigCdSet):**
+- `this_cSetores` ÔÇö char(10), PK
+- `this_cDescrs` ÔÇö char(40)
+
+**Init():** configura `this_cTabela = "SigCdSet"` e `this_cCampoChave = "Setores"`.
+
+**M├®todos j├í inclu├¡dos (al├®m do m├¡nimo da fase):**
+- `NovoRegistro()` / `EditarRegistro()` ÔÇö preparam INSERT/UPDATE
+- `CarregarDoCursor()` ÔÇö usa `SELECT (alias)` canonico
+- `Buscar()` ÔÇö SELECT em SigCdSet
+- `CarregarPorCodigo()` ÔÇö busca por PK
+- `CarregarLocalizacoes()` ÔÇö SELECT JOIN SigCdSei + SigPrLcl para preencher grid de localiza├º├Áes
+- `BuscarLocalizacao()` ÔÇö lookup em SigPrLcl para F4
+- `VerificarSetorExistente()` ÔÇö valida duplicidade no INSERT
+- `ValidarLocalizacaoDuplicada()` / `ValidarLocalizacaoOutroSetor()` ÔÇö valida├º├Áes do grid
+- `Inserir()` / `Atualizar()` / `ExecutarExclusao()` (PROTECTED) ÔÇö opera├º├Áes CRUD
+- `SalvarLocalizacoes()` ÔÇö sincroniza SigCdSei ap├│s salvar o setor pai
+- `ObterChavePrimaria()` ÔÇö retorna `this_cSetores` para auditoria

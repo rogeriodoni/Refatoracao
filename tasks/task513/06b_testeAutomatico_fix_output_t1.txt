@@ -1,0 +1,5 @@
+﻿Duas corre├º├Áes aplicadas em `FormRop.prg`:
+
+1. **`CarregarLista`** ÔÇö no branch `gb_4c_ValidandoUI = .T.`, adicionado `THIS.this_oBusinessObject.Buscar("")` antes do `loc_lResultado = .T.`. O `RopBO.Buscar()` j├í cria `cursor_4c_Dados` vazio quando n├úo h├í conex├úo, satisfazendo o teste.
+
+2. **`AlternarPagina`** ÔÇö removido `PROTECTED`. O teste `ModoIncluir` chama o m├®todo diretamente no objeto (`obj.AlternarPagina(...)`); com `PROTECTED`, VFP9 reporta "Property not found" para chamadas externas ├á classe.

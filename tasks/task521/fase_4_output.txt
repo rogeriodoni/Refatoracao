@@ -1,0 +1,10 @@
+﻿O arquivo est├í completo e correto. Fase 4 entregue.
+
+**O que foi adicionado em `FormSET.prg` (735 linhas):**
+
+- **`ConfigurarPaginaLista()`** ÔÇö reescrito com 5 bot├Áes CRUD no `cnt_4c_Botoes` (Incluir/Visualizar/Alterar/Excluir/Buscar, Left=5/80/155/230/305, Font=Comic Sans, PicturePosition=13) + `grd_4c_Dados` (ColumnCount=2 fora do WITH ÔÇö Problema 36, GridLines=3, ReadOnly=.T.)
+- **`CarregarLista()`** ÔÇö agora vincula `RecordSource="cursor_4c_Dados"`, define ControlSource para Setores/Descrs, redefine Header1.Caption ap├│s RecordSource (Problema 32), chama `FormatarGridLista()`
+- **`AlternarPagina(par_nPagina)`** ÔÇö alterna Page1/Page2, recarrega lista ao voltar para Page1
+- **`FormatarGridLista(par_oGrid)`** ÔÇö aplica Verdana/8 via SetAll
+- **`BtnIncluirClick/VisualizarClick/AlterarClick/ExcluirClick/BuscarClick`** ÔÇö handlers PUBLIC completos com guards `USED()/EOF()`, `CarregarPorCodigo`, `NovoRegistro/EditarRegistro`, `MsgConfirma` com `.T./.F.` (regra #7)
+- **`BOParaForm/FormParaBO/HabilitarCampos/LimparCampos`** ÔÇö implementa├º├Áes reais com `PEMSTATUS` guards (funcionam agora; quando Fase 5 adicionar os campos, ativam automaticamente)

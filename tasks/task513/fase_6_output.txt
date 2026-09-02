@@ -1,0 +1,10 @@
+﻿O arquivo est├í correto. A Fase 6 est├í conclu├¡da:
+
+**O que foi detectado:** Todos os 10 campos e todos os lookups j├í estavam implementados na Fase 5 (o arquivo j├í estava mais completo do que planejado). Os ├║nicos artefatos incompletos eram os guards `PEMSTATUS()` nos m├®todos de suporte, que foram deixados ali em antecipa├º├úo ├á Fase 6.
+
+**O que foi feito na Fase 6:**
+1. Removidos todos os guards `PEMSTATUS()` em `FormParaBO()` ÔÇö substitu├¡dos por atribui├º├Áes diretas para os 10 campos
+2. Refatorado `BOParaForm()` ÔÇö eliminados guards, l├│gica de carga das descri├º├Áes (Grupo de Produto e Grupo Cont├íbil) reorganizada de forma linear e clara
+3. Simplificado `LimparCampos()` ÔÇö 12 atribui├º├Áes diretas, sem guards
+4. Simplificado `HabilitarCampos()` ÔÇö 12 atribui├º├Áes de `ReadOnly` + `Enabled` do OptionGroup, sem guards
+5. Atualizado coment├írio de `ConfigurarPaginaDados()` para refletir o estado real

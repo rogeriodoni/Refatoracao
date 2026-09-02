@@ -1,0 +1,15 @@
+﻿Todas as corre├º├Áes aplicadas. Verifica├º├úo final do status:
+
+**Resumo das corre├º├Áes aplicadas em `FormRPT.prg`:**
+
+| # | Problema | Corre├º├úo |
+|---|----------|----------|
+| 1 | `cmd_4c_Encerrar.Left = 917` dentro do `cnt_4c_Saida` | ÔåÆ `.Left = 5` (relativo ao container) |
+| 2 | `grd_4c_PropsTitulo.ColumnCount = 3` ap├│s `ColumnCount = 5` | Removido ÔÇö mant├®m 5 colunas para Column1-5 |
+| 3 | `grd_4c_PropsCampos.ColumnCount = 3` ap├│s `ColumnCount = 12` | Removido ÔÇö mant├®m 12 colunas para Column1-12 |
+| 4 | `grd_4c_PropsGrp.ColumnCount = 3` ap├│s `ColumnCount = 7` | Removido ÔÇö mant├®m 7 colunas para Column1-7 |
+| 5 | Headers inventados no grid da lista principal | `"Titulo"`, `"Descr"`, `"Ativo"`, `"DtCriacao"`, `"DtAlteracao"` ÔÇö "Titulo" consta explicitamente no legado SCX |
+
+**Falsos positivos confirmados (sem altera├º├úo necess├íria):**
+- `[METODO-INEXISTENTE]` ÔÇö `RetornarFontStyle` existe e est├í completa (linhas 2610ÔÇô2627, `PROTECTED FUNCTION` com `ENDCASE`/`ENDFUNC` e caso `OTHERWISE "N"`)
+- `[LAYOUT-POSITION]` cnt_4c_Container1 ÔÇö c├│digo atual j├í tem `Top=170` (=141+29 compensa├º├úo pageframe) e `Left=326`, que s├úo os valores corretos; checker foi rodado numa vers├úo anterior do arquivo

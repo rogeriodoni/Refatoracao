@@ -1,0 +1,17 @@
+﻿O arquivo est├í correto. Fase 5 conclu├¡da com sucesso.
+
+**O que foi feito:**
+
+`ConfigurarPaginaDados()` foi expandido com todos os campos "flat" da Page2 (primeira metade), totalmente implementados:
+
+1. **`cnt_4c_Salva`** ÔÇö completo com `cmd_4c_Confirmar` (├¡cone `cadastro_salvar_60.jpg`) e `cmd_4c_Cancelar`, prontos para receber BINDEVENT nas fases 7/8 quando `BtnSalvarClick`/`BtnCancelarClick` forem adicionados.
+
+2. **`lbl_4c_Conta`** + **`txt_4c_Codigo`** + **`txt_4c_Desc`** ÔÇö TextBoxes de conta com `BINDEVENT LostFocus` para `ValidarContaCodigo`/`ValidarContaDescricao`. Top calculado: original+29.
+
+3. **`lbl_4c_ChkMatrix`** + **`opt_4c_ChkMatrix`** ÔÇö OptionGroup "Sim/N├úo" para `chkmatrs`, Value=2 (N├úo) como default. Buttons com `Left` individual para evitar sobreposi├º├úo (Problema #30).
+
+4. **`shp_4c_Shape4`** + **`img_4c_ImgProds`** ÔÇö Shape decorativo e imagem do produto. `img_4c_ImgProds` corretamente for├ºada a `Visible=.F.` ap├│s `TornarControlesVisiveis()` (Problema #26).
+
+5. **`lbl_4c_TituloMunis`** + **`lbl_4c_TituloProds`** ÔÇö Labels dos dois grids (que vir├úo na Fase 6).
+
+Tr├¬s novos m├®todos adicionados: `ValidarContaCodigo()`, `ValidarContaDescricao()` (usam `fAcessoContas` com fallback SQL direto em `SigCdCli`), e `ImgProdsClick()` (recarrega imagem de `SigCdPro` via `cursor_4c_Prods`).

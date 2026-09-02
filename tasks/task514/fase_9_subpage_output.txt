@@ -1,0 +1,16 @@
+﻿50 PROCEDUREs and 50 ENDPROCs ÔÇö perfectly balanced. FASE 9 is complete.
+
+Here's what was implemented:
+
+**`ConfigurarPgPage1()`** (new method at line 3341):
+- Adds 3 action buttons (`cmd_4c_LayOutRPT`, `cmd_4c_Estrutura`, `cmd_4c_Processar`) INSIDE the existing dark header container (`cnt_4c_CabecalhoDados`), repositioning the title labels right to make space
+- Adds date filter row on Row 1 right side: `lbl_4c_De` + `txt_4c_DtInicial` + `lbl_4c_Ate` + `txt_4c_DtFinal` (Left=802+, after `txt_4c_DtAlteracao` which ends at 798)
+- Adds `lbl_4c_SqlAlterado` ("*" indicator) inline with the SQL Query label (Top=238, Left=73)
+- Wires BINDEVENTs for all 3 buttons
+
+**3 new handlers**:
+- `BtnProcessarClick` ÔÇö reads date textboxes ÔåÆ sets `PUBLIC _vp_DtInicial/_vp_DtFinal` ÔåÆ calls `BtnExecutarSQLClick()` ÔåÆ resets indicator to black
+- `BtnLayOutRPTClick` ÔÇö calls `FormParaBO()` + `Salvar()` ÔåÆ navigates to Layout sub-page
+- `BtnEstruturaClick` ÔÇö reads selected table name from OleRTF ÔåÆ queries `sys.all_Columns` ÔåÆ shows in `grd_4c_Resultado`
+
+**Other changes**: `LimparCampos()` resets date fields and indicator; `InicializarForm()` declares `PUBLIC _vp_DtInicial, _vp_DtFinal = DATE()`.

@@ -1,0 +1,19 @@
+﻿Phase 5/8 is complete. Here's a summary of what was added to `FormRPT.prg`:
+
+**`ConfigurarPaginaDados()` ÔÇö full Sub-Page1 implementation (was a 20-line stub, now ~230 lines):**
+- `cnt_4c_CabecalhoDados` (Left=0, Width=832, Height=85) ÔÇö dark header with "Dados do Relat├│rio" shadow+title labels
+- `cnt_4c_Salva` (Left=835, Width=165, Height=85) ÔÇö canonical Confirmar+Cancelar buttons, BINDEVENTs wired to `BtnSalvarClick`/`BtnCancelarClick`
+- Row 1 (Top=120): `txt_4c_NmReport` + `chk_4c_Ativo` + `txt_4c_DtCriacao` (ReadOnly) + `txt_4c_DtAlteracao` (ReadOnly)
+- Row 2 (Top=150): `edt_4c_Descricao` (EditBox, 53px tall)
+- Row 3 (Top=208): `cbo_4c_NmReports` (ComboBox) + `cnt_4c_Container1` with F8/F9 hint labels
+- (Top=257): `obj_4c_OleRTF_SqlCMD` (OLE RichText, 170px) ÔÇö all `.OBJECT.Text` accesses in pre-existing methods now resolve
+- (Top=452): `grd_4c_Resultado` (148px, ends at 600px ÔÇö fits exactly)
+
+**New methods:**
+- `CboNmReportsChange()` (PUBLIC) ÔÇö on combo selection, fetches `SqlQuery` from DB and loads into OLE editor
+- `BtnExecutarSQLClick()` (PUBLIC) ÔÇö executes SQL from OLE editor, populates `grd_4c_Resultado` with `FCOUNT()`-auto-sized columns
+- `PopularComboReports()` (PROTECTED) ÔÇö SCAN over `cursor_4c_Dados` to fill combo via `AddItem()`
+
+**Other changes:** `CarregarLista()` now calls `PopularComboReports()` after grid setup; `Destroy()` closes `cursor_4c_Resultado` and `cursor_4c_CboSQL`.
+
+**Next phase:** Phase 6/8 ÔÇö add Sub-Page2 (Layout configuration: orienta├º├úo OptionGroup, papel ComboBox, FwGrade grids for columns/groups).

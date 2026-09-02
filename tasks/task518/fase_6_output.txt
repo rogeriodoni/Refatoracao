@@ -1,0 +1,9 @@
+﻿Fase 6 conclu├¡da. As 3 altera├º├Áes foram aplicadas em `FormSed.prg`:
+
+1. **Cabe├ºalho atualizado** (linha 17-18): marcado como "Fases 3-6/8 completas", documentando que o form plano sem Page2/lookups est├í implementado.
+
+2. **`loc_oGrid.Refresh()`** (linha 550): adicionado ap├│s o rebinding de Caption/Width no `CarregarDados()` para garantir que o grid redesenhe corretamente ap├│s troca de `RecordSource`.
+
+3. **`LockScreen` em `cmd_4c_ExcluirClick`** (linhas 642/649): adicionado `.T.` antes do delete + reload e `.F.` depois, eliminando flickering durante a opera├º├úo ÔÇö fidelidade ao `ThisForm.LockScreen = .t./.f.` do original.
+
+O FormSed era um form operacional plano sem campos extras, sem lookups e sem Page2, portanto a implementa├º├úo das Fases 3-5 j├í estava completa. A Fase 6 adicionou os refinamentos de UX identificados na an├ílise do c├│digo fonte original.

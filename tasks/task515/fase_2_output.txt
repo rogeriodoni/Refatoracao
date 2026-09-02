@@ -1,0 +1,13 @@
+﻿O arquivo est├í correto e completo. Fase 2/8 conclu├¡da: `RssBO.prg` agora tem todos os m├®todos CRUD implementados:
+
+- **`CarregarDoCursor()`** ÔÇö mapeia cidchaves, grupoos, grupods, usuars do cursor usando `SELECT (alias)` obrigat├│rio
+- **`LimparDados()`** ÔÇö limpa todas as propriedades
+- **`ValidarDados()`** ÔÇö valida grupoos e grupods obrigat├│rios + unicidade do par na inser├º├úo
+- **`VerificarDuplicidade()`** ÔÇö query `WHERE grupoos = X AND grupods = Y` em SigCdRps
+- **`GerarChaveUnica()`** ÔÇö gera cidchaves via `NEWID()` do SQL Server
+- **`Inserir()`** ÔÇö INSERT com cidchaves, grupoos, grupods, `GETDATE()` e usu├írio logado
+- **`Atualizar()`** ÔÇö UPDATE de grupoos, grupods, datars, usuars por cidchaves
+- **`ExecutarExclusao()`** ÔÇö DELETE por cidchaves (com auditoria)
+- **`Buscar()`** ÔÇö SELECT grupoos, grupods, cidchaves com cursor placeholder para modo sem conex├úo
+- **`CarregarPorCodigo()`** ÔÇö SELECT completo por cidchaves, reseta `this_lNovoRegistro = .F.`
+- **`BuscarDescricaoGrupo()`** ÔÇö helper para o form buscar `Descrs` de SigCdGcr por c├│digo (usado ao carregar registro para exibir descri├º├Áes de Origem e Destino)

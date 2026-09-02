@@ -1,0 +1,14 @@
+﻿Fase 6 conclu├¡da. O arquivo `FormRss.prg` foi atualizado com:
+
+**Adicionado em `ConfigurarPaginaDados()`:**
+- `lbl_4c_Say1` ÔÇö label "Destino : " (Top=205, Left=179, branco sobre fundo escuro)
+- `txt_4c_Destino` ÔÇö campo c├│digo do Grupo Destino (Top=203, Left=232, Width=80, edit├ível)
+- `txt_4c_Ddestino` ÔÇö campo descri├º├úo do Grupo Destino (Top=203, Left=314, Width=193, ReadOnly, fundo cinza)
+- BINDEVENTs para `LostFocus` ÔåÆ `ValidarDestino` e `KeyPress` ÔåÆ `DestinoKeyPress`
+
+**Novos m├®todos adicionados:**
+- `ValidarDestino()` ÔÇö guard `this_cUltimoDestinoValidado` evita re-abertura em cada foco perdido
+- `DestinoKeyPress(par_nKeyCode, par_nShiftAltCtrl)` ÔÇö abre lookup ao pressionar F4 (c├│digo 115)
+- `AbrirBuscaDestino(par_cValor)` ÔÇö FormBuscaAuxiliar em SigCdGcr por Codigos, preenche c├│digo + descri├º├úo via `BuscarDescricaoGrupo()`
+
+**Propriedade adicionada:** `this_cUltimoDestinoValidado = ""` na DEFINE CLASS.

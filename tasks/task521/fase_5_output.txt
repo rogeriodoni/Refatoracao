@@ -1,0 +1,17 @@
+﻿Arquivo completo e correto. Fase 5/8 conclu├¡da.
+
+**O que foi adicionado em `FormSET.prg`:**
+
+1. **`ConfigurarPaginaDados()` ÔÇö primeira metade (4 de 8 controles):**
+   - `cnt_4c_Salva` (Left=842, Top=33) com `cmd_4c_Confirmar` (cadastro_salvar_60.jpg) e `cmd_4c_Cancelar` (cadastro_cancelar_60.jpg), ambos com BINDEVENT
+   - `lbl_4c_Setor` ÔÇö Label6 original (Left=141, Top=170, ForeColor=36,84,155, Verdana 8)
+   - `txt_4c_Setores` ÔÇö getSetores original (Left=185, Top=167, Width=80, MaxLength=10)
+   - `lbl_4c_Descricao` ÔÇö Label7 original (Left=298, Top=170, ForeColor=36,84,155)
+
+2. **`BtnSalvarClick()`** ÔÇö l├│gica do `salva.Click` legado: valida├º├úo de Setor, Descri├º├úo e m├¡nimo de 1 localiza├º├úo; checagem de c├│digo duplicado no INCLUIR; salva via `BO.Salvar()` + `BO.SalvarLocalizacoes()`
+
+3. **`BtnCancelarClick()`** ÔÇö retorna para Page1
+
+4. **`LimparCampos()`** ÔÇö atualizado: cria `cursor_4c_Localizacoes` via `CREATE CURSOR` se n├úo existir (necess├írio na primeira chamada no modo INCLUIR)
+
+**Fase 6/8** adicionar├í os controles restantes: `txt_4c_Descrs`, `lbl_4c_Localizacoes`, `grd_4c_Localizacoes` (com handlers Column1.Valid e Column1.When) e `cmd_4c_Apagar`.

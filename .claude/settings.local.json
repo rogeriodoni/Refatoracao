@@ -445,7 +445,17 @@
       "PowerShell($bytes = [System.IO.File]::ReadAllBytes\\('C:\\\\4c\\\\projeto\\\\app\\\\forms\\\\cadastros\\\\FormCTA.prg'\\); $text = [System.Text.Encoding]::GetEncoding\\(1252\\).GetString\\($bytes\\); $regex = [regex]'\\(?i\\)N.o.{0,40}[Gg]rupo|[Gg]rupo.{0,40}\\(N.o|Selecionad|Encontrad|Escolh|Digit\\)'; foreach \\($m in $regex.Matches\\($text\\)\\) { Write-Output $m.Value }; Write-Output '---'; $regex2 = [regex]'MsgAviso\\\\\\([^\\)]{0,200}\\\\\\)'; foreach \\($m in $regex2.Matches\\($text\\)\\) { Write-Output $m.Value })",
       "Bash(\"C:/Program Files \\(x86\\)/Microsoft Visual FoxPro 9/vfp9.exe\" -t \"C:\\\\\\\\4c\\\\\\\\tmp_compile_formcliente.prg\")",
       "Bash(\"C:/Program Files \\(x86\\)/Microsoft Visual FoxPro 9/vfp9.exe\" -t \"C:\\\\\\\\4c\\\\\\\\tmp_compile_fc.prg\")",
-      "Bash(\"C:/Program Files \\(x86\\)/Microsoft Visual FoxPro 9/vfp9.exe\" -t \"C:/4c/tmp_compile_fc.prg\")"
+      "Bash(\"C:/Program Files \\(x86\\)/Microsoft Visual FoxPro 9/vfp9.exe\" -t \"C:/4c/tmp_compile_fc.prg\")",
+      "PowerShell(Get-ChildItem C:\\\\4c -Directory | Where-Object { $_.Name -match 'orre' } | Select-Object -ExpandProperty Name)",
+      "PowerShell(Get-ChildItem C:\\\\4c -Directory -Recurse -Depth 2 -ErrorAction SilentlyContinue | Where-Object { $_.Name -match 'orre|orrec|rro137|137' } | Select-Object -ExpandProperty FullName)",
+      "PowerShell(Add-Type -AssemblyName System.Drawing; $img = [System.Drawing.Image]::FromFile\\(\"C:\\\\4c\\\\origem\\\\correcoes\\\\Erro137.PNG\"\\); \"Size: $\\($img.Width\\)x$\\($img.Height\\)\"; $img.Dispose\\(\\))",
+      "PowerShell(Add-Type -AssemblyName System.Drawing; $src = [System.Drawing.Image]::FromFile\\(\"C:\\\\4c\\\\origem\\\\correcoes\\\\Erro137.PNG\"\\); $bmp = New-Object System.Drawing.Bitmap 1014,686; $g = [System.Drawing.Graphics]::FromImage\\($bmp\\); $g.DrawImage\\($src, 0, 0, 1014, 686\\); $bmp.Save\\(\"C:\\\\4c\\\\origem\\\\correcoes\\\\Erro137_full.PNG\", [System.Drawing.Imaging.ImageFormat]::Png\\); $g.Dispose\\(\\); $bmp.Dispose\\(\\); $src.Dispose\\(\\); \"done\")",
+      "PowerShell(Get-ChildItem C:\\\\4c\\\\tasks -Directory | Where-Object { $_.Name -match 'cdcar|cdcgv|cdcgc|cdccl' } | Select-Object -ExpandProperty Name)",
+      "PowerShell($proc = Start-Process -FilePath \"C:\\\\Program Files \\(x86\\)\\\\Microsoft Visual FoxPro 9\\\\vfp9.exe\" -ArgumentList \"-t\",\"DO C:\\\\4c\\\\compile_formcargo_check.prg\" -PassThru -Wait -WindowStyle Hidden; \"Exit code: $\\($proc.ExitCode\\)\")",
+      "Bash(taskkill *)",
+      "PowerShell($p = Start-Process -FilePath \"C:\\\\Program Files \\(x86\\)\\\\Microsoft Visual FoxPro 9\\\\vfp9.exe\" -ArgumentList \"-t\",\"DO C:\\\\4c\\\\compile_formcargo_check.prg\" -PassThru -Wait -WindowStyle Hidden; \"ExitCode: $\\($p.ExitCode\\)\"; if \\(Test-Path C:\\\\4c\\\\compile_formcargo_check.log\\) { Get-Content C:\\\\4c\\\\compile_formcargo_check.log })",
+      "PowerShell(& \"C:\\\\Program Files\\\\PowerShell\\\\7\\\\pwsh.exe\" -NoProfile -ExecutionPolicy Bypass -Command \"& { & 'C:\\\\4c\\\\automation\\\\CorretorAutomatico.ps1' -ArquivoPrg 'C:\\\\4c\\\\test_pattern175.prg' }\" 2>&1 | Select-String -Pattern 'Pattern #175|Correcoes aplicadas|CORRECAO CONCLUIDA')",
+      "PowerShell(& \"C:\\\\4c\\\\automation\\\\CorretorAutomatico.ps1\" -ArquivoPrg \"C:\\\\4c\\\\test_pattern176.prg\" 2>&1 | Select-String -Pattern 'Pattern #176|Correcoes aplicadas' | ForEach-Object { $_.Line })"
     ]
   }
 }

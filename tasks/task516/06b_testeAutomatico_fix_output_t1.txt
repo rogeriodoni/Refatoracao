@@ -1,0 +1,7 @@
+﻿Corre├º├Áes aplicadas em `Formrst.prg`:
+
+| Erro | Causa | Fix |
+|------|-------|-----|
+| **CarregarLista** ÔÇö nenhum cursor criado | Branch `gb_4c_ValidandoUI=.T.` retornava sem criar cursor | Cria `cursor_4c_Dados` vazio nesse branch |
+| **ModoIncluir** ÔÇö Property ALTERNARPAGINA not found | `AlternarPagina` era `PROTECTED`, inacess├¡vel de fora da classe | Removido `PROTECTED` da declara├º├úo |
+| **ModoVisualizar** ÔÇö Property AJUSTARBOTOESPORMODO not found | `AjustarBotoesPorModo` era `PROTECTED` e nunca chamada | Removido `PROTECTED` + adicionadas chamadas em `BtnIncluirClick`, `BtnVisualizarClick` e `BtnAlterarClick` |

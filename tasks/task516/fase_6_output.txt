@@ -1,0 +1,32 @@
+﻿`APPEND BLANK IN alias` is valid VFP9 syntax. Phase 6/8 is complete.
+
+**Summary of changes in this session:**
+
+- **Edit 2** ÔÇö `BtnIncluirClick`: now calls `LimparCampos()` ÔåÆ `InicializarGradesVazias()` ÔåÆ `HabilitarCampos(.T.)` ÔåÆ `AlternarPagina(2)` ÔåÆ `SetFocus` on txt_4c_Codigo
+- **Edit 3** ÔÇö `BtnVisualizarClick`: now calls `BOParaForm()` ÔåÆ `CarregarGrades()` ÔåÆ `HabilitarCampos(.F.)` after loading the record
+- **Edit 4** ÔÇö `BtnAlterarClick`: now calls `BOParaForm()` ÔåÆ `CarregarGrades()` ÔåÆ `HabilitarCampos(.T.)` after loading the record
+- **Edit 5** ÔÇö Added 19 new methods (lines 1239ÔÇô1961):
+
+| Method | Access | Purpose |
+|--------|--------|---------|
+| `BtnSalvarClick` | PUBLIC | Validates conta/produto/duplicate, calls FormParaBO + BO.Salvar, returns to Page1 |
+| `BtnCancelarClick` | PUBLIC | Resets mode LISTA, navigates to Page1 |
+| `FormParaBO` | PROTECTED | Maps Page2 controls ÔåÆ BO properties |
+| `BOParaForm` | PROTECTED | Maps BO properties ÔåÆ Page2 controls |
+| `HabilitarCampos(par_lHabilitar)` | PROTECTED | ReadOnly/Enabled toggle for all Page2 controls |
+| `LimparCampos` | PROTECTED | Clears txt_4c_Codigo, txt_4c_Desc, resets OptionGroup, hides image |
+| `CarregarGrades(par_cSkChaves)` | PROTECTED | Calls BO.BuscarMunicipios + BO.BuscarProdutos + RefreshGrid |
+| `InicializarGradesVazias` | PROTECTED | Creates empty local cursors (1 blank row each) for INCLUIR mode |
+| `RefreshGridMunis` | PROTECTED | Rebinds grid after cursor recreation (RecordSourceÔåÆColumnCountÔåÆColumns) |
+| `RefreshGridProds` | PROTECTED | Same for grd_4c_Prods |
+| `GradMuniUFLostFocus` | PUBLIC | Validates UF against SigCdUfs; opens FormBuscaAuxiliar if not found |
+| `GradMuniMunLostFocus` | PUBLIC | Duplicate check (SCAN) + validates SigCdMun + FormBuscaAuxiliar |
+| `GradProdCodLostFocus` | PUBLIC | Validates cpros against SigCdPro + FormBuscaAuxiliar |
+| `GradProdDescLostFocus` | PUBLIC | Duplicate check on cpros + searches SigCdPro by dpros |
+| `GradProdAfterRowColChange(par_nColIndex)` | PUBLIC | Loads FigJpgs from SigCdPro, STRCONV decode, sets img_4c_ImgProds.Picture |
+| `BtnInserirMuniClick` | PUBLIC | APPEND BLANK in cursor_4c_Munis, REPLACE defaults, Refresh |
+| `BtnExcluirMuniClick` | PUBLIC | DELETE current row from cursor_4c_Munis, Refresh |
+| `BtnInserirProdClick` | PUBLIC | APPEND BLANK in cursor_4c_Prods, REPLACE defaults, Refresh |
+| `BtnExcluirProdClick` | PUBLIC | DELETE current row from cursor_4c_Prods, Refresh |
+
+Two bugs fixed during review: invalid `SCAN IN cursor_4c_Munis/Prods FOR` syntax replaced with `SELECT alias` + `SCAN FOR` (VFP9 SCAN has no IN clause).

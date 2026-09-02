@@ -1,0 +1,11 @@
+﻿Nenhuma outra ocorr├¬ncia. As 4 corre├º├Áes foram aplicadas com sucesso.
+
+**Causa do erro**: VFP9 n├úo suporta `:` como separador de comandos em c├│digo compilado (`.prg`). O compilador interpretava cada `loc_var = valor : outro_var = valor` como sintaxe inv├ílida.
+
+**Corre├º├úo aplicada** em 4 locais do `FormRPT.prg`:
+- Linha 2682 (`BtnGerarLayoutClick` ÔÇö bloco grupo)
+- Linha 2742 (`BtnGerarLayoutClick` ÔÇö SCAN de campos)  
+- Linha 2959 (`MesclarComTemplate`)
+- Linhas 3194ÔÇô3214 (`SalvarFRXParaSQL` ÔÇö bloco de registros filtro-only)
+
+Cada linha com `:` foi separada em atribui├º├Áes individuais por linha, que ├® a ├║nica sintaxe v├ílida no compilador VFP9.

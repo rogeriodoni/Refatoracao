@@ -1,0 +1,5 @@
+﻿5 fixes aplicados em `FormRPT.prg`:
+
+- **Linhas 1395/1525** (`grd_4c_Resultado` ÔÇö grid din├ómico): `ColumnCount = 3` ÔåÆ `ColumnCount = 0` e removido `FCOUNT`. Com `ColumnCount = 0`, VFP9 cria automaticamente uma coluna por campo do cursor ao setar `RecordSource`, que ├® o comportamento correto para grids de resultado SQL din├ómico.
+
+- **Linhas 1873/1969/2178** (`grd_4c_PropsTitulo` / `grd_4c_PropsCampos` / `grd_4c_PropsGrp`): Removido o `ColumnCount = 3` esp├║rio que sobrescrevia o count correto (5/12/7) imediatamente antes do `RecordSource`. Esse `= 3` fazia com que as colunas 4+ n├úo existissem quando o bloco `WITH` tentava acess├í-las para definir `ControlSource`. O `ColumnCount` correto j├í estava na linha anterior; os `ControlSource` j├í eram definidos corretamente no `WITH` subsequente.
