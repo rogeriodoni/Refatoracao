@@ -1,0 +1,730 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGCDSET.SCX
+* Data/Hora: 02/09/2026 04:43:45
+* Total de registros: 15
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDSET
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Label7
+  Parent: SIGCDSET.pagina.dados
+  Class: label
+  BaseClass: label
+
+Objeto: Label8
+  Parent: SIGCDSET.pagina.dados
+  Class: label
+  BaseClass: label
+
+Objeto: Label6
+  Parent: SIGCDSET.pagina.dados
+  Class: label
+  BaseClass: label
+
+Objeto: getSetores
+  Parent: SIGCDSET.pagina.dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: grdLocalizacoes
+  Parent: SIGCDSET.pagina.dados
+  Class: fwgrade
+  BaseClass: grid
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Header1
+  Parent: SIGCDSET.pagina.dados.grdLocalizacoes.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDSET.pagina.dados.grdLocalizacoes.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDSET.pagina.dados.grdLocalizacoes.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDSET.pagina.dados.grdLocalizacoes.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: getDescrs
+  Parent: SIGCDSET.pagina.dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cmdApagar
+  Parent: SIGCDSET.pagina.dados
+  Class: commandgroup
+  BaseClass: commandgroup
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 0
+  Height = 0
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDSET
+------------------------------------------------------------
+  DataSession = 2
+  DoCreate = .T.
+  Caption = "Cadastro de Setores"
+  Name = "SIGCDSET"
+  pagina.ErasePage = .T.
+  pagina.lista.cntSombra.lblSombra.Name = "lblSombra"
+  pagina.lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  pagina.lista.cntSombra.Name = "cntSombra"
+  pagina.lista.grade.FontName = "Tahoma"
+  pagina.lista.grade.FontSize = 8
+  pagina.lista.grade.RowHeight = 16
+  pagina.lista.grade.ForeColor = 90,90,90
+  pagina.lista.grade.Name = "grade"
+  pagina.lista.grupo_op.inserir.Top = 5
+  pagina.lista.grupo_op.inserir.Left = 36
+  pagina.lista.grupo_op.inserir.Name = "inserir"
+  pagina.lista.grupo_op.consultar.Top = 5
+  pagina.lista.grupo_op.consultar.Left = 111
+  pagina.lista.grupo_op.consultar.Name = "consultar"
+  pagina.lista.grupo_op.alterar.Top = 5
+  pagina.lista.grupo_op.alterar.Left = 186
+  pagina.lista.grupo_op.alterar.Name = "alterar"
+  pagina.lista.grupo_op.excluir.Top = 5
+  pagina.lista.grupo_op.excluir.Left = 261
+  pagina.lista.grupo_op.excluir.Name = "excluir"
+  pagina.lista.grupo_op.procurar.Top = 5
+  pagina.lista.grupo_op.procurar.Left = 336
+  pagina.lista.grupo_op.procurar.Name = "procurar"
+  pagina.lista.grupo_op.Height = 85
+  pagina.lista.grupo_op.Left = 313
+  pagina.lista.grupo_op.Top = -1
+  pagina.lista.grupo_op.Width = 414
+  pagina.lista.grupo_op.Name = "grupo_op"
+  pagina.lista.grupo_saida.sair.Top = 5
+  pagina.lista.grupo_saida.sair.Left = 5
+  pagina.lista.grupo_saida.sair.Name = "sair"
+  pagina.lista.grupo_saida.Left = 719
+  pagina.lista.grupo_saida.Top = -1
+  pagina.lista.grupo_saida.Name = "grupo_saida"
+  pagina.lista.cntFiltros.Name = "cntFiltros"
+  pagina.lista.Name = "lista"
+  pagina.dados.grupo_salva.salva.Top = 5
+  pagina.dados.grupo_salva.salva.Left = 5
+  pagina.dados.grupo_salva.salva.Name = "salva"
+  pagina.dados.grupo_salva.cancelar.Top = 5
+  pagina.dados.grupo_salva.cancelar.Left = 88
+  pagina.dados.grupo_salva.cancelar.Name = "cancelar"
+  pagina.dados.grupo_salva.TabIndex = 8
+  pagina.dados.grupo_salva.ZOrderSet = 1
+  pagina.dados.grupo_salva.Name = "grupo_salva"
+  pagina.dados.Name = "dados"
+  pagina.Name = "pagina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDSET.pagina.dados.Label7
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Verdana"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "\<Descrição :"
+  Height = 15
+  Left = 298
+  Top = 141
+  Width = 67
+  TabIndex = 3
+  ForeColor = 36,84,155
+  ZOrderSet = 3
+  Name = "Label7"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDSET.pagina.dados.Label8
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Verdana"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "\<Localizações :"
+  Height = 15
+  Left = 201
+  Top = 185
+  Width = 82
+  TabIndex = 5
+  ForeColor = 36,84,155
+  ZOrderSet = 3
+  Name = "Label8"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDSET.pagina.dados.Label6
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Verdana"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "\<Setor :"
+  Height = 15
+  Left = 141
+  Top = 141
+  Width = 42
+  TabIndex = 1
+  ForeColor = 36,84,155
+  ZOrderSet = 4
+  Name = "Label6"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDSET.pagina.dados.getSetores
+------------------------------------------------------------
+  ControlSource = "crSigCdSet.Setores"
+  Left = 185
+  TabIndex = 2
+  Top = 138
+  Width = 80
+  ZOrderSet = 10
+  plprocurar = .T.
+  Name = "getSetores"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDSET.pagina.dados.grdLocalizacoes
+------------------------------------------------------------
+  ColumnCount = 2
+  Height = 274
+  Left = 289
+  TabIndex = 6
+  Top = 183
+  Width = 261
+  ZOrderSet = 6
+  Name = "grdLocalizacoes"
+  Column1.Width = 80
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.Name = "Column1"
+  Column2.Width = 150
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.Name = "Column2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDSET.pagina.dados.grdLocalizacoes.Column1.Header1
+------------------------------------------------------------
+  Alignment = 2
+  Caption = "Localização"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDSET.pagina.dados.grdLocalizacoes.Column1.Text1
+------------------------------------------------------------
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDSET.pagina.dados.grdLocalizacoes.Column2.Header1
+------------------------------------------------------------
+  Alignment = 2
+  Caption = "Descrição"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDSET.pagina.dados.grdLocalizacoes.Column2.Text1
+------------------------------------------------------------
+  BorderStyle = 0
+  Margin = 0
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDSET.pagina.dados.getDescrs
+------------------------------------------------------------
+  ControlSource = "crSigCdSet.Descrs"
+  Left = 366
+  TabIndex = 4
+  Top = 138
+  Width = 290
+  ZOrderSet = 9
+  plprocurar = .T.
+  Name = "getDescrs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDSET.pagina.dados.cmdApagar
+------------------------------------------------------------
+  ButtonCount = 1
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 50
+  Left = 559
+  Top = 295
+  Width = 50
+  TabIndex = 7
+  ZOrderSet = 7
+  Themes = .F.
+  Name = "cmdApagar"
+  Command1.Top = 5
+  Command1.Left = 5
+  Command1.Height = 40
+  Command1.Width = 40
+  Command1.FontName = "Verdana"
+  Command1.FontSize = 8
+  Command1.Picture = ..\vbmp\a_misc6.bmp
+  Command1.Caption = ""
+  Command1.ToolTipText = "Excluir"
+  Command1.ForeColor = 36,84,155
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "btnApagar"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDSET
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE montagrade
+------------------------------------------------------------
+PROCEDURE montagrade
+Private pKey
+
+pKey = crSigCdSet.Setores
+
+With ThisForm.Pagina.Dados.grdLocalizacoes
+	.RecordSource = ''
+
+	ThisForm.poDataMgr.Requery('crSigCdSei')
+	Select crSigCdSei
+	Scan
+		ThisForm.poDataMgr.CursorQuery('SigPrLcl', 'LocalPrLoc', 'Codigos', crSigCdSei.Locals, 'Descricaos')
+		If Not Eof('LocalPrLoc')
+			Replace Descricaos With LocalPrLoc.Descricaos In crSigCdSei
+		EndIf
+	EndScan
+	Go Top In crSigCdSei
+
+	.RecordSource          = 'crSigCdSei'
+	.Column1.ControlSource = 'crSigCdSei.Locals'
+	.Column2.ControlSource = 'crSigCdSei.Descricaos'
+	.Refresh
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Private pKey
+
+pKey = Replicate(Chr(254), 10)
+
+lcQrySetor = [Select * From SigCdSet]
+lcQrySetoI = [Select *, Space(20) as Descricaos From SigCdSei Where Setores = ?pKey]
+
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		With .poDataMgr
+			.AddCursor('SigCdSet', 'Setores', 'crSigCdSet', '', ThisForm.Pagina.Lista.Grade, lcQrySetor)
+			.pfSqlTabela(1).pColuna('Setores', '', '', 'Setor',     080, .t.)
+			.pfSqlTabela(1).pColuna('Descrs',  '', '', 'Descrição', 290, .t.)
+
+			.AddCursor('SigCdSei', 'cIdChaves', 'crSigCdSei', '', '', lcQrySetoI)
+		EndWith
+
+		=DoDefault()
+
+		ThisForm.Pagina.Lista.Grade.Column1.SetFocus
+	Else
+		=Messagebox('Impossível Efetuar Conexão Com o Servidor de Banco de Dados...', 0+48, 'CreateObject - ' + ThisForm.Name)
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_procurar
+------------------------------------------------------------
+PROCEDURE msv_procurar
+loDad = ThisForm.Pagina.Dados
+
+Select crSigCdSet
+Do Case
+	Case Not Empty(loDad.getSetores.Value)
+		Locate For Setores = loDad.getSetores.Value
+
+	Case Not Empty(loDad.getDescrs.Value)
+		Locate For Descrs = loDad.getDescrs.Value
+EndCase
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE pagina.lista.grupo_op.Click
+------------------------------------------------------------
+PROCEDURE pagina.lista.grupo_op.Click
+LParameters lnOpcao
+
+If (Type('lnOpcao') = 'N')
+	This.Value = lnOpcao
+EndIf
+
+Select crSigCdSet
+
+If Not DoDefault(lnOpcao)
+	ThisForm.mAtivapagina1
+	Return 0
+EndIf
+
+ThisForm.MontaGrade
+
+loDad = ThisForm.Pagina.Dados
+
+Do Case
+	Case Inlist(ThisForm.pcEscolha, 'PROCURAR', 'INSERIR')
+		loDad.getSetores.Setfocus	
+
+	Case (ThisForm.pcEscolha = 'ALTERAR')
+		loDad.grdLocalizacoes.Column1.Setfocus	
+
+	Case Inlist(ThisForm.pcEscolha, 'CONSULTAR', 'EXCLUIR')
+		loDad.Grupo_Salva.Salva.Setfocus
+EndCase
+
+loDad.cmdApagar.Visible = InList(ThisForm.pcEscolha, 'ALTERAR', 'INSERIR')
+
+If InList(ThisForm.pcEscolha, 'ALTERAR', 'INSERIR')
+	* Insere Um Setor Na Grade
+	Go Bottom In crSigCdSei
+	Insert Into crSigCdSei (Setores, cIdChaves) Values (crSigCdSet.Setores, fUniqueIds())
+EndIf
+
+Select crSigCdSet
+
+loDad.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE pagina.dados.grupo_salva.salva.Click
+------------------------------------------------------------
+PROCEDURE pagina.dados.grupo_salva.salva.Click
+Private pKey
+
+pKey = crSigCdSet.Setores
+
+loDad = ThisForm.Pagina.Dados
+
+Delete From crSigCdSei Where Empty(Locals)
+
+If InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')
+	If Empty(loDad.getSetores.Value)
+		=MessageBox('Obrigatório Informar o Setor!!!', 48, '')
+		loDad.getSetores.SetFocus
+		Return 0
+	EndIf
+
+	If Empty(loDad.getDescrs.Value)
+		=MessageBox('Obrigatório Informar a Descrição!!!', 48, '')
+		loDad.getDescrs.SetFocus
+		Return 0
+	EndIf
+
+	Select * ;
+	  From crSigCdSei ;
+	  Into Cursor csItens
+
+	If (Reccount('csItens') < 1)
+		=MessageBox('Não Foram Cadastrados Grupos!!!', 48, '')
+		loDad.grdLocalizacoes.Column1.SetFocus
+		Return 0
+	EndIf
+
+	If (Thisform.pcEscolha = 'INSERIR' )
+		If ThisForm.poDataMgr.CursorQuery('SigCdSet', 'LocalSetor', 'Setores',loDad.getSetores.Value )
+			MessageBox( 'Código já cadastrado...', 48, '' )
+			loDad.getSetores.SetFocus
+			Return 0
+		EndIf
+	EndIf
+	
+	Select crSigCdSei
+	Scan
+		If Empty(crSigCdSei.Setores)
+			Replace Setores With crSigCdSet.Setores In crSigCdSei
+		EndIf
+	EndScan
+EndIf
+
+If (ThisForm.pcEscolha = 'EXCLUIR')
+	ThisForm.MontaGrade
+	Delete From crSigCdSei
+EndIf
+
+If Not ThisForm.poDataMgr.Update('crSigCdSei')
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (Update - crSigCdSei)')
+	Return 0
+EndIf
+
+Select crSigCdSet
+
+=DoDefault()
+
+ThisForm.mAtivaPagina1
+* Fim ************************************************************************************** 
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE pagina.dados.grupo_salva.cancelar.Click
+------------------------------------------------------------
+PROCEDURE pagina.dados.grupo_salva.cancelar.Click
+=DoDefault()
+
+If ThisForm.plCancelar
+	ThisForm.mAtivapagina1
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDSET.pagina.dados.grdLocalizacoes.Column1.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigPrLcl', ;
+						   'crListaRemota', 'Codigos', This.Value, 'Seleção', .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('Codigos',    '', 'Código')
+		loLista.mAddColuna('Descricaos', '', 'Descrição')
+		loLista.Show()
+	EndIf
+	
+	This.Value = crListaRemota.Codigos
+	ThisForm.Pagina.Dados.grdLocalizacoes.Column2.Text1.Value = crListaRemota.Descricaos
+	Use In crListaRemota
+Else
+	This.Value = ''
+EndIf
+This.Refresh
+
+Select CrSigCdSei
+If Not Empty(This.Value)
+	&& checa Duplicidade de Local na Grade
+	Skip 
+	Skip -1
+	Select Count(1) As Qt From crSigCdSei ;
+		Where Locals = This.Value ;
+		Into Cursor TmpTotSetores
+	If TmpTotSetores.Qt > 1
+		MessageBox('Código já Cadastrado!!!',0+16,'')
+		This.Value = ' '
+		ThisForm.Pagina.Dados.grdLocalizacoes.Column2.Text1.Value = ' '
+		ThisForm.Pagina.Dados.grdLocalizacoes.Refresh
+		Return 0
+	Else
+		&& checa se Local já não está cadastrado em outro Setor
+		lcLocals = This.Value
+		lcSetors = ThisForm.Pagina.Dados.GetSetores.Value
+		lcSql = [Select Locals,Setores From SigCdSei Where Locals = ']+lcLocals+[' And Setores <> ']+lcSetors+[']
+		If ThisForm.Podatamgr.Sqlexecute(lcSql,'LocalSetoI') < 1
+			=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (LocalSetoI)')
+			Return 0
+		EndIf
+		If (Reccount('LocalSetoI') > 0)
+			MessageBox('O Local '+lcLocals+' já está Cadastrado no Setor '+LocalSetoI.Setores+'!!!',0+16,'')
+			This.Value = ' '	
+			ThisForm.Pagina.Dados.grdLocalizacoes.Column2.Text1.Value = ' '
+			ThisForm.Pagina.Dados.grdLocalizacoes.Refresh
+			Return 0
+		Endif
+
+		&& Insere Um Local Na Grade Se Não Existir Uma Em Branco
+		Select * ;
+		  From crSigCdSei ;
+		 Where Empty(Locals) ;
+		  Into Cursor TmpInsSetores
+
+		If (Reccount('TmpInsSetores') = 0)
+			Go Bottom In crSigCdSei
+
+			Insert Into crSigCdSei (Setores, cIdChaves) Values (crSigCdSet.Setores, fUniqueIds())
+			ThisForm.Pagina.Dados.grdLocalizacoes.Column1.Refresh
+		EndIf
+		Select CrSigCdSei
+		If This.Value <> ThisForm.Antvalue Or (Reccount('TmpInsSetores') = 0) Or Lastkey() = 13
+			Keyboard '{DnArrow}'
+		Endif
+	Endif
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+loDad = ThisForm.Pagina.Dados
+
+ThisForm.AntValue = This.Value
+Return Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR') And ;
+	   Not Empty(loDad.getSetores.Value) And Not Empty(loDad.getDescrs.Value)
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDSET.pagina.dados.grdLocalizacoes.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return .f.
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDSET.pagina.dados.cmdApagar
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 14
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE btnApagar.Click
+------------------------------------------------------------
+PROCEDURE btnApagar.Click
+Select CrSigCdSei
+If Not Eof('crSigCdSei')
+	Delete In crSigCdSei
+	Skip
+	Skip -1
+
+	Select * ;
+	  From crSigCdSei ;
+	 Where Empty(Locals) ;
+	  Into Cursor TmpInsGrupo
+
+	If (Reccount('TmpInsGrupo') = 0)
+		Go Bottom In crSigCdSei
+
+		Insert Into crSigCdSei (Setores, cIdChaves) Values (crSigCdSet.Setores, fUniqueIds())
+	EndIf
+	ThisForm.Pagina.Dados.grdLocalizacoes.Column1.Text1.SetFocus
+	Keyboard '{DnArrow}'
+
+	ThisForm.Pagina.Dados.grdLocalizacoes.Refresh
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE btnApagar.When
+------------------------------------------------------------
+PROCEDURE btnApagar.When
+loDad = ThisForm.Pagina.Dados
+
+Return Inlist(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR') And ;
+	   Not Empty(loDad.getSetores.Value) And Not Empty(loDad.getDescrs.Value)
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGCDSET
+RESERVED3 (ClassInfo): antvalue
+*montagrade 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 12
+================================================================================

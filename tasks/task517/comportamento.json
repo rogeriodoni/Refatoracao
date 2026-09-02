@@ -1,0 +1,118 @@
+{
+  "resumo": {
+    "totalMetodos": 6,
+    "metodosComSQL": 2,
+    "metodosComValidacao": 2,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fwget::WHEN"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDSCL",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "Local lcBusca\n\nIf .Not.IsEmpty(ThisForm.Pagina.Dados.get_codigo.Value)\n\tThisForm.poDataMgr.LocateCursor('CrSigCdCst','Codigos',ThisForm.Pagina.Dados.get_codigo.Value)\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "LocateCursor",
+        "controlesReferenciados": "get_codigo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSCL",
+      "evento": "Init",
+      "linhas": 14,
+      "codigoOriginal": "LPARAMETERS lcacesso\n\nWith ThisForm\n\t.poDatamgr = CreateObject('fSqlConector')\n\tWith .poDatamgr\n\t\t.AddCursor('SigCdCst','codigos','crSigCdCst','',ThisForm.pagina.lista.grade)\n\t\t.pfSqlTabela(1).pColuna('codigos','','','Código',70,.t.)\n\t\t.pfSqlTabela(1).pColuna('descrs','','','Descrição',240,.t.)\n\t\t.pfSqlTabela(1).pColuna('descr2s','','','Descrição 2',240,.t.)\n\t\t.pfSqlTabela(1).pColuna('cMalads','','','Mala Direta',70,.t.)\n\tEndWith\n\t= DoDefault()\n\t.LockScreen = .f.\nEndWith",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSCL",
+      "evento": "Click",
+      "linhas": 19,
+      "codigoOriginal": "LPARAMETERS opcao\n\nselect CrSigCdCst\nIf !dodefault( Opcao )\n\tThisForm.mAtivapagina1\n\tReturn\nEndif\nif thisform.pcEscolha='CONSULTAR' or ;\n\tthisform.pcEscolha='EXCLUIR'\n\tthisform.pagina.dados.grupo_salva.salva.setfocus\nendif\nif thisform.pcEscolha='ALTERAR'\n\tthisform.pagina.dados.Get_Descr.setfocus\nendif\nif thisform.pcEscolha='INSERIR' or ;\n\tthisform.pcEscolha='PROCURAR'\n\tthisform.pagina.dados.Get_Codigo.setfocus\nendif\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Descr,Get_Codigo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSCL",
+      "evento": "Click",
+      "linhas": 22,
+      "codigoOriginal": "if thisform.pcEscolha='INSERIR' or thisform.pcEscolha='ALTERAR'\n\tif IsEmpty(thisform.pagina.dados.Get_Codigo.value)\n\t\tmessagebox('Dados Inválidos',0+48,'')\n\t\tthisform.pagina.dados.Get_Codigo.setfocus\n\t\treturn\n\tendif\n\tIf .Not.InList(ThisForm.pagina.dados.getMalad.Value,'S','N')\n\t\tmessagebox('Especificação da Mala Direta Inválida, Apenas [S]im ou [N]ão.',0+48,'')\n\t\tThisForm.pagina.dados.getMalad.SetFocus\n\t\treturn\n\tendif\nendif\nif thisform.pcEscolha='INSERIR' \n\tIf ThisForm.poDataMgr.ChkRegister('Sig... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChkRegister",
+        "controlesReferenciados": "Get_Codigo,ChkRegister('SigCdCst'",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSCL",
+      "evento": "Click",
+      "linhas": 6,
+      "codigoOriginal": "select crSigCdCst\n=DoDefault()\n\nif thisform.plCancelar\n\tthisform.mAtivapagina1\nendif",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSCL.Pagina.Dados.Get_Codigo",
+      "evento": "When",
+      "linhas": 7,
+      "codigoOriginal": "LOCAL RET\n\nRET=fwget::WHEN()\nIF thisform.pcEscolha='ALTERAR'\n\tRET=.F.\nENDIF\nRETURN(RET)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwget::WHEN",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

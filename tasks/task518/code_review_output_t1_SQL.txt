@@ -1,0 +1,40 @@
+﻿Ap├│s ler os dois arquivos completos, analisei cuidadosamente os dois itens flaggeados.
+
+## An├ílise dos Problemas
+
+### [SQL-FILTRO-INVENTADO] CBARSEDEXS
+
+O `WHERE cBarSedexs = ...` aparece em **duas** situa├º├Áes no `SedBO.prg`:
+- **Linha 412-413**: `ExecutarExclusao` ÔåÆ SELECT para checar se etiqueta est├í usada
+- **Linha 437-438**: `ExecutarExclusao` ÔåÆ DELETE FROM SigCdSed WHERE cBarSedexs = PK
+- **Linha 376**: `Atualizar` ÔåÆ UPDATE WHERE cBarSedexs = PK
+
+**Diagn├│stico**: `cBarSedexs` ├® a PK real da tabela SigCdSed (`this_cCampoChave = "cBarSedexs"`). Os usos de WHERE cBarSedexs s├úo os padr├Áes can├┤nicos do BusinessBase para UPDATE/DELETE por PK ÔÇö n├úo foram inventados. Al├®m disso, o FormSed **nunca chama** `this_oBusinessObject.Excluir()` ÔÇö ele sempre chama `ExcluirFaixa()`, que usa corretamente `WHERE cEmps AND FaixaInis` (conforme o legado). O `ExecutarExclusao` ├® dead code para este form operacional, mas ├® v├ílido como template method.
+
+**Falso positivo** ÔÇö nenhuma altera├º├úo necess├íria.
+
+### [SQL-FILTRO-INVENTADO] CONTROLCOUNT
+
+Busquei `CONTROLCOUNT` em todo o arquivo `FormSed.prg`. Aparece apenas nas linhas 238 e 245:
+
+```foxpro
+FOR loc_i = 1 TO par_oContainer.ControlCount         && linha 238 ÔÇö VFP property
+IF ... AND loc_oControl.ControlCount > 0              && linha 245 ÔÇö VFP property
+```
+
+`ControlCount` ├® uma **propriedade VFP9 de Container/Form**, n├úo uma coluna SQL. N├úo existe nenhuma cl├íusula `WHERE ... CONTROLCOUNT ...` em nenhum dos dois arquivos.
+
+**Falso positivo** ÔÇö nenhuma altera├º├úo necess├íria.
+
+---
+
+## Conclus├úo
+
+Ambos os problemas reportados pelo code review s├úo **falsos positivos**:
+
+| Flag | Motivo | Status |
+|------|--------|--------|
+| `CBARSEDEXS` | ├ë a PK real de SigCdSed, usada nos padr├Áes can├┤nicos BusinessBase (UPDATE/DELETE por PK) | Falso positivo |
+| `CONTROLCOUNT` | ├ë propriedade VFP9 `.ControlCount` ÔÇö n├úo aparece em nenhuma cl├íusula SQL WHERE | Falso positivo |
+
+Os arquivos `FormSed.prg` e `SedBO.prg` est├úo **corretos** e **n├úo precisam de altera├º├úo** neste pass SQL.

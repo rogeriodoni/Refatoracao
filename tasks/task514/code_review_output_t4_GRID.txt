@@ -1,0 +1,9 @@
+﻿3 corre├º├Áes aplicadas em `FormRPT.prg`:
+
+| Linha original | Grid | Bug | Fix |
+|---|---|---|---|
+| 1894 | `grd_4c_PropsTitulo` | `ColumnCount=3` sobrescrevia `ColumnCount=5` antes de RecordSource ÔåÆ Column4/Column5 n├úo existiam | Removido `ColumnCount=3` |
+| 1990 | `grd_4c_PropsCampos` | `ColumnCount=3` sobrescrevia `ColumnCount=12` ÔåÆ Column4ÔÇôColumn12 n├úo existiam | Removido `ColumnCount=3` |
+| 2199 | `grd_4c_PropsGrp` | `ColumnCount=3` sobrescrevia `ColumnCount=7` ÔåÆ Column4ÔÇôColumn7 n├úo existiam | Removido `ColumnCount=3` |
+
+**Linhas 1401 e 1542**: j├í estavam corretas ÔÇö ambas usam `ColumnCount=0` + `RecordSource` seguido por FOR loop que redefine `ControlSource` e `Header1.Caption` para todas as colunas via `FCOUNT()`/`FIELD()`. O checker as flagou porque n├úo reconheceu o FOR loop como padr├úo de reconfigura├º├úo.

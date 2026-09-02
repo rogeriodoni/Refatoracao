@@ -1,0 +1,18 @@
+﻿O arquivo est├í correto e completo. A Fase 4 foi implementada com sucesso.
+
+**Resumo do que foi adicionado em `FormScl.prg`:**
+
+**`ConfigurarPaginaLista()`** ÔÇö expandida com:
+- 5 bot├Áes CRUD em `cnt_4c_Botoes` (Incluir, Visualizar, Alterar, Excluir, Buscar) com todas as propriedades can├┤nicas (FontName="Comic Sans MS", PicturePosition=13, Themes=.F., etc.) e BINDEVENT para cada um
+- Bot├úo Encerrar can├┤nico em `cnt_4c_Saida` (Left=5, Width=75, Caption="Encerrar") com BINDEVENT
+- Grid `grd_4c_Lista` com ColumnCount=4 **fora do WITH** (regra Problema 36), Top=127 (98+29 compensa├º├úo PageFrame), 4 colunas com larguras do legado (70/240/240/70)
+
+**`CarregarLista()`** ÔÇö aprimorada:
+- RecordSource definido fora de WITH (regra Problema 48)
+- ControlSource de todas as colunas ap├│s RecordSource
+- `Header1.Caption` redefinido ap├│s RecordSource (regra Problema 32)
+
+**6 m├®todos de click** (todos PUBLIC para BINDEVENT funcionar):
+- `BtnEncerrarClick()` ÔÇö completo (Release)
+- `BtnBuscarClick()` ÔÇö completo (CarregarLista)
+- `BtnIncluirClick/Visualizar/Alterar/ExcluirClick` ÔÇö navega├º├úo para Page2 com leitura do registro selecionado no cursor; ser├úo expandidos em fases posteriores com BOParaForm/HabilitarCampos

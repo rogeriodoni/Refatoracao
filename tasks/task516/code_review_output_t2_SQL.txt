@@ -1,0 +1,19 @@
+﻿Tenho todas as informa├º├Áes necess├írias para avaliar cada um dos 4 problemas flaggeados. Analisando contra o c├│digo original:
+
+---
+
+**An├ílise das 4 ocorr├¬ncias**
+
+**1. CURSOR_4C_MUN** ÔÇö Falso positivo. N├úo existe nenhum `WHERE` com essa "coluna" nem no Form nem no BO. O detector encontrou o nome do cursor VFP (`cursor_4c_Munis`) em algum contexto e classificou erroneamente como coluna SQL. Nenhuma corre├º├úo necess├íria.
+
+**2. RCLIS (linha 1188)** ÔÇö `WHERE Rclis LIKE ...` est├í dentro de um bloco `CATCH` que s├│ ├® executado se `fAcessoContas()` lan├ºar exce├º├úo. O original usava `fAcessoContas` para lookup por nome; este CATCH ├® o fallback quando o framework legado n├úo est├í dispon├¡vel. `Rclis` ├® coluna real de `SigCdCli`. Remover quebraria o lookup por nome do cliente.
+
+**3. DESCS (linhas 1602/1615)** ÔÇö O original filtrava `WHERE b.estados = '...'` e depois fazia VFP `Seek(nome, [crLocal], [munici])`. A migra├º├úo traduziu esse Seek para `WHERE a.descs = ...` / `WHERE a.descs LIKE ...` diretamente no SQL Server. `descs` ├® coluna real de `SigCdMun`. ├ë uma tradu├º├úo v├ílida da opera├º├úo Seek original.
+
+**4. DPROS (linha 1816)** ÔÇö `WHERE a.dpros LIKE ...` ├® executado no handler `GradProdDescLostFocus` quando o usu├írio digita na coluna de descri├º├úo da grade de produtos. `dpros` ├® coluna real de `SigCdPro`. O original n├úo tinha um equivalente SQL direto (usava `clsconta`/framework), mas o lookup por descri├º├úo ├® funcionalidade necess├íria.
+
+---
+
+**Conclus├úo**: Todos os 4 problemas detectados s├úo **falsos positivos** deste pass automatizado. As condi├º├Áes `WHERE Rclis`, `WHERE a.descs` e `WHERE a.dpros` s├úo tradu├º├Áes v├ílidas de opera├º├Áes VFP Seek e chamadas de framework para SQL direto ÔÇö todas usam colunas reais das tabelas corretas. Remov├¬-las quebraria funcionalidades de lookup (proibido pela regra "NAO remover campos, funcionalidades ou lookups").
+
+Nenhuma altera├º├úo ├® necess├íria em `Formrst.prg` ou `rstBO.prg` para este pass SQL.

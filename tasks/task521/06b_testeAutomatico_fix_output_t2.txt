@@ -1,0 +1,9 @@
+﻿No remaining stale patterns. The fix is complete:
+
+- **Line 358**: `PEMSTATUS(THIS.oForm, "CarregarLista", 3) = 3` ÔåÆ `PEMSTATUS(THIS.oForm.Class, "CarregarLista", 5)`
+- **Line 444**: `PEMSTATUS(THIS.oForm, "AlternarPagina", 3) = 3` ÔåÆ `PEMSTATUS(THIS.oForm.Class, "AlternarPagina", 5)`
+- **Line 1087**: `PEMSTATUS(THIS.oForm, "BtnEncerrarClick", 3) = 3` ÔåÆ `PEMSTATUS(THIS.oForm.Class, "BtnEncerrarClick", 5)`
+- **Line 1094**: `...BtnFecharClick, 3) = 3` ÔåÆ `...BtnFecharClick, 5)`
+- **Line 1095**: `...BtnSairClick, 3) = 3` ÔåÆ `...BtnSairClick, 5)`
+
+Root cause: `PEMSTATUS(objectRef, methodName, 3)` returns `.F.` for class-level methods (not instance-added), and `.F. = 3` triggers VFP9 Error 11 "Function argument value, type, or count is invalid." Using `THIS.oForm.Class` (the class name string) with `nAttribute=5` correctly queries the class definition and returns `.T.` for any method defined in `DEFINE CLASS...ENDDEFINE`.

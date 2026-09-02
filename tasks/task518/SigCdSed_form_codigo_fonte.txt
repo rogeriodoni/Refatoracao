@@ -1,0 +1,743 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigCdSed.SCX
+* Data/Hora: 02/09/2026 02:30:41
+* Total de registros: 25
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDSED
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGCDSED
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGCDSED.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGCDSED.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: cmdprocessar
+  Parent: SIGCDSED
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: sair
+  Parent: SIGCDSED
+  Class: fwbtng
+  BaseClass: commandbutton
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: lbl_produto
+  Parent: SIGCDSED
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getfaixainicial
+  Parent: SIGCDSED
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: lbl_produto_a
+  Parent: SIGCDSED
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getfaixafinal
+  Parent: SIGCDSED
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: grade
+  Parent: SIGCDSED
+  Class: fwgrade
+  BaseClass: grid
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Header1
+  Parent: SIGCDSED.grade.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDSED.grade.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDSED.grade.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDSED.grade.Column2
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDSED.grade.Column3
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDSED.grade.Column3
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDSED.grade.Column4
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDSED.grade.Column4
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDSED.grade.Column5
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDSED.grade.Column5
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: excluir
+  Parent: SIGCDSED
+  Class: commandbutton
+  BaseClass: commandbutton
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDSED
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 400
+  Width = 600
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Etiquetas de Sedex"
+  ControlBox = .F.
+  Closable = .F.
+  FontName = "Verdana"
+  FontSize = 8
+  MaxButton = .F.
+  MinButton = .F.
+  ClipControls = .F.
+  TitleBar = 0
+  WindowType = 1
+  ForeColor = 36,84,155
+  incluir = 0
+  Name = "SIGCDSED"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDSED.cntSombra
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDSED.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDSED.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDSED.cmdprocessar
+------------------------------------------------------------
+  Top = 3
+  Left = 450
+  Picture = ..\framework\imagens\cadastro_inserir_60.jpg
+  Caption = "Gerar"
+  TabIndex = 3
+  Name = "cmdprocessar"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDSED.sair
+------------------------------------------------------------
+  Top = 3
+  Left = 525
+  Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Cancel = .T.
+  Caption = "Encerrar"
+  TabIndex = 4
+  Name = "sair"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDSED.lbl_produto
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = "\<Faixa :"
+  Height = 15
+  Left = 35
+  Top = 101
+  Width = 35
+  TabIndex = 5
+  ForeColor = 90,90,90
+  Name = "lbl_produto"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDSED.getfaixainicial
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "K!"
+  Height = 22
+  InputMask = ""
+  Left = 72
+  MaxLength = 14
+  SpecialEffect = 1
+  TabIndex = 1
+  ToolTipText = ""
+  Top = 97
+  Width = 108
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  BorderColor = 100,100,100
+  Themes = .F.
+  Name = "getfaixainicial"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDSED.lbl_produto_a
+------------------------------------------------------------
+  AutoSize = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = "até"
+  Left = 184
+  Top = 101
+  Width = 18
+  TabIndex = 6
+  ForeColor = 90,90,90
+  Name = "lbl_produto_a"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDSED.getfaixafinal
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "K!"
+  Height = 23
+  InputMask = ""
+  Left = 206
+  MaxLength = 14
+  SpecialEffect = 1
+  TabIndex = 2
+  ToolTipText = ""
+  Top = 97
+  Width = 108
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  BorderColor = 100,100,100
+  Themes = .F.
+  Name = "getfaixafinal"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDSED.grade
+------------------------------------------------------------
+  ColumnCount = 5
+  Height = 254
+  Left = 35
+  TabIndex = 7
+  Top = 127
+  Width = 482
+  Name = "grade"
+  Column1.ColumnOrder = 2
+  Column1.Width = 108
+  Column1.Resizable = .F.
+  Column1.ReadOnly = .T.
+  Column1.Name = "Column1"
+  Column2.ColumnOrder = 3
+  Column2.Width = 108
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .T.
+  Column2.Name = "Column2"
+  Column3.ColumnOrder = 4
+  Column3.Resizable = .F.
+  Column3.ReadOnly = .T.
+  Column3.Name = "Column3"
+  Column4.ColumnOrder = 5
+  Column4.Resizable = .F.
+  Column4.ReadOnly = .T.
+  Column4.Name = "Column4"
+  Column5.ColumnOrder = 1
+  Column5.Width = 80
+  Column5.Resizable = .F.
+  Column5.ReadOnly = .T.
+  Column5.Name = "Column5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDSED.grade.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Faixa inicial"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDSED.grade.Column1.Text1
+------------------------------------------------------------
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDSED.grade.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Faixa Final"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDSED.grade.Column2.Text1
+------------------------------------------------------------
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDSED.grade.Column3.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Livres"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDSED.grade.Column3.Text1
+------------------------------------------------------------
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDSED.grade.Column4.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Usadas"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDSED.grade.Column4.Text1
+------------------------------------------------------------
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDSED.grade.Column5.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Data Inclusão"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDSED.grade.Column5.Text1
+------------------------------------------------------------
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .T.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDSED.excluir
+------------------------------------------------------------
+  Top = 223
+  Left = 520
+  Height = 45
+  Width = 45
+  FontBold = .T.
+  FontName = "Verdana"
+  FontSize = 8
+  Picture = ..\framework\imagens\cadastro_excluir_26.jpg
+  Caption = ""
+  TabIndex = 9
+  ToolTipText = "Excluir"
+  Visible = .T.
+  ForeColor = 36,84,155
+  BackColor = 255,255,255
+  ZOrderSet = 53
+  Themes = .F.
+  Name = "excluir"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Tahoma, 0, 9, 5, 14, 12, 29, 2, 0
+  Arial, 0, 9, 5, 15, 12, 32, 3, 0
+  Verdana, 1, 8, 6, 13, 11, 25, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDSED
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+Parameters ThisParent, _DataSession
+
+ThisForm.cntSombra.lblSombra.Caption = ThisForm.Caption
+ThisForm.cntSombra.lblTitulo.Caption = ThisForm.Caption
+
+ThisForm.ThisParent = ThisParent
+Set DataSession to _DataSession
+
+*!*	This.Caption = 'Cotação do ' + Alltrim(CrSigCdMoe.cmoes)
+
+*!*	Select * From CrSigCdCot Into Cursor TmpCot ReadWrite
+*!*	Index On cidchaves Tag CidChaves
+*!*	Index On cmoes + Dtos(datas) + horas Tag Cotacaos
+*!*	Go Bottom
+
+*!*	Zap In CrSigCdCot
+
+lcQuery = [Select DtIncs, FaixaInis, FaixaFins, sum(Case When EmpDopNums = '' Then 0 Else 1 End) as nUsadas, sum(Case When EmpDopNums <> '' Then 0 Else 1 End) as nLivres ] +;
+			[from SigCdSed Where cEmps = ?crSigCdEmp.cEmps Group By DtIncs, FaixaInis, FaixaFins Order By DtIncs, FaixaInis, FaixaFins]
+If Not (ThisForm.ThisParent.poDatamgr.SqlExecute(lcQuery,'crSedex') > 0)
+	MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSedex)')
+	Return .f.
+EndIf			
+
+thisform.grade.RecordSource = 'crSedex'
+thisform.grade.column1.ControlSource = 'crSedex.FaixaInis'
+thisform.grade.column2.ControlSource = 'crSedex.FaixaFins'
+thisform.grade.column3.ControlSource = 'crSedex.nLivres'
+thisform.grade.column4.ControlSource = 'crSedex.nUsadas'
+thisform.grade.column4.ControlSource = 'crSedex.nUsadas'
+thisform.grade.column5.ControlSource = 'crSedex.DtIncs'
+
+****************  Acesso dos Botões  *****************
+*!*	ThisForm.Inserir.Visible = fChecaAcesso('SIGPRCOT','INSERIR')
+*!*	ThisForm.Delete.Visible  = fChecaAcesso('SIGPRCOT','EXCLUIR')
+*!*	lnLeft = 13
+*!*	If ThisForm.Inserir.Visible
+*!*		ThisForm.Inserir.Left = lnLeft
+*!*		lnLeft = lnLeft + ThisForm.Inserir.Width
+*!*	EndIf
+*!*	If ThisForm.Delete.Visible
+*!*		ThisForm.Delete.Left = lnLeft
+*!*		lnLeft = lnLeft + ThisForm.Delete.Width
+*!*	EndIf
+******************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDSED.cmdprocessar
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+If Empty(thisform.getfaixainicial.Value) or Empty(thisform.getfaixafinal.value)
+	Messagebox([Faixa inicial e final são obrigatórias.],48,[Aviso])
+	Return .f.
+Endif
+
+lcFaixaIni = Substr(fSubstTxt(thisform.getfaixainicial.Value, [], [N]),1,8)
+lcFaixaFin = Substr(fSubstTxt(thisform.getfaixafinal.Value, [], [N]),1,8)
+lnFaixaIni = Val(lcFaixaIni)
+lnFaixaFin = Val(lcFaixaFin)
+
+*** Checa se já tem etiqueta gerada pra faixa informada; checa sem o dígito verificador
+lcQuery = [Select cBarSedexs from SigCdSed where nNumEtiqs Between ?lcFaixaIni And ?lcFaixaFin And cEmps = ?crSigCdEmp.cEmps]
+If Not (ThisForm.ThisParent.poDatamgr.SqlExecute(lcQuery,'LocalSed') > 0)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (LocalSed)')
+	Return .f.
+EndIf
+
+Select cBarSedexs from crSigCdSed where nNumEtiqs Between lnFaixaIni And lnFaixaFin And cEmps = crSigCdEmp.cEmps into cursor LocalSed2
+
+If !Eof('LocalSed') or !Eof('LocalSed2')
+	Messagebox([Já existe etiquetas geradas na faixa informada.],48,[Aviso])
+	Return .f.
+Endif
+
+For x = lnFaixaIni to lnFaixaFin
+	Insert into crSigCdSed(cEmps,DtIncs,nNumEtiqs,FaixaInis,FaixaFins) values (crSigCdEmp.cEmps,Date(),x,thisform.getfaixainicial.Value,thisform.getfaixafinal.Value)
+	lcBarEtiq = Substr(thisform.getfaixainicial.Value,1,2) + Str(x,8) + Substr(thisform.getfaixainicial.Value,13,2)	
+	lcBarEtiq = fBarSedex(lcBarEtiq)
+	replace cBarSedexs With lcBarEtiq in crSigCdSed
+Next
+
+Select crSigCdSed
+Insert into crSedex(DtIncs,FaixaInis,FaixaFins,nLivres,nUsadas) values (Date(),thisform.getfaixainicial.Value,thisform.getfaixafinal.Value,(lnFaixaFin - lnFaixaIni + 1),0)
+thisform.grade.Refresh()
+
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(INLIST(Thisform.thisparent.pcEscolha,'INSERIR','ALTERAR'))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDSED.sair
+* Classe: fwbtng (Base: commandbutton)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+ThisForm.Release()
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDSED.getfaixainicial
+* Classe: textbox (Base: textbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(INLIST(Thisform.thisparent.pcEscolha,'INSERIR','ALTERAR'))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDSED.getfaixafinal
+* Classe: textbox (Base: textbox)
+* Registro: 12
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(INLIST(Thisform.thisparent.pcEscolha,'INSERIR','ALTERAR'))
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDSED.excluir
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 24
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select crSedex
+If crSedex.nUsadas > 0
+	Messagebox([Etiquetas já usadas na faixa selecionada. Não é permitido exclusão.],48,[Aviso])
+	Return .f.
+EndIf
+
+ThisForm.LockScreen = .t.
+
+lcQuery = [Select * from SigCdSed Where cEmps = ?crSigCdEmp.cEmps And FaixaInis = ?crSedex.FaixaInis]
+If Not (ThisForm.ThisParent.poDatamgr.SqlExecute(lcQuery,[LocalSedex]) > 0)
+	MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão')
+	Return .f.
+Endif
+
+Select crSedex
+Delete
+Locate
+ThisForm.grade.Refresh()
+
+ThisForm.LockScreen = .f.
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(INLIST(Thisform.thisparent.pcEscolha,'INSERIR','ALTERAR'))
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGCDSED
+RESERVED3 (ClassInfo): incluir
+thisparent
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 9
+================================================================================

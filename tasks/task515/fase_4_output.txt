@@ -1,0 +1,19 @@
+﻿Arquivo atualizado. Resumo do que foi adicionado na Fase 4:
+
+**`ConfigurarPaginaLista()` ÔÇö completa:**
+- 5 bot├Áes em `cnt_4c_Botoes` (Incluir, Visualizar, Alterar, Excluir, Buscar) com ├¡cones, `Comic Sans MS`, `PicturePosition=13`
+- `cmd_4c_Encerrar` em `cnt_4c_Saida` (Left=917, Width=90, padr├úo can├┤nico regra #10)
+- `grd_4c_Lista` com 2 colunas (`grupoos`/`grupods`), `Verdana 8`, `GridLines=3`, `HighlightStyle=2`
+- `BINDEVENT` para todos os 6 bot├Áes
+
+**`ConfigurarPaginaDados()` ÔÇö expandida:**
+- Bot├Áes `cmd_4c_Confirmar` e `cmd_4c_Cancelar` adicionados ao `cnt_4c_BotoesAcao` (antes vazio)
+- `BINDEVENT` para Confirmar/Cancelar
+
+**`CarregarLista()` ÔÇö atualizada:**
+- Wiring `RecordSource` + `ControlSource` das 2 colunas
+- `Header1.Caption` redefinido ap├│s `RecordSource` (obrigat├│rio ÔÇö VFP9 reseta)
+
+**Novos m├®todos:**
+- `FormParaBO` / `BOParaForm` / `LimparCampos` / `HabilitarCampos` / `AjustarBotoesPorModo` ÔÇö usam `PEMSTATUS()` para compatibilidade com a Fase 5 que ainda n├úo tem os campos de Page2
+- `BtnIncluirClick` / `BtnVisualizarClick` / `BtnAlterarClick` / `BtnExcluirClick` / `BtnBuscarClick` / `BtnEncerrarClick` / `BtnConfirmarClick` / `BtnCancelarClick` ÔÇö todos PUBLIC, l├│gica completa

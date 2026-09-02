@@ -1,0 +1,15 @@
+﻿Estrutura correta. Fase 4 conclu├¡da com sucesso.
+
+**O que foi adicionado ao `Formrst.prg`:**
+
+- **`ConfigurarPaginaLista()`** agora completo:
+  - 5 bot├Áes CRUD em `cnt_4c_Botoes` (Incluir, Visualizar, Alterar, Excluir, Buscar) com `Left` can├┤nico (5/80/155/230/305), ├¡cones e `FontName="Comic Sans MS"`
+  - Bot├úo Encerrar em `cnt_4c_Saida` (padr├úo can├┤nico `Left=917, Width=75`)
+  - Grid `grd_4c_Lista` (Top=117, Left=26, Width=890, Height=483) com 3 colunas: Conta/Nome da Conta/Data
+  - BINDEVENT para todos os 6 bot├Áes + DblClick no grid
+
+- **`CarregarLista()`** atualizado: vincula `RecordSource`, `ControlSource` e `Header1.Caption` ap├│s o `Buscar()` (evita o Problema #2 das li├º├Áes do FormCor)
+
+- **`AlternarPagina(par_nPagina)`** adicionado: muda `ActivePage` e recarrega lista ao voltar para Page1
+
+- **6 handlers de bot├úo** adicionados: `BtnIncluirClick`, `BtnVisualizarClick`, `BtnAlterarClick`, `BtnExcluirClick`, `BtnBuscarClick`, `BtnEncerrarClick` ÔÇö todos `PUBLIC` para funcionar com BINDEVENT

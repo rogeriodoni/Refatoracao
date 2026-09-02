@@ -1,0 +1,47 @@
+﻿Analisei o c├│digo real. Todos os 5 problemas reportados s├úo **falsos positivos** do validador autom├ítico. Aqui est├í a an├ílise:
+
+---
+
+## Resultado da Verifica├º├úo
+
+### [GRID-SQL] grupoos e grupods ÔÇö FALSO POSITIVO
+
+O `Buscar()` do BO (linha 277) faz exatamente:
+```foxpro
+loc_cSQL = "SELECT grupoos, grupods, cidchaves" + ;
+    " FROM SigCdRps"
+```
+E o fallback `CREATE CURSOR` (linha 268) tamb├®m declara os 3 campos. Ambas as colunas est├úo no SELECT. O validador errou.
+
+---
+
+### [SQL-FILTRO-INVENTADO] GRUPOOS e GRUPODS ÔÇö FALSO POSITIVO
+
+A condi├º├úo `WHERE grupoos = ... AND grupods = ...` est├í em `VerificarDuplicidade()` (linha 119), que consulta **SigCdRps** para checar pares duplicados. O validador comparou esse WHERE com o SQL de refer├¬ncia do legado (`WHERE Codigos = ...` em **SigCdGcr**), que ├® uma tabela completamente diferente ÔÇö a refer├¬ncia ├® do m├®todo `BuscarDescricaoGrupo`, j├í implementado corretamente (linha 346).
+
+---
+
+### [SQL-FILTRO-INVENTADO] CIDCHAVES ÔÇö FALSO POSITIVO
+
+`WHERE cidchaves = ...` aparece em:
+- `CarregarPorCodigo()` linha 314 ÔÇö acesso por PK, padr├úo CRUD can├┤nico
+- `Atualizar()` linha 211 ÔÇö UPDATE por PK
+- `ExecutarExclusao()` linha 237 ÔÇö DELETE por PK
+
+Novamente, o validador comparou estes WHEREs contra o SQL de lookup SigCdGcr do legado. S├úo SQLs de tabelas e prop├│sitos completamente distintos.
+
+---
+
+## Conclus├úo
+
+Nenhuma altera├º├úo ├® necess├íria. O c├│digo est├í correto:
+
+| Problema | Verifica├º├úo | Status |
+|----------|-------------|--------|
+| GRID-SQL grupoos | `SELECT grupoos, grupods, cidchaves FROM SigCdRps` ÔÇö linha 277 | Ô£à Campo presente |
+| GRID-SQL grupods | Mesmo SELECT acima | Ô£à Campo presente |
+| FILTRO-INVENTADO GRUPOOS | `VerificarDuplicidade` query em SigCdRps (PK logic) ÔÇö linha 119 | Ô£à V├ílido |
+| FILTRO-INVENTADO GRUPODS | Mesmo m├®todo acima | Ô£à V├ílido |
+| FILTRO-INVENTADO CIDCHAVES | CRUD por PK em CarregarPorCodigo/Atualizar/ExecutarExclusao | Ô£à V├ílido |
+
+O validador confundiu o contexto SQL: a refer├¬ncia `WHERE Codigos = ...` do legado pertence ao lookup de `SigCdGcr` (migrado corretamente para `BuscarDescricaoGrupo`), n├úo ├ás opera├º├Áes CRUD sobre `SigCdRps`.

@@ -1,0 +1,3 @@
+﻿**Causa:** Em `ConfigurarSubPaginaLayout`, o grid `grd_4c_PropsCampos` recebe `ColumnCount = 12`, o que faz o VFP criar automaticamente um controle `Text1` em cada coluna. Depois, as colunas 1 e 2 chamavam `.AddObject("Text1", "TextBox")` tentando criar outro `Text1` que j├í existia ÔåÆ "A member object with this name already exists".
+
+**Corre├º├úo:** Removidas as linhas `AddObject("Text1", "TextBox")` e `CurrentControl = "Text1"` das colunas 1 e 2 do `grd_4c_PropsCampos`. O bloco `WITH .Text1` que configura as propriedades (ReadOnly, Width) foi mantido ÔÇö ele acessa o `Text1` que o VFP j├í criou automaticamente.

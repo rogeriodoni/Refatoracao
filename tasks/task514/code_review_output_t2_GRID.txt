@@ -1,0 +1,9 @@
+﻿Todas as 5 corre├º├Áes est├úo aplicadas e verificadas. Resumo do que foi feito:
+
+**Linhas 1882, 1978, 2187 (grids est├íticos) ÔÇö bug cr├¡tico resolvido:**
+- Removido `ColumnCount = 3` de cada grid (`grd_4c_PropsTitulo`, `grd_4c_PropsCampos`, `grd_4c_PropsGrp`).
+- Esse `= 3` destru├¡a as Column4/5/6/7/etc rec├®m-criadas pelo valor correto acima, causando "Property COLUMN4 is not found" no WITH block subsequente. Os ControlSources j├í eram definidos corretamente dentro do WITH ÔÇö s├│ precisava que as colunas existissem.
+
+**Linhas 1401 e 1536 (grids din├ómicos) ÔÇö auto-bind explicitado:**
+- Adicionado loop `FOR loc_j = 1 TO FCOUNT(...)` ap├│s `RecordSource =` em `BtnExecutarSQLClick` e `BtnEstruturaClick`.
+- Usa `FIELD(j, cursor)` para re-vincular `.ControlSource` e `.Header1.Caption` de cada coluna, garantindo que uma segunda execu├º├úo com SQL diferente n├úo deixe colunas com v├¡nculos do cursor anterior.

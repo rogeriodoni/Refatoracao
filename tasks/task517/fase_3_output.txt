@@ -1,0 +1,16 @@
+﻿Arquivo criado corretamente. Checklist r├ípido da Fase 3:
+
+**O que foi entregue:**
+- `DEFINE CLASS FormScl AS FormBase` com `DataSession=2`, Width=1000, Height=600
+- `Init()` ÔåÆ apenas `RETURN DODEFAULT()` (sem chamada dupla de InicializarForm)
+- `InicializarForm()` ÔåÆ Caption com CHR(), cria SclBO, chama ConfigurarPageFrame/Lista/Dados, guarda `gb_4c_ValidandoUI`
+- `ConfigurarPageFrame()` ÔåÆ pgf_4c_Paginas com 2 pages, Top=-29, Tabs=.F., imagem fundo_cad_1003.jpg
+- `ConfigurarPaginaLista()` ÔåÆ cnt_4c_Cabecalho (RGB 53,53,53) + lbl_4c_Sombra/Titulo + cnt_4c_Botoes (Left=542) + cnt_4c_Saida (Left=917 ÔÇö can├┤nico regra #10)
+- `ConfigurarPaginaDados()` ÔåÆ cnt_4c_Salva (Left=843, Top=26 = -3+29)
+- `CarregarLista()` ÔåÆ guard `gb_4c_ValidandoUI` FORA do TRY, chama `BO.Buscar("")`
+- `AlternarPagina()` ÔåÆ valida├º├úo ANTES do TRY, navega entre pages
+- `TornarControlesVisiveis()` ÔåÆ recursiva (Pages + Controls)
+- `FormatarGridLista()` ÔåÆ Tahoma 8
+- `Destroy()` ÔåÆ null BO + DODEFAULT()
+
+**Nenhuma viola├º├úo cr├¡tica:** sem RETURN dentro de TRY/CATCH, sem CHR acentuados literais, sem PUBLIC em DEFINE CLASS, sem Container.Themes.

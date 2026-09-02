@@ -1,0 +1,134 @@
+{
+  "resumo": {
+    "totalMetodos": 7,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 2,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": []
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDSEG",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "Local lcBusca\n\nIf .Not.IsEmpty(ThisForm.Pagina.Dados.Get_codigo.Value)\n\tThisForm.poDataMgr.LocateCursor('crSigCdSct','codigos',ThisForm.Pagina.Dados.Get_codigo.Value)\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "LocateCursor",
+        "controlesReferenciados": "Get_codigo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSEG",
+      "evento": "Init",
+      "linhas": 12,
+      "codigoOriginal": "LPARAMETERS lcacesso\n\nWith ThisForm\n\t.poDatamgr = CreateObject('fSqlConector')\n\tWith .poDatamgr\n\t\t.AddCursor('SigCdSct','codigos','crSigCdSct','',ThisForm.pagina.lista.grade)\n\t\t.pfSqlTabela(1).pColuna('codigos','','','Código',80,.t.)\n\t\t.pfSqlTabela(1).pColuna('descs','','','Descrição',160,.t.)\n\tEndWith\n\t= DoDefault()\n\t.LockScreen = .f.\nEndWith",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSEG",
+      "evento": "Click",
+      "linhas": 17,
+      "codigoOriginal": "LParameters opcao\n\nselect CrSigCdSct\nIf !dodefault( opcao )\n\tThisForm.mAtivapagina1\n\tReturn\nEndif\n\nDo Case\n\tCase Inlist( ThisForm.pcEscolha, 'INSERIR', 'PROCURAR' )\n\t\tThisForm.Pagina.Dados.Get_Codigo.SetFocus\n\tCase ThisForm.pcEscolha = 'ALTERAR'\n\t\tThisForm.Pagina.Dados.Get_Descricao.SetFocus\nOther\n\tThisForm.Pagina.Dados.Grupo_Salva.Salva.SetFocus\nEndcase\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Codigo,Get_Descricao",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSEG",
+      "evento": "Click",
+      "linhas": 17,
+      "codigoOriginal": "If ThisForm.pcEscolha = 'INSERIR'\n\tIf IsEmpty( CrSigCdSct.Codigos )\n\t\tMessagebox( 'Codigo não pode ficar em branco!', 48, '' )\n\t\tThisForm.Pagina.Dados.Get_Codigo.SetFocus\n\t\tReturn\n\tEndif\n\tIf ThisForm.poDataMgr.ChkRegister('SigCdSct','codigos',ThisForm.Pagina.Dados.Get_Codigo.Value)\n\t\tMessagebox( 'Código já Cadastrado!', 48, '' )\n\t\tThisForm.Pagina.Dados.Get_Codigo.SetFocus\n\t\tReturn\n\tEndif\nEndif\n\n=DoDefault()\n\nThisForm.mAtivapagina1\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChkRegister",
+        "controlesReferenciados": "Get_Codigo,ChkRegister('SigCdSct'",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSEG",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "=DoDefault()\nIf ThisForm.plCancelar\n\tThisForm.mAtivapagina1\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSEG.Pagina.Dados.Get_codigo",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "return( !thisform.pcEscolha $ 'ALTERAR/EXCLUIR/CONSULTAR' )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSEG.Pagina.Dados.op_con",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Inlist( ThisForm.pcEscolha, \"INSERIR\", \"ALTERAR\" )\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

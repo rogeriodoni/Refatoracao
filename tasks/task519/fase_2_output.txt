@@ -1,0 +1,9 @@
+﻿Fase 2 conclu├¡da. SEGBO.prg agora tem implementa├º├úo completa com 7 m├®todos adicionados:
+
+- **`ObterChavePrimaria()`** ÔÇö retorna `this_cCodigo` para auditoria
+- **`CarregarDoCursor()`** ÔÇö usa `SELECT (par_cAliasCursor)` + acesso direto ├ás colunas (`codigos`, `descs`, `impops`)
+- **`Buscar()`** ÔÇö SELECT com ORDER BY codigos, cria `cursor_4c_Dados`
+- **`CarregarPorCodigo()`** ÔÇö SELECT por PK, fecha `cursor_4c_Carrega` ao final, reseta `this_lNovoRegistro = .F.`
+- **`Inserir()`** ÔÇö INSERT com `EscaparSQL`/`FormatarNumeroSQL` + auditoria (PROTECTED)
+- **`Atualizar()`** ÔÇö UPDATE com todos os campos edit├íveis + auditoria (PROTECTED)
+- **`ExecutarExclusao()`** ÔÇö DELETE por PK + auditoria (PROTECTED, chamado via `Excluir()` p├║blico do BusinessBase)

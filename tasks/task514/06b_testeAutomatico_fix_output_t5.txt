@@ -1,0 +1,3 @@
+﻿Corre├º├úo aplicada nos tr├¬s grids da `ConfigurarSubPaginaLayout`. O problema: ap├│s setar `ColumnCount = 5/12/7` (correto), o c├│digo sobrescrevia com `ColumnCount = 3`, destruindo as colunas extras, e depois tentava acessar `Column4`+ ÔÇö que n├úo existiam mais.
+
+Removi as tr├¬s linhas `ColumnCount = 3` esp├║rias. O `.FXP` antigo precisa ser deletado antes do pr├│ximo teste para for├ºar recompila├º├úo.

@@ -1,0 +1,11 @@
+﻿Fase 2 conclu├¡da. O RPTBO.prg agora tem todos os m├®todos CRUD completos:
+
+- **`LimparDados()`** ÔÇö reseta todas as propriedades this_*
+- **`CarregarDoCursor()`** ÔÇö l├¬ do cursor com `SELECT (par_cAliasCursor)` antes de acessar campos; usa `PEMSTATUS` para DtCriacao/DtAlteracao (colunas ausentes no cursor do Buscar)
+- **`ValidarDados()`** ÔÇö valida NmReport e SqlQuery obrigat├│rios
+- **`GerarRPT_ID()`** ÔÇö gera chave `YYYYMMDD_HHMMSS` (padr├úo legado)
+- **`Inserir()`** ÔÇö INSERT em SIGCDRLC com RPT_ID gerado e datas preenchidas automaticamente
+- **`Atualizar()`** ÔÇö UPDATE em SIGCDRLC; DtAlteracao sempre atualizado com DATE()
+- **`ExecutarExclusao()`** ÔÇö DELETE em SIGCDRLD primeiro (FK), depois SIGCDRLC
+- **`Buscar()`** ÔÇö SELECT lista de reports com fallback de cursor vazio para ValidandoUI
+- **`CarregarPorCodigo()`** ÔÇö SELECT completo incluindo SqlQuery; reseta `this_lNovoRegistro = .F.`

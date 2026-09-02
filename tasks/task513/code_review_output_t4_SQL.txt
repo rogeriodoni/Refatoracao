@@ -1,0 +1,9 @@
+﻿Correto. Apenas uma corre├º├úo real foi necess├íria no RopBO.prg:
+
+**Problema real corrigido:**
+- `VerificarDuplicidade()`: removida a condi├º├úo `AND cidchaves <> X` inventada pela LLM
+- `ValidarDados()`: adicionado guard `IF THIS.this_lNovoRegistro` ÔÇö a checagem de duplicidade s├│ ocorre no INSERT, exatamente como no original (no INSERT o registro ainda n├úo existe no banco, ent├úo n├úo h├í risco de auto-detec├º├úo)
+
+**Falsos positivos confirmados (sem altera├º├úo necess├íria):**
+- **9 GRID-SQL**: todos os campos (`dopps`, `tpops`, `cgrus`, `opers`, `mercs`, `grupos`, `contas`, `contaorig`, `codcors`) j├í est├úo no `SELECT` do `Buscar()` e no `CREATE CURSOR` do RopBO.prg
+- **CODIGOS**: ├® uma coluna leg├¡tima de `SigCdGcr` (confirmado em CcoBO.prg e ccrBO.prg) ÔÇö a detec├º├úo confundiu o lookup de Grupo Cont├íbil com um filtro inventado no WHERE de SigCdRpo

@@ -1,0 +1,9 @@
+﻿O arquivo est├í correto. Fase 4 conclu├¡da com sucesso.
+
+**O que foi adicionado a `FormRop.prg`:**
+
+- **`ConfigurarPaginaLista()`** ÔÇö completo com 5 bot├Áes CRUD em `cnt_4c_Botoes` (Incluir/Visualizar/Alterar/Excluir/Buscar com ├¡cones, Comic Sans MS, BINDEVENT wired) + bot├úo Encerrar em `cnt_4c_Saida` (can├┤nico Left=917) + grid `grd_4c_Lista` (9 colunas, ColumnCount=9 com refer├¬ncia expl├¡cita, Top=117, Width=890, Verdana)
+
+- **`CarregarLista()`** ÔÇö completo: chama `Buscar("")`, seta `RecordSource`, redefine `ControlSource` + `Width` + `Header1.Caption` para todas as 9 colunas ap├│s RecordSource (evita reset de headers), chama `FormatarGridLista()`
+
+- **6 handlers Click** ÔÇö todos PUBLIC para BINDEVENT funcionar: `BtnIncluirClick` (NovoRegistroÔåÆPage2), `BtnVisualizarClick` (CarregarPorCodigoÔåÆBOParaFormÔåÆreadonly), `BtnAlterarClick` (CarregarPorCodigoÔåÆEditarRegistroÔåÆeditable), `BtnExcluirClick` (MsgConfirmaÔåÆExcluirÔåÆrecarrega), `BtnBuscarClick` (CarregarLista), `BtnEncerrarClick` (Release)

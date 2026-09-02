@@ -1,0 +1,8 @@
+﻿Ambas as corre├º├Áes est├úo aplicadas corretamente. Resumo do que foi alterado:
+
+**SERBO.prg:**
+- `Buscar`: removido `OR a.Descs LIKE ...` ÔÇö filtro inventado, original usa apenas `Cods`
+- `CarregarPorCodigo`: `WHERE a.cIdChaves = ...` ÔåÆ `WHERE a.Cods = ...` ÔÇö chave de busca alinhada ao original
+
+**FormSER.prg (3 ocorr├¬ncias):**
+- `cursor_4c_Dados.cIdChaves` ÔåÆ `cursor_4c_Dados.Cods` em `BtnVisualizarClick`, `BtnAlterarClick` e `BtnExcluirClick` ÔÇö o form agora passa o c├│digo de neg├│cio (`Cods`) para `CarregarPorCodigo`, consistente com a nova assinatura do BO

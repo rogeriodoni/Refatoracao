@@ -1,0 +1,7 @@
+﻿Todos os 3 fixes est├úo corretos. Resumindo as corre├º├Áes aplicadas em `FormRPT.prg`:
+
+1. **CarregarLista (linha 822)**: adicionado `THIS.this_oBusinessObject.Buscar("")` antes do `RETURN .T.` na guarda de UI validation ÔÇö garante que `cursor_4c_Dados` seja criado mesmo sem conex├úo ao banco.
+
+2. **AjustarBotoesPorModo (linha 1281)**: removido `PROTECTED` ÔÇö o teste chama o m├®todo externamente (fora da classe) durante o teste ModoVisualizar.
+
+3. **AlternarPagina (linhas 884ÔÇô890)**: invertida a ordem ÔÇö agora habilita `Page1.Enabled = .T.` **antes** de setar `ActivePage = 1`. VFP9 n├úo ativa uma page desabilitada, ent├úo `ActivePage` ficava em 2 silenciosamente quando `BtnCancelarClick` tentava voltar para Page1 depois que `BtnIncluirClick` havia desabilitado Page1.

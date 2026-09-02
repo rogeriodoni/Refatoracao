@@ -1,0 +1,16 @@
+﻿Fase 5 conclu├¡da. Aqui est├í o resumo do que foi implementado em `FormRss.prg`:
+
+**Adicionado em `ConfigurarPaginaDados()`:**
+- `lbl_4c_Say2` ÔÇö label "Origem : " (Top=169, Left=181, compensa├º├úo +29)
+- `txt_4c_Origem` ÔÇö TextBox para c├│digo do Grupo Origem (Top=167, Left=232, W=80, H=23)
+- `txt_4c_Dorigem` ÔÇö TextBox readonly para descri├º├úo do Grupo Origem (Top=167, Left=314, W=193, H=23, BackColor cinza)
+- BINDEVENTs: LostFocus ÔåÆ `ValidarOrigem`, KeyPress ÔåÆ `OrigemKeyPress`
+
+**Novos m├®todos (PUBLIC, compat├¡veis com BINDEVENT):**
+- `ValidarOrigem()` ÔÇö guard de repeti├º├úo por `this_cUltimoOrigemValidada`; chama `AbrirBuscaOrigem` se valor mudou
+- `OrigemKeyPress(par_nKeyCode, par_nShiftAltCtrl)` ÔÇö ativa ao F4 (keyCode=115)
+- `AbrirBuscaOrigem(par_cValor)` ÔÇö FormBuscaAuxiliar Mode 1 em SigCdGcr por Codigos; ap├│s sele├º├úo chama `RssBO.BuscarDescricaoGrupo()` para preencher `txt_4c_Dorigem`
+
+**Nova propriedade de classe:** `this_cUltimoOrigemValidada = ""` (guard LostFocus)
+
+A Fase 6 adicionar├í os campos de Destino (lbl_4c_Say1, txt_4c_Destino, txt_4c_Ddestino) com lookup an├ílogo.

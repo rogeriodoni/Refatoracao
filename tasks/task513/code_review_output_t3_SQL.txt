@@ -1,0 +1,11 @@
+﻿**Corre├º├Áes aplicadas:**
+
+**SQL-FILTRO-INVENTADO (3 flags ÔåÆ 4 sites corrigidos):**
+- `ValidarConta` (linha 1710-1711): removido `AND Inativas = 0` do WHERE em SigCdCli
+- `AbrirBuscaConta` (linha 1753-1754): removido `WHERE Inativas = 0` da query de listagem
+- `ValidarContaOrig` (linha 1797-1798): removido `AND Inativas = 0`
+- `AbrirBuscaContaOrig` (linha 1840-1841): removido `WHERE Inativas = 0`
+
+**GRID-SQL (9 flags):** Falsos positivos ÔÇö o BO atual j├í tem `SELECT dopps, tpops, cgrus, opers, mercs, grupos, contas, contaorig, codcors, cidchaves FROM SigCdRpo` e o CREATE CURSOR offline com todos os campos. Nenhuma altera├º├úo necess├íria.
+
+**CIDCHAVES e CODIGOS em WHERE:** Mantidos ÔÇö `cidchaves` ├® o mecanismo de PK lookup (substitui├º├úo do SEEK legado, essencial em `CarregarPorCodigo` e `VerificarDuplicidade`); `Codigos` ├® coluna leg├¡tima de `SigCdGcr` (tabela diferente de `SigCdRpo`).

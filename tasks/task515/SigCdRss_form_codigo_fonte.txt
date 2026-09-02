@@ -1,0 +1,528 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigCdRss.SCX
+* Data/Hora: 01/09/2026 23:31:54
+* Total de registros: 10
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDRSS
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGCDRSS.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGCDRSS.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Destino
+  Parent: SIGCDRSS.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Origem
+  Parent: SIGCDRSS.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Dorigem
+  Parent: SIGCDRSS.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_ddestino
+  Parent: SIGCDRSS.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDRSS
+------------------------------------------------------------
+  DataSession = 2
+  DoCreate = .T.
+  Caption = "Restrição de Setores"
+  Name = "SIGCDRSS"
+  Pagina.ErasePage = .T.
+  Pagina.Lista.cntSombra.lblSombra.Name = "lblSombra"
+  Pagina.Lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  Pagina.Lista.cntSombra.Name = "cntSombra"
+  Pagina.Lista.Grade.FontName = "Tahoma"
+  Pagina.Lista.Grade.FontSize = 8
+  Pagina.Lista.Grade.RowHeight = 16
+  Pagina.Lista.Grade.ForeColor = 90,90,90
+  Pagina.Lista.Grade.Name = "Grade"
+  Pagina.Lista.Grupo_op.AutoSize = .T.
+  Pagina.Lista.Grupo_op.Inserir.Top = 5
+  Pagina.Lista.Grupo_op.Inserir.Left = 5
+  Pagina.Lista.Grupo_op.Inserir.Name = "Inserir"
+  Pagina.Lista.Grupo_op.Consultar.Top = 5
+  Pagina.Lista.Grupo_op.Consultar.Left = 81
+  Pagina.Lista.Grupo_op.Consultar.Name = "Consultar"
+  Pagina.Lista.Grupo_op.Alterar.Top = 5
+  Pagina.Lista.Grupo_op.Alterar.Left = 157
+  Pagina.Lista.Grupo_op.Alterar.Name = "Alterar"
+  Pagina.Lista.Grupo_op.Excluir.Top = 5
+  Pagina.Lista.Grupo_op.Excluir.Left = 233
+  Pagina.Lista.Grupo_op.Excluir.Name = "Excluir"
+  Pagina.Lista.Grupo_op.procurar.Top = 5
+  Pagina.Lista.Grupo_op.procurar.Left = 309
+  Pagina.Lista.Grupo_op.procurar.Name = "procurar"
+  Pagina.Lista.Grupo_op.Height = 85
+  Pagina.Lista.Grupo_op.Left = 339
+  Pagina.Lista.Grupo_op.Top = -1
+  Pagina.Lista.Grupo_op.Width = 389
+  Pagina.Lista.Grupo_op.Name = "Grupo_op"
+  Pagina.Lista.Grupo_Saida.Sair.Top = 5
+  Pagina.Lista.Grupo_Saida.Sair.Left = 5
+  Pagina.Lista.Grupo_Saida.Sair.Name = "Sair"
+  Pagina.Lista.Grupo_Saida.Left = 719
+  Pagina.Lista.Grupo_Saida.Top = -1
+  Pagina.Lista.Grupo_Saida.Name = "Grupo_Saida"
+  Pagina.Lista.cntFiltros.Name = "cntFiltros"
+  Pagina.Lista.Name = "Lista"
+  Pagina.Dados.Grupo_Salva.AutoSize = .T.
+  Pagina.Dados.Grupo_Salva.Salva.Top = 5
+  Pagina.Dados.Grupo_Salva.Salva.Left = 5
+  Pagina.Dados.Grupo_Salva.Salva.Name = "Salva"
+  Pagina.Dados.Grupo_Salva.Cancelar.Top = 5
+  Pagina.Dados.Grupo_Salva.Cancelar.Left = 81
+  Pagina.Dados.Grupo_Salva.Cancelar.Name = "Cancelar"
+  Pagina.Dados.Grupo_Salva.TabIndex = 7
+  Pagina.Dados.Grupo_Salva.Name = "Grupo_Salva"
+  Pagina.Dados.Name = "Dados"
+  Pagina.Name = "Pagina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDRSS.Pagina.Dados.Say1
+------------------------------------------------------------
+  Caption = "Destino : "
+  Left = 179
+  Top = 176
+  TabIndex = 1
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDRSS.Pagina.Dados.Say2
+------------------------------------------------------------
+  Caption = "Origem : "
+  Left = 181
+  Top = 140
+  TabIndex = 2
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDRSS.Pagina.Dados.Get_Destino
+------------------------------------------------------------
+  ControlSource = "crSigCdRps.Grupods"
+  Left = 232
+  TabIndex = 5
+  Top = 174
+  Width = 80
+  plprocurar = .F.
+  Name = "Get_Destino"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDRSS.Pagina.Dados.Get_Origem
+------------------------------------------------------------
+  ControlSource = "crSigCdRps.grupoos"
+  Height = 23
+  Left = 232
+  TabIndex = 3
+  Top = 138
+  Width = 80
+  Name = "Get_Origem"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDRSS.Pagina.Dados.Get_Dorigem
+------------------------------------------------------------
+  Height = 23
+  Left = 314
+  TabIndex = 4
+  Top = 138
+  Width = 193
+  plprocurar = .F.
+  Name = "Get_Dorigem"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDRSS.Pagina.Dados.Get_ddestino
+------------------------------------------------------------
+  Height = 23
+  Left = 314
+  TabIndex = 6
+  Top = 174
+  Width = 193
+  plprocurar = .F.
+  Name = "Get_ddestino"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDRSS
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE msv_procurar
+------------------------------------------------------------
+PROCEDURE msv_procurar
+Local lcBusca
+
+If .Not.IsEmpty(ThisForm.Pagina.Dados.Get_Origem.Value)
+	ThisForm.poDataMgr.LocateCursor('crSigCdRps','grupoos',ThisForm.Pagina.Dados.Get_Origem.Value)
+Endif
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LPARAMETERS lcacesso
+
+With ThisForm
+	.poDatamgr = CreateObject('fSqlConector')
+	With .poDatamgr
+		.AddCursor('SigCdRps','cidchaves','crSigCdRps','',ThisForm.pagina.lista.grade)
+		.pfSqlTabela(1).pColuna('grupoos','','','Grupo Origem',100,.t.)
+		.pfSqlTabela(1).pColuna('grupods','','','Grupo Destino',100,.t.)
+		.AddCursor('SigCdGcr','codigos','crSigCdGcr','','')
+	EndWith
+	= DoDefault()
+	.LockScreen = .f.
+EndWith
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Lista.Grupo_op.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Lista.Grupo_op.Click
+LParameters opcao
+
+If !dodefault( opcao )
+	ThisForm.mAtivapagina1
+	Return
+Endif
+
+If InList(ThisForm.pcEscolha,'INSERIR','PROCURAR')
+	ThisForm.Pagina.Dados.Get_dOrigem.Value = ' '
+	ThisForm.Pagina.Dados.Get_ddestino.Value = ' '
+Else
+	If Thisform.PoDatamgr.SQLExecute([Select Descrs from SigCdGcr where Codigos = '] + CrSigCdRps.Grupoos + [' ],'CrSigCdGcr') < 0
+		MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')
+		Return(.F.)
+	Else
+		ThisForm.Pagina.Dados.Get_dOrigem.Value = CrSigCdGcr.Descrs
+	Endif	
+	
+	If Thisform.PoDatamgr.SQLExecute([Select Descrs from SigCdGcr where Codigos = '] + CrSigCdRps.Grupods + [' ],'CrSigCdGcr') < 0
+		MessageBox('Favor reinicializar o processo.',16,'Falha na Conexão')
+		Return(.F.)
+	Else
+		ThisForm.Pagina.Dados.Get_ddestino.Value = CrSigCdGcr.Descrs
+	Endif	
+Endif
+
+Do Case
+	Case Inlist( ThisForm.pcEscolha, 'INSERIR', 'PROCURAR' )
+		ThisForm.Pagina.Dados.Get_Origem.SetFocus
+	Case ThisForm.pcEscolha = 'ALTERAR'
+		ThisForm.Pagina.Dados.Get_Destino.SetFocus
+Other
+	ThisForm.Pagina.Dados.Grupo_Salva.Salva.SetFocus
+Endcase
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+Local laCampos(2,2)
+
+get_origem  = thisform.pagina.dados.get_Origem.value
+get_destino = thisform.pagina.dados.get_Destino.value
+
+If ThisForm.pcEscolha = 'INSERIR'
+
+	m.laCampos(1,1) = 'grupoos'
+	m.laCampos(1,2) = get_origem
+	m.laCampos(2,1) = 'grupods'
+	m.laCampos(2,2) = get_destino
+
+	If ThisForm.poDataMgr.ChkRegister('SigCdRps',@m.laCampos)
+		Messagebox( 'Grupo Origem , Grupo Destino já Cadastrado!', 48, '' )
+		ThisForm.Pagina.Dados.Get_Origem.SetFocus
+		Return
+	Endif
+	Select CrSigCdRps
+	Replace cidchaves with fUniqueIds(),;
+			Datars    With DateTime(),;
+			Usuars    With Usuar
+
+Endif
+
+=DoDefault()
+
+ThisForm.mAtivapagina1
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+=DoDefault()
+If ThisForm.plCancelar
+	ThisForm.mAtivapagina1
+Endif
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDRSS.Pagina.Dados.Get_Destino
+* Classe: fwget (Base: textbox)
+* Registro: 6
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+return( !thisform.pcEscolha $ 'EXCLUIR/CONSULTAR/PROCURAR' )
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+local lcod,lfan,codcor,xobj,grupo,retorno
+
+m.llRetorno = (IsEmpty(This.Value))
+
+If .Not.m.llRetorno
+
+	m.loLista = CreateObject('fwBuscaExt',Thisform.podatamgr.pnidconn,'SigCdGcr','crSigCdGcr','Codigos',This.Value,'Grupos',1000)
+	If .Not.m.loLista.plAchouRegistro
+		m.loLista.mAddColuna('Codigos','','Código')
+		m.loLista.mAddColuna('Descrs',Replicate('x',60),'Descrição')
+		m.loLista.Show()
+	EndIf
+
+	this.value = lcod
+	this.parent.get_Destino.value = Iif(LastKey()==27 or !used('CrSigCdGcr'),Space(15),crSigCdGcr.codigos)
+	ThisForm.Pagina.Dados.Get_dDestino.Value = CrSigCdGcr.Descrs
+	This.Refresh
+	
+	m.llRetorno = (.Not.IsEmpty(This.Value))
+	
+EndIf
+m.llRetorno = .t.
+
+Return(m.llRetorno)
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDRSS.Pagina.Dados.Get_Origem
+* Classe: fwget (Base: textbox)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+return( !thisform.pcEscolha $ 'ALTERAR/EXCLUIR/CONSULTAR' )
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+local lcod,lfan,codcor,xobj,grupo,retorno
+
+m.llRetorno = (IsEmpty(This.Value))
+
+If .Not.m.llRetorno
+
+	m.loLista = CreateObject('fwBuscaExt',Thisform.podatamgr.pnidconn,'SigCdGcr','crSigCdGcr','Codigos',This.Value,'Grupos',1000)
+	If .Not.m.loLista.plAchouRegistro
+		m.loLista.mAddColuna('Codigos','','Código')
+		m.loLista.mAddColuna('Descrs',Replicate('x',60),'Descrição')
+		m.loLista.Show()
+	EndIf
+
+	this.value = lcod
+	this.parent.get_Origem.value = Iif(LastKey()==27 or !used('CrSigCdGcr'),Space(15),crSigCdGcr.codigos)
+	ThisForm.Pagina.Dados.Get_DOrigem.Value = CrSigCdGcr.Descrs
+	This.Refresh
+	m.llRetorno = (.Not.IsEmpty(This.Value))
+	
+EndIf
+m.llRetorno = .t.
+
+Return(m.llRetorno)
+
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDRSS.Pagina.Dados.Get_Dorigem
+* Classe: fwget (Base: textbox)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (IsEmpty(ThisForm.Pagina.Dados.Get_Origem.Value))
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+local lcod,lfan,codcor,xobj,grupo,retorno
+
+m.llRetorno = (IsEmpty(This.Value))
+
+If .Not.m.llRetorno
+
+	m.loLista = CreateObject('fwBuscaExt',Thisform.podatamgr.pnidconn,'SigCdGcr','crSigCdGcr','Descrs',This.Value,'Grupos',1000)
+	If .Not.m.loLista.plAchouRegistro
+		m.loLista.mAddColuna('Descrs',Replicate('x',60),'Descrição')
+		m.loLista.mAddColuna('Codigos','','Código')
+		m.loLista.Show()
+	EndIf
+
+	This.Value = CrSigCdGcr.Descrs
+	this.parent.get_Origem.value = Iif(LastKey()==27 or !used('CrSigCdGcr'),Space(15),crSigCdGcr.codigos)
+	This.Refresh
+	m.llRetorno = (.Not.IsEmpty(This.Value))
+	
+EndIf
+m.llRetorno = .t.
+
+Return(m.llRetorno)
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDRSS.Pagina.Dados.Get_ddestino
+* Classe: fwget (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return (IsEmpty(ThisForm.Pagina.Dados.Get_Destino.Value)) AND !InList(ThisForm.pcEscolha,'PROCURAR')
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+local lcod,lfan,codcor,xobj,grupo,retorno
+
+m.llRetorno = (IsEmpty(This.Value))
+
+If .Not.m.llRetorno
+
+	m.loLista = CreateObject('fwBuscaExt',Thisform.podatamgr.pnidconn,'SigCdGcr','crSigCdGcr','Descrs',This.Value,'Grupos',1000)
+	If .Not.m.loLista.plAchouRegistro
+		m.loLista.mAddColuna('Descrs',Replicate('x',60),'Descrição')
+		m.loLista.mAddColuna('Codigos','','Código')
+		m.loLista.Show()
+	EndIf
+
+	This.Value = CrSigCdGcr.Descrs
+	this.parent.get_Destino.value = Iif(LastKey()==27 or !used('CrSigCdGcr'),Space(15),crSigCdGcr.codigos)
+	This.Refresh
+	m.llRetorno = (.Not.IsEmpty(This.Value))
+	
+EndIf
+m.llRetorno = .t.
+
+Return(m.llRetorno)
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 13
+================================================================================

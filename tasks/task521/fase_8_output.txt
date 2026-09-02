@@ -1,0 +1,17 @@
+﻿Tudo certo. Verifica├º├úo final dos pontos cr├¡ticos:
+
+- `AjustarBotoesPorModo()` implementado e chamado em 4 handlers (Incluir/Visualizar/Alterar/Cancelar)
+- DEFINE BAR 170 e ON SELECTION BAR 170 no popCadastros
+- `PROCEDURE AbrirFormSET()` com o padr├úo can├┤nico (VARTYPE, Show sem par├ómetro, sem Release)
+
+**Resumo da Fase 8:**
+
+O FormSET.prg j├í estava ~95% completo das fases anteriores. A Fase 8 adicionou:
+
+1. **`AjustarBotoesPorModo()`** ÔÇö desabilita bot├Áes CRUD da Page1 quando o usu├írio est├í em modo de edi├º├úo (INCLUIR/ALTERAR/VISUALIZAR/EXCLUIR) e controla Confirmar.Enabled na Page2.
+
+2. **Chamadas nos handlers** ÔÇö BtnIncluirClick, BtnVisualizarClick, BtnAlterarClick, BtnCancelarClick agora chamam `THIS.AjustarBotoesPorModo()` ao mudar de modo.
+
+3. **Integra├º├úo no menu** ÔÇö BAR 170 "Setores" + ON SELECTION + `PROCEDURE AbrirFormSET()` com padr├úo can├┤nico.
+
+Os arquivos SETBO.prg e FormSET.prg est├úo em `projeto\app\classes\` e `projeto\app\forms\cadastros\` respectivamente, e ser├úo carregados automaticamente pelo ADIR() do config.prg.

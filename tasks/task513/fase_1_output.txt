@@ -1,0 +1,9 @@
+﻿O arquivo est├í correto. **Fase 1/8 conclu├¡da.**
+
+`C:\4c\projeto\app\classes\RopBO.prg` criado com:
+
+- **12 propriedades** mapeando todos os campos de `SigCdRpo` (schema consultado):
+  - `this_cCidChaves` (PK char 20), `this_cCgrus`, `this_cDopps`, `this_cDoptpgrus`, `this_cTpops`, `this_cMercs`, `this_cOpers`, `this_cGrupos`, `this_nExclus` (numeric), `this_cContas`, `this_cCodcors`, `this_cContaorig`
+- **`Init()`** com `this_cTabela = "SigCdRpo"` e `this_cCampoChave = "cidchaves"`
+- Todos os m├®todos obrigat├│rios completos: `CarregarDoCursor`, `LimparDados`, `ValidarDados`, `Inserir`, `Atualizar`, `ExecutarExclusao`, `Buscar`, `CarregarPorCodigo`, `GerarChaveUnica` (usa `NEWID()` do SQL Server ÔÇö necess├írio pois o PK ├® `char(20)` gerado pelo legado via `fUniqueIds()`)
+- Nota: `this_nExclus = 2` como default porque o legado usa `OptionGroup.Value=2` para "N├úo" (valor inicial)

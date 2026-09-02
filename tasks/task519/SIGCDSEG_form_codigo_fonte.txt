@@ -1,0 +1,398 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGCDSEG.SCX
+* Data/Hora: 02/09/2026 03:30:29
+* Total de registros: 10
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDSEG
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGCDSEG.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGCDSEG.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_codigo
+  Parent: SIGCDSEG.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_descricao
+  Parent: SIGCDSEG.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: op_con
+  Parent: SIGCDSEG.Pagina.Dados
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGCDSEG.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 792
+  Height = 419
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDSEG
+------------------------------------------------------------
+  Height = 600
+  Width = 1000
+  DoCreate = .T.
+  Caption = "Cadastro de Segmentos de Contas"
+  Name = "SIGCDSEG"
+  Pagina.ErasePage = .T.
+  Pagina.Lista.cntSombra.lblSombra.Name = "lblSombra"
+  Pagina.Lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  Pagina.Lista.cntSombra.Width = 1100
+  Pagina.Lista.cntSombra.Name = "cntSombra"
+  Pagina.Lista.Grade.Height = 490
+  Pagina.Lista.Grade.Left = 30
+  Pagina.Lista.Grade.RecordSource = "crSigCdSct"
+  Pagina.Lista.Grade.Top = 97
+  Pagina.Lista.Grade.Width = 939
+  Pagina.Lista.Grade.Name = "Grade"
+  Pagina.Lista.Grupo_op.AutoSize = .T.
+  Pagina.Lista.Grupo_op.Inserir.Top = 5
+  Pagina.Lista.Grupo_op.Inserir.Left = 5
+  Pagina.Lista.Grupo_op.Inserir.Name = "Inserir"
+  Pagina.Lista.Grupo_op.Consultar.Top = 5
+  Pagina.Lista.Grupo_op.Consultar.Left = 80
+  Pagina.Lista.Grupo_op.Consultar.Name = "Consultar"
+  Pagina.Lista.Grupo_op.Alterar.Top = 5
+  Pagina.Lista.Grupo_op.Alterar.Left = 155
+  Pagina.Lista.Grupo_op.Alterar.Name = "Alterar"
+  Pagina.Lista.Grupo_op.Excluir.Top = 5
+  Pagina.Lista.Grupo_op.Excluir.Left = 230
+  Pagina.Lista.Grupo_op.Excluir.Name = "Excluir"
+  Pagina.Lista.Grupo_op.procurar.Top = 5
+  Pagina.Lista.Grupo_op.procurar.Left = 305
+  Pagina.Lista.Grupo_op.procurar.Name = "procurar"
+  Pagina.Lista.Grupo_op.Height = 85
+  Pagina.Lista.Grupo_op.Left = 544
+  Pagina.Lista.Grupo_op.Top = -1
+  Pagina.Lista.Grupo_op.Width = 385
+  Pagina.Lista.Grupo_op.Name = "Grupo_op"
+  Pagina.Lista.Grupo_Saida.Sair.Top = 5
+  Pagina.Lista.Grupo_Saida.Sair.Left = 5
+  Pagina.Lista.Grupo_Saida.Sair.Name = "Sair"
+  Pagina.Lista.Grupo_Saida.Left = 919
+  Pagina.Lista.Grupo_Saida.Top = -1
+  Pagina.Lista.Grupo_Saida.Name = "Grupo_Saida"
+  Pagina.Lista.cntFiltros.Top = 25
+  Pagina.Lista.cntFiltros.Left = 479
+  Pagina.Lista.cntFiltros.Name = "cntFiltros"
+  Pagina.Lista.Picture = ..\framework\imagens\new_background.jpg
+  Pagina.Lista.Name = "Lista"
+  Pagina.Dados.Grupo_Salva.Salva.Top = 5
+  Pagina.Dados.Grupo_Salva.Salva.Left = 5
+  Pagina.Dados.Grupo_Salva.Salva.Name = "Salva"
+  Pagina.Dados.Grupo_Salva.Cancelar.Top = 5
+  Pagina.Dados.Grupo_Salva.Cancelar.Left = 80
+  Pagina.Dados.Grupo_Salva.Cancelar.Name = "Cancelar"
+  Pagina.Dados.Grupo_Salva.Left = 843
+  Pagina.Dados.Grupo_Salva.Top = -4
+  Pagina.Dados.Grupo_Salva.TabIndex = 7
+  Pagina.Dados.Grupo_Salva.Name = "Grupo_Salva"
+  Pagina.Dados.Picture = ..\framework\imagens\new_background.jpg
+  Pagina.Dados.Name = "Dados"
+  Pagina.Width = 1003
+  Pagina.Name = "Pagina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDSEG.Pagina.Dados.Say2
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Código :"
+  Left = 403
+  Top = 182
+  TabIndex = 1
+  ForeColor = 90,90,90
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDSEG.Pagina.Dados.Say3
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Descrição :"
+  Left = 390
+  Top = 209
+  TabIndex = 3
+  ForeColor = 90,90,90
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDSEG.Pagina.Dados.Get_codigo
+------------------------------------------------------------
+  ControlSource = "crSigCdSct.codigos"
+  Left = 447
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 180
+  Width = 80
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  plprocurar = .T.
+  Name = "Get_codigo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDSEG.Pagina.Dados.Get_descricao
+------------------------------------------------------------
+  ControlSource = "crSigCdSct.descs"
+  Left = 447
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 206
+  Width = 220
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  Name = "Get_descricao"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDSEG.Pagina.Dados.op_con
+------------------------------------------------------------
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 0
+  ControlSource = "crSigCdSct.impops"
+  Height = 20
+  Left = 442
+  SpecialEffect = 0
+  Top = 234
+  Width = 109
+  TabIndex = 6
+  ZOrderSet = 47
+  Name = "op_con"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.Alignment = 0
+  Option1.BackStyle = 0
+  Option1.Caption = "Sim"
+  Option1.Value = 0
+  Option1.Left = 4
+  Option1.Top = 2
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.BackColor = 36,84,155
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Não"
+  Option2.Left = 55
+  Option2.Top = 2
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.BackColor = 36,84,155
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDSEG.Pagina.Dados.Say1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Imprimir OF Pendente :"
+  Left = 332
+  Top = 236
+  TabIndex = 5
+  ForeColor = 90,90,90
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Verdana, 0, 9, 6, 14, 12, 25, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDSEG
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE msv_procurar
+------------------------------------------------------------
+PROCEDURE msv_procurar
+Local lcBusca
+
+If .Not.IsEmpty(ThisForm.Pagina.Dados.Get_codigo.Value)
+	ThisForm.poDataMgr.LocateCursor('crSigCdSct','codigos',ThisForm.Pagina.Dados.Get_codigo.Value)
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LPARAMETERS lcacesso
+
+With ThisForm
+	.poDatamgr = CreateObject('fSqlConector')
+	With .poDatamgr
+		.AddCursor('SigCdSct','codigos','crSigCdSct','',ThisForm.pagina.lista.grade)
+		.pfSqlTabela(1).pColuna('codigos','','','Código',80,.t.)
+		.pfSqlTabela(1).pColuna('descs','','','Descrição',160,.t.)
+	EndWith
+	= DoDefault()
+	.LockScreen = .f.
+EndWith
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Lista.Grupo_op.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Lista.Grupo_op.Click
+LParameters opcao
+
+select CrSigCdSct
+If !dodefault( opcao )
+	ThisForm.mAtivapagina1
+	Return
+Endif
+
+Do Case
+	Case Inlist( ThisForm.pcEscolha, 'INSERIR', 'PROCURAR' )
+		ThisForm.Pagina.Dados.Get_Codigo.SetFocus
+	Case ThisForm.pcEscolha = 'ALTERAR'
+		ThisForm.Pagina.Dados.Get_Descricao.SetFocus
+Other
+	ThisForm.Pagina.Dados.Grupo_Salva.Salva.SetFocus
+Endcase
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+If ThisForm.pcEscolha = 'INSERIR'
+	If IsEmpty( CrSigCdSct.Codigos )
+		Messagebox( 'Codigo não pode ficar em branco!', 48, '' )
+		ThisForm.Pagina.Dados.Get_Codigo.SetFocus
+		Return
+	Endif
+	If ThisForm.poDataMgr.ChkRegister('SigCdSct','codigos',ThisForm.Pagina.Dados.Get_Codigo.Value)
+		Messagebox( 'Código já Cadastrado!', 48, '' )
+		ThisForm.Pagina.Dados.Get_Codigo.SetFocus
+		Return
+	Endif
+Endif
+
+=DoDefault()
+
+ThisForm.mAtivapagina1
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+=DoDefault()
+If ThisForm.plCancelar
+	ThisForm.mAtivapagina1
+Endif
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDSEG.Pagina.Dados.Get_codigo
+* Classe: fwget (Base: textbox)
+* Registro: 6
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+return( !thisform.pcEscolha $ 'ALTERAR/EXCLUIR/CONSULTAR' )
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDSEG.Pagina.Dados.op_con
+* Classe: fwoption (Base: optiongroup)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Inlist( ThisForm.pcEscolha, "INSERIR", "ALTERAR" )
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 7
+================================================================================

@@ -1,0 +1,451 @@
+{
+  "resumo": {
+    "totalMetodos": 26,
+    "metodosComSQL": 5,
+    "metodosComValidacao": 16,
+    "totalQueries": 2,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fUniqueIds", "fwBuscaExt", "fwBuscaSel", "fAcessoContab", "fAcessoContas"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDROP",
+      "evento": "Init",
+      "linhas": 53,
+      "codigoOriginal": "lcQryOpt = [Select * From SigCdRpo ]\n\nWith ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tWith .poDataMgr\n\t\t\t.AddCursor('SigCdRpo', 'cIdChaves', 'crSigCdRpo', '', ThisForm.Pagina.Lista.Grade, lcQryOpt)\n\t\t\t.pfSqlTabela(1).pColuna('Dopps', '', '', 'Operação', 150, .t.)\n\t\t\t.pfSqlTabela(1).pColuna('TpOps', '', '', 'Tipo de Material', 120, .t.)\n\t\t\t.pfSqlTabela(1).pColuna('Cgrus', '', '', 'Grp.Produto', 80, .t.)\n\t\t\t.pfSqlTabela(1).pColuna('opers', '... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDROP",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "=fConfigGeral()\n=DoDefault()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDROP",
+      "evento": "Procedure",
+      "linhas": 1,
+      "codigoOriginal": "=DoDefault()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDROP",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.podatamgr.Release\n=DoDefault()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDROP",
+      "evento": "Click",
+      "linhas": 27,
+      "codigoOriginal": "LPARAMETERS opcao\nIf !dodefault( Opcao )\n\tThisForm.mAtivapagina1\n\tReturn\nEndif\n\nlcSql = [Select Dgrus From SigCdGrp Where Cgrus = ']+CrSigCdRpo.Cgrus+[']\nIf ThisForm.Podatamgr.Sqlexecute(lcSql,'LocalGru') < 0\n\tMessageBox('Favor reinicializar o processo !!!',16,'Falha na Conexão (LocalGru)')\n\tReturn(.F.)\nEndif\nSelect crSigCdRpo\n\nThisForm.Pagina.Dados.Get_ds_grupo.Value = LocalGru.Dgrus\n\n* posiciona o cursor de acordo com a opção\nDo Case\n\tCase Inlist( ThisForm.pcEscolha, 'INSERIR', 'PROCURAR' )\n\t\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Sqlexecute",
+        "controlesReferenciados": "Get_ds_grupo,get_Dopp",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDROP",
+      "evento": "Click",
+      "linhas": 45,
+      "codigoOriginal": "With ThisForm.Pagina.Dados\n\tIf InList(ThisForm.pcEscolha,'INSERIR','ALTERAR')\n\t\tIf IsEmpty(.Get_Dopp.Value)\n\t\t\tMessageBox( 'Obrigatório Informar o Operação de Produção.', 48, '' )\n\t\t\t.Get_Dopp.SetFocus\n\t\t\tReturn\n\t\tEndIf\n\t\tIf IsEmpty(.Get_TpOp.Value) And IsEmpty(.Get_Cgru.Value) AND IsEmpty(.Get_gde.Value) And IsEmpty(.Get_Grupos.Value)\n\t\t\tMessageBox( 'Obrigatório Informar o Tipo de Material Ou Grupo de Produto Ou Grande Grupo Ou Grupo Conta', 48, '' )\n\t\t\t.Get_Gde.SetFocus\n\t\t\tReturn\n\t\tEndIf\n\t\t\n\t\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "fUniqueIds",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "Get_Dopp,Get_TpOp,Get_Cgru,Get_gde,Get_Grupos,opTpGrus",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDROP",
+      "evento": "Click",
+      "linhas": 5,
+      "codigoOriginal": "=DoDefault()\nIf ThisForm.plCancelar\n\tThisForm.mAtivapagina1\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDROP.Pagina.Dados.get_Cgru",
+      "evento": "Valid",
+      "linhas": 18,
+      "codigoOriginal": "If !Empty(This.Value)\n\tm.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigCdGrp','CrGrupos','CGrus',This.Value,'Grupos',.T.)\n\tIf !(m.loLista.plAchouRegistro)\n\t\tm.loLista.mAddColuna('CGrus','XXXXXX','Código')\n\t\tm.loLista.mAddColuna('DGrus','','Descrição')\n\t\tm.loLista.Show()\n\tEndIf\n\tIf LastKey() <> 27 And Used('CrGrupos')\n\t\tThis.Value = Evaluate('CrGrupos.CGrus')\n\t\tThis.parent.get_ds_grupo.Value = Evaluate('CrGrupos.Dgrus')\n\tElse\n\t\tThis.Value = ' '\n\t\tThis.parent.get_ds_grupo.Val... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_ds_grupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDROP.Pagina.Dados.get_Cgru",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Inlist(ThisForm.pcEscolha, \"INSERIR\",\"ALTERAR\",\"PROCURAR\")\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDROP.Pagina.Dados.Get_Dopp",
+      "evento": "Valid",
+      "linhas": 11,
+      "codigoOriginal": "If Empty(This.Value)\n\tReturn(.T.)\nEndIf\nIf Not Seek(This.Value,'TmpOpe','Dopps')\n\tloBrowse = CreateObject('fwBuscaSel', 'TmpOpe', 'Dopps', This.Value, 'Cadastro de Tipos de Operação')\n\tloBrowse.AddColuna('dopps','','Operação',.t.,'dopps')\n\tloBrowse.Show\n\tThis.Value = TmpOpe.Dopps\nEndif\nThis.Refresh\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDROP.Pagina.Dados.Get_Dopp",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Inlist(ThisForm.pcEscolha, \"INSERIR\",\"ALTERAR\",\"PROCURAR\")\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDROP.Pagina.Dados.Get_Tpop",
+      "evento": "Valid",
+      "linhas": 26,
+      "codigoOriginal": "Local lCod, lFan, xObj\n\nIf Not Empty(This.Value)\n\n\tlcQuery = [Select Cods, Descs, pFalhas, Grupos ] + ;\n\t\t\t\t[From SigOpOpt ] + ;\n\t\t\t   [Where Not Situas = 2]\n\n\tIf (ThisForm.poDataMgr.SqlExecute(lcQuery, 'TmpOpt') < 1)\n\t\t=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (TmpOpt)')\n\t\tReturn 0\n\tEndIf\n\tSelect TmpOpt\n\tIndex On Cods Tag Cods\n\n\tIf Not Seek(This.Value)\n\t\tloBrowse = CreateObject('fwBuscaSel', 'TmpOpt', 'Cods', This.Value, 'Cadastro de Tipos de Operação')\n\t\tloBrowse.A... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "Opt'",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDROP.Pagina.Dados.Get_Tpop",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return Inlist(ThisForm.pcEscolha, \"INSERIR\",\"ALTERAR\",\"PROCURAR\")\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDROP.Pagina.Dados.Get_gde",
+      "evento": "Valid",
+      "linhas": 15,
+      "codigoOriginal": "If !Empty(This.Value)\n\tm.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigCdGpr','CrGdeGrupo','codigos',This.Value,'Grandes Grupos',.T.)\n\tIf !(m.loLista.plAchouRegistro)\n\t\tm.loLista.mAddColuna('codigos','XXXXXXXXXX','Código')\n\t\tm.loLista.mAddColuna('descs','XXXXXXXXXXXXXXXXXXXX','Descrição')\n\t\tm.loLista.Show()\n\tEndIf\n\tIf LastKey() <> 27 And Used('CrGdeGrupo')\n\t\tThis.Value = Evaluate('CrGdeGrupo.codigos')\n\tElse\n\t\tThis.Value = ''\n\tEndIf\n \tThis.Refresh\nEndIf\nReturn(.T.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDROP.Pagina.Dados.Get_gde",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist(ThisForm.pcEscolha, \"INSERIR\",\"ALTERAR\")",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDROP.Pagina.Dados.Get_Grupos",
+      "evento": "Valid",
+      "linhas": 8,
+      "codigoOriginal": "If !IsEmpty(this.value)\n\tfAcessoContab(Usuar,'C',this.value,This,Thisform.pagina.dados.get_Dgrupos)\nElse\n\tThisform.pagina.dados.get_dGrupos.value = ''\n\tThisform.pagina.dados.get_dGrupos.refresh\nendif\nselect crSigCdRpo\nreturn(.t.)",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Dgrupos",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDROP.Pagina.Dados.Get_Dgrupos",
+      "evento": "Valid",
+      "linhas": 7,
+      "codigoOriginal": "If !IsEmpty(this.value)\n\tfAcessoContab(Usuar,'D',this.value,thisform.pagina.dados.get_Grupos,this)\nElse\n\tthisform.pagina.dados.get_Grupos.value = ''\n\tthisform.pagina.dados.get_Grupos.refresh\nendif\nreturn(.t.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Grupos",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDROP.Pagina.Dados.Get_Dgrupos",
+      "evento": "When",
+      "linhas": 3,
+      "codigoOriginal": "Return(IsEmpty(Thisform.pagina.dados.get_grupos.value) AND ;\n       Inlist(ThisForm.pcEscolha, \"INSERIR\", \"ALTERAR\"))\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_grupos",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDROP.Pagina.Dados.Get_OpPad",
+      "evento": "Valid",
+      "linhas": 5,
+      "codigoOriginal": "If !Empty( This.Value ) And !InList(This.Value,'E','S')\n\tMessageBox('Opção Inválida. Digite Apenas [E] ou [S] ou [ ] !!!',0+48,'')\n\tReturn 0\nEndif\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDROP.Pagina.Dados.Get_OpPad",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist(ThisForm.pcEscolha, \"INSERIR\",\"ALTERAR\")",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDROP.Pagina.Dados.opt_Exclusivo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha,'INSERIR','ALTERAR'))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDROP.Pagina.Dados.get_ds_grupo",
+      "evento": "Valid",
+      "linhas": 23,
+      "codigoOriginal": "With This.parent\n\tIf Empty(This.Value)\n\t\t.get_Cgru.Value = ''\n\t\t.get_Cgru.Refresh\n\tElse\n\t\tm.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigCdGrp','CrGrupos','DGrus',This.Value,'Grupos',.T.)\n\t\tIf !(m.loLista.plAchouRegistro)\n\t\t\tm.loLista.mAddColuna('DGrus','','Descrição')\n\t\t\tm.loLista.mAddColuna('CGrus','XXXXXX','Código')\n\t\t\tm.loLista.Show()\n\t\tEndIf\n\t\tIf LastKey() <> 27 And Used('CrGrupos')\n\t\t\t.Get_Cgru.Value     = Evaluate('CrGrupos.cgrus')\n\t\t\t.Get_Ds_Grupo.Value = Evaluate(... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Cgru,Get_Ds_Grupo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDROP.Pagina.Dados.get_ds_grupo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (Empty(This.parent.get_Cgru.Value))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_Cgru",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDROP.Pagina.Dados.Get_Conta",
+      "evento": "Valid",
+      "linhas": 12,
+      "codigoOriginal": "grupo = ''\nIf !IsEmpty(This.value)\n\tIf !fAcessoContas(Usuar,grupo,'C',This.value,This)\n\t\tMessagebox('Acesso Negado !!',0+48,'')\n\t\tThis.Value=''\n\t\tThis.Refresh\n\t\treturn 0 \n\tEndif\nElse\n\treturn(.t.)\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDROP.Pagina.Dados.getCor",
+      "evento": "Valid",
+      "linhas": 18,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdCor', ;\n\t\t\t\t\t\t   'CrListaRemota', 'Cods', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('Cods',  '', 'Código')\n\t\tloLista.mAddColuna('Descs', '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThis.Value = CrListaRemota.Cods\n\tUse In CrListaRemota\nEndIf\nThis.Refresh\n* Fim *********************************************************************************\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDROP.Pagina.Dados.Get_ContaOrig",
+      "evento": "Valid",
+      "linhas": 12,
+      "codigoOriginal": "grupo = ''\nIf !IsEmpty(This.value)\n\tIf !fAcessoContas(Usuar,grupo,'C',This.value,This)\n\t\tMessagebox('Acesso Negado !!',0+48,'')\n\t\tThis.Value=''\n\t\tThis.Refresh\n\t\treturn 0 \n\tEndif\nElse\n\treturn(.t.)\nEndIf\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDROP.Init",
+      "queryOriginal": "lcQryOpt = [Select * From SigCdRpo ]",
+      "tabelas": "SigCdRpo",
+      "colunas": "",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDROP.Click",
+      "queryOriginal": "lcSql = [Select Dgrus From SigCdGrp Where Cgrus = ']+CrSigCdRpo.Cgrus+['] If ThisForm.Podatamgr.Sqlexecute(lcSql,'LocalGru') < 0",
+      "tabelas": "SigCdGrp",
+      "colunas": "Dgrus,Cgrus,Cgrus+[],SqlexecutelcSql,LocalGru",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdRpo", "SigCdGrp"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

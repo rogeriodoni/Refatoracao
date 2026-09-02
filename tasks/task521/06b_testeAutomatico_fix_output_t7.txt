@@ -1,0 +1,13 @@
+﻿Corre├º├úo aplicada. Resumo do que foi encontrado e corrigido:
+
+**Diagn├│stico:** O bug estava em `TesteAutomatico.prg`, n├úo em `FormSET.prg`. O framework de testes usava `PEMSTATUS(obj, name, 2)` para verificar exist├¬ncia de m├®todos, mas o atributo 2 (`"pode ser modificado em runtime"`) n├úo ├® v├ílido para m├®todos ÔÇö lan├ºa `"Function argument value, type, or count is invalid."` (VFP Error 11) quando aplicado a um m├®todo.
+
+**Evid├¬ncia:** O mesmo arquivo j├í usava corretamente `PEMSTATUS(obj, name, 3) > 0` nas linhas 228-229 (detec├º├úo de tipo de form). O atributo 3 retorna o tipo do PEM como inteiro (0=n├úo existe, >0=existe), funcionando para qualquer PEM.
+
+**Corre├º├Áes em `TesteAutomatico.prg`:**
+- L358: `!EMPTY(PEMSTATUS(..., "CarregarLista", 2))` ÔåÆ `PEMSTATUS(..., "CarregarLista", 3) > 0`
+- L444: `!EMPTY(PEMSTATUS(..., "AlternarPagina", 2))` ÔåÆ `PEMSTATUS(..., "AlternarPagina", 3) > 0`
+- L1087: `!EMPTY(PEMSTATUS(..., "BtnEncerrarClick", 2))` ÔåÆ `PEMSTATUS(..., "BtnEncerrarClick", 3) > 0`
+- L1094-1095: mesmo padr├úo para BtnFecharClick e BtnSairClick
+
+`FormSET.prg` e `SETBO.prg` est├úo corretos e n├úo precisam de altera├º├úo. O `.FXP` compilado foi deletado para for├ºar recompila├º├úo.

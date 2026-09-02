@@ -1,0 +1,8 @@
+﻿Fase 7 conclu├¡da. Os 4 m├®todos foram adicionados ao `FormSed.prg` (linhas 655-699):
+
+- **`BtnIncluirClick`** ÔÇö muda para modo INSERIR, limpa os campos de faixa e habilita os controles (equivalente a `pcEscolha='INSERIR'` do wrapper legado)
+- **`BtnAlterarClick`** ÔÇö muda para modo ALTERAR mantendo campos preenchidos e habilitando controles (equivalente a `pcEscolha='ALTERAR'`)
+- **`BtnVisualizarClick`** ÔÇö muda para modo VISUALIZAR desabilitando campos de entrada e o bot├úo Gerar (equivalente a `pcEscolha='VISUALIZAR'`)
+- **`BtnExcluirClick`** ÔÇö delega para `cmd_4c_ExcluirClick` que j├í tem a l├│gica completa de valida├º├úo e exclus├úo via BO
+
+Como este ├® um form **OPERACIONAL FLAT** (sem PageFrame CRUD), os handlers espec├¡ficos dos bot├Áes do form j├í foram implementados nas fases anteriores. Os `Btn*Click` adicionados exp├Áem uma interface p├║blica uniforme para que o wrapper (que controlava o modo via `pcEscolha` no legado) possa alterar o estado do form ap├│s a abertura.
