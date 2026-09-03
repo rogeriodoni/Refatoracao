@@ -220,7 +220,7 @@ DEFINE CLASS FormDmo AS FormBase
             loc_oPg.AddObject("cmd_4c_Incluir", "CommandButton")
             WITH loc_oPg.cmd_4c_Incluir
                 .Top             = 3
-                .Left            = 548
+                .Left = 5
                 .Height          = 75
                 .Width           = 75
                 .Caption         = "\<Inserir"
@@ -266,7 +266,7 @@ DEFINE CLASS FormDmo AS FormBase
             loc_oPg.AddObject("cmd_4c_Alterar", "CommandButton")
             WITH loc_oPg.cmd_4c_Alterar
                 .Top             = 3
-                .Left            = 698
+                .Left = 155
                 .Height          = 75
                 .Width           = 75
                 .Caption         = "\<Alterar"
@@ -289,7 +289,7 @@ DEFINE CLASS FormDmo AS FormBase
             loc_oPg.AddObject("cmd_4c_Excluir", "CommandButton")
             WITH loc_oPg.cmd_4c_Excluir
                 .Top             = 3
-                .Left            = 773
+                .Left = 230
                 .Height          = 75
                 .Width           = 75
                 .Caption         = "\<Excluir"
@@ -346,9 +346,9 @@ DEFINE CLASS FormDmo AS FormBase
                 .AddObject("cmd_4c_Encerrar", "CommandButton")
                 WITH .cmd_4c_Encerrar
                     .Top             = 5
-                    .Left            = 917
+                    .Left = 5
                     .Height          = 75
-                    .Width           = 90
+                    .Width           = 75
                     .Caption         = "Encerrar"
                     .FontBold        = .T.
                     .FontItalic      = .T.

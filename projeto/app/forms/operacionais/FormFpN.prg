@@ -205,7 +205,7 @@ DEFINE CLASS FormFpN AS FormBase
             THIS.AddObject("cmd_4c_Excluir", "CommandButton")
             WITH THIS.cmd_4c_Excluir
                 .Top             = 4
-                .Left            = 575
+                .Left = 230
                 .Width           = 75
                 .Height          = 75
                 .Caption         = "Excluir"

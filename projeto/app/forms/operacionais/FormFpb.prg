@@ -310,7 +310,7 @@ DEFINE CLASS FormFpb AS FormBase
 
             loc_oCnt.AddObject("cmd_4c_Excluir", "CommandButton")
             WITH loc_oCnt.cmd_4c_Excluir
-                .Left            = 75
+                .Left = 230
                 .Top             = 5
                 .Width           = 75
                 .Height          = 75
@@ -332,7 +332,7 @@ DEFINE CLASS FormFpb AS FormBase
 
             loc_oCnt.AddObject("cmd_4c_Encerrar", "CommandButton")
             WITH loc_oCnt.cmd_4c_Encerrar
-                .Left            = 150
+                .Left = 5
                 .Top             = 5
                 .Width           = 75
                 .Height          = 75

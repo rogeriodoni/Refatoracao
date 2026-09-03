@@ -267,8 +267,8 @@ DEFINE CLASS FormSigPrHpr AS FormBase
             .AddObject("cmd_4c_Encerrar", "CommandButton")
             WITH .cmd_4c_Encerrar
                 .Top     = 3
-                .Left    = 917
-                .Width   = 75
+                .Left = 5
+                .Width   = 90
                 .Height  = 75
                 .Caption = "Encerrar"
                 .Picture = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"

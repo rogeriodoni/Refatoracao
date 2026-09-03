@@ -224,7 +224,7 @@ DEFINE CLASS FormROM AS FormBase
             .Picture         = gc_4c_CaminhoIcones + "cadastro_alterar_60.jpg"
             .PicturePosition = 13
             .Top             = 5
-            .Left            = 80
+            .Left = 155
             .Width           = 75
             .Height          = 75
             .FontName        = "Tahoma"
@@ -249,7 +249,7 @@ DEFINE CLASS FormROM AS FormBase
             .Picture         = gc_4c_CaminhoIcones + "cadastro_vizualizar_60.jpg"
             .PicturePosition = 13
             .Top             = 5
-            .Left            = 155
+            .Left = 80
             .Width           = 75
             .Height          = 75
             .FontName        = "Tahoma"

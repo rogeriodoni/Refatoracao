@@ -214,7 +214,7 @@ DEFINE CLASS FormDCC AS FormBase
             THIS.AddObject("cmd_4c_Excluir", "CommandButton")
             WITH THIS.cmd_4c_Excluir
                 .Top             = 7
-                .Left            = 811
+                .Left = 230
                 .Width           = 75
                 .Height          = 75
                 .Caption         = "Excluir"
@@ -239,7 +239,7 @@ DEFINE CLASS FormDCC AS FormBase
             THIS.AddObject("cmd_4c_Encerrar", "CommandButton")
             WITH THIS.cmd_4c_Encerrar
                 .Top             = 7
-                .Left            = 906
+                .Left = 5
                 .Width           = 75
                 .Height          = 75
                 .Caption         = "Encerrar"

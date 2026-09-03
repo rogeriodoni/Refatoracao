@@ -1,4 +1,4 @@
-﻿*====================================================================
+*====================================================================
 * FormPrm.prg
 *
 * Formulario de Cadastro de Promocoes
@@ -212,7 +212,7 @@ DEFINE CLASS FormPrm AS FormBase
                 .Picture         = gc_4c_CaminhoIcones + "cadastro_inserir_26.jpg"
                 .PicturePosition = 13
                 .Top             = 5
-                .Left            = 5
+                .Left = 5
                 .Width           = 75
                 .Height          = 75
                 .BackColor       = RGB(255, 255, 255)
@@ -234,7 +234,7 @@ DEFINE CLASS FormPrm AS FormBase
                 .Picture         = gc_4c_CaminhoIcones + "cadastro_vizualizar_60.jpg"
                 .PicturePosition = 13
                 .Top             = 5
-                .Left            = 80
+                .Left = 80
                 .Width           = 75
                 .Height          = 75
                 .BackColor       = RGB(255, 255, 255)
@@ -257,7 +257,7 @@ DEFINE CLASS FormPrm AS FormBase
                 .Picture         = gc_4c_CaminhoIcones + "cadastro_alterar_60.jpg"
                 .PicturePosition = 13
                 .Top             = 5
-                .Left            = 155
+                .Left = 155
                 .Width           = 75
                 .Height          = 75
                 .BackColor       = RGB(255, 255, 255)
@@ -280,7 +280,7 @@ DEFINE CLASS FormPrm AS FormBase
                 .Picture         = gc_4c_CaminhoIcones + "cadastro_excluir_60.jpg"
                 .PicturePosition = 13
                 .Top             = 5
-                .Left            = 230
+                .Left = 230
                 .Width           = 75
                 .Height          = 75
                 .BackColor       = RGB(255, 255, 255)
@@ -303,7 +303,7 @@ DEFINE CLASS FormPrm AS FormBase
                 .Picture         = gc_4c_CaminhoIcones + "cadastro_procurar_60.jpg"
                 .PicturePosition = 13
                 .Top             = 5
-                .Left            = 305
+                .Left = 305
                 .Width           = 75
                 .Height          = 75
                 .BackColor       = RGB(255, 255, 255)
@@ -344,8 +344,8 @@ DEFINE CLASS FormPrm AS FormBase
                 .Picture         = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
                 .PicturePosition = 13
                 .Top             = 5
-                .Left            = 5
-                .Width           = 90
+                .Left = 5
+                .Width           = 75
                 .Height          = 75
                 .BackColor       = RGB(255, 255, 255)
                 .ForeColor       = RGB(90, 90, 90)

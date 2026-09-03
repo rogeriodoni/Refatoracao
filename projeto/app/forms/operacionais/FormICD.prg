@@ -268,7 +268,7 @@ DEFINE CLASS FormICD AS FormBase
         THIS.AddObject("cmd_4c_Encerrar", "CommandButton")
         WITH THIS.cmd_4c_Encerrar
             .Top             = 2
-            .Left            = 367
+            .Left = 5
             .Height          = 75
             .Width           = 75
             .FontBold        = .T.

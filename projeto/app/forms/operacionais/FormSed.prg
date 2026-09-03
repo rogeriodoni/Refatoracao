@@ -368,7 +368,7 @@ DEFINE CLASS FormSed AS FormBase
         THIS.AddObject("cmd_4c_Excluir", "CommandButton")
         WITH THIS.cmd_4c_Excluir
             .Top             = 335
-            .Left            = 867
+            .Left = 230
             .Width           = 75
             .Height          = 75
             .Caption         = ""

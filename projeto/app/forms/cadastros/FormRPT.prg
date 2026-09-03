@@ -1,4 +1,4 @@
-﻿*==============================================================================
+*==============================================================================
 * FormRPT.prg - Cadastro Customizado de Relatorios 4Report
 * Migracao de SIGCDRPT.SCX (frmcadastro)
 * Fase 8/8 - Consolidacao Final (todos os metodos implementados)
@@ -326,8 +326,8 @@ DEFINE CLASS FormRPT AS FormBase
                 .Picture         = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
                 .PicturePosition = 13
                 .Top             = 5
-                .Left            = 5
-                .Width           = 90
+                .Left = 5
+                .Width           = 75
                 .Height          = 75
                 .FontName        = "Tahoma"
                 .FontSize        = 8

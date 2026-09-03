@@ -181,7 +181,7 @@ DEFINE CLASS FormFis AS FormBase
         THIS.AddObject("cmd_4c_Encerrar", "CommandButton")
         WITH THIS.cmd_4c_Encerrar
             .Top             = 3
-            .Left            = 724
+            .Left = 5
             .Width           = 75
             .Height          = 75
             .Caption         = "Encerrar"
