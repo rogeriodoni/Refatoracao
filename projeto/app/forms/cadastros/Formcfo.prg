@@ -295,7 +295,7 @@ DEFINE CLASS Formcfo AS FormBase
                 .Picture         = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
                 .PicturePosition = 13
                 .Top             = 5
-                .Left            = 917
+                .Left = 5
                 .Width           = 75
                 .Height          = 75
                 .FontName        = "Tahoma"

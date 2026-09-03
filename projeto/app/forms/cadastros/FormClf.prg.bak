@@ -995,7 +995,7 @@ DEFINE CLASS FormClf AS FormBase
             .Picture       = gc_4c_CaminhoIcones + "cadastro_inserir_26.jpg"
             .ToolTipText   = "Inserir"
             .Top           = 275
-            .Left          = 932
+            .Left = 5
             .Width         = 45
             .Height        = 45
             .FontName      = "Verdana"
@@ -1017,7 +1017,7 @@ DEFINE CLASS FormClf AS FormBase
             .Picture       = gc_4c_CaminhoIcones + "cadastro_excluir_26.jpg"
             .ToolTipText   = "Excluir"
             .Top           = 320
-            .Left          = 932
+            .Left = 230
             .Width         = 45
             .Height        = 45
             .FontName      = "Verdana"

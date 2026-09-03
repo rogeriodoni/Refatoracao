@@ -2060,7 +2060,7 @@ DEFINE CLASS FormBAL AS FormBase
         WITH loc_oPg3.cmd_4c_Excluir
             .Caption       = "Excluir"
             .Top           = 41
-            .Left          = 453
+            .Left = 230
             .Width         = 70
             .Height        = 40
             .FontName      = "Tahoma"

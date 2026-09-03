@@ -1,4 +1,4 @@
-*==============================================================================
+﻿*==============================================================================
 * FormPec.prg - Formulario de Cadastro de Posicao Empresarial
 * Herda de: FormBase
 * Entidade: Posicao Empresarial
@@ -183,7 +183,7 @@ DEFINE CLASS FormPec AS FormBase
                 .Picture         = gc_4c_CaminhoIcones + "cadastro_inserir_26.jpg"
                 .PicturePosition = 13
                 .Top             = 5
-                .Left            =  542
+                .Left            = 5
                 .Width           = 75
                 .Height          = 75
                 .BackColor       = RGB(255, 255, 255)
@@ -205,7 +205,7 @@ DEFINE CLASS FormPec AS FormBase
                 .Picture         = gc_4c_CaminhoIcones + "cadastro_vizualizar_60.jpg"
                 .PicturePosition = 13
                 .Top             = 5
-                .Left            =  542
+                .Left            = 80
                 .Width           = 75
                 .Height          = 75
                 .BackColor       = RGB(255, 255, 255)
@@ -228,7 +228,7 @@ DEFINE CLASS FormPec AS FormBase
                 .Picture         = gc_4c_CaminhoIcones + "cadastro_alterar_60.jpg"
                 .PicturePosition = 13
                 .Top             = 5
-                .Left            =  542
+                .Left            = 155
                 .Width           = 75
                 .Height          = 75
                 .BackColor       = RGB(255, 255, 255)
@@ -251,7 +251,7 @@ DEFINE CLASS FormPec AS FormBase
                 .Picture         = gc_4c_CaminhoIcones + "cadastro_excluir_60.jpg"
                 .PicturePosition = 13
                 .Top             = 5
-                .Left            =  542
+                .Left            = 230
                 .Width           = 75
                 .Height          = 75
                 .BackColor       = RGB(255, 255, 255)
@@ -274,7 +274,7 @@ DEFINE CLASS FormPec AS FormBase
                 .Picture         = gc_4c_CaminhoIcones + "cadastro_procurar_60.jpg"
                 .PicturePosition = 13
                 .Top             = 5
-                .Left            =  542
+                .Left            = 305
                 .Width           = 75
                 .Height          = 75
                 .BackColor       = RGB(255, 255, 255)
@@ -309,7 +309,7 @@ DEFINE CLASS FormPec AS FormBase
                 .Picture         = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
                 .PicturePosition = 13
                 .Top             = 5
-                .Left            = 917
+                .Left            = 5
                 .Width           = 75
                 .Height          = 75
                 .BackColor       = RGB(255, 255, 255)

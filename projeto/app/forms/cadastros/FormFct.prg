@@ -174,7 +174,7 @@ DEFINE CLASS FormFct AS FormBase
                 .AddObject("cmd_4c_Incluir", "CommandButton")
                 WITH .cmd_4c_Incluir
                     .Top             = 5
-                    .Left            =  542
+                    .Left = 5
                     .Width           = 75
                     .Height          = 75
                     .Caption         = "Incluir"
@@ -195,7 +195,7 @@ DEFINE CLASS FormFct AS FormBase
                 .AddObject("cmd_4c_Visualizar", "CommandButton")
                 WITH .cmd_4c_Visualizar
                     .Top             = 5
-                    .Left            =  542
+                    .Left = 80
                     .Width           = 75
                     .Height          = 75
                     .Caption         = "Visualizar"
@@ -217,7 +217,7 @@ DEFINE CLASS FormFct AS FormBase
                 .AddObject("cmd_4c_Alterar", "CommandButton")
                 WITH .cmd_4c_Alterar
                     .Top             = 5
-                    .Left            =  542
+                    .Left = 155
                     .Width           = 75
                     .Height          = 75
                     .Caption         = "Alterar"
@@ -239,7 +239,7 @@ DEFINE CLASS FormFct AS FormBase
                 .AddObject("cmd_4c_Excluir", "CommandButton")
                 WITH .cmd_4c_Excluir
                     .Top             = 5
-                    .Left            =  542
+                    .Left = 230
                     .Width           = 75
                     .Height          = 75
                     .Caption         = "Excluir"
@@ -261,7 +261,7 @@ DEFINE CLASS FormFct AS FormBase
                 .AddObject("cmd_4c_Buscar", "CommandButton")
                 WITH .cmd_4c_Buscar
                     .Top             = 5
-                    .Left            =  542
+                    .Left = 305
                     .Width           = 75
                     .Height          = 75
                     .Caption         = "Buscar"
@@ -293,8 +293,8 @@ DEFINE CLASS FormFct AS FormBase
                 .AddObject("cmd_4c_Encerrar", "CommandButton")
                 WITH .cmd_4c_Encerrar
                     .Top             = 5
-                    .Left            = 917
-                    .Width           = 90
+                    .Left = 5
+                    .Width           = 75
                     .Height          = 75
                     .Caption         = "Encerrar"
                     .Picture         = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"

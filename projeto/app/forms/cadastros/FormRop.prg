@@ -32,6 +32,9 @@ DEFINE CLASS FormRop AS FormBase
     PROCEDURE Init()
         LOCAL loc_lSucesso
         loc_lSucesso = .F.
+        IF TYPE("gb_4c_ModoTeste") = "L" AND gb_4c_ModoTeste
+            THIS.WindowType = 0
+        ENDIF
         TRY
             loc_lSucesso = DODEFAULT()
         CATCH TO loc_oErro

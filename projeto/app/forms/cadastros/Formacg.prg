@@ -168,7 +168,7 @@ DEFINE CLASS Formacg AS FormBase
         loc_oP1.cnt_4c_Botoes.AddObject("cmd_4c_Alterar", "CommandButton")
         WITH loc_oP1.cnt_4c_Botoes.cmd_4c_Alterar
             .Caption         = "Alterar"
-            .Left            = 85
+            .Left = 155
             .Top             = 5
             .Width           = 75
             .Height          = 75
@@ -187,7 +187,7 @@ DEFINE CLASS Formacg AS FormBase
         loc_oP1.cnt_4c_Botoes.AddObject("cmd_4c_Excluir", "CommandButton")
         WITH loc_oP1.cnt_4c_Botoes.cmd_4c_Excluir
             .Caption         = "Excluir"
-            .Left            = 165
+            .Left = 230
             .Top             = 5
             .Width           = 75
             .Height          = 75
@@ -206,7 +206,7 @@ DEFINE CLASS Formacg AS FormBase
         loc_oP1.cnt_4c_Botoes.AddObject("cmd_4c_Buscar", "CommandButton")
         WITH loc_oP1.cnt_4c_Botoes.cmd_4c_Buscar
             .Caption         = "Buscar"
-            .Left            = 245
+            .Left = 305
             .Top             = 5
             .Width           = 75
             .Height          = 75

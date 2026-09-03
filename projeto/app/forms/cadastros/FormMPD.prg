@@ -239,7 +239,7 @@ DEFINE CLASS FormMPD AS FormBase
             loc_oCnt.AddObject("cmd_4c_Visualizar", "CommandButton")
             WITH loc_oCnt.cmd_4c_Visualizar
                 .Top      = 5
-                .Left     = 82
+                .Left = 80
                 .Width    = 75
                 .Height   = 75
                 .Caption  = "Visualizar"
@@ -253,7 +253,7 @@ DEFINE CLASS FormMPD AS FormBase
             loc_oCnt.AddObject("cmd_4c_Alterar", "CommandButton")
             WITH loc_oCnt.cmd_4c_Alterar
                 .Top      = 5
-                .Left     = 159
+                .Left = 155
                 .Width    = 75
                 .Height   = 75
                 .Caption  = "Alterar"
@@ -267,7 +267,7 @@ DEFINE CLASS FormMPD AS FormBase
             loc_oCnt.AddObject("cmd_4c_Excluir", "CommandButton")
             WITH loc_oCnt.cmd_4c_Excluir
                 .Top      = 5
-                .Left     = 236
+                .Left = 230
                 .Width    = 75
                 .Height   = 75
                 .Caption  = "Excluir"
@@ -281,7 +281,7 @@ DEFINE CLASS FormMPD AS FormBase
             loc_oCnt.AddObject("cmd_4c_Buscar", "CommandButton")
             WITH loc_oCnt.cmd_4c_Buscar
                 .Top      = 5
-                .Left     = 313
+                .Left = 305
                 .Width    = 75
                 .Height   = 75
                 .Caption  = "Buscar"
