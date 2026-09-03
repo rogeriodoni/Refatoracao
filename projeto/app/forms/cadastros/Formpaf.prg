@@ -205,7 +205,7 @@ DEFINE CLASS Formpaf AS FormBase
             .Picture         = gc_4c_CaminhoIcones + "cadastro_alterar_60.jpg"
             .PicturePosition = 13
             .Top             = 5
-            .Left            = 80
+            .Left = 155
             .Width           = 75
             .Height          = 75
             .FontName        = "Tahoma"
@@ -230,7 +230,7 @@ DEFINE CLASS Formpaf AS FormBase
             .Picture         = gc_4c_CaminhoIcones + "cadastro_procurar_60.jpg"
             .PicturePosition = 13
             .Top             = 5
-            .Left            = 155
+            .Left = 305
             .Width           = 75
             .Height          = 75
             .FontName        = "Tahoma"

@@ -205,7 +205,7 @@ DEFINE CLASS FormCfb AS FormBase
             .Picture         = gc_4c_CaminhoIcones + "cadastro_alterar_60.jpg"
             .PicturePosition = 13
             .Top             = 5
-            .Left            = 80
+            .Left = 155
             .Width           = 75
             .Height          = 75
             .BackColor       = RGB(255, 255, 255)
@@ -227,7 +227,7 @@ DEFINE CLASS FormCfb AS FormBase
             .Picture         = gc_4c_CaminhoIcones + "cadastro_vizualizar_60.jpg"
             .PicturePosition = 13
             .Top             = 5
-            .Left            = 155
+            .Left = 80
             .Width           = 75
             .Height          = 75
             .BackColor       = RGB(255, 255, 255)

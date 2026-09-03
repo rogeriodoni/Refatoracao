@@ -289,7 +289,7 @@ DEFINE CLASS FormAcessoGrupo AS FormBase
             .Caption = "Encerrar"
             .Width = 75
             .Height = 75
-            .Left = 380
+            .Left = 5
             .Top = 5
             .Picture = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
             .PicturePosition = 13

@@ -206,9 +206,9 @@ DEFINE CLASS FormOCO AS FormBase
 
                 .AddObject("cmd_4c_Encerrar", "CommandButton")
                 WITH .cmd_4c_Encerrar
-                    .Left            = 917
+                    .Left = 5
                     .Top             = 5
-                    .Width           = 75
+                    .Width           = 90
                     .Height          = 75
                     .Caption         = "Encerrar"
                     .Picture         = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"

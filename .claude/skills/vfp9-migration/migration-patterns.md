@@ -9143,7 +9143,81 @@ Zero falso positivo: regex ancorado em `\s*$` (linha exata), literal numerico ob
 - Complementa: Pattern #179 (Form.Width < 1000).
 - Origem: Erro142 (2026-09-01, FormSrv menu Cadastros->Servicos — botoes ainda cortados apos Pattern #179 aplicado — user reportou "form continua cortando").
 
+## 182. Left RELATIVO em Botoes de Container — NUNCA copiar Left absoluto do container pai (Erro143 2026-09-03)
 
+### Problema
 
+Botoes CommandButton dentro de `cnt_4c_Botoes` (CRUD) e `cnt_4c_Saida` (Encerrar) recebem `.Left` igual ao Left ABSOLUTO do container pai em vez da posicao RELATIVA correta.
+
+```foxpro
+*-- ERRADO: migrador copiou Left do container (542) para os botoes filhos
+loc_oPagina.AddObject("cnt_4c_Botoes", "Container")
+WITH loc_oPagina.cnt_4c_Botoes
+    .Left = 542    && posicao absoluta do container na page
+    ...
+    WITH .cmd_4c_Incluir
+        .Left = 542  && BUG: deveria ser 5 (relativo ao container)
+    ENDWITH
+    WITH .cmd_4c_Visualizar
+        .Left = 542  && BUG: deveria ser 80
+    ENDWITH
+ENDWITH
+```
+
+Resultado: botao em posicao absoluta = 542+542 = 1084, alem do Form.Width=1000 → **INVISIVEL**.
+
+### Fix canonico — posicoes RELATIVAS ao container
+
+```foxpro
+*-- CORRETO: posicoes relativas dentro do container
+WITH .cmd_4c_Incluir
+    .Left = 5      && relativo ao cnt_4c_Botoes
+ENDWITH
+WITH .cmd_4c_Visualizar
+    .Left = 80
+ENDWITH
+WITH .cmd_4c_Alterar
+    .Left = 155
+ENDWITH
+WITH .cmd_4c_Excluir
+    .Left = 230
+ENDWITH
+WITH .cmd_4c_Buscar
+    .Left = 305
+ENDWITH
+
+*-- Dentro de cnt_4c_Saida (Left=917 no container, Left=5 no botao filho)
+WITH .cmd_4c_Encerrar
+    .Left = 5      && relativo ao cnt_4c_Saida, NAO 917
+ENDWITH
+```
+
+### Causa raiz
+
+Migrador (LLM) copia o `cnt_4c_Botoes.Left=542` da page para os botoes filhos. Em VFP9, `.Left` dentro de um bloco `WITH .cmdXxx` eh RELATIVO ao container pai, nao absoluto. O valor 542 como Left relativo empurra os botoes para x=542+542=1084.
+
+### Heuristica de deteccao (Pattern #182)
+
+Auto-mutate:
+
+1. Percorrer linhas detectando `WITH \.cmd_4c_(Incluir|Visualizar|Alterar|Excluir|Buscar|Encerrar)` → entra no contexto do botao.
+2. Dentro do contexto: se `.Left\s*=\s*N` onde N >= 50 e N != valor_canonico → substituir por `.Left = <canonico>`.
+3. Limpar contexto em `ENDWITH`.
+4. Idempotente: se `.Left` ja tem o valor canonico, skip.
+
+Valores canonicos: Incluir=5, Visualizar=80, Alterar=155, Excluir=230, Buscar=305, Encerrar=5.
+
+Threshold >= 50 evita falso positivo em botoes legítimamente pequenos (ex: Left=10 ficaria intocado).
+
+### Impacto
+
+Sweep 2026-09-03 (Erro143): 32 forms cadastros corrigidos, 168 correcoes. Todos tinham Left=542 nos botoes CRUD e Left=917 no cmd_4c_Encerrar.
+
+### Referencias
+
+- Sweep fix: `C:\4c\fix_buttons_left.ps1` (script ad-hoc aplicado antes do Pattern #182).
+- Auto-fix: `C:\4c\automation\CorretorAutomatico.ps1` `Corrigir-BotoesCrudLeftAbsoluto` (Pattern #182).
+- Forms de referencia corrigidos: FormCAD, FormCol, FormCOM, Formcrf, FormDIC, Formacu, e outros 26.
+- Origem: Erro143 (2026-09-03, Formacu "Cadastro de Usuarios" — user reportou "botoes fora do padrao, sem botoes de incluir/alterar/excluir/sair").
 
 

@@ -204,9 +204,8 @@ DEFINE CLASS FormTester AS Custom
 
         *-- Detecta tipo de formulario (REPORT vs CRUD vs OPERACIONAL)
         *-- Prioriza hint do pipeline (par_cFormType), senao detecta automaticamente
-        *-- NOTA: PEMSTATUS(..., 5) retorna .F. para metodos definidos na classe (class-level),
-        *-- apenas retorna .T. para PEMs adicionados via AddObject/AddProperty em runtime.
-        *-- Por isso o hint explicito e preferido e a auto-deteccao usa PEMSTATUS(..., 3).
+        *-- NOTA: PEMSTATUS(..., 5) retorna .T./.F. para QUALQUER PEM (estatico OU runtime).
+        *-- O hint explicito e preferido; a auto-deteccao usa PEMSTATUS(..., 5).
         IF THIS.cFormTypeHint = "CRUD"
             THIS.lFormOperacional = .F.
             THIS.lFormReport = .F.
@@ -219,14 +218,14 @@ DEFINE CLASS FormTester AS Custom
                     THIS.lFormReport = .T.
                     THIS.lFormOperacional = .F.
                 ELSE
-                    *-- Deteccao automatica (sem hint): usa PEMSTATUS 3 (type check) que
-                    *-- funciona para metodos definidos na classe (diferente do param 5)
-                    THIS.lFormReport = PEMSTATUS(THIS.oForm, "this_oRelatorio", 3) > 0
+                    *-- Deteccao automatica (sem hint): PEMSTATUS(..., 5) funciona para
+                    *-- metodos definidos estaticamente na classe (diferente da crenca anterior)
+                    THIS.lFormReport = PEMSTATUS(THIS.oForm, "this_oRelatorio", 5)
                     IF !THIS.lFormReport
                         *-- OPERACIONAL: nao tem CarregarLista nem AlternarPagina (padrao CRUD)
                         *-- e nao tem this_oRelatorio (padrao REPORT)
-                        IF !(PEMSTATUS(THIS.oForm, "CarregarLista", 3) > 0) AND ;
-                           !(PEMSTATUS(THIS.oForm, "AlternarPagina", 3) > 0)
+                        IF !PEMSTATUS(THIS.oForm, "CarregarLista", 5) AND ;
+                           !PEMSTATUS(THIS.oForm, "AlternarPagina", 5)
                             THIS.lFormOperacional = .T.
                         ENDIF
                     ENDIF
@@ -354,8 +353,8 @@ DEFINE CLASS FormTester AS Custom
         ?? "  [2] CarregarLista... "
 
         TRY
-            *-- Tenta chamar CarregarLista se existir (attr 2: retorna nome da classe se PEM existe)
-            IF PEMSTATUS(THIS.oForm, "CarregarLista", 3) > 0
+            *-- Tenta chamar CarregarLista se existir (attr 5: membership test, retorna .T./.F.)
+            IF PEMSTATUS(THIS.oForm, "CarregarLista", 5)
                 THIS.oForm.CarregarLista()
 
                 *-- Verifica cursors conhecidos na datasession do form (suporte DataSession=2)
@@ -374,7 +373,7 @@ DEFINE CLASS FormTester AS Custom
 
                 *-- Forms com DataSession=2 criam cursors no datasession privado — mudar para la
                 loc_nDSSaved = SET("DATASESSION")
-                IF PEMSTATUS(THIS.oForm, "DataSessionID", 3) > 0
+                IF PEMSTATUS(THIS.oForm, "DataSessionID", 5)
                     SET DATASESSION TO THIS.oForm.DataSessionID
                 ENDIF
 
@@ -440,12 +439,12 @@ DEFINE CLASS FormTester AS Custom
         ?? "  [3] ModoIncluir... "
 
         TRY
-            *-- Tenta chamar AlternarPagina se existir (attr 2: retorna nome da classe se PEM existe)
-            IF PEMSTATUS(THIS.oForm, "AlternarPagina", 3) > 0
+            *-- Tenta chamar AlternarPagina se existir (attr 5: membership test, retorna .T./.F.)
+            IF PEMSTATUS(THIS.oForm, "AlternarPagina", 5)
                 THIS.oForm.AlternarPagina(2)
 
                 *-- Verifica se PageFrame.ActivePage mudou
-                IF PEMSTATUS(THIS.oForm, "pgf_4c_Paginas", 3) > 0
+                IF PEMSTATUS(THIS.oForm, "pgf_4c_Paginas", 5)
                     IF THIS.oForm.pgf_4c_Paginas.ActivePage = 2
                         loc_lPassou = .T.
                         loc_cDetalhes = "Page2 ativada com sucesso"
@@ -1084,15 +1083,15 @@ DEFINE CLASS FormTester AS Custom
         ?? "  [" + ALLTRIM(STR(THIS.nTestes + 1)) + "] BtnEncerrarExiste... "
 
         TRY
-            IF PEMSTATUS(THIS.oForm, "BtnEncerrarClick", 3) > 0
+            IF PEMSTATUS(THIS.oForm, "BtnEncerrarClick", 5)
                 loc_lPassou = .T.
                 loc_cDetalhes = "Metodo BtnEncerrarClick encontrado"
                 ?? "PASSOU"
             ELSE
                 *-- Verificar alternativas comuns
                 LOCAL loc_lTemFechar, loc_lTemSair
-                loc_lTemFechar = PEMSTATUS(THIS.oForm, "BtnFecharClick", 3) > 0
-                loc_lTemSair = PEMSTATUS(THIS.oForm, "BtnSairClick", 3) > 0
+                loc_lTemFechar = PEMSTATUS(THIS.oForm, "BtnFecharClick", 5)
+                loc_lTemSair = PEMSTATUS(THIS.oForm, "BtnSairClick", 5)
 
                 IF loc_lTemFechar OR loc_lTemSair
                     loc_lPassou = .T.

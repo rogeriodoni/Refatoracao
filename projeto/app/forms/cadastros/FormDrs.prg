@@ -216,7 +216,7 @@ DEFINE CLASS FormDrs AS FormBase
             .Picture         = gc_4c_CaminhoIcones + "cadastro_alterar_60.jpg"
             .PicturePosition = 13
             .Top             = 5
-            .Left            = 80
+            .Left = 155
             .Width           = 75
             .Height          = 75
             .FontName        = "Tahoma"
@@ -240,7 +240,7 @@ DEFINE CLASS FormDrs AS FormBase
             .Picture         = gc_4c_CaminhoIcones + "cadastro_excluir_60.jpg"
             .PicturePosition = 13
             .Top             = 5
-            .Left            = 155
+            .Left = 230
             .Width           = 75
             .Height          = 75
             .FontName        = "Tahoma"
@@ -264,7 +264,7 @@ DEFINE CLASS FormDrs AS FormBase
             .Picture         = gc_4c_CaminhoIcones + "cadastro_procurar_60.jpg"
             .PicturePosition = 13
             .Top             = 5
-            .Left            = 230
+            .Left = 305
             .Width           = 75
             .Height          = 75
             .FontName        = "Tahoma"

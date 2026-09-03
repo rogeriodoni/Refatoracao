@@ -1,18 +1,20 @@
 # CorretorAutomatico.ps1 - Patterns Reference
 
-This document is the complete reference for all 181 total auto-fix patterns in `CorretorAutomatico.ps1` and the full Common Errors Reference table for VFP9 migration.
+This document is the complete reference for all 182 total auto-fix patterns in `CorretorAutomatico.ps1` and the full Common Errors Reference table for VFP9 migration.
 
 The CorretorAutomatico runs automatically during the migration pipeline (Etapa 5.5) and fixes known anti-patterns that cause compilation or runtime errors in VFP9.
 
 ---
 
-## Auto-Fix Patterns (175 total)
+## Auto-Fix Patterns (182 total)
 
 **Nota**: Patterns marcados como **WARNING-only** apenas registram alerta amarelo no log (nao mutam o codigo). Sao usados quando a correcao seria ambigua/fragil e exige revisao manual.
 
 
 | # | Description | Before (WRONG) | After (CORRECT) |
 |---|-------------|-----------------|------------------|
+| 182 | **Auto-mutate** — `cmd_4c_Incluir/Visualizar/Alterar/Excluir/Buscar/Encerrar.Left` igual ao Left absoluto do container pai (542/917) em vez da posicao relativa correta | `WITH .cmd_4c_Incluir / .Left = 542` (Left do container copiado para o filho — botao em x=1084, INVISIVEL) | `.Left = 5` (Incluir), `80` (Visualizar), `155` (Alterar), `230` (Excluir), `305` (Buscar), `5` (Encerrar). Detecta `WITH .cmd_4c_<NOME>` + `.Left = N` onde N >= 50 e N != canonico. Idempotente. Sweep 2026-09-03: 32 forms, 168 correcoes. |
+| 181 | **Auto-mutate** — `pgf_4c_Paginas.Width` hardcoded `< 1000` trunca botoes mesmo com Form.Width canonico | `.Width = 815` (PageFrame Width menor que Form.Width — botoes alem de 815 cortados pela borda do PageFrame) | `.Width = THIS.Width` (dinamico — segue Form.Width sem hardcode). Detecta dentro de bloco WITH pgf_4c_Paginas: `.Width = N` com N < 1000. Idempotente. Complementa Pattern #179. |
 | 1 | RETURN dentro de TRY/CATCH | `TRY` ... `RETURN .F.` ... `ENDTRY` | `loc_lResultado = .F.` ... `RETURN loc_lResultado` (FORA do TRY) |
 | 2 | THIS.InicializarForm() apos DODEFAULT | `DODEFAULT()` + `THIS.InicializarForm()` | `DODEFAULT()` (FormBase.Init ja chama InicializarForm) |
 | 3 | loForm.Show(1) | `loForm.Show(1)` | `loForm.Show()` |

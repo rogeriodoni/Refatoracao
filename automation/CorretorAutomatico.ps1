@@ -12385,6 +12385,104 @@ function Corrigir-PageFramePaginasWidthHardcoded {
     return $Linhas
 }
 
+function Corrigir-BotoesCrudLeftAbsoluto {
+    # Pattern #182: Botoes CommandButton dentro de cnt_4c_Botoes e cnt_4c_Saida
+    # recebem .Left = valor ABSOLUTO do container pai em vez da posicao RELATIVA
+    # correta. Resultado: botao em posicao x = 542+542 = 1084 (Form.Width=1000)
+    # — completamente fora da area visivel, INVISIVEL para o usuario.
+    #
+    # Valores canonicos RELATIVOS ao container:
+    #   cmd_4c_Incluir    -> Left = 5
+    #   cmd_4c_Visualizar -> Left = 80
+    #   cmd_4c_Alterar    -> Left = 155
+    #   cmd_4c_Excluir    -> Left = 230
+    #   cmd_4c_Buscar     -> Left = 305
+    #   cmd_4c_Encerrar   -> Left = 5 (dentro de cnt_4c_Saida)
+    #
+    # Auto-fix: substitui .Left = X incorreto pelo valor canonico dentro de cada
+    # bloco WITH. Guard: apenas em Form CRUD (AS FormBase). Idempotente.
+    # Origem: Erro143 (2026-09-03, 32 forms cadastros — sweep fix_buttons_left.ps1).
+    param([string[]]$Linhas)
+
+    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
+
+    # Guard: precisa herdar FormBase (Form CRUD)
+    $conteudo = $Linhas -join "`n"
+    if ($conteudo -notmatch '(?im)^\s*DEFINE\s+CLASS\s+\w+\s+AS\s+FormBase') { return $Linhas }
+
+    # Mapa de botao -> Left canonico RELATIVO
+    $leftCanonico = @{
+        'cmd_4c_Incluir'    = 5
+        'cmd_4c_Visualizar' = 80
+        'cmd_4c_Alterar'    = 155
+        'cmd_4c_Excluir'    = 230
+        'cmd_4c_Buscar'     = 305
+        'cmd_4c_Encerrar'   = 5
+    }
+
+    # Threshold: Left > 50 indica valor absoluto copiado erroneamente
+    # (valores canonicos sao todos <= 305; Left absoluto do container eh 542/917)
+    $thresholdCrud     = 50   # para botoes CRUD (Incluir..Buscar)
+    $thresholdEncerrar = 10   # para Encerrar (canonico = 5)
+
+    $modificados = 0
+    $botaoAtual  = ""   # nome do botao no WITH corrente
+    $inWith      = $false
+
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        $ln = $Linhas[$i]
+
+        # Detectar entrada em WITH .*cmd_4c_<botao> (qualquer profundidade de path)
+        $mWith = [regex]::Match($ln, '(?i)^\s*WITH\s+.*\.(cmd_4c_(?:Incluir|Visualizar|Alterar|Excluir|Buscar|Encerrar))\s*$')
+        if ($mWith.Success) {
+            $botaoAtual = $mWith.Groups[1].Value.ToLower()
+            # normalizar case para bater com hashtable (chave com maiuscula)
+            foreach ($k in $leftCanonico.Keys) {
+                if ($k.ToLower() -eq $botaoAtual) {
+                    $botaoAtual = $k
+                    break
+                }
+            }
+            $inWith = $true
+            continue
+        }
+
+        # Sair do WITH (ENDWITH fecha o bloco corrente)
+        if ($inWith -and $ln -match '(?i)^\s*ENDWITH\s*$') {
+            $inWith     = $false
+            $botaoAtual = ""
+            continue
+        }
+
+        # Dentro de WITH: detectar .Left = N
+        if ($inWith -and $botaoAtual -ne "" -and $leftCanonico.ContainsKey($botaoAtual)) {
+            $mLeft = [regex]::Match($ln, '(?i)^(\s*)\.Left\s*=\s*(\d+)\s*$')
+            if ($mLeft.Success) {
+                $indent    = $mLeft.Groups[1].Value
+                $valAtual  = [int]$mLeft.Groups[2].Value
+                $valCanon  = $leftCanonico[$botaoAtual]
+
+                # Threshold por tipo de botao
+                $threshold = if ($botaoAtual -eq 'cmd_4c_Encerrar') { $thresholdEncerrar } else { $thresholdCrud }
+
+                if ($valAtual -ne $valCanon -and $valAtual -gt $threshold) {
+                    $novo = "${indent}.Left = $valCanon"
+                    $descricao = "Pattern #182 (Erro143): $botaoAtual.Left = $valAtual parece ser Left absoluto do container pai (>$threshold, deve ser relativo). Corrigido para Left canonico RELATIVO = $valCanon. Botao com Left absoluto fica em posicao $valAtual + offset_container, fora do form (Width=1000), INVISIVEL. Sweep 2026-09-03: 32 forms afetados."
+                    Add-Correcao -Tipo "AUTO-182-BOTAO-LEFT-ABSOLUTO" -Linha ($i + 1) `
+                        -Original ".Left = $valAtual (provavel Left absoluto do container — botao invisivel)" `
+                        -Corrigido ".Left = $valCanon (Left relativo canonico para $botaoAtual)" `
+                        -Descricao $descricao
+                    $Linhas[$i] = $novo
+                    $modificados++
+                    Write-Host "[Pattern #182] Linha $($i + 1): $botaoAtual.Left $valAtual -> $valCanon (Erro143)" -ForegroundColor Green
+                }
+            }
+        }
+    }
+
+    return $Linhas
+}
+
 function Invoke-CorrecaoAutomatica {
     param(
         [string]$Arquivo,
@@ -12589,6 +12687,7 @@ function Invoke-CorrecaoAutomatica {
     $linhas = Corrigir-FormWidthMenorQueSaida -Linhas $linhas
     $linhas = Corrigir-GridRecordSourceResetSemReconfig -Linhas $linhas
     $linhas = Corrigir-PageFramePaginasWidthHardcoded -Linhas $linhas
+    $linhas = Corrigir-BotoesCrudLeftAbsoluto -Linhas $linhas
 
     # Salva arquivo corrigido em UTF-8 SEM BOM.
     # - VFP9 nao suporta BOM (por isso removemos no read com bytes[3..])

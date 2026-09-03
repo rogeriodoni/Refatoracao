@@ -1351,7 +1351,7 @@ DEFINE CLASS FormBch AS FormBase
         loc_oPg3.AddObject("cmd_4c_Excluir", "CommandButton")
         WITH loc_oPg3.cmd_4c_Excluir
             .Top             = 31
-            .Left            = 773
+            .Left = 230
             .Width           = 75
             .Height          = 75
             .Caption         = "Excluir"

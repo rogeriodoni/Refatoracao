@@ -444,7 +444,7 @@ DEFINE CLASS FormGcp AS FormBase
             .Picture         = gc_4c_CaminhoIcones + "cadastro_excluir_60.jpg"
             .PicturePosition = 13
             .Top             = 5
-            .Left            = 80
+            .Left = 230
             .Width           = 75
             .Height          = 75
             .BackColor       = RGB(255, 255, 255)
