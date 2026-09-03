@@ -12483,6 +12483,63 @@ function Corrigir-BotoesCrudLeftAbsoluto {
     return $Linhas
 }
 
+function Corrigir-GridColumnCountEmCarregar {
+    # Pattern #183: Grid.ColumnCount reatribuido em metodo Carregar* destrói AddObject.
+    # Em VFP9, qualquer atribuicao a ColumnCount recria TODOS os objetos de coluna,
+    # destruindo controles adicionados via AddObject (CheckBox, ComboBox, etc.).
+    # Regra: ColumnCount deve ser definido APENAS em ConfigurarAba*/ConfigurarGrid*
+    # durante inicializacao. Nos metodos Carregar*Aba/CarregarLista NAO reatribuir.
+    #
+    # WARNING-only: nao sabemos se ha AddObject nas colunas sem analisar o form inteiro.
+    # Origem: Erro144 (2026-09-03, Formacg — CheckBox sumia apos carregar dados).
+    param([string[]]$Linhas)
+
+    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
+
+    $inCarregar  = $false
+    $profWith    = 0  # profundidade de WITH blocks dentro do metodo
+
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        $ln = $Linhas[$i]
+
+        # Detectar inicio de metodo Carregar*
+        if ($ln -match '(?i)^\s*(PROCEDURE|FUNCTION)\s+Carregar\w+') {
+            $inCarregar = $true
+            $profWith   = 0
+            continue
+        }
+
+        # Detectar fim do metodo (ENDPROC/ENDFUNC ou novo PROCEDURE/FUNCTION)
+        if ($inCarregar -and $ln -match '(?i)^\s*(ENDPROC|ENDFUNC|PROCEDURE|FUNCTION)\s') {
+            $inCarregar = $false
+            $profWith   = 0
+            continue
+        }
+
+        if ($inCarregar) {
+            # Rastrear profundidade de WITH para distinguir standalone vs .ColumnCount
+            if ($ln -match '(?i)^\s*WITH\s+') { $profWith++ }
+            if ($ln -match '(?i)^\s*ENDWITH\s*$') { $profWith-- }
+
+            # Detectar standalone `var.ColumnCount = N` (nao `.ColumnCount` relativo)
+            if ($profWith -eq 0 -and $ln -match '(?i)^\s*\w[\w.]*\.ColumnCount\s*=\s*\d+') {
+                $descricao = "Pattern #183 (Erro144): ColumnCount reatribuido em metodo Carregar* (linha $($i + 1)). " +
+                    "Em VFP9, qualquer atribuicao a ColumnCount recria TODOS os objetos de coluna, destruindo " +
+                    "controles AddObject (CheckBox/ComboBox). Remover esta linha se ColumnCount ja foi definido " +
+                    "em ConfigurarAba*/ConfigurarGrid* durante inicializacao. " +
+                    "Adicionar protecao defensiva: PEMSTATUS(grid.ColumnN, 'controle', 5) antes de acessar."
+                Add-Correcao -Tipo "WARN-183-COLUMNCOUNT-EM-CARREGAR" -Linha ($i + 1) `
+                    -Original $ln.Trim() `
+                    -Corrigido "(remover — ColumnCount ja definido em ConfigurarAba*)" `
+                    -Descricao $descricao
+                Write-Host "[Pattern #183 WARN] Linha $($i + 1): ColumnCount em Carregar* pode destruir AddObject" -ForegroundColor Yellow
+            }
+        }
+    }
+
+    return $Linhas
+}
+
 function Invoke-CorrecaoAutomatica {
     param(
         [string]$Arquivo,
@@ -12688,6 +12745,7 @@ function Invoke-CorrecaoAutomatica {
     $linhas = Corrigir-GridRecordSourceResetSemReconfig -Linhas $linhas
     $linhas = Corrigir-PageFramePaginasWidthHardcoded -Linhas $linhas
     $linhas = Corrigir-BotoesCrudLeftAbsoluto -Linhas $linhas
+    $linhas = Corrigir-GridColumnCountEmCarregar -Linhas $linhas
 
     # Salva arquivo corrigido em UTF-8 SEM BOM.
     # - VFP9 nao suporta BOM (por isso removemos no read com bytes[3..])
