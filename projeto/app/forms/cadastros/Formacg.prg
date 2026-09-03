@@ -104,7 +104,7 @@ DEFINE CLASS Formacg AS FormBase
             .Width     = 1000
             .Height    = 85
             .BackStyle = 1
-            .BackColor = RGB(215,215,215)
+            .BackColor = RGB(100,100,100)
             .BorderWidth = 0
             .Visible   = .T.
         ENDWITH
@@ -117,7 +117,7 @@ DEFINE CLASS Formacg AS FormBase
             .Height    = 85
             .AutoSize  = .F.
             .BackStyle = 1
-            .BackColor = RGB(215,215,215)
+            .BackColor = RGB(100,100,100)
         ENDWITH
         loc_oP1.cnt_4c_Cabecalho.AddObject("lbl_4c_Titulo", "Label")
         WITH loc_oP1.cnt_4c_Cabecalho.lbl_4c_Titulo
@@ -131,7 +131,7 @@ DEFINE CLASS Formacg AS FormBase
             .FontSize  = 14
             .FontBold  = .T.
             .BackStyle = 0
-            .ForeColor = RGB(60,60,60)
+            .ForeColor = RGB(255,255,255)
         ENDWITH
 
         *-- Container botoes CRUD (Incluir, Alterar, Excluir, Buscar, Copiar)
@@ -382,7 +382,7 @@ DEFINE CLASS Formacg AS FormBase
             .Width     = 1000
             .Height    = 85
             .BackStyle = 1
-            .BackColor = RGB(215,215,215)
+            .BackColor = RGB(100,100,100)
             .BorderWidth = 0
             .Visible   = .T.
         ENDWITH
@@ -395,7 +395,7 @@ DEFINE CLASS Formacg AS FormBase
             .Height    = 85
             .AutoSize  = .F.
             .BackStyle = 1
-            .BackColor = RGB(215,215,215)
+            .BackColor = RGB(100,100,100)
         ENDWITH
         loc_oP2.cnt_4c_Cabecalho.AddObject("lbl_4c_Titulo", "Label")
         WITH loc_oP2.cnt_4c_Cabecalho.lbl_4c_Titulo
@@ -409,7 +409,7 @@ DEFINE CLASS Formacg AS FormBase
             .FontSize  = 14
             .FontBold  = .T.
             .BackStyle = 0
-            .ForeColor = RGB(60,60,60)
+            .ForeColor = RGB(255,255,255)
         ENDWITH
 
         *-- Botoes Salvar/Cancelar (sobrepostos ao cabecalho, lado direito)
@@ -805,6 +805,7 @@ DEFINE CLASS Formacg AS FormBase
         ENDWITH
         WITH loc_oGrid.Column3
             .AddObject("chk_4c_Marcas", "CheckBox")
+            .CurrentControl = "chk_4c_Marcas"
         ENDWITH
         WITH loc_oGrid.Column3.chk_4c_Marcas
             .Caption   = ""
@@ -852,6 +853,7 @@ DEFINE CLASS Formacg AS FormBase
         ENDWITH
         WITH loc_oGrid.Column2
             .AddObject("chk_4c_SelBarras", "CheckBox")
+            .CurrentControl = "chk_4c_SelBarras"
         ENDWITH
         WITH loc_oGrid.Column2.chk_4c_SelBarras
             .Caption   = ""
@@ -905,6 +907,7 @@ DEFINE CLASS Formacg AS FormBase
         ENDWITH
         WITH loc_oGrid.Column3
             .AddObject("cbo_4c_CmbStatus", "ComboBox")
+            .CurrentControl = "cbo_4c_CmbStatus"
         ENDWITH
         WITH loc_oGrid.Column3.cbo_4c_CmbStatus
             .RowSourceType = 1
@@ -1033,7 +1036,6 @@ DEFINE CLASS Formacg AS FormBase
                 loc_oGrid = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page2.grd_4c_Programas
                 *-- NAO reatribuir ColumnCount: em VFP9, qualquer atribuicao a ColumnCount
                 *-- recria todos os objetos de coluna, destruindo AddObject (chk_4c_Marcas)
-                loc_oGrid.ColumnCount = 4
                 loc_oGrid.RecordSource = "cursor_4c_Programas"
                 loc_oGrid.Column1.ControlSource = "cursor_4c_Programas.Descricaos"
                 loc_oGrid.Column2.ControlSource = "cursor_4c_Programas.Programas"
@@ -1052,6 +1054,7 @@ DEFINE CLASS Formacg AS FormBase
                     WITH loc_oGrid.Column3
                         .AddObject("chk_4c_Marcas", "CheckBox")
                         .Sparse = .F.
+                        .CurrentControl = "chk_4c_Marcas"
                     ENDWITH
                     WITH loc_oGrid.Column3.chk_4c_Marcas
                         .Caption   = ""
@@ -1091,6 +1094,7 @@ DEFINE CLASS Formacg AS FormBase
                     WITH loc_oGrid.Column2
                         .AddObject("chk_4c_SelBarras", "CheckBox")
                         .Sparse = .F.
+                        .CurrentControl = "chk_4c_SelBarras"
                     ENDWITH
                     WITH loc_oGrid.Column2.chk_4c_SelBarras
                         .Caption   = ""
@@ -1133,6 +1137,7 @@ DEFINE CLASS Formacg AS FormBase
                     WITH loc_oGrid.Column3
                         .AddObject("cbo_4c_CmbStatus", "ComboBox")
                         .Sparse = .F.
+                        .CurrentControl = "cbo_4c_CmbStatus"
                     ENDWITH
                     WITH loc_oGrid.Column3.cbo_4c_CmbStatus
                         .BoundTo   = .T.
