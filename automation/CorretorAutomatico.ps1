@@ -5081,12 +5081,33 @@ function Corrigir-GridColumnCountAntesRecordSource {
             $indent = $Matches[1]
             $gridRef = $Matches[2]
 
-            # Ja tem .ColumnCount = N na linha anterior?
+            # Guard Erro144: NUNCA injetar ColumnCount dentro de metodo Carregar*
+            # (ColumnCount em Carregar* destroi controles AddObject — Pattern #183)
+            $inCarregar = $false
+            for ($k = $i - 1; $k -ge [Math]::Max(0, $i - 60); $k--) {
+                if ($Linhas[$k] -match '(?i)^\s*(PROCEDURE|FUNCTION)\s+Carregar\w+') {
+                    $inCarregar = $true
+                    break
+                }
+                if ($Linhas[$k] -match '(?i)^\s*(ENDPROC|ENDFUNC)\s*$') { break }
+            }
+            if ($inCarregar) {
+                [void]$resultado.Add($linha)
+                continue
+            }
+
+            # Ja tem .ColumnCount = N nas ultimas 3 linhas?
             $temColumnCount = $false
-            if ($i -gt 0) {
-                $linhaAnterior = $Linhas[$i - 1]
+            for ($k = [Math]::Max(0, $i - 3); $k -lt $i; $k++) {
+                $linhaAnterior = $Linhas[$k]
                 if ($linhaAnterior -match "(?i)^\s*$([regex]::Escape($gridRef))\.ColumnCount\s*=\s*\d+\s*$") {
                     $temColumnCount = $true
+                    break
+                }
+                # Tambem pular se ha comentario "NAO reatribuir ColumnCount" (Erro144 guard)
+                if ($linhaAnterior -match '(?i)NAO reatribuir ColumnCount') {
+                    $temColumnCount = $true
+                    break
                 }
             }
 
