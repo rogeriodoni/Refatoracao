@@ -296,7 +296,7 @@ DEFINE CLASS Formcfo AS FormBase
                 .PicturePosition = 13
                 .Top             = 5
                 .Left = 5
-                .Width           = 75
+                .Width           = 90
                 .Height          = 75
                 .FontName        = "Tahoma"
                 .FontBold        = .T.

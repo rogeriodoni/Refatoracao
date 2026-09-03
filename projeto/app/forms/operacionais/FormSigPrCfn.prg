@@ -190,7 +190,7 @@ DEFINE CLASS FormSigPrCfn AS FormBase
             .PageCount   = 2
             .Top         = 80
             .Left        = 0
-            .Width       = 600
+            .Width = THIS.Width
             .Height      = 220
             .Tabs        = .F.
             .BorderWidth = 0

@@ -106,7 +106,7 @@ DEFINE CLASS Formpag AS FormBase
             WITH loc_oCnt.cmd_4c_Alterar
                 .Caption = "Alterar"
                 .Top     = 5
-                .Left    = 85
+                .Left = 155
                 .Width   = 75
                 .Height  = 75
                 .Visible = .T.
@@ -117,7 +117,7 @@ DEFINE CLASS Formpag AS FormBase
             WITH loc_oCnt.cmd_4c_Visualizar
                 .Caption = "Visualizar"
                 .Top     = 5
-                .Left    = 165
+                .Left = 80
                 .Width   = 75
                 .Height  = 75
                 .Visible = .T.
@@ -128,7 +128,7 @@ DEFINE CLASS Formpag AS FormBase
             WITH loc_oCnt.cmd_4c_Excluir
                 .Caption = "Excluir"
                 .Top     = 5
-                .Left    = 245
+                .Left = 230
                 .Width   = 75
                 .Height  = 75
                 .Visible = .T.
@@ -139,7 +139,7 @@ DEFINE CLASS Formpag AS FormBase
             WITH loc_oCnt.cmd_4c_Buscar
                 .Caption = "Buscar"
                 .Top     = 5
-                .Left    = 325
+                .Left = 305
                 .Width   = 75
                 .Height  = 75
                 .Visible = .T.

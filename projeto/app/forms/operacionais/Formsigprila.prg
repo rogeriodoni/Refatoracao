@@ -466,7 +466,7 @@ DEFINE CLASS Formsigprila AS FormBase
         THIS.AddObject("cmd_4c_Encerrar", "CommandButton")
         WITH THIS.cmd_4c_Encerrar
             .Top             = 3
-            .Left            = 725
+            .Left = 5
             .Width           = 75
             .Height          = 75
             .Caption         = "Encerrar"

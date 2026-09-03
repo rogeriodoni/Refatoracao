@@ -1,4 +1,4 @@
-﻿*==============================================================================
+*==============================================================================
 * Formsigpres2.prg - Pedido de Estoque (SIGPRES2)
 * Herda de: FormBase
 * Tipo: Operacional (detalhe de pedido - aberto pelo form pai)
@@ -227,8 +227,8 @@ DEFINE CLASS Formsigpres2 AS FormBase
                 .Picture         = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
                 .PicturePosition = 13
                 .Top             = 5
-                .Left            = 5
-                .Width           = 75
+                .Left = 5
+                .Width           = 90
                 .Height          = 75
                 .BackColor       = RGB(255, 255, 255)
                 .ForeColor       = RGB(90, 90, 90)

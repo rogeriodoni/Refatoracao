@@ -1033,6 +1033,7 @@ DEFINE CLASS Formacg AS FormBase
                 loc_oGrid = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page2.grd_4c_Programas
                 *-- NAO reatribuir ColumnCount: em VFP9, qualquer atribuicao a ColumnCount
                 *-- recria todos os objetos de coluna, destruindo AddObject (chk_4c_Marcas)
+                loc_oGrid.ColumnCount = 4
                 loc_oGrid.RecordSource = "cursor_4c_Programas"
                 loc_oGrid.Column1.ControlSource = "cursor_4c_Programas.Descricaos"
                 loc_oGrid.Column2.ControlSource = "cursor_4c_Programas.Programas"

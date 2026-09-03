@@ -259,9 +259,9 @@ DEFINE CLASS FormSigPrEml AS FormBase
             .AddObject("cmd_4c_Encerrar", "CommandButton")
             WITH .cmd_4c_Encerrar
                 .Top         = 5
-                .Left        = 917
+                .Left = 5
                 .Height      = 75
-                .Width       = 90
+                .Width       = 75
                 .FontBold    = .T.
                 .FontItalic  = .T.
                 .FontName    = "Tahoma"

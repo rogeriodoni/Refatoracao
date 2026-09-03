@@ -1007,7 +1007,7 @@ DEFINE CLASS Formsigprnfe AS FormBase
         THIS.AddObject("cmd_4c_Encerrar", "CommandButton")
         WITH THIS.cmd_4c_Encerrar
             .Top             = 499
-            .Left            = 917
+            .Left = 5
             .Width           = 75
             .Height          = 75
             .Caption         = "Encerrar"
