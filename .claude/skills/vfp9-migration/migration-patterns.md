@@ -9220,4 +9220,82 @@ Sweep 2026-09-03 (Erro143): 32 forms cadastros corrigidos, 168 correcoes. Todos 
 - Forms de referencia corrigidos: FormCAD, FormCol, FormCOM, Formcrf, FormDIC, Formacu, e outros 26.
 - Origem: Erro143 (2026-09-03, Formacu "Cadastro de Usuarios" — user reportou "botoes fora do padrao, sem botoes de incluir/alterar/excluir/sair").
 
+## 183. Grid.ColumnCount NUNCA Reatribuir em Metodos Carregar* — Destroi AddObject (Erro144 2026-09-03)
+
+### Problema
+
+Em VFP9, qualquer atribuicao a `Grid.ColumnCount` — mesmo para o mesmo valor ja definido — **recria todos os objetos de coluna do zero**, destruindo controles adicionados via `AddObject` (CheckBox, ComboBox, etc.) em iteracoes anteriores.
+
+```foxpro
+*-- ERRADO: ConfigurarAbaProgramas() ja definiu ColumnCount=4 + AddObject("chk_4c_Marcas")
+*-- CarregarProgramasAba() reatribui ColumnCount e destroi o CheckBox silenciosamente
+PROCEDURE CarregarProgramasAba(par_cGrupos)
+    LOCAL loc_oGrid
+    loc_oGrid = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page2.grd_4c_Programas
+    loc_oGrid.ColumnCount = 4          && BUG: recria colunas, destrói chk_4c_Marcas
+    loc_oGrid.RecordSource = "cursor_4c_Programas"
+    loc_oGrid.Column3.ControlSource = "cursor_4c_Programas.Marcas"
+    *-- chk_4c_Marcas foi destruido acima; CheckBox nao aparece no grid
+ENDPROC
+```
+
+Resultado: o CheckBox some do grid apos o primeiro carregamento de dados. O usuario nao consegue marcar/desmarcar registros.
+
+### Fix canonico
+
+```foxpro
+*-- CORRETO: NAO reatribuir ColumnCount; proteção defensiva com PEMSTATUS
+PROCEDURE CarregarProgramasAba(par_cGrupos)
+    LOCAL loc_oGrid
+    loc_oGrid = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page2.grd_4c_Programas
+    *-- NAO atribuir ColumnCount aqui — ja definido em ConfigurarAbaProgramas()
+    loc_oGrid.RecordSource = "cursor_4c_Programas"
+    loc_oGrid.Column3.ControlSource = "cursor_4c_Programas.Marcas"
+    *-- Proteção defensiva: re-adicionar CheckBox se foi destruido
+    IF !PEMSTATUS(loc_oGrid.Column3, "chk_4c_Marcas", 5)
+        WITH loc_oGrid.Column3
+            .AddObject("chk_4c_Marcas", "CheckBox")
+            .Sparse = .F.
+        ENDWITH
+        WITH loc_oGrid.Column3.chk_4c_Marcas
+            .Caption   = ""
+            .Width     = 60
+            .Height    = 17
+            .BackStyle = 0
+            .Themes    = .F.
+        ENDWITH
+        BINDEVENT(loc_oGrid.Column3.chk_4c_Marcas, "When", THIS, "ChkMarcasWhen")
+    ENDIF
+ENDPROC
+```
+
+### Causa raiz
+
+O migrador (LLM) copia `ColumnCount = N` do bloco `ConfigurarAba*` (inicializacao) para o bloco `Carregar*Aba` (data-loading), pois o SCX legado nao tem separacao clara entre "configurar grid" e "carregar dados". Em VFP9, `ColumnCount` na inicializacao e necessario para criar as colunas; na recarga de dados, e destrutivo.
+
+### Regra
+
+- Definir `ColumnCount` **APENAS UMA VEZ** em `ConfigurarAba*`/`ConfigurarGrid*` durante `InicializarForm`.
+- Em metodos `Carregar*Aba`, `CarregarDados`, `CarregarLista`: **NUNCA reatribuir ColumnCount**.
+- Usar `PEMSTATUS(grid.ColumnN, "nomeControle", 5)` como guarda defensiva antes de acessar controle AddObject'd.
+- `Sparse = .F.` e obrigatorio no Column para CheckBox/ComboBox aparecer em todas as linhas — preservar apos re-adicionar.
+
+### Heuristica de deteccao (Pattern #183)
+
+WARNING-only (nao auto-mutate — contexto necessario para confirmar que ha AddObject nas colunas):
+
+1. Detectar metodo `PROCEDURE Carregar\w+` ou `FUNCTION Carregar\w+`.
+2. Dentro do metodo: detectar `\w+\.ColumnCount\s*=\s*\d+` que NAO esteja dentro de bloco `WITH` (i.e., linha standalone, nao `.ColumnCount`).
+3. Emitir WARNING: "Pattern #183: ColumnCount reatribuido em Carregar* — pode destruir controles AddObject. Remover se ColumnCount ja foi definido em ConfigurarAba*."
+
+### Impacto
+
+Erro144 (2026-09-03, Formacg "Acesso de Grupos"): 3 grids afetados (Programas/Barra/Telas). CheckBox `chk_4c_Marcas` e `chk_4c_SelBarras` + ComboBox `cbo_4c_CmbStatus` sumiam apos primeiro carregamento de dados. Acesso a `grid.Column3.cbo_4c_CmbStatus` apos `ColumnCount = 3` causaria crash "Property CBO_4C_CMBSTATUS is not found".
+
+### Referencias
+
+- Form corrigido: `C:\4c\projeto\app\forms\cadastros\Formacg.prg` metodos `CarregarProgramasAba`, `CarregarBarraAba`, `CarregarTelasAba`.
+- Warning: `C:\4c\automation\CorretorAutomatico.ps1` `Corrigir-GridColumnCountEmCarregar` (Pattern #183).
+- Origem: Erro144 (2026-09-03, Formacg — user reportou "nao existe o check box para marcar o acesso").
+
 
