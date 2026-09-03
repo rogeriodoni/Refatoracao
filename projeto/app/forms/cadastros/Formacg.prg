@@ -61,6 +61,7 @@ DEFINE CLASS Formacg AS FormBase
                 THIS.pgf_4c_Paginas.ActivePage = 1
                 THIS.this_cModoAtual = "LISTA"
                 THIS.AjustarBotoesPorModo()
+                THIS.HabilitarColunasGrid(.F.)
                 loc_lSucesso = .T.
             ENDIF
         CATCH TO loc_oErro
@@ -134,12 +135,13 @@ DEFINE CLASS Formacg AS FormBase
             .ForeColor = RGB(255,255,255)
         ENDWITH
 
-        *-- Container botoes CRUD (Incluir, Alterar, Excluir, Buscar, Copiar)
+        *-- Container botoes CRUD (CopiarAcesso, Incluir, Consultar, Alterar, Excluir, Buscar)
+        *-- Left=390 alinha com original: cmdCopia(390) + Grupo_op(540); 6 botoes 75+5px cada
         loc_oP1.AddObject("cnt_4c_Botoes", "Container")
         WITH loc_oP1.cnt_4c_Botoes
             .Top       = 29
-            .Left      =  542
-            .Width     = 465
+            .Left      = 390
+            .Width     = 540
             .Height    = 85
             .BackStyle = 0
             .BorderWidth = 0
@@ -149,7 +151,7 @@ DEFINE CLASS Formacg AS FormBase
         loc_oP1.cnt_4c_Botoes.AddObject("cmd_4c_Incluir", "CommandButton")
         WITH loc_oP1.cnt_4c_Botoes.cmd_4c_Incluir
             .Caption         = "Incluir"
-            .Left            = 5
+            .Left            = 85
             .Top             = 5
             .Width           = 75
             .Height          = 75
@@ -165,10 +167,29 @@ DEFINE CLASS Formacg AS FormBase
         ENDWITH
         BINDEVENT(loc_oP1.cnt_4c_Botoes.cmd_4c_Incluir, "Click", THIS, "BtnIncluirClick")
 
+        loc_oP1.cnt_4c_Botoes.AddObject("cmd_4c_Consultar", "CommandButton")
+        WITH loc_oP1.cnt_4c_Botoes.cmd_4c_Consultar
+            .Caption         = "Visualizar"
+            .Left            = 165
+            .Top             = 5
+            .Width           = 75
+            .Height          = 75
+            .Picture         = gc_4c_CaminhoIcones + "cadastro_vizualizar_60.jpg"
+            .PicturePosition = 13
+            .FontName        = "Tahoma"
+            .FontSize        = 8
+            .Themes          = .F.
+            .SpecialEffect   = 0
+            .BackColor       = RGB(255,255,255)
+            .ForeColor       = RGB(90,90,90)
+            .Visible         = .T.
+        ENDWITH
+        BINDEVENT(loc_oP1.cnt_4c_Botoes.cmd_4c_Consultar, "Click", THIS, "BtnVisualizarClick")
+
         loc_oP1.cnt_4c_Botoes.AddObject("cmd_4c_Alterar", "CommandButton")
         WITH loc_oP1.cnt_4c_Botoes.cmd_4c_Alterar
             .Caption         = "Alterar"
-            .Left = 155
+            .Left            = 245
             .Top             = 5
             .Width           = 75
             .Height          = 75
@@ -187,7 +208,7 @@ DEFINE CLASS Formacg AS FormBase
         loc_oP1.cnt_4c_Botoes.AddObject("cmd_4c_Excluir", "CommandButton")
         WITH loc_oP1.cnt_4c_Botoes.cmd_4c_Excluir
             .Caption         = "Excluir"
-            .Left = 230
+            .Left            = 325
             .Top             = 5
             .Width           = 75
             .Height          = 75
@@ -206,7 +227,7 @@ DEFINE CLASS Formacg AS FormBase
         loc_oP1.cnt_4c_Botoes.AddObject("cmd_4c_Buscar", "CommandButton")
         WITH loc_oP1.cnt_4c_Botoes.cmd_4c_Buscar
             .Caption         = "Buscar"
-            .Left = 305
+            .Left            = 405
             .Top             = 5
             .Width           = 75
             .Height          = 75
@@ -225,11 +246,11 @@ DEFINE CLASS Formacg AS FormBase
         loc_oP1.cnt_4c_Botoes.AddObject("cmd_4c_CopiarAcesso", "CommandButton")
         WITH loc_oP1.cnt_4c_Botoes.cmd_4c_CopiarAcesso
             .Caption         = "Copiar" + CHR(13) + "Acessos"
-            .Left            = 325
+            .Left            = 5
             .Top             = 5
             .Width           = 75
             .Height          = 75
-            .Picture         = gc_4c_CaminhoIcones + "geral_copiar_26.jpg"
+            .Picture         = gc_4c_CaminhoIcones + "geral_copiar_acesso_60.jpg"
             .PicturePosition = 13
             .FontName        = "Tahoma"
             .FontSize        = 8
@@ -1232,10 +1253,23 @@ DEFINE CLASS Formacg AS FormBase
     * HabilitarColunasGrid - Habilita/desabilita colunas de checkbox nos grids
     *==========================================================================
     PROTECTED PROCEDURE HabilitarColunasGrid(par_lHabilitar)
+        LOCAL loc_oGrd
         TRY
-            THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page2.grd_4c_Programas.Column3.ReadOnly = !par_lHabilitar
-            THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page3.grd_4c_Barra.Column2.ReadOnly     = !par_lHabilitar
-            THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page4.grd_4c_Telas.Column3.ReadOnly     = !par_lHabilitar
+            loc_oGrd = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page2.grd_4c_Programas
+            loc_oGrd.Column3.ReadOnly = !par_lHabilitar
+            IF PEMSTATUS(loc_oGrd.Column3, "chk_4c_Marcas", 5)
+                loc_oGrd.Column3.chk_4c_Marcas.Enabled = par_lHabilitar
+            ENDIF
+            loc_oGrd = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page3.grd_4c_Barra
+            loc_oGrd.Column2.ReadOnly = !par_lHabilitar
+            IF PEMSTATUS(loc_oGrd.Column2, "chk_4c_SelBarras", 5)
+                loc_oGrd.Column2.chk_4c_SelBarras.Enabled = par_lHabilitar
+            ENDIF
+            loc_oGrd = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page4.grd_4c_Telas
+            loc_oGrd.Column3.ReadOnly = !par_lHabilitar
+            IF PEMSTATUS(loc_oGrd.Column3, "cbo_4c_CmbStatus", 5)
+                loc_oGrd.Column3.cbo_4c_CmbStatus.Enabled = par_lHabilitar
+            ENDIF
         CATCH TO loc_oErro
             MsgErro("Erro ao habilitar grids: " + loc_oErro.Message, "Erro")
         ENDTRY
@@ -1249,11 +1283,12 @@ DEFINE CLASS Formacg AS FormBase
         TRY
             loc_lNaLista = (THIS.this_cModoAtual = "LISTA")
             loc_oBotoes  = THIS.pgf_4c_Paginas.Page1.cnt_4c_Botoes
+            loc_oBotoes.cmd_4c_CopiarAcesso.Enabled = loc_lNaLista
             loc_oBotoes.cmd_4c_Incluir.Enabled      = .T.
+            loc_oBotoes.cmd_4c_Consultar.Enabled    = loc_lNaLista
             loc_oBotoes.cmd_4c_Alterar.Enabled      = loc_lNaLista
             loc_oBotoes.cmd_4c_Excluir.Enabled      = loc_lNaLista
             loc_oBotoes.cmd_4c_Buscar.Enabled       = loc_lNaLista
-            loc_oBotoes.cmd_4c_CopiarAcesso.Enabled = loc_lNaLista
             THIS.pgf_4c_Paginas.Page1.cnt_4c_Saida.cmd_4c_Encerrar.Enabled = .T.
         CATCH TO loc_oErro
             MsgErro("Erro em AjustarBotoesPorModo: " + loc_oErro.Message, "Erro")
