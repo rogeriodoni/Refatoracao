@@ -1031,7 +1031,8 @@ DEFINE CLASS Formacg AS FormBase
                     SET FILTER TO
                 ENDIF
                 loc_oGrid = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page2.grd_4c_Programas
-                loc_oGrid.ColumnCount = 4
+                *-- NAO reatribuir ColumnCount: em VFP9, qualquer atribuicao a ColumnCount
+                *-- recria todos os objetos de coluna, destruindo AddObject (chk_4c_Marcas)
                 loc_oGrid.RecordSource = "cursor_4c_Programas"
                 loc_oGrid.Column1.ControlSource = "cursor_4c_Programas.Descricaos"
                 loc_oGrid.Column2.ControlSource = "cursor_4c_Programas.Programas"
@@ -1045,6 +1046,21 @@ DEFINE CLASS Formacg AS FormBase
                 loc_oGrid.Column2.Width = 120
                 loc_oGrid.Column3.Width = 65
                 loc_oGrid.Column4.Width = 120
+                *-- Protecao defensiva: re-adicionar CheckBox se foi destruido
+                IF !PEMSTATUS(loc_oGrid.Column3, "chk_4c_Marcas", 5)
+                    WITH loc_oGrid.Column3
+                        .AddObject("chk_4c_Marcas", "CheckBox")
+                        .Sparse = .F.
+                    ENDWITH
+                    WITH loc_oGrid.Column3.chk_4c_Marcas
+                        .Caption   = ""
+                        .Width     = 60
+                        .Height    = 17
+                        .BackStyle = 0
+                        .Themes    = .F.
+                    ENDWITH
+                    BINDEVENT(loc_oGrid.Column3.chk_4c_Marcas, "When", THIS, "ChkMarcasWhen")
+                ENDIF
                 loc_oGrid.FontName = "Tahoma"
                 loc_oGrid.FontSize = 8
                 loc_oGrid.Refresh()
@@ -1062,7 +1078,7 @@ DEFINE CLASS Formacg AS FormBase
         TRY
             IF THIS.this_oBusinessObject.CarregarBarra(par_cGrupos)
                 loc_oGrid = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page3.grd_4c_Barra
-                loc_oGrid.ColumnCount = 2
+                *-- NAO reatribuir ColumnCount: destrói AddObject (chk_4c_SelBarras)
                 loc_oGrid.RecordSource = "TmpBarra"
                 loc_oGrid.Column1.ControlSource = "TmpBarra.Descricaos"
                 loc_oGrid.Column2.ControlSource = "TmpBarra.SelBarras"
@@ -1070,6 +1086,20 @@ DEFINE CLASS Formacg AS FormBase
                 loc_oGrid.Column2.Header1.Caption = ""
                 loc_oGrid.Column1.Width = 550
                 loc_oGrid.Column2.Width = 80
+                IF !PEMSTATUS(loc_oGrid.Column2, "chk_4c_SelBarras", 5)
+                    WITH loc_oGrid.Column2
+                        .AddObject("chk_4c_SelBarras", "CheckBox")
+                        .Sparse = .F.
+                    ENDWITH
+                    WITH loc_oGrid.Column2.chk_4c_SelBarras
+                        .Caption   = ""
+                        .Width     = 75
+                        .Height    = 17
+                        .BackStyle = 0
+                        .Themes    = .F.
+                    ENDWITH
+                    BINDEVENT(loc_oGrid.Column2.chk_4c_SelBarras, "When", THIS, "ChkSelBarrasWhen")
+                ENDIF
                 loc_oGrid.FontName = "Tahoma"
                 loc_oGrid.FontSize = 8
                 loc_oGrid.Refresh()
@@ -1087,7 +1117,7 @@ DEFINE CLASS Formacg AS FormBase
         TRY
             IF THIS.this_oBusinessObject.CarregarAcessoTelas(par_cGrupos)
                 loc_oGrid = THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page4.grd_4c_Telas
-                loc_oGrid.ColumnCount = 3
+                *-- NAO reatribuir ColumnCount: destrói AddObject (cbo_4c_CmbStatus)
                 loc_oGrid.RecordSource = "crSigAcTel"
                 loc_oGrid.Column1.ControlSource = "crSigAcTel.cDescTelas"
                 loc_oGrid.Column2.ControlSource = "crSigAcTel.cDescCamps"
@@ -1098,6 +1128,21 @@ DEFINE CLASS Formacg AS FormBase
                 loc_oGrid.Column1.Width = 360
                 loc_oGrid.Column2.Width = 360
                 loc_oGrid.Column3.Width = 168
+                IF !PEMSTATUS(loc_oGrid.Column3, "cbo_4c_CmbStatus", 5)
+                    WITH loc_oGrid.Column3
+                        .AddObject("cbo_4c_CmbStatus", "ComboBox")
+                        .Sparse = .F.
+                    ENDWITH
+                    WITH loc_oGrid.Column3.cbo_4c_CmbStatus
+                        .BoundTo   = .T.
+                        .Style     = 2
+                        .Width     = 160
+                        .Height    = 20
+                        .FontName  = "Tahoma"
+                        .FontSize  = 8
+                    ENDWITH
+                    BINDEVENT(loc_oGrid.Column3.cbo_4c_CmbStatus, "When", THIS, "ChkStatusWhen")
+                ENDIF
                 loc_oGrid.Column3.cbo_4c_CmbStatus.RowSourceType = 1
                 loc_oGrid.Column3.cbo_4c_CmbStatus.RowSource = "Padr" + CHR(227) + "o," + ;
                     "Invis" + CHR(237) + "vel," + ;
