@@ -354,6 +354,7 @@ DEFINE CLASS Formale AS FormBase
             .Sparse     = .F.
             .ToolTipText = "Inserir"
             .AddObject("Check1", "CheckBox")
+            THIS.BindToggleTgDados2(THIS.grd_4c_Dados.Column2.Check1)
             WITH .Check1
                 .Caption    = ""
                 .BackColor  = RGB(255, 255, 255)
@@ -375,6 +376,7 @@ DEFINE CLASS Formale AS FormBase
             .Sparse     = .F.
             .ToolTipText = "Alterar"
             .AddObject("Check1", "CheckBox")
+            THIS.BindToggleTgDados3(THIS.grd_4c_Dados.Column3.Check1)
             WITH .Check1
                 .Caption   = ""
                 .Alignment = 0
@@ -395,6 +397,7 @@ DEFINE CLASS Formale AS FormBase
             .Sparse     = .F.
             .ToolTipText = "Excluir"
             .AddObject("Check1", "CheckBox")
+            THIS.BindToggleTgDados4(THIS.grd_4c_Dados.Column4.Check1)
             WITH .Check1
                 .Caption   = ""
                 .Alignment = 0
@@ -415,6 +418,7 @@ DEFINE CLASS Formale AS FormBase
             .Sparse     = .F.
             .ToolTipText = "Baixar"
             .AddObject("Check1", "CheckBox")
+            THIS.BindToggleTgDados5(THIS.grd_4c_Dados.Column5.Check1)
             WITH .Check1
                 .Caption   = ""
                 .Alignment = 0
@@ -959,4 +963,196 @@ DEFINE CLASS Formale AS FormBase
         DODEFAULT()
     ENDPROC
 
+
+    *==========================================================================
+    * Toggle do CheckBox Check1 - grd_4c_Dados.Column2 (crSigCdAle.inserirs)
+    *
+    * CheckBox em coluna de Grid NAO alterna pelo binding nativo: o legado
+    * suprime o toggle padrao (NODEFAULT em Click/MouseDown) e alterna o valor
+    * por codigo no MouseUp/KeyPress, com REPLACE no cursor + Refresh do grid.
+    * Sem estes handlers o CheckBox renderiza e recebe foco, mas clicar ou
+    * teclar Espaco/Enter nao muda nada. Pattern #185 / Erro146 (2026-09-04).
+    * Ref canonico: Formsigredtv.prg (grd_4c_Emps) e Formacg.prg.
+    *==========================================================================
+    PROTECTED PROCEDURE BindToggleTgDados2(par_oChk)
+        BINDEVENT(par_oChk, "KeyPress",  THIS, "TgDados2KeyPress")
+        BINDEVENT(par_oChk, "MouseUp",   THIS, "TgDados2MouseUp")
+        BINDEVENT(par_oChk, "MouseDown", THIS, "TgDados2MouseDown")
+        BINDEVENT(par_oChk, "Click",     THIS, "TgDados2Click")
+    ENDPROC
+
+    PROCEDURE TgDados2KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF !INLIST(par_nKeyCode, 13, 32)
+            RETURN
+        ENDIF
+        *-- NODEFAULT sempre que a tecla for tratada: suprime o toggle nativo
+        NODEFAULT
+        IF !USED("crSigCdAle") OR EOF("crSigCdAle")
+            RETURN
+        ENDIF
+        *-- Campo pode ser LOGICO (legado) ou NUMERICO (CASE WHEN ... 1 ELSE 0)
+        IF VARTYPE(crSigCdAle.inserirs) == "L"
+            REPLACE crSigCdAle.inserirs WITH !crSigCdAle.inserirs
+        ELSE
+            REPLACE crSigCdAle.inserirs WITH IIF(crSigCdAle.inserirs = 0, 1, 0)
+        ENDIF
+        THIS.grd_4c_Dados.Refresh()
+    ENDPROC
+
+    PROCEDURE TgDados2MouseUp(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+        THIS.TgDados2KeyPress(13, 0)
+        NODEFAULT
+    ENDPROC
+
+    PROCEDURE TgDados2MouseDown(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+        NODEFAULT
+    ENDPROC
+
+    PROCEDURE TgDados2Click()
+        NODEFAULT
+    ENDPROC
+
+    *==========================================================================
+    * Toggle do CheckBox Check1 - grd_4c_Dados.Column3 (crSigCdAle.alterars)
+    *
+    * CheckBox em coluna de Grid NAO alterna pelo binding nativo: o legado
+    * suprime o toggle padrao (NODEFAULT em Click/MouseDown) e alterna o valor
+    * por codigo no MouseUp/KeyPress, com REPLACE no cursor + Refresh do grid.
+    * Sem estes handlers o CheckBox renderiza e recebe foco, mas clicar ou
+    * teclar Espaco/Enter nao muda nada. Pattern #185 / Erro146 (2026-09-04).
+    * Ref canonico: Formsigredtv.prg (grd_4c_Emps) e Formacg.prg.
+    *==========================================================================
+    PROTECTED PROCEDURE BindToggleTgDados3(par_oChk)
+        BINDEVENT(par_oChk, "KeyPress",  THIS, "TgDados3KeyPress")
+        BINDEVENT(par_oChk, "MouseUp",   THIS, "TgDados3MouseUp")
+        BINDEVENT(par_oChk, "MouseDown", THIS, "TgDados3MouseDown")
+        BINDEVENT(par_oChk, "Click",     THIS, "TgDados3Click")
+    ENDPROC
+
+    PROCEDURE TgDados3KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF !INLIST(par_nKeyCode, 13, 32)
+            RETURN
+        ENDIF
+        *-- NODEFAULT sempre que a tecla for tratada: suprime o toggle nativo
+        NODEFAULT
+        IF !USED("crSigCdAle") OR EOF("crSigCdAle")
+            RETURN
+        ENDIF
+        *-- Campo pode ser LOGICO (legado) ou NUMERICO (CASE WHEN ... 1 ELSE 0)
+        IF VARTYPE(crSigCdAle.alterars) == "L"
+            REPLACE crSigCdAle.alterars WITH !crSigCdAle.alterars
+        ELSE
+            REPLACE crSigCdAle.alterars WITH IIF(crSigCdAle.alterars = 0, 1, 0)
+        ENDIF
+        THIS.grd_4c_Dados.Refresh()
+    ENDPROC
+
+    PROCEDURE TgDados3MouseUp(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+        THIS.TgDados3KeyPress(13, 0)
+        NODEFAULT
+    ENDPROC
+
+    PROCEDURE TgDados3MouseDown(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+        NODEFAULT
+    ENDPROC
+
+    PROCEDURE TgDados3Click()
+        NODEFAULT
+    ENDPROC
+
+    *==========================================================================
+    * Toggle do CheckBox Check1 - grd_4c_Dados.Column4 (crSigCdAle.excluirs)
+    *
+    * CheckBox em coluna de Grid NAO alterna pelo binding nativo: o legado
+    * suprime o toggle padrao (NODEFAULT em Click/MouseDown) e alterna o valor
+    * por codigo no MouseUp/KeyPress, com REPLACE no cursor + Refresh do grid.
+    * Sem estes handlers o CheckBox renderiza e recebe foco, mas clicar ou
+    * teclar Espaco/Enter nao muda nada. Pattern #185 / Erro146 (2026-09-04).
+    * Ref canonico: Formsigredtv.prg (grd_4c_Emps) e Formacg.prg.
+    *==========================================================================
+    PROTECTED PROCEDURE BindToggleTgDados4(par_oChk)
+        BINDEVENT(par_oChk, "KeyPress",  THIS, "TgDados4KeyPress")
+        BINDEVENT(par_oChk, "MouseUp",   THIS, "TgDados4MouseUp")
+        BINDEVENT(par_oChk, "MouseDown", THIS, "TgDados4MouseDown")
+        BINDEVENT(par_oChk, "Click",     THIS, "TgDados4Click")
+    ENDPROC
+
+    PROCEDURE TgDados4KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF !INLIST(par_nKeyCode, 13, 32)
+            RETURN
+        ENDIF
+        *-- NODEFAULT sempre que a tecla for tratada: suprime o toggle nativo
+        NODEFAULT
+        IF !USED("crSigCdAle") OR EOF("crSigCdAle")
+            RETURN
+        ENDIF
+        *-- Campo pode ser LOGICO (legado) ou NUMERICO (CASE WHEN ... 1 ELSE 0)
+        IF VARTYPE(crSigCdAle.excluirs) == "L"
+            REPLACE crSigCdAle.excluirs WITH !crSigCdAle.excluirs
+        ELSE
+            REPLACE crSigCdAle.excluirs WITH IIF(crSigCdAle.excluirs = 0, 1, 0)
+        ENDIF
+        THIS.grd_4c_Dados.Refresh()
+    ENDPROC
+
+    PROCEDURE TgDados4MouseUp(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+        THIS.TgDados4KeyPress(13, 0)
+        NODEFAULT
+    ENDPROC
+
+    PROCEDURE TgDados4MouseDown(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+        NODEFAULT
+    ENDPROC
+
+    PROCEDURE TgDados4Click()
+        NODEFAULT
+    ENDPROC
+
+    *==========================================================================
+    * Toggle do CheckBox Check1 - grd_4c_Dados.Column5 (crSigCdAle.baixas)
+    *
+    * CheckBox em coluna de Grid NAO alterna pelo binding nativo: o legado
+    * suprime o toggle padrao (NODEFAULT em Click/MouseDown) e alterna o valor
+    * por codigo no MouseUp/KeyPress, com REPLACE no cursor + Refresh do grid.
+    * Sem estes handlers o CheckBox renderiza e recebe foco, mas clicar ou
+    * teclar Espaco/Enter nao muda nada. Pattern #185 / Erro146 (2026-09-04).
+    * Ref canonico: Formsigredtv.prg (grd_4c_Emps) e Formacg.prg.
+    *==========================================================================
+    PROTECTED PROCEDURE BindToggleTgDados5(par_oChk)
+        BINDEVENT(par_oChk, "KeyPress",  THIS, "TgDados5KeyPress")
+        BINDEVENT(par_oChk, "MouseUp",   THIS, "TgDados5MouseUp")
+        BINDEVENT(par_oChk, "MouseDown", THIS, "TgDados5MouseDown")
+        BINDEVENT(par_oChk, "Click",     THIS, "TgDados5Click")
+    ENDPROC
+
+    PROCEDURE TgDados5KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF !INLIST(par_nKeyCode, 13, 32)
+            RETURN
+        ENDIF
+        *-- NODEFAULT sempre que a tecla for tratada: suprime o toggle nativo
+        NODEFAULT
+        IF !USED("crSigCdAle") OR EOF("crSigCdAle")
+            RETURN
+        ENDIF
+        *-- Campo pode ser LOGICO (legado) ou NUMERICO (CASE WHEN ... 1 ELSE 0)
+        IF VARTYPE(crSigCdAle.baixas) == "L"
+            REPLACE crSigCdAle.baixas WITH !crSigCdAle.baixas
+        ELSE
+            REPLACE crSigCdAle.baixas WITH IIF(crSigCdAle.baixas = 0, 1, 0)
+        ENDIF
+        THIS.grd_4c_Dados.Refresh()
+    ENDPROC
+
+    PROCEDURE TgDados5MouseUp(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+        THIS.TgDados5KeyPress(13, 0)
+        NODEFAULT
+    ENDPROC
+
+    PROCEDURE TgDados5MouseDown(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+        NODEFAULT
+    ENDPROC
+
+    PROCEDURE TgDados5Click()
+        NODEFAULT
+    ENDPROC
 ENDDEFINE

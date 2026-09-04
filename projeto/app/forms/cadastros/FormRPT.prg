@@ -2036,6 +2036,7 @@ DEFINE CLASS FormRPT AS FormBase
                 .Width           = 65
                 .Sparse          = .F.
                 .AddObject("Check1", "CheckBox")
+                THIS.BindToggleTgPropsCampos3(THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page2.grd_4c_PropsCampos.Column3.Check1)
                 .CurrentControl  = "Check1"
                 WITH .Check1
                     .Caption = ""
@@ -2051,6 +2052,7 @@ DEFINE CLASS FormRPT AS FormBase
                 .Width           = 55
                 .Sparse          = .F.
                 .AddObject("Check1", "CheckBox")
+                THIS.BindToggleTgPropsCampos4(THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page2.grd_4c_PropsCampos.Column4.Check1)
                 .CurrentControl  = "Check1"
                 WITH .Check1
                     .Caption = ""
@@ -2066,6 +2068,7 @@ DEFINE CLASS FormRPT AS FormBase
                 .Width           = 60
                 .Sparse          = .F.
                 .AddObject("Check1", "CheckBox")
+                THIS.BindToggleTgPropsCampos5(THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page2.grd_4c_PropsCampos.Column5.Check1)
                 .CurrentControl  = "Check1"
                 WITH .Check1
                     .Caption = ""
@@ -2081,6 +2084,7 @@ DEFINE CLASS FormRPT AS FormBase
                 .Width           = 55
                 .Sparse          = .F.
                 .AddObject("Check1", "CheckBox")
+                THIS.BindToggleTgPropsCampos6(THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page2.grd_4c_PropsCampos.Column6.Check1)
                 .CurrentControl  = "Check1"
                 WITH .Check1
                     .Caption = ""
@@ -3679,4 +3683,208 @@ DEFINE CLASS FormRPT AS FormBase
         DODEFAULT()
     ENDPROC
 
+
+    *==========================================================================
+    * Toggle do CheckBox Check1 - grd_4c_PropsCampos.Column3 (cursor_4c_PropsCampos.CkOutRPT)
+    *
+    * CheckBox em coluna de Grid NAO alterna pelo binding nativo: o legado
+    * suprime o toggle padrao (NODEFAULT em Click/MouseDown) e alterna o valor
+    * por codigo no MouseUp/KeyPress, com REPLACE no cursor + Refresh do grid.
+    * Sem estes handlers o CheckBox renderiza e recebe foco, mas clicar ou
+    * teclar Espaco/Enter nao muda nada. Pattern #185 / Erro146 (2026-09-04).
+    * Ref canonico: Formsigredtv.prg (grd_4c_Emps) e Formacg.prg.
+    *==========================================================================
+    PROTECTED PROCEDURE BindToggleTgPropsCampos3(par_oChk)
+        BINDEVENT(par_oChk, "KeyPress",  THIS, "TgPropsCampos3KeyPress")
+        BINDEVENT(par_oChk, "MouseUp",   THIS, "TgPropsCampos3MouseUp")
+        BINDEVENT(par_oChk, "MouseDown", THIS, "TgPropsCampos3MouseDown")
+        BINDEVENT(par_oChk, "Click",     THIS, "TgPropsCampos3Click")
+    ENDPROC
+
+    PROCEDURE TgPropsCampos3KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF !INLIST(par_nKeyCode, 13, 32)
+            RETURN
+        ENDIF
+        *-- NODEFAULT sempre que a tecla for tratada: suprime o toggle nativo
+        NODEFAULT
+        IF !INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
+            RETURN
+        ENDIF
+        IF !USED("cursor_4c_PropsCampos") OR EOF("cursor_4c_PropsCampos")
+            RETURN
+        ENDIF
+        *-- Campo pode ser LOGICO (legado) ou NUMERICO (CASE WHEN ... 1 ELSE 0)
+        IF VARTYPE(cursor_4c_PropsCampos.CkOutRPT) == "L"
+            REPLACE cursor_4c_PropsCampos.CkOutRPT WITH !cursor_4c_PropsCampos.CkOutRPT
+        ELSE
+            REPLACE cursor_4c_PropsCampos.CkOutRPT WITH IIF(cursor_4c_PropsCampos.CkOutRPT = 0, 1, 0)
+        ENDIF
+        THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page2.grd_4c_PropsCampos.Refresh()
+    ENDPROC
+
+    PROCEDURE TgPropsCampos3MouseUp(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+        THIS.TgPropsCampos3KeyPress(13, 0)
+        NODEFAULT
+    ENDPROC
+
+    PROCEDURE TgPropsCampos3MouseDown(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+        NODEFAULT
+    ENDPROC
+
+    PROCEDURE TgPropsCampos3Click()
+        NODEFAULT
+    ENDPROC
+
+    *==========================================================================
+    * Toggle do CheckBox Check1 - grd_4c_PropsCampos.Column4 (cursor_4c_PropsCampos.CkFiltro)
+    *
+    * CheckBox em coluna de Grid NAO alterna pelo binding nativo: o legado
+    * suprime o toggle padrao (NODEFAULT em Click/MouseDown) e alterna o valor
+    * por codigo no MouseUp/KeyPress, com REPLACE no cursor + Refresh do grid.
+    * Sem estes handlers o CheckBox renderiza e recebe foco, mas clicar ou
+    * teclar Espaco/Enter nao muda nada. Pattern #185 / Erro146 (2026-09-04).
+    * Ref canonico: Formsigredtv.prg (grd_4c_Emps) e Formacg.prg.
+    *==========================================================================
+    PROTECTED PROCEDURE BindToggleTgPropsCampos4(par_oChk)
+        BINDEVENT(par_oChk, "KeyPress",  THIS, "TgPropsCampos4KeyPress")
+        BINDEVENT(par_oChk, "MouseUp",   THIS, "TgPropsCampos4MouseUp")
+        BINDEVENT(par_oChk, "MouseDown", THIS, "TgPropsCampos4MouseDown")
+        BINDEVENT(par_oChk, "Click",     THIS, "TgPropsCampos4Click")
+    ENDPROC
+
+    PROCEDURE TgPropsCampos4KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF !INLIST(par_nKeyCode, 13, 32)
+            RETURN
+        ENDIF
+        *-- NODEFAULT sempre que a tecla for tratada: suprime o toggle nativo
+        NODEFAULT
+        IF !INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
+            RETURN
+        ENDIF
+        IF !USED("cursor_4c_PropsCampos") OR EOF("cursor_4c_PropsCampos")
+            RETURN
+        ENDIF
+        *-- Campo pode ser LOGICO (legado) ou NUMERICO (CASE WHEN ... 1 ELSE 0)
+        IF VARTYPE(cursor_4c_PropsCampos.CkFiltro) == "L"
+            REPLACE cursor_4c_PropsCampos.CkFiltro WITH !cursor_4c_PropsCampos.CkFiltro
+        ELSE
+            REPLACE cursor_4c_PropsCampos.CkFiltro WITH IIF(cursor_4c_PropsCampos.CkFiltro = 0, 1, 0)
+        ENDIF
+        THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page2.grd_4c_PropsCampos.Refresh()
+    ENDPROC
+
+    PROCEDURE TgPropsCampos4MouseUp(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+        THIS.TgPropsCampos4KeyPress(13, 0)
+        NODEFAULT
+    ENDPROC
+
+    PROCEDURE TgPropsCampos4MouseDown(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+        NODEFAULT
+    ENDPROC
+
+    PROCEDURE TgPropsCampos4Click()
+        NODEFAULT
+    ENDPROC
+
+    *==========================================================================
+    * Toggle do CheckBox Check1 - grd_4c_PropsCampos.Column5 (cursor_4c_PropsCampos.CkSubTot)
+    *
+    * CheckBox em coluna de Grid NAO alterna pelo binding nativo: o legado
+    * suprime o toggle padrao (NODEFAULT em Click/MouseDown) e alterna o valor
+    * por codigo no MouseUp/KeyPress, com REPLACE no cursor + Refresh do grid.
+    * Sem estes handlers o CheckBox renderiza e recebe foco, mas clicar ou
+    * teclar Espaco/Enter nao muda nada. Pattern #185 / Erro146 (2026-09-04).
+    * Ref canonico: Formsigredtv.prg (grd_4c_Emps) e Formacg.prg.
+    *==========================================================================
+    PROTECTED PROCEDURE BindToggleTgPropsCampos5(par_oChk)
+        BINDEVENT(par_oChk, "KeyPress",  THIS, "TgPropsCampos5KeyPress")
+        BINDEVENT(par_oChk, "MouseUp",   THIS, "TgPropsCampos5MouseUp")
+        BINDEVENT(par_oChk, "MouseDown", THIS, "TgPropsCampos5MouseDown")
+        BINDEVENT(par_oChk, "Click",     THIS, "TgPropsCampos5Click")
+    ENDPROC
+
+    PROCEDURE TgPropsCampos5KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF !INLIST(par_nKeyCode, 13, 32)
+            RETURN
+        ENDIF
+        *-- NODEFAULT sempre que a tecla for tratada: suprime o toggle nativo
+        NODEFAULT
+        IF !INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
+            RETURN
+        ENDIF
+        IF !USED("cursor_4c_PropsCampos") OR EOF("cursor_4c_PropsCampos")
+            RETURN
+        ENDIF
+        *-- Campo pode ser LOGICO (legado) ou NUMERICO (CASE WHEN ... 1 ELSE 0)
+        IF VARTYPE(cursor_4c_PropsCampos.CkSubTot) == "L"
+            REPLACE cursor_4c_PropsCampos.CkSubTot WITH !cursor_4c_PropsCampos.CkSubTot
+        ELSE
+            REPLACE cursor_4c_PropsCampos.CkSubTot WITH IIF(cursor_4c_PropsCampos.CkSubTot = 0, 1, 0)
+        ENDIF
+        THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page2.grd_4c_PropsCampos.Refresh()
+    ENDPROC
+
+    PROCEDURE TgPropsCampos5MouseUp(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+        THIS.TgPropsCampos5KeyPress(13, 0)
+        NODEFAULT
+    ENDPROC
+
+    PROCEDURE TgPropsCampos5MouseDown(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+        NODEFAULT
+    ENDPROC
+
+    PROCEDURE TgPropsCampos5Click()
+        NODEFAULT
+    ENDPROC
+
+    *==========================================================================
+    * Toggle do CheckBox Check1 - grd_4c_PropsCampos.Column6 (cursor_4c_PropsCampos.CkTotal)
+    *
+    * CheckBox em coluna de Grid NAO alterna pelo binding nativo: o legado
+    * suprime o toggle padrao (NODEFAULT em Click/MouseDown) e alterna o valor
+    * por codigo no MouseUp/KeyPress, com REPLACE no cursor + Refresh do grid.
+    * Sem estes handlers o CheckBox renderiza e recebe foco, mas clicar ou
+    * teclar Espaco/Enter nao muda nada. Pattern #185 / Erro146 (2026-09-04).
+    * Ref canonico: Formsigredtv.prg (grd_4c_Emps) e Formacg.prg.
+    *==========================================================================
+    PROTECTED PROCEDURE BindToggleTgPropsCampos6(par_oChk)
+        BINDEVENT(par_oChk, "KeyPress",  THIS, "TgPropsCampos6KeyPress")
+        BINDEVENT(par_oChk, "MouseUp",   THIS, "TgPropsCampos6MouseUp")
+        BINDEVENT(par_oChk, "MouseDown", THIS, "TgPropsCampos6MouseDown")
+        BINDEVENT(par_oChk, "Click",     THIS, "TgPropsCampos6Click")
+    ENDPROC
+
+    PROCEDURE TgPropsCampos6KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF !INLIST(par_nKeyCode, 13, 32)
+            RETURN
+        ENDIF
+        *-- NODEFAULT sempre que a tecla for tratada: suprime o toggle nativo
+        NODEFAULT
+        IF !INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
+            RETURN
+        ENDIF
+        IF !USED("cursor_4c_PropsCampos") OR EOF("cursor_4c_PropsCampos")
+            RETURN
+        ENDIF
+        *-- Campo pode ser LOGICO (legado) ou NUMERICO (CASE WHEN ... 1 ELSE 0)
+        IF VARTYPE(cursor_4c_PropsCampos.CkTotal) == "L"
+            REPLACE cursor_4c_PropsCampos.CkTotal WITH !cursor_4c_PropsCampos.CkTotal
+        ELSE
+            REPLACE cursor_4c_PropsCampos.CkTotal WITH IIF(cursor_4c_PropsCampos.CkTotal = 0, 1, 0)
+        ENDIF
+        THIS.pgf_4c_Paginas.Page2.pgf_4c_Dados.Page2.grd_4c_PropsCampos.Refresh()
+    ENDPROC
+
+    PROCEDURE TgPropsCampos6MouseUp(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+        THIS.TgPropsCampos6KeyPress(13, 0)
+        NODEFAULT
+    ENDPROC
+
+    PROCEDURE TgPropsCampos6MouseDown(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+        NODEFAULT
+    ENDPROC
+
+    PROCEDURE TgPropsCampos6Click()
+        NODEFAULT
+    ENDPROC
 ENDDEFINE
