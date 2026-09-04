@@ -11461,7 +11461,7 @@ function Corrigir-RelatorioBaseTrioMetodosAusentes {
                 $stubs += "                    loc_cArquivo = SYS(5) + CURDIR() + `"$baseExcel`_`" + ;"
                 $stubs += "                                   STRTRAN(DTOC(DATE()), `"/`", `"`") + `".xls`""
                 $stubs += "                    REPORT FORM (gc_4c_CaminhoReports + THIS.this_cArquivoRelatorio) ;"
-                $stubs += "                        TO FILE (loc_cArquivo) NOPREVIEW NOCONSOLE ASCII"
+                $stubs += "                        TO FILE (loc_cArquivo) NOCONSOLE ASCII"
                 $stubs += "                    IF FILE(loc_cArquivo)"
                 $stubs += "                        MsgInfo(`"Arquivo gerado:`" + CHR(13) + loc_cArquivo, `"Excel`")"
                 $stubs += "                    ENDIF"
