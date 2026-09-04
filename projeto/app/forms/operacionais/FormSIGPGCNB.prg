@@ -560,6 +560,8 @@ DEFINE CLASS FormSIGPGCNB AS FormBase
             .Column1.Check1.Caption = ""
             .Column1.Check1.Value   = 0
             .Column1.CurrentControl = "Check1"
+            *-- Pattern #185 / Erro146: CheckBox de grid nao alterna sem handlers
+            THIS.BindToggleGrupos1(.Column1.Check1)
             .Column2.Width    = 150
             .Column2.Movable  = .F.
             .Column2.Resizable = .F.
@@ -649,6 +651,8 @@ DEFINE CLASS FormSIGPGCNB AS FormBase
             .Column1.AddObject("Check1", "CheckBox")
             .Column1.Check1.Caption = ""
             .Column1.Check1.Value   = 0
+            *-- Pattern #185 / Erro146: CheckBox de grid nao alterna sem handlers
+            THIS.BindToggleFiltro1(.Column1.Check1)
             .Column1.CurrentControl = "Check1"
             .Column2.Width     = 70
             .Column2.Movable   = .F.
@@ -3894,4 +3898,86 @@ DEFINE CLASS FormSIGPGCNB AS FormBase
         DODEFAULT()
     ENDPROC
 
+
+    *==========================================================================
+    * Toggle do CheckBox Check1 - grd_4c_Grupos.Column1 (cursor_4c_Grupos.marca)
+    * Pattern #185 / Erro146 (2026-09-04): CheckBox em coluna de Grid nao alterna
+    * pelo binding nativo. Click/MouseDown suprimem o padrao; MouseUp/KeyPress
+    * alternam por codigo com REPLACE no cursor + Refresh.
+    *==========================================================================
+    PROTECTED PROCEDURE BindToggleGrupos1(par_oChk)
+        BINDEVENT(par_oChk, "KeyPress",  THIS, "TgGrupos1KeyPress")
+        BINDEVENT(par_oChk, "MouseUp",   THIS, "TgGrupos1MouseUp")
+        BINDEVENT(par_oChk, "MouseDown", THIS, "TgGrupos1MouseDown")
+        BINDEVENT(par_oChk, "Click",     THIS, "TgGrupos1Click")
+    ENDPROC
+
+    PROCEDURE TgGrupos1KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF !INLIST(par_nKeyCode, 13, 32)
+            RETURN
+        ENDIF
+        NODEFAULT
+        IF !USED("cursor_4c_Grupos") OR EOF("cursor_4c_Grupos")
+            RETURN
+        ENDIF
+        IF VARTYPE(cursor_4c_Grupos.marca) == "L"
+            REPLACE cursor_4c_Grupos.marca WITH !cursor_4c_Grupos.marca
+        ELSE
+            REPLACE cursor_4c_Grupos.marca WITH IIF(cursor_4c_Grupos.marca = 0, 1, 0)
+        ENDIF
+        THIS.pgf_4c_Principal.pgfiltro.grd_4c_Grupos.Refresh()
+    ENDPROC
+
+    PROCEDURE TgGrupos1MouseUp(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+        THIS.TgGrupos1KeyPress(13, 0)
+        NODEFAULT
+    ENDPROC
+
+    PROCEDURE TgGrupos1MouseDown(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+        NODEFAULT
+    ENDPROC
+
+    PROCEDURE TgGrupos1Click()
+        NODEFAULT
+    ENDPROC
+
+    *==========================================================================
+    * Toggle do CheckBox Check1 - grd_4c_Dados.Column1 (cursor_4c_Filtro.marca)
+    * Pattern #185 / Erro146 (2026-09-04).
+    *==========================================================================
+    PROTECTED PROCEDURE BindToggleFiltro1(par_oChk)
+        BINDEVENT(par_oChk, "KeyPress",  THIS, "TgFiltro1KeyPress")
+        BINDEVENT(par_oChk, "MouseUp",   THIS, "TgFiltro1MouseUp")
+        BINDEVENT(par_oChk, "MouseDown", THIS, "TgFiltro1MouseDown")
+        BINDEVENT(par_oChk, "Click",     THIS, "TgFiltro1Click")
+    ENDPROC
+
+    PROCEDURE TgFiltro1KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF !INLIST(par_nKeyCode, 13, 32)
+            RETURN
+        ENDIF
+        NODEFAULT
+        IF !USED("cursor_4c_Filtro") OR EOF("cursor_4c_Filtro")
+            RETURN
+        ENDIF
+        IF VARTYPE(cursor_4c_Filtro.marca) == "L"
+            REPLACE cursor_4c_Filtro.marca WITH !cursor_4c_Filtro.marca
+        ELSE
+            REPLACE cursor_4c_Filtro.marca WITH IIF(cursor_4c_Filtro.marca = 0, 1, 0)
+        ENDIF
+        THIS.pgf_4c_Principal.pgdados.grd_4c_Dados.Refresh()
+    ENDPROC
+
+    PROCEDURE TgFiltro1MouseUp(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+        THIS.TgFiltro1KeyPress(13, 0)
+        NODEFAULT
+    ENDPROC
+
+    PROCEDURE TgFiltro1MouseDown(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+        NODEFAULT
+    ENDPROC
+
+    PROCEDURE TgFiltro1Click()
+        NODEFAULT
+    ENDPROC
 ENDDEFINE

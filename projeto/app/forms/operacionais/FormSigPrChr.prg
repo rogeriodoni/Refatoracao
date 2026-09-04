@@ -1570,6 +1570,8 @@ DEFINE CLASS FormSigPrChr AS FormBase
         IF VARTYPE(THIS.grd_4c_Dados) = "O"
             BINDEVENT(THIS.grd_4c_Dados.Column10.Check1, "KeyPress",  THIS, "GrdChkKeyPress")
             BINDEVENT(THIS.grd_4c_Dados.Column10.Check1, "MouseDown", THIS, "GrdChkMouseDown")
+            BINDEVENT(THIS.grd_4c_Dados.Column10.Check1, "MouseUp",   THIS, "GrdChkMouseUp")
+            BINDEVENT(THIS.grd_4c_Dados.Column10.Check1, "Click",     THIS, "GrdChkClick")
         ENDIF
 
         *-- Header clnNcopias: Click para reordenar por NCopias
@@ -1719,6 +1721,17 @@ DEFINE CLASS FormSigPrChr AS FormBase
     *-- Grid Checkbox MouseDown: delegar para KeyPress com SPACE
     PROCEDURE GrdChkMouseDown(par_nButton, par_nShift, par_nX, par_nY)
         THIS.GrdChkKeyPress(32, 0)
+        NODEFAULT
+    ENDPROC
+
+    *-- MouseUp e Click: absorver. O toggle ja aconteceu no MouseDown; sem estes
+    *-- handlers o processamento nativo reverte a marcacao (alternancia dupla).
+    *-- Pattern #185 / Erro146 (2026-09-04).
+    PROCEDURE GrdChkMouseUp(par_nButton, par_nShift, par_nX, par_nY)
+        NODEFAULT
+    ENDPROC
+
+    PROCEDURE GrdChkClick()
         NODEFAULT
     ENDPROC
 

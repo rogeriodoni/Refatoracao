@@ -1192,8 +1192,11 @@ DEFINE CLASS FormMda AS FormBase
         ENDWITH
         loc_oPagina.grd_4c_Emps.Column1.Header1.Caption   = ""
         loc_oPagina.grd_4c_Emps.Column1.Header1.Alignment = 2
-        loc_oPagina.grd_4c_Emps.Column1.AddObject("check12", "CheckBox")
-        WITH loc_oPagina.grd_4c_Emps.Column1.check12
+        *-- Pattern #185 / Erro146: havia um "check12" identico adicionado aqui e
+        *-- nunca referenciado (o CurrentControl da coluna eh o check13) — objeto
+        *-- morto, removido.
+        loc_oPagina.grd_4c_Emps.Column1.AddObject("check13", "CheckBox")
+        WITH loc_oPagina.grd_4c_Emps.Column1.check13
             .Caption   = ""
             .Alignment = 0
             .ReadOnly  = .F.
@@ -1203,8 +1206,6 @@ DEFINE CLASS FormMda AS FormBase
             .Height    = 17
             .Width     = 22
         ENDWITH
-        loc_oPagina.grd_4c_Emps.Column1.AddObject("check13", "CheckBox")
-        loc_oPagina.grd_4c_Emps.Column1.check13.Caption = ""
         loc_oPagina.grd_4c_Emps.Column1.CurrentControl = "check13"
 
         *-- Column2: Codigo empresa (Emps) - ReadOnly
@@ -1225,10 +1226,14 @@ DEFINE CLASS FormMda AS FormBase
         ENDWITH
         loc_oPagina.grd_4c_Emps.Column3.Header1.Caption = "Descri" + CHR(231) + CHR(227) + "o"
 
-        BINDEVENT(loc_oPagina.grd_4c_Emps.Column1.Check1, "MouseDown", THIS, "EmpCheckboxMouseDown")
-        BINDEVENT(loc_oPagina.grd_4c_Emps.Column1.Check1, "MouseUp",   THIS, "EmpCheckboxMouseUp")
-        BINDEVENT(loc_oPagina.grd_4c_Emps.Column1.Check1, "Click",     THIS, "EmpCheckboxClick")
-        BINDEVENT(loc_oPagina.grd_4c_Emps.Column1.Check1, "KeyPress",  THIS, "EmpCheckboxKeyPress")
+        *-- Pattern #185 / Erro146: os 4 BINDEVENT apontavam para
+        *-- grd_4c_Emps.Column1.Check1, controle que NAO existe nesta coluna
+        *-- (so em grd_4c_Opers.Column1). O CurrentControl daqui eh o check13,
+        *-- entao o checkbox de Empresas ficava sem toggle nenhum.
+        BINDEVENT(loc_oPagina.grd_4c_Emps.Column1.check13, "MouseDown", THIS, "EmpCheckboxMouseDown")
+        BINDEVENT(loc_oPagina.grd_4c_Emps.Column1.check13, "MouseUp",   THIS, "EmpCheckboxMouseUp")
+        BINDEVENT(loc_oPagina.grd_4c_Emps.Column1.check13, "Click",     THIS, "EmpCheckboxClick")
+        BINDEVENT(loc_oPagina.grd_4c_Emps.Column1.check13, "KeyPress",  THIS, "EmpCheckboxKeyPress")
 
         *----------------------------------------------------------------------
         * Container botoes MarcaTodos/DesmarcaTodos Empresas

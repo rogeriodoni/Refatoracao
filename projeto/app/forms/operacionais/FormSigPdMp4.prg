@@ -480,6 +480,8 @@ DEFINE CLASS FormSigPdMp4 AS FormBase
         loc_oGrade.Column8.Check1.Caption = ""
         loc_oGrade.Column8.Check1.Value   = 0
         loc_oGrade.Column8.CurrentControl = "Check1"
+        *-- Pattern #185 / Erro146: CheckBox de grid nao alterna sem handlers
+        THIS.BindToggleDados8(THIS.grd_4c_Dados.Column8.Check1)
 
         *-- Column9: Peso original (ColumnOrder=6, ReadOnly)
         WITH loc_oGrade.Column9
@@ -1466,4 +1468,45 @@ DEFINE CLASS FormSigPdMp4 AS FormBase
         ENDIF
     ENDPROC
 
+
+    *==========================================================================
+    * Toggle do CheckBox de grid - grd_4c_Dados.Column8 (TmpDistrib.Marca)
+    * Pattern #185 / Erro146 (2026-09-04): CheckBox em coluna de Grid nao alterna
+    * pelo binding nativo. Click/MouseDown suprimem o padrao; MouseUp delega ao
+    * KeyPress, que alterna por codigo com REPLACE no cursor + Refresh do grid.
+    *==========================================================================
+    PROTECTED PROCEDURE BindToggleDados8(par_oChk)
+        BINDEVENT(par_oChk, "KeyPress",  THIS, "TgDados8KeyPress")
+        BINDEVENT(par_oChk, "MouseUp",   THIS, "TgDados8MouseUp")
+        BINDEVENT(par_oChk, "MouseDown", THIS, "TgDados8MouseDown")
+        BINDEVENT(par_oChk, "Click",     THIS, "TgDados8Click")
+    ENDPROC
+
+    PROCEDURE TgDados8KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF !INLIST(par_nKeyCode, 13, 32)
+            RETURN
+        ENDIF
+        NODEFAULT
+        IF !USED("TmpDistrib") OR EOF("TmpDistrib")
+            RETURN
+        ENDIF
+        IF VARTYPE(TmpDistrib.Marca) == "L"
+            REPLACE TmpDistrib.Marca WITH !TmpDistrib.Marca
+        ELSE
+            REPLACE TmpDistrib.Marca WITH IIF(TmpDistrib.Marca = 0, 1, 0)
+        ENDIF        THIS.grd_4c_Dados.Refresh()
+    ENDPROC
+
+    PROCEDURE TgDados8MouseUp(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+        THIS.TgDados8KeyPress(13, 0)
+        NODEFAULT
+    ENDPROC
+
+    PROCEDURE TgDados8MouseDown(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+        NODEFAULT
+    ENDPROC
+
+    PROCEDURE TgDados8Click()
+        NODEFAULT
+    ENDPROC
 ENDDEFINE

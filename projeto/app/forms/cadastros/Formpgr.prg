@@ -2084,8 +2084,11 @@ DEFINE CLASS Formpgr AS FormBase
             .Header1.FontSize  = 8
             .Header1.Alignment = 2
         ENDWITH
-        loc_oPag1.grd_4c_ContaCorrente.Column1.AddObject("Check1", "CheckBox")
-        WITH loc_oPag1.grd_4c_ContaCorrente.Column1.Check1
+        *-- Pattern #185 / Erro146: havia um "Check1" identico adicionado aqui e
+        *-- nunca referenciado (o CurrentControl da coluna eh o check12) — objeto
+        *-- morto, removido; a configuracao visual passou para o check12.
+        loc_oPag1.grd_4c_ContaCorrente.Column1.AddObject("check12", "CheckBox")
+        WITH loc_oPag1.grd_4c_ContaCorrente.Column1.check12
             .Caption   = ""
             .BackStyle = 0
             .Alignment = 0
@@ -2093,10 +2096,10 @@ DEFINE CLASS Formpgr AS FormBase
             .FontSize  = 8
             .Visible   = .T.
         ENDWITH
-        loc_oPag1.grd_4c_ContaCorrente.Column1.AddObject("check12", "CheckBox")
-        loc_oPag1.grd_4c_ContaCorrente.Column1.check12.Caption = ""
         loc_oPag1.grd_4c_ContaCorrente.Column1.CurrentControl = "check12"
         loc_oPag1.grd_4c_ContaCorrente.Column1.ControlSource  = "cursor_4c_Pendencias.Flag"
+        *-- Pattern #185 / Erro146: CheckBox de grid nao alterna sem handlers
+        THIS.BindToggleContaCorrente1(THIS.pgf_4c_Paginas.Page2.pgf_4c_SubPaginas.Page1.grd_4c_ContaCorrente.Column1.check12)
 
         *-- Column2: Emps (Emp) - Width=36, ColumnOrder=2
         WITH loc_oPag1.grd_4c_ContaCorrente.Column2
@@ -5847,4 +5850,45 @@ DEFINE CLASS Formpgr AS FormBase
         ENDIF
     ENDPROC
 
+
+    *==========================================================================
+    * Toggle do CheckBox de grid - grd_4c_ContaCorrente.Column1 (cursor_4c_Pendencias.Flag)
+    * Pattern #185 / Erro146 (2026-09-04): CheckBox em coluna de Grid nao alterna
+    * pelo binding nativo. Click/MouseDown suprimem o padrao; MouseUp delega ao
+    * KeyPress, que alterna por codigo com REPLACE no cursor + Refresh do grid.
+    *==========================================================================
+    PROTECTED PROCEDURE BindToggleContaCorrente1(par_oChk)
+        BINDEVENT(par_oChk, "KeyPress",  THIS, "TgContaCorrente1KeyPress")
+        BINDEVENT(par_oChk, "MouseUp",   THIS, "TgContaCorrente1MouseUp")
+        BINDEVENT(par_oChk, "MouseDown", THIS, "TgContaCorrente1MouseDown")
+        BINDEVENT(par_oChk, "Click",     THIS, "TgContaCorrente1Click")
+    ENDPROC
+
+    PROCEDURE TgContaCorrente1KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF !INLIST(par_nKeyCode, 13, 32)
+            RETURN
+        ENDIF
+        NODEFAULT
+        IF !USED("cursor_4c_Pendencias") OR EOF("cursor_4c_Pendencias")
+            RETURN
+        ENDIF
+        IF VARTYPE(cursor_4c_Pendencias.Flag) == "L"
+            REPLACE cursor_4c_Pendencias.Flag WITH !cursor_4c_Pendencias.Flag
+        ELSE
+            REPLACE cursor_4c_Pendencias.Flag WITH IIF(cursor_4c_Pendencias.Flag = 0, 1, 0)
+        ENDIF        THIS.pgf_4c_Paginas.Page2.pgf_4c_SubPaginas.Page1.grd_4c_ContaCorrente.Refresh()
+    ENDPROC
+
+    PROCEDURE TgContaCorrente1MouseUp(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+        THIS.TgContaCorrente1KeyPress(13, 0)
+        NODEFAULT
+    ENDPROC
+
+    PROCEDURE TgContaCorrente1MouseDown(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+        NODEFAULT
+    ENDPROC
+
+    PROCEDURE TgContaCorrente1Click()
+        NODEFAULT
+    ENDPROC
 ENDDEFINE

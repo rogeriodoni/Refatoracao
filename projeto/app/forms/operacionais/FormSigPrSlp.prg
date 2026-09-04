@@ -290,6 +290,8 @@ DEFINE CLASS FormSigPrSlp AS FormBase
             .Check1.Width     = 22
             .Check1.Value     = 0
             .CurrentControl = "Check1"
+            *-- Pattern #185 / Erro146: CheckBox de grid nao alterna sem handlers
+            THIS.BindToggleItens1(THIS.grd_4c_Itens.Column1.Check1)
             .Header1.Caption  = ""
             .Header1.FontName = "Tahoma"
             .Header1.FontSize = 8
@@ -963,4 +965,48 @@ DEFINE CLASS FormSigPrSlp AS FormBase
         ENDIF
     ENDPROC
 
+
+    *==========================================================================
+    * Toggle do CheckBox de grid - grd_4c_Itens.Column1 (THIS.this_oBusinessObject.this_cCursorItens -> .lMarcas)
+    * Pattern #185 / Erro146 (2026-09-04): CheckBox em coluna de Grid nao alterna
+    * pelo binding nativo. Click/MouseDown suprimem o padrao; MouseUp delega ao
+    * KeyPress, que alterna por codigo com REPLACE no cursor + Refresh do grid.
+    *==========================================================================
+    PROTECTED PROCEDURE BindToggleItens1(par_oChk)
+        BINDEVENT(par_oChk, "KeyPress",  THIS, "TgItens1KeyPress")
+        BINDEVENT(par_oChk, "MouseUp",   THIS, "TgItens1MouseUp")
+        BINDEVENT(par_oChk, "MouseDown", THIS, "TgItens1MouseDown")
+        BINDEVENT(par_oChk, "Click",     THIS, "TgItens1Click")
+    ENDPROC
+
+    PROCEDURE TgItens1KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF !INLIST(par_nKeyCode, 13, 32)
+            RETURN
+        ENDIF
+        NODEFAULT
+        LOCAL loc_cCur
+        loc_cCur = THIS.this_oBusinessObject.this_cCursorItens
+        IF VARTYPE(loc_cCur) != "C" OR !USED(loc_cCur) OR EOF(loc_cCur)
+            RETURN
+        ENDIF
+        SELECT (loc_cCur)
+        IF VARTYPE(lMarcas) == "L"
+            REPLACE lMarcas WITH !lMarcas
+        ELSE
+            REPLACE lMarcas WITH IIF(lMarcas = 0, 1, 0)
+        ENDIF        THIS.grd_4c_Itens.Refresh()
+    ENDPROC
+
+    PROCEDURE TgItens1MouseUp(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+        THIS.TgItens1KeyPress(13, 0)
+        NODEFAULT
+    ENDPROC
+
+    PROCEDURE TgItens1MouseDown(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+        NODEFAULT
+    ENDPROC
+
+    PROCEDURE TgItens1Click()
+        NODEFAULT
+    ENDPROC
 ENDDEFINE
