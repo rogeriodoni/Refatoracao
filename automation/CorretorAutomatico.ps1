@@ -13007,6 +13007,222 @@ function Corrigir-GridCheckBoxSemToggleHandlers {
     return $Linhas
 }
 
+function Corrigir-AddObjectBindEventIncoerente {
+    # Pattern #186 (sweep #185, 2026-09-04): tres defeitos estruturais de
+    # AddObject/BINDEVENT em colunas de Grid, todos detectaveis estaticamente
+    # comparando os nomes por OBJETO-ALVO (grid + coluna):
+    #
+    # (A) WARN-186-ADDOBJECT-DUPLICADO — dois AddObject("<X>", ...) com o MESMO
+    #     nome no MESMO alvo. VFP dispara "Object <X> is already defined" e o
+    #     Init do form quebra. Achado em FormLin (grd_4c_Fases.Column4 com dois
+    #     AddObject("Check1","CheckBox") identicos dentro do mesmo WITH).
+    #
+    # (B) WARN-186-CONTROLE-MORTO — controle adicionado numa coluna e NUNCA
+    #     referenciado: o CurrentControl da coluna aponta para outro. Nao quebra,
+    #     mas confunde quem le e engana o proximo detector. Achado em FormMda
+    #     (check12 vs CurrentControl=check13) e Formpgr (Check1 vs check12).
+    #
+    # (C) WARN-186-BINDEVENT-MEMBRO-INEXISTENTE — BINDEVENT(<...>.ColumnN.<M>, ...)
+    #     onde <M> nao eh membro nativo da Column (Text1/Header1) nem foi
+    #     AddObject'd NAQUELA coluna. BINDEVENT com referencia invalida estoura no
+    #     Init e o controle fica sem handler nenhum. Achado em FormMda: os 4
+    #     BINDEVENT apontavam para grd_4c_Emps.Column1.Check1, controle que so
+    #     existe em grd_4c_Opers.Column1 — o checkbox de Empresas ficou sem toggle.
+    #
+    # WARNING-only: (A) exigiria saber a extensao do bloco de configuracao do
+    # objeto duplicado para remover; (B) e decisao de limpeza; (C) exige escolher
+    # o membro correto entre os candidatos da coluna.
+    param([string[]]$Linhas, [string]$Arquivo = "")
+
+    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
+    if ([string]::IsNullOrEmpty($Arquivo)) { return $Linhas }
+    $nomeArq = Split-Path -Leaf $Arquivo
+    if ($nomeArq -notlike 'Form*.prg') { return $Linhas }
+
+    # GUARD RAPIDO
+    $temAdd = $false
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        if ($Linhas[$i] -like '*AddObject*' -and $Linhas[$i] -match '(?i)Column\d') { $temAdd = $true; break }
+    }
+    if (-not $temAdd) {
+        for ($i = 0; $i -lt $Linhas.Count; $i++) {
+            if ($Linhas[$i] -match '(?i)BINDEVENT\s*\(\s*[\w.]*Column\d+\.\w+') { $temAdd = $true; break }
+        }
+    }
+    if (-not $temAdd) { return $Linhas }
+
+    $rxProc    = [regex]'(?i)^\s*(PROTECTED\s+|HIDDEN\s+)?(PROCEDURE|FUNCTION)\s+\w+'
+    $rxEndProc = [regex]'(?i)^\s*(ENDPROC|ENDFUNC)\s*$'
+    $rxWith    = [regex]'(?i)^\s*WITH\s+(.+?)\s*$'
+    $rxEndWith = [regex]'(?i)^\s*ENDWITH\s*$'
+    $rxVarAsg  = [regex]'(?i)^\s*(\w+)\s*=\s*([\w.]*\.[\w.]+)\s*$'
+    $rxAdd     = [regex]'(?i)AddObject\s*\(\s*"(\w+)"\s*,\s*"(\w+)"\s*\)'
+    $rxCurr    = [regex]'(?i)CurrentControl\s*=\s*"(\w+)"'
+    $rxBind    = [regex]'(?i)BINDEVENT\s*\(\s*([\w.]+)\s*,\s*"(\w+)"'
+
+    function Resolve-Alvo {
+        param([string]$Expr, [hashtable]$VarMap)
+        $d = 0
+        while ($d -lt 6 -and -not [string]::IsNullOrWhiteSpace($Expr)) {
+            $raiz = ($Expr -split '\.')[0]
+            if ($raiz -match '(?i)^(THIS|THISFORM|_SCREEN)$') { break }
+            if (-not $VarMap.ContainsKey($raiz.ToLower())) { break }
+            $Expr = $VarMap[$raiz.ToLower()] + $Expr.Substring($raiz.Length)
+            $d++
+        }
+        return $Expr
+    }
+
+    # Chave canonica do alvo: "<grid>|<coluna>". Devolve $null quando o nome do
+    # grid NAO pode ser resolvido — sem isso colunas de grids diferentes caem na
+    # mesma chave ("|1") e viram falso positivo de duplicata/controle morto.
+    function Chave-Coluna {
+        param([string]$Alvo)
+        if ($Alvo -match '(?i)^(.*?)\.?Column(\d+)\s*$') {
+            $g = $Matches[1].TrimEnd('.').Trim()
+            $col = $Matches[2]
+            # O ULTIMO segmento tem de SER o nome do grid. Casar "grd" como
+            # substring aceitava parametros como `par_oGrd`, que representam grids
+            # diferentes a cada chamada e colapsavam na mesma chave.
+            $seg = ($g -split '\.')[-1]
+            if ($seg -notmatch '(?i)^(grd|grade)\w*$') { return $null }
+            return ($seg.ToLower() + "|" + $col)
+        }
+        return $null
+    }
+
+    $addPorAlvo  = @{}   # chave -> hashtable nome -> @(linhas INCONDICIONAIS)
+    $currPorAlvo = @{}   # chave -> nome do CurrentControl
+    $binds       = @()   # @{Chave; Membro; Linha}
+    $varMap = @{}
+    $pilha = New-Object System.Collections.ArrayList
+    $depthIf = 0         # AddObject dentro de IF eh o re-add defensivo (Pattern #183)
+
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        $ln = $Linhas[$i]
+        if ($rxProc.IsMatch($ln) -or $rxEndProc.IsMatch($ln)) { $varMap = @{}; $pilha.Clear(); $depthIf = 0; continue }
+        if ($ln -match '(?i)^\s*IF\s')          { $depthIf++ }
+        elseif ($ln -match '(?i)^\s*ENDIF\s*$') { if ($depthIf -gt 0) { $depthIf-- } }
+        $mv = $rxVarAsg.Match($ln)
+        if ($mv.Success) { $varMap[$mv.Groups[1].Value.ToLower()] = $mv.Groups[2].Value; continue }
+        $mw = $rxWith.Match($ln)
+        if ($mw.Success) { [void]$pilha.Add($mw.Groups[1].Value); continue }
+        if ($rxEndWith.IsMatch($ln)) { if ($pilha.Count -gt 0) { $pilha.RemoveAt($pilha.Count-1) }; continue }
+
+        $prefixoDe = {
+            param($linha, $idx)
+            $pre = $linha.Substring(0, $idx).Trim()
+            if ($pre -match '(?i)^(.+?)\.$') { return $Matches[1].Trim() }
+            if (($pre -eq '.' -or $pre -eq '') -and $pilha.Count -gt 0) { return $pilha[$pilha.Count-1] }
+            return $null
+        }
+
+        $ma = $rxAdd.Match($ln)
+        if ($ma.Success) {
+            $alvo = & $prefixoDe $ln $ma.Index
+            if ($null -ne $alvo) {
+                $k = Chave-Coluna (Resolve-Alvo -Expr $alvo -VarMap $varMap)
+                # Só conta AddObject INCONDICIONAL: o re-add dentro de
+                # IF !PEMSTATUS(...) dos Carregar* eh defensivo e legitimo
+                # (Pattern #183) — conta-lo geraria falso positivo de duplicata.
+                if ($null -ne $k -and $depthIf -eq 0) {
+                    if (-not $addPorAlvo.ContainsKey($k)) { $addPorAlvo[$k] = @{} }
+                    $n = $ma.Groups[1].Value.ToLower()
+                    if (-not $addPorAlvo[$k].ContainsKey($n)) { $addPorAlvo[$k][$n] = @() }
+                    $addPorAlvo[$k][$n] += ($i + 1)
+                }
+            }
+            continue
+        }
+
+        $mc = $rxCurr.Match($ln)
+        if ($mc.Success) {
+            $alvo = & $prefixoDe $ln $mc.Index
+            if ($null -ne $alvo) {
+                $k = Chave-Coluna (Resolve-Alvo -Expr $alvo -VarMap $varMap)
+                if ($null -ne $k) { $currPorAlvo[$k] = $mc.Groups[1].Value.ToLower() }
+            }
+            continue
+        }
+
+        foreach ($mb in $rxBind.Matches($ln)) {
+            $ref = $mb.Groups[1].Value
+            if ($ref -notmatch '(?i)^(.*Column\d+)\.(\w+)$') { continue }
+            $k = Chave-Coluna (Resolve-Alvo -Expr $Matches[1] -VarMap $varMap)
+            if ($null -ne $k) { $binds += @{ Chave = $k; Membro = $Matches[2].ToLower(); Linha = ($i + 1) } }
+        }
+    }
+
+    # --- (A) AddObject duplicado no mesmo alvo ---
+    foreach ($k in $addPorAlvo.Keys) {
+        foreach ($nome in $addPorAlvo[$k].Keys) {
+            $ls = $addPorAlvo[$k][$nome]
+            if ($ls.Count -lt 2) { continue }
+            $descricao = "Pattern #186-A: AddObject(`"$nome`") aparece $($ls.Count)x no MESMO alvo ($k) — linhas " +
+                ($ls -join ", ") + ". VFP dispara `"Object $nome is already defined`" e o Init do form quebra. " +
+                "REVISAR MANUAL: manter apenas o primeiro AddObject (com a configuracao do controle) e remover os " +
+                "demais. Se as duas copias configuram propriedades diferentes, consolidar num bloco so. " +
+                "Origem: sweep Pattern #185 (2026-09-04, FormLin grd_4c_Fases.Column4 com dois Check1 identicos)."
+            Add-Correcao -Tipo "WARN-186-ADDOBJECT-DUPLICADO" -Linha $ls[1] `
+                -Original $Linhas[$ls[1] - 1].Trim() `
+                -Corrigido "(remover — objeto ja adicionado na linha $($ls[0]))" `
+                -Descricao $descricao
+            Write-Host "[Pattern #186-A] Linha $($ls[1]): AddObject('$nome') duplicado em $k (1o em $($ls[0]))" -ForegroundColor Red
+        }
+    }
+
+    # --- (B) controle morto: adicionado mas nao eh o CurrentControl nem tem BINDEVENT ---
+    foreach ($k in $addPorAlvo.Keys) {
+        if (-not $currPorAlvo.ContainsKey($k)) { continue }
+        if ($addPorAlvo[$k].Keys.Count -lt 2) { continue }
+        $cc = $currPorAlvo[$k]
+        foreach ($nome in $addPorAlvo[$k].Keys) {
+            if ($nome -eq $cc) { continue }
+            $temBind = $false
+            foreach ($b in $binds) { if ($b.Chave -eq $k -and $b.Membro -eq $nome) { $temBind = $true; break } }
+            if ($temBind) { continue }
+            $l0 = $addPorAlvo[$k][$nome][0]
+            $descricao = "Pattern #186-B: controle '$nome' foi adicionado em $k mas nunca eh usado — o " +
+                "CurrentControl da coluna eh '$cc' e nao ha BINDEVENT apontando para '$nome'. Objeto morto: " +
+                "ocupa memoria, confunde a leitura e engana os detectores que casam controle por nome. " +
+                "REVISAR MANUAL: remover o AddObject e o bloco de configuracao de '$nome', ou — se a intencao era " +
+                "que ELE fosse o controle da coluna — corrigir o CurrentControl. Origem: sweep Pattern #185 " +
+                "(2026-09-04, FormMda check12 vs check13; Formpgr Check1 vs check12)."
+            Add-Correcao -Tipo "WARN-186-CONTROLE-MORTO" -Linha $l0 `
+                -Original $Linhas[$l0 - 1].Trim() `
+                -Corrigido "(remover — CurrentControl da coluna eh '$cc')" `
+                -Descricao $descricao
+            Write-Host "[Pattern #186-B] Linha ${l0}: controle '$nome' morto em $k (CurrentControl = '$cc')" -ForegroundColor Yellow
+        }
+    }
+
+    # --- (C) BINDEVENT em membro que nao existe naquela coluna ---
+    $nativos = @{ 'text1' = $true; 'header1' = $true }
+    foreach ($b in $binds) {
+        if ($nativos.ContainsKey($b.Membro)) { continue }
+        if ($addPorAlvo.ContainsKey($b.Chave) -and $addPorAlvo[$b.Chave].ContainsKey($b.Membro)) { continue }
+        # so avisa se a coluna tem ALGUM AddObject (senao pode ser coluna de outro
+        # grid que o resolvedor nao alcancou — evita falso positivo)
+        if (-not $addPorAlvo.ContainsKey($b.Chave)) { continue }
+        $cands = ($addPorAlvo[$b.Chave].Keys | Sort-Object) -join ", "
+        $cc = if ($currPorAlvo.ContainsKey($b.Chave)) { $currPorAlvo[$b.Chave] } else { "(nenhum)" }
+        $descricao = "Pattern #186-C: BINDEVENT aponta para '$($b.Membro)' em $($b.Chave), membro que NAO existe " +
+            "nessa coluna. Controles realmente adicionados ali: $cands (CurrentControl = '$cc'). BINDEVENT com " +
+            "referencia de objeto invalida estoura no Init do form, e o controle que deveria ser ligado fica sem " +
+            "handler nenhum. Causa tipica: copiar o bloco de BINDEVENT de outro grid sem trocar o nome do controle. " +
+            "REVISAR MANUAL: repontar para o CurrentControl da coluna ('$cc'). Origem: sweep Pattern #185 " +
+            "(2026-09-04, FormMda — os 4 BINDEVENT de grd_4c_Emps.Column1 apontavam para Check1, que so existe em " +
+            "grd_4c_Opers.Column1; o checkbox de Empresas ficou sem toggle)."
+        Add-Correcao -Tipo "WARN-186-BINDEVENT-MEMBRO-INEXISTENTE" -Linha $b.Linha `
+            -Original $Linhas[$b.Linha - 1].Trim() `
+            -Corrigido "(repontar para '$cc' — controles existentes: $cands)" `
+            -Descricao $descricao
+        Write-Host "[Pattern #186-C] Linha $($b.Linha): BINDEVENT em '$($b.Membro)' inexistente em $($b.Chave) (ha: $cands)" -ForegroundColor Red
+    }
+
+    return $Linhas
+}
+
 function Invoke-CorrecaoAutomatica {
     param(
         [string]$Arquivo,
@@ -13215,6 +13431,7 @@ function Invoke-CorrecaoAutomatica {
     $linhas = Corrigir-GridColumnCountEmCarregar -Linhas $linhas
     $linhas = Corrigir-GridEditavelCursorReadOnly -Linhas $linhas -Arquivo $Arquivo
     $linhas = Corrigir-GridCheckBoxSemToggleHandlers -Linhas $linhas -Arquivo $Arquivo
+    $linhas = Corrigir-AddObjectBindEventIncoerente -Linhas $linhas -Arquivo $Arquivo
 
     # Salva arquivo corrigido em UTF-8 SEM BOM.
     # - VFP9 nao suporta BOM (por isso removemos no read com bytes[3..])
