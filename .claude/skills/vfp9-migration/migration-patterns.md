@@ -9510,3 +9510,99 @@ Achado colateral do sweep — `FormMda.prg` esta pior que "faltando handlers": `
 - Warning: `C:\4c\automation\CorretorAutomatico.ps1` `Corrigir-GridCheckBoxSemToggleHandlers` (Pattern #185).
 - Complementa Pattern #184 (cursor READWRITE) e Pattern #183 (ColumnCount destroi AddObject).
 - Origem: Erro146 (2026-09-04, Formacg — user reportou "check box ainda nao estao habilitados para marcar ou nao o acesso").
+
+## 186. AddObject/BINDEVENT Incoerentes em Coluna de Grid — Duplicata, Objeto Morto e Membro Inexistente (sweep #185, 2026-09-04)
+
+### Problema
+
+Tres defeitos distintos, todos nascidos da mesma causa: **copiar o bloco de configuracao de um grid para outro e nao trocar o nome do controle**. Nenhum deles aparece como "checkbox nao marca" — dois quebram o `Init` do form e o terceiro so confunde quem le (e engana os detectores que casam controle por nome).
+
+Os tres sao detectaveis estaticamente comparando os nomes **por objeto-alvo** (grid + coluna).
+
+#### (A) `AddObject` duplicado no mesmo alvo
+
+```foxpro
+*-- ERRADO (FormLin, grd_4c_Fases.Column4): dois AddObject identicos no mesmo WITH
+WITH loc_oAba.grd_4c_Fases.Column4
+    .AddObject("Check1", "CheckBox")
+    .Check1.Caption = ""
+    ...
+    .CurrentControl = "Check1"
+    .Header1.Caption = ""
+    .AddObject("Check1", "CheckBox")     && BUG: "Object CHECK1 is already defined"
+    WITH .Check1
+        ...
+    ENDWITH
+ENDWITH
+```
+
+VFP dispara `Object CHECK1 is already defined` e o `Init` do form morre. Fix: manter apenas o primeiro `AddObject` (com sua configuracao) e remover os demais; se as duas copias configuram propriedades diferentes, consolidar num bloco so.
+
+**Excecao legitima**: o re-`AddObject` dentro de `IF !PEMSTATUS(...)` nos `Carregar*` eh defensivo (Pattern #183) e **nao** conta como duplicata — ele so roda quando o controle foi destruido.
+
+#### (B) Controle morto
+
+```foxpro
+*-- ERRADO (FormMda grd_4c_Emps.Column1; Formpgr grd_4c_ContaCorrente.Column1)
+loc_oPagina.grd_4c_Emps.Column1.AddObject("check12", "CheckBox")
+WITH loc_oPagina.grd_4c_Emps.Column1.check12      && configurado com carinho...
+    .Caption = "" / .Alignment = 0 / .Top = 9 / ...
+ENDWITH
+loc_oPagina.grd_4c_Emps.Column1.AddObject("check13", "CheckBox")
+loc_oPagina.grd_4c_Emps.Column1.CurrentControl = "check13"   && ...e nunca usado
+```
+
+`check12` nao eh o `CurrentControl` e nao tem `BINDEVENT` apontando para ele: objeto morto. Ocupa memoria, confunde a leitura e faz o proximo detector casar o controle errado. Fix: remover o `AddObject` e o bloco de configuracao do morto (movendo a configuracao visual para o que ficou), **ou** — se a intencao era que ELE fosse o controle da coluna — corrigir o `CurrentControl`.
+
+#### (C) `BINDEVENT` em membro que nao existe naquela coluna
+
+```foxpro
+*-- ERRADO (FormMda): a Column1 de grd_4c_Emps tem check12/check13, nao Check1.
+*-- "Check1" so existe em grd_4c_Opers.Column1 — o bloco foi copiado de la.
+BINDEVENT(loc_oPagina.grd_4c_Emps.Column1.Check1, "MouseDown", THIS, "EmpCheckboxMouseDown")
+BINDEVENT(loc_oPagina.grd_4c_Emps.Column1.Check1, "MouseUp",   THIS, "EmpCheckboxMouseUp")
+BINDEVENT(loc_oPagina.grd_4c_Emps.Column1.Check1, "Click",     THIS, "EmpCheckboxClick")
+BINDEVENT(loc_oPagina.grd_4c_Emps.Column1.Check1, "KeyPress",  THIS, "EmpCheckboxKeyPress")
+
+*-- CORRETO: apontar para o CurrentControl real da coluna
+BINDEVENT(loc_oPagina.grd_4c_Emps.Column1.check13, "MouseDown", THIS, "EmpCheckboxMouseDown")
+...
+```
+
+`BINDEVENT` com referencia de objeto invalida **estoura no `Init`** e, pior, o controle que deveria ser ligado fica **sem handler nenhum** — o CheckBox de Empresas do FormMda tinha os quatro handlers escritos e corretos, e mesmo assim nao marcava. O erro passa despercebido porque some no `CATCH` do `InicializarForm`.
+
+Membros nativos de uma `Column` sao `Text1` e `Header1`; qualquer outro nome precisa ter sido `AddObject`'d **naquela** coluna.
+
+### Regra pratica
+
+Ao copiar um bloco de configuracao de grid, trocar **tres** coisas juntas:
+
+1. o caminho do grid,
+2. o nome do controle no `AddObject` **e** no `CurrentControl`,
+3. o alvo de cada `BINDEVENT`.
+
+Trocar so 1 e 2 produz o defeito (C) — que eh o mais caro, porque o sintoma ("o checkbox nao marca") aponta para o handler, e o handler esta certo.
+
+### Heuristica de deteccao (Pattern #186)
+
+WARNING-only nos tres eixos. Resolve o alvo de cada `AddObject`/`CurrentControl`/`BINDEVENT` ate uma chave canonica `"<grid>|<coluna>"`, rastreando `WITH` e variaveis locais:
+
+- **WARN-186-ADDOBJECT-DUPLICADO** — mesmo nome, mesmo alvo, 2+ vezes (so conta `AddObject` **incondicional**: `$depthIf -eq 0`).
+- **WARN-186-CONTROLE-MORTO** — controle adicionado que nao eh o `CurrentControl` da coluna e nao tem `BINDEVENT`.
+- **WARN-186-BINDEVENT-MEMBRO-INEXISTENTE** — alvo de `BINDEVENT` que nao eh `Text1`/`Header1` nem foi `AddObject`'d naquela coluna.
+
+Dois cuidados que custaram falso positivo na primeira versao:
+
+1. **A chave exige o nome do grid resolvido.** Sem isso, colunas de grids diferentes caem em `"|1"` e viram "duplicata" fantasma.
+2. **O ultimo segmento tem de SER o nome do grid**, nao conter `grd` como substring — casar por substring aceitava parametros como `par_oGrd`, que representam grids diferentes a cada chamada.
+
+### Impacto
+
+Sweep 2026-09-04 sobre 403 forms: **4 ocorrencias reais** — FormLin (A), FormMda (B + C ×4), Formpgr (B), Formsigredtv (B). Todas corrigidas. Apos os fixes e o ajuste dos falsos positivos, o sweep vai a zero.
+
+### Referencias
+
+- Fixes: `FormLin.prg` (duplicata removida), `FormMda.prg` (check12 morto removido + 4 BINDEVENT repontados para check13), `Formpgr.prg` e `Formsigredtv.prg` (controle morto removido, config movida).
+- Warning: `C:\4c\automation\CorretorAutomatico.ps1` `Corrigir-AddObjectBindEventIncoerente` (Pattern #186).
+- Complementa Pattern #185 (handlers de toggle) e Pattern #183 (ColumnCount destroi AddObject).
+- Origem: sweep do Pattern #185 (2026-09-04) — os defeitos apareceram ao investigar por que 24 forms nao encaixavam no template de toggle.
