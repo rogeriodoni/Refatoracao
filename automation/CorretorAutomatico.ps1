@@ -12847,6 +12847,166 @@ function Corrigir-GridEditavelCursorReadOnly {
     return $Linhas
 }
 
+function Corrigir-GridCheckBoxSemToggleHandlers {
+    # Pattern #185 (Erro146): CheckBox embutido em coluna de Grid NAO alterna pelo
+    # binding nativo. Os forms legado Fortyus SUPRIMEM o toggle padrao (NoDefault em
+    # Click/MouseDown) e alternam o valor por codigo no MouseUp/KeyPress, com REPLACE
+    # direto no cursor + Refresh do grid.
+    #
+    # Migrar apenas o `When` (o gate de modo) deixa o CheckBox inerte: ele RENDERIZA
+    # em todas as linhas (Sparse=.F.) e ate RECEBE FOCO, mas clicar ou teclar
+    # Espaco/Enter nao muda nada. O sintoma parece bug de Enabled/Column.ReadOnly,
+    # que estao corretos — por isso custa caro para diagnosticar.
+    #
+    # Template canonico (Formsigredtv.prg:963-1585 / Formacg.prg pos-Erro146):
+    #   PROCEDURE Chk<X>KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+    #       IF INLIST(par_nKeyCode, 13, 32) ;
+    #               AND INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR") ;
+    #               AND USED("<cursor>") AND !EOF("<cursor>")
+    #           REPLACE <cursor>.<campo> WITH IIF(<cursor>.<campo> = 0, 1, 0)
+    #           THIS.<path>.<grid>.Refresh()
+    #           NODEFAULT
+    #       ENDIF
+    #   ENDPROC
+    #   Chk<X>MouseUp   -> THIS.Chk<X>KeyPress(13, 0) + NODEFAULT
+    #   Chk<X>MouseDown -> NODEFAULT      (suprime o toggle nativo)
+    #   Chk<X>Click     -> NODEFAULT      (idem — evita alternancia dupla)
+    #
+    # O gate de modo vai DENTRO do KeyPress, nao so no `When`: BINDEVENT descarta o
+    # retorno do delegate, entao um `When` ligado por BINDEVENT nao bloqueia edicao.
+    # PRE-REQUISITO: cursor READWRITE (Pattern #184) — senao o REPLACE estoura.
+    #
+    # WARNING-only: o handler precisa do nome do cursor, do campo e do caminho do
+    # grid; e nem todo CheckBox de grid precisa do mecanismo manual (cursor local
+    # gravavel com campo logico pode alternar nativamente, como o Grade.Seleciona
+    # do proprio SIGCDACG). Decisao e implementacao exigem contexto.
+    # Origem: Erro146 (2026-09-04, Formacg — user reportou "check box ainda nao
+    # estao habilitados para marcar ou nao o acesso").
+    param([string[]]$Linhas, [string]$Arquivo = "")
+
+    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
+    if ([string]::IsNullOrEmpty($Arquivo)) { return $Linhas }
+
+    $nomeArq = Split-Path -Leaf $Arquivo
+    if ($nomeArq -notlike 'Form*.prg') { return $Linhas }
+
+    # GUARD RAPIDO: sem AddObject de CheckBox nao ha o que avisar
+    $temChk = $false
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        if ($Linhas[$i] -like '*"CheckBox"*' -and $Linhas[$i] -like '*AddObject*') { $temChk = $true; break }
+    }
+    if (-not $temChk) { return $Linhas }
+
+    # 1) Coletar CheckBoxes adicionados a colunas de grid: nome -> linha do AddObject.
+    #    Duas formas: direta (`<expr>.ColumnN.AddObject(...)`) e dentro de WITH
+    #    (`WITH <expr>.ColumnN` / `.AddObject(...)`) — a segunda eh a usada no Formacg.
+    $rxAddChk  = [regex]'(?i)AddObject\s*\(\s*"(\w+)"\s*,\s*"CheckBox"\s*\)'
+    $rxWith    = [regex]'(?i)^\s*WITH\s+(.+?)\s*$'
+    $rxEndWith = [regex]'(?i)^\s*ENDWITH\s*$'
+    $chkEmColuna = @{}
+    $withStack = New-Object System.Collections.ArrayList
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        $ln = $Linhas[$i]
+        $mw = $rxWith.Match($ln)
+        if ($mw.Success) { [void]$withStack.Add($mw.Groups[1].Value); continue }
+        if ($rxEndWith.IsMatch($ln)) {
+            if ($withStack.Count -gt 0) { $withStack.RemoveAt($withStack.Count - 1) }
+            continue
+        }
+        $m = $rxAddChk.Match($ln)
+        if (-not $m.Success) { continue }
+        # O alvo do AddObject eh uma coluna? Prefixo da propria linha ou o WITH ativo.
+        $prefixo = $ln.Substring(0, $m.Index)
+        $ehColuna = ($prefixo -match '(?i)Column\d+\s*\.\s*$')
+        if (-not $ehColuna -and $prefixo -match '(?i)^\s*\.?\s*$' -and $withStack.Count -gt 0) {
+            $ehColuna = ($withStack[$withStack.Count - 1] -match '(?i)Column\d+\s*$')
+        }
+        if ($ehColuna) { $chkEmColuna[$m.Groups[1].Value.ToLower()] = ($i + 1) }
+    }
+    if ($chkEmColuna.Count -eq 0) { return $Linhas }
+
+    # 2) Manter apenas os que sao de fato o editor da celula (CurrentControl aponta p/ ele)
+    $rxCurrCtrl = [regex]'(?i)\.CurrentControl\s*=\s*"(\w+)"'
+    $ehCurrentControl = @{}
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        foreach ($m in $rxCurrCtrl.Matches($Linhas[$i])) {
+            $ehCurrentControl[$m.Groups[1].Value.ToLower()] = $true
+        }
+    }
+
+    # 3) Coletar eventos ja ligados por BINDEVENT para cada CheckBox
+    #    BINDEVENT(<expr que termina no nome do chk>, "<Evento>", THIS, "<handler>")
+    $rxBind = [regex]'(?i)BINDEVENT\s*\(\s*([\w.\(\)]+?)\s*,\s*"(\w+)"'
+    $eventosPorChk = @{}
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        foreach ($m in $rxBind.Matches($Linhas[$i])) {
+            $alvo = ($m.Groups[1].Value -split '\.')[-1].ToLower()
+            if (-not $chkEmColuna.ContainsKey($alvo)) { continue }
+            if (-not $eventosPorChk.ContainsKey($alvo)) { $eventosPorChk[$alvo] = @{} }
+            $eventosPorChk[$alvo][$m.Groups[2].Value.ToLower()] = $true
+        }
+    }
+    # Bindings feitos via helper (ex: THIS.BindToggleMarcas(<chk>)) tambem contam:
+    # se o arquivo tem BINDEVENT de MouseUp/KeyPress sobre um parametro, nao da para
+    # amarrar ao checkbox por regex — entao considera o helper como cobertura quando
+    # ele recebe o checkbox como argumento.
+    $rxHelper = [regex]'(?i)THIS\.\w+\s*\(\s*[\w.]*\.(\w+)\s*\)'
+    $temHelperMouseUp = $false
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        if ($Linhas[$i] -match '(?i)BINDEVENT\s*\(\s*par_\w+\s*,\s*"MouseUp"') { $temHelperMouseUp = $true; break }
+    }
+    if ($temHelperMouseUp) {
+        for ($i = 0; $i -lt $Linhas.Count; $i++) {
+            foreach ($m in $rxHelper.Matches($Linhas[$i])) {
+                $alvo = $m.Groups[1].Value.ToLower()
+                if (-not $chkEmColuna.ContainsKey($alvo)) { continue }
+                if (-not $eventosPorChk.ContainsKey($alvo)) { $eventosPorChk[$alvo] = @{} }
+                $eventosPorChk[$alvo]['mouseup']   = $true
+                $eventosPorChk[$alvo]['keypress']  = $true
+                $eventosPorChk[$alvo]['mousedown'] = $true
+                $eventosPorChk[$alvo]['click']     = $true
+            }
+        }
+    }
+
+    # 4) Emitir WARNING para cada CheckBox-editor sem o mecanismo de toggle
+    foreach ($chk in $chkEmColuna.Keys) {
+        if (-not $ehCurrentControl.ContainsKey($chk)) { continue }
+        $eventos = if ($eventosPorChk.ContainsKey($chk)) { $eventosPorChk[$chk] } else { @{} }
+        $faltando = @()
+        foreach ($ev in @('keypress', 'mouseup', 'mousedown', 'click')) {
+            if (-not $eventos.ContainsKey($ev)) { $faltando += $ev }
+        }
+        # MouseUp + KeyPress sao o par que efetivamente alterna; sem eles o checkbox
+        # eh inerte. Se ambos existem, considera coberto (Click/MouseDown sao reforco).
+        if ($eventos.ContainsKey('mouseup') -and $eventos.ContainsKey('keypress')) { continue }
+
+        $nLinha = $chkEmColuna[$chk]
+        $temWhen = $eventos.ContainsKey('when')
+        $descricao = "Pattern #185 (Erro146): CheckBox '$chk' eh o CurrentControl de uma coluna de Grid mas " +
+            "NAO tem os handlers de toggle (faltam: " + ($faltando -join ", ") + ")" +
+            $(if ($temWhen) { " — so o 'When' foi ligado, que eh apenas o gate de modo" } else { "" }) + ". " +
+            "CheckBox em coluna de Grid NAO alterna pelo binding nativo: o legado Fortyus suprime o toggle padrao " +
+            "e alterna por codigo. Sem isso o CheckBox renderiza e recebe foco, mas clicar ou teclar Espaco/Enter " +
+            "nao muda nada — e o sintoma parece bug de Enabled/Column.ReadOnly, que estao corretos. " +
+            "REVISAR MANUAL: adicionar 4 handlers + BINDEVENT em TODO ponto que cria o controle (ConfigurarAba* E " +
+            "o bloco defensivo IF !PEMSTATUS dos Carregar*). KeyPress: IF INLIST(par_nKeyCode,13,32) AND " +
+            "INLIST(THIS.this_cModoAtual,'INCLUIR','ALTERAR') AND USED('<cursor>') AND !EOF('<cursor>') -> " +
+            "REPLACE <cursor>.<campo> WITH IIF(<cursor>.<campo> = 0, 1, 0) + <grid>.Refresh() + NODEFAULT. " +
+            "MouseUp: THIS.<Chk>KeyPress(13,0) + NODEFAULT. MouseDown e Click: NODEFAULT (suprimem o nativo, " +
+            "evitam alternancia dupla). O gate de modo vai DENTRO do KeyPress: BINDEVENT descarta o retorno do " +
+            "delegate, entao 'When' via BINDEVENT nao bloqueia edicao. PRE-REQUISITO: cursor READWRITE (Pattern " +
+            "#184). Ref canonico Formsigredtv.prg:963-1585 e Formacg.prg pos-Erro146."
+        Add-Correcao -Tipo "WARN-185-GRID-CHECKBOX-SEM-TOGGLE" -Linha $nLinha `
+            -Original $Linhas[$nLinha - 1].Trim() `
+            -Corrigido "(adicionar handlers Click/MouseDown/MouseUp/KeyPress com NODEFAULT + REPLACE no cursor)" `
+            -Descricao $descricao
+        Write-Host "[Pattern #185 WARN] Linha ${nLinha}: CheckBox '$chk' de grid sem handlers de toggle (faltam: $($faltando -join ', '))" -ForegroundColor Yellow
+    }
+
+    return $Linhas
+}
+
 function Invoke-CorrecaoAutomatica {
     param(
         [string]$Arquivo,
@@ -13054,6 +13214,7 @@ function Invoke-CorrecaoAutomatica {
     $linhas = Corrigir-BotoesCrudLeftAbsoluto -Linhas $linhas
     $linhas = Corrigir-GridColumnCountEmCarregar -Linhas $linhas
     $linhas = Corrigir-GridEditavelCursorReadOnly -Linhas $linhas -Arquivo $Arquivo
+    $linhas = Corrigir-GridCheckBoxSemToggleHandlers -Linhas $linhas -Arquivo $Arquivo
 
     # Salva arquivo corrigido em UTF-8 SEM BOM.
     # - VFP9 nao suporta BOM (por isso removemos no read com bytes[3..])

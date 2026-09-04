@@ -9404,3 +9404,109 @@ Erro145-v2 (2026-09-04, Formacg "Acesso de Grupos"): 3 cursores read-only (`curs
 - Complementa Pattern #180 (reset de Width/Header1.Caption no rebind) e Pattern #183 (ColumnCount destroi AddObject).
 - Origem: Erro145-v2 (2026-09-04, Formacg — user reportou "na grid aparecem os checkbox mas ao clicar em incluir nao habilita para marcar ou nao").
 - **Guard correlato no sweep (Pattern #182 v2 / `CNT-BOTOES-LEFT-542`)**: `Formacg` tem `cmd_4c_CopiarAcesso` dentro de `cnt_4c_Botoes`, entao o bloco CRUD fica legitimamente deslocado (`Left=390`/`Width=540`; CopiarAcesso=5, Incluir=152, Visualizar=227, Alterar=302, Excluir=377, Buscar=452 — absolutos 542..917). O corretor revertia isso para os offsets canonicos 5/80/155/230/305 e o container para `Left=542`, empilhando CopiarAcesso e Incluir no mesmo Left. Ambas as funcoes agora suprimem o auto-mutate quando o container tem CommandButton fora do conjunto canonico, emitindo WARNING.
+
+## 185. CheckBox em Coluna de Grid NAO Alterna pelo Binding Nativo — Exige 4 Handlers com NODEFAULT (Erro146 2026-09-04)
+
+### Problema
+
+`Column.AddObject("chk_4c_X", "CheckBox")` + `CurrentControl` + `ControlSource` + `Sparse = .F.` fazem o CheckBox **renderizar em todas as linhas** e ate **receber foco** — mas clicar ou teclar Espaco/Enter **nao muda o valor**.
+
+O sintoma engana duas vezes: parece bug de `Enabled` / `Column.ReadOnly` / `Grid.ReadOnly` (todos corretos), e depois parece bug de cursor somente-leitura (que e pre-requisito, mas nao a causa). A causa real e que os forms legado Fortyus **nunca usaram o binding nativo**: eles suprimem o toggle padrao e alternam o valor por codigo.
+
+Legado `SIGCDACG.Pagina.Dados.Pagina.Acesso.grdAcesso.Column3.Check1` — cinco handlers:
+
+| Evento | Codigo legado |
+|--------|---------------|
+| `When` | `Return INLIST(Thisform.pcEscolha, 'INSERIR', 'ALTERAR')` |
+| `Click` | `NoDefault` |
+| `MouseDown` | `NoDefault` |
+| `MouseUp` | `This.KeyPress(13, 0)` + `NoDefault` |
+| `KeyPress` | `If InList(nKeyCode,13,32) / Replace crSigCdPrg.Marcas With IIf(crSigCdPrg.Marcas == 0,1,0) / This.parent.parent.Refresh / NoDefault / EndIf` |
+
+A migracao trouxe **apenas o `When`** (o gate de modo) e descartou os quatro handlers que de fato marcam — deixando o CheckBox inerte.
+
+```foxpro
+*-- ERRADO: so o gate de modo; o CheckBox nunca alterna
+WITH loc_oGrid.Column3
+    .AddObject("chk_4c_Marcas", "CheckBox")
+    .Sparse         = .F.
+    .CurrentControl = "chk_4c_Marcas"
+ENDWITH
+BINDEVENT(loc_oGrid.Column3.chk_4c_Marcas, "When", THIS, "ChkMarcasWhen")
+```
+
+### Fix canonico
+
+```foxpro
+*-- CORRETO: gate de modo + os 4 handlers de toggle
+BINDEVENT(loc_oGrid.Column3.chk_4c_Marcas, "When", THIS, "ChkMarcasWhen")
+THIS.BindToggleMarcas(loc_oGrid.Column3.chk_4c_Marcas)
+
+PROTECTED PROCEDURE BindToggleMarcas(par_oChk)
+    BINDEVENT(par_oChk, "KeyPress",  THIS, "ChkMarcasKeyPress")
+    BINDEVENT(par_oChk, "MouseUp",   THIS, "ChkMarcasMouseUp")
+    BINDEVENT(par_oChk, "MouseDown", THIS, "ChkMarcasMouseDown")
+    BINDEVENT(par_oChk, "Click",     THIS, "ChkMarcasClick")
+ENDPROC
+
+PROCEDURE ChkMarcasKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+    IF INLIST(par_nKeyCode, 13, 32) ;
+            AND INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR") ;
+            AND USED("cursor_4c_Programas") AND !EOF("cursor_4c_Programas")
+        REPLACE cursor_4c_Programas.Marcas ;
+            WITH IIF(cursor_4c_Programas.Marcas = 0, 1, 0)
+        THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page2.grd_4c_Programas.Refresh()
+        NODEFAULT
+    ENDIF
+ENDPROC
+
+PROCEDURE ChkMarcasMouseUp(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+    THIS.ChkMarcasKeyPress(13, 0)
+    NODEFAULT
+ENDPROC
+
+PROCEDURE ChkMarcasMouseDown(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+    NODEFAULT
+ENDPROC
+
+PROCEDURE ChkMarcasClick()
+    NODEFAULT
+ENDPROC
+```
+
+### Detalhes que nao podem ser omitidos
+
+1. **`MouseDown` e `Click` existem para SUPRIMIR o toggle nativo.** Sem eles, se o binding nativo funcionar em algum contexto, o valor alterna duas vezes (nativo + handler) e o usuario nao ve mudanca nenhuma.
+
+2. **O gate de modo vai DENTRO do `KeyPress`, nao so no `When`.** `BINDEVENT` **descarta o valor de retorno do delegate**, entao um `When` ligado por BINDEVENT nao bloqueia edicao — ele so executa junto. Confiar nele deixa o CheckBox editavel em modo LISTA/VISUALIZAR.
+
+3. **Registrar os BINDEVENTs em TODO ponto que cria o controle**: o `ConfigurarAba*` da inicializacao **e** o bloco defensivo `IF !PEMSTATUS(...)` dos `Carregar*` (que re-adiciona o controle quando ele foi destruido — Pattern #183).
+
+4. **PRE-REQUISITO: cursor READWRITE** (Pattern #184). O `REPLACE` estoura em cursor de `SQLEXEC`. As duas licoes sao complementares: sem READWRITE o toggle nao grava; sem os handlers o toggle nem dispara.
+
+5. **Nem todo CheckBox de grid precisa do mecanismo manual.** No proprio `SIGCDACG`, o checkbox da aba Barra (`Cabecalho.Grade.Seleciona.Check1`) tem **so** o `When` — porque seu cursor `TmpBarra` e criado com `CREATE CURSOR ... SelBarras l` (local, gravavel, campo LOGICO) e alterna nativamente. Quando o campo migrado vira NUMERIC (`CASE WHEN ... THEN 1 ELSE 0`), o mecanismo manual passa a ser a opcao segura.
+
+### Heuristica de deteccao (Pattern #185)
+
+WARNING-only (o handler precisa do nome do cursor, do campo e do caminho do grid — e o item 5 acima mostra que nem todo caso precisa):
+
+1. Guard: `Form*.prg` contendo `AddObject(..., "CheckBox")`.
+2. Coletar CheckBoxes adicionados a **colunas** de grid, nas duas formas: direta (`<expr>.ColumnN.AddObject(...)`) e dentro de `WITH <expr>.ColumnN` (rastreando a pilha de `WITH` — e a forma usada no Formacg).
+3. Manter so os que sao o editor da celula (algum `.CurrentControl = "<nome>"` aponta para ele).
+4. Coletar eventos ja ligados por `BINDEVENT(<expr terminando no nome>, "<Evento>", ...)`; contar tambem os registrados por helper (`THIS.BindToggleX(<chk>)`) quando o arquivo tem `BINDEVENT(par_*, "MouseUp", ...)`.
+5. Se faltar o par `MouseUp` + `KeyPress` (os que efetivamente alternam), emitir `WARN-185-GRID-CHECKBOX-SEM-TOGGLE` listando os eventos ausentes.
+
+### Impacto
+
+Erro146 (2026-09-04, Formacg "Acesso de Grupos"): checkbox das abas Programas e Barra renderizavam e recebiam foco mas nao marcavam. Sweep 2026-09-04 sobre 403 forms: **50 forms / 52 CheckBoxes** sem o mecanismo de toggle.
+
+Achado colateral do sweep — `FormMda.prg` esta pior que "faltando handlers": `grd_4c_Emps.Column1` faz `AddObject("check12")` + `AddObject("check13")` e `CurrentControl = "check13"`, mas os quatro `BINDEVENT` (linhas 1228-1231) apontam para `grd_4c_Emps.Column1.Check1` — controle que **so existe em `grd_4c_Opers.Column1`**. O checkbox de Empresas fica sem toggle e `check12` e codigo morto.
+
+### Referencias
+
+- Fix aplicado: `C:\4c\projeto\app\forms\cadastros\Formacg.prg` (`BindToggleMarcas`/`BindToggleSelBarras` + 8 handlers).
+- Ref canonico no sistema novo: `C:\4c\projeto\app\forms\relatorios\Formsigredtv.prg:963-1585` (`grd_4c_Emps`/`grd_4c_Orcs`).
+- Ref legado: `SIGCDACG.Pagina.Dados.Pagina.Acesso.grdAcesso.Column3.Check1` (task342 `comportamento.json`).
+- Warning: `C:\4c\automation\CorretorAutomatico.ps1` `Corrigir-GridCheckBoxSemToggleHandlers` (Pattern #185).
+- Complementa Pattern #184 (cursor READWRITE) e Pattern #183 (ColumnCount destroi AddObject).
+- Origem: Erro146 (2026-09-04, Formacg — user reportou "check box ainda nao estao habilitados para marcar ou nao o acesso").
