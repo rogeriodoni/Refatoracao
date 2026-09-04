@@ -838,6 +838,7 @@ DEFINE CLASS Formacg AS FormBase
             .Themes    = .F.
         ENDWITH
         BINDEVENT(loc_oGrid.Column3.chk_4c_Marcas, "When", THIS, "ChkMarcasWhen")
+        THIS.BindToggleMarcas(loc_oGrid.Column3.chk_4c_Marcas)
     ENDPROC
 
     *==========================================================================
@@ -886,6 +887,7 @@ DEFINE CLASS Formacg AS FormBase
             .Themes    = .F.
         ENDWITH
         BINDEVENT(loc_oGrid.Column2.chk_4c_SelBarras, "When", THIS, "ChkSelBarrasWhen")
+        THIS.BindToggleSelBarras(loc_oGrid.Column2.chk_4c_SelBarras)
     ENDPROC
 
     *==========================================================================
@@ -1090,6 +1092,7 @@ DEFINE CLASS Formacg AS FormBase
                         .Themes    = .F.
                     ENDWITH
                     BINDEVENT(loc_oGrid.Column3.chk_4c_Marcas, "When", THIS, "ChkMarcasWhen")
+                    THIS.BindToggleMarcas(loc_oGrid.Column3.chk_4c_Marcas)
                 ENDIF
                 *-- Reatribuir RecordSource reseta Sparse/CurrentControl da coluna
                 loc_oGrid.Column3.Sparse = .F.
@@ -1133,6 +1136,7 @@ DEFINE CLASS Formacg AS FormBase
                         .Themes    = .F.
                     ENDWITH
                     BINDEVENT(loc_oGrid.Column2.chk_4c_SelBarras, "When", THIS, "ChkSelBarrasWhen")
+                    THIS.BindToggleSelBarras(loc_oGrid.Column2.chk_4c_SelBarras)
                 ENDIF
                 *-- Reatribuir RecordSource reseta Sparse/CurrentControl da coluna
                 loc_oGrid.Column2.Sparse = .F.
@@ -1764,6 +1768,83 @@ DEFINE CLASS Formacg AS FormBase
     *==========================================================================
     PROCEDURE ChkMarcasWhen()
         RETURN INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
+    ENDPROC
+
+    *==========================================================================
+    * BindToggleMarcas / BindToggleSelBarras
+    *
+    * O CheckBox embutido em coluna de Grid NAO alterna pelo binding nativo:
+    * o legado suprime o comportamento padrao (NoDefault em Click/MouseDown) e
+    * alterna o valor por codigo no MouseUp/KeyPress, com REPLACE direto no
+    * cursor + Refresh do grid. Sem esses 4 handlers o CheckBox renderiza e
+    * recebe foco, mas clicar ou teclar Espaco/Enter nao muda nada.
+    *
+    * Ref legado SIGCDACG.Pagina.Dados.Pagina.Acesso.grdAcesso.Column3.Check1:
+    *   Click     -> NoDefault
+    *   MouseDown -> NoDefault
+    *   MouseUp   -> This.KeyPress(13,0) + NoDefault
+    *   KeyPress  -> IF InList(nKeyCode,13,32) / Replace ... / Refresh / NoDefault
+    * Ref canonico no sistema novo: Formsigredtv.prg:963-1585 (grd_4c_Emps).
+    *==========================================================================
+    PROTECTED PROCEDURE BindToggleMarcas(par_oChk)
+        BINDEVENT(par_oChk, "KeyPress",  THIS, "ChkMarcasKeyPress")
+        BINDEVENT(par_oChk, "MouseUp",   THIS, "ChkMarcasMouseUp")
+        BINDEVENT(par_oChk, "MouseDown", THIS, "ChkMarcasMouseDown")
+        BINDEVENT(par_oChk, "Click",     THIS, "ChkMarcasClick")
+    ENDPROC
+
+    PROCEDURE ChkMarcasKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF INLIST(par_nKeyCode, 13, 32) ;
+                AND INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR") ;
+                AND USED("cursor_4c_Programas") AND !EOF("cursor_4c_Programas")
+            REPLACE cursor_4c_Programas.Marcas ;
+                WITH IIF(cursor_4c_Programas.Marcas = 0, 1, 0)
+            THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page2.grd_4c_Programas.Refresh()
+            NODEFAULT
+        ENDIF
+    ENDPROC
+
+    PROCEDURE ChkMarcasMouseUp(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+        THIS.ChkMarcasKeyPress(13, 0)
+        NODEFAULT
+    ENDPROC
+
+    PROCEDURE ChkMarcasMouseDown(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+        NODEFAULT
+    ENDPROC
+
+    PROCEDURE ChkMarcasClick()
+        NODEFAULT
+    ENDPROC
+
+    PROTECTED PROCEDURE BindToggleSelBarras(par_oChk)
+        BINDEVENT(par_oChk, "KeyPress",  THIS, "ChkSelBarrasKeyPress")
+        BINDEVENT(par_oChk, "MouseUp",   THIS, "ChkSelBarrasMouseUp")
+        BINDEVENT(par_oChk, "MouseDown", THIS, "ChkSelBarrasMouseDown")
+        BINDEVENT(par_oChk, "Click",     THIS, "ChkSelBarrasClick")
+    ENDPROC
+
+    PROCEDURE ChkSelBarrasKeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF INLIST(par_nKeyCode, 13, 32) ;
+                AND INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR") ;
+                AND USED("TmpBarra") AND !EOF("TmpBarra")
+            REPLACE TmpBarra.SelBarras WITH IIF(TmpBarra.SelBarras = 0, 1, 0)
+            THIS.pgf_4c_Paginas.Page2.pgf_4c_Abas.Page3.grd_4c_Barra.Refresh()
+            NODEFAULT
+        ENDIF
+    ENDPROC
+
+    PROCEDURE ChkSelBarrasMouseUp(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+        THIS.ChkSelBarrasKeyPress(13, 0)
+        NODEFAULT
+    ENDPROC
+
+    PROCEDURE ChkSelBarrasMouseDown(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+        NODEFAULT
+    ENDPROC
+
+    PROCEDURE ChkSelBarrasClick()
+        NODEFAULT
     ENDPROC
 
     *==========================================================================
