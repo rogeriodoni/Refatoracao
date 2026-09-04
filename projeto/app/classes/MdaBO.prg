@@ -425,8 +425,18 @@ DEFINE CLASS MdaBO AS BusinessBase
                        " WHERE NOT Ativas = 2" + ;
                        " ORDER BY Cemps"
 
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Emps")
+            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_EmpsSPT")
             IF loc_nResult >= 0
+                *-- Converte para READWRITE (SQLEXEC gera somente-leitura por padrao)
+                *-- Sem isso o UPDATE abaixo estoura e o CheckBox da Column1 do
+                *-- grd_4c_Emps aparece no grid mas nao aceita clique
+                IF USED("cursor_4c_Emps")
+                    USE IN cursor_4c_Emps
+                ENDIF
+                SELECT * FROM cursor_4c_EmpsSPT INTO CURSOR cursor_4c_Emps READWRITE
+                IF USED("cursor_4c_EmpsSPT")
+                    USE IN cursor_4c_EmpsSPT
+                ENDIF
                 *-- Marcar empresas vinculadas
                 IF !EMPTY(par_cCodigos)
                     loc_cSQL = "SELECT Emps FROM SigCdFsi WHERE Codigos = " + EscaparSQL(par_cCodigos)
@@ -466,8 +476,18 @@ DEFINE CLASS MdaBO AS BusinessBase
                        " WHERE b.OpeInatvs <> 1" + ;
                        " ORDER BY a.Dopes"
 
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Opers")
+            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_OpersSPT")
             IF loc_nResult >= 0
+                *-- Converte para READWRITE (SQLEXEC gera somente-leitura por padrao)
+                *-- Sem isso o UPDATE abaixo estoura e o CheckBox da Column1 do
+                *-- grd_4c_Opers aparece no grid mas nao aceita clique
+                IF USED("cursor_4c_Opers")
+                    USE IN cursor_4c_Opers
+                ENDIF
+                SELECT * FROM cursor_4c_OpersSPT INTO CURSOR cursor_4c_Opers READWRITE
+                IF USED("cursor_4c_OpersSPT")
+                    USE IN cursor_4c_OpersSPT
+                ENDIF
                 *-- Marcar operacoes vinculadas
                 IF !EMPTY(par_cCodigos)
                     loc_cSQL = "SELECT Dopes FROM SigCdFso WHERE Codigos = " + EscaparSQL(par_cCodigos)

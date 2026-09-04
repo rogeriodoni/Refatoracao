@@ -12767,12 +12767,49 @@ function Corrigir-GridEditavelCursorReadOnly {
     $arqBO = Join-Path $dirClasses ($mBO.Groups[1].Value + ".prg")
     if (-not (Test-Path $arqBO)) { return $Linhas }
 
-    $txtBO = (Get-Content $arqBO -Encoding UTF8) -join "`n"
+    $linhasBO = Get-Content $arqBO -Encoding UTF8
+    $txtBO    = $linhasBO -join "`n"
 
-    # Aliases criados por SQLEXEC (3o argumento literal)
+    # Metodos do BO REALMENTE chamados pelo Form (+ 2 niveis de chamadas internas
+    # THIS.<Metodo>() dentro deles). Sem esse filtro, SQLEXEC em metodo morto do
+    # template CRUD (ex: FpoBO.Buscar, que o FormFpo nunca chama) gera falso
+    # positivo. Origem do refinamento: revisao em lote 2026-09-04.
+    $metodosChamados = @{}
+    foreach ($m in [regex]::Matches($conteudo, '(?i)this_oBusinessObject\.(\w+)\s*\(')) {
+        $metodosChamados[$m.Groups[1].Value.ToLower()] = $true
+    }
+    # Mapear metodo -> linhas do BO (para expandir chamadas internas e localizar SQLEXEC)
+    $rxProcBO = [regex]'(?i)^\s*(PROTECTED\s+|HIDDEN\s+)?(PROCEDURE|FUNCTION)\s+(\w+)'
+    $metodoDeLinha = New-Object string[] $linhasBO.Count
+    $atual = ""
+    for ($k = 0; $k -lt $linhasBO.Count; $k++) {
+        $mm = $rxProcBO.Match($linhasBO[$k])
+        if ($mm.Success) { $atual = $mm.Groups[3].Value.ToLower() }
+        elseif ($linhasBO[$k] -match '(?i)^\s*(ENDPROC|ENDFUNC)\s*$') { $atual = "" }
+        $metodoDeLinha[$k] = $atual
+    }
+    if ($metodosChamados.Count -gt 0) {
+        for ($round = 1; $round -le 2; $round++) {
+            $novos = @{}
+            for ($k = 0; $k -lt $linhasBO.Count; $k++) {
+                if (-not $metodosChamados.ContainsKey($metodoDeLinha[$k])) { continue }
+                foreach ($m in [regex]::Matches($linhasBO[$k], '(?i)THIS\.(\w+)\s*\(')) {
+                    $nm = $m.Groups[1].Value.ToLower()
+                    if (-not $metodosChamados.ContainsKey($nm)) { $novos[$nm] = $true }
+                }
+            }
+            if ($novos.Count -eq 0) { break }
+            foreach ($nm in $novos.Keys) { $metodosChamados[$nm] = $true }
+        }
+    }
+
+    # Aliases criados por SQLEXEC (3o argumento literal), restrito a metodos alcancaveis
     $sqlexecAlias = @{}
-    foreach ($m in [regex]::Matches($txtBO, '(?i)SQLEXEC\s*\([^,()]+,[^,]+,\s*"(\w+)"')) {
-        $sqlexecAlias[$m.Groups[1].Value.ToLower()] = $true
+    for ($k = 0; $k -lt $linhasBO.Count; $k++) {
+        if ($metodosChamados.Count -gt 0 -and -not $metodosChamados.ContainsKey($metodoDeLinha[$k])) { continue }
+        foreach ($m in [regex]::Matches($linhasBO[$k], '(?i)SQLEXEC\s*\([^,()]+,[^,]+,\s*"(\w+)"')) {
+            $sqlexecAlias[$m.Groups[1].Value.ToLower()] = $true
+        }
     }
     # Aliases ja gravaveis: INTO CURSOR <x> ... READWRITE ou CREATE CURSOR <x>
     $gravavel = @{}

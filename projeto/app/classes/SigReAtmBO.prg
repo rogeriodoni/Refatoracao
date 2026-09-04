@@ -131,10 +131,20 @@ DEFINE CLASS SigReAtmBO AS RelatorioBase
             loc_cSQL = "SELECT 0 AS Marca, Cods, Descs FROM SigOpOpt " + ;
                        "WHERE Situas < 2 AND " + ;
                        "(RTRIM(Emps) = '' OR Emps = " + EscaparSQL(loc_cEmp) + ")"
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_TiposMat")
+            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_TiposMatSPT")
             IF loc_nResult < 1
                 THIS.this_cMensagemErro = "Erro ao carregar tipos de material"
                 loc_lSucesso = .F.
+            ENDIF
+            *-- Converte para READWRITE (SQLEXEC gera somente-leitura por padrao)
+            *-- Sem isso o INDEX ON abaixo e os REPLACE ALL Marca no Form
+            *-- (marcar/desmarcar todos) estouram e o CheckBox nao aceita clique
+            IF USED("cursor_4c_TiposMat")
+                USE IN cursor_4c_TiposMat
+            ENDIF
+            SELECT * FROM cursor_4c_TiposMatSPT INTO CURSOR cursor_4c_TiposMat READWRITE
+            IF USED("cursor_4c_TiposMatSPT")
+                USE IN cursor_4c_TiposMatSPT
             ENDIF
             SELECT cursor_4c_TiposMat
             INDEX ON Cods  TAG Cods
