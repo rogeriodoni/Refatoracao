@@ -313,11 +313,21 @@ DEFINE CLASS sigredtvBO AS RelatorioBase
             WAIT WINDOW "Aguarde !!! Carregando previs" + CHR(245) + "es..." NOWAIT
             loc_cQuery = "SELECT 0 AS Imps, cMes, cAno, cTitulo, Moeda " + ;
                          "FROM SigCdMrp GROUP BY cMes, cAno, cTitulo, Moeda"
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cQuery, "crSigCdMrp")
+            loc_nResult = SQLEXEC(gnConnHandle, loc_cQuery, "crSigCdMrpSPT")
             IF loc_nResult < 1
                 THIS.this_cMensagemErro = "Falha ao carregar SigCdMrp"
                 MsgErro(THIS.this_cMensagemErro, "sigredtvBO.InicializarDados")
                 loc_lSucesso = .F.
+            ENDIF
+            *-- Converte para READWRITE (SQLEXEC gera somente-leitura por padrao)
+            *-- Sem isso o INDEX ON abaixo e os REPLACE de Imps no Form (marcar/
+            *-- desmarcar do grd_4c_Orcs) estouram e o CheckBox nao aceita clique
+            IF USED("crSigCdMrp")
+                USE IN crSigCdMrp
+            ENDIF
+            SELECT * FROM crSigCdMrpSPT INTO CURSOR crSigCdMrp READWRITE
+            IF USED("crSigCdMrpSPT")
+                USE IN crSigCdMrpSPT
             ENDIF
             SELECT crSigCdMrp
             INDEX ON cTitulo TAG cTitulo
@@ -349,11 +359,21 @@ DEFINE CLASS sigredtvBO AS RelatorioBase
         TRY
             loc_cQuery = "SELECT a.cemps, a.razas, 1 AS Imps " + ;
                          "FROM SigCdEmp a ORDER BY a.cemps"
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cQuery, "csSigCdEmp")
+            loc_nResult = SQLEXEC(gnConnHandle, loc_cQuery, "csSigCdEmpSPT")
             IF loc_nResult < 1
                 THIS.this_cMensagemErro = "Falha ao carregar SigCdEmp"
                 MsgErro(THIS.this_cMensagemErro, "sigredtvBO.CarregarEmpresas")
                 loc_lSucesso = .F.
+            ENDIF
+            *-- Converte para READWRITE (SQLEXEC gera somente-leitura por padrao)
+            *-- Sem isso os REPLACE de Imps no Form (marcar/desmarcar do grd_4c_Emps)
+            *-- estouram e o CheckBox aparece no grid mas nao aceita clique
+            IF USED("csSigCdEmp")
+                USE IN csSigCdEmp
+            ENDIF
+            SELECT * FROM csSigCdEmpSPT INTO CURSOR csSigCdEmp READWRITE
+            IF USED("csSigCdEmpSPT")
+                USE IN csSigCdEmpSPT
             ENDIF
             loc_lSucesso = .T.
         CATCH TO loc_oErro
@@ -395,11 +415,21 @@ DEFINE CLASS sigredtvBO AS RelatorioBase
                 USE IN crQtdEmp
             ENDIF
 
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cQuery, "crSigCdMrp")
+            loc_nResult = SQLEXEC(gnConnHandle, loc_cQuery, "crSigCdMrpSPT")
             IF loc_nResult < 1
                 THIS.this_cMensagemErro = "Falha ao carregar orcamentos (SigCdMrp)"
                 MsgErro(THIS.this_cMensagemErro, "sigredtvBO.DisponibilizarOrcamentos")
                 loc_lSucesso = .F.
+            ENDIF
+
+            *-- Converte para READWRITE (SQLEXEC gera somente-leitura por padrao)
+            *-- Sem isso o INDEX ON abaixo e os REPLACE de Imps no Form estouram
+            IF USED("crSigCdMrp")
+                USE IN crSigCdMrp
+            ENDIF
+            SELECT * FROM crSigCdMrpSPT INTO CURSOR crSigCdMrp READWRITE
+            IF USED("crSigCdMrpSPT")
+                USE IN crSigCdMrpSPT
             ENDIF
 
             SELECT crSigCdMrp
