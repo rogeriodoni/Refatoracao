@@ -4782,6 +4782,31 @@ function Corrigir-CntBotoesLeft542 {
         return $Linhas
     }
 
+    # SAFETY GUARD v2 (2026-09-04, Erro145-v2): Left=542 assume container com os 5
+    # botoes CRUD canonicos (5..305, terminando em 917 onde comeca cnt_4c_Saida).
+    # Container com botao EXTRA (ex: Formacg tem cmd_4c_CopiarAcesso) precisa comecar
+    # mais a esquerda para caber o botao adicional — forcar 542 empurra o ultimo botao
+    # para fora/por cima do Encerrar. Mesmo criterio do Pattern #182 v2.
+    $conteudoCnt = $Linhas -join "`n"
+    $canonicosCnt = @('cmd_4c_incluir','cmd_4c_visualizar','cmd_4c_consultar','cmd_4c_alterar',
+                      'cmd_4c_excluir','cmd_4c_buscar','cmd_4c_encerrar')
+    $extrasCnt = @()
+    foreach ($m in [regex]::Matches($conteudoCnt, '(?i)cnt_4c_Botoes\.AddObject\s*\(\s*"(cmd_4c_\w+)"')) {
+        if ($canonicosCnt -notcontains $m.Groups[1].Value.ToLower()) { $extrasCnt += $m.Groups[1].Value }
+    }
+    if ($extrasCnt.Count -gt 0) {
+        $lstExtras = ($extrasCnt | Select-Object -Unique) -join ", "
+        Add-Correcao -Tipo "WARN-CNT-BOTOES-LEFT-BOTAO-EXTRA" -Linha 0 `
+            -Original "cnt_4c_Botoes com botao extra: $lstExtras" `
+            -Corrigido "(auto-fix Left=542 suprimido — container precisa de mais largura)" `
+            -Descricao ("cnt_4c_Botoes contem botao(oes) EXTRA ($lstExtras) alem dos CRUD canonicos, entao Left=542 " +
+                "(que assume 5 botoes terminando em 917) NAO se aplica — o container precisa comecar mais a esquerda. " +
+                "Auto-fix suprimido. REVISAR MANUAL junto com Pattern #182 v2. Ref Formacg: Left=390, Width=540, " +
+                "CopiarAcesso=5 e bloco CRUD em 152/227/302/377/452 (abs 542..917). Origem: Erro145-v2 (2026-09-04).")
+        Write-Host "[CNT-BOTOES-LEFT-542 WARN] cnt_4c_Botoes tem botao extra ($lstExtras) - auto-fix de Left suprimido" -ForegroundColor Yellow
+        return $Linhas
+    }
+
     # Detecta AddObject("cnt_4c_Botoes", "Container") + linha posterior com .Left = <qualquer valor != 542>
     # Requer estar dentro do WITH cnt_4c_Botoes (nao de outro container)
     $resultado = @()
@@ -12423,6 +12448,12 @@ function Corrigir-BotoesCrudLeftAbsoluto {
     # Auto-fix: substitui .Left = X incorreto pelo valor canonico dentro de cada
     # bloco WITH. Guard: apenas em Form CRUD (AS FormBase). Idempotente.
     # Origem: Erro143 (2026-09-03, 32 forms cadastros — sweep fix_buttons_left.ps1).
+    #
+    # v2 (2026-09-04, Erro145-v2): os offsets canonicos 5/80/155/230/305 assumem que
+    # cnt_4c_Botoes contem APENAS os botoes CRUD padrao. Forms com botao EXTRA no
+    # mesmo container (ex: Formacg tem cmd_4c_CopiarAcesso em Left=5, deslocando o
+    # bloco CRUD para 152/227/302/377/452) sao legitimos — aplicar o canonico ali
+    # empilha dois botoes em Left=5 e quebra o layout. Nesses casos: WARNING, nao muta.
     param([string[]]$Linhas)
 
     if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
@@ -12430,6 +12461,30 @@ function Corrigir-BotoesCrudLeftAbsoluto {
     # Guard: precisa herdar FormBase (Form CRUD)
     $conteudo = $Linhas -join "`n"
     if ($conteudo -notmatch '(?im)^\s*DEFINE\s+CLASS\s+\w+\s+AS\s+FormBase') { return $Linhas }
+
+    # Guard v2: container com botao EXTRA -> offsets canonicos nao se aplicam
+    $canonicos = @('cmd_4c_incluir','cmd_4c_visualizar','cmd_4c_consultar','cmd_4c_alterar',
+                   'cmd_4c_excluir','cmd_4c_buscar','cmd_4c_encerrar')
+    $botoesExtras = @()
+    foreach ($m in [regex]::Matches($conteudo, '(?i)cnt_4c_Botoes\.AddObject\s*\(\s*"(cmd_4c_\w+)"')) {
+        $nome = $m.Groups[1].Value
+        if ($canonicos -notcontains $nome.ToLower()) { $botoesExtras += $nome }
+    }
+    if ($botoesExtras.Count -gt 0) {
+        $extras = ($botoesExtras | Select-Object -Unique) -join ", "
+        $descricao = "Pattern #182 v2 (Erro145-v2): cnt_4c_Botoes contem botao(oes) EXTRA ($extras) alem dos " +
+            "CRUD canonicos, entao os offsets 5/80/155/230/305 NAO se aplicam — o bloco CRUD fica legitimamente " +
+            "deslocado para abrir espaco. Auto-mutate SUPRIMIDO para nao empilhar dois botoes no mesmo Left e " +
+            "quebrar o layout. REVISAR MANUAL: manter passo de 75px entre botoes e terminar o ultimo em Left " +
+            "absoluto 917 (onde comeca cnt_4c_Saida). Ref Formacg: CopiarAcesso=5, Incluir=152, Visualizar=227, " +
+            "Alterar=302, Excluir=377, Buscar=452 (container Left=390)."
+        Add-Correcao -Tipo "WARN-182-CONTAINER-COM-BOTAO-EXTRA" -Linha 0 `
+            -Original "cnt_4c_Botoes com botao extra: $extras" `
+            -Corrigido "(auto-fix de Left suprimido — revisar posicoes manualmente)" `
+            -Descricao $descricao
+        Write-Host "[Pattern #182 WARN] cnt_4c_Botoes tem botao extra ($extras) - auto-fix de Left suprimido" -ForegroundColor Yellow
+        return $Linhas
+    }
 
     # Mapa de botao -> Left canonico RELATIVO
     $leftCanonico = @{
@@ -12555,6 +12610,200 @@ function Corrigir-GridColumnCountEmCarregar {
                     -Descricao $descricao
                 Write-Host "[Pattern #183 WARN] Linha $($i + 1): ColumnCount em Carregar* pode destruir AddObject" -ForegroundColor Yellow
             }
+        }
+    }
+
+    return $Linhas
+}
+
+function Corrigir-GridEditavelCursorReadOnly {
+    # Pattern #184 (Erro145-v2): Grid com coluna EDITAVEL (CheckBox/ComboBox via
+    # AddObject + CurrentControl) ligado a cursor criado direto por SQLEXEC().
+    # No VFP, cursor de SQL pass-through nasce SOMENTE-LEITURA: o controle embutido
+    # RENDERIZA em todas as linhas (Sparse=.F.) mas a celula NUNCA entra em edicao —
+    # clicar no CheckBox nao faz nada. O sintoma parece bug de Enabled/ReadOnly
+    # (que estao corretos), o que faz perder horas no lugar errado.
+    #
+    # Fix canonico no BO (template CCJBO.prg:214):
+    #   loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "<alias>Tmp")
+    #   IF USED("<alias>") / USE IN <alias> / ENDIF
+    #   SELECT * FROM <alias>Tmp INTO CURSOR <alias> READWRITE
+    #   IF USED("<alias>Tmp") / USE IN <alias>Tmp / ENDIF
+    #
+    # COROLARIO (WARN #2): como o cursor passa a ser fechado/recriado, o Grid perde
+    # o binding e reatribuir RecordSource reseta Column.Sparse/.CurrentControl/
+    # .ReadOnly (alem de Width/Header1.Caption — Pattern #180). Nos metodos
+    # Carregar* restaurar `.Sparse = .F.` + `.CurrentControl = "<controle>"` APOS o
+    # rebind, e reaplicar o Habilitar*Grid(<editavel>) DEPOIS de todas as cargas
+    # (HabilitarCampos(.T.) em BtnIncluirClick roda ANTES do rebind e eh descartado).
+    #
+    # WARNING-only: converter para READWRITE tem custo e so faz sentido quando a
+    # coluna eh de fato editavel; a decisao (e quais colunas) exige contexto.
+    # Origem: Erro145-v2 (2026-09-04, Formacg/acgBO).
+    param([string[]]$Linhas, [string]$Arquivo = "")
+
+    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
+    if ([string]::IsNullOrEmpty($Arquivo)) { return $Linhas }
+
+    # Guard: aplicavel apenas a Form*.prg (o BO eh lido como arquivo secundario)
+    $nomeArq = Split-Path -Leaf $Arquivo
+    if ($nomeArq -notlike 'Form*.prg') { return $Linhas }
+
+    # GUARD RAPIDO: sem CurrentControl nao ha coluna editavel — evita todo o I/O
+    $temCurrentControl = $false
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        if ($Linhas[$i] -like '*CurrentControl*') { $temCurrentControl = $true; break }
+    }
+    if (-not $temCurrentControl) { return $Linhas }
+
+    $rxVarGrid   = [regex]'(?i)^\s*(\w+)\s*=\s*[\w.]*\.(grd_4c_\w+)\s*$'
+    $rxWith      = [regex]'(?i)^\s*WITH\s+(.+?)\s*$'
+    $rxEndWith   = [regex]'(?i)^\s*ENDWITH\s*$'
+    $rxProc      = [regex]'(?i)^\s*(PROTECTED\s+|HIDDEN\s+)?(PROCEDURE|FUNCTION)\s+(\w+)'
+    $rxEndProc   = [regex]'(?i)^\s*(ENDPROC|ENDFUNC)\s*$'
+    $rxRecSource = [regex]'(?i)^\s*([\w.]*?)\.?RecordSource\s*=\s*"(\w+)"'
+    $rxCurrCtrl  = [regex]'(?i)^\s*([\w.]*?)\.?CurrentControl\s*=\s*"(\w+)"'
+
+    $varParaGrid    = @{}   # variavel local -> grd_4c_X
+    $gridsEditaveis = @{}   # grd_4c_X -> nome do controle embutido
+    $aliasPorGrid   = @{}   # grd_4c_X -> hashtable alias -> linha
+    $rebinds        = @()   # rebinds de RecordSource dentro de metodos Carregar*
+    $withStack      = New-Object System.Collections.ArrayList
+    $metodoAtual    = ""
+
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        $ln = $Linhas[$i]
+
+        $mp = $rxProc.Match($ln)
+        if ($mp.Success) {
+            $metodoAtual = $mp.Groups[3].Value
+            $withStack.Clear()
+            continue
+        }
+        if ($rxEndProc.IsMatch($ln)) { $metodoAtual = ""; $withStack.Clear(); continue }
+
+        $mw = $rxWith.Match($ln)
+        if ($mw.Success) { [void]$withStack.Add($mw.Groups[1].Value); continue }
+        if ($rxEndWith.IsMatch($ln)) {
+            if ($withStack.Count -gt 0) { $withStack.RemoveAt($withStack.Count - 1) }
+            continue
+        }
+
+        $mv = $rxVarGrid.Match($ln)
+        if ($mv.Success) {
+            $varParaGrid[$mv.Groups[1].Value.ToLower()] = $mv.Groups[2].Value.ToLower()
+            continue
+        }
+
+        # Resolve o grid a partir do prefixo da linha (ou do WITH ativo se vazio)
+        $mc = $rxCurrCtrl.Match($ln)
+        $mr = $rxRecSource.Match($ln)
+        if (-not $mc.Success -and -not $mr.Success) { continue }
+
+        $expr = if ($mc.Success) { $mc.Groups[1].Value } else { $mr.Groups[1].Value }
+        if ([string]::IsNullOrWhiteSpace($expr) -and $withStack.Count -gt 0) {
+            $expr = $withStack[$withStack.Count - 1]
+        }
+        $grid = $null
+        if (-not [string]::IsNullOrWhiteSpace($expr)) {
+            $mg = [regex]::Match($expr, '(?i)(grd_4c_\w+)')
+            if ($mg.Success) {
+                $grid = $mg.Groups[1].Value.ToLower()
+            } else {
+                $raiz = ($expr -split '\.')[0].ToLower()
+                if ($varParaGrid.ContainsKey($raiz)) { $grid = $varParaGrid[$raiz] }
+            }
+        }
+        if ($null -eq $grid) { continue }
+
+        if ($mc.Success) {
+            $gridsEditaveis[$grid] = $mc.Groups[2].Value
+        } else {
+            if (-not $aliasPorGrid.ContainsKey($grid)) { $aliasPorGrid[$grid] = @{} }
+            $aliasPorGrid[$grid][$mr.Groups[2].Value] = ($i + 1)
+            if ($metodoAtual -like 'Carregar*') {
+                $rebinds += [PSCustomObject]@{ Grid = $grid; Alias = $mr.Groups[2].Value; Linha = ($i + 1); Metodo = $metodoAtual }
+            }
+        }
+    }
+
+    if ($gridsEditaveis.Count -eq 0) { return $Linhas }
+
+    # --- WARN #2 (in-file): rebind em Carregar* sem restaurar Sparse/CurrentControl ---
+    foreach ($rb in $rebinds) {
+        if (-not $gridsEditaveis.ContainsKey($rb.Grid)) { continue }
+        # So conta restauracao INCONDICIONAL: o CurrentControl dentro do bloco
+        # defensivo `IF !PEMSTATUS(...)` roda apenas quando o controle foi destruido,
+        # nao cobre o reset silencioso causado pelo proprio rebind de RecordSource.
+        $restaurou = $false
+        $depthIf   = 0
+        for ($j = $rb.Linha; $j -lt $Linhas.Count; $j++) {
+            if ($rxEndProc.IsMatch($Linhas[$j])) { break }
+            if ($Linhas[$j] -match '(?i)^\s*IF\s') { $depthIf++ }
+            elseif ($Linhas[$j] -match '(?i)^\s*ENDIF\s*$') { if ($depthIf -gt 0) { $depthIf-- } }
+            elseif ($depthIf -eq 0 -and $Linhas[$j] -like '*CurrentControl*') { $restaurou = $true; break }
+        }
+        if ($restaurou) { continue }
+        $ctrl = $gridsEditaveis[$rb.Grid]
+        $descricao = "Pattern #184 (Erro145-v2): $($rb.Metodo) reatribui RecordSource do grid '$($rb.Grid)' " +
+            "(coluna editavel, CurrentControl = '$ctrl') sem restaurar .Sparse/.CurrentControl depois. " +
+            "Reatribuir RecordSource reseta Column.Sparse/.CurrentControl/.ReadOnly alem de Width/Header1.Caption " +
+            "(Problema 48 / Pattern #180) — o CheckBox/ComboBox some ou para de aceitar clique. REVISAR MANUAL: " +
+            "apos o bloco de ControlSource/Width adicionar .Sparse = .F. e .CurrentControl = '$ctrl', e reaplicar " +
+            "Habilitar*Grid(<modo editavel>) DEPOIS de todas as cargas (nunca antes do rebind — seria descartado)."
+        Add-Correcao -Tipo "WARN-184-REBIND-SEM-CURRENTCONTROL" -Linha $rb.Linha `
+            -Original $Linhas[$rb.Linha - 1].Trim() `
+            -Corrigido "(adicionar .Sparse = .F. + .CurrentControl = '$ctrl' apos o rebind)" `
+            -Descricao $descricao
+        Write-Host "[Pattern #184 WARN] Linha $($rb.Linha): rebind de $($rb.Grid) sem restaurar CurrentControl" -ForegroundColor Yellow
+    }
+
+    # --- WARN #1 (cross-file): alias de grid editavel criado por SQLEXEC sem READWRITE ---
+    $conteudo = $Linhas -join "`n"
+    $mBO = [regex]::Match($conteudo, '(?i)CREATEOBJECT\s*\(\s*"(\w+BO)"\s*\)')
+    if (-not $mBO.Success) { return $Linhas }
+
+    $dirClasses = Join-Path (Split-Path (Split-Path (Split-Path $Arquivo -Parent) -Parent) -Parent) "classes"
+    $arqBO = Join-Path $dirClasses ($mBO.Groups[1].Value + ".prg")
+    if (-not (Test-Path $arqBO)) { return $Linhas }
+
+    $txtBO = (Get-Content $arqBO -Encoding UTF8) -join "`n"
+
+    # Aliases criados por SQLEXEC (3o argumento literal)
+    $sqlexecAlias = @{}
+    foreach ($m in [regex]::Matches($txtBO, '(?i)SQLEXEC\s*\([^,()]+,[^,]+,\s*"(\w+)"')) {
+        $sqlexecAlias[$m.Groups[1].Value.ToLower()] = $true
+    }
+    # Aliases ja gravaveis: INTO CURSOR <x> ... READWRITE ou CREATE CURSOR <x>
+    $gravavel = @{}
+    foreach ($m in [regex]::Matches($txtBO, '(?i)INTO\s+CURSOR\s+(\w+)[^\r\n]*\bREADWRITE\b')) {
+        $gravavel[$m.Groups[1].Value.ToLower()] = $true
+    }
+    foreach ($m in [regex]::Matches($txtBO, '(?i)CREATE\s+CURSOR\s+(\w+)')) {
+        $gravavel[$m.Groups[1].Value.ToLower()] = $true
+    }
+
+    foreach ($g in $gridsEditaveis.Keys) {
+        if (-not $aliasPorGrid.ContainsKey($g)) { continue }
+        foreach ($alias in $aliasPorGrid[$g].Keys) {
+            $ak = $alias.ToLower()
+            if (-not $sqlexecAlias.ContainsKey($ak)) { continue }
+            if ($gravavel.ContainsKey($ak)) { continue }
+            $nLinha = $aliasPorGrid[$g][$alias]
+            $ctrl   = $gridsEditaveis[$g]
+            $descricao = "Pattern #184 (Erro145-v2): grid '$g' tem coluna EDITAVEL (CurrentControl = '$ctrl') ligada " +
+                "ao cursor '$alias', que em $($mBO.Groups[1].Value).prg eh criado direto por SQLEXEC() sem conversao " +
+                "READWRITE. Cursor de SQL pass-through nasce SOMENTE-LEITURA no VFP: o CheckBox/ComboBox RENDERIZA em " +
+                "todas as linhas mas a celula NUNCA entra em edicao (clicar nao faz nada) — o sintoma parece bug de " +
+                "Enabled/ReadOnly, que estao corretos. REVISAR MANUAL no BO: SQLEXEC em alias TEMPORARIO + " +
+                "IF USED('$alias') / USE IN $alias / ENDIF + SELECT * FROM ${alias}Tmp INTO CURSOR $alias READWRITE + " +
+                "USE IN ${alias}Tmp (template CCJBO.prg:214). Depois garantir restauracao de .Sparse/.CurrentControl " +
+                "no rebind (ver WARN-184-REBIND-SEM-CURRENTCONTROL)."
+            Add-Correcao -Tipo "WARN-184-CURSOR-SQLEXEC-READONLY" -Linha $nLinha `
+                -Original $Linhas[$nLinha - 1].Trim() `
+                -Corrigido "(no BO: converter '$alias' para READWRITE via SELECT ... INTO CURSOR $alias READWRITE)" `
+                -Descricao $descricao
+            Write-Host "[Pattern #184 WARN] Linha ${nLinha}: cursor '$alias' (grid editavel $g) eh read-only (SQLEXEC sem READWRITE)" -ForegroundColor Yellow
         }
     }
 
@@ -12767,6 +13016,7 @@ function Invoke-CorrecaoAutomatica {
     $linhas = Corrigir-PageFramePaginasWidthHardcoded -Linhas $linhas
     $linhas = Corrigir-BotoesCrudLeftAbsoluto -Linhas $linhas
     $linhas = Corrigir-GridColumnCountEmCarregar -Linhas $linhas
+    $linhas = Corrigir-GridEditavelCursorReadOnly -Linhas $linhas -Arquivo $Arquivo
 
     # Salva arquivo corrigido em UTF-8 SEM BOM.
     # - VFP9 nao suporta BOM (por isso removemos no read com bytes[3..])

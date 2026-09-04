@@ -9299,3 +9299,108 @@ Erro144 (2026-09-03, Formacg "Acesso de Grupos"): 3 grids afetados (Programas/Ba
 - Origem: Erro144 (2026-09-03, Formacg — user reportou "nao existe o check box para marcar o acesso").
 
 
+
+## 184. Grid com Coluna EDITAVEL Exige Cursor READWRITE — SQLEXEC() Cria Cursor Somente-Leitura (Erro145-v2 2026-09-04)
+
+### Problema
+
+No VFP, cursor criado direto por `SQLEXEC()` (SQL pass-through) nasce **SOMENTE-LEITURA**. Se um Grid ligado a esse cursor tem coluna editavel (`AddObject` de CheckBox/ComboBox + `CurrentControl` + `Sparse = .F.`), o controle **RENDERIZA normalmente em todas as linhas**, mas a celula **NUNCA entra em edicao**: clicar no CheckBox nao faz nada.
+
+O sintoma engana: parece bug de `Enabled` / `Column.ReadOnly` / `Grid.ReadOnly`, e o tempo vai todo para o lado errado — essas propriedades ja estao corretas. A causa esta no BO, nao no Form.
+
+```foxpro
+*-- ERRADO (acgBO.prg antes do fix): cursor read-only alimenta grid editavel
+PROCEDURE CarregarProgramas(par_cGrupos)
+    loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Programas")
+    IF loc_nResult >= 0
+        IF USED("cursor_4c_Programas")
+            SELECT cursor_4c_Programas
+            GO TOP
+        ENDIF
+        loc_lResultado = .T.
+    ENDIF
+ENDPROC
+```
+
+Complemento: `SET FILTER`, `LOCATE`, `SCAN` e leitura funcionam normalmente no cursor read-only, entao o bug so aparece na hora de editar — passa por todos os testes de carga.
+
+### Fix canonico (template `CCJBO.prg:214`)
+
+```foxpro
+*-- CORRETO: SQLEXEC em alias TEMPORARIO + conversao READWRITE
+PROCEDURE CarregarProgramas(par_cGrupos)
+    loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_ProgTmp")
+    IF loc_nResult >= 0
+        *-- Converte para READWRITE (SQLEXEC gera somente-leitura por padrao)
+        *-- Sem isso o CheckBox chk_4c_Marcas aparece no grid mas nao aceita clique
+        IF USED("cursor_4c_Programas")
+            USE IN cursor_4c_Programas
+        ENDIF
+        SELECT * FROM cursor_4c_ProgTmp INTO CURSOR cursor_4c_Programas READWRITE
+        IF USED("cursor_4c_ProgTmp")
+            USE IN cursor_4c_ProgTmp
+        ENDIF
+        IF USED("cursor_4c_Programas")
+            SELECT cursor_4c_Programas
+            GO TOP
+        ENDIF
+        loc_lResultado = .T.
+    ENDIF
+ENDPROC
+```
+
+### Corolario obrigatorio: restaurar Sparse/CurrentControl apos o rebind
+
+Como o cursor passa a ser **fechado e recriado**, o Grid perde o binding e reatribuir `RecordSource` reseta `Column.Sparse`, `Column.CurrentControl` e `Column.ReadOnly` — alem de `Column.Width` e `Header1.Caption` (Problema 48 / Pattern #180, que a maioria dos forms ja restaura).
+
+```foxpro
+*-- No Form, dentro de Carregar*Aba, APOS o bloco de ControlSource/Width/Caption:
+*-- Reatribuir RecordSource reseta Sparse/CurrentControl da coluna
+loc_oGrid.Column3.Sparse = .F.
+loc_oGrid.Column3.CurrentControl = "chk_4c_Marcas"
+```
+
+**A restauracao dentro do `IF !PEMSTATUS(...)` defensivo NAO basta**: aquele bloco so roda quando o controle foi de fato destruido (Pattern #183), e o reset causado pelo rebind de `RecordSource` e silencioso — o objeto continua existindo, so perde a ligacao com a coluna.
+
+### Ordem de chamada: habilitar DEPOIS de carregar
+
+```foxpro
+*-- ERRADO: HabilitarCampos roda ANTES do rebind e e descartado
+PROCEDURE BtnIncluirClick()
+    THIS.this_cModoAtual = "INCLUIR"
+    THIS.HabilitarCampos(.T.)        && seta Column.ReadOnly = .F. ...
+    THIS.CarregarDadosGrupo("")      && ... e o rebind aqui reseta tudo
+ENDPROC
+
+*-- CORRETO: reaplicar o estado do modo no fim de CarregarDadosGrupo
+PROCEDURE CarregarDadosGrupo(par_cGrupos)
+    THIS.CarregarProgramasAba(par_cGrupos)
+    THIS.CarregarBarraAba(par_cGrupos)
+    THIS.CarregarTelasAba(par_cGrupos)
+    *-- Rebind de RecordSource reseta Column.ReadOnly/Enabled: reaplicar
+    THIS.HabilitarColunasGrid(INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR"))
+ENDPROC
+```
+
+### Heuristica de deteccao (Pattern #184)
+
+WARNING-only em dois eixos (cross-file Form -> BO; converter para READWRITE tem custo e so faz sentido quando a coluna e realmente editavel):
+
+1. Guard: arquivo `Form*.prg` que contenha `CurrentControl` (sem isso nao ha coluna editavel — evita todo o I/O).
+2. Mapear grid -> controle embutido (`.CurrentControl = "x"`, resolvendo `WITH` e variaveis locais `loc_oGrid = <path>.grd_4c_X`).
+3. Mapear grid -> aliases via `.RecordSource = "<alias>"`.
+4. **WARN-184-REBIND-SEM-CURRENTCONTROL**: rebind de `RecordSource` dentro de metodo `Carregar*` de grid editavel sem `.CurrentControl` **incondicional** depois (ignora o que esta dentro de `IF !PEMSTATUS(...)`).
+5. **WARN-184-CURSOR-SQLEXEC-READONLY**: localizar o BO via `CREATEOBJECT("<Xxx>BO")`, e para cada alias de grid editavel que aparece como 3o argumento de `SQLEXEC(...)` no BO **sem** um `INTO CURSOR <alias> ... READWRITE` ou `CREATE CURSOR <alias>` correspondente, emitir WARNING.
+
+### Impacto
+
+Erro145-v2 (2026-09-04, Formacg "Acesso de Grupos"): 3 cursores read-only (`cursor_4c_Programas`, `TmpBarra`, `crSigAcTel`) alimentando 3 grids editaveis — checkboxes de Programas e Barra e o ComboBox de Status nao aceitavam edicao em modo INCLUIR/ALTERAR. Sweep do Pattern #184 sobre 402 forms: **11 forms com WARNING** (FormMda, FormBAL, Formsigredtv, FormSigReAtm, FormSIGREEQR, FormFpo, FormFop, Formacu, FormSigPdMp3, FormPGR, Formsigprdis).
+
+### Referencias
+
+- Fix aplicado: `C:\4c\projeto\app\classes\acgBO.prg` (`CarregarProgramas`/`CarregarBarra`/`CarregarAcessoTelas`) + `C:\4c\projeto\app\forms\cadastros\Formacg.prg` (`Carregar*Aba`, `CarregarDadosGrupo`).
+- Template canonico da conversao: `C:\4c\projeto\app\classes\CCJBO.prg:214`.
+- Warning: `C:\4c\automation\CorretorAutomatico.ps1` `Corrigir-GridEditavelCursorReadOnly` (Pattern #184).
+- Complementa Pattern #180 (reset de Width/Header1.Caption no rebind) e Pattern #183 (ColumnCount destroi AddObject).
+- Origem: Erro145-v2 (2026-09-04, Formacg — user reportou "na grid aparecem os checkbox mas ao clicar em incluir nao habilita para marcar ou nao").
+- **Guard correlato no sweep (Pattern #182 v2 / `CNT-BOTOES-LEFT-542`)**: `Formacg` tem `cmd_4c_CopiarAcesso` dentro de `cnt_4c_Botoes`, entao o bloco CRUD fica legitimamente deslocado (`Left=390`/`Width=540`; CopiarAcesso=5, Incluir=152, Visualizar=227, Alterar=302, Excluir=377, Buscar=452 — absolutos 542..917). O corretor revertia isso para os offsets canonicos 5/80/155/230/305 e o container para `Left=542`, empilhando CopiarAcesso e Incluir no mesmo Left. Ambas as funcoes agora suprimem o auto-mutate quando o container tem CommandButton fora do conjunto canonico, emitindo WARNING.
