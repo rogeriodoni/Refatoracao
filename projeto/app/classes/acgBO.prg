@@ -308,8 +308,17 @@ DEFINE CLASS acgBO AS BusinessBase
                 " AND b.grupos = " + EscaparSQL(ALLTRIM(par_cGrupos)) + ;
                 " AND b.usuarios = ''" + ;
                 " ORDER BY a.Descricaos, a.Programas, a.Parametros"
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Programas")
+            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_ProgTmp")
             IF loc_nResult >= 0
+                *-- Converte para READWRITE (SQLEXEC gera somente-leitura por padrao)
+                *-- Sem isso o CheckBox chk_4c_Marcas aparece no grid mas nao aceita clique
+                IF USED("cursor_4c_Programas")
+                    USE IN cursor_4c_Programas
+                ENDIF
+                SELECT * FROM cursor_4c_ProgTmp INTO CURSOR cursor_4c_Programas READWRITE
+                IF USED("cursor_4c_ProgTmp")
+                    USE IN cursor_4c_ProgTmp
+                ENDIF
                 IF USED("cursor_4c_Programas")
                     SELECT cursor_4c_Programas
                     GO TOP
@@ -345,8 +354,17 @@ DEFINE CLASS acgBO AS BusinessBase
                 " AND b.usuarios = ''" + ;
                 " WHERE a.grupos = '' AND a.usuarios = ''" + ;
                 " ORDER BY a.BarraOrdem, a.Descricaos"
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "TmpBarra")
+            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "TmpBarraSPT")
             IF loc_nResult >= 0
+                *-- Converte para READWRITE (SQLEXEC gera somente-leitura por padrao)
+                *-- Sem isso o CheckBox chk_4c_SelBarras aparece no grid mas nao aceita clique
+                IF USED("TmpBarra")
+                    USE IN TmpBarra
+                ENDIF
+                SELECT * FROM TmpBarraSPT INTO CURSOR TmpBarra READWRITE
+                IF USED("TmpBarraSPT")
+                    USE IN TmpBarraSPT
+                ENDIF
                 IF USED("TmpBarra")
                     SELECT TmpBarra
                     GO TOP
@@ -394,8 +412,17 @@ DEFINE CLASS acgBO AS BusinessBase
                     " WHERE a.grupos = '' AND a.usuarios = ''" + ;
                     " ORDER BY a.cCodigos"
             ENDIF
-            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "crSigAcTel")
+            loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "crSigAcTelSPT")
             IF loc_nResult >= 0
+                *-- Converte para READWRITE (SQLEXEC gera somente-leitura por padrao)
+                *-- Sem isso o ComboBox cbo_4c_CmbStatus aparece no grid mas nao aceita edicao
+                IF USED("crSigAcTel")
+                    USE IN crSigAcTel
+                ENDIF
+                SELECT * FROM crSigAcTelSPT INTO CURSOR crSigAcTel READWRITE
+                IF USED("crSigAcTelSPT")
+                    USE IN crSigAcTelSPT
+                ENDIF
                 IF USED("crSigAcTel")
                     SELECT crSigAcTel
                     GO TOP

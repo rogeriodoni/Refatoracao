@@ -136,7 +136,9 @@ DEFINE CLASS Formacg AS FormBase
         ENDWITH
 
         *-- Container botoes CRUD (CopiarAcesso, Incluir, Consultar, Alterar, Excluir, Buscar)
-        *-- Left=390 alinha com original: cmdCopia(390) + Grupo_op(540); 6 botoes 75+5px cada
+        *-- Left=390 espelha o legado (cmdCopia@390 + Grupo_op@540)
+        *-- CopiarAcesso@5 (abs 395); bloco CRUD 152/227/302/377/452 (abs 542/617/692/767/842)
+        *-- ordem canonica FormCor: Incluir, Visualizar, Alterar, Excluir, Buscar; Encerrar@917
         loc_oP1.AddObject("cnt_4c_Botoes", "Container")
         WITH loc_oP1.cnt_4c_Botoes
             .Top       = 29
@@ -151,7 +153,7 @@ DEFINE CLASS Formacg AS FormBase
         loc_oP1.cnt_4c_Botoes.AddObject("cmd_4c_Incluir", "CommandButton")
         WITH loc_oP1.cnt_4c_Botoes.cmd_4c_Incluir
             .Caption         = "Incluir"
-            .Left            = 85
+            .Left            = 152
             .Top             = 5
             .Width           = 75
             .Height          = 75
@@ -170,7 +172,7 @@ DEFINE CLASS Formacg AS FormBase
         loc_oP1.cnt_4c_Botoes.AddObject("cmd_4c_Consultar", "CommandButton")
         WITH loc_oP1.cnt_4c_Botoes.cmd_4c_Consultar
             .Caption         = "Visualizar"
-            .Left            = 165
+            .Left            = 227
             .Top             = 5
             .Width           = 75
             .Height          = 75
@@ -189,7 +191,7 @@ DEFINE CLASS Formacg AS FormBase
         loc_oP1.cnt_4c_Botoes.AddObject("cmd_4c_Alterar", "CommandButton")
         WITH loc_oP1.cnt_4c_Botoes.cmd_4c_Alterar
             .Caption         = "Alterar"
-            .Left            = 245
+            .Left            = 302
             .Top             = 5
             .Width           = 75
             .Height          = 75
@@ -208,7 +210,7 @@ DEFINE CLASS Formacg AS FormBase
         loc_oP1.cnt_4c_Botoes.AddObject("cmd_4c_Excluir", "CommandButton")
         WITH loc_oP1.cnt_4c_Botoes.cmd_4c_Excluir
             .Caption         = "Excluir"
-            .Left            = 325
+            .Left            = 377
             .Top             = 5
             .Width           = 75
             .Height          = 75
@@ -227,7 +229,7 @@ DEFINE CLASS Formacg AS FormBase
         loc_oP1.cnt_4c_Botoes.AddObject("cmd_4c_Buscar", "CommandButton")
         WITH loc_oP1.cnt_4c_Botoes.cmd_4c_Buscar
             .Caption         = "Buscar"
-            .Left            = 405
+            .Left            = 452
             .Top             = 5
             .Width           = 75
             .Height          = 75
@@ -988,6 +990,9 @@ DEFINE CLASS Formacg AS FormBase
                 THIS.CarregarProgramasAba(par_cGrupos)
                 THIS.CarregarBarraAba(par_cGrupos)
                 THIS.CarregarTelasAba(par_cGrupos)
+                *-- Rebind de RecordSource reseta Column.ReadOnly/Enabled: reaplicar
+                *-- o estado do modo DEPOIS das cargas (INCLUIR/ALTERAR = editavel)
+                THIS.HabilitarColunasGrid(INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR"))
             ENDIF
             loc_lSucesso = .T.
         CATCH TO loc_oErro
@@ -1086,6 +1091,9 @@ DEFINE CLASS Formacg AS FormBase
                     ENDWITH
                     BINDEVENT(loc_oGrid.Column3.chk_4c_Marcas, "When", THIS, "ChkMarcasWhen")
                 ENDIF
+                *-- Reatribuir RecordSource reseta Sparse/CurrentControl da coluna
+                loc_oGrid.Column3.Sparse = .F.
+                loc_oGrid.Column3.CurrentControl = "chk_4c_Marcas"
                 loc_oGrid.FontName = "Tahoma"
                 loc_oGrid.FontSize = 8
                 loc_oGrid.Refresh()
@@ -1126,6 +1134,9 @@ DEFINE CLASS Formacg AS FormBase
                     ENDWITH
                     BINDEVENT(loc_oGrid.Column2.chk_4c_SelBarras, "When", THIS, "ChkSelBarrasWhen")
                 ENDIF
+                *-- Reatribuir RecordSource reseta Sparse/CurrentControl da coluna
+                loc_oGrid.Column2.Sparse = .F.
+                loc_oGrid.Column2.CurrentControl = "chk_4c_SelBarras"
                 loc_oGrid.FontName = "Tahoma"
                 loc_oGrid.FontSize = 8
                 loc_oGrid.Refresh()
@@ -1175,6 +1186,9 @@ DEFINE CLASS Formacg AS FormBase
                     "Invis" + CHR(237) + "vel," + ;
                     "N" + CHR(227) + "o Edit" + CHR(225) + "vel," + ;
                     "Obrigat" + CHR(243) + "rio"
+                *-- Reatribuir RecordSource reseta Sparse/CurrentControl da coluna
+                loc_oGrid.Column3.Sparse = .F.
+                loc_oGrid.Column3.CurrentControl = "cbo_4c_CmbStatus"
                 loc_oGrid.FontName = "Tahoma"
                 loc_oGrid.FontSize = 8
                 loc_oGrid.Refresh()
