@@ -300,7 +300,7 @@ DEFINE CLASS FormLin AS FormBase
                     .Caption         = "Encerrar"
                     .Top             = 5
                     .Left = 5
-                    .Width           = 75
+                    .Width           = 90
                     .Height          = 75
                     .Picture         = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
                     .PicturePosition = 13
@@ -1674,17 +1674,9 @@ DEFINE CLASS FormLin AS FormBase
                 .Check1.Width     = 22
                 .CurrentControl = "Check1"
                 .Header1.Caption = ""
-                .AddObject("Check1", "CheckBox")
-                WITH .Check1
-                    .Caption   = ""
-                    .Alignment = 0
-                    .ReadOnly  = .F.
-                    .Visible   = .T.
-                    .Top       = 9
-                    .Left      = 2
-                    .Height    = 17
-                    .Width     = 22
-                ENDWITH
+                *-- Pattern #185 / Erro146: havia um segundo AddObject("Check1")
+                *-- identico logo abaixo. AddObject com nome ja existente estoura
+                *-- ("Object CHECK1 is already defined") no Init do form.
             ENDWITH
             WITH loc_oAba.grd_4c_Fases.Column5
                 .Width = 90

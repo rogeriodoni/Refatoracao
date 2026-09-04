@@ -473,6 +473,8 @@ DEFINE CLASS Formsigreipe AS FormBase
                 .Check1.Width   = 25
                 .Check1.Height  = 14
                 .CurrentControl  = "Check1"
+                *-- Pattern #185 / Erro146: CheckBox de grid nao alterna sem handlers
+                THIS.BindToggleGrdOper1(THIS.pgf_4c_Paginas.Page1.grd_4c_GrdOper.Column1.Check1)
                 .ControlSource   = "cursor_4c_Operacoes.Marcas"
                 .Header1.Caption = ""
             ENDWITH
@@ -2513,4 +2515,45 @@ DEFINE CLASS Formsigreipe AS FormBase
         RETURN
     ENDPROC
 
+
+    *==========================================================================
+    * Toggle do CheckBox de grid - grd_4c_GrdOper.Column1 (cursor_4c_Operacoes.Marcas)
+    * Pattern #185 / Erro146 (2026-09-04): CheckBox em coluna de Grid nao alterna
+    * pelo binding nativo. Click/MouseDown suprimem o padrao; MouseUp delega ao
+    * KeyPress, que alterna por codigo com REPLACE no cursor + Refresh do grid.
+    *==========================================================================
+    PROTECTED PROCEDURE BindToggleGrdOper1(par_oChk)
+        BINDEVENT(par_oChk, "KeyPress",  THIS, "TgGrdOper1KeyPress")
+        BINDEVENT(par_oChk, "MouseUp",   THIS, "TgGrdOper1MouseUp")
+        BINDEVENT(par_oChk, "MouseDown", THIS, "TgGrdOper1MouseDown")
+        BINDEVENT(par_oChk, "Click",     THIS, "TgGrdOper1Click")
+    ENDPROC
+
+    PROCEDURE TgGrdOper1KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF !INLIST(par_nKeyCode, 13, 32)
+            RETURN
+        ENDIF
+        NODEFAULT
+        IF !USED("cursor_4c_Operacoes") OR EOF("cursor_4c_Operacoes")
+            RETURN
+        ENDIF
+        IF VARTYPE(cursor_4c_Operacoes.Marcas) == "L"
+            REPLACE cursor_4c_Operacoes.Marcas WITH !cursor_4c_Operacoes.Marcas
+        ELSE
+            REPLACE cursor_4c_Operacoes.Marcas WITH IIF(cursor_4c_Operacoes.Marcas = 0, 1, 0)
+        ENDIF        THIS.pgf_4c_Paginas.Page1.grd_4c_GrdOper.Refresh()
+    ENDPROC
+
+    PROCEDURE TgGrdOper1MouseUp(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+        THIS.TgGrdOper1KeyPress(13, 0)
+        NODEFAULT
+    ENDPROC
+
+    PROCEDURE TgGrdOper1MouseDown(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+        NODEFAULT
+    ENDPROC
+
+    PROCEDURE TgGrdOper1Click()
+        NODEFAULT
+    ENDPROC
 ENDDEFINE

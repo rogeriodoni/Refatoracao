@@ -472,6 +472,7 @@ DEFINE CLASS FormSigPrMlu AS FormBase
         BINDEVENT(THIS.grd_4c_Selecoes.Column1.ctlCheck1, "MouseDown", THIS, "GrdChkMouseDown")
         BINDEVENT(THIS.grd_4c_Selecoes.Column1.ctlCheck1, "KeyPress",  THIS, "GrdChkKeyPress")
         BINDEVENT(THIS.grd_4c_Selecoes.Column1.ctlCheck1, "Click",     THIS, "GrdChkClick")
+        BINDEVENT(THIS.grd_4c_Selecoes.Column1.ctlCheck1, "MouseUp",   THIS, "GrdChkMouseUp")
     ENDPROC
 
     *==========================================================================
@@ -799,6 +800,14 @@ DEFINE CLASS FormSigPrMlu AS FormBase
 
     *-- Click: absorver para nao disparar duplo-toggle com MouseDown
     PROCEDURE GrdChkClick()
+        NODEFAULT
+    ENDPROC
+
+    *-- MouseUp: absorver tambem. O toggle ja aconteceu no MouseDown; sem este
+    *-- handler o processamento nativo do MouseUp reverte a marcacao.
+    *-- Pattern #185 / Erro146 (2026-09-04).
+    PROCEDURE GrdChkMouseUp
+        LPARAMETERS par_nButton, par_nShift, par_nXCoord, par_nYCoord
         NODEFAULT
     ENDPROC
 

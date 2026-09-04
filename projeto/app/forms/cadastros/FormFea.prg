@@ -4307,6 +4307,11 @@ DEFINE CLASS FormFea AS FormBase
                 .Width           = 160
             ENDWITH
             BINDEVENT(par_oCnt.grdMov.Column1.Check1, "KeyPress", THIS, "GrdMovCheck1KeyPress")
+            *-- Pattern #185 / Erro146: sem MouseUp/MouseDown/Click o clique do mouse
+            *-- nao marca (o KeyPress sozinho so cobre Espaco/Enter)
+            BINDEVENT(par_oCnt.grdMov.Column1.Check1, "MouseUp",   THIS, "GrdMovCheck1MouseUp")
+            BINDEVENT(par_oCnt.grdMov.Column1.Check1, "MouseDown", THIS, "GrdMovCheck1MouseDown")
+            BINDEVENT(par_oCnt.grdMov.Column1.Check1, "Click",     THIS, "GrdMovCheck1Click")
 
             *-- Pagina pageframe interno (top=5,left=462,w=510,h=275,3 paginas)
             par_oCnt.AddObject("Pagina", "PageFrame")
@@ -5171,6 +5176,25 @@ DEFINE CLASS FormFea AS FormBase
         CATCH TO loc_oErro
             MsgErro("Erro em GrdMovCheck1KeyPress:" + CHR(13) + loc_oErro.Message, "FormFea")
         ENDTRY
+    ENDPROC
+
+    *==========================================================================
+    * GrdMovCheck1 MouseUp/MouseDown/Click - Pattern #185 / Erro146 (2026-09-04)
+    * CheckBox em coluna de Grid nao alterna pelo binding nativo: MouseUp delega
+    * o toggle ao KeyPress e MouseDown/Click apenas suprimem o padrao, evitando
+    * alternancia dupla.
+    *==========================================================================
+    PROCEDURE GrdMovCheck1MouseUp(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+        THIS.GrdMovCheck1KeyPress(13, 0)
+        NODEFAULT
+    ENDPROC
+
+    PROCEDURE GrdMovCheck1MouseDown(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+        NODEFAULT
+    ENDPROC
+
+    PROCEDURE GrdMovCheck1Click()
+        NODEFAULT
     ENDPROC
 
     *==========================================================================

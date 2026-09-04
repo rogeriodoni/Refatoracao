@@ -700,6 +700,17 @@ DEFINE CLASS FormFpo AS FormBase
                 BINDEVENT(loc_oGrid.Column2.Check1, "KeyPress", THIS, "GradeCol2CheckKeyPress")
                 BINDEVENT(loc_oGrid.Column3.Check1, "KeyPress", THIS, "GradeCol3CheckKeyPress")
                 BINDEVENT(loc_oGrid.Column4.Check1, "KeyPress", THIS, "GradeCol4CheckKeyPress")
+                *-- Pattern #185 / Erro146: sem MouseUp/MouseDown/Click o clique do
+                *-- mouse nao marca (o KeyPress sozinho so cobre Espaco/Enter)
+                BINDEVENT(loc_oGrid.Column2.Check1, "MouseUp",   THIS, "GradeCol2CheckMouseUp")
+                BINDEVENT(loc_oGrid.Column2.Check1, "MouseDown", THIS, "GradeChkMouseDown")
+                BINDEVENT(loc_oGrid.Column2.Check1, "Click",     THIS, "GradeChkClick")
+                BINDEVENT(loc_oGrid.Column3.Check1, "MouseUp",   THIS, "GradeCol3CheckMouseUp")
+                BINDEVENT(loc_oGrid.Column3.Check1, "MouseDown", THIS, "GradeChkMouseDown")
+                BINDEVENT(loc_oGrid.Column3.Check1, "Click",     THIS, "GradeChkClick")
+                BINDEVENT(loc_oGrid.Column4.Check1, "MouseUp",   THIS, "GradeCol4CheckMouseUp")
+                BINDEVENT(loc_oGrid.Column4.Check1, "MouseDown", THIS, "GradeChkMouseDown")
+                BINDEVENT(loc_oGrid.Column4.Check1, "Click",     THIS, "GradeChkClick")
 
                 THIS.FormatarGridLista(loc_oGrid)
                 loc_oGrid.Refresh()
@@ -995,6 +1006,35 @@ DEFINE CLASS FormFpo AS FormBase
                 MsgErro(loc_oErro.Message, "Erro em GradeCol4CheckKeyPress")
             ENDTRY
         ENDIF
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * GradeCol2/3/4CheckMouseUp + GradeChkMouseDown/Click
+    * Pattern #185 / Erro146 (2026-09-04): CheckBox em coluna de Grid nao alterna
+    * pelo binding nativo. MouseUp delega o toggle ao KeyPress da propria coluna;
+    * MouseDown e Click apenas suprimem o padrao, evitando alternancia dupla.
+    *--------------------------------------------------------------------------
+    PROCEDURE GradeCol2CheckMouseUp(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+        THIS.GradeCol2CheckKeyPress(13, 0)
+        NODEFAULT
+    ENDPROC
+
+    PROCEDURE GradeCol3CheckMouseUp(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+        THIS.GradeCol3CheckKeyPress(13, 0)
+        NODEFAULT
+    ENDPROC
+
+    PROCEDURE GradeCol4CheckMouseUp(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+        THIS.GradeCol4CheckKeyPress(13, 0)
+        NODEFAULT
+    ENDPROC
+
+    PROCEDURE GradeChkMouseDown(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+        NODEFAULT
+    ENDPROC
+
+    PROCEDURE GradeChkClick()
+        NODEFAULT
     ENDPROC
 
     *--------------------------------------------------------------------------
