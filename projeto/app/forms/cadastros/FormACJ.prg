@@ -356,6 +356,52 @@ DEFINE CLASS FormACJ AS FormBase
 
         *-- Fundo padrao do framework frmcadastro (sem isso a pagina fica branca)
         loc_oPagina.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
+        *-- Cabecalho cinza (identico ao da pagina Lista) - Erro152
+        *-- conteudo da pagina deslocado +53 para nao ficar sob a faixa
+        loc_oPagina.AddObject("cnt_4c_Cabecalho", "Container")
+        WITH loc_oPagina.cnt_4c_Cabecalho
+            .Top           = 29
+            .Left          = 0
+            .Width         = THIS.Width
+            .Height        = 80
+            .BackColor     = RGB(100, 100, 100)
+            .BorderWidth   = 0
+            .SpecialEffect = 0
+            .Visible       = .T.
+
+            .AddObject("lbl_4c_Sombra", "Label")
+            WITH .lbl_4c_Sombra
+                .Caption   = THIS.Caption
+                .Top       = 15
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 40
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(0, 0, 0)
+                .BackStyle = 0
+                .AutoSize  = .F.
+                .Visible   = .T.
+            ENDWITH
+
+            .AddObject("lbl_4c_Titulo", "Label")
+            WITH .lbl_4c_Titulo
+                .Caption   = THIS.Caption
+                .Top       = 18
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 46
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(255, 255, 255)
+                .BackStyle = 0
+                .AutoSize  = .F.
+                .Visible   = .T.
+            ENDWITH
+        ENDWITH
+
 
         *-- Container de botoes Confirmar/Cancelar (Top=4+29=33)
         loc_oPagina.AddObject("cnt_4c_BotoesAcao", "Container")
@@ -458,7 +504,7 @@ DEFINE CLASS FormACJ AS FormBase
         WITH loc_oPagina.chk_4c_ChkInativos
             .Caption   = "Inativo"
             .Value     = 0
-            .Top       = 56
+            .Top       = 109
             .Left      = 307
             .Width     = 80
             .Height    = 17
@@ -475,7 +521,7 @@ DEFINE CLASS FormACJ AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label1", "Label")
         WITH loc_oPagina.lbl_4c_Label1
             .Caption   = "Grupo :"
-            .Top       = 78
+            .Top       = 131
             .Left      = 267
             .Width     = 40
             .Height    = 17
@@ -492,7 +538,7 @@ DEFINE CLASS FormACJ AS FormBase
         loc_oPagina.AddObject("txt_4c_Grupo", "TextBox")
         WITH loc_oPagina.txt_4c_Grupo
             .Value    = ""
-            .Top      = 74
+            .Top      = 127
             .Left     = 307
             .Width    = 80
             .Height   = 21
@@ -506,7 +552,7 @@ DEFINE CLASS FormACJ AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label4", "Label")
         WITH loc_oPagina.lbl_4c_Label4
             .Caption   = "Cria" + CHR(231) + CHR(227) + "o do JOB :"
-            .Top       = 78
+            .Top       = 131
             .Left      = 410
             .Width     = 84
             .Height    = 17
@@ -523,7 +569,7 @@ DEFINE CLASS FormACJ AS FormBase
         loc_oPagina.AddObject("txt_4c_Usuars", "TextBox")
         WITH loc_oPagina.txt_4c_Usuars
             .Value    = ""
-            .Top      = 74
+            .Top      = 127
             .Left     = 494
             .Width    = 92
             .Height   = 23
@@ -537,7 +583,7 @@ DEFINE CLASS FormACJ AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label5", "Label")
         WITH loc_oPagina.lbl_4c_Label5
             .Caption   = "Criado em :"
-            .Top       = 78
+            .Top       = 131
             .Left      = 611
             .Width     = 58
             .Height    = 17
@@ -554,7 +600,7 @@ DEFINE CLASS FormACJ AS FormBase
         loc_oPagina.AddObject("txt_4c_DataIncs", "TextBox")
         WITH loc_oPagina.txt_4c_DataIncs
             .Value    = ""
-            .Top      = 74
+            .Top      = 127
             .Left     = 670
             .Width    = 80
             .Height   = 21
@@ -569,7 +615,7 @@ DEFINE CLASS FormACJ AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label2", "Label")
         WITH loc_oPagina.lbl_4c_Label2
             .Caption   = "JOB :"
-            .Top       = 104
+            .Top       = 157
             .Left      = 277
             .Width     = 30
             .Height    = 17
@@ -586,7 +632,7 @@ DEFINE CLASS FormACJ AS FormBase
         loc_oPagina.AddObject("txt_4c_IClis", "TextBox")
         WITH loc_oPagina.txt_4c_IClis
             .Value    = ""
-            .Top      = 100
+            .Top      = 153
             .Left     = 307
             .Width    = 80
             .Height   = 21
@@ -600,7 +646,7 @@ DEFINE CLASS FormACJ AS FormBase
         loc_oPagina.AddObject("txt_4c_RClis", "TextBox")
         WITH loc_oPagina.txt_4c_RClis
             .Value    = ""
-            .Top      = 100
+            .Top      = 153
             .Left     = 390
             .Width    = 360
             .Height   = 21
@@ -615,7 +661,7 @@ DEFINE CLASS FormACJ AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label3", "Label")
         WITH loc_oPagina.lbl_4c_Label3
             .Caption   = "Descritivo :"
-            .Top       = 130
+            .Top       = 183
             .Left      = 249
             .Width     = 58
             .Height    = 17
@@ -632,7 +678,7 @@ DEFINE CLASS FormACJ AS FormBase
         loc_oPagina.AddObject("txt_4c_Razaos", "TextBox")
         WITH loc_oPagina.txt_4c_Razaos
             .Value    = ""
-            .Top      = 126
+            .Top      = 179
             .Left     = 307
             .Width    = 443
             .Height   = 23
@@ -646,7 +692,7 @@ DEFINE CLASS FormACJ AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label6", "Label")
         WITH loc_oPagina.lbl_4c_Label6
             .Caption   = "Lista de Usu" + CHR(225) + "rios Que Ter" + CHR(227) + "o Acesso a Esse JOB:"
-            .Top       = 183
+            .Top       = 236
             .Left      = 308
             .Width     = 340
             .Height    = 17
@@ -716,7 +762,7 @@ DEFINE CLASS FormACJ AS FormBase
             .Caption         = ""
             .Picture         = gc_4c_CaminhoIcones + "cadastro_inserir_26.jpg"
             .PicturePosition = 13
-            .Top             = 199
+            .Top             = 252
             .Left            = 654
             .Width           = 42
             .Height          = 42
@@ -734,7 +780,7 @@ DEFINE CLASS FormACJ AS FormBase
             .Caption         = ""
             .Picture         = gc_4c_CaminhoIcones + "cadastro_excluir_26.jpg"
             .PicturePosition = 13
-            .Top             = 241
+            .Top             = 294
             .Left            = 654
             .Width           = 42
             .Height          = 42
@@ -1481,3 +1527,4 @@ DEFINE CLASS FormACJ AS FormBase
     ENDPROC
 
 ENDDEFINE
+
