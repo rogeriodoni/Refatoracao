@@ -9763,3 +9763,235 @@ registro visualizado direto para o INSERT. Todo BO CRUD deve implementar
 
 - Fix: `projeto/app/forms/cadastros/Formcfo.prg` (7 combos + 12 OptionGroups) e `projeto/app/classes/cfoBO.prg` (`LimparDados`).
 - Origem: Erro147 (2026-09-08, Formcfo "Cadastro de CFOP").
+
+---
+
+## 189. Gravacao que Nao Tem o Que Gravar NAO Pode Reportar Sucesso (Erro148 2026-09-08)
+
+### O sintoma
+
+"Clico em Incluir, informo grupo e conta, clico em Gravar e o registro nao aparece na lista."
+O usuario ve *"Lancamentos salvos com sucesso!"* — e nada foi gravado.
+
+### A causa
+
+Nos cadastros mestre-detalhe (grade de itens/ocorrencias/parcelas) o registro **e** o conjunto de linhas
+de detalhe. O metodo do BO percorria o cursor da grade e, quando ele estava vazio, marcava sucesso:
+
+```foxpro
+* ERRADO — cursor vazio vira "sucesso" e nada eh inserido
+IF !USED(par_cCursorOco) OR RECCOUNT(par_cCursorOco) = 0
+    loc_lSucesso = .T.
+    loc_lAbortar = .T.
+ENDIF
+```
+
+O form entao entrava no ramo feliz:
+
+```foxpro
+IF THIS.this_oBusinessObject.SalvarOcorrencias(loc_cGrupos, loc_cContas, "cursor_4c_OcoLocal")
+    MsgInfo("Lan" + CHR(231) + "amentos salvos com sucesso!", "Sucesso")   && mentira
+    THIS.AlternarPagina(1)
+ENDIF
+```
+
+### A correcao (dois niveis)
+
+**No form** — bloquear antes de chamar o BO, contando as linhas com a coluna-chave preenchida:
+
+```foxpro
+IF THIS.this_cModoAtual = "INSERIR" AND THIS.ContarOcorrenciasPreenchidas() = 0
+    MsgAviso("Informe ao menos uma ocorr" + CHR(234) + "ncia antes de gravar.", "Aten" + CHR(231) + CHR(227) + "o")
+    RETURN
+ENDIF
+```
+
+**No BO** — nao decidir sozinho que vazio eh sucesso; receber a intencao do chamador:
+
+```foxpro
+PROCEDURE SalvarOcorrencias(par_cGrupos, par_cContas, par_cCursorOco, par_lPermitirVazio)
+    loc_lPermitirVazio = (VARTYPE(par_lPermitirVazio) = "L" AND par_lPermitirVazio)
+    ...
+    IF !USED(par_cCursorOco) OR RECCOUNT(par_cCursorOco) = 0
+        loc_lSucesso = loc_lPermitirVazio       && so ALTERAR aceita lista vazia
+        loc_lAbortar = .T.
+    ENDIF
+```
+
+**Por que ALTERAR aceita vazio**: quando o legado grava com "apaga tudo e reinsere", remover todas as linhas
+da grade e gravar significa *excluir os itens daquele mestre* — operacao legitima. Em INCLUSAO nao ha o que criar.
+
+O helper de contagem tem de preservar o ponteiro do cursor (o `COUNT` move o registro corrente):
+
+```foxpro
+SELECT cursor_4c_OcoLocal
+loc_nPonteiro = IIF(RECCOUNT("cursor_4c_OcoLocal") > 0, RECNO(), 0)
+COUNT TO loc_nTotal FOR !EMPTY(ALLTRIM(cursor_4c_OcoLocal.Cocos))
+IF loc_nPonteiro > 0 AND loc_nPonteiro <= RECCOUNT("cursor_4c_OcoLocal")
+    GO loc_nPonteiro IN cursor_4c_OcoLocal
+ENDIF
+```
+
+**Regra geral**: nenhum caminho de gravacao pode terminar em sucesso sem ter escrito nada. Mesma familia do
+Erro147, em que `FormParaBO` falhava no CATCH e o Salvar seguia gravando registro parcial — la o erro era
+engolido, aqui o vazio era promovido a sucesso.
+
+### Deteccao
+
+`CorretorAutomatico.ps1` Pattern **#189-A** (`WARN-189-SUCESSO-SEM-GRAVAR`): guarda de cursor vazio
+(`!USED(...)` / `RECCOUNT(...) = 0`) seguida, em ate 3 linhas e sem nenhum `SQLEXEC`/`INSERT`/`UPDATE`/`DELETE`
+no meio, de atribuicao `.T.` a uma flag de **sucesso**. Nao casa flags de aborto (`loc_lAbortar`) — o filtro
+por nome custou um falso positivo no proprio arquivo ja corrigido. WARNING-only: o corretor nao sabe qual modo
+chamou o metodo.
+
+### Referencias
+
+- Fix: `projeto/app/forms/cadastros/FormSIGPRLNC.prg` (`BtnSalvarClick`, `ContarOcorrenciasPreenchidas`) e
+  `projeto/app/classes/SIGPRLNCBO.prg` (`SalvarOcorrencias` com `par_lPermitirVazio`).
+- Origem: Erro148 (2026-09-08, FormSIGPRLNC "Cadastro de Lancamentos").
+
+---
+
+## 190. Grid da Lista Espelha o AddCursor/pColuna do Legado — Nunca a Grade de Detalhe (Erro148 2026-09-08)
+
+### O sintoma
+
+A lista de registros aparece com os cabecalhos da **grade de detalhe** ("Ocorrencia" / "Descricao") e faltando
+colunas — no Erro148 a lista de lancamentos mostrava 2 colunas com captions da Page2 em vez de Grupos / Contas /
+Operacao.
+
+### Onde estao as colunas certas
+
+No `Init` do SCX legado, junto do `AddCursor`:
+
+```foxpro
+.AddCursor('SigClLan', 'cIdChaves', 'crSigClLan', '', ThisForm.Pagina.Lista.Grade, lcQryLancamento)
+    .pfSqlTabela(1).pColuna('Grupos', '', '', 'Grupos',   80, .t.)
+    .pfSqlTabela(1).pColuna('Contas', '', '', 'Contas',   80, .t.)
+    .pfSqlTabela(1).pColuna('Cocos',  '', '', 'Operacao', 80, .t.)
+```
+
+Cada `pColuna` da: **campo**, **caption** e **largura**. Copiar os tres, na ordem, para o `CarregarLista`.
+A query da lista tambem esta ali (`lcQryLancamento = [Select * From SigClLan]`).
+
+### A granularidade da lista muda a semantica do Excluir
+
+```foxpro
+* ERRADO — DISTINCT de um subconjunto: some a coluna Cocos E some a PK
+loc_cSQL = "SELECT DISTINCT a.grupos, a.contas, a.grucontas FROM SigClLan a"
+```
+
+```foxpro
+* CORRETO — uma linha por registro, com a PK no cursor
+loc_cSQL = "SELECT a.grupos, a.contas, a.cocos, a.cidchaves, a.grucontas" + ;
+           " FROM SigClLan a ORDER BY a.grupos, a.contas, a.cocos"
+```
+
+Sem a PK no cursor, o `BtnExcluirClick` acaba excluindo por chave **secundaria**
+(`DELETE FROM SigClLan WHERE grucontas = ...`): o usuario seleciona uma linha e o sistema apaga todas as linhas
+do mestre. Com a PK, o Excluir remove so o registro corrente, como o Grupo_op do framework legado:
+
+```foxpro
+IF THIS.this_oBusinessObject.CarregarPorCodigo(loc_cCidChaves)
+    IF THIS.this_oBusinessObject.Excluir()
+```
+
+**Regra**: ao migrar a Page1, conferir campo/caption/largura de CADA `pColuna` e a query do `AddCursor`; se o
+legado lista uma linha por registro, a migracao tambem lista — e a PK vai junto no cursor.
+
+### Deteccao
+
+`CorretorAutomatico.ps1` Pattern **#189-B** (`WARN-189-LISTA-SELECT-DISTINCT`): `SELECT DISTINCT` dentro do
+`Buscar()` de um `*BO.prg`. Ha DISTINCT legitimo, por isso WARNING. A conferencia de captions/larguras contra o
+`pColuna` do legado nao eh automatizavel sem ler o SCX — fica como regra de prompt.
+
+### Referencias
+
+- Fix: `projeto/app/forms/cadastros/FormSIGPRLNC.prg` (`CarregarLista`, `BtnExcluirClick`) e
+  `projeto/app/classes/SIGPRLNCBO.prg` (`Buscar`).
+- Origem: Erro148 (2026-09-08, FormSIGPRLNC "Cadastro de Lancamentos").
+
+---
+
+## 191. INSERT do BO Tem de Cobrir Todas as Colunas NOT NULL (Erro151 2026-09-08)
+
+### O sintoma
+
+Clicar em Confirmar no cadastro e receber:
+
+```
+Erro ao inserir alinea:
+Connectivity error: [Microsoft][ODBC SQL Server Driver][SQL Server]Nao eh possivel inserir o valor
+NULL na coluna 'reincids', tabela 'DB_MBAHIA.dbo.SIGCDALI'; a coluna nao permite nulos. Falha em INSERT.
+```
+
+Nenhum registro entra — o cadastro fica inutilizavel para inclusao.
+
+### A causa
+
+O legado grava o registro **inteiro**: `.AddCursor('SigCdAli','codigos','crSigCdAli', ...)` sem query eh
+`SELECT *`, e o `TABLEUPDATE` do framework escreve todas as colunas do registro em branco. Colunas que nao
+aparecem na tela continuam sendo gravadas (0, "", data vazia).
+
+O BO migrado lista no `INSERT` apenas as colunas que o form mostra. Se alguma das ausentes for
+`NOT NULL` sem `DEFAULT`, o SQL Server recusa a instrucao inteira.
+
+```foxpro
+* ERRADO — SigCdAli tem 7 colunas NOT NULL; o INSERT cobre 6
+INSERT INTO SigCdAli (codigos, descrs, opautos, opsaidas, fpagsautos, pefins)
+
+* CORRETO
+INSERT INTO SigCdAli (codigos, descrs, opautos, opsaidas, fpagsautos, pefins, reincids)
+...
+FormatarNumeroSQL(THIS.this_nReincids, 2) + ")"
+```
+
+### Como preencher cada coluna que falta
+
+| Caso | Valor |
+|---|---|
+| `cidchaves` / `pkchaves` (chave unica Fortyus) | `EscaparSQL(fUniqueIds())` — **nunca** `""`, senao o 2o registro colide no indice unico |
+| Coluna com property no BO | a propria property (`this_nImpress`, `this_cUsualts`, ...) |
+| `usuars` / `usualts` | `gc_4c_UsuarioLogado` |
+| char sem property | `EscaparSQL("")` |
+| numeric sem property | `FormatarNumeroSQL(0, <decimais>)` |
+| bit | `0` |
+| datetime NOT NULL sem property | sentinela (`'19000101'`) — nao usar `GETDATE()`, que marcaria o evento como ja ocorrido |
+
+### Cuidado com colunas GEMEAS
+
+Varias tabelas tem duas colunas de nome parecido, **ambas NOT NULL**. A migracao inclui uma e esquece a outra:
+
+| Tabela | Colunas |
+|---|---|
+| `SigCdRom` | `tipo` (char) + `tipos` (numeric) |
+| `SigCdClc` | `prioridade` + `prioridades` |
+| `SigOpPic` | `imprs` + `iimprs` |
+| `SigCdCli` | `cidatrabs` + `cidtrabs` |
+
+Ler o relatorio da auditoria com atencao ao nome exato: a coluna existente **nao** deve ser trocada, a que
+falta deve ser **acrescentada**.
+
+### Auditoria em lote
+
+`automation\VerificarInsertNotNull.ps1` cruza os `INSERT INTO` de todos os `*BO.prg` com o
+`INFORMATION_SCHEMA` da base (exclui IDENTITY e colunas computadas) e lista os candidatos.
+
+O relatorio eh **lista de candidatos, nao veredito**: SQL montado em varias atribuicoes
+(`loc_cSQL = loc_cSQL + "..."`) faz a captura parar antes do fim da lista e gera falso positivo. Falso
+negativo nao ocorre. No sweep de 2026-09-08 foram 23 candidatos com 1-2 colunas; **17 eram reais** e
+6 eram truncamento do parser — cada um foi conferido no arquivo antes da correcao.
+
+### Achado colateral do mesmo sweep
+
+`ROMBO.prg` nao compilava: usava `ISNULL(campo, default)` (funcao do **SQL Server**, 2 argumentos) como
+codigo VFP. O equivalente em VFP eh `NVL(campo, default)`; `ISNULL()` do VFP aceita 1 argumento so e o
+compilador acusa "Too many arguments". Dentro de string SQL o `ISNULL` continua correto.
+
+### Referencias
+
+- Fix inicial: `projeto/app/classes/AliBO.prg` (`Inserir`).
+- Sweep: CtgBO, MTVBO, socBO, CNQBO, DICBO, fnlBO, FreBO, gemBO, FpmBO (2 sites), MtpBO, mtzBO, CcoBO,
+  COCBO, COMBO, gprBO, ImpBO, ClienteBO, SedBO, SigPrCtrBO, ROMBO (3 sites), sigprilaBO, SIGPRSTFBO,
+  SigPrEmlBO (2 sites), sigopdivBO (3 sites), sigpdmp6BO.
+- Origem: Erro151 (2026-09-08, FormAli "Cadastro de Alineas").
