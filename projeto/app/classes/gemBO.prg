@@ -153,8 +153,9 @@ DEFINE CLASS gemBO AS BusinessBase
             loc_cGruClass = ALLTRIM(THIS.this_cGrupo) + ALLTRIM(THIS.this_cClass)
             THIS.this_cGruClass = loc_cGruClass
 
-            loc_cSQL = "INSERT INTO SigCdGre (grupo, class, gruclass, tipos)" + ;
+            loc_cSQL = "INSERT INTO SigCdGre (cidchaves, grupo, class, gruclass, tipos)" + ;
                        " VALUES (" + ;
+                       EscaparSQL(fUniqueIds()) + ", " + ;
                        EscaparSQL(THIS.this_cGrupo) + ", " + ;
                        EscaparSQL(THIS.this_cClass) + ", " + ;
                        EscaparSQL(loc_cGruClass) + ", " + ;

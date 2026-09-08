@@ -102,8 +102,9 @@ DEFINE CLASS CNQBO AS BusinessBase
 
         TRY
             TEXT TO loc_cSQL TEXTMERGE NOSHOW
-                INSERT INTO SigCdCnq (conquilhas, codtams, valors)
+                INSERT INTO SigCdCnq (pkchaves, conquilhas, codtams, valors)
                 VALUES (
+                    <<EscaparSQL(fUniqueIds())>>,
                     <<EscaparSQL(THIS.this_cConquilha)>>,
                     <<EscaparSQL(THIS.this_cCodTam)>>,
                     <<FormatarNumeroSQL(THIS.this_nValor, 3)>>

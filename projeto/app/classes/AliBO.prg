@@ -127,14 +127,20 @@ DEFINE CLASS AliBO AS BusinessBase
 		loc_lSucesso = .F.
 
 		TRY
-			loc_cSQL = "INSERT INTO SigCdAli (codigos, descrs, opautos, opsaidas, fpagsautos, pefins)" + ;
+			*-- reincids eh NOT NULL em SigCdAli e nao aparece na tela. O legado grava a
+			*-- coluna junto das demais (AddCursor sem query -> SELECT * + TABLEUPDATE do
+			*-- registro em branco, ou seja, 0). Omitir a coluna no INSERT fazia o SQL
+			*-- Server rejeitar: "Nao eh possivel inserir o valor NULL na coluna 'reincids'
+			*-- ... a coluna nao permite nulos. Falha em INSERT." (Erro151)
+			loc_cSQL = "INSERT INTO SigCdAli (codigos, descrs, opautos, opsaidas, fpagsautos, pefins, reincids)" + ;
 			           " VALUES (" + ;
 			           FormatarNumeroSQL(THIS.this_nCodigos) + "," + ;
 			           EscaparSQL(THIS.this_cDescrs) + "," + ;
 			           EscaparSQL(THIS.this_cOpAutos) + "," + ;
 			           EscaparSQL(THIS.this_cOpSaidas) + "," + ;
 			           EscaparSQL(THIS.this_cFPagSAutos) + "," + ;
-			           FormatarNumeroSQL(THIS.this_nPefins) + ;
+			           FormatarNumeroSQL(THIS.this_nPefins) + "," + ;
+			           FormatarNumeroSQL(THIS.this_nReincids, 2) + ;
 			           ")"
 
 			loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL)

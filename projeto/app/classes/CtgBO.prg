@@ -105,13 +105,19 @@ DEFINE CLASS CtgBO AS BusinessBase
 	* Inserir - Insere novo registro na tabela SigCdCtg
 	*====================================================================
 	PROTECTED PROCEDURE Inserir()
-		LOCAL loc_cSQL, loc_nResultado, loc_lSucesso
+		LOCAL loc_cSQL, loc_nResultado, loc_lSucesso, loc_cCidChaves
 		loc_lSucesso = .F.
+
+		*-- cidchaves eh NOT NULL e tem indice unico: gerar a chave como o legado
+		*-- (fUniqueIds). Omitir a coluna fazia o SQL Server recusar o INSERT
+		*-- ("a coluna nao permite nulos") — mesma causa do Erro151.
+		loc_cCidChaves = fUniqueIds()
 
 		TRY
 			TEXT TO loc_cSQL TEXTMERGE NOSHOW
-				INSERT INTO SigCdCtg (cods, descs)
+				INSERT INTO SigCdCtg (cidchaves, cods, descs)
 				VALUES (
+					<<EscaparSQL(loc_cCidChaves)>>,
 					<<EscaparSQL(THIS.this_cCods)>>,
 					<<EscaparSQL(THIS.this_cDescs)>>
 				)

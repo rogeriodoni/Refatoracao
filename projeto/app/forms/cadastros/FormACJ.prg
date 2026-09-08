@@ -1020,43 +1020,22 @@ DEFINE CLASS FormACJ AS FormBase
     * BtnIncluirClick - Gerencia acessos do JOB selecionado partindo de lista vazia
     *--------------------------------------------------------------------------
     PROCEDURE BtnIncluirClick()
-        LOCAL loc_lSucesso
-        loc_lSucesso = .F.
-
-        IF !USED("cursor_4c_Lista") OR RECCOUNT("cursor_4c_Lista") = 0
-            MsgAviso("Selecione um JOB na lista.", "")
-            RETURN .F.
-        ENDIF
-
-        SELECT cursor_4c_Lista
-        IF EOF("cursor_4c_Lista")
-            MsgAviso("Selecione um JOB na lista.", "")
-            RETURN .F.
-        ENDIF
-
-        TRY
-            THIS.this_oBusinessObject.CarregarJobDoCursor("cursor_4c_Lista")
-            THIS.this_cModoAtual = "INCLUIR"
-            THIS.LimparCampos()
-            THIS.BOParaForm()
-
-            IF USED("cursor_4c_AcJ")
-                USE IN cursor_4c_AcJ
-            ENDIF
-            SET NULL ON
-            CREATE CURSOR cursor_4c_AcJ (pkChaves C(20), JOBs C(20), Usuars C(20), NComps C(30))
-            SET NULL OFF
-
-            THIS.AlternarPagina(2)
-            THIS.CarregarGridUsuarios()
-            THIS.AjustarBotoesPorModo()
-            loc_lSucesso = .T.
-        CATCH TO loc_oErro
-            MsgErro("Erro ao incluir:" + CHR(13) + loc_oErro.Message, "Erro")
-            loc_lSucesso = .F.
-        ENDTRY
-
-        RETURN loc_lSucesso
+        *-- Este cadastro NAO cria JOBs: a lista vem de SigCdCli filtrada pelos grupos
+        *-- com Coletors = 10 (mesma query do legado). No legado, Pagina.Lista.Grupo_op.Click
+        *-- devolve para a lista qualquer opcao fora de CONSULTAR/ALTERAR:
+        *--     If Not Inlist(ThisForm.pcEscolha, [CONSULTAR], [ALTERAR])
+        *--         ThisForm.mAtivapagina1
+        *--         Return .f.
+        *--     EndIf
+        *-- ou seja, Incluir nunca abre a pagina de Dados. A versao anterior abria a Page2
+        *-- em modo "INCLUIR" e, com a lista vazia, so exibia "Selecione um JOB na lista."
+        *-- — mensagem sem sentido para quem clicou em Incluir (Erro150). Mantemos o
+        *-- comportamento do legado e explicamos de onde vem o JOB.
+        MsgAviso("Os JOBs s" + CHR(227) + "o cadastrados no Cadastro de Clientes " + ;
+                 "(grupo com coletor 10)." + CHR(13) + ;
+                 "Neste cadastro somente os acessos de um JOB s" + CHR(227) + "o alterados.", ;
+                 "Aten" + CHR(231) + CHR(227) + "o")
+        RETURN .F.
     ENDPROC
 
     *--------------------------------------------------------------------------
