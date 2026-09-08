@@ -349,6 +349,52 @@ DEFINE CLASS FormCec AS FormBase
 
         *-- Fundo padrao do framework frmcadastro (sem isso a pagina fica branca)
         loc_oPagina.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
+        *-- Cabecalho cinza (identico ao da pagina Lista) - Erro152
+        *-- conteudo da pagina deslocado +25 para nao ficar sob a faixa
+        loc_oPagina.AddObject("cnt_4c_Cabecalho", "Container")
+        WITH loc_oPagina.cnt_4c_Cabecalho
+            .Top           = 29
+            .Left          = 0
+            .Width         = THIS.Width
+            .Height        = 80
+            .BackColor     = RGB(100, 100, 100)
+            .BorderWidth   = 0
+            .SpecialEffect = 0
+            .Visible       = .T.
+
+            .AddObject("lbl_4c_Sombra", "Label")
+            WITH .lbl_4c_Sombra
+                .Caption   = THIS.Caption
+                .Top       = 15
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 40
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(0, 0, 0)
+                .BackStyle = 0
+                .AutoSize  = .F.
+                .Visible   = .T.
+            ENDWITH
+
+            .AddObject("lbl_4c_Titulo", "Label")
+            WITH .lbl_4c_Titulo
+                .Caption   = THIS.Caption
+                .Top       = 18
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 46
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(255, 255, 255)
+                .BackStyle = 0
+                .AutoSize  = .F.
+                .Visible   = .T.
+            ENDWITH
+        ENDWITH
+
 
         *-- Container botoes salvar/cancelar (grupo_salva no legado)
         loc_oPagina.AddObject("cnt_4c_Salva", "Container")
@@ -418,7 +464,7 @@ DEFINE CLASS FormCec AS FormBase
         loc_oPagina.AddObject("lbl_4c_Ocup2", "Label")
         WITH loc_oPagina.lbl_4c_Ocup2
             .Caption   = "Empresa :"
-            .Top       = 86
+            .Top       = 111
             .Left      = 188
             .Width     = 90
             .Height    = 17
@@ -433,7 +479,7 @@ DEFINE CLASS FormCec AS FormBase
         loc_oPagina.AddObject("txt_4c_Empresa", "TextBox")
         WITH loc_oPagina.txt_4c_Empresa
             .Value     = ""
-            .Top       = 84
+            .Top       = 109
             .Left      = 240
             .Width     = 31
             .Height    = 23
@@ -447,7 +493,7 @@ DEFINE CLASS FormCec AS FormBase
         loc_oPagina.AddObject("txt_4c_DesEmpresa", "TextBox")
         WITH loc_oPagina.txt_4c_DesEmpresa
             .Value     = ""
-            .Top       = 84
+            .Top       = 109
             .Left      = 273
             .Width     = 290
             .Height    = 23
@@ -464,7 +510,7 @@ DEFINE CLASS FormCec AS FormBase
         loc_oPagina.AddObject("lbl_4c_Ocup1", "Label")
         WITH loc_oPagina.lbl_4c_Ocup1
             .Caption   = "Tipo :"
-            .Top       = 111
+            .Top       = 136
             .Left      = 209
             .Width     = 50
             .Height    = 17
@@ -479,7 +525,7 @@ DEFINE CLASS FormCec AS FormBase
         loc_oPagina.AddObject("cbo_4c_CmbTCons", "ComboBox")
         WITH loc_oPagina.cbo_4c_CmbTCons
             .Value         = ""
-            .Top           = 108
+            .Top           = 133
             .Left          = 240
             .Width         = 115
             .Height        = 24
@@ -499,7 +545,7 @@ DEFINE CLASS FormCec AS FormBase
         loc_oPagina.AddObject("lbl_4c_Ocup3", "Label")
         WITH loc_oPagina.lbl_4c_Ocup3
             .Caption   = "Contrato :"
-            .Top       = 135
+            .Top       = 160
             .Left      = 186
             .Width     = 70
             .Height    = 17
@@ -514,7 +560,7 @@ DEFINE CLASS FormCec AS FormBase
         loc_oPagina.AddObject("txt_4c_Contrato", "TextBox")
         WITH loc_oPagina.txt_4c_Contrato
             .Value     = ""
-            .Top       = 133
+            .Top       = 158
             .Left      = 239
             .Width     = 365
             .Height    = 23
@@ -531,7 +577,7 @@ DEFINE CLASS FormCec AS FormBase
         loc_oPagina.AddObject("lbl_4c_Ocup5", "Label")
         WITH loc_oPagina.lbl_4c_Ocup5
             .Caption   = "Codigo da Rede :"
-            .Top       = 159
+            .Top       = 184
             .Left      = 153
             .Width     = 105
             .Height    = 17
@@ -546,7 +592,7 @@ DEFINE CLASS FormCec AS FormBase
         loc_oPagina.AddObject("txt_4c_Rede", "TextBox")
         WITH loc_oPagina.txt_4c_Rede
             .Value     = ""
-            .Top       = 157
+            .Top       = 182
             .Left      = 240
             .Width     = 365
             .Height    = 23
@@ -563,7 +609,7 @@ DEFINE CLASS FormCec AS FormBase
         loc_oPagina.AddObject("lbl_4c_Ocup6", "Label")
         WITH loc_oPagina.lbl_4c_Ocup6
             .Caption   = "Codigo do Loja :"
-            .Top       = 183
+            .Top       = 208
             .Left      = 158
             .Width     = 100
             .Height    = 17
@@ -578,7 +624,7 @@ DEFINE CLASS FormCec AS FormBase
         loc_oPagina.AddObject("txt_4c_Loja", "TextBox")
         WITH loc_oPagina.txt_4c_Loja
             .Value     = ""
-            .Top       = 181
+            .Top       = 206
             .Left      = 240
             .Width     = 365
             .Height    = 23
@@ -595,7 +641,7 @@ DEFINE CLASS FormCec AS FormBase
         loc_oPagina.AddObject("lbl_4c_Ocup4", "Label")
         WITH loc_oPagina.lbl_4c_Ocup4
             .Caption   = "Logon :"
-            .Top       = 207
+            .Top       = 232
             .Left      = 200
             .Width     = 55
             .Height    = 17
@@ -610,7 +656,7 @@ DEFINE CLASS FormCec AS FormBase
         loc_oPagina.AddObject("txt_4c_Logon", "TextBox")
         WITH loc_oPagina.txt_4c_Logon
             .Value     = ""
-            .Top       = 205
+            .Top       = 230
             .Left      = 240
             .Width     = 68
             .Height    = 23
@@ -627,7 +673,7 @@ DEFINE CLASS FormCec AS FormBase
         loc_oPagina.AddObject("lbl_4c_Ocup7", "Label")
         WITH loc_oPagina.lbl_4c_Ocup7
             .Caption   = "Senha :"
-            .Top       = 231
+            .Top       = 256
             .Left      = 199
             .Width     = 55
             .Height    = 17
@@ -642,7 +688,7 @@ DEFINE CLASS FormCec AS FormBase
         loc_oPagina.AddObject("txt_4c_Senha", "TextBox")
         WITH loc_oPagina.txt_4c_Senha
             .Value        = ""
-            .Top          = 229
+            .Top          = 254
             .Left         = 240
             .Width        = 68
             .Height       = 23
@@ -661,7 +707,7 @@ DEFINE CLASS FormCec AS FormBase
         loc_oPagina.AddObject("lbl_4c_Ocup12", "Label")
         WITH loc_oPagina.lbl_4c_Ocup12
             .Caption   = "Consulta Serasa :"
-            .Top       = 256
+            .Top       = 281
             .Left      = 151
             .Width     = 115
             .Height    = 17
@@ -676,7 +722,7 @@ DEFINE CLASS FormCec AS FormBase
         loc_oPagina.AddObject("txt_4c_Fwget1", "TextBox")
         WITH loc_oPagina.txt_4c_Fwget1
             .Value     = ""
-            .Top       = 254
+            .Top       = 279
             .Left      = 240
             .Width     = 24
             .Height    = 23
@@ -693,7 +739,7 @@ DEFINE CLASS FormCec AS FormBase
         loc_oPagina.AddObject("lbl_4c_Ocup9", "Label")
         WITH loc_oPagina.lbl_4c_Ocup9
             .Caption   = "Valor Minimo :"
-            .Top       = 281
+            .Top       = 306
             .Left      = 170
             .Width     = 95
             .Height    = 17
@@ -708,7 +754,7 @@ DEFINE CLASS FormCec AS FormBase
         loc_oPagina.AddObject("txt_4c_ValMin", "TextBox")
         WITH loc_oPagina.txt_4c_ValMin
             .Value     = 0
-            .Top       = 279
+            .Top       = 304
             .Left      = 240
             .Width     = 130
             .Height    = 23
@@ -725,7 +771,7 @@ DEFINE CLASS FormCec AS FormBase
         loc_oPagina.AddObject("lbl_4c_Ocup10", "Label")
         WITH loc_oPagina.lbl_4c_Ocup10
             .Caption   = "Valor Fixo :"
-            .Top       = 305
+            .Top       = 330
             .Left      = 182
             .Width     = 80
             .Height    = 17
@@ -740,7 +786,7 @@ DEFINE CLASS FormCec AS FormBase
         loc_oPagina.AddObject("txt_4c_ValFix", "TextBox")
         WITH loc_oPagina.txt_4c_ValFix
             .Value     = 0
-            .Top       = 303
+            .Top       = 328
             .Left      = 240
             .Width     = 130
             .Height    = 23
@@ -757,7 +803,7 @@ DEFINE CLASS FormCec AS FormBase
         loc_oPagina.AddObject("lbl_4c_Ocup8", "Label")
         WITH loc_oPagina.lbl_4c_Ocup8
             .Caption   = "URL / IP - Proxi :"
-            .Top       = 332
+            .Top       = 357
             .Left      = 156
             .Width     = 115
             .Height    = 17
@@ -772,7 +818,7 @@ DEFINE CLASS FormCec AS FormBase
         loc_oPagina.AddObject("txt_4c_Ip", "TextBox")
         WITH loc_oPagina.txt_4c_Ip
             .Value     = ""
-            .Top       = 328
+            .Top       = 353
             .Left      = 240
             .Width     = 365
             .Height    = 23
@@ -788,7 +834,7 @@ DEFINE CLASS FormCec AS FormBase
         loc_oPagina.AddObject("lbl_4c_Ocup11", "Label")
         WITH loc_oPagina.lbl_4c_Ocup11
             .Caption   = "Porta :"
-            .Top       = 355
+            .Top       = 380
             .Left      = 203
             .Width     = 50
             .Height    = 17
@@ -803,7 +849,7 @@ DEFINE CLASS FormCec AS FormBase
         loc_oPagina.AddObject("txt_4c_Porta", "TextBox")
         WITH loc_oPagina.txt_4c_Porta
             .Value     = 0
-            .Top       = 353
+            .Top       = 378
             .Left      = 240
             .Width     = 43
             .Height    = 23
@@ -820,7 +866,7 @@ DEFINE CLASS FormCec AS FormBase
         loc_oPagina.AddObject("lbl_4c_Ocup13", "Label")
         WITH loc_oPagina.lbl_4c_Ocup13
             .Caption   = "Usuario Proxy :"
-            .Top       = 380
+            .Top       = 405
             .Left      = 162
             .Width     = 100
             .Height    = 17
@@ -835,7 +881,7 @@ DEFINE CLASS FormCec AS FormBase
         loc_oPagina.AddObject("txt_4c_UsuProxy", "TextBox")
         WITH loc_oPagina.txt_4c_UsuProxy
             .Value     = ""
-            .Top       = 378
+            .Top       = 403
             .Left      = 240
             .Width     = 363
             .Height    = 23
@@ -851,7 +897,7 @@ DEFINE CLASS FormCec AS FormBase
         loc_oPagina.AddObject("lbl_4c_Ocup14", "Label")
         WITH loc_oPagina.lbl_4c_Ocup14
             .Caption   = "Senha Proxy :"
-            .Top       = 405
+            .Top       = 430
             .Left      = 168
             .Width     = 95
             .Height    = 17
@@ -866,7 +912,7 @@ DEFINE CLASS FormCec AS FormBase
         loc_oPagina.AddObject("txt_4c_SenProxy", "TextBox")
         WITH loc_oPagina.txt_4c_SenProxy
             .Value        = ""
-            .Top          = 403
+            .Top          = 428
             .Left         = 240
             .Width        = 198
             .Height       = 23
@@ -1381,3 +1427,4 @@ DEFINE CLASS FormCec AS FormBase
     ENDPROC
 
 ENDDEFINE
+
