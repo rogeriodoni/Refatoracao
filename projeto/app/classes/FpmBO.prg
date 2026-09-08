@@ -258,8 +258,9 @@ DEFINE CLASS FpmBO AS BusinessBase
                         loc_cEmps    = cursor_4c_FpagI.emps
 
                         loc_cSQL = "INSERT INTO SigOpFpi " + ;
-                                   "(fpags, nparcs, valmins, valmaxs, emps) " + ;
+                                   "(cidchaves, fpags, nparcs, valmins, valmaxs, emps) " + ;
                                    "VALUES (" + ;
+                                   EscaparSQL(fUniqueIds()) + ", " + ;
                                    EscaparSQL(loc_cFpags) + ", " + ;
                                    FormatarNumeroSQL(loc_nNparcs, 0) + ", " + ;
                                    FormatarNumeroSQL(loc_nValmins, 2) + ", " + ;
@@ -323,8 +324,9 @@ DEFINE CLASS FpmBO AS BusinessBase
 
         TRY
             loc_cSQL = "INSERT INTO SigOpFpi " + ;
-                       "(fpags, nparcs, valmins, valmaxs, emps) " + ;
+                       "(cidchaves, fpags, nparcs, valmins, valmaxs, emps) " + ;
                        "VALUES (" + ;
+                       EscaparSQL(fUniqueIds()) + ", " + ;
                        EscaparSQL(THIS.this_cFpags) + ", " + ;
                        FormatarNumeroSQL(THIS.this_nNparcs, 0) + ", " + ;
                        FormatarNumeroSQL(THIS.this_nValmins, 2) + ", " + ;

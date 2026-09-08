@@ -780,7 +780,8 @@ DEFINE CLASS cliBO AS BusinessBase
                 IIF(EMPTY(THIS.this_cPastas), "NULL", EscaparSQL(THIS.this_cPastas)) + ", " + ;
                 IIF(EMPTY(THIS.this_cFigjpgs), "NULL", EscaparSQL(THIS.this_cFigjpgs)) + ", " + ;
                 IIF(EMPTY(THIS.this_cFiglgpds), "NULL", EscaparSQL(THIS.this_cFiglgpds)) + ", " + ;
-                "NULL"
+                "NULL" + ", " + ;
+                EscaparSQL("")   && cidtrabs: NOT NULL sem property no BO (Erro151)
 
             loc_cSQL = "INSERT INTO SIGCDCLI (" + ;
                 "iclis, nclis, idcontas, idconta, rclis, razaos, nomearts, cpfs, cpfcs, rgs, " + ;
@@ -803,7 +804,7 @@ DEFINE CLASS cliBO AS BusinessBase
                 "cepcos, complcos, numcos, cfos, codtifs, fpubls, cfgfiscos, cfgfiscss, cfgfisics, cfgfisiis, " + ;
                 "cfgfisins, cfgfisips, cfgfisirs, cfgfisiss, cfgfispis, ccargs, ean13ents, ean13cobs, pracas, " + ;
                 "codvendedor, usuars, usualts, usuariocrm, senhas, ccartoes, cobs, pais, maes, " + ;
-                "obs, perfils, pastas, figjpgs, figlgpds, figuras" + ;
+                "obs, perfils, pastas, figjpgs, figlgpds, figuras, cidtrabs" + ;
                 ") VALUES (" + loc_cVals + ")"
 
             IF SQLEXEC(gnConnHandle, loc_cSQL) > 0

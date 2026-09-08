@@ -171,7 +171,8 @@ DEFINE CLASS FreBO AS BusinessBase
                     FormatarNumeroSQL(THIS.this_nFrete) + ")"
             ELSE
                 *-- Modo operacional: INSERT em SigOpFrt com chave composta cidas+dopes
-                loc_cSQL = "INSERT INTO SigOpFrt (cidas, dopes, valors) VALUES (" + ;
+                loc_cSQL = "INSERT INTO SigOpFrt (cidchaves, cidas, dopes, valors) VALUES (" + ;
+                    EscaparSQL(fUniqueIds()) + ", " + ;
                     EscaparSQL(THIS.this_cCidade) + ", " + ;
                     EscaparSQL(THIS.this_cDopes) + ", " + ;
                     FormatarNumeroSQL(THIS.this_nFrete) + ")"

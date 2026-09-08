@@ -150,7 +150,7 @@ DEFINE CLASS sigopdivBO AS BusinessBase
                        "Emps, Dopps, Numps, Nops, Dopes, Numes, Dataps, Dataes, Qtds, " + ;
                        "Obss, SeqDivs, Cpros, Divs, CodCors, CodTams, Usuars, NopMaes, QtdCpnts, " + ;
                        "Empds, CidChaves, EmpDopNums, EmpDNps, EmpDopNops, Dpros, Notas, Citens, Pesos, " + ;
-                       "Locals, Ntrans, CodBarras, QtdTubos, IImprs, Moedas, Units, Nfunds, CodTgOps) " + ;
+                       "Locals, Ntrans, CodBarras, QtdTubos, IImprs, Moedas, Units, Nfunds, CodTgOps, Imprs) " + ;
                        "VALUES (" + ;
                        EscaparSQL(THIS.this_cEmps) + ", " + ;
                        EscaparSQL(THIS.this_cDivisaoop) + ", " + ;
@@ -179,7 +179,7 @@ DEFINE CLASS sigopdivBO AS BusinessBase
                        EscaparSQL(THIS.this_cNotas) + ", " + ;
                        FormatarNumeroSQL(THIS.this_nCitens) + ", " + ;
                        FormatarNumeroSQL(THIS.this_nPesos) + ", " + ;
-                       "' ', 0, 0, 0, 0, '   ', 0, 0, '')"
+                       "' ', 0, 0, 0, 0, '   ', 0, 0, '', 0)"   && ultimo 0 = Imprs (bit NOT NULL, Erro151)
 
             IF SQLEXEC(gnConnHandle, loc_cSQL) > 0
                 THIS.RegistrarAuditoria("I")
@@ -916,7 +916,7 @@ DEFINE CLASS sigopdivBO AS BusinessBase
                                "Emps, Dopps, Numps, Nops, Dopes, Numes, Dataps, Dataes, Qtds, " + ;
                                "Obss, SeqDivs, Cpros, Divs, CodCors, CodTams, Usuars, NopMaes, QtdCpnts, " + ;
                                "Empds, CidChaves, EmpDopNums, EmpDNps, EmpDopNops, Dpros, Notas, Citens, Pesos, " + ;
-                               "Locals, Ntrans, CodBarras, QtdTubos, IImprs, Moedas, Units, Nfunds, CodTgOps) " + ;
+                               "Locals, Ntrans, CodBarras, QtdTubos, IImprs, Moedas, Units, Nfunds, CodTgOps, Imprs) " + ;
                                "VALUES (" + ;
                                EscaparSQL(THIS.this_cEmps) + ", " + ;
                                EscaparSQL(ALLTRIM(par_cDivisaoop)) + ", " + ;
@@ -948,7 +948,7 @@ DEFINE CLASS sigopdivBO AS BusinessBase
                                EscaparSQL(ALLTRIM(Temp_DivOp.Notas)) + ", " + ;
                                FormatarNumeroSQL(Temp_DivOp.Citens) + ", " + ;
                                FormatarNumeroSQL(loc_nPesoOpNew) + ", " + ;
-                               "' ', 0, 0, 0, 0, '   ', 0, 0, '')"
+                               "' ', 0, 0, 0, 0, '   ', 0, 0, '', 0)"   && ultimo 0 = Imprs (bit NOT NULL, Erro151)
                     IF SQLEXEC(gnConnHandle, loc_cSQL) <= 0
                         MsgErro("Favor Reinicializar o Processo!!! (INSERT SigOpPic)", "Erro")
                         USE IN cursor_4c_LocalMfas
@@ -1062,7 +1062,7 @@ DEFINE CLASS sigopdivBO AS BusinessBase
                                    "Emps, Dopps, Numps, Nops, Dopes, Numes, Dataps, Dataes, Qtds, " + ;
                                    "Obss, SeqDivs, Cpros, Divs, CodCors, CodTams, Usuars, NopMaes, QtdCpnts, " + ;
                                    "Empds, CidChaves, EmpDopNums, EmpDNps, EmpDopNops, Dpros, Notas, Citens, " + ;
-                                   "Locals, Ntrans, CodBarras, QtdTubos, IImprs, Moedas, Units, Nfunds, CodTgOps) " + ;
+                                   "Locals, Ntrans, CodBarras, QtdTubos, IImprs, Moedas, Units, Nfunds, CodTgOps, Pesos, Imprs) " + ;
                                    "VALUES (" + ;
                                    EscaparSQL(THIS.this_cEmps) + ", " + ;
                                    EscaparSQL(ALLTRIM(par_cDivisaoop)) + ", " + ;
@@ -1093,7 +1093,8 @@ DEFINE CLASS sigopdivBO AS BusinessBase
                                    EscaparSQL(ALLTRIM(Temp_DivOp.Dpros)) + ", " + ;
                                    EscaparSQL(ALLTRIM(Temp_DivOp.Notas)) + ", " + ;
                                    FormatarNumeroSQL(Temp_DivOp.Citens) + ", " + ;
-                                   "' ', 0, 0, 0, 0, '   ', 0, 0, '')"
+                                   "' ', 0, 0, 0, 0, '   ', 0, 0, '', " + ;
+                                   FormatarNumeroSQL(NVL(Temp_DivOp.Pesos, 0)) + ", 0)"   && Pesos + Imprs (NOT NULL, Erro151)
                         IF SQLEXEC(gnConnHandle, loc_cSQL) <= 0
                             MsgErro("Favor Reinicializar o Processo!!! (SigOpPic Etiq)", "Erro")
                             USE IN cursor_4c_LocalMfas

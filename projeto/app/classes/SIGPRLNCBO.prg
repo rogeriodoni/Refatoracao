@@ -61,9 +61,11 @@ DEFINE CLASS SIGPRLNCBO AS BusinessBase
         loc_lSucesso = .F.
 
         TRY
-            loc_cSQL = "SELECT DISTINCT a.grupos, a.contas, a.grucontas" + ;
+            *-- Legado (Init): "Select * From SigClLan" com colunas Grupos, Contas e
+            *-- Cocos (header "Operacao") — UMA linha por lancamento, sem DISTINCT.
+            loc_cSQL = "SELECT a.grupos, a.contas, a.cocos, a.cidchaves, a.grucontas" + ;
                        " FROM SigClLan a" + ;
-                       " ORDER BY a.grupos, a.contas"
+                       " ORDER BY a.grupos, a.contas, a.cocos"
 
             IF USED("cursor_4c_Dados")
                 USE IN cursor_4c_Dados
@@ -312,11 +314,17 @@ DEFINE CLASS SIGPRLNCBO AS BusinessBase
     * par_cContas    = codigo da conta (char 10)
     * par_cCursorOco = nome do cursor VFP com a lista de ocorrencias (campo cocos)
     *--------------------------------------------------------------------------
-    PROCEDURE SalvarOcorrencias(par_cGrupos, par_cContas, par_cCursorOco)
-        LOCAL loc_cGruContas, loc_lSucesso, loc_cCocos, loc_lAbortar
+    PROCEDURE SalvarOcorrencias(par_cGrupos, par_cContas, par_cCursorOco, par_lPermitirVazio)
+        LOCAL loc_cGruContas, loc_lSucesso, loc_cCocos, loc_lAbortar, loc_lPermitirVazio
         LOCAL loc_cSQLIns, loc_nResIns
         loc_lSucesso = .F.
         loc_lAbortar = .F.
+
+        *-- Cursor vazio significa "remover todas as ocorrencias do grupo+conta" e so
+        *-- eh valido em ALTERAR (o legado apaga e reinsere). Em INCLUSAO nao ha o que
+        *-- gravar: retornar .F. em vez de sucesso, para o form nao anunciar que salvou
+        *-- um registro que nao existe (Erro148).
+        loc_lPermitirVazio = (VARTYPE(par_lPermitirVazio) = "L" AND par_lPermitirVazio)
 
         TRY
             loc_cGruContas = PADR(ALLTRIM(par_cGrupos), 10) + PADR(ALLTRIM(par_cContas), 10)
@@ -327,8 +335,11 @@ DEFINE CLASS SIGPRLNCBO AS BusinessBase
 
             IF !loc_lAbortar
                 IF !USED(par_cCursorOco) OR RECCOUNT(par_cCursorOco) = 0
-                    loc_lSucesso = .T.
+                    loc_lSucesso = loc_lPermitirVazio
                     loc_lAbortar = .T.
+                    IF !loc_lPermitirVazio
+                        THIS.this_cMensagemErro = "Nenhuma ocorr" + CHR(234) + "ncia informada."
+                    ENDIF
                 ENDIF
             ENDIF
 

@@ -81,10 +81,12 @@ DEFINE CLASS SIGPRSTFBO AS BusinessBase
         loc_lSucesso = .T.
 
         TRY
+            *-- ChaveRegistro eh NOT NULL (mesma ordem de colunas do BusinessBase.RegistrarAuditoria)
             loc_cSQL = "INSERT INTO LogAuditoria " + ;
-                       "(Tabela, Operacao, Usuario, DataHora) VALUES (" + ;
+                       "(Tabela, Operacao, ChaveRegistro, Usuario, DataHora) VALUES (" + ;
                        EscaparSQL("SIGPRSTF") + ", " + ;
                        EscaparSQL(par_cOperacao) + ", " + ;
+                       EscaparSQL(LEFT(ALLTRIM(THIS.ObterChavePrimaria()), 100)) + ", " + ;
                        EscaparSQL(gc_4c_UsuarioLogado) + ", " + ;
                        "GETDATE())"
 

@@ -163,7 +163,7 @@ DEFINE CLASS gprBO AS BusinessBase
             TEXT TO loc_cSQL TEXTMERGE NOSHOW
                 INSERT INTO SigCdGpr (codigos, descs, CodConPads, Matprincs,
                     cpqtds, digauts, AplicFlhs, Barrefs, PesEnvs,
-                    linhas, priors, AltEtiqs, nChkObjs, Fchcxs, digbars, prodecomm)
+                    linhas, priors, AltEtiqs, nChkObjs, Fchcxs, digbars, prodecomm, ids)
                 VALUES (
                     <<EscaparSQL(THIS.this_cCodigos)>>,
                     <<EscaparSQL(THIS.this_cDescs)>>,
@@ -180,7 +180,8 @@ DEFINE CLASS gprBO AS BusinessBase
                     <<FormatarNumeroSQL(THIS.this_nNchkobjs, 0)>>,
                     <<FormatarNumeroSQL(THIS.this_nFchcxs, 0)>>,
                     <<FormatarNumeroSQL(THIS.this_nDigbars, 0)>>,
-                    <<FormatarNumeroSQL(THIS.this_nProdecomm, 0)>>
+                    <<FormatarNumeroSQL(THIS.this_nProdecomm, 0)>>,
+                    <<FormatarNumeroSQL(THIS.this_nIds, 0)>>
                 )
             ENDTEXT
 

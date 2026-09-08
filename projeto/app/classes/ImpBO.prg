@@ -218,7 +218,7 @@ DEFINE CLASS ImpBO AS BusinessBase
                 " expds, expas, barcmds, fontes, fonte2s, fontemp1s," + ;
                 " nlivl1s, nclvl1s, nlivext1s, nclvext1s, nlivext2s, nclvext2s," + ;
                 " nlinom1s, nclnom1s, nlicid1s, nclcid1s," + ;
-                " nlidia1s, ncldia1s, nlimes1s, nclmes1s, nliano1s, nclano1s)" + ;
+                " nlidia1s, ncldia1s, nlimes1s, nclmes1s, nliano1s, nclano1s, tpbarra)" + ;
                 " VALUES (" + ;
                 EscaparSQL(THIS.this_cImpres) + ", " + ;
                 EscaparSQL(loc_cChave) + ", " + ;
@@ -258,7 +258,8 @@ DEFINE CLASS ImpBO AS BusinessBase
                 FormatarNumeroSQL(THIS.this_nNlimes1s,  0) + ", " + ;
                 FormatarNumeroSQL(THIS.this_nNclmes1s,  0) + ", " + ;
                 FormatarNumeroSQL(THIS.this_nNliano1s,  0) + ", " + ;
-                FormatarNumeroSQL(THIS.this_nNclano1s,  0) + ")"
+                FormatarNumeroSQL(THIS.this_nNclano1s,  0) + ", " + ;
+                FormatarNumeroSQL(0, 0) + ")"   && tpbarra: NOT NULL sem property no BO (Erro151)
 
             loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL)
 

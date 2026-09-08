@@ -152,16 +152,16 @@ DEFINE CLASS ROMBO AS BusinessBase
                 THIS.this_cCodigo    = ALLTRIM(Codigo)
                 THIS.this_dDatas     = Datas
                 THIS.this_cTipo      = ALLTRIM(Tipo)
-                THIS.this_cCodTransp = ALLTRIM(ISNULL(CodTransp, ""))
-                THIS.this_cContas    = ALLTRIM(ISNULL(Contas, ""))
-                THIS.this_cDepOrig   = ALLTRIM(ISNULL(DepOrig, ""))
-                THIS.this_cDepDest   = ALLTRIM(ISNULL(DepDest, ""))
-                THIS.this_cObs       = ALLTRIM(ISNULL(ObsVal, ""))
-                THIS.this_nNAceite   = ISNULL(nAceite, 0)
+                THIS.this_cCodTransp = ALLTRIM(NVL(CodTransp, ""))
+                THIS.this_cContas    = ALLTRIM(NVL(Contas, ""))
+                THIS.this_cDepOrig   = ALLTRIM(NVL(DepOrig, ""))
+                THIS.this_cDepDest   = ALLTRIM(NVL(DepDest, ""))
+                THIS.this_cObs       = ALLTRIM(NVL(ObsVal, ""))
+                THIS.this_nNAceite   = NVL(nAceite, 0)
                 THIS.this_dDataAct   = DataAct
-                THIS.this_cUsuarios  = ALLTRIM(ISNULL(Usuarios, ""))
-                THIS.this_nValor     = ISNULL(Valor, 0)
-                THIS.this_cCidChaves = ALLTRIM(ISNULL(CidChaves, ""))
+                THIS.this_cUsuarios  = ALLTRIM(NVL(Usuarios, ""))
+                THIS.this_nValor     = NVL(Valor, 0)
+                THIS.this_cCidChaves = ALLTRIM(NVL(CidChaves, ""))
                 loc_lResultado = .T.
             ENDIF
         CATCH TO loc_oErro
@@ -224,13 +224,16 @@ DEFINE CLASS ROMBO AS BusinessBase
         loc_lResultado = .F.
 
         TRY
+            *-- SigCdRom tem `Tipo` (char) e `Tipos` (numeric), ambas NOT NULL. Faltava
+            *-- a numerica e o INSERT era recusado pelo SQL Server (Erro151).
             loc_cSQL = "INSERT INTO SigCdRom " + ;
-                "(Codigo, Datas, Tipo, CodTransp, Contas, DepOrig, DepDest, Obs, " + ;
+                "(Codigo, Datas, Tipo, Tipos, CodTransp, Contas, DepOrig, DepDest, Obs, " + ;
                 "nAceite, Valor, CidChaves, Usuarios) " + ;
                 "VALUES (" + ;
                 EscaparSQL(THIS.this_cCodigo)                     + ", " + ;
                 FormatarDataSQL(THIS.this_dDatas)                 + ", " + ;
                 EscaparSQL(THIS.this_cTipo)                       + ", " + ;
+                FormatarNumeroSQL(0, 0)                           + ", " + ;
                 EscaparSQL(THIS.this_cCodTransp)                  + ", " + ;
                 EscaparSQL(THIS.this_cContas)                     + ", " + ;
                 EscaparSQL(THIS.this_cDepOrig)                    + ", " + ;
@@ -281,12 +284,13 @@ DEFINE CLASS ROMBO AS BusinessBase
             IF loc_nResultado >= 0
                 *-- Re-insere cabecalho
                 loc_cSQL = "INSERT INTO SigCdRom " + ;
-                    "(Codigo, Datas, Tipo, CodTransp, Contas, DepOrig, DepDest, Obs, " + ;
+                    "(Codigo, Datas, Tipo, Tipos, CodTransp, Contas, DepOrig, DepDest, Obs, " + ;
                     "nAceite, Valor, CidChaves, Usuarios) " + ;
                     "VALUES (" + ;
                     EscaparSQL(THIS.this_cCodigo)                     + ", " + ;
                     FormatarDataSQL(THIS.this_dDatas)                 + ", " + ;
                     EscaparSQL(THIS.this_cTipo)                       + ", " + ;
+                    FormatarNumeroSQL(0, 0)                           + ", " + ;
                     EscaparSQL(THIS.this_cCodTransp)                  + ", " + ;
                     EscaparSQL(THIS.this_cContas)                     + ", " + ;
                     EscaparSQL(THIS.this_cDepOrig)                    + ", " + ;
@@ -409,11 +413,12 @@ DEFINE CLASS ROMBO AS BusinessBase
                     loc_cCidChaves = LEFT(SYS(2015) + SYS(2015), 20)
                 ENDIF
 
-                loc_cSQL = "INSERT INTO SigCdRoI (Codigo, Chave, cIdChaves) " + ;
+                loc_cSQL = "INSERT INTO SigCdRoI (Codigo, Chave, cIdChaves, id) " + ;
                     "VALUES (" + ;
                     EscaparSQL(par_cCodigo) + ", " + ;
                     EscaparSQL(loc_cChave)  + ", " + ;
-                    EscaparSQL(loc_cCidChaves) + ")"
+                    EscaparSQL(loc_cCidChaves) + ", " + ;
+                    FormatarNumeroSQL(0, 0) + ")"   && id: NOT NULL sem property no BO (Erro151)
 
                 loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL)
                 IF loc_nResultado < 0
@@ -516,7 +521,7 @@ DEFINE CLASS ROMBO AS BusinessBase
             IF loc_nResult > 0 AND USED("cursor_4c_NfiTemp") AND RECCOUNT("cursor_4c_NfiTemp") > 0
                 SELECT cursor_4c_NfiTemp
                 LOCAL loc_cXml, loc_cDestino, loc_cUF
-                loc_cXml     = ALLTRIM(ISNULL(nfexml, ""))
+                loc_cXml     = ALLTRIM(NVL(nfexml, ""))
                 loc_cDestino = STREXTRACT(loc_cXml, "<enderDest>", "</enderDest>")
                 loc_cUF      = STREXTRACT(loc_cDestino, "<UF>", "</UF>")
 
@@ -529,7 +534,7 @@ DEFINE CLASS ROMBO AS BusinessBase
 
                     IF loc_nResUf > 0 AND USED("cursor_4c_UfsTemp") AND RECCOUNT("cursor_4c_UfsTemp") > 0
                         SELECT cursor_4c_UfsTemp
-                        IF ISNULL(chkgnre, 0) = 1
+                        IF NVL(chkgnre, 0) = 1
                             IF !MsgConfirma("NF com inscri" + CHR(231) + CHR(227) + "o pendente." + ;
                                 CHR(13) + "Guia GNRE foi paga?", "Aten" + CHR(231) + CHR(227) + "o")
                                 loc_lResultado = .F.
@@ -569,7 +574,7 @@ DEFINE CLASS ROMBO AS BusinessBase
                     "cursor_4c_TrpTemp")
                 IF loc_nResult > 0 AND USED("cursor_4c_TrpTemp") AND RECCOUNT("cursor_4c_TrpTemp") > 0
                     SELECT cursor_4c_TrpTemp
-                    loc_cRazao    = ALLTRIM(ISNULL(Razaos, ""))
+                    loc_cRazao    = ALLTRIM(NVL(Razaos, ""))
                     loc_cIdTransp = ALLTRIM(IdTransp)
                 ENDIF
             CATCH TO loc_oErro
@@ -598,7 +603,7 @@ DEFINE CLASS ROMBO AS BusinessBase
                     "cursor_4c_DptTemp")
                 IF loc_nResult > 0 AND USED("cursor_4c_DptTemp") AND RECCOUNT("cursor_4c_DptTemp") > 0
                     SELECT cursor_4c_DptTemp
-                    loc_cDesc = ALLTRIM(ISNULL(Descricaos, ""))
+                    loc_cDesc = ALLTRIM(NVL(Descricaos, ""))
                 ENDIF
             CATCH TO loc_oErro
                 MsgErro(loc_oErro.Message, "ROMBO.BuscarDepartamento")
@@ -627,7 +632,7 @@ DEFINE CLASS ROMBO AS BusinessBase
                     "cursor_4c_CliTemp")
                 IF loc_nResult > 0 AND USED("cursor_4c_CliTemp") AND RECCOUNT("cursor_4c_CliTemp") > 0
                     SELECT cursor_4c_CliTemp
-                    loc_cRClis = ALLTRIM(ISNULL(RClis, ""))
+                    loc_cRClis = ALLTRIM(NVL(RClis, ""))
                     loc_cCpfs  = ALLTRIM(Cpfs)
                 ENDIF
             CATCH TO loc_oErro
@@ -732,7 +737,7 @@ DEFINE CLASS ROMBO AS BusinessBase
                 IF loc_nResult > 0 AND USED("cursor_4c_CliCpfTemp") AND RECCOUNT("cursor_4c_CliCpfTemp") > 0
                     SELECT cursor_4c_CliCpfTemp
                     loc_cIClis = ALLTRIM(IClis)
-                    loc_cRClis = ALLTRIM(ISNULL(RClis, ""))
+                    loc_cRClis = ALLTRIM(NVL(RClis, ""))
                     loc_cCpfs  = ALLTRIM(Cpfs)
                 ENDIF
             CATCH TO loc_oErro

@@ -347,7 +347,8 @@ DEFINE CLASS sigpdmp6BO AS BusinessBase
                        "  nlotes, naceites, nops, ntrans, locals, jobs," + ;
                        "  totpesos, pesolancs, retrabs, chksubn," + ;
                        "  nconforms, codnconfs, procbals, procdbal," + ;
-                       "  imprs, autos, lccs, libprods, chkbaixa)" + ;
+                       "  imprs, autos, lccs, libprods, chkbaixa," + ;
+                       "  numbalds, numbals)" + ;
                        " VALUES (" + ;
                        EscaparSQL(THIS.this_cCidChaves)            + ", " + ;
                        EscaparSQL(THIS.this_cEmpDnPs)              + ", " + ;
@@ -383,7 +384,9 @@ DEFINE CLASS sigpdmp6BO AS BusinessBase
                        IIF(THIS.this_lAutos,     "1", "0")          + ", " + ;
                        IIF(THIS.this_lLccs,      "1", "0")          + ", " + ;
                        EscaparSQL(THIS.this_cLibProds)             + ", " + ;
-                       FormatarNumeroSQL(THIS.this_nChkBaixa)       + ")"
+                       FormatarNumeroSQL(THIS.this_nChkBaixa)       + ", " + ;
+                       FormatarNumeroSQL(THIS.this_nNumBalds, 0)   + ", " + ;
+                       FormatarNumeroSQL(THIS.this_nNumBals, 0)    + ")"
 
             loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL)
 
