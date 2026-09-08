@@ -1002,16 +1002,16 @@ DEFINE CLASS FormCRC AS FormBase
             THIS.this_oBusinessObject.this_cGrupos = ALLTRIM(loc_oPag2.txt_4c_Grupo.Value)
         ENDIF
         IF PEMSTATUS(loc_oPag2, "chk_4c_ChkAuto", 5)
-            THIS.this_oBusinessObject.this_nAutos = IIF(loc_oPag2.chk_4c_ChkAuto.Value, 1, 0)
+            THIS.this_oBusinessObject.this_nAutos = IIF(loc_oPag2.chk_4c_ChkAuto.Value = 1, 1, 0)
         ENDIF
         IF PEMSTATUS(loc_oPag2, "chk_4c_ChkBloqueios", 5)
-            THIS.this_oBusinessObject.this_nBloqueios = IIF(loc_oPag2.chk_4c_ChkBloqueios.Value, 1, 0)
+            THIS.this_oBusinessObject.this_nBloqueios = IIF(loc_oPag2.chk_4c_ChkBloqueios.Value = 1, 1, 0)
         ENDIF
         IF PEMSTATUS(loc_oPag2, "chk_4c_ChkObrigs", 5)
-            THIS.this_oBusinessObject.this_nObrigs = IIF(loc_oPag2.chk_4c_ChkObrigs.Value, 1, 0)
+            THIS.this_oBusinessObject.this_nObrigs = IIF(loc_oPag2.chk_4c_ChkObrigs.Value = 1, 1, 0)
         ENDIF
         IF PEMSTATUS(loc_oPag2, "chk_4c_Check1", 5)
-            THIS.this_oBusinessObject.this_nLocks = IIF(loc_oPag2.chk_4c_Check1.Value, 1, 0)
+            THIS.this_oBusinessObject.this_nLocks = IIF(loc_oPag2.chk_4c_Check1.Value = 1, 1, 0)
         ENDIF
     ENDPROC
 

@@ -309,7 +309,7 @@ DEFINE CLASS Formcrf AS FormBase
                 .PicturePosition = 13
                 .Top             = 5
                 .Left = 5
-                .Width           = 90
+                .Width           = 75
                 .Height          = 75
                 .FontName        = "Tahoma"
                 .FontSize        = 8

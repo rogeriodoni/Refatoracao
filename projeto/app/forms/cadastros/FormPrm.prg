@@ -953,9 +953,9 @@ DEFINE CLASS FormPrm AS FormBase
 
         THIS.this_oBusinessObject.this_cPromos    = ALLTRIM(loc_oPg2.txt_4c_Promos.Value)
         THIS.this_oBusinessObject.this_cCods      = ALLTRIM(loc_oPg2.txt_4c_Codigo.Value)
-        THIS.this_oBusinessObject.this_nIncentivs = IIF(loc_oPg2.chk_4c_Comissao.Value, 1, 0)
+        THIS.this_oBusinessObject.this_nIncentivs = IIF(loc_oPg2.chk_4c_Comissao.Value = 1, 1, 0)
         THIS.this_oBusinessObject.this_nComiss    = loc_oPg2.txt_4c_Comiss.Value
-        THIS.this_oBusinessObject.this_nECommerce = IIF(loc_oPg2.chk_4c_eCommerce.Value, 1, 0)
+        THIS.this_oBusinessObject.this_nECommerce = IIF(loc_oPg2.chk_4c_eCommerce.Value = 1, 1, 0)
         THIS.this_oBusinessObject.this_cLPrecos   = ALLTRIM(loc_oPg2.txt_4c_LPrecos.Value)
     ENDPROC
 
