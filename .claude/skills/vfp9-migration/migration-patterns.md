@@ -9606,3 +9606,160 @@ Sweep 2026-09-04 sobre 403 forms: **4 ocorrencias reais** — FormLin (A), FormM
 - Warning: `C:\4c\automation\CorretorAutomatico.ps1` `Corrigir-AddObjectBindEventIncoerente` (Pattern #186).
 - Complementa Pattern #185 (handlers de toggle) e Pattern #183 (ColumnCount destroi AddObject).
 - Origem: sweep do Pattern #185 (2026-09-04) — os defeitos apareceram ao investigar por que 24 forms nao encaixavam no template de toggle.
+
+---
+
+## 187. IIF() Exige Condicao LOGICA — `IIF(chk.Value, 1, 0)` Dispara Erro 11 (Erro147 2026-09-08)
+
+### O sintoma
+
+Preencher o cadastro e clicar em **Salvar** abre a caixa:
+
+```
+Erro em FormParaBO
+Function argument value, type, or count is invalid.
+```
+
+### A causa
+
+`CheckBox.Value` eh **numerico** nos forms gerados (o `AddObject` sempre inicializa `.Value = 0`).
+`IIF()` exige um valor **logico** no primeiro argumento — passar numero estoura o erro 11 do VFP9:
+
+```foxpro
+* ERRADO — CheckBox.Value eh 0/1 (numerico)
+loc_oBO.this_nFrticms = IIF(loc_oPage1.chk_4c_ObjFreteICM.Value, 1, 0)
+
+* CORRETO
+loc_oBO.this_nFrticms = IIF(loc_oPage1.chk_4c_ObjFreteICM.Value = 1, 1, 0)
+```
+
+Teste isolado que confirma (VFP9): `IIF(0, 1, 0)` -> `Erro 11: Function argument value, type, or count is invalid.`
+
+### O agravante: o CATCH esconde e o Salvar continua
+
+`FormParaBO` era `PROCEDURE` com `TRY/CATCH`. O erro na 1a linha de CheckBox aborta o metodo **no meio** —
+todas as propriedades seguintes do BO ficam com o valor anterior — e `BtnSalvarClick` seguia adiante:
+
+```foxpro
+* ERRADO — grava mesmo com FormParaBO tendo falhado
+IF loc_lProsseguir
+    THIS.FormParaBO()
+    IF THIS.this_oBusinessObject.Salvar()
+```
+
+```foxpro
+* CORRETO — FormParaBO vira FUNCTION e a gravacao aborta
+PROTECTED FUNCTION FormParaBO()
+    LOCAL loc_lSucesso
+    loc_lSucesso = .F.
+    TRY
+        ...
+        loc_lSucesso = .T.
+    CATCH TO loc_oErro
+        MsgErro(loc_oErro.Message, "Erro em FormParaBO")
+    ENDTRY
+    RETURN loc_lSucesso
+ENDFUNC
+
+* no BtnSalvarClick:
+IF loc_lProsseguir AND !THIS.FormParaBO()
+    loc_lProsseguir = .F.
+ENDIF
+```
+
+**Regra geral**: qualquer expressao NUMERICA usada como condicao (`IIF`, `IF`, `DO WHILE`) precisa de comparacao explicita.
+Todo metodo de transferencia (`FormParaBO`) deve reportar falha, e quem grava deve respeitar esse retorno.
+
+### Auto-fix
+
+`CorretorAutomatico.ps1` Pattern **#187** (`Corrigir-IIFCheckBoxValueNumerico`): insere ` = 1` quando o controle eh
+CheckBox (AddObject `"CheckBox"` ou prefixo `chk_4c_`) com `.Value` numerico. Se o `.Value` inicial for logico
+(`.F.`), emite `WARN-187-CHECKBOX-VALUE-LOGICO` em vez de mutar (comparar logico com 1 daria
+"Operator/operand type mismatch"). Idempotente.
+
+### Referencias
+
+- Fix: `projeto/app/forms/cadastros/Formcfo.prg` (`FormParaBO`, `BtnSalvarClick`).
+- Origem: Erro147 (2026-09-08, Formcfo "Cadastro de CFOP" — user preencheu codigo + descricao e clicou Salvar).
+
+---
+
+## 188. ControlSource NUMERICO no SCX Grava INDICE 1-based, Nunca Booleano 0/1 (Erro147 2026-09-08)
+
+### A semantica do legado
+
+No SCX, `ComboBox`/`OptionGroup` com `ControlSource = "crSigCdCfo.<coluna numerica>"` grava o **indice do item
+selecionado**, nao um booleano:
+
+| RowSource do SCX | Valor gravado na coluna |
+|---|---|
+| `"Sim,Nao"` | 1 = Sim, 2 = Nao, **0 = nada selecionado** |
+| `"Nao,Base,Preco"` | 1 = Nao, 2 = Base, 3 = Preco |
+| `"Sim-Descricao CFOP,Nao-Nenhuma,Sim-Obs. Operacao"` | 1, 2 ou 3 |
+| OptionGroup de 5 botoes ("0".."4") | 1..5 (o botao 5 grava **5**, nao 4) |
+
+Confirmado nos dados: `SigCdCfo.icmsdscs` so contem 0/2, `pontedescs` 0..3, `ctissqn` 0 e 5,
+`situas` 0/1/2 — e o proprio legado pinta `IIF(crSigCdCfo.Situas = 1, preto, vermelho)`, ou seja **1 = Ativo**.
+
+### O que a migracao fazia de errado
+
+```foxpro
+* ERRADO — lista placeholder inventada + gravacao por valor
+.RowSource = "0,1"
+.Value     = "0"
+...
+loc_oBO.this_nInclicms = ALLTRIM(loc_oPage1.cbo_4c_Combo3.Value)          && grava "0"/"1"
+loc_oPage1.cbo_4c_Combo3.Value = LTRIM(STR(loc_oBO.this_nInclicms, 1))
+loc_oBO.this_nSituas = IIF(loc_oPage1.obj_4c_Opc_situacao.Value = 1, 0, 1) && inverte a semantica
+```
+
+```foxpro
+* CORRETO — lista EXATA do SCX + indice
+.RowSource = "N" + CHR(227) + "o,Base,Pre" + CHR(231) + "o"
+.Value     = ""
+...
+loc_oBO.this_nInclicms = loc_oPage1.cbo_4c_Combo3.ListIndex
+loc_oPage1.cbo_4c_Combo3.ListIndex = IIF(BETWEEN(loc_oBO.this_nInclicms, 1, 3), loc_oBO.this_nInclicms, 0)
+loc_oBO.this_nSituas = loc_oPage1.obj_4c_Opc_situacao.Value
+loc_oPage1.obj_4c_Opc_situacao.Value = IIF(BETWEEN(loc_oBO.this_nSituas, 1, 2), loc_oBO.this_nSituas, 0)
+```
+
+`ComboBox.ListIndex = 0` e `OptionGroup.Value = 0` sao validos e significam "nada selecionado" — igual ao registro
+em branco do legado (`APPEND BLANK` -> coluna 0).
+
+### Variantes que acompanham a mesma regra
+
+1. **ControlSource CHAR** (ex.: `ipi_icms char(1)` com RowSource `"Sim,Nao"`): grava a **inicial** da opcao —
+   `LEFT(UPPER(ALLTRIM(cbo.Value)), 1)`, exatamente o que o legado faz no
+   `Replace campo with padr(upper(alltrim(cbo.value)), 1)`. O caminho inverso reconstroi a legenda
+   (`ICASE(inicial == "O", "Outros", inicial == "I", "Isento", "Tributado")`), replicando os **defaults** do
+   `mAtivaPagina2` para registro em branco.
+2. **ComboBox de 2 colunas**: `ColumnCount = 2` + `ColumnWidths = "189,0"` + `BoundColumn = 2` exibe o texto e grava
+   a 2a coluna (`"Compras,1,Devolucao compras,2,..."`). Copiar as tres propriedades do SCX.
+3. **Colunas nao mapeadas**: conferir se cada `ControlSource` do SCX virou uma propriedade do BO — em Formcfo,
+   `ipi_icms` nao era gravado por ninguem e dois controles gravavam `pontedescs`.
+
+**Antes de assumir 0/1, consultar a distribuicao real da coluna no banco**
+(`SELECT col, COUNT(*) FROM tabela GROUP BY col`). Foi o que decidiu o caso.
+
+### Auto-fix
+
+`CorretorAutomatico.ps1` Pattern **#188** (`Corrigir-ControlSourceNumericoIndice1Based`) — **WARNING-only**, 3 eixos:
+
+- `WARN-188-ROWSOURCE-PLACEHOLDER` — `.RowSource = "0,1"` (lista de digitos) em ComboBox.
+- `WARN-188-COMBO-CHAR-EM-COLUNA-NUMERICA` — `BO.this_n<X> = ALLTRIM(<cbo>.Value)`.
+- `WARN-188-COMBO-VALUE-STR-NUMERICO` — `<cbo>.Value = LTRIM(STR(BO.this_n<X>))`.
+
+Nao muta: a correcao exige o RowSource real do SCX (quantos itens, em que ordem) e a distribuicao da coluna.
+
+### Correlato — o BO precisa de LimparDados()
+
+`BusinessBase.LimparDados()` eh um stub; se o BO nao o sobrescreve, `NovoRegistro()` **nao zera nada** e as
+propriedades nao mapeadas pelo form (em Formcfo: `somaicmfrete`, `motdeson`, `tiporecs`, `obspads`) vazam do ultimo
+registro visualizado direto para o INSERT. Todo BO CRUD deve implementar
+`PROTECTED PROCEDURE LimparDados()` com `DODEFAULT()` + reset de todas as propriedades.
+
+### Referencias
+
+- Fix: `projeto/app/forms/cadastros/Formcfo.prg` (7 combos + 12 OptionGroups) e `projeto/app/classes/cfoBO.prg` (`LimparDados`).
+- Origem: Erro147 (2026-09-08, Formcfo "Cadastro de CFOP").

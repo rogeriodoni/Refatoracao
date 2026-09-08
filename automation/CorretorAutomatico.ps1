@@ -13223,6 +13223,212 @@ function Corrigir-AddObjectBindEventIncoerente {
     return $Linhas
 }
 
+function Corrigir-IIFCheckBoxValueNumerico {
+    # Pattern #187 (Erro147, 2026-09-08): IIF() com CheckBox.Value como condicao.
+    #
+    # CheckBox.Value eh NUMERICO (0/1) nos forms gerados (`.Value = 0` no bloco
+    # WITH do AddObject). IIF() exige LOGICO no 1o argumento: passar numero
+    # dispara VFP9 erro 11 "Function argument value, type, or count is invalid."
+    # Pior: em FormParaBO o erro cai no CATCH e o metodo aborta no meio — o
+    # restante das propriedades do BO nunca eh preenchido e o Salvar segue,
+    # gravando um registro parcial (bug silencioso, pior que a caixa de erro).
+    #
+    # Fix: comparar explicitamente -> IIF(chk_4c_X.Value = 1, 1, 0).
+    #
+    # Guard de tipo: so muta se o controle for CheckBox (AddObject "CheckBox" ou
+    # prefixo canonico chk_4c_) E a inicializacao do WITH for numerica
+    # (.Value = 0 / .Value = 1). Se for logica (.Value = .F.), comparar com 1
+    # daria "Operator/operand type mismatch" — nesse caso emite
+    # WARN-187-CHECKBOX-VALUE-LOGICO em vez de mutar.
+    # Idempotente: a regex exige virgula imediatamente apos .Value.
+    # Origem: Erro147 (2026-09-08, Formcfo — "Erro em FormParaBO: Function
+    # argument value, type, or count is invalid." ao salvar CFOP).
+    param([string[]]$Linhas, [string]$Arquivo = "")
+
+    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
+
+    # GUARD RAPIDO: precisa existir IIF( ... .Value ,
+    $temIIF = $false
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        if ($Linhas[$i] -match '(?i)IIF\s*\(\s*[\w.]*\.Value\s*,') { $temIIF = $true; break }
+    }
+    if (-not $temIIF) { return $Linhas }
+
+    # Mapa: nome do controle -> tipo do AddObject / literal do .Value inicial
+    $tipoCtrl   = @{}
+    $valorCtrl  = @{}
+    $rxAdd      = [regex]'(?i)AddObject\s*\(\s*"(\w+)"\s*,\s*"(\w+)"\s*\)'
+    $rxWithCtrl = [regex]'(?i)^\s*WITH\s+.*?\.(\w+)\s*$'
+    $rxValor    = [regex]'(?i)^\s*\.Value\s*=\s*(.+?)\s*$'
+    $atual = ""
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        $mA = $rxAdd.Match($Linhas[$i])
+        if ($mA.Success) { $tipoCtrl[$mA.Groups[1].Value.ToLower()] = $mA.Groups[2].Value }
+        $mW = $rxWithCtrl.Match($Linhas[$i])
+        if ($mW.Success) { $atual = $mW.Groups[1].Value.ToLower(); continue }
+        if ($Linhas[$i] -imatch '^\s*ENDWITH\s*$') { $atual = ""; continue }
+        if ($atual -ne "") {
+            $mV = $rxValor.Match($Linhas[$i])
+            if ($mV.Success -and -not $valorCtrl.ContainsKey($atual)) {
+                $valorCtrl[$atual] = $mV.Groups[1].Value
+            }
+        }
+    }
+
+    # Uso: IIF( <caminho>.<controle>.Value ,
+    $rxUso = [regex]'(?i)(IIF\s*\(\s*)((?:[\w]+\.)*(\w+)\.Value)(\s*,)'
+
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        if ($Linhas[$i] -match '^\s*\*') { continue }   # comentario
+        if ($Linhas[$i] -notmatch '(?i)IIF\s*\(\s*[\w.]*\.Value\s*,') { continue }
+
+        $linhaOrig = $Linhas[$i]
+        $nova      = $linhaOrig
+        $mutou     = $false
+
+        foreach ($m in $rxUso.Matches($linhaOrig)) {
+            $ctrl = $m.Groups[3].Value.ToLower()
+            $tipo = if ($tipoCtrl.ContainsKey($ctrl)) { $tipoCtrl[$ctrl] } else { "" }
+
+            # So trata CheckBox (declarado como tal ou com prefixo canonico chk_4c_)
+            $ehCheck = ($tipo -ieq "CheckBox") -or ($ctrl -like 'chk_4c_*')
+            if (-not $ehCheck) { continue }
+
+            $ini = if ($valorCtrl.ContainsKey($ctrl)) { $valorCtrl[$ctrl] } else { "" }
+            if ($ini -match '(?i)^\.[TF]\.$') {
+                # CheckBox com Value LOGICO: comparar com 1 quebraria. So avisa.
+                Add-Correcao -Tipo "WARN-187-CHECKBOX-VALUE-LOGICO" -Linha ($i + 1) `
+                    -Original $linhaOrig.TrimEnd() -Corrigido "(REVISAR MANUAL)" `
+                    -Descricao ("Pattern #187: IIF() usa " + $m.Groups[2].Value + " como condicao, mas o controle foi " +
+                        "inicializado com Value LOGICO (" + $ini + "). IIF exige logico, entao a linha pode estar correta; " +
+                        "se o CheckBox alimenta coluna NUMERICA, padronizar para .Value = 0 e comparar com = 1. " +
+                        "Origem: Erro147 (2026-09-08 Formcfo).")
+                Write-Host "[Pattern #187] Linha $($i + 1): CheckBox '$ctrl' com Value logico - revisar manual" -ForegroundColor Yellow
+                continue
+            }
+
+            $velho      = $m.Groups[1].Value + $m.Groups[2].Value + $m.Groups[4].Value
+            $novoTrecho = $m.Groups[1].Value + $m.Groups[2].Value + " = 1" + $m.Groups[4].Value
+            $nova       = $nova.Replace($velho, $novoTrecho)
+            $mutou      = $true
+        }
+
+        if ($mutou) {
+            Add-Correcao -Tipo "AUTO-187-IIF-CHECKBOX-VALUE-NUMERICO" -Linha ($i + 1) `
+                -Original $linhaOrig.TrimEnd() -Corrigido $nova.TrimEnd() `
+                -Descricao ("Pattern #187: IIF(<CheckBox>.Value, ...) dispara VFP9 erro 11 'Function argument value, " +
+                    "type, or count is invalid.' porque CheckBox.Value eh NUMERICO (0/1) e IIF exige condicao LOGICA. " +
+                    "Em FormParaBO o erro cai no CATCH e aborta o metodo no meio - o Salvar segue e grava registro " +
+                    "parcial. Fix: comparar explicitamente com = 1. Origem: Erro147 (2026-09-08 Formcfo).")
+            $Linhas[$i] = $nova
+            Write-Host "[Pattern #187] Linha $($i + 1): IIF(chk.Value, ...) -> IIF(chk.Value = 1, ...)" -ForegroundColor Green
+        }
+    }
+
+    return $Linhas
+}
+
+function Corrigir-ControlSourceNumericoIndice1Based {
+    # Pattern #188 (Erro147, 2026-09-08) - WARNING-only, 3 eixos.
+    #
+    # No SCX legado, ComboBox/OptionGroup com ControlSource = "cr<X>.<coluna
+    # NUMERICA>" grava o INDICE do item selecionado (1 = 1o item, 2 = 2o item,
+    # 0 = nada selecionado), NUNCA um booleano 0/1. A migracao costuma inverter
+    # isso de tres formas, todas silenciosas (gravam valor errado no banco):
+    #
+    # (A) WARN-188-ROWSOURCE-PLACEHOLDER - .RowSource = "0,1" (ou "0,1,2,...")
+    #     num ComboBox: lista inventada pelo gerador no lugar da lista real do
+    #     SCX (Sim,Nao / Nao,Base,Preco / ...). Alem de quebrar a UX (PILAR 1),
+    #     denuncia que o mapeamento foi feito por valor e nao por indice.
+    #
+    # (B) WARN-188-COMBO-CHAR-EM-COLUNA-NUMERICA - BO.this_n<X> = ALLTRIM(<cbo>.Value)
+    #     grava o texto do combo em propriedade/coluna numerica.
+    #     Correto: BO.this_n<X> = <cbo>.ListIndex
+    #
+    # (C) WARN-188-COMBO-VALUE-STR-NUMERICO - <cbo>.Value = LTRIM(STR(BO.this_n<X>...))
+    #     exibe a coluna numerica como texto do item.
+    #     Correto: <cbo>.ListIndex = IIF(BETWEEN(val, 1, N), val, 0)
+    #
+    # WARNING-only: a correcao exige o RowSource REAL do SCX legado (quantos
+    # itens e em que ordem) e a distribuicao da coluna no banco - regex nao tem
+    # como inventar. OptionGroup segue a mesma regra (grava opt.Value cru; o
+    # inverso, opt.Value = IIF(BETWEEN(val,1,N), val, 0)).
+    # Origem: Erro147 (2026-09-08, Formcfo - 7 combos e 12 OptionGroups gravavam
+    # 0/1 em vez do indice; situas gravava 0=Ativo enquanto o proprio grid do
+    # form pintava situas=1 como Ativo, seguindo o legado).
+    param([string[]]$Linhas, [string]$Arquivo = "")
+
+    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
+    if ([string]::IsNullOrEmpty($Arquivo)) { return $Linhas }
+    $nomeArq = Split-Path -Leaf $Arquivo
+    if ($nomeArq -notlike 'Form*.prg') { return $Linhas }
+
+    $rxWithCtrl  = [regex]'(?i)^\s*WITH\s+.*?\.(\w+)\s*$'
+    $rxAdd       = [regex]'(?i)AddObject\s*\(\s*"(\w+)"\s*,\s*"(\w+)"\s*\)'
+    $rxRowSource = [regex]'(?i)^\s*\.RowSource\s*=\s*"((?:\d\s*,\s*)+\d)"\s*$'
+    $rxCharEmNum = [regex]'(?i)\.(this_n\w+)\s*=\s*ALLTRIM\s*\(\s*[\w.]*\b(cbo_4c_\w+)\.Value\s*\)'
+    $rxValueStr  = [regex]'(?i)\b(cbo_4c_\w+)\.Value\s*=\s*(?:LTRIM|ALLTRIM)?\s*\(?\s*STR\s*\(\s*[\w.]*\.(this_n\w+)'
+
+    # Mapa controle -> tipo (eixo A so avisa em ComboBox)
+    $tipoCtrl = @{}
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        $mA = $rxAdd.Match($Linhas[$i])
+        if ($mA.Success) { $tipoCtrl[$mA.Groups[1].Value.ToLower()] = $mA.Groups[2].Value }
+    }
+
+    $atual = ""
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        $linha = $Linhas[$i]
+        if ($linha -match '^\s*\*') { continue }
+
+        $mW = $rxWithCtrl.Match($linha)
+        if ($mW.Success) { $atual = $mW.Groups[1].Value.ToLower(); continue }
+        if ($linha -imatch '^\s*ENDWITH\s*$') { $atual = ""; continue }
+
+        # (A) RowSource placeholder numerico
+        $mR = $rxRowSource.Match($linha)
+        if ($mR.Success) {
+            $tipo = if ($atual -ne "" -and $tipoCtrl.ContainsKey($atual)) { $tipoCtrl[$atual] } else { "" }
+            if ($tipo -ieq "ComboBox" -or $atual -like 'cbo_4c_*') {
+                Add-Correcao -Tipo "WARN-188-ROWSOURCE-PLACEHOLDER" -Linha ($i + 1) `
+                    -Original $linha.TrimEnd() -Corrigido "(REVISAR MANUAL)" `
+                    -Descricao ("Pattern #188-A: RowSource de digitos (" + $mR.Groups[1].Value + ") em '" + $atual +
+                        "' eh placeholder do gerador. Copiar a lista EXATA do SCX legado. Se o controle era ligado a " +
+                        "coluna NUMERICA (ControlSource no SCX), o valor gravado eh o ListIndex (1=1o item, 2=2o item, " +
+                        "0=nada selecionado) - usar BO.this_nX = <cbo>.ListIndex e o inverso " +
+                        "<cbo>.ListIndex = IIF(BETWEEN(val,1,N),val,0). ComboBox com ColumnCount=2 + BoundColumn=2 grava a " +
+                        "2a coluna do RowSource. Origem: Erro147 (2026-09-08 Formcfo).")
+                Write-Host "[Pattern #188-A] Linha $($i + 1): RowSource placeholder em '$atual'" -ForegroundColor Yellow
+            }
+        }
+
+        # (B) grava texto do combo em propriedade numerica
+        foreach ($m in $rxCharEmNum.Matches($linha)) {
+            Add-Correcao -Tipo "WARN-188-COMBO-CHAR-EM-COLUNA-NUMERICA" -Linha ($i + 1) `
+                -Original $linha.TrimEnd() -Corrigido "(REVISAR MANUAL)" `
+                -Descricao ("Pattern #188-B: " + $m.Groups[1].Value + " eh propriedade NUMERICA mas recebe ALLTRIM(" +
+                    $m.Groups[2].Value + ".Value) (texto do combo). No legado, ComboBox com ControlSource numerico grava o " +
+                    "INDICE do item. Trocar por BO." + $m.Groups[1].Value + " = " + $m.Groups[2].Value + ".ListIndex. " +
+                    "Conferir a distribuicao real da coluna no banco antes de assumir 0/1. Origem: Erro147 (2026-09-08 Formcfo).")
+            Write-Host "[Pattern #188-B] Linha $($i + 1): $($m.Groups[1].Value) = ALLTRIM($($m.Groups[2].Value).Value)" -ForegroundColor Yellow
+        }
+
+        # (C) le coluna numerica como texto do item
+        foreach ($m in $rxValueStr.Matches($linha)) {
+            Add-Correcao -Tipo "WARN-188-COMBO-VALUE-STR-NUMERICO" -Linha ($i + 1) `
+                -Original $linha.TrimEnd() -Corrigido "(REVISAR MANUAL)" `
+                -Descricao ("Pattern #188-C: " + $m.Groups[1].Value + ".Value = STR(" + $m.Groups[2].Value + ") exibe a " +
+                    "coluna numerica como texto do item - so funciona com RowSource placeholder de digitos. Trocar por " +
+                    $m.Groups[1].Value + ".ListIndex = IIF(BETWEEN(BO." + $m.Groups[2].Value + ", 1, N), BO." +
+                    $m.Groups[2].Value + ", 0), com N = numero de itens do RowSource do SCX. " +
+                    "Origem: Erro147 (2026-09-08 Formcfo).")
+            Write-Host "[Pattern #188-C] Linha $($i + 1): $($m.Groups[1].Value).Value = STR($($m.Groups[2].Value))" -ForegroundColor Yellow
+        }
+    }
+
+    return $Linhas
+}
+
 function Invoke-CorrecaoAutomatica {
     param(
         [string]$Arquivo,
@@ -13432,6 +13638,8 @@ function Invoke-CorrecaoAutomatica {
     $linhas = Corrigir-GridEditavelCursorReadOnly -Linhas $linhas -Arquivo $Arquivo
     $linhas = Corrigir-GridCheckBoxSemToggleHandlers -Linhas $linhas -Arquivo $Arquivo
     $linhas = Corrigir-AddObjectBindEventIncoerente -Linhas $linhas -Arquivo $Arquivo
+    $linhas = Corrigir-IIFCheckBoxValueNumerico -Linhas $linhas -Arquivo $Arquivo
+    $linhas = Corrigir-ControlSourceNumericoIndice1Based -Linhas $linhas -Arquivo $Arquivo
 
     # Salva arquivo corrigido em UTF-8 SEM BOM.
     # - VFP9 nao suporta BOM (por isso removemos no read com bytes[3..])
