@@ -13447,6 +13447,104 @@ function Corrigir-ControlSourceNumericoIndice1Based {
     return $Linhas
 }
 
+
+function Corrigir-SucessoSemGravarEListaDistinct {
+    # Pattern #189 (Erro148, 2026-09-08) - WARNING-only, 2 eixos.
+    #
+    # (A) WARN-189-SUCESSO-SEM-GRAVAR - metodo de gravacao que percorre um cursor
+    #     de detalhe (grade de itens/ocorrencias/parcelas) marca sucesso quando o
+    #     cursor esta VAZIO:
+    #         IF !USED(par_cCursorOco) OR RECCOUNT(par_cCursorOco) = 0
+    #             loc_lSucesso = .T.       && <-- nada foi gravado
+    #     O form entao exibe MsgInfo("... salvos com sucesso!") e volta para a
+    #     lista sem que exista registro nenhum. Em INCLUSAO isso tem de ser
+    #     bloqueado ANTES (contar linhas com a coluna-chave preenchida e avisar);
+    #     em ALTERAR a lista vazia pode ser legitima quando o legado apaga e
+    #     reinsere (significa remover todos os itens) — por isso WARNING, nao
+    #     auto-mutate: o corretor nao sabe qual modo chamou o metodo.
+    #
+    # (B) WARN-189-LISTA-SELECT-DISTINCT - `SELECT DISTINCT` no metodo Buscar()
+    #     de BO CRUD. A lista do legado normalmente vem de `Select * From <tab>`
+    #     (uma linha por registro); trocar por DISTINCT de um subconjunto esconde
+    #     colunas E tira a PK do cursor, o que muda a semantica de Alterar/Excluir
+    #     (a linha selecionada deixa de ter chave e o Excluir vira exclusao em
+    #     massa por chave secundaria). Ha casos legitimos de DISTINCT, dai o
+    #     WARNING.
+    #
+    # Origem: Erro148 (2026-09-08, FormSIGPRLNC "Cadastro de Lancamentos" — user
+    # reportou "clicando em incluir e inserindo o grupo e conta e clicar em gravar
+    # nao grava o registro"; a lista ainda mostrava os captions da grade de
+    # detalhe por causa do DISTINCT + colunas copiadas da Page2).
+    param([string[]]$Linhas, [string]$Arquivo = "")
+
+    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
+    if ([string]::IsNullOrEmpty($Arquivo)) { return $Linhas }
+    $nomeArq = Split-Path -Leaf $Arquivo
+
+    # ---------------- (A) sucesso com cursor vazio ----------------
+    # Casa a guarda de "cursor ausente/vazio" e procura, nas 3 linhas seguintes,
+    # a atribuicao de sucesso (.T.) sem nenhuma escrita no banco no meio.
+    $rxGuardaVazio = [regex]'(?i)^\s*IF\s+.*(!|NOT\s+)USED\s*\(\s*([\w."]+)\s*\).*(RECCOUNT\s*\(|EOF\s*\()'
+    $rxVazioSimples = [regex]'(?i)^\s*IF\s+.*RECCOUNT\s*\(\s*([\w."]+)\s*\)\s*(=|==)\s*0'
+    # So flags de SUCESSO. NAO casar loc_lAbortar/loc_lErro/loc_lSair etc: `.T.`
+    # neles significa "abortar", nao "gravou" (falso positivo pego no teste do
+    # proprio SIGPRLNCBO corrigido, onde a linha seguinte eh loc_lAbortar = .T.).
+    $rxSucesso     = [regex]'(?i)^\s*(loc_l(Sucesso|Ok|Retorno|Gravou|Salvou|Gravado|Salvo)\w*|llSucesso|llOk)\s*=\s*\.T\.\s*$'
+
+    for ($i = 0; $i -lt $Linhas.Count - 1; $i++) {
+        $linha = $Linhas[$i]
+        if ($linha -match '^\s*\*') { continue }
+        if (-not ($rxGuardaVazio.IsMatch($linha) -or $rxVazioSimples.IsMatch($linha))) { continue }
+
+        $fim = [Math]::Min($i + 3, $Linhas.Count - 1)
+        for ($j = $i + 1; $j -le $fim; $j++) {
+            if ($Linhas[$j] -match '^\s*\*') { continue }
+            # se houver INSERT/UPDATE/DELETE/SQLEXEC no meio, nao eh o caso
+            if ($Linhas[$j] -match '(?i)(SQLEXEC|INSERT\s+INTO|UPDATE\s+\w|DELETE\s+FROM)') { break }
+            if ($rxSucesso.IsMatch($Linhas[$j])) {
+                Add-Correcao -Tipo "WARN-189-SUCESSO-SEM-GRAVAR" -Linha ($j + 1) `
+                    -Original $Linhas[$j].TrimEnd() -Corrigido "(REVISAR MANUAL)" `
+                    -Descricao ("Pattern #189-A: o metodo marca sucesso (.T.) no ramo em que o cursor de detalhe esta " +
+                        "VAZIO (guarda na linha " + ($i + 1) + ") — nada eh gravado e mesmo assim o form costuma exibir " +
+                        "MsgInfo de sucesso e voltar para a lista. Em modo de INCLUSAO, bloquear ANTES de chamar o BO: " +
+                        "contar as linhas do cursor com a coluna-chave preenchida e, se zero, MsgAviso(Informe ao menos " +
+                        "um item antes de gravar) + RETURN. Em ALTERAR a lista vazia pode ser legitima (apaga-e-reinsere " +
+                        "= remover todos os itens), por isso nao ha auto-fix. Origem: Erro148 (2026-09-08 FormSIGPRLNC).")
+                Write-Host "[Pattern #189-A] Linha $($j + 1): sucesso .T. com cursor de detalhe vazio" -ForegroundColor Yellow
+                break
+            }
+        }
+    }
+
+    # ---------------- (B) SELECT DISTINCT na lista do CRUD ----------------
+    if ($nomeArq -like '*BO.prg') {
+        $dentroBuscar = $false
+        $rxProcBuscar = [regex]'(?i)^\s*(PROTECTED\s+|HIDDEN\s+)?(PROCEDURE|FUNCTION)\s+Buscar\b'
+        $rxProcQualquer = [regex]'(?i)^\s*(PROTECTED\s+|HIDDEN\s+)?(PROCEDURE|FUNCTION)\s+\w+'
+        for ($i = 0; $i -lt $Linhas.Count; $i++) {
+            $linha = $Linhas[$i]
+            if ($rxProcBuscar.IsMatch($linha)) { $dentroBuscar = $true; continue }
+            if ($dentroBuscar -and $rxProcQualquer.IsMatch($linha)) { $dentroBuscar = $false }
+            if (-not $dentroBuscar) { continue }
+            if ($linha -match '^\s*\*') { continue }
+
+            if ($linha -match '(?i)SELECT\s+DISTINCT') {
+                Add-Correcao -Tipo "WARN-189-LISTA-SELECT-DISTINCT" -Linha ($i + 1) `
+                    -Original $linha.TrimEnd() -Corrigido "(REVISAR MANUAL)" `
+                    -Descricao ("Pattern #189-B: Buscar() do BO monta a lista do CRUD com SELECT DISTINCT. No legado a " +
+                        "lista costuma vir de Select * From <tabela> (UMA linha por registro) com as colunas do " +
+                        ".pfSqlTabela(1).pColuna(...) do Init. DISTINCT de um subconjunto esconde colunas e tira a PK do " +
+                        "cursor — sem a PK, Alterar/Excluir passam a operar por chave secundaria e o Excluir vira " +
+                        "exclusao em massa (apaga linhas que o usuario nao selecionou). Conferir o Init do SCX legado; " +
+                        "se o DISTINCT for mesmo necessario, garantir que o Excluir use a chave certa. " +
+                        "Origem: Erro148 (2026-09-08 FormSIGPRLNC).")
+                Write-Host "[Pattern #189-B] Linha $($i + 1): SELECT DISTINCT em Buscar() de BO CRUD" -ForegroundColor Yellow
+            }
+        }
+    }
+
+    return $Linhas
+}
 function Invoke-CorrecaoAutomatica {
     param(
         [string]$Arquivo,
@@ -13658,6 +13756,7 @@ function Invoke-CorrecaoAutomatica {
     $linhas = Corrigir-AddObjectBindEventIncoerente -Linhas $linhas -Arquivo $Arquivo
     $linhas = Corrigir-IIFCheckBoxValueNumerico -Linhas $linhas -Arquivo $Arquivo
     $linhas = Corrigir-ControlSourceNumericoIndice1Based -Linhas $linhas -Arquivo $Arquivo
+    $linhas = Corrigir-SucessoSemGravarEListaDistinct -Linhas $linhas -Arquivo $Arquivo
 
     # Salva arquivo corrigido em UTF-8 SEM BOM.
     # - VFP9 nao suporta BOM (por isso removemos no read com bytes[3..])
