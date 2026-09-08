@@ -1239,7 +1239,7 @@ DEFINE CLASS Formsigprpre AS FormBase
         ENDIF
         THIS.this_oBusinessObject.this_cUsuals = ALLTRIM(gc_4c_UsuarioLogado)
         IF PEMSTATUS(loc_oPagina, "chk_4c_CKAtuSite", 5)
-            THIS.this_oBusinessObject.this_nCKAtuSite = IIF(loc_oPagina.chk_4c_CKAtuSite.Value, 1, 0)
+            THIS.this_oBusinessObject.this_nCKAtuSite = IIF(loc_oPagina.chk_4c_CKAtuSite.Value = 1, 1, 0)
         ENDIF
     ENDPROC
 

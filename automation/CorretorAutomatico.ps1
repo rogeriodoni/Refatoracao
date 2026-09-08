@@ -5300,7 +5300,17 @@ function Corrigir-CntSaidaEncerrarCanonico {
         }
 
         # Dentro do WITH cnt_4c_Saida: normalizar .Left = N e .Width = N
-        if ($dentroCntSaida) {
+        # ATENCAO: exclui o WITH ANINHADO do cmd_4c_Encerrar. Sem o guard
+        # `-not $dentroEncerrar`, as regras do container caem sobre as
+        # propriedades do BOTAO (que fica dentro do escopo do container) e,
+        # como este bloco roda ANTES do bloco do Encerrar e usa `continue`,
+        # o botao recebia Left=917/Width=90 em vez de Left=5/Width=75.
+        # Efeito observado no sweep 2026-09-08: `.Width` do botao oscilava
+        # 75 -> 90 (aqui) e 90 -> 75 (bloco do Encerrar) a cada execucao,
+        # conforme o valor de partida; o `.Left` ia para 917 e so voltava a 5
+        # porque o Pattern #182 corrige depois. CLAUDE.md #10 fixa
+        # cnt_4c_Saida = Left 917 / Width 90 e cmd_4c_Encerrar = Left 5 / 75x75.
+        if ($dentroCntSaida -and -not $dentroEncerrar) {
             # .Left = <expressao qualquer> -> 917
             if ($linha -match '(?i)^(\s*\.Left\s*=\s*).+$') {
                 $indent = $Matches[1]
