@@ -4837,7 +4837,15 @@ function Corrigir-CntBotoesLeft542 {
         }
 
         # Detectar .Left = <numero != 542> dentro do WITH cnt_4c_Botoes
-        if ($dentroCntBotoes -and $linha -match '(?i)^(\s*\.Left\s*=\s*)(\d+)\s*$') {
+        # ATENCAO: `$contadorEndWith -le 1` restringe a regra ao WITH do PROPRIO
+        # container (profundidade 1). Os CommandButtons CRUD sao criados DENTRO
+        # dele (`WITH .cmd_4c_Incluir` = profundidade 2) e sem esse guard todo
+        # `.Left` dos botoes virava 542 — o Pattern #182 devolvia 5/80/155/230/305
+        # logo depois, entao o arquivo convergia na mesma execucao, mas o log
+        # enchia de par 542 -> 5 e o defeito ficava mascarado. Mesmo bug do
+        # `Corrigir-CntSaidaCanonico` (ver CNT-SAIDA (v2) em corretor-patterns.md).
+        # CLAUDE.md #10: cnt_4c_Botoes.Left = 542 e botoes com Left RELATIVO.
+        if ($dentroCntBotoes -and $contadorEndWith -le 1 -and $linha -match '(?i)^(\s*\.Left\s*=\s*)(\d+)\s*$') {
             $indent = $Matches[1]
             $valor = [int]$Matches[2]
             if ($valor -ne 542) {
