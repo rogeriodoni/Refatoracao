@@ -391,6 +391,53 @@ DEFINE CLASS Formrst AS FormBase
         *-- Fundo padrao do framework frmcadastro (sem isso a pagina fica branca)
         loc_oPagina.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
 
+        *-- Cabecalho cinza (identico ao da pagina Lista) - CLAUDE.md #11 / Erro152
+        loc_oPagina.AddObject("cnt_4c_Cabecalho", "Container")
+        WITH loc_oPagina.cnt_4c_Cabecalho
+            .Top           = 29
+            .Left          = 0
+            .Width         = THIS.Width
+            .Height        = 80
+            .BackColor     = RGB(100, 100, 100)
+            .BorderWidth   = 0
+            .SpecialEffect = 0
+            .Visible       = .T.
+
+            .AddObject("lbl_4c_Sombra", "Label")
+            WITH .lbl_4c_Sombra
+                .Caption   = THIS.Caption
+                .Top       = 15
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 40
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(0, 0, 0)
+                .BackStyle = 0
+                .AutoSize  = .F.
+                .Visible   = .T.
+            ENDWITH
+
+            .AddObject("lbl_4c_Titulo", "Label")
+            WITH .lbl_4c_Titulo
+                .Caption   = THIS.Caption
+                .Top       = 18
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 46
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(255, 255, 255)
+                .BackStyle = 0
+                .AutoSize  = .F.
+                .Visible   = .T.
+            ENDWITH
+
+        ENDWITH
+
+
         *-- ===================================================================
         *-- cnt_4c_Salva (Grupo_Salva) - Confirmar + Cancelar
         *-- Canonico: Top=4+29=33, Left=842, Width=160, Height=85
@@ -458,7 +505,7 @@ DEFINE CLASS Formrst AS FormBase
         loc_oPagina.AddObject("lbl_4c_Conta", "Label")
         WITH loc_oPagina.lbl_4c_Conta
             .Caption   = "Conta :"
-            .Top       = 80
+            .Top       = 156
             .Left      = 82
             .Width     = 55
             .Height    = 17
@@ -476,7 +523,7 @@ DEFINE CLASS Formrst AS FormBase
         loc_oPagina.AddObject("txt_4c_Codigo", "TextBox")
         WITH loc_oPagina.txt_4c_Codigo
             .Value       = ""
-            .Top         = 76
+            .Top         = 152
             .Left        = 129
             .Width       = 80
             .Height      = 25
@@ -495,7 +542,7 @@ DEFINE CLASS Formrst AS FormBase
         loc_oPagina.AddObject("txt_4c_Desc", "TextBox")
         WITH loc_oPagina.txt_4c_Desc
             .Value       = ""
-            .Top         = 76
+            .Top         = 152
             .Left        = 212
             .Width       = 290
             .Height      = 25
@@ -515,7 +562,7 @@ DEFINE CLASS Formrst AS FormBase
         loc_oPagina.AddObject("lbl_4c_ChkMatrix", "Label")
         WITH loc_oPagina.lbl_4c_ChkMatrix
             .Caption   = "Checa Matriz :"
-            .Top       = 108
+            .Top       = 184
             .Left      = 42
             .Width     = 80
             .Height    = 17
@@ -534,7 +581,7 @@ DEFINE CLASS Formrst AS FormBase
         loc_oPagina.AddObject("opt_4c_ChkMatrix", "OptionGroup")
         WITH loc_oPagina.opt_4c_ChkMatrix
             .ButtonCount = 2
-            .Top         = 106
+            .Top         = 182
             .Left        = 124
             .Width       = 103
             .Height      = 22
@@ -574,7 +621,7 @@ DEFINE CLASS Formrst AS FormBase
         *-- ===================================================================
         loc_oPagina.AddObject("shp_4c_Shape4", "Shape")
         WITH loc_oPagina.shp_4c_Shape4
-            .Top         = 39
+            .Top         = 115
             .Left        = 648
             .Width       = 163
             .Height      = 111
@@ -588,7 +635,7 @@ DEFINE CLASS Formrst AS FormBase
         *-- Inicia OCULTA - exibida somente quando produto da grade tem imagem
         loc_oPagina.AddObject("img_4c_ImgProds", "Image")
         WITH loc_oPagina.img_4c_ImgProds
-            .Top     = 41
+            .Top     = 117
             .Left    = 650
             .Width   = 159
             .Height  = 107
@@ -604,7 +651,7 @@ DEFINE CLASS Formrst AS FormBase
         loc_oPagina.AddObject("lbl_4c_TituloMunis", "Label")
         WITH loc_oPagina.lbl_4c_TituloMunis
             .Caption   = "Munic" + CHR(237) + "pios pertencentes a esta restri" + CHR(231) + CHR(227) + "o:"
-            .Top       = 145
+            .Top       = 221
             .Left      = 44
             .Width     = 199
             .Height    = 15
@@ -623,7 +670,7 @@ DEFINE CLASS Formrst AS FormBase
         loc_oPagina.AddObject("lbl_4c_TituloProds", "Label")
         WITH loc_oPagina.lbl_4c_TituloProds
             .Caption   = "Produtos restringidos:"
-            .Top       = 145
+            .Top       = 221
             .Left      = 418
             .Width     = 108
             .Height    = 15
@@ -665,7 +712,7 @@ DEFINE CLASS Formrst AS FormBase
             .ToolTipText     = "Inserir Munic" + CHR(237) + "pio"
             .Picture         = gc_4c_CaminhoIcones + "cadastro_inserir_26.jpg"
             .PicturePosition = 0
-            .Top             = 334
+            .Top             = 410
             .Left            = 356
             .Width           = 45
             .Height          = 45
@@ -688,7 +735,7 @@ DEFINE CLASS Formrst AS FormBase
             .ToolTipText     = "Excluir Munic" + CHR(237) + "pio"
             .Picture         = gc_4c_CaminhoIcones + "cadastro_excluir_26.jpg"
             .PicturePosition = 0
-            .Top             = 379
+            .Top             = 455
             .Left            = 356
             .Width           = 45
             .Height          = 45
@@ -714,10 +761,10 @@ DEFINE CLASS Formrst AS FormBase
         loc_oPagina.grd_4c_Munis.ColumnCount  = 2
 
         WITH loc_oPagina.grd_4c_Munis
-            .Top                = 162
+            .Top                = 238
             .Left               = 41
             .Width              = 309
-            .Height             = 456
+            .Height             = 391
             .DeleteMark         = .F.
             .RecordMark         = .F.
             .RowHeight          = 16
@@ -764,7 +811,7 @@ DEFINE CLASS Formrst AS FormBase
             .ToolTipText     = "Inserir Produto"
             .Picture         = gc_4c_CaminhoIcones + "cadastro_inserir_26.jpg"
             .PicturePosition = 0
-            .Top             = 334
+            .Top             = 410
             .Left            = 912
             .Width           = 45
             .Height          = 45
@@ -787,7 +834,7 @@ DEFINE CLASS Formrst AS FormBase
             .ToolTipText     = "Excluir Produto"
             .Picture         = gc_4c_CaminhoIcones + "cadastro_excluir_26.jpg"
             .PicturePosition = 0
-            .Top             = 379
+            .Top             = 455
             .Left            = 912
             .Width           = 45
             .Height          = 45
@@ -813,10 +860,10 @@ DEFINE CLASS Formrst AS FormBase
         loc_oPagina.grd_4c_Prods.ColumnCount  = 2
 
         WITH loc_oPagina.grd_4c_Prods
-            .Top                = 162
+            .Top                = 238
             .Left               = 417
             .Width              = 490
-            .Height             = 456
+            .Height             = 391
             .DeleteMark         = .F.
             .RecordMark         = .F.
             .RowHeight          = 16
@@ -2017,3 +2064,4 @@ DEFINE CLASS Formrst AS FormBase
     ENDPROC
 
 ENDDEFINE
+

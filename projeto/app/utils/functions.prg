@@ -382,6 +382,39 @@ FUNCTION TratarNulo(puValor, puPadrao)
 ENDFUNC
 
 *------------------------------------------------------------------------------
+* ConverterParaLogico - Converte para LOGICO o valor lido de um cursor
+*
+* Coluna `bit` do SQL Server chega ao VFP ora como Logico (.T./.F.), ora como
+* Numerico (0/1), conforme o driver/ODBC; coluna numeric(1,0) chega como
+* Numerico; coluna char de marcacao chega como "S"/"N" (ou "1"/"0").
+* Comparar direto com 1 estoura "Operator/operand type mismatch" quando o valor
+* vem como Logico - por isso a conversao testa o VARTYPE antes.
+*
+* Parametros: puValor - valor lido do cursor
+* Retorno: .T. / .F.  (NULL e valor desconhecido viram .F.)
+*------------------------------------------------------------------------------
+FUNCTION ConverterParaLogico(puValor)
+    LOCAL loc_cTipo, loc_lRetorno
+
+    loc_lRetorno = .F.
+
+    IF !ISNULL(puValor)
+        loc_cTipo = VARTYPE(puValor)
+
+        DO CASE
+            CASE loc_cTipo = "L"
+                loc_lRetorno = puValor
+            CASE loc_cTipo = "N"
+                loc_lRetorno = (puValor != 0)
+            CASE loc_cTipo = "C"
+                loc_lRetorno = INLIST(UPPER(LEFT(ALLTRIM(puValor), 1)), "S", "T", "Y", "1")
+        ENDCASE
+    ENDIF
+
+    RETURN loc_lRetorno
+ENDFUNC
+
+*------------------------------------------------------------------------------
 * Centralizar - Centraliza um formulário na tela
 * Parâmetros: poForm - referência ao formulário
 *------------------------------------------------------------------------------

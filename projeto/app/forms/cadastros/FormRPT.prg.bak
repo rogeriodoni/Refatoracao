@@ -492,7 +492,7 @@ DEFINE CLASS FormRPT AS FormBase
                 .FontName  = "Tahoma"
                 .FontSize  = 16
                 .FontBold  = .T.
-                .ForeColor = RGB(255, 255, 255)
+                .ForeColor = RGB(90, 90, 90)
                 .BackStyle = 0
                 .Visible   = .T.
             ENDWITH

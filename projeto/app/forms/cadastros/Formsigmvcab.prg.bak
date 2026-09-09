@@ -9,7 +9,7 @@
 DEFINE CLASS Formsigmvcab AS FormBase
 
     *-- Propriedades visuais (PILAR 1 - UX FIDELITY)
-    Height      = 600
+    Height      = 692
     Width       = 1000
     Caption     = "Movimenta" + CHR(231) + CHR(227) + "o de Estoque"
     AutoCenter  = .T.
@@ -169,7 +169,7 @@ DEFINE CLASS Formsigmvcab AS FormBase
             .Top       = -30
             .Left      = 0
             .Width     = 1004
-            .Height    = 635
+            .Height    = 727
             .PageCount = 2
             .Tabs      = .F.
             .Visible   = .T.
@@ -586,7 +586,7 @@ DEFINE CLASS Formsigmvcab AS FormBase
             .Top             = 173
             .Left            = 28
             .Width           = 944
-            .Height          = 456
+            .Height          = 548
             .FontName        = "Tahoma"
             .FontSize        = 8
             .DeleteMark      = .F.
@@ -738,6 +738,53 @@ DEFINE CLASS Formsigmvcab AS FormBase
         *-- Fundo padrao do framework frmcadastro (sem isso a pagina fica branca)
         loc_oPagina.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
 
+        *-- Cabecalho cinza (identico ao da pagina Lista) - CLAUDE.md #11 / Erro152
+        loc_oPagina.AddObject("cnt_4c_Cabecalho", "Container")
+        WITH loc_oPagina.cnt_4c_Cabecalho
+            .Top           = 29
+            .Left          = 0
+            .Width         = THIS.Width
+            .Height        = 80
+            .BackColor     = RGB(100, 100, 100)
+            .BorderWidth   = 0
+            .SpecialEffect = 0
+            .Visible       = .T.
+
+            .AddObject("lbl_4c_Sombra", "Label")
+            WITH .lbl_4c_Sombra
+                .Caption   = THIS.Caption
+                .Top       = 15
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 40
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(0, 0, 0)
+                .BackStyle = 0
+                .AutoSize  = .F.
+                .Visible   = .T.
+            ENDWITH
+
+            .AddObject("lbl_4c_Titulo", "Label")
+            WITH .lbl_4c_Titulo
+                .Caption   = THIS.Caption
+                .Top       = 18
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 46
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(255, 255, 255)
+                .BackStyle = 0
+                .AutoSize  = .F.
+                .Visible   = .T.
+            ENDWITH
+
+        ENDWITH
+
+
         *-- Container botoes Salva/Cancelar (legado: grupo_salva Left=840, Top=18->48)
         loc_oPagina.AddObject("cnt_4c_BotoesSalvar", "Container")
         WITH loc_oPagina.cnt_4c_BotoesSalvar
@@ -788,7 +835,7 @@ DEFINE CLASS Formsigmvcab AS FormBase
         *-- Container de Produto/Leilao (legado: cntProdLeilao Top=133->163, Left=452, Width=550, Height=473)
         loc_oPagina.AddObject("cnt_4c_ProdLeilao", "Container")
         WITH loc_oPagina.cnt_4c_ProdLeilao
-            .Top         = 163
+            .Top         = 248
             .Left        = 452
             .Width       = 550
             .Height      = 473
@@ -801,7 +848,7 @@ DEFINE CLASS Formsigmvcab AS FormBase
         *-- Container de Observacoes (legado: cntObs Top=134->164, Left=460, Width=532, Height=466)
         loc_oPagina.AddObject("cnt_4c_Obs", "Container")
         WITH loc_oPagina.cnt_4c_Obs
-            .Top         = 164
+            .Top         = 249
             .Left        = 460
             .Width       = 532
             .Height      = 466
@@ -817,7 +864,7 @@ DEFINE CLASS Formsigmvcab AS FormBase
         loc_oPagina.AddObject("pgf_4c_Principal", "PageFrame")
         WITH loc_oPagina.pgf_4c_Principal
             .PageCount = 3
-            .Top       = 165
+            .Top       = 250
             .Left      = 6
             .Width     = 447
             .Height    = 466
@@ -866,7 +913,7 @@ DEFINE CLASS Formsigmvcab AS FormBase
             .Left            = 695
             .RecordMark      = .F.
             .ScrollBars      = 2
-            .Top             = 56
+            .Top             = 141
             .Width           = 101
             .Visible         = .F.
         ENDWITH
@@ -883,7 +930,7 @@ DEFINE CLASS Formsigmvcab AS FormBase
             .Left            = 696
             .RecordMark      = .F.
             .ScrollBars      = 2
-            .Top             = 56
+            .Top             = 141
             .Visible         = .F.
             .Width           = 102
         ENDWITH
@@ -900,7 +947,7 @@ DEFINE CLASS Formsigmvcab AS FormBase
             .Left            = 695
             .RecordMark      = .F.
             .ScrollBars      = 2
-            .Top             = 56
+            .Top             = 141
             .Visible         = .F.
             .Width           = 102
         ENDWITH
@@ -917,7 +964,7 @@ DEFINE CLASS Formsigmvcab AS FormBase
             .Left            = 695
             .RecordMark      = .F.
             .ScrollBars      = 2
-            .Top             = 56
+            .Top             = 141
             .Visible         = .F.
             .Width           = 102
         ENDWITH
@@ -929,7 +976,7 @@ DEFINE CLASS Formsigmvcab AS FormBase
         *-- Label TxtCaption (legado: TxtCaption)
         loc_oPagina.AddObject("lbl_4c_TxtCaption", "Label")
         WITH loc_oPagina.lbl_4c_TxtCaption
-            .Top       = 30
+            .Top       = 115
             .Left      = 10
             .Width     = 400
             .Height    = 25
@@ -1963,3 +2010,4 @@ DEFINE CLASS Formsigmvcab AS FormBase
     ENDPROC
 
 ENDDEFINE
+

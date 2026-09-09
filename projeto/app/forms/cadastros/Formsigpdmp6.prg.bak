@@ -702,12 +702,59 @@ DEFINE CLASS Formsigpdmp6 AS FormBase
 
         loc_oPagina.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
 
+        *-- Cabecalho cinza (identico ao da pagina Lista) - CLAUDE.md #11 / Erro152
+        loc_oPagina.AddObject("cnt_4c_Cabecalho", "Container")
+        WITH loc_oPagina.cnt_4c_Cabecalho
+            .Top           = 29
+            .Left          = 0
+            .Width         = THIS.Width
+            .Height        = 80
+            .BackColor     = RGB(100, 100, 100)
+            .BorderWidth   = 0
+            .SpecialEffect = 0
+            .Visible       = .T.
+
+            .AddObject("lbl_4c_Sombra", "Label")
+            WITH .lbl_4c_Sombra
+                .Caption   = THIS.Caption
+                .Top       = 15
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 40
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(0, 0, 0)
+                .BackStyle = 0
+                .AutoSize  = .F.
+                .Visible   = .T.
+            ENDWITH
+
+            .AddObject("lbl_4c_Titulo", "Label")
+            WITH .lbl_4c_Titulo
+                .Caption   = THIS.Caption
+                .Top       = 18
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 46
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(255, 255, 255)
+                .BackStyle = 0
+                .AutoSize  = .F.
+                .Visible   = .T.
+            ENDWITH
+
+        ENDWITH
+
+
         *-- Faixa de titulo no topo (TxtCaption no legado)
         *-- Legado: Top=1+29=30, Left=-3, Width=1301, Height=19
         loc_oPagina.AddObject("lbl_4c_TxtCaption", "Label")
         WITH loc_oPagina.lbl_4c_TxtCaption
             .Caption   = "     Movimenta" + CHR(231) + CHR(227) + "o"
-            .Top       = 30
+            .Top       = 115
             .Left      = -3
             .Width     = 1301
             .Height    = 19
@@ -723,7 +770,7 @@ DEFINE CLASS Formsigpdmp6 AS FormBase
         *-- Legado: Top=14+29=43, Left=12, Width=432, Height=30
         loc_oPagina.AddObject("shp_4c_ShpBtnGs", "Shape")
         WITH loc_oPagina.shp_4c_ShpBtnGs
-            .Top         = 43
+            .Top         = 128
             .Left        = 12
             .Width       = 432
             .Height      = 30
@@ -786,7 +833,7 @@ DEFINE CLASS Formsigpdmp6 AS FormBase
         *-- Operacao (Movimento): Left=3
         loc_oPagina.AddObject("cmd_4c_Operacao", "CommandButton")
         WITH loc_oPagina.cmd_4c_Operacao
-            .Top             = 53
+            .Top             = 138
             .Left            = 3
             .Width           = 75
             .Height          = 40
@@ -804,7 +851,7 @@ DEFINE CLASS Formsigpdmp6 AS FormBase
         *-- Componentes: Left=78
         loc_oPagina.AddObject("cmd_4c_Componentes", "CommandButton")
         WITH loc_oPagina.cmd_4c_Componentes
-            .Top             = 53
+            .Top             = 138
             .Left            = 78
             .Width           = 75
             .Height          = 40
@@ -822,7 +869,7 @@ DEFINE CLASS Formsigpdmp6 AS FormBase
         *-- Etiquetas: Left=153
         loc_oPagina.AddObject("cmd_4c_Etiquetas", "CommandButton")
         WITH loc_oPagina.cmd_4c_Etiquetas
-            .Top             = 53
+            .Top             = 138
             .Left            = 153
             .Width           = 75
             .Height          = 40
@@ -840,7 +887,7 @@ DEFINE CLASS Formsigpdmp6 AS FormBase
         *-- Servicos: Left=228
         loc_oPagina.AddObject("cmd_4c_Servicos", "CommandButton")
         WITH loc_oPagina.cmd_4c_Servicos
-            .Top             = 53
+            .Top             = 138
             .Left            = 228
             .Width           = 75
             .Height          = 40
@@ -858,7 +905,7 @@ DEFINE CLASS Formsigpdmp6 AS FormBase
         *-- EtqCompo (Etq. Compo.): Left=303
         loc_oPagina.AddObject("cmd_4c_EtqCompo", "CommandButton")
         WITH loc_oPagina.cmd_4c_EtqCompo
-            .Top             = 53
+            .Top             = 138
             .Left            = 303
             .Width           = 75
             .Height          = 40
@@ -876,7 +923,7 @@ DEFINE CLASS Formsigpdmp6 AS FormBase
         *-- Boleto: Left=378
         loc_oPagina.AddObject("cmd_4c_Boleto", "CommandButton")
         WITH loc_oPagina.cmd_4c_Boleto
-            .Top             = 53
+            .Top             = 138
             .Left            = 378
             .Width           = 75
             .Height          = 40
@@ -894,7 +941,7 @@ DEFINE CLASS Formsigpdmp6 AS FormBase
         *-- Documento: Left=453
         loc_oPagina.AddObject("cmd_4c_Documento", "CommandButton")
         WITH loc_oPagina.cmd_4c_Documento
-            .Top             = 53
+            .Top             = 138
             .Left            = 453
             .Width           = 75
             .Height          = 40
@@ -913,7 +960,7 @@ DEFINE CLASS Formsigpdmp6 AS FormBase
         *-- Legado: Top=22+29=51, Left=718, Width=50, Height=23, InputMask="999999"
         loc_oPagina.AddObject("txt_4c_Buscaop", "TextBox")
         WITH loc_oPagina.txt_4c_Buscaop
-            .Top           = 51
+            .Top           = 136
             .Left          = 718
             .Width         = 50
             .Height        = 23
@@ -933,7 +980,7 @@ DEFINE CLASS Formsigpdmp6 AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label6", "Label")
         WITH loc_oPagina.lbl_4c_Label6
             .Caption   = "Industrializa" + CHR(231) + CHR(227) + "o :"
-            .Top       = 55
+            .Top       = 140
             .Left      = 599
             .Width     = 116
             .Height    = 15
@@ -951,7 +998,7 @@ DEFINE CLASS Formsigpdmp6 AS FormBase
         *-- Legado: Top=50+29=79, Left=771, Width=40, Height=40
         loc_oPagina.AddObject("cmd_4c_Bot_Pendentes", "CommandButton")
         WITH loc_oPagina.cmd_4c_Bot_Pendentes
-            .Top         = 79
+            .Top         = 164
             .Left        = 771
             .Width       = 40
             .Height      = 40
@@ -971,7 +1018,7 @@ DEFINE CLASS Formsigpdmp6 AS FormBase
         *-- Legado: Top=150+29=179, Left=12, Width=571, Height=75
         loc_oPagina.AddObject("cnt_4c_Dados", "Container")
         WITH loc_oPagina.cnt_4c_Dados
-            .Top         = 179
+            .Top         = 264
             .Left        = 12
             .Width       = 571
             .Height      = 75
@@ -1129,7 +1176,7 @@ DEFINE CLASS Formsigpdmp6 AS FormBase
         *-- Legado: Top=190+29=219, Left=774, Width=89, Height=34
         loc_oPagina.AddObject("shp_4c_Shape3", "Shape")
         WITH loc_oPagina.shp_4c_Shape3
-            .Top           = 219
+            .Top           = 304
             .Left          = 774
             .Width         = 89
             .Height        = 34
@@ -1143,7 +1190,7 @@ DEFINE CLASS Formsigpdmp6 AS FormBase
         *-- Legado: Top=189+29=218, Left=869, Width=89, Height=34
         loc_oPagina.AddObject("shp_4c_Shape4", "Shape")
         WITH loc_oPagina.shp_4c_Shape4
-            .Top           = 218
+            .Top           = 303
             .Left          = 869
             .Width         = 89
             .Height        = 34
@@ -1158,7 +1205,7 @@ DEFINE CLASS Formsigpdmp6 AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label4Docu", "Label")
         WITH loc_oPagina.lbl_4c_Label4Docu
             .Caption   = "Documento"
-            .Top       = 204
+            .Top       = 289
             .Left      = 774
             .AutoSize  = .T.
             .FontBold  = .T.
@@ -1172,7 +1219,7 @@ DEFINE CLASS Formsigpdmp6 AS FormBase
         *-- Legado: Top=196+29=225, Left=778, Width=81, Height=23, MaxLength=10
         loc_oPagina.AddObject("txt_4c_Docu", "TextBox")
         WITH loc_oPagina.txt_4c_Docu
-            .Top           = 225
+            .Top           = 310
             .Left          = 778
             .Width         = 81
             .Height        = 23
@@ -1190,7 +1237,7 @@ DEFINE CLASS Formsigpdmp6 AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label5Ace", "Label")
         WITH loc_oPagina.lbl_4c_Label5Ace
             .Caption   = "Aceite"
-            .Top       = 203
+            .Top       = 288
             .Left      = 869
             .AutoSize  = .T.
             .FontBold  = .T.
@@ -1204,7 +1251,7 @@ DEFINE CLASS Formsigpdmp6 AS FormBase
         *-- Legado: Top=195+29=224, Left=873, Width=81, Height=23, MaxLength=10
         loc_oPagina.AddObject("txt_4c_Fwget1", "TextBox")
         WITH loc_oPagina.txt_4c_Fwget1
-            .Top           = 224
+            .Top           = 309
             .Left          = 873
             .Width         = 81
             .Height        = 23
@@ -1224,7 +1271,7 @@ DEFINE CLASS Formsigpdmp6 AS FormBase
         *-- =====================================================================
         loc_oPagina.AddObject("cnt_4c_Origem", "Container")
         WITH loc_oPagina.cnt_4c_Origem
-            .Top         = 260
+            .Top         = 345
             .Left        = 12
             .Width       = 571
             .Height      = 75
@@ -1365,7 +1412,7 @@ DEFINE CLASS Formsigpdmp6 AS FormBase
         *-- =====================================================================
         loc_oPagina.AddObject("cnt_4c_Destino", "Container")
         WITH loc_oPagina.cnt_4c_Destino
-            .Top         = 340
+            .Top         = 425
             .Left        = 12
             .Width       = 571
             .Height      = 75
@@ -1506,7 +1553,7 @@ DEFINE CLASS Formsigpdmp6 AS FormBase
         *-- =====================================================================
         loc_oPagina.AddObject("cnt_4c_Responsavel", "Container")
         WITH loc_oPagina.cnt_4c_Responsavel
-            .Top         = 419
+            .Top         = 504
             .Left        = 12
             .Width       = 571
             .Height      = 75
@@ -1647,7 +1694,7 @@ DEFINE CLASS Formsigpdmp6 AS FormBase
         *-- =====================================================================
         loc_oPagina.AddObject("grd_4c_GradeOperacao", "Grid")
         WITH loc_oPagina.grd_4c_GradeOperacao
-            .Top         = 79
+            .Top         = 164
             .Left        = 598
             .Width       = 171
             .Height      = 182
@@ -1683,7 +1730,7 @@ DEFINE CLASS Formsigpdmp6 AS FormBase
         loc_oPagina.AddObject("lbl_4c_LblObs", "Label")
         WITH loc_oPagina.lbl_4c_LblObs
             .Caption   = "Observa" + CHR(231) + CHR(227) + "o :"
-            .Top       = 267
+            .Top       = 352
             .Left      = 599
             .AutoSize  = .T.
             .FontBold  = .T.
@@ -1696,7 +1743,7 @@ DEFINE CLASS Formsigpdmp6 AS FormBase
 
         loc_oPagina.AddObject("txt_4c_Codobs", "TextBox")
         WITH loc_oPagina.txt_4c_Codobs
-            .Top           = 263
+            .Top           = 348
             .Left          = 690
             .Width         = 32
             .Height        = 23
@@ -1716,7 +1763,7 @@ DEFINE CLASS Formsigpdmp6 AS FormBase
         *-- BO: this_cObss
         loc_oPagina.AddObject("edt_4c_Mmobs", "EditBox")
         WITH loc_oPagina.edt_4c_Mmobs
-            .Top    = 288
+            .Top    = 373
             .Left   = 597
             .Width  = 397
             .Height = 205
@@ -1729,7 +1776,7 @@ DEFINE CLASS Formsigpdmp6 AS FormBase
         *-- Legado: Top=481+29=510, Left=17
         loc_oPagina.AddObject("cmd_4c_BtnCompoOp", "CommandButton")
         WITH loc_oPagina.cmd_4c_BtnCompoOp
-            .Top         = 510
+            .Top         = 595
             .Left        = 17
             .Width       = 100
             .Height      = 27
@@ -3989,3 +4036,4 @@ DEFINE CLASS Formsigpdmp6 AS FormBase
     ENDPROC
 
 ENDDEFINE
+

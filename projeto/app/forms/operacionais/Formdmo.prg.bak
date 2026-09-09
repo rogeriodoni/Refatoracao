@@ -389,7 +389,7 @@ DEFINE CLASS FormDmo AS FormBase
                     .FontName  = "Verdana"
                     .FontSize  = 8
                     .BackStyle = 0
-                    .ForeColor = RGB(255, 255, 255)
+                    .ForeColor = RGB(90, 90, 90)
                     .Caption   = "\<Per" + CHR(237) + "odo :"
                     .Visible   = .T.
                 ENDWITH
@@ -405,7 +405,7 @@ DEFINE CLASS FormDmo AS FormBase
                     .FontName  = "Verdana"
                     .FontSize  = 8
                     .BackStyle = 0
-                    .ForeColor = RGB(255, 255, 255)
+                    .ForeColor = RGB(90, 90, 90)
                     .Caption   = "at" + CHR(233)
                     .Visible   = .T.
                 ENDWITH
@@ -2373,7 +2373,7 @@ DEFINE CLASS FormDmo AS FormBase
                         loc_lSucesso = .T.
                     ENDIF
                 ENDIF
-                SET ORDER TO IN crSigMvCab
+                SET ORDER TO 0 IN crSigMvCab
             ENDIF
 
         CATCH TO loc_oErro

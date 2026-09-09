@@ -8,7 +8,7 @@
 DEFINE CLASS Formrgr AS FormBase
 
     *-- Propriedades visuais (PILAR 1 - UX FIDELITY: exatos do original)
-    Height      = 600
+    Height      = 624
     Width       = 1000
     Caption     = "Regras de E-Commerce"
     AutoCenter  = .T.
@@ -338,7 +338,7 @@ DEFINE CLASS Formrgr AS FormBase
             .Top                = 115
             .Left               = 26
             .Width              = 880
-            .Height             = 478
+            .Height             = 502
             .ColumnCount        = 2
             .FontName           = "Verdana"
             .FontSize           = 8
@@ -379,6 +379,53 @@ DEFINE CLASS Formrgr AS FormBase
 
         *-- Fundo padrao do framework frmcadastro (sem isso a pagina fica branca)
         loc_oPagina.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
+
+        *-- Cabecalho cinza (identico ao da pagina Lista) - CLAUDE.md #11 / Erro152
+        loc_oPagina.AddObject("cnt_4c_Cabecalho", "Container")
+        WITH loc_oPagina.cnt_4c_Cabecalho
+            .Top           = 29
+            .Left          = 0
+            .Width         = THIS.Width
+            .Height        = 80
+            .BackColor     = RGB(100, 100, 100)
+            .BorderWidth   = 0
+            .SpecialEffect = 0
+            .Visible       = .T.
+
+            .AddObject("lbl_4c_Sombra", "Label")
+            WITH .lbl_4c_Sombra
+                .Caption   = THIS.Caption
+                .Top       = 15
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 40
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(0, 0, 0)
+                .BackStyle = 0
+                .AutoSize  = .F.
+                .Visible   = .T.
+            ENDWITH
+
+            .AddObject("lbl_4c_Titulo", "Label")
+            WITH .lbl_4c_Titulo
+                .Caption   = THIS.Caption
+                .Top       = 18
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 46
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(255, 255, 255)
+                .BackStyle = 0
+                .AutoSize  = .F.
+                .Visible   = .T.
+            ENDWITH
+
+        ENDWITH
+
 
         *-- Container Salvar/Cancelar (Grupo_Salva: Left=638, Top=8+27=35)
         loc_oPagina.AddObject("cnt_4c_Salva", "Container")
@@ -445,7 +492,7 @@ DEFINE CLASS Formrgr AS FormBase
         loc_oPagina.AddObject("lbl_4c_LblGrupo", "Label")
         WITH loc_oPagina.lbl_4c_LblGrupo
             .Caption   = "C" + CHR(243) + "digo :"
-            .Top       = 85
+            .Top       = 119
             .Left      = 181
             .Width     = 42
             .Height    = 17
@@ -459,7 +506,7 @@ DEFINE CLASS Formrgr AS FormBase
         loc_oPagina.AddObject("txt_4c_Codigo", "TextBox")
         WITH loc_oPagina.txt_4c_Codigo
             .Value     = ""
-            .Top       = 81
+            .Top       = 115
             .Left      = 227
             .Width     = 82
             .Height    = 23
@@ -475,7 +522,7 @@ DEFINE CLASS Formrgr AS FormBase
         WITH loc_oPagina.chk_4c_Check1
             .Caption   = "Inativa"
             .Value     = 0
-            .Top       = 85
+            .Top       = 119
             .Left      = 320
             .Width     = 52
             .Height    = 15
@@ -488,7 +535,7 @@ DEFINE CLASS Formrgr AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label6", "Label")
         WITH loc_oPagina.lbl_4c_Label6
             .Caption   = "Descri" + CHR(231) + CHR(227) + "o :"
-            .Top       = 110
+            .Top       = 144
             .Left      = 168
             .Width     = 55
             .Height    = 17
@@ -502,7 +549,7 @@ DEFINE CLASS Formrgr AS FormBase
         loc_oPagina.AddObject("txt_4c_Descricao", "TextBox")
         WITH loc_oPagina.txt_4c_Descricao
             .Value     = ""
-            .Top       = 107
+            .Top       = 141
             .Left      = 227
             .Width     = 351
             .Height    = 21
@@ -519,7 +566,7 @@ DEFINE CLASS Formrgr AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label2", "Label")
         WITH loc_oPagina.lbl_4c_Label2
             .Caption   = "Valor acima de :"
-            .Top       = 136
+            .Top       = 170
             .Left      = 145
             .Width     = 78
             .Height    = 17
@@ -533,7 +580,7 @@ DEFINE CLASS Formrgr AS FormBase
         loc_oPagina.AddObject("txt_4c_Valor", "TextBox")
         WITH loc_oPagina.txt_4c_Valor
             .Value     = 0
-            .Top       = 131
+            .Top       = 165
             .Left      = 227
             .Width     = 105
             .Height    = 21
@@ -570,7 +617,7 @@ DEFINE CLASS Formrgr AS FormBase
         loc_oPagina.grd_4c_Dados.ColumnCount  = 9
 
         WITH loc_oPagina.grd_4c_Dados
-            .Top                = 156
+            .Top                = 190
             .Left               = 11
             .Width              = 739
             .Height             = 371
@@ -645,7 +692,7 @@ DEFINE CLASS Formrgr AS FormBase
         *-- CommandGroup Mover linhas (Commandgroup1: Top=200+27=227, Left=748, W=50, H=90)
         loc_oPagina.AddObject("obj_4c_Commandgroup1", "CommandGroup")
         WITH loc_oPagina.obj_4c_Commandgroup1
-            .Top         = 227
+            .Top         = 261
             .Left        = 748
             .Width       = 50
             .Height      = 90
@@ -681,7 +728,7 @@ DEFINE CLASS Formrgr AS FormBase
         *-- CommandGroup Inserir/Deletar linhas (cmdInsFtc: Top=287+27=314, Left=748, W=50, H=90)
         loc_oPagina.AddObject("obj_4c_CmdInsFtc", "CommandGroup")
         WITH loc_oPagina.obj_4c_CmdInsFtc
-            .Top         = 314
+            .Top         = 348
             .Left        = 748
             .Width       = 50
             .Height      = 90
@@ -717,7 +764,7 @@ DEFINE CLASS Formrgr AS FormBase
         *-- Shape1 - separador horizontal acima da area de observacao (Top=503+27=530)
         loc_oPagina.AddObject("shp_4c_Shape1", "Shape")
         WITH loc_oPagina.shp_4c_Shape1
-            .Top           = 530
+            .Top           = 564
             .Left          = 7
             .Width         = 780
             .Height        = 2
@@ -731,7 +778,7 @@ DEFINE CLASS Formrgr AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label1", "Label")
         WITH loc_oPagina.lbl_4c_Label1
             .Caption   = "Observa" + CHR(231) + CHR(227) + "o :"
-            .Top       = 546
+            .Top       = 580
             .Left      = 88
             .Width     = 65
             .Height    = 17
@@ -747,10 +794,10 @@ DEFINE CLASS Formrgr AS FormBase
         loc_oPagina.AddObject("edt_4c_Observacao", "EditBox")
         WITH loc_oPagina.edt_4c_Observacao
             .Value         = ""
-            .Top           = 541
+            .Top           = 575
             .Left          = 157
             .Width         = 465
-            .Height        = 80
+            .Height        = 78
             .FontName      = "Verdana"
             .FontSize      = 8
             .SpecialEffect = 1
@@ -763,7 +810,7 @@ DEFINE CLASS Formrgr AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label20", "Label")
         WITH loc_oPagina.lbl_4c_Label20
             .Caption   = "Data / Usu" + CHR(225) + "rio"
-            .Top       = 538
+            .Top       = 572
             .Left      = 626
             .Width     = 71
             .Height    = 17
@@ -779,7 +826,7 @@ DEFINE CLASS Formrgr AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label24", "Label")
         WITH loc_oPagina.lbl_4c_Label24
             .Caption   = "Inclus" + CHR(227) + "o"
-            .Top       = 557
+            .Top       = 591
             .Left      = 626
             .Width     = 42
             .Height    = 15
@@ -795,7 +842,7 @@ DEFINE CLASS Formrgr AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label25", "Label")
         WITH loc_oPagina.lbl_4c_Label25
             .Caption   = "Altera" + CHR(231) + CHR(227) + "o"
-            .Top       = 557
+            .Top       = 591
             .Left      = 707
             .Width     = 48
             .Height    = 15
@@ -810,7 +857,7 @@ DEFINE CLASS Formrgr AS FormBase
         *-- Shape3 - separador linha auditoria (Top=526+27=553, Left=626)
         loc_oPagina.AddObject("shp_4c_Shape3", "Shape")
         WITH loc_oPagina.shp_4c_Shape3
-            .Top           = 553
+            .Top           = 587
             .Left          = 626
             .Width         = 161
             .Height        = 2
@@ -824,7 +871,7 @@ DEFINE CLASS Formrgr AS FormBase
         loc_oPagina.AddObject("txt_4c_DtIncs", "TextBox")
         WITH loc_oPagina.txt_4c_DtIncs
             .Value         = {}
-            .Top           = 572
+            .Top           = 606
             .Left          = 626
             .Width         = 79
             .Height        = 23
@@ -842,7 +889,7 @@ DEFINE CLASS Formrgr AS FormBase
         loc_oPagina.AddObject("txt_4c_Usuario", "TextBox")
         WITH loc_oPagina.txt_4c_Usuario
             .Value         = ""
-            .Top           = 596
+            .Top           = 630
             .Left          = 626
             .Width         = 79
             .Height        = 23
@@ -860,7 +907,7 @@ DEFINE CLASS Formrgr AS FormBase
         loc_oPagina.AddObject("txt_4c_DataAlts", "TextBox")
         WITH loc_oPagina.txt_4c_DataAlts
             .Value         = {}
-            .Top           = 572
+            .Top           = 606
             .Left          = 707
             .Width         = 79
             .Height        = 23
@@ -878,7 +925,7 @@ DEFINE CLASS Formrgr AS FormBase
         loc_oPagina.AddObject("txt_4c_UsuaAlts", "TextBox")
         WITH loc_oPagina.txt_4c_UsuaAlts
             .Value         = ""
-            .Top           = 596
+            .Top           = 630
             .Left          = 707
             .Width         = 79
             .Height        = 23
@@ -1821,3 +1868,4 @@ DEFINE CLASS Formrgr AS FormBase
     ENDPROC
 
 ENDDEFINE
+

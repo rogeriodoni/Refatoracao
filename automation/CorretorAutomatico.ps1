@@ -13749,6 +13749,215 @@ function Corrigir-LabelForeColorBrancoInvisivel {
     return $Linhas
 }
 
+function Get-HelpersUtils {
+    # Lista barata dos helpers globais de projeto\app\utils\*.prg (3 arquivos).
+    # Usada como PRE-FILTRO do Pattern #192: Msg*/Formatar*/Escapar*/Tratar*/
+    # Converter* sao chamados "nus" em praticamente todo arquivo do projeto e
+    # sao legitimos; descarta-los aqui evita montar o catalogo completo
+    # (varredura de ~875 .prg, ~5s) nos 831 arquivos do sweep.
+    if ($null -ne $script:HelpersUtils) { return $script:HelpersUtils }
+
+    $h = @{}
+    $dir = "C:\4c\projeto\app\utils"
+    if (Test-Path $dir) {
+        foreach ($a in (Get-ChildItem -Path $dir -Filter "*.prg" -ErrorAction SilentlyContinue |
+                        Where-Object { $_.Name -notmatch '\.bak$' })) {
+            foreach ($l in [System.IO.File]::ReadAllLines($a.FullName)) {
+                if ($l -match '(?i)^\s*(?:FUNCTION|PROCEDURE)\s+([A-Za-z_]\w*)') { $h[$Matches[1].ToLower()] = $true }
+            }
+        }
+    }
+    $script:HelpersUtils = $h
+    return $h
+}
+
+function Get-CatalogoFuncoesProjeto {
+    # Catalogo usado pelo Pattern #192.
+    #   Globais  = FUNCTION/PROCEDURE fora de DEFINE CLASS  -> chamavel sem THIS.
+    #   Metodos  = FUNCTION/PROCEDURE dentro de DEFINE CLASS -> exige THIS.
+    #   Declares = DECLARE <tipo> <Nome> IN <dll> (API externa)
+    #
+    # Varrer projeto\app custa ~5s. O sweep roda 831 arquivos em runspaces
+    # separados, e o cache em memoria (script:scope) nao atravessa runspace -
+    # sem cache em DISCO o sweep pagaria ~70 min so nisto. O cache tem TTL curto
+    # e, quando um candidato parece indefinido, o Pattern #192 ainda revalida o
+    # nome direto no disco (Test-FuncaoGlobalDefinida) antes de acusar: cache
+    # velho nunca vira aviso falso, no maximo um trabalho extra pontual.
+    if ($null -ne $script:CatalogoFuncoes) { return $script:CatalogoFuncoes }
+
+    $arqCache = Join-Path $env:TEMP "4c_catalogo_funcoes.xml"
+    if (Test-Path $arqCache) {
+        $idade = (Get-Date) - (Get-Item $arqCache).LastWriteTime
+        # o cache tambem expira se utils*.prg (onde vivem os helpers globais)
+        # mudou depois dele - assim helper recem-criado/removido nunca fica escondido
+        $mtimeUtils = [datetime]::MinValue
+        foreach ($u in (Get-ChildItem -Path (Join-Path $PSScriptRoot "..\projeto\app\utils") -Filter "*.prg" -ErrorAction SilentlyContinue)) {
+            if ($u.LastWriteTime -gt $mtimeUtils) { $mtimeUtils = $u.LastWriteTime }
+        }
+        if ($idade.TotalMinutes -lt 20 -and (Get-Item $arqCache).LastWriteTime -ge $mtimeUtils) {
+            try {
+                $script:CatalogoFuncoes = Import-Clixml $arqCache
+                return $script:CatalogoFuncoes
+            } catch { }
+        }
+    }
+
+    $globais = @{}; $metodos = @{}; $declares = @{}
+    $raiz = "C:\4c\projeto\app"
+    if (Test-Path $raiz) {
+        $arqs = Get-ChildItem -Path $raiz -Recurse -Filter "*.prg" -ErrorAction SilentlyContinue |
+                Where-Object { $_.Name -notmatch '\.bak$' }
+        foreach ($a in $arqs) {
+            $dentro = $false
+            foreach ($l in [System.IO.File]::ReadAllLines($a.FullName)) {
+                if ($l -match '(?i)^\s*DEFINE\s+CLASS\s') { $dentro = $true }
+                if ($l -match '(?i)^\s*ENDDEFINE')        { $dentro = $false }
+                if ($l -match '(?i)^\s*(?:PROTECTED\s+|HIDDEN\s+)?(?:FUNCTION|PROCEDURE)\s+([A-Za-z_]\w*)') {
+                    if ($dentro) { $metodos[$Matches[1].ToLower()] = $true } else { $globais[$Matches[1].ToLower()] = $true }
+                }
+                if ($l -match '(?i)\bDECLARE\s+\w+\s+([A-Za-z_]\w*)\s+IN\s') { $declares[$Matches[1].ToLower()] = $true }
+            }
+        }
+    }
+    $script:CatalogoFuncoes = @{ Globais = $globais; Metodos = $metodos; Declares = $declares }
+    try { $script:CatalogoFuncoes | Export-Clixml -Path $arqCache -Force } catch { }
+    return $script:CatalogoFuncoes
+}
+
+function Test-FuncaoGlobalDefinida {
+    # Revalidacao EXATA de um unico nome direto no disco, usada pelo Pattern
+    # #192 quando o catalogo (possivelmente cacheado) diz que o nome nao existe.
+    # Retorna 'GLOBAL', 'METODO' ou '' (nao encontrado).
+    param([string]$Nome)
+
+    $raiz = "C:\4c\projeto\app"
+    if (-not (Test-Path $raiz)) { return '' }
+    $alvo = $Nome.ToLower()
+
+    $arqs = Get-ChildItem -Path $raiz -Recurse -Filter "*.prg" -ErrorAction SilentlyContinue |
+            Where-Object { $_.Name -notmatch '\.bak$' }
+    foreach ($a in $arqs) {
+        $texto = [System.IO.File]::ReadAllText($a.FullName)
+        if ($texto -notmatch ('(?im)^\s*(?:PROTECTED\s+|HIDDEN\s+)?(?:FUNCTION|PROCEDURE)\s+' + [regex]::Escape($Nome) + '\b')) { continue }
+        $dentro = $false
+        foreach ($l in ($texto -split "`r?`n")) {
+            if ($l -match '(?i)^\s*DEFINE\s+CLASS\s') { $dentro = $true }
+            if ($l -match '(?i)^\s*ENDDEFINE')        { $dentro = $false }
+            if ($l -match '(?i)^\s*(?:PROTECTED\s+|HIDDEN\s+)?(?:FUNCTION|PROCEDURE)\s+([A-Za-z_]\w*)') {
+                if ($Matches[1].ToLower() -eq $alvo) { if ($dentro) { return 'METODO' } else { return 'GLOBAL' } }
+            }
+        }
+    }
+    return ''
+}
+
+function Corrigir-ChamadaFuncaoNaoDefinida {
+    # Pattern #192 (Erro154, 2026-09-09) - WARNING-only.
+    #
+    # Chamada "nua" (sem THIS. e sem ponto) a um nome do NAMESPACE DE HELPERS do
+    # projeto que nao existe como funcao global. Em VFP9 isso nao quebra a
+    # compilacao: o erro so aparece em RUNTIME, quando o usuario clica no botao,
+    # como "File 'nomedafuncao.prg' does not exist."
+    #
+    # Duas familias:
+    #   NAO-DEFINIDA    - helper que o migrador inventou e nunca definiu.
+    #                     Fix: DEFINIR em projeto\app\utils\functions.prg (que o
+    #                     config.prg ja carrega), ou trocar por helper existente.
+    #                     Origem: ConverterParaLogico, chamado em 6 BOs (BchBO,
+    #                     BlqBO, DCCBO, OETBO, sigpdmp6BO, sigpres2BO) sem
+    #                     existir em lugar nenhum - 17 call sites.
+    #   METODO-SEM-THIS - metodo da propria classe chamado sem o THIS.
+    #                     (CLAUDE.md regra #8). Fix: prefixar com THIS.
+    #
+    # ESCOPO: so nomes com prefixo de helper do projeto (Converter/Tratar/
+    # Formatar/Validar/Obter/Carregar/...). Restringir ao namespace eh o que da
+    # ZERO falso positivo: nome de cursor (TmpX/CsX/CrX), palavra de SQL
+    # (VALUES/SUM/COUNT) e spec de tipo (C(10), N(6,2)) nunca casam com esses
+    # prefixos. A varredura generica de "funcao nao definida" foi testada e
+    # produz ~400 falsos positivos - foi descartada de proposito.
+    #
+    # WARNING-only: a correcao exige decidir ONDE definir o helper e com que
+    # semantica (o tipo do valor vem do schema), ou distinguir metodo de helper.
+    # Auditoria do projeto inteiro: automation\VerificarFuncoesNaoDefinidas.ps1
+    param([string[]]$Linhas, [string]$Arquivo = "")
+
+    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
+    if ([string]::IsNullOrEmpty($Arquivo)) { return $Linhas }
+
+    $ns = '^(Converter|Tratar|Formatar|Escapar|Validar|Msg|Mostrar|Calcular|Obter|Gerar|Verificar|Limpar|Preencher|Extrair|Normalizar|Aplicar|Montar|Checar|Carregar|Configurar|Atualizar|Registrar|Executar|Habilitar|Desabilitar|Selecionar|Preparar|Definir|Exibir)[A-Z]'
+
+    # nativas do VFP9 que casariam com os prefixos acima
+    $nativas = @{ 'validate' = $true }
+    $utils   = Get-HelpersUtils
+
+    # PRE-FILTRO barato: coleta os candidatos (chamada nua com prefixo do
+    # namespace) ANTES de montar o catalogo do projeto. Quase todo arquivo tem
+    # zero candidatos - chamada de metodo vem com THIS. e leva ponto, entao nao
+    # entra aqui - e assim o sweep de 831 arquivos nao paga a varredura de
+    # projeto\app (~8s) em cada um deles.
+    $candidatos = @()
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        $l = $Linhas[$i] -replace '\s*&&.*$', ''
+        if ($l -match '^\s*\*') { continue }
+        if ($l -match '(?i)^\s*(?:PROTECTED\s+|HIDDEN\s+)?(?:FUNCTION|PROCEDURE)\s') { continue }
+        $l = $l -replace '"[^"]*"', '""' -replace "'[^']*'", "''"
+        if ($l -match '(?i)\bDECLARE\s') { continue }
+
+        foreach ($m in [regex]::Matches($l, '(?:^|[^A-Za-z0-9_.])([A-Za-z_]\w*)\s*\(')) {
+            $nome = $m.Groups[1].Value
+            if ($nome -notmatch $ns) { continue }
+            $kn = $nome.ToLower()
+            if ($nativas.ContainsKey($kn) -or $utils.ContainsKey($kn)) { continue }
+            $candidatos += [PSCustomObject]@{ Linha = $i + 1; Nome = $nome }
+        }
+    }
+    if ($candidatos.Count -eq 0) { return $Linhas }
+
+    $cat = Get-CatalogoFuncoesProjeto
+    if ($cat.Globais.Count -eq 0) { return $Linhas }
+
+    $achados = @()
+    foreach ($c in $candidatos) {
+        $k = $c.Nome.ToLower()
+        if ($cat.Globais.ContainsKey($k) -or $cat.Declares.ContainsKey($k)) { continue }
+        # catalogo pode estar cacheado: revalida o nome direto no disco antes de acusar
+        $real = Test-FuncaoGlobalDefinida -Nome $c.Nome
+        if ($real -eq 'GLOBAL') { continue }
+        $tipo = if ($real -eq 'METODO' -or $cat.Metodos.ContainsKey($k)) { 'METODO-SEM-THIS' } else { 'NAO-DEFINIDA' }
+        $achados += [PSCustomObject]@{ Linha = $c.Linha; Nome = $c.Nome; Tipo = $tipo }
+    }
+
+    if ($achados.Count -eq 0) { return $Linhas }
+
+    foreach ($g in ($achados | Group-Object Nome, Tipo)) {
+        $primeiro = $g.Group[0]
+        $linhas5  = (($g.Group | Select-Object -First 5 | ForEach-Object { $_.Linha }) -join ', ')
+        if ($primeiro.Tipo -eq 'NAO-DEFINIDA') {
+            $desc = ("Pattern #192: '" + $primeiro.Nome + "' eh chamada mas NAO existe como funcao global em " +
+                     "projeto\app - nem em utils\functions.prg, nem em nenhum outro .prg fora de DEFINE CLASS. " +
+                     "Em VFP9 isso compila e so estoura em RUNTIME, quando o usuario aciona o botao: " +
+                     "[File '" + $primeiro.Nome.ToLower() + ".prg' does not exist.] Fix: DEFINIR o helper em " +
+                     "projeto\app\utils\functions.prg (o config.prg ja carrega esse arquivo), copiando a " +
+                     "semantica do legado - ou trocar a chamada por um helper que ja exista (TratarNulo, " +
+                     "EscaparSQL, FormatarNumeroSQL, FormatarDataSQL). Helper que le coluna do banco tem de " +
+                     "testar VARTYPE antes de comparar: coluna bit do SQL Server chega ao VFP ora como Logico " +
+                     "ora como Numerico. Auditoria do projeto: automation\VerificarFuncoesNaoDefinidas.ps1. " +
+                     "Origem: Erro154 (2026-09-09, ConverterParaLogico em 6 BOs, 17 call sites).")
+        } else {
+            $desc = ("Pattern #192: '" + $primeiro.Nome + "' existe como METODO de classe, mas esta sendo " +
+                     "chamada SEM o THIS. Sem o prefixo, o VFP9 procura o arquivo externo '" +
+                     $primeiro.Nome.ToLower() + ".prg' e estoura em runtime com [does not exist]. " +
+                     "Fix: prefixar com THIS. (CLAUDE.md regra #8). Origem: Erro154 (2026-09-09).")
+        }
+        Add-Correcao -Tipo ("WARN-192-" + $primeiro.Tipo) -Linha $primeiro.Linha `
+            -Original ($primeiro.Nome + "(...) em " + $g.Group.Count + " call site(s): linha(s) " + $linhas5) `
+            -Corrigido "(REVISAR MANUAL)" -Descricao $desc
+        Write-Host ("[Pattern #192] " + $primeiro.Tipo + ": " + $primeiro.Nome + " em " + $g.Group.Count + " call site(s) (linha " + $linhas5 + ")") -ForegroundColor Yellow
+    }
+
+    return $Linhas
+}
+
 function Invoke-CorrecaoAutomatica {
     param(
         [string]$Arquivo,
@@ -13963,6 +14172,7 @@ function Invoke-CorrecaoAutomatica {
     $linhas = Corrigir-SucessoSemGravarEListaDistinct -Linhas $linhas -Arquivo $Arquivo
     $linhas = Corrigir-PaginaDadosSemCabecalho -Linhas $linhas -Arquivo $Arquivo
     $linhas = Corrigir-LabelForeColorBrancoInvisivel -Linhas $linhas -Arquivo $Arquivo
+    $linhas = Corrigir-ChamadaFuncaoNaoDefinida -Linhas $linhas -Arquivo $Arquivo
 
     # Salva arquivo corrigido em UTF-8 SEM BOM.
     # - VFP9 nao suporta BOM (por isso removemos no read com bytes[3..])

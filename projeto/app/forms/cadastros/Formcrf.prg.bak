@@ -10,7 +10,7 @@ DEFINE CLASS Formcrf AS FormBase
     *--------------------------------------------------------------------------
     * Propriedades visuais (PILAR 1 - UX fidelity)
     *--------------------------------------------------------------------------
-    Height      = 600
+    Height      = 618
     Width       = 1000
     Caption     = "Contagem de Refer" + CHR(234) + "ncia"
     AutoCenter  = .T.
@@ -103,7 +103,7 @@ DEFINE CLASS Formcrf AS FormBase
             .Top        = -29
             .Left       = 0
             .Width      = 1003
-            .Height     = 635
+            .Height     = 653
             .Tabs       = .F.
             .Visible    = .T.
             .Page1.Caption = "Lista"
@@ -393,7 +393,7 @@ DEFINE CLASS Formcrf AS FormBase
             .Top                = 162
             .Left               = 0
             .Width              = 913
-            .Height             = 400
+            .Height             = 418
             .FontName           = "Verdana"
             .FontSize           = 8
             .ForeColor          = RGB(90, 90, 90)
@@ -437,6 +437,53 @@ DEFINE CLASS Formcrf AS FormBase
 
         *-- Fundo padrao do framework frmcadastro (sem isso a pagina fica branca)
         loc_oPagina.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
+
+        *-- Cabecalho cinza (identico ao da pagina Lista) - CLAUDE.md #11 / Erro152
+        loc_oPagina.AddObject("cnt_4c_Cabecalho", "Container")
+        WITH loc_oPagina.cnt_4c_Cabecalho
+            .Top           = 29
+            .Left          = 0
+            .Width         = THIS.Width
+            .Height        = 80
+            .BackColor     = RGB(100, 100, 100)
+            .BorderWidth   = 0
+            .SpecialEffect = 0
+            .Visible       = .T.
+
+            .AddObject("lbl_4c_Sombra", "Label")
+            WITH .lbl_4c_Sombra
+                .Caption   = THIS.Caption
+                .Top       = 15
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 40
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(0, 0, 0)
+                .BackStyle = 0
+                .AutoSize  = .F.
+                .Visible   = .T.
+            ENDWITH
+
+            .AddObject("lbl_4c_Titulo", "Label")
+            WITH .lbl_4c_Titulo
+                .Caption   = THIS.Caption
+                .Top       = 18
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 46
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(255, 255, 255)
+                .BackStyle = 0
+                .AutoSize  = .F.
+                .Visible   = .T.
+            ENDWITH
+
+        ENDWITH
+
 
         *-- Container botoes Confirmar/Cancelar (Grupo_Salva: Top=11+29=40, Left=817)
         loc_oPagina.AddObject("cnt_4c_Salva", "Container")
@@ -497,7 +544,7 @@ DEFINE CLASS Formcrf AS FormBase
         *-- Label Codigo (Label4: Top=68+29=97, Left=205, Width=45)
         loc_oPagina.AddObject("lbl_4c_Label4", "Label")
         WITH loc_oPagina.lbl_4c_Label4
-            .Top       = 97
+            .Top       = 120
             .Left      = 205
             .Width     = 45
             .Height    = 15
@@ -514,7 +561,7 @@ DEFINE CLASS Formcrf AS FormBase
         *-- TextBox getCods = txt_4c_Codigo (Top=63+29=92, Left=254, readonly - When=.F.)
         loc_oPagina.AddObject("txt_4c_Codigo", "TextBox")
         WITH loc_oPagina.txt_4c_Codigo
-            .Top       = 92
+            .Top       = 115
             .Left      = 254
             .Width     = 80
             .Height    = 24
@@ -531,7 +578,7 @@ DEFINE CLASS Formcrf AS FormBase
         *-- Label Vendedor (Label2: Top=95+29=124, Left=192)
         loc_oPagina.AddObject("lbl_4c_Label2", "Label")
         WITH loc_oPagina.lbl_4c_Label2
-            .Top       = 124
+            .Top       = 147
             .Left      = 192
             .Width     = 58
             .Height    = 15
@@ -549,7 +596,7 @@ DEFINE CLASS Formcrf AS FormBase
         *-- When: InList(pcEscolha, INSERIR, CONSULTAR) -> editavel so em INCLUIR
         loc_oPagina.AddObject("txt_4c_Conta", "TextBox")
         WITH loc_oPagina.txt_4c_Conta
-            .Top       = 119
+            .Top       = 142
             .Left      = 254
             .Width     = 80
             .Height    = 24
@@ -564,7 +611,7 @@ DEFINE CLASS Formcrf AS FormBase
         *-- TextBox getDConta = txt_4c_DConta (Top=90+29=119, Left=336, Width=290 - nome readonly)
         loc_oPagina.AddObject("txt_4c_DConta", "TextBox")
         WITH loc_oPagina.txt_4c_DConta
-            .Top       = 119
+            .Top       = 142
             .Left      = 336
             .Width     = 290
             .Height    = 24
@@ -580,7 +627,7 @@ DEFINE CLASS Formcrf AS FormBase
         *-- Label Conta (Label1: Top=177+29=206, Left=209)
         loc_oPagina.AddObject("lbl_4c_Label1", "Label")
         WITH loc_oPagina.lbl_4c_Label1
-            .Top       = 206
+            .Top       = 229
             .Left      = 209
             .Width     = 41
             .Height    = 15
@@ -597,7 +644,7 @@ DEFINE CLASS Formcrf AS FormBase
         *-- Label Busca Produto (Label3: Top=126+29=155, Left=169)
         loc_oPagina.AddObject("lbl_4c_Label3", "Label")
         WITH loc_oPagina.lbl_4c_Label3
-            .Top       = 155
+            .Top       = 178
             .Left      = 169
             .Width     = 81
             .Height    = 15
@@ -614,7 +661,7 @@ DEFINE CLASS Formcrf AS FormBase
         *-- Label Procurar (Say3: Top=126+29=155, Left=373)
         loc_oPagina.AddObject("lbl_4c_Say3", "Label")
         WITH loc_oPagina.lbl_4c_Say3
-            .Top       = 155
+            .Top       = 178
             .Left      = 373
             .Width     = 43
             .Height    = 15
@@ -630,7 +677,7 @@ DEFINE CLASS Formcrf AS FormBase
         *-- Linha separadora (Line1: Top=117+29=146, Left=165, Width=668)
         loc_oPagina.AddObject("lin_4c_Line1", "Line")
         WITH loc_oPagina.lin_4c_Line1
-            .Top       = 146
+            .Top       = 169
             .Left      = 165
             .Width     = 668
             .Height    = 0
@@ -641,7 +688,7 @@ DEFINE CLASS Formcrf AS FormBase
         *-- Label Quantidade (Label5: Top=152+29=181, Left=182)
         loc_oPagina.AddObject("lbl_4c_Label5", "Label")
         WITH loc_oPagina.lbl_4c_Label5
-            .Top       = 181
+            .Top       = 204
             .Left      = 182
             .Width     = 68
             .Height    = 15
@@ -657,7 +704,7 @@ DEFINE CLASS Formcrf AS FormBase
         *-- Label Descricao (Label7: Top=576+29=605, Left=196)
         loc_oPagina.AddObject("lbl_4c_Label7", "Label")
         WITH loc_oPagina.lbl_4c_Label7
-            .Top       = 605
+            .Top       = 628
             .Left      = 196
             .Width     = 55
             .Height    = 15
@@ -674,7 +721,7 @@ DEFINE CLASS Formcrf AS FormBase
         *-- Busca por codigo de barras ou codigo de produto (conforme opt_4c_OptBusca)
         loc_oPagina.AddObject("txt_4c_Busca", "TextBox")
         WITH loc_oPagina.txt_4c_Busca
-            .Top       = 151
+            .Top       = 174
             .Left      = 254
             .Width     = 108
             .Height    = 23
@@ -690,7 +737,7 @@ DEFINE CLASS Formcrf AS FormBase
         *-- Quantidade a registrar; LostFocus atualiza csSigCdCri.QtdCtg
         loc_oPagina.AddObject("txt_4c_TotQt", "TextBox")
         WITH loc_oPagina.txt_4c_TotQt
-            .Top       = 177
+            .Top       = 200
             .Left      = 254
             .Width     = 80
             .Height    = 23
@@ -705,7 +752,7 @@ DEFINE CLASS Formcrf AS FormBase
         *-- Buttons(1): busca por Cod.Barra; Buttons(2): busca por Produto
         loc_oPagina.AddObject("opt_4c_OptBusca", "OptionGroup")
         WITH loc_oPagina.opt_4c_OptBusca
-            .Top         = 151
+            .Top         = 174
             .Left        = 414
             .Width       = 122
             .Height      = 23
@@ -745,7 +792,7 @@ DEFINE CLASS Formcrf AS FormBase
         loc_oPagina.AddObject("grd_4c_Dados", "Grid")
         loc_oPagina.grd_4c_Dados.ColumnCount = 6
         WITH loc_oPagina.grd_4c_Dados
-            .Top                = 203
+            .Top                = 226
             .Left               = 254
             .Width              = 477
             .Height             = 396
@@ -790,7 +837,7 @@ DEFINE CLASS Formcrf AS FormBase
         *-- Image ImgJpg (Top=242+29=271, Left=746 - inicialmente invisivel)
         loc_oPagina.AddObject("img_4c_ImgJpg", "Image")
         WITH loc_oPagina.img_4c_ImgJpg
-            .Top     = 271
+            .Top     = 294
             .Left    = 746
             .Width   = 241
             .Height  = 217
@@ -800,7 +847,7 @@ DEFINE CLASS Formcrf AS FormBase
         *-- Shape ShpFigura (borda da area de imagem: Top=239+29=268, Left=743)
         loc_oPagina.AddObject("shp_4c_ShpFigura", "Shape")
         WITH loc_oPagina.shp_4c_ShpFigura
-            .Top         = 268
+            .Top         = 291
             .Left        = 743
             .Width       = 247
             .Height      = 224
@@ -814,7 +861,7 @@ DEFINE CLASS Formcrf AS FormBase
         *-- Descricao do produto selecionado no grid (readonly)
         loc_oPagina.AddObject("txt_4c_DContas", "TextBox")
         WITH loc_oPagina.txt_4c_DContas
-            .Top       = 600
+            .Top       = 623
             .Left      = 254
             .Width     = 356
             .Height    = 24
@@ -1801,3 +1848,4 @@ DEFINE CLASS Formcrf AS FormBase
     ENDPROC
 
 ENDDEFINE
+

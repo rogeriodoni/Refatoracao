@@ -550,7 +550,7 @@ DEFINE CLASS FormOCO AS FormBase
                 .FontName  = "Tahoma"
                 .FontSize  = 8
                 .FontBold  = .F.
-                .ForeColor = RGB(255, 255, 255)
+                .ForeColor = RGB(90, 90, 90)
                 .BackStyle = 0
                 .Alignment = 1
                 .Visible   = .T.
@@ -586,7 +586,7 @@ DEFINE CLASS FormOCO AS FormBase
                 .FontName  = "Tahoma"
                 .FontSize  = 8
                 .FontBold  = .F.
-                .ForeColor = RGB(255, 255, 255)
+                .ForeColor = RGB(90, 90, 90)
                 .BackStyle = 0
                 .Alignment = 1
                 .Visible   = .T.
