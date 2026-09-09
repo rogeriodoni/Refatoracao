@@ -4244,7 +4244,7 @@ DEFINE CLASS Formlch AS FormBase
 
         TRY
             loc_nRes = SQLEXEC(gnConnHandle, ;
-                "SELECT iclis, cpfs, razaos FROM SigCdCli WHERE iclis = " + EscaparSQL(loc_cConta), ;
+                "SELECT iclis, cpfs, RClis FROM SigCdCli WHERE iclis = " + EscaparSQL(loc_cConta), ;
                 "cursor_4c_ValidCli")
             IF loc_nRes >= 0 AND RECCOUNT("cursor_4c_ValidCli") > 0
                 SELECT cursor_4c_ValidCli
@@ -4252,7 +4252,7 @@ DEFINE CLASS Formlch AS FormBase
                     loc_oPg2.cnt_4c_Conta.txt_4c_CpfIclis.Value = ALLTRIM(cursor_4c_ValidCli.cpfs)
                 ENDIF
                 IF VARTYPE(loc_oPg2.cnt_4c_Conta.txt_4c_NomeIclis) = "O"
-                    loc_oPg2.cnt_4c_Conta.txt_4c_NomeIclis.Value = ALLTRIM(cursor_4c_ValidCli.razaos)
+                    loc_oPg2.cnt_4c_Conta.txt_4c_NomeIclis.Value = ALLTRIM(cursor_4c_ValidCli.RClis)
                 ENDIF
             ELSE
                 MsgAviso("Cliente n" + CHR(227) + "o encontrado: " + loc_cConta, "")
@@ -4331,7 +4331,7 @@ DEFINE CLASS Formlch AS FormBase
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * BuscarDescConta - helper para buscar descricao de conta (SigCdCli.razaos)
+    * BuscarDescConta - helper para buscar descricao de conta (SigCdCli.RClis - coluna goSistema.BuscaNome, igual ao fAcessoContas do legado)
     *--------------------------------------------------------------------------
     PROTECTED PROCEDURE BuscarDescConta(par_cCnt, par_cTxtCon, par_cTxtDesc)
         LOCAL loc_oPg2, loc_oCnt, loc_cConta, loc_nRes, loc_cDesc
@@ -4360,12 +4360,12 @@ DEFINE CLASS Formlch AS FormBase
 
         TRY
             loc_nRes = SQLEXEC(gnConnHandle, ;
-                "SELECT iclis, razaos FROM SigCdCli WHERE iclis = " + EscaparSQL(loc_cConta), ;
+                "SELECT iclis, RClis FROM SigCdCli WHERE iclis = " + EscaparSQL(loc_cConta), ;
                 "cursor_4c_DescCon")
             loc_cDesc = ""
             IF loc_nRes >= 0 AND RECCOUNT("cursor_4c_DescCon") > 0
                 SELECT cursor_4c_DescCon
-                loc_cDesc = ALLTRIM(cursor_4c_DescCon.razaos)
+                loc_cDesc = ALLTRIM(cursor_4c_DescCon.RClis)
             ELSE
                 MsgAviso("Conta/cliente n" + CHR(227) + "o encontrado: " + loc_cConta, "")
                 EVALUATE("loc_oCnt." + par_cTxtCon + ".Value = ''")
@@ -4760,7 +4760,7 @@ DEFINE CLASS Formlch AS FormBase
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * AbrirLookupConta - lookup generico SigCdCli (iclis/razaos)
+    * AbrirLookupConta - lookup generico SigCdCli (iclis/RClis - RClis eh a coluna goSistema.BuscaNome)
     *--------------------------------------------------------------------------
     PROTECTED PROCEDURE AbrirLookupConta(par_cCnt, par_cTxtCon, par_cTxtDesc)
         LOCAL loc_oPg2, loc_oCnt, loc_oBusca, loc_lResultado, loc_oTxtCon, loc_oTxtDesc
@@ -4776,7 +4776,7 @@ DEFINE CLASS Formlch AS FormBase
 
                 IF VARTYPE(loc_oBusca) = "O"
                     loc_oBusca.mAddColuna("iclis",  "", "Conta")
-                    loc_oBusca.mAddColuna("razaos", "", "Nome")
+                    loc_oBusca.mAddColuna("RClis", "", "Nome")
                     loc_oBusca.Show()
 
                     IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaCon")
@@ -4789,7 +4789,7 @@ DEFINE CLASS Formlch AS FormBase
                             IF !EMPTY(par_cTxtDesc)
                                 loc_oTxtDesc = EVALUATE("loc_oCnt." + par_cTxtDesc)
                                 IF VARTYPE(loc_oTxtDesc) = "O"
-                                    loc_oTxtDesc.Value = ALLTRIM(cursor_4c_BuscaCon.razaos)
+                                    loc_oTxtDesc.Value = ALLTRIM(cursor_4c_BuscaCon.RClis)
                                 ENDIF
                             ENDIF
                         ENDIF
@@ -4827,7 +4827,7 @@ DEFINE CLASS Formlch AS FormBase
                 IF VARTYPE(loc_oBusca) = "O"
                     loc_oBusca.mAddColuna("cpfs",   "", "CPF")
                     loc_oBusca.mAddColuna("iclis",  "", "Conta")
-                    loc_oBusca.mAddColuna("razaos", "", "Nome")
+                    loc_oBusca.mAddColuna("RClis", "", "Nome")
                     loc_oBusca.Show()
 
                     IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaCpf")
@@ -4917,7 +4917,7 @@ DEFINE CLASS Formlch AS FormBase
             IF VARTYPE(loc_oBusca) = "O"
                 loc_oBusca.mAddColuna("iclis",  "", "Conta")
                 loc_oBusca.mAddColuna("cpfs",   "", "CPF")
-                loc_oBusca.mAddColuna("razaos", "", "Nome")
+                loc_oBusca.mAddColuna("RClis", "", "Nome")
                 loc_oBusca.Show()
 
                 IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaIclis")
@@ -4933,7 +4933,7 @@ DEFINE CLASS Formlch AS FormBase
                         ENDIF
                         IF VARTYPE(loc_oPg2.cnt_4c_Conta.txt_4c_NomeIclis) = "O"
                             loc_oPg2.cnt_4c_Conta.txt_4c_NomeIclis.Value = ;
-                                ALLTRIM(cursor_4c_BuscaIclis.razaos)
+                                ALLTRIM(cursor_4c_BuscaIclis.RClis)
                         ENDIF
                     ENDIF
                 ENDIF
