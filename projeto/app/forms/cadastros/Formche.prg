@@ -360,7 +360,7 @@ DEFINE CLASS Formche AS FormBase
             .Height    = 15
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -387,7 +387,7 @@ DEFINE CLASS Formche AS FormBase
             .Left      = 149
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -647,7 +647,7 @@ DEFINE CLASS Formche AS FormBase
             .Left      = 79
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .AutoSize  = .T.
             .Visible   = .T.
@@ -675,7 +675,7 @@ DEFINE CLASS Formche AS FormBase
             .Left      = 191
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .AutoSize  = .T.
             .Visible   = .T.
@@ -703,7 +703,7 @@ DEFINE CLASS Formche AS FormBase
             .Left      = 360
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .AutoSize  = .T.
             .Visible   = .T.
@@ -732,7 +732,7 @@ DEFINE CLASS Formche AS FormBase
             .Left      = 48
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .AutoSize  = .T.
             .Visible   = .T.
@@ -760,7 +760,7 @@ DEFINE CLASS Formche AS FormBase
             .Left      = 253
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .AutoSize  = .T.
             .Visible   = .T.
@@ -788,7 +788,7 @@ DEFINE CLASS Formche AS FormBase
             .Left      = 380
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .AutoSize  = .T.
             .Visible   = .F.
@@ -815,7 +815,7 @@ DEFINE CLASS Formche AS FormBase
             .Left      = 489
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .F.
         ENDWITH
@@ -828,7 +828,7 @@ DEFINE CLASS Formche AS FormBase
             .Left      = 29
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .AutoSize  = .T.
             .Visible   = .T.
@@ -870,7 +870,7 @@ DEFINE CLASS Formche AS FormBase
             .Left      = 47
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .AutoSize  = .T.
             .Visible   = .T.
@@ -900,7 +900,7 @@ DEFINE CLASS Formche AS FormBase
             .Left      = 247
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .AutoSize  = .T.
             .Visible   = .T.
@@ -930,7 +930,7 @@ DEFINE CLASS Formche AS FormBase
             .Left      = 433
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .AutoSize  = .T.
             .Visible   = .T.
@@ -960,7 +960,7 @@ DEFINE CLASS Formche AS FormBase
             .Left      = 590
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .AutoSize  = .T.
             .Visible   = .T.
@@ -988,7 +988,7 @@ DEFINE CLASS Formche AS FormBase
             .Left      = 582
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .AutoSize  = .T.
             .Visible   = .T.
@@ -1018,7 +1018,7 @@ DEFINE CLASS Formche AS FormBase
             .Left      = 570
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .AutoSize  = .T.
             .Visible   = .T.

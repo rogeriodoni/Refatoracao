@@ -491,7 +491,7 @@ DEFINE CLASS FormACE AS FormBase
             .Height    = 17
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH

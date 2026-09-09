@@ -540,14 +540,18 @@ DEFINE CLASS CcoBO AS BusinessBase
                 THIS.this_cIdChaves = fUniqueIds()
             ENDIF
 
+            *-- SigCdClc tem DUAS colunas de prioridade, ambas NOT NULL: `prioridade`
+            *-- (numeric) e `prioridades` (decimal). Faltava a primeira e o INSERT era
+            *-- recusado pelo SQL Server (Erro151). Gravamos o mesmo valor nas duas.
             loc_cSQL = "INSERT INTO SigCdClc" + ;
                        " (cIdChaves, Emps, grupos, codigos, descs," + ;
-                       " Prioridades, faixais, faixafs, ClcStatus)" + ;
+                       " prioridade, Prioridades, faixais, faixafs, ClcStatus)" + ;
                        " VALUES (" + EscaparSQL(THIS.this_cIdChaves) + ;
                        ", " + EscaparSQL(LEFT(THIS.this_cEmps, 3)) + ;
                        ", " + EscaparSQL(LEFT(THIS.this_cGrupos, 10)) + ;
                        ", " + EscaparSQL(LEFT(THIS.this_cCodigos, 80)) + ;
                        ", " + EscaparSQL(LEFT(THIS.this_cDescs, 220)) + ;
+                       ", " + FormatarNumeroSQL(THIS.this_nPrioridades) + ;
                        ", " + FormatarNumeroSQL(THIS.this_nPrioridades) + ;
                        ", " + FormatarNumeroSQL(THIS.this_nFaixaIs) + ;
                        ", " + FormatarNumeroSQL(THIS.this_nFaixaFs) + ;

@@ -342,7 +342,7 @@ DEFINE CLASS Formlch AS FormBase
             .AutoSize = .F.
             .FontName = "Tahoma"
             .FontSize = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible = .T.
         ENDWITH
@@ -370,7 +370,7 @@ DEFINE CLASS Formlch AS FormBase
             .AutoSize = .F.
             .FontName = "Tahoma"
             .FontSize = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible = .T.
         ENDWITH
@@ -399,7 +399,7 @@ DEFINE CLASS Formlch AS FormBase
             .AutoSize = .F.
             .FontName = "Tahoma"
             .FontSize = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(0, 0, 0)
             .BackStyle = 0
             .Visible = .T.
         ENDWITH
@@ -641,7 +641,7 @@ DEFINE CLASS Formlch AS FormBase
             .AutoSize = .F.
             .FontName = "Tahoma"
             .FontSize = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible = .T.
         ENDWITH
@@ -670,7 +670,7 @@ DEFINE CLASS Formlch AS FormBase
             .AutoSize = .F.
             .FontName = "Tahoma"
             .FontSize = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible = .T.
         ENDWITH
@@ -698,7 +698,7 @@ DEFINE CLASS Formlch AS FormBase
             .AutoSize = .F.
             .FontName = "Tahoma"
             .FontSize = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible = .T.
         ENDWITH
@@ -733,21 +733,21 @@ DEFINE CLASS Formlch AS FormBase
             .Buttons(1).Top      = 0
             .Buttons(1).Width    = 51
             .Buttons(1).AutoSize = .F.
-            .Buttons(1).ForeColor = RGB(255, 255, 255)
+            .Buttons(1).ForeColor = RGB(90, 90, 90)
             .Buttons(1).Themes   = .F.
             .Buttons(2).Caption  = "Pend."
             .Buttons(2).Left     = 51
             .Buttons(2).Top      = 0
             .Buttons(2).Width    = 51
             .Buttons(2).AutoSize = .F.
-            .Buttons(2).ForeColor = RGB(255, 255, 255)
+            .Buttons(2).ForeColor = RGB(90, 90, 90)
             .Buttons(2).Themes   = .F.
             .Buttons(3).Caption  = "Concil."
             .Buttons(3).Left     = 102
             .Buttons(3).Top      = 0
             .Buttons(3).Width    = 51
             .Buttons(3).AutoSize = .F.
-            .Buttons(3).ForeColor = RGB(255, 255, 255)
+            .Buttons(3).ForeColor = RGB(90, 90, 90)
             .Buttons(3).Themes   = .F.
         ENDWITH
         BINDEVENT(loc_oPg2.opt_4c_SNA, "InteractiveChange", THIS, "OptSNAChange")
@@ -763,7 +763,7 @@ DEFINE CLASS Formlch AS FormBase
             .AutoSize = .F.
             .FontName = "Tahoma"
             .FontSize = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible = .T.
         ENDWITH
@@ -1894,7 +1894,7 @@ DEFINE CLASS Formlch AS FormBase
             .AutoSize = .F.
             .FontName = "Tahoma"
             .FontSize = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible = .T.
         ENDWITH
@@ -2529,7 +2529,7 @@ DEFINE CLASS Formlch AS FormBase
             .AutoSize = .F.
             .FontName = "Tahoma"
             .FontSize = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible = .T.
         ENDWITH
@@ -2587,7 +2587,7 @@ DEFINE CLASS Formlch AS FormBase
             .AutoSize = .F.
             .FontName = "Tahoma"
             .FontSize = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible = .T.
         ENDWITH
@@ -2755,7 +2755,7 @@ DEFINE CLASS Formlch AS FormBase
             .AutoSize = .F.
             .FontName = "Tahoma"
             .FontSize = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible = .T.
         ENDWITH
@@ -2784,7 +2784,7 @@ DEFINE CLASS Formlch AS FormBase
             .AutoSize = .F.
             .FontName = "Tahoma"
             .FontSize = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible = .T.
         ENDWITH
@@ -2841,7 +2841,7 @@ DEFINE CLASS Formlch AS FormBase
             .AutoSize = .F.
             .FontName = "Tahoma"
             .FontSize = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible = .T.
         ENDWITH

@@ -1,0 +1,22 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Analisei os 38 problemas listados neste pass funcional:
+
+**37 de 38 s├úo `[LAYOUT-POSITION]`** ÔÇö fora do escopo deste pass (que ├® exclusivamente Functional Logic: m├®todos, eventos, containers). Esses pertencem a um pass de LAYOUT separado, e a regra deste pass pro├¡be alterar propriedades visuais (Top/Left) exceto quando o problema ├® especificamente de alinhamento ÔÇö n├úo ├® o caso aqui (s├úo desalinhamentos de posi├º├úo herdados do legado, tratados em outro pass).
+
+**1 de 38 ├® `[METODO-INEXISTENTE]`** ÔÇö `THIS.ObterDescricaoConta()`. Verifiquei no arquivo:
+
+```
+3343: PROTECTED FUNCTION ObterDescricaoConta(par_cConta)
+```
+
+O m├®todo **existe e est├í corretamente implementado** (faz `SELECT Rclis FROM SigCdCli WHERE Iclis = ...`, trata NULL, fecha cursor). ├ë chamado corretamente em 7 pontos dentro de `BOParaForm` (linhas 3562-3582), todos passando o par├ómetro certo (`this_cContaContab`, `this_cContaPis`, `this_cContaCofins`, etc.).
+
+O motivo do falso positivo: em VFP9, `PROCEDURE` e `FUNCTION` s├úo sintaxes equivalentes para definir m├®todos de classe ÔÇö o scanner autom├ítico aparentemente s├│ procurou por `PROCEDURE ObterDescricaoConta` e n├úo reconheceu a declara├º├úo como `FUNCTION`. N├úo ├® um m├®todo inventado pela LLM nem uma chamada ├│rf├ú.
+
+**Conclus├úo: nenhuma altera├º├úo de c├│digo foi necess├íria neste pass.** N├úo h├í problemas funcionais reais para corrigir em `FormSRV.prg` ou `SRVBO.prg` dentre os 38 detectados ÔÇö apenas um falso positivo do scanner e itens de layout que pertencem a outro pass.
+
+Observa├º├úo ├á parte (fora do escopo, n├úo corrigida): o `CATCH` em `ObterDescricaoConta` (linha 3363-3365) ├® silencioso, violando a regra #9 do CLAUDE.md ("CATCH nunca silencioso"). Como n├úo estava na lista de 38 problemas deste pass, n├úo alterei ÔÇö mas fica registrado caso queira que eu trate num pass seguinte ou agora, se preferir.

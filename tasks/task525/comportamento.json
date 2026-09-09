@@ -1,0 +1,1603 @@
+{
+  "resumo": {
+    "totalMetodos": 98,
+    "metodosComSQL": 6,
+    "metodosComValidacao": 48,
+    "totalQueries": 2,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["For Alltrim", "fConfigGeral", "fAcessoContab", "fAcessoContas", "fwBuscaSel", "fwBuscaExt"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDSRV",
+      "evento": "Procedure",
+      "linhas": 14,
+      "codigoOriginal": "ThisForm.poDataMgr.CursorQuery([SigCdCli],[crSigCdCli],[Iclis],crSigCdSrv.cContab,[rClis])\nThisForm.Pagina.Dados.pgDados.pgImpostos.Get_Dcontao.Value = crSigCdCli.rClis \nThisForm.poDataMgr.CursorQuery([SigCdCli],[crSigCdCli],[Iclis],crSigCdSrv.cCtaPiss,[rClis])\nThisForm.Pagina.Dados.pgDados.pgVencimentos.Get_DcontaPis.Value = crSigCdCli.rClis \nThisForm.poDataMgr.CursorQuery([SigCdCli],[crSigCdCli],[Iclis],crSigCdSrv.cCtaCofins,[rClis])\nThisForm.Pagina.Dados.pgDados.pgVencimentos.Get_DcontaCofins... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CursorQuery",
+        "controlesReferenciados": "Get_Dcontao,Get_DcontaPis,Get_DcontaCofins,Get_DcontaIrrf,Get_DcontaInss,Get_DcontaCsll,Get_DcontaIss",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV",
+      "evento": "Procedure",
+      "linhas": 10,
+      "codigoOriginal": "loDad = ThisForm.Pagina.Dados.pgDados.pgImpostos\n\nSelect crSigCdSrv\nIf Not Empty(loDad.getDescricao.Value)\n\tLocate For Alltrim(descservs) = Alltrim(loDad.getDescricao.Value)\nEndIf\nIf Not Empty(loDad.getCodigos.Value)\n\tLocate For Alltrim(codservs) = Alltrim(loDad.getCodigos.Value)\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "For Alltrim",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.poDataMgr.Update([crSigSeRvp])\n=DoDefault()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Update",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.poDataMgr.Update([crSigSeRvp])\n=DoDefault()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Update",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "ThisForm.poDataMgr.Update([crSigSeRvp])\n=DoDefault()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "Update",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV",
+      "evento": "Procedure",
+      "linhas": 2,
+      "codigoOriginal": "pcCodServ = crSigCdSrv.CodServs\n=DoDefault()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "=fConfigGeral()\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV",
+      "evento": "Init",
+      "linhas": 42,
+      "codigoOriginal": "Lparameters lcTipo\n\nThisForm.pcTipo = Iif(Type([lcTipo]) <> [C], [S], lcTipo)\nThisForm.Caption= [Serviços de ] + Iif(ThisForm.pcTipo = [S], [Saídas], [Entradas])\nThisForm.Name  = [SIGCDSRV]+Iif(ThisForm.pcTipo <> [S], [E],[])\n\npcCodServ = []\n\nWith ThisForm\n\t.poDataMgr = CreateObject([fSqlConector], This.Name)\t\n\t\n\tm.lcQuery = [Select * from SigCdSrv where cTipos = ']+ThisForm.pcTipo+[']\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tWith .poDataMgr\n\t\t\t.AddCursor([SigCdSrv], [cIdChaves], [crSigCdSrv], [], ThisFo... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "pcTipo = Iif,Caption= [Serviços de ] + Iif,Name  = [SIGCDSRV]+Iif",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDSRV",
+      "evento": "Click",
+      "linhas": 45,
+      "codigoOriginal": "LParameters lnOpcao\n\nIf (Type('lnOpcao') = 'N')\n\tThis.Value = lnOpcao\nEndIf\n\nSelect crSigCdSrv\n\nIf Not DoDefault(lnOpcao)\n\tThisForm.mAtivapagina1\n\tReturn 0\nEndIf\n\nThisForm.CarregaDescrs() \nThisForm.Pagina.Dados.pgDados.ActivePage = 1\n\nReplace cIdChaves With Iif(Empty(cIdChaves), fUniqueIds(), cIdChaves)\n\nWith ThisForm.Pagina.Dados.pgDados.pgVencimentos\n\t.grdProdutos.RecordSource = []\n\tpcCodServ = crSigCdSrv.CodServs\n\tThisForm.poDataMgr.Requery([crSigSeRvp])\n\t.grdProdutos.RecordSource = [crSigSeR... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "CarregaDescrs,Requery",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV",
+      "evento": "Click",
+      "linhas": 50,
+      "codigoOriginal": "Local loDad\n\nloDad = ThisForm.Pagina.Dados.pgDados.pgImpostos  \n\nIf InList(ThisForm.pcEscolha, 'INSERIR', 'ALTERAR')\n\tIf Empty(loDad.getCodigos.Value)\n\t\t=MessageBox('Obrigatório Informar o Código!!!', 48, '')\n\t\tloDad.getCodigos.SetFocus\n\t\tReturn 0\n\tEndIf\n\n\tIf Empty(loDad.getDescricao.Value)\n\t\t=MessageBox('Obrigatório Informar a Descrição!!!', 48, '')\n\t\tloDad.getDescricao.SetFocus\n\t\tReturn 0\n\tEndIf\n\t\t\n\tIf (Thisform.pcEscolha = 'INSERIR' )\n\t\tlcQuery = [Select * ] + ;\n\t\t\t\t    [From SigCdSrv ] + ;\n\t... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV",
+      "evento": "Click",
+      "linhas": 6,
+      "codigoOriginal": "=DoDefault()\n\nIf ThisForm.plCancelar\n\tThisForm.mAtivapagina1\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados",
+      "evento": "Activate",
+      "linhas": 1,
+      "codigoOriginal": "this.Refresh()",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgImpostos.getCodigos",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return (INLIST(Thisform.pcEscolha,[INSERIR],[PROCURAR]))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgImpostos.Get_grupoo",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR]))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgImpostos.Get_grupoo",
+      "evento": "Valid",
+      "linhas": 7,
+      "codigoOriginal": "If !IsEmpty(This.value)\n\tfAcessoContab(Usuar,'C',This.value,This)\nElse\n\tThis.parent.Get_Contao.Value = ''\n\tThis.parent.Get_DContao.Value = ''\nendif\nreturn(.t.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Contao,Get_DContao",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgImpostos.Get_contao",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist( ThisForm.pcEscolha, \"INSERIR\", \"ALTERAR\" ) And !IsEmpty( This.Parent.Get_Grupoo.Value )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Grupoo",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgImpostos.Get_contao",
+      "evento": "Valid",
+      "linhas": 15,
+      "codigoOriginal": "Local lcGrupo\n\nlcgrupo = This.Parent.get_grupoo.value\nIf !IsEmpty(This.value)\n\tIf !fAcessoContas(Usuar,lcgrupo,'C',This.value,This,This.parent.get_dcontao)\n\t\tMessagebox('Acesso Negado !!',0+48,'')\n\t\tThis.Value=''\n\t\tThis.Refresh\n\t\tThis.parent.Get_DContao.Value = ''\n\t\tThis.parent.Get_DContao.Refresh\n\tEndif\nElse\n\tThis.parent.Get_DContao.Value = ''\n\tThis.parent.Get_DContao.Refresh\nendif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_grupoo,get_dcontao",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgImpostos.Get_dcontao",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist( ThisForm.pcEscolha, \"INSERIR\", \"ALTERAR\" ) And !IsEmpty( This.Parent.Get_Grupoo.Value ) And IsEmpty( This.Parent.Get_Contao.Value )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Grupoo,Get_Contao",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgImpostos.Get_dcontao",
+      "evento": "Valid",
+      "linhas": 13,
+      "codigoOriginal": "grupo = This.Parent.get_grupoo.value\nIf !IsEmpty(This.value)\n\tIf !fAcessoContas(Usuar,grupo,'D',This.value,This.parent.get_contao,This)\n\t\tMessagebox('Acesso Negado !!',0+48,'')\n\t\tThis.Value=''\n\t\tThis.Refresh\n\t\tThis.parent.get_contao.value = ''\n\t\tThis.parent.get_contao.Refresh\n\tEndif\nElse\n\tThis.parent.get_contao.value = ''\n\tThis.parent.get_contao.Refresh\t\nendif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_grupoo,get_contao",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgImpostos.get_CodOcorCofins",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR]))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgImpostos.get_CodOcorCofins",
+      "evento": "Valid",
+      "linhas": 17,
+      "codigoOriginal": "If Not Empty(This.Value)\n\tIf Not Seek(This.Value, 'crSigOpOco', 'Codigos')\n\t\txBrow = CreateObject('fwBuscaSel', 'crSigOpOco', 'Codigos', This.Value, 'Cadastro de Ocorrências de Títulos')\n\t\txBrow.AddColuna('Codigos', 'xxxxxxxxxx', 'Código'   , .t.)\n\t\txBrow.AddColuna('Descrs' , ''          , 'Descrição', .t.)\n\t\txBrow.Show\n\tEndIf\n\tIf (Lastkey() <> 27)\n\t\tThis.Value = crSigOpOco.Codigos\n\tElse\n\t\tThis.Value = ''\n\t\tThis.Refresh()\n\t\tReturn 0\n\tEndIf\nEndIf\nThis.Refresh()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgImpostos.get_CodOcorIrrf",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR]))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgImpostos.get_CodOcorIrrf",
+      "evento": "Valid",
+      "linhas": 17,
+      "codigoOriginal": "If Not Empty(This.Value)\n\tIf Not Seek(This.Value, 'crSigOpOco', 'Codigos')\n\t\txBrow = CreateObject('fwBuscaSel', 'crSigOpOco', 'Codigos', This.Value, 'Cadastro de Ocorrências de Títulos')\n\t\txBrow.AddColuna('Codigos', 'xxxxxxxxxx', 'Código'   , .t.)\n\t\txBrow.AddColuna('Descrs' , ''          , 'Descrição', .t.)\n\t\txBrow.Show\n\tEndIf\n\tIf (Lastkey() <> 27)\n\t\tThis.Value = crSigOpOco.Codigos\n\tElse\n\t\tThis.Value = ''\n\t\tThis.Refresh()\n\t\tReturn 0\n\tEndIf\nEndIf\nThis.Refresh()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgImpostos.get_CodOcorInss",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR]))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgImpostos.get_CodOcorInss",
+      "evento": "Valid",
+      "linhas": 17,
+      "codigoOriginal": "If Not Empty(This.Value)\n\tIf Not Seek(This.Value, 'crSigOpOco', 'Codigos')\n\t\txBrow = CreateObject('fwBuscaSel', 'crSigOpOco', 'Codigos', This.Value, 'Cadastro de Ocorrências de Títulos')\n\t\txBrow.AddColuna('Codigos', 'xxxxxxxxxx', 'Código'   , .t.)\n\t\txBrow.AddColuna('Descrs' , ''          , 'Descrição', .t.)\n\t\txBrow.Show\n\tEndIf\n\tIf (Lastkey() <> 27)\n\t\tThis.Value = crSigOpOco.Codigos\n\tElse\n\t\tThis.Value = ''\n\t\tThis.Refresh()\n\t\tReturn 0\n\tEndIf\nEndIf\nThis.Refresh()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgImpostos.get_CodOcorCsll",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR]))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgImpostos.get_CodOcorCsll",
+      "evento": "Valid",
+      "linhas": 17,
+      "codigoOriginal": "If Not Empty(This.Value)\n\tIf Not Seek(This.Value, 'crSigOpOco', 'Codigos')\n\t\txBrow = CreateObject('fwBuscaSel', 'crSigOpOco', 'Codigos', This.Value, 'Cadastro de Ocorrências de Títulos')\n\t\txBrow.AddColuna('Codigos', 'xxxxxxxxxx', 'Código'   , .t.)\n\t\txBrow.AddColuna('Descrs' , ''          , 'Descrição', .t.)\n\t\txBrow.Show\n\tEndIf\n\tIf (Lastkey() <> 27)\n\t\tThis.Value = crSigOpOco.Codigos\n\tElse\n\t\tThis.Value = ''\n\t\tThis.Refresh()\n\t\tReturn 0\n\tEndIf\nEndIf\nThis.Refresh()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgImpostos.get_CodOcoriSS",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR]))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgImpostos.get_CodOcoriSS",
+      "evento": "Valid",
+      "linhas": 17,
+      "codigoOriginal": "If Not Empty(This.Value)\n\tIf Not Seek(This.Value, 'crSigOpOco', 'Codigos')\n\t\txBrow = CreateObject('fwBuscaSel', 'crSigOpOco', 'Codigos', This.Value, 'Cadastro de Ocorrências de Títulos')\n\t\txBrow.AddColuna('Codigos', 'xxxxxxxxxx', 'Código'   , .t.)\n\t\txBrow.AddColuna('Descrs' , ''          , 'Descrição', .t.)\n\t\txBrow.Show\n\tEndIf\n\tIf (Lastkey() <> 27)\n\t\tThis.Value = crSigOpOco.Codigos\n\tElse\n\t\tThis.Value = ''\n\t\tThis.Refresh()\n\t\tReturn 0\n\tEndIf\nEndIf\nThis.Refresh()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgImpostos.get_CodOcorPis",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR]))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgImpostos.get_CodOcorPis",
+      "evento": "Valid",
+      "linhas": 17,
+      "codigoOriginal": "If Not Empty(This.Value)\n\tIf Not Seek(This.Value, 'crSigOpOco', 'Codigos')\n\t\txBrow = CreateObject('fwBuscaSel', 'crSigOpOco', 'Codigos', This.Value, 'Cadastro de Ocorrências de Títulos')\n\t\txBrow.AddColuna('Codigos', 'xxxxxxxxxx', 'Código'   , .t.)\n\t\txBrow.AddColuna('Descrs' , ''          , 'Descrição', .t.)\n\t\txBrow.Show\n\tEndIf\n\tIf (Lastkey() <> 27)\n\t\tThis.Value = crSigOpOco.Codigos\n\tElse\n\t\tThis.Value = ''\n\t\tThis.Refresh()\n\t\tReturn 0\n\tEndIf\nEndIf\nThis.Refresh()\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaSel",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgImpostos.chk_LancFinPis",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha,\"INSERIR\",\"ALTERAR\"))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgImpostos.chk_bpisms",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha,\"INSERIR\",\"ALTERAR\"))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgImpostos.chk_bcofinms",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha,\"INSERIR\",\"ALTERAR\"))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgImpostos.chk_bcsllms",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha,\"INSERIR\",\"ALTERAR\"))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgImpostos.chk_birrfms",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha,\"INSERIR\",\"ALTERAR\"))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgImpostos.chk_binssms",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha,\"INSERIR\",\"ALTERAR\"))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgImpostos.ck_LancFinCofins",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha,\"INSERIR\",\"ALTERAR\"))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgImpostos.ck_LancFinIrrf",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha,\"INSERIR\",\"ALTERAR\"))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgImpostos.ck_LancFinInss",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha,\"INSERIR\",\"ALTERAR\"))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgImpostos.ck_LancFinIss",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha,\"INSERIR\",\"ALTERAR\"))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgImpostos.ck_LancFinCsll",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha,\"INSERIR\",\"ALTERAR\"))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgVencimentos.get_contapis",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist( ThisForm.pcEscolha, \"INSERIR\", \"ALTERAR\" ) And !IsEmpty( This.Parent.Get_Grupopis.Value )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Grupopis",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgVencimentos.get_contapis",
+      "evento": "Valid",
+      "linhas": 15,
+      "codigoOriginal": "Local lcGrupo\n\nlcgrupo = This.Parent.get_grupoPis.value\nIf !IsEmpty(This.value)\n\tIf !fAcessoContas(Usuar,lcgrupo,'C',This.value,This,This.parent.get_dcontapis)\n\t\tMessagebox('Acesso Negado !!',0+48,'')\n\t\tThis.Value=''\n\t\tThis.Refresh\n\t\tThis.parent.Get_DContapis.Value = ''\n\t\tThis.parent.Get_DContapis.Refresh\n\tEndif\nElse\n\tThis.parent.Get_DContapis.Value = ''\n\tThis.parent.Get_DContapis.Refresh\nendif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_grupoPis,get_dcontapis",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgVencimentos.get_dcontapis",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist( ThisForm.pcEscolha, \"INSERIR\", \"ALTERAR\" ) And !IsEmpty( This.Parent.Get_Grupopis.Value ) And IsEmpty( This.Parent.Get_Contapis.Value )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Grupopis,Get_Contapis",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgVencimentos.get_dcontapis",
+      "evento": "Valid",
+      "linhas": 13,
+      "codigoOriginal": "grupo = This.Parent.get_grupopis.value\nIf !IsEmpty(This.value)\n\tIf !fAcessoContas(Usuar,grupo,'D',This.value,This.parent.get_contapis,This)\n\t\tMessagebox('Acesso Negado !!',0+48,'')\n\t\tThis.Value=''\n\t\tThis.Refresh\n\t\tThis.parent.get_contapis.value = ''\n\t\tThis.parent.get_contapis.Refresh\n\tEndif\nElse\n\tThis.parent.get_contapis.value = ''\n\tThis.parent.get_contapis.Refresh\t\nendif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_grupopis,get_contapis",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgVencimentos.get_grupocofins",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR]))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgVencimentos.get_grupocofins",
+      "evento": "Valid",
+      "linhas": 7,
+      "codigoOriginal": "If !IsEmpty(This.value)\n\tfAcessoContab(Usuar,'C',This.value,This)\nElse\n\tThis.parent.Get_Contacofins.Value = ''\n\tThis.parent.Get_DContacofins.Value = ''\nendif\nreturn(.t.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Contacofins,Get_DContacofins",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgVencimentos.get_contacofins",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist( ThisForm.pcEscolha, \"INSERIR\", \"ALTERAR\" ) And !IsEmpty( This.Parent.Get_Grupocofins.Value )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Grupocofins",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgVencimentos.get_contacofins",
+      "evento": "Valid",
+      "linhas": 15,
+      "codigoOriginal": "Local lcGrupo\n\nlcgrupo = This.Parent.get_grupocofins.value\nIf !IsEmpty(This.value)\n\tIf !fAcessoContas(Usuar,lcgrupo,'C',This.value,This,This.parent.get_dcontacofins)\n\t\tMessagebox('Acesso Negado !!',0+48,'')\n\t\tThis.Value=''\n\t\tThis.Refresh\n\t\tThis.parent.Get_DContacofins.Value = ''\n\t\tThis.parent.Get_DContacofins.Refresh\n\tEndif\nElse\n\tThis.parent.Get_DContacofins.Value = ''\n\tThis.parent.Get_DContacofins.Refresh\nendif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_grupocofins,get_dcontacofins",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgVencimentos.get_dcontacofins",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist( ThisForm.pcEscolha, \"INSERIR\", \"ALTERAR\" ) And !IsEmpty( This.Parent.Get_Grupocofins.Value ) And IsEmpty( This.Parent.Get_Contacofins.Value )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Grupocofins,Get_Contacofins",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgVencimentos.get_dcontacofins",
+      "evento": "Valid",
+      "linhas": 13,
+      "codigoOriginal": "grupo = This.Parent.get_grupocofins.value\nIf !IsEmpty(This.value)\n\tIf !fAcessoContas(Usuar,grupo,'D',This.value,This.parent.get_contacofins,This)\n\t\tMessagebox('Acesso Negado !!',0+48,'')\n\t\tThis.Value=''\n\t\tThis.Refresh\n\t\tThis.parent.get_contacofins.value = ''\n\t\tThis.parent.get_contacofins.Refresh\n\tEndif\nElse\n\tThis.parent.get_contacofins.value = ''\n\tThis.parent.get_contacofins.Refresh\t\nendif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_grupocofins,get_contacofins",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgVencimentos.get_grupoirrf",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR]))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgVencimentos.get_grupoirrf",
+      "evento": "Valid",
+      "linhas": 7,
+      "codigoOriginal": "If !IsEmpty(This.value)\n\tfAcessoContab(Usuar,'C',This.value,This)\nElse\n\tThis.parent.Get_Contairrf.Value = ''\n\tThis.parent.Get_DContairrf.Value = ''\nendif\nreturn(.t.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Contairrf,Get_DContairrf",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgVencimentos.get_contairrf",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist( ThisForm.pcEscolha, \"INSERIR\", \"ALTERAR\" ) And !IsEmpty( This.Parent.Get_Grupoirrf.Value )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Grupoirrf",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgVencimentos.get_contairrf",
+      "evento": "Valid",
+      "linhas": 15,
+      "codigoOriginal": "Local lcGrupo\n\nlcgrupo = This.Parent.get_grupoirrf.value\nIf !IsEmpty(This.value)\n\tIf !fAcessoContas(Usuar,lcgrupo,'C',This.value,This,This.parent.get_dcontairrf)\n\t\tMessagebox('Acesso Negado !!',0+48,'')\n\t\tThis.Value=''\n\t\tThis.Refresh\n\t\tThis.parent.Get_DContairrf.Value = ''\n\t\tThis.parent.Get_DContairrf.Refresh\n\tEndif\nElse\n\tThis.parent.Get_DContairrf.Value = ''\n\tThis.parent.Get_DContairrf.Refresh\nendif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_grupoirrf,get_dcontairrf",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgVencimentos.get_dcontairrf",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist( ThisForm.pcEscolha, \"INSERIR\", \"ALTERAR\" ) And !IsEmpty( This.Parent.Get_Grupoirrf.Value ) And IsEmpty( This.Parent.Get_Contairrf.Value )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Grupoirrf,Get_Contairrf",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgVencimentos.get_dcontairrf",
+      "evento": "Valid",
+      "linhas": 13,
+      "codigoOriginal": "grupo = This.Parent.get_grupoirrf.value\nIf !IsEmpty(This.value)\n\tIf !fAcessoContas(Usuar,grupo,'D',This.value,This.parent.get_contairrf,This)\n\t\tMessagebox('Acesso Negado !!',0+48,'')\n\t\tThis.Value=''\n\t\tThis.Refresh\n\t\tThis.parent.get_contairrf.value = ''\n\t\tThis.parent.get_contairrf.Refresh\n\tEndif\nElse\n\tThis.parent.get_contairrf.value = ''\n\tThis.parent.get_contairrf.Refresh\t\nendif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_grupoirrf,get_contairrf",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgVencimentos.get_grupoinss",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR]))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgVencimentos.get_grupoinss",
+      "evento": "Valid",
+      "linhas": 7,
+      "codigoOriginal": "If !IsEmpty(This.value)\n\tfAcessoContab(Usuar,'C',This.value,This)\nElse\n\tThis.parent.Get_Containss.Value = ''\n\tThis.parent.Get_DContainss.Value = ''\nendif\nreturn(.t.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Containss,Get_DContainss",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgVencimentos.get_containss",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist( ThisForm.pcEscolha, \"INSERIR\", \"ALTERAR\" ) And !IsEmpty( This.Parent.Get_Grupoinss.Value )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Grupoinss",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgVencimentos.get_containss",
+      "evento": "Valid",
+      "linhas": 15,
+      "codigoOriginal": "Local lcGrupo\n\nlcgrupo = This.Parent.get_grupoinss.value\nIf !IsEmpty(This.value)\n\tIf !fAcessoContas(Usuar,lcgrupo,'C',This.value,This,This.parent.get_dcontainss)\n\t\tMessagebox('Acesso Negado !!',0+48,'')\n\t\tThis.Value=''\n\t\tThis.Refresh\n\t\tThis.parent.Get_DContainss.Value = ''\n\t\tThis.parent.Get_DContainss.Refresh\n\tEndif\nElse\n\tThis.parent.Get_DContainss.Value = ''\n\tThis.parent.Get_DContainss.Refresh\nendif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_grupoinss,get_dcontainss",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgVencimentos.get_dcontainss",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist( ThisForm.pcEscolha, \"INSERIR\", \"ALTERAR\" ) And !IsEmpty( This.Parent.Get_GrupoInss.Value ) And IsEmpty( This.Parent.Get_ContaInss.Value )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_GrupoInss,Get_ContaInss",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgVencimentos.get_dcontainss",
+      "evento": "Valid",
+      "linhas": 13,
+      "codigoOriginal": "grupo = This.Parent.get_grupoinss.value\nIf !IsEmpty(This.value)\n\tIf !fAcessoContas(Usuar,grupo,'D',This.value,This.parent.get_containss,This)\n\t\tMessagebox('Acesso Negado !!',0+48,'')\n\t\tThis.Value=''\n\t\tThis.Refresh\n\t\tThis.parent.get_containss.value = ''\n\t\tThis.parent.get_containss.Refresh\n\tEndif\nElse\n\tThis.parent.get_containss.value = ''\n\tThis.parent.get_containss.Refresh\t\nendif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_grupoinss,get_containss",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgVencimentos.get_grupocsll",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR]))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgVencimentos.get_grupocsll",
+      "evento": "Valid",
+      "linhas": 7,
+      "codigoOriginal": "If !IsEmpty(This.value)\n\tfAcessoContab(Usuar,'C',This.value,This)\nElse\n\tThis.parent.Get_Contacsll.Value = ''\n\tThis.parent.Get_DContacsll.Value = ''\nendif\nreturn(.t.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Contacsll,Get_DContacsll",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgVencimentos.get_contacsll",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist( ThisForm.pcEscolha, \"INSERIR\", \"ALTERAR\" ) And !IsEmpty( This.Parent.Get_Grupocsll.Value )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Grupocsll",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgVencimentos.get_contacsll",
+      "evento": "Valid",
+      "linhas": 15,
+      "codigoOriginal": "Local lcGrupo\n\nlcgrupo = This.Parent.get_grupocsll.value\nIf !IsEmpty(This.value)\n\tIf !fAcessoContas(Usuar,lcgrupo,'C',This.value,This,This.parent.get_dcontacsll)\n\t\tMessagebox('Acesso Negado !!',0+48,'')\n\t\tThis.Value=''\n\t\tThis.Refresh\n\t\tThis.parent.Get_DContacsll.Value = ''\n\t\tThis.parent.Get_DContacsll.Refresh\n\tEndif\nElse\n\tThis.parent.Get_DContacsll.Value = ''\n\tThis.parent.Get_DContacsll.Refresh\nendif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_grupocsll,get_dcontacsll",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgVencimentos.get_dcontacsll",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist( ThisForm.pcEscolha, \"INSERIR\", \"ALTERAR\" ) And !IsEmpty( This.Parent.Get_Grupocsll.Value ) And IsEmpty( This.Parent.Get_Contacsll.Value )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_Grupocsll,Get_Contacsll",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgVencimentos.get_dcontacsll",
+      "evento": "Valid",
+      "linhas": 13,
+      "codigoOriginal": "grupo = This.Parent.get_grupocsll.value\nIf !IsEmpty(This.value)\n\tIf !fAcessoContas(Usuar,grupo,'D',This.value,This.parent.get_contacsll,This)\n\t\tMessagebox('Acesso Negado !!',0+48,'')\n\t\tThis.Value=''\n\t\tThis.Refresh\n\t\tThis.parent.get_contacsll.value = ''\n\t\tThis.parent.get_contacsll.Refresh\n\tEndif\nElse\n\tThis.parent.get_contacsll.value = ''\n\tThis.parent.get_contacsll.Refresh\t\nendif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_grupocsll,get_contacsll",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgVencimentos.opt_VencPis",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR]))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgVencimentos.opt_VencCofins",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR]))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgVencimentos.opt_VencIrrf",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR]))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgVencimentos.opt_VencInss",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR]))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgVencimentos.opt_VencCsll",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR]))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgVencimentos.get_grupoiss",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR]))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgVencimentos.get_grupoiss",
+      "evento": "Valid",
+      "linhas": 7,
+      "codigoOriginal": "If !IsEmpty(This.value)\n\tfAcessoContab(Usuar,'C',This.value,This)\nElse\n\tThis.parent.Get_ContaIss.Value = ''\n\tThis.parent.Get_DContaIss.Value = ''\nendif\nreturn(.t.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_ContaIss,Get_DContaIss",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgVencimentos.get_contaiss",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist( ThisForm.pcEscolha, \"INSERIR\", \"ALTERAR\" ) And !IsEmpty( This.Parent.Get_GrupoIss.Value )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_GrupoIss",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgVencimentos.get_contaiss",
+      "evento": "Valid",
+      "linhas": 15,
+      "codigoOriginal": "Local lcGrupo\n\nlcgrupo = This.Parent.get_grupoIss.value\nIf !IsEmpty(This.value)\n\tIf !fAcessoContas(Usuar,lcgrupo,'C',This.value,This,This.parent.get_dcontaIss)\n\t\tMessagebox('Acesso Negado !!',0+48,'')\n\t\tThis.Value=''\n\t\tThis.Refresh\n\t\tThis.parent.Get_DContaIss.Value = ''\n\t\tThis.parent.Get_DContaIss.Refresh\n\tEndif\nElse\n\tThis.parent.Get_DContaIss.Value = ''\n\tThis.parent.Get_DContaIss.Refresh\nendif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_grupoIss,get_dcontaIss",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgVencimentos.get_dcontaiss",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Inlist( ThisForm.pcEscolha, \"INSERIR\", \"ALTERAR\" ) And !IsEmpty( This.Parent.Get_GrupoIss.Value ) And IsEmpty( This.Parent.Get_Contaiss.Value )",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_GrupoIss,Get_Contaiss",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgVencimentos.get_dcontaiss",
+      "evento": "Valid",
+      "linhas": 13,
+      "codigoOriginal": "grupo = This.Parent.get_grupoIss.value\nIf !IsEmpty(This.value)\n\tIf !fAcessoContas(Usuar,grupo,'D',This.value,This.parent.get_contaiss,This)\n\t\tMessagebox('Acesso Negado !!',0+48,'')\n\t\tThis.Value=''\n\t\tThis.Refresh\n\t\tThis.parent.get_contaiss.value = ''\n\t\tThis.parent.get_contaiss.Refresh\n\tEndif\nElse\n\tThis.parent.get_contaIss.value = ''\n\tThis.parent.get_contaIss.Refresh\t\nendif",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContas",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_grupoIss,get_contaiss",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgVencimentos.opt_vencIss",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR]))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgVencimentos.cmdExcluir",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha,[INSERIR],[ALTERAR]))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgVencimentos.cmdExcluir",
+      "evento": "Click",
+      "linhas": 6,
+      "codigoOriginal": "Select crSigSeRvp\nDelete\nSkip\nSkip -1\nThis.Parent.grdProdutos.Refresh\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgVencimentos.grdProdutos.Column1.Text1",
+      "evento": "When",
+      "linhas": 2,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])\n",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgVencimentos.grdProdutos.Column1.Text1",
+      "evento": "Valid",
+      "linhas": 22,
+      "codigoOriginal": "Local loLista\n\nIf !Empty(This.Value)\n\tm.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigCdPro','CrProds','CPros',This.Value,'Produtos',1000)\n\tIf !(m.loLista.plAchouRegistro)\n\t\tm.loLista.mAddColuna('CPros','','Código')\n\t\tm.loLista.mAddColuna('DPros','','Descrição')\n\t\tm.loLista.Show()\n\tEndIf\n\tm.loLista = NULL\n\tIf LastKey() <> 27 And Used('CrProds')\t\t\n\t\tThis.Value = Evaluate('CrProds.CPros')\n\t\tThis.Parent.Parent.Column2.Text1.Value = Evaluate('crProds.dpros')  \n\tElse\n\t\tThis.Valu... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgVencimentos.grdProdutos.Column2.Text1",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha,[INSERIR],[ALTERAR]))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgVencimentos.grdProdutos.Column2.Text1",
+      "evento": "Valid",
+      "linhas": 22,
+      "codigoOriginal": "Local loLista\n\nIf !Empty(This.Value)\n\tm.loLista = CreateObject('fwBuscaExt',ThisForm.poDataMgr.pnIdConn,'SigCdPro','CrProds','DPros',This.Value,'Produtos',1000)\n\tIf !(m.loLista.plAchouRegistro)\n\t\tm.loLista.mAddColuna('DPros','','Descrição')\n\t\tm.loLista.mAddColuna('CPros','','Código')\n\t\tm.loLista.Show()\n\tEndIf\n\tm.loLista = NULL\n\tIf LastKey() <> 27 And Used('CrProds')\t\t\n\t\tThis.Value = Evaluate('CrProds.DPros')\n\t\tThis.Parent.Parent.Column1.Text1.Value = Evaluate('crProds.cpros')  \n\tElse\n\t\tThis.Valu... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgVencimentos.cmdInserir",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha,[INSERIR],[ALTERAR]))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgVencimentos.cmdInserir",
+      "evento": "Click",
+      "linhas": 7,
+      "codigoOriginal": "If not Empty(crSigSeRvp.cPros) or Eof([crSigSeRvp])\n\tInsert into crSigSeRvp(CodServs,cPros,cIdChaves) Values(crSigCdSrv.CodServs,[],fUniqueIds())\t\nEndIf\nThis.Parent.grdProdutos.Refresh\n\n\n",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgVencimentos.get_grupopis",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR]))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgVencimentos.get_grupopis",
+      "evento": "Valid",
+      "linhas": 7,
+      "codigoOriginal": "If !IsEmpty(This.value)\n\tfAcessoContab(Usuar,'C',This.value,This)\nElse\n\tThis.parent.Get_ContaPis.Value = ''\n\tThis.parent.Get_DContaPis.Value = ''\nendif\nreturn(.t.)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fAcessoContab",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Get_ContaPis,Get_DContaPis",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgRetencao.cntRPA.opt_RPA",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR]))",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgRetencao.cntRPA.getCodRecCof",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha,[INSERIR],[ALTERAR]) and This.Parent.Opt_RPA.Value = 1) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Opt_RPA",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgRetencao.cntRPA.getCodRecPis",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha,[INSERIR],[ALTERAR]) and This.Parent.Opt_RPA.Value = 1) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Opt_RPA",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgRetencao.cntRPA.getCodRecCsll",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha,[INSERIR],[ALTERAR]) and This.Parent.Opt_RPA.Value = 1) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Opt_RPA",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgRetencao.cntRPA.get_MaxRetInss",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha,[INSERIR],[ALTERAR]) and This.Parent.Opt_RPA.Value = 1) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Opt_RPA",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSRV.pagina.dados.pgDados.pgRetencao.cntRPA.getCodRecIrrf",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return(InList(ThisForm.pcEscolha,[INSERIR],[ALTERAR]) and This.Parent.Opt_RPA.Value = 1) ",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "Opt_RPA",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+    {
+      "metodo": "SIGCDSRV.Init",
+      "queryOriginal": "\tm.lcQuery = [Select * from SigCdSrv where cTipos = ']+ThisForm.pcTipo+['] \tIf (.poDataMgr.pnIdconn > 0)",
+      "tabelas": "SigCdSrv",
+      "colunas": "cTipos,pcTipo+[],pnIdconn",
+      "colunasInvalidas": ""
+    },
+    {
+      "metodo": "SIGCDSRV.pagina.dados.pgDados.pgVencimentos.cmdInserir.Click",
+      "queryOriginal": "\tInsert into crSigSeRvp(CodServs,cPros,cIdChaves) Values(crSigCdSrv.CodServs,[],fUniqueIds())\t",
+      "tabelas": "crSigSeRvp",
+      "colunas": "CodServs,cPros,cIdChaves",
+      "colunasInvalidas": ""
+    }
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": ["SigCdSrv", "crSigSeRvp"],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

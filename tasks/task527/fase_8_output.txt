@@ -1,0 +1,19 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Tudo j├í est├í integrado e completo. Verifica├º├úo final:
+
+**FormTam.prg** ÔÇö todos os m├®todos exigidos pela Fase 8 j├í est├úo implementados com l├│gica completa (nenhum stub):
+- `BtnBuscarClick()`, `BtnEncerrarClick()`, `BtnSalvarClick()` (alias de `BtnConfirmarClick`), `BtnCancelarClick()` Ô£ô
+- `FormParaBO()` / `BOParaForm()` ÔÇö cobrem os 3 campos da tabela (`cods`, `descs`, `varias`), batendo 1:1 com as propriedades do BO Ô£ô
+- `HabilitarCampos()`, `LimparCampos()`, `CarregarLista()`, `AjustarBotoesPorModo()` Ô£ô
+- `BtnConfirmarClick()` replica fielmente o comportamento do legado (`comportamento.json`): modo BUSCAR faz `LocateCursor` por c├│digo, sen├úo por descri├º├úo (evento "Procedure" do SIGCDTAM); modo INCLUIR valida duplicidade via `ChkRegister` (aqui via `CarregarPorCodigo`) antes de salvar
+- `TornarControlesVisiveis()` implementado com percurso recursivo Pages+Controls
+
+**TamBO.prg** ÔÇö CRUD completo (`Buscar`, `CarregarPorCodigo`, `CarregarDoCursor`, `Inserir`, `Atualizar`, `ExecutarExclusao`), `ObterChavePrimaria()` para auditoria, usa `EscaparSQL`/`FormatarNumeroSQL`, e `CarregarPorCodigo` reseta `this_lNovoRegistro = .F.` (Problema 22).
+
+**Integra├º├úo** ÔÇö j├í presente em `menu.prg`: `DEFINE BAR 8 OF popCadastros PROMPT "Tamanhos"` + `ON SELECTION BAR 8 OF popCadastros DO AbrirFormTam` + `PROCEDURE AbrirFormTam()` seguindo o padr├úo can├┤nico (`VARTYPE`, `Show()` sem par├ómetro, sem `Release()`, `MostrarErro` com linha/procedure). `config.prg` n├úo precisa de `SET PROCEDURE` manual pois usa `ADIR()` para carregar `*BO.prg`/`Form*.prg` automaticamente (conforme CLAUDE.md).
+
+Nenhuma a├º├úo adicional ├® necess├íria ÔÇö as Fases 1-7 j├í entregaram o arquivo funcionalmente completo, e a Fase 8 confirma que todos os itens obrigat├│rios (m├®todos do form, BO, e integra├º├úo menu.prg) est├úo presentes com l├│gica real, sem TODOs/placeholders. A migra├º├úo do **FormTam** (SigCdTam ÔÇö Cadastro de Tamanhos) est├í conclu├¡da.

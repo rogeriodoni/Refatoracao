@@ -10086,3 +10086,84 @@ baixos (ou pelo nome conter Botoes/Salva/Saida).
 - Canonico: `projeto/app/forms/cadastros/Formcfo.prg` (`ConfigurarPaginaDados`).
 - Sweep: 115 forms (commit `b78635c3`).
 - Origem: Erro152 (2026-09-08, FormARV — "a parte superior dos forms esta com a mesma cor do corpo").
+
+## 193. Label de Dados com ForeColor Branco Fica Invisivel — o Canonico eh RGB(90,90,90) (Erro153 2026-09-09)
+
+O testador abre o cadastro, clica **Incluir**, cai na aba **Dados** e ve as caixas de
+texto **sem nenhuma legenda**: os labels existem, estao `Visible = .T.` e no lugar
+certo — so estao pintados de branco sobre um fundo claro.
+
+### Por que acontece
+
+As Pages do PageFrame recebem as duas coisas:
+
+```foxpro
+.Page2.BackColor = RGB(100, 100, 100)                                   && cinza escuro
+.Page2.Picture   = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"           && textura CLARA
+```
+
+A `Picture` **cobre** o `BackColor`. Quem olha so o `BackColor` conclui "fundo escuro,
+logo texto branco" — e escreve `ForeColor = RGB(255, 255, 255)` em todo label que o
+SCX legado nao declarou cor. O resultado eh legenda branca sobre textura branca.
+
+O mesmo vale para container com `BackStyle = 0` (transparente): a textura da pagina
+aparece atraves dele.
+
+### ERRADO
+
+```foxpro
+loc_oPg2.AddObject("lbl_4c_Codigo", "Label")
+WITH loc_oPg2.lbl_4c_Codigo
+    .Caption   = "C" + CHR(243) + "digo :"
+    .ForeColor = RGB(255, 255, 255)      && INVISIVEL sobre fundo_cad_1003.jpg
+    .BackStyle = 0
+ENDWITH
+```
+
+### CORRETO
+
+```foxpro
+loc_oPg2.AddObject("lbl_4c_Codigo", "Label")
+WITH loc_oPg2.lbl_4c_Codigo
+    .Caption   = "C" + CHR(243) + "digo :"
+    .ForeColor = RGB(90, 90, 90)         && canonico p/ classe `say` sem ForeColor no SCX
+    .BackStyle = 0
+ENDWITH
+```
+
+### Como escolher a cor
+
+| Situacao no dump do SCX legado | ForeColor no migrado |
+|---|---|
+| Objeto NAO declara `ForeColor` (classe `say` do Framework) | `RGB(90, 90, 90)` |
+| `ForeColor = 90,90,90` | `RGB(90, 90, 90)` |
+| `ForeColor = 36,84,155` (titulo de secao, Verdana bold) | `RGB(36, 84, 155)` |
+| `ForeColor = 255,0,0` (nota/aviso de rodape) | `RGB(255, 0, 0)` |
+| `ForeColor = 0,0,0` | `RGB(0, 0, 0)` |
+| `ForeColor` quase-branco (ex.: `231,254,253`) | escurecer para a cor das labels irmas — o legado tambem era ilegivel |
+
+**Achar o objeto no dump**: `Say<N>` do legado costuma virar `lbl_4c_Label<N>` no
+migrado (e vice-versa) — procurar pelos DOIS nomes antes de concluir "nao existe no
+legado". Nomes semanticos (`lbl_4c_Codigo`) casam pela `Caption` normalizada.
+
+### Excecoes — o branco esta CORRETO
+
+1. `lbl_4c_Titulo` / `lbl_4c_LblTitulo` da faixa do cabecalho (container
+   `BackColor = RGB(100,100,100)`, Pattern #190/secao 192).
+2. Label dentro de container **opaco escuro**: `BackStyle = 1` **+**
+   `BackColor = RGB(90,90,90)` ou `RGB(100,100,100)` — ex.: `lbl_4c_TxtCaption` do
+   `Formsigpdmp6` e `lbl_4c_ListaTitulo` do `FormCliente`.
+3. `HighlightForeColor`, `SelectedForeColor`, `SelectedItemForeColor` — sao o texto da
+   linha/item **selecionado**, que aparece sobre realce escuro (`RGB(15,41,104)`,
+   `RGB(0,0,128)`). **Nao confundir com `.ForeColor`**: o detector tem de ancorar em
+   `^\s*\.ForeColor\s*=` para nao mexer nessas.
+4. Label de barra de progresso (`lbl_4c_Porcento` / `lbl_4c_LblPorcento` sobre
+   `shp_4c_Barra`): o legado tambem usa branco — manter por fidelidade.
+
+### Referencias
+
+- Canonico: `projeto/app/forms/cadastros/FormCor.prg` (labels da Page2 em `RGB(90,90,90)`).
+- Sweep: 217 sites em 23 forms (FormARV + FormBAL/FormCfb/FormFBI/Formlch/Formche/
+  FormCVE/FormSigPrEtq/FormICM/FormBch/FormTam/FormDIC/Formdmo/FormTAN/FormRss/
+  FormOCO/FormDpi/FormCEP/Formsigopind/FormSIGPRNSE/FormRPT/FormJrn/FormACE).
+- Origem: Erro153 (2026-09-09, FormARV "Tipos de Arvore" — "ao incluir, os labels nao aparecem").

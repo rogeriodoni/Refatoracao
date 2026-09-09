@@ -370,6 +370,52 @@ DEFINE CLASS Formccr AS FormBase
     PROTECTED PROCEDURE ConfigurarPaginaDados()
         LOCAL loc_oPg2, loc_oBotoesAcao
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
+        *-- Cabecalho cinza (identico ao da pagina Lista) - Erro152
+        *-- conteudo da pagina deslocado +66 para nao ficar sob a faixa
+        loc_oPg2.AddObject("cnt_4c_Cabecalho", "Container")
+        WITH loc_oPg2.cnt_4c_Cabecalho
+            .Top           = 29
+            .Left          = 0
+            .Width         = THIS.Width
+            .Height        = 80
+            .BackColor     = RGB(100, 100, 100)
+            .BorderWidth   = 0
+            .SpecialEffect = 0
+            .Visible       = .T.
+
+            .AddObject("lbl_4c_Sombra", "Label")
+            WITH .lbl_4c_Sombra
+                .Caption   = THIS.Caption
+                .Top       = 15
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 40
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(0, 0, 0)
+                .BackStyle = 0
+                .AutoSize  = .F.
+                .Visible   = .T.
+            ENDWITH
+
+            .AddObject("lbl_4c_Titulo", "Label")
+            WITH .lbl_4c_Titulo
+                .Caption   = THIS.Caption
+                .Top       = 18
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 46
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(255, 255, 255)
+                .BackStyle = 0
+                .AutoSize  = .F.
+                .Visible   = .T.
+            ENDWITH
+        ENDWITH
+
 
         *-- Container Confirmar/Cancelar (Top=33, Left=838, Width=160)
         loc_oPg2.AddObject("cnt_4c_BotoesAcao", "Container")
@@ -437,7 +483,7 @@ DEFINE CLASS Formccr AS FormBase
         loc_oPg2.AddObject("lbl_4c_LblCodigo", "Label")
         WITH loc_oPg2.lbl_4c_LblCodigo
             .Caption   = "C" + CHR(243) + "digo:"
-            .Top       = 47
+            .Top       = 113
             .Left      = 39
             .Width     = 42
             .Height    = 17
@@ -452,7 +498,7 @@ DEFINE CLASS Formccr AS FormBase
         loc_oPg2.AddObject("txt_4c_Codigo", "TextBox")
         WITH loc_oPg2.txt_4c_Codigo
             .Value         = ""
-            .Top           = 43
+            .Top           = 109
             .Left          = 83
             .Width         = 80
             .Height        = 23
@@ -470,7 +516,7 @@ DEFINE CLASS Formccr AS FormBase
         loc_oPg2.AddObject("lbl_4c_LblDigito", "Label")
         WITH loc_oPg2.lbl_4c_LblDigito
             .Caption   = "D" + CHR(237) + "g:"
-            .Top       = 47
+            .Top       = 113
             .Left      = 176
             .Width     = 35
             .Height    = 17
@@ -485,7 +531,7 @@ DEFINE CLASS Formccr AS FormBase
         loc_oPg2.AddObject("txt_4c_Digito", "TextBox")
         WITH loc_oPg2.txt_4c_Digito
             .Value         = ""
-            .Top           = 43
+            .Top           = 109
             .Left          = 214
             .Width         = 19
             .Height        = 23
@@ -503,7 +549,7 @@ DEFINE CLASS Formccr AS FormBase
         loc_oPg2.AddObject("lbl_4c_LblDescr", "Label")
         WITH loc_oPg2.lbl_4c_LblDescr
             .Caption   = "Descri" + CHR(231) + CHR(227) + "o:"
-            .Top       = 47
+            .Top       = 113
             .Left      = 261
             .Width     = 55
             .Height    = 17
@@ -518,7 +564,7 @@ DEFINE CLASS Formccr AS FormBase
         loc_oPg2.AddObject("txt_4c_Descr", "TextBox")
         WITH loc_oPg2.txt_4c_Descr
             .Value         = ""
-            .Top           = 43
+            .Top           = 109
             .Left          = 318
             .Width         = 290
             .Height        = 23
@@ -536,7 +582,7 @@ DEFINE CLASS Formccr AS FormBase
         loc_oPg2.AddObject("lbl_4c_LblInterno", "Label")
         WITH loc_oPg2.lbl_4c_LblInterno
             .Caption   = "Interno:"
-            .Top       = 73
+            .Top       = 139
             .Left      = 36
             .Width     = 45
             .Height    = 17
@@ -551,7 +597,7 @@ DEFINE CLASS Formccr AS FormBase
         loc_oPg2.AddObject("txt_4c_Interno", "TextBox")
         WITH loc_oPg2.txt_4c_Interno
             .Value         = ""
-            .Top           = 69
+            .Top           = 135
             .Left          = 83
             .Width         = 150
             .Height        = 23
@@ -569,7 +615,7 @@ DEFINE CLASS Formccr AS FormBase
         loc_oPg2.AddObject("lbl_4c_LblClasse", "Label")
         WITH loc_oPg2.lbl_4c_LblClasse
             .Caption   = "Classe:"
-            .Top       = 71
+            .Top       = 137
             .Left      = 276
             .Width     = 40
             .Height    = 17
@@ -584,7 +630,7 @@ DEFINE CLASS Formccr AS FormBase
         loc_oPg2.AddObject("txt_4c_Classes", "TextBox")
         WITH loc_oPg2.txt_4c_Classes
             .Value         = ""
-            .Top           = 68
+            .Top           = 134
             .Left          = 318
             .Width         = 80
             .Height        = 23
@@ -601,7 +647,7 @@ DEFINE CLASS Formccr AS FormBase
         loc_oPg2.AddObject("txt_4c_DClasses", "TextBox")
         WITH loc_oPg2.txt_4c_DClasses
             .Value         = ""
-            .Top           = 68
+            .Top           = 134
             .Left          = 400
             .Width         = 290
             .Height        = 23
@@ -623,7 +669,7 @@ DEFINE CLASS Formccr AS FormBase
         loc_oPg2.AddObject("lbl_4c_LblTpCods", "Label")
         WITH loc_oPg2.lbl_4c_LblTpCods
             .Caption   = "Codifica" + CHR(231) + CHR(227) + "o:"
-            .Top       = 100
+            .Top       = 166
             .Left      = 17
             .Width     = 64
             .Height    = 17
@@ -638,7 +684,7 @@ DEFINE CLASS Formccr AS FormBase
         loc_oPg2.AddObject("obj_4c_Opt_TpCods", "OptionGroup")
         WITH loc_oPg2.obj_4c_Opt_TpCods
             .ButtonCount = 2
-            .Top         = 94
+            .Top         = 160
             .Left        = 83
             .Width       = 150
             .Height      = 23
@@ -670,7 +716,7 @@ DEFINE CLASS Formccr AS FormBase
         loc_oPg2.AddObject("lbl_4c_LblTpEmps", "Label")
         WITH loc_oPg2.lbl_4c_LblTpEmps
             .Caption   = "Incluir Empresa:"
-            .Top       = 97
+            .Top       = 163
             .Left      = 318
             .Width     = 90
             .Height    = 17
@@ -685,7 +731,7 @@ DEFINE CLASS Formccr AS FormBase
         loc_oPg2.AddObject("obj_4c_Opt_TpEmps", "OptionGroup")
         WITH loc_oPg2.obj_4c_Opt_TpEmps
             .ButtonCount = 3
-            .Top         = 93
+            .Top         = 159
             .Left        = 459
             .Width       = 225
             .Height      = 23
@@ -726,7 +772,7 @@ DEFINE CLASS Formccr AS FormBase
         loc_oPg2.AddObject("lbl_4c_LblTpCads", "Label")
         WITH loc_oPg2.lbl_4c_LblTpCads
             .Caption   = "Tipo:"
-            .Top       = 124
+            .Top       = 190
             .Left      = 52
             .Width     = 30
             .Height    = 17
@@ -741,7 +787,7 @@ DEFINE CLASS Formccr AS FormBase
         loc_oPg2.AddObject("obj_4c_Opt_TpCads", "OptionGroup")
         WITH loc_oPg2.obj_4c_Opt_TpCads
             .ButtonCount = 2
-            .Top         = 120
+            .Top         = 186
             .Left        = 83
             .Width       = 150
             .Height      = 23
@@ -6820,3 +6866,4 @@ DEFINE CLASS Formccr AS FormBase
     ENDPROC
 
 ENDDEFINE
+

@@ -454,6 +454,8 @@ DEFINE CLASS Formsigreffi AS FormBase
                 .Column1.Check1.Value     = 0
                 .Column1.Check1.Visible   = .T.
                 .Column1.CurrentControl   = "Check1"
+                *-- Pattern #185 / Erro146: CheckBox de grid nao alterna sem handlers
+                THIS.BindToggleEmpresas1(THIS.pgf_4c_Paginas.Page1.grd_4c_Empresas.Column1.Check1)
                 .Column1.Resizable        = .F.
                 .Column2.ReadOnly         = .T.
                 .Column3.ReadOnly         = .T.
@@ -575,6 +577,8 @@ DEFINE CLASS Formsigreffi AS FormBase
                 .Column1.Check1.Value     = 0
                 .Column1.Check1.Visible   = .T.
                 .Column1.CurrentControl   = "Check1"
+                *-- Pattern #185 / Erro146: CheckBox de grid nao alterna sem handlers
+                THIS.BindToggleDisps1(THIS.pgf_4c_Paginas.Page1.grd_4c_Disps.Column1.Check1)
                 .Column1.Resizable        = .F.
                 .Column2.ReadOnly         = .T.
                 .Column3.ReadOnly         = .T.
@@ -2364,4 +2368,86 @@ DEFINE CLASS Formsigreffi AS FormBase
         ENDTRY
     ENDPROC
 
+
+    *==========================================================================
+    * Toggle do CheckBox de grid - grd_4c_Empresas.Column1 (cursor_4c_Emp.ImpEmps)
+    * Pattern #185 / Erro146 (2026-09-04): CheckBox em coluna de Grid nao alterna
+    * pelo binding nativo. Click/MouseDown suprimem o padrao; MouseUp delega ao
+    * KeyPress, que alterna por codigo com REPLACE no cursor + Refresh do grid.
+    *==========================================================================
+    PROTECTED PROCEDURE BindToggleEmpresas1(par_oChk)
+        BINDEVENT(par_oChk, "KeyPress",  THIS, "TgEmpresas1KeyPress")
+        BINDEVENT(par_oChk, "MouseUp",   THIS, "TgEmpresas1MouseUp")
+        BINDEVENT(par_oChk, "MouseDown", THIS, "TgEmpresas1MouseDown")
+        BINDEVENT(par_oChk, "Click",     THIS, "TgEmpresas1Click")
+    ENDPROC
+
+    PROCEDURE TgEmpresas1KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF !INLIST(par_nKeyCode, 13, 32)
+            RETURN
+        ENDIF
+        NODEFAULT
+        IF !USED("cursor_4c_Emp") OR EOF("cursor_4c_Emp")
+            RETURN
+        ENDIF
+        IF VARTYPE(cursor_4c_Emp.ImpEmps) == "L"
+            REPLACE cursor_4c_Emp.ImpEmps WITH !cursor_4c_Emp.ImpEmps
+        ELSE
+            REPLACE cursor_4c_Emp.ImpEmps WITH IIF(cursor_4c_Emp.ImpEmps = 0, 1, 0)
+        ENDIF        THIS.pgf_4c_Paginas.Page1.grd_4c_Empresas.Refresh()
+    ENDPROC
+
+    PROCEDURE TgEmpresas1MouseUp(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+        THIS.TgEmpresas1KeyPress(13, 0)
+        NODEFAULT
+    ENDPROC
+
+    PROCEDURE TgEmpresas1MouseDown(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+        NODEFAULT
+    ENDPROC
+
+    PROCEDURE TgEmpresas1Click()
+        NODEFAULT
+    ENDPROC
+
+    *==========================================================================
+    * Toggle do CheckBox de grid - grd_4c_Disps.Column1 (cursor_4c_Disp.ImpDisps)
+    * Pattern #185 / Erro146 (2026-09-04): CheckBox em coluna de Grid nao alterna
+    * pelo binding nativo. Click/MouseDown suprimem o padrao; MouseUp delega ao
+    * KeyPress, que alterna por codigo com REPLACE no cursor + Refresh do grid.
+    *==========================================================================
+    PROTECTED PROCEDURE BindToggleDisps1(par_oChk)
+        BINDEVENT(par_oChk, "KeyPress",  THIS, "TgDisps1KeyPress")
+        BINDEVENT(par_oChk, "MouseUp",   THIS, "TgDisps1MouseUp")
+        BINDEVENT(par_oChk, "MouseDown", THIS, "TgDisps1MouseDown")
+        BINDEVENT(par_oChk, "Click",     THIS, "TgDisps1Click")
+    ENDPROC
+
+    PROCEDURE TgDisps1KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF !INLIST(par_nKeyCode, 13, 32)
+            RETURN
+        ENDIF
+        NODEFAULT
+        IF !USED("cursor_4c_Disp") OR EOF("cursor_4c_Disp")
+            RETURN
+        ENDIF
+        IF VARTYPE(cursor_4c_Disp.ImpDisps) == "L"
+            REPLACE cursor_4c_Disp.ImpDisps WITH !cursor_4c_Disp.ImpDisps
+        ELSE
+            REPLACE cursor_4c_Disp.ImpDisps WITH IIF(cursor_4c_Disp.ImpDisps = 0, 1, 0)
+        ENDIF        THIS.pgf_4c_Paginas.Page1.grd_4c_Disps.Refresh()
+    ENDPROC
+
+    PROCEDURE TgDisps1MouseUp(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+        THIS.TgDisps1KeyPress(13, 0)
+        NODEFAULT
+    ENDPROC
+
+    PROCEDURE TgDisps1MouseDown(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+        NODEFAULT
+    ENDPROC
+
+    PROCEDURE TgDisps1Click()
+        NODEFAULT
+    ENDPROC
 ENDDEFINE

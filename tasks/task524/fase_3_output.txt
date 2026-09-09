@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FormSre.prg (Fase 3/8 ÔÇö Estrutura Base) criado em `C:\4c\projeto\app\forms\cadastros\FormSre.prg`.
+
+Conte├║do desta fase:
+- `DEFINE CLASS FormSre AS FormBase` com propriedades visuais exatas (Width=1000, Height=600, Caption com acento via `CHR(233)`, BorderStyle=2, sem barra de t├¡tulo ÔÇö padr├úo frmcadastro)
+- `Init()` ÔÇö apenas `RETURN DODEFAULT()`
+- `InicializarForm()` ÔÇö cria `SreBO`, chama `ConfigurarPageFrame()`, propaga `Caption` para os labels do cabe├ºalho, chama `CarregarLista()` de forma defensiva (`PEMSTATUS`, pois esse m├®todo s├│ existe a partir da Fase 4) guardado por `gb_4c_ValidandoUI`
+- `ConfigurarPageFrame()` ÔÇö PageFrame com `Top=-29`, `Tabs=.F.`, Page1="Lista"/Page2="Dados", fundo can├┤nico `fundo_cad_1003.jpg`
+- `ConfigurarPaginaLista()` ÔÇö `cnt_4c_Cabecalho` completo (com `lbl_4c_Sombra`/`lbl_4c_Titulo`) + `cnt_4c_Botoes` como container vazio (CRUD entra na Fase 4)
+- `ConfigurarPaginaDados()` ÔÇö `cnt_4c_BotoesAcao` como container vazio (Confirmar/Cancelar entram depois)
+- `TornarControlesVisiveis()` completo (percorre Pages e Controls recursivamente)
+- `Destroy()` ÔÇö libera BO e cursor
+
+N├úo inclu├¡ grid/bot├Áes CRUD, TextBoxes de dados nem eventos ÔÇö conforme escopo expl├¡cito desta fase. Nenhum TODO/stub: todo m├®todo presente est├í funcional.

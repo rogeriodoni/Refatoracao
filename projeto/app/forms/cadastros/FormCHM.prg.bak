@@ -374,6 +374,52 @@ DEFINE CLASS FormCHM AS FormBase
         loc_oPagina = THIS.pgf_4c_Paginas.Page2
 
         loc_oPagina.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
+        *-- Cabecalho cinza (identico ao da pagina Lista) - Erro152
+        *-- conteudo da pagina deslocado +14 para nao ficar sob a faixa
+        loc_oPagina.AddObject("cnt_4c_Cabecalho", "Container")
+        WITH loc_oPagina.cnt_4c_Cabecalho
+            .Top           = 29
+            .Left          = 0
+            .Width         = THIS.Width
+            .Height        = 80
+            .BackColor     = RGB(100, 100, 100)
+            .BorderWidth   = 0
+            .SpecialEffect = 0
+            .Visible       = .T.
+
+            .AddObject("lbl_4c_Sombra", "Label")
+            WITH .lbl_4c_Sombra
+                .Caption   = THIS.Caption
+                .Top       = 15
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 40
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(0, 0, 0)
+                .BackStyle = 0
+                .AutoSize  = .F.
+                .Visible   = .T.
+            ENDWITH
+
+            .AddObject("lbl_4c_Titulo", "Label")
+            WITH .lbl_4c_Titulo
+                .Caption   = THIS.Caption
+                .Top       = 18
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 46
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(255, 255, 255)
+                .BackStyle = 0
+                .AutoSize  = .F.
+                .Visible   = .T.
+            ENDWITH
+        ENDWITH
+
 
         *-- Container botoes Salvar/Cancelar (Grupo_Salva.Left=627, Top=6+29=35)
         loc_oPagina.AddObject("cnt_4c_BotoesDados", "Container")
@@ -444,7 +490,7 @@ DEFINE CLASS FormCHM AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label2", "Label")
         WITH loc_oPagina.lbl_4c_Label2
             .Caption   = "Banco :"
-            .Top       = 99
+            .Top       = 113
             .Left      = 204
             .Width     = 42
             .Height    = 15
@@ -460,7 +506,7 @@ DEFINE CLASS FormCHM AS FormBase
         loc_oPagina.AddObject("txt_4c_Banco", "TextBox")
         WITH loc_oPagina.txt_4c_Banco
             .Value        = ""
-            .Top          = 95
+            .Top          = 109
             .Left         = 251
             .Width        = 45
             .Height       = 23
@@ -479,7 +525,7 @@ DEFINE CLASS FormCHM AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label3", "Label")
         WITH loc_oPagina.lbl_4c_Label3
             .Caption   = "Linha"
-            .Top       = 145
+            .Top       = 159
             .Left      = 254
             .Width     = 32
             .Height    = 15
@@ -495,7 +541,7 @@ DEFINE CLASS FormCHM AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label4", "Label")
         WITH loc_oPagina.lbl_4c_Label4
             .Caption   = "Coluna"
-            .Top       = 144
+            .Top       = 158
             .Left      = 336
             .Width     = 40
             .Height    = 15
@@ -514,7 +560,7 @@ DEFINE CLASS FormCHM AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label1", "Label")
         WITH loc_oPagina.lbl_4c_Label1
             .Caption   = "Valor :"
-            .Top       = 166
+            .Top       = 180
             .Left      = 213
             .Width     = 33
             .Height    = 15
@@ -530,7 +576,7 @@ DEFINE CLASS FormCHM AS FormBase
         loc_oPagina.AddObject("txt_4c_Fwget1", "TextBox")
         WITH loc_oPagina.txt_4c_Fwget1
             .Value     = 0
-            .Top       = 162
+            .Top       = 176
             .Left      = 250
             .Width     = 51
             .Height    = 23
@@ -544,7 +590,7 @@ DEFINE CLASS FormCHM AS FormBase
         loc_oPagina.AddObject("txt_4c_Fwget2", "TextBox")
         WITH loc_oPagina.txt_4c_Fwget2
             .Value     = 0
-            .Top       = 162
+            .Top       = 176
             .Left      = 335
             .Width     = 51
             .Height    = 23
@@ -561,7 +607,7 @@ DEFINE CLASS FormCHM AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label5", "Label")
         WITH loc_oPagina.lbl_4c_Label5
             .Caption   = "Valor Extenso 1 :"
-            .Top       = 192
+            .Top       = 206
             .Left      = 162
             .Width     = 84
             .Height    = 15
@@ -577,7 +623,7 @@ DEFINE CLASS FormCHM AS FormBase
         loc_oPagina.AddObject("txt_4c_Fwget3", "TextBox")
         WITH loc_oPagina.txt_4c_Fwget3
             .Value     = 0
-            .Top       = 188
+            .Top       = 202
             .Left      = 250
             .Width     = 51
             .Height    = 23
@@ -591,7 +637,7 @@ DEFINE CLASS FormCHM AS FormBase
         loc_oPagina.AddObject("txt_4c_Fwget4", "TextBox")
         WITH loc_oPagina.txt_4c_Fwget4
             .Value     = 0
-            .Top       = 188
+            .Top       = 202
             .Left      = 335
             .Width     = 51
             .Height    = 23
@@ -608,7 +654,7 @@ DEFINE CLASS FormCHM AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label6", "Label")
         WITH loc_oPagina.lbl_4c_Label6
             .Caption   = "Valor Extenso 2 :"
-            .Top       = 218
+            .Top       = 232
             .Left      = 162
             .Width     = 84
             .Height    = 15
@@ -624,7 +670,7 @@ DEFINE CLASS FormCHM AS FormBase
         loc_oPagina.AddObject("txt_4c_Fwget5", "TextBox")
         WITH loc_oPagina.txt_4c_Fwget5
             .Value     = 0
-            .Top       = 214
+            .Top       = 228
             .Left      = 250
             .Width     = 51
             .Height    = 23
@@ -638,7 +684,7 @@ DEFINE CLASS FormCHM AS FormBase
         loc_oPagina.AddObject("txt_4c_Fwget6", "TextBox")
         WITH loc_oPagina.txt_4c_Fwget6
             .Value     = 0
-            .Top       = 214
+            .Top       = 228
             .Left      = 335
             .Width     = 51
             .Height    = 23
@@ -655,7 +701,7 @@ DEFINE CLASS FormCHM AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label7", "Label")
         WITH loc_oPagina.lbl_4c_Label7
             .Caption   = "Favorecido :"
-            .Top       = 244
+            .Top       = 258
             .Left      = 184
             .Width     = 62
             .Height    = 15
@@ -671,7 +717,7 @@ DEFINE CLASS FormCHM AS FormBase
         loc_oPagina.AddObject("txt_4c_Fwget7", "TextBox")
         WITH loc_oPagina.txt_4c_Fwget7
             .Value     = 0
-            .Top       = 240
+            .Top       = 254
             .Left      = 250
             .Width     = 51
             .Height    = 23
@@ -685,7 +731,7 @@ DEFINE CLASS FormCHM AS FormBase
         loc_oPagina.AddObject("txt_4c_Fwget8", "TextBox")
         WITH loc_oPagina.txt_4c_Fwget8
             .Value     = 0
-            .Top       = 240
+            .Top       = 254
             .Left      = 335
             .Width     = 51
             .Height    = 23
@@ -702,7 +748,7 @@ DEFINE CLASS FormCHM AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label8", "Label")
         WITH loc_oPagina.lbl_4c_Label8
             .Caption   = "Localidade :"
-            .Top       = 270
+            .Top       = 284
             .Left      = 187
             .Width     = 59
             .Height    = 15
@@ -718,7 +764,7 @@ DEFINE CLASS FormCHM AS FormBase
         loc_oPagina.AddObject("txt_4c_Fwget9", "TextBox")
         WITH loc_oPagina.txt_4c_Fwget9
             .Value     = 0
-            .Top       = 265
+            .Top       = 279
             .Left      = 250
             .Width     = 51
             .Height    = 23
@@ -732,7 +778,7 @@ DEFINE CLASS FormCHM AS FormBase
         loc_oPagina.AddObject("txt_4c_Fwget10", "TextBox")
         WITH loc_oPagina.txt_4c_Fwget10
             .Value     = 0
-            .Top       = 265
+            .Top       = 279
             .Left      = 335
             .Width     = 51
             .Height    = 23
@@ -749,7 +795,7 @@ DEFINE CLASS FormCHM AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label9", "Label")
         WITH loc_oPagina.lbl_4c_Label9
             .Caption   = "Dia :"
-            .Top       = 295
+            .Top       = 309
             .Left      = 222
             .Width     = 24
             .Height    = 15
@@ -765,7 +811,7 @@ DEFINE CLASS FormCHM AS FormBase
         loc_oPagina.AddObject("txt_4c_Fwget11", "TextBox")
         WITH loc_oPagina.txt_4c_Fwget11
             .Value     = 0
-            .Top       = 290
+            .Top       = 304
             .Left      = 250
             .Width     = 51
             .Height    = 23
@@ -779,7 +825,7 @@ DEFINE CLASS FormCHM AS FormBase
         loc_oPagina.AddObject("txt_4c_Fwget12", "TextBox")
         WITH loc_oPagina.txt_4c_Fwget12
             .Value     = 0
-            .Top       = 290
+            .Top       = 304
             .Left      = 335
             .Width     = 51
             .Height    = 23
@@ -796,7 +842,7 @@ DEFINE CLASS FormCHM AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label10", "Label")
         WITH loc_oPagina.lbl_4c_Label10
             .Caption   = "Mes :"
-            .Top       = 320
+            .Top       = 334
             .Left      = 218
             .Width     = 28
             .Height    = 15
@@ -812,7 +858,7 @@ DEFINE CLASS FormCHM AS FormBase
         loc_oPagina.AddObject("txt_4c_Fwget13", "TextBox")
         WITH loc_oPagina.txt_4c_Fwget13
             .Value     = 0
-            .Top       = 315
+            .Top       = 329
             .Left      = 250
             .Width     = 51
             .Height    = 23
@@ -826,7 +872,7 @@ DEFINE CLASS FormCHM AS FormBase
         loc_oPagina.AddObject("txt_4c_Fwget14", "TextBox")
         WITH loc_oPagina.txt_4c_Fwget14
             .Value     = 0
-            .Top       = 315
+            .Top       = 329
             .Left      = 335
             .Width     = 51
             .Height    = 23
@@ -843,7 +889,7 @@ DEFINE CLASS FormCHM AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label11", "Label")
         WITH loc_oPagina.lbl_4c_Label11
             .Caption   = "Ano :"
-            .Top       = 345
+            .Top       = 359
             .Left      = 218
             .Width     = 28
             .Height    = 15
@@ -859,7 +905,7 @@ DEFINE CLASS FormCHM AS FormBase
         loc_oPagina.AddObject("txt_4c_Fwget15", "TextBox")
         WITH loc_oPagina.txt_4c_Fwget15
             .Value     = 0
-            .Top       = 340
+            .Top       = 354
             .Left      = 250
             .Width     = 51
             .Height    = 23
@@ -873,7 +919,7 @@ DEFINE CLASS FormCHM AS FormBase
         loc_oPagina.AddObject("txt_4c_Fwget16", "TextBox")
         WITH loc_oPagina.txt_4c_Fwget16
             .Value     = 0
-            .Top       = 340
+            .Top       = 354
             .Left      = 335
             .Width     = 51
             .Height    = 23
@@ -890,7 +936,7 @@ DEFINE CLASS FormCHM AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label12", "Label")
         WITH loc_oPagina.lbl_4c_Label12
             .Caption   = "Local :"
-            .Top       = 369
+            .Top       = 383
             .Left      = 213
             .Width     = 33
             .Height    = 15
@@ -906,7 +952,7 @@ DEFINE CLASS FormCHM AS FormBase
         loc_oPagina.AddObject("txt_4c_Fwget17", "TextBox")
         WITH loc_oPagina.txt_4c_Fwget17
             .Value     = ""
-            .Top       = 366
+            .Top       = 380
             .Left      = 250
             .Width     = 160
             .Height    = 23
@@ -925,7 +971,7 @@ DEFINE CLASS FormCHM AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label13", "Label")
         WITH loc_oPagina.lbl_4c_Label13
             .Caption   = "Tamanho Folha :"
-            .Top       = 393
+            .Top       = 407
             .Left      = 164
             .Width     = 82
             .Height    = 15
@@ -941,7 +987,7 @@ DEFINE CLASS FormCHM AS FormBase
         loc_oPagina.AddObject("txt_4c_Fwget18", "TextBox")
         WITH loc_oPagina.txt_4c_Fwget18
             .Value     = ""
-            .Top       = 391
+            .Top       = 405
             .Left      = 250
             .Width     = 244
             .Height    = 23
@@ -962,7 +1008,7 @@ DEFINE CLASS FormCHM AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label14", "Label")
         WITH loc_oPagina.lbl_4c_Label14
             .Caption   = "Nome Impressora :"
-            .Top       = 421
+            .Top       = 435
             .Left      = 153
             .Width     = 93
             .Height    = 15
@@ -978,7 +1024,7 @@ DEFINE CLASS FormCHM AS FormBase
         loc_oPagina.AddObject("txt_4c_Fwget19", "TextBox")
         WITH loc_oPagina.txt_4c_Fwget19
             .Value     = ""
-            .Top       = 416
+            .Top       = 430
             .Left      = 250
             .Width     = 319
             .Height    = 23
@@ -1602,3 +1648,4 @@ DEFINE CLASS FormCHM AS FormBase
     ENDPROC
 
 ENDDEFINE
+

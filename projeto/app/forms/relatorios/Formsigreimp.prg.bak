@@ -760,6 +760,8 @@ DEFINE CLASS Formsigreimp AS FormBase
             ENDWITH
             .Column1.Check1.Caption = ""
             .Column1.CurrentControl = "Check1"
+            *-- Pattern #185 / Erro146: CheckBox de grid nao alterna sem handlers
+            THIS.BindToggleOperacoesE1(THIS.pgf_4c_Paginas.Page1.grd_4c_OperacoesE.Column1.Check1)
             .Column1.Sparse         = .F.
 
             *-- Column 2: Codigo (somente leitura)
@@ -839,6 +841,8 @@ DEFINE CLASS Formsigreimp AS FormBase
             ENDWITH
             .Column1.Check1.Caption = ""
             .Column1.CurrentControl = "Check1"
+            *-- Pattern #185 / Erro146: CheckBox de grid nao alterna sem handlers
+            THIS.BindToggleOperacoesS1(THIS.pgf_4c_Paginas.Page1.grd_4c_OperacoesS.Column1.Check1)
             .Column1.Sparse         = .F.
 
             .Column2.Width    = 55
@@ -1704,4 +1708,92 @@ DEFINE CLASS Formsigreimp AS FormBase
         DODEFAULT()
     ENDPROC
 
+
+    *==========================================================================
+    * Toggle do CheckBox de grid - grd_4c_OperacoesE.Column1 (THIS.this_oRelatorio.this_cCursorOperacoesE -> .SelImp)
+    * Pattern #185 / Erro146 (2026-09-04): CheckBox em coluna de Grid nao alterna
+    * pelo binding nativo. Click/MouseDown suprimem o padrao; MouseUp delega ao
+    * KeyPress, que alterna por codigo com REPLACE no cursor + Refresh do grid.
+    *==========================================================================
+    PROTECTED PROCEDURE BindToggleOperacoesE1(par_oChk)
+        BINDEVENT(par_oChk, "KeyPress",  THIS, "TgOperacoesE1KeyPress")
+        BINDEVENT(par_oChk, "MouseUp",   THIS, "TgOperacoesE1MouseUp")
+        BINDEVENT(par_oChk, "MouseDown", THIS, "TgOperacoesE1MouseDown")
+        BINDEVENT(par_oChk, "Click",     THIS, "TgOperacoesE1Click")
+    ENDPROC
+
+    PROCEDURE TgOperacoesE1KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF !INLIST(par_nKeyCode, 13, 32)
+            RETURN
+        ENDIF
+        NODEFAULT
+        LOCAL loc_cCur
+        loc_cCur = THIS.this_oRelatorio.this_cCursorOperacoesE
+        IF VARTYPE(loc_cCur) != "C" OR !USED(loc_cCur) OR EOF(loc_cCur)
+            RETURN
+        ENDIF
+        SELECT (loc_cCur)
+        IF VARTYPE(SelImp) == "L"
+            REPLACE SelImp WITH !SelImp
+        ELSE
+            REPLACE SelImp WITH IIF(SelImp = 0, 1, 0)
+        ENDIF        THIS.pgf_4c_Paginas.Page1.grd_4c_OperacoesE.Refresh()
+    ENDPROC
+
+    PROCEDURE TgOperacoesE1MouseUp(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+        THIS.TgOperacoesE1KeyPress(13, 0)
+        NODEFAULT
+    ENDPROC
+
+    PROCEDURE TgOperacoesE1MouseDown(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+        NODEFAULT
+    ENDPROC
+
+    PROCEDURE TgOperacoesE1Click()
+        NODEFAULT
+    ENDPROC
+
+    *==========================================================================
+    * Toggle do CheckBox de grid - grd_4c_OperacoesS.Column1 (THIS.this_oRelatorio.this_cCursorOperacoesS -> .SelImp)
+    * Pattern #185 / Erro146 (2026-09-04): CheckBox em coluna de Grid nao alterna
+    * pelo binding nativo. Click/MouseDown suprimem o padrao; MouseUp delega ao
+    * KeyPress, que alterna por codigo com REPLACE no cursor + Refresh do grid.
+    *==========================================================================
+    PROTECTED PROCEDURE BindToggleOperacoesS1(par_oChk)
+        BINDEVENT(par_oChk, "KeyPress",  THIS, "TgOperacoesS1KeyPress")
+        BINDEVENT(par_oChk, "MouseUp",   THIS, "TgOperacoesS1MouseUp")
+        BINDEVENT(par_oChk, "MouseDown", THIS, "TgOperacoesS1MouseDown")
+        BINDEVENT(par_oChk, "Click",     THIS, "TgOperacoesS1Click")
+    ENDPROC
+
+    PROCEDURE TgOperacoesS1KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF !INLIST(par_nKeyCode, 13, 32)
+            RETURN
+        ENDIF
+        NODEFAULT
+        LOCAL loc_cCur
+        loc_cCur = THIS.this_oRelatorio.this_cCursorOperacoesS
+        IF VARTYPE(loc_cCur) != "C" OR !USED(loc_cCur) OR EOF(loc_cCur)
+            RETURN
+        ENDIF
+        SELECT (loc_cCur)
+        IF VARTYPE(SelImp) == "L"
+            REPLACE SelImp WITH !SelImp
+        ELSE
+            REPLACE SelImp WITH IIF(SelImp = 0, 1, 0)
+        ENDIF        THIS.pgf_4c_Paginas.Page1.grd_4c_OperacoesS.Refresh()
+    ENDPROC
+
+    PROCEDURE TgOperacoesS1MouseUp(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+        THIS.TgOperacoesS1KeyPress(13, 0)
+        NODEFAULT
+    ENDPROC
+
+    PROCEDURE TgOperacoesS1MouseDown(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+        NODEFAULT
+    ENDPROC
+
+    PROCEDURE TgOperacoesS1Click()
+        NODEFAULT
+    ENDPROC
 ENDDEFINE

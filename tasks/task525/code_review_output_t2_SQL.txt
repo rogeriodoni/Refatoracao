@@ -1,0 +1,36 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Analisei os dois achados do pass SQL comparando com o c├│digo-fonte legado real (`tasks/task525/SIGCDSRV_form_codigo_fonte.txt`), e **ambos s├úo falsos positivos** do detector autom├ítico ÔÇö aplicar a "corre├º├úo" sugerida quebraria o sistema. N├úo fiz altera├º├Áes. Segue a justificativa:
+
+## 1. `CIDCHAVES` no WHERE de `Atualizar()`/`ExecutarExclusao()` (SRVBO.prg)
+
+O detector comparou o WHERE migrado apenas contra a query de listagem do legado (`Select * from SigCdSrv where cTipos = ...`), mas essa n├úo ├® a query relevante para UPDATE/DELETE de registro ├║nico.
+
+Evid├¬ncia no legado (linha 3713):
+```foxpro
+.AddCursor([SigCdSrv], [cIdChaves], [crSigCdSrv], [], ThisForm.Pagina.Lista.Grade, m.lcQuery)
+```
+O framework legado (`poDataMgr`) declara **`cIdChaves` como campo-chave** do cursor `SigCdSrv`. ├ë exatamente esse campo que o `poDataMgr.Update()` do legado usa internamente para montar a cl├íusula `WHERE` de UPDATE/DELETE (padr├úo CursorAdapter). A migra├º├úo fez isso de forma expl├¡cita em SQL ÔÇö comportamento correto e equivalente ao legado, n├úo uma condi├º├úo inventada.
+
+**Se eu removesse o `WHERE cidchaves = ...`**, o `UPDATE`/`DELETE` passaria a afetar **todas as linhas da tabela `SigCdSrv`** ÔÇö um bug catastr├│fico, n├úo uma corre├º├úo.
+
+## 2. `ICLIS` no WHERE de `ObterDescricaoConta()` (FormSRV.prg:3352)
+
+Mesmo problema de compara├º├úo: o detector validou contra o WHERE de `SigCdSrv` (CTIPOS/CODSERVS), mas essa query consulta uma **tabela diferente** (`SigCdCli`), para resolver a descri├º├úo da conta cont├íbil (lookup), n├úo para filtrar `SigCdSrv`.
+
+Evid├¬ncia no legado (linhas 3621ÔÇô3633):
+```foxpro
+ThisForm.poDataMgr.CursorQuery([SigCdCli],[crSigCdCli],[Iclis],crSigCdSrv.cContab,[rClis])
+ThisForm.poDataMgr.CursorQuery([SigCdCli],[crSigCdCli],[Iclis],crSigCdSrv.cCtaPiss,[rClis])
+... (idem para cCtaCofins, cCtaIrrfs, cCtaInss, cCtaCslls, cCtaIss)
+```
+O legado literalmente faz `CursorQuery` em `SigCdCli` filtrando por `Iclis` para obter `rClis` ÔÇö ├® exatamente o que `ObterDescricaoConta` (`SELECT Rclis FROM SigCdCli WHERE Iclis = ...`) reproduz, s├│ que consolidado numa fun├º├úo reutiliz├ível em vez de 7 chamadas repetidas. N├úo ├® uma condi├º├úo inventada.
+
+**Se eu removesse o `WHERE Iclis = ...`**, a busca da descri├º├úo da conta cont├íbil deixaria de funcionar (retornaria a primeira linha aleat├│ria de `SigCdCli` ou erro).
+
+## Conclus├úo
+
+Nenhum dos dois arquivos foi alterado. Ambos os achados resultam do detector autom├ítico n├úo enxergar chamadas de framework legado (`AddCursor`/`CursorQuery`) como fonte de WHERE ÔÇö ele s├│ analisou strings de SQL literais. Recomendo registrar esse padr├úo (WHERE por PK em UPDATE/DELETE e WHERE em lookup cross-table) como exce├º├úo conhecida no detector do pipeline, para n├úo gerar ru├¡do repetido em outros BOs que seguem o mesmo padr├úo can├┤nico.

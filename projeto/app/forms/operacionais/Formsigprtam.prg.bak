@@ -252,7 +252,7 @@ DEFINE CLASS Formsigprtam AS FormBase
         THIS.AddObject("cmd_4c_Excluir", "CommandButton")
         WITH THIS.cmd_4c_Excluir
             .Top             = 3
-            .Left            = 488
+            .Left = 230
             .Width           = 75
             .Height          = 75
             .Caption         = "Excluir"
@@ -276,7 +276,7 @@ DEFINE CLASS Formsigprtam AS FormBase
         THIS.AddObject("cmd_4c_Encerrar", "CommandButton")
         WITH THIS.cmd_4c_Encerrar
             .Top             = 3
-            .Left            = 563
+            .Left = 5
             .Width           = 75
             .Height          = 75
             .Caption         = "Encerrar"

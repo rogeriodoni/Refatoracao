@@ -13635,6 +13635,120 @@ function Corrigir-PaginaDadosSemCabecalho {
 
     return $Linhas
 }
+function Corrigir-LabelForeColorBrancoInvisivel {
+    # Pattern #191 (Erro153, 2026-09-09) - WARNING-only.
+    #
+    # Label/CheckBox/OptionButton de DADOS com .ForeColor = RGB(255,255,255)
+    # criado direto numa Page do PageFrame (ou em container transparente/claro).
+    # As Pages recebem .Picture = fundo_cad_1003.jpg (textura CLARA) POR CIMA do
+    # .BackColor = RGB(100,100,100), entao o texto branco fica invisivel: o
+    # usuario clica Incluir, cai na aba Dados e ve as caixas sem legenda.
+    #
+    # Canonico quando o SCX legado nao declara ForeColor (classe `say` do
+    # Framework): RGB(90, 90, 90). Quando declara, copiar o valor EXATO
+    # (36,84,155 nos titulos de secao; 255,0,0 nas notas de rodape). Por isso o
+    # pattern eh WARNING-only: a cor certa vem do dump do legado, e trocar tudo
+    # por 90,90,90 achataria as cores de secao (violaria o PILAR 1).
+    #
+    # NAO acusa (branco legitimo):
+    #   - lbl_4c_Titulo / lbl_4c_LblTitulo / lbl_4c_Sombra da faixa do cabecalho;
+    #   - controle dentro de container OPACO escuro (BackStyle=1 + BackColor
+    #     RGB(100,100,100)/RGB(90,90,90)), e o proprio controle quando ele mesmo
+    #     declara esse par;
+    #   - HighlightForeColor / SelectedForeColor / SelectedItemForeColor, que sao
+    #     o texto da linha selecionada sobre realce escuro (por isso o regex
+    #     ancora em ^\s*\.ForeColor).
+    param([string[]]$Linhas, [string]$Arquivo = "")
+
+    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
+    if ([string]::IsNullOrEmpty($Arquivo)) { return $Linhas }
+    $nomeArq = Split-Path -Leaf $Arquivo
+    if ($nomeArq -notlike 'Form*.prg') { return $Linhas }
+
+    # 1) aliases de variavel: loc_oX = <expr>  ->  ultimo segmento de <expr>
+    $alias = @{}
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        if ($Linhas[$i] -match '(?i)^\s*((?:loc_|par_)\w+)\s*=\s*([A-Za-z_][\w\.\(\)]*)\s*$') {
+            $partes = $Matches[2] -split '\.'
+            $alias[$Matches[1]] = $partes[$partes.Count - 1]
+        }
+    }
+
+    # 2) BackStyle/BackColor de cada objeto criado por AddObject
+    $bs = @{}; $bc = @{}
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        if ($Linhas[$i] -match '(?i)AddObject\s*\(\s*"(\w+)"') {
+            $ob = $Matches[1]
+            for ($j = $i + 1; $j -lt [Math]::Min($i + 31, $Linhas.Count); $j++) {
+                if ($Linhas[$j] -match '(?i)AddObject\s*\(') { break }
+                if ($Linhas[$j] -match '(?i)^\s*\.BackStyle\s*=\s*(\d+)')  { $bs[$ob] = [int]$Matches[1] }
+                if ($Linhas[$j] -match '(?i)^\s*\.BackColor\s*=\s*RGB\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)') {
+                    $bc[$ob] = [int]$Matches[1] + [int]$Matches[2] + [int]$Matches[3]
+                }
+            }
+        }
+    }
+
+    $isPagina = '(?i)^(loc_oPg\d?|loc_oPagina\d?|par_oPagina\d?|loc_oPage\d?|par_oPage\d?|Page\d|Pages|THIS|)$'
+    $ignoraNome = '(?i)^lbl_4c_(Titulo|LblTitulo|Sombra|titulo\d)$'
+
+    $achados = @()
+    $cur = ''; $pai = ''
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        $l = $Linhas[$i]
+
+        if ($l -match '(?i)^\s*WITH\s+([\w\.\(\)"\+ ]+?)\s*$') {
+            $partes = ($Matches[1] -replace '\s', '') -split '\.'
+            $cur = $partes[$partes.Count - 1]
+            $pai = if ($partes.Count -gt 1) { $partes[$partes.Count - 2] } else { '' }
+            continue
+        }
+
+        # .ForeColor = RGB(255,255,255) ou .Buttons(N).ForeColor = RGB(255,255,255)
+        if ($l -notmatch '(?i)^\s*\.(Buttons\(\d+\)\.)?ForeColor\s*=\s*RGB\(\s*255\s*,\s*255\s*,\s*255\s*\)\s*$') { continue }
+        if ($cur -match $ignoraNome) { continue }
+
+        # rotulo de barra de progresso (lbl_4c_Porcento sobre shp_4c_Barra):
+        # o legado tambem usa branco - a legenda so aparece quando a barra enche.
+        if ($cur -match '(?i)Porcento|Percent' -and $pai -match '(?i)Barra') { continue }
+
+        # o proprio controle eh um bloco opaco escuro? (ex.: lbl_4c_TxtCaption)
+        if ($bs.ContainsKey($cur) -and $bs[$cur] -eq 1 -and $bc.ContainsKey($cur) -and $bc[$cur] -lt 400) { continue }
+
+        $alvo = $pai
+        if ($alias.ContainsKey($alvo)) { $alvo = $alias[$alvo] }
+        if ($alvo -notmatch $isPagina) {
+            # container: branco so eh legitimo se ele for OPACO e ESCURO
+            $opaco  = ($bs.ContainsKey($alvo) -and $bs[$alvo] -eq 1) -or (-not $bs.ContainsKey($alvo) -and $bc.ContainsKey($alvo))
+            $escuro = $bc.ContainsKey($alvo) -and $bc[$alvo] -lt 400
+            if ($opaco -and $escuro) { continue }
+        }
+
+        $achados += [PSCustomObject]@{ Linha = $i + 1; Obj = $cur; Pai = $alvo }
+    }
+
+    if ($achados.Count -eq 0) { return $Linhas }
+
+    $amostra = ($achados | Select-Object -First 6 | ForEach-Object { "$($_.Obj)@$($_.Linha)" }) -join ', '
+    Add-Correcao -Tipo "WARN-191-FORECOLOR-BRANCO-INVISIVEL" -Linha $achados[0].Linha `
+        -Original ("$($achados.Count) controle(s) com .ForeColor = RGB(255,255,255): " + $amostra) `
+        -Corrigido "(REVISAR MANUAL - canonico RGB(90, 90, 90))" `
+        -Descricao ("Pattern #191: label/checkbox/optionbutton de DADOS com ForeColor branco criado direto na " +
+            "Page (ou em container transparente/claro). As Pages recebem .Picture = fundo_cad_1003.jpg (textura " +
+            "CLARA) POR CIMA do .BackColor = RGB(100,100,100), entao o texto branco fica INVISIVEL - o usuario " +
+            "clica Incluir, cai na aba Dados e ve as caixas de texto sem legenda. Cor certa: se o objeto do SCX " +
+            "legado NAO declara ForeColor (classe `say` do Framework), usar RGB(90, 90, 90); se declara, copiar o " +
+            "valor EXATO (36,84,155 nos titulos de secao em Verdana, 255,0,0 nas notas de rodape). Ao procurar o " +
+            "objeto no dump do legado, conferir os DOIS nomes: Say<N> do legado costuma virar lbl_4c_Label<N> no " +
+            "migrado. Branco continua correto em lbl_4c_Titulo/lbl_4c_Sombra do cabecalho, em label dentro de " +
+            "container opaco escuro (BackStyle=1 + BackColor RGB(100,100,100)/RGB(90,90,90)) e nas propriedades " +
+            "HighlightForeColor/SelectedForeColor/SelectedItemForeColor. Origem: Erro153 (2026-09-09, FormARV; " +
+            "sweep de 217 sites em 23 forms).")
+    Write-Host "[Pattern #191] $($achados.Count) ForeColor branco invisivel: $amostra" -ForegroundColor Yellow
+
+    return $Linhas
+}
+
 function Invoke-CorrecaoAutomatica {
     param(
         [string]$Arquivo,
@@ -13848,6 +13962,7 @@ function Invoke-CorrecaoAutomatica {
     $linhas = Corrigir-ControlSourceNumericoIndice1Based -Linhas $linhas -Arquivo $Arquivo
     $linhas = Corrigir-SucessoSemGravarEListaDistinct -Linhas $linhas -Arquivo $Arquivo
     $linhas = Corrigir-PaginaDadosSemCabecalho -Linhas $linhas -Arquivo $Arquivo
+    $linhas = Corrigir-LabelForeColorBrancoInvisivel -Linhas $linhas -Arquivo $Arquivo
 
     # Salva arquivo corrigido em UTF-8 SEM BOM.
     # - VFP9 nao suporta BOM (por isso removemos no read com bytes[3..])

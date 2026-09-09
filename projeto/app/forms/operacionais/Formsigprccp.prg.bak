@@ -1370,6 +1370,7 @@ DEFINE CLASS Formsigprccp AS FormBase
                 .FontName     = "Tahoma"
                 .FontSize     = 8
                 .AddObject("Check1", "CheckBox")
+                THIS.BindToggleTgProduto1(THIS.grd_4c_Produto.Column1.Check1)
                 .Check1.Caption = ""
                 .Check1.Alignment = 0
                 .Check1.ReadOnly  = .F.
@@ -3080,4 +3081,52 @@ DEFINE CLASS Formsigprccp AS FormBase
         DODEFAULT()
     ENDPROC
 
+
+    *==========================================================================
+    * Toggle do CheckBox Check1 - grd_4c_Produto.Column1 (cursor_4c_Produtos.lMarca)
+    *
+    * CheckBox em coluna de Grid NAO alterna pelo binding nativo: o legado
+    * suprime o toggle padrao (NODEFAULT em Click/MouseDown) e alterna o valor
+    * por codigo no MouseUp/KeyPress, com REPLACE no cursor + Refresh do grid.
+    * Sem estes handlers o CheckBox renderiza e recebe foco, mas clicar ou
+    * teclar Espaco/Enter nao muda nada. Pattern #185 / Erro146 (2026-09-04).
+    * Ref canonico: Formsigredtv.prg (grd_4c_Emps) e Formacg.prg.
+    *==========================================================================
+    PROTECTED PROCEDURE BindToggleTgProduto1(par_oChk)
+        BINDEVENT(par_oChk, "KeyPress",  THIS, "TgProduto1KeyPress")
+        BINDEVENT(par_oChk, "MouseUp",   THIS, "TgProduto1MouseUp")
+        BINDEVENT(par_oChk, "MouseDown", THIS, "TgProduto1MouseDown")
+        BINDEVENT(par_oChk, "Click",     THIS, "TgProduto1Click")
+    ENDPROC
+
+    PROCEDURE TgProduto1KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF !INLIST(par_nKeyCode, 13, 32)
+            RETURN
+        ENDIF
+        *-- NODEFAULT sempre que a tecla for tratada: suprime o toggle nativo
+        NODEFAULT
+        IF !USED("cursor_4c_Produtos") OR EOF("cursor_4c_Produtos")
+            RETURN
+        ENDIF
+        *-- Campo pode ser LOGICO (legado) ou NUMERICO (CASE WHEN ... 1 ELSE 0)
+        IF VARTYPE(cursor_4c_Produtos.lMarca) == "L"
+            REPLACE cursor_4c_Produtos.lMarca WITH !cursor_4c_Produtos.lMarca
+        ELSE
+            REPLACE cursor_4c_Produtos.lMarca WITH IIF(cursor_4c_Produtos.lMarca = 0, 1, 0)
+        ENDIF
+        THIS.grd_4c_Produto.Refresh()
+    ENDPROC
+
+    PROCEDURE TgProduto1MouseUp(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+        THIS.TgProduto1KeyPress(13, 0)
+        NODEFAULT
+    ENDPROC
+
+    PROCEDURE TgProduto1MouseDown(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+        NODEFAULT
+    ENDPROC
+
+    PROCEDURE TgProduto1Click()
+        NODEFAULT
+    ENDPROC
 ENDDEFINE

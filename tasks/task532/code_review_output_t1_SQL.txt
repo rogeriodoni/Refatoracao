@@ -1,0 +1,37 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Revisei os 16 itens apontados neste pass e, ap├│s cruzar cada um contra o c├│digo real (Form + BO), **nenhum ├® um bug genu├¡no** ÔÇö s├úo falsos positivos do scanner autom├ítico, que n├úo faz cross-reference entre `FormTbv.prg` e `TbvBO.prg`, e que confunde `SET FILTER`/`IF` locais com `WHERE` de SQL enviado ao servidor. N├úo apliquei nenhuma altera├º├úo, pois faz├¬-lo quebraria funcionalidade correta (violaria "NAO alterar logica de negocio").
+
+**[GRID-SQL] 1ÔÇô7 ÔÇö cursor_4c_Tds (Campo1is/fs, Campo2is/fs, Campo3is/fs, dfators)**
+`TbvBO.CarregarFaixasDesconto` j├í faz:
+```sql
+SELECT cidchaves, codigos, tipos, codtips, tipods,
+ campo1is, campo1fs, campo2is, campo2fs,
+ campo3is, campo3fs, campo4is, campo4fs,
+ descos, dfators, nchvtbds
+FROM SigOpTds WHERE codigos = ...
+```
+Todos os 7 campos usados nos `ControlSource` de `grd_4c_GradeD` (FormTbv.prg:1573,1587,1601,1613,3401-3405) j├í est├úo nesse SELECT. O scanner s├│ olhou o Form isoladamente e n├úo viu o SELECT, que est├í no BO.
+
+**[GRID-SQL] 8ÔÇô13 ÔÇö cursor_4c_Tdi (grupos, contas, pintegrals, pdivididas, patendes, moedas)**
+`TbvBO.CarregarComissoesDesconto` j├í faz:
+```sql
+SELECT cidchaves, codigos, tipos, codtips, grupos, contas,
+ moedas, pintegrals, pdivididas, patendes
+FROM SigOpTdi WHERE codigos = ...
+```
+Os 6 campos usados em `grd_4c_Gradec` (FormTbv.prg:3275-3280) j├í est├úo presentes. Mesmo problema de cross-reference do scanner.
+
+**[SQL-FILTRO-INVENTADO] 14 ÔÇö CMOES**
+`CMOES` s├│ aparece como par├ómetro `par_cCampo="cmoes"` do `FormBuscaAuxiliar` para `SigCdMoe` (lookups F4 de Moeda Ref e Moeda Fator, linhas 3099 e 3153) ÔÇö ├® a PK da tabela de moedas, tabela diferente das listadas pelo scanner (SigOpTdz/Tdt/Tdi/Tds). N├úo ├® filtro inventado, ├® lookup leg├¡timo de uma tabela auxiliar que nem fazia parte do trecho de refer├¬ncia fornecido.
+
+**[SQL-FILTRO-INVENTADO] 15 ÔÇö TIPODS**
+A ├║nica ocorr├¬ncia "WHERE-like" ├® `SET FILTER TO ... AND tipods = loc_nTipoDs` (FormTbv.prg:3382, dentro de `MontarConfiguracaoDesconto`) ÔÇö isso ├® filtro **local** sobre um cursor j├í carregado por completo (sem WHERE tipods no SQL), exatamente reproduzindo o `MontaTbDes` do legado citado no coment├írio do pr├│prio m├®todo. N├úo ├® SQL enviado ao servidor.
+
+**[SQL-FILTRO-INVENTADO] 16 ÔÇö CAMPO3IS**
+N├úo h├í nenhum `WHERE`/`SET FILTER` com `Campo3is` no arquivo ÔÇö s├│ compara├º├Áes `IF`/`REPLACE` locais (linhas 3487, 3553-3554, 3618) sobre a linha corrente do cursor j├í carregado. O scanner provavelmente confundiu a express├úo condicional `IF cursor_4c_Tds.Campo3is > cursor_4c_Tds.Campo3fs` com uma cl├íusula WHERE.
+
+**Conclus├úo:** os arquivos `FormTbv.prg` e `TbvBO.prg` j├í est├úo corretos para este pass de valida├º├úo SQL ÔÇö nenhuma edi├º├úo foi necess├íria.

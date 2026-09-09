@@ -159,8 +159,9 @@ DEFINE CLASS fnlBO AS BusinessBase
 
         TRY
             loc_cSQL = "INSERT INTO SigFiNal" + ;
-                       " (imps, ordems, descrs, nfixos, ncodfinzs, vincs, nrelgers)" + ;
+                       " (cidchaves, imps, ordems, descrs, nfixos, ncodfinzs, vincs, nrelgers)" + ;
                        " VALUES (" + ;
+                       EscaparSQL(fUniqueIds()) + ", " + ;
                        EscaparSQL(THIS.this_cImps) + ", " + ;
                        FormatarNumeroSQL(THIS.this_nOrdems) + ", " + ;
                        EscaparSQL(THIS.this_cDescrs) + ", " + ;

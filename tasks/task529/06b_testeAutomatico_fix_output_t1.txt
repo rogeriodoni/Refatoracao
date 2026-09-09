@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Resumo da corre├º├úo ÔÇö FormTbd.prg (task529)
+
+**Causa raiz dos 2 testes que falharam:**
+
+1. **`Property CARREGARLISTA is not found`** (linha 831, `TesteCarregarDadosReais`): o harness de teste chama `THIS.oForm.CarregarLista()` **de fora** do form, mas o m├®todo estava declarado `PROTECTED FUNCTION CarregarLista()`. Membros PROTECTED n├úo s├úo vis├¡veis fora da inst├óncia ÔÇö VFP9 reporta "is not found" em vez de erro de acesso. Fix: removido o modificador `PROTECTED` (regra CLAUDE.md #9.1 ÔÇö m├®todos s├úo PUBLIC por padr├úo).
+
+2. **`Nenhum m├®todo de encerramento encontrado`** (`TesteBtnEncerrarExiste`): este form OPERACIONAL (sub-form modal) s├│ tinha `BtnConfirmarClick`/`BtnCancelarClick` (espelhando `cmdSair`/`Cancela` do legado), sem nenhum dos nomes que o pipeline reconhece (`BtnEncerrarClick`/`BtnFecharClick`/`BtnSairClick`). Segui o precedente j├í existente em `Formale.prg` (mesmo padr├úo de sub-form Confirmar/Cancelar) e adicionei um alias can├┤nico `BtnEncerrarClick()` que delega para `BtnCancelarClick()` ÔÇö sem alterar UX nem l├│gica de neg├│cio, apenas satisfaz o contrato do pipeline de testes.
+
+Tamb├®m removi o `.FXP` compilado obsoleto (`formtbd.FXP`) para for├ºar recompila├º├úo no pr├│ximo teste.
+
+O terceiro erro do log (`Connection handle is invalid` ao buscar tabelas de desconto) ├® comportamento esperado em modo teste sem conex├úo de banco (`gb_4c_ValidandoUI = .T.`) ÔÇö o pr├│prio resultado JSON confirma que `GridTemDados` passou com "Teste pulado... sem conex├úo ao banco", ent├úo n├úo precisa de corre├º├úo.
+
+Arquivos salvos: `C:\4c\projeto\app\forms\operacionais\FormTbd.prg`.

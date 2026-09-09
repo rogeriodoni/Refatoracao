@@ -1,0 +1,24 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Corre├º├úo aplicada em `C:\4c\projeto\app\forms\cadastros\FormTAN.prg`, dentro de `InicializarForm`, logo ap├│s `THIS.ConfigurarPageFrame()`:
+
+```foxpro
+THIS.ConfigurarPageFrame()
+
+*-- Propaga Caption do form para os labels de titulo (Page1/Page2)
+THIS.pgf_4c_Paginas.Page1.cnt_4c_Cabecalho.lbl_4c_Sombra.Caption = THIS.Caption
+THIS.pgf_4c_Paginas.Page1.cnt_4c_Cabecalho.lbl_4c_Titulo.Caption = THIS.Caption
+THIS.pgf_4c_Paginas.Page2.cnt_4c_Cabecalho.lbl_4c_Sombra.Caption = THIS.Caption
+THIS.pgf_4c_Paginas.Page2.cnt_4c_Cabecalho.lbl_4c_Titulo.Caption = THIS.Caption
+```
+
+Observa├º├Áes importantes:
+
+1. **O template da instru├º├úo usava um caminho inv├ílido para este form.** O snippet sugerido no relat├│rio referenciava `cnt_4c_Sombra` como container, mas neste `FormTAN` o container que hospeda `lbl_4c_Sombra`/`lbl_4c_Titulo` se chama `cnt_4c_Cabecalho` (criado em `ConfigurarPaginaLista`/`ConfigurarPaginaDados`, linhas 120-158 e 435-471). Copiar o snippet literal teria causado `Property CNT_4C_SOMBRA is not found` em runtime. Corrigi o caminho para o nome real do container, e propaguei para as duas p├íginas (Lista e Dados), j├í que ambas t├¬m cabe├ºalho com t├¡tulo.
+
+2. **O c├│digo j├í estava correto na pr├ítica.** Ambos os labels j├í recebiam `.Caption = THIS.Caption` inline no momento da cria├º├úo (dentro do pr├│prio `AddObject`), e `THIS.Caption` ├® uma propriedade literal fixa da classe (`"Tipos de An" + CHR(225) + "lises"`), nunca reatribu├¡da depois. Ou seja, o t├¡tulo exibido j├í era o correto ("Tipos de An├ílises"), n├úo havia bug real de "Cadastro de Testes" aparecendo. A adi├º├úo acima ├® redundante em efeito, mas atende ao padr├úo exigido pelo pass de forma expl├¡cita e seguindo `ConfigurarPageFrame()`, sem quebrar nada.
+
+3. N├úo toquei em nenhuma outra propriedade visual (Width/Height/Top/Left/cores/fontes) nem em l├│gica de neg├│cio ÔÇö nenhum outro item da lista de problemas se aplicava (n├úo h├í bot├Áes desalinhados no mesmo grupo, n├úo h├í CheckBox, n├úo h├í `Comic Sans MS`).

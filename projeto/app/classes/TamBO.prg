@@ -1,206 +1,189 @@
-*==============================================================================
-* TamBO.prg - Business Object para Cadastro de Tamanhos
-* Tabela: SigCdTam
+*====================================================================
+* TamBO.prg
+*
+* Business Object para Tamanhos
+* Tabela principal: SigCdTam (cods PK)
 * Herda de: BusinessBase
-*==============================================================================
+*====================================================================
 
 DEFINE CLASS TamBO AS BusinessBase
 
-    *-- Propriedades de dados (mapeadas para SigCdTam)
-    this_cCodigo        = ""    && cods   CHAR(4)
-    this_cDescricao     = ""    && descs  CHAR(20)
-    this_nVariacaoPreco = 0     && varias NUMERIC(6,2)
+	*-- Propriedades da entidade (SigCdTam)
+	this_cCods    = ""   && cods char(4)         - PK (codigo do tamanho)
+	this_cDescs   = ""   && descs char(20)       - descricao do tamanho
+	this_nVarias  = 0    && varias numeric(6,2)  - variacao de preco
 
-    *--------------------------------------------------------------------------
-    * Init - Configura tabela e campo chave
-    *--------------------------------------------------------------------------
-    PROCEDURE Init()
-        DODEFAULT()
-        THIS.this_cTabela     = "SigCdTam"
-        THIS.this_cCampoChave = "cods"
-        RETURN .T.
-    ENDPROC
+	*====================================================================
+	* Init - Inicializa Business Object
+	*====================================================================
+	PROCEDURE Init()
+		DODEFAULT()
+		THIS.this_cTabela     = "SigCdTam"
+		THIS.this_cCampoChave = "cods"
+		RETURN .T.
+	ENDPROC
 
-    *--------------------------------------------------------------------------
-    * ObterChavePrimaria - Retorna chave primaria para auditoria
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE ObterChavePrimaria()
-        RETURN THIS.this_cCodigo
-    ENDPROC
+	*====================================================================
+	* ObterChavePrimaria - Retorna chave primaria para auditoria
+	*====================================================================
+	PROTECTED PROCEDURE ObterChavePrimaria()
+		RETURN ALLTRIM(THIS.this_cCods)
+	ENDPROC
 
-    *--------------------------------------------------------------------------
-    * Buscar - Retorna todos os registros (opcional: filtro por descricao)
-    *--------------------------------------------------------------------------
-    PROCEDURE Buscar(par_cFiltro)
-        LOCAL loc_cSQL, loc_lResultado
-        loc_lResultado = .F.
+	*====================================================================
+	* Buscar - Carrega lista de tamanhos no cursor_4c_Dados
+	*====================================================================
+	PROCEDURE Buscar(par_cFiltro)
+		LOCAL loc_cSQL, loc_nResultado, loc_lSucesso
+		loc_lSucesso = .F.
 
-        IF VARTYPE(par_cFiltro) != "C"
-            par_cFiltro = ""
-        ENDIF
+		TRY
+			IF EMPTY(par_cFiltro)
+				loc_cSQL = "SELECT cods, descs, varias FROM SigCdTam ORDER BY cods"
+			ELSE
+				loc_cSQL = "SELECT cods, descs, varias FROM SigCdTam" + ;
+				           " WHERE RTRIM(cods) = " + EscaparSQL(ALLTRIM(par_cFiltro)) + ;
+				           " ORDER BY cods"
+			ENDIF
 
-        TRY
-            IF USED("cursor_4c_Dados")
-                USE IN cursor_4c_Dados
-            ENDIF
+			loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Dados")
+			IF loc_nResultado >= 0
+				loc_lSucesso = .T.
+			ELSE
+				MsgErro("Erro ao buscar tamanhos:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
+			ENDIF
+		CATCH TO loc_oErro
+			MsgErro("Erro ao buscar tamanhos:" + CHR(13) + loc_oErro.Message, "Erro")
+		ENDTRY
 
-            IF EMPTY(ALLTRIM(par_cFiltro))
-                loc_cSQL = "SELECT cods, descs, varias" + ;
-                           " FROM SigCdTam" + ;
-                           " ORDER BY cods"
-            ELSE
-                loc_cSQL = "SELECT cods, descs, varias" + ;
-                           " FROM SigCdTam" + ;
-                           " WHERE descs LIKE " + EscaparSQL("%" + ALLTRIM(par_cFiltro) + "%") + ;
-                           " ORDER BY cods"
-            ENDIF
+		RETURN loc_lSucesso
+	ENDPROC
 
-            loc_lResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Dados") > 0
+	*====================================================================
+	* CarregarPorCodigo - Carrega um registro pelo codigo (PK)
+	*====================================================================
+	PROCEDURE CarregarPorCodigo(par_cCods)
+		LOCAL loc_cSQL, loc_nResultado, loc_lSucesso
+		loc_lSucesso = .F.
 
-            IF !loc_lResultado
-                MsgErro("Erro ao buscar tamanhos:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
-            ENDIF
-        CATCH TO loException
-            MsgErro("Erro:" + CHR(13) + loException.Message, "Erro")
-            loc_lResultado = .F.
-        ENDTRY
+		TRY
+			loc_cSQL = "SELECT cods, descs, varias FROM SigCdTam" + ;
+			           " WHERE RTRIM(cods) = " + EscaparSQL(ALLTRIM(par_cCods))
 
-        RETURN loc_lResultado
-    ENDPROC
+			loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Carrega")
+			IF loc_nResultado >= 0 AND RECCOUNT("cursor_4c_Carrega") > 0
+				loc_lSucesso = THIS.CarregarDoCursor("cursor_4c_Carrega")
+				THIS.this_lNovoRegistro = .F.
+			ENDIF
 
-    *--------------------------------------------------------------------------
-    * CarregarPorCodigo - Carrega registro pelo codigo (PK)
-    *--------------------------------------------------------------------------
-    PROCEDURE CarregarPorCodigo(par_cCodigo)
-        LOCAL loc_cSQL, loc_lResultado
-        loc_lResultado = .F.
+			IF USED("cursor_4c_Carrega")
+				USE IN cursor_4c_Carrega
+			ENDIF
+		CATCH TO loc_oErro
+			MsgErro("Erro ao carregar tamanho:" + CHR(13) + loc_oErro.Message, "Erro")
+			IF USED("cursor_4c_Carrega")
+				USE IN cursor_4c_Carrega
+			ENDIF
+		ENDTRY
 
-        TRY
-            IF USED("cursor_4c_Carrega")
-                USE IN cursor_4c_Carrega
-            ENDIF
+		RETURN loc_lSucesso
+	ENDPROC
 
-            loc_cSQL = "SELECT cods, descs, varias" + ;
-                       " FROM SigCdTam" + ;
-                       " WHERE cods = " + EscaparSQL(ALLTRIM(par_cCodigo))
+	*====================================================================
+	* CarregarDoCursor - Mapeia campos do cursor para propriedades do BO
+	*====================================================================
+	PROTECTED PROCEDURE CarregarDoCursor(par_cAliasCursor)
+		LOCAL loc_lSucesso
+		loc_lSucesso = .F.
 
-            IF SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Carrega") > 0
-                IF RECCOUNT("cursor_4c_Carrega") > 0
-                    loc_lResultado = THIS.CarregarDoCursor("cursor_4c_Carrega")
-                    THIS.this_lNovoRegistro = .F.
-                ENDIF
-            ELSE
-                MsgErro("Erro ao carregar tamanho:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
-            ENDIF
+		IF USED(par_cAliasCursor)
+			SELECT (par_cAliasCursor)
+			THIS.this_cCods   = TratarNulo(cods, "C")
+			THIS.this_cDescs  = TratarNulo(descs, "C")
+			THIS.this_nVarias = TratarNulo(varias, "N")
+			loc_lSucesso = .T.
+		ENDIF
 
-            IF USED("cursor_4c_Carrega")
-                USE IN cursor_4c_Carrega
-            ENDIF
-        CATCH TO loException
-            MsgErro("Erro:" + CHR(13) + loException.Message, "Erro")
-            loc_lResultado = .F.
-        ENDTRY
+		RETURN loc_lSucesso
+	ENDPROC
 
-        RETURN loc_lResultado
-    ENDPROC
+	*====================================================================
+	* Inserir - INSERT na tabela SigCdTam
+	*====================================================================
+	PROTECTED PROCEDURE Inserir()
+		LOCAL loc_cSQL, loc_nResultado, loc_lSucesso
+		loc_lSucesso = .F.
 
-    *--------------------------------------------------------------------------
-    * CarregarDoCursor - Mapeia campos do cursor para propriedades do BO
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE CarregarDoCursor(par_cAliasCursor)
-        LOCAL loc_lResultado
-        loc_lResultado = .F.
+		TRY
+			loc_cSQL = "INSERT INTO SigCdTam (cods, descs, varias)" + ;
+			           " VALUES (" + ;
+			           EscaparSQL(THIS.this_cCods) + "," + ;
+			           EscaparSQL(THIS.this_cDescs) + "," + ;
+			           FormatarNumeroSQL(THIS.this_nVarias) + ;
+			           ")"
 
-        IF USED(par_cAliasCursor)
-            SELECT (par_cAliasCursor)
-            THIS.this_cCodigo        = TratarNulo(cods,   "C")
-            THIS.this_cDescricao     = TratarNulo(descs,  "C")
-            THIS.this_nVariacaoPreco = TratarNulo(varias, "N")
-            loc_lResultado = .T.
-        ENDIF
+			loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL)
+			IF loc_nResultado >= 0
+				THIS.RegistrarAuditoria("INSERT")
+				loc_lSucesso = .T.
+			ELSE
+				MsgErro("Erro ao inserir tamanho:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
+			ENDIF
+		CATCH TO loc_oErro
+			MsgErro("Erro ao inserir tamanho:" + CHR(13) + loc_oErro.Message, "Erro")
+		ENDTRY
 
-        RETURN loc_lResultado
-    ENDPROC
+		RETURN loc_lSucesso
+	ENDPROC
 
-    *--------------------------------------------------------------------------
-    * Inserir - INSERT na tabela SigCdTam
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE Inserir()
-        LOCAL loc_cSQL, loc_lResultado
-        loc_lResultado = .F.
+	*====================================================================
+	* Atualizar - UPDATE na tabela SigCdTam
+	*====================================================================
+	PROTECTED PROCEDURE Atualizar()
+		LOCAL loc_cSQL, loc_nResultado, loc_lSucesso
+		loc_lSucesso = .F.
 
-        TRY
-            loc_cSQL = "INSERT INTO SigCdTam (cods, descs, varias)" + ;
-                       " VALUES (" + ;
-                       EscaparSQL(THIS.this_cCodigo) + ", " + ;
-                       EscaparSQL(THIS.this_cDescricao) + ", " + ;
-                       FormatarNumeroSQL(THIS.this_nVariacaoPreco) + ;
-                       ")"
+		TRY
+			loc_cSQL = "UPDATE SigCdTam SET" + ;
+			           " descs = " + EscaparSQL(THIS.this_cDescs) + "," + ;
+			           " varias = " + FormatarNumeroSQL(THIS.this_nVarias) + ;
+			           " WHERE RTRIM(cods) = " + EscaparSQL(ALLTRIM(THIS.this_cCods))
 
-            IF SQLEXEC(gnConnHandle, loc_cSQL) > 0
-                THIS.RegistrarAuditoria("INSERT")
-                loc_lResultado = .T.
-            ELSE
-                MsgErro("Erro ao inserir tamanho:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
-            ENDIF
-        CATCH TO loException
-            MsgErro("Erro:" + CHR(13) + loException.Message, "Erro")
-            loc_lResultado = .F.
-        ENDTRY
+			loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL)
+			IF loc_nResultado >= 0
+				THIS.RegistrarAuditoria("UPDATE")
+				loc_lSucesso = .T.
+			ELSE
+				MsgErro("Erro ao atualizar tamanho:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
+			ENDIF
+		CATCH TO loc_oErro
+			MsgErro("Erro ao atualizar tamanho:" + CHR(13) + loc_oErro.Message, "Erro")
+		ENDTRY
 
-        RETURN loc_lResultado
-    ENDPROC
+		RETURN loc_lSucesso
+	ENDPROC
 
-    *--------------------------------------------------------------------------
-    * Atualizar - UPDATE na tabela SigCdTam
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE Atualizar()
-        LOCAL loc_cSQL, loc_lResultado
-        loc_lResultado = .F.
+	*====================================================================
+	* ExecutarExclusao - DELETE na tabela SigCdTam
+	*====================================================================
+	PROTECTED PROCEDURE ExecutarExclusao()
+		LOCAL loc_cSQL, loc_nResultado, loc_lSucesso
+		loc_lSucesso = .F.
 
-        TRY
-            loc_cSQL = "UPDATE SigCdTam SET" + ;
-                       " descs  = " + EscaparSQL(THIS.this_cDescricao) + "," + ;
-                       " varias = " + FormatarNumeroSQL(THIS.this_nVariacaoPreco) + ;
-                       " WHERE cods = " + EscaparSQL(THIS.this_cCodigo)
+		TRY
+			loc_cSQL = "DELETE FROM SigCdTam WHERE RTRIM(cods) = " + EscaparSQL(ALLTRIM(THIS.this_cCods))
+			loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL)
+			IF loc_nResultado >= 0
+				THIS.RegistrarAuditoria("DELETE")
+				loc_lSucesso = .T.
+			ELSE
+				MsgErro("Erro ao excluir tamanho:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
+			ENDIF
+		CATCH TO loc_oErro
+			MsgErro("Erro ao excluir tamanho:" + CHR(13) + loc_oErro.Message, "Erro")
+		ENDTRY
 
-            IF SQLEXEC(gnConnHandle, loc_cSQL) > 0
-                THIS.RegistrarAuditoria("UPDATE")
-                loc_lResultado = .T.
-            ELSE
-                MsgErro("Erro ao atualizar tamanho:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
-            ENDIF
-        CATCH TO loException
-            MsgErro("Erro:" + CHR(13) + loException.Message, "Erro")
-            loc_lResultado = .F.
-        ENDTRY
-
-        RETURN loc_lResultado
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * ExecutarExclusao - DELETE na tabela SigCdTam
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE ExecutarExclusao()
-        LOCAL loc_cSQL, loc_lResultado
-        loc_lResultado = .F.
-
-        TRY
-            loc_cSQL = "DELETE FROM SigCdTam" + ;
-                       " WHERE cods = " + EscaparSQL(THIS.this_cCodigo)
-
-            IF SQLEXEC(gnConnHandle, loc_cSQL) > 0
-                THIS.RegistrarAuditoria("DELETE")
-                loc_lResultado = .T.
-            ELSE
-                MsgErro("Erro ao excluir tamanho:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
-            ENDIF
-        CATCH TO loException
-            MsgErro("Erro:" + CHR(13) + loException.Message, "Erro")
-            loc_lResultado = .F.
-        ENDTRY
-
-        RETURN loc_lResultado
-    ENDPROC
+		RETURN loc_lSucesso
+	ENDPROC
 
 ENDDEFINE

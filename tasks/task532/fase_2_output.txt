@@ -1,0 +1,19 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+8 methods, 8 ENDPROC/ENDFUNC, 6 TRY, 6 ENDTRY ÔÇö all balanced. Only one literal `RETURN .T.`/`RETURN .F.` (in `Init()`, outside TRY), confirming all other returns correctly use `loc_lResultado` variables and no `RETURN` occurs inside a TRY/CATCH block anywhere in the file.
+
+## Resumo da Fase 2/8
+
+Completei `C:\4c\projeto\app\classes\TbvBO.prg` adicionando os m├®todos CRUD completos sobre `SigOpTdz` (schema validado contra `docs/schema.sql`, todas as 21 colunas confirmadas):
+
+- **`CarregarDoCursor()`** ÔÇö mapeia todas as 21 colunas via `SELECT (par_cAliasCursor)` + `TratarNulo()`, sem sintaxe `(variavel).campo`.
+- **`Inserir()`** ÔÇö `INSERT INTO SigOpTdz` com as 21 colunas (incluindo as NOT NULL), usando `EscaparSQL`/`FormatarNumeroSQL`/`FormatarDataSQL` com as casas decimais corretas por coluna (ex.: `ajustes` N(8,6), `descos`/`fators`/`descmxs` com 2 decimais, campos inteiros com 0).
+- **`Atualizar()`** ÔÇö `UPDATE SigOpTdz SET ...` (sem alterar a PK `codigos`, usada s├│ no `WHERE`).
+- **`ObterChavePrimaria()`** ÔÇö retorna `ALLTRIM(this_cCodigo)` para a auditoria.
+- **`RegistrarAuditoria()`** ÔÇö chamada (herdada do `BusinessBase`) em `Inserir`/`Atualizar`/`ExecutarExclusao` ap├│s sucesso do SQL.
+- Tamb├®m inclu├¡ `Buscar()`, `CarregarPorCodigo()` (resetando `this_lNovoRegistro`) e `ExecutarExclusao()` (com cascade em `SigOpTdt`/`SigOpTdi`/`SigOpTds` antes do registro principal, sem FK no schema mas espelhando a limpeza feita pelo legado), j├í que o t├¡tulo da fase ├® "BO - M├®todos CRUD" completo e as fases seguintes de Form dependem desses m├®todos existirem.
+
+Todos os `RETURN` ficam fora de `TRY/CATCH` (regra cr├¡tica #1), todo `CATCH` chama `MsgErro` (regra #9), e nenhuma coluna NOT NULL foi omitida do INSERT.

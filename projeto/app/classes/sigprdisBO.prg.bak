@@ -347,11 +347,20 @@ DEFINE CLASS sigprdisBO AS BusinessBase
                        " WHERE tpcads = 3" + ;
                        " ORDER BY emps, grupos, contas"
 
-            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Estoques")
+            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_EstoquesSPT")
 
             IF loc_nResultado < 0
                 MsgErro("Erro ao carregar estoques:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
             ELSE
+                *-- Converte para READWRITE (SQLEXEC gera somente-leitura por padrao)
+                *-- Sem isso os REPLACE de nMarca no Form (marcar/desmarcar do
+                *-- grd_4c_Estoques) estouram e o CheckBox nao aceita clique.
+                *-- O INTO CURSOR ... READWRITE do InicializarForm eh so placeholder:
+                *-- o USE IN acima ja o descartou.
+                SELECT * FROM cursor_4c_EstoquesSPT INTO CURSOR cursor_4c_Estoques READWRITE
+                IF USED("cursor_4c_EstoquesSPT")
+                    USE IN cursor_4c_EstoquesSPT
+                ENDIF
                 IF USED("cursor_4c_Estoques")
                     GO TOP IN cursor_4c_Estoques
                 ENDIF

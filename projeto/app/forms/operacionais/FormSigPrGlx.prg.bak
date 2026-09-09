@@ -1894,7 +1894,7 @@ DEFINE CLASS FormSigPrGlx AS FormBase
             loc_oPage.AddObject("cmd_4c_Encerrar", "CommandButton")
             WITH loc_oPage.cmd_4c_Encerrar
                 .Top         = 2
-                .Left        = 723
+                .Left = 5
                 .Width       = 75
                 .Height      = 75
                 .Caption     = "Encerrar"

@@ -469,7 +469,7 @@ DEFINE CLASS FormICM AS FormBase
             .FontName  = "Tahoma"
             .FontSize  = 8
             .FontBold  = .F.
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .AutoSize  = .F.
             .Alignment = 1
@@ -522,7 +522,7 @@ DEFINE CLASS FormICM AS FormBase
             .FontName  = "Tahoma"
             .FontSize  = 8
             .FontBold  = .F.
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .AutoSize  = .F.
             .Alignment = 1
@@ -575,7 +575,7 @@ DEFINE CLASS FormICM AS FormBase
             .FontName  = "Tahoma"
             .FontSize  = 8
             .FontBold  = .F.
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .AutoSize  = .F.
             .Alignment = 1
@@ -628,7 +628,7 @@ DEFINE CLASS FormICM AS FormBase
             .FontName  = "Tahoma"
             .FontSize  = 8
             .FontBold  = .F.
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .AutoSize  = .F.
             .Alignment = 1
@@ -663,7 +663,7 @@ DEFINE CLASS FormICM AS FormBase
             .FontName  = "Tahoma"
             .FontSize  = 8
             .FontBold  = .F.
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .AutoSize  = .F.
             .Alignment = 1
@@ -681,7 +681,7 @@ DEFINE CLASS FormICM AS FormBase
             .FontName  = "Tahoma"
             .FontSize  = 8
             .FontBold  = .F.
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(0, 0, 0)
             .BackStyle = 0
             .AutoSize  = .F.
             .Alignment = 0
@@ -699,7 +699,7 @@ DEFINE CLASS FormICM AS FormBase
             .FontName  = "Tahoma"
             .FontSize  = 8
             .FontBold  = .F.
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(0, 0, 0)
             .BackStyle = 0
             .AutoSize  = .F.
             .Alignment = 0

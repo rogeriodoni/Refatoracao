@@ -112,6 +112,12 @@ DEFINE CLASS FeaBO AS BusinessBase
                     USE IN crSigCdPam
                 ENDIF
                 IF TYPE("gnConnHandle") = "N" AND gnConnHandle > 0
+                    *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
+                    IF USED("cursor_4c_Pam_Temp")
+                        TABLEREVERT(.T., "cursor_4c_Pam_Temp")
+                        USE IN cursor_4c_Pam_Temp
+                    ENDIF
+
                     loc_nResultPam = SQLEXEC(gnConnHandle, "SELECT * FROM SigCdPam", "cursor_4c_Pam_Temp")
                     IF loc_nResultPam > 0
                         SELECT * FROM cursor_4c_Pam_Temp INTO CURSOR crSigCdPam READWRITE

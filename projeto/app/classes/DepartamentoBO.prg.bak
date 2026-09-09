@@ -10,9 +10,9 @@ DEFINE CLASS DepartamentoBO AS BusinessBase
     this_cCodigo       = ""   && codigos     C(10) - Chave Primaria
     this_cDescricao    = ""   && descricaos  C(40) - Descricao do departamento
     this_cDiretor      = ""   && diretors    C(10) - FK SigCdUsu.Usuarios
-    this_nSubclaEncerr = 0    && nchksubs    N(1)  - Obriga Subclas. Encerramento (1=Sim 2=Nao)
-    this_nTipo         = 0    && nchktipos   N(1)  - Tipo do departamento (1=Sim 2=Nao)
-    this_nAutomatico   = 0    && autos       N(1)  - Automatico (1=Sim 2=Nao)
+    this_nChkSubs = 0    && nchksubs    N(1)  - Obriga Subclas. Encerramento (1=Sim 2=Nao)
+    this_nChkTipos         = 0    && nchktipos   N(1)  - Tipo do departamento (1=Sim 2=Nao)
+    this_nAutos   = 0    && autos       N(1)  - Automatico (1=Sim 2=Nao)
     this_nUtilizaLanc  = 0    && UtiLacto - campo exibido no form (nao existe no schema atual)
 
     *-- Nome do cursor de grupos (sigdptgg)
@@ -121,9 +121,9 @@ DEFINE CLASS DepartamentoBO AS BusinessBase
                 THIS.this_cCodigo       = ALLTRIM(TratarNulo(codigos, "C"))
                 THIS.this_cDescricao    = ALLTRIM(TratarNulo(descricaos, "C"))
                 THIS.this_cDiretor      = ALLTRIM(TratarNulo(diretors, "C"))
-                THIS.this_nSubclaEncerr = TratarNulo(nchksubs, "N")
-                THIS.this_nTipo         = TratarNulo(nchktipos, "N")
-                THIS.this_nAutomatico   = TratarNulo(autos, "N")
+                THIS.this_nChkSubs = TratarNulo(nchksubs, "N")
+                THIS.this_nChkTipos         = TratarNulo(nchktipos, "N")
+                THIS.this_nAutos   = TratarNulo(autos, "N")
                 THIS.this_nUtilizaLanc  = 0
                 loc_lResultado = .T.
             ENDIF
@@ -148,9 +148,9 @@ DEFINE CLASS DepartamentoBO AS BusinessBase
                        EscaparSQL(THIS.this_cCodigo) + ", " + ;
                        EscaparSQL(THIS.this_cDescricao) + ", " + ;
                        EscaparSQL(THIS.this_cDiretor) + ", " + ;
-                       FormatarNumeroSQL(THIS.this_nSubclaEncerr) + ", " + ;
-                       FormatarNumeroSQL(THIS.this_nTipo) + ", " + ;
-                       FormatarNumeroSQL(THIS.this_nAutomatico) + ")"
+                       FormatarNumeroSQL(THIS.this_nChkSubs) + ", " + ;
+                       FormatarNumeroSQL(THIS.this_nChkTipos) + ", " + ;
+                       FormatarNumeroSQL(THIS.this_nAutos) + ")"
 
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
             IF USED("cursor_4c_Ins")
@@ -190,9 +190,9 @@ DEFINE CLASS DepartamentoBO AS BusinessBase
             loc_cSQL = "UPDATE SigCdDpt SET" + ;
                        " descricaos = " + EscaparSQL(THIS.this_cDescricao) + "," + ;
                        " diretors   = " + EscaparSQL(THIS.this_cDiretor)   + "," + ;
-                       " nchksubs   = " + FormatarNumeroSQL(THIS.this_nSubclaEncerr) + "," + ;
-                       " nchktipos  = " + FormatarNumeroSQL(THIS.this_nTipo)         + "," + ;
-                       " autos      = " + FormatarNumeroSQL(THIS.this_nAutomatico)   + ;
+                       " nchksubs   = " + FormatarNumeroSQL(THIS.this_nChkSubs) + "," + ;
+                       " nchktipos  = " + FormatarNumeroSQL(THIS.this_nChkTipos)         + "," + ;
+                       " autos      = " + FormatarNumeroSQL(THIS.this_nAutos)   + ;
                        " WHERE codigos = " + EscaparSQL(THIS.this_cCodigo)
 
             *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
@@ -478,7 +478,7 @@ DEFINE CLASS DepartamentoBO AS BusinessBase
         loc_lValido = .T.
 
         TRY
-            IF THIS.this_nAutomatico = 1
+            IF THIS.this_nAutos = 1
                 loc_cSQL = "SELECT COUNT(*) AS Total FROM SigCdDpt WHERE autos = 1"
                 IF VARTYPE(par_cCodIgnorar) = "C" AND !EMPTY(par_cCodIgnorar)
                     loc_cSQL = loc_cSQL + ;

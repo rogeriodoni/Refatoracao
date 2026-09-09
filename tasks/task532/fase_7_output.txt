@@ -1,0 +1,22 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+35 procedures, 35 ENDPROCs ÔÇö balanced. FASE 7 is complete.
+
+## Resumo
+
+Implementei os 4 eventos principais do `FormTbv.prg` (`C:\4c\projeto\app\forms\cadastros\FormTbv.prg`), j├í vinculados via `BINDEVENT` nos bot├Áes CRUD desde a fase 4:
+
+- **`BtnIncluirClick()`** ÔÇö chama `NovoRegistro()` no BO, limpa a Page2, seta modo `INCLUIR`, habilita campos, carrega a grade de empresas e navega para Page2.
+- **`BtnVisualizarClick()`** ÔÇö l├¬ o c├│digo selecionado no grid da lista, carrega via `CarregarPorCodigo()`, popula a Page2 (`BOParaForm`) em modo somente-leitura `VISUALIZAR`.
+- **`BtnAlterarClick()`** ÔÇö mesma leitura do grid, mas chama `EditarRegistro()` no BO e habilita os campos em modo `ALTERAR`.
+- **`BtnExcluirClick()`** ÔÇö carrega o registro, confirma com `MsgConfirma()` (retorno l├│gico, conforme regra do projeto), chama `this_oBusinessObject.Excluir()` (que aciona `ExecutarExclusao()` protegido no BO, removendo tamb├®m `SigOpTdt`/`SigOpTdi`/`SigOpTds`) e recarrega a lista.
+
+Como esses quatro handlers dependiam de infraestrutura ainda inexistente no form, tamb├®m implementei (pr├®-requisitos funcionais, n├úo placeholders):
+- `LimparCampos()` ÔÇö reseta todos os campos da Page2 para os defaults do legado (ex.: `Rel_Descs=2`, `Chk_Acesso=1`).
+- `HabilitarCampos(par_lHabilitar)` ÔÇö habilita/desabilita campos conforme modo, com c├│digo (PK) edit├ível s├│ em `INCLUIR`.
+- `AjustarBotoesPorModo()` ÔÇö `Confirmar` habilitado s├│ em `INCLUIR`/`ALTERAR`.
+
+Todos os `RETURN` ficam fora de blocos `TRY/CATCH` (regra #1 do CLAUDE.md), `CATCH` sempre chama `MostrarErro`/`MsgErro` (regra #9), e o arquivo ficou balanceado (35 `PROCEDURE`/`FUNCTION` = 35 `ENDPROC`). BtnBuscarClick/BtnConfirmarClick/BtnCancelarClick/BtnEncerrarClick continuam pendentes ÔÇö s├úo escopo da fase seguinte.

@@ -1,0 +1,24 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Fase 1/8 conclu├¡da
+
+Criei **`C:\4c\projeto\app\classes\SRVBO.prg`** com:
+
+- **`DEFINE CLASS SRVBO AS BusinessBase`** com todas as propriedades mapeadas da tabela `SigCdSrv` (55 colunas, consultadas em `docs/schema.sql:8598-8675`), organizadas por se├º├úo l├│gica do form:
+  - Identifica├º├úo (`this_cCidChaves` PK, `this_cCodigo`, `this_cDescricao`, `this_cTipo`)
+  - Al├¡quotas (%) ÔÇö Pis/Cofins/Irrf/Inss/Csll/Iss
+  - Valores m├¡nimos a recolher e base de c├ílculo m├¡nima
+  - Checkboxes de recolhimento mensal e lan├ºamento financeiro
+  - C├│digos de ocorr├¬ncia (lookup F4 em `crSigOpOco`)
+  - C├│digos reduzidos de imposto (`codcofinss`/`codcslls`/`codpiss` ÔÇö existem na tabela mas n├úo aparecem na UI legada; mantidos por PILAR 2, schema id├¬ntico)
+  - Grupo/Conta cont├íbil principal + por imposto (aba Vencimentos)
+  - Op├º├úo de vencimento (OptionGroups) por imposto
+  - Bloco RPA (reten├º├úo, c├│digos de receita DARF)
+  - `this_cCursorProdutos` ÔÇö nome do cursor local para o grid-detalhe (`SigSeRvp`, tratado nas pr├│ximas fases)
+
+- **`Init()`** seguindo o padr├úo can├┤nico (`DODEFAULT()` + `this_cTabela = "SigCdSrv"` + `this_cCampoChave = "cidchaves"`, dentro de TRY/CATCH sem `RETURN` interno, conforme regra #1 do CLAUDE.md).
+
+Nenhum stub, TODO ou placeholder ÔÇö apenas propriedades e Init(), como pedido nesta fase. `CarregarDoCursor()`, `Inserir()`, `Atualizar()` ficam para a Fase 2/8.

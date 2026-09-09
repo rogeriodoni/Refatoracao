@@ -409,6 +409,52 @@ DEFINE CLASS Formmtz AS FormBase
 
         *-- Fundo padrao do framework frmcadastro (sem isso a pagina fica branca)
         loc_oPagina.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
+        *-- Cabecalho cinza (identico ao da pagina Lista) - Erro152
+        *-- conteudo da pagina deslocado +41 para nao ficar sob a faixa
+        loc_oPagina.AddObject("cnt_4c_Cabecalho", "Container")
+        WITH loc_oPagina.cnt_4c_Cabecalho
+            .Top           = 29
+            .Left          = 0
+            .Width         = THIS.Width
+            .Height        = 80
+            .BackColor     = RGB(100, 100, 100)
+            .BorderWidth   = 0
+            .SpecialEffect = 0
+            .Visible       = .T.
+
+            .AddObject("lbl_4c_Sombra", "Label")
+            WITH .lbl_4c_Sombra
+                .Caption   = THIS.Caption
+                .Top       = 15
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 40
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(0, 0, 0)
+                .BackStyle = 0
+                .AutoSize  = .F.
+                .Visible   = .T.
+            ENDWITH
+
+            .AddObject("lbl_4c_Titulo", "Label")
+            WITH .lbl_4c_Titulo
+                .Caption   = THIS.Caption
+                .Top       = 18
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 46
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(255, 255, 255)
+                .BackStyle = 0
+                .AutoSize  = .F.
+                .Visible   = .T.
+            ENDWITH
+        ENDWITH
+
 
         *--------------------------------------------------------------------------
         *-- Container botoes Salvar/Cancelar (lado direito topo)
@@ -479,7 +525,7 @@ DEFINE CLASS Formmtz AS FormBase
         loc_oPagina.AddObject("lbl_4c_Lbl_grupo", "Label")
         WITH loc_oPagina.lbl_4c_Lbl_grupo
             .Caption   = "C" + CHR(243) + "digo :"
-            .Top       = 72
+            .Top       = 113
             .Left      = 334
             .Width     = 42
             .Height    = 15
@@ -494,7 +540,7 @@ DEFINE CLASS Formmtz AS FormBase
         WITH loc_oPagina.txt_4c_Codigo
             .Value     = ""
             .MaxLength = 10
-            .Top       = 68
+            .Top       = 109
             .Left      = 382
             .Width     = 51
             .Height    = 23
@@ -512,7 +558,7 @@ DEFINE CLASS Formmtz AS FormBase
         WITH loc_oPagina.chk_4c_Inativa
             .Caption   = "Inativa"
             .Value     = 0
-            .Top       = 72
+            .Top       = 113
             .Left      = 440
             .Width     = 52
             .Height    = 15
@@ -529,7 +575,7 @@ DEFINE CLASS Formmtz AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label2", "Label")
         WITH loc_oPagina.lbl_4c_Label2
             .Caption   = "Moeda :"
-            .Top       = 72
+            .Top       = 113
             .Left      = 718
             .Width     = 41
             .Height    = 15
@@ -544,7 +590,7 @@ DEFINE CLASS Formmtz AS FormBase
         WITH loc_oPagina.txt_4c_Moeda
             .Value     = ""
             .MaxLength = 3
-            .Top       = 68
+            .Top       = 109
             .Left      = 764
             .Width     = 51
             .Height    = 23
@@ -560,7 +606,7 @@ DEFINE CLASS Formmtz AS FormBase
         loc_oPagina.AddObject("lbl_4c_Lbl_Ano", "Label")
         WITH loc_oPagina.lbl_4c_Lbl_Ano
             .Caption   = "Ano Compet" + CHR(234) + "ncia :"
-            .Top       = 99
+            .Top       = 140
             .Left      = 283
             .Width     = 93
             .Height    = 15
@@ -575,7 +621,7 @@ DEFINE CLASS Formmtz AS FormBase
         WITH loc_oPagina.txt_4c_Ano
             .Value     = ""
             .MaxLength = 4
-            .Top       = 95
+            .Top       = 136
             .Left      = 382
             .Width     = 51
             .Height    = 23
@@ -591,7 +637,7 @@ DEFINE CLASS Formmtz AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label1", "Label")
         WITH loc_oPagina.lbl_4c_Label1
             .Caption   = "Valor Acumulado :"
-            .Top       = 99
+            .Top       = 140
             .Left      = 671
             .Width     = 88
             .Height    = 15
@@ -605,7 +651,7 @@ DEFINE CLASS Formmtz AS FormBase
         loc_oPagina.AddObject("txt_4c_ValorTotal", "TextBox")
         WITH loc_oPagina.txt_4c_ValorTotal
             .Value     = 0
-            .Top       = 95
+            .Top       = 136
             .Left      = 764
             .Width     = 108
             .Height    = 23
@@ -624,7 +670,7 @@ DEFINE CLASS Formmtz AS FormBase
         loc_oPagina.AddObject("lbl_4c_LblCentroCusto", "Label")
         WITH loc_oPagina.lbl_4c_LblCentroCusto
             .Caption   = "Centro de Custo :"
-            .Top       = 126
+            .Top       = 167
             .Left      = 288
             .Width     = 88
             .Height    = 15
@@ -639,7 +685,7 @@ DEFINE CLASS Formmtz AS FormBase
         WITH loc_oPagina.txt_4c_Sgrupo
             .Value     = ""
             .MaxLength = 10
-            .Top       = 122
+            .Top       = 163
             .Left      = 382
             .Width     = 82
             .Height    = 23
@@ -651,7 +697,7 @@ DEFINE CLASS Formmtz AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label14", "Label")
         WITH loc_oPagina.lbl_4c_Label14
             .Caption   = "/"
-            .Top       = 126
+            .Top       = 167
             .Left      = 466
             .Width     = 10
             .Height    = 15
@@ -666,7 +712,7 @@ DEFINE CLASS Formmtz AS FormBase
         WITH loc_oPagina.txt_4c_Sconta
             .Value     = ""
             .MaxLength = 20
-            .Top       = 122
+            .Top       = 163
             .Left      = 473
             .Width     = 80
             .Height    = 23
@@ -678,7 +724,7 @@ DEFINE CLASS Formmtz AS FormBase
         loc_oPagina.AddObject("txt_4c_Sdconta", "TextBox")
         WITH loc_oPagina.txt_4c_Sdconta
             .Value     = ""
-            .Top       = 122
+            .Top       = 163
             .Left      = 554
             .Width     = 290
             .Height    = 23
@@ -692,7 +738,7 @@ DEFINE CLASS Formmtz AS FormBase
         WITH loc_oPagina.txt_4c_Class3
             .Value     = ""
             .MaxLength = 3
-            .Top       = 122
+            .Top       = 163
             .Left      = 845
             .Width     = 27
             .Height    = 23
@@ -709,7 +755,7 @@ DEFINE CLASS Formmtz AS FormBase
         loc_oPagina.AddObject("txt_4c_Saldo", "TextBox")
         WITH loc_oPagina.txt_4c_Saldo
             .Value     = 0
-            .Top       = 138
+            .Top       = 179
             .Left      = 11
             .Width     = 100
             .Height    = 17
@@ -2300,3 +2346,4 @@ DEFINE CLASS Formmtz AS FormBase
     ENDPROC
 
 ENDDEFINE
+

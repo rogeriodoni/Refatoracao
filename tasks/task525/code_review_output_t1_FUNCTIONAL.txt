@@ -1,0 +1,24 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Analisei os 38 problemas apontados no FormSRV.prg / SRVBO.prg para o pass **FUNCTIONAL**:
+
+## Resultado: nenhuma altera├º├úo necess├íria
+
+**METODO-INEXISTENTE (`THIS.ObterDescricaoConta()`)** ÔÇö falso positivo. O m├®todo **j├í existe** no Form, corretamente definido e chamado:
+
+- Defini├º├úo: `FormSRV.prg:3338` ÔÇö `PROTECTED FUNCTION ObterDescricaoConta(par_cConta)` ... `ENDFUNC` (linha 3367), com TRY/CATCH, SQLEXEC em `SigCdCli.Rclis`, fechamento de cursor ÔÇö implementa├º├úo completa e correta.
+- Chamado em 7 pontos (linhas 3557, 3562, 3565, 3568, 3571, 3574, 3577) dentro de `BOParaForm`, todos com `THIS.ObterDescricaoConta(...)` e assinatura compat├¡vel.
+
+O revisor aparentemente s├│ reconhece `PROCEDURE <nome>` como defini├º├úo v├ílida e n├úo capturou `FUNCTION <nome>` ÔÇö mas em VFP9 `FUNCTION`/`PROCEDURE` s├úo equivalentes para m├®todos dentro de `DEFINE CLASS`, ent├úo n├úo h├í bug real aqui. Nada a implementar ou remover.
+
+**As 37 ocorr├¬ncias LAYOUT-POSITION** ÔÇö fora do escopo deste pass (Functional Logic). N├úo constam entre as categorias de corre├º├úo listadas para este pass (CONTAINER-VISIVEL, BUSCA-CURSOR, OPTIONGROUP-LEFT, CARGA-DADOS, BINDEVENT-PARAMS, STUB-MSGAVISO, LOSTFOCUS-SEM-GUARDIA, INIT-DUPLICADO, METODO-INEXISTENTE) e a regra do pr├│prio pass pro├¡be alterar Top/Left exceto quando o problema ├® especificamente de alinhamento ÔÇö o que n├úo ├® o caso de diverg├¬ncias de posi├º├úo vs. legado. Devem ser tratadas por um pass de LAYOUT-POSITION dedicado.
+
+**Verifica├º├úo adicional das categorias funcionais gen├®ricas** (mesmo n├úo listadas como ocorr├¬ncia espec├¡fica):
+- `OPTIONGROUP-LEFT`: `CriarOptionVencimento` (linhas 2105-2159) e `obj_4c_Opt_RPA` (linhas 2338-2376) j├í definem `.Left`/`.Top`/`.AutoSize` em cada Button individualmente ÔÇö OK, sem sobreposi├º├úo.
+- `BINDEVENT-PARAMS`: todos os handlers de `KeyPress` no arquivo j├í declaram `(par_nKeyCode, par_nShiftAltCtrl)` ÔÇö OK.
+- `INIT-DUPLICADO`: `Init()` (linha 34-36) s├│ faz `RETURN DODEFAULT()`, sem chamar `InicializarForm()` manualmente ÔÇö OK, sem duplica├º├úo.
+
+Nenhuma edi├º├úo foi feita em `FormSRV.prg` nem `SRVBO.prg` ÔÇö o c├│digo j├í est├í correto para os crit├®rios deste pass.

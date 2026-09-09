@@ -1,0 +1,21 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Resumo ÔÇö Fase 10 conclu├¡da: Sub-p├ígina "Descontos / Comiss├Áes" (pgDesconto)
+
+Implementei a p├ígina completa `pgDesconto` do legado `SIGCDTBV`, seguindo o padr├úo can├┤nico j├í estabelecido nas fases anteriores (container flutuante `cnt_4c_PgDesconto` sobre a Page2, mesmo compensa├º├úo `Top=151` usada por `cnt_4c_PgConfDesconto`).
+
+**`TbvBO.prg`**
+- `CarregarComposicaoDesconto` expandida para trazer TODAS as colunas NOT NULL de `SigOpTdt` (cidchaves, campos/operadores/constantes/moedas das f├│rmulas 1┬¬/2┬¬, tpcomis, descfats, fatorpads, chkcots, tpunidade, chkmultcot) ÔÇö necess├írias porque a grade de composi├º├úo passou a ser edit├ível nesta fase.
+- Novas fun├º├Áes: `CarregarComissoesDesconto`, `SalvarComposicaoDesconto`, `SalvarComissoesDesconto` (padr├úo DELETE+INSERT igual a `SalvarFaixasDesconto`, com `fUniqueIds()` para `cidchaves` e todas as colunas NOT NULL preenchidas).
+
+**`FormTbv.prg`**
+- `ConfigurarPgPgDesconto()`: `grd_4c_Gradei` (grade mestre edit├ível de composi├º├úo, 8 colunas, com lookup F4/DblClick por Tipo via `FormBuscaAuxiliar` ÔÇö Grupo/Linha/Gr.Venda/Produto/Moeda/Unidade/Feitio/SubGrupo/Finalidade), `grd_4c_Gradec` (comiss├Áes, filtradas localmente pela linha corrente ÔÇö equivalente ao `MontaTbCom` do legado), `cnt_4c_Formula1`/`cnt_4c_Formula2` (bindados a `cursor_4c_Tdt`), Desconto M├íximo, Combo de Comiss├úo, Descritivo/Fator Padr├úo, "Ignora cota├º├úo", bot├Áes incluir/excluir para as duas grades.
+- `CarregarConfiguracaoDesconto`, `FormParaBO`, `BOParaForm`, `LimparCampos`, `HabilitarCampos`, `BtnConfirmarClick` e `Destroy` atualizados para integrar a nova p├ígina.
+- ~15 novos m├®todos p├║blicos (handlers de BINDEVENT) e o helper compartilhado `ConfigurarFormulaDesconto`.
+
+**Simplifica├º├úo documentada**: as checagens de acesso cont├íbil do legado (`fAcessoContab`/`fAcessoContas`, framework legado) n├úo foram reproduzidas na valida├º├úo de Grupo/Conta da comiss├úo ÔÇö mantive apenas a busca/preenchimento autom├ítico via `SigCdCli`, com coment├írio expl├¡cito no c├│digo sinalizando a decis├úo.
+
+Validei balanceamento estrutural (WITH/ENDWITH, IF/ENDIF, TRY/ENDTRY, DO CASE/ENDCASE, FUNCTION/ENDFUNC, SCAN/ENDSCAN) nos dois arquivos ÔÇö tudo consistente. N├úo h├í como compilar/rodar o VFP neste ambiente, ent├úo recomendo o passo padr├úo do pipeline: apagar os `.fxp` e testar a abertura do form antes do commit.

@@ -788,6 +788,52 @@ DEFINE CLASS FormOPE AS FormBase
         loc_oPagina = THIS.pgf_4c_Paginas.Page2
 
         loc_oPagina.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
+        *-- Cabecalho cinza (identico ao da pagina Lista) - Erro152
+        *-- conteudo da pagina deslocado +77 para nao ficar sob a faixa
+        loc_oPagina.AddObject("cnt_4c_Cabecalho", "Container")
+        WITH loc_oPagina.cnt_4c_Cabecalho
+            .Top           = 29
+            .Left          = 0
+            .Width         = THIS.Width
+            .Height        = 80
+            .BackColor     = RGB(100, 100, 100)
+            .BorderWidth   = 0
+            .SpecialEffect = 0
+            .Visible       = .T.
+
+            .AddObject("lbl_4c_Sombra", "Label")
+            WITH .lbl_4c_Sombra
+                .Caption   = THIS.Caption
+                .Top       = 15
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 40
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(0, 0, 0)
+                .BackStyle = 0
+                .AutoSize  = .F.
+                .Visible   = .T.
+            ENDWITH
+
+            .AddObject("lbl_4c_Titulo", "Label")
+            WITH .lbl_4c_Titulo
+                .Caption   = THIS.Caption
+                .Top       = 18
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 46
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(255, 255, 255)
+                .BackStyle = 0
+                .AutoSize  = .F.
+                .Visible   = .T.
+            ENDWITH
+        ENDWITH
+
 
         *-- Container Salvar/Cancelar (legado: Grupo_Salva Top=-2, Left=840; canonico Top=27)
         loc_oPagina.AddObject("cnt_4c_Salva", "Container")
@@ -858,7 +904,7 @@ DEFINE CLASS FormOPE AS FormBase
         loc_oPagina.AddObject("lbl_4c_LCodigo", "Label")
         WITH loc_oPagina.lbl_4c_LCodigo
             .Caption   = "C" + CHR(243) + "digo :"
-            .Top       = 36
+            .Top       = 113
             .Left      = 30
             .Width     = 50
             .Height    = 15
@@ -875,7 +921,7 @@ DEFINE CLASS FormOPE AS FormBase
         loc_oPagina.AddObject("txt_4c_Codigo", "TextBox")
         WITH loc_oPagina.txt_4c_Codigo
             .Value         = ""
-            .Top           = 32
+            .Top           = 109
             .Left          = 73
             .Width         = 179
             .Height        = 23
@@ -893,7 +939,7 @@ DEFINE CLASS FormOPE AS FormBase
         loc_oPagina.AddObject("lbl_4c_LDescricao", "Label")
         WITH loc_oPagina.lbl_4c_LDescricao
             .Caption   = "Descri" + CHR(231) + CHR(227) + "o :"
-            .Top       = 61
+            .Top       = 138
             .Left      = 17
             .Width     = 55
             .Height    = 15
@@ -911,7 +957,7 @@ DEFINE CLASS FormOPE AS FormBase
         loc_oPagina.AddObject("txt_4c_Descricao", "TextBox")
         WITH loc_oPagina.txt_4c_Descricao
             .Value         = ""
-            .Top           = 57
+            .Top           = 134
             .Left          = 73
             .Width         = 250
             .Height        = 23
@@ -929,7 +975,7 @@ DEFINE CLASS FormOPE AS FormBase
         loc_oPagina.AddObject("lbl_4c_LMenu", "Label")
         WITH loc_oPagina.lbl_4c_LMenu
             .Caption   = "Menu :"
-            .Top       = 86
+            .Top       = 163
             .Left      = 37
             .Width     = 35
             .Height    = 15
@@ -945,7 +991,7 @@ DEFINE CLASS FormOPE AS FormBase
         loc_oPagina.AddObject("cbo_4c_Menu", "ComboBox")
         WITH loc_oPagina.cbo_4c_Menu
             .Value         = ""
-            .Top           = 82
+            .Top           = 159
             .Left          = 73
             .Width         = 150
             .Height        = 23
@@ -964,7 +1010,7 @@ DEFINE CLASS FormOPE AS FormBase
         loc_oPagina.AddObject("lbl_4c_LTipo", "Label")
         WITH loc_oPagina.lbl_4c_LTipo
             .Caption   = "Tipo :"
-            .Top       = 61
+            .Top       = 138
             .Left      = 295
             .Width     = 29
             .Height    = 15
@@ -981,7 +1027,7 @@ DEFINE CLASS FormOPE AS FormBase
         loc_oPagina.AddObject("txt_4c_Tipo", "TextBox")
         WITH loc_oPagina.txt_4c_Tipo
             .Value         = ""
-            .Top           = 57
+            .Top           = 134
             .Left          = 325
             .Width         = 100
             .Height        = 23
@@ -999,7 +1045,7 @@ DEFINE CLASS FormOPE AS FormBase
         *-- Compensacao +29: top=159
         loc_oPagina.AddObject("pgf_4c_PagDados", "PageFrame")
         WITH loc_oPagina.pgf_4c_PagDados
-            .Top       = 159
+            .Top       = 236
             .Left      = 0
             .Width     = THIS.Width
             .Height    = THIS.Height + 29 - 159
@@ -2589,3 +2635,4 @@ DEFINE CLASS FormOPE AS FormBase
     ENDPROC
 
 ENDDEFINE
+

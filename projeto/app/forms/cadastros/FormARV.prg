@@ -504,7 +504,7 @@ DEFINE CLASS FormARV AS FormBase
             .Height    = 17
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .AutoSize  = .F.
             .Visible   = .T.
@@ -533,7 +533,7 @@ DEFINE CLASS FormARV AS FormBase
             .Height    = 17
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .AutoSize  = .F.
             .Visible   = .T.
@@ -562,7 +562,7 @@ DEFINE CLASS FormARV AS FormBase
             .Height    = 17
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .AutoSize  = .F.
             .Visible   = .T.
@@ -594,7 +594,7 @@ DEFINE CLASS FormARV AS FormBase
             .Height    = 15
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(36, 84, 155)
             .BackStyle = 0
             .AutoSize  = .F.
             .Visible   = .T.
@@ -624,7 +624,7 @@ DEFINE CLASS FormARV AS FormBase
             .Height    = 15
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(36, 84, 155)
             .BackStyle = 0
             .AutoSize  = .F.
             .Visible   = .T.
@@ -641,7 +641,7 @@ DEFINE CLASS FormARV AS FormBase
             .FontName  = "Tahoma"
             .FontSize  = 8
             .FontBold  = .T.
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(36, 84, 155)
             .BackStyle = 0
             .AutoSize  = .F.
             .Visible   = .T.
@@ -689,7 +689,7 @@ DEFINE CLASS FormARV AS FormBase
             .FontName  = "Verdana"
             .FontSize  = 8
             .FontBold  = .F.
-            .ForeColor = RGB(231, 254, 253)
+            .ForeColor = RGB(36, 84, 155)
             .BackStyle = 0
             .AutoSize  = .F.
             .Visible   = .T.
@@ -768,7 +768,7 @@ DEFINE CLASS FormARV AS FormBase
             .FontName  = "Verdana"
             .FontSize  = 8
             .FontBold  = .F.
-            .ForeColor = RGB(231, 254, 253)
+            .ForeColor = RGB(36, 84, 155)
             .BackStyle = 0
             .AutoSize  = .F.
             .Visible   = .T.

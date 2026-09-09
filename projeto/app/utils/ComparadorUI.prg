@@ -617,7 +617,7 @@ DEFINE CLASS ComparadorUI AS Custom
 
         *-- Se o caminho esta mapeado diretamente, usa o mapeamento direto
         FOR i = 1 TO THIS.nMapeamentos
-            IF UPPER(THIS.aMapeamento[i, 1]) = UPPER(par_cCaminhoOriginal)
+            IF UPPER(THIS.aMapeamento[i, 1]) == UPPER(par_cCaminhoOriginal)
                 *-- Mapeamento direto encontrado, mas precisa construir caminho completo
                 *-- incluindo os pais (PageFrame, Page, etc.)
                 RETURN THIS.ConstruirCaminhoCompleto(par_cCaminhoOriginal, THIS.aMapeamento[i, 2])
@@ -653,7 +653,7 @@ DEFINE CLASS ComparadorUI AS Custom
 
             *-- Procura no mapeamento
             FOR i = 1 TO THIS.nMapeamentos
-                IF UPPER(THIS.aMapeamento[i, 1]) = UPPER(loc_cTentativa)
+                IF UPPER(THIS.aMapeamento[i, 1]) == UPPER(loc_cTentativa)
                     *-- Encontrou! Constroi caminho do prefixo e concatena sufixo
                     loc_cCaminhoMapeado = THIS.ConstruirCaminhoCompleto(loc_cTentativa, THIS.aMapeamento[i, 2])
                     RETURN loc_cCaminhoMapeado + "." + loc_cSufixo
@@ -715,7 +715,7 @@ DEFINE CLASS ComparadorUI AS Custom
 
             *-- Procura mapeamento para este nivel
             FOR i = 1 TO THIS.nMapeamentos
-                IF UPPER(THIS.aMapeamento[i, 1]) = UPPER(loc_cCaminhoAcumulado)
+                IF UPPER(THIS.aMapeamento[i, 1]) == UPPER(loc_cCaminhoAcumulado)
                     loc_cParteNova = THIS.aMapeamento[i, 2]
 
                     *-- Ignora "Form" (nao adiciona ao caminho)

@@ -632,7 +632,7 @@ DEFINE CLASS FormBAL AS FormBase
             .AutoSize  = .F.
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Alignment = 1
             .Visible   = .T.
@@ -665,7 +665,7 @@ DEFINE CLASS FormBAL AS FormBase
             .AutoSize  = .F.
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Alignment = 1
             .Visible   = .T.
@@ -699,7 +699,7 @@ DEFINE CLASS FormBAL AS FormBase
             .AutoSize  = .F.
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Alignment = 1
             .Visible   = .T.
@@ -753,7 +753,7 @@ DEFINE CLASS FormBAL AS FormBase
             .AutoSize  = .F.
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Alignment = 1
             .Visible   = .T.
@@ -807,7 +807,7 @@ DEFINE CLASS FormBAL AS FormBase
             .AutoSize  = .F.
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Alignment = 1
             .Visible   = .T.
@@ -858,7 +858,7 @@ DEFINE CLASS FormBAL AS FormBase
             .AutoSize  = .F.
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Alignment = 1
             .Visible   = .T.
@@ -893,7 +893,7 @@ DEFINE CLASS FormBAL AS FormBase
             .AutoSize  = .F.
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -928,7 +928,7 @@ DEFINE CLASS FormBAL AS FormBase
             .AutoSize  = .F.
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Alignment = 1
             .Visible   = .T.
@@ -962,7 +962,7 @@ DEFINE CLASS FormBAL AS FormBase
             .AutoSize  = .F.
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -998,7 +998,7 @@ DEFINE CLASS FormBAL AS FormBase
             .AutoSize  = .F.
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Alignment = 1
             .Visible   = .T.
@@ -1030,7 +1030,7 @@ DEFINE CLASS FormBAL AS FormBase
             .AutoSize  = .F.
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -1066,7 +1066,7 @@ DEFINE CLASS FormBAL AS FormBase
             .AutoSize  = .F.
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Alignment = 1
             .Visible   = .T.
@@ -1100,7 +1100,7 @@ DEFINE CLASS FormBAL AS FormBase
             .AutoSize  = .F.
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -1135,7 +1135,7 @@ DEFINE CLASS FormBAL AS FormBase
             .AutoSize  = .F.
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Alignment = 1
             .Visible   = .T.
@@ -1169,7 +1169,7 @@ DEFINE CLASS FormBAL AS FormBase
             .AutoSize  = .F.
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -1204,7 +1204,7 @@ DEFINE CLASS FormBAL AS FormBase
             .AutoSize  = .F.
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Alignment = 1
             .Visible   = .T.
@@ -1236,7 +1236,7 @@ DEFINE CLASS FormBAL AS FormBase
             .AutoSize  = .F.
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -1273,7 +1273,7 @@ DEFINE CLASS FormBAL AS FormBase
             .AutoSize  = .F.
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Alignment = 1
             .Visible   = .T.
@@ -1305,7 +1305,7 @@ DEFINE CLASS FormBAL AS FormBase
             .AutoSize  = .F.
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -1339,7 +1339,7 @@ DEFINE CLASS FormBAL AS FormBase
             .AutoSize  = .F.
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -1372,7 +1372,7 @@ DEFINE CLASS FormBAL AS FormBase
             .AutoSize  = .F.
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -1408,7 +1408,7 @@ DEFINE CLASS FormBAL AS FormBase
             .AutoSize  = .F.
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -1439,7 +1439,7 @@ DEFINE CLASS FormBAL AS FormBase
             .AutoSize  = .F.
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -1476,7 +1476,7 @@ DEFINE CLASS FormBAL AS FormBase
             .AutoSize  = .F.
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -1509,7 +1509,7 @@ DEFINE CLASS FormBAL AS FormBase
             .AutoSize  = .F.
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -1545,7 +1545,7 @@ DEFINE CLASS FormBAL AS FormBase
             .AutoSize  = .F.
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -1578,7 +1578,7 @@ DEFINE CLASS FormBAL AS FormBase
             .AutoSize  = .F.
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Alignment = 1
             .Visible   = .T.
@@ -1604,7 +1604,7 @@ DEFINE CLASS FormBAL AS FormBase
                 .Height    = 16
                 .AutoSize  = .F.
                 .BackStyle = 0
-                .ForeColor = RGB(255, 255, 255)
+                .ForeColor = RGB(90, 90, 90)
                 .Themes    = .F.
             ENDWITH
             WITH .Buttons(2)
@@ -1615,7 +1615,7 @@ DEFINE CLASS FormBAL AS FormBase
                 .Height    = 16
                 .AutoSize  = .F.
                 .BackStyle = 0
-                .ForeColor = RGB(255, 255, 255)
+                .ForeColor = RGB(90, 90, 90)
                 .Themes    = .F.
             ENDWITH
         ENDWITH
@@ -1632,7 +1632,7 @@ DEFINE CLASS FormBAL AS FormBase
             .AutoSize  = .F.
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Alignment = 1
             .Visible   = .T.
@@ -1658,7 +1658,7 @@ DEFINE CLASS FormBAL AS FormBase
                 .Height    = 14
                 .AutoSize  = .F.
                 .BackStyle = 0
-                .ForeColor = RGB(255, 255, 255)
+                .ForeColor = RGB(90, 90, 90)
                 .Themes    = .F.
             ENDWITH
             WITH .Buttons(2)
@@ -1669,7 +1669,7 @@ DEFINE CLASS FormBAL AS FormBase
                 .Height    = 14
                 .AutoSize  = .F.
                 .BackStyle = 0
-                .ForeColor = RGB(255, 255, 255)
+                .ForeColor = RGB(90, 90, 90)
                 .Themes    = .F.
             ENDWITH
             WITH .Buttons(3)
@@ -1680,7 +1680,7 @@ DEFINE CLASS FormBAL AS FormBase
                 .Height    = 14
                 .AutoSize  = .F.
                 .BackStyle = 0
-                .ForeColor = RGB(255, 255, 255)
+                .ForeColor = RGB(90, 90, 90)
                 .Themes    = .F.
             ENDWITH
         ENDWITH
@@ -1697,7 +1697,7 @@ DEFINE CLASS FormBAL AS FormBase
             .Height    = 17
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -1713,7 +1713,7 @@ DEFINE CLASS FormBAL AS FormBase
             .Height    = 17
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -1729,7 +1729,7 @@ DEFINE CLASS FormBAL AS FormBase
             .Height    = 17
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -1746,7 +1746,7 @@ DEFINE CLASS FormBAL AS FormBase
             .AutoSize  = .F.
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -1780,7 +1780,7 @@ DEFINE CLASS FormBAL AS FormBase
             .FontName  = "Tahoma"
             .FontSize  = 8
             .FontBold  = .T.
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -1884,7 +1884,7 @@ DEFINE CLASS FormBAL AS FormBase
             .FontName  = "Tahoma"
             .FontSize  = 8
             .FontBold  = .T.
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -2447,7 +2447,7 @@ DEFINE CLASS FormBAL AS FormBase
             .FontName  = "Tahoma"
             .FontSize  = 8
             .BackStyle = 0
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .Visible   = .T.
         ENDWITH
 
@@ -2463,7 +2463,7 @@ DEFINE CLASS FormBAL AS FormBase
             .AutoSize  = .F.
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -2493,7 +2493,7 @@ DEFINE CLASS FormBAL AS FormBase
             .AutoSize  = .F.
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -2523,7 +2523,7 @@ DEFINE CLASS FormBAL AS FormBase
             .AutoSize  = .F.
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -2553,7 +2553,7 @@ DEFINE CLASS FormBAL AS FormBase
             .AutoSize  = .F.
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -2583,7 +2583,7 @@ DEFINE CLASS FormBAL AS FormBase
             .AutoSize  = .F.
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -2613,7 +2613,7 @@ DEFINE CLASS FormBAL AS FormBase
             .AutoSize  = .F.
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -2643,7 +2643,7 @@ DEFINE CLASS FormBAL AS FormBase
             .AutoSize  = .F.
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -2673,7 +2673,7 @@ DEFINE CLASS FormBAL AS FormBase
             .AutoSize  = .F.
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -2701,7 +2701,7 @@ DEFINE CLASS FormBAL AS FormBase
             .Width     = 4
             .Height    = 17
             .AutoSize  = .F.
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -2731,7 +2731,7 @@ DEFINE CLASS FormBAL AS FormBase
             .AutoSize  = .F.
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -2763,7 +2763,7 @@ DEFINE CLASS FormBAL AS FormBase
             .Width     = 20
             .Height    = 17
             .AutoSize  = .F.
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -2779,7 +2779,7 @@ DEFINE CLASS FormBAL AS FormBase
             .AutoSize  = .F.
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -2809,7 +2809,7 @@ DEFINE CLASS FormBAL AS FormBase
             .AutoSize  = .F.
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -2839,7 +2839,7 @@ DEFINE CLASS FormBAL AS FormBase
             .AutoSize  = .F.
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -2871,7 +2871,7 @@ DEFINE CLASS FormBAL AS FormBase
             .Width     = 20
             .Height    = 17
             .AutoSize  = .F.
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -2887,7 +2887,7 @@ DEFINE CLASS FormBAL AS FormBase
             .AutoSize  = .F.
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -2917,7 +2917,7 @@ DEFINE CLASS FormBAL AS FormBase
             .AutoSize  = .F.
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -2947,7 +2947,7 @@ DEFINE CLASS FormBAL AS FormBase
             .AutoSize  = .F.
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -2976,7 +2976,7 @@ DEFINE CLASS FormBAL AS FormBase
             .AutoSize  = .F.
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH

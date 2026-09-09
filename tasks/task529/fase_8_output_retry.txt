@@ -1,0 +1,40 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 8 conclu├¡da. `FormTbd.prg` est├í completo, compila sem erros e passa na valida├º├úo do orquestrador.
+
+## Por que a fase falhou antes
+
+A valida├º├úo da Fase 8 (`OrquestradorMigracao.ps1:5032`) exige a presen├ºa de 5 nomes no form: `BtnSalvarClick`, `BtnCancelarClick`, `FormParaBO`, `BOParaForm`, `CarregarLista`. A execu├º├úo anterior concluiu que os m├®todos gen├®ricos de CRUD "n├úo se aplicam" a este form OPERACIONAL e n├úo os gerou ÔÇö faltavam 3 dos 5.
+
+Em vez de criar stubs (proibido pelo CLAUDE.md), implementei os tr├¬s com l├│gica real mapeada no legado:
+
+| M├®todo | L├│gica real |
+|---|---|
+| `FormParaBO()` | Opera├º├úo corrente (`Dopes`) + linha do `cursor_4c_Dados` ÔåÆ propriedades do BO. Aborta com aviso se `Dopes` vazio ÔÇö sem ele o DELETE/INSERT por opera├º├úo apagaria a faixa errada. |
+| `BOParaForm()` | Inverso: monta o Caption a partir da opera├º├úo e devolve `codigos`/`descrs` para a linha corrente, relendo `SigOpTdz` **sem** abrir o FormBuscaAuxiliar (transfer├¬ncia de dados n├úo dispara di├ílogo). |
+| `BtnSalvarClick()` | Concentra a grava├º├úo do `cmdSair.Click`: duplicidade ÔåÆ `.F.` (form fica aberto); erro de grava├º├úo ÔåÆ s├│ mensagem, form fecha (igual ao legado, que n├úo tem `Return .f.` ap├│s o MessageBox). |
+
+`BtnConfirmarClick` agora delega a `BtnSalvarClick()` em vez de duplicar a l├│gica; `AtualizarTitulo()` (auxiliar) propaga o caption para as duas Pages.
+
+## Duas diverg├¬ncias de PILAR 1 corrigidas
+
+1. **Caption din├ómico perdido**: o `Init` legado faz `.Caption = 'Grupos de Produtos ' + AllTrim(Dopes)`, mas o migrado mantinha o "Tabelas de Desconto" est├ítico. `BOParaForm()` (chamado no `InicializarForm`) restaura isso.
+2. **Fundo do form ausente**: o legado tem `Picture = ..\framework\imagens\new_background.jpg`; adicionei `.Page1/.Page2.Picture` seguindo a conven├º├úo dos outros forms (`gc_4c_CaminhoIcones`).
+
+## Verifica├º├úo
+
+- Compila├º├úo VFP9 real: `FormTbd.prg` e `TbdBO.prg` OK, nenhum `.err` gerado. `.fxp` removidos depois.
+- Estrutura balanceada: PROCEDURE/ENDPROC 22/22, FUNCTION/ENDFUNC 4/4, TRY/CATCH/ENDTRY 23/23/23, WITH/ENDWITH 15/15.
+- Sem `RETURN` dentro de TRY, sem acentos literais, sem `PUBLIC` em `DEFINE CLASS`, nenhum CATCH silencioso, nenhum TODO/stub.
+- `CorretorAutomatico` rodado e idempotente (s├│ warnings restantes).
+
+## Ponto que precisa da sua decis├úo
+
+O `CorretorAutomatico` reescreve `cmd_4c_Cancelar.Caption` de `"Cancelar"` para `"Encerrar"` a cada execu├º├úo (pattern `BOTAO-SAIDA-CANONICO`, linha 5467). O gate dele ├® `cnt_4c_Saida|AS FormBase|frmcadastro` ÔÇö como *todo* form migrado ├® `AS FormBase`, ele pega tamb├®m forms OPERACIONAIS que n├úo t├¬m `cnt_4c_Saida`, como este.
+
+Aqui isso atinge o bot├úo que espelha o `Cancela` do legado (cancelar-sem-gravar), que convive com o Confirmar e mant├®m o ├¡cone `cadastro_cancelar_60.jpg` ÔÇö fica "Encerrar" com ├¡cone de cancelar. Isso tamb├®m contradiz `docs/framework_frmcadastro_layout.md`, que documenta `cmd_4c_Cancelar` com Caption `"Cancelar"`.
+
+Reverti uma vez e o corretor reaplicou. **Aceitei o "Encerrar"** porque `FormCor` e `FormMoe` ÔÇö as refer├¬ncias can├┤nicas do CLAUDE.md ÔÇö j├í est├úo assim, ent├úo mudar s├│ este form criaria inconsist├¬ncia. Mas ├® o mesmo formato de meta-bug j├í registrado na mem├│ria (pattern over-broad revertendo corre├º├úo silenciosamente), e afeta todos os forms com Page2. N├úo mexi no corretor compartilhado por ser fora do escopo da task529 ÔÇö se quiser, restrinjo o gate a `cnt_4c_Saida` e rodo um sweep.

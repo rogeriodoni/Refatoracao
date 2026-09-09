@@ -1,0 +1,23 @@
+﻿Arquivo criado e verificado. Resumo do que foi implementado na Fase 3:
+
+**`C:\4c\projeto\app\forms\cadastros\Formsoc.prg`** ÔÇö 305 linhas
+
+| M├®todo | Implementa├º├úo |
+|--------|---------------|
+| `Init()` | Apenas `DODEFAULT()` ÔÇö sem chamar InicializarForm diretamente (Problema 8) |
+| `InicializarForm()` | Caption com CHR(), cria socBO, chama os 3 Configurar*, guard `gb_4c_ValidandoUI` |
+| `ConfigurarPageFrame()` | Top=-29, Tabs=.F., 2 pages, imagem fundo_cad_1003.jpg |
+| `ConfigurarPaginaLista()` | `cnt_4c_Cabecalho` + `lbl_4c_Sombra`/`lbl_4c_Titulo`, `cnt_4c_Botoes` (Left=542), `cnt_4c_Saida` (Left=917 can├┤nico) |
+| `ConfigurarPaginaDados()` | `cnt_4c_Salva` (Top=40, Left=817 ÔÇö original Grupo_Salva.Top=11+29) |
+| `CarregarLista()` | PEMSTATUS protege acesso ao `grd_4c_Lista` (ainda n├úo existe na Fase 3) |
+| `AlternarPagina()` | Valida├º├úo de par├ómetro fora do TRY, muda ActivePage, recarrega lista |
+| `TornarControlesVisiveis()` | Recursivo, itera Pages de PageFrames e Controls de Containers |
+| `FormatarGridLista()` | SetAll Tahoma/8 |
+| `Destroy()` | Nulla BO, DODEFAULT() |
+
+**Decis├Áes aplicadas:**
+- `cnt_4c_Saida.Left=917` (can├┤nico CLAUDE.md #10, ignora Grupo_Saida.Left=918 do legado)
+- `cnt_4c_Botoes.Left=542` (can├┤nico framework nova arquitetura)
+- Compensa├º├úo +29 em todos os controles das Pages (PageFrame.Top=-29)
+- `DataSession=2` mantido do legado (SET DATE/CENTURY corrigido pelo FormBase via DODEFAULT)
+- Nenhum RETURN dentro de TRY/CATCH (Critical Rule #1)

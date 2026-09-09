@@ -249,8 +249,10 @@ DEFINE CLASS COCBO AS BusinessBase
         loc_lSucesso = .F.
 
         TRY
+            *-- Imps (bit NOT NULL) nao aparece na tela; o legado grava o valor do
+            *-- registro em branco (0). Sem a coluna o INSERT era recusado (Erro151).
             loc_cSQL = "INSERT INTO SigOpOco" + ;
-                       " (Codigos, Descrs, Grupos, Contas, DContas, Opers, Contabs, Notas)" + ;
+                       " (Codigos, Descrs, Grupos, Contas, DContas, Opers, Contabs, Notas, Imps)" + ;
                        " VALUES (" + ;
                        EscaparSQL(ALLTRIM(THIS.this_cCodigos)) + ", " + ;
                        EscaparSQL(ALLTRIM(THIS.this_cDescrs))  + ", " + ;
@@ -259,7 +261,8 @@ DEFINE CLASS COCBO AS BusinessBase
                        EscaparSQL(ALLTRIM(THIS.this_cDContas)) + ", " + ;
                        EscaparSQL(ALLTRIM(THIS.this_cOpers))   + ", " + ;
                        FormatarNumeroSQL(THIS.this_nContabs)   + ", " + ;
-                       FormatarNumeroSQL(THIS.this_nNotas)     + ;
+                       FormatarNumeroSQL(THIS.this_nNotas)     + ", " + ;
+                       "0" + ;
                        ")"
 
             loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL)

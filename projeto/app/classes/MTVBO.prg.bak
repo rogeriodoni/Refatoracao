@@ -151,8 +151,10 @@ DEFINE CLASS MTVBO AS BusinessBase
             ENDIF
 
             IF !loc_lDuplicado
-                loc_cSQL = "INSERT INTO SigCdMtv (Cods, Descs)" + ;
-                           " VALUES (" + EscaparSQL(THIS.this_cCodigo) + ;
+                *-- cidchaves: NOT NULL com indice unico, gerada como no legado (fUniqueIds)
+                loc_cSQL = "INSERT INTO SigCdMtv (cidchaves, Cods, Descs)" + ;
+                           " VALUES (" + EscaparSQL(fUniqueIds()) + ;
+                           ", " + EscaparSQL(THIS.this_cCodigo) + ;
                            ", " + EscaparSQL(THIS.this_cDescricao) + ")"
 
                 loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL)

@@ -1293,6 +1293,7 @@ DEFINE CLASS Formsigreinr AS FormBase
 
         *-- Adiciona CheckBox na Column1 para marcar ocorrencias
         loc_oPagina.grd_4c_Operacaos.Column1.AddObject("chk_4c_Marca", "CheckBox")
+        THIS.BindToggleTgOperacaos1(THIS.pgf_4c_Paginas.Page1.grd_4c_Operacaos.Column1.chk_4c_Marca)
         WITH loc_oPagina.grd_4c_Operacaos.Column1.chk_4c_Marca
             .AutoSize      = .T.
             .Alignment     = 0
@@ -2000,4 +2001,52 @@ DEFINE CLASS Formsigreinr AS FormBase
         DODEFAULT()
     ENDPROC
 
+
+    *==========================================================================
+    * Toggle do CheckBox chk_4c_Marca - grd_4c_Operacaos.Column1 (CsOperacaos.Marcas)
+    *
+    * CheckBox em coluna de Grid NAO alterna pelo binding nativo: o legado
+    * suprime o toggle padrao (NODEFAULT em Click/MouseDown) e alterna o valor
+    * por codigo no MouseUp/KeyPress, com REPLACE no cursor + Refresh do grid.
+    * Sem estes handlers o CheckBox renderiza e recebe foco, mas clicar ou
+    * teclar Espaco/Enter nao muda nada. Pattern #185 / Erro146 (2026-09-04).
+    * Ref canonico: Formsigredtv.prg (grd_4c_Emps) e Formacg.prg.
+    *==========================================================================
+    PROTECTED PROCEDURE BindToggleTgOperacaos1(par_oChk)
+        BINDEVENT(par_oChk, "KeyPress",  THIS, "TgOperacaos1KeyPress")
+        BINDEVENT(par_oChk, "MouseUp",   THIS, "TgOperacaos1MouseUp")
+        BINDEVENT(par_oChk, "MouseDown", THIS, "TgOperacaos1MouseDown")
+        BINDEVENT(par_oChk, "Click",     THIS, "TgOperacaos1Click")
+    ENDPROC
+
+    PROCEDURE TgOperacaos1KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF !INLIST(par_nKeyCode, 13, 32)
+            RETURN
+        ENDIF
+        *-- NODEFAULT sempre que a tecla for tratada: suprime o toggle nativo
+        NODEFAULT
+        IF !USED("CsOperacaos") OR EOF("CsOperacaos")
+            RETURN
+        ENDIF
+        *-- Campo pode ser LOGICO (legado) ou NUMERICO (CASE WHEN ... 1 ELSE 0)
+        IF VARTYPE(CsOperacaos.Marcas) == "L"
+            REPLACE CsOperacaos.Marcas WITH !CsOperacaos.Marcas
+        ELSE
+            REPLACE CsOperacaos.Marcas WITH IIF(CsOperacaos.Marcas = 0, 1, 0)
+        ENDIF
+        THIS.pgf_4c_Paginas.Page1.grd_4c_Operacaos.Refresh()
+    ENDPROC
+
+    PROCEDURE TgOperacaos1MouseUp(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+        THIS.TgOperacaos1KeyPress(13, 0)
+        NODEFAULT
+    ENDPROC
+
+    PROCEDURE TgOperacaos1MouseDown(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+        NODEFAULT
+    ENDPROC
+
+    PROCEDURE TgOperacaos1Click()
+        NODEFAULT
+    ENDPROC
 ENDDEFINE

@@ -1,0 +1,24 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Corre├º├Áes aplicadas com sucesso. Resumo:
+
+## Investiga├º├úo
+
+Localizei o c├│digo-fonte legado real (`tasks/task524/SigCdSre_form_codigo_fonte.txt` ÔÇö n├úo confundir com `tasks/task520/SIGCDSER` que ├® uma entidade diferente, "Servi├ºos dos Produtos"). No legado, a valida├º├úo de empresa usa:
+- `CursorQuery('SigCdEmp', 'crSigCdEmp', 'Cemps', crSigCdSer.Emps)` ÔÇö busca simples por `Cemps`, **sem filtro de status**.
+- `fAcessoEmpresa(Usuar, 'C'/'D', ...)` ÔÇö fun├º├úo de framework opaca, sem evid├¬ncia de filtro `Ativas`.
+
+Confirmei que a condi├º├úo `AND Ativas = 1` foi de fato **inventada** pela LLM em 3 pontos (n├úo apenas nos 2 SELECTs apontados pela revis├úo, mas tamb├®m num terceiro lugar equivalente que a revis├úo n├úo pegou ÔÇö o filtro do `FormBuscaAuxiliar` no F4/lookup).
+
+## Corre├º├Áes em `FormSre.prg`
+
+1. **`ValidarEmpresa` (linha ~1233)**: removido `AND Ativas = 1` do WHERE ÔÇö mantido apenas `WHERE Cemps = ...` (bate com `CursorQuery` do legado).
+2. **`ValidarDescricaoEmpresa` (linha ~1279)**: removido `AND Ativas = 1` ÔÇö mantido `WHERE Razas LIKE ...`.
+3. **`AbrirLookupEmpresa` (linha ~1324)**: removido o filtro `"Ativas = 1"` passado ao `FormBuscaAuxiliar` (trocado por `""`), para consist├¬ncia ÔÇö sem isso, o picker F4 continuaria escondendo empresas inativas enquanto a valida├º├úo direta por c├│digo/descri├º├úo j├í as aceitaria, quebrando a paridade de UX (PILAR 1).
+
+As colunas `Cemps` e `Razas` foram **mantidas** nas cl├íusulas WHERE ÔÇö s├úo estruturalmente necess├írias para a busca funcionar (correspondem ao par├ómetro `'Cemps'` do `CursorQuery` original) e remov├¬-las quebraria a funcionalidade de lookup por completo, o que violaria a regra de paridade funcional.
+
+Nenhuma altera├º├úo foi feita no `SreBO.prg` ÔÇö n├úo h├í ocorr├¬ncia de `Ativas`/`Cemps`/`Razas` inventadas l├í; os WHEREs existentes (`empcods`, `series`, `cemps` em `BuscarDescricaoEmpresa`) j├í batem com o legado.

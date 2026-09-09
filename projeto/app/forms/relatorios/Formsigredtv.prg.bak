@@ -853,14 +853,15 @@ DEFINE CLASS Formsigredtv AS FormBase
             .ReadOnly  = .F.
             .Sparse    = .F.
         ENDWITH
-        THIS.grd_4c_Orcs.Column1.AddObject("check12", "CheckBox")
-        WITH THIS.grd_4c_Orcs.Column1.check12
+        *-- Pattern #186-B: havia um "check12" adicionado aqui e nunca referenciado
+        *-- (o CurrentControl da coluna eh o check13, e os BINDEVENT tambem apontam
+        *-- para ele) — objeto morto, removido; config visual movida para o check13.
+        THIS.grd_4c_Orcs.Column1.AddObject("check13", "CheckBox")
+        WITH THIS.grd_4c_Orcs.Column1.check13
             .Caption  = ""
             .AutoSize = .T.
             .Visible  = .T.
         ENDWITH
-        THIS.grd_4c_Orcs.Column1.AddObject("check13", "CheckBox")
-        THIS.grd_4c_Orcs.Column1.check13.Caption = ""
         THIS.grd_4c_Orcs.Column1.CurrentControl = "check13"
         THIS.grd_4c_Orcs.Column1.Header1.Caption   = ""
         THIS.grd_4c_Orcs.Column1.Header1.ForeColor = RGB(90, 90, 90)

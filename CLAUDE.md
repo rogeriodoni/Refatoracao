@@ -167,6 +167,20 @@ Nao se aplica a form sem pagina de dados real: `FormFpd` (OPERACIONAL com PageFr
 
 WARNING: CorretorAutomatico **#190**. Ferramentas: `automation\LibCabecalhoPaginas.ps1` (parsers compartilhados), `automation\DiagnosticoCabecalhoPaginas.ps1`, `automation\AplicarCabecalhoComDeslocamento.ps1` (injeta + re-layouta), `automation\InjetarCabecalhoPaginaDados.ps1` (so paginas com espaco livre). Referencia: `Formcfo`.
 
+### 12. Label de dados NUNCA com ForeColor branco - canonico RGB(90, 90, 90)
+As Pages do PageFrame recebem `.BackColor = RGB(100,100,100)` **e** `.Picture = fundo_cad_1003.jpg` (textura CLARA). A Picture cobre o BackColor, entao `.ForeColor = RGB(255,255,255)` num controle criado direto na Page (ou em container `BackStyle = 0`) fica **INVISIVEL** - o usuario clica Incluir e ve as caixas de texto sem legenda.
+
+| Objeto no dump do SCX legado | ForeColor no migrado |
+|------------------------------|----------------------|
+| **nao declara** ForeColor (classe `say`) | **`RGB(90, 90, 90)`** |
+| `36,84,155` (titulo de secao, Verdana bold) | `RGB(36, 84, 155)` |
+| `255,0,0` (nota de rodape) | `RGB(255, 0, 0)` |
+| quase-branco (`231,254,253`) | escurecer p/ cor das labels irmas |
+
+`Say<N>` do legado vira `lbl_4c_Label<N>` no migrado - procurar pelos **dois** nomes no dump. **Branco continua correto** em: `lbl_4c_Titulo`/`lbl_4c_Sombra` do cabecalho; controle em container OPACO escuro (`BackStyle=1` + BackColor `RGB(100,100,100)`/`RGB(90,90,90)`); rotulo de barra de progresso; e `HighlightForeColor`/`SelectedForeColor`/`SelectedItemForeColor` (linha selecionada).
+
+WARNING: CorretorAutomatico **#191**. Referencia: `FormCor`. Origem: Erro153 (sweep de 217 sites em 23 forms).
+
 **Full VFP9 reference, control properties, and 58 common errors**: See vfp9-migration skill.
 
 ## BusinessBase Property Names (CORRECT)
