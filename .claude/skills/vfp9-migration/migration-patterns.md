@@ -10254,3 +10254,88 @@ definida" foi construida e testada: rende ~400 falsos positivos e foi descartada
 - Sweep: 17 call sites em 6 BOs (`BchBO` 2, `BlqBO` 1, `DCCBO` 1, `OETBO` 1,
   `sigpdmp6BO` 8, `sigpres2BO` 4) — todos resolvidos por uma unica definicao.
 - Origem: Erro154 (2026-09-09, FormBch "Balanco de Cheques", botao Alterar).
+
+## 195. docs/schema.sql eh UTF-16 — grep Devolve Zero e Voce "Descobre" Tabela Inexistente (Erro155 2026-09-09)
+
+O testador abre **Cadastro de Bloqueios por Periodo** e leva um dialogo do
+proprio SQL Server:
+
+```
+Erro ao buscar bloqueios:
+Connectivity error: [Microsoft][ODBC SQL Server Driver][SQL Server]
+Nome de objeto 'SigCdBlq' invalido.
+```
+
+### A armadilha
+
+O caminho obvio eh conferir se a tabela existe:
+
+```bash
+grep -ci "sigcdblq" docs/schema.sql     # -> 0
+```
+
+**Esse zero eh mentira.** `docs\schema.sql` eh **UTF-16LE**; grep, awk e findstr
+tratam o arquivo como binario e nao acham nada — silenciosamente, sem erro. A
+tabela esta la, com exatamente as colunas que o form usa:
+
+```sql
+CREATE TABLE [dbo].[SigCdBlq](
+    [Codigos] [char](10) NOT NULL,
+    [CidChaves] [char](20) NOT NULL,
+    [dtInicial] [datetime] NULL,
+    [dtFinal] [datetime] NULL,
+    [inativo] [bit] NOT NULL,
+    [UsuIncs] [char](10) NOT NULL,
+    [DtIncs] [datetime] NULL,
+    [UsuAlts] [char](10) NOT NULL,
+    [DtAlts] [datetime] NULL,
+```
+
+O perigo nao eh o zero em si — eh a "correcao" que ele sugere. Concluir que a
+tabela nao existe leva a apontar o BO para outra tabela parecida, o que **grava
+dado no lugar errado e viola o PILAR 2**.
+
+### CERTO
+
+```powershell
+# Get-Content -Raw respeita o BOM UTF-16
+$t = Get-Content 'C:\4c\docs\schema.sql' -Raw
+[regex]::Matches($t, '(?i)CREATE TABLE \[dbo\]\.\[([A-Za-z0-9_]+)\]').Count   # -> 682
+```
+
+Ou usar `automation\VerificarTabelasInexistentes.ps1`, que ja trata o encoding e
+**aborta se ler menos de 100 tabelas** — piso de sanidade para nunca transformar
+uma falha de leitura em "o projeto inteiro esta errado".
+
+### A segunda armadilha: schema_ascii.sql eh snapshot congelado
+
+`tasks\<task>\schema_ascii.sql` eh a conversao ASCII feita **na epoca daquela
+task**. O da `task351` tem **674** tabelas; o canonico tem **682**. Validar
+contra o snapshot de uma task antiga produz falso "tabela nao existe":
+
+| Fonte | Tabelas | Referencias de BO "ausentes" |
+|---|---|---|
+| `tasks/task351/schema_ascii.sql` (antigo) | 674 | **10** (falso) |
+| `docs/schema.sql` (canonico) | 682 | **1** (real: `SigCdCcr` em `PENBO.prg:255`) |
+
+### Como diagnosticar "Nome de objeto X invalido"
+
+A mensagem vem do **SQL Server**, nao do VFP, e nao quebra a compilacao. Ordem:
+
+1. **A tabela esta no schema canonico?** (com o encoding certo). Se nao esta, ver
+   o passo 2 mesmo assim.
+2. **O legado usa o mesmo nome?** — `tasks\<task>\*_form_codigo_fonte.txt`. No
+   caso do Erro155 o legado usa exatamente `SigCdBlq`:
+   `.AddCursor([SigCdBlq], [cIdChaves], [crSigCdBlq], ...)`.
+3. **Existe no schema E o legado usa o mesmo nome** -> o codigo migrado esta
+   FIEL. A divergencia eh de **BANCO/ambiente**: a base conectada nao bate com o
+   dump. Nao eh bug de migracao e **nao se conserta no codigo**.
+4. **O legado usa outro nome** -> ai sim eh erro de migracao: corrigir para o
+   nome do legado.
+
+### Referencias
+
+- Ferramenta: `automation\VerificarTabelasInexistentes.ps1` (auditoria do projeto).
+- Pattern #193 (WARNING-only) faz o mesmo por arquivo no CorretorAutomatico.
+- Conexao real do sistema: `projeto\app\start\config.prg:22-25`.
+- Origem: Erro155 (2026-09-09, FormBlq "Cadastro de Bloqueios por Periodo").

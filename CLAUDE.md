@@ -6,7 +6,7 @@ This file provides critical guidance to Claude Code when working with code in th
 
 ## Project Overview
 
-Sistema em Visual FoxPro 9 com arquitetura SOLID em camadas, conectando ao SQL Server (192.168.15.101, banco DB_MBAHIA).
+Sistema em Visual FoxPro 9 com arquitetura SOLID em camadas, conectando ao SQL Server (192.168.200.10, banco DB_MBAHIA - ver `projeto/app/start/config.prg:22-25`).
 
 ### Filosofia de Refatoracao - 3 Pilares Inegociaveis
 
@@ -197,6 +197,26 @@ Duas familias com a mesma mensagem:
 **Helper que le coluna do banco tem de testar `VARTYPE` antes de comparar**: coluna `bit` do SQL Server chega ao VFP ora como Logico (`.T.`/`.F.`) ora como Numerico (0/1) conforme o driver; `numeric(1,0)` sempre Numerico; char de marcacao como `"S"`/`"N"`. Comparar Logico com `1` estoura *Operator/operand type mismatch*.
 
 Auditoria: `automation\VerificarFuncoesNaoDefinidas.ps1`. WARNING: CorretorAutomatico **#192**. Origem: Erro154 (`ConverterParaLogico` chamado em 17 sites de 6 BOs sem existir).
+
+### 14. `docs/schema.sql` eh UTF-16 - NUNCA validar schema com grep
+`grep`/`awk`/`findstr` tratam o arquivo como **binario** e devolvem **ZERO ocorrencias silenciosamente**, fazendo tabela e coluna EXISTENTES parecerem inexistentes. O perigo nao eh o zero: eh a "correcao" que ele sugere - apontar o BO para outra tabela grava dado no lugar errado e viola o PILAR 2.
+
+```powershell
+# CERTO - Get-Content -Raw respeita o BOM UTF-16
+$t = Get-Content 'C:\4c\docs\schema.sql' -Raw
+[regex]::Matches($t, '(?i)CREATE TABLE \[dbo\]\.\[([A-Za-z0-9_]+)\]').Count   # 682
+```
+
+`tasks\<task>\schema_ascii.sql` **nao** eh fonte de verdade: eh snapshot congelado na epoca da task (task351 tem 674 tabelas contra 682 do canonico) e faz tabela nova parecer ausente.
+
+**Erro `Nome de objeto 'X' invalido`** vem do SQL Server (nao do VFP) e nao quebra compilacao. Diagnosticar nesta ordem:
+
+1. a tabela esta no schema canonico? (encoding certo)
+2. o legado usa o mesmo nome? (`tasks\<task>\*_form_codigo_fonte.txt`)
+3. **existe no schema + legado usa o mesmo nome** -> migrado esta FIEL; a divergencia eh de **BANCO/ambiente** e NAO se conserta no codigo
+4. **legado usa outro nome** -> erro de migracao: corrigir para o nome do legado
+
+Auditoria: `automation\VerificarTabelasInexistentes.ps1`. WARNING: CorretorAutomatico **#193**. Origem: Erro155 (FormBlq — `grep` no schema disse "10 tabelas ausentes"; na verdade era **1**).
 **Full VFP9 reference, control properties, and 58 common errors**: See vfp9-migration skill.
 
 ## BusinessBase Property Names (CORRECT)
