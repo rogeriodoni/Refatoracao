@@ -412,6 +412,53 @@ DEFINE CLASS FormMoe AS FormBase
         *-- Fundo padrao do framework frmcadastro (sem isso a pagina fica branca)
         loc_oPagina.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
 
+        *-- Cabecalho cinza (identico ao da pagina Lista) - CLAUDE.md #11 / Erro152
+        loc_oPagina.AddObject("cnt_4c_Cabecalho", "Container")
+        WITH loc_oPagina.cnt_4c_Cabecalho
+            .Top           = 29
+            .Left          = 0
+            .Width         = THIS.Width
+            .Height        = 80
+            .BackColor     = RGB(100, 100, 100)
+            .BorderWidth   = 0
+            .SpecialEffect = 0
+            .Visible       = .T.
+
+            .AddObject("lbl_4c_Sombra", "Label")
+            WITH .lbl_4c_Sombra
+                .Caption   = THIS.Caption
+                .Top       = 15
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 40
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(0, 0, 0)
+                .BackStyle = 0
+                .AutoSize  = .F.
+                .Visible   = .T.
+            ENDWITH
+
+            .AddObject("lbl_4c_Titulo", "Label")
+            WITH .lbl_4c_Titulo
+                .Caption   = THIS.Caption
+                .Top       = 18
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 46
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(255, 255, 255)
+                .BackStyle = 0
+                .AutoSize  = .F.
+                .Visible   = .T.
+            ENDWITH
+
+        ENDWITH
+
+
         *-- Container botoes Confirmar/Cancelar (Grupo_Salva no legado)
         *-- Original: Grupo_Salva.Top=16, Left=619. Compensacao +29: Top=45
         *-- Left canonico do framework: 842 (form Width=1000)
@@ -477,7 +524,7 @@ DEFINE CLASS FormMoe AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label1", "Label")
         WITH loc_oPagina.lbl_4c_Label1
             .Caption    = "C" + CHR(243) + "digo :"
-            .Top        = 95
+            .Top        = 120
             .Left       = 298
             .Width      = 42
             .Height     = 15
@@ -496,7 +543,7 @@ DEFINE CLASS FormMoe AS FormBase
         loc_oPagina.AddObject("txt_4c_Moeda", "TextBox")
         WITH loc_oPagina.txt_4c_Moeda
             .Value      = ""
-            .Top        = 90
+            .Top        = 115
             .Left       = 347
             .Width      = 31
             .Height     = 23
@@ -511,7 +558,7 @@ DEFINE CLASS FormMoe AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label2", "Label")
         WITH loc_oPagina.lbl_4c_Label2
             .Caption    = "Descri" + CHR(231) + CHR(227) + "o :"
-            .Top        = 121
+            .Top        = 146
             .Left       = 285
             .Width      = 60
             .Height     = 15
@@ -529,7 +576,7 @@ DEFINE CLASS FormMoe AS FormBase
         loc_oPagina.AddObject("txt_4c_Descricao", "TextBox")
         WITH loc_oPagina.txt_4c_Descricao
             .Value      = ""
-            .Top        = 116
+            .Top        = 141
             .Left       = 347
             .Width      = 115
             .Height     = 23
@@ -546,7 +593,7 @@ DEFINE CLASS FormMoe AS FormBase
         WITH loc_oPagina.chk_4c_Cotacao
             .Caption    = "Cota" + CHR(231) + CHR(227) + "o :"
             .Value      = 0
-            .Top        = 144
+            .Top        = 169
             .Left       = 295
             .Width      = 65
             .Height     = 15
@@ -565,7 +612,7 @@ DEFINE CLASS FormMoe AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label3", "Label")
         WITH loc_oPagina.lbl_4c_Label3
             .Caption    = "Fator Multiplicador :"
-            .Top        = 168
+            .Top        = 193
             .Left       = 243
             .Width      = 100
             .Height     = 15
@@ -584,7 +631,7 @@ DEFINE CLASS FormMoe AS FormBase
         loc_oPagina.AddObject("txt_4c_Fmult", "TextBox")
         WITH loc_oPagina.txt_4c_Fmult
             .Value      = ""
-            .Top        = 163
+            .Top        = 188
             .Left       = 347
             .Width      = 20
             .Height     = 23
@@ -600,7 +647,7 @@ DEFINE CLASS FormMoe AS FormBase
         loc_oPagina.AddObject("obj_4c_SpnNordrels", "Spinner")
         WITH loc_oPagina.obj_4c_SpnNordrels
             .Value             = 0
-            .Top               = 189
+            .Top               = 214
             .Left              = 347
             .Width             = 33
             .Height            = 25
@@ -618,7 +665,7 @@ DEFINE CLASS FormMoe AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label4", "Label")
         WITH loc_oPagina.lbl_4c_Label4
             .Caption    = "N" + CHR(186) + " da Coluna nos Relat" + CHR(243) + "rios :"
-            .Top        = 194
+            .Top        = 219
             .Left       = 197
             .Width      = 145
             .Height     = 15
@@ -637,7 +684,7 @@ DEFINE CLASS FormMoe AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label8", "Label")
         WITH loc_oPagina.lbl_4c_Label8
             .Caption    = "Moeda Equivalente :"
-            .Top        = 221
+            .Top        = 246
             .Left       = 240
             .Width      = 100
             .Height     = 15
@@ -656,7 +703,7 @@ DEFINE CLASS FormMoe AS FormBase
         loc_oPagina.AddObject("txt_4c_MoeEq", "TextBox")
         WITH loc_oPagina.txt_4c_MoeEq
             .Value      = ""
-            .Top        = 217
+            .Top        = 242
             .Left       = 347
             .Width      = 31
             .Height     = 23
@@ -671,7 +718,7 @@ DEFINE CLASS FormMoe AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label9", "Label")
         WITH loc_oPagina.lbl_4c_Label9
             .Caption    = "Qtde: "
-            .Top        = 221
+            .Top        = 246
             .Left       = 386
             .Width      = 33
             .Height     = 15
@@ -690,7 +737,7 @@ DEFINE CLASS FormMoe AS FormBase
         loc_oPagina.AddObject("txt_4c_Qtde", "TextBox")
         WITH loc_oPagina.txt_4c_Qtde
             .Value      = 0
-            .Top        = 217
+            .Top        = 242
             .Left       = 421
             .Width      = 92
             .Height     = 23
@@ -707,7 +754,7 @@ DEFINE CLASS FormMoe AS FormBase
         WITH loc_oPagina.chk_4c_Tabref
             .Caption    = "Imprime Tabela Refer" + CHR(234) + "ncia :"
             .Value      = 0
-            .Top        = 245
+            .Top        = 270
             .Left       = 156
             .Width      = 205
             .Height     = 17
@@ -726,7 +773,7 @@ DEFINE CLASS FormMoe AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label13", "Label")
         WITH loc_oPagina.lbl_4c_Label13
             .Caption    = "Cond.Pagto Autom" + CHR(225) + "tica :"
-            .Top        = 271
+            .Top        = 296
             .Left       = 217
             .Width      = 120
             .Height     = 15
@@ -745,7 +792,7 @@ DEFINE CLASS FormMoe AS FormBase
         loc_oPagina.AddObject("txt_4c_FPG", "TextBox")
         WITH loc_oPagina.txt_4c_FPG
             .Value      = ""
-            .Top        = 267
+            .Top        = 292
             .Left       = 348
             .Width      = 94
             .Height     = 23
@@ -761,7 +808,7 @@ DEFINE CLASS FormMoe AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label14", "Label")
         WITH loc_oPagina.lbl_4c_Label14
             .Caption    = "Toler" + CHR(226) + "ncia Convers" + CHR(227) + "o :"
-            .Top        = 297
+            .Top        = 322
             .Left       = 227
             .Width      = 113
             .Height     = 15
@@ -779,7 +826,7 @@ DEFINE CLASS FormMoe AS FormBase
         loc_oPagina.AddObject("txt_4c_Toleras", "TextBox")
         WITH loc_oPagina.txt_4c_Toleras
             .Value      = 0
-            .Top        = 293
+            .Top        = 318
             .Left       = 348
             .Width      = 45
             .Height     = 23
@@ -795,7 +842,7 @@ DEFINE CLASS FormMoe AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label15", "Label")
         WITH loc_oPagina.lbl_4c_Label15
             .Caption    = "Listar na consulta :"
-            .Top        = 322
+            .Top        = 347
             .Left       = 247
             .Width      = 93
             .Height     = 15
@@ -814,7 +861,7 @@ DEFINE CLASS FormMoe AS FormBase
         loc_oPagina.AddObject("obj_4c_OptTipo", "OptionGroup")
         WITH loc_oPagina.obj_4c_OptTipo
             .ButtonCount = 2
-            .Top         = 317
+            .Top         = 342
             .Left        = 343
             .Width       = 109
             .Height      = 25
@@ -853,7 +900,7 @@ DEFINE CLASS FormMoe AS FormBase
         *-- Shape2 separador - Original Top=352, +29=381, Left=150, Width=367, Height=2
         loc_oPagina.AddObject("shp_4c_Shape2", "Shape")
         WITH loc_oPagina.shp_4c_Shape2
-            .Top           = 381
+            .Top           = 406
             .Left          = 150
             .Width         = 367
             .Height        = 2
@@ -869,7 +916,7 @@ DEFINE CLASS FormMoe AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label7", "Label")
         WITH loc_oPagina.lbl_4c_Label7
             .Caption    = "Pre" + CHR(231) + "o na Etiqueta do Produto"
-            .Top        = 364
+            .Top        = 389
             .Left       = 150
             .Width      = 200
             .Height     = 15
@@ -887,7 +934,7 @@ DEFINE CLASS FormMoe AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label5", "Label")
         WITH loc_oPagina.lbl_4c_Label5
             .Caption    = "Codifica na Etiqueta do Produto :"
-            .Top        = 393
+            .Top        = 418
             .Left       = 166
             .Width      = 175
             .Height     = 15
@@ -906,7 +953,7 @@ DEFINE CLASS FormMoe AS FormBase
         loc_oPagina.AddObject("txt_4c_DisfPres", "TextBox")
         WITH loc_oPagina.txt_4c_DisfPres
             .Value      = ""
-            .Top        = 388
+            .Top        = 413
             .Left       = 347
             .Width      = 20
             .Height     = 23
@@ -921,7 +968,7 @@ DEFINE CLASS FormMoe AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label6", "Label")
         WITH loc_oPagina.lbl_4c_Label6
             .Caption    = "Valor Adicional :"
-            .Top        = 418
+            .Top        = 443
             .Left       = 249
             .Width      = 90
             .Height     = 15
@@ -940,7 +987,7 @@ DEFINE CLASS FormMoe AS FormBase
         loc_oPagina.AddObject("txt_4c_ValAdics", "TextBox")
         WITH loc_oPagina.txt_4c_ValAdics
             .Value      = 0
-            .Top        = 414
+            .Top        = 439
             .Left       = 347
             .Width      = 31
             .Height     = 23
@@ -955,7 +1002,7 @@ DEFINE CLASS FormMoe AS FormBase
         *-- Shape3 separador - Original Top=438, +29=467, Left=150, Width=367, Height=2
         loc_oPagina.AddObject("shp_4c_Shape3", "Shape")
         WITH loc_oPagina.shp_4c_Shape3
-            .Top           = 467
+            .Top           = 492
             .Left          = 150
             .Width         = 367
             .Height        = 2
@@ -971,7 +1018,7 @@ DEFINE CLASS FormMoe AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label11", "Label")
         WITH loc_oPagina.lbl_4c_Label11
             .Caption    = "Valoriza" + CHR(231) + CHR(227) + "o do Estoque"
-            .Top        = 451
+            .Top        = 476
             .Left       = 150
             .Width      = 200
             .Height     = 15
@@ -989,7 +1036,7 @@ DEFINE CLASS FormMoe AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label12", "Label")
         WITH loc_oPagina.lbl_4c_Label12
             .Caption    = "Grupo :"
-            .Top        = 478
+            .Top        = 503
             .Left       = 299
             .Width      = 45
             .Height     = 15
@@ -1007,7 +1054,7 @@ DEFINE CLASS FormMoe AS FormBase
         loc_oPagina.AddObject("txt_4c_Grupo", "TextBox")
         WITH loc_oPagina.txt_4c_Grupo
             .Value      = ""
-            .Top        = 474
+            .Top        = 499
             .Left       = 347
             .Width      = 80
             .Height     = 23
@@ -1022,7 +1069,7 @@ DEFINE CLASS FormMoe AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label10", "Label")
         WITH loc_oPagina.lbl_4c_Label10
             .Caption    = "Sub-Grupo :"
-            .Top        = 504
+            .Top        = 529
             .Left       = 277
             .Width      = 65
             .Height     = 15
@@ -1040,7 +1087,7 @@ DEFINE CLASS FormMoe AS FormBase
         loc_oPagina.AddObject("txt_4c_Subg", "TextBox")
         WITH loc_oPagina.txt_4c_Subg
             .Value      = ""
-            .Top        = 500
+            .Top        = 525
             .Left       = 347
             .Width      = 80
             .Height     = 23
@@ -1684,3 +1731,4 @@ DEFINE CLASS FormMoe AS FormBase
     ENDPROC
 
 ENDDEFINE
+

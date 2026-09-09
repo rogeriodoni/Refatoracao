@@ -513,6 +513,53 @@ DEFINE CLASS FormBAL AS FormBase
 
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
 
+        *-- Cabecalho cinza (identico ao da pagina Lista) - CLAUDE.md #11 / Erro152
+        loc_oPg2.AddObject("cnt_4c_Cabecalho", "Container")
+        WITH loc_oPg2.cnt_4c_Cabecalho
+            .Top           = 29
+            .Left          = 0
+            .Width         = THIS.Width
+            .Height        = 80
+            .BackColor     = RGB(100, 100, 100)
+            .BorderWidth   = 0
+            .SpecialEffect = 0
+            .Visible       = .T.
+
+            .AddObject("lbl_4c_Sombra", "Label")
+            WITH .lbl_4c_Sombra
+                .Caption   = THIS.Caption
+                .Top       = 15
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 40
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(0, 0, 0)
+                .BackStyle = 0
+                .AutoSize  = .F.
+                .Visible   = .T.
+            ENDWITH
+
+            .AddObject("lbl_4c_Titulo", "Label")
+            WITH .lbl_4c_Titulo
+                .Caption   = THIS.Caption
+                .Top       = 18
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 46
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(255, 255, 255)
+                .BackStyle = 0
+                .AutoSize  = .F.
+                .Visible   = .T.
+            ENDWITH
+
+        ENDWITH
+
+
         *-- Container botoes Confirmar/Cancelar (Top=29, Left=842)
         loc_oPg2.AddObject("cnt_4c_BotoesAcao", "Container")
         WITH loc_oPg2.cnt_4c_BotoesAcao
@@ -579,7 +626,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg2.AddObject("lbl_4c_Label3", "Label")
         WITH loc_oPg2.lbl_4c_Label3
             .Caption   = "C" + CHR(243) + "digo :"
-            .Top       = 101
+            .Top       = 119
             .Left      = 289
             .Width     = 42
             .AutoSize  = .F.
@@ -594,7 +641,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg2.AddObject("txt_4c_Codigo", "TextBox")
         WITH loc_oPg2.txt_4c_Codigo
             .Value         = 0
-            .Top           = 97
+            .Top           = 115
             .Left          = 336
             .Width         = 82
             .Height        = 23
@@ -612,7 +659,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg2.AddObject("lbl_4c_Label15", "Label")
         WITH loc_oPg2.lbl_4c_Label15
             .Caption   = "Data Base :"
-            .Top       = 101
+            .Top       = 119
             .Left      = 500
             .Width     = 58
             .AutoSize  = .F.
@@ -627,7 +674,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg2.AddObject("txt_4c_DBase", "TextBox")
         WITH loc_oPg2.txt_4c_DBase
             .Value         = {}
-            .Top           = 97
+            .Top           = 115
             .Left          = 572
             .Width         = 81
             .Height        = 23
@@ -646,7 +693,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg2.AddObject("lbl_4c_Lbl_grupos", "Label")
         WITH loc_oPg2.lbl_4c_Lbl_grupos
             .Caption   = "Grupo :"
-            .Top       = 127
+            .Top       = 145
             .Left      = 293
             .Width     = 38
             .AutoSize  = .F.
@@ -661,7 +708,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg2.AddObject("txt_4c_Grupo", "TextBox")
         WITH loc_oPg2.txt_4c_Grupo
             .Value         = ""
-            .Top           = 123
+            .Top           = 141
             .Left          = 336
             .Width         = 82
             .Height        = 23
@@ -681,7 +728,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg2.AddObject("txt_4c_DGrupo", "TextBox")
         WITH loc_oPg2.txt_4c_DGrupo
             .Value         = ""
-            .Top           = 123
+            .Top           = 141
             .Left          = 421
             .Width         = 232
             .Height        = 23
@@ -700,7 +747,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg2.AddObject("lbl_4c_Label12", "Label")
         WITH loc_oPg2.lbl_4c_Label12
             .Caption   = "Estoque :"
-            .Top       = 153
+            .Top       = 171
             .Left      = 283
             .Width     = 48
             .AutoSize  = .F.
@@ -715,7 +762,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg2.AddObject("txt_4c_Conta", "TextBox")
         WITH loc_oPg2.txt_4c_Conta
             .Value         = ""
-            .Top           = 149
+            .Top           = 167
             .Left          = 336
             .Width         = 82
             .Height        = 23
@@ -735,7 +782,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg2.AddObject("txt_4c_DConta", "TextBox")
         WITH loc_oPg2.txt_4c_DConta
             .Value         = ""
-            .Top           = 149
+            .Top           = 167
             .Left          = 421
             .Width         = 232
             .Height        = 23
@@ -754,7 +801,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg2.AddObject("lbl_4c_Label1", "Label")
         WITH loc_oPg2.lbl_4c_Label1
             .Caption   = "Data :"
-            .Top       = 180
+            .Top       = 198
             .Left      = 299
             .Width     = 32
             .AutoSize  = .F.
@@ -769,7 +816,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg2.AddObject("txt_4c_DataFinal", "TextBox")
         WITH loc_oPg2.txt_4c_DataFinal
             .Value         = {}
-            .Top           = 175
+            .Top           = 193
             .Left          = 336
             .Width         = 82
             .Height        = 23
@@ -786,7 +833,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg2.AddObject("txt_4c_DataInicial", "TextBox")
         WITH loc_oPg2.txt_4c_DataInicial
             .Value         = {}
-            .Top           = 175
+            .Top           = 193
             .Left          = 571
             .Width         = 82
             .Height        = 23
@@ -805,7 +852,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg2.AddObject("lbl_4c_Label19", "Label")
         WITH loc_oPg2.lbl_4c_Label19
             .Caption   = "Produto :"
-            .Top       = 205
+            .Top       = 223
             .Left      = 284
             .Width     = 47
             .AutoSize  = .F.
@@ -820,7 +867,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg2.AddObject("txt_4c_CProsI", "TextBox")
         WITH loc_oPg2.txt_4c_CProsI
             .Value         = ""
-            .Top           = 201
+            .Top           = 219
             .Left          = 336
             .Width         = 108
             .Height        = 23
@@ -840,7 +887,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg2.AddObject("lbl_4c_Label20", "Label")
         WITH loc_oPg2.lbl_4c_Label20
             .Caption   = CHR(224)
-            .Top       = 205
+            .Top       = 223
             .Left      = 446
             .Width     = 14
             .AutoSize  = .F.
@@ -854,7 +901,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg2.AddObject("txt_4c_CProsF", "TextBox")
         WITH loc_oPg2.txt_4c_CProsF
             .Value         = ""
-            .Top           = 201
+            .Top           = 219
             .Left          = 464
             .Width         = 108
             .Height        = 23
@@ -875,7 +922,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg2.AddObject("lbl_4c_Label2", "Label")
         WITH loc_oPg2.lbl_4c_Label2
             .Caption   = "Local :"
-            .Top       = 231
+            .Top       = 249
             .Left      = 298
             .Width     = 33
             .AutoSize  = .F.
@@ -890,7 +937,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg2.AddObject("txt_4c_LocalInicial", "TextBox")
         WITH loc_oPg2.txt_4c_LocalInicial
             .Value         = ""
-            .Top           = 227
+            .Top           = 245
             .Left          = 336
             .Width         = 82
             .Height        = 23
@@ -909,7 +956,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg2.AddObject("lbl_4c_Label5", "Label")
         WITH loc_oPg2.lbl_4c_Label5
             .Caption   = CHR(224)
-            .Top       = 231
+            .Top       = 249
             .Left      = 423
             .Width     = 14
             .AutoSize  = .F.
@@ -923,7 +970,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg2.AddObject("txt_4c_LocalFinal", "TextBox")
         WITH loc_oPg2.txt_4c_LocalFinal
             .Value         = ""
-            .Top           = 227
+            .Top           = 245
             .Left          = 443
             .Width         = 82
             .Height        = 23
@@ -944,7 +991,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg2.AddObject("lbl_4c_Label6", "Label")
         WITH loc_oPg2.lbl_4c_Label6
             .Caption   = "Fornecedor :"
-            .Top       = 257
+            .Top       = 275
             .Left      = 267
             .Width     = 64
             .Height    = 15
@@ -960,7 +1007,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg2.AddObject("txt_4c_FornecInicial", "TextBox")
         WITH loc_oPg2.txt_4c_FornecInicial
             .Value         = ""
-            .Top           = 253
+            .Top           = 271
             .Left          = 336
             .Width         = 82
             .Height        = 23
@@ -977,7 +1024,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg2.AddObject("lbl_4c_Label7", "Label")
         WITH loc_oPg2.lbl_4c_Label7
             .Caption   = CHR(224)
-            .Top       = 257
+            .Top       = 275
             .Left      = 423
             .Width     = 14
             .AutoSize  = .F.
@@ -991,7 +1038,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg2.AddObject("txt_4c_FornecFinal", "TextBox")
         WITH loc_oPg2.txt_4c_FornecFinal
             .Value         = ""
-            .Top           = 253
+            .Top           = 271
             .Left          = 443
             .Width         = 82
             .Height        = 23
@@ -1013,7 +1060,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg2.AddObject("lbl_4c_Label13", "Label")
         WITH loc_oPg2.lbl_4c_Label13
             .Caption   = "Grande Grupo :"
-            .Top       = 283
+            .Top       = 301
             .Left      = 255
             .Width     = 76
             .AutoSize  = .F.
@@ -1028,7 +1075,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg2.AddObject("txt_4c_GGrupoInicial", "TextBox")
         WITH loc_oPg2.txt_4c_GGrupoInicial
             .Value         = ""
-            .Top           = 279
+            .Top           = 297
             .Left          = 336
             .Width         = 34
             .Height        = 23
@@ -1047,7 +1094,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg2.AddObject("lbl_4c_Label14", "Label")
         WITH loc_oPg2.lbl_4c_Label14
             .Caption   = CHR(224)
-            .Top       = 283
+            .Top       = 301
             .Left      = 423
             .Width     = 14
             .AutoSize  = .F.
@@ -1061,7 +1108,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg2.AddObject("txt_4c_GGrupoFinal", "TextBox")
         WITH loc_oPg2.txt_4c_GGrupoFinal
             .Value         = ""
-            .Top           = 279
+            .Top           = 297
             .Left          = 443
             .Width         = 34
             .Height        = 23
@@ -1082,7 +1129,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg2.AddObject("lbl_4c_Label8", "Label")
         WITH loc_oPg2.lbl_4c_Label8
             .Caption   = "Grupo :"
-            .Top       = 309
+            .Top       = 327
             .Left      = 293
             .Width     = 38
             .AutoSize  = .F.
@@ -1097,7 +1144,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg2.AddObject("txt_4c_GrupoInicial", "TextBox")
         WITH loc_oPg2.txt_4c_GrupoInicial
             .Value         = ""
-            .Top           = 305
+            .Top           = 323
             .Left          = 336
             .Width         = 34
             .Height        = 23
@@ -1116,7 +1163,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg2.AddObject("lbl_4c_Label9", "Label")
         WITH loc_oPg2.lbl_4c_Label9
             .Caption   = CHR(224)
-            .Top       = 309
+            .Top       = 327
             .Left      = 423
             .Width     = 14
             .AutoSize  = .F.
@@ -1130,7 +1177,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg2.AddObject("txt_4c_GrupoFinal", "TextBox")
         WITH loc_oPg2.txt_4c_GrupoFinal
             .Value         = ""
-            .Top           = 305
+            .Top           = 323
             .Left          = 443
             .Width         = 34
             .Height        = 23
@@ -1151,7 +1198,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg2.AddObject("lbl_4c_Label23", "Label")
         WITH loc_oPg2.lbl_4c_Label23
             .Caption   = "Subgrupo :"
-            .Top       = 334
+            .Top       = 352
             .Left      = 276
             .Width     = 55
             .AutoSize  = .F.
@@ -1166,7 +1213,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg2.AddObject("txt_4c_SGrusI", "TextBox")
         WITH loc_oPg2.txt_4c_SGrusI
             .Value         = ""
-            .Top           = 330
+            .Top           = 348
             .Left          = 336
             .Width         = 52
             .Height        = 23
@@ -1183,7 +1230,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg2.AddObject("lbl_4c_Label24", "Label")
         WITH loc_oPg2.lbl_4c_Label24
             .Caption   = CHR(224)
-            .Top       = 334
+            .Top       = 352
             .Left      = 423
             .Width     = 14
             .AutoSize  = .F.
@@ -1197,7 +1244,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg2.AddObject("txt_4c_SGrusF", "TextBox")
         WITH loc_oPg2.txt_4c_SGrusF
             .Value         = ""
-            .Top           = 330
+            .Top           = 348
             .Left          = 443
             .Width         = 52
             .Height        = 23
@@ -1219,7 +1266,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg2.AddObject("lbl_4c_Label10", "Label")
         WITH loc_oPg2.lbl_4c_Label10
             .Caption   = "Pre" + CHR(231) + "o :"
-            .Top       = 359
+            .Top       = 377
             .Left      = 295
             .Width     = 36
             .Height    = 15
@@ -1235,7 +1282,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg2.AddObject("txt_4c_PrecoInicial", "TextBox")
         WITH loc_oPg2.txt_4c_PrecoInicial
             .Value         = 0
-            .Top           = 355
+            .Top           = 373
             .Left          = 336
             .Width         = 82
             .Height        = 23
@@ -1252,7 +1299,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg2.AddObject("lbl_4c_Label11", "Label")
         WITH loc_oPg2.lbl_4c_Label11
             .Caption   = CHR(224)
-            .Top       = 359
+            .Top       = 377
             .Left      = 423
             .Width     = 14
             .AutoSize  = .F.
@@ -1266,7 +1313,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg2.AddObject("txt_4c_PrecoFinal", "TextBox")
         WITH loc_oPg2.txt_4c_PrecoFinal
             .Value         = 0
-            .Top           = 355
+            .Top           = 373
             .Left          = 443
             .Width         = 82
             .Height        = 23
@@ -1285,7 +1332,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg2.AddObject("lbl_4c_Label17", "Label")
         WITH loc_oPg2.lbl_4c_Label17
             .Caption   = "Linha :"
-            .Top       = 384
+            .Top       = 402
             .Left      = 297
             .Width     = 34
             .Height    = 15
@@ -1300,7 +1347,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg2.AddObject("txt_4c_Lin", "TextBox")
         WITH loc_oPg2.txt_4c_Lin
             .Value         = ""
-            .Top           = 380
+            .Top           = 398
             .Left          = 336
             .Width         = 82
             .Height        = 23
@@ -1319,7 +1366,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg2.AddObject("lbl_4c_Label18", "Label")
         WITH loc_oPg2.lbl_4c_Label18
             .Caption   = CHR(224)
-            .Top       = 384
+            .Top       = 402
             .Left      = 423
             .Width     = 14
             .AutoSize  = .F.
@@ -1333,7 +1380,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg2.AddObject("txt_4c_Lin2", "TextBox")
         WITH loc_oPg2.txt_4c_Lin2
             .Value         = ""
-            .Top           = 380
+            .Top           = 398
             .Left          = 443
             .Width         = 82
             .Height        = 23
@@ -1354,7 +1401,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg2.AddObject("lbl_4c_Label22", "Label")
         WITH loc_oPg2.lbl_4c_Label22
             .Caption   = "Grupo de Venda :"
-            .Top       = 409
+            .Top       = 427
             .Left      = 245
             .Width     = 86
             .Height    = 15
@@ -1369,7 +1416,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg2.AddObject("txt_4c_ColecoesI", "TextBox")
         WITH loc_oPg2.txt_4c_ColecoesI
             .Value         = ""
-            .Top           = 405
+            .Top           = 423
             .Left          = 336
             .Width         = 82
             .Height        = 23
@@ -1386,7 +1433,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg2.AddObject("lbl_4c_Label21", "Label")
         WITH loc_oPg2.lbl_4c_Label21
             .Caption   = CHR(224)
-            .Top       = 409
+            .Top       = 427
             .Left      = 423
             .Width     = 14
             .AutoSize  = .F.
@@ -1400,7 +1447,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg2.AddObject("txt_4c_ColecoesF", "TextBox")
         WITH loc_oPg2.txt_4c_ColecoesF
             .Value         = ""
-            .Top           = 405
+            .Top           = 423
             .Left          = 443
             .Width         = 82
             .Height        = 23
@@ -1422,7 +1469,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg2.AddObject("lbl_4c_Label26", "Label")
         WITH loc_oPg2.lbl_4c_Label26
             .Caption   = "Unidade :"
-            .Top       = 435
+            .Top       = 453
             .Left      = 283
             .Width     = 48
             .Height    = 15
@@ -1437,7 +1484,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg2.AddObject("txt_4c__UniIni", "TextBox")
         WITH loc_oPg2.txt_4c__UniIni
             .Value         = ""
-            .Top           = 431
+            .Top           = 449
             .Left          = 336
             .Width         = 40
             .Height        = 23
@@ -1456,7 +1503,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg2.AddObject("lbl_4c_Label4", "Label")
         WITH loc_oPg2.lbl_4c_Label4
             .Caption   = CHR(224)
-            .Top       = 435
+            .Top       = 453
             .Left      = 423
             .Width     = 14
             .AutoSize  = .F.
@@ -1470,7 +1517,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg2.AddObject("txt_4c__UniFim", "TextBox")
         WITH loc_oPg2.txt_4c__UniFim
             .Value         = ""
-            .Top           = 431
+            .Top           = 449
             .Left          = 443
             .Width         = 40
             .Height        = 23
@@ -1491,7 +1538,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg2.AddObject("lbl_4c_Label25", "Label")
         WITH loc_oPg2.lbl_4c_Label25
             .Caption   = "Observa" + CHR(231) + CHR(227) + "o 1:"
-            .Top       = 460
+            .Top       = 478
             .Left      = 258
             .Width     = 73
             .Height    = 15
@@ -1506,7 +1553,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg2.AddObject("txt_4c_ObsPes", "TextBox")
         WITH loc_oPg2.txt_4c_ObsPes
             .Value         = ""
-            .Top           = 456
+            .Top           = 474
             .Left          = 336
             .Width         = 220
             .Height        = 23
@@ -1524,7 +1571,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg2.AddObject("lbl_4c_Label16", "Label")
         WITH loc_oPg2.lbl_4c_Label16
             .Caption   = "Agrupa :"
-            .Top       = 481
+            .Top       = 499
             .Left      = 287
             .Width     = 44
             .Height    = 15
@@ -1542,7 +1589,7 @@ DEFINE CLASS FormBAL AS FormBase
         WITH loc_oPg2.obj_4c_Opt_Agrupa
             .Value       = 1
             .ButtonCount = 2
-            .Top         = 482
+            .Top         = 500
             .Left        = 330
             .Width       = 263
             .Height      = 16
@@ -1578,7 +1625,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg2.AddObject("lbl_4c_Label28", "Label")
         WITH loc_oPg2.lbl_4c_Label28
             .Caption   = "C" + CHR(243) + "d. Barras :"
-            .Top       = 499
+            .Top       = 517
             .Left      = 265
             .Width     = 66
             .Height    = 15
@@ -1596,7 +1643,7 @@ DEFINE CLASS FormBAL AS FormBase
         WITH loc_oPg2.obj_4c_OptFilBarra
             .Value       = 1
             .ButtonCount = 3
-            .Top         = 498
+            .Top         = 516
             .Left        = 330
             .Width       = 209
             .Height      = 14
@@ -1644,7 +1691,7 @@ DEFINE CLASS FormBAL AS FormBase
         WITH loc_oPg2.chk_4c_Fwcheckbox2
             .Caption   = "Tratamento por Peso"
             .Value     = 0
-            .Top       = 532
+            .Top       = 550
             .Left      = 336
             .Width     = 180
             .Height    = 17
@@ -1660,7 +1707,7 @@ DEFINE CLASS FormBAL AS FormBase
         WITH loc_oPg2.chk_4c_Fwcheckbox1
             .Caption   = "Balan" + CHR(231) + "o Separado por Estoque"
             .Value     = 0
-            .Top       = 516
+            .Top       = 534
             .Left      = 336
             .Width     = 220
             .Height    = 17
@@ -1676,7 +1723,7 @@ DEFINE CLASS FormBAL AS FormBase
         WITH loc_oPg2.chk_4c_Fwcheckbox3
             .Caption   = "Leitura somente do Grupo + Conta do Invent" + CHR(225) + "rio"
             .Value     = 0
-            .Top       = 548
+            .Top       = 566
             .Left      = 336
             .Width     = 310
             .Height    = 17
@@ -1692,7 +1739,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg2.AddObject("lbl_4c_Label27", "Label")
         WITH loc_oPg2.lbl_4c_Label27
             .Caption   = "Observa" + CHR(231) + CHR(227) + "o :"
-            .Top       = 567
+            .Top       = 585
             .Left      = 264
             .Width     = 67
             .Height    = 15
@@ -1707,10 +1754,10 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg2.AddObject("obj_4c_GetObs", "EditBox")
         WITH loc_oPg2.obj_4c_GetObs
             .Value         = ""
-            .Top           = 566
+            .Top           = 584
             .Left          = 335
             .Width         = 322
-            .Height        = 60
+            .Height        = 45
             .FontName      = "Tahoma"
             .FontSize      = 8
             .ForeColor     = RGB(90, 90, 90)
@@ -1725,7 +1772,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg2.AddObject("lbl_4c_label29", "Label")
         WITH loc_oPg2.lbl_4c_label29
             .Caption   = "Grande Grupo"
-            .Top       = 169
+            .Top       = 187
             .Left      = 683
             .Width     = 80
             .Height    = 15
@@ -1745,7 +1792,7 @@ DEFINE CLASS FormBAL AS FormBase
 
         loc_oGrdGGrupo = loc_oPg2.grd_4c_GGrupo
         WITH loc_oGrdGGrupo
-            .Top                = 186
+            .Top                = 204
             .Left               = 683
             .Width              = 238
             .Height             = 147
@@ -1795,7 +1842,7 @@ DEFINE CLASS FormBAL AS FormBase
             .Caption         = ""
             .Picture         = gc_4c_CaminhoIcones + "geral_marcar_26.jpg"
             .PicturePosition = 13
-            .Top             = 212
+            .Top             = 230
             .Left            = 924
             .Width           = 45
             .Height          = 45
@@ -1812,7 +1859,7 @@ DEFINE CLASS FormBAL AS FormBase
             .Caption         = ""
             .Picture         = gc_4c_CaminhoIcones + "cadastro_excluir_26.jpg"
             .PicturePosition = 13
-            .Top             = 257
+            .Top             = 275
             .Left            = 924
             .Width           = 45
             .Height          = 45
@@ -1829,7 +1876,7 @@ DEFINE CLASS FormBAL AS FormBase
         loc_oPg2.AddObject("lbl_4c_label110", "Label")
         WITH loc_oPg2.lbl_4c_label110
             .Caption   = "Grupo Produto"
-            .Top       = 342
+            .Top       = 360
             .Left      = 683
             .Width     = 84
             .Height    = 15
@@ -1849,7 +1896,7 @@ DEFINE CLASS FormBAL AS FormBase
 
         loc_oGrdGrupo = loc_oPg2.grd_4c_Grupos
         WITH loc_oGrdGrupo
-            .Top                = 359
+            .Top                = 377
             .Left               = 683
             .Width              = 238
             .Height             = 147
@@ -1899,7 +1946,7 @@ DEFINE CLASS FormBAL AS FormBase
             .Caption         = ""
             .Picture         = gc_4c_CaminhoIcones + "geral_marcar_26.jpg"
             .PicturePosition = 13
-            .Top             = 378
+            .Top             = 396
             .Left            = 924
             .Width           = 45
             .Height          = 45
@@ -1916,7 +1963,7 @@ DEFINE CLASS FormBAL AS FormBase
             .Caption         = ""
             .Picture         = gc_4c_CaminhoIcones + "cadastro_excluir_26.jpg"
             .PicturePosition = 13
-            .Top             = 424
+            .Top             = 442
             .Left            = 924
             .Width           = 45
             .Height          = 45
@@ -4988,3 +5035,4 @@ DEFINE CLASS FormBAL AS FormBase
         NODEFAULT
     ENDPROC
 ENDDEFINE
+

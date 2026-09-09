@@ -543,6 +543,53 @@ DEFINE CLASS FormCTA AS FormBase
         loc_oPagina = THIS.pgf_4c_Paginas.Page2
         loc_oPagina.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
 
+        *-- Cabecalho cinza (identico ao da pagina Lista) - CLAUDE.md #11 / Erro152
+        loc_oPagina.AddObject("cnt_4c_Cabecalho", "Container")
+        WITH loc_oPagina.cnt_4c_Cabecalho
+            .Top           = 29
+            .Left          = 0
+            .Width         = THIS.Width
+            .Height        = 80
+            .BackColor     = RGB(100, 100, 100)
+            .BorderWidth   = 0
+            .SpecialEffect = 0
+            .Visible       = .T.
+
+            .AddObject("lbl_4c_Sombra", "Label")
+            WITH .lbl_4c_Sombra
+                .Caption   = THIS.Caption
+                .Top       = 15
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 40
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(0, 0, 0)
+                .BackStyle = 0
+                .AutoSize  = .F.
+                .Visible   = .T.
+            ENDWITH
+
+            .AddObject("lbl_4c_Titulo", "Label")
+            WITH .lbl_4c_Titulo
+                .Caption   = THIS.Caption
+                .Top       = 18
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 46
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(255, 255, 255)
+                .BackStyle = 0
+                .AutoSize  = .F.
+                .Visible   = .T.
+            ENDWITH
+
+        ENDWITH
+
+
         *-- Botoes Salvar/Cancelar (Grupo_Salva: Top=-7+29=22, Left=842)
         loc_oPagina.AddObject("cnt_4c_BotoesAcao", "Container")
         WITH loc_oPagina.cnt_4c_BotoesAcao
@@ -790,7 +837,7 @@ DEFINE CLASS FormCTA AS FormBase
         par_oPagina.AddObject("cnt_4c_Pg1", "Container")
         loc_oCnt = par_oPagina.cnt_4c_Pg1
         WITH loc_oCnt
-            .Top         = 107
+            .Top         = 115
             .Left        = 0
             .Width       = 1000
             .Height      = 493
@@ -1904,7 +1951,7 @@ DEFINE CLASS FormCTA AS FormBase
         par_oPagina.AddObject("cnt_4c_Pg2", "Container")
         loc_oCnt = par_oPagina.cnt_4c_Pg2
         WITH loc_oCnt
-            .Top = 107
+            .Top = 115
             .Left = 0
             .Width = 1000
             .Height = 493
@@ -2520,7 +2567,7 @@ DEFINE CLASS FormCTA AS FormBase
         par_oPagina.AddObject("cnt_4c_Pg3", "Container")
         loc_oCnt = par_oPagina.cnt_4c_Pg3
         WITH loc_oCnt
-            .Top = 107
+            .Top = 115
             .Left = 0
             .Width = 1000
             .Height = 493
@@ -2648,7 +2695,7 @@ DEFINE CLASS FormCTA AS FormBase
         par_oPagina.AddObject("cnt_4c_Pg4", "Container")
         loc_oCnt = par_oPagina.cnt_4c_Pg4
         WITH loc_oCnt
-            .Top = 107
+            .Top = 115
             .Left = 0
             .Width = 1000
             .Height = 493
@@ -2845,7 +2892,7 @@ DEFINE CLASS FormCTA AS FormBase
         par_oPagina.AddObject("cnt_4c_Pg5", "Container")
         loc_oCnt = par_oPagina.cnt_4c_Pg5
         WITH loc_oCnt
-            .Top = 107
+            .Top = 115
             .Left = 0
             .Width = 1000
             .Height = 493
@@ -3014,7 +3061,7 @@ DEFINE CLASS FormCTA AS FormBase
         par_oPagina.AddObject("cnt_4c_Pg6", "Container")
         loc_oCnt = par_oPagina.cnt_4c_Pg6
         WITH loc_oCnt
-            .Top = 107
+            .Top = 115
             .Left = 0
             .Width = 1000
             .Height = 493
@@ -3186,7 +3233,7 @@ DEFINE CLASS FormCTA AS FormBase
         par_oPagina.AddObject("cnt_4c_Pg7", "Container")
         loc_oCnt = par_oPagina.cnt_4c_Pg7
         WITH loc_oCnt
-            .Top = 107
+            .Top = 115
             .Left = 0
             .Width = 1000
             .Height = 493
@@ -3399,7 +3446,7 @@ DEFINE CLASS FormCTA AS FormBase
         par_oPagina.AddObject("cnt_4c_Pg8", "Container")
         loc_oCnt = par_oPagina.cnt_4c_Pg8
         WITH loc_oCnt
-            .Top = 107
+            .Top = 115
             .Left = 0
             .Width = 1000
             .Height = 493
@@ -3516,7 +3563,7 @@ DEFINE CLASS FormCTA AS FormBase
         par_oPagina.AddObject("cnt_4c_Pg9", "Container")
         loc_oCnt = par_oPagina.cnt_4c_Pg9
         WITH loc_oCnt
-            .Top = 107
+            .Top = 115
             .Left = 0
             .Width = 1000
             .Height = 493
@@ -3765,7 +3812,7 @@ DEFINE CLASS FormCTA AS FormBase
         par_oPagina.AddObject("cnt_4c_Pg10", "Container")
         loc_oCnt = par_oPagina.cnt_4c_Pg10
         WITH loc_oCnt
-            .Top = 107
+            .Top = 115
             .Left = 0
             .Width = 1000
             .Height = 493
@@ -3970,7 +4017,7 @@ DEFINE CLASS FormCTA AS FormBase
         par_oPagina.AddObject("cnt_4c_Pg11", "Container")
         loc_oCnt = par_oPagina.cnt_4c_Pg11
         WITH loc_oCnt
-            .Top = 107
+            .Top = 115
             .Left = 0
             .Width = 1000
             .Height = 493
@@ -4177,7 +4224,7 @@ DEFINE CLASS FormCTA AS FormBase
         par_oPagina.AddObject("cnt_4c_Pg12", "Container")
         loc_oCnt = par_oPagina.cnt_4c_Pg12
         WITH loc_oCnt
-            .Top = 107
+            .Top = 115
             .Left = 0
             .Width = 1000
             .Height = 493
@@ -4277,9 +4324,14 @@ DEFINE CLASS FormCTA AS FormBase
         loc_aNomes[11] = "cnt_4c_Pg11"
         loc_aNomes[12] = "cnt_4c_Pg12"
 
+        LOCAL loc_oCnt
         FOR loc_nIdx = 1 TO 12
             IF PEMSTATUS(loc_oPagina, loc_aNomes[loc_nIdx], 5)
-                loc_oPagina.(loc_aNomes[loc_nIdx]).Visible = (loc_nIdx = par_nPagina)
+                *-- obj.(expr).Prop nao compila em VFP9; resolver com EVALUATE
+                loc_oCnt = EVALUATE("loc_oPagina." + ALLTRIM(loc_aNomes[loc_nIdx]))
+                IF VARTYPE(loc_oCnt) = "O"
+                    loc_oCnt.Visible = (loc_nIdx = par_nPagina)
+                ENDIF
             ENDIF
         ENDFOR
 
@@ -5202,7 +5254,8 @@ DEFINE CLASS FormCTA AS FormBase
 
         FOR loc_i = 1 TO 12
             IF PEMSTATUS(loc_oPg2, loc_aSubPags[loc_i], 5)
-                loc_oP = loc_oPg2.(loc_aSubPags[loc_i])
+                *-- obj.(expr) nao compila em VFP9; resolver com EVALUATE
+                loc_oP = EVALUATE("loc_oPg2." + ALLTRIM(loc_aSubPags[loc_i]))
                 LOCAL loc_j
                 FOR loc_j = 1 TO loc_oP.ControlCount
                     LOCAL loc_oCtrl
@@ -6107,3 +6160,4 @@ DEFINE CLASS FormCTA AS FormBase
     ENDPROC
 
 ENDDEFINE
+

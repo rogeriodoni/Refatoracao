@@ -388,6 +388,53 @@ DEFINE CLASS FormOTI AS FormBase
         *-- Fundo padrao do framework frmcadastro (sem isso a pagina fica branca)
         loc_oPagina.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
 
+        *-- Cabecalho cinza (identico ao da pagina Lista) - CLAUDE.md #11 / Erro152
+        loc_oPagina.AddObject("cnt_4c_Cabecalho", "Container")
+        WITH loc_oPagina.cnt_4c_Cabecalho
+            .Top           = 29
+            .Left          = 0
+            .Width         = THIS.Width
+            .Height        = 80
+            .BackColor     = RGB(100, 100, 100)
+            .BorderWidth   = 0
+            .SpecialEffect = 0
+            .Visible       = .T.
+
+            .AddObject("lbl_4c_Sombra", "Label")
+            WITH .lbl_4c_Sombra
+                .Caption   = THIS.Caption
+                .Top       = 15
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 40
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(0, 0, 0)
+                .BackStyle = 0
+                .AutoSize  = .F.
+                .Visible   = .T.
+            ENDWITH
+
+            .AddObject("lbl_4c_Titulo", "Label")
+            WITH .lbl_4c_Titulo
+                .Caption   = THIS.Caption
+                .Top       = 18
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 46
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(255, 255, 255)
+                .BackStyle = 0
+                .AutoSize  = .F.
+                .Visible   = .T.
+            ENDWITH
+
+        ENDWITH
+
+
         *----------------------------------------------------------------------
         *-- Container bot" + CHR(245) + "es Confirmar / Cancelar
         *----------------------------------------------------------------------
@@ -457,7 +504,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("txt_4c_Ndope", "TextBox")
         WITH loc_oPagina.txt_4c_Ndope
             .Value    = 0
-            .Top      = 65
+            .Top      = 115
             .Left     = 688
             .Width    = 80
             .Height   = 23
@@ -471,7 +518,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label3", "Label")
         WITH loc_oPagina.lbl_4c_Label3
             .Caption   = "N" + CHR(186) + " Opera" + CHR(231) + CHR(227) + "o :"
-            .Top       = 69
+            .Top       = 119
             .Left      = 605
             .Width     = 80
             .Height    = 15
@@ -484,7 +531,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("chk_4c_Chk_Inativar", "CheckBox")
         WITH loc_oPagina.chk_4c_Chk_Inativar
             .Caption   = "Cancelamento"
-            .Top       = 70
+            .Top       = 120
             .Left      = 298
             .Width     = 99
             .Height    = 15
@@ -499,7 +546,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label1", "Label")
         WITH loc_oPagina.lbl_4c_Label1
             .Caption   = "Descri" + CHR(231) + CHR(227) + "o :"
-            .Top       = 71
+            .Top       = 121
             .Left      = 73
             .Width     = 63
             .Height    = 15
@@ -512,7 +559,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("txt_4c_Dope", "TextBox")
         WITH loc_oPagina.txt_4c_Dope
             .Value     = ""
-            .Top       = 67
+            .Top       = 117
             .Left      = 140
             .Width     = 150
             .Height    = 23
@@ -529,7 +576,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label2", "Label")
         WITH loc_oPagina.lbl_4c_Label2
             .Caption   = "Opera" + CHR(231) + CHR(227) + "o :"
-            .Top       = 93
+            .Top       = 143
             .Left      = 77
             .Width     = 59
             .Height    = 15
@@ -542,7 +589,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("obj_4c_Opcao_oper", "OptionGroup")
         WITH loc_oPagina.obj_4c_Opcao_oper
             .ButtonCount = 2
-            .Top         = 90
+            .Top         = 140
             .Left        = 135
             .Width       = 142
             .Height      = 21
@@ -576,7 +623,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label4", "Label")
         WITH loc_oPagina.lbl_4c_Label4
             .Caption   = "Opera" + CHR(231) + CHR(227) + "o de Dep" + CHR(243) + "sito :"
-            .Top       = 94
+            .Top       = 144
             .Left      = 567
             .Width     = 116
             .Height    = 15
@@ -589,7 +636,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("txt_4c_Opdepo", "TextBox")
         WITH loc_oPagina.txt_4c_Opdepo
             .Value     = ""
-            .Top       = 90
+            .Top       = 140
             .Left      = 688
             .Width     = 80
             .Height    = 23
@@ -607,7 +654,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label5", "Label")
         WITH loc_oPagina.lbl_4c_Label5
             .Caption   = "Hist" + CHR(243) + "rico Padr" + CHR(227) + "o :"
-            .Top       = 113
+            .Top       = 163
             .Left      = 49
             .Width     = 87
             .Height    = 15
@@ -620,7 +667,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("txt_4c_Hists", "TextBox")
         WITH loc_oPagina.txt_4c_Hists
             .Value     = ""
-            .Top       = 109
+            .Top       = 159
             .Left      = 140
             .Width     = 223
             .Height    = 23
@@ -633,7 +680,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label24", "Label")
         WITH loc_oPagina.lbl_4c_Label24
             .Caption   = "Pend" + CHR(234) + "ncias :"
-            .Top       = 116
+            .Top       = 166
             .Left      = 622
             .Width     = 61
             .Height    = 15
@@ -646,7 +693,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("obj_4c_Opc_Pend", "OptionGroup")
         WITH loc_oPagina.obj_4c_Opc_Pend
             .ButtonCount = 2
-            .Top         = 113
+            .Top         = 163
             .Left        = 683
             .Width       = 128
             .Height      = 21
@@ -684,7 +731,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label19", "Label")
         WITH loc_oPagina.lbl_4c_Label19
             .Caption   = "Valor Previsto :"
-            .Top       = 132
+            .Top       = 182
             .Left      = 610
             .Width     = 73
             .Height    = 15
@@ -697,7 +744,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("obj_4c_Opc_valprev", "OptionGroup")
         WITH loc_oPagina.obj_4c_Opc_valprev
             .ButtonCount = 2
-            .Top         = 129
+            .Top         = 179
             .Left        = 683
             .Width       = 128
             .Height      = 21
@@ -731,7 +778,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label6", "Label")
         WITH loc_oPagina.lbl_4c_Label6
             .Caption   = "Compl. Hist" + CHR(243) + "rico :"
-            .Top       = 137
+            .Top       = 187
             .Left      = 50
             .Width     = 86
             .Height    = 15
@@ -744,7 +791,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("obj_4c_Opc_Compl", "OptionGroup")
         WITH loc_oPagina.obj_4c_Opc_Compl
             .ButtonCount = 5
-            .Top         = 134
+            .Top         = 184
             .Left        = 135
             .Width       = 206
             .Height      = 53
@@ -815,7 +862,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label26", "Label")
         WITH loc_oPagina.lbl_4c_Label26
             .Caption   = "Bloquear C/C :"
-            .Top       = 149
+            .Top       = 199
             .Left      = 613
             .Width     = 70
             .Height    = 15
@@ -828,7 +875,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("obj_4c_Opc_blqcc", "OptionGroup")
         WITH loc_oPagina.obj_4c_Opc_blqcc
             .ButtonCount = 2
-            .Top         = 146
+            .Top         = 196
             .Left        = 683
             .Width       = 128
             .Height      = 21
@@ -866,7 +913,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label27", "Label")
         WITH loc_oPagina.lbl_4c_Label27
             .Caption   = "Realizar Apenas Autorizados :"
-            .Top       = 167
+            .Top       = 217
             .Left      = 537
             .Width     = 146
             .Height    = 15
@@ -879,7 +926,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("obj_4c_Opc_Transporte", "OptionGroup")
         WITH loc_oPagina.obj_4c_Opc_Transporte
             .ButtonCount = 2
-            .Top         = 162
+            .Top         = 212
             .Left        = 683
             .Width       = 128
             .Height      = 21
@@ -917,7 +964,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label31", "Label")
         WITH loc_oPagina.lbl_4c_Label31
             .Caption   = "Outros Titulos (Auto) :"
-            .Top       = 182
+            .Top       = 232
             .Left      = 573
             .Width     = 110
             .Height    = 15
@@ -930,7 +977,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("obj_4c_Get_OutroTit", "OptionGroup")
         WITH loc_oPagina.obj_4c_Get_OutroTit
             .ButtonCount = 2
-            .Top         = 179
+            .Top         = 229
             .Left        = 683
             .Width       = 128
             .Height      = 21
@@ -964,7 +1011,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label7", "Label")
         WITH loc_oPagina.lbl_4c_Label7
             .Caption   = "N" + CHR(186) + " titulo autom" + CHR(225) + "tico :"
-            .Top       = 188
+            .Top       = 238
             .Left      = 32
             .Width     = 104
             .Height    = 15
@@ -977,7 +1024,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("obj_4c_Opc_Numtit", "OptionGroup")
         WITH loc_oPagina.obj_4c_Opc_Numtit
             .ButtonCount = 2
-            .Top         = 185
+            .Top         = 235
             .Left        = 135
             .Width       = 110
             .Height      = 21
@@ -1011,7 +1058,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label8", "Label")
         WITH loc_oPagina.lbl_4c_Label8
             .Caption   = "Identificador :"
-            .Top       = 188
+            .Top       = 238
             .Left      = 303
             .Width     = 70
             .Height    = 15
@@ -1024,7 +1071,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("txt_4c_Ident", "TextBox")
         WITH loc_oPagina.txt_4c_Ident
             .Value     = ""
-            .Top       = 184
+            .Top       = 234
             .Left      = 378
             .Width     = 17
             .Height    = 21
@@ -1041,7 +1088,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label17", "Label")
         WITH loc_oPagina.lbl_4c_Label17
             .Caption   = "Tipo :"
-            .Top       = 200
+            .Top       = 250
             .Left      = 654
             .Width     = 29
             .Height    = 15
@@ -1054,7 +1101,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("obj_4c_Opc_realprev", "OptionGroup")
         WITH loc_oPagina.obj_4c_Opc_realprev
             .ButtonCount = 2
-            .Top         = 197
+            .Top         = 247
             .Left        = 683
             .Width       = 128
             .Height      = 21
@@ -1089,7 +1136,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label16", "Label")
         WITH loc_oPagina.lbl_4c_Label16
             .Caption   = "Qtd. Vias Boleto :"
-            .Top       = 213
+            .Top       = 263
             .Left      = 287
             .Width     = 86
             .Height    = 15
@@ -1102,7 +1149,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("txt_4c_Vias", "TextBox")
         WITH loc_oPagina.txt_4c_Vias
             .Value    = 0
-            .Top      = 208
+            .Top      = 258
             .Left     = 378
             .Width    = 24
             .Height   = 24
@@ -1119,7 +1166,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label15", "Label")
         WITH loc_oPagina.lbl_4c_Label15
             .Caption   = "Imprime Boleto :"
-            .Top       = 213
+            .Top       = 263
             .Left      = 56
             .Width     = 80
             .Height    = 15
@@ -1132,7 +1179,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("obj_4c_Opc_Impbol", "OptionGroup")
         WITH loc_oPagina.obj_4c_Opc_Impbol
             .ButtonCount = 2
-            .Top         = 210
+            .Top         = 260
             .Left        = 135
             .Width       = 110
             .Height      = 21
@@ -1166,7 +1213,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label18", "Label")
         WITH loc_oPagina.lbl_4c_Label18
             .Caption   = "Opera" + CHR(231) + CHR(227) + "o Realizado :"
-            .Top       = 220
+            .Top       = 270
             .Left      = 578
             .Width     = 105
             .Height    = 15
@@ -1179,7 +1226,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("txt_4c_DopReal", "TextBox")
         WITH loc_oPagina.txt_4c_DopReal
             .Value     = ""
-            .Top       = 216
+            .Top       = 266
             .Left      = 688
             .Width     = 150
             .Height    = 23
@@ -1197,7 +1244,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label28", "Label")
         WITH loc_oPagina.lbl_4c_Label28
             .Caption   = "Imprime Documento :"
-            .Top       = 234
+            .Top       = 284
             .Left      = 32
             .Width     = 104
             .Height    = 15
@@ -1210,7 +1257,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("obj_4c_Opc_imprimedoc", "OptionGroup")
         WITH loc_oPagina.obj_4c_Opc_imprimedoc
             .ButtonCount = 2
-            .Top         = 231
+            .Top         = 281
             .Left        = 135
             .Width       = 110
             .Height      = 21
@@ -1244,7 +1291,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label30", "Label")
         WITH loc_oPagina.lbl_4c_Label30
             .Caption   = "Opera" + CHR(231) + CHR(227) + "o Cancelamento :"
-            .Top       = 245
+            .Top       = 295
             .Left      = 556
             .Width     = 127
             .Height    = 15
@@ -1257,7 +1304,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("txt_4c_DopCanc", "TextBox")
         WITH loc_oPagina.txt_4c_DopCanc
             .Value     = ""
-            .Top       = 241
+            .Top       = 291
             .Left      = 688
             .Width     = 150
             .Height    = 23
@@ -1275,7 +1322,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label32", "Label")
         WITH loc_oPagina.lbl_4c_Label32
             .Caption   = "Dados Pagamento :"
-            .Top       = 273
+            .Top       = 323
             .Left      = 37
             .Width     = 99
             .Height    = 15
@@ -1288,7 +1335,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("obj_4c_Opc_DadosPg", "OptionGroup")
         WITH loc_oPagina.obj_4c_Opc_DadosPg
             .ButtonCount = 2
-            .Top         = 270
+            .Top         = 320
             .Left        = 135
             .Width       = 110
             .Height      = 21
@@ -1322,7 +1369,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label33", "Label")
         WITH loc_oPagina.lbl_4c_Label33
             .Caption   = "Campo NF :"
-            .Top       = 273
+            .Top       = 323
             .Left      = 583
             .Width     = 65
             .Height    = 15
@@ -1335,7 +1382,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("obj_4c_Opt_CampoNf", "OptionGroup")
         WITH loc_oPagina.obj_4c_Opt_CampoNf
             .ButtonCount = 2
-            .Top         = 270
+            .Top         = 320
             .Left        = 136
             .Width       = 128
             .Height      = 21
@@ -1373,7 +1420,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label34", "Label")
         WITH loc_oPagina.lbl_4c_Label34
             .Caption   = "Emit.=Portador :"
-            .Top       = 295
+            .Top       = 345
             .Left      = 54
             .Width     = 82
             .Height    = 15
@@ -1386,7 +1433,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("obj_4c_Opc_EmiPor", "OptionGroup")
         WITH loc_oPagina.obj_4c_Opc_EmiPor
             .ButtonCount = 2
-            .Top         = 292
+            .Top         = 342
             .Left        = 135
             .Width       = 110
             .Height      = 21
@@ -1420,7 +1467,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label35", "Label")
         WITH loc_oPagina.lbl_4c_Label35
             .Caption   = "Compet" + CHR(234) + "ncia :"
-            .Top       = 295
+            .Top       = 345
             .Left      = 574
             .Width     = 75
             .Height    = 15
@@ -1433,7 +1480,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("obj_4c_Opc_Compet", "OptionGroup")
         WITH loc_oPagina.obj_4c_Opc_Compet
             .ButtonCount = 2
-            .Top         = 292
+            .Top         = 342
             .Left        = 683
             .Width       = 128
             .Height      = 21
@@ -1471,7 +1518,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label36", "Label")
         WITH loc_oPagina.lbl_4c_Label36
             .Caption   = "Filtra Conta p/ Grupo :"
-            .Top       = 317
+            .Top       = 367
             .Left      = 17
             .Width     = 119
             .Height    = 15
@@ -1484,7 +1531,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("obj_4c_Opc_FiltContas", "OptionGroup")
         WITH loc_oPagina.obj_4c_Opc_FiltContas
             .ButtonCount = 2
-            .Top         = 314
+            .Top         = 364
             .Left        = 135
             .Width       = 110
             .Height      = 21
@@ -1518,7 +1565,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label37", "Label")
         WITH loc_oPagina.lbl_4c_Label37
             .Caption   = "Jobs :"
-            .Top       = 317
+            .Top       = 367
             .Left      = 633
             .Width     = 36
             .Height    = 15
@@ -1531,7 +1578,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("obj_4c_Opt_Jobs", "OptionGroup")
         WITH loc_oPagina.obj_4c_Opt_Jobs
             .ButtonCount = 2
-            .Top         = 314
+            .Top         = 364
             .Left        = 683
             .Width       = 128
             .Height      = 21
@@ -1569,7 +1616,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label38", "Label")
         WITH loc_oPagina.lbl_4c_Label38
             .Caption   = "Limite Cr" + CHR(233) + "dito :"
-            .Top       = 339
+            .Top       = 389
             .Left      = 42
             .Width     = 94
             .Height    = 15
@@ -1582,7 +1629,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("obj_4c_Opc_Limcres", "OptionGroup")
         WITH loc_oPagina.obj_4c_Opc_Limcres
             .ButtonCount = 2
-            .Top         = 336
+            .Top         = 386
             .Left        = 135
             .Width       = 110
             .Height      = 21
@@ -1620,7 +1667,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("chk_4c_Congvs", "CheckBox")
         WITH loc_oPagina.chk_4c_Congvs
             .Caption   = "Cong" + CHR(234) + "neres"
-            .Top       = 362
+            .Top       = 412
             .Left      = 20
             .Width     = 100
             .Height    = 17
@@ -1634,7 +1681,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("chk_4c_BlqTits", "CheckBox")
         WITH loc_oPagina.chk_4c_BlqTits
             .Caption   = "Bloqueia T" + CHR(237) + "tulos"
-            .Top       = 362
+            .Top       = 412
             .Left      = 128
             .Width     = 118
             .Height    = 17
@@ -1648,7 +1695,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("chk_4c_Espobrigs", "CheckBox")
         WITH loc_oPagina.chk_4c_Espobrigs
             .Caption   = "Esp. Obrig."
-            .Top       = 362
+            .Top       = 412
             .Left      = 255
             .Width     = 95
             .Height    = 17
@@ -1662,7 +1709,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("chk_4c_LancCCEs", "CheckBox")
         WITH loc_oPagina.chk_4c_LancCCEs
             .Caption   = "Lan" + CHR(231) + ".C/C Emiss."
-            .Top       = 362
+            .Top       = 412
             .Left      = 360
             .Width     = 112
             .Height    = 17
@@ -1676,7 +1723,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("chk_4c_LancCCAs", "CheckBox")
         WITH loc_oPagina.chk_4c_LancCCAs
             .Caption   = "Lan" + CHR(231) + ".C/C Ato."
-            .Top       = 362
+            .Top       = 412
             .Left      = 480
             .Width     = 105
             .Height    = 17
@@ -1690,7 +1737,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("chk_4c_Obsobrigs", "CheckBox")
         WITH loc_oPagina.chk_4c_Obsobrigs
             .Caption   = "Obs. Obrig."
-            .Top       = 362
+            .Top       = 412
             .Left      = 595
             .Width     = 95
             .Height    = 17
@@ -1704,7 +1751,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("chk_4c_ObrCompet", "CheckBox")
         WITH loc_oPagina.chk_4c_ObrCompet
             .Caption   = "Obrig. Compet."
-            .Top       = 362
+            .Top       = 412
             .Left      = 700
             .Width     = 115
             .Height    = 17
@@ -1722,7 +1769,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label39", "Label")
         WITH loc_oPagina.lbl_4c_Label39
             .Caption   = "M" + CHR(225) + "scara NF :"
-            .Top       = 387
+            .Top       = 437
             .Left      = 12
             .Width     = 82
             .Height    = 15
@@ -1735,7 +1782,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("txt_4c_Mascara", "TextBox")
         WITH loc_oPagina.txt_4c_Mascara
             .Value     = ""
-            .Top       = 383
+            .Top       = 433
             .Left      = 97
             .Width     = 75
             .Height    = 23
@@ -1748,7 +1795,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label40", "Label")
         WITH loc_oPagina.lbl_4c_Label40
             .Caption   = "Dias Vcto :"
-            .Top       = 387
+            .Top       = 437
             .Left      = 178
             .Width     = 65
             .Height    = 15
@@ -1761,7 +1808,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("txt_4c_DiasVcto", "TextBox")
         WITH loc_oPagina.txt_4c_DiasVcto
             .Value     = 0
-            .Top       = 383
+            .Top       = 433
             .Left      = 248
             .Width     = 40
             .Height    = 23
@@ -1774,7 +1821,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label41", "Label")
         WITH loc_oPagina.lbl_4c_Label41
             .Caption   = "Juros Di" + CHR(225) + "rio(%) :"
-            .Top       = 387
+            .Top       = 437
             .Left      = 296
             .Width     = 90
             .Height    = 15
@@ -1787,7 +1834,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("txt_4c_Juros", "TextBox")
         WITH loc_oPagina.txt_4c_Juros
             .Value     = 0.0
-            .Top       = 383
+            .Top       = 433
             .Left      = 390
             .Width     = 55
             .Height    = 23
@@ -1799,7 +1846,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label42", "Label")
         WITH loc_oPagina.lbl_4c_Label42
             .Caption   = "Moeda :"
-            .Top       = 387
+            .Top       = 437
             .Left      = 452
             .Width     = 47
             .Height    = 15
@@ -1812,7 +1859,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("txt_4c_Moeda", "TextBox")
         WITH loc_oPagina.txt_4c_Moeda
             .Value     = ""
-            .Top       = 383
+            .Top       = 433
             .Left      = 503
             .Width     = 35
             .Height    = 23
@@ -1826,7 +1873,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label43", "Label")
         WITH loc_oPagina.lbl_4c_Label43
             .Caption   = "Vlr.Lim.Aprov. :"
-            .Top       = 387
+            .Top       = 437
             .Left      = 544
             .Width     = 100
             .Height    = 15
@@ -1839,7 +1886,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("txt_4c_VlrLimApv", "TextBox")
         WITH loc_oPagina.txt_4c_VlrLimApv
             .Value     = 0.0
-            .Top       = 383
+            .Top       = 433
             .Left      = 648
             .Width     = 95
             .Height    = 23
@@ -1855,7 +1902,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label44", "Label")
         WITH loc_oPagina.lbl_4c_Label44
             .Caption   = "Pasta(s) :"
-            .Top       = 412
+            .Top       = 462
             .Left      = 37
             .Width     = 58
             .Height    = 15
@@ -1868,7 +1915,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("txt_4c_Pasta", "TextBox")
         WITH loc_oPagina.txt_4c_Pasta
             .Value     = ""
-            .Top       = 408
+            .Top       = 458
             .Left      = 99
             .Width     = 620
             .Height    = 23
@@ -1881,7 +1928,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("cmd_4c_BtnPastasCl", "CommandButton")
         WITH loc_oPagina.cmd_4c_BtnPastasCl
             .Caption       = "..."
-            .Top           = 408
+            .Top           = 458
             .Left          = 538
             .Width         = 25
             .Height        = 23
@@ -1899,7 +1946,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label45", "Label")
         WITH loc_oPagina.lbl_4c_Label45
             .Caption   = "Gr.Emitente :"
-            .Top       = 437
+            .Top       = 487
             .Left      = 10
             .Width     = 82
             .Height    = 15
@@ -1912,7 +1959,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("txt_4c_Grupo1", "TextBox")
         WITH loc_oPagina.txt_4c_Grupo1
             .Value     = ""
-            .Top       = 433
+            .Top       = 483
             .Left      = 97
             .Width     = 85
             .Height    = 23
@@ -1925,7 +1972,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label46", "Label")
         WITH loc_oPagina.lbl_4c_Label46
             .Caption   = "Gr.Portador :"
-            .Top       = 437
+            .Top       = 487
             .Left      = 193
             .Width     = 80
             .Height    = 15
@@ -1938,7 +1985,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("txt_4c_Grupo2", "TextBox")
         WITH loc_oPagina.txt_4c_Grupo2
             .Value     = ""
-            .Top       = 433
+            .Top       = 483
             .Left      = 278
             .Width     = 85
             .Height    = 23
@@ -1951,7 +1998,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label47", "Label")
         WITH loc_oPagina.lbl_4c_Label47
             .Caption   = "Gr.C.Custo :"
-            .Top       = 437
+            .Top       = 487
             .Left      = 374
             .Width     = 77
             .Height    = 15
@@ -1964,7 +2011,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("txt_4c_Grupo3", "TextBox")
         WITH loc_oPagina.txt_4c_Grupo3
             .Value     = ""
-            .Top       = 433
+            .Top       = 483
             .Left      = 456
             .Width     = 85
             .Height    = 23
@@ -1977,7 +2024,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label48", "Label")
         WITH loc_oPagina.lbl_4c_Label48
             .Caption   = "Gr.Ag.Cobr. :"
-            .Top       = 437
+            .Top       = 487
             .Left      = 548
             .Width     = 83
             .Height    = 15
@@ -1990,7 +2037,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("txt_4c_Grupo4", "TextBox")
         WITH loc_oPagina.txt_4c_Grupo4
             .Value     = ""
-            .Top       = 433
+            .Top       = 483
             .Left      = 636
             .Width     = 85
             .Height    = 23
@@ -2007,7 +2054,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label49", "Label")
         WITH loc_oPagina.lbl_4c_Label49
             .Caption   = "Tit.Emitente :"
-            .Top       = 461
+            .Top       = 511
             .Left      = 10
             .Width     = 82
             .Height    = 15
@@ -2020,7 +2067,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("txt_4c_Txt01", "TextBox")
         WITH loc_oPagina.txt_4c_Txt01
             .Value     = ""
-            .Top       = 457
+            .Top       = 507
             .Left      = 97
             .Width     = 90
             .Height    = 23
@@ -2033,7 +2080,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label50", "Label")
         WITH loc_oPagina.lbl_4c_Label50
             .Caption   = "Tit.Portador :"
-            .Top       = 461
+            .Top       = 511
             .Left      = 196
             .Width     = 80
             .Height    = 15
@@ -2046,7 +2093,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("txt_4c_Txt02", "TextBox")
         WITH loc_oPagina.txt_4c_Txt02
             .Value     = ""
-            .Top       = 457
+            .Top       = 507
             .Left      = 281
             .Width     = 90
             .Height    = 23
@@ -2059,7 +2106,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label51", "Label")
         WITH loc_oPagina.lbl_4c_Label51
             .Caption   = "Tit.C.Custo :"
-            .Top       = 461
+            .Top       = 511
             .Left      = 380
             .Width     = 75
             .Height    = 15
@@ -2072,7 +2119,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("txt_4c_Txt03", "TextBox")
         WITH loc_oPagina.txt_4c_Txt03
             .Value     = ""
-            .Top       = 457
+            .Top       = 507
             .Left      = 460
             .Width     = 90
             .Height    = 23
@@ -2085,7 +2132,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label52", "Label")
         WITH loc_oPagina.lbl_4c_Label52
             .Caption   = "Tit.Agente :"
-            .Top       = 461
+            .Top       = 511
             .Left      = 560
             .Width     = 72
             .Height    = 15
@@ -2098,7 +2145,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("txt_4c_Txt04", "TextBox")
         WITH loc_oPagina.txt_4c_Txt04
             .Value     = ""
-            .Top       = 457
+            .Top       = 507
             .Left      = 638
             .Width     = 90
             .Height    = 23
@@ -2115,7 +2162,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label53", "Label")
         WITH loc_oPagina.lbl_4c_Label53
             .Caption   = "Gr.Cad.1 :"
-            .Top       = 487
+            .Top       = 537
             .Left      = 10
             .Width     = 66
             .Height    = 15
@@ -2128,7 +2175,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("txt_4c_GrpCad1", "TextBox")
         WITH loc_oPagina.txt_4c_GrpCad1
             .Value     = ""
-            .Top       = 483
+            .Top       = 533
             .Left      = 80
             .Width     = 65
             .Height    = 23
@@ -2142,7 +2189,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("txt_4c_DGrpCad1", "TextBox")
         WITH loc_oPagina.txt_4c_DGrpCad1
             .Value     = ""
-            .Top       = 483
+            .Top       = 533
             .Left      = 150
             .Width     = 200
             .Height    = 23
@@ -2156,7 +2203,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label54", "Label")
         WITH loc_oPagina.lbl_4c_Label54
             .Caption   = "Gr.Cad.2 :"
-            .Top       = 487
+            .Top       = 537
             .Left      = 365
             .Width     = 66
             .Height    = 15
@@ -2169,7 +2216,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("txt_4c_GrpCad2", "TextBox")
         WITH loc_oPagina.txt_4c_GrpCad2
             .Value     = ""
-            .Top       = 483
+            .Top       = 533
             .Left      = 436
             .Width     = 65
             .Height    = 23
@@ -2183,7 +2230,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("txt_4c_DGrpCad2", "TextBox")
         WITH loc_oPagina.txt_4c_DGrpCad2
             .Value     = ""
-            .Top       = 483
+            .Top       = 533
             .Left      = 506
             .Width     = 200
             .Height    = 23
@@ -2197,7 +2244,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label55", "Label")
         WITH loc_oPagina.lbl_4c_Label55
             .Caption   = "Gr.Cad.3 :"
-            .Top       = 511
+            .Top       = 561
             .Left      = 10
             .Width     = 66
             .Height    = 15
@@ -2210,7 +2257,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("txt_4c_GrpCad3", "TextBox")
         WITH loc_oPagina.txt_4c_GrpCad3
             .Value     = ""
-            .Top       = 507
+            .Top       = 557
             .Left      = 80
             .Width     = 65
             .Height    = 23
@@ -2224,7 +2271,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("txt_4c_DGrpCad3", "TextBox")
         WITH loc_oPagina.txt_4c_DGrpCad3
             .Value     = ""
-            .Top       = 507
+            .Top       = 557
             .Left      = 150
             .Width     = 200
             .Height    = 23
@@ -2238,7 +2285,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label56", "Label")
         WITH loc_oPagina.lbl_4c_Label56
             .Caption   = "Gr.Cad.4 :"
-            .Top       = 511
+            .Top       = 561
             .Left      = 365
             .Width     = 66
             .Height    = 15
@@ -2251,7 +2298,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("txt_4c_GrpCad4", "TextBox")
         WITH loc_oPagina.txt_4c_GrpCad4
             .Value     = ""
-            .Top       = 507
+            .Top       = 557
             .Left      = 436
             .Width     = 65
             .Height    = 23
@@ -2265,7 +2312,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("txt_4c_DGrpCad4", "TextBox")
         WITH loc_oPagina.txt_4c_DGrpCad4
             .Value     = ""
-            .Top       = 507
+            .Top       = 557
             .Left      = 506
             .Width     = 200
             .Height    = 23
@@ -2283,7 +2330,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label57", "Label")
         WITH loc_oPagina.lbl_4c_Label57
             .Caption   = "Classe 1 :"
-            .Top       = 538
+            .Top       = 588
             .Left      = 10
             .Width     = 60
             .Height    = 15
@@ -2296,7 +2343,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("txt_4c_Class1", "TextBox")
         WITH loc_oPagina.txt_4c_Class1
             .Value     = ""
-            .Top       = 534
+            .Top       = 584
             .Left      = 74
             .Width     = 30
             .Height    = 23
@@ -2310,7 +2357,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("chk_4c_ObrigC1", "CheckBox")
         WITH loc_oPagina.chk_4c_ObrigC1
             .Caption   = "Obrigat" + CHR(243) + "ria"
-            .Top       = 536
+            .Top       = 586
             .Left      = 109
             .Width     = 80
             .Height    = 17
@@ -2324,7 +2371,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label58", "Label")
         WITH loc_oPagina.lbl_4c_Label58
             .Caption   = "Classe 2 :"
-            .Top       = 538
+            .Top       = 588
             .Left      = 200
             .Width     = 60
             .Height    = 15
@@ -2337,7 +2384,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("txt_4c_Class2", "TextBox")
         WITH loc_oPagina.txt_4c_Class2
             .Value     = ""
-            .Top       = 534
+            .Top       = 584
             .Left      = 264
             .Width     = 30
             .Height    = 23
@@ -2351,7 +2398,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("chk_4c_ObrigC2", "CheckBox")
         WITH loc_oPagina.chk_4c_ObrigC2
             .Caption   = "Obrigat" + CHR(243) + "ria"
-            .Top       = 536
+            .Top       = 586
             .Left      = 299
             .Width     = 80
             .Height    = 17
@@ -2365,7 +2412,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label59", "Label")
         WITH loc_oPagina.lbl_4c_Label59
             .Caption   = "Classe 3 :"
-            .Top       = 538
+            .Top       = 588
             .Left      = 395
             .Width     = 60
             .Height    = 15
@@ -2378,7 +2425,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("txt_4c_Class3", "TextBox")
         WITH loc_oPagina.txt_4c_Class3
             .Value     = ""
-            .Top       = 534
+            .Top       = 584
             .Left      = 459
             .Width     = 30
             .Height    = 23
@@ -2392,7 +2439,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("chk_4c_ObrigC3", "CheckBox")
         WITH loc_oPagina.chk_4c_ObrigC3
             .Caption   = "Obrigat" + CHR(243) + "ria"
-            .Top       = 536
+            .Top       = 586
             .Left      = 494
             .Width     = 80
             .Height    = 17
@@ -2406,7 +2453,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label60", "Label")
         WITH loc_oPagina.lbl_4c_Label60
             .Caption   = "Classe 4 :"
-            .Top       = 538
+            .Top       = 588
             .Left      = 590
             .Width     = 60
             .Height    = 15
@@ -2419,7 +2466,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("txt_4c_Class4", "TextBox")
         WITH loc_oPagina.txt_4c_Class4
             .Value     = ""
-            .Top       = 534
+            .Top       = 584
             .Left      = 654
             .Width     = 30
             .Height    = 23
@@ -2433,7 +2480,7 @@ DEFINE CLASS FormOTI AS FormBase
         loc_oPagina.AddObject("chk_4c_ObrigC4", "CheckBox")
         WITH loc_oPagina.chk_4c_ObrigC4
             .Caption   = "Obrigat" + CHR(243) + "ria"
-            .Top       = 536
+            .Top       = 586
             .Left      = 689
             .Width     = 80
             .Height    = 17
@@ -4439,3 +4486,4 @@ DEFINE CLASS FormOTI AS FormBase
     ENDPROC
 
 ENDDEFINE
+

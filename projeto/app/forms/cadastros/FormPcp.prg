@@ -448,6 +448,53 @@ DEFINE CLASS FormPcp AS FormBase
             loc_oPage.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
 
             *-- Container botoes Confirmar/Cancelar (Top orig=4 +29=33)
+
+            *-- Cabecalho cinza (identico ao da pagina Lista) - CLAUDE.md #11 / Erro152
+            loc_oPage.AddObject("cnt_4c_Cabecalho", "Container")
+            WITH loc_oPage.cnt_4c_Cabecalho
+                .Top           = 29
+                .Left          = 0
+                .Width         = THIS.Width
+                .Height        = 80
+                .BackColor     = RGB(100, 100, 100)
+                .BorderWidth   = 0
+                .SpecialEffect = 0
+                .Visible       = .T.
+
+                .AddObject("lbl_4c_Sombra", "Label")
+                WITH .lbl_4c_Sombra
+                    .Caption   = THIS.Caption
+                    .Top       = 15
+                    .Left      = 10
+                    .Width     = THIS.Width
+                    .Height    = 40
+                    .FontName  = "Tahoma"
+                    .FontSize  = 16
+                    .FontBold  = .T.
+                    .ForeColor = RGB(0, 0, 0)
+                    .BackStyle = 0
+                    .AutoSize  = .F.
+                    .Visible   = .T.
+                ENDWITH
+
+                .AddObject("lbl_4c_Titulo", "Label")
+                WITH .lbl_4c_Titulo
+                    .Caption   = THIS.Caption
+                    .Top       = 18
+                    .Left      = 10
+                    .Width     = THIS.Width
+                    .Height    = 46
+                    .FontName  = "Tahoma"
+                    .FontSize  = 16
+                    .FontBold  = .T.
+                    .ForeColor = RGB(255, 255, 255)
+                    .BackStyle = 0
+                    .AutoSize  = .F.
+                    .Visible   = .T.
+                ENDWITH
+
+            ENDWITH
+
             loc_oPage.AddObject("cnt_4c_BotoesAcao", "Container")
             loc_oCntAcao = loc_oPage.cnt_4c_BotoesAcao
             WITH loc_oCntAcao
@@ -1655,3 +1702,4 @@ DEFINE CLASS FormPcp AS FormBase
     ENDPROC
 
 ENDDEFINE
+

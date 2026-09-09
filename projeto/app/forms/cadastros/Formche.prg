@@ -11,7 +11,7 @@
 DEFINE CLASS Formche AS FormBase
 
     *-- Propriedades visuais (PILAR 1 - UX FIDELITY)
-    Height      = 579
+    Height      = 654
     Width       = 1000
     Caption     = "Carteira de Cheques"
     AutoCenter  = .T.
@@ -428,7 +428,7 @@ DEFINE CLASS Formche AS FormBase
         loc_oGrid.Top         = 156
         loc_oGrid.Left        = 2
         loc_oGrid.Width       = 910
-        loc_oGrid.Height      = 385
+        loc_oGrid.Height      = 460
         loc_oGrid.ColumnCount = 6
 
         WITH loc_oGrid
@@ -476,6 +476,53 @@ DEFINE CLASS Formche AS FormBase
         LOCAL loc_oPg2, loc_oBotoesAcao, loc_oGrid
 
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
+
+        *-- Cabecalho cinza (identico ao da pagina Lista) - CLAUDE.md #11 / Erro152
+        loc_oPg2.AddObject("cnt_4c_Cabecalho", "Container")
+        WITH loc_oPg2.cnt_4c_Cabecalho
+            .Top           = 29
+            .Left          = 0
+            .Width         = THIS.Width
+            .Height        = 80
+            .BackColor     = RGB(100, 100, 100)
+            .BorderWidth   = 0
+            .SpecialEffect = 0
+            .Visible       = .T.
+
+            .AddObject("lbl_4c_Sombra", "Label")
+            WITH .lbl_4c_Sombra
+                .Caption   = THIS.Caption
+                .Top       = 15
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 40
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(0, 0, 0)
+                .BackStyle = 0
+                .AutoSize  = .F.
+                .Visible   = .T.
+            ENDWITH
+
+            .AddObject("lbl_4c_Titulo", "Label")
+            WITH .lbl_4c_Titulo
+                .Caption   = THIS.Caption
+                .Top       = 18
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 46
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(255, 255, 255)
+                .BackStyle = 0
+                .AutoSize  = .F.
+                .Visible   = .T.
+            ENDWITH
+
+        ENDWITH
+
 
         *-- Container botoes de acao: Confirmar / Cancelar (Top=4+29=33)
         loc_oPg2.AddObject("cnt_4c_BotoesAcao", "Container")
@@ -572,7 +619,7 @@ DEFINE CLASS Formche AS FormBase
         *-- Shapes decorativos (top=8+29=37)
         loc_oPg2.AddObject("shp_4c_Shape1", "Shape")
         WITH loc_oPg2.shp_4c_Shape1
-            .Top         = 37
+            .Top         = 115
             .Left        = 9
             .Width       = 620
             .Height      = 112
@@ -583,7 +630,7 @@ DEFINE CLASS Formche AS FormBase
 
         loc_oPg2.AddObject("shp_4c_Shape2", "Shape")
         WITH loc_oPg2.shp_4c_Shape2
-            .Top         = 37
+            .Top         = 115
             .Left        = 719
             .Width       = 92
             .Height      = 53
@@ -596,7 +643,7 @@ DEFINE CLASS Formche AS FormBase
         loc_oPg2.AddObject("lbl_4c_Label3", "Label")
         WITH loc_oPg2.lbl_4c_Label3
             .Caption   = "Lote :"
-            .Top       = 48
+            .Top       = 126
             .Left      = 79
             .FontName  = "Tahoma"
             .FontSize  = 8
@@ -608,7 +655,7 @@ DEFINE CLASS Formche AS FormBase
 
         loc_oPg2.AddObject("txt_4c_Lote", "TextBox")
         WITH loc_oPg2.txt_4c_Lote
-            .Top         = 44
+            .Top         = 122
             .Left        = 111
             .Width       = 64
             .Height      = 23
@@ -624,7 +671,7 @@ DEFINE CLASS Formche AS FormBase
         loc_oPg2.AddObject("lbl_4c_DataBase", "Label")
         WITH loc_oPg2.lbl_4c_DataBase
             .Caption   = "Data Base :"
-            .Top       = 48
+            .Top       = 126
             .Left      = 191
             .FontName  = "Tahoma"
             .FontSize  = 8
@@ -636,7 +683,7 @@ DEFINE CLASS Formche AS FormBase
 
         loc_oPg2.AddObject("txt_4c_Data", "TextBox")
         WITH loc_oPg2.txt_4c_Data
-            .Top         = 44
+            .Top         = 122
             .Left        = 251
             .Width       = 77
             .Height      = 23
@@ -652,7 +699,7 @@ DEFINE CLASS Formche AS FormBase
         loc_oPg2.AddObject("lbl_4c_Label22", "Label")
         WITH loc_oPg2.lbl_4c_Label22
             .Caption   = "Data do Movimento :"
-            .Top       = 48
+            .Top       = 126
             .Left      = 360
             .FontName  = "Tahoma"
             .FontSize  = 8
@@ -664,7 +711,7 @@ DEFINE CLASS Formche AS FormBase
 
         loc_oPg2.AddObject("txt_4c_DtMovs", "TextBox")
         WITH loc_oPg2.txt_4c_DtMovs
-            .Top         = 44
+            .Top         = 122
             .Left        = 464
             .Width       = 77
             .Height      = 23
@@ -681,7 +728,7 @@ DEFINE CLASS Formche AS FormBase
         loc_oPg2.AddObject("lbl_4c_Label19", "Label")
         WITH loc_oPg2.lbl_4c_Label19
             .Caption   = "Movimento :"
-            .Top       = 74
+            .Top       = 152
             .Left      = 48
             .FontName  = "Tahoma"
             .FontSize  = 8
@@ -693,7 +740,7 @@ DEFINE CLASS Formche AS FormBase
 
         loc_oPg2.AddObject("txt_4c_OperL", "TextBox")
         WITH loc_oPg2.txt_4c_OperL
-            .Top         = 70
+            .Top         = 148
             .Left        = 111
             .Width       = 124
             .Height      = 23
@@ -709,7 +756,7 @@ DEFINE CLASS Formche AS FormBase
         loc_oPg2.AddObject("lbl_4c_Label5", "Label")
         WITH loc_oPg2.lbl_4c_Label5
             .Caption   = "Opera" + CHR(231) + CHR(227) + "o :"
-            .Top       = 74
+            .Top       = 152
             .Left      = 253
             .FontName  = "Tahoma"
             .FontSize  = 8
@@ -721,7 +768,7 @@ DEFINE CLASS Formche AS FormBase
 
         loc_oPg2.AddObject("txt_4c_Opera", "TextBox")
         WITH loc_oPg2.txt_4c_Opera
-            .Top         = 70
+            .Top         = 148
             .Left        = 311
             .Width       = 17
             .Height      = 23
@@ -737,7 +784,7 @@ DEFINE CLASS Formche AS FormBase
         loc_oPg2.AddObject("lbl_4c_Label13", "Label")
         WITH loc_oPg2.lbl_4c_Label13
             .Caption   = "Limpar Carteira :"
-            .Top       = 74
+            .Top       = 152
             .Left      = 380
             .FontName  = "Tahoma"
             .FontSize  = 8
@@ -749,7 +796,7 @@ DEFINE CLASS Formche AS FormBase
 
         loc_oPg2.AddObject("txt_4c_LimCart", "TextBox")
         WITH loc_oPg2.txt_4c_LimCart
-            .Top         = 70
+            .Top         = 148
             .Left        = 464
             .Width       = 17
             .Height      = 23
@@ -764,7 +811,7 @@ DEFINE CLASS Formche AS FormBase
         loc_oPg2.AddObject("lbl_4c_Label14", "Label")
         WITH loc_oPg2.lbl_4c_Label14
             .Caption   = "(S/N)"
-            .Top       = 74
+            .Top       = 152
             .Left      = 489
             .FontName  = "Tahoma"
             .FontSize  = 8
@@ -777,7 +824,7 @@ DEFINE CLASS Formche AS FormBase
         loc_oPg2.AddObject("lbl_4c_Label21", "Label")
         WITH loc_oPg2.lbl_4c_Label21
             .Caption   = "Grupo Terceiro :"
-            .Top       = 100
+            .Top       = 178
             .Left      = 29
             .FontName  = "Tahoma"
             .FontSize  = 8
@@ -789,7 +836,7 @@ DEFINE CLASS Formche AS FormBase
 
         loc_oPg2.AddObject("txt_4c_GrupoT", "TextBox")
         WITH loc_oPg2.txt_4c_GrupoT
-            .Top         = 96
+            .Top         = 174
             .Left        = 111
             .Width       = 87
             .Height      = 23
@@ -803,7 +850,7 @@ DEFINE CLASS Formche AS FormBase
 
         loc_oPg2.AddObject("txt_4c_DGrupoT", "TextBox")
         WITH loc_oPg2.txt_4c_DGrupoT
-            .Top         = 96
+            .Top         = 174
             .Left        = 200
             .Width       = 300
             .Height      = 23
@@ -819,7 +866,7 @@ DEFINE CLASS Formche AS FormBase
         loc_oPg2.AddObject("lbl_4c_Label8", "Label")
         WITH loc_oPg2.lbl_4c_Label8
             .Caption   = "Total Bruto :"
-            .Top       = 126
+            .Top       = 204
             .Left      = 47
             .FontName  = "Tahoma"
             .FontSize  = 8
@@ -831,7 +878,7 @@ DEFINE CLASS Formche AS FormBase
 
         loc_oPg2.AddObject("txt_4c_Valor", "TextBox")
         WITH loc_oPg2.txt_4c_Valor
-            .Top         = 122
+            .Top         = 200
             .Left        = 111
             .Width       = 124
             .Height      = 23
@@ -849,7 +896,7 @@ DEFINE CLASS Formche AS FormBase
         loc_oPg2.AddObject("lbl_4c_Label17", "Label")
         WITH loc_oPg2.lbl_4c_Label17
             .Caption   = "Juros :"
-            .Top       = 126
+            .Top       = 204
             .Left      = 247
             .FontName  = "Tahoma"
             .FontSize  = 8
@@ -861,7 +908,7 @@ DEFINE CLASS Formche AS FormBase
 
         loc_oPg2.AddObject("txt_4c_TJUROS", "TextBox")
         WITH loc_oPg2.txt_4c_TJUROS
-            .Top         = 122
+            .Top         = 200
             .Left        = 284
             .Width       = 113
             .Height      = 23
@@ -879,7 +926,7 @@ DEFINE CLASS Formche AS FormBase
         loc_oPg2.AddObject("lbl_4c_Label4", "Label")
         WITH loc_oPg2.lbl_4c_Label4
             .Caption   = "Total L" + CHR(237) + "quido :"
-            .Top       = 126
+            .Top       = 204
             .Left      = 433
             .FontName  = "Tahoma"
             .FontSize  = 8
@@ -891,7 +938,7 @@ DEFINE CLASS Formche AS FormBase
 
         loc_oPg2.AddObject("txt_4c_TLiq", "TextBox")
         WITH loc_oPg2.txt_4c_TLiq
-            .Top         = 122
+            .Top         = 200
             .Left        = 504
             .Width       = 117
             .Height      = 23
@@ -909,7 +956,7 @@ DEFINE CLASS Formche AS FormBase
         loc_oPg2.AddObject("lbl_4c_Label6", "Label")
         WITH loc_oPg2.lbl_4c_Label6
             .Caption   = "Moeda :"
-            .Top       = 435
+            .Top       = 513
             .Left      = 590
             .FontName  = "Tahoma"
             .FontSize  = 8
@@ -921,7 +968,7 @@ DEFINE CLASS Formche AS FormBase
 
         loc_oPg2.AddObject("txt_4c_Moeda", "TextBox")
         WITH loc_oPg2.txt_4c_Moeda
-            .Top         = 431
+            .Top         = 509
             .Left        = 633
             .Width       = 32
             .Height      = 23
@@ -937,7 +984,7 @@ DEFINE CLASS Formche AS FormBase
         loc_oPg2.AddObject("lbl_4c_Cotacao", "Label")
         WITH loc_oPg2.lbl_4c_Cotacao
             .Caption   = "Cota" + CHR(231) + CHR(227) + "o :"
-            .Top       = 460
+            .Top       = 538
             .Left      = 582
             .FontName  = "Tahoma"
             .FontSize  = 8
@@ -949,7 +996,7 @@ DEFINE CLASS Formche AS FormBase
 
         loc_oPg2.AddObject("txt_4c_Cotacao", "TextBox")
         WITH loc_oPg2.txt_4c_Cotacao
-            .Top         = 456
+            .Top         = 534
             .Left        = 633
             .Width       = 118
             .Height      = 23
@@ -967,7 +1014,7 @@ DEFINE CLASS Formche AS FormBase
         loc_oPg2.AddObject("lbl_4c_Label20", "Label")
         WITH loc_oPg2.lbl_4c_Label20
             .Caption   = "Valor Conv :"
-            .Top       = 485
+            .Top       = 563
             .Left      = 570
             .FontName  = "Tahoma"
             .FontSize  = 8
@@ -979,7 +1026,7 @@ DEFINE CLASS Formche AS FormBase
 
         loc_oPg2.AddObject("txt_4c_ValConv", "TextBox")
         WITH loc_oPg2.txt_4c_ValConv
-            .Top         = 481
+            .Top         = 559
             .Left        = 633
             .Width       = 118
             .Height      = 23
@@ -1041,7 +1088,7 @@ DEFINE CLASS Formche AS FormBase
         *-- Botao Excluir Cheque da grade (ExcCheque, top=376+29=405, left=939)
         loc_oPg2.AddObject("cmd_4c_ExcCheque", "CommandButton")
         WITH loc_oPg2.cmd_4c_ExcCheque
-            .Top           = 405
+            .Top           = 483
             .Left          = 939
             .Width         = 55
             .Height        = 53
@@ -1059,7 +1106,7 @@ DEFINE CLASS Formche AS FormBase
         *-- Get_Cheque: campo para leitora magnetica / digitacao (top=393+29=422, left=115)
         loc_oPg2.AddObject("txt_4c_Cheque", "TextBox")
         WITH loc_oPg2.txt_4c_Cheque
-            .Top         = 422
+            .Top         = 500
             .Left        = 115
             .Width       = 252
             .Height      = 24
@@ -1073,7 +1120,7 @@ DEFINE CLASS Formche AS FormBase
         *-- Labels AvisoPorta M/T/S (ocultos - visiveis conforme tipo de operacao)
         loc_oPg2.AddObject("lbl_4c_AvisoPortaM", "Label")
         WITH loc_oPg2.lbl_4c_AvisoPortaM
-            .Top       = 96
+            .Top       = 174
             .Left      = 544
             .Width     = 22
             .Height    = 18
@@ -1088,7 +1135,7 @@ DEFINE CLASS Formche AS FormBase
 
         loc_oPg2.AddObject("lbl_4c_AvisoPortaT", "Label")
         WITH loc_oPg2.lbl_4c_AvisoPortaT
-            .Top       = 96
+            .Top       = 174
             .Left      = 570
             .Width     = 22
             .Height    = 18
@@ -1103,7 +1150,7 @@ DEFINE CLASS Formche AS FormBase
 
         loc_oPg2.AddObject("lbl_4c_AvisoPortaS", "Label")
         WITH loc_oPg2.lbl_4c_AvisoPortaS
-            .Top       = 96
+            .Top       = 174
             .Left      = 596
             .Width     = 22
             .Height    = 18
@@ -1119,7 +1166,7 @@ DEFINE CLASS Formche AS FormBase
         *-- cmd_4c_Command3 Historico (top=405, left=829)
         loc_oPg2.AddObject("cmd_4c_Command3", "CommandButton")
         WITH loc_oPg2.cmd_4c_Command3
-            .Top           = 405
+            .Top           = 483
             .Left          = 829
             .Width         = 55
             .Height        = 53
@@ -1136,7 +1183,7 @@ DEFINE CLASS Formche AS FormBase
         *-- cmd_4c_BotConsulta PGV consulta lote (top=405, left=884)
         loc_oPg2.AddObject("cmd_4c_BotConsulta", "CommandButton")
         WITH loc_oPg2.cmd_4c_BotConsulta
-            .Top           = 405
+            .Top           = 483
             .Left          = 884
             .Width         = 55
             .Height        = 53
@@ -1153,7 +1200,7 @@ DEFINE CLASS Formche AS FormBase
         *-- Grupo Origem (top=456, left=9/115/197)
         loc_oPg2.AddObject("lbl_4c_LblGrupoOs", "Label")
         WITH loc_oPg2.lbl_4c_LblGrupoOs
-            .Top      = 459
+            .Top      = 537
             .Left     = 9
             .Width    = 100
             .Height   = 18
@@ -1165,7 +1212,7 @@ DEFINE CLASS Formche AS FormBase
 
         loc_oPg2.AddObject("txt_4c_GrupoOs", "TextBox")
         WITH loc_oPg2.txt_4c_GrupoOs
-            .Top         = 456
+            .Top         = 534
             .Left        = 115
             .Width       = 75
             .Height      = 24
@@ -1178,7 +1225,7 @@ DEFINE CLASS Formche AS FormBase
 
         loc_oPg2.AddObject("txt_4c_DGrupoOs", "TextBox")
         WITH loc_oPg2.txt_4c_DGrupoOs
-            .Top         = 456
+            .Top         = 534
             .Left        = 197
             .Width       = 298
             .Height      = 24
@@ -1192,7 +1239,7 @@ DEFINE CLASS Formche AS FormBase
         *-- cmd_4c_Command1 PGV Origem (top=456, left=500, cobre linha Grupo+Conta Orig)
         loc_oPg2.AddObject("cmd_4c_Command1", "CommandButton")
         WITH loc_oPg2.cmd_4c_Command1
-            .Top           = 456
+            .Top           = 534
             .Left          = 500
             .Width         = 31
             .Height        = 48
@@ -1209,7 +1256,7 @@ DEFINE CLASS Formche AS FormBase
         *-- Conta Origem (top=481, left=9/115/197)
         loc_oPg2.AddObject("lbl_4c_LblContaOs", "Label")
         WITH loc_oPg2.lbl_4c_LblContaOs
-            .Top      = 484
+            .Top      = 562
             .Left     = 9
             .Width    = 100
             .Height   = 18
@@ -1221,7 +1268,7 @@ DEFINE CLASS Formche AS FormBase
 
         loc_oPg2.AddObject("txt_4c_ContaOs", "TextBox")
         WITH loc_oPg2.txt_4c_ContaOs
-            .Top         = 481
+            .Top         = 559
             .Left        = 115
             .Width       = 75
             .Height      = 24
@@ -1234,7 +1281,7 @@ DEFINE CLASS Formche AS FormBase
 
         loc_oPg2.AddObject("txt_4c_DCONTAOs", "TextBox")
         WITH loc_oPg2.txt_4c_DCONTAOs
-            .Top         = 481
+            .Top         = 559
             .Left        = 197
             .Width       = 298
             .Height      = 24
@@ -1248,7 +1295,7 @@ DEFINE CLASS Formche AS FormBase
         *-- Grupo Destino (top=506, left=9/115/197)
         loc_oPg2.AddObject("lbl_4c_LblGrupoDs", "Label")
         WITH loc_oPg2.lbl_4c_LblGrupoDs
-            .Top      = 509
+            .Top      = 587
             .Left     = 9
             .Width    = 100
             .Height   = 18
@@ -1260,7 +1307,7 @@ DEFINE CLASS Formche AS FormBase
 
         loc_oPg2.AddObject("txt_4c_GrupoDs", "TextBox")
         WITH loc_oPg2.txt_4c_GrupoDs
-            .Top         = 506
+            .Top         = 584
             .Left        = 115
             .Width       = 75
             .Height      = 24
@@ -1273,7 +1320,7 @@ DEFINE CLASS Formche AS FormBase
 
         loc_oPg2.AddObject("txt_4c_DGrupoDs", "TextBox")
         WITH loc_oPg2.txt_4c_DGrupoDs
-            .Top         = 506
+            .Top         = 584
             .Left        = 197
             .Width       = 298
             .Height      = 24
@@ -1287,7 +1334,7 @@ DEFINE CLASS Formche AS FormBase
         *-- cmd_4c_Command2 PGV Destino (top=506, left=500, cobre linha Grupo+Conta Dest)
         loc_oPg2.AddObject("cmd_4c_Command2", "CommandButton")
         WITH loc_oPg2.cmd_4c_Command2
-            .Top           = 506
+            .Top           = 584
             .Left          = 500
             .Width         = 31
             .Height        = 48
@@ -1304,7 +1351,7 @@ DEFINE CLASS Formche AS FormBase
         *-- Conta Destino (top=531, left=9/115/197)
         loc_oPg2.AddObject("lbl_4c_LblContaDs", "Label")
         WITH loc_oPg2.lbl_4c_LblContaDs
-            .Top      = 534
+            .Top      = 612
             .Left     = 9
             .Width    = 100
             .Height   = 18
@@ -1316,7 +1363,7 @@ DEFINE CLASS Formche AS FormBase
 
         loc_oPg2.AddObject("txt_4c_ContaDs", "TextBox")
         WITH loc_oPg2.txt_4c_ContaDs
-            .Top         = 531
+            .Top         = 609
             .Left        = 115
             .Width       = 75
             .Height      = 24
@@ -1329,7 +1376,7 @@ DEFINE CLASS Formche AS FormBase
 
         loc_oPg2.AddObject("txt_4c_DCONTADs", "TextBox")
         WITH loc_oPg2.txt_4c_DCONTADs
-            .Top         = 531
+            .Top         = 609
             .Left        = 197
             .Width       = 298
             .Height      = 24
@@ -1343,7 +1390,7 @@ DEFINE CLASS Formche AS FormBase
         *-- Taxa a.m.% label + textbox (top=506, left=548/633)
         loc_oPg2.AddObject("lbl_4c_LblTaxa", "Label")
         WITH loc_oPg2.lbl_4c_LblTaxa
-            .Top      = 509
+            .Top      = 587
             .Left     = 548
             .Width    = 80
             .Height   = 18
@@ -1355,7 +1402,7 @@ DEFINE CLASS Formche AS FormBase
 
         loc_oPg2.AddObject("txt_4c_Taxa", "TextBox")
         WITH loc_oPg2.txt_4c_Taxa
-            .Top         = 506
+            .Top         = 584
             .Left        = 633
             .Width       = 66
             .Height      = 24
@@ -1369,7 +1416,7 @@ DEFINE CLASS Formche AS FormBase
         *-- Taxa a.d.% label + textbox (top=531, left=548/633)
         loc_oPg2.AddObject("lbl_4c_LblTaxaDia", "Label")
         WITH loc_oPg2.lbl_4c_LblTaxaDia
-            .Top      = 534
+            .Top      = 612
             .Left     = 548
             .Width    = 80
             .Height   = 18
@@ -1381,7 +1428,7 @@ DEFINE CLASS Formche AS FormBase
 
         loc_oPg2.AddObject("txt_4c_TaxaDia", "TextBox")
         WITH loc_oPg2.txt_4c_TaxaDia
-            .Top         = 531
+            .Top         = 609
             .Left        = 633
             .Width       = 66
             .Height      = 24
@@ -1395,7 +1442,7 @@ DEFINE CLASS Formche AS FormBase
         *-- Indicadores S (Simples) / C (Composto) entre Taxa dia e IOF (top=552, left=717/743)
         loc_oPg2.AddObject("lbl_4c_TpJuroS", "Label")
         WITH loc_oPg2.lbl_4c_TpJuroS
-            .Top       = 552
+            .Top       = 630
             .Left      = 717
             .Width     = 20
             .Height    = 18
@@ -1409,7 +1456,7 @@ DEFINE CLASS Formche AS FormBase
 
         loc_oPg2.AddObject("lbl_4c_TpJuroC", "Label")
         WITH loc_oPg2.lbl_4c_TpJuroC
-            .Top       = 552
+            .Top       = 630
             .Left      = 743
             .Width     = 20
             .Height    = 18
@@ -1424,7 +1471,7 @@ DEFINE CLASS Formche AS FormBase
         *-- Grupo Juros (top=556, left=9/115/197)
         loc_oPg2.AddObject("lbl_4c_LblGruJuro", "Label")
         WITH loc_oPg2.lbl_4c_LblGruJuro
-            .Top      = 559
+            .Top      = 637
             .Left     = 9
             .Width    = 100
             .Height   = 18
@@ -1436,7 +1483,7 @@ DEFINE CLASS Formche AS FormBase
 
         loc_oPg2.AddObject("txt_4c_GruJuro", "TextBox")
         WITH loc_oPg2.txt_4c_GruJuro
-            .Top         = 556
+            .Top         = 634
             .Left        = 115
             .Width       = 75
             .Height      = 24
@@ -1449,7 +1496,7 @@ DEFINE CLASS Formche AS FormBase
 
         loc_oPg2.AddObject("txt_4c_DGruJuro", "TextBox")
         WITH loc_oPg2.txt_4c_DGruJuro
-            .Top         = 556
+            .Top         = 634
             .Left        = 197
             .Width       = 298
             .Height      = 24
@@ -1463,7 +1510,7 @@ DEFINE CLASS Formche AS FormBase
         *-- IOF a.m.% label + textbox (top=556, left=548/633)
         loc_oPg2.AddObject("lbl_4c_LblTaxaIof", "Label")
         WITH loc_oPg2.lbl_4c_LblTaxaIof
-            .Top      = 559
+            .Top      = 637
             .Left     = 548
             .Width    = 80
             .Height   = 18
@@ -1475,7 +1522,7 @@ DEFINE CLASS Formche AS FormBase
 
         loc_oPg2.AddObject("txt_4c_TaxaIof", "TextBox")
         WITH loc_oPg2.txt_4c_TaxaIof
-            .Top         = 556
+            .Top         = 634
             .Left        = 633
             .Width       = 66
             .Height      = 24
@@ -1489,7 +1536,7 @@ DEFINE CLASS Formche AS FormBase
         *-- Conta Juros (top=581, left=9/115/197)
         loc_oPg2.AddObject("lbl_4c_LblConJuro", "Label")
         WITH loc_oPg2.lbl_4c_LblConJuro
-            .Top      = 584
+            .Top      = 662
             .Left     = 9
             .Width    = 100
             .Height   = 18
@@ -1501,7 +1548,7 @@ DEFINE CLASS Formche AS FormBase
 
         loc_oPg2.AddObject("txt_4c_ConJuro", "TextBox")
         WITH loc_oPg2.txt_4c_ConJuro
-            .Top         = 581
+            .Top         = 659
             .Left        = 115
             .Width       = 75
             .Height      = 24
@@ -1514,7 +1561,7 @@ DEFINE CLASS Formche AS FormBase
 
         loc_oPg2.AddObject("txt_4c_DJuro", "TextBox")
         WITH loc_oPg2.txt_4c_DJuro
-            .Top         = 581
+            .Top         = 659
             .Left        = 197
             .Width       = 298
             .Height      = 24
@@ -3332,3 +3379,5 @@ DEFINE CLASS Formche AS FormBase
     ENDPROC
 
 ENDDEFINE
+
+
