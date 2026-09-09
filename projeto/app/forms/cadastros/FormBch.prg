@@ -2230,11 +2230,11 @@ DEFINE CLASS FormBch AS FormBase
             IF VARTYPE(loc_oPg2.txt_4c_DConta) = "O"
                 IF !EMPTY(loc_cConta)
                     loc_nResultado = SQLEXEC(gnConnHandle, ;
-                        "SELECT razaos FROM SIGCDCLI WHERE iclis = " + EscaparSQL(loc_cConta), ;
+                        "SELECT RClis FROM SIGCDCLI WHERE iclis = " + EscaparSQL(loc_cConta), ;
                         "cursor_4c_DescCli")
                     IF loc_nResultado >= 0 AND RECCOUNT("cursor_4c_DescCli") > 0
                         SELECT cursor_4c_DescCli
-                        loc_oPg2.txt_4c_DConta.Value = ALLTRIM(cursor_4c_DescCli.razaos)
+                        loc_oPg2.txt_4c_DConta.Value = ALLTRIM(cursor_4c_DescCli.RClis)
                     ELSE
                         loc_oPg2.txt_4c_DConta.Value = ""
                     ENDIF
@@ -2465,7 +2465,17 @@ DEFINE CLASS FormBch AS FormBase
     * ValidConta - Valid handler: lookup SIGCDCLI por iclis, preenche DConta
     *--------------------------------------------------------------------------
     PROCEDURE ValidConta(par_nKeyCode, par_nShiftAltCtrl)
-        LOCAL loc_oPg2, loc_cCodigo, loc_oBusca, loc_nResultado, loc_lResultado
+        *-- Espelha o Valid do legado (SigCdBch.Pagina.Dados.GetConta.Valid):
+        *--   Grupo = .GetGrupo.Value
+        *--   If !fAcessoContas(Usuar, Grupo, 'C', This.Value, .GetConta, .GetDConta)
+        *--       MessageBox('Acesso Negado !!!', 0+48, '')
+        *--
+        *-- O GRUPO faz parte da regra de acesso: fAcessoContas cruza SigSyAgc/
+        *-- SigSyAcc com SigCdAcG para decidir quais contas o usuario enxerga
+        *-- naquele grupo, e ele mesmo abre a lista quando nao acha direto. A
+        *-- versao anterior fazia SELECT em SIGCDCLI sem filtro de grupo e montava
+        *-- um FormBuscaAuxiliar proprio - buraco de permissao, nao so de exibicao.
+        LOCAL loc_oPg2, loc_cCodigo, loc_cGrupo, loc_lResultado
         loc_lResultado = .T.
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
 
@@ -2478,75 +2488,49 @@ DEFINE CLASS FormBch AS FormBase
         IF EMPTY(loc_cCodigo)
             IF VARTYPE(loc_oPg2.txt_4c_DConta) = "O"
                 loc_oPg2.txt_4c_DConta.Value = ""
+                loc_oPg2.txt_4c_DConta.Refresh
             ENDIF
             RETURN .T.
         ENDIF
 
-        TRY
-            loc_nResultado = SQLEXEC(gnConnHandle, ;
-                "SELECT iclis, razaos FROM SIGCDCLI WHERE iclis = " + EscaparSQL(loc_cCodigo), ;
-                "cursor_4c_ChkCli")
+        loc_cGrupo = ""
+        IF VARTYPE(loc_oPg2.txt_4c_Grupo) = "O"
+            loc_cGrupo = ALLTRIM(loc_oPg2.txt_4c_Grupo.Value)
+        ENDIF
 
-            IF loc_nResultado >= 0 AND RECCOUNT("cursor_4c_ChkCli") > 0
-                SELECT cursor_4c_ChkCli
-                IF VARTYPE(loc_oPg2.txt_4c_DConta) = "O"
-                    loc_oPg2.txt_4c_DConta.Value = ALLTRIM(cursor_4c_ChkCli.razaos)
-                ENDIF
-            ELSE
+        TRY
+            IF !fAcessoContas(Usuar, loc_cGrupo, "C", loc_cCodigo, ;
+                              loc_oPg2.txt_4c_Conta, loc_oPg2.txt_4c_DConta)
+                MsgAviso("Acesso Negado !!!", "")
+                loc_oPg2.txt_4c_Conta.Value = ""
+                loc_oPg2.txt_4c_Conta.Refresh
                 IF VARTYPE(loc_oPg2.txt_4c_DConta) = "O"
                     loc_oPg2.txt_4c_DConta.Value = ""
+                    loc_oPg2.txt_4c_DConta.Refresh
                 ENDIF
-                loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
-                    "SIGCDCLI", "cursor_4c_BuscaCli", "iclis", loc_cCodigo, "Conta")
-
-                IF VARTYPE(loc_oBusca) = "O"
-                    loc_oBusca.mAddColuna("iclis",  "", "C" + CHR(243) + "digo")
-                    loc_oBusca.mAddColuna("razaos", "", "Nome")
-                    loc_oBusca.Show()
-
-                    IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaCli")
-                        SELECT cursor_4c_BuscaCli
-                        IF !EOF("cursor_4c_BuscaCli")
-                            loc_oPg2.txt_4c_Conta.Value = ALLTRIM(cursor_4c_BuscaCli.iclis)
-                            IF VARTYPE(loc_oPg2.txt_4c_DConta) = "O"
-                                loc_oPg2.txt_4c_DConta.Value = ALLTRIM(cursor_4c_BuscaCli.razaos)
-                            ENDIF
-                        ELSE
-                            loc_oPg2.txt_4c_Conta.Value = ""
-                        ENDIF
-                    ELSE
-                        loc_oPg2.txt_4c_Conta.Value = ""
-                    ENDIF
-
-                    loc_oBusca.Release()
-                ENDIF
-            ENDIF
-
-            IF USED("cursor_4c_ChkCli")
-                USE IN cursor_4c_ChkCli
-            ENDIF
-            IF USED("cursor_4c_BuscaCli")
-                USE IN cursor_4c_BuscaCli
+                loc_lResultado = .F.
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "FormBch.ValidConta")
-            IF USED("cursor_4c_ChkCli")
-                USE IN cursor_4c_ChkCli
-            ENDIF
-            IF USED("cursor_4c_BuscaCli")
-                USE IN cursor_4c_BuscaCli
-            ENDIF
+            loc_lResultado = .F.
         ENDTRY
 
         RETURN loc_lResultado
     ENDPROC
 
     *--------------------------------------------------------------------------
-    * ValidDConta - Valid handler: busca reversa SIGCDCLI por razaos
+    * ValidDConta - Valid handler: busca reversa SIGCDCLI por RClis (coluna goSistema.BuscaNome, igual ao fAcessoContas do legado)
     * Ativo apenas quando txt_4c_Conta estiver vazio em modo INCLUIR
     *--------------------------------------------------------------------------
     PROCEDURE ValidDConta(par_nKeyCode, par_nShiftAltCtrl)
-        LOCAL loc_oPg2, loc_oBusca, loc_lResultado
+        *-- Espelha o Valid do legado (SigCdBch.Pagina.Dados.GetDConta.Valid):
+        *--   Grupo = .GetGrupo.Value
+        *--   If !fAcessoContas(Usuar, Grupo, 'D', This.Value, .GetConta, .GetDConta)
+        *--       MessageBox('Acesso Negado !!!', 0+48, '')
+        *--
+        *-- Tipo 'D' = busca reversa: o usuario digita a DESCRICAO e o
+        *-- fAcessoContas resolve o codigo, ja filtrado pelo acesso naquele grupo.
+        LOCAL loc_oPg2, loc_cDesc, loc_cGrupo, loc_lResultado
         loc_lResultado = .T.
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
 
@@ -2559,44 +2543,36 @@ DEFINE CLASS FormBch AS FormBase
             RETURN .T.
         ENDIF
 
-        IF EMPTY(ALLTRIM(loc_oPg2.txt_4c_DConta.Value))
+        loc_cDesc = ALLTRIM(loc_oPg2.txt_4c_DConta.Value)
+
+        IF EMPTY(loc_cDesc)
+            IF VARTYPE(loc_oPg2.txt_4c_Conta) = "O"
+                loc_oPg2.txt_4c_Conta.Value = ""
+                loc_oPg2.txt_4c_Conta.Refresh
+            ENDIF
             RETURN .T.
         ENDIF
 
+        loc_cGrupo = ""
+        IF VARTYPE(loc_oPg2.txt_4c_Grupo) = "O"
+            loc_cGrupo = ALLTRIM(loc_oPg2.txt_4c_Grupo.Value)
+        ENDIF
+
         TRY
-            loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
-                "SIGCDCLI", "cursor_4c_BuscaCli", "iclis", "", "Conta")
-
-            IF VARTYPE(loc_oBusca) = "O"
-                loc_oBusca.mAddColuna("iclis",  "", "C" + CHR(243) + "digo")
-                loc_oBusca.mAddColuna("razaos", "", "Nome")
-                loc_oBusca.Show()
-
-                IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaCli")
-                    SELECT cursor_4c_BuscaCli
-                    IF !EOF("cursor_4c_BuscaCli")
-                        IF VARTYPE(loc_oPg2.txt_4c_Conta) = "O"
-                            loc_oPg2.txt_4c_Conta.Value  = ALLTRIM(cursor_4c_BuscaCli.iclis)
-                        ENDIF
-                        loc_oPg2.txt_4c_DConta.Value = ALLTRIM(cursor_4c_BuscaCli.razaos)
-                    ELSE
-                        loc_oPg2.txt_4c_DConta.Value = ""
-                    ENDIF
-                ELSE
-                    loc_oPg2.txt_4c_DConta.Value = ""
+            IF !fAcessoContas(Usuar, loc_cGrupo, "D", loc_cDesc, ;
+                              loc_oPg2.txt_4c_Conta, loc_oPg2.txt_4c_DConta)
+                MsgAviso("Acesso Negado !!!", "")
+                loc_oPg2.txt_4c_DConta.Value = ""
+                loc_oPg2.txt_4c_DConta.Refresh
+                IF VARTYPE(loc_oPg2.txt_4c_Conta) = "O"
+                    loc_oPg2.txt_4c_Conta.Value = ""
+                    loc_oPg2.txt_4c_Conta.Refresh
                 ENDIF
-
-                loc_oBusca.Release()
-            ENDIF
-
-            IF USED("cursor_4c_BuscaCli")
-                USE IN cursor_4c_BuscaCli
+                loc_lResultado = .F.
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "FormBch.ValidDConta")
-            IF USED("cursor_4c_BuscaCli")
-                USE IN cursor_4c_BuscaCli
-            ENDIF
+            loc_lResultado = .F.
         ENDTRY
 
         RETURN loc_lResultado
@@ -2696,11 +2672,11 @@ DEFINE CLASS FormBch AS FormBase
 
             IF !EMPTY(loc_cConta) AND VARTYPE(loc_oPg3.txt_4c_DContaDisp) = "O"
                 loc_nResultado = SQLEXEC(gnConnHandle, ;
-                    "SELECT razaos FROM SIGCDCLI WHERE iclis = " + EscaparSQL(loc_cConta), ;
+                    "SELECT RClis FROM SIGCDCLI WHERE iclis = " + EscaparSQL(loc_cConta), ;
                     "cursor_4c_DescCli")
                 IF loc_nResultado >= 0 AND RECCOUNT("cursor_4c_DescCli") > 0
                     SELECT cursor_4c_DescCli
-                    loc_oPg3.txt_4c_DContaDisp.Value = ALLTRIM(cursor_4c_DescCli.razaos)
+                    loc_oPg3.txt_4c_DContaDisp.Value = ALLTRIM(cursor_4c_DescCli.RClis)
                 ELSE
                     loc_oPg3.txt_4c_DContaDisp.Value = ""
                 ENDIF
