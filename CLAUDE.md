@@ -217,6 +217,29 @@ $t = Get-Content 'C:\4c\docs\schema.sql' -Raw
 4. **legado usa outro nome** -> erro de migracao: corrigir para o nome do legado
 
 Auditoria: `automation\VerificarTabelasInexistentes.ps1`. WARNING: CorretorAutomatico **#193**. Origem: Erro155 (FormBlq — `grep` no schema disse "10 tabelas ausentes"; na verdade era **1**).
+
+### 15. `EVALUATE()` NAO atribui - use `STORE ... TO (...)`
+`EVALUATE()` **avalia** uma expressao e devolve o valor. Com um `=` dentro da string, o VFP enxerga uma **comparacao**, avalia como `.T.`/`.F.` e descarta - **sem erro e sem aviso**, o campo nunca muda.
+
+```foxpro
+* ERRADO - nao limpa nada
+EVALUATE("loc_oCnt." + par_cTxtDesc + ".Value = ''")
+
+* CERTO
+STORE ""        TO ("loc_oCnt." + par_cTxtDesc + ".Value")
+STORE loc_cDesc TO ("loc_oCnt." + par_cTxtDesc + ".Value")
+```
+
+**EVALUATE continua CERTO para LEITURA** - o `=` fica FORA da string e eh comparacao mesmo:
+
+```foxpro
+loc_c    = EVALUATE("loc_oCnt." + par_cTxtCon + ".Value")
+loc_oCnt = EVALUATE("loc_oPg2." + par_cCnt)
+IF EVALUATE("VARTYPE(loc_oCnt." + par_cX + ")") = "O"
+IF EVALUATE("loc_oCnt." + par_cTxtCon + ".Value") = "X"
+```
+
+Auto-fix: CorretorAutomatico **#194** (forma segura; valor com concatenacao/funcao vira WARNING). Origem: Erro155 - no `Formlch` a descricao do GRUPO nunca apareceu nos 7 containers, desde a migracao.
 **Full VFP9 reference, control properties, and 58 common errors**: See vfp9-migration skill.
 
 ## BusinessBase Property Names (CORRECT)

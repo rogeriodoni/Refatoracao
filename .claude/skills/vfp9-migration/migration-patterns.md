@@ -10339,3 +10339,65 @@ A mensagem vem do **SQL Server**, nao do VFP, e nao quebra a compilacao. Ordem:
 - Pattern #193 (WARNING-only) faz o mesmo por arquivo no CorretorAutomatico.
 - Conexao real do sistema: `projeto\app\start\config.prg:22-25`.
 - Origem: Erro155 (2026-09-09, FormBlq "Cadastro de Bloqueios por Periodo").
+
+## 196. EVALUATE() Nao Atribui — Ele Avalia e Devolve o Valor (Erro155 2026-09-09)
+
+Ninguem reporta este bug: nao ha erro, nao ha aviso, o campo so nunca muda.
+
+```foxpro
+EVALUATE("loc_oCnt." + par_cTxtDesc + ".Value = ''")
+```
+
+O VFP monta a string, enxerga uma **comparacao** (`obj.prop.Value = ''`), avalia
+como `.T.`/`.F.` e joga o resultado fora. Comprovado no VFP9:
+
+```
+antes:            [ABC]
+depois EVALUATE:  [ABC]     <-- nao atribuiu nada
+depois STORE TO:  []
+```
+
+### CERTO
+
+```foxpro
+STORE ""         TO ("loc_oCnt." + par_cTxtDesc + ".Value")
+STORE loc_cDesc  TO ("loc_oCnt." + par_cTxtDesc + ".Value")
+```
+
+`STORE <valor> TO (<expressao que resulta no nome>)` eh a forma de atribuir a um
+nome montado em tempo de execucao. (`&lcCmd` tambem funciona, mas macro
+substitution eh mais fragil e nao permite valor de qualquer tipo.)
+
+### EVALUATE continua CERTO para LEITURA
+
+```foxpro
+loc_c    = EVALUATE("loc_oCnt." + par_cTxtCon + ".Value")           && OK
+loc_oCnt = EVALUATE("loc_oPg2." + par_cCnt)                         && OK
+IF EVALUATE("VARTYPE(loc_oCnt." + par_cTxtDesc + ")") = "O"         && OK
+IF EVALUATE("loc_oCnt." + par_cTxtCon + ".Value") = "X"             && OK
+```
+
+Nos dois ultimos o `=` esta **fora** da string — eh comparacao mesmo, e esta
+correto. O defeito existe so quando o `=` esta **dentro** da string montada, que
+eh o unico caso em que a intencao era atribuir. O detector do Pattern #194 se
+apoia exatamente nessa distincao.
+
+### Por que passa despercebido
+
+No `Formlch` eram 4 sites. O pior:
+
+```foxpro
+* BuscarDescGrupo - exibir a descricao do grupo ao lado do codigo
+EVALUATE("loc_oCnt." + par_cTxtDesc + ".Value = loc_cDesc")
+```
+
+A descricao do **grupo** nunca apareceu em nenhum dos 7 containers do form,
+desde a migracao. O codigo esta ali, faz sentido na leitura, compila, roda e nao
+faz nada. Os outros dois sites nunca limpavam o campo quando deveriam.
+
+### Referencias
+
+- Auto-fix: Pattern #194 (forma segura: valor vazio ou identificador simples;
+  valor com concatenacao/funcao vira WARNING).
+- Origem: Erro155 (2026-09-09, `Formlch.prg` — 3 dos 4 sites eram pre-existentes,
+  encontrados ao portar o `fChecarInativas`).

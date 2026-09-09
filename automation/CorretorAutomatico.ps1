@@ -14055,6 +14055,104 @@ function Corrigir-TabelaInexistenteNoSchema {
     return $Linhas
 }
 
+function Corrigir-EvaluateAtribuicaoQueNaoAtribui {
+    # Pattern #194 (Erro155, 2026-09-09) - AUTO-FIX (forma segura) + WARNING.
+    #
+    # EVALUATE() AVALIA uma expressao e devolve o valor; ele NAO executa
+    # atribuicao. Entao
+    #
+    #     EVALUATE("loc_oCnt." + par_cTxtDesc + ".Value = ''")
+    #
+    # nao limpa nada: o VFP monta a string, enxerga uma COMPARACAO
+    # (obj.prop.Value = '') , avalia como .T./.F. e joga o resultado fora. Sem
+    # erro, sem aviso - o campo simplesmente nunca muda. Comprovado no VFP9:
+    #     antes:            [ABC]
+    #     depois EVALUATE:  [ABC]
+    #     depois STORE TO:  []
+    #
+    # A forma correta de atribuir a um nome montado em tempo de execucao eh
+    # STORE <valor> TO (<expressao que resulta no nome>):
+    #
+    #     STORE "" TO ("loc_oCnt." + par_cTxtDesc + ".Value")
+    #
+    # ATENCAO: EVALUATE continua CERTO para LEITURA -
+    #     loc_c = EVALUATE("loc_oCnt." + par_cTxtCon + ".Value")
+    #     IF EVALUATE("VARTYPE(loc_oCnt." + par_cTxtDesc + ")") = "O"
+    # O pattern so mexe quando o sinal de igual esta DENTRO da string montada,
+    # que eh o unico caso em que a intencao era atribuir.
+    #
+    # AUTO-FIX so na forma segura, em que o valor depois do '=' eh string
+    # vazia ('' ou "") ou um identificador simples (variavel/propriedade). Valor
+    # com concatenacao, chamada de funcao ou aspas internas vira WARNING - a
+    # reescrita ai exige ler o contexto.
+    #
+    # Origem: Erro155 (2026-09-09, Formlch) - 4 sites, 3 deles pre-existentes. O
+    # pior calava a descricao do GRUPO nos 7 containers do form.
+    param([string[]]$Linhas, [string]$Arquivo = "")
+
+    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
+
+    $rx = [regex]'(?i)EVALUATE\(\s*(?<expr>"[^"]*"(?:\s*\+\s*[A-Za-z_]\w*(?:\.\w+)*\s*\+\s*"[^"]*")*)\s*\)'
+
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        $l = $Linhas[$i]
+        if ($l -notmatch '(?i)EVALUATE\s*\(') { continue }
+        if ($l -match '^\s*\*') { continue }
+
+        $m = $rx.Match($l)
+        if (-not $m.Success) { continue }
+
+        $expr = $m.Groups['expr'].Value
+
+        # o '=' tem de estar DENTRO do ULTIMO literal da concatenacao
+        $ultAspas = $expr.LastIndexOf('"')
+        if ($ultAspas -lt 1) { continue }
+        $iniUlt = $expr.LastIndexOf('"', $ultAspas - 1)
+        if ($iniUlt -lt 0) { continue }
+        $ultimo = $expr.Substring($iniUlt + 1, $ultAspas - $iniUlt - 1)
+
+        $mi = [regex]::Match($ultimo, '^(?<alvo>[^=<>!]*?)\s*=\s*(?<valor>.*)$')
+        if (-not $mi.Success) { continue }
+        $alvo  = $mi.Groups['alvo'].Value
+        $valor = $mi.Groups['valor'].Value.Trim()
+        if ([string]::IsNullOrWhiteSpace($alvo)) { continue }
+
+        $novoExpr = $expr.Substring(0, $iniUlt + 1) + $alvo + '"'
+
+        # forma segura?
+        $valorPS = $null
+        if ($valor -eq "''" -or $valor -eq '""') { $valorPS = '""' }
+        elseif ($valor -match '^[A-Za-z_]\w*(\.\w+)*$') { $valorPS = $valor }
+
+        if ($null -eq $valorPS) {
+            Add-Correcao -Tipo "WARN-194-EVALUATE-NAO-ATRIBUI" -Linha ($i + 1) `
+                -Original $l.Trim() -Corrigido "(REVISAR MANUAL)" `
+                -Descricao ("Pattern #194: EVALUATE() AVALIA e devolve valor, NAO atribui - o campo nunca muda, " +
+                    "sem erro e sem aviso. Trocar por STORE <valor> TO (<expressao do nome>). O valor aqui nao eh " +
+                    "string vazia nem identificador simples, entao a reescrita exige ler o contexto. " +
+                    "EVALUATE continua CERTO para LEITURA. Origem: Erro155 (2026-09-09, Formlch).")
+            Write-Host "[Pattern #194] EVALUATE-atribuicao (revisar) linha $($i + 1)" -ForegroundColor Yellow
+            continue
+        }
+
+        $indent = ''
+        if ($l -match '^(\s*)') { $indent = $Matches[1] }
+        $nova = $indent + 'STORE ' + $valorPS + ' TO (' + $novoExpr + ')'
+
+        Add-Correcao -Tipo "EVALUATE_NAO_ATRIBUI" -Linha ($i + 1) `
+            -Original $l.Trim() -Corrigido $nova.Trim() `
+            -Descricao ("Pattern #194: EVALUATE() AVALIA e devolve valor, NAO atribui - a linha original nunca " +
+                "mudava o campo, silenciosamente (o VFP so avaliava a comparacao e descartava). Trocado por " +
+                "STORE ... TO (...), a forma correta de atribuir a nome montado em tempo de execucao. " +
+                "Origem: Erro155 (2026-09-09, Formlch - 4 sites, 3 pre-existentes; o pior calava a descricao do " +
+                "grupo nos 7 containers).")
+        Write-Host "[Pattern #194] EVALUATE-atribuicao corrigida na linha $($i + 1)" -ForegroundColor Green
+        $Linhas[$i] = $nova
+    }
+
+    return $Linhas
+}
+
 function Invoke-CorrecaoAutomatica {
     param(
         [string]$Arquivo,
@@ -14271,6 +14369,7 @@ function Invoke-CorrecaoAutomatica {
     $linhas = Corrigir-LabelForeColorBrancoInvisivel -Linhas $linhas -Arquivo $Arquivo
     $linhas = Corrigir-ChamadaFuncaoNaoDefinida -Linhas $linhas -Arquivo $Arquivo
     $linhas = Corrigir-TabelaInexistenteNoSchema -Linhas $linhas -Arquivo $Arquivo
+    $linhas = Corrigir-EvaluateAtribuicaoQueNaoAtribui -Linhas $linhas -Arquivo $Arquivo
 
     # Salva arquivo corrigido em UTF-8 SEM BOM.
     # - VFP9 nao suporta BOM (por isso removemos no read com bytes[3..])
