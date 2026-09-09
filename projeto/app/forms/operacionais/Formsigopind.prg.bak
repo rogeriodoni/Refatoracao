@@ -2587,7 +2587,7 @@ DEFINE CLASS Formsigopind AS FormBase
                 .Picture   = gc_4c_CaminhoIcones + "cadastro_sair_60.jpg"
                 .FontName  = "Tahoma"
                 .FontSize  = 8
-                .ForeColor = RGB(255, 255, 255)
+                .ForeColor = RGB(90, 90, 90)
             ENDWITH
             BINDEVENT(loc_oCnt.obj_4c_QuitasVoltar, "Click", THIS, "BtnCntQuitasVoltarClick")
 

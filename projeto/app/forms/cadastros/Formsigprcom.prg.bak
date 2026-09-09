@@ -839,6 +839,53 @@ DEFINE CLASS Formsigprcom AS FormBase
         *-- Fundo padrao do framework frmcadastro (sem isso a pagina fica branca)
         loc_oPagina.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
 
+        *-- Cabecalho cinza (identico ao da pagina Lista) - CLAUDE.md #11 / Erro152
+        loc_oPagina.AddObject("cnt_4c_Cabecalho", "Container")
+        WITH loc_oPagina.cnt_4c_Cabecalho
+            .Top           = 29
+            .Left          = 0
+            .Width         = THIS.Width
+            .Height        = 80
+            .BackColor     = RGB(100, 100, 100)
+            .BorderWidth   = 0
+            .SpecialEffect = 0
+            .Visible       = .T.
+
+            .AddObject("lbl_4c_Sombra", "Label")
+            WITH .lbl_4c_Sombra
+                .Caption   = THIS.Caption
+                .Top       = 15
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 40
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(0, 0, 0)
+                .BackStyle = 0
+                .AutoSize  = .F.
+                .Visible   = .T.
+            ENDWITH
+
+            .AddObject("lbl_4c_Titulo", "Label")
+            WITH .lbl_4c_Titulo
+                .Caption   = THIS.Caption
+                .Top       = 18
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 46
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(255, 255, 255)
+                .BackStyle = 0
+                .AutoSize  = .F.
+                .Visible   = .T.
+            ENDWITH
+
+        ENDWITH
+
+
         *-- Container de botoes de acao (Confirmar/Cancelar)
         *-- Grupo_Salva.Left=843, Grupo_Salva.Top=-3 + 29 = 26
         loc_oPagina.AddObject("cnt_4c_BotoesAcao", "Container")
@@ -902,7 +949,7 @@ DEFINE CLASS Formsigprcom AS FormBase
         *-- Label Produto (Say1): top=79+29=108, left=260, width=47
         loc_oPagina.AddObject("lbl_4c_Label1", "Label")
         WITH loc_oPagina.lbl_4c_Label1
-            .Top       = 79 + 29
+            .Top       = 119
             .Left      = 260
             .Width     = 47
             .Height    = 15
@@ -918,7 +965,7 @@ DEFINE CLASS Formsigprcom AS FormBase
         *-- Label Grupo (Say8): top=105+29=134, left=269, width=38
         loc_oPagina.AddObject("lbl_4c_Label8", "Label")
         WITH loc_oPagina.lbl_4c_Label8
-            .Top       = 105 + 29
+            .Top       = 145
             .Left      = 269
             .Width     = 38
             .Height    = 15
@@ -934,7 +981,7 @@ DEFINE CLASS Formsigprcom AS FormBase
         *-- Label Fornecedor (Say11): top=130+29=159, left=243, width=64
         loc_oPagina.AddObject("lbl_4c_Label11", "Label")
         WITH loc_oPagina.lbl_4c_Label11
-            .Top       = 130 + 29
+            .Top       = 170
             .Left      = 243
             .Width     = 64
             .Height    = 15
@@ -950,7 +997,7 @@ DEFINE CLASS Formsigprcom AS FormBase
         *-- Label Ref. Fornecedor (Say12): top=156+29=185, left=219, width=88
         loc_oPagina.AddObject("lbl_4c_Label12", "Label")
         WITH loc_oPagina.lbl_4c_Label12
-            .Top       = 156 + 29
+            .Top       = 196
             .Left      = 219
             .Width     = 88
             .Height    = 15
@@ -966,7 +1013,7 @@ DEFINE CLASS Formsigprcom AS FormBase
         *-- Label Situacao (Say19): top=105+29=134, left=505
         loc_oPagina.AddObject("lbl_4c_Label19", "Label")
         WITH loc_oPagina.lbl_4c_Label19
-            .Top       = 105 + 29
+            .Top       = 145
             .Left      = 505
             .Width     = 50
             .Height    = 15
@@ -984,7 +1031,7 @@ DEFINE CLASS Formsigprcom AS FormBase
         *-- top=75+29=104, left=309, width=108, height=23
         loc_oPagina.AddObject("txt_4c__produto", "TextBox")
         WITH loc_oPagina.txt_4c__produto
-            .Top       = 75 + 29
+            .Top       = 115
             .Left      = 309
             .Width     = 108
             .Height    = 23
@@ -998,7 +1045,7 @@ DEFINE CLASS Formsigprcom AS FormBase
         *-- top=75+29=104, left=419, width=360, height=23
         loc_oPagina.AddObject("txt_4c_Dpro", "TextBox")
         WITH loc_oPagina.txt_4c_Dpro
-            .Top       = 75 + 29
+            .Top       = 115
             .Left      = 419
             .Width     = 360
             .Height    = 23
@@ -1015,7 +1062,7 @@ DEFINE CLASS Formsigprcom AS FormBase
         *-- top=101+29=130, left=309, width=31, height=23
         loc_oPagina.AddObject("txt_4c_Cgru", "TextBox")
         WITH loc_oPagina.txt_4c_Cgru
-            .Top       = 101 + 29
+            .Top       = 141
             .Left      = 309
             .Width     = 31
             .Height    = 23
@@ -1031,7 +1078,7 @@ DEFINE CLASS Formsigprcom AS FormBase
         *-- top=101+29=130, left=343, width=150, height=23
         loc_oPagina.AddObject("txt_4c_Dgru", "TextBox")
         WITH loc_oPagina.txt_4c_Dgru
-            .Top       = 101 + 29
+            .Top       = 141
             .Left      = 343
             .Width     = 150
             .Height    = 23
@@ -1047,7 +1094,7 @@ DEFINE CLASS Formsigprcom AS FormBase
         *-- top=100+29=129, left=555, width=117, height=25; ButtonCount=2 (1=Ativo, 2=Inativo)
         loc_oPagina.AddObject("obj_4c_Opc_situacao", "OptionGroup")
         WITH loc_oPagina.obj_4c_Opc_situacao
-            .Top         = 100 + 29
+            .Top         = 140
             .Left        = 555
             .Width       = 117
             .Height      = 25
@@ -1082,7 +1129,7 @@ DEFINE CLASS Formsigprcom AS FormBase
         *-- txt_4c_Ifor: codigo do fornecedor - somente leitura (top=130+29=159)
         loc_oPagina.AddObject("txt_4c_Ifor", "TextBox")
         WITH loc_oPagina.txt_4c_Ifor
-            .Top       = 130 + 29
+            .Top       = 170
             .Left      = 309
             .Width     = 80
             .Height    = 23
@@ -1097,7 +1144,7 @@ DEFINE CLASS Formsigprcom AS FormBase
         *-- txt_4c_Dfor: nome do fornecedor - somente leitura (top=130+29=159)
         loc_oPagina.AddObject("txt_4c_Dfor", "TextBox")
         WITH loc_oPagina.txt_4c_Dfor
-            .Top       = 130 + 29
+            .Top       = 170
             .Left      = 392
             .Width     = 220
             .Height    = 23
@@ -1112,7 +1159,7 @@ DEFINE CLASS Formsigprcom AS FormBase
         *-- txt_4c_Refs: referencia do fornecedor - somente leitura (top=156+29=185)
         loc_oPagina.AddObject("txt_4c_Refs", "TextBox")
         WITH loc_oPagina.txt_4c_Refs
-            .Top       = 156 + 29
+            .Top       = 196
             .Left      = 309
             .Width     = 150
             .Height    = 23
@@ -1128,7 +1175,7 @@ DEFINE CLASS Formsigprcom AS FormBase
         *-- cmd_4c_BtnExcluir: exclui linhas da empresa corrente na grade
         loc_oPagina.AddObject("cmd_4c_BtnExcluir", "CommandButton")
         WITH loc_oPagina.cmd_4c_BtnExcluir
-            .Top             = 414
+            .Top             = 425
             .Left            = 700
             .Width           = 40
             .Height          = 40
@@ -1152,7 +1199,7 @@ DEFINE CLASS Formsigprcom AS FormBase
         loc_oPagina.grd_4c_Gradei.ColumnCount  = 5
 
         WITH loc_oPagina.grd_4c_Gradei
-            .Top          = 181 + 29
+            .Top          = 221
             .Left         = 309
             .Width        = 387
             .Height       = 472
@@ -2513,3 +2560,4 @@ DEFINE CLASS Formsigprcom AS FormBase
         NODEFAULT
     ENDPROC
 ENDDEFINE
+

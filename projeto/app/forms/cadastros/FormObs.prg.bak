@@ -12,7 +12,7 @@
 DEFINE CLASS FormObs AS FormBase
 
     *-- Propriedades visuais (PILAR 1 - UX FIDELITY)
-    Height      = 600
+    Height      = 645
     Width       = 1000
     Caption     = "Cadastro de Observacoes"
     AutoCenter  = .T.
@@ -354,7 +354,7 @@ DEFINE CLASS FormObs AS FormBase
             .Top                = 117
             .Left               = 12
             .Width              = 894
-            .Height             = 455
+            .Height             = 500
             .DeleteMark         = .F.
             .RecordMark         = .F.
             .RowHeight          = 16
@@ -398,6 +398,53 @@ DEFINE CLASS FormObs AS FormBase
     PROTECTED PROCEDURE ConfigurarPaginaDados()
         LOCAL loc_oPg2, loc_oBotoesAcao
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
+
+        *-- Cabecalho cinza (identico ao da pagina Lista) - CLAUDE.md #11 / Erro152
+        loc_oPg2.AddObject("cnt_4c_Cabecalho", "Container")
+        WITH loc_oPg2.cnt_4c_Cabecalho
+            .Top           = 29
+            .Left          = 0
+            .Width         = THIS.Width
+            .Height        = 80
+            .BackColor     = RGB(100, 100, 100)
+            .BorderWidth   = 0
+            .SpecialEffect = 0
+            .Visible       = .T.
+
+            .AddObject("lbl_4c_Sombra", "Label")
+            WITH .lbl_4c_Sombra
+                .Caption   = THIS.Caption
+                .Top       = 15
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 40
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(0, 0, 0)
+                .BackStyle = 0
+                .AutoSize  = .F.
+                .Visible   = .T.
+            ENDWITH
+
+            .AddObject("lbl_4c_Titulo", "Label")
+            WITH .lbl_4c_Titulo
+                .Caption   = THIS.Caption
+                .Top       = 18
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 46
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(255, 255, 255)
+                .BackStyle = 0
+                .AutoSize  = .F.
+                .Visible   = .T.
+            ENDWITH
+
+        ENDWITH
+
 
         *-- Container botoes Confirmar/Cancelar (Grupo_Salva.Left=819, Top=7+29=36)
         loc_oPg2.AddObject("cnt_4c_BotoesAcao", "Container")
@@ -470,7 +517,7 @@ DEFINE CLASS FormObs AS FormBase
         WITH loc_oPg2.lbl_4c_Codigo
             .Caption   = "C" + CHR(243) + "digo :"
             .Left      = 55
-            .Top       = 60
+            .Top       = 118
             .Width     = 40
             .Height    = 17
             .FontName  = "Tahoma"
@@ -487,7 +534,7 @@ DEFINE CLASS FormObs AS FormBase
             .InputMask     = "999"
             .Alignment     = 3
             .Left          = 100
-            .Top           = 57
+            .Top           = 115
             .Width         = 37
             .Height        = 23
             .FontName      = "Tahoma"
@@ -502,7 +549,7 @@ DEFINE CLASS FormObs AS FormBase
         WITH loc_oPg2.lbl_4c_Grupo
             .Caption   = "Grupo :"
             .Left      = 154
-            .Top       = 60
+            .Top       = 118
             .Width     = 37
             .Height    = 17
             .FontName  = "Tahoma"
@@ -517,7 +564,7 @@ DEFINE CLASS FormObs AS FormBase
         WITH loc_oPg2.txt_4c_Grupos
             .Value         = ""
             .Left          = 194
-            .Top           = 57
+            .Top           = 115
             .Width         = 80
             .Height        = 23
             .FontName      = "Tahoma"
@@ -532,7 +579,7 @@ DEFINE CLASS FormObs AS FormBase
         WITH loc_oPg2.lbl_4c_Agrupamento
             .Caption   = "Agrupamento :"
             .Left      = 293
-            .Top       = 61
+            .Top       = 119
             .Width     = 77
             .Height    = 17
             .FontName  = "Tahoma"
@@ -548,7 +595,7 @@ DEFINE CLASS FormObs AS FormBase
             .Value         = ""
             .InputMask     = "!!!!!!!!!!"
             .Left          = 373
-            .Top           = 57
+            .Top           = 115
             .Width         = 80
             .Height        = 23
             .FontName      = "Tahoma"
@@ -563,7 +610,7 @@ DEFINE CLASS FormObs AS FormBase
         WITH loc_oPg2.lbl_4c_MovAut
             .Caption   = "Movimenta" + CHR(231) + CHR(227) + "o Automatica :"
             .Left      = 481
-            .Top       = 61
+            .Top       = 119
             .Width     = 133
             .Height    = 17
             .FontName  = "Tahoma"
@@ -579,7 +626,7 @@ DEFINE CLASS FormObs AS FormBase
         WITH loc_oPg2.txt_4c_MovAutDop
             .Value         = ""
             .Left          = 621
-            .Top           = 57
+            .Top           = 115
             .Width         = 192
             .Height        = 23
             .FontName      = "Tahoma"
@@ -597,7 +644,7 @@ DEFINE CLASS FormObs AS FormBase
         WITH loc_oPg2.lbl_4c_Observacao
             .Caption   = "Observa" + CHR(231) + CHR(227) + "o :"
             .Left      = 30
-            .Top       = 85
+            .Top       = 143
             .Width     = 65
             .Height    = 17
             .FontName  = "Tahoma"
@@ -612,7 +659,7 @@ DEFINE CLASS FormObs AS FormBase
         WITH loc_oPg2.edt_4c_Observas
             .Value         = ""
             .Left          = 100
-            .Top           = 85
+            .Top           = 143
             .Width         = 713
             .Height        = 179
             .FontName      = "Tahoma"
@@ -629,7 +676,7 @@ DEFINE CLASS FormObs AS FormBase
         WITH loc_oPg2.lbl_4c_Descricao
             .Caption   = "Descri" + CHR(231) + CHR(227) + "o :"
             .Left      = 42
-            .Top       = 270
+            .Top       = 328
             .Width     = 55
             .Height    = 17
             .FontName  = "Tahoma"
@@ -644,7 +691,7 @@ DEFINE CLASS FormObs AS FormBase
         WITH loc_oPg2.txt_4c_Descrs
             .Value         = ""
             .Left          = 100
-            .Top           = 267
+            .Top           = 325
             .Width         = 713
             .Height        = 23
             .FontName      = "Tahoma"
@@ -661,7 +708,7 @@ DEFINE CLASS FormObs AS FormBase
         WITH loc_oPg2.lbl_4c_PagaComissao
             .Caption   = "Paga Comiss" + CHR(227) + "o :"
             .Left      = 119
-            .Top       = 301
+            .Top       = 359
             .Width     = 78
             .Height    = 17
             .FontName  = "Tahoma"
@@ -681,7 +728,7 @@ DEFINE CLASS FormObs AS FormBase
             .BorderStyle = 0
             .Height      = 27
             .Left        = 200
-            .Top         = 296
+            .Top         = 354
             .Width       = 101
             .Value       = 1
             .Visible     = .T.
@@ -716,7 +763,7 @@ DEFINE CLASS FormObs AS FormBase
         WITH loc_oPg2.lbl_4c_Classificacao
             .Caption   = "Classifica" + CHR(231) + CHR(227) + "o : "
             .Left      = 391
-            .Top       = 301
+            .Top       = 359
             .Width     = 72
             .Height    = 17
             .FontName  = "Tahoma"
@@ -736,7 +783,7 @@ DEFINE CLASS FormObs AS FormBase
             .BorderStyle = 0
             .Height      = 27
             .Left        = 465
-            .Top         = 296
+            .Top         = 354
             .Width       = 205
             .Value       = 1
             .Visible     = .T.
@@ -782,7 +829,7 @@ DEFINE CLASS FormObs AS FormBase
         *-- Container1: Left=121, Top=311->340, Width=671, Height=276, BackColor amarelo
         loc_oPg2.AddObject("cnt_4c_Container1", "Container")
         WITH loc_oPg2.cnt_4c_Container1
-            .Top         = 340
+            .Top         = 398
             .Left        = 121
             .Width       = 671
             .Height      = 276
@@ -1506,3 +1553,4 @@ DEFINE CLASS FormObs AS FormBase
     ENDPROC
 
 ENDDEFINE
+

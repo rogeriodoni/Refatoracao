@@ -234,7 +234,7 @@ DEFINE CLASS Formsigmvcab AS FormBase
             .Left        = 542
             .Width       = 385
             .Height      = 85
-            .BackStyle = 1
+            .BackStyle = 0
             .BackColor = RGB(255, 255, 255)
             .BorderWidth = 0
             .Visible     = .T.
@@ -332,7 +332,7 @@ DEFINE CLASS Formsigmvcab AS FormBase
             .Left        = 917
             .Width       = 85
             .Height      = 85
-            .BackStyle = 1
+            .BackStyle = 0
             .BackColor = RGB(255, 255, 255)
             .BorderWidth = 0
             .BorderColor = RGB(136, 189, 188)
@@ -792,7 +792,7 @@ DEFINE CLASS Formsigmvcab AS FormBase
             .Left        = 840
             .Width       = 160
             .Height      = 85
-            .BackStyle = 1
+            .BackStyle = 0
             .BackColor = RGB(255, 255, 255)
             .BorderWidth = 0
             .Visible     = .T.

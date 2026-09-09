@@ -408,13 +408,60 @@ DEFINE CLASS Formsigpdmp7 AS FormBase
         *-- Fundo padrao do framework frmcadastro (sem isso a pagina fica branca)
         loc_oPagina.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
 
+        *-- Cabecalho cinza (identico ao da pagina Lista) - CLAUDE.md #11 / Erro152
+        loc_oPagina.AddObject("cnt_4c_Cabecalho", "Container")
+        WITH loc_oPagina.cnt_4c_Cabecalho
+            .Top           = 29
+            .Left          = 0
+            .Width         = THIS.Width
+            .Height        = 80
+            .BackColor     = RGB(100, 100, 100)
+            .BorderWidth   = 0
+            .SpecialEffect = 0
+            .Visible       = .T.
+
+            .AddObject("lbl_4c_Sombra", "Label")
+            WITH .lbl_4c_Sombra
+                .Caption   = THIS.Caption
+                .Top       = 15
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 40
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(0, 0, 0)
+                .BackStyle = 0
+                .AutoSize  = .F.
+                .Visible   = .T.
+            ENDWITH
+
+            .AddObject("lbl_4c_Titulo", "Label")
+            WITH .lbl_4c_Titulo
+                .Caption   = THIS.Caption
+                .Top       = 18
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 46
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(255, 255, 255)
+                .BackStyle = 0
+                .AutoSize  = .F.
+                .Visible   = .T.
+            ENDWITH
+
+        ENDWITH
+
+
         *----------------------------------------------------------------------
         *-- Container central de dados (cntDados - Top=117+29=146, Left=8)
         *-- Contem: Codigo, Data, label NomeOperacao
         *----------------------------------------------------------------------
         loc_oPagina.AddObject("cnt_4c_Dados", "Container")
         WITH loc_oPagina.cnt_4c_Dados
-            .Top         = 146
+            .Top         = 228
             .Left        = 8
             .Width       = 571
             .Height      = 75
@@ -525,7 +572,7 @@ DEFINE CLASS Formsigpdmp7 AS FormBase
         *----------------------------------------------------------------------
         loc_oPagina.AddObject("cnt_4c_Origem", "Container")
         WITH loc_oPagina.cnt_4c_Origem
-            .Top         = 227
+            .Top         = 309
             .Left        = 7
             .Width       = 571
             .Height      = 75
@@ -706,7 +753,7 @@ DEFINE CLASS Formsigpdmp7 AS FormBase
         *----------------------------------------------------------------------
         loc_oPagina.AddObject("cnt_4c_Destino", "Container")
         WITH loc_oPagina.cnt_4c_Destino
-            .Top         = 307
+            .Top         = 389
             .Left        = 7
             .Width       = 571
             .Height      = 75
@@ -831,7 +878,7 @@ DEFINE CLASS Formsigpdmp7 AS FormBase
         *----------------------------------------------------------------------
         loc_oPagina.AddObject("cnt_4c_Responsavel", "Container")
         WITH loc_oPagina.cnt_4c_Responsavel
-            .Top         = 386
+            .Top         = 468
             .Left        = 7
             .Width       = 571
             .Height      = 75
@@ -1067,7 +1114,7 @@ DEFINE CLASS Formsigpdmp7 AS FormBase
         *----------------------------------------------------------------------
         loc_oPagina.AddObject("shp_4c_ShpBtnGs", "Shape")
         WITH loc_oPagina.shp_4c_ShpBtnGs
-            .Top         = 179
+            .Top         = 261
             .Left        = 6
             .Width       = 484
             .Height      = 110
@@ -1083,7 +1130,7 @@ DEFINE CLASS Formsigpdmp7 AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label3", "Label")
         WITH loc_oPagina.lbl_4c_Label3
             .Caption   = "Observa" + CHR(231) + CHR(227) + "o : "
-            .Top       = 366
+            .Top       = 448
             .Left      = 592
             .AutoSize  = .T.
             .BackStyle = 0
@@ -1101,10 +1148,10 @@ DEFINE CLASS Formsigpdmp7 AS FormBase
         loc_oPagina.AddObject("obj_4c_Mm_obs", "EditBox")
         WITH loc_oPagina.obj_4c_Mm_obs
             .Value     = ""
-            .Top       = 382
+            .Top       = 464
             .Left      = 592
             .Width     = 397
-            .Height    = 205
+            .Height    = 165
             .FontName  = "Tahoma"
             .FontSize  = 8
             .ForeColor = RGB(0, 0, 0)
@@ -1122,7 +1169,7 @@ DEFINE CLASS Formsigpdmp7 AS FormBase
         loc_oPagina.grd_4c_Dados.ColumnCount = 1
 
         WITH loc_oPagina.grd_4c_Dados
-            .Top                = 33
+            .Top                = 115
             .Left               = 592
             .Width              = 171
             .Height             = 218
@@ -2088,3 +2135,4 @@ DEFINE CLASS Formsigpdmp7 AS FormBase
     ENDPROC
 
 ENDDEFINE
+

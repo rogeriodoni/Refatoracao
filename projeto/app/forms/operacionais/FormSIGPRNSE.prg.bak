@@ -736,7 +736,7 @@ DEFINE CLASS FormSIGPRNSE AS FormBase
             .FontName   = "Verdana"
             .FontSize   = 8
             .FontItalic = .F.
-            .ForeColor  = RGB(255, 255, 255)
+            .ForeColor  = RGB(90, 90, 90)
             .Left       = 21
             .Top        = 580
         ENDWITH

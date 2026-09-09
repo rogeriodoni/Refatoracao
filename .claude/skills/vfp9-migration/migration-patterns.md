@@ -10167,3 +10167,90 @@ legado". Nomes semanticos (`lbl_4c_Codigo`) casam pela `Caption` normalizada.
   FormCVE/FormSigPrEtq/FormICM/FormBch/FormTam/FormDIC/Formdmo/FormTAN/FormRss/
   FormOCO/FormDpi/FormCEP/Formsigopind/FormSIGPRNSE/FormRPT/FormJrn/FormACE).
 - Origem: Erro153 (2026-09-09, FormARV "Tipos de Arvore" — "ao incluir, os labels nao aparecem").
+
+## 194. Helper Inventado pelo Migrador so Estoura em RUNTIME (Erro154 2026-09-09)
+
+O testador clica **Alterar** e leva um dialogo `Erro`:
+
+```
+File 'converterparalogico.prg' does not exist.
+```
+
+O `.prg` compila sem uma unica reclamacao. Em VFP9, nome desconhecido seguido de
+`(` nao eh erro de compilacao: o interpretador resolve em tempo de execucao
+procurando **um arquivo `<nome>.prg` em disco**. So quando o usuario aciona o
+caminho de codigo eh que o erro aparece.
+
+### Duas familias com a MESMA mensagem
+
+| Familia | Causa | Fix |
+|---|---|---|
+| **Helper inexistente** | o migrador inventou `ConverterParaLogico()` e chamou em 6 BOs sem nunca defini-lo | DEFINIR em `projeto\app\utils\functions.prg` |
+| **Metodo sem `THIS.`** | `ValidarDados()` em vez de `THIS.ValidarDados()` | prefixar com `THIS.` (CLAUDE.md regra #8) |
+
+### ERRADO
+
+```foxpro
+*-- BchBO.CarregarDoCursor - ConverterParaLogico nao existe em lugar nenhum
+THIS.this_lEncerras = ConverterParaLogico(encerras)
+THIS.this_lGrvs     = ConverterParaLogico(grvs)
+```
+
+### CORRETO
+
+Definir o helper em `utils\functions.prg` (que o `config.prg:299` ja carrega):
+
+```foxpro
+FUNCTION ConverterParaLogico(puValor)
+    LOCAL loc_cTipo, loc_lRetorno
+    loc_lRetorno = .F.
+    IF !ISNULL(puValor)
+        loc_cTipo = VARTYPE(puValor)
+        DO CASE
+            CASE loc_cTipo = "L"
+                loc_lRetorno = puValor
+            CASE loc_cTipo = "N"
+                loc_lRetorno = (puValor != 0)
+            CASE loc_cTipo = "C"
+                loc_lRetorno = INLIST(UPPER(LEFT(ALLTRIM(puValor), 1)), "S", "T", "Y", "1")
+        ENDCASE
+    ENDIF
+    RETURN loc_lRetorno
+ENDFUNC
+```
+
+### Por que o VARTYPE, e nao um `= 1` direto
+
+Coluna `bit` do SQL Server chega ao VFP via ODBC **ora como Logico (.T./.F.), ora
+como Numerico (0/1)**, conforme driver e forma da consulta; `numeric(1,0)` chega
+sempre como Numerico; coluna char de marcacao chega como `"S"`/`"N"`. O idioma que
+ja existia em `BALBO.prg:223` — `(TratarNulo(encerras, "N") = 1)` — quebra com
+*Operator/operand type mismatch* justamente no caso Logico. E o legado do SigCdBch
+confirma que esse eh o caso real: `Iif(CrSigCdBch.Encerras, ...)` e
+`Replace Grvs With .T.` usam a coluna como logico puro.
+
+### Helpers globais que JA existem (nao reinventar)
+
+`TratarNulo`, `EscaparSQL`, `FormatarNumeroSQL`, `FormatarDataSQL`,
+`ConverterParaLogico`, `MsgErro`, `MsgAviso`, `MsgInfo`, `MsgConfirma`,
+`MostrarErro`, `Centralizar`, `CapturarErroSQL`. Precisando de outro, DEFINIR em
+`utils\functions.prg` — nunca so chamar.
+
+### Deteccao
+
+`automation\VerificarFuncoesNaoDefinidas.ps1` audita o projeto inteiro; o
+CorretorAutomatico faz o mesmo por arquivo no Pattern #192 (WARNING-only).
+
+O detector so olha o **namespace de helpers** do projeto (prefixos `Converter`,
+`Tratar`, `Formatar`, `Validar`, `Obter`, `Carregar`, ...). Essa restricao eh o
+que da zero falso positivo: nome de cursor (`TmpResumo`, `CsCabecalho`,
+`CrSigMvCcr`), palavra de SQL (`VALUES`, `SUM`, `COUNT`) e spec de tipo (`C(10)`,
+`N(6,2)`) nunca casam com esses prefixos. A varredura generica de "funcao nao
+definida" foi construida e testada: rende ~400 falsos positivos e foi descartada.
+
+### Referencias
+
+- Helper: `projeto/app/utils/functions.prg` (logo apos `TratarNulo`).
+- Sweep: 17 call sites em 6 BOs (`BchBO` 2, `BlqBO` 1, `DCCBO` 1, `OETBO` 1,
+  `sigpdmp6BO` 8, `sigpres2BO` 4) — todos resolvidos por uma unica definicao.
+- Origem: Erro154 (2026-09-09, FormBch "Balanco de Cheques", botao Alterar).

@@ -9,7 +9,7 @@ SET PROCEDURE TO (gc_4c_CaminhoClasses + "formbase.prg") ADDITIVE
 DEFINE CLASS Formsigpres2 AS FormBase
 
     *-- Propriedades visuais (PILAR 1 - UX Fidelity)
-    Height      = 600
+    Height      = 664
     Width       = 1000
     Caption     = "Pedido de Estoque"
     AutoCenter  = .T.
@@ -256,7 +256,7 @@ DEFINE CLASS Formsigpres2 AS FormBase
             .Top                = 117
             .Left               = 26
             .Width              = 960
-            .Height             = 468
+            .Height             = 532
             .FontName           = "Verdana"
             .FontSize           = 8
             .ForeColor          = RGB(90, 90, 90)
@@ -337,6 +337,53 @@ DEFINE CLASS Formsigpres2 AS FormBase
         *-- Fundo padrao do framework frmcadastro (sem isso a pagina fica branca)
         loc_oPagina.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
 
+        *-- Cabecalho cinza (identico ao da pagina Lista) - CLAUDE.md #11 / Erro152
+        loc_oPagina.AddObject("cnt_4c_Cabecalho", "Container")
+        WITH loc_oPagina.cnt_4c_Cabecalho
+            .Top           = 29
+            .Left          = 0
+            .Width         = THIS.Width
+            .Height        = 80
+            .BackColor     = RGB(100, 100, 100)
+            .BorderWidth   = 0
+            .SpecialEffect = 0
+            .Visible       = .T.
+
+            .AddObject("lbl_4c_Sombra", "Label")
+            WITH .lbl_4c_Sombra
+                .Caption   = THIS.Caption
+                .Top       = 15
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 40
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(0, 0, 0)
+                .BackStyle = 0
+                .AutoSize  = .F.
+                .Visible   = .T.
+            ENDWITH
+
+            .AddObject("lbl_4c_Titulo", "Label")
+            WITH .lbl_4c_Titulo
+                .Caption   = THIS.Caption
+                .Top       = 18
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 46
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(255, 255, 255)
+                .BackStyle = 0
+                .AutoSize  = .F.
+                .Visible   = .T.
+            ENDWITH
+
+        ENDWITH
+
+
         *-- Container salvar/cancelar (Grupo_Salva no legado)
         *-- Top=4+29=33, Left=829, Width=160, Height=85
         loc_oPagina.AddObject("cnt_4c_Salva", "Container")
@@ -401,7 +448,7 @@ DEFINE CLASS Formsigpres2 AS FormBase
         loc_oGrid = loc_oPagina.grd_4c_Operacao
         loc_oGrid.ColumnCount = 1
         WITH loc_oGrid
-            .Top                = 39
+            .Top                = 118
             .Left               = 679
             .Width              = 112
             .Height             = 148
@@ -427,7 +474,7 @@ DEFINE CLASS Formsigpres2 AS FormBase
         loc_oPagina.AddObject("cmd_4c_Entrega", "CommandButton")
         WITH loc_oPagina.cmd_4c_Entrega
             .Caption       = "Entrega"
-            .Top           = 36
+            .Top           = 115
             .Left          = 23
             .Width         = 90
             .Height        = 40
@@ -448,7 +495,7 @@ DEFINE CLASS Formsigpres2 AS FormBase
         loc_oPagina.AddObject("lbl_4c_Codigo", "Label")
         WITH loc_oPagina.lbl_4c_Codigo
             .Caption   = "C" + CHR(243) + "digo"
-            .Top       = 43
+            .Top       = 122
             .Left      = 131
             .Width     = 65
             .Height    = 15
@@ -464,7 +511,7 @@ DEFINE CLASS Formsigpres2 AS FormBase
         loc_oPagina.AddObject("txt_4c_Codigo", "TextBox")
         WITH loc_oPagina.txt_4c_Codigo
             .Value         = ""
-            .Top           = 60
+            .Top           = 139
             .Left          = 131
             .Width         = 61
             .Height        = 23
@@ -483,7 +530,7 @@ DEFINE CLASS Formsigpres2 AS FormBase
         loc_oPagina.AddObject("lbl_4c_Data", "Label")
         WITH loc_oPagina.lbl_4c_Data
             .Caption   = "Data"
-            .Top       = 43
+            .Top       = 122
             .Left      = 201
             .Width     = 40
             .Height    = 15
@@ -499,7 +546,7 @@ DEFINE CLASS Formsigpres2 AS FormBase
         loc_oPagina.AddObject("txt_4c_Data", "TextBox")
         WITH loc_oPagina.txt_4c_Data
             .Value         = {}
-            .Top           = 60
+            .Top           = 139
             .Left          = 201
             .Width         = 80
             .Height        = 23
@@ -518,7 +565,7 @@ DEFINE CLASS Formsigpres2 AS FormBase
         loc_oPagina.AddObject("lbl_4c_PrvEnts", "Label")
         WITH loc_oPagina.lbl_4c_PrvEnts
             .Caption   = "Prz Entrega"
-            .Top       = 43
+            .Top       = 122
             .Left      = 289
             .Width     = 70
             .Height    = 15
@@ -534,7 +581,7 @@ DEFINE CLASS Formsigpres2 AS FormBase
         loc_oPagina.AddObject("txt_4c_PrvEnts", "TextBox")
         WITH loc_oPagina.txt_4c_PrvEnts
             .Value         = {}
-            .Top           = 60
+            .Top           = 139
             .Left          = 289
             .Width         = 80
             .Height        = 23
@@ -553,7 +600,7 @@ DEFINE CLASS Formsigpres2 AS FormBase
         loc_oPagina.AddObject("lbl_4c_Nota", "Label")
         WITH loc_oPagina.lbl_4c_Nota
             .Caption   = "Docto"
-            .Top       = 91
+            .Top       = 170
             .Left      = 193
             .Width     = 30
             .Height    = 15
@@ -569,7 +616,7 @@ DEFINE CLASS Formsigpres2 AS FormBase
         loc_oPagina.AddObject("txt_4c_Nota", "TextBox")
         WITH loc_oPagina.txt_4c_Nota
             .Value         = ""
-            .Top           = 107
+            .Top           = 186
             .Left          = 193
             .Width         = 66
             .Height        = 23
@@ -588,7 +635,7 @@ DEFINE CLASS Formsigpres2 AS FormBase
         loc_oPagina.AddObject("lbl_4c_Nop", "Label")
         WITH loc_oPagina.lbl_4c_Nop
             .Caption   = "OP"
-            .Top       = 91
+            .Top       = 170
             .Left      = 131
             .Width     = 55
             .Height    = 15
@@ -604,7 +651,7 @@ DEFINE CLASS Formsigpres2 AS FormBase
         loc_oPagina.AddObject("txt_4c_Nop", "TextBox")
         WITH loc_oPagina.txt_4c_Nop
             .Value         = ""
-            .Top           = 108
+            .Top           = 187
             .Left          = 131
             .Width         = 55
             .Height        = 23
@@ -623,7 +670,7 @@ DEFINE CLASS Formsigpres2 AS FormBase
         loc_oPagina.AddObject("lbl_4c_Tabd", "Label")
         WITH loc_oPagina.lbl_4c_Tabd
             .Caption   = "Tb. Desconto"
-            .Top       = 91
+            .Top       = 170
             .Left      = 269
             .Width     = 70
             .Height    = 15
@@ -639,7 +686,7 @@ DEFINE CLASS Formsigpres2 AS FormBase
         loc_oPagina.AddObject("txt_4c_Tabd", "TextBox")
         WITH loc_oPagina.txt_4c_Tabd
             .Value         = ""
-            .Top           = 108
+            .Top           = 187
             .Left          = 269
             .Width         = 80
             .Height        = 23
@@ -658,7 +705,7 @@ DEFINE CLASS Formsigpres2 AS FormBase
         loc_oPagina.AddObject("lbl_4c_PStatus", "Label")
         WITH loc_oPagina.lbl_4c_PStatus
             .Caption   = "Status"
-            .Top       = 91
+            .Top       = 170
             .Left      = 358
             .Width     = 36
             .Height    = 15
@@ -674,7 +721,7 @@ DEFINE CLASS Formsigpres2 AS FormBase
         loc_oPagina.AddObject("txt_4c_PStatus", "TextBox")
         WITH loc_oPagina.txt_4c_PStatus
             .Value         = ""
-            .Top           = 108
+            .Top           = 187
             .Left          = 358
             .Width         = 36
             .Height        = 23
@@ -693,7 +740,7 @@ DEFINE CLASS Formsigpres2 AS FormBase
         loc_oPagina.AddObject("cmd_4c_SubNiveis", "CommandButton")
         WITH loc_oPagina.cmd_4c_SubNiveis
             .Caption       = "   Sub" + CHR(237) + "veis    "
-            .Top           = 154
+            .Top           = 233
             .Left          = 833
             .Width         = 137
             .Height        = 40
@@ -713,7 +760,7 @@ DEFINE CLASS Formsigpres2 AS FormBase
         *-- Top=173+29=202, Left=27, Width=582, Height=164
         loc_oPagina.AddObject("cnt_4c_Origem", "Container")
         WITH loc_oPagina.cnt_4c_Origem
-            .Top         = 202
+            .Top         = 281
             .Left        = 27
             .Width       = 582
             .Height      = 164
@@ -1062,7 +1109,7 @@ DEFINE CLASS Formsigpres2 AS FormBase
         loc_oGridItens = loc_oPagina.grd_4c_Itens
         loc_oGridItens.ColumnCount = 10
         WITH loc_oGridItens
-            .Top                = 379
+            .Top                = 458
             .Left               = 23
             .Width              = 732
             .Height             = 191
@@ -1106,7 +1153,7 @@ DEFINE CLASS Formsigpres2 AS FormBase
         *-- Top=173+29=202, Left=614, Width=373, Height=164
         loc_oPagina.AddObject("cnt_4c_ObsItem", "Container")
         WITH loc_oPagina.cnt_4c_ObsItem
-            .Top         = 202
+            .Top         = 281
             .Left        = 614
             .Width       = 373
             .Height      = 164
@@ -1151,7 +1198,7 @@ DEFINE CLASS Formsigpres2 AS FormBase
         loc_oPagina.AddObject("lbl_4c_DescrLbl", "Label")
         WITH loc_oPagina.lbl_4c_DescrLbl
             .Caption   = "Descri" + CHR(231) + CHR(227) + "o"
-            .Top       = 575
+            .Top       = 654
             .Left      = 23
             .Width     = 60
             .Height    = 15
@@ -1166,7 +1213,7 @@ DEFINE CLASS Formsigpres2 AS FormBase
         loc_oPagina.AddObject("txt_4c_Descr", "TextBox")
         WITH loc_oPagina.txt_4c_Descr
             .Value         = ""
-            .Top           = 591
+            .Top           = 670
             .Left          = 23
             .Width         = 454
             .Height        = 23
@@ -1184,7 +1231,7 @@ DEFINE CLASS Formsigpres2 AS FormBase
         *-- Top=365+29=394, Left=762, Width=225, Height=163
         loc_oPagina.AddObject("img_4c_FigJpg", "Image")
         WITH loc_oPagina.img_4c_FigJpg
-            .Top     = 394
+            .Top     = 473
             .Left    = 762
             .Width   = 225
             .Height  = 163
@@ -1197,7 +1244,7 @@ DEFINE CLASS Formsigpres2 AS FormBase
         loc_oPagina.AddObject("lbl_4c_ObsItemLbl", "Label")
         WITH loc_oPagina.lbl_4c_ObsItemLbl
             .Caption   = "Observa" + CHR(231) + CHR(227) + "o do item"
-            .Top       = 573
+            .Top       = 652
             .Left      = 496
             .Width     = 100
             .Height    = 15
@@ -1212,7 +1259,7 @@ DEFINE CLASS Formsigpres2 AS FormBase
         loc_oPagina.AddObject("txt_4c_ObsItem", "EditBox")
         WITH loc_oPagina.txt_4c_ObsItem
             .Value         = ""
-            .Top           = 590
+            .Top           = 669
             .Left          = 496
             .Width         = 454
             .Height        = 24
@@ -2034,3 +2081,4 @@ DEFINE CLASS Formsigpres2 AS FormBase
     ENDPROC
 
 ENDDEFINE
+

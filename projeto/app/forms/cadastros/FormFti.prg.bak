@@ -8,7 +8,7 @@
 DEFINE CLASS FormFti AS FormBase
 
     *-- Propriedades visuais (PILAR 1 - UX Fidelity)
-    Height      = 600
+    Height      = 682
     Width       = 1000
     Caption     = "Cadastro de Feitios"
     AutoCenter  = .T.
@@ -286,7 +286,7 @@ DEFINE CLASS FormFti AS FormBase
             .Top               = 162
             .Left              = 12
             .Width             = 940
-            .Height            = 458
+            .Height            = 540
             .ColumnCount       = 2
             .FontName          = "Verdana"
             .FontSize          = 8
@@ -450,6 +450,53 @@ DEFINE CLASS FormFti AS FormBase
         *-- Fundo padrao do framework frmcadastro (sem isso a pagina fica branca)
         loc_oPagina.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
 
+        *-- Cabecalho cinza (identico ao da pagina Lista) - CLAUDE.md #11 / Erro152
+        loc_oPagina.AddObject("cnt_4c_Cabecalho", "Container")
+        WITH loc_oPagina.cnt_4c_Cabecalho
+            .Top           = 29
+            .Left          = 0
+            .Width         = THIS.Width
+            .Height        = 80
+            .BackColor     = RGB(100, 100, 100)
+            .BorderWidth   = 0
+            .SpecialEffect = 0
+            .Visible       = .T.
+
+            .AddObject("lbl_4c_Sombra", "Label")
+            WITH .lbl_4c_Sombra
+                .Caption   = THIS.Caption
+                .Top       = 15
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 40
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(0, 0, 0)
+                .BackStyle = 0
+                .AutoSize  = .F.
+                .Visible   = .T.
+            ENDWITH
+
+            .AddObject("lbl_4c_Titulo", "Label")
+            WITH .lbl_4c_Titulo
+                .Caption   = THIS.Caption
+                .Top       = 18
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 46
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(255, 255, 255)
+                .BackStyle = 0
+                .AutoSize  = .F.
+                .Visible   = .T.
+            ENDWITH
+
+        ENDWITH
+
+
         *-- Container Salvar/Cancelar (Grupo_Salva: Left=818, Top=10+29=39, W=160, H=85)
         loc_oPagina.AddObject("cnt_4c_Salva", "Container")
         WITH loc_oPagina.cnt_4c_Salva
@@ -548,7 +595,7 @@ DEFINE CLASS FormFti AS FormBase
         *-- PageFrame Configuracao aninhado (Top=184+29=213, Left=-2, W=1003, H=420)
         loc_oPagina.AddObject("pgf_4c_Configuracao", "PageFrame")
         WITH loc_oPagina.pgf_4c_Configuracao
-            .Top       = 213
+            .Top       = 291
             .Left      = -2
             .Width     = 1003
             .Height    = 420
@@ -567,7 +614,7 @@ DEFINE CLASS FormFti AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label1", "Label")
         WITH loc_oPagina.lbl_4c_Label1
             .Caption   = "C" + CHR(243) + "digo : "
-            .Top       = 41
+            .Top       = 119
             .Left      = 121
             .Width     = 45
             .Height    = 15
@@ -586,7 +633,7 @@ DEFINE CLASS FormFti AS FormBase
         loc_oPagina.AddObject("txt_4c_Codigo", "TextBox")
         WITH loc_oPagina.txt_4c_Codigo
             .Value     = ""
-            .Top       = 37
+            .Top       = 115
             .Left      = 166
             .Width     = 34
             .Height    = 23
@@ -601,7 +648,7 @@ DEFINE CLASS FormFti AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label2", "Label")
         WITH loc_oPagina.lbl_4c_Label2
             .Caption   = "Descri" + CHR(231) + CHR(227) + "o : "
-            .Top       = 41
+            .Top       = 119
             .Left      = 215
             .Width     = 58
             .Height    = 15
@@ -619,7 +666,7 @@ DEFINE CLASS FormFti AS FormBase
         loc_oPagina.AddObject("txt_4c_Descricao", "TextBox")
         WITH loc_oPagina.txt_4c_Descricao
             .Value     = ""
-            .Top       = 37
+            .Top       = 115
             .Left      = 278
             .Width     = 290
             .Height    = 23
@@ -634,7 +681,7 @@ DEFINE CLASS FormFti AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label3", "Label")
         WITH loc_oPagina.lbl_4c_Label3
             .Caption   = "Valor do Feitio : "
-            .Top       = 66
+            .Top       = 144
             .Left      = 86
             .Width     = 80
             .Height    = 15
@@ -652,7 +699,7 @@ DEFINE CLASS FormFti AS FormBase
         loc_oPagina.AddObject("txt_4c_Valor", "TextBox")
         WITH loc_oPagina.txt_4c_Valor
             .Value     = 0
-            .Top       = 63
+            .Top       = 141
             .Left      = 166
             .Width     = 150
             .Height    = 23
@@ -668,7 +715,7 @@ DEFINE CLASS FormFti AS FormBase
         loc_oPagina.AddObject("opt_4c_TpFtio", "OptionGroup")
         WITH loc_oPagina.opt_4c_TpFtio
             .ButtonCount = 3
-            .Top         = 62
+            .Top         = 140
             .Left        = 316
             .Width       = 283
             .Height      = 27
@@ -719,7 +766,7 @@ DEFINE CLASS FormFti AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label4", "Label")
         WITH loc_oPagina.lbl_4c_Label4
             .Caption   = "Moeda : "
-            .Top       = 93
+            .Top       = 171
             .Left      = 122
             .Width     = 44
             .Height    = 15
@@ -738,7 +785,7 @@ DEFINE CLASS FormFti AS FormBase
         loc_oPagina.AddObject("txt_4c_CdMoeda", "TextBox")
         WITH loc_oPagina.txt_4c_CdMoeda
             .Value     = ""
-            .Top       = 89
+            .Top       = 167
             .Left      = 166
             .Width     = 32
             .Height    = 23
@@ -755,7 +802,7 @@ DEFINE CLASS FormFti AS FormBase
         loc_oPagina.AddObject("txt_4c_DsMoeda", "TextBox")
         WITH loc_oPagina.txt_4c_DsMoeda
             .Value     = ""
-            .Top       = 89
+            .Top       = 167
             .Left      = 201
             .Width     = 115
             .Height    = 23
@@ -771,7 +818,7 @@ DEFINE CLASS FormFti AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label5", "Label")
         WITH loc_oPagina.lbl_4c_Label5
             .Caption   = "Multiplicador : "
-            .Top       = 93
+            .Top       = 171
             .Left      = 401
             .Width     = 71
             .Height    = 15
@@ -789,7 +836,7 @@ DEFINE CLASS FormFti AS FormBase
         loc_oPagina.AddObject("txt_4c_Acrescimo", "TextBox")
         WITH loc_oPagina.txt_4c_Acrescimo
             .Value     = 0
-            .Top       = 89
+            .Top       = 167
             .Left      = 474
             .Width     = 94
             .Height    = 23
@@ -804,7 +851,7 @@ DEFINE CLASS FormFti AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label12", "Label")
         WITH loc_oPagina.lbl_4c_Label12
             .Caption   = "sem uso :"
-            .Top       = 43
+            .Top       = 121
             .Left      = 586
             .Width     = 59
             .Height    = 15
@@ -821,7 +868,7 @@ DEFINE CLASS FormFti AS FormBase
         loc_oPagina.AddObject("txt_4c_Lucro", "TextBox")
         WITH loc_oPagina.txt_4c_Lucro
             .Value     = 0
-            .Top       = 39
+            .Top       = 117
             .Left      = 647
             .Width     = 50
             .Height    = 23
@@ -839,7 +886,7 @@ DEFINE CLASS FormFti AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label8", "Label")
         WITH loc_oPagina.lbl_4c_Label8
             .Caption   = "Faixa de : "
-            .Top       = 119
+            .Top       = 197
             .Left      = 113
             .Width     = 53
             .Height    = 15
@@ -856,7 +903,7 @@ DEFINE CLASS FormFti AS FormBase
         loc_oPagina.AddObject("txt_4c_FaixaI", "TextBox")
         WITH loc_oPagina.txt_4c_FaixaI
             .Value         = 0
-            .Top           = 115
+            .Top           = 193
             .Left          = 166
             .Width         = 94
             .Height        = 23
@@ -873,7 +920,7 @@ DEFINE CLASS FormFti AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label9", "Label")
         WITH loc_oPagina.lbl_4c_Label9
             .Caption   = "at" + CHR(233)
-            .Top       = 119
+            .Top       = 197
             .Left      = 266
             .Width     = 18
             .Height    = 15
@@ -890,7 +937,7 @@ DEFINE CLASS FormFti AS FormBase
         loc_oPagina.AddObject("txt_4c_Faixaf", "TextBox")
         WITH loc_oPagina.txt_4c_Faixaf
             .Value         = 0
-            .Top           = 115
+            .Top           = 193
             .Left          = 290
             .Width         = 94
             .Height        = 23
@@ -907,7 +954,7 @@ DEFINE CLASS FormFti AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label11", "Label")
         WITH loc_oPagina.lbl_4c_Label11
             .Caption   = "Perda do Metal : "
-            .Top       = 119
+            .Top       = 197
             .Left      = 442
             .Width     = 84
             .Height    = 15
@@ -924,7 +971,7 @@ DEFINE CLASS FormFti AS FormBase
         loc_oPagina.AddObject("txt_4c_Perdas", "TextBox")
         WITH loc_oPagina.txt_4c_Perdas
             .Value         = 0
-            .Top           = 115
+            .Top           = 193
             .Left          = 528
             .Width         = 40
             .Height        = 23
@@ -940,7 +987,7 @@ DEFINE CLASS FormFti AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label6", "Label")
         WITH loc_oPagina.lbl_4c_Label6
             .Caption   = "Tipo : "
-            .Top       = 142
+            .Top       = 220
             .Left      = 134
             .Width     = 32
             .Height    = 15
@@ -957,7 +1004,7 @@ DEFINE CLASS FormFti AS FormBase
         loc_oPagina.AddObject("opt_4c_CusVenda", "OptionGroup")
         WITH loc_oPagina.opt_4c_CusVenda
             .ButtonCount   = 2
-            .Top           = 141
+            .Top           = 219
             .Left          = 161
             .Width         = 158
             .Height        = 17
@@ -994,7 +1041,7 @@ DEFINE CLASS FormFti AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label13", "Label")
         WITH loc_oPagina.lbl_4c_Label13
             .Caption   = "Utilizado na Etiqueta : "
-            .Top       = 143
+            .Top       = 221
             .Left      = 359
             .Width     = 110
             .Height    = 15
@@ -1011,7 +1058,7 @@ DEFINE CLASS FormFti AS FormBase
         loc_oPagina.AddObject("opt_4c_Etiquetas", "OptionGroup")
         WITH loc_oPagina.opt_4c_Etiquetas
             .ButtonCount   = 3
-            .Top           = 137
+            .Top           = 215
             .Left          = 474
             .Width         = 182
             .Height        = 25
@@ -1059,7 +1106,7 @@ DEFINE CLASS FormFti AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label7", "Label")
         WITH loc_oPagina.lbl_4c_Label7
             .Caption   = "Coeficiente Custo Fixo : "
-            .Top       = 162
+            .Top       = 240
             .Left      = 46
             .Width     = 120
             .Height    = 15
@@ -1076,7 +1123,7 @@ DEFINE CLASS FormFti AS FormBase
         loc_oPagina.AddObject("opt_4c_Cfixo", "OptionGroup")
         WITH loc_oPagina.opt_4c_Cfixo
             .ButtonCount   = 2
-            .Top           = 161
+            .Top           = 239
             .Left          = 161
             .Width         = 162
             .Height        = 17
@@ -1113,7 +1160,7 @@ DEFINE CLASS FormFti AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label10", "Label")
         WITH loc_oPagina.lbl_4c_Label10
             .Caption   = "Aplicar Sobre Custo : "
-            .Top       = 182
+            .Top       = 260
             .Left      = 60
             .Width     = 106
             .Height    = 15
@@ -1130,7 +1177,7 @@ DEFINE CLASS FormFti AS FormBase
         loc_oPagina.AddObject("opt_4c_Fwoption1", "OptionGroup")
         WITH loc_oPagina.opt_4c_Fwoption1
             .ButtonCount   = 2
-            .Top           = 180
+            .Top           = 258
             .Left          = 161
             .Width         = 144
             .Height        = 19
@@ -2436,3 +2483,4 @@ DEFINE CLASS FormFti AS FormBase
     ENDPROC
 
 ENDDEFINE
+

@@ -7,7 +7,7 @@
 
 DEFINE CLASS FormNfl AS FormBase
 
-    Height      = 600
+    Height      = 661
     Width       = 1000
     Caption     = "Configuracao de Nota Fiscal"
     AutoCenter  = .T.
@@ -391,7 +391,7 @@ DEFINE CLASS FormNfl AS FormBase
             .Top          = 164
             .Left         = 12
             .Width        = 971
-            .Height       = 450
+            .Height       = 511
             .FontName     = "Tahoma"
             .FontSize     = 8
             .ColumnCount  = 4
@@ -517,11 +517,58 @@ DEFINE CLASS FormNfl AS FormBase
         *-- Fundo padrao do framework frmcadastro (sem isso a pagina fica branca)
         loc_oPagina.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
 
+        *-- Cabecalho cinza (identico ao da pagina Lista) - CLAUDE.md #11 / Erro152
+        loc_oPagina.AddObject("cnt_4c_Cabecalho", "Container")
+        WITH loc_oPagina.cnt_4c_Cabecalho
+            .Top           = 29
+            .Left          = 0
+            .Width         = THIS.Width
+            .Height        = 80
+            .BackColor     = RGB(100, 100, 100)
+            .BorderWidth   = 0
+            .SpecialEffect = 0
+            .Visible       = .T.
+
+            .AddObject("lbl_4c_Sombra", "Label")
+            WITH .lbl_4c_Sombra
+                .Caption   = THIS.Caption
+                .Top       = 15
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 40
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(0, 0, 0)
+                .BackStyle = 0
+                .AutoSize  = .F.
+                .Visible   = .T.
+            ENDWITH
+
+            .AddObject("lbl_4c_Titulo", "Label")
+            WITH .lbl_4c_Titulo
+                .Caption   = THIS.Caption
+                .Top       = 18
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 46
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(255, 255, 255)
+                .BackStyle = 0
+                .AutoSize  = .F.
+                .Visible   = .T.
+            ENDWITH
+
+        ENDWITH
+
+
         *-- Serie (Top original=27/23, +29 comp)
         loc_oPagina.AddObject("lbl_4c_LblSerie", "Label")
         WITH loc_oPagina.lbl_4c_LblSerie
             .Caption   = "S" + CHR(233) + "rie :"
-            .Top       = 56
+            .Top       = 121
             .Left      = 23
             .Height    = 15
             .Width     = 45
@@ -533,7 +580,7 @@ DEFINE CLASS FormNfl AS FormBase
         ENDWITH
         loc_oPagina.AddObject("txt_4c_Series", "TextBox")
         WITH loc_oPagina.txt_4c_Series
-            .Top           = 52
+            .Top           = 117
             .Left          = 65
             .Width         = 31
             .Height        = 24
@@ -548,7 +595,7 @@ DEFINE CLASS FormNfl AS FormBase
         loc_oPagina.AddObject("lbl_4c_LblProxNota", "Label")
         WITH loc_oPagina.lbl_4c_LblProxNota
             .Caption   = "Pr" + CHR(243) + "xima Nota Fiscal :"
-            .Top       = 54
+            .Top       = 119
             .Left      = 132
             .Width     = 105
             .Height    = 15
@@ -560,7 +607,7 @@ DEFINE CLASS FormNfl AS FormBase
         ENDWITH
         loc_oPagina.AddObject("txt_4c_ProxNota", "TextBox")
         WITH loc_oPagina.txt_4c_ProxNota
-            .Top           = 50
+            .Top           = 115
             .Left          = 245
             .Width         = 89
             .Height        = 21
@@ -574,7 +621,7 @@ DEFINE CLASS FormNfl AS FormBase
         loc_oPagina.AddObject("lbl_4c_LblProxSelo", "Label")
         WITH loc_oPagina.lbl_4c_LblProxSelo
             .Caption   = "Pr" + CHR(243) + "ximo Selo :"
-            .Top       = 78
+            .Top       = 143
             .Left      = 164
             .Width     = 73
             .Height    = 15
@@ -586,7 +633,7 @@ DEFINE CLASS FormNfl AS FormBase
         ENDWITH
         loc_oPagina.AddObject("txt_4c_ProxSelo", "TextBox")
         WITH loc_oPagina.txt_4c_ProxSelo
-            .Top           = 74
+            .Top           = 139
             .Left          = 245
             .Width         = 89
             .Height        = 21
@@ -600,7 +647,7 @@ DEFINE CLASS FormNfl AS FormBase
         loc_oPagina.AddObject("lbl_4c_LblProxSeloTrans", "Label")
         WITH loc_oPagina.lbl_4c_LblProxSeloTrans
             .Caption   = "Pr" + CHR(243) + "ximo Selo Transporte :"
-            .Top       = 102
+            .Top       = 167
             .Left      = 108
             .Width     = 129
             .Height    = 15
@@ -612,7 +659,7 @@ DEFINE CLASS FormNfl AS FormBase
         ENDWITH
         loc_oPagina.AddObject("txt_4c_ProxSeloTrans", "TextBox")
         WITH loc_oPagina.txt_4c_ProxSeloTrans
-            .Top           = 98
+            .Top           = 163
             .Left          = 245
             .Width         = 89
             .Height        = 21
@@ -626,7 +673,7 @@ DEFINE CLASS FormNfl AS FormBase
         loc_oPagina.AddObject("lbl_4c_LblCasas", "Label")
         WITH loc_oPagina.lbl_4c_LblCasas
             .Caption   = "No. de Casas Decimais dos Itens :"
-            .Top       = 127
+            .Top       = 192
             .Left      = 72
             .Height    = 15
             .Width     = 165
@@ -639,7 +686,7 @@ DEFINE CLASS FormNfl AS FormBase
         loc_oPagina.AddObject("obj_4c_Op_ItCasas", "OptionGroup")
         WITH loc_oPagina.obj_4c_Op_ItCasas
             .ButtonCount = 2
-            .Top         = 125
+            .Top         = 190
             .Left        = 242
             .Width       = 126
             .Height      = 20
@@ -711,7 +758,7 @@ DEFINE CLASS FormNfl AS FormBase
         loc_oPagina.AddObject("pgf_4c_Abas", "PageFrame")
         WITH loc_oPagina.pgf_4c_Abas
             .PageCount  = 10
-            .Top        = 153
+            .Top        = 218
             .Left       = 8
             .Width      = 982
             .Height     = 472
@@ -11217,3 +11264,4 @@ DEFINE CLASS FormNfl AS FormBase
     ENDPROC
 
 ENDDEFINE
+

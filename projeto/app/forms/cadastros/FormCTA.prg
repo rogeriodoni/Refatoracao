@@ -4327,7 +4327,7 @@ DEFINE CLASS FormCTA AS FormBase
         LOCAL loc_oCnt
         FOR loc_nIdx = 1 TO 12
             IF PEMSTATUS(loc_oPagina, loc_aNomes[loc_nIdx], 5)
-                *-- obj.(expr).Prop nao compila em VFP9; resolver com EVALUATE
+                *-- obj.Prop nao compila em VFP9; resolver com EVALUATE
                 loc_oCnt = EVALUATE("loc_oPagina." + ALLTRIM(loc_aNomes[loc_nIdx]))
                 IF VARTYPE(loc_oCnt) = "O"
                     loc_oCnt.Visible = (loc_nIdx = par_nPagina)

@@ -11,7 +11,7 @@
 DEFINE CLASS FormCargo AS FormBase
 
     *-- Propriedades visuais (PILAR 1 - UX FIDELITY)
-    Height      = 600
+    Height      = 613
     Width       = 1000
     Caption     = "Cadastro de Cargos"
     AutoCenter  = .T.
@@ -340,7 +340,7 @@ DEFINE CLASS FormCargo AS FormBase
             .Top                     = 117
             .Left                    = 12
             .Width                   = 890
-            .Height                  = 480
+            .Height                  = 493
             .FontName                = "Verdana"
             .FontSize                = 8
             .ForeColor               = RGB(90, 90, 90)
@@ -373,6 +373,53 @@ DEFINE CLASS FormCargo AS FormBase
     PROTECTED PROCEDURE ConfigurarPaginaDados()
         LOCAL loc_oPg2, loc_oBotoesAcao, loc_oGridAcesso, loc_oGridCat
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
+
+        *-- Cabecalho cinza (identico ao da pagina Lista) - CLAUDE.md #11 / Erro152
+        loc_oPg2.AddObject("cnt_4c_Cabecalho", "Container")
+        WITH loc_oPg2.cnt_4c_Cabecalho
+            .Top           = 29
+            .Left          = 0
+            .Width         = THIS.Width
+            .Height        = 80
+            .BackColor     = RGB(100, 100, 100)
+            .BorderWidth   = 0
+            .SpecialEffect = 0
+            .Visible       = .T.
+
+            .AddObject("lbl_4c_Sombra", "Label")
+            WITH .lbl_4c_Sombra
+                .Caption   = THIS.Caption
+                .Top       = 15
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 40
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(0, 0, 0)
+                .BackStyle = 0
+                .AutoSize  = .F.
+                .Visible   = .T.
+            ENDWITH
+
+            .AddObject("lbl_4c_Titulo", "Label")
+            WITH .lbl_4c_Titulo
+                .Caption   = THIS.Caption
+                .Top       = 18
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 46
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(255, 255, 255)
+                .BackStyle = 0
+                .AutoSize  = .F.
+                .Visible   = .T.
+            ENDWITH
+
+        ENDWITH
+
 
         *-- Botoes Confirmar/Cancelar
         loc_oPg2.AddObject("cnt_4c_BotoesAcao", "Container")
@@ -442,7 +489,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("lbl_4c_LbCargo", "Label")
         WITH loc_oPg2.lbl_4c_LbCargo
             .Caption   = "Cargo :"
-            .Top       = 51
+            .Top       = 120
             .Left      = 212
             .Width     = 38
             .Height    = 17
@@ -458,7 +505,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("txt_4c_Ccargs", "TextBox")
         WITH loc_oPg2.txt_4c_Ccargs
             .Value         = ""
-            .Top           = 47
+            .Top           = 116
             .Left          = 252
             .Width         = 80
             .Height        = 21
@@ -479,7 +526,7 @@ DEFINE CLASS FormCargo AS FormBase
             .Picture         = gc_4c_CaminhoIcones + "cadastro_procurar_26.jpg"
             .DisabledPicture = gc_4c_CaminhoIcones + "cadastro_procurar_26.jpg"
             .PicturePosition = 0
-            .Top             = 47
+            .Top             = 116
             .Left            = 335
             .Width           = 22
             .Height          = 22
@@ -495,7 +542,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("lbl_4c_LbSenha", "Label")
         WITH loc_oPg2.lbl_4c_LbSenha
             .Caption   = "Senha :"
-            .Top       = 50
+            .Top       = 119
             .Left      = 578
             .Width     = 40
             .Height    = 17
@@ -511,7 +558,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("txt_4c_Nivels", "TextBox")
         WITH loc_oPg2.txt_4c_Nivels
             .Value         = ""
-            .Top           = 46
+            .Top           = 115
             .Left          = 619
             .Width         = 20
             .Height        = 21
@@ -530,7 +577,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("lbl_4c_LbSenhaSN", "Label")
         WITH loc_oPg2.lbl_4c_LbSenhaSN
             .Caption   = "(S/N)"
-            .Top       = 50
+            .Top       = 119
             .Left      = 642
             .Width     = 35
             .Height    = 17
@@ -548,7 +595,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("lbl_4c_LbDescr", "Label")
         WITH loc_oPg2.lbl_4c_LbDescr
             .Caption   = "Descri" + CHR(231) + CHR(227) + "o :"
-            .Top       = 76
+            .Top       = 145
             .Left      = 195
             .Width     = 55
             .Height    = 17
@@ -564,7 +611,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("txt_4c_Dcargs", "TextBox")
         WITH loc_oPg2.txt_4c_Dcargs
             .Value         = ""
-            .Top           = 72
+            .Top           = 141
             .Left          = 252
             .Width         = 155
             .Height        = 21
@@ -581,7 +628,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("lbl_4c_LbAltCot", "Label")
         WITH loc_oPg2.lbl_4c_LbAltCot
             .Caption   = "Altera Cota" + CHR(231) + CHR(227) + "o :"
-            .Top       = 75
+            .Top       = 144
             .Left      = 536
             .Width     = 82
             .Height    = 17
@@ -597,7 +644,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("txt_4c_Altcots", "TextBox")
         WITH loc_oPg2.txt_4c_Altcots
             .Value         = ""
-            .Top           = 71
+            .Top           = 140
             .Left          = 619
             .Width         = 20
             .Height        = 21
@@ -616,7 +663,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("lbl_4c_LbAltCotSN", "Label")
         WITH loc_oPg2.lbl_4c_LbAltCotSN
             .Caption   = "(S/N)"
-            .Top       = 75
+            .Top       = 144
             .Left      = 642
             .Width     = 35
             .Height    = 17
@@ -634,7 +681,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("lbl_4c_LbLimDesc", "Label")
         WITH loc_oPg2.lbl_4c_LbLimDesc
             .Caption   = "Limite Desconto :"
-            .Top       = 101
+            .Top       = 170
             .Left      = 166
             .Width     = 84
             .Height    = 17
@@ -650,7 +697,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("txt_4c_Limdescs", "TextBox")
         WITH loc_oPg2.txt_4c_Limdescs
             .Value         = 0
-            .Top           = 97
+            .Top           = 166
             .Left          = 252
             .Width         = 108
             .Height        = 21
@@ -668,7 +715,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("txt_4c_Descpors", "TextBox")
         WITH loc_oPg2.txt_4c_Descpors
             .Value         = 0
-            .Top           = 97
+            .Top           = 166
             .Left          = 362
             .Width         = 45
             .Height        = 21
@@ -686,7 +733,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("lbl_4c_LbDescPct", "Label")
         WITH loc_oPg2.lbl_4c_LbDescPct
             .Caption   = "(%)"
-            .Top       = 101
+            .Top       = 170
             .Left      = 410
             .Width     = 25
             .Height    = 17
@@ -701,7 +748,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("lbl_4c_LbLibLim", "Label")
         WITH loc_oPg2.lbl_4c_LbLibLim
             .Caption   = "Libera Limite :"
-            .Top       = 100
+            .Top       = 169
             .Left      = 549
             .Width     = 68
             .Height    = 17
@@ -717,7 +764,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("txt_4c_Limites", "TextBox")
         WITH loc_oPg2.txt_4c_Limites
             .Value         = ""
-            .Top           = 96
+            .Top           = 165
             .Left          = 619
             .Width         = 20
             .Height        = 21
@@ -736,7 +783,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("lbl_4c_LbLibLimSN", "Label")
         WITH loc_oPg2.lbl_4c_LbLibLimSN
             .Caption   = "(S/N)"
-            .Top       = 100
+            .Top       = 169
             .Left      = 642
             .Width     = 35
             .Height    = 17
@@ -754,7 +801,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("lbl_4c_LbLimAcre", "Label")
         WITH loc_oPg2.lbl_4c_LbLimAcre
             .Caption   = "Limite Acr" + CHR(233) + "scimo :"
-            .Top       = 126
+            .Top       = 195
             .Left      = 163
             .Width     = 87
             .Height    = 17
@@ -770,7 +817,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("txt_4c_Limacres", "TextBox")
         WITH loc_oPg2.txt_4c_Limacres
             .Value         = 0
-            .Top           = 122
+            .Top           = 191
             .Left          = 252
             .Width         = 108
             .Height        = 21
@@ -788,7 +835,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("txt_4c_Acrepors", "TextBox")
         WITH loc_oPg2.txt_4c_Acrepors
             .Value         = 0
-            .Top           = 122
+            .Top           = 191
             .Left          = 362
             .Width         = 45
             .Height        = 21
@@ -806,7 +853,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("lbl_4c_LbAcrePct", "Label")
         WITH loc_oPg2.lbl_4c_LbAcrePct
             .Caption   = "(%)"
-            .Top       = 126
+            .Top       = 195
             .Left      = 410
             .Width     = 25
             .Height    = 17
@@ -821,7 +868,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("lbl_4c_LbCancItem", "Label")
         WITH loc_oPg2.lbl_4c_LbCancItem
             .Caption   = "Cancela Item Cupom Fiscal:"
-            .Top       = 125
+            .Top       = 194
             .Left      = 483
             .Width     = 135
             .Height    = 17
@@ -837,7 +884,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("txt_4c_Cancitens", "TextBox")
         WITH loc_oPg2.txt_4c_Cancitens
             .Value         = ""
-            .Top           = 121
+            .Top           = 190
             .Left          = 619
             .Width         = 20
             .Height        = 21
@@ -856,7 +903,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("lbl_4c_LbCancSN", "Label")
         WITH loc_oPg2.lbl_4c_LbCancSN
             .Caption   = "(S/N)"
-            .Top       = 125
+            .Top       = 194
             .Left      = 642
             .Width     = 35
             .Height    = 17
@@ -874,7 +921,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("lbl_4c_LbVlPag", "Label")
         WITH loc_oPg2.lbl_4c_LbVlPag
             .Caption   = "Liberar Pagamentos at" + CHR(233) + " :"
-            .Top       = 151
+            .Top       = 220
             .Left      = 127
             .Width     = 123
             .Height    = 17
@@ -890,7 +937,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("txt_4c_Vllibpgs", "TextBox")
         WITH loc_oPg2.txt_4c_Vllibpgs
             .Value         = 0
-            .Top           = 147
+            .Top           = 216
             .Left          = 252
             .Width         = 108
             .Height        = 21
@@ -908,7 +955,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("lbl_4c_LbVlPagRS", "Label")
         WITH loc_oPg2.lbl_4c_LbVlPagRS
             .Caption   = "(R$)"
-            .Top       = 151
+            .Top       = 220
             .Left      = 365
             .Width     = 30
             .Height    = 17
@@ -923,7 +970,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("lbl_4c_LbLibFpag", "Label")
         WITH loc_oPg2.lbl_4c_LbLibFpag
             .Caption   = "Excluir Condi" + CHR(231) + CHR(227) + "o Pagto (ecf):"
-            .Top       = 150
+            .Top       = 219
             .Left      = 476
             .Width     = 142
             .Height    = 17
@@ -939,7 +986,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("txt_4c_Libfpags", "TextBox")
         WITH loc_oPg2.txt_4c_Libfpags
             .Value         = ""
-            .Top           = 146
+            .Top           = 215
             .Left          = 619
             .Width         = 20
             .Height        = 21
@@ -958,7 +1005,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("lbl_4c_LbLibFpagSN", "Label")
         WITH loc_oPg2.lbl_4c_LbLibFpagSN
             .Caption   = "(S/N)"
-            .Top       = 150
+            .Top       = 219
             .Left      = 642
             .Width     = 35
             .Height    = 17
@@ -976,7 +1023,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("lbl_4c_LbVlCot", "Label")
         WITH loc_oPg2.lbl_4c_LbVlCot
             .Caption   = "Liberar Cota" + CHR(231) + CHR(245) + "es at" + CHR(233) + " :"
-            .Top       = 176
+            .Top       = 245
             .Left      = 141
             .Width     = 109
             .Height    = 17
@@ -992,7 +1039,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("txt_4c_Vllibcots", "TextBox")
         WITH loc_oPg2.txt_4c_Vllibcots
             .Value         = 0
-            .Top           = 172
+            .Top           = 241
             .Left          = 252
             .Width         = 108
             .Height        = 21
@@ -1010,7 +1057,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("lbl_4c_LbVlCotRS", "Label")
         WITH loc_oPg2.lbl_4c_LbVlCotRS
             .Caption   = "(R$)"
-            .Top       = 176
+            .Top       = 245
             .Left      = 365
             .Width     = 30
             .Height    = 17
@@ -1025,7 +1072,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("lbl_4c_LbSdIns", "Label")
         WITH loc_oPg2.lbl_4c_LbSdIns
             .Caption   = "Libera Saldo Insuficiente :"
-            .Top       = 175
+            .Top       = 244
             .Left      = 491
             .Width     = 127
             .Height    = 17
@@ -1041,7 +1088,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("txt_4c_Libsdins", "TextBox")
         WITH loc_oPg2.txt_4c_Libsdins
             .Value         = ""
-            .Top           = 171
+            .Top           = 240
             .Left          = 619
             .Width         = 20
             .Height        = 21
@@ -1060,7 +1107,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("lbl_4c_LbSdInsSN", "Label")
         WITH loc_oPg2.lbl_4c_LbSdInsSN
             .Caption   = "(S/N)"
-            .Top       = 175
+            .Top       = 244
             .Left      = 642
             .Width     = 35
             .Height    = 17
@@ -1078,7 +1125,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("lbl_4c_LbVlOps", "Label")
         WITH loc_oPg2.lbl_4c_LbVlOps
             .Caption   = "Liberar Movimenta" + CHR(231) + CHR(245) + "es at" + CHR(233) + " :"
-            .Top       = 201
+            .Top       = 270
             .Left      = 112
             .Width     = 138
             .Height    = 17
@@ -1094,7 +1141,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("txt_4c_Vllibopes", "TextBox")
         WITH loc_oPg2.txt_4c_Vllibopes
             .Value         = 0
-            .Top           = 197
+            .Top           = 266
             .Left          = 252
             .Width         = 108
             .Height        = 21
@@ -1112,7 +1159,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("lbl_4c_LbVlOpsRS", "Label")
         WITH loc_oPg2.lbl_4c_LbVlOpsRS
             .Caption   = "(R$)"
-            .Top       = 201
+            .Top       = 270
             .Left      = 365
             .Width     = 30
             .Height    = 17
@@ -1127,7 +1174,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("lbl_4c_LbLibFpgs", "Label")
         WITH loc_oPg2.lbl_4c_LbLibFpgs
             .Caption   = "Liberar Condi" + CHR(231) + CHR(227) + "o Pagto :"
-            .Top       = 200
+            .Top       = 269
             .Left      = 497
             .Width     = 121
             .Height    = 17
@@ -1143,7 +1190,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("txt_4c_Libfpgs", "TextBox")
         WITH loc_oPg2.txt_4c_Libfpgs
             .Value         = ""
-            .Top           = 196
+            .Top           = 265
             .Left          = 619
             .Width         = 20
             .Height        = 21
@@ -1162,7 +1209,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("lbl_4c_LbLibFpgsSN", "Label")
         WITH loc_oPg2.lbl_4c_LbLibFpgsSN
             .Caption   = "(S/N)"
-            .Top       = 200
+            .Top       = 269
             .Left      = 642
             .Width     = 35
             .Height    = 17
@@ -1180,7 +1227,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("lbl_4c_LbVarCot", "Label")
         WITH loc_oPg2.lbl_4c_LbVarCot
             .Caption   = "Varia" + CHR(231) + CHR(227) + "o Cota" + CHR(231) + CHR(227) + "o :"
-            .Top       = 226
+            .Top       = 295
             .Left      = 157
             .Width     = 93
             .Height    = 17
@@ -1196,7 +1243,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("txt_4c_Varcots", "TextBox")
         WITH loc_oPg2.txt_4c_Varcots
             .Value         = 0
-            .Top           = 222
+            .Top           = 291
             .Left          = 252
             .Width         = 52
             .Height        = 21
@@ -1214,7 +1261,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("lbl_4c_LbVarCotPct", "Label")
         WITH loc_oPg2.lbl_4c_LbVarCotPct
             .Caption   = "(%)"
-            .Top       = 226
+            .Top       = 295
             .Left      = 309
             .Width     = 25
             .Height    = 17
@@ -1229,7 +1276,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("lbl_4c_LbLibOpes", "Label")
         WITH loc_oPg2.lbl_4c_LbLibOpes
             .Caption   = "Liberar Movimenta" + CHR(231) + CHR(245) + "es de Estoque :"
-            .Top       = 225
+            .Top       = 294
             .Left      = 441
             .Width     = 177
             .Height    = 17
@@ -1245,7 +1292,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("txt_4c_Libopes", "TextBox")
         WITH loc_oPg2.txt_4c_Libopes
             .Value         = ""
-            .Top           = 221
+            .Top           = 290
             .Left          = 619
             .Width         = 20
             .Height        = 21
@@ -1264,7 +1311,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("lbl_4c_LbLibOpesSN", "Label")
         WITH loc_oPg2.lbl_4c_LbLibOpesSN
             .Caption   = "(S/N)"
-            .Top       = 225
+            .Top       = 294
             .Left      = 642
             .Width     = 35
             .Height    = 17
@@ -1282,7 +1329,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("lbl_4c_LbGrupo", "Label")
         WITH loc_oPg2.lbl_4c_LbGrupo
             .Caption   = "Grupo Financeiro :"
-            .Top       = 251
+            .Top       = 320
             .Left      = 160
             .Width     = 90
             .Height    = 17
@@ -1298,7 +1345,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("txt_4c_Grcomis", "TextBox")
         WITH loc_oPg2.txt_4c_Grcomis
             .Value         = ""
-            .Top           = 247
+            .Top           = 316
             .Left          = 252
             .Width         = 80
             .Height        = 21
@@ -1317,7 +1364,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("lbl_4c_LbLibExprd", "Label")
         WITH loc_oPg2.lbl_4c_LbLibExprd
             .Caption   = "Libera Excluir Movimenta" + CHR(231) + CHR(227) + "o de Produ" + CHR(231) + CHR(227) + "o :"
-            .Top       = 250
+            .Top       = 319
             .Left      = 410
             .Width     = 208
             .Height    = 17
@@ -1333,7 +1380,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("txt_4c_Libexprd", "TextBox")
         WITH loc_oPg2.txt_4c_Libexprd
             .Value         = ""
-            .Top           = 246
+            .Top           = 315
             .Left          = 619
             .Width         = 20
             .Height        = 21
@@ -1352,7 +1399,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("lbl_4c_LbLibExprdSN", "Label")
         WITH loc_oPg2.lbl_4c_LbLibExprdSN
             .Caption   = "(S/N)"
-            .Top       = 250
+            .Top       = 319
             .Left      = 642
             .Width     = 35
             .Height    = 17
@@ -1370,7 +1417,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("lbl_4c_LbFcomis", "Label")
         WITH loc_oPg2.lbl_4c_LbFcomis
             .Caption   = "Fator de Comiss" + CHR(227) + "o :"
-            .Top       = 275
+            .Top       = 344
             .Left      = 519
             .Width     = 99
             .Height    = 17
@@ -1386,7 +1433,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("txt_4c_Fcomis", "TextBox")
         WITH loc_oPg2.txt_4c_Fcomis
             .Value         = ""
-            .Top           = 271
+            .Top           = 340
             .Left          = 619
             .Width         = 20
             .Height        = 21
@@ -1405,7 +1452,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("lbl_4c_LbFcomisSN", "Label")
         WITH loc_oPg2.lbl_4c_LbFcomisSN
             .Caption   = "(S/N)"
-            .Top       = 275
+            .Top       = 344
             .Left      = 642
             .Width     = 35
             .Height    = 17
@@ -1420,7 +1467,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("txt_4c_Acomis", "TextBox")
         WITH loc_oPg2.txt_4c_Acomis
             .Value         = 0
-            .Top           = 271
+            .Top           = 340
             .Left          = 680
             .Width         = 52
             .Height        = 21
@@ -1440,7 +1487,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("lbl_4c_LbAcomisPct", "Label")
         WITH loc_oPg2.lbl_4c_LbAcomisPct
             .Caption   = "(%)"
-            .Top       = 275
+            .Top       = 344
             .Left      = 737
             .Width     = 25
             .Height    = 17
@@ -1460,7 +1507,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("lbl_4c_LbLibleilaos", "Label")
         WITH loc_oPg2.lbl_4c_LbLibleilaos
             .Caption   = "Libera Produtos Bloqueados :"
-            .Top       = 276
+            .Top       = 345
             .Left      = 108
             .Width     = 138
             .Height    = 17
@@ -1476,7 +1523,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("opt_4c_Libleilaos", "OptionGroup")
         WITH loc_oPg2.opt_4c_Libleilaos
             .ButtonCount = 2
-            .Top         = 272
+            .Top         = 341
             .Left        = 247
             .Width       = 89
             .Height      = 22
@@ -1511,7 +1558,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("lbl_4c_LbLibdupends", "Label")
         WITH loc_oPg2.lbl_4c_LbLibdupends
             .Caption   = "Libera Duplicidade :"
-            .Top       = 296
+            .Top       = 365
             .Left      = 155
             .Width     = 91
             .Height    = 17
@@ -1527,7 +1574,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("opt_4c_Libdupends", "OptionGroup")
         WITH loc_oPg2.opt_4c_Libdupends
             .ButtonCount = 2
-            .Top         = 292
+            .Top         = 361
             .Left        = 247
             .Width       = 89
             .Height      = 22
@@ -1564,7 +1611,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("lbl_4c_LbComis", "Label")
         WITH loc_oPg2.lbl_4c_LbComis
             .Caption   = "Comiss" + CHR(227) + "o :"
-            .Top       = 299
+            .Top       = 368
             .Left      = 563
             .Width     = 55
             .Height    = 17
@@ -1580,7 +1627,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("txt_4c_Comis", "TextBox")
         WITH loc_oPg2.txt_4c_Comis
             .Value         = 0
-            .Top           = 295
+            .Top           = 364
             .Left          = 619
             .Width         = 52
             .Height        = 21
@@ -1598,7 +1645,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("lbl_4c_LbComisPct", "Label")
         WITH loc_oPg2.lbl_4c_LbComisPct
             .Caption   = "(%)"
-            .Top       = 299
+            .Top       = 368
             .Left      = 675
             .Width     = 25
             .Height    = 17
@@ -1613,7 +1660,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("lbl_4c_LbTpComis", "Label")
         WITH loc_oPg2.lbl_4c_LbTpComis
             .Caption   = "Tipo : "
-            .Top       = 296
+            .Top       = 365
             .Left      = 719
             .Width     = 32
             .Height    = 17
@@ -1629,7 +1676,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("opt_4c_Tpcomis", "OptionGroup")
         WITH loc_oPg2.opt_4c_Tpcomis
             .ButtonCount = 3
-            .Top         = 292
+            .Top         = 361
             .Left        = 749
             .Width       = 141
             .Height      = 21
@@ -1674,7 +1721,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("lbl_4c_LbCustoprod", "Label")
         WITH loc_oPg2.lbl_4c_LbCustoprod
             .Caption   = "Libera Varia" + CHR(231) + CHR(227) + "o de Custo :"
-            .Top       = 317
+            .Top       = 386
             .Left      = 122
             .Width     = 124
             .Height    = 17
@@ -1690,7 +1737,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("opt_4c_Custoprod", "OptionGroup")
         WITH loc_oPg2.opt_4c_Custoprod
             .ButtonCount = 2
-            .Top         = 313
+            .Top         = 382
             .Left        = 247
             .Width       = 89
             .Height      = 22
@@ -1725,7 +1772,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("lbl_4c_LbVarMovDup", "Label")
         WITH loc_oPg2.lbl_4c_LbVarMovDup
             .Caption   = "Varia" + CHR(231) + CHR(227) + "o Mov. Dupla :"
-            .Top       = 326
+            .Top       = 395
             .Left      = 510
             .Width     = 108
             .Height    = 17
@@ -1741,7 +1788,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("txt_4c_Varmovdup", "TextBox")
         WITH loc_oPg2.txt_4c_Varmovdup
             .Value         = 0
-            .Top           = 320
+            .Top           = 389
             .Left          = 619
             .Width         = 52
             .Height        = 21
@@ -1759,7 +1806,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("lbl_4c_LbVarMovDupPct", "Label")
         WITH loc_oPg2.lbl_4c_LbVarMovDupPct
             .Caption   = "(%)"
-            .Top       = 324
+            .Top       = 393
             .Left      = 676
             .Width     = 25
             .Height    = 17
@@ -1775,7 +1822,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("lbl_4c_LbLibValmmax", "Label")
         WITH loc_oPg2.lbl_4c_LbLibValmmax
             .Caption   = "Libera Valor Max. Malote :"
-            .Top       = 338
+            .Top       = 407
             .Left      = 123
             .Width     = 123
             .Height    = 17
@@ -1791,7 +1838,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("opt_4c_LibValmmax", "OptionGroup")
         WITH loc_oPg2.opt_4c_LibValmmax
             .ButtonCount = 2
-            .Top         = 334
+            .Top         = 403
             .Left        = 247
             .Width       = 89
             .Height      = 22
@@ -1826,7 +1873,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("lbl_4c_LbLibVMovDup", "Label")
         WITH loc_oPg2.lbl_4c_LbLibVMovDup
             .Caption   = "Liberar Varia" + CHR(231) + CHR(227) + "o Mov. Dupla :"
-            .Top       = 350
+            .Top       = 419
             .Left      = 474
             .Width     = 144
             .Height    = 17
@@ -1842,7 +1889,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("txt_4c_Libvmovdup", "TextBox")
         WITH loc_oPg2.txt_4c_Libvmovdup
             .Value         = ""
-            .Top           = 346
+            .Top           = 415
             .Left          = 619
             .Width         = 20
             .Height        = 21
@@ -1861,7 +1908,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("lbl_4c_LbLibVMovDupSN", "Label")
         WITH loc_oPg2.lbl_4c_LbLibVMovDupSN
             .Caption   = "(S/N)"
-            .Top       = 350
+            .Top       = 419
             .Left      = 642
             .Width     = 35
             .Height    = 17
@@ -1877,7 +1924,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("lbl_4c_LbLibduptits", "Label")
         WITH loc_oPg2.lbl_4c_LbLibduptits
             .Caption   = "Liberar T" + CHR(237) + "tulos Iguais :"
-            .Top       = 356
+            .Top       = 425
             .Left      = 142
             .Width     = 104
             .Height    = 17
@@ -1893,7 +1940,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("opt_4c_Libduptits", "OptionGroup")
         WITH loc_oPg2.opt_4c_Libduptits
             .ButtonCount = 2
-            .Top         = 352
+            .Top         = 421
             .Left        = 247
             .Width       = 89
             .Height      = 22
@@ -1928,7 +1975,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("lbl_4c_LbLibprzes", "Label")
         WITH loc_oPg2.lbl_4c_LbLibprzes
             .Caption   = "Libera Prazo de Entrega :"
-            .Top       = 377
+            .Top       = 446
             .Left      = 126
             .Width     = 120
             .Height    = 17
@@ -1944,7 +1991,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("opt_4c_Libprzes", "OptionGroup")
         WITH loc_oPg2.opt_4c_Libprzes
             .ButtonCount = 2
-            .Top         = 373
+            .Top         = 442
             .Left        = 247
             .Width       = 89
             .Height      = 22
@@ -1979,7 +2026,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("lbl_4c_LbConsSubn", "Label")
         WITH loc_oPg2.lbl_4c_LbConsSubn
             .Caption   = "Libera Consulta de Todos Subniveis :"
-            .Top       = 375
+            .Top       = 444
             .Left      = 439
             .Width     = 179
             .Height    = 17
@@ -1995,7 +2042,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("txt_4c_ConsSubn", "TextBox")
         WITH loc_oPg2.txt_4c_ConsSubn
             .Value         = ""
-            .Top           = 371
+            .Top           = 440
             .Left          = 619
             .Width         = 20
             .Height        = 21
@@ -2014,7 +2061,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("lbl_4c_LbConsSubnSN", "Label")
         WITH loc_oPg2.lbl_4c_LbConsSubnSN
             .Caption   = "(S/N)"
-            .Top       = 375
+            .Top       = 444
             .Left      = 642
             .Width     = 35
             .Height    = 17
@@ -2032,7 +2079,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("lbl_4c_LbGradeAcesso", "Label")
         WITH loc_oPg2.lbl_4c_LbGradeAcesso
             .Caption   = "Liberar Pagamentos por Centro de Custo"
-            .Top       = 403
+            .Top       = 472
             .Left      = 66
             .Width     = 231
             .Height    = 15
@@ -2051,10 +2098,10 @@ DEFINE CLASS FormCargo AS FormBase
 
         loc_oGridAcesso = loc_oPg2.grd_4c_AcessoFinan
         WITH loc_oGridAcesso
-            .Top                     = 419
+            .Top                     = 488
             .Left                    = 66
             .Width                   = 310
-            .Height                  = 205
+            .Height                  = 154
             .FontName                = "Verdana"
             .FontSize                = 8
             .ForeColor               = RGB(90, 90, 90)
@@ -2090,7 +2137,7 @@ DEFINE CLASS FormCargo AS FormBase
             .Caption         = "Inserir"
             .Picture         = gc_4c_CaminhoIcones + "cadastro_inserir_26.jpg"
             .PicturePosition = 13
-            .Top             = 482
+            .Top             = 551
             .Left            = 380
             .Width           = 45
             .Height          = 45
@@ -2112,7 +2159,7 @@ DEFINE CLASS FormCargo AS FormBase
             .Caption         = "Excluir"
             .Picture         = gc_4c_CaminhoIcones + "cadastro_excluir_26.jpg"
             .PicturePosition = 13
-            .Top             = 528
+            .Top             = 597
             .Left            = 380
             .Width           = 45
             .Height          = 45
@@ -2138,7 +2185,7 @@ DEFINE CLASS FormCargo AS FormBase
         loc_oPg2.AddObject("lbl_4c_LbGradeCat", "Label")
         WITH loc_oPg2.lbl_4c_LbGradeCat
             .Caption   = "Categorias"
-            .Top       = 403
+            .Top       = 472
             .Left      = 509
             .Width     = 63
             .Height    = 15
@@ -2157,10 +2204,10 @@ DEFINE CLASS FormCargo AS FormBase
 
         loc_oGridCat = loc_oPg2.grd_4c_Categorias
         WITH loc_oGridCat
-            .Top                     = 419
+            .Top                     = 488
             .Left                    = 509
             .Width                   = 310
-            .Height                  = 205
+            .Height                  = 154
             .FontName                = "Verdana"
             .FontSize                = 8
             .ForeColor               = RGB(90, 90, 90)
@@ -2194,7 +2241,7 @@ DEFINE CLASS FormCargo AS FormBase
             .Caption         = "Inserir"
             .Picture         = gc_4c_CaminhoIcones + "cadastro_inserir_26.jpg"
             .PicturePosition = 13
-            .Top             = 482
+            .Top             = 551
             .Left            = 380
             .Width           = 45
             .Height          = 45
@@ -2216,7 +2263,7 @@ DEFINE CLASS FormCargo AS FormBase
             .Caption         = "Excluir"
             .Picture         = gc_4c_CaminhoIcones + "cadastro_excluir_26.jpg"
             .PicturePosition = 13
-            .Top             = 528
+            .Top             = 597
             .Left            = 823
             .Width           = 45
             .Height          = 45
@@ -3324,3 +3371,4 @@ DEFINE CLASS FormCargo AS FormBase
     ENDPROC
 
 ENDDEFINE
+

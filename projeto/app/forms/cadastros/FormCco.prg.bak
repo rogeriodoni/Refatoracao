@@ -408,6 +408,53 @@ DEFINE CLASS FormCco AS FormBase
     PROTECTED PROCEDURE ConfigurarPaginaDados(par_oPagina)
 
         *-- Container botoes Confirmar/Cancelar (Grupo_Salva: Left=841, Top=-3 -> +28=25)
+
+        *-- Cabecalho cinza (identico ao da pagina Lista) - CLAUDE.md #11 / Erro152
+        par_oPagina.AddObject("cnt_4c_Cabecalho", "Container")
+        WITH par_oPagina.cnt_4c_Cabecalho
+            .Top           = 29
+            .Left          = 0
+            .Width         = THIS.Width
+            .Height        = 80
+            .BackColor     = RGB(100, 100, 100)
+            .BorderWidth   = 0
+            .SpecialEffect = 0
+            .Visible       = .T.
+
+            .AddObject("lbl_4c_Sombra", "Label")
+            WITH .lbl_4c_Sombra
+                .Caption   = THIS.Caption
+                .Top       = 15
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 40
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(0, 0, 0)
+                .BackStyle = 0
+                .AutoSize  = .F.
+                .Visible   = .T.
+            ENDWITH
+
+            .AddObject("lbl_4c_Titulo", "Label")
+            WITH .lbl_4c_Titulo
+                .Caption   = THIS.Caption
+                .Top       = 18
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 46
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(255, 255, 255)
+                .BackStyle = 0
+                .AutoSize  = .F.
+                .Visible   = .T.
+            ENDWITH
+
+        ENDWITH
+
         par_oPagina.AddObject("cnt_4c_Salva", "Container")
         WITH par_oPagina.cnt_4c_Salva
             .Top         = 25
@@ -472,7 +519,7 @@ DEFINE CLASS FormCco AS FormBase
         WITH par_oPagina.lbl_4c_Codigo
             .Caption   = "C" + CHR(243) + "digo :"
             .Left      = 95
-            .Top       = 81
+            .Top       = 121
             .FontName  = "Tahoma"
             .FontSize  = 8
             .FontBold  = .F.
@@ -486,7 +533,7 @@ DEFINE CLASS FormCco AS FormBase
         WITH par_oPagina.txt_4c_Codigo
             .Value         = ""
             .Left          = 139
-            .Top           = 77
+            .Top           = 117
             .Width         = 80
             .Height        = 23
             .SpecialEffect = 1
@@ -503,7 +550,7 @@ DEFINE CLASS FormCco AS FormBase
         WITH par_oPagina.lbl_4c_Descricao
             .Caption   = "Descri" + CHR(231) + CHR(227) + "o :"
             .Left      = 270
-            .Top       = 81
+            .Top       = 121
             .FontName  = "Tahoma"
             .FontSize  = 8
             .FontBold  = .F.
@@ -517,7 +564,7 @@ DEFINE CLASS FormCco AS FormBase
         WITH par_oPagina.txt_4c_Descricao
             .Value         = ""
             .Left          = 327
-            .Top           = 77
+            .Top           = 117
             .Width         = 220
             .Height        = 23
             .SpecialEffect = 1
@@ -534,7 +581,7 @@ DEFINE CLASS FormCco AS FormBase
         WITH par_oPagina.lbl_4c_ClcStatus
             .Caption   = "Selecionavel nos Cadastros :"
             .Left      = 573
-            .Top       = 80
+            .Top       = 120
             .FontName  = "Tahoma"
             .FontSize  = 8
             .FontBold  = .F.
@@ -549,7 +596,7 @@ DEFINE CLASS FormCco AS FormBase
         WITH par_oPagina.opt_4c_ClcStatus
             .ButtonCount = 2
             .Left        = 711
-            .Top         = 75
+            .Top         = 115
             .Width       = 105
             .Height      = 26
             .BackStyle   = 0
@@ -592,7 +639,7 @@ DEFINE CLASS FormCco AS FormBase
         WITH par_oPagina.lbl_4c_Grupo
             .Caption   = "Grupo :"
             .Left      = 99
-            .Top       = 106
+            .Top       = 146
             .FontName  = "Tahoma"
             .FontSize  = 8
             .FontBold  = .F.
@@ -607,7 +654,7 @@ DEFINE CLASS FormCco AS FormBase
         WITH par_oPagina.txt_4c_Grupo
             .Value         = ""
             .Left          = 139
-            .Top           = 102
+            .Top           = 142
             .Width         = 80
             .Height        = 23
             .SpecialEffect = 1
@@ -626,7 +673,7 @@ DEFINE CLASS FormCco AS FormBase
         WITH par_oPagina.lbl_4c_Priori
             .Caption   = "Prioridade :"
             .Left      = 268
-            .Top       = 106
+            .Top       = 146
             .FontName  = "Tahoma"
             .FontSize  = 8
             .FontBold  = .F.
@@ -640,7 +687,7 @@ DEFINE CLASS FormCco AS FormBase
         WITH par_oPagina.txt_4c_Priori
             .Value         = 0
             .Left          = 327
-            .Top           = 102
+            .Top           = 142
             .Width         = 26
             .Height        = 23
             .SpecialEffect = 1
@@ -663,7 +710,7 @@ DEFINE CLASS FormCco AS FormBase
         WITH par_oPagina.lbl_4c_Empresa
             .Caption   = "Empresa :"
             .Left      = 87
-            .Top       = 131
+            .Top       = 171
             .FontName  = "Tahoma"
             .FontSize  = 8
             .FontBold  = .F.
@@ -677,7 +724,7 @@ DEFINE CLASS FormCco AS FormBase
         WITH par_oPagina.txt_4c_Emps
             .Value         = ""
             .Left          = 139
-            .Top           = 127
+            .Top           = 167
             .Width         = 34
             .Height        = 23
             .SpecialEffect = 1
@@ -696,7 +743,7 @@ DEFINE CLASS FormCco AS FormBase
         WITH par_oPagina.lbl_4c_FaixaDe
             .Caption   = "Faixa de :"
             .Left      = 275
-            .Top       = 131
+            .Top       = 171
             .FontName  = "Tahoma"
             .FontSize  = 8
             .FontBold  = .F.
@@ -710,7 +757,7 @@ DEFINE CLASS FormCco AS FormBase
         WITH par_oPagina.txt_4c_FaixaI
             .Value         = 0
             .Left          = 327
-            .Top           = 127
+            .Top           = 167
             .Width         = 108
             .Height        = 23
             .SpecialEffect = 1
@@ -727,7 +774,7 @@ DEFINE CLASS FormCco AS FormBase
         WITH par_oPagina.lbl_4c_FaixaAte
             .Caption   = "at" + CHR(233) + " :"
             .Left      = 439
-            .Top       = 131
+            .Top       = 171
             .FontName  = "Tahoma"
             .FontSize  = 8
             .FontBold  = .F.
@@ -741,7 +788,7 @@ DEFINE CLASS FormCco AS FormBase
         WITH par_oPagina.txt_4c_FaixaF
             .Value         = 0
             .Left          = 461
-            .Top           = 127
+            .Top           = 167
             .Width         = 115
             .Height        = 23
             .SpecialEffect = 1
@@ -764,9 +811,9 @@ DEFINE CLASS FormCco AS FormBase
             .FontName          = "Tahoma"
             .FontSize          = 8
             .Left              = 98
-            .Top               = 160
+            .Top               = 200
             .Width             = 706
-            .Height            = 464
+            .Height            = 458
             .AllowHeaderSizing = .F.
             .AllowRowSizing    = .F.
             .DeleteMark        = .F.
@@ -1660,3 +1707,4 @@ DEFINE CLASS FormCco AS FormBase
     ENDPROC
 
 ENDDEFINE
+

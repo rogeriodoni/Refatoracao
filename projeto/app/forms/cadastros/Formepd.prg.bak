@@ -7,7 +7,7 @@
 DEFINE CLASS Formepd AS FormBase
 
     *-- Propriedades visuais (PILAR 1 - UX Fidelity)
-    Height      = 600
+    Height      = 663
     Width       = 1000
     Caption     = "Finaliza" + CHR(231) + CHR(227) + "o Antecipada"
     AutoCenter  = .T.
@@ -394,6 +394,53 @@ DEFINE CLASS Formepd AS FormBase
         *-- Fundo padrao do framework frmcadastro (sem isso a pagina fica branca)
         loc_oPagina.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
 
+        *-- Cabecalho cinza (identico ao da pagina Lista) - CLAUDE.md #11 / Erro152
+        loc_oPagina.AddObject("cnt_4c_Cabecalho", "Container")
+        WITH loc_oPagina.cnt_4c_Cabecalho
+            .Top           = 29
+            .Left          = 0
+            .Width         = THIS.Width
+            .Height        = 80
+            .BackColor     = RGB(100, 100, 100)
+            .BorderWidth   = 0
+            .SpecialEffect = 0
+            .Visible       = .T.
+
+            .AddObject("lbl_4c_Sombra", "Label")
+            WITH .lbl_4c_Sombra
+                .Caption   = THIS.Caption
+                .Top       = 15
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 40
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(0, 0, 0)
+                .BackStyle = 0
+                .AutoSize  = .F.
+                .Visible   = .T.
+            ENDWITH
+
+            .AddObject("lbl_4c_Titulo", "Label")
+            WITH .lbl_4c_Titulo
+                .Caption   = THIS.Caption
+                .Top       = 18
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 46
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(255, 255, 255)
+                .BackStyle = 0
+                .AutoSize  = .F.
+                .Visible   = .T.
+            ENDWITH
+
+        ENDWITH
+
+
         *-- Container bot" + CHR(245) + "es Confirmar/Cancelar (Grupo_Salva no legado)
         loc_oPagina.AddObject("cnt_4c_BotoesAcao", "Container")
         WITH loc_oPagina.cnt_4c_BotoesAcao
@@ -497,7 +544,7 @@ DEFINE CLASS Formepd AS FormBase
         loc_oPagina.AddObject("cmd_4c_Operacao", "CommandButton")
         WITH loc_oPagina.cmd_4c_Operacao
             .Caption       = "\<Movimento"
-            .Top           = 35
+            .Top           = 115
             .Left          = 616
             .Width         = 70
             .Height        = 25
@@ -514,7 +561,7 @@ DEFINE CLASS Formepd AS FormBase
         loc_oPagina.AddObject("cmd_4c_Boleto", "CommandButton")
         WITH loc_oPagina.cmd_4c_Boleto
             .Caption       = "\<Boleto"
-            .Top           = 35
+            .Top           = 115
             .Left          = 692
             .Width         = 70
             .Height        = 25
@@ -531,7 +578,7 @@ DEFINE CLASS Formepd AS FormBase
         loc_oPagina.AddObject("cmd_4c_Documento", "CommandButton")
         WITH loc_oPagina.cmd_4c_Documento
             .Caption       = "\<Documento"
-            .Top           = 35
+            .Top           = 115
             .Left          = 768
             .Width         = 70
             .Height        = 25
@@ -548,7 +595,7 @@ DEFINE CLASS Formepd AS FormBase
         *-- Separador visual (shpBtnGs no legado, top=143+29=172)
         loc_oPagina.AddObject("shp_4c_ShpBtnGs", "Shape")
         WITH loc_oPagina.shp_4c_ShpBtnGs
-            .Top     = 172
+            .Top     = 252
             .Left    = 635
             .Width   = 18
             .Height  = 50
@@ -558,7 +605,7 @@ DEFINE CLASS Formepd AS FormBase
         *-- Container1: C" + CHR(243) + "digo e Data (top=268+29=297)
         loc_oPagina.AddObject("cnt_4c_Container1", "Container")
         WITH loc_oPagina.cnt_4c_Container1
-            .Top         = 297
+            .Top         = 377
             .Left        = 214
             .Width       = 571
             .Height      = 75
@@ -634,7 +681,7 @@ DEFINE CLASS Formepd AS FormBase
         *-- Container Origem: Grupo/Conta/Nome de Origem (top=349+29=378)
         loc_oPagina.AddObject("cnt_4c_Origem", "Container")
         WITH loc_oPagina.cnt_4c_Origem
-            .Top         = 378
+            .Top         = 458
             .Left        = 214
             .Width       = 571
             .Height      = 75
@@ -757,7 +804,7 @@ DEFINE CLASS Formepd AS FormBase
         *-- Container Destino: Grupo/Conta/Nome de Destino (top=429+29=458)
         loc_oPagina.AddObject("cnt_4c_Destino", "Container")
         WITH loc_oPagina.cnt_4c_Destino
-            .Top         = 458
+            .Top         = 538
             .Left        = 214
             .Width       = 571
             .Height      = 75
@@ -880,7 +927,7 @@ DEFINE CLASS Formepd AS FormBase
         *-- Container Responsavel: Grupo/Conta/Nome do Responsavel (top=508+29=537)
         loc_oPagina.AddObject("cnt_4c_Responsavel", "Container")
         WITH loc_oPagina.cnt_4c_Responsavel
-            .Top         = 537
+            .Top         = 617
             .Left        = 214
             .Width       = 571
             .Height      = 75
@@ -1003,7 +1050,7 @@ DEFINE CLASS Formepd AS FormBase
         *-- Grade de Operacao (top=68+29=97, Visible=.F. por padrao)
         loc_oPagina.AddObject("grd_4c_GradeOperacao", "Grid")
         WITH loc_oPagina.grd_4c_GradeOperacao
-            .Top         = 97
+            .Top         = 177
             .Left        = 266
             .Width       = 171
             .Height      = 182
@@ -1030,7 +1077,7 @@ DEFINE CLASS Formepd AS FormBase
         loc_oPagina.AddObject("cmd_4c_BotOrdens", "CommandButton")
         WITH loc_oPagina.cmd_4c_BotOrdens
             .Caption       = "..."
-            .Top           = 98
+            .Top           = 178
             .Left          = 440
             .Width         = 40
             .Height        = 40
@@ -2280,3 +2327,4 @@ DEFINE CLASS Formepd AS FormBase
     ENDPROC
 
 ENDDEFINE
+

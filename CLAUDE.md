@@ -181,6 +181,22 @@ As Pages do PageFrame recebem `.BackColor = RGB(100,100,100)` **e** `.Picture = 
 
 WARNING: CorretorAutomatico **#191**. Referencia: `FormCor`. Origem: Erro153 (sweep de 217 sites em 23 forms).
 
+
+### 13. NUNCA chamar helper que voce nao definiu (erro so em RUNTIME)
+Em VFP9, nome desconhecido seguido de `(` **nao eh erro de compilacao**: o interpretador resolve procurando `<nome>.prg` em disco. O `.prg` compila limpo e o erro so aparece quando o usuario aciona o botao: `File 'nomedafuncao.prg' does not exist.`
+
+Duas familias com a mesma mensagem:
+
+| Familia | Causa | Fix |
+|---------|-------|-----|
+| **Helper inexistente** | migrador inventou a funcao e nunca definiu | DEFINIR em `projeto\app\utils\functions.prg` |
+| **Metodo sem `THIS.`** | `ValidarDados()` no lugar de `THIS.ValidarDados()` | prefixar com `THIS.` (regra #8) |
+
+**Helpers globais que JA existem** (nao reinventar): `TratarNulo`, `EscaparSQL`, `FormatarNumeroSQL`, `FormatarDataSQL`, `ConverterParaLogico`, `MsgErro`, `MsgAviso`, `MsgInfo`, `MsgConfirma`, `MostrarErro`, `Centralizar`, `CapturarErroSQL`.
+
+**Helper que le coluna do banco tem de testar `VARTYPE` antes de comparar**: coluna `bit` do SQL Server chega ao VFP ora como Logico (`.T.`/`.F.`) ora como Numerico (0/1) conforme o driver; `numeric(1,0)` sempre Numerico; char de marcacao como `"S"`/`"N"`. Comparar Logico com `1` estoura *Operator/operand type mismatch*.
+
+Auditoria: `automation\VerificarFuncoesNaoDefinidas.ps1`. WARNING: CorretorAutomatico **#192**. Origem: Erro154 (`ConverterParaLogico` chamado em 17 sites de 6 BOs sem existir).
 **Full VFP9 reference, control properties, and 58 common errors**: See vfp9-migration skill.
 
 ## BusinessBase Property Names (CORRECT)
