@@ -143,6 +143,24 @@ Se o SCX legado tem `Grupo_Saida.Left=935`, `Width=60`, botao com `Caption="X"`/
 
 Auto-fix: CorretorAutomatico patterns **#81, #88, #89**. Referencia: `FormCor`/`FormMoe`.
 
+### 11. Faixa do Cabecalho nas DUAS Paginas (PREVALECE sobre PILAR 1)
+A faixa cinza do cabecalho vai na pagina **Lista E na pagina Dados**. No `frmcadastro` legado o `cntSombra` existe so em `Pagina.Lista` — padronizar as duas paginas foi decisao do time (Erro152) e tem precedencia sobre o PILAR 1 neste bloco.
+
+| Objeto (na Page2 tambem) | Propriedade | Valor canonico |
+|--------------------------|-------------|----------------|
+| `cnt_4c_Cabecalho` | Top / Left | **29** / 0 |
+| `cnt_4c_Cabecalho` | Width / Height | **`THIS.Width`** / **80** |
+| `cnt_4c_Cabecalho` | BackColor | **RGB(100, 100, 100)** |
+| `lbl_4c_Sombra` | Top / ForeColor | 15 / RGB(0,0,0) |
+| `lbl_4c_Titulo` | Top / ForeColor | 18 / RGB(255,255,255) |
+| ambos os labels | Font / Caption | Tahoma 16 bold / **`THIS.Caption`** |
+
+**A faixa tem de ser o PRIMEIRO `AddObject` da pagina** — os containers de botao ficam em Top=29..33, dentro da area da faixa, e precisam ser criados depois para desenhar por cima. Consequencia: nenhum controle de dados pode ter `Top < 109` (29+80).
+
+**NUNCA detectar o cabecalho pelo NOME**: 8 forms chamam o mesmo container de `cnt_4c_Sombra`. Identificar por `BackColor = RGB(100,100,100)` **+ `Height >= 60`** — a busca por nome ja gerou faixa duplicada em 3 forms.
+
+WARNING: CorretorAutomatico **#190**. Ferramentas: `automation\DiagnosticoCabecalhoPaginas.ps1`, `automation\InjetarCabecalhoPaginaDados.ps1`. Referencia: `Formcfo`.
+
 **Full VFP9 reference, control properties, and 58 common errors**: See vfp9-migration skill.
 
 ## BusinessBase Property Names (CORRECT)

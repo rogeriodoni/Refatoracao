@@ -13545,6 +13545,96 @@ function Corrigir-SucessoSemGravarEListaDistinct {
 
     return $Linhas
 }
+
+function Corrigir-PaginaDadosSemCabecalho {
+    # Pattern #190 (Erro152, 2026-09-08) - WARNING-only.
+    #
+    # Form CRUD cuja pagina DADOS nao tem a faixa cinza do cabecalho que a
+    # pagina Lista tem. O padrao adotado no sistema novo eh a faixa nas DUAS
+    # paginas (decisao do time; o frmcadastro legado so tem cntSombra na Lista).
+    #
+    # Bloco canonico: Formcfo.prg ConfigurarPaginaDados - cnt_4c_Cabecalho
+    # (Top=29, Height=80, BackColor RGB(100,100,100)) com lbl_4c_Sombra (preto,
+    # Top=15) e lbl_4c_Titulo (branco, Top=18), Tahoma 16 bold, Caption =
+    # THIS.Caption. Tem de ser o PRIMEIRO AddObject da pagina para os
+    # containers de botao (Top=29..33) desenharem POR CIMA da faixa.
+    #
+    # A deteccao NAO usa o nome do container: 8 forms chamam a mesma faixa de
+    # `cnt_4c_Sombra` (nome do legado) em vez de `cnt_4c_Cabecalho`, e procurar
+    # pelo nome fez o sweep injetar faixa DUPLICADA em FormFte/FormUfs/Formpgr.
+    # Aqui o cabecalho eh reconhecido pelo par BackColor=RGB(100,100,100) +
+    # Height >= 60 num Container criado direto na pagina.
+    #
+    # WARNING-only: injetar exige checar se algum controle de dados ficaria sob
+    # a faixa (Top < 109). Quando fica, o conteudo precisa ser deslocado para
+    # baixo - e em 29 forms do sweep isso estouraria o rodape, exigindo
+    # redesenho. Ferramentas: automation\DiagnosticoCabecalhoPaginas.ps1 (ve o
+    # estado) e automation\InjetarCabecalhoPaginaDados.ps1 (injeta onde cabe).
+    param([string[]]$Linhas, [string]$Arquivo = "")
+
+    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
+    if ([string]::IsNullOrEmpty($Arquivo)) { return $Linhas }
+    $nomeArq = Split-Path -Leaf $Arquivo
+    if ($nomeArq -notlike 'Form*.prg') { return $Linhas }
+
+    # so forms CRUD: precisam ter Page2 (pagina de dados)
+    $temPage2 = $false
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        if ($Linhas[$i] -match '(?i)THIS\.pgf_4c_Paginas\.Page2') { $temPage2 = $true; break }
+    }
+    if (-not $temPage2) { return $Linhas }
+
+    # mapeia containers -> pagina e marca os que sao faixa de cabecalho
+    $varPag = @{}; $pagDe = @{}; $ehCab = @{}; $linhaDe = @{}
+    $obj = ''; $altura = 0; $cor = $false
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        $l = $Linhas[$i]
+        if ($l -match '(?i)^\s*(\w+)\s*=\s*THIS\.pgf_4c_Paginas\.Page(\d)') { $varPag[$Matches[1]] = [int]$Matches[2]; continue }
+
+        $novo = ''; $pagina = -1
+        if ($l -match '(?i)THIS\.pgf_4c_Paginas\.Page(\d)\.AddObject\s*\(\s*"(\w+)"\s*,\s*"Container"') {
+            $pagina = [int]$Matches[1]; $novo = $Matches[2]
+        }
+        elseif ($l -match '(?i)(\w+)\.AddObject\s*\(\s*"(\w+)"\s*,\s*"Container"\s*\)') {
+            $pai = $Matches[1]; $novo = $Matches[2]
+            if ($varPag.ContainsKey($pai)) { $pagina = $varPag[$pai] } else { $pagina = 0 }
+        }
+        if ($novo -ne '') {
+            if ($obj -ne '' -and $cor -and $altura -ge 60) { $ehCab[$obj] = $true }
+            $obj = $novo; $pagDe[$obj] = $pagina; $linhaDe[$obj] = $i + 1; $altura = 0; $cor = $false
+            continue
+        }
+        if ($obj -ne '') {
+            if ($l -match '(?i)^\s*\.BackColor\s*=\s*RGB\(\s*100\s*,\s*100\s*,\s*100\s*\)') { $cor = $true }
+            if ($l -match '(?i)^\s*\.Height\s*=\s*(\d+)' -and $altura -eq 0) { $altura = [int]$Matches[1] }
+        }
+    }
+    if ($obj -ne '' -and $cor -and $altura -ge 60) { $ehCab[$obj] = $true }
+
+    $ignoraNome = '(?i)(Botoes|Salva|Saida|Botao|Cmd)'
+    $cabP1 = @($ehCab.Keys | Where-Object { $pagDe[$_] -eq 1 -and $_ -notmatch $ignoraNome })
+    $cabP2 = @($ehCab.Keys | Where-Object { $pagDe[$_] -eq 2 -and $_ -notmatch $ignoraNome })
+
+    if ($cabP2.Count -ge 1) { return $Linhas }          # ja tem faixa na Dados
+    if ($cabP1.Count -eq 0) { return $Linhas }          # form sem faixa em pagina nenhuma: outro caso
+
+    Add-Correcao -Tipo "WARN-190-PAGINA-DADOS-SEM-CABECALHO" -Linha $linhaDe[$cabP1[0]] `
+        -Original ("pagina Lista tem '" + $cabP1[0] + "', pagina Dados nao tem faixa") `
+        -Corrigido "(REVISAR MANUAL)" `
+        -Descricao ("Pattern #190: a pagina DADOS nao tem a faixa cinza do cabecalho que a Lista tem. " +
+            "Padrao do sistema novo: faixa nas DUAS paginas (decisao do time no Erro152; o frmcadastro legado " +
+            "so tem cntSombra na Lista). Copiar o bloco canonico de Formcfo.prg ConfigurarPaginaDados " +
+            "(cnt_4c_Cabecalho Top=29 Height=80 BackColor RGB(100,100,100) + lbl_4c_Sombra preto Top=15 + " +
+            "lbl_4c_Titulo branco Top=18, Tahoma 16 bold, Caption=THIS.Caption) como PRIMEIRO AddObject da " +
+            "pagina, para os containers de botao desenharem por cima. ANTES de injetar, conferir se algum " +
+            "controle de dados fica com Top < 109: se ficar, o conteudo precisa ser deslocado para baixo, e " +
+            "se o deslocamento estourar o rodape o form precisa de redesenho. Ferramentas: " +
+            "automation\DiagnosticoCabecalhoPaginas.ps1 e automation\InjetarCabecalhoPaginaDados.ps1. " +
+            "Origem: Erro152 (2026-09-08).")
+    Write-Host "[Pattern #190] pagina Dados sem a faixa do cabecalho (Lista tem '$($cabP1[0])')" -ForegroundColor Yellow
+
+    return $Linhas
+}
 function Invoke-CorrecaoAutomatica {
     param(
         [string]$Arquivo,
@@ -13757,6 +13847,7 @@ function Invoke-CorrecaoAutomatica {
     $linhas = Corrigir-IIFCheckBoxValueNumerico -Linhas $linhas -Arquivo $Arquivo
     $linhas = Corrigir-ControlSourceNumericoIndice1Based -Linhas $linhas -Arquivo $Arquivo
     $linhas = Corrigir-SucessoSemGravarEListaDistinct -Linhas $linhas -Arquivo $Arquivo
+    $linhas = Corrigir-PaginaDadosSemCabecalho -Linhas $linhas -Arquivo $Arquivo
 
     # Salva arquivo corrigido em UTF-8 SEM BOM.
     # - VFP9 nao suporta BOM (por isso removemos no read com bytes[3..])

@@ -9995,3 +9995,94 @@ compilador acusa "Too many arguments". Dentro de string SQL o `ISNULL` continua 
   COCBO, COMBO, gprBO, ImpBO, ClienteBO, SedBO, SigPrCtrBO, ROMBO (3 sites), sigprilaBO, SIGPRSTFBO,
   SigPrEmlBO (2 sites), sigopdivBO (3 sites), sigpdmp6BO.
 - Origem: Erro151 (2026-09-08, FormAli "Cadastro de Alineas").
+
+---
+
+## 192. Faixa do Cabecalho nas DUAS Paginas (Lista e Dados) — e Como NAO Detecta-la (Erro152 2026-09-08)
+
+### A regra
+
+A pagina **Dados** leva a mesma faixa cinza que a pagina **Lista**.
+
+Isto **diverge do legado de proposito**: no `frmcadastro` do Framework o `cntSombra` existe apenas em
+`Pagina.Lista` — a pagina Dados nao tem faixa. A padronizacao nas duas paginas foi decisao do time
+(Erro152) e **prevalece sobre o PILAR 1** neste ponto especifico, como ja acontecia em 13 forms
+(Formcfo, Formacg, FormCEP...).
+
+### Bloco canonico (Formcfo.prg, ConfigurarPaginaDados)
+
+```foxpro
+loc_oPagina.AddObject("cnt_4c_Cabecalho", "Container")   && PRIMEIRO AddObject da pagina
+WITH loc_oPagina.cnt_4c_Cabecalho
+    .Top           = 29
+    .Left          = 0
+    .Width         = THIS.Width
+    .Height        = 80
+    .BackColor     = RGB(100, 100, 100)
+    .BorderWidth   = 0
+    .SpecialEffect = 0
+    .Visible       = .T.
+
+    .AddObject("lbl_4c_Sombra", "Label")     && sombra preta, Top=15
+    .AddObject("lbl_4c_Titulo", "Label")     && titulo branco, Top=18
+    *-- ambos: Tahoma 16 bold, Left=10, Width=THIS.Width, BackStyle=0,
+    *--        AutoSize=.F., Caption = THIS.Caption
+ENDWITH
+```
+
+**A ordem importa**: o cabecalho tem de ser o **primeiro** `AddObject` da pagina. Os containers de botao
+(`cnt_4c_Salva` / `cnt_4c_BotoesAcao` / `cnt_4c_Saida`) ficam em `Top = 29..33`, ou seja, DENTRO da area da
+faixa — criados depois, eles desenham por cima e aparecem como no Formcfo. Criados antes, sumiriam atras
+do cinza.
+
+### Consequencia de layout
+
+Nenhum controle de **dados** pode ficar com `Top < 109` (29 + 80) na pagina Dados. Ao converter os Tops do
+SCX, empurrar o conteudo para baixo da faixa.
+
+No sweep de 2026-09-08 isso separou os forms em tres grupos:
+
+| Situacao | Forms | O que foi feito |
+|---|---|---|
+| Conteudo ja comecava abaixo de 109 | 105 | faixa injetada, layout intacto |
+| Conteudo na faixa, mas cabe se descer | 10 | conteudo deslocado (+10 a +77) e faixa injetada |
+| Conteudo na faixa e o deslocamento estouraria o rodape | 29 | ficaram SEM faixa (exigem redesenho) |
+
+Ao deslocar, mexer **somente no `.Top` de primeiro nivel**: controle dentro de container tem Top relativo
+ao pai e nao pode ser somado; os containers de botao tambem nao se movem.
+
+### A armadilha: NUNCA detectar o cabecalho pelo NOME
+
+O mesmo container aparece com **dois nomes** no codigo migrado:
+
+- `cnt_4c_Cabecalho` — maioria dos forms
+- `cnt_4c_Sombra` — 8 forms (nome herdado do `cntSombra` legado): FormEmn, FormFte, FormFti, FormGpe,
+  FormTam, FormUfs, Formema, Formpgr
+
+Procurar so por `cnt_4c_Cabecalho` faz esses forms parecerem "sem cabecalho". Na primeira versao do sweep
+isso injetou faixa **duplicada** por cima da existente em `FormFte`, `FormUfs` e `Formpgr` — os tres
+tiveram de ser restaurados.
+
+```powershell
+# ERRADO — deteccao por nome
+if (([regex]::Matches($txt, 'AddObject\("cnt_4c_Cabecalho"')).Count -ge 2) { ... }
+
+# CORRETO — deteccao por aparencia: Container com a cor da faixa e altura de faixa
+#   BackColor = RGB(100,100,100)  E  Height >= 60,  criado direto na pagina
+```
+
+A altura entra na regra porque os containers de botao usam a **mesma cor** e so se distinguem por serem
+baixos (ou pelo nome conter Botoes/Salva/Saida).
+
+### Ferramentas
+
+- `automation\DiagnosticoCabecalhoPaginas.ps1` — diz, por form, se cada pagina tem a faixa (deteccao por cor+altura).
+- `automation\InjetarCabecalhoPaginaDados.ps1` — injeta o bloco, pulando quem ja tem e quem tem campo sob a faixa.
+- `CorretorAutomatico.ps1` Pattern **#190** (`WARN-190-PAGINA-DADOS-SEM-CABECALHO`) — avisa quando a Lista
+  tem faixa e a Dados nao. WARNING-only: injetar exige a analise de colisao/deslocamento acima.
+
+### Referencias
+
+- Canonico: `projeto/app/forms/cadastros/Formcfo.prg` (`ConfigurarPaginaDados`).
+- Sweep: 115 forms (commit `b78635c3`).
+- Origem: Erro152 (2026-09-08, FormARV — "a parte superior dos forms esta com a mesma cor do corpo").
