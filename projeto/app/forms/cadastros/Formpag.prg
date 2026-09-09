@@ -298,10 +298,57 @@ DEFINE CLASS Formpag AS FormBase
             loc_oPage.Caption = "Dados"
 
             && --- Cabecalho: Descricao ---
+
+            *-- Cabecalho cinza (identico ao da pagina Lista) - CLAUDE.md #11 / Erro152
+            loc_oPage.AddObject("cnt_4c_Cabecalho", "Container")
+            WITH loc_oPage.cnt_4c_Cabecalho
+                .Top           = 29
+                .Left          = 0
+                .Width         = THIS.Width
+                .Height        = 80
+                .BackColor     = RGB(100, 100, 100)
+                .BorderWidth   = 0
+                .SpecialEffect = 0
+                .Visible       = .T.
+
+                .AddObject("lbl_4c_Sombra", "Label")
+                WITH .lbl_4c_Sombra
+                    .Caption   = THIS.Caption
+                    .Top       = 15
+                    .Left      = 10
+                    .Width     = THIS.Width
+                    .Height    = 40
+                    .FontName  = "Tahoma"
+                    .FontSize  = 16
+                    .FontBold  = .T.
+                    .ForeColor = RGB(0, 0, 0)
+                    .BackStyle = 0
+                    .AutoSize  = .F.
+                    .Visible   = .T.
+                ENDWITH
+
+                .AddObject("lbl_4c_Titulo", "Label")
+                WITH .lbl_4c_Titulo
+                    .Caption   = THIS.Caption
+                    .Top       = 18
+                    .Left      = 10
+                    .Width     = THIS.Width
+                    .Height    = 46
+                    .FontName  = "Tahoma"
+                    .FontSize  = 16
+                    .FontBold  = .T.
+                    .ForeColor = RGB(255, 255, 255)
+                    .BackStyle = 0
+                    .AutoSize  = .F.
+                    .Visible   = .T.
+                ENDWITH
+
+            ENDWITH
+
             loc_oPage.AddObject("lbl_4c_Descrs", "Label")
             WITH loc_oPage.lbl_4c_Descrs
                 .Caption  = "Descri" + CHR(231) + CHR(227) + "o :"
-                .Top      = 20
+                .Top      = 115
                 .Left     = 10
                 .AutoSize = .T.
                 .Visible  = .T.
@@ -309,7 +356,7 @@ DEFINE CLASS Formpag AS FormBase
 
             loc_oPage.AddObject("txt_4c_Descrs", "TextBox")
             WITH loc_oPage.txt_4c_Descrs
-                .Top       = 16
+                .Top       = 111
                 .Left      = 112
                 .Width     = 220
                 .Height    = 21
@@ -321,7 +368,7 @@ DEFINE CLASS Formpag AS FormBase
             loc_oPage.AddObject("lbl_4c_TitFPags", "Label")
             WITH loc_oPage.lbl_4c_TitFPags
                 .Caption  = "T" + CHR(237) + "tulo :"
-                .Top      = 20
+                .Top      = 115
                 .Left     = 338
                 .AutoSize = .T.
                 .Visible  = .T.
@@ -329,7 +376,7 @@ DEFINE CLASS Formpag AS FormBase
 
             loc_oPage.AddObject("txt_4c_TitFPags", "TextBox")
             WITH loc_oPage.txt_4c_TitFPags
-                .Top       = 16
+                .Top       = 111
                 .Left      = 380
                 .Width     = 220
                 .Height    = 21
@@ -341,7 +388,7 @@ DEFINE CLASS Formpag AS FormBase
             loc_oPage.AddObject("lbl_4c_Forma", "Label")
             WITH loc_oPage.lbl_4c_Forma
                 .Caption  = "Forma :"
-                .Top      = 20
+                .Top      = 115
                 .Left     = 605
                 .AutoSize = .T.
                 .Visible  = .T.
@@ -349,7 +396,7 @@ DEFINE CLASS Formpag AS FormBase
 
             loc_oPage.AddObject("txt_4c_Forma", "TextBox")
             WITH loc_oPage.txt_4c_Forma
-                .Top       = 16
+                .Top       = 111
                 .Left      = 650
                 .Width     = 94
                 .Height    = 21
@@ -361,7 +408,7 @@ DEFINE CLASS Formpag AS FormBase
             loc_oPage.AddObject("lbl_4c_Fpags", "Label")
             WITH loc_oPage.lbl_4c_Fpags
                 .Caption  = "C" + CHR(243) + "digo :"
-                .Top      = 53
+                .Top      = 148
                 .Left     = 10
                 .AutoSize = .T.
                 .Visible  = .T.
@@ -369,7 +416,7 @@ DEFINE CLASS Formpag AS FormBase
 
             loc_oPage.AddObject("txt_4c_Codigo", "TextBox")
             WITH loc_oPage.txt_4c_Codigo
-                .Top       = 53
+                .Top       = 148
                 .Left      = 112
                 .Width     = 94
                 .Height    = 21
@@ -380,7 +427,7 @@ DEFINE CLASS Formpag AS FormBase
             loc_oPage.AddObject("lbl_4c_Nfpags", "Label")
             WITH loc_oPage.lbl_4c_Nfpags
                 .Caption  = "Nro :"
-                .Top      = 53
+                .Top      = 148
                 .Left     = 215
                 .AutoSize = .T.
                 .Visible  = .T.
@@ -388,7 +435,7 @@ DEFINE CLASS Formpag AS FormBase
 
             loc_oPage.AddObject("txt_4c_Nfpag", "TextBox")
             WITH loc_oPage.txt_4c_Nfpag
-                .Top       = 53
+                .Top       = 148
                 .Left      = 248
                 .Width     = 40
                 .Height    = 21
@@ -399,7 +446,7 @@ DEFINE CLASS Formpag AS FormBase
             loc_oPage.AddObject("lbl_4c_Modpagto", "Label")
             WITH loc_oPage.lbl_4c_Modpagto
                 .Caption  = "Modalidade :"
-                .Top      = 53
+                .Top      = 148
                 .Left     = 300
                 .AutoSize = .T.
                 .Visible  = .T.
@@ -407,7 +454,7 @@ DEFINE CLASS Formpag AS FormBase
 
             loc_oPage.AddObject("txt_4c_Modalidade", "TextBox")
             WITH loc_oPage.txt_4c_Modalidade
-                .Top       = 53
+                .Top       = 148
                 .Left      = 385
                 .Width     = 232
                 .Height    = 21
@@ -419,7 +466,7 @@ DEFINE CLASS Formpag AS FormBase
             loc_oPage.AddObject("lbl_4c_GrpDs", "Label")
             WITH loc_oPage.lbl_4c_GrpDs
                 .Caption  = "Grupo Deb. :"
-                .Top      = 91
+                .Top      = 186
                 .Left     = 10
                 .AutoSize = .T.
                 .Visible  = .T.
@@ -427,7 +474,7 @@ DEFINE CLASS Formpag AS FormBase
 
             loc_oPage.AddObject("txt_4c_Grupo", "TextBox")
             WITH loc_oPage.txt_4c_Grupo
-                .Top       = 91
+                .Top       = 186
                 .Left      = 90
                 .Width     = 80
                 .Height    = 21
@@ -438,7 +485,7 @@ DEFINE CLASS Formpag AS FormBase
             loc_oPage.AddObject("lbl_4c_CtaDs", "Label")
             WITH loc_oPage.lbl_4c_CtaDs
                 .Caption  = "Conta :"
-                .Top      = 91
+                .Top      = 186
                 .Left     = 178
                 .AutoSize = .T.
                 .Visible  = .T.
@@ -446,7 +493,7 @@ DEFINE CLASS Formpag AS FormBase
 
             loc_oPage.AddObject("txt_4c_Conta", "TextBox")
             WITH loc_oPage.txt_4c_Conta
-                .Top       = 91
+                .Top       = 186
                 .Left      = 220
                 .Width     = 80
                 .Height    = 21
@@ -457,7 +504,7 @@ DEFINE CLASS Formpag AS FormBase
             loc_oPage.AddObject("lbl_4c_DctaDs", "Label")
             WITH loc_oPage.lbl_4c_DctaDs
                 .Caption  = "Descr. Conta :"
-                .Top      = 91
+                .Top      = 186
                 .Left     = 305
                 .AutoSize = .T.
                 .Visible  = .T.
@@ -465,7 +512,7 @@ DEFINE CLASS Formpag AS FormBase
 
             loc_oPage.AddObject("txt_4c_Dconta", "TextBox")
             WITH loc_oPage.txt_4c_Dconta
-                .Top       = 91
+                .Top       = 186
                 .Left      = 390
                 .Width     = 290
                 .Height    = 21
@@ -477,7 +524,7 @@ DEFINE CLASS Formpag AS FormBase
             && --- OptionGroup Conta Mov ---
             loc_oPage.AddObject("obj_4c_Opt_ContaMov", "OptionGroup")
             WITH loc_oPage.obj_4c_Opt_ContaMov
-                .Top         = 90
+                .Top         = 185
                 .Left        = 479
                 .Width       = 283
                 .Height      = 23
@@ -574,7 +621,7 @@ DEFINE CLASS Formpag AS FormBase
             loc_oPage.AddObject("pgf_4c_Dados", "PageFrame")
             loc_oPgf2 = loc_oPage.pgf_4c_Dados
             WITH loc_oPgf2
-                .Top       = 120
+                .Top       = 215
                 .Left      = 0
                 .Width     = THIS.Width
                 .Height    = THIS.Height - 120 + 29
@@ -3723,3 +3770,4 @@ DEFINE CLASS Formpag AS FormBase
     ENDPROC
 
 ENDDEFINE
+

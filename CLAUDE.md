@@ -155,11 +155,17 @@ A faixa cinza do cabecalho vai na pagina **Lista E na pagina Dados**. No `frmcad
 | `lbl_4c_Titulo` | Top / ForeColor | 18 / RGB(255,255,255) |
 | ambos os labels | Font / Caption | Tahoma 16 bold / **`THIS.Caption`** |
 
-**A faixa tem de ser o PRIMEIRO `AddObject` da pagina** — os containers de botao ficam em Top=29..33, dentro da area da faixa, e precisam ser criados depois para desenhar por cima. Consequencia: nenhum controle de dados pode ter `Top < 109` (29+80).
+**A faixa tem de ser o PRIMEIRO `AddObject` da pagina** — os containers de botao ficam em Top=29..33, dentro da area da faixa, e precisam ser criados depois para desenhar por cima. Consequencia: nenhum controle de dados pode ter `Top < 109` (29+80). **Excecao**: se a pagina tem um PageFrame/Container interno que cobre tudo (`Formgpd.pgf_4c_Divisoes`), ele pinta por cima da faixa — criar a faixa DEPOIS dele e trazer a barra de botoes para frente com `ZOrder(0)`.
 
-**NUNCA detectar o cabecalho pelo NOME**: 8 forms chamam o mesmo container de `cnt_4c_Sombra`. Identificar por `BackColor = RGB(100,100,100)` **+ `Height >= 60`** — a busca por nome ja gerou faixa duplicada em 3 forms.
+**NUNCA detectar o cabecalho pelo NOME**, em nenhuma direcao: 8 forms chamam a faixa de `cnt_4c_Sombra` (detectar por nome duplicou a faixa em 3 forms) e o `Formpgr` usa `cnt_4c_Cabecalho` para um container de CAMPOS (reusar o nome estoura "object already exists" — nesse caso usar `cnt_4c_FaixaTitulo`). Identificar sempre por `BackColor = RGB(100,100,100)` **+ `Height >= 60`**.
 
-WARNING: CorretorAutomatico **#190**. Ferramentas: `automation\DiagnosticoCabecalhoPaginas.ps1`, `automation\InjetarCabecalhoPaginaDados.ps1`. Referencia: `Formcfo`.
+**Pagina cheia exige re-layout, nao so a injecao**: deslocar os filhos diretos ate o primeiro controle de dados ficar em `Top >= 115`; encolher no rodape apenas controles FOLHA (Grid/EditBox/Image/Shape) — encolher Container/PageFrame CORTA o conteudo interno; o que nao encolhe vira aumento do `Form.Height` (e a grade da Lista cresce junto). Ficam POR CIMA da faixa, sem deslocar: `cnt_4c_Botoes*`/`cnt_4c_Salva*`/`cnt_4c_Saida` e a barra de acao do topo (CommandButton/Container/OptionGroup com Top 20..55 e Height 60..100).
+
+**Ao varrer os forms**, a pagina chega aos metodos de tres formas: variavel (`loc_oPagina = ...Page2`), `Pages(2)` e **PARAMETRO** (`ConfigurarPaginaDados(par_oPagina)`, encadeado ate 3 niveis no FormCTA). Ignorar o caso do parametro faz a ferramenta "nao ver" a faixa que ja existe (FormEmn) nem os controles que ficariam soterrados. Variavel reatribuida a outra coisa (`loc_oPage = par_oPage`, Formpag) tem de PERDER o mapeamento.
+
+Nao se aplica a form sem pagina de dados real: `FormFpd` (OPERACIONAL com PageFrame stub fora da tela) e `FormGcp` (Page2 declarada "reservada").
+
+WARNING: CorretorAutomatico **#190**. Ferramentas: `automation\LibCabecalhoPaginas.ps1` (parsers compartilhados), `automation\DiagnosticoCabecalhoPaginas.ps1`, `automation\AplicarCabecalhoComDeslocamento.ps1` (injeta + re-layouta), `automation\InjetarCabecalhoPaginaDados.ps1` (so paginas com espaco livre). Referencia: `Formcfo`.
 
 **Full VFP9 reference, control properties, and 58 common errors**: See vfp9-migration skill.
 

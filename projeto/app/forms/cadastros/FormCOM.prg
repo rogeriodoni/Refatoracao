@@ -14,7 +14,7 @@ DEFINE CLASS FormCOM AS FormBase
     * Propriedades visuais (PILAR 1 - UX Fidelity)
     * Caption sem acento aqui; InicializarForm usa CHR(245) para "Comissoes"
     *--------------------------------------------------------------------------
-    Height      = 600
+    Height      = 647
     Width       = 1000
     Caption     = "Cadastro de Comissoes"
     AutoCenter  = .T.
@@ -388,7 +388,7 @@ DEFINE CLASS FormCOM AS FormBase
                 .Top                = 117
                 .Left               = 0
                 .Width              = 916
-                .Height             = 510
+                .Height             = 557
                 .FontName           = "Verdana"
                 .FontSize           = 8
                 .ForeColor          = RGB(90, 90, 90)
@@ -444,6 +444,53 @@ DEFINE CLASS FormCOM AS FormBase
 
         *-- Fundo padrao do framework frmcadastro (sem isso a pagina fica branca)
         loc_oPagina.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
+
+        *-- Cabecalho cinza (identico ao da pagina Lista) - CLAUDE.md #11 / Erro152
+        loc_oPagina.AddObject("cnt_4c_Cabecalho", "Container")
+        WITH loc_oPagina.cnt_4c_Cabecalho
+            .Top           = 29
+            .Left          = 0
+            .Width         = THIS.Width
+            .Height        = 80
+            .BackColor     = RGB(100, 100, 100)
+            .BorderWidth   = 0
+            .SpecialEffect = 0
+            .Visible       = .T.
+
+            .AddObject("lbl_4c_Sombra", "Label")
+            WITH .lbl_4c_Sombra
+                .Caption   = THIS.Caption
+                .Top       = 15
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 40
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(0, 0, 0)
+                .BackStyle = 0
+                .AutoSize  = .F.
+                .Visible   = .T.
+            ENDWITH
+
+            .AddObject("lbl_4c_Titulo", "Label")
+            WITH .lbl_4c_Titulo
+                .Caption   = THIS.Caption
+                .Top       = 18
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 46
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(255, 255, 255)
+                .BackStyle = 0
+                .AutoSize  = .F.
+                .Visible   = .T.
+            ENDWITH
+
+        ENDWITH
+
 
         TRY
             *------------------------------------------------------------------
@@ -516,7 +563,7 @@ DEFINE CLASS FormCOM AS FormBase
             loc_oPagina.AddObject("lbl_4c_Label7", "Label")
             WITH loc_oPagina.lbl_4c_Label7
                 .Caption   = "Descri" + CHR(231) + CHR(227) + "o :"
-                .Top       = 45
+                .Top       = 119
                 .Left      = 72
                 .Width     = 66
                 .Height    = 17
@@ -531,7 +578,7 @@ DEFINE CLASS FormCOM AS FormBase
             loc_oPagina.AddObject("txt_4c_Descricao", "TextBox")
             WITH loc_oPagina.txt_4c_Descricao
                 .Value     = ""
-                .Top       = 41
+                .Top       = 115
                 .Left      = 140
                 .Width     = 323
                 .Height    = 23
@@ -550,7 +597,7 @@ DEFINE CLASS FormCOM AS FormBase
             loc_oPagina.AddObject("lbl_4c_Empresa", "Label")
             WITH loc_oPagina.lbl_4c_Empresa
                 .Caption   = "Empresa :"
-                .Top       = 71
+                .Top       = 145
                 .Left      = 78
                 .Width     = 61
                 .Height    = 17
@@ -565,7 +612,7 @@ DEFINE CLASS FormCOM AS FormBase
             loc_oPagina.AddObject("txt_4c_Empresa", "TextBox")
             WITH loc_oPagina.txt_4c_Empresa
                 .Value     = ""
-                .Top       = 67
+                .Top       = 141
                 .Left      = 140
                 .Width     = 31
                 .Height    = 23
@@ -578,7 +625,7 @@ DEFINE CLASS FormCOM AS FormBase
             loc_oPagina.AddObject("txt_4c_DEmpresa", "TextBox")
             WITH loc_oPagina.txt_4c_DEmpresa
                 .Value     = ""
-                .Top       = 67
+                .Top       = 141
                 .Left      = 173
                 .Width     = 290
                 .Height    = 23
@@ -601,7 +648,7 @@ DEFINE CLASS FormCOM AS FormBase
             loc_oPagina.AddObject("lbl_4c_Label2", "Label")
             WITH loc_oPagina.lbl_4c_Label2
                 .Caption   = "Per" + CHR(237) + "odo :"
-                .Top       = 97
+                .Top       = 171
                 .Left      = 85
                 .Width     = 54
                 .Height    = 17
@@ -616,7 +663,7 @@ DEFINE CLASS FormCOM AS FormBase
             loc_oPagina.AddObject("txt_4c_DtInicio", "TextBox")
             WITH loc_oPagina.txt_4c_DtInicio
                 .Value     = {}
-                .Top       = 93
+                .Top       = 167
                 .Left      = 140
                 .Width     = 80
                 .Height    = 23
@@ -629,7 +676,7 @@ DEFINE CLASS FormCOM AS FormBase
             loc_oPagina.AddObject("lbl_4c_Label3", "Label")
             WITH loc_oPagina.lbl_4c_Label3
                 .Caption   = "at" + CHR(233)
-                .Top       = 97
+                .Top       = 171
                 .Left      = 222
                 .Width     = 20
                 .Height    = 17
@@ -644,7 +691,7 @@ DEFINE CLASS FormCOM AS FormBase
             loc_oPagina.AddObject("txt_4c_DtFim", "TextBox")
             WITH loc_oPagina.txt_4c_DtFim
                 .Value     = {}
-                .Top       = 93
+                .Top       = 167
                 .Left      = 251
                 .Width     = 80
                 .Height    = 23
@@ -662,7 +709,7 @@ DEFINE CLASS FormCOM AS FormBase
             loc_oPagina.AddObject("lbl_4c_Label10", "Label")
             WITH loc_oPagina.lbl_4c_Label10
                 .Caption   = "Meta Empresa :"
-                .Top       = 123
+                .Top       = 197
                 .Left      = 47
                 .Width     = 92
                 .Height    = 17
@@ -677,7 +724,7 @@ DEFINE CLASS FormCOM AS FormBase
             loc_oPagina.AddObject("txt_4c_MetaEmps", "TextBox")
             WITH loc_oPagina.txt_4c_MetaEmps
                 .Value     = 0
-                .Top       = 119
+                .Top       = 193
                 .Left      = 140
                 .Width     = 108
                 .Height    = 23
@@ -699,7 +746,7 @@ DEFINE CLASS FormCOM AS FormBase
             loc_oPagina.AddObject("lbl_4c_Moeda", "Label")
             WITH loc_oPagina.lbl_4c_Moeda
                 .Caption   = "Moeda : "
-                .Top       = 122
+                .Top       = 196
                 .Left      = 266
                 .Width     = 52
                 .Height    = 15
@@ -714,7 +761,7 @@ DEFINE CLASS FormCOM AS FormBase
             loc_oPagina.AddObject("txt_4c_Moeda", "TextBox")
             WITH loc_oPagina.txt_4c_Moeda
                 .Value     = ""
-                .Top       = 118
+                .Top       = 192
                 .Left      = 316
                 .Width     = 31
                 .Height    = 23
@@ -727,7 +774,7 @@ DEFINE CLASS FormCOM AS FormBase
             loc_oPagina.AddObject("txt_4c_DMoeda", "TextBox")
             WITH loc_oPagina.txt_4c_DMoeda
                 .Value     = ""
-                .Top       = 118
+                .Top       = 192
                 .Left      = 348
                 .Width     = 115
                 .Height    = 23
@@ -747,7 +794,7 @@ DEFINE CLASS FormCOM AS FormBase
             *------------------------------------------------------------------
             loc_oPagina.AddObject("shp_4c_Shape3", "Shape")
             WITH loc_oPagina.shp_4c_Shape3
-                .Top     = 41
+                .Top     = 115
                 .Left    = 475
                 .Width   = 170
                 .Height  = 98
@@ -757,7 +804,7 @@ DEFINE CLASS FormCOM AS FormBase
             loc_oPagina.AddObject("lbl_4c_Label1", "Label")
             WITH loc_oPagina.lbl_4c_Label1
                 .Caption   = "Comiss" + CHR(227) + "o Dividida "
-                .Top       = 49
+                .Top       = 123
                 .Left      = 498
                 .Width     = 130
                 .Height    = 17
@@ -778,7 +825,7 @@ DEFINE CLASS FormCOM AS FormBase
             loc_oPagina.AddObject("lbl_4c_Label4", "Label")
             WITH loc_oPagina.lbl_4c_Label4
                 .Caption   = "Vendedor 1 :"
-                .Top       = 76
+                .Top       = 150
                 .Left      = 485
                 .Width     = 77
                 .Height    = 17
@@ -793,7 +840,7 @@ DEFINE CLASS FormCOM AS FormBase
             loc_oPagina.AddObject("txt_4c_PctVd1", "TextBox")
             WITH loc_oPagina.txt_4c_PctVd1
                 .Value     = 100
-                .Top       = 72
+                .Top       = 146
                 .Left      = 564
                 .Width     = 52
                 .Height    = 23
@@ -807,7 +854,7 @@ DEFINE CLASS FormCOM AS FormBase
             loc_oPagina.AddObject("lbl_4c_Label5", "Label")
             WITH loc_oPagina.lbl_4c_Label5
                 .Caption   = "%"
-                .Top       = 76
+                .Top       = 150
                 .Left      = 619
                 .Width     = 14
                 .Height    = 17
@@ -830,7 +877,7 @@ DEFINE CLASS FormCOM AS FormBase
             loc_oPagina.AddObject("lbl_4c_Label6", "Label")
             WITH loc_oPagina.lbl_4c_Label6
                 .Caption   = "Vendedor 2 :"
-                .Top       = 102
+                .Top       = 176
                 .Left      = 485
                 .Width     = 77
                 .Height    = 17
@@ -845,7 +892,7 @@ DEFINE CLASS FormCOM AS FormBase
             loc_oPagina.AddObject("txt_4c_PctVd2", "TextBox")
             WITH loc_oPagina.txt_4c_PctVd2
                 .Value     = 0
-                .Top       = 98
+                .Top       = 172
                 .Left      = 564
                 .Width     = 52
                 .Height    = 23
@@ -859,7 +906,7 @@ DEFINE CLASS FormCOM AS FormBase
             loc_oPagina.AddObject("lbl_4c_Label8", "Label")
             WITH loc_oPagina.lbl_4c_Label8
                 .Caption   = "%"
-                .Top       = 102
+                .Top       = 176
                 .Left      = 619
                 .Width     = 14
                 .Height    = 17
@@ -878,7 +925,7 @@ DEFINE CLASS FormCOM AS FormBase
             *------------------------------------------------------------------
             loc_oPagina.AddObject("shp_4c_Shape1", "Shape")
             WITH loc_oPagina.shp_4c_Shape1
-                .Top           = 149
+                .Top           = 223
                 .Left          = 18
                 .Width         = 793
                 .Height        = 0
@@ -896,7 +943,7 @@ DEFINE CLASS FormCOM AS FormBase
             loc_oPagina.AddObject("lbl_4c_Label11", "Label")
             WITH loc_oPagina.lbl_4c_Label11
                 .Caption   = "Vendedores"
-                .Top       = 154
+                .Top       = 228
                 .Left      = 7
                 .Width     = 100
                 .Height    = 17
@@ -914,7 +961,7 @@ DEFINE CLASS FormCOM AS FormBase
             loc_oGridV.ColumnCount  = 6
 
             WITH loc_oGridV
-                .Top               = 171
+                .Top               = 245
                 .Left              = 7
                 .Width             = 624
                 .Height            = 224
@@ -973,7 +1020,7 @@ DEFINE CLASS FormCOM AS FormBase
                 .Caption         = ""
                 .Picture         = gc_4c_CaminhoIcones + "cadastro_excluir_26.jpg"
                 .DisabledPicture = gc_4c_CaminhoIcones + "cadastro_excluir_26.jpg"
-                .Top             = 355
+                .Top             = 429
                 .Left            = 633
                 .Width           = 26
                 .Height          = 26
@@ -993,7 +1040,7 @@ DEFINE CLASS FormCOM AS FormBase
             loc_oPagina.AddObject("lbl_4c_Label9", "Label")
             WITH loc_oPagina.lbl_4c_Label9
                 .Caption   = "Produtos"
-                .Top       = 154
+                .Top       = 228
                 .Left      = 679
                 .Width     = 80
                 .Height    = 17
@@ -1011,10 +1058,10 @@ DEFINE CLASS FormCOM AS FormBase
             loc_oGridP.ColumnCount  = 4
 
             WITH loc_oGridP
-                .Top               = 171
+                .Top               = 245
                 .Left              = 679
                 .Width             = 260
-                .Height            = 445
+                .Height            = 431
                 .HeaderHeight      = 17
                 .RowHeight         = 17
                 .FontName          = "Arial"
@@ -1057,7 +1104,7 @@ DEFINE CLASS FormCOM AS FormBase
                 .Caption         = ""
                 .Picture         = gc_4c_CaminhoIcones + "cadastro_excluir_26.jpg"
                 .DisabledPicture = gc_4c_CaminhoIcones + "cadastro_excluir_26.jpg"
-                .Top             = 576
+                .Top             = 650
                 .Left            = 940
                 .Width           = 26
                 .Height          = 26
@@ -1077,7 +1124,7 @@ DEFINE CLASS FormCOM AS FormBase
             loc_oPagina.AddObject("lbl_4c_Label12", "Label")
             WITH loc_oPagina.lbl_4c_Label12
                 .Caption   = "Faixas de Remunera" + CHR(231) + CHR(227) + "o dos Vendedores"
-                .Top       = 409
+                .Top       = 483
                 .Left      = 7
                 .Width     = 310
                 .Height    = 17
@@ -1095,10 +1142,10 @@ DEFINE CLASS FormCOM AS FormBase
             loc_oGridM.ColumnCount  = 5
 
             WITH loc_oGridM
-                .Top               = 426
+                .Top               = 500
                 .Left              = 7
                 .Width             = 507
-                .Height            = 190
+                .Height            = 176
                 .HeaderHeight      = 17
                 .RowHeight         = 17
                 .FontName          = "Arial"
@@ -1146,7 +1193,7 @@ DEFINE CLASS FormCOM AS FormBase
                 .Caption         = ""
                 .Picture         = gc_4c_CaminhoIcones + "cadastro_excluir_26.jpg"
                 .DisabledPicture = gc_4c_CaminhoIcones + "cadastro_excluir_26.jpg"
-                .Top             = 576
+                .Top             = 650
                 .Left            = 516
                 .Width           = 26
                 .Height          = 26
@@ -2240,3 +2287,4 @@ DEFINE CLASS FormCOM AS FormBase
     ENDPROC
 
 ENDDEFINE
+

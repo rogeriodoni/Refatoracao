@@ -7,7 +7,7 @@
 DEFINE CLASS FormFUN AS FormBase
 
     *-- Propriedades visuais (PILAR 1 - UX FIDELITY)
-    Height      = 600
+    Height      = 680
     Width       = 1000
     Caption     = "Cadastro de Fundi" + CHR(231) + CHR(245) + "es"
     BackColor   = RGB(100, 100, 100)
@@ -563,7 +563,7 @@ DEFINE CLASS FormFUN AS FormBase
             .Top                = 186
             .Left               = 12
             .Width              = 944
-            .Height             = 434
+            .Height             = 514
             .FontName           = "Tahoma"
             .FontSize           = 8
             .ForeColor          = RGB(90, 90, 90)
@@ -630,6 +630,53 @@ DEFINE CLASS FormFUN AS FormBase
         *-- Fundo padrao do framework frmcadastro (sem isso a pagina fica branca)
         loc_oPagina.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
 
+        *-- Cabecalho cinza (identico ao da pagina Lista) - CLAUDE.md #11 / Erro152
+        loc_oPagina.AddObject("cnt_4c_Cabecalho", "Container")
+        WITH loc_oPagina.cnt_4c_Cabecalho
+            .Top           = 29
+            .Left          = 0
+            .Width         = THIS.Width
+            .Height        = 80
+            .BackColor     = RGB(100, 100, 100)
+            .BorderWidth   = 0
+            .SpecialEffect = 0
+            .Visible       = .T.
+
+            .AddObject("lbl_4c_Sombra", "Label")
+            WITH .lbl_4c_Sombra
+                .Caption   = THIS.Caption
+                .Top       = 15
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 40
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(0, 0, 0)
+                .BackStyle = 0
+                .AutoSize  = .F.
+                .Visible   = .T.
+            ENDWITH
+
+            .AddObject("lbl_4c_Titulo", "Label")
+            WITH .lbl_4c_Titulo
+                .Caption   = THIS.Caption
+                .Top       = 18
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 46
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(255, 255, 255)
+                .BackStyle = 0
+                .AutoSize  = .F.
+                .Visible   = .T.
+            ENDWITH
+
+        ENDWITH
+
+
         *----------------------------------------------------------------------
         * cnt_4c_Salva - Botoes Confirmar/Cancelar (Fase 4 adiciona os botoes)
         * Canonico: Top=33, Left=842, Width=160, Height=85
@@ -652,7 +699,7 @@ DEFINE CLASS FormFUN AS FormBase
         *----------------------------------------------------------------------
         loc_oPagina.AddObject("cnt_4c_Container2", "Container")
         WITH loc_oPagina.cnt_4c_Container2
-            .Top         = 34
+            .Top         = 115
             .Left        = 9
             .Width       = 296
             .Height      = 594
@@ -683,7 +730,7 @@ DEFINE CLASS FormFUN AS FormBase
         *----------------------------------------------------------------------
         loc_oPagina.AddObject("cnt_4c_Container5", "Container")
         WITH loc_oPagina.cnt_4c_Container5
-            .Top         = 169
+            .Top         = 250
             .Left        = 303
             .Width       = 247
             .Height      = 148
@@ -698,7 +745,7 @@ DEFINE CLASS FormFUN AS FormBase
         *----------------------------------------------------------------------
         loc_oPagina.AddObject("cnt_4c_Container3", "Container")
         WITH loc_oPagina.cnt_4c_Container3
-            .Top         = 161
+            .Top         = 242
             .Left        = 549
             .Width       = 445
             .Height      = 345
@@ -713,7 +760,7 @@ DEFINE CLASS FormFUN AS FormBase
         *----------------------------------------------------------------------
         loc_oPagina.AddObject("cnt_4c_Container6", "Container")
         WITH loc_oPagina.cnt_4c_Container6
-            .Top         = 329
+            .Top         = 410
             .Left        = 303
             .Width       = 247
             .Height      = 126
@@ -728,7 +775,7 @@ DEFINE CLASS FormFUN AS FormBase
         *----------------------------------------------------------------------
         loc_oPagina.AddObject("cnt_4c_Container4", "Container")
         WITH loc_oPagina.cnt_4c_Container4
-            .Top         = 508
+            .Top         = 589
             .Left        = 311
             .Width       = 679
             .Height      = 118
@@ -743,7 +790,7 @@ DEFINE CLASS FormFUN AS FormBase
         *----------------------------------------------------------------------
         loc_oPagina.AddObject("cnt_4c_Total", "Container")
         WITH loc_oPagina.cnt_4c_Total
-            .Top         = 231
+            .Top         = 312
             .Left        = 246
             .Width       = 508
             .Height      = 200
@@ -2801,7 +2848,7 @@ DEFINE CLASS FormFUN AS FormBase
         WITH par_oPagina.lbl_4c_TipoArvoreLabel
             .Caption   = "Tipo " + CHR(193) + "rvore :"
             .Left      = 327
-            .Top       = 127
+            .Top       = 208
             .AutoSize  = .T.
             .FontBold  = .T.
             .BackStyle = 0
@@ -2814,7 +2861,7 @@ DEFINE CLASS FormFUN AS FormBase
             .Value     = ""
             .MaxLength = 10
             .Left      = 416
-            .Top       = 122
+            .Top       = 203
             .Width     = 79
             .Height    = 25
             .FontName  = "Tahoma"
@@ -2830,7 +2877,7 @@ DEFINE CLASS FormFUN AS FormBase
             .Value     = ""
             .MaxLength = 40
             .Left      = 497
-            .Top       = 122
+            .Top       = 203
             .Width     = 200
             .Height    = 25
             .ReadOnly  = .T.
@@ -3843,3 +3890,4 @@ DEFINE CLASS FormFUN AS FormBase
     ENDPROC
 
 ENDDEFINE
+

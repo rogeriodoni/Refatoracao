@@ -12,7 +12,7 @@
 DEFINE CLASS FormLpr AS FormBase
 
     *-- Propriedades visuais (PILAR 1 - UX FIDELITY)
-    Height          = 600
+    Height          = 652
     Width           = 1000
     Caption         = "Listas de Precificacao"
     AutoCenter      = .T.
@@ -799,6 +799,53 @@ DEFINE CLASS FormLpr AS FormBase
             loc_oPagina = THIS.pgf_4c_Paginas.Page2
             loc_oPagina.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
 
+            *-- Cabecalho cinza (identico ao da pagina Lista) - CLAUDE.md #11 / Erro152
+            loc_oPagina.AddObject("cnt_4c_Cabecalho", "Container")
+            WITH loc_oPagina.cnt_4c_Cabecalho
+                .Top           = 29
+                .Left          = 0
+                .Width         = THIS.Width
+                .Height        = 80
+                .BackColor     = RGB(100, 100, 100)
+                .BorderWidth   = 0
+                .SpecialEffect = 0
+                .Visible       = .T.
+
+                .AddObject("lbl_4c_Sombra", "Label")
+                WITH .lbl_4c_Sombra
+                    .Caption   = THIS.Caption
+                    .Top       = 15
+                    .Left      = 10
+                    .Width     = THIS.Width
+                    .Height    = 40
+                    .FontName  = "Tahoma"
+                    .FontSize  = 16
+                    .FontBold  = .T.
+                    .ForeColor = RGB(0, 0, 0)
+                    .BackStyle = 0
+                    .AutoSize  = .F.
+                    .Visible   = .T.
+                ENDWITH
+
+                .AddObject("lbl_4c_Titulo", "Label")
+                WITH .lbl_4c_Titulo
+                    .Caption   = THIS.Caption
+                    .Top       = 18
+                    .Left      = 10
+                    .Width     = THIS.Width
+                    .Height    = 46
+                    .FontName  = "Tahoma"
+                    .FontSize  = 16
+                    .FontBold  = .T.
+                    .ForeColor = RGB(255, 255, 255)
+                    .BackStyle = 0
+                    .AutoSize  = .F.
+                    .Visible   = .T.
+                ENDWITH
+
+            ENDWITH
+
+
             *----------------------------------------------------------------------
             * Container botoes acao do cabecalho (Grupo_Salva do legado)
             * Top=33=4+29, Left=842, Width=160, Height=85
@@ -866,7 +913,7 @@ DEFINE CLASS FormLpr AS FormBase
             *----------------------------------------------------------------------
             loc_oPagina.AddObject("shp_4c_Shape1", "Shape")
             WITH loc_oPagina.shp_4c_Shape1
-                .Top         = 37
+                .Top         = 115
                 .Left        = 723
                 .Width       = 91
                 .Height      = 110
@@ -884,7 +931,7 @@ DEFINE CLASS FormLpr AS FormBase
             loc_oPagina.AddObject("lbl_4c_Say4", "Label")
             WITH loc_oPagina.lbl_4c_Say4
                 .Caption   = "Empresa :"
-                .Top       = 45
+                .Top       = 123
                 .Left      = 56
                 .Width     = 50
                 .Height    = 15
@@ -898,7 +945,7 @@ DEFINE CLASS FormLpr AS FormBase
             loc_oPagina.AddObject("txt_4c_Emps", "TextBox")
             WITH loc_oPagina.txt_4c_Emps
                 .Value     = ""
-                .Top       = 41
+                .Top       = 119
                 .Left      = 108
                 .Width     = 35
                 .Height    = 23
@@ -916,7 +963,7 @@ DEFINE CLASS FormLpr AS FormBase
             loc_oPagina.AddObject("lbl_4c_Say3", "Label")
             WITH loc_oPagina.lbl_4c_Say3
                 .Caption   = "C" + CHR(243) + "digo :"
-                .Top       = 71
+                .Top       = 149
                 .Left      = 64
                 .Width     = 42
                 .Height    = 15
@@ -930,7 +977,7 @@ DEFINE CLASS FormLpr AS FormBase
             loc_oPagina.AddObject("txt_4c_Codigo", "TextBox")
             WITH loc_oPagina.txt_4c_Codigo
                 .Value     = ""
-                .Top       = 67
+                .Top       = 145
                 .Left      = 108
                 .Width     = 94
                 .Height    = 23
@@ -948,7 +995,7 @@ DEFINE CLASS FormLpr AS FormBase
             loc_oPagina.AddObject("txt_4c_Lpreco", "TextBox")
             WITH loc_oPagina.txt_4c_Lpreco
                 .Value     = ""
-                .Top       = 67
+                .Top       = 145
                 .Left      = 205
                 .Width     = 290
                 .Height    = 23
@@ -966,7 +1013,7 @@ DEFINE CLASS FormLpr AS FormBase
             loc_oPagina.AddObject("lbl_4c_Say12", "Label")
             WITH loc_oPagina.lbl_4c_Say12
                 .Caption   = "Cond. Pagto :"
-                .Top       = 97
+                .Top       = 175
                 .Left      = 37
                 .Width     = 69
                 .Height    = 15
@@ -980,7 +1027,7 @@ DEFINE CLASS FormLpr AS FormBase
             loc_oPagina.AddObject("txt_4c_Fpg", "TextBox")
             WITH loc_oPagina.txt_4c_Fpg
                 .Value     = ""
-                .Top       = 94
+                .Top       = 172
                 .Left      = 108
                 .Width     = 94
                 .Height    = 23
@@ -995,7 +1042,7 @@ DEFINE CLASS FormLpr AS FormBase
             *----------------------------------------------------------------------
             loc_oPagina.AddObject("shp_4c_Shape2", "Shape")
             WITH loc_oPagina.shp_4c_Shape2
-                .Top         = 174
+                .Top         = 252
                 .Left        = 9
                 .Width       = 980
                 .Height      = 1
@@ -1015,7 +1062,7 @@ DEFINE CLASS FormLpr AS FormBase
             loc_oPagina.AddObject("lbl_4c_LblProcura", "Label")
             WITH loc_oPagina.lbl_4c_LblProcura
                 .Caption   = "Busca :"
-                .Top       = 187
+                .Top       = 265
                 .Left      = 56
                 .Width     = 55
                 .Height    = 13
@@ -1029,7 +1076,7 @@ DEFINE CLASS FormLpr AS FormBase
             loc_oPagina.AddObject("txt_4c_Txtcpros", "TextBox")
             WITH loc_oPagina.txt_4c_Txtcpros
                 .Value     = ""
-                .Top       = 183
+                .Top       = 261
                 .Left      = 108
                 .Width     = 119
                 .Height    = 22
@@ -1042,7 +1089,7 @@ DEFINE CLASS FormLpr AS FormBase
             loc_oPagina.AddObject("txt_4c_Txtdpros", "TextBox")
             WITH loc_oPagina.txt_4c_Txtdpros
                 .Value     = ""
-                .Top       = 183
+                .Top       = 261
                 .Left      = 230
                 .Width     = 342
                 .Height    = 22
@@ -1057,7 +1104,7 @@ DEFINE CLASS FormLpr AS FormBase
                 .Caption         = ""
                 .Picture         = gc_4c_CaminhoIcones + "cadastro_procurar_60.jpg"
                 .PicturePosition = 0
-                .Top             = 178
+                .Top             = 256
                 .Left            = 576
                 .Width           = 36
                 .Height          = 33
@@ -1090,7 +1137,7 @@ DEFINE CLASS FormLpr AS FormBase
             loc_oPagina.grd_4c_GradeC.ColumnCount  = 7
             loc_oPagina.grd_4c_GradeC.RecordSource = ""
             WITH loc_oPagina.grd_4c_GradeC
-                .Top          = 213
+                .Top          = 291
                 .Left         = 8
                 .Width        = 982
                 .Height       = 293
@@ -1132,7 +1179,7 @@ DEFINE CLASS FormLpr AS FormBase
             loc_oPagina.grd_4c_Grade.ColumnCount  = 9
             loc_oPagina.grd_4c_Grade.RecordSource = ""
             WITH loc_oPagina.grd_4c_Grade
-                .Top          = 213
+                .Top          = 291
                 .Left         = 8
                 .Width        = 982
                 .Height       = 293
@@ -1182,7 +1229,7 @@ DEFINE CLASS FormLpr AS FormBase
                 .Caption         = "Inserir"
                 .Picture         = gc_4c_CaminhoIcones + "cadastro_inserir_60.jpg"
                 .PicturePosition = 13
-                .Top             = 528
+                .Top             = 606
                 .Left            = 28
                 .Width           = 75
                 .Height          = 75
@@ -1204,7 +1251,7 @@ DEFINE CLASS FormLpr AS FormBase
                 .Caption         = "Excluir"
                 .Picture         = gc_4c_CaminhoIcones + "cadastro_excluir_60.jpg"
                 .PicturePosition = 13
-                .Top             = 528
+                .Top             = 606
                 .Left            = 103
                 .Width           = 75
                 .Height          = 75
@@ -1226,7 +1273,7 @@ DEFINE CLASS FormLpr AS FormBase
                 .Caption         = "Duplicar"
                 .Picture         = gc_4c_CaminhoIcones + "geral_duplicar_60.jpg"
                 .PicturePosition = 13
-                .Top             = 528
+                .Top             = 606
                 .Left            = 178
                 .Width           = 75
                 .Height          = 75
@@ -1248,7 +1295,7 @@ DEFINE CLASS FormLpr AS FormBase
                 .Caption         = "Selecionar"
                 .Picture         = gc_4c_CaminhoIcones + "geral_marcar_60.jpg"
                 .PicturePosition = 13
-                .Top             = 528
+                .Top             = 606
                 .Left            = 253
                 .Width           = 75
                 .Height          = 75
@@ -1270,7 +1317,7 @@ DEFINE CLASS FormLpr AS FormBase
                 .Caption         = "Vencimento"
                 .Picture         = gc_4c_CaminhoIcones + "geral_datas_60.jpg"
                 .PicturePosition = 13
-                .Top             = 528
+                .Top             = 606
                 .Left            = 328
                 .Width           = 75
                 .Height          = 75
@@ -1293,7 +1340,7 @@ DEFINE CLASS FormLpr AS FormBase
             *----------------------------------------------------------------------
             loc_oPagina.AddObject("cnt_4c_Vencimentos", "Container")
             WITH loc_oPagina.cnt_4c_Vencimentos
-                .Top         = 528
+                .Top         = 606
                 .Left        = 415
                 .Width       = 200
                 .Height      = 75
@@ -1367,7 +1414,7 @@ DEFINE CLASS FormLpr AS FormBase
             loc_oPagina.AddObject("opt_4c_Opt_Comissao", "OptionGroup")
             WITH loc_oPagina.opt_4c_Opt_Comissao
                 .ButtonCount = 2
-                .Top         = 92
+                .Top         = 170
                 .Left        = 288
                 .Width       = 94
                 .Height      = 22
@@ -1399,7 +1446,7 @@ DEFINE CLASS FormLpr AS FormBase
             loc_oPagina.AddObject("opt_4c_Opt_ApliTabD", "OptionGroup")
             WITH loc_oPagina.opt_4c_Opt_ApliTabD
                 .ButtonCount = 2
-                .Top         = 120
+                .Top         = 198
                 .Left        = 621
                 .Width       = 94
                 .Height      = 22
@@ -1431,7 +1478,7 @@ DEFINE CLASS FormLpr AS FormBase
             loc_oPagina.AddObject("opt_4c_Opt_Vencimento", "OptionGroup")
             WITH loc_oPagina.opt_4c_Opt_Vencimento
                 .ButtonCount = 2
-                .Top         = 92
+                .Top         = 170
                 .Left        = 621
                 .Width       = 94
                 .Height      = 22
@@ -1463,7 +1510,7 @@ DEFINE CLASS FormLpr AS FormBase
             loc_oPagina.AddObject("opt_4c_Opt_Formula", "OptionGroup")
             WITH loc_oPagina.opt_4c_Opt_Formula
                 .ButtonCount = 2
-                .Top         = 67
+                .Top         = 145
                 .Left        = 621
                 .Width       = 94
                 .Height      = 22
@@ -1495,7 +1542,7 @@ DEFINE CLASS FormLpr AS FormBase
             loc_oPagina.AddObject("lbl_4c_Say9", "Label")
             WITH loc_oPagina.lbl_4c_Say9
                 .Caption   = "Aplica F" + CHR(243) + "rmulas :"
-                .Top       = 71
+                .Top       = 149
                 .Left      = 540
                 .Width     = 80
                 .Height    = 15
@@ -1509,7 +1556,7 @@ DEFINE CLASS FormLpr AS FormBase
             loc_oPagina.AddObject("txt_4c_Tabd", "TextBox")
             WITH loc_oPagina.txt_4c_Tabd
                 .Value     = ""
-                .Top       = 120
+                .Top       = 198
                 .Left      = 108
                 .Width     = 94
                 .Height    = 23
@@ -1522,7 +1569,7 @@ DEFINE CLASS FormLpr AS FormBase
             loc_oPagina.AddObject("txt_4c_Juros", "TextBox")
             WITH loc_oPagina.txt_4c_Juros
                 .Value    = 0
-                .Top      = 120
+                .Top      = 198
                 .Left     = 294
                 .Width    = 69
                 .Height   = 23
@@ -1559,7 +1606,7 @@ DEFINE CLASS FormLpr AS FormBase
             *----------------------------------------------------------------------
             loc_oPagina.AddObject("cnt_4c_Compra", "Container")
             WITH loc_oPagina.cnt_4c_Compra
-                .Top         = 118
+                .Top         = 196
                 .Left        = -15
                 .Width       = 512
                 .Height      = 51
@@ -3484,3 +3531,4 @@ DEFINE CLASS FormLpr AS FormBase
     ENDPROC
 
 ENDDEFINE
+

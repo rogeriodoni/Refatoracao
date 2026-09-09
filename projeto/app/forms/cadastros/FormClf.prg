@@ -327,6 +327,53 @@ DEFINE CLASS FormClf AS FormBase
 
         loc_oPagina.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
 
+        *-- Cabecalho cinza (identico ao da pagina Lista) - CLAUDE.md #11 / Erro152
+        loc_oPagina.AddObject("cnt_4c_Cabecalho", "Container")
+        WITH loc_oPagina.cnt_4c_Cabecalho
+            .Top           = 29
+            .Left          = 0
+            .Width         = THIS.Width
+            .Height        = 80
+            .BackColor     = RGB(100, 100, 100)
+            .BorderWidth   = 0
+            .SpecialEffect = 0
+            .Visible       = .T.
+
+            .AddObject("lbl_4c_Sombra", "Label")
+            WITH .lbl_4c_Sombra
+                .Caption   = THIS.Caption
+                .Top       = 15
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 40
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(0, 0, 0)
+                .BackStyle = 0
+                .AutoSize  = .F.
+                .Visible   = .T.
+            ENDWITH
+
+            .AddObject("lbl_4c_Titulo", "Label")
+            WITH .lbl_4c_Titulo
+                .Caption   = THIS.Caption
+                .Top       = 18
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 46
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(255, 255, 255)
+                .BackStyle = 0
+                .AutoSize  = .F.
+                .Visible   = .T.
+            ENDWITH
+
+        ENDWITH
+
+
         *-- Container de botoes de acao (Grupo_Salva: posicao aprox. Right side)
         loc_oPagina.AddObject("cnt_4c_BotoesDados", "Container")
         WITH loc_oPagina.cnt_4c_BotoesDados
@@ -383,7 +430,7 @@ DEFINE CLASS FormClf AS FormBase
         *-- shp_4c_Shape2: fundo decorativo inferior (top=421+29=450)
         loc_oPagina.AddObject("shp_4c_Shape2", "Shape")
         WITH loc_oPagina.shp_4c_Shape2
-            .Top           = 450
+            .Top           = 497
             .Left          = 54
             .Width         = 912
             .Height        = 38
@@ -397,7 +444,7 @@ DEFINE CLASS FormClf AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label1", "Label")
         WITH loc_oPagina.lbl_4c_Label1
             .Caption   = "C" + CHR(243) + "digo :"
-            .Top       = 73
+            .Top       = 120
             .Left      = 223
             .Width     = 42
             .Height    = 15
@@ -412,7 +459,7 @@ DEFINE CLASS FormClf AS FormBase
         loc_oPagina.AddObject("txt_4c_Codigo", "TextBox")
         WITH loc_oPagina.txt_4c_Codigo
             .Value         = ""
-            .Top           = 68
+            .Top           = 115
             .Left          = 268
             .Width         = 94
             .Height        = 25
@@ -432,7 +479,7 @@ DEFINE CLASS FormClf AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label2", "Label")
         WITH loc_oPagina.lbl_4c_Label2
             .Caption   = "Descri" + CHR(231) + CHR(227) + "o :"
-            .Top       = 73
+            .Top       = 120
             .Left      = 387
             .Width     = 55
             .Height    = 15
@@ -447,7 +494,7 @@ DEFINE CLASS FormClf AS FormBase
         loc_oPagina.AddObject("txt_4c_Descricao", "TextBox")
         WITH loc_oPagina.txt_4c_Descricao
             .Value         = ""
-            .Top           = 68
+            .Top           = 115
             .Left          = 443
             .Width         = 290
             .Height        = 25
@@ -467,7 +514,7 @@ DEFINE CLASS FormClf AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label4", "Label")
         WITH loc_oPagina.lbl_4c_Label4
             .Caption   = "Unidade :"
-            .Top       = 101
+            .Top       = 148
             .Left      = 217
             .Width     = 48
             .Height    = 15
@@ -482,7 +529,7 @@ DEFINE CLASS FormClf AS FormBase
         loc_oPagina.AddObject("txt_4c_Unidade", "TextBox")
         WITH loc_oPagina.txt_4c_Unidade
             .Value         = ""
-            .Top           = 96
+            .Top           = 143
             .Left          = 268
             .Width         = 31
             .Height        = 25
@@ -501,7 +548,7 @@ DEFINE CLASS FormClf AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label18", "Label")
         WITH loc_oPagina.lbl_4c_Label18
             .Caption   = "Substitui" + CHR(231) + CHR(227) + "o Tribut" + CHR(225) + "ria em SP por :"
-            .Top       = 101
+            .Top       = 148
             .Left      = 362
             .Width     = 167
             .Height    = 15
@@ -517,7 +564,7 @@ DEFINE CLASS FormClf AS FormBase
         loc_oPagina.AddObject("opt_4c_Opt_TpSubSt", "OptionGroup")
         WITH loc_oPagina.opt_4c_Opt_TpSubSt
             .ButtonCount = 2
-            .Top         = 95
+            .Top         = 142
             .Left        = 527
             .Width       = 182
             .Height      = 27
@@ -554,7 +601,7 @@ DEFINE CLASS FormClf AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label11", "Label")
         WITH loc_oPagina.lbl_4c_Label11
             .Caption   = "C" + CHR(243) + "digo do Tipo da Mercadoria :"
-            .Top       = 129
+            .Top       = 176
             .Left      = 114
             .Width     = 151
             .Height    = 15
@@ -568,7 +615,7 @@ DEFINE CLASS FormClf AS FormBase
         *-- cbo_4c_CmbTipoMerc: CmbTipoMerc top=95+29=124; itens 01-76 via PopularCmbTipoMerc
         loc_oPagina.AddObject("cbo_4c_CmbTipoMerc", "ComboBox")
         WITH loc_oPagina.cbo_4c_CmbTipoMerc
-            .Top           = 124
+            .Top           = 171
             .Left          = 268
             .Width         = 54
             .Height        = 25
@@ -589,7 +636,7 @@ DEFINE CLASS FormClf AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label10", "Label")
         WITH loc_oPagina.lbl_4c_Label10
             .Caption   = "IVA-ST Substitui" + CHR(231) + CHR(227) + "o Tribut" + CHR(225) + "ria SP :"
-            .Top       = 129
+            .Top       = 176
             .Left      = 362
             .Width     = 167
             .Height    = 15
@@ -604,7 +651,7 @@ DEFINE CLASS FormClf AS FormBase
         loc_oPagina.AddObject("txt_4c_IVAST", "TextBox")
         WITH loc_oPagina.txt_4c_IVAST
             .Value         = 0
-            .Top           = 124
+            .Top           = 171
             .Left          = 533
             .Width         = 70
             .Height        = 25
@@ -624,7 +671,7 @@ DEFINE CLASS FormClf AS FormBase
         loc_oPagina.AddObject("lbl_4c_LblTipoMerc", "Label")
         WITH loc_oPagina.lbl_4c_LblTipoMerc
             .Caption   = ""
-            .Top       = 453
+            .Top       = 500
             .Left      = 59
             .Width     = 902
             .Height    = 32
@@ -641,7 +688,7 @@ DEFINE CLASS FormClf AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label5", "Label")
         WITH loc_oPagina.lbl_4c_Label5
             .Caption   = "Base Reduzida ICMS :"
-            .Top       = 157
+            .Top       = 204
             .Left      = 158
             .Width     = 107
             .Height    = 15
@@ -655,7 +702,7 @@ DEFINE CLASS FormClf AS FormBase
         *-- cbo_4c_Cmbbred: Cmbbred top=123+29=152; base reducao S/N
         loc_oPagina.AddObject("cbo_4c_Cmbbred", "ComboBox")
         WITH loc_oPagina.cbo_4c_Cmbbred
-            .Top           = 152
+            .Top           = 199
             .Left          = 268
             .Width         = 54
             .Height        = 24
@@ -674,7 +721,7 @@ DEFINE CLASS FormClf AS FormBase
         loc_oPagina.AddObject("txt_4c_Areduzida", "TextBox")
         WITH loc_oPagina.txt_4c_Areduzida
             .Value         = 0
-            .Top           = 152
+            .Top           = 199
             .Left          = 533
             .Width         = 45
             .Height        = 25
@@ -694,7 +741,7 @@ DEFINE CLASS FormClf AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label8", "Label")
         WITH loc_oPagina.lbl_4c_Label8
             .Caption   = "Al" + CHR(237) + "quota Base Reduzida de ICMS :"
-            .Top       = 157
+            .Top       = 204
             .Left      = 365
             .Width     = 164
             .Height    = 15
@@ -709,7 +756,7 @@ DEFINE CLASS FormClf AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label6", "Label")
         WITH loc_oPagina.lbl_4c_Label6
             .Caption   = "Al" + CHR(237) + "quota Reduzida ICMS :"
-            .Top       = 185
+            .Top       = 232
             .Left      = 142
             .Width     = 123
             .Height    = 15
@@ -723,7 +770,7 @@ DEFINE CLASS FormClf AS FormBase
         *-- cbo_4c_CmbAred: CmbAred top=151+29=180; aliq reducao S/N
         loc_oPagina.AddObject("cbo_4c_CmbAred", "ComboBox")
         WITH loc_oPagina.cbo_4c_CmbAred
-            .Top           = 180
+            .Top           = 227
             .Left          = 268
             .Width         = 54
             .Height        = 24
@@ -742,7 +789,7 @@ DEFINE CLASS FormClf AS FormBase
         loc_oPagina.AddObject("txt_4c_AreduzidaS", "TextBox")
         WITH loc_oPagina.txt_4c_AreduzidaS
             .Value         = 0
-            .Top           = 180
+            .Top           = 227
             .Left          = 533
             .Width         = 45
             .Height        = 25
@@ -762,7 +809,7 @@ DEFINE CLASS FormClf AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label12", "Label")
         WITH loc_oPagina.lbl_4c_Label12
             .Caption   = "Al" + CHR(237) + "quota Base Reduzida de Subst :"
-            .Top       = 185
+            .Top       = 232
             .Left      = 363
             .Width     = 166
             .Height    = 15
@@ -777,7 +824,7 @@ DEFINE CLASS FormClf AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label7", "Label")
         WITH loc_oPagina.lbl_4c_Label7
             .Caption   = "IPI :"
-            .Top       = 213
+            .Top       = 260
             .Left      = 242
             .Width     = 23
             .Height    = 15
@@ -791,7 +838,7 @@ DEFINE CLASS FormClf AS FormBase
         *-- cbo_4c_CmbIpi: cmbIpi top=179+29=208; Tributado/Isento/Outros
         loc_oPagina.AddObject("cbo_4c_CmbIpi", "ComboBox")
         WITH loc_oPagina.cbo_4c_CmbIpi
-            .Top           = 208
+            .Top           = 255
             .Left          = 268
             .Width         = 91
             .Height        = 25
@@ -810,7 +857,7 @@ DEFINE CLASS FormClf AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label3", "Label")
         WITH loc_oPagina.lbl_4c_Label3
             .Caption   = "Al" + CHR(237) + "quota IPI :"
-            .Top       = 213
+            .Top       = 260
             .Left      = 464
             .Width     = 65
             .Height    = 15
@@ -825,7 +872,7 @@ DEFINE CLASS FormClf AS FormBase
         loc_oPagina.AddObject("txt_4c_Aipi", "TextBox")
         WITH loc_oPagina.txt_4c_Aipi
             .Value         = 0
-            .Top           = 208
+            .Top           = 255
             .Left          = 533
             .Width         = 45
             .Height        = 25
@@ -844,7 +891,7 @@ DEFINE CLASS FormClf AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label9", "Label")
         WITH loc_oPagina.lbl_4c_Label9
             .Caption   = "Cadastrar IPI por Produto :"
-            .Top       = 242
+            .Top       = 289
             .Left      = 131
             .Width     = 134
             .Height    = 15
@@ -858,7 +905,7 @@ DEFINE CLASS FormClf AS FormBase
         *-- cbo_4c_CmbIPip: CmbIPip top=208+29=237; S/N
         loc_oPagina.AddObject("cbo_4c_CmbIPip", "ComboBox")
         WITH loc_oPagina.cbo_4c_CmbIPip
-            .Top           = 237
+            .Top           = 284
             .Left          = 268
             .Width         = 54
             .Height        = 24
@@ -877,7 +924,7 @@ DEFINE CLASS FormClf AS FormBase
         loc_oPagina.AddObject("lbl_4c__IPI", "Label")
         WITH loc_oPagina.lbl_4c__IPI
             .Caption   = "Existem Produtos Com Aliquota de IPI"
-            .Top       = 242
+            .Top       = 289
             .Left      = 326
             .Width     = 250
             .Height    = 15
@@ -893,7 +940,7 @@ DEFINE CLASS FormClf AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label14", "Label")
         WITH loc_oPagina.lbl_4c_Label14
             .Caption   = "Al" + CHR(237) + "quota ICMS para FCP :"
-            .Top       = 269
+            .Top       = 316
             .Left      = 142
             .Width     = 123
             .Height    = 15
@@ -908,7 +955,7 @@ DEFINE CLASS FormClf AS FormBase
         loc_oPagina.AddObject("txt_4c_AliqFcp", "TextBox")
         WITH loc_oPagina.txt_4c_AliqFcp
             .Value         = 0
-            .Top           = 264
+            .Top           = 311
             .Left          = 268
             .Width         = 45
             .Height        = 25
@@ -928,7 +975,7 @@ DEFINE CLASS FormClf AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label16", "Label")
         WITH loc_oPagina.lbl_4c_Label16
             .Caption   = "CEST :"
-            .Top       = 297
+            .Top       = 344
             .Left      = 231
             .Width     = 34
             .Height    = 15
@@ -943,7 +990,7 @@ DEFINE CLASS FormClf AS FormBase
         loc_oPagina.AddObject("txt_4c_Cest", "TextBox")
         WITH loc_oPagina.txt_4c_Cest
             .Value         = ""
-            .Top           = 292
+            .Top           = 339
             .Left          = 268
             .Width         = 94
             .Height        = 25
@@ -962,7 +1009,7 @@ DEFINE CLASS FormClf AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label13", "Label")
         WITH loc_oPagina.lbl_4c_Label13
             .Caption   = "IVA-ST para os estados :"
-            .Top       = 185
+            .Top       = 232
             .Left      = 693
             .Width     = 122
             .Height    = 15
@@ -977,7 +1024,7 @@ DEFINE CLASS FormClf AS FormBase
         loc_oPagina.AddObject("lbl_4c_Label15", "Label")
         WITH loc_oPagina.lbl_4c_Label15
             .Caption   = "Aliquotas de Redu" + CHR(231) + CHR(227) + "o para os estados :"
-            .Top       = 276
+            .Top       = 323
             .Left      = 387
             .Width     = 193
             .Height    = 15
@@ -994,7 +1041,7 @@ DEFINE CLASS FormClf AS FormBase
             .Caption       = ""
             .Picture       = gc_4c_CaminhoIcones + "cadastro_inserir_26.jpg"
             .ToolTipText   = "Inserir"
-            .Top           = 275
+            .Top           = 322
             .Left = 5
             .Width         = 45
             .Height        = 45
@@ -1016,7 +1063,7 @@ DEFINE CLASS FormClf AS FormBase
             .Caption       = ""
             .Picture       = gc_4c_CaminhoIcones + "cadastro_excluir_26.jpg"
             .ToolTipText   = "Excluir"
-            .Top           = 320
+            .Top           = 367
             .Left = 230
             .Width         = 45
             .Height        = 45
@@ -1038,7 +1085,7 @@ DEFINE CLASS FormClf AS FormBase
             .Caption       = ""
             .Picture       = gc_4c_CaminhoIcones + "cadastro_inserir_26.jpg"
             .ToolTipText   = "Inserir"
-            .Top           = 344
+            .Top           = 391
             .Left          = 626
             .Width         = 45
             .Height        = 45
@@ -1060,7 +1107,7 @@ DEFINE CLASS FormClf AS FormBase
             .Caption       = ""
             .Picture       = gc_4c_CaminhoIcones + "cadastro_excluir_26.jpg"
             .ToolTipText   = "Excluir"
-            .Top           = 389
+            .Top           = 436
             .Left          = 626
             .Width         = 45
             .Height        = 45
@@ -1079,7 +1126,7 @@ DEFINE CLASS FormClf AS FormBase
         *-- grd_4c_IVA: GradIva top=171+29=200; Left=693; Width=235; Height=234
         loc_oPagina.AddObject("grd_4c_IVA", "Grid")
         WITH loc_oPagina.grd_4c_IVA
-            .Top           = 200
+            .Top           = 247
             .Left          = 693
             .Width         = 235
             .Height        = 234
@@ -1179,7 +1226,7 @@ DEFINE CLASS FormClf AS FormBase
         *-- grd_4c_Reducao: GradRed top=262+29=291; Left=388; Width=235; Height=143
         loc_oPagina.AddObject("grd_4c_Reducao", "Grid")
         WITH loc_oPagina.grd_4c_Reducao
-            .Top           = 291
+            .Top           = 338
             .Left          = 388
             .Width         = 235
             .Height        = 143
@@ -2520,3 +2567,4 @@ DEFINE CLASS FormClf AS FormBase
     ENDPROC
 
 ENDDEFINE
+

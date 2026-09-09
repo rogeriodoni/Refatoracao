@@ -7,7 +7,7 @@
 DEFINE CLASS FormGpd AS FormBase
 
     *-- Propriedades visuais (PILAR 1 - UX FIDELITY)
-    Height      = 600
+    Height      = 640
     Width       = 1000
     Caption     = "Cadastro de Grupo de Produto"
     AutoCenter  = .T.
@@ -481,7 +481,7 @@ DEFINE CLASS FormGpd AS FormBase
             .Top         = 172
             .Left        = 34
             .Width       = 523
-            .Height      = 439
+            .Height      = 479
             .ColumnCount = 3
             .DeleteMark  = .F.
             .RecordMark  = .F.
@@ -508,7 +508,7 @@ DEFINE CLASS FormGpd AS FormBase
             .Top         = 172
             .Left        = 576
             .Width       = 394
-            .Height      = 439
+            .Height      = 479
             .ColumnCount = 3
             .DeleteMark  = .F.
             .RecordMark  = .F.
@@ -784,7 +784,9 @@ DEFINE CLASS FormGpd AS FormBase
         loc_oPagina.AddObject("pgf_4c_Divisoes", "PageFrame")
         WITH loc_oPagina.pgf_4c_Divisoes
             .PageCount = 9
-            .Top       = -29
+            *-- Top -29 -> 30: abre espaco para a faixa do cabecalho (29..109).
+            *-- O controle mais alto das abas esta em Top=85, entao 30+85=115.
+            .Top       = 30
             .Left      = 0
             .Width     = 1000
             .Height    = 639
@@ -838,6 +840,53 @@ DEFINE CLASS FormGpd AS FormBase
         THIS.ConfigurarPgpgDescrs()
         THIS.ConfigurarPgpgEstoque()
         THIS.ConfigurarPgpgProdutos()
+
+        *-- Cabecalho cinza (identico ao da pagina Lista) - CLAUDE.md #11 / Erro152
+        *-- Criado DEPOIS do pgf_4c_Divisoes: o PageFrame interno pinta fundo
+        *-- branco sobre a area 30..109 e cobriria a faixa se ela viesse antes.
+        loc_oPagina.AddObject("cnt_4c_FaixaTitulo", "Container")
+        WITH loc_oPagina.cnt_4c_FaixaTitulo
+            .Top           = 29
+            .Left          = 0
+            .Width         = THIS.Width
+            .Height        = 80
+            .BackColor     = RGB(100, 100, 100)
+            .BorderWidth   = 0
+            .SpecialEffect = 0
+            .Visible       = .T.
+
+            .AddObject("lbl_4c_Sombra", "Label")
+            WITH .lbl_4c_Sombra
+                .Caption   = THIS.Caption
+                .Top       = 15
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 40
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(0, 0, 0)
+                .BackStyle = 0
+                .AutoSize  = .F.
+                .Visible   = .T.
+            ENDWITH
+
+            .AddObject("lbl_4c_Titulo", "Label")
+            WITH .lbl_4c_Titulo
+                .Caption   = THIS.Caption
+                .Top       = 18
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 46
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(255, 255, 255)
+                .BackStyle = 0
+                .AutoSize  = .F.
+                .Visible   = .T.
+            ENDWITH
+        ENDWITH
 
         *-- Z-ORDER: Trazer navegacao e botoes para frente do PageFrame interno
         *-- (pgf_4c_Divisoes e o ultimo AddObject, cobre tudo; ZOrder(0) = traz para frente)
@@ -1973,7 +2022,7 @@ DEFINE CLASS FormGpd AS FormBase
         ENDTRY
 
         RETURN loc_lValido
-    ENDFUNCTION
+    ENDFUNC
 
     *==========================================================================
     * LimparCampos - Limpa todos os campos da Page2 para novo registro
@@ -10082,7 +10131,7 @@ DEFINE CLASS FormGpd AS FormBase
             IF loc_nResult > 0 AND !EOF(par_cCursorNome)
                 loc_cDesc = ALLTRIM(dmoes)
                 IF PEMSTATUS(par_oPagina, par_cTxtCod, 5)
-                    par_oPagina.Controls(par_cTxtCod).Value = ALLTRIM((par_cCursorNome).cmoes)
+                    par_oPagina.Controls(par_cTxtCod).Value = ALLTRIM(cmoes)
                 ENDIF
                 IF !EMPTY(par_cTxtDesc) AND PEMSTATUS(par_oPagina, par_cTxtDesc, 5)
                     par_oPagina.Controls(par_cTxtDesc).Value = loc_cDesc
@@ -10106,7 +10155,7 @@ DEFINE CLASS FormGpd AS FormBase
             USE IN (par_cCursorNome)
         ENDIF
         RETURN .T.
-    ENDFUNCTION
+    ENDFUNC
 
     *-- Abre lookup de moeda com referencia ao campo na pagina especificada
     PROCEDURE AbrirLookupMoeda(par_cTxtCod, par_cTxtDesc, par_nPagina)
@@ -10196,7 +10245,7 @@ DEFINE CLASS FormGpd AS FormBase
             IF loc_nResult > 0 AND !EOF(par_cCursorNome)
                 loc_cDesc = ALLTRIM(Descrs)
                 IF PEMSTATUS(par_oPagina, par_cTxtCod, 5)
-                    par_oPagina.Controls(par_cTxtCod).Value = ALLTRIM((par_cCursorNome).Codigos)
+                    par_oPagina.Controls(par_cTxtCod).Value = ALLTRIM(Codigos)
                 ENDIF
                 IF !EMPTY(par_cTxtDesc) AND PEMSTATUS(par_oPagina, par_cTxtDesc, 5)
                     par_oPagina.Controls(par_cTxtDesc).Value = loc_cDesc
@@ -10219,7 +10268,7 @@ DEFINE CLASS FormGpd AS FormBase
             USE IN (par_cCursorNome)
         ENDIF
         RETURN .T.
-    ENDFUNCTION
+    ENDFUNC
 
     *-- Abre lookup de Grupo Contabil (SigCdGcr)
     PROCEDURE AbrirLookupGrupoContab(par_cTxtCod, par_cTxtDesc, par_nPagina)
@@ -10309,7 +10358,7 @@ DEFINE CLASS FormGpd AS FormBase
             IF loc_nResult > 0 AND !EOF(par_cCursorNome)
                 loc_cDesc = ALLTRIM(Rclis)
                 IF PEMSTATUS(par_oPagina, par_cTxtCod, 5)
-                    par_oPagina.Controls(par_cTxtCod).Value = ALLTRIM((par_cCursorNome).Iclis)
+                    par_oPagina.Controls(par_cTxtCod).Value = ALLTRIM(Iclis)
                 ENDIF
                 IF !EMPTY(par_cTxtDesc) AND PEMSTATUS(par_oPagina, par_cTxtDesc, 5)
                     par_oPagina.Controls(par_cTxtDesc).Value = loc_cDesc
@@ -10332,7 +10381,7 @@ DEFINE CLASS FormGpd AS FormBase
             USE IN (par_cCursorNome)
         ENDIF
         RETURN .T.
-    ENDFUNCTION
+    ENDFUNC
 
     *-- Abre lookup de Conta Contabil (SigCdCli)
     PROCEDURE AbrirLookupContaContab(par_cTxtCod, par_cTxtDesc, par_nPagina)

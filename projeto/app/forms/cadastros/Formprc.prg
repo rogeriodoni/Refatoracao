@@ -10,7 +10,7 @@
 DEFINE CLASS Formprc AS FormBase
 
     *-- Propriedades visuais
-    Height      = 600
+    Height      = 634
     Width       = 1000
     Caption     = "Cadastro de Movimenta" + CHR(231) + CHR(245) + "es Para C" + CHR(243) + "pia"
     AutoCenter  = .T.
@@ -354,7 +354,7 @@ DEFINE CLASS Formprc AS FormBase
             .Top                = 150
             .Left               = 12
             .Width              = 932
-            .Height             = 470
+            .Height             = 504
             .FontName           = "Verdana"
             .FontSize           = 8
             .ForeColor          = RGB(90, 90, 90)
@@ -400,6 +400,53 @@ DEFINE CLASS Formprc AS FormBase
         loc_oPagina = THIS.pgf_4c_Paginas.Page2
 
         loc_oPagina.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
+
+        *-- Cabecalho cinza (identico ao da pagina Lista) - CLAUDE.md #11 / Erro152
+        loc_oPagina.AddObject("cnt_4c_Cabecalho", "Container")
+        WITH loc_oPagina.cnt_4c_Cabecalho
+            .Top           = 29
+            .Left          = 0
+            .Width         = THIS.Width
+            .Height        = 80
+            .BackColor     = RGB(100, 100, 100)
+            .BorderWidth   = 0
+            .SpecialEffect = 0
+            .Visible       = .T.
+
+            .AddObject("lbl_4c_Sombra", "Label")
+            WITH .lbl_4c_Sombra
+                .Caption   = THIS.Caption
+                .Top       = 15
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 40
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(0, 0, 0)
+                .BackStyle = 0
+                .AutoSize  = .F.
+                .Visible   = .T.
+            ENDWITH
+
+            .AddObject("lbl_4c_Titulo", "Label")
+            WITH .lbl_4c_Titulo
+                .Caption   = THIS.Caption
+                .Top       = 18
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 46
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(255, 255, 255)
+                .BackStyle = 0
+                .AutoSize  = .F.
+                .Visible   = .T.
+            ENDWITH
+
+        ENDWITH
+
 
         *-- Container botoes Confirmar/Cancelar
         loc_oPagina.AddObject("cnt_4c_BotoesAcao", "Container")
@@ -461,7 +508,7 @@ DEFINE CLASS Formprc AS FormBase
         *-- Shape2: box ao redor dos campos de cabecalho
         loc_oPagina.AddObject("shp_4c_Shape2", "Shape")
         WITH loc_oPagina.shp_4c_Shape2
-            .Top           = 36
+            .Top           = 115
             .Left          = 187
             .Width         = 613
             .Height        = 110
@@ -475,7 +522,7 @@ DEFINE CLASS Formprc AS FormBase
         loc_oPagina.AddObject("lbl_4c_Processo", "Label")
         WITH loc_oPagina.lbl_4c_Processo
             .Caption   = "Processo :"
-            .Top       = 40
+            .Top       = 119
             .Left      = 192
             .FontName  = "Tahoma"
             .FontSize  = 8
@@ -487,7 +534,7 @@ DEFINE CLASS Formprc AS FormBase
         loc_oPagina.AddObject("txt_4c_Processos", "TextBox")
         WITH loc_oPagina.txt_4c_Processos
             .Value         = ""
-            .Top           = 51
+            .Top           = 130
             .Left          = 192
             .Width         = 150
             .Height        = 21
@@ -503,7 +550,7 @@ DEFINE CLASS Formprc AS FormBase
         loc_oPagina.AddObject("lbl_4c_Codigo", "Label")
         WITH loc_oPagina.lbl_4c_Codigo
             .Caption   = "C" + CHR(243) + "digo :"
-            .Top       = 40
+            .Top       = 119
             .Left      = 344
             .FontName  = "Tahoma"
             .FontSize  = 8
@@ -515,7 +562,7 @@ DEFINE CLASS Formprc AS FormBase
         loc_oPagina.AddObject("txt_4c_Codigos", "TextBox")
         WITH loc_oPagina.txt_4c_Codigos
             .Value         = 0
-            .Top           = 51
+            .Top           = 130
             .Left          = 343
             .Width         = 52
             .Height        = 21
@@ -531,7 +578,7 @@ DEFINE CLASS Formprc AS FormBase
         loc_oPagina.AddObject("lbl_4c_Imprimir", "Label")
         WITH loc_oPagina.lbl_4c_Imprimir
             .Caption   = "Impressora :"
-            .Top       = 77
+            .Top       = 156
             .Left      = 361
             .FontName  = "Tahoma"
             .FontSize  = 8
@@ -542,7 +589,7 @@ DEFINE CLASS Formprc AS FormBase
 
         loc_oPagina.AddObject("obj_4c_OptImprimir", "OptionGroup")
         WITH loc_oPagina.obj_4c_OptImprimir
-            .Top          = 88
+            .Top          = 167
             .Left         = 361
             .Width        = 89
             .Height       = 23
@@ -571,7 +618,7 @@ DEFINE CLASS Formprc AS FormBase
         loc_oPagina.AddObject("lbl_4c_Ordenar", "Label")
         WITH loc_oPagina.lbl_4c_Ordenar
             .Caption   = "Ordenar por :"
-            .Top       = 77
+            .Top       = 156
             .Left      = 490
             .FontName  = "Tahoma"
             .FontSize  = 8
@@ -582,7 +629,7 @@ DEFINE CLASS Formprc AS FormBase
 
         loc_oPagina.AddObject("obj_4c_OptOrdems", "OptionGroup")
         WITH loc_oPagina.obj_4c_OptOrdems
-            .Top          = 88
+            .Top          = 167
             .Left         = 490
             .Width        = 70
             .Height       = 23
@@ -611,7 +658,7 @@ DEFINE CLASS Formprc AS FormBase
         loc_oPagina.AddObject("lbl_4c_Fiscal", "Label")
         WITH loc_oPagina.lbl_4c_Fiscal
             .Caption   = "Dados Fiscais :"
-            .Top       = 112
+            .Top       = 191
             .Left      = 192
             .FontName  = "Tahoma"
             .FontSize  = 8
@@ -622,7 +669,7 @@ DEFINE CLASS Formprc AS FormBase
 
         loc_oPagina.AddObject("obj_4c_OptFiscal", "OptionGroup")
         WITH loc_oPagina.obj_4c_OptFiscal
-            .Top          = 123
+            .Top          = 202
             .Left         = 192
             .Width        = 81
             .Height       = 23
@@ -651,7 +698,7 @@ DEFINE CLASS Formprc AS FormBase
         loc_oPagina.AddObject("lbl_4c_Logs", "Label")
         WITH loc_oPagina.lbl_4c_Logs
             .Caption   = "Arquivos de Log :"
-            .Top       = 112
+            .Top       = 191
             .Left      = 368
             .FontName  = "Tahoma"
             .FontSize  = 8
@@ -662,7 +709,7 @@ DEFINE CLASS Formprc AS FormBase
 
         loc_oPagina.AddObject("obj_4c_OptLogs", "OptionGroup")
         WITH loc_oPagina.obj_4c_OptLogs
-            .Top          = 123
+            .Top          = 202
             .Left         = 365
             .Width        = 90
             .Height       = 23
@@ -691,7 +738,7 @@ DEFINE CLASS Formprc AS FormBase
         loc_oPagina.AddObject("lbl_4c_Apagar", "Label")
         WITH loc_oPagina.lbl_4c_Apagar
             .Caption   = "Apagar Dados Origem :"
-            .Top       = 112
+            .Top       = 191
             .Left      = 490
             .FontName  = "Tahoma"
             .FontSize  = 8
@@ -702,7 +749,7 @@ DEFINE CLASS Formprc AS FormBase
 
         loc_oPagina.AddObject("obj_4c_OptApagar", "OptionGroup")
         WITH loc_oPagina.obj_4c_OptApagar
-            .Top          = 122
+            .Top          = 201
             .Left         = 490
             .Width        = 249
             .Height       = 23
@@ -744,7 +791,7 @@ DEFINE CLASS Formprc AS FormBase
         *-- Container botoes insercao/exclusao de linhas (cmdgCompo)
         loc_oPagina.AddObject("cnt_4c_CompoOp", "Container")
         WITH loc_oPagina.cnt_4c_CompoOp
-            .Top         = 36
+            .Top         = 115
             .Left        = 7
             .Width       = 173
             .Height      = 110
@@ -791,7 +838,7 @@ DEFINE CLASS Formprc AS FormBase
         *-- Shape1: box ao redor do grdDestinos
         loc_oPagina.AddObject("shp_4c_Shape1", "Shape")
         WITH loc_oPagina.shp_4c_Shape1
-            .Top           = 155
+            .Top           = 234
             .Left          = 8
             .Width         = 791
             .Height        = 263
@@ -806,7 +853,7 @@ DEFINE CLASS Formprc AS FormBase
         loc_oPagina.grd_4c_Destinos.ColumnCount = 18
         loc_oPagina.grd_4c_Destinos.RecordSource = "csDestinos"
         WITH loc_oPagina.grd_4c_Destinos
-            .Top                = 162
+            .Top                = 241
             .Left               = 15
             .Width              = 779
             .Height             = 189
@@ -949,7 +996,7 @@ DEFINE CLASS Formprc AS FormBase
         loc_oPagina.AddObject("cmd_4c_CopOpe", "CommandButton")
         WITH loc_oPagina.cmd_4c_CopOpe
             .Caption       = "Copiar"
-            .Top           = 325
+            .Top           = 404
             .Left          = 738
             .Width         = 55
             .Height        = 59
@@ -967,7 +1014,7 @@ DEFINE CLASS Formprc AS FormBase
         loc_oPagina.AddObject("chk_4c_ChkHelp", "CheckBox")
         WITH loc_oPagina.chk_4c_ChkHelp
             .Caption     = ""
-            .Top         = 358
+            .Top         = 437
             .Left        = 24
             .Width       = 26
             .Height      = 26
@@ -978,7 +1025,7 @@ DEFINE CLASS Formprc AS FormBase
         loc_oPagina.AddObject("lbl_4c_Origem", "Label")
         WITH loc_oPagina.lbl_4c_Origem
             .Caption   = "Origem :"
-            .Top       = 356
+            .Top       = 435
             .Left      = 62
             .FontName  = "Tahoma"
             .FontSize  = 8
@@ -989,7 +1036,7 @@ DEFINE CLASS Formprc AS FormBase
 
         loc_oPagina.AddObject("obj_4c_OptGruConOs", "OptionGroup")
         WITH loc_oPagina.obj_4c_OptGruConOs
-            .Top          = 357
+            .Top          = 436
             .Left         = 105
             .Width        = 567
             .Height       = 15
@@ -1038,7 +1085,7 @@ DEFINE CLASS Formprc AS FormBase
         loc_oPagina.AddObject("lbl_4c_Destino", "Label")
         WITH loc_oPagina.lbl_4c_Destino
             .Caption   = "Destino :"
-            .Top       = 375
+            .Top       = 454
             .Left      = 60
             .FontName  = "Tahoma"
             .FontSize  = 8
@@ -1049,7 +1096,7 @@ DEFINE CLASS Formprc AS FormBase
 
         loc_oPagina.AddObject("obj_4c_OptGruConDs", "OptionGroup")
         WITH loc_oPagina.obj_4c_OptGruConDs
-            .Top          = 374
+            .Top          = 453
             .Left         = 106
             .Width        = 519
             .Height       = 18
@@ -1091,7 +1138,7 @@ DEFINE CLASS Formprc AS FormBase
         *-- ======= SHAPES DELIMITADORES DAS SECOES DE OPCOES =======
         loc_oPagina.AddObject("shp_4c_Shape3", "Shape")
         WITH loc_oPagina.shp_4c_Shape3
-            .Top = 427
+            .Top = 506
             .Left = 8
             .Width = 323
             .Height = 126
@@ -1103,7 +1150,7 @@ DEFINE CLASS Formprc AS FormBase
 
         loc_oPagina.AddObject("shp_4c_Shape4", "Shape")
         WITH loc_oPagina.shp_4c_Shape4
-            .Top = 427
+            .Top = 506
             .Left = 340
             .Width = 252
             .Height = 127
@@ -1115,7 +1162,7 @@ DEFINE CLASS Formprc AS FormBase
 
         loc_oPagina.AddObject("shp_4c_Shape5", "Shape")
         WITH loc_oPagina.shp_4c_Shape5
-            .Top = 427
+            .Top = 506
             .Left = 600
             .Width = 252
             .Height = 82
@@ -1127,7 +1174,7 @@ DEFINE CLASS Formprc AS FormBase
 
         loc_oPagina.AddObject("shp_4c_Shape6", "Shape")
         WITH loc_oPagina.shp_4c_Shape6
-            .Top = 513
+            .Top = 592
             .Left = 600
             .Width = 358
             .Height = 71
@@ -1142,7 +1189,7 @@ DEFINE CLASS Formprc AS FormBase
         loc_oPagina.AddObject("lbl_4c_Agrupar", "Label")
         WITH loc_oPagina.lbl_4c_Agrupar
             .Caption = "Agrupar Itens :"
-            .Top = 428
+            .Top = 507
             .Left = 8
             .FontName = "Tahoma"
             .FontSize = 8
@@ -1153,7 +1200,7 @@ DEFINE CLASS Formprc AS FormBase
 
         loc_oPagina.AddObject("obj_4c_OptAgrupar", "OptionGroup")
         WITH loc_oPagina.obj_4c_OptAgrupar
-            .Top = 427
+            .Top = 506
             .Left = 121
             .Width = 163
             .Height = 19
@@ -1188,7 +1235,7 @@ DEFINE CLASS Formprc AS FormBase
         loc_oPagina.AddObject("lbl_4c_Custos", "Label")
         WITH loc_oPagina.lbl_4c_Custos
             .Caption = "Calcular Custos :"
-            .Top = 446
+            .Top = 525
             .Left = 12
             .FontName = "Tahoma"
             .FontSize = 8
@@ -1199,7 +1246,7 @@ DEFINE CLASS Formprc AS FormBase
 
         loc_oPagina.AddObject("obj_4c_OptCustos", "OptionGroup")
         WITH loc_oPagina.obj_4c_OptCustos
-            .Top = 414
+            .Top = 493
             .Left = 121
             .Width = 80
             .Height = 18
@@ -1227,7 +1274,7 @@ DEFINE CLASS Formprc AS FormBase
         loc_oPagina.AddObject("lbl_4c_Impostos", "Label")
         WITH loc_oPagina.lbl_4c_Impostos
             .Caption = "Calcula Impostos :"
-            .Top = 462
+            .Top = 541
             .Left = 12
             .FontName = "Tahoma"
             .FontSize = 8
@@ -1238,7 +1285,7 @@ DEFINE CLASS Formprc AS FormBase
 
         loc_oPagina.AddObject("obj_4c_OptImpostos", "OptionGroup")
         WITH loc_oPagina.obj_4c_OptImpostos
-            .Top = 429
+            .Top = 508
             .Left = 121
             .Width = 80
             .Height = 18
@@ -1266,7 +1313,7 @@ DEFINE CLASS Formprc AS FormBase
         loc_oPagina.AddObject("lbl_4c_Imagem", "Label")
         WITH loc_oPagina.lbl_4c_Imagem
             .Caption = "Copia Imagem :"
-            .Top = 476
+            .Top = 555
             .Left = 12
             .FontName = "Tahoma"
             .FontSize = 8
@@ -1277,7 +1324,7 @@ DEFINE CLASS Formprc AS FormBase
 
         loc_oPagina.AddObject("obj_4c_OptImagem", "OptionGroup")
         WITH loc_oPagina.obj_4c_OptImagem
-            .Top = 474
+            .Top = 553
             .Left = 121
             .Width = 122
             .Height = 19
@@ -1305,7 +1352,7 @@ DEFINE CLASS Formprc AS FormBase
         loc_oPagina.AddObject("lbl_4c_OriCompos", "Label")
         WITH loc_oPagina.lbl_4c_OriCompos
             .Caption = "Componentes Origem :"
-            .Top = 491
+            .Top = 570
             .Left = 12
             .FontName = "Tahoma"
             .FontSize = 8
@@ -1316,7 +1363,7 @@ DEFINE CLASS Formprc AS FormBase
 
         loc_oPagina.AddObject("obj_4c_OptOriCompos", "OptionGroup")
         WITH loc_oPagina.obj_4c_OptOriCompos
-            .Top = 489
+            .Top = 568
             .Left = 121
             .Width = 121
             .Height = 19
@@ -1344,7 +1391,7 @@ DEFINE CLASS Formprc AS FormBase
         loc_oPagina.AddObject("lbl_4c_NovoCod", "Label")
         WITH loc_oPagina.lbl_4c_NovoCod
             .Caption = "Novo C" + CHR(243) + "digo :"
-            .Top = 506
+            .Top = 585
             .Left = 12
             .FontName = "Tahoma"
             .FontSize = 8
@@ -1355,7 +1402,7 @@ DEFINE CLASS Formprc AS FormBase
 
         loc_oPagina.AddObject("obj_4c_OptNovoCodigo", "OptionGroup")
         WITH loc_oPagina.obj_4c_OptNovoCodigo
-            .Top = 504
+            .Top = 583
             .Left = 121
             .Width = 121
             .Height = 19
@@ -1383,7 +1430,7 @@ DEFINE CLASS Formprc AS FormBase
         loc_oPagina.AddObject("lbl_4c_CorTamanho", "Label")
         WITH loc_oPagina.lbl_4c_CorTamanho
             .Caption = "Copia Cor/Tam :"
-            .Top = 524
+            .Top = 603
             .Left = 12
             .FontName = "Tahoma"
             .FontSize = 8
@@ -1394,7 +1441,7 @@ DEFINE CLASS Formprc AS FormBase
 
         loc_oPagina.AddObject("obj_4c_OptCorTamanho", "OptionGroup")
         WITH loc_oPagina.obj_4c_OptCorTamanho
-            .Top = 520
+            .Top = 599
             .Left = 121
             .Width = 121
             .Height = 19
@@ -1422,7 +1469,7 @@ DEFINE CLASS Formprc AS FormBase
         loc_oPagina.AddObject("lbl_4c_MoeTrat", "Label")
         WITH loc_oPagina.lbl_4c_MoeTrat
             .Caption = "Tratamento Moedas :"
-            .Top = 539
+            .Top = 618
             .Left = 12
             .FontName = "Tahoma"
             .FontSize = 8
@@ -1433,7 +1480,7 @@ DEFINE CLASS Formprc AS FormBase
 
         loc_oPagina.AddObject("obj_4c_OptMoevals", "OptionGroup")
         WITH loc_oPagina.obj_4c_OptMoevals
-            .Top = 532
+            .Top = 611
             .Left = 121
             .Width = 193
             .Height = 24
@@ -1470,7 +1517,7 @@ DEFINE CLASS Formprc AS FormBase
         loc_oPagina.AddObject("lbl_4c_EmpDests", "Label")
         WITH loc_oPagina.lbl_4c_EmpDests
             .Caption = "Empresa Destino :"
-            .Top = 428
+            .Top = 507
             .Left = 352
             .FontName = "Tahoma"
             .FontSize = 8
@@ -1481,7 +1528,7 @@ DEFINE CLASS Formprc AS FormBase
 
         loc_oPagina.AddObject("obj_4c_OptEmpDests", "OptionGroup")
         WITH loc_oPagina.obj_4c_OptEmpDests
-            .Top = 364
+            .Top = 443
             .Left = 102
             .Width = 130
             .Height = 19
@@ -1516,7 +1563,7 @@ DEFINE CLASS Formprc AS FormBase
         loc_oPagina.AddObject("lbl_4c_Franquia", "Label")
         WITH loc_oPagina.lbl_4c_Franquia
             .Caption = "Franquias :"
-            .Top = 429
+            .Top = 508
             .Left = 350
             .FontName = "Tahoma"
             .FontSize = 8
@@ -1527,7 +1574,7 @@ DEFINE CLASS Formprc AS FormBase
 
         loc_oPagina.AddObject("obj_4c_OptFranquia", "OptionGroup")
         WITH loc_oPagina.obj_4c_OptFranquia
-            .Top = 427
+            .Top = 506
             .Left = 494
             .Width = 86
             .Height = 18
@@ -1555,7 +1602,7 @@ DEFINE CLASS Formprc AS FormBase
         loc_oPagina.AddObject("lbl_4c_MontaObs", "Label")
         WITH loc_oPagina.lbl_4c_MontaObs
             .Caption = "Nota+Data na Obs do" + CHR(205) + "tem :"
-            .Top = 476
+            .Top = 555
             .Left = 350
             .FontName = "Tahoma"
             .FontSize = 8
@@ -1566,7 +1613,7 @@ DEFINE CLASS Formprc AS FormBase
 
         loc_oPagina.AddObject("obj_4c_OptMontaObs", "OptionGroup")
         WITH loc_oPagina.obj_4c_OptMontaObs
-            .Top = 475
+            .Top = 554
             .Left = 494
             .Width = 87
             .Height = 18
@@ -1594,7 +1641,7 @@ DEFINE CLASS Formprc AS FormBase
         loc_oPagina.AddObject("lbl_4c_Barras", "Label")
         WITH loc_oPagina.lbl_4c_Barras
             .Caption = "C" + CHR(243) + "d.Barras :"
-            .Top = 492
+            .Top = 571
             .Left = 352
             .FontName = "Tahoma"
             .FontSize = 8
@@ -1605,7 +1652,7 @@ DEFINE CLASS Formprc AS FormBase
 
         loc_oPagina.AddObject("obj_4c_OptBarras", "OptionGroup")
         WITH loc_oPagina.obj_4c_OptBarras
-            .Top = 491
+            .Top = 570
             .Left = 656
             .Width = 80
             .Height = 18
@@ -1633,7 +1680,7 @@ DEFINE CLASS Formprc AS FormBase
         loc_oPagina.AddObject("lbl_4c_DesItens", "Label")
         WITH loc_oPagina.lbl_4c_DesItens
             .Caption = "Descri" + CHR(231) + CHR(227) + "o do" + CHR(205) + "tem :"
-            .Top = 509
+            .Top = 588
             .Left = 350
             .FontName = "Tahoma"
             .FontSize = 8
@@ -1644,7 +1691,7 @@ DEFINE CLASS Formprc AS FormBase
 
         loc_oPagina.AddObject("obj_4c_OptDesItens", "OptionGroup")
         WITH loc_oPagina.obj_4c_OptDesItens
-            .Top = 431
+            .Top = 510
             .Left = 494
             .Width = 80
             .Height = 18
@@ -1672,7 +1719,7 @@ DEFINE CLASS Formprc AS FormBase
         loc_oPagina.AddObject("lbl_4c_Globaliza", "Label")
         WITH loc_oPagina.lbl_4c_Globaliza
             .Caption = "Globaliza :"
-            .Top = 528
+            .Top = 607
             .Left = 359
             .FontName = "Tahoma"
             .FontSize = 8
@@ -1683,7 +1730,7 @@ DEFINE CLASS Formprc AS FormBase
 
         loc_oPagina.AddObject("obj_4c_OptGlobaliza", "OptionGroup")
         WITH loc_oPagina.obj_4c_OptGlobaliza
-            .Top = 526
+            .Top = 605
             .Left = 656
             .Width = 80
             .Height = 18
@@ -1711,7 +1758,7 @@ DEFINE CLASS Formprc AS FormBase
         loc_oPagina.AddObject("lbl_4c_ChkCons", "Label")
         WITH loc_oPagina.lbl_4c_ChkCons
             .Caption = "Chk. Conserto :"
-            .Top = 546
+            .Top = 625
             .Left = 351
             .FontName = "Tahoma"
             .FontSize = 8
@@ -1722,7 +1769,7 @@ DEFINE CLASS Formprc AS FormBase
 
         loc_oPagina.AddObject("obj_4c_OptChkCons", "OptionGroup")
         WITH loc_oPagina.obj_4c_OptChkCons
-            .Top = 461
+            .Top = 540
             .Left = 494
             .Width = 80
             .Height = 18
@@ -1752,7 +1799,7 @@ DEFINE CLASS Formprc AS FormBase
         loc_oPagina.AddObject("lbl_4c_Mccrs", "Label")
         WITH loc_oPagina.lbl_4c_Mccrs
             .Caption = "Copiar Mov.de Cc. :"
-            .Top = 432
+            .Top = 511
             .Left = 624
             .FontName = "Tahoma"
             .FontSize = 8
@@ -1763,7 +1810,7 @@ DEFINE CLASS Formprc AS FormBase
 
         loc_oPagina.AddObject("obj_4c_OptMccrs", "OptionGroup")
         WITH loc_oPagina.obj_4c_OptMccrs
-            .Top = 432
+            .Top = 511
             .Left = 750
             .Width = 87
             .Height = 18
@@ -1791,7 +1838,7 @@ DEFINE CLASS Formprc AS FormBase
         loc_oPagina.AddObject("lbl_4c_Cheques", "Label")
         WITH loc_oPagina.lbl_4c_Cheques
             .Caption = "Copiar Mov.de Cheques :"
-            .Top = 447
+            .Top = 526
             .Left = 624
             .FontName = "Tahoma"
             .FontSize = 8
@@ -1802,7 +1849,7 @@ DEFINE CLASS Formprc AS FormBase
 
         loc_oPagina.AddObject("obj_4c_OptCheques", "OptionGroup")
         WITH loc_oPagina.obj_4c_OptCheques
-            .Top = 447
+            .Top = 526
             .Left = 750
             .Width = 87
             .Height = 18
@@ -1830,7 +1877,7 @@ DEFINE CLASS Formprc AS FormBase
         loc_oPagina.AddObject("lbl_4c_Recalculos", "Label")
         WITH loc_oPagina.lbl_4c_Recalculos
             .Caption = "Recalcular Saldos/Custos :"
-            .Top = 462
+            .Top = 541
             .Left = 613
             .FontName = "Tahoma"
             .FontSize = 8
@@ -1841,7 +1888,7 @@ DEFINE CLASS Formprc AS FormBase
 
         loc_oPagina.AddObject("obj_4c_OptRecalculos", "OptionGroup")
         WITH loc_oPagina.obj_4c_OptRecalculos
-            .Top = 462
+            .Top = 541
             .Left = 750
             .Width = 87
             .Height = 18
@@ -1869,7 +1916,7 @@ DEFINE CLASS Formprc AS FormBase
         loc_oPagina.AddObject("lbl_4c_MantProds", "Label")
         WITH loc_oPagina.lbl_4c_MantProds
             .Caption = "Mantem Prods. Destino :"
-            .Top = 477
+            .Top = 556
             .Left = 617
             .FontName = "Tahoma"
             .FontSize = 8
@@ -1880,7 +1927,7 @@ DEFINE CLASS Formprc AS FormBase
 
         loc_oPagina.AddObject("obj_4c_OptMantProds", "OptionGroup")
         WITH loc_oPagina.obj_4c_OptMantProds
-            .Top = 476
+            .Top = 555
             .Left = 750
             .Width = 87
             .Height = 18
@@ -1908,7 +1955,7 @@ DEFINE CLASS Formprc AS FormBase
         loc_oPagina.AddObject("lbl_4c_MantemMats", "Label")
         WITH loc_oPagina.lbl_4c_MantemMats
             .Caption = "Mantem Mat. Prima :"
-            .Top = 492
+            .Top = 571
             .Left = 623
             .FontName = "Tahoma"
             .FontSize = 8
@@ -1919,7 +1966,7 @@ DEFINE CLASS Formprc AS FormBase
 
         loc_oPagina.AddObject("obj_4c_OptMantemMats", "OptionGroup")
         WITH loc_oPagina.obj_4c_OptMantemMats
-            .Top = 491
+            .Top = 570
             .Left = 494
             .Width = 87
             .Height = 18
@@ -1947,7 +1994,7 @@ DEFINE CLASS Formprc AS FormBase
         loc_oPagina.AddObject("lbl_4c_MantDPros", "Label")
         WITH loc_oPagina.lbl_4c_MantDPros
             .Caption = "Mantem Desc. Produto :"
-            .Top = 507
+            .Top = 586
             .Left = 615
             .FontName = "Tahoma"
             .FontSize = 8
@@ -1958,7 +2005,7 @@ DEFINE CLASS Formprc AS FormBase
 
         loc_oPagina.AddObject("obj_4c_OptMantDPros", "OptionGroup")
         WITH loc_oPagina.obj_4c_OptMantDPros
-            .Top = 462
+            .Top = 541
             .Left = 750
             .Width = 87
             .Height = 18
@@ -1988,7 +2035,7 @@ DEFINE CLASS Formprc AS FormBase
         loc_oPagina.AddObject("lbl_4c_Situacao", "Label")
         WITH loc_oPagina.lbl_4c_Situacao
             .Caption = "Situa" + CHR(231) + CHR(227) + "o :"
-            .Top = 518
+            .Top = 597
             .Left = 606
             .FontName = "Tahoma"
             .FontSize = 8
@@ -1999,7 +2046,7 @@ DEFINE CLASS Formprc AS FormBase
 
         loc_oPagina.AddObject("obj_4c_OptSituas", "OptionGroup")
         WITH loc_oPagina.obj_4c_OptSituas
-            .Top = 516
+            .Top = 595
             .Left = 660
             .Width = 130
             .Height = 18
@@ -2034,7 +2081,7 @@ DEFINE CLASS Formprc AS FormBase
         loc_oPagina.AddObject("lbl_4c_Delets", "Label")
         WITH loc_oPagina.lbl_4c_Delets
             .Caption = "Deletar Mov. :"
-            .Top = 536
+            .Top = 615
             .Left = 615
             .FontName = "Tahoma"
             .FontSize = 8
@@ -2045,7 +2092,7 @@ DEFINE CLASS Formprc AS FormBase
 
         loc_oPagina.AddObject("obj_4c_OptDelets", "OptionGroup")
         WITH loc_oPagina.obj_4c_OptDelets
-            .Top = 416
+            .Top = 495
             .Left = 494
             .Width = 110
             .Height = 18
@@ -2080,7 +2127,7 @@ DEFINE CLASS Formprc AS FormBase
         loc_oPagina.AddObject("lbl_4c_MovMZeros", "Label")
         WITH loc_oPagina.lbl_4c_MovMZeros
             .Caption = "Mv c/ Qt/Val > 0 :"
-            .Top = 554
+            .Top = 633
             .Left = 614
             .FontName = "Tahoma"
             .FontSize = 8
@@ -2091,7 +2138,7 @@ DEFINE CLASS Formprc AS FormBase
 
         loc_oPagina.AddObject("obj_4c_OptMovMZeros", "OptionGroup")
         WITH loc_oPagina.obj_4c_OptMovMZeros
-            .Top = 491
+            .Top = 570
             .Left = 494
             .Width = 80
             .Height = 18
@@ -2119,7 +2166,7 @@ DEFINE CLASS Formprc AS FormBase
         loc_oPagina.AddObject("lbl_4c_MovcParc", "Label")
         WITH loc_oPagina.lbl_4c_MovcParc
             .Caption = "Mv c/ Parcelas :"
-            .Top = 569
+            .Top = 648
             .Left = 616
             .FontName = "Tahoma"
             .FontSize = 8
@@ -2130,7 +2177,7 @@ DEFINE CLASS Formprc AS FormBase
 
         loc_oPagina.AddObject("obj_4c_OptMovcParc", "OptionGroup")
         WITH loc_oPagina.obj_4c_OptMovcParc
-            .Top = 506
+            .Top = 585
             .Left = 494
             .Width = 80
             .Height = 18
@@ -2159,7 +2206,7 @@ DEFINE CLASS Formprc AS FormBase
         loc_oPagina.AddObject("lbl_4c_Tolerancia", "Label")
         WITH loc_oPagina.lbl_4c_Tolerancia
             .Caption = "Toler" + CHR(226) + "ncias (%) :"
-            .Top     = 556
+            .Top     = 635
             .Left    = 8
             .FontName  = "Tahoma"
             .FontSize  = 8
@@ -2171,7 +2218,7 @@ DEFINE CLASS Formprc AS FormBase
         loc_oPagina.AddObject("txt_4c_Toleras", "TextBox")
         WITH loc_oPagina.txt_4c_Toleras
             .Value         = 0
-            .Top           = 554
+            .Top           = 633
             .Left          = 90
             .Width         = 80
             .Height        = 21
@@ -2187,7 +2234,7 @@ DEFINE CLASS Formprc AS FormBase
         *-- ======= GRID grd_4c_DestinoG (grupos do item selecionado) =======
         loc_oPagina.AddObject("cnt_4c_CompoG", "Container")
         WITH loc_oPagina.cnt_4c_CompoG
-            .Top         = 394
+            .Top         = 473
             .Left        = 800
             .Width       = 180
             .Height      = 85
@@ -2234,7 +2281,7 @@ DEFINE CLASS Formprc AS FormBase
         loc_oPagina.AddObject("lbl_4c_Merc", "Label")
         WITH loc_oPagina.lbl_4c_Merc
             .Caption = "Merc"
-            .Top = 393
+            .Top = 472
             .Left = 800
             .FontName = "Tahoma"
             .FontSize = 8
@@ -2245,7 +2292,7 @@ DEFINE CLASS Formprc AS FormBase
         loc_oPagina.AddObject("lbl_4c_CUni", "Label")
         WITH loc_oPagina.lbl_4c_CUni
             .Caption = "Uni"
-            .Top = 393
+            .Top = 472
             .Left = 850
             .FontName = "Tahoma"
             .FontSize = 8
@@ -2256,7 +2303,7 @@ DEFINE CLASS Formprc AS FormBase
         loc_oPagina.AddObject("lbl_4c_CGru", "Label")
         WITH loc_oPagina.lbl_4c_CGru
             .Caption = "Grupo"
-            .Top = 393
+            .Top = 472
             .Left = 893
             .FontName = "Tahoma"
             .FontSize = 8
@@ -2269,7 +2316,7 @@ DEFINE CLASS Formprc AS FormBase
         loc_oPagina.grd_4c_DestinoG.ColumnCount = 3
         loc_oPagina.grd_4c_DestinoG.RecordSource = "csDestinoG"
         WITH loc_oPagina.grd_4c_DestinoG
-            .Top                = 408
+            .Top                = 487
             .Left               = 800
             .Width              = 175
             .Height             = 160
@@ -3851,3 +3898,4 @@ DEFINE CLASS Formprc AS FormBase
     ENDPROC
 
 ENDDEFINE
+

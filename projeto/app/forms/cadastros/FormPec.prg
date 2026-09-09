@@ -388,6 +388,53 @@ DEFINE CLASS FormPec AS FormBase
             loc_oPagina = THIS.pgf_4c_Paginas.Page2
             loc_oPagina.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
 
+            *-- Cabecalho cinza (identico ao da pagina Lista) - CLAUDE.md #11 / Erro152
+            loc_oPagina.AddObject("cnt_4c_Cabecalho", "Container")
+            WITH loc_oPagina.cnt_4c_Cabecalho
+                .Top           = 29
+                .Left          = 0
+                .Width         = THIS.Width
+                .Height        = 80
+                .BackColor     = RGB(100, 100, 100)
+                .BorderWidth   = 0
+                .SpecialEffect = 0
+                .Visible       = .T.
+
+                .AddObject("lbl_4c_Sombra", "Label")
+                WITH .lbl_4c_Sombra
+                    .Caption   = THIS.Caption
+                    .Top       = 15
+                    .Left      = 10
+                    .Width     = THIS.Width
+                    .Height    = 40
+                    .FontName  = "Tahoma"
+                    .FontSize  = 16
+                    .FontBold  = .T.
+                    .ForeColor = RGB(0, 0, 0)
+                    .BackStyle = 0
+                    .AutoSize  = .F.
+                    .Visible   = .T.
+                ENDWITH
+
+                .AddObject("lbl_4c_Titulo", "Label")
+                WITH .lbl_4c_Titulo
+                    .Caption   = THIS.Caption
+                    .Top       = 18
+                    .Left      = 10
+                    .Width     = THIS.Width
+                    .Height    = 46
+                    .FontName  = "Tahoma"
+                    .FontSize  = 16
+                    .FontBold  = .T.
+                    .ForeColor = RGB(255, 255, 255)
+                    .BackStyle = 0
+                    .AutoSize  = .F.
+                    .Visible   = .T.
+                ENDWITH
+
+            ENDWITH
+
+
             *-- Container botoes Confirmar/Cancelar (Grupo_Salva orig Left=839,Top=7+29=36)
             loc_oPagina.AddObject("cnt_4c_BotoesAcao", "Container")
             loc_oCntAcao = loc_oPagina.cnt_4c_BotoesAcao
@@ -514,7 +561,7 @@ DEFINE CLASS FormPec AS FormBase
             *-- (orig Top=13+29=42, Left=8, Width=663, Height=75)
             loc_oPagina.AddObject("shp_4c_Shape2", "Shape")
             WITH loc_oPagina.shp_4c_Shape2
-                .Top           = 42
+                .Top           = 115
                 .Left          = 8
                 .Width         = 663
                 .Height        = 75
@@ -527,7 +574,7 @@ DEFINE CLASS FormPec AS FormBase
             loc_oPagina.AddObject("lbl_4c_Relatorio", "Label")
             WITH loc_oPagina.lbl_4c_Relatorio
                 .Caption   = "Relat" + CHR(243) + "rio : "
-                .Top       = 56
+                .Top       = 129
                 .Left      = 18
                 .FontName  = "Tahoma"
                 .FontSize  = 8
@@ -540,7 +587,7 @@ DEFINE CLASS FormPec AS FormBase
             *-- (orig Top=26+29=55, Left=74, Width=290, Height=23)
             loc_oPagina.AddObject("txt_4c_Relatorio", "TextBox")
             WITH loc_oPagina.txt_4c_Relatorio
-                .Top           = 55
+                .Top           = 128
                 .Left          = 80
                 .Width         = 380
                 .Height        = 23
@@ -557,7 +604,7 @@ DEFINE CLASS FormPec AS FormBase
             loc_oPagina.AddObject("lbl_4c_Empresa", "Label")
             WITH loc_oPagina.lbl_4c_Empresa
                 .Caption   = "Empresa : "
-                .Top       = 82
+                .Top       = 155
                 .Left      = 20
                 .FontName  = "Tahoma"
                 .FontSize  = 8
@@ -570,7 +617,7 @@ DEFINE CLASS FormPec AS FormBase
             *-- (orig Top=50+29=79, Left=74, Width=31)
             loc_oPagina.AddObject("txt_4c_Empresa", "TextBox")
             WITH loc_oPagina.txt_4c_Empresa
-                .Top           = 79
+                .Top           = 152
                 .Left          = 80
                 .Width         = 60
                 .Height        = 23
@@ -590,7 +637,7 @@ DEFINE CLASS FormPec AS FormBase
             WITH loc_oPagina.cmd_4c_MoverCima
                 .Caption       = ""
                 .Picture       = gc_4c_CaminhoIcones + "cadastro_seta_cima_20.jpg"
-                .Top           = 205
+                .Top           = 278
                 .Left          = 950
                 .Width         = 40
                 .Height        = 40
@@ -606,7 +653,7 @@ DEFINE CLASS FormPec AS FormBase
             WITH loc_oPagina.cmd_4c_MoverBaixo
                 .Caption       = ""
                 .Picture       = gc_4c_CaminhoIcones + "cadastro_seta_baixo_20.jpg"
-                .Top           = 246
+                .Top           = 319
                 .Left          = 950
                 .Width         = 40
                 .Height        = 40
@@ -621,10 +668,10 @@ DEFINE CLASS FormPec AS FormBase
             *-- (orig Top=126+29=155, Left=1, Width=994, Height=470)
             loc_oPagina.AddObject("shp_4c_Shape1", "Shape")
             WITH loc_oPagina.shp_4c_Shape1
-                .Top           = 155
+                .Top           = 228
                 .Left          = 1
                 .Width         = 994
-                .Height        = 470
+                .Height        = 401
                 .BackStyle     = 0
                 .SpecialEffect = 1
                 .Visible       = .T.
@@ -635,7 +682,7 @@ DEFINE CLASS FormPec AS FormBase
             loc_oPagina.AddObject("cmd_4c_Expandir", "CommandButton")
             WITH loc_oPagina.cmd_4c_Expandir
                 .Caption       = "Expandir"
-                .Top           = 157
+                .Top           = 230
                 .Left          = 3
                 .Width         = 77
                 .Height        = 25
@@ -655,7 +702,7 @@ DEFINE CLASS FormPec AS FormBase
             loc_oPagina.AddObject("lbl_4c_ProcGrupo", "Label")
             WITH loc_oPagina.lbl_4c_ProcGrupo
                 .Caption   = "Grupo:"
-                .Top       = 160
+                .Top       = 233
                 .Left      = 85
                 .FontName  = "Tahoma"
                 .FontSize  = 8
@@ -668,7 +715,7 @@ DEFINE CLASS FormPec AS FormBase
             *-- (orig Txt_Procura_Grupo Top=129+29=158, Left=81, Width=256)
             loc_oPagina.AddObject("txt_4c_ProcuraGrupo", "TextBox")
             WITH loc_oPagina.txt_4c_ProcuraGrupo
-                .Top           = 158
+                .Top           = 231
                 .Left          = 130
                 .Width         = 218
                 .Height        = 21
@@ -684,7 +731,7 @@ DEFINE CLASS FormPec AS FormBase
             loc_oPagina.AddObject("lbl_4c_ProcConta", "Label")
             WITH loc_oPagina.lbl_4c_ProcConta
                 .Caption   = "Conta:"
-                .Top       = 160
+                .Top       = 233
                 .Left      = 364
                 .FontName  = "Tahoma"
                 .FontSize  = 8
@@ -697,7 +744,7 @@ DEFINE CLASS FormPec AS FormBase
             *-- (orig Txt_Procura_Conta Top=129+29=158, Left=456, Width=256)
             loc_oPagina.AddObject("txt_4c_ProcuraConta", "TextBox")
             WITH loc_oPagina.txt_4c_ProcuraConta
-                .Top           = 158
+                .Top           = 231
                 .Left          = 405
                 .Width         = 218
                 .Height        = 21
@@ -714,10 +761,10 @@ DEFINE CLASS FormPec AS FormBase
             loc_oPagina.AddObject("grd_4c_Grupos", "Grid")
             loc_oGrdGrupos = loc_oPagina.grd_4c_Grupos
             WITH loc_oGrdGrupos
-                .Top                = 181
+                .Top                = 254
                 .Left               = 4
                 .Width              = 353
-                .Height             = 443
+                .Height             = 375
                 .ColumnCount        = 2
                 .FontName           = "Tahoma"
                 .FontSize           = 8
@@ -769,10 +816,10 @@ DEFINE CLASS FormPec AS FormBase
             loc_oPagina.AddObject("grd_4c_Destinos", "Grid")
             loc_oGrdDest = loc_oPagina.grd_4c_Destinos
             WITH loc_oGrdDest
-                .Top                = 181
+                .Top                = 254
                 .Left               = 359
                 .Width              = 585
-                .Height             = 443
+                .Height             = 375
                 .ColumnCount        = 5
                 .FontName           = "Tahoma"
                 .FontSize           = 8
@@ -1634,3 +1681,4 @@ DEFINE CLASS FormPec AS FormBase
     ENDPROC
 
 ENDDEFINE
+
