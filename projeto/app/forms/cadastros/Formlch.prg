@@ -4302,7 +4302,7 @@ DEFINE CLASS Formlch AS FormBase
 
         IF EMPTY(loc_cGrupo)
             IF !EMPTY(par_cTxtDesc) AND EVALUATE("VARTYPE(loc_oCnt." + par_cTxtDesc + ")") = "O"
-                EVALUATE("loc_oCnt." + par_cTxtDesc + ".Value = ''")
+                STORE "" TO ("loc_oCnt." + par_cTxtDesc + ".Value")
             ENDIF
             RETURN
         ENDIF
@@ -4317,10 +4317,10 @@ DEFINE CLASS Formlch AS FormBase
                 loc_cDesc = ALLTRIM(cursor_4c_DescGru.descrs)
             ELSE
                 MsgAviso("Grupo n" + CHR(227) + "o encontrado: " + loc_cGrupo, "")
-                EVALUATE("loc_oCnt." + par_cTxtGru + ".Value = ''")
+                STORE "" TO ("loc_oCnt." + par_cTxtGru + ".Value")
             ENDIF
             IF !EMPTY(par_cTxtDesc) AND EVALUATE("VARTYPE(loc_oCnt." + par_cTxtDesc + ")") = "O"
-                EVALUATE("loc_oCnt." + par_cTxtDesc + ".Value = loc_cDesc")
+                STORE loc_cDesc TO ("loc_oCnt." + par_cTxtDesc + ".Value")
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Formlch.BuscarDescGrupo")
@@ -4333,6 +4333,20 @@ DEFINE CLASS Formlch AS FormBase
     *--------------------------------------------------------------------------
     * BuscarDescConta - helper para buscar descricao de conta (SigCdCli.RClis - coluna goSistema.BuscaNome, igual ao fAcessoContas do legado)
     *--------------------------------------------------------------------------
+    *--------------------------------------------------------------------------
+    * LimparCpfConta - zera o CPF do container quando a conta eh recusada
+    *   O legado limpa .Get_Cpf junto com conta e descricao (CntEmissor); nos
+    *   containers sem campo de CPF (Carteira, Responsavel) nao ha o que limpar.
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE LimparCpfConta(par_oCnt, par_cTxtCpf)
+        IF VARTYPE(par_oCnt) != "O" OR EMPTY(par_cTxtCpf)
+            RETURN
+        ENDIF
+        IF EVALUATE("VARTYPE(par_oCnt." + par_cTxtCpf + ")") = "O"
+            STORE "" TO ("par_oCnt." + par_cTxtCpf + ".Value")
+        ENDIF
+    ENDPROC
+
     PROTECTED PROCEDURE BuscarDescConta(par_cCnt, par_cTxtCon, par_cTxtDesc, par_cTxtGru, par_cTxtCpf)
         *-- Espelha o Valid do legado (ex.: CntOrigem.Get_ConOrig.Valid):
         *--   If !Empty(This.Value) and EMPTY(this.Parent.get_CPF.Value) And ;
@@ -4392,6 +4406,21 @@ DEFINE CLASS Formlch AS FormBase
                 loc_oTxtCon.Value = ""
                 IF VARTYPE(loc_oTxtDesc) = "O"
                     loc_oTxtDesc.Value = ""
+                ENDIF
+                THIS.LimparCpfConta(loc_oCnt, par_cTxtCpf)
+            ELSE
+                *-- Acesso concedido nao basta: a conta ainda pode estar INATIVA.
+                *-- Legado, CntEmissor.Get_ConEmiss.Valid (ramo Else do fAcessoContas):
+                *--   If not fChecarInativas(This.Value, ThisForm.poDataMgr)
+                *--       MessageBox('Conta Inativa ...', 32, '')
+                *--       .Get_ConEmiss.Value = '' / .Get_dConEmiss.Value = '' / .Get_Cpf.Value = ''
+                IF !fChecarInativas(ALLTRIM(loc_oTxtCon.Value))
+                    MsgAviso("Conta Inativa ...", "")
+                    loc_oTxtCon.Value = ""
+                    IF VARTYPE(loc_oTxtDesc) = "O"
+                        loc_oTxtDesc.Value = ""
+                    ENDIF
+                    THIS.LimparCpfConta(loc_oCnt, par_cTxtCpf)
                 ENDIF
             ENDIF
             loc_oTxtCon.Refresh
