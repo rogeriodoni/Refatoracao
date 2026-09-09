@@ -1,0 +1,607 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGCDPEN.SCX
+* Data/Hora: 09/09/2026 15:22:23
+* Total de registros: 16
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDPEN
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say4
+  Parent: SIGCDPEN.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say5
+  Parent: SIGCDPEN.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Grupos
+  Parent: SIGCDPEN.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_Contas
+  Parent: SIGCDPEN.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_G
+  Parent: SIGCDPEN.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_C
+  Parent: SIGCDPEN.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_DDi
+  Parent: SIGCDPEN.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_ddf
+  Parent: SIGCDPEN.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Get_pena
+  Parent: SIGCDPEN.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGCDPEN.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGCDPEN.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGCDPEN.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 181
+  Left = 62
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPEN
+------------------------------------------------------------
+  DataSession = 2
+  DoCreate = .T.
+  Caption = "Cadastro de Penalidades de Comissão"
+  Name = "SIGCDPEN"
+  Pagina.ErasePage = .T.
+  Pagina.Lista.cntSombra.lblSombra.Name = "lblSombra"
+  Pagina.Lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  Pagina.Lista.cntSombra.Name = "cntSombra"
+  Pagina.Lista.Grade.FontName = "Tahoma"
+  Pagina.Lista.Grade.FontSize = 8
+  Pagina.Lista.Grade.RowHeight = 16
+  Pagina.Lista.Grade.ForeColor = 90,90,90
+  Pagina.Lista.Grade.Name = "Grade"
+  Pagina.Lista.Grupo_op.Inserir.Top = 5
+  Pagina.Lista.Grupo_op.Inserir.Left = 36
+  Pagina.Lista.Grupo_op.Inserir.Name = "Inserir"
+  Pagina.Lista.Grupo_op.Consultar.Top = 5
+  Pagina.Lista.Grupo_op.Consultar.Left = 111
+  Pagina.Lista.Grupo_op.Consultar.Name = "Consultar"
+  Pagina.Lista.Grupo_op.Alterar.Top = 5
+  Pagina.Lista.Grupo_op.Alterar.Left = 186
+  Pagina.Lista.Grupo_op.Alterar.Name = "Alterar"
+  Pagina.Lista.Grupo_op.Excluir.Top = 5
+  Pagina.Lista.Grupo_op.Excluir.Left = 261
+  Pagina.Lista.Grupo_op.Excluir.Name = "Excluir"
+  Pagina.Lista.Grupo_op.procurar.Top = 5
+  Pagina.Lista.Grupo_op.procurar.Left = 336
+  Pagina.Lista.Grupo_op.procurar.Name = "procurar"
+  Pagina.Lista.Grupo_op.Height = 85
+  Pagina.Lista.Grupo_op.Left = 312
+  Pagina.Lista.Grupo_op.Top = -1
+  Pagina.Lista.Grupo_op.Width = 419
+  Pagina.Lista.Grupo_op.Name = "Grupo_op"
+  Pagina.Lista.Grupo_Saida.Sair.Top = 5
+  Pagina.Lista.Grupo_Saida.Sair.Left = 5
+  Pagina.Lista.Grupo_Saida.Sair.Name = "Sair"
+  Pagina.Lista.Grupo_Saida.Left = 719
+  Pagina.Lista.Grupo_Saida.Top = -1
+  Pagina.Lista.Grupo_Saida.Name = "Grupo_Saida"
+  Pagina.Lista.cntFiltros.Name = "cntFiltros"
+  Pagina.Lista.Name = "Lista"
+  Pagina.Dados.Grupo_Salva.Salva.Top = 5
+  Pagina.Dados.Grupo_Salva.Salva.Left = 5
+  Pagina.Dados.Grupo_Salva.Salva.Name = "Salva"
+  Pagina.Dados.Grupo_Salva.Cancelar.Top = 5
+  Pagina.Dados.Grupo_Salva.Cancelar.Left = 88
+  Pagina.Dados.Grupo_Salva.Cancelar.Name = "Cancelar"
+  Pagina.Dados.Grupo_Salva.TabIndex = 8
+  Pagina.Dados.Grupo_Salva.ZOrderSet = 1
+  Pagina.Dados.Grupo_Salva.Name = "Grupo_Salva"
+  Pagina.Dados.Name = "Dados"
+  Pagina.Name = "Pagina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPEN.Pagina.Dados.Say4
+------------------------------------------------------------
+  Caption = "Grupo : "
+  Left = 193
+  Top = 131
+  TabIndex = 9
+  ZOrderSet = 2
+  Name = "Say4"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPEN.Pagina.Dados.Say5
+------------------------------------------------------------
+  Caption = "Conta : "
+  Left = 194
+  Top = 160
+  TabIndex = 10
+  ZOrderSet = 3
+  Name = "Say5"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPEN.Pagina.Dados.Get_Grupos
+------------------------------------------------------------
+  Value = 
+  ControlSource = "CrSigCdPen.Grupos"
+  Format = "K"
+  InputMask = ""
+  Left = 241
+  TabIndex = 1
+  Top = 128
+  Width = 80
+  ZOrderSet = 4
+  Name = "Get_Grupos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPEN.Pagina.Dados.Get_Contas
+------------------------------------------------------------
+  Value = 
+  ControlSource = "CrSigCdPen.Contas"
+  Format = "K"
+  InputMask = ""
+  Left = 241
+  TabIndex = 3
+  Top = 157
+  Width = 80
+  ZOrderSet = 5
+  Name = "Get_Contas"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPEN.Pagina.Dados.Get_G
+------------------------------------------------------------
+  Value = 
+  Format = "K"
+  Height = 23
+  InputMask = ""
+  Left = 323
+  TabIndex = 2
+  Top = 128
+  Width = 150
+  ZOrderSet = 6
+  Name = "Get_G"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPEN.Pagina.Dados.Get_C
+------------------------------------------------------------
+  Value = 
+  ControlSource = ""
+  Format = "K"
+  Height = 23
+  InputMask = ""
+  Left = 323
+  TabIndex = 4
+  Top = 157
+  Width = 252
+  ZOrderSet = 7
+  Name = "Get_C"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPEN.Pagina.Dados.Get_DDi
+------------------------------------------------------------
+  ControlSource = "CrSigCdPen.Ddis"
+  Height = 21
+  InputMask = "9999"
+  Left = 241
+  MaxLength = 4
+  TabIndex = 5
+  Top = 185
+  Width = 38
+  ZOrderSet = 8
+  Name = "Get_DDi"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPEN.Pagina.Dados.get_ddf
+------------------------------------------------------------
+  ControlSource = "CrSigCdPen.Ddfs"
+  Height = 21
+  InputMask = "9999"
+  Left = 323
+  MaxLength = 4
+  TabIndex = 6
+  Top = 185
+  Width = 38
+  ZOrderSet = 9
+  Name = "get_ddf"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPEN.Pagina.Dados.Get_pena
+------------------------------------------------------------
+  ControlSource = "CrSigCdPen.Penas"
+  Height = 21
+  InputMask = "999.99"
+  Left = 241
+  TabIndex = 7
+  Top = 212
+  Width = 58
+  ZOrderSet = 10
+  Name = "Get_pena"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPEN.Pagina.Dados.Say1
+------------------------------------------------------------
+  Caption = "Dias de Atraso de : "
+  Left = 126
+  Top = 187
+  TabIndex = 11
+  ZOrderSet = 11
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPEN.Pagina.Dados.Say3
+------------------------------------------------------------
+  Caption = "% Penalidade : "
+  Left = 149
+  Top = 214
+  TabIndex = 13
+  ZOrderSet = 13
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDPEN.Pagina.Dados.Say2
+------------------------------------------------------------
+  Caption = "até"
+  Left = 292
+  Top = 187
+  TabIndex = 12
+  ZOrderSet = 12
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDPEN
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+lcQryOpt = [Select * From SigCdPen]
+
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		With .poDataMgr
+			.AddCursor('SigCdPen', 'cIdChaves', 'crSigCdPen', '', ThisForm.Pagina.Lista.Grade, lcQryOpt)
+			.pfSqlTabela(1).pColuna('Grupos', '', '', 'Grupo', 80, .t.)
+			.pfSqlTabela(1).pColuna('Contas', '', '', 'Conta', 80, .t.)
+			.pfSqlTabela(1).pColuna('ddis', '', '', 'Dia Inicial', 80, .f.)
+			.pfSqlTabela(1).pColuna('ddfs', '', '', 'Dia Final', 80, .f.)
+			.pfSqlTabela(1).pColuna('penas', '', '', '%Penalidade', 80, .f.)
+		EndWith
+
+		=DoDefault()
+
+		ThisForm.Pagina.Lista.Grade.Column1.SetFocus
+	Else
+		=Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+EndWith
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+=DoDefault()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_procurar
+------------------------------------------------------------
+PROCEDURE msv_procurar
+=DoDefault()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Release
+------------------------------------------------------------
+PROCEDURE Release
+ThisForm.podatamgr.Release
+=DoDefault()
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Lista.Grupo_op.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Lista.Grupo_op.Click
+LPARAMETERS opcao
+If !dodefault( Opcao )
+	ThisForm.mAtivapagina1
+	Return
+Endif
+
+Select crSigCdPen
+* posiciona o cursor de acordo com a opção
+Do Case
+	Case Inlist( ThisForm.pcEscolha, 'INSERIR', 'PROCURAR' )
+		Thisform.pagina.dados.Get_Grupos.setfocus
+	Case ThisForm.pcEscolha = 'ALTERAR'
+		Thisform.pagina.dados.Get_Grupos.setfocus
+	Case Inlist( ThisForm.pcEscolha, 'CONSULTAR', 'EXCLUIR' )
+		Thisform.pagina.dados.grupo_salva.salva.setfocus
+Endcase
+ThisForm.Pagina.Dados.Refresh
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+With ThisForm.Pagina.Dados
+	If InList(ThisForm.pcEscolha ,'INSERIR','ALTERAR')
+		If Empty(.get_Grupos.Value)
+			MessageBox( 'Obrigatório Informar o Grupo!!!', 48, '' )
+			.get_grupos.SetFocus
+			Return
+		Endif
+		If .get_ddf.Value = 0
+			MessageBox( 'Dia Final não pode ser = 0 !!!', 48, '' )
+			.get_ddf.Setfocus
+			Return
+		Endif
+	EndIf
+	If InList(ThisForm.pcEscolha,'INSERIR')
+		Replace CidChaves with fUniqueIds() in CrSigCdPen
+	EndIf
+	
+	If InList(ThisForm.pcEscolha,'ALTERAR')
+		lcSql = [Select * From SigCdPen where Grupos = ']+CrSigCdPen.Grupos+[' And Contas = ']+CrSigCdPen.Contas+[']
+		If Thisform.Podatamgr.Sqlexecute(lcSql,'LocalPena') < 1
+			MessageBox('Favor reinicializar o processo.Falha na Conexão (LocalPena)',0+48,'')
+			Return .f.
+		EndIf
+
+		Select LocalPena
+		Index on Grupos + Contas + Str(Ddis,4) + Str(ddfs,4) + Str(Penas,6,2) Tag GruCon
+		If Seek (CrSigCdPen.Grupos+CrSigCdPen.Contas+Str(CrSigCdPen.ddis,4)+Str(CrSigCdPen.ddfs,4) + Str(CrSigCdPen.penas,6,2) )
+			Messagebox('Já Existe um lançamento com estes dados !!',0+48,'')
+			.Get_grupos.Setfocus		
+			Return .f.
+		Endif
+	Endif
+EndWith
+
+=DoDefault()
+ThisForm.mAtivapagina1
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+=DoDefault()
+If ThisForm.plCancelar
+	ThisForm.mAtivapagina1
+Endif
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDPEN.Pagina.Dados.Get_Grupos
+* Classe: fwget (Base: textbox)
+* Registro: 6
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !IsEmpty(this.value)
+	fAcessoContab(Usuar,'C',this.value,This,thisform.pagina.dados.get_G)
+Else
+	thisform.pagina.dados.get_G.value = ''
+	thisform.pagina.dados.get_G.refresh
+endif
+select crSigCdPen
+Return(.t.)
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDPEN.Pagina.Dados.Get_Contas
+* Classe: fwget (Base: textbox)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+grupo = thisform.pagina.dados.Get_Grupos.value
+If !IsEmpty(this.value)
+	If !fAcessoContas(Usuar,grupo,'C',this.value,This,thisform.pagina.dados.get_C)
+		Messagebox('Acesso Negado !!',0+48,'')
+		This.Value=''
+		This.Refresh
+		thisform.pagina.dados.get_C.Value = ''
+		thisform.pagina.dados.get_C.Refresh
+		return 0 
+	Endif
+Else
+	thisform.pagina.dados.get_C.Value = ''
+	thisform.pagina.dados.get_C.Refresh
+	return(.t.)
+endif
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDPEN.Pagina.Dados.Get_G
+* Classe: fwget (Base: textbox)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+If !IsEmpty(this.value)
+	fAcessoContab(Usuar,'D',this.value,thisform.pagina.dados.get_Grupos,this)
+Else
+	thisform.pagina.dados.get_Grupos.value = ''
+	thisform.pagina.dados.get_Grupos.refresh
+endif
+return(.t.)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(IsEmpty(Thisform.pagina.dados.get_grupos.value) AND ;
+       Inlist(ThisForm.pcEscolha, "INSERIR", "ALTERAR"))
+
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDPEN.Pagina.Dados.Get_C
+* Classe: fwget (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+grupo = thisform.pagina.dados.Get_Grupos.value
+If !IsEmpty(this.value)
+	If !fAcessoContas(Usuar,grupo,'D',this.value,This,thisform.pagina.dados.get_Contas)
+		Messagebox('Acesso Negado !!',0+48,'')
+		This.Value=''
+		This.Refresh
+		thisform.pagina.dados.get_Contas.Value = ''
+		thisform.pagina.dados.get_Contas.Refresh
+		select crSigOpOpt
+		return 0 
+	Endif
+Else
+	thisform.pagina.dados.get_Contas.Value = ''
+	thisform.pagina.dados.get_Contas.Refresh
+	select crSigCdPen
+	return(.t.)
+endif
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return(IsEmpty(Thisform.pagina.dados.get_Contas.value) AND ;
+       Inlist(ThisForm.pcEscolha, "INSERIR", "ALTERAR"))
+
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 13
+================================================================================

@@ -245,18 +245,21 @@ DEFINE CLASS PENBO AS BusinessBase
     ENDPROC
 
     *====================================================================
-    * BuscarDescConta - Retorna Descrs de SigCdCcr dado Codigos
+    * BuscarDescConta - Retorna a descricao da conta (SigCdCli.RClis) dado o IClis
+    *   O legado resolve a conta via fAcessoContas (Framework\sigacess.PRG:158), que
+    *   busca em SigCdCli e devolve a coluna goSistema.BuscaNome ("RClis") no textbox
+    *   de descricao. SigCdCcr nao existe no banco - Erro155.
     *====================================================================
     PROCEDURE BuscarDescConta(par_cCodigos)
         LOCAL loc_cDesc, loc_nResult
         loc_cDesc = ""
         TRY
             loc_nResult = SQLEXEC(gnConnHandle, ;
-                "SELECT Descrs FROM SigCdCcr WHERE Codigos = " + EscaparSQL(par_cCodigos), ;
+                "SELECT RClis FROM SigCdCli WHERE IClis = " + EscaparSQL(par_cCodigos), ;
                 "cursor_4c_DescConta")
             IF loc_nResult > 0 AND USED("cursor_4c_DescConta") AND ;
-               RECCOUNT("cursor_4c_DescConta") > 0 AND !EMPTY(cursor_4c_DescConta.Descrs)
-                loc_cDesc = ALLTRIM(cursor_4c_DescConta.Descrs)
+               RECCOUNT("cursor_4c_DescConta") > 0 AND !EMPTY(cursor_4c_DescConta.RClis)
+                loc_cDesc = ALLTRIM(cursor_4c_DescConta.RClis)
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "PENBO.BuscarDescConta")
