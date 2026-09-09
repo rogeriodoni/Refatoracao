@@ -294,7 +294,7 @@ DEFINE CLASS FormSigPrCar AS FormBase
         THIS.AddObject("cmd_4c_Excluir", "CommandButton")
         WITH THIS.cmd_4c_Excluir
             .Top             = 3
-            .Left            = 330
+            .Left = 230
             .Width           = 70
             .Height          = 70
             .Caption         = "Excluir"

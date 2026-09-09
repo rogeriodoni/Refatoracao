@@ -463,7 +463,7 @@ DEFINE CLASS FormDIC AS FormBase
             .FontName  = "Tahoma"
             .FontSize  = 8
             .FontBold  = .F.
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(36, 84, 155)
             .BackStyle = 0
             .AutoSize  = .F.
             .Alignment = 1
@@ -499,7 +499,7 @@ DEFINE CLASS FormDIC AS FormBase
             .FontName  = "Tahoma"
             .FontSize  = 8
             .FontBold  = .F.
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(36, 84, 155)
             .BackStyle = 0
             .AutoSize  = .F.
             .Alignment = 1
@@ -535,7 +535,7 @@ DEFINE CLASS FormDIC AS FormBase
             .FontName  = "Tahoma"
             .FontSize  = 8
             .FontBold  = .F.
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(36, 84, 155)
             .BackStyle = 0
             .AutoSize  = .F.
             .Alignment = 1

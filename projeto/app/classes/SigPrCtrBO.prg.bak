@@ -383,7 +383,7 @@ DEFINE CLASS SigPrCtrBO AS BusinessBase
                     loc_cSQL = "INSERT INTO SigPrCtr" + ;
                                " (PkChave, Codigos, Cpros, CodCors, CodTams," + ;
                                "  OriDopNums, Qtds, QtdOs, Contas, Arquivo," + ;
-                               "  Moedas, Precific, FkChaves, Datas, Usuars)" + ;
+                               "  Moedas, Precific, FkChaves, Datas, Usuars, UsuAlts)" + ;
                                " VALUES (" + ;
                                " NEWID()," + ;
                                EscaparSQL(loc_cCodigos) + "," + ;
@@ -399,6 +399,7 @@ DEFINE CLASS SigPrCtrBO AS BusinessBase
                                FormatarNumeroSQL(cursor_4c_Linhas.Precific) + "," + ;
                                EscaparSQL(LEFT(ALLTRIM(cursor_4c_Linhas.FkChaves), 20)) + "," + ;
                                "GETDATE()," + ;
+                               EscaparSQL(LEFT(ALLTRIM(gc_4c_UsuarioLogado), 10)) + "," + ;
                                EscaparSQL(LEFT(ALLTRIM(gc_4c_UsuarioLogado), 10)) + ")"
 
                     loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL)

@@ -208,8 +208,9 @@ DEFINE CLASS DICBO AS BusinessBase
                 loc_lResultado = .F.
             ELSE
                 loc_cSQL = "INSERT INTO SigCdDic" + ;
-                    " (datas, expressao, idioma, traducao, usuars)" + ;
+                    " (cidchaves, datas, expressao, idioma, traducao, usuars)" + ;
                     " VALUES (" + ;
+                    EscaparSQL(fUniqueIds()) + ", " + ;
                     "GETDATE(), " + ;
                     EscaparSQL(LEFT(ALLTRIM(THIS.this_cExpressao), 60)) + ", " + ;
                     EscaparSQL(LEFT(ALLTRIM(THIS.this_cIdioma), 10)) + ", " + ;

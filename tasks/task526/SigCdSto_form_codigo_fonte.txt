@@ -1,0 +1,621 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigCdSto.SCX
+* Data/Hora: 04/09/2026 17:30:59
+* Total de registros: 18
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDSTO
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGCDSTO.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGCDSTO.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Shape3
+  Parent: SIGCDSTO.Pagina.Dados
+  Class: shape
+  BaseClass: shape
+
+Objeto: getCods
+  Parent: SIGCDSTO.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDescs
+  Parent: SIGCDSTO.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: chkEntrega02
+  Parent: SIGCDSTO.Pagina.Dados
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: chkEntregaDo
+  Parent: SIGCDSTO.Pagina.Dados
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: chkEntrega04
+  Parent: SIGCDSTO.Pagina.Dados
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: chkEntrega03
+  Parent: SIGCDSTO.Pagina.Dados
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: Say18
+  Parent: SIGCDSTO.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: chkEntrega06
+  Parent: SIGCDSTO.Pagina.Dados
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: chkEntrega05
+  Parent: SIGCDSTO.Pagina.Dados
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: chkEntregaFe
+  Parent: SIGCDSTO.Pagina.Dados
+  Class: checkbox
+  BaseClass: checkbox
+
+Objeto: chkEntregaSa
+  Parent: SIGCDSTO.Pagina.Dados
+  Class: checkbox
+  BaseClass: checkbox
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDSTO
+------------------------------------------------------------
+  DataSession = 2
+  DoCreate = .T.
+  Caption = "Cadastro de Status de Operação"
+  Name = "SIGCDSTO"
+  Pagina.ErasePage = .T.
+  Pagina.Lista.cntSombra.lblSombra.Name = "lblSombra"
+  Pagina.Lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  Pagina.Lista.cntSombra.Name = "cntSombra"
+  Pagina.Lista.Grade.FontName = "Tahoma"
+  Pagina.Lista.Grade.FontSize = 8
+  Pagina.Lista.Grade.RowHeight = 16
+  Pagina.Lista.Grade.ForeColor = 90,90,90
+  Pagina.Lista.Grade.Name = "Grade"
+  Pagina.Lista.Grupo_op.AutoSize = .T.
+  Pagina.Lista.Grupo_op.Inserir.Top = 5
+  Pagina.Lista.Grupo_op.Inserir.Left = 5
+  Pagina.Lista.Grupo_op.Inserir.Name = "Inserir"
+  Pagina.Lista.Grupo_op.Consultar.Top = 5
+  Pagina.Lista.Grupo_op.Consultar.Left = 80
+  Pagina.Lista.Grupo_op.Consultar.Name = "Consultar"
+  Pagina.Lista.Grupo_op.Alterar.Top = 5
+  Pagina.Lista.Grupo_op.Alterar.Left = 155
+  Pagina.Lista.Grupo_op.Alterar.Name = "Alterar"
+  Pagina.Lista.Grupo_op.Excluir.Top = 5
+  Pagina.Lista.Grupo_op.Excluir.Left = 230
+  Pagina.Lista.Grupo_op.Excluir.Name = "Excluir"
+  Pagina.Lista.Grupo_op.procurar.Top = 5
+  Pagina.Lista.Grupo_op.procurar.Left = 305
+  Pagina.Lista.Grupo_op.procurar.Name = "procurar"
+  Pagina.Lista.Grupo_op.Height = 85
+  Pagina.Lista.Grupo_op.Left = 344
+  Pagina.Lista.Grupo_op.Top = -1
+  Pagina.Lista.Grupo_op.Width = 385
+  Pagina.Lista.Grupo_op.Name = "Grupo_op"
+  Pagina.Lista.Grupo_Saida.SAIR.Top = 5
+  Pagina.Lista.Grupo_Saida.SAIR.Left = 5
+  Pagina.Lista.Grupo_Saida.SAIR.Name = "SAIR"
+  Pagina.Lista.Grupo_Saida.Left = 719
+  Pagina.Lista.Grupo_Saida.Top = -1
+  Pagina.Lista.Grupo_Saida.Name = "Grupo_Saida"
+  Pagina.Lista.cntFiltros.Name = "cntFiltros"
+  Pagina.Lista.Name = "Lista"
+  Pagina.Dados.Grupo_Salva.AutoSize = .T.
+  Pagina.Dados.Grupo_Salva.Salva.Top = 5
+  Pagina.Dados.Grupo_Salva.Salva.Left = 5
+  Pagina.Dados.Grupo_Salva.Salva.Name = "Salva"
+  Pagina.Dados.Grupo_Salva.Cancelar.Top = 5
+  Pagina.Dados.Grupo_Salva.Cancelar.Left = 80
+  Pagina.Dados.Grupo_Salva.Cancelar.Name = "Cancelar"
+  Pagina.Dados.Grupo_Salva.TabIndex = 14
+  Pagina.Dados.Grupo_Salva.ZOrderSet = 1
+  Pagina.Dados.Grupo_Salva.Name = "Grupo_Salva"
+  Pagina.Dados.Name = "Dados"
+  Pagina.Name = "Pagina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDSTO.Pagina.Dados.Say1
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Código :"
+  Left = 216
+  Top = 134
+  TabIndex = 12
+  ForeColor = 90,90,90
+  ZOrderSet = 2
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDSTO.Pagina.Dados.Say2
+------------------------------------------------------------
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Descrição :"
+  Left = 203
+  Top = 160
+  TabIndex = 13
+  ForeColor = 90,90,90
+  ZOrderSet = 3
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDSTO.Pagina.Dados.Shape3
+------------------------------------------------------------
+  Top = 209
+  Left = 180
+  Height = 2
+  Width = 378
+  BackStyle = 0
+  BorderWidth = 2
+  Curvature = 0
+  SpecialEffect = 0
+  Name = "Shape3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDSTO.Pagina.Dados.getCods
+------------------------------------------------------------
+  ControlSource = "crSigCdSts.Cods"
+  Height = 24
+  Left = 258
+  TabIndex = 1
+  Top = 130
+  Width = 31
+  ZOrderSet = 5
+  plprocurar = .T.
+  Name = "getCods"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDSTO.Pagina.Dados.getDescs
+------------------------------------------------------------
+  ControlSource = "crSigCdSts.Descs"
+  Height = 24
+  Left = 258
+  TabIndex = 2
+  Top = 156
+  Width = 220
+  ZOrderSet = 6
+  Name = "getDescs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDSTO.Pagina.Dados.chkEntrega02
+------------------------------------------------------------
+  Top = 215
+  Left = 271
+  Height = 15
+  Width = 86
+  FontName = "Tahoma"
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Segunda-feira"
+  Value = 0
+  TabIndex = 4
+  ForeColor = 90,90,90
+  Name = "chkEntrega02"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDSTO.Pagina.Dados.chkEntregaDo
+------------------------------------------------------------
+  Top = 215
+  Left = 179
+  Height = 15
+  Width = 64
+  FontName = "Tahoma"
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Domingos"
+  Value = 0
+  TabIndex = 3
+  ForeColor = 90,90,90
+  Name = "chkEntregaDo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDSTO.Pagina.Dados.chkEntrega04
+------------------------------------------------------------
+  Top = 215
+  Left = 467
+  Height = 15
+  Width = 78
+  FontName = "Tahoma"
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Quarta-feira"
+  Value = 0
+  TabIndex = 6
+  ForeColor = 90,90,90
+  Name = "chkEntrega04"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDSTO.Pagina.Dados.chkEntrega03
+------------------------------------------------------------
+  Top = 215
+  Left = 377
+  Height = 15
+  Width = 71
+  FontName = "Tahoma"
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Terça-feira"
+  Value = 0
+  TabIndex = 5
+  ForeColor = 90,90,90
+  Name = "chkEntrega03"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDSTO.Pagina.Dados.Say18
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = " Datas Válidas Para Utilização das Operações"
+  Height = 15
+  Left = 180
+  Top = 192
+  Width = 254
+  TabIndex = 11
+  ForeColor = 90,90,90
+  ZOrderSet = 11
+  Name = "Say18"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDSTO.Pagina.Dados.chkEntrega06
+------------------------------------------------------------
+  Top = 235
+  Left = 271
+  Height = 15
+  Width = 72
+  FontName = "Tahoma"
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Sexta-feira"
+  Value = 0
+  TabIndex = 8
+  ForeColor = 90,90,90
+  Name = "chkEntrega06"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDSTO.Pagina.Dados.chkEntrega05
+------------------------------------------------------------
+  Top = 235
+  Left = 179
+  Height = 15
+  Width = 76
+  FontName = "Tahoma"
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Quinta-feira"
+  Value = 0
+  TabIndex = 7
+  ForeColor = 90,90,90
+  Name = "chkEntrega05"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDSTO.Pagina.Dados.chkEntregaFe
+------------------------------------------------------------
+  Top = 235
+  Left = 467
+  Height = 15
+  Width = 59
+  FontName = "Tahoma"
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Feriados"
+  Value = 0
+  TabIndex = 10
+  ForeColor = 90,90,90
+  Name = "chkEntregaFe"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDSTO.Pagina.Dados.chkEntregaSa
+------------------------------------------------------------
+  Top = 235
+  Left = 377
+  Height = 15
+  Width = 59
+  FontName = "Tahoma"
+  FontSize = 8
+  AutoSize = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Sábados"
+  Value = 0
+  TabIndex = 9
+  ForeColor = 90,90,90
+  Name = "chkEntregaSa"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDSTO
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE chkdtvalid
+------------------------------------------------------------
+PROCEDURE chkdtvalid
+Lparameters pTip
+
+Local lcStr, loPag
+
+loPag = ThisForm.Pagina.Dados
+lcStr = CrSigCdSts.DdVals
+
+If (pTip = [SALVAR])
+	lcStr = Str(loPag.chkEntregaDo.Value, 1) + ;
+			Str(loPag.chkEntrega02.Value, 1) + ;
+			Str(loPag.chkEntrega03.Value, 1) + ;
+			Str(loPag.chkEntrega04.Value, 1) + ;
+			Str(loPag.chkEntrega05.Value, 1) + ;
+			Str(loPag.chkEntrega06.Value, 1) + ;
+			Str(loPag.chkEntregaSa.Value, 1) + ;
+			Str(loPag.chkEntregaFe.Value, 1)
+
+	Replace ddVals With lcStr In CrSigCdSts
+Else
+	loPag.chkEntregaDo.Value = Val(Substr(lcStr, 1, 1))
+	loPag.chkEntrega02.Value = Val(Substr(lcStr, 2, 1))
+	loPag.chkEntrega03.Value = Val(Substr(lcStr, 3, 1))
+	loPag.chkEntrega04.Value = Val(Substr(lcStr, 4, 1))
+	loPag.chkEntrega05.Value = Val(Substr(lcStr, 5, 1))
+	loPag.chkEntrega06.Value = Val(Substr(lcStr, 6, 1))
+	loPag.chkEntregaSa.Value = Val(Substr(lcStr, 7, 1))
+	loPag.chkEntregaFe.Value = Val(Substr(lcStr, 8, 1))
+EndIf
+
+loPag.chkEntregaDo.Refresh 
+loPag.chkEntrega02.Refresh 
+loPag.chkEntrega03.Refresh 
+loPag.chkEntrega04.Refresh 
+loPag.chkEntrega05.Refresh 
+loPag.chkEntrega06.Refresh 
+loPag.chkEntregaSa.Refresh 
+loPag.chkEntregaFe.Refresh 
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+With ThisForm
+	.poDataMgr = CreateObject([fSqlConector], .Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		With .poDataMgr
+			.AddCursor([SigCdSts], [Cods], [crSigCdSts], [], ThisForm.Pagina.Lista.Grade)
+			.pfSqlTabela(1).pColuna([Cods],  [], [], [Código],    080, .t.)
+			.pfSqlTabela(1).pColuna([Descs], [], [], [Descrição], 220, .t.)
+		EndWith
+
+		=DoDefault()
+
+		.Pagina.Lista.Grade.Column1.SetFocus
+	Else
+		=Messagebox([Impossível Efetuar Conexão Com o Servidor de Banco de Dados...], 0+48, [CreateObject])
+		Return .f.
+	EndIf
+EndWith
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_procurar
+------------------------------------------------------------
+PROCEDURE msv_procurar
+Local lcBusca
+
+If Not Empty(ThisForm.Pagina.Dados.getCods.Value)
+	ThisForm.poDataMgr.LocateCursor([crSigCdSts], [Cods], ThisForm.Pagina.Dados.getCods.Value)
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Lista.Grupo_op.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Lista.Grupo_op.Click
+Parameters lnOpcao
+
+If Not DoDefault(lnOpcao)
+	ThisForm.mAtivaPagina1
+	Return .f.
+EndIf
+
+ThisForm.ChkDtvalid('Leitura')
+Do Case
+	Case InList(ThisForm.pcEscolha, [INSERIR], [PROCURAR])
+		 ThisForm.Pagina.Dados.getCods.SetFocus
+		 
+	Case InList(ThisForm.pcEscolha, [ALTERAR])
+		 ThisForm.Pagina.Dados.getDescs.SetFocus
+
+	Otherwise
+		 ThisForm.Pagina.Dados.Grupo_Salva.Salva.SetFocus
+EndCase
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+If InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])
+	If Empty(ThisForm.Pagina.Dados.getCods.Value)
+		=Messagebox([Código Inválido!!!], 48, [Atenção!!!])
+		ThisForm.Pagina.Dados.getCods.SetFocus
+		Return .f.
+	EndIf
+	If Empty(ThisForm.Pagina.Dados.getDescs.Value)
+		=Messagebox([Descrição Inválida!!!], 48, [Atenção!!!])
+		ThisForm.Pagina.Dados.getDescs.SetFocus
+		Return .f.
+	EndIf
+	If (ThisForm.pcEscolha = [INSERIR])
+		lcQuery = [Select Cods ] + ;
+				    [From SigCdSts ] + ;
+				   [Where Cods = '] + Padr(ThisForm.Pagina.Dados.getCods.Value, 3) + [']
+
+		If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalBus]) < 1)
+			=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalBus 1)])
+			Return .f.
+		EndIf
+		Go Top In LocalBus
+		If Not Eof([LocalBus])
+			=Messagebox([Código Já Cadastrado!!!], 48, [Atenção!!!])
+			ThisForm.Pagina.Dados.getCods.SetFocus
+			Return .f.
+		EndIf
+	EndIf
+	ThisForm.Chkdtvalid([SALVAR])
+EndIf
+=DoDefault()
+ThisForm.mAtivaPagina1
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+=DoDefault()
+
+If ThisForm.plCancelar
+	ThisForm.mAtivapagina1
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDSTO.Pagina.Dados.getCods
+* Classe: fwget (Base: textbox)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return InList(ThisForm.pcEscolha, [INSERIR], [PROCURAR])
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGCDSTO
+RESERVED3 (ClassInfo): nrecno
+*chkdtvalid 
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 7
+================================================================================

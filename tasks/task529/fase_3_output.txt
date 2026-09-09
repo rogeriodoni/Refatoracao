@@ -1,0 +1,19 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**FASE 3/8 conclu├¡da.** Criei `C:\4c\projeto\app\forms\operacionais\FormTbd.prg` com a estrutura base do form.
+
+Resumo do que foi feito:
+
+- **Modelo usado**: `FormFpb.prg`, o form OPERACIONAL modal mais pr├│ximo em arquitetura (grid de edi├º├úo vinculado a um registro pai, aberto via `Init(par_oParentForm, ...)`), j├í que `SIGCDTBD` ├® um popup modal sem PageFrame no legado ÔÇö o PageFrame Page1(Lista)/Page2(Dados) ├® uma decis├úo de arquitetura do sistema novo (PILAR 3), n├úo uma c├│pia do SCX.
+- **DEFINE CLASS FormTbd AS FormBase** com propriedades: `GravaDados`, `AntValue` (nomes espelhando o legado `ThisForm.GravaDados`/`ThisForm.AntValue`), `this_oParentForm`, `this_cDopes` (FK para `SigCdOpe.dopes`), `this_oBusinessObject`, `this_cModoAtual`, `this_lRedirigindo`.
+- **Propriedades visuais** fi├®is ao `layout.json` original: `Width=800`, `Height=400`, modal (`TitleBar=0`, `ControlBox=.F.`, `WindowType=1`, `BorderStyle=2`), `Caption="Tabelas de Desconto"`, `DataSession=2`.
+- **Init(par_oParentForm, par_cDopes)**: cria `TbdBO`, desabilita o form pai, chama `DODEFAULT()` (que aciona `FormBase.Init()` ÔåÆ `InicializarForm()`).
+- **InicializarForm()**: monta `ConfigurarPageFrame()` + `ConfigurarContainersBase()`, ativa Page1 e chama `TornarControlesVisiveis`.
+- **ConfigurarPageFrame()**: PageFrame com Top=-29 compensado, Tabs ocultas, Page1="Lista"/Page2="Dados".
+- **ConfigurarContainersBase()**: `cnt_4c_Cabecalho` (com labels sombra/t├¡tulo) e `cnt_4c_Botoes` vazio em Page1 (posicionado ├á direita, refletindo `cmdInserir`/`cmdExcluir` do legado em Left=500/575 num form de 800px); `cnt_4c_BotoesAcao` vazio em Page2 (refletindo `cmdSair`/`Cancela` em Left=650/725).
+- **TornarControlesVisiveis** e **Destroy** (reabilita o pai, libera `cursor_4c_Dados`, chama `DODEFAULT()`).
+
+Ainda **n├úo** inclu├¡ grid, bot├Áes, TextBoxes ou eventos ÔÇö isso fica para as Fases 4ÔÇô8, conforme o escopo desta fase.

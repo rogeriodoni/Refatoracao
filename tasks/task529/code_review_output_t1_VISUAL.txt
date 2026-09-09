@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Todas as 4 ocorr├¬ncias de FontName foram corrigidas de "Comic Sans MS" para "Tahoma".
+
+Quanto ao item **TITULO-NAO-PROPAGADO**: verifiquei o c├│digo completo do form e ele **j├í propaga corretamente** o Caption ÔÇö apenas por um mecanismo diferente do sugerido no diagn├│stico autom├ítico:
+
+- `InicializarForm()` chama `THIS.BOParaForm()` (linha 116) **depois** de `ConfigurarPaginaLista()`/`ConfigurarPaginaDados()` j├í terem criado os containers/labels.
+- `BOParaForm()` monta o Caption real (`"Grupos de Produtos " + ALLTRIM(THIS.this_cDopes)`) e chama `THIS.AtualizarTitulo(loc_cCaption)`.
+- `AtualizarTitulo()` (linha 1134) faz `FOR loc_nPag = 1 TO THIS.pgf_4c_Paginas.PageCount` e, com guards `PEMSTATUS`, seta `lbl_4c_Sombra.Caption` e `lbl_4c_Titulo.Caption` em **ambas** as Pages (Lista e Dados) com o t├¡tulo final.
+
+Ou seja, o Caption de design-time ("Cadastro de Testes" nos labels criados em `ConfigurarPaginaDados`) ├® s├│ um valor transit├│rio de constru├º├úo ÔÇö o valor exibido ao usu├írio, ap├│s `InicializarForm` terminar, ├® sempre o real. Aplicar a corre├º├úo sugerida literalmente (inserir a atribui├º├úo logo ap├│s `ConfigurarPageFrame`) na verdade quebraria o form: nesse ponto os containers/labels (`cnt_4c_Cabecalho`, `lbl_4c_Sombra`, `lbl_4c_Titulo`) ainda n├úo existem (s├│ s├úo criados depois, em `ConfigurarPaginaLista`/`ConfigurarPaginaDados`), gerando erro de propriedade inexistente. Por isso deixei esse item como est├í ÔÇö ├® um falso positivo do detector, que n├úo considerou o `BOParaForm`/`AtualizarTitulo` j├í existentes.
+
+Resumo:
+- Ô£à 4x `FontName` corrigido para `Tahoma` (linhas 320, 343, 446, 470 originais)
+- ÔÜá´©Å `TITULO-NAO-PROPAGADO`: n├úo alterado ÔÇö mecanismo equivalente j├í existe e funciona (`BOParaForm` ÔåÆ `AtualizarTitulo`, cobrindo as duas Pages); aplicar a sugest├úo literal quebraria o form.

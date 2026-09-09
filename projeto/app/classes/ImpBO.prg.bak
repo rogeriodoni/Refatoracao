@@ -218,7 +218,7 @@ DEFINE CLASS ImpBO AS BusinessBase
                 " expds, expas, barcmds, fontes, fonte2s, fontemp1s," + ;
                 " nlivl1s, nclvl1s, nlivext1s, nclvext1s, nlivext2s, nclvext2s," + ;
                 " nlinom1s, nclnom1s, nlicid1s, nclcid1s," + ;
-                " nlidia1s, ncldia1s, nlimes1s, nclmes1s, nliano1s, nclano1s)" + ;
+                " nlidia1s, ncldia1s, nlimes1s, nclmes1s, nliano1s, nclano1s, tpbarra)" + ;
                 " VALUES (" + ;
                 EscaparSQL(THIS.this_cImpres) + ", " + ;
                 EscaparSQL(loc_cChave) + ", " + ;
@@ -258,7 +258,8 @@ DEFINE CLASS ImpBO AS BusinessBase
                 FormatarNumeroSQL(THIS.this_nNlimes1s,  0) + ", " + ;
                 FormatarNumeroSQL(THIS.this_nNclmes1s,  0) + ", " + ;
                 FormatarNumeroSQL(THIS.this_nNliano1s,  0) + ", " + ;
-                FormatarNumeroSQL(THIS.this_nNclano1s,  0) + ")"
+                FormatarNumeroSQL(THIS.this_nNclano1s,  0) + ", " + ;
+                FormatarNumeroSQL(0, 0) + ")"   && tpbarra: NOT NULL sem property no BO (Erro151)
 
             loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL)
 
@@ -399,27 +400,13 @@ DEFINE CLASS ImpBO AS BusinessBase
                 loc_cSQL = loc_cSQL + " ORDER BY impres"
 
                 IF USED("cursor_4c_Dados")
-                    loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_DadosTmp")
-                    IF loc_nResultado >= 0
-                        SELECT cursor_4c_Dados
-                        ZAP
-                        SET NULL ON
-                        APPEND FROM DBF("cursor_4c_DadosTmp")
-                        SET NULL OFF
-                        IF USED("cursor_4c_DadosTmp")
-                            USE IN cursor_4c_DadosTmp
-                        ENDIF
-                        loc_lSucesso = .T.
-                    ELSE
-                        MostrarErro("Erro ao buscar impressoras:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
-                    ENDIF
+                    USE IN cursor_4c_Dados
+                ENDIF
+                loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Dados")
+                IF loc_nResultado >= 0
+                    loc_lSucesso = .T.
                 ELSE
-                    loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Dados")
-                    IF loc_nResultado >= 0
-                        loc_lSucesso = .T.
-                    ELSE
-                        MostrarErro("Erro ao buscar impressoras:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
-                    ENDIF
+                    MostrarErro("Erro ao buscar impressoras:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
                 ENDIF
             ENDIF
 

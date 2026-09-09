@@ -1,0 +1,12 @@
+﻿Fase 2 conclu├¡da. O `socBO.prg` est├í completo com todos os m├®todos CRUD:
+
+**Adicionado:**
+- `ObterChavePrimaria()` ÔÇö retorna `this_cCodigo` para auditoria
+- `CarregarDoCursor()` ÔÇö mapeia `Cods`/`Descs` do cursor com `SELECT (alias)` obrigat├│rio antes
+- `ValidarDados()` ÔÇö valida c├│digo n├úo vazio, unicidade (apenas no INSERT), descri├º├úo n├úo vazia ÔÇö mensagens fieis ao legado ("C├│digo Inv├ílido!!!", "C├│digo J├í Cadastrado!!!", "Descri├º├úo Inv├ílida!!!")
+- `VerificarCodigoExistente()` ÔÇö consulta `SigCdSoc` com `PADR(codigo, 3)` para garantir padding correto
+- `Inserir()` ÔÇö INSERT com apenas `Cods` e `Descs` (o campo `cIdChaves` era interno do framework Fortyus, n├úo existe no novo sistema)
+- `Atualizar()` ÔÇö UPDATE `Descs` WHERE `Cods`
+- `ExecutarExclusao()` ÔÇö DELETE WHERE `Cods` (sem verifica├º├úo de depend├¬ncias ÔÇö o original tamb├®m n├úo verificava)
+- `Buscar()` ÔÇö SELECT com filtro opcional + fallback para `gb_4c_ValidandoUI`
+- `CarregarPorCodigo()` ÔÇö SELECT por PK com `this_lNovoRegistro = .F.` ap├│s carregar

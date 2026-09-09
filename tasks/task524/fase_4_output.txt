@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+The file structure is consistent ÔÇö all `ADDOBJECT`/`WITH`/`ENDWITH`/`ENDPROC` pairs balance, and `CarregarLista()` is now called unconditionally in `InicializarForm()` since it's fully implemented (no more `PEMSTATUS` guard needed).
+
+## Resumo ÔÇö Fase 4/8: FormSre.prg
+
+Completei `ConfigurarPaginaLista()` da Page1 com:
+
+- **Grid `grd_4c_Lista`** (4 colunas: Emp, C├│digo, Descri├º├úo, Tipo N.F. ÔÇö espelhando os `pColuna` do `fSqlConector` legado), posicionado em Top=117/Left=12/Width=890, padr├úo can├┤nico Verdana/RGB do framework.
+- **`cnt_4c_Botoes`** com 5 bot├Áes CRUD (Incluir/Visualizar/Alterar/Excluir/Buscar) no padr├úo can├┤nico (Left=542, cada bot├úo 75├ù75 com ├¡cone+caption).
+- **`cnt_4c_Saida`** com `cmd_4c_Encerrar` no padr├úo can├┤nico da regra #10 do CLAUDE.md (Left=917, Width=90, Caption="Encerrar").
+- **`CarregarLista()`** completo: busca via `SreBO.Buscar("")`, vincula `RecordSource`/`ControlSource`, redefine `Header1.Caption` (evitando o bug de headers perdidos) e chama `FormatarGridLista()`.
+- **`FormatarGridLista()`** e **`AlternarPagina(par_nPagina)`** implementados por completo, seguindo o padr├úo can├┤nico do FormCargo.
+
+N├úo inclu├¡ ainda `BINDEVENT` dos cliques nem os m├®todos `Btn*Click` ÔÇö isso ├® escopo da Fase 7/8 (Eventos), conforme `PROCESSAMENTO_MULTI_FASE.md`. Tamb├®m corrigi coment├írios obsoletos que ainda referenciavam "Fase 4" como pend├¬ncia e removi a guarda `PEMSTATUS` redundante em `InicializarForm()` j├í que `CarregarLista()` agora existe.

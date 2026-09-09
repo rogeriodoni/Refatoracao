@@ -372,7 +372,7 @@ DEFINE CLASS FormCVE AS FormBase
                     .Height    = 15
                     .FontName  = "Tahoma"
                     .FontSize  = 8
-                    .ForeColor = RGB(255, 255, 255)
+                    .ForeColor = RGB(90, 90, 90)
                     .BackStyle = 0
                     .Visible   = .T.
                 ENDWITH
@@ -399,7 +399,7 @@ DEFINE CLASS FormCVE AS FormBase
                     .Height    = 15
                     .FontName  = "Tahoma"
                     .FontSize  = 8
-                    .ForeColor = RGB(255, 255, 255)
+                    .ForeColor = RGB(90, 90, 90)
                     .BackStyle = 0
                     .Visible   = .T.
                 ENDWITH
@@ -811,7 +811,7 @@ DEFINE CLASS FormCVE AS FormBase
                 .Height    = 15
                 .FontName  = "Tahoma"
                 .FontSize  = 8
-                .ForeColor = RGB(255, 255, 255)
+                .ForeColor = RGB(90, 90, 90)
                 .BackStyle = 0
                 .AutoSize  = .F.
                 .Visible   = .T.
@@ -845,7 +845,7 @@ DEFINE CLASS FormCVE AS FormBase
                 .Height    = 15
                 .FontName  = "Tahoma"
                 .FontSize  = 8
-                .ForeColor = RGB(255, 255, 255)
+                .ForeColor = RGB(90, 90, 90)
                 .BackStyle = 0
                 .AutoSize  = .F.
                 .Visible   = .T.
@@ -876,7 +876,7 @@ DEFINE CLASS FormCVE AS FormBase
                 .Height    = 15
                 .FontName  = "Tahoma"
                 .FontSize  = 8
-                .ForeColor = RGB(255, 255, 255)
+                .ForeColor = RGB(90, 90, 90)
                 .BackStyle = 0
                 .Visible   = .T.
             ENDWITH
@@ -906,7 +906,7 @@ DEFINE CLASS FormCVE AS FormBase
                 .Height    = 15
                 .FontName  = "Tahoma"
                 .FontSize  = 8
-                .ForeColor = RGB(255, 255, 255)
+                .ForeColor = RGB(90, 90, 90)
                 .BackStyle = 0
                 .AutoSize  = .F.
                 .Visible   = .T.
@@ -939,7 +939,7 @@ DEFINE CLASS FormCVE AS FormBase
                 .Height    = 15
                 .FontName  = "Tahoma"
                 .FontSize  = 8
-                .ForeColor = RGB(255, 255, 255)
+                .ForeColor = RGB(90, 90, 90)
                 .BackStyle = 0
                 .Visible   = .T.
             ENDWITH
@@ -954,7 +954,7 @@ DEFINE CLASS FormCVE AS FormBase
                 .Height    = 15
                 .FontName  = "Tahoma"
                 .FontSize  = 8
-                .ForeColor = RGB(255, 255, 255)
+                .ForeColor = RGB(90, 90, 90)
                 .BackStyle = 0
                 .AutoSize  = .F.
                 .Visible   = .T.
@@ -988,7 +988,7 @@ DEFINE CLASS FormCVE AS FormBase
                 .Height    = 15
                 .FontName  = "Tahoma"
                 .FontSize  = 8
-                .ForeColor = RGB(255, 255, 255)
+                .ForeColor = RGB(90, 90, 90)
                 .BackStyle = 0
                 .AutoSize  = .F.
                 .Visible   = .T.
@@ -1017,7 +1017,7 @@ DEFINE CLASS FormCVE AS FormBase
                 .Height    = 15
                 .FontName  = "Tahoma"
                 .FontSize  = 8
-                .ForeColor = RGB(255, 255, 255)
+                .ForeColor = RGB(90, 90, 90)
                 .BackStyle = 0
                 .Visible   = .T.
             ENDWITH
@@ -1032,7 +1032,7 @@ DEFINE CLASS FormCVE AS FormBase
                 .Height    = 15
                 .FontName  = "Tahoma"
                 .FontSize  = 8
-                .ForeColor = RGB(255, 255, 255)
+                .ForeColor = RGB(90, 90, 90)
                 .BackStyle = 0
                 .AutoSize  = .F.
                 .Visible   = .T.
@@ -1061,7 +1061,7 @@ DEFINE CLASS FormCVE AS FormBase
                 .Height    = 15
                 .FontName  = "Tahoma"
                 .FontSize  = 8
-                .ForeColor = RGB(255, 255, 255)
+                .ForeColor = RGB(90, 90, 90)
                 .BackStyle = 0
                 .AutoSize  = .F.
                 .Visible   = .T.

@@ -1,0 +1,19 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+I've added the four required event handlers to `C:\4c\projeto\app\forms\cadastros\FormTAN.prg` (Fase 7/8):
+
+- **`BtnIncluirClick()`** ÔÇö chama `NovoRegistro()` no BO, limpa campos, entra em modo `INCLUIR`, habilita campos, ajusta bot├Áes, vai para Page2 e foca `txt_4c_Codigo` (replica o `Get_Cod.SetFocus` do legado para `pcEscolha='INSERIR'`).
+- **`BtnVisualizarClick()`** ÔÇö valida sele├º├úo no grid, carrega pelo c├│digo (num├®rico, coluna `codigos`), preenche formul├írio via `BOParaForm()`, modo `VISUALIZAR` com campos somente leitura, foca o bot├úo Confirmar (equivalente ao `Salva.SetFocus` do caso "Other" do legado).
+- **`BtnAlterarClick()`** ÔÇö valida sele├º├úo, carrega registro, chama `EditarRegistro()` no BO, preenche form, modo `ALTERAR`, campos habilitados, foca `txt_4c_Descricao` (replica `Get_Desc.SetFocus` para `pcEscolha='ALTERAR'`).
+- **`BtnExcluirClick()`** ÔÇö valida sele├º├úo, carrega registro, confirma com `MsgConfirma()` (retorno l├│gico, sem compara├º├úo num├®rica), chama `THIS.this_oBusinessObject.Excluir()` (p├║blico, nunca `ExecutarExclusao()` direto) e recarrega a lista.
+
+Pontos observados das regras do projeto:
+- `RETURN` s├│ fora de `TRY/CATCH`; guardas de sele├º├úo vazia ficam antes do `TRY`.
+- Todos os m├®todos s├úo `PUBLIC` (sem `PROTECTED`) para funcionar com os `BINDEVENT` j├í registrados em `ConfigurarPaginaLista()`.
+- `CATCH` sempre chama `MsgErro` com mensagem + procedure.
+- Leitura do c├│digo feita como num├®rico direto (`cursor_4c_Dados.codigos`), j├í que `codigos` ├® `numeric(2,0)` ÔÇö sem `ALLTRIM` indevido.
+
+**Nota de escopo**: esses quatro m├®todos referenciam `LimparCampos()`, `HabilitarCampos()`, `AjustarBotoesPorModo()` e `BOParaForm()`, que ainda n├úo existem no arquivo ÔÇö pelo plano das 8 fases, eles ser├úo implementados na Fase 8 (campos auxiliares/Salvar/Cancelar/Buscar/Encerrar). Isso ├® esperado no fluxo multi-fase (VFP resolve m├®todos em runtime), mas o form s├│ ficar├í funcional de ponta a ponta ap├│s a Fase 8.

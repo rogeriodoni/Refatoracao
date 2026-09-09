@@ -690,6 +690,7 @@ DEFINE CLASS FormSIGREEQR AS FormBase
 
         *-- Column1: CheckBox para marcar/desmarcar grupos e contas
         loc_oGrd.Column1.AddObject("Check1", "CheckBox")
+        THIS.BindToggleTgGrade1(THIS.pgf_4c_Paginas.Page1.grd_4c_Grade.Column1.Check1)
         loc_oGrd.Column1.Check1.Caption  = ""
         loc_oGrd.Column1.CurrentControl  = "Check1"
         loc_oGrd.Column1.ControlSource   = "Selecao.marcas"
@@ -1709,4 +1710,52 @@ DEFINE CLASS FormSIGREEQR AS FormBase
         DODEFAULT()
     ENDPROC
 
+
+    *==========================================================================
+    * Toggle do CheckBox Check1 - grd_4c_Grade.Column1 (Selecao.marcas)
+    *
+    * CheckBox em coluna de Grid NAO alterna pelo binding nativo: o legado
+    * suprime o toggle padrao (NODEFAULT em Click/MouseDown) e alterna o valor
+    * por codigo no MouseUp/KeyPress, com REPLACE no cursor + Refresh do grid.
+    * Sem estes handlers o CheckBox renderiza e recebe foco, mas clicar ou
+    * teclar Espaco/Enter nao muda nada. Pattern #185 / Erro146 (2026-09-04).
+    * Ref canonico: Formsigredtv.prg (grd_4c_Emps) e Formacg.prg.
+    *==========================================================================
+    PROTECTED PROCEDURE BindToggleTgGrade1(par_oChk)
+        BINDEVENT(par_oChk, "KeyPress",  THIS, "TgGrade1KeyPress")
+        BINDEVENT(par_oChk, "MouseUp",   THIS, "TgGrade1MouseUp")
+        BINDEVENT(par_oChk, "MouseDown", THIS, "TgGrade1MouseDown")
+        BINDEVENT(par_oChk, "Click",     THIS, "TgGrade1Click")
+    ENDPROC
+
+    PROCEDURE TgGrade1KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF !INLIST(par_nKeyCode, 13, 32)
+            RETURN
+        ENDIF
+        *-- NODEFAULT sempre que a tecla for tratada: suprime o toggle nativo
+        NODEFAULT
+        IF !USED("Selecao") OR EOF("Selecao")
+            RETURN
+        ENDIF
+        *-- Campo pode ser LOGICO (legado) ou NUMERICO (CASE WHEN ... 1 ELSE 0)
+        IF VARTYPE(Selecao.marcas) == "L"
+            REPLACE Selecao.marcas WITH !Selecao.marcas
+        ELSE
+            REPLACE Selecao.marcas WITH IIF(Selecao.marcas = 0, 1, 0)
+        ENDIF
+        THIS.pgf_4c_Paginas.Page1.grd_4c_Grade.Refresh()
+    ENDPROC
+
+    PROCEDURE TgGrade1MouseUp(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+        THIS.TgGrade1KeyPress(13, 0)
+        NODEFAULT
+    ENDPROC
+
+    PROCEDURE TgGrade1MouseDown(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+        NODEFAULT
+    ENDPROC
+
+    PROCEDURE TgGrade1Click()
+        NODEFAULT
+    ENDPROC
 ENDDEFINE

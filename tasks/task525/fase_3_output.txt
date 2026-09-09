@@ -1,0 +1,16 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+All balanced. FormSRV.prg (Fase 3/8) is complete:
+
+- **DEFINE CLASS FormSRV AS FormBase** with canonical visual properties (Width=1000, Height=600) plus `this_oBusinessObject`, `this_cModoAtual`, and `this_cTipoServico` (preserves the legacy Sa├¡das/Entradas dual-context via `SigCdSrv.cTipos`, mapped to `SRVBO.this_cTipo`)
+- **Init()** ÔÇö pure `RETURN DODEFAULT()` (avoids the double-InicializarForm bug)
+- **InicializarForm()** ÔÇö creates `SRVBO`, propagates tipo/Caption, calls `ConfigurarPageFrame()`, sets modo/p├ígina inicial
+- **ConfigurarPageFrame()** ÔÇö PageFrame with Page1 (Lista) / Page2 (Dados), Top=-29 compensation, canonical fundo_cad_1003.jpg
+- **ConfigurarPaginaLista()** / **ConfigurarPaginaDados()** ÔÇö create the three empty containers requested (`cnt_4c_Cabecalho`, `cnt_4c_Botoes` on Page1; `cnt_4c_BotoesAcao` on Page2) at canonical framework coordinates, no grid/buttons/textboxes yet
+- **TornarControlesVisiveis()** helper (needed by the Configurar* methods)
+- **Destroy()** ÔÇö releases BO and closes `cursor_4c_Dados`/`cursor_4c_Produtos` if open
+
+No stubs/TODOs; everything present is fully functional for this phase's scope. Bracket/block balance verified (DEFINE CLASS/ENDDEFINE, PROCEDURE/ENDPROC, WITH/ENDWITH, FOR/ENDFOR, TRY/ENDTRY, IF/ENDIF all matched). Grid, CRUD buttons, TextBoxes, lookups, and events are intentionally deferred to Fases 4ÔÇô8 as instructed.

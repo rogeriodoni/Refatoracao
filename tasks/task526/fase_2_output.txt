@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+O `StoBO.prg` est├í completo. Resumo do que foi adicionado na Fase 2/8:
+
+- **`ObterChavePrimaria()`** ÔÇö retorna `cods` para auditoria
+- **`CarregarDoCursor()`** ÔÇö mapeia `cods`/`descs`/`ddvals` com `SELECT (par_cAliasCursor)` antes de acessar campos, sincronizando as 8 flags booleanas de dias
+- **`SincronizarDiasDoValor()` / `MontarDiasValidos()`** ÔÇö decomp├Áem/recomp├Áem a string `ddvals` (8 posi├º├Áes: DomingoÔåÆFeriado) nas propriedades booleanas individuais, reproduzindo a l├│gica exata do `Valid(pTip)` legado (`comportamento.json`)
+- **`Inserir()`** ÔÇö INSERT completo com `RegistrarAuditoria("INSERT")`
+- **`Atualizar()`** ÔÇö UPDATE completo com `RegistrarAuditoria("UPDATE")`
+- **`ExecutarExclusao()`** ÔÇö DELETE com `RegistrarAuditoria("DELETE")`
+- **`ValidarDados()` + `VerificarCodigoExistente()`** ÔÇö reproduz a valida├º├úo do legado (c├│digo/descri├º├úo obrigat├│rios, duplicidade na inclus├úo)
+- **`Buscar()` / `CarregarPorCodigo()`** ÔÇö adicionados tamb├®m, pois nenhuma das fases 3-8 (todas focadas no Form) volta a tocar o BO, e o Form (Fase 3+) depende desses m├®todos para funcionar
+
+Todos os `RETURN` ficam fora de `TRY/CATCH` (regra cr├¡tica do projeto), `CATCH` sempre chama `MostrarErro`, e nomes de tabela/colunas (`SigCdSts`, `cods`, `descs`, `ddvals`) foram confirmados contra `docs/schema.sql`.

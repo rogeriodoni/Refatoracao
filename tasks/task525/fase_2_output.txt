@@ -1,0 +1,22 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+The file looks structurally complete and balanced (every `PROCEDURE`/`FUNCTION` has a matching `ENDPROC`/`ENDFUNC`, single `ENDDEFINE`). Let me verify there's no stray syntax issue by checking paren/quote balance isn't something I can fully verify statically, but the SQL column/value lists were cross-checked 1:1 against the 66 NOT NULL columns in `SigCdSrv` from `schema.sql`.
+
+## Resumo da Fase 2/8
+
+Completei **`C:\4c\projeto\app\classes\SRVBO.prg`** adicionando ao BO j├í existente (Fase 1):
+
+- **`ObterChavePrimaria()`** ÔÇö retorna `this_cCidChaves` (PK real da tabela)
+- **`LimparDados()`** ÔÇö reseta as 60+ propriedades `this_*` e recria `cursor_4c_Produtos`
+- **`Buscar(par_cFiltro)`** ÔÇö lista servi├ºos filtrados por `ctipos = this_cTipo` (Entradas/Sa├¡das) + filtro opcional por c├│digo/descri├º├úo
+- **`CarregarPorCodigo(par_cCodigo)`** ÔÇö SELECT completo (todas as 66 colunas) + carrega produtos relacionados
+- **`CarregarDoCursor(par_cAliasCursor)`** ÔÇö mapeia as 66 colunas do cursor para as propriedades `this_*`, com convers├úo l├│gicoÔåönum├®rico para os campos "Mensal"/"Lan├ºamento Financeiro" (armazenados como `numeric(1,0)` no banco)
+- **`Inserir()`** ÔÇö INSERT completo com todas as 66 colunas, gera `cidchaves` via `fUniqueIds()` se vazio, chama `RegistrarAuditoria("INSERT")` e persiste produtos (`SalvarProdutos`)
+- **`Atualizar()`** ÔÇö UPDATE completo (todas as colunas exceto chave/c├│digo/tipo), chama `RegistrarAuditoria("UPDATE")` e `SalvarProdutos`
+- **`ExecutarExclusao()`** ÔÇö apaga primeiro `SigSeRvp` (produtos) depois `SigCdSrv`, com `RegistrarAuditoria("DELETE")`
+- **`CarregarProdutos()` / `SalvarProdutos()`** ÔÇö gerenciam o grid mestre-detalhe de produtos (`SigSeRvp`, com JOIN em `SigCdPro` para exibir descri├º├úo), seguindo o mesmo padr├úo de `DepartamentoBO.SalvarGrupos`
+
+Todos os nomes de tabela/coluna foram conferidos linha a linha contra `docs/schema.sql` (`SigCdSrv` e `SigSeRvp`) ÔÇö nenhum nome inventado. Sem `RETURN` dentro de `TRY/CATCH`, todos os `CATCH` chamam `MsgErro` (nunca silenciosos), e cursores tempor├írios usam `TABLEREVERT` + `USE IN` antes de reabrir, seguindo os padr├Áes j├í estabelecidos em `DepartamentoBO.prg`.

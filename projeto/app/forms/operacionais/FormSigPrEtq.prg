@@ -267,7 +267,7 @@ DEFINE CLASS FormSigPrEtq AS FormBase
 			.FontName  = "Tahoma"
 			.FontSize  = 8
 			.BackStyle = 0
-			.ForeColor = RGB(255, 255, 255)
+			.ForeColor = RGB(90, 90, 90)
 		ENDWITH
 
 		THIS.AddObject("txt_4c_Emps", "TextBox")
@@ -292,7 +292,7 @@ DEFINE CLASS FormSigPrEtq AS FormBase
 			.FontName  = "Tahoma"
 			.FontSize  = 8
 			.BackStyle = 0
-			.ForeColor = RGB(255, 255, 255)
+			.ForeColor = RGB(90, 90, 90)
 		ENDWITH
 
 		THIS.AddObject("lbl_4c_LDopes", "Label")
@@ -306,7 +306,7 @@ DEFINE CLASS FormSigPrEtq AS FormBase
 			.FontName  = "Tahoma"
 			.FontSize  = 8
 			.BackStyle = 0
-			.ForeColor = RGB(255, 255, 255)
+			.ForeColor = RGB(90, 90, 90)
 		ENDWITH
 
 		THIS.AddObject("txt_4c_Dopes", "TextBox")
@@ -331,7 +331,7 @@ DEFINE CLASS FormSigPrEtq AS FormBase
 			.FontName  = "Tahoma"
 			.FontSize  = 8
 			.BackStyle = 0
-			.ForeColor = RGB(255, 255, 255)
+			.ForeColor = RGB(90, 90, 90)
 		ENDWITH
 
 		THIS.AddObject("txt_4c_Numes", "TextBox")
@@ -359,7 +359,7 @@ DEFINE CLASS FormSigPrEtq AS FormBase
 			.FontName  = "Tahoma"
 			.FontSize  = 8
 			.BackStyle = 0
-			.ForeColor = RGB(255, 255, 255)
+			.ForeColor = RGB(90, 90, 90)
 		ENDWITH
 
 		THIS.AddObject("txt_4c_Cpros", "TextBox")
@@ -395,7 +395,7 @@ DEFINE CLASS FormSigPrEtq AS FormBase
 			.FontName  = "Tahoma"
 			.FontSize  = 8
 			.BackStyle = 0
-			.ForeColor = RGB(255, 255, 255)
+			.ForeColor = RGB(90, 90, 90)
 		ENDWITH
 
 		THIS.AddObject("txt_4c_Qtds", "TextBox")
@@ -449,7 +449,7 @@ DEFINE CLASS FormSigPrEtq AS FormBase
 			.FontName  = "Tahoma"
 			.FontSize  = 8
 			.BackStyle = 0
-			.ForeColor = RGB(255, 255, 255)
+			.ForeColor = RGB(90, 90, 90)
 		ENDWITH
 
 		THIS.AddObject("txt_4c_Lpreco", "TextBox")
@@ -484,7 +484,7 @@ DEFINE CLASS FormSigPrEtq AS FormBase
 			.FontName  = "Tahoma"
 			.FontSize  = 8
 			.BackStyle = 0
-			.ForeColor = RGB(255, 255, 255)
+			.ForeColor = RGB(90, 90, 90)
 			.Value     = 0
 		ENDWITH
 
@@ -498,7 +498,7 @@ DEFINE CLASS FormSigPrEtq AS FormBase
 			.FontName  = "Tahoma"
 			.FontSize  = 8
 			.BackStyle = 0
-			.ForeColor = RGB(255, 255, 255)
+			.ForeColor = RGB(90, 90, 90)
 			.Value     = 0
 		ENDWITH
 

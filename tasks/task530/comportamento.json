@@ -1,0 +1,134 @@
+{
+  "resumo": {
+    "totalMetodos": 7,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 5,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": ["fConfigGeral", "fwBuscaExt", "For"]
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDTBI",
+      "evento": "Procedure",
+      "linhas": 4,
+      "codigoOriginal": "=fConfigGeral()\n\n=DoDefault()\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "fConfigGeral",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTBI",
+      "evento": "Init",
+      "linhas": 15,
+      "codigoOriginal": "With ThisForm\n\t.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\t.get_moeda.Value = ''\n\t\t.get_moeda_desc.Value = ''\n\t\t.get_copias.Value = 1\n\n\t\t=DoDefault()\n\tElse\n\t\t=Messagebox('Impossível Efetuar Conexão Com o Servidor de Banco de Dados...', 0+48, 'CreateObject')\n\t\tReturn .f.\n\tEndIf\nEndWith\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_moeda,get_moeda_desc,get_copias",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDTBI.get_moeda_desc",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return Empty(ThisForm.get_moeda.Value)",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_moeda",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTBI.get_moeda_desc",
+      "evento": "Valid",
+      "linhas": 22,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;\n\t\t\t\t\t\t   'crListaRemota', 'DMoes', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('DMoes', '', 'Descrição')\n\t\tloLista.mAddColuna('CMoes', '', 'Cod')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThisForm.get_moeda.Value = crListaRemota.Cmoes\n\tThisForm.get_moeda_desc.Value = crListaRemota.Dmoes\n\tUse In crListaRemota\nElse\n\tThisForm.get_moeda.Value = ''\n\tThisForm.... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_moeda,get_moeda_desc",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTBI.get_moeda",
+      "evento": "Valid",
+      "linhas": 22,
+      "codigoOriginal": "Local loLista\n\nIf Not Empty(This.Value)\n\tloLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;\n\t\t\t\t\t\t   'crListaRemota', 'CMoes', This.Value, 'Seleção', .t.)\n\n\tIf Not loLista.plAchouRegistro\n\t\tloLista.mAddColuna('CMoes', '', 'Cod')\n\t\tloLista.mAddColuna('DMoes', '', 'Descrição')\n\t\tloLista.Show()\n\tEndIf\n\t\n\tThisForm.get_moeda.Value = crListaRemota.Cmoes\n\tThisForm.get_moeda_desc.Value = crListaRemota.Dmoes\n\tUse In crListaRemota\nElse\n\tThisForm.get_moeda.Value = ''\n\tThisForm.... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": true,
+        "temNavegacao": false,
+        "funcoesExternas": "fwBuscaExt",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "get_moeda,get_moeda_desc",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDTBI.cmd_grupo",
+      "evento": "Click",
+      "linhas": 270,
+      "codigoOriginal": "local lnCopias, lcMoedaRef, lnVlCotRef, lcMoeda, lnVlCotacao, lcTabela, lnVlDesconto\nlocal lnConfirma, lnContador, llExisteImpressao, lnVlRef, lnImpress, llImpBol\n\nif empty(thisform.get_moeda.value)\n\tmessagebox('Moeda inválida !',16,'')\n\tthisform.get_moeda.setfocus\n\treturn(.f.)\nendif\n\nif thisform.get_copias.value < 1\n\tmessagebox('Quantidade de cópias inválida !',16,'')\n\tthisform.get_copias.setfocus\n\treturn(.f.)\nendif \n\nlcQuery = [Select * ] + ;\n\t\t    [From SigCdMoe ] + ;\n\t\t   [Order By Cmoes]\n\nI... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "For",
+        "metodosFormChamados": "SqlExecute,CursorQuery",
+        "controlesReferenciados": "get_moeda,get_copias,OpTdz'",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDTBI.cmd_grupo",
+      "evento": "Click",
+      "linhas": 6,
+      "codigoOriginal": "ThisForm.poDataMgr.Release\n\n=DoDefault()\n\nThisForm.Release\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

@@ -1,0 +1,15 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 1/8 conclu├¡da: **`C:\4c\projeto\app\classes\TamBO.prg`** criado com:
+
+- `DEFINE CLASS TamBO AS BusinessBase`
+- As 3 propriedades da tabela `SigCdTam` (schema confirmado em `tasks\task527\analise.json`/instru├º├úo da tarefa):
+  - `this_cCods` (cods char(4), PK)
+  - `this_cDescs` (descs char(20))
+  - `this_nVarias` (varias numeric(6,2))
+- `Init()` chamando `DODEFAULT()` e configurando `this_cTabela = "SigCdTam"` e `this_cCampoChave = "cods"` (nomes corretos de propriedade herdada, conforme regra do CLAUDE.md).
+
+Nenhum outro m├®todo foi inclu├¡do nesta fase (CarregarDoCursor, Inserir, Atualizar, ExecutarExclusao, Buscar, CarregarPorCodigo ficam para a Fase 2), conforme escopo da Fase 1/8.

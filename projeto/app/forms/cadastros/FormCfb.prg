@@ -526,7 +526,7 @@ DEFINE CLASS FormCfb AS FormBase
             .FontName  = "Tahoma"
             .FontSize  = 8
             .FontBold  = .F.
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -587,7 +587,7 @@ DEFINE CLASS FormCfb AS FormBase
             .FontName  = "Tahoma"
             .FontSize  = 8
             .FontBold  = .T.
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -603,7 +603,7 @@ DEFINE CLASS FormCfb AS FormBase
             .Height    = 15
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -631,7 +631,7 @@ DEFINE CLASS FormCfb AS FormBase
             .Height    = 15
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -660,7 +660,7 @@ DEFINE CLASS FormCfb AS FormBase
             .Height    = 15
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -688,7 +688,7 @@ DEFINE CLASS FormCfb AS FormBase
             .Height    = 15
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -717,7 +717,7 @@ DEFINE CLASS FormCfb AS FormBase
             .Height    = 15
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -745,7 +745,7 @@ DEFINE CLASS FormCfb AS FormBase
             .Height    = 15
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -774,7 +774,7 @@ DEFINE CLASS FormCfb AS FormBase
             .Height    = 15
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -802,7 +802,7 @@ DEFINE CLASS FormCfb AS FormBase
             .Height    = 15
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -831,7 +831,7 @@ DEFINE CLASS FormCfb AS FormBase
             .Height    = 15
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -859,7 +859,7 @@ DEFINE CLASS FormCfb AS FormBase
             .Height    = 15
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -904,7 +904,7 @@ DEFINE CLASS FormCfb AS FormBase
             .FontName  = "Tahoma"
             .FontSize  = 8
             .FontBold  = .T.
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -920,7 +920,7 @@ DEFINE CLASS FormCfb AS FormBase
             .Height    = 15
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -948,7 +948,7 @@ DEFINE CLASS FormCfb AS FormBase
             .Height    = 15
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -977,7 +977,7 @@ DEFINE CLASS FormCfb AS FormBase
             .Height    = 15
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -1006,7 +1006,7 @@ DEFINE CLASS FormCfb AS FormBase
             .Height    = 15
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -1052,7 +1052,7 @@ DEFINE CLASS FormCfb AS FormBase
             .FontName  = "Tahoma"
             .FontSize  = 8
             .FontBold  = .T.
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -1068,7 +1068,7 @@ DEFINE CLASS FormCfb AS FormBase
             .Height    = 15
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -1094,7 +1094,7 @@ DEFINE CLASS FormCfb AS FormBase
             .Height    = 15
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -1122,7 +1122,7 @@ DEFINE CLASS FormCfb AS FormBase
             .Height    = 15
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -1148,7 +1148,7 @@ DEFINE CLASS FormCfb AS FormBase
             .Height    = 15
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -1176,7 +1176,7 @@ DEFINE CLASS FormCfb AS FormBase
             .Height    = 15
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -1202,7 +1202,7 @@ DEFINE CLASS FormCfb AS FormBase
             .Height    = 15
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -1230,7 +1230,7 @@ DEFINE CLASS FormCfb AS FormBase
             .Height    = 15
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -1256,7 +1256,7 @@ DEFINE CLASS FormCfb AS FormBase
             .Height    = 15
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -1284,7 +1284,7 @@ DEFINE CLASS FormCfb AS FormBase
             .Height    = 15
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -1310,7 +1310,7 @@ DEFINE CLASS FormCfb AS FormBase
             .Height    = 15
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -1338,7 +1338,7 @@ DEFINE CLASS FormCfb AS FormBase
             .Height    = 15
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -1364,7 +1364,7 @@ DEFINE CLASS FormCfb AS FormBase
             .Height    = 15
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -1392,7 +1392,7 @@ DEFINE CLASS FormCfb AS FormBase
             .Height    = 15
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -1418,7 +1418,7 @@ DEFINE CLASS FormCfb AS FormBase
             .Height    = 15
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -1462,7 +1462,7 @@ DEFINE CLASS FormCfb AS FormBase
             .FontName  = "Tahoma"
             .FontSize  = 8
             .FontBold  = .T.
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -1478,7 +1478,7 @@ DEFINE CLASS FormCfb AS FormBase
             .Height    = 15
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -1506,7 +1506,7 @@ DEFINE CLASS FormCfb AS FormBase
             .Height    = 15
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -1534,7 +1534,7 @@ DEFINE CLASS FormCfb AS FormBase
             .Height    = 15
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -1562,7 +1562,7 @@ DEFINE CLASS FormCfb AS FormBase
             .Height    = 15
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH

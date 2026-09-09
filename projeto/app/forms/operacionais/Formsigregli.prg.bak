@@ -182,7 +182,7 @@ DEFINE CLASS Formsigregli AS FormBase
             THIS.AddObject("cmd_4c_Visualizar", "CommandButton")
             WITH THIS.cmd_4c_Visualizar
                 .Top                = 3
-                .Left               = 374
+                .Left = 80
                 .Height             = 75
                 .Width              = 75
                 .Picture            = gc_4c_CaminhoIcones + "relatorio_video_26.jpg"

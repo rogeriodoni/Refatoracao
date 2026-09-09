@@ -527,7 +527,7 @@ DEFINE CLASS FormFBI AS FormBase
             .Caption   = "N" + CHR(186) + " Fabrica" + CHR(231) + CHR(227) + "o - NFAB. :"
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Alignment = 1
             .AutoSize  = .F.
@@ -559,7 +559,7 @@ DEFINE CLASS FormFBI AS FormBase
             .Caption   = "N" + CHR(186) + " do Caixa - NSEQ. :"
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Alignment = 1
             .AutoSize  = .F.
@@ -592,7 +592,7 @@ DEFINE CLASS FormFBI AS FormBase
             .Caption   = "Contador Reinicio de Opera" + CHR(231) + CHR(227) + "o :"
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Alignment = 1
             .AutoSize  = .F.
@@ -624,7 +624,7 @@ DEFINE CLASS FormFBI AS FormBase
             .Caption   = "Empresa :"
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Alignment = 1
             .AutoSize  = .F.
@@ -658,7 +658,7 @@ DEFINE CLASS FormFBI AS FormBase
             .Caption   = "GT Inicial :"
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Alignment = 1
             .AutoSize  = .F.
@@ -690,7 +690,7 @@ DEFINE CLASS FormFBI AS FormBase
             .Caption   = "GT Atual :"
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Alignment = 1
             .AutoSize  = .F.
@@ -722,7 +722,7 @@ DEFINE CLASS FormFBI AS FormBase
             .Caption   = "Modelo :"
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Alignment = 1
             .AutoSize  = .F.
@@ -756,7 +756,7 @@ DEFINE CLASS FormFBI AS FormBase
             .Caption   = "Numero do Usu" + CHR(225) + "rio do ECF :"
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Alignment = 1
             .AutoSize  = .F.
@@ -791,7 +791,7 @@ DEFINE CLASS FormFBI AS FormBase
             .Caption   = "Tipo do ECF :"
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Alignment = 1
             .AutoSize  = .F.
@@ -823,7 +823,7 @@ DEFINE CLASS FormFBI AS FormBase
             .Caption   = "Vers" + CHR(227) + "o do Sofware B" + CHR(225) + "sico :"
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Alignment = 1
             .AutoSize  = .F.
@@ -855,7 +855,7 @@ DEFINE CLASS FormFBI AS FormBase
             .Caption   = "Data do Sofware B" + CHR(225) + "sico :"
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Alignment = 1
             .AutoSize  = .F.
@@ -887,7 +887,7 @@ DEFINE CLASS FormFBI AS FormBase
             .Caption   = "Hora do Sofware B" + CHR(225) + "sico :"
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Alignment = 1
             .AutoSize  = .F.
@@ -920,7 +920,7 @@ DEFINE CLASS FormFBI AS FormBase
             .Caption   = "Comando de Gera" + CHR(231) + CHR(227) + "o RFD :"
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Alignment = 1
             .AutoSize  = .F.
@@ -952,7 +952,7 @@ DEFINE CLASS FormFBI AS FormBase
             .Caption   = "Coo Inicial (Troca Aplicativo) :"
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Alignment = 1
             .AutoSize  = .F.
@@ -987,7 +987,7 @@ DEFINE CLASS FormFBI AS FormBase
             .Caption   = "Data do Cadastro do ECF :"
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Alignment = 1
             .AutoSize  = .F.
@@ -1021,7 +1021,7 @@ DEFINE CLASS FormFBI AS FormBase
             .Caption   = "Hora do Cadastro do ECF :"
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Alignment = 1
             .AutoSize  = .F.
@@ -1055,7 +1055,7 @@ DEFINE CLASS FormFBI AS FormBase
             .Caption   = "Reinicio de Opera" + CHR(231) + CHR(245) + "es :"
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Alignment = 1
             .AutoSize  = .F.
@@ -1089,7 +1089,7 @@ DEFINE CLASS FormFBI AS FormBase
             .Caption   = "Leitura Mem. Fiscal Autom" + CHR(225) + "tico :"
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Alignment = 1
             .AutoSize  = .F.
@@ -1120,7 +1120,7 @@ DEFINE CLASS FormFBI AS FormBase
             .Caption   = "Gaveta Acoplada :"
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Alignment = 1
             .AutoSize  = .F.
@@ -1151,7 +1151,7 @@ DEFINE CLASS FormFBI AS FormBase
             .Caption   = "Imp. Cheques :"
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Alignment = 1
             .AutoSize  = .F.
@@ -1182,7 +1182,7 @@ DEFINE CLASS FormFBI AS FormBase
             .Caption   = "MFD :"
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Alignment = 1
             .AutoSize  = .F.
@@ -1213,7 +1213,7 @@ DEFINE CLASS FormFBI AS FormBase
             .Caption   = "Inativa :"
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Alignment = 1
             .AutoSize  = .F.
@@ -1244,7 +1244,7 @@ DEFINE CLASS FormFBI AS FormBase
             .Caption   = "Bom Para :"
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Alignment = 1
             .AutoSize  = .F.
@@ -1275,7 +1275,7 @@ DEFINE CLASS FormFBI AS FormBase
             .Caption   = "Nominal :"
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Alignment = 1
             .AutoSize  = .F.
@@ -1306,7 +1306,7 @@ DEFINE CLASS FormFBI AS FormBase
             .Caption   = "Cruzado :"
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Alignment = 1
             .AutoSize  = .F.
@@ -1337,7 +1337,7 @@ DEFINE CLASS FormFBI AS FormBase
             .Caption   = "Pertochek / Check-Pronto :"
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Alignment = 1
             .AutoSize  = .F.
@@ -1368,7 +1368,7 @@ DEFINE CLASS FormFBI AS FormBase
             .Caption   = "Autentica :"
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Alignment = 1
             .AutoSize  = .F.
@@ -1420,7 +1420,7 @@ DEFINE CLASS FormFBI AS FormBase
             .Caption   = "Imprime C" + CHR(243) + "digo de Barras :"
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Alignment = 1
             .AutoSize  = .F.
@@ -1472,7 +1472,7 @@ DEFINE CLASS FormFBI AS FormBase
             .Caption   = "C" + CHR(243) + "digo Nacional do ECF :"
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Alignment = 1
             .AutoSize  = .F.
@@ -1507,7 +1507,7 @@ DEFINE CLASS FormFBI AS FormBase
             .Caption   = "Incid" + CHR(234) + "ncia Desc. ISSQN :"
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Alignment = 1
             .AutoSize  = .F.

@@ -87,12 +87,16 @@ DEFINE CLASS sigprilaBO AS BusinessBase
                 loc_lResultado = .F.
             ENDIF
             loc_cChave = fUniqueIds()
-            loc_cSQL = "INSERT INTO SigPrTam (CIdChaves, Cpros, Percs, Valor)" + ;
+            *-- codtams e pesoms sao NOT NULL em SigPrTam e nao aparecem na tela:
+            *-- gravar o valor do registro em branco, como o legado (Erro151)
+            loc_cSQL = "INSERT INTO SigPrTam (CIdChaves, Cpros, Percs, Valor, CodTams, PesoMs)" + ;
                 " VALUES (" + ;
                 EscaparSQL(loc_cChave) + "," + ;
                 EscaparSQL(THIS.this_cCpros) + "," + ;
                 FormatarNumeroSQL(THIS.this_nPercs, 2) + "," + ;
-                FormatarNumeroSQL(THIS.this_nValor, 5) + ")"
+                FormatarNumeroSQL(THIS.this_nValor, 5) + "," + ;
+                EscaparSQL("") + "," + ;
+                FormatarNumeroSQL(0, 3) + ")"
             IF SQLEXEC(gnConnHandle, loc_cSQL, "") < 1
                 THIS.this_cMensagemErro = "Erro ao inserir em SigPrTam"
                 loc_lResultado = .F.

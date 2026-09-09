@@ -1,0 +1,63 @@
+﻿{
+    "arquivo":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormTbv.prg",
+    "timestamp":  "2026-09-08T23:11:13",
+    "correcoes":  [
+                      {
+                          "Tipo":  "WARN-166-FORMBUSCAAUXILIAR-PATTERN-B",
+                          "Linha":  3178,
+                          "Original":  "loc_oBusca = CREATEOBJECT(\"FormBuscaAuxiliar\", gnConnHandle, ;",
+                          "Corrigido":  "(REVISAR MANUAL — auto-mutate inseguro)",
+                          "Descricao":  "Pattern #166 WARNING: CREATEOBJECT(\u0027FormBuscaAuxiliar\u0027, \u003cargs\u003e) eh Pattern B defeituoso. Refactor para THIS.AbrirLookupCanonico(par_cTabela, par_cCampoCod, par_cCampoDesc, par_cTitulo, par_cValorFiltro, par_oTxtCod, par_oTxtDesc, par_cFiltroExtra) [PREFERIDO — helper em FormBase.prg] OU Pattern A manual [FALLBACK — ver migration-patterns.md #166]. Pattern B defeitos: (1) Init WHERE exato + LIKE prefixo; se ambos 0 rows, FECHA cursor -\u003e picker vazio; (2) DataSession=1 vs pai DataSession=2 -\u003e USED() pos-Show retorna .F. no caller -\u003e selecao perdida; (3) cursor scope isolado. Ref canonico: Formsigrecrf.prg (task066), Formsigrecog.prg (task059 pos-Erro114). Origem: Erro114 (2026-08-13, Formsigrecog — digita \u0027M\u0027 em vendedor+Enter, picker abre vazio pois WHERE codigos=\u0027M\u0027 e LIKE \u0027M%\u0027 ambos 0 rows)."
+                      },
+                      {
+                          "Tipo":  "WARN-166-FORMBUSCAAUXILIAR-PATTERN-B",
+                          "Linha":  3232,
+                          "Original":  "loc_oBusca = CREATEOBJECT(\"FormBuscaAuxiliar\", gnConnHandle, ;",
+                          "Corrigido":  "(REVISAR MANUAL — auto-mutate inseguro)",
+                          "Descricao":  "Pattern #166 WARNING: CREATEOBJECT(\u0027FormBuscaAuxiliar\u0027, \u003cargs\u003e) eh Pattern B defeituoso. Refactor para THIS.AbrirLookupCanonico(par_cTabela, par_cCampoCod, par_cCampoDesc, par_cTitulo, par_cValorFiltro, par_oTxtCod, par_oTxtDesc, par_cFiltroExtra) [PREFERIDO — helper em FormBase.prg] OU Pattern A manual [FALLBACK — ver migration-patterns.md #166]. Pattern B defeitos: (1) Init WHERE exato + LIKE prefixo; se ambos 0 rows, FECHA cursor -\u003e picker vazio; (2) DataSession=1 vs pai DataSession=2 -\u003e USED() pos-Show retorna .F. no caller -\u003e selecao perdida; (3) cursor scope isolado. Ref canonico: Formsigrecrf.prg (task066), Formsigrecog.prg (task059 pos-Erro114). Origem: Erro114 (2026-08-13, Formsigrecog — digita \u0027M\u0027 em vendedor+Enter, picker abre vazio pois WHERE codigos=\u0027M\u0027 e LIKE \u0027M%\u0027 ambos 0 rows)."
+                      },
+                      {
+                          "Tipo":  "WARN-166-FORMBUSCAAUXILIAR-PATTERN-B",
+                          "Linha":  4037,
+                          "Original":  "loc_oBusca = CREATEOBJECT(\"FormBuscaAuxiliar\", gnConnHandle, ;",
+                          "Corrigido":  "(REVISAR MANUAL — auto-mutate inseguro)",
+                          "Descricao":  "Pattern #166 WARNING: CREATEOBJECT(\u0027FormBuscaAuxiliar\u0027, \u003cargs\u003e) eh Pattern B defeituoso. Refactor para THIS.AbrirLookupCanonico(par_cTabela, par_cCampoCod, par_cCampoDesc, par_cTitulo, par_cValorFiltro, par_oTxtCod, par_oTxtDesc, par_cFiltroExtra) [PREFERIDO — helper em FormBase.prg] OU Pattern A manual [FALLBACK — ver migration-patterns.md #166]. Pattern B defeitos: (1) Init WHERE exato + LIKE prefixo; se ambos 0 rows, FECHA cursor -\u003e picker vazio; (2) DataSession=1 vs pai DataSession=2 -\u003e USED() pos-Show retorna .F. no caller -\u003e selecao perdida; (3) cursor scope isolado. Ref canonico: Formsigrecrf.prg (task066), Formsigrecog.prg (task059 pos-Erro114). Origem: Erro114 (2026-08-13, Formsigrecog — digita \u0027M\u0027 em vendedor+Enter, picker abre vazio pois WHERE codigos=\u0027M\u0027 e LIKE \u0027M%\u0027 ambos 0 rows)."
+                      },
+                      {
+                          "Tipo":  "WARN-183-COLUMNCOUNT-EM-CARREGAR",
+                          "Linha":  397,
+                          "Original":  "loc_oGrid.ColumnCount   = 4",
+                          "Corrigido":  "(remover — ColumnCount ja definido em ConfigurarAba*)",
+                          "Descricao":  "Pattern #183 (Erro144): ColumnCount reatribuido em metodo Carregar* (linha 397). Em VFP9, qualquer atribuicao a ColumnCount recria TODOS os objetos de coluna, destruindo controles AddObject (CheckBox/ComboBox). Remover esta linha se ColumnCount ja foi definido em ConfigurarAba*/ConfigurarGrid* durante inicializacao. Adicionar protecao defensiva: PEMSTATUS(grid.ColumnN, \u0027controle\u0027, 5) antes de acessar."
+                      },
+                      {
+                          "Tipo":  "WARN-183-COLUMNCOUNT-EM-CARREGAR",
+                          "Linha":  3355,
+                          "Original":  "loc_oGradec.ColumnCount = 6",
+                          "Corrigido":  "(remover — ColumnCount ja definido em ConfigurarAba*)",
+                          "Descricao":  "Pattern #183 (Erro144): ColumnCount reatribuido em metodo Carregar* (linha 3355). Em VFP9, qualquer atribuicao a ColumnCount recria TODOS os objetos de coluna, destruindo controles AddObject (CheckBox/ComboBox). Remover esta linha se ColumnCount ja foi definido em ConfigurarAba*/ConfigurarGrid* durante inicializacao. Adicionar protecao defensiva: PEMSTATUS(grid.ColumnN, \u0027controle\u0027, 5) antes de acessar."
+                      },
+                      {
+                          "Tipo":  "WARN-184-REBIND-SEM-CURRENTCONTROL",
+                          "Linha":  3313,
+                          "Original":  "loc_oGradei.RecordSource        = \"cursor_4c_Tdt\"",
+                          "Corrigido":  "(adicionar .Sparse = .F. + .CurrentControl = \u0027cbo_4c_GiFaixa\u0027 apos o rebind)",
+                          "Descricao":  "Pattern #184 (Erro145-v2): CarregarConfiguracaoDesconto reatribui RecordSource do grid \u0027grd_4c_gradei\u0027 (coluna editavel, CurrentControl = \u0027cbo_4c_GiFaixa\u0027) sem restaurar .Sparse/.CurrentControl depois. Reatribuir RecordSource reseta Column.Sparse/.CurrentControl/.ReadOnly alem de Width/Header1.Caption (Problema 48 / Pattern #180) — o CheckBox/ComboBox some ou para de aceitar clique. REVISAR MANUAL: apos o bloco de ControlSource/Width adicionar .Sparse = .F. e .CurrentControl = \u0027cbo_4c_GiFaixa\u0027, e reaplicar Habilitar*Grid(\u003cmodo editavel\u003e) DEPOIS de todas as cargas (nunca antes do rebind — seria descartado)."
+                      },
+                      {
+                          "Tipo":  "WARN-184-REBIND-SEM-CURRENTCONTROL",
+                          "Linha":  3323,
+                          "Original":  "loc_oGradeiDesc.RecordSource        = \"cursor_4c_Tdt\"",
+                          "Corrigido":  "(adicionar .Sparse = .F. + .CurrentControl = \u0027cbo_4c_GiFaixa\u0027 apos o rebind)",
+                          "Descricao":  "Pattern #184 (Erro145-v2): CarregarConfiguracaoDesconto reatribui RecordSource do grid \u0027grd_4c_gradei\u0027 (coluna editavel, CurrentControl = \u0027cbo_4c_GiFaixa\u0027) sem restaurar .Sparse/.CurrentControl depois. Reatribuir RecordSource reseta Column.Sparse/.CurrentControl/.ReadOnly alem de Width/Header1.Caption (Problema 48 / Pattern #180) — o CheckBox/ComboBox some ou para de aceitar clique. REVISAR MANUAL: apos o bloco de ControlSource/Width adicionar .Sparse = .F. e .CurrentControl = \u0027cbo_4c_GiFaixa\u0027, e reaplicar Habilitar*Grid(\u003cmodo editavel\u003e) DEPOIS de todas as cargas (nunca antes do rebind — seria descartado)."
+                      },
+                      {
+                          "Tipo":  "WARN-186-ADDOBJECT-DUPLICADO",
+                          "Linha":  1746,
+                          "Original":  "loc_oGradei.Column1.AddObject(\"cbo_4c_GiTipo\", \"ComboBox\")",
+                          "Corrigido":  "(remover — objeto ja adicionado na linha 1483)",
+                          "Descricao":  "Pattern #186-A: AddObject(\"cbo_4c_gitipo\") aparece 2x no MESMO alvo (grd_4c_gradei|1) — linhas 1483, 1746. VFP dispara \"Object cbo_4c_gitipo is already defined\" e o Init do form quebra. REVISAR MANUAL: manter apenas o primeiro AddObject (com a configuracao do controle) e remover os demais. Se as duas copias configuram propriedades diferentes, consolidar num bloco so. Origem: sweep Pattern #185 (2026-09-04, FormLin grd_4c_Fases.Column4 com dois Check1 identicos)."
+                      }
+                  ],
+    "totalCorrecoes":  8
+}

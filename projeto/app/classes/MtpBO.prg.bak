@@ -189,9 +189,10 @@ DEFINE CLASS MtpBO AS BusinessBase
                         MsgErro("J" + CHR(225) + " existe registro com este Tipo e Grupo!", "Erro de valida" + CHR(231) + CHR(227) + "o")
                     ELSE
                         loc_cSQL = "INSERT INTO SigIdPcp" + ;
-                                   " (tipos, grupos, descs," + ;
+                                   " (cidchaves, tipos, grupos, descs," + ;
                                    " limites, fmaxs, valors, moedas, ganhos)" + ;
                                    " VALUES (" + ;
+                                   EscaparSQL(fUniqueIds())                  + ", " + ;
                                    EscaparSQL(THIS.this_cTipos)              + ", " + ;
                                    EscaparSQL(THIS.this_cGrupos)             + ", " + ;
                                    EscaparSQL(THIS.this_cDescs)              + ", " + ;

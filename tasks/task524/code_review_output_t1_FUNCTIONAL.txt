@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Verifiquei os dois handlers apontados no relat├│rio (`ValidarEmpresa` e `ValidarDescricaoEmpresa`, linhas 1211 e 1257 de `FormSre.prg`) e ambos **j├í declaram os par├ómetros corretamente**:
+
+```foxpro
+PROCEDURE ValidarEmpresa(par_nKeyCode, par_nShiftAltCtrl)
+...
+PROCEDURE ValidarDescricaoEmpresa(par_nKeyCode, par_nShiftAltCtrl)
+```
+
+- S├úo `PROCEDURE` sem modificador `PROTECTED`/`HIDDEN` ÔåÆ PUBLIC por default (exig├¬ncia do BINDEVENT, regra #3 do CLAUDE.md).
+- Recebem exatamente `par_nKeyCode, par_nShiftAltCtrl`, que ├® o par de par├ómetros que o VFP passa para o evento `KeyPress` ÔÇö igual ao que os outros handlers de KeyPress do mesmo form (`EmpsKeyPress`, `DEmpsKeyPress`) j├í usam.
+
+N├úo h├í necessidade de altera├º├úo ÔÇö os dois findings [BINDEVENT-PARAMS] j├í est├úo corrigidos no arquivo atual (nenhuma escrita foi feita, pois nada precisava mudar).

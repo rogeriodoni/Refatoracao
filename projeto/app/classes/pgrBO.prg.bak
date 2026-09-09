@@ -117,6 +117,12 @@ DEFINE CLASS PGRBO AS BusinessBase
                            " ORDER BY datarcs DESC, numes DESC"
             ENDIF
 
+            *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
+            IF USED("cursor_4c_Dados")
+                TABLEREVERT(.T., "cursor_4c_Dados")
+                USE IN cursor_4c_Dados
+            ENDIF
+
             loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Dados")
 
             IF loc_nResult >= 0

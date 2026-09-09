@@ -1,0 +1,770 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SIGCDTBI.SCX
+* Data/Hora: 08/09/2026 19:42:33
+* Total de registros: 14
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDTBI
+  Parent: (raiz)
+  Class: form
+  BaseClass: form
+
+Objeto: cntSombra
+  Parent: SIGCDTBI
+  Class: container
+  BaseClass: container
+
+Objeto: lblSombra
+  Parent: SIGCDTBI.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: lblTitulo
+  Parent: SIGCDTBI.cntSombra
+  Class: label
+  BaseClass: label
+
+Objeto: shp_relatorio
+  Parent: SIGCDTBI
+  Class: shape
+  BaseClass: shape
+
+Objeto: lbl_moeda
+  Parent: SIGCDTBI
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_moeda_desc
+  Parent: SIGCDTBI
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: get_moeda
+  Parent: SIGCDTBI
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: lbl_copias
+  Parent: SIGCDTBI
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: get_copias
+  Parent: SIGCDTBI
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: cmd_grupo
+  Parent: SIGCDTBI
+  Class: commandgroup
+  BaseClass: commandgroup
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 220
+  Left = 1
+  Width = 520
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTBI
+------------------------------------------------------------
+  DataSession = 2
+  BorderStyle = 2
+  Height = 197
+  Width = 284
+  DoCreate = .T.
+  AutoCenter = .T.
+  Picture = ..\framework\imagens\new_background.jpg
+  Caption = "Relatório de Tabelas de Referência"
+  ControlBox = .F.
+  Closable = .F.
+  FontName = "Verdana"
+  FontSize = 8
+  MaxButton = .F.
+  MinButton = .F.
+  Movable = .F.
+  ClipControls = .F.
+  TitleBar = 0
+  WindowType = 1
+  ForeColor = 36,84,155
+  Name = "SIGCDTBI"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTBI.cntSombra
+------------------------------------------------------------
+  Top = -1
+  Left = -2
+  Width = 800
+  Height = 80
+  BorderWidth = 0
+  BackColor = 100,100,100
+  Name = "cntSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTBI.cntSombra.lblSombra
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  FontUnderline = .F.
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 40
+  Left = 10
+  Top = 18
+  Width = 769
+  ForeColor = 0,0,0
+  Rotation = 0
+  Name = "lblSombra"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTBI.cntSombra.lblTitulo
+------------------------------------------------------------
+  FontBold = .T.
+  FontName = "Tahoma"
+  FontSize = 18
+  WordWrap = .T.
+  Alignment = 0
+  BackStyle = 0
+  Caption = "Cadastro de Testes"
+  Height = 46
+  Left = 10
+  Top = 17
+  Width = 769
+  ForeColor = 255,255,255
+  ToolTipText = "Título do Relatório"
+  Rotation = 0
+  Name = "lblTitulo"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTBI.shp_relatorio
+------------------------------------------------------------
+  Top = 85
+  Left = 32
+  Height = 63
+  Width = 219
+  BackStyle = 0
+  BorderStyle = 6
+  FillStyle = 1
+  SpecialEffect = 0
+  ColorScheme = 1
+  BackColor = 192,192,192
+  ZOrderSet = 1
+  Name = "shp_relatorio"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTBI.lbl_moeda
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "Moeda  :"
+  Left = 39
+  Top = 99
+  Width = 44
+  TabIndex = 4
+  Name = "lbl_moeda"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTBI.get_moeda_desc
+------------------------------------------------------------
+  Comment = ""
+  FontName = "Courier New"
+  Value = 
+  ControlSource = ""
+  Format = "!"
+  Height = 23
+  Left = 122
+  MaxLength = 15
+  TabIndex = 3
+  Top = 94
+  Width = 115
+  Name = "get_moeda_desc"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTBI.get_moeda
+------------------------------------------------------------
+  Comment = ""
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Courier New"
+  FontSize = 9
+  FontUnderline = .F.
+  Alignment = 0
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "!"
+  Height = 23
+  InputMask = ""
+  Left = 91
+  MaxLength = 3
+  SpecialEffect = 0
+  TabIndex = 2
+  ToolTipText = ""
+  Top = 94
+  Width = 31
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "get_moeda"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTBI.lbl_copias
+------------------------------------------------------------
+  AutoSize = .T.
+  Caption = "Cópias :"
+  Left = 41
+  Top = 122
+  Width = 41
+  TabIndex = 6
+  Name = "lbl_copias"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTBI.get_copias
+------------------------------------------------------------
+  Comment = "1"
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Courier New"
+  FontSize = 9
+  FontUnderline = .F.
+  Alignment = 3
+  BackStyle = 1
+  BorderStyle = 1
+  Value = 
+  ControlSource = ""
+  Format = "99999"
+  Height = 23
+  InputMask = "99999"
+  Left = 91
+  MaxLength = 5
+  SpecialEffect = 0
+  TabIndex = 5
+  ToolTipText = ""
+  Top = 117
+  Width = 45
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "get_copias"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTBI.cmd_grupo
+------------------------------------------------------------
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  Height = 110
+  Left = 123
+  SpecialEffect = 1
+  Top = -2
+  Width = 172
+  TabIndex = 28
+  BorderColor = 100,100,100
+  Themes = .F.
+  Name = "cmd_grupo"
+  Command1.Top = 5
+  Command1.Left = 11
+  Command1.Height = 75
+  Command1.Width = 75
+  Command1.FontBold = .T.
+  Command1.FontItalic = .T.
+  Command1.FontName = "Tahoma"
+  Command1.FontSize = 8
+  Command1.Picture = ..\framework\imagens\cadastro_salvar_60.jpg
+  Command1.Caption = "Confirma"
+  Command1.ForeColor = 90,90,90
+  Command1.BackColor = 255,255,255
+  Command1.Themes = .F.
+  Command1.Name = "cmd_ok"
+  Command2.Top = 5
+  Command2.Left = 86
+  Command2.Height = 75
+  Command2.Width = 75
+  Command2.FontBold = .T.
+  Command2.FontItalic = .T.
+  Command2.FontName = "Tahoma"
+  Command2.FontSize = 8
+  Command2.Picture = ..\framework\imagens\cadastro_sair_60.jpg
+  Command2.Cancel = .T.
+  Command2.Caption = "Encerrar"
+  Command2.ToolTipText = "Encerrar"
+  Command2.ForeColor = 90,90,90
+  Command2.BackColor = 255,255,255
+  Command2.Themes = .F.
+  Command2.Name = "cmd_cancela"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Courier New, 0, 9, 7, 15, 12, 9, 3, 0
+  Tahoma, 3, 8, 6, 13, 11, 32, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDTBI
+* Classe: form (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+With ThisForm
+	.poDataMgr = CreateObject('fSqlConector', ThisForm.Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		.get_moeda.Value = ''
+		.get_moeda_desc.Value = ''
+		.get_copias.Value = 1
+
+		=DoDefault()
+	Else
+		=Messagebox('Impossível Efetuar Conexão Com o Servidor de Banco de Dados...', 0+48, 'CreateObject')
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDTBI.get_moeda_desc
+* Classe: textbox (Base: textbox)
+* Registro: 9
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return Empty(ThisForm.get_moeda.Value)
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;
+						   'crListaRemota', 'DMoes', This.Value, 'Seleção', .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('DMoes', '', 'Descrição')
+		loLista.mAddColuna('CMoes', '', 'Cod')
+		loLista.Show()
+	EndIf
+	
+	ThisForm.get_moeda.Value = crListaRemota.Cmoes
+	ThisForm.get_moeda_desc.Value = crListaRemota.Dmoes
+	Use In crListaRemota
+Else
+	ThisForm.get_moeda.Value = ''
+	ThisForm.get_moeda_desc.Value = ''
+EndIf
+ThisForm.get_moeda.Refresh
+ThisForm.get_moeda_desc.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDTBI.get_moeda
+* Classe: textbox (Base: textbox)
+* Registro: 10
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(This.Value)
+	loLista = CreateObject('fwBuscaExt', ThisForm.poDataMgr.pnIdConn, 'SigCdMoe', ;
+						   'crListaRemota', 'CMoes', This.Value, 'Seleção', .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna('CMoes', '', 'Cod')
+		loLista.mAddColuna('DMoes', '', 'Descrição')
+		loLista.Show()
+	EndIf
+	
+	ThisForm.get_moeda.Value = crListaRemota.Cmoes
+	ThisForm.get_moeda_desc.Value = crListaRemota.Dmoes
+	Use In crListaRemota
+Else
+	ThisForm.get_moeda.Value = ''
+	ThisForm.get_moeda_desc.Value = ''
+EndIf
+ThisForm.get_moeda.Refresh
+ThisForm.get_moeda_desc.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDTBI.cmd_grupo
+* Classe: commandgroup (Base: commandgroup)
+* Registro: 13
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE cmd_ok.Click
+------------------------------------------------------------
+PROCEDURE cmd_ok.Click
+local lnCopias, lcMoedaRef, lnVlCotRef, lcMoeda, lnVlCotacao, lcTabela, lnVlDesconto
+local lnConfirma, lnContador, llExisteImpressao, lnVlRef, lnImpress, llImpBol
+
+if empty(thisform.get_moeda.value)
+	messagebox('Moeda inválida !',16,'')
+	thisform.get_moeda.setfocus
+	return(.f.)
+endif
+
+if thisform.get_copias.value < 1
+	messagebox('Quantidade de cópias inválida !',16,'')
+	thisform.get_copias.setfocus
+	return(.f.)
+endif 
+
+lcQuery = [Select * ] + ;
+		    [From SigCdMoe ] + ;
+		   [Order By Cmoes]
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigCdMoe') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigCdMoe)')
+	Return 0
+EndIf
+Select crSigCdMoe
+Index On cmoes tag cmoes
+Index On dmoes tag dmoes
+
+lcQuery = [Select cmoes,datas,horas,valos,cidchaves,usuars,dtalts ] + ;
+			[From SigCdCot ] + ;
+		   [Order By cmoes,datas,horas,valos,cidchaves,usuars,dtalts ]
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, 'crSigCdCot') < 1)
+	=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (crSigCdCot)')
+	Return 0
+EndIf
+Select crSigCdCot
+Index On cmoes+DTOS(datas) tag CMOEDATA
+
+ThisForm.poDataMgr.CursorQuery('SigOpTdz', 'crSigOpTdz')
+
+lnImpress = aprinters(gaprinters)
+
+llFechaCimp = .f.
+llFechaAcImp = .f.
+llFechaGrupUsua = .f.
+lnEtqImpres = 0
+
+If lnImpress > 0
+
+	* Apanhando Dados de Configuração de Impressoras (SigCdmp)
+	pTip = 1
+	lcSQLCmd = [Select Impres, nTpImpres From SigCdmp ] + ;
+				[Where nTpImpres = ?pTip]
+				
+	lnSQLErr = ThisForm.Podatamgr.SQLExecute(lcSQLCmd, 'Tmp1')
+	If (lnSQLErr < 1)				&& Caso Falhe ao Executar a Instrução SQL Acima
+		=MessageBox('Favor Reinicializar o Processo!!!', 16, 'Falha na Conexão (SigCdmp)')
+		Return .F.
+	EndIf
+
+	llFlags = .f.
+	Select Impres, nTpImpres, llFlags as lMarcas, llFlags as lSituas ;
+	  From Tmp1 ;
+	  Into Cursor csSigCdmp ReadWrite
+
+	Select csSigCdmp
+	Index On Impres Tag Imprime For ( lSituas = .T.)
+	Index On Impres Tag Impres
+	Goto Top In csSigCdmp
+
+	lcSql = [Select b.Impres, b.nTpImpres  From SigSyImp a, SigCdmp b Where a.UsuAcess = ']+Usuar+[' And a.cImps = b.Impres And b.nTpImpres = ?pTip ]+;
+			[Union all ]+;
+			[Select c.Impres, c.nTpImpres  From SigCdAcG a, SigSyImp b, SigCdmp c Where a.Usuarios=']+Usuar+[' ]+;
+			[And a.Grupos = b.GrAcess And b.Cimps = c.Impres And c.nTpImpres = ?pTip]
+
+	If ThisForm.Podatamgr.sqlexecute(lcSql,'CrTmpCimp') <= 0
+		Messagebox('Impossivel Efetuar Conexão com Servidor de Banco de Dados.',(0+48),goSistema.TituloSistema)
+		Return .f.
+	EndIf
+
+	Select CrTmpCimp
+	If Reccount() > 0
+		Select Impres, nTpImpres  From CrTmpCimp Into Cursor LocalcImp Group by Impres, nTpImpres ReadWrite
+		llFlags = .f.
+		Select *, llFlags as lMarcas, llFlags as lSituas ;
+		  From LocalcImp ;
+		  Into Cursor csSigCdmp ReadWrite
+
+		Select csSigCdmp
+		Index On Impres Tag Imprime For ( lSituas = .T.)
+		Index On Impres Tag Impres
+		Goto Top In csSigCdmp
+	Endif
+ 	For I=1 to APrinters(gaPrinters)
+ 		lcImpres = Upper(gaPrinters(I, 1))
+ 		If Seek(lcImpres, 'csSigCdmp', 'Impres')
+	 		lnEtqImpres = lnEtqImpres + 1
+	 		Select csSigCdmp
+	 		Replace lMarcas With .T., ;
+	 				lSituas With .T.
+	 	Endif
+	Next
+	
+	If (lnEtqImpres = 0)
+		Messagebox( 'Nenhuma Impressora de Etiqueta Está Configurada no' + Chr(13) + ;
+					'Painel de Controle.  Contate o Suporte Técnico.', 0+48, ;
+					'Sem Impressora Configurada no Painel de Controle' )
+		Return ''
+	Else
+		If (lnEtqImpres # 1)	&& Se Tiver Mais Que Uma Impressora, Habilita Formulário
+			Do Form SigOpIpb	&& Seleciona Impressora Para Etiqueta / Boletos	
+		EndIf
+	EndIf
+	
+	Select csSigCdmp
+	Locate for lSituas
+
+	Set Printer To Name (AllTrim(CsSigCdmp.impres))
+	set device to printer
+else
+	messagebox('Não Existe Impressora Instalada !',0+48,'')					
+endif
+
+lnConfirma = messagebox('Confirma impressão das tabelas de referência ?',32+4,'')
+if lnConfirma <> 6
+	Set Printer to Default
+	Set Device to Screen
+	return(.f.)
+endif
+
+* criação do arquivo de cabeçalho
+create cursor dbcabecalho (moeda_referencia c(45),cabecalho c(45),linha c(45))
+
+* criação do arquivo de impressão
+create cursor dbrelatorio (detalhe c(45))
+
+* criação do arquivo temporário
+create cursor dbtemp1 (cd_moeda c(4),nm_tabela c(30),vl_cotacao n(9,2))
+
+* inicializa variáveis de campos
+lnCopias   = thisform.get_copias.value
+lcMoedaRef = thisform.get_moeda.value
+lnVlCotRef = fBuscarCambio(ctod(''),date(),space(03),lcMoedaRef)
+
+* loop principal
+llExisteImpressao = .f.
+
+Select crSigCdMoe
+scan for crSigCdMoe.cmoes <> lcMoedaRef and crSigCdMoe.TabRefs 
+	lcMoeda     = crSigCdMoe.cmoes
+	lcMoedaI    = ' ' + crSigCdMoe.cmoes
+	lnVlCotacao = fBuscarCambio(ctod(''),date(),space(03),lcMoeda)
+
+	select crSigOpTdz
+	scan for crSigOpTdz.rel_descs = 1
+		llExisteImpressao = .t.
+		lcTabela     = crSigOpTdz.codigos
+		lnVlDesconto = 1-(crSigOpTdz.descos/100)
+		lnVlRef      = iif(crSigCdMoe.FMults = 'S',round(lnVlCotRef*lnVlCotacao*lnVlDesconto,2),round(lnVlCotacao*lnVlDesconto,2))
+		insert into dbtemp1 (cd_moeda,nm_tabela,vl_cotacao) ;
+				values (lcMoedaI,lcTabela,lnVlRef)
+	endscan
+endscan
+
+if not llExisteImpressao
+	messagebox('Não há tabelas de desconto selecionadas para impressão !',16,'')
+	Thisform.Release
+	Return(.t.)
+EndIf
+
+select a.cd_moeda,a.nm_tabela,str(a.vl_cotacao,9,2) as vl_cotacao;
+	from dbtemp1 a into cursor dbtemp2 Order by a.Cd_Moeda
+
+use dbf('dbtemp2') again alias dbtemp3 in 0 &&order dbtemp2
+select dbtemp3
+
+goto top
+do VFPxtab with 'dbtemporario',.T.
+select dbtemporario
+lnTotalRegistros = afields(lvRelatorio)
+
+scan
+	lcReferencia = padr(&lvRelatorio(1,1).,5)
+	if empty(field(2))
+		lcCampo1 = space(07)
+	else
+		lcCampo1 = padl(alltrim(right(&lvRelatorio(2,1).,7)),7)
+	endif
+	if empty(field(3))
+		lcCampo2 = space(07)
+	else
+		lcCampo2 = padl(alltrim(right(&lvRelatorio(3,1).,7)),7)
+	endif
+	if empty(field(4))
+		lcCampo3 = space(07)
+	else
+		lcCampo3 = padl(alltrim(right(&lvRelatorio(4,1).,7)),7)
+	endif
+	if empty(field(5))
+		lcCampo4 = space(07)
+	else
+		lcCampo4 = padl(alltrim(right(&lvRelatorio(5,1).,7)),7)
+	endif
+	
+	lcDetalhe = lcReferencia+space(2)+lcCampo1+space(2)+lcCampo2+space(2)+lcCampo3+space(2)+lcCampo4
+	insert into dbrelatorio (detalhe) ;
+				values (lcDetalhe)
+endscan
+
+
+* atualiza cursor de cabeçalho
+lcMoeda_Referencia = 'MOEDA: '+alltrim(lcMoedaRef)+' ('+alltrim(str(lnVlCotRef,9,2))+')'
+lcMoeda            = 'REF. '
+dimension lvCabecalho(4)
+lvCabecalho(1) = ''
+lvCabecalho(2) = ''
+lvCabecalho(3) = ''
+lvCabecalho(4) = ''
+lnContador = 1
+select crSigOpTdz
+scan for lnContador < 5 and crSigOpTdz.rel_descs = 1
+	lvCabecalho(lnContador) = padl(alltrim(left(crSigOpTdz.descrs,7)),7)
+	lnContador = lnContador + 1
+endscan
+
+select dbtemporario
+lcCabecalho = lcMoeda+space(2)+lvCabecalho(1)+space(2)+lvCabecalho(2)+space(2)+lvCabecalho(3)+space(2)+lvCabecalho(4)
+lcLinha = replicate('=',5)+space(2)+replicate(iif(empty(field(2)),' ','='),7)+space(2)+replicate(iif(empty(field(3)),' ','='),7)+space(2)+replicate(iif(empty(field(4)),' ','='),7)+space(2)+replicate(iif(empty(field(5)),' ','='),7)
+insert into dbcabecalho (moeda_referencia,cabecalho,linha) ;
+		 values (lcMoeda_Referencia,lcCabecalho,lcLinha)
+
+select dbrelatorio
+
+for lnContador = 1 to lnCopias
+	
+	* impressão da área de cabeçalho
+	??? '' + chr(13) + chr(10)
+	??? replicate('=',40) + chr(13) + chr(10)
+	??? 'TABELAS DE REFERENCIA EM ' + DToC(Date()) + chr(13) + chr(10)
+	??? replicate('=',40) + chr(13) + chr(10)
+	??? dbcabecalho.moeda_referencia + chr(13) + chr(10)
+	??? '' + chr(13) + chr(10)
+	??? dbcabecalho.cabecalho + chr(13) + chr(10)
+	??? dbcabecalho.linha + chr(13) + chr(10)
+	scan
+		??? dbrelatorio.detalhe + chr(13) + chr(10)
+	endscan
+	??? '' + chr(13) + chr(10)
+	??? '' + chr(13) + chr(10)
+	??? replicate('-',40) + chr(13) + chr(10)
+	??? '' + chr(13) + chr(10)
+	??? '' + chr(13) + chr(10)
+	??? '' + chr(13) + chr(10)
+	??? '' + chr(13) + chr(10)
+	??? '' + chr(13) + chr(10)
+	??? '' + chr(13) + chr(10)	
+	??? '' + chr(13) + chr(10)
+	??? '' + chr(13) + chr(10)	
+	
+next lnContador
+
+If !llImpBol
+	??? Chr(12)
+EndIf
+
+set printer to default
+set device to screen
+
+ThisForm.Release
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE cmd_cancela.Click
+------------------------------------------------------------
+PROCEDURE cmd_cancela.Click
+ThisForm.poDataMgr.Release
+
+=DoDefault()
+
+ThisForm.Release
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGCDTBI
+RESERVED3 (ClassInfo): podatamgr
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 7
+================================================================================

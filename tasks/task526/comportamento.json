@@ -1,0 +1,134 @@
+{
+  "resumo": {
+    "totalMetodos": 7,
+    "metodosComSQL": 1,
+    "metodosComValidacao": 4,
+    "totalQueries": 0,
+    "colunasInvalidas": 0,
+    "funcoesExternas": []
+  },
+  "metodos": [
+    {
+      "objeto": "SIGCDSTO",
+      "evento": "Valid",
+      "linhas": 38,
+      "codigoOriginal": "Lparameters pTip\n\nLocal lcStr, loPag\n\nloPag = ThisForm.Pagina.Dados\nlcStr = CrSigCdSts.DdVals\n\nIf (pTip = [SALVAR])\n\tlcStr = Str(loPag.chkEntregaDo.Value, 1) + ;\n\t\t\tStr(loPag.chkEntrega02.Value, 1) + ;\n\t\t\tStr(loPag.chkEntrega03.Value, 1) + ;\n\t\t\tStr(loPag.chkEntrega04.Value, 1) + ;\n\t\t\tStr(loPag.chkEntrega05.Value, 1) + ;\n\t\t\tStr(loPag.chkEntrega06.Value, 1) + ;\n\t\t\tStr(loPag.chkEntregaSa.Value, 1) + ;\n\t\t\tStr(loPag.chkEntregaFe.Value, 1)\n\n\tReplace ddVals With lcStr In CrSigCdSts\nElse\n\tloPag.chkEntre... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "chkEntregaDo,chkEntrega02,chkEntrega03,chkEntrega04,chkEntrega05,chkEntrega06,chkEntregaSa,chkEntregaFe",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSTO",
+      "evento": "Init",
+      "linhas": 19,
+      "codigoOriginal": "With ThisForm\n\t.poDataMgr = CreateObject([fSqlConector], .Name)\n\n\tIf (.poDataMgr.pnIdconn > 0)\n\t\tWith .poDataMgr\n\t\t\t.AddCursor([SigCdSts], [Cods], [crSigCdSts], [], ThisForm.Pagina.Lista.Grade)\n\t\t\t.pfSqlTabela(1).pColuna([Cods],  [], [], [Código],    080, .t.)\n\t\t\t.pfSqlTabela(1).pColuna([Descs], [], [], [Descrição], 220, .t.)\n\t\tEndWith\n\n\t\t=DoDefault()\n\n\t\t.Pagina.Lista.Grade.Column1.SetFocus\n\tElse\n\t\t=Messagebox([Impossível Efetuar Conexão Com o Servidor de Banco de Dados...], 0+48, [CreateObject]... [TRUNCADO]",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDSTO",
+      "evento": "Procedure",
+      "linhas": 6,
+      "codigoOriginal": "Local lcBusca\n\nIf Not Empty(ThisForm.Pagina.Dados.getCods.Value)\n\tThisForm.poDataMgr.LocateCursor([crSigCdSts], [Cods], ThisForm.Pagina.Dados.getCods.Value)\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "LocateCursor",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSTO",
+      "evento": "Click",
+      "linhas": 19,
+      "codigoOriginal": "Parameters lnOpcao\n\nIf Not DoDefault(lnOpcao)\n\tThisForm.mAtivaPagina1\n\tReturn .f.\nEndIf\n\nThisForm.ChkDtvalid('Leitura')\nDo Case\n\tCase InList(ThisForm.pcEscolha, [INSERIR], [PROCURAR])\n\t\t ThisForm.Pagina.Dados.getCods.SetFocus\n\t\t \n\tCase InList(ThisForm.pcEscolha, [ALTERAR])\n\t\t ThisForm.Pagina.Dados.getDescs.SetFocus\n\n\tOtherwise\n\t\t ThisForm.Pagina.Dados.Grupo_Salva.Salva.SetFocus\nEndCase\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "ChkDtvalid",
+        "controlesReferenciados": "ChkDtvalid('Leitura'",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDSTO",
+      "evento": "Click",
+      "linhas": 32,
+      "codigoOriginal": "If InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])\n\tIf Empty(ThisForm.Pagina.Dados.getCods.Value)\n\t\t=Messagebox([Código Inválido!!!], 48, [Atenção!!!])\n\t\tThisForm.Pagina.Dados.getCods.SetFocus\n\t\tReturn .f.\n\tEndIf\n\tIf Empty(ThisForm.Pagina.Dados.getDescs.Value)\n\t\t=Messagebox([Descrição Inválida!!!], 48, [Atenção!!!])\n\t\tThisForm.Pagina.Dados.getDescs.SetFocus\n\t\tReturn .f.\n\tEndIf\n\tIf (ThisForm.pcEscolha = [INSERIR])\n\t\tlcQuery = [Select Cods ] + ;\n\t\t\t\t    [From SigCdSts ] + ;\n\t\t\t\t   [Where Cods = '... [TRUNCADO]",
+      "analise": {
+        "temSQL": true,
+        "temValidacao": true,
+        "temLookup": false,
+        "temNavegacao": true,
+        "funcoesExternas": "",
+        "metodosFormChamados": "SqlExecute,Chkdtvalid",
+        "controlesReferenciados": "Chkdtvalid([SALVAR]",
+        "retornaFalso": true
+      }
+    },
+    {
+      "objeto": "SIGCDSTO",
+      "evento": "Click",
+      "linhas": 6,
+      "codigoOriginal": "=DoDefault()\n\nIf ThisForm.plCancelar\n\tThisForm.mAtivapagina1\nEndIf\n* Fim **************************************************************************************",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    },
+    {
+      "objeto": "SIGCDSTO.Pagina.Dados.getCods",
+      "evento": "When",
+      "linhas": 1,
+      "codigoOriginal": "Return InList(ThisForm.pcEscolha, [INSERIR], [PROCURAR])",
+      "analise": {
+        "temSQL": false,
+        "temValidacao": false,
+        "temLookup": false,
+        "temNavegacao": false,
+        "funcoesExternas": "",
+        "metodosFormChamados": "",
+        "controlesReferenciados": "",
+        "retornaFalso": false
+      }
+    }
+  ],
+  "sqlQueries": [
+
+  ],
+  "validacaoSchema": {
+    "tabelasUsadas": [],
+    "colunasVerificadas": false,
+    "colunasInvalidas": [],
+    "avisos": []
+  },
+  "colunaTipos": {}
+}

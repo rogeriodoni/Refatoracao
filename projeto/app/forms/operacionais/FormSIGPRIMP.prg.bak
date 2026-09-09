@@ -167,7 +167,7 @@ DEFINE CLASS FormSIGPRIMP AS FormBase
         THIS.AddObject("cmd_4c_Visualizar", "CommandButton")
         WITH THIS.cmd_4c_Visualizar
             .Top             = 3
-            .Left            = 775
+            .Left = 80
             .Width           = 75
             .Height          = 75
             .Caption         = "V" + CHR(237) + "deo"

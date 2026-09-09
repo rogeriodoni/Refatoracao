@@ -1,0 +1,30 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Analisei o achado **[SQL-FILTRO-INVENTADO]** apontado para o `TbOBO.prg` e conclu├¡ que ├® **falso positivo** ÔÇö n├úo vou remov├¬-lo. Motivo:
+
+**Evid├¬ncia do schema real** (`docs/schema.sql:16920-16928`):
+```sql
+CREATE TABLE [dbo].[SigOpTdo](
+    [cidchaves] [char](20) NOT NULL,
+    [dopes]     [char](20) NOT NULL,
+    [tabds]     [char](10) NOT NULL,
+ CONSTRAINT [sigoptdo_cidchaves] PRIMARY KEY CLUSTERED ([cidchaves] ASC)
+)
+```
+`cidchaves` ├® a **PRIMARY KEY real** da tabela `SigOpTdo` no banco ÔÇö n├úo foi inventada.
+
+**Evid├¬ncia no pr├│prio c├│digo legado** (linhas de refer├¬ncia do pass):
+```
+Insert Into LocalTabdO (Dopes, CidChaves) Values (crSigCdOpe.Dopes, fUniqueIds())
+Insert Into CrSigOpTdo (Dopes, Tabds, CidChaves) Values ...
+```
+O legado j├í gera `cidchaves` via `fUniqueIds()` e a grava ÔÇö ├® o mecanismo legado de identifica├º├úo ├║nica de linha no cursor de detalhe, exatamente o papel que ela cumpre no `WHERE cidchaves = ...` do BO migrado (`CarregarPorCodigo`, `Atualizar`, `ExecutarExclusao`).
+
+**Por que remover quebraria o sistema**: sem `cidchaves` no `WHERE`, `Atualizar`/`ExecutarExclusao` teriam que localizar a linha por `dopes`+`tabds`, que n├úo ├® garantidamente ├║nico durante edi├º├úo (├® justamente o que `ValidarTabelaDescontoDuplicada`/`ExisteVinculoDuplicado` verificam) ÔÇö isso reproduziria a classe de bug do **Pattern #189-B** (grid sem PK -> exclus├úo/atualiza├º├úo por chave secund├íria, risco de afetar registro errado).
+
+As colunas "LNI, DOPES, TABDS, TOTA" citadas como refer├¬ncia do WHERE original n├úo aparecem em nenhuma tabela deste form (`SigOpTdo`/`SigOpTdz`) nem nos trechos de c├│digo-fonte fornecidos ÔÇö ind├¡cio de que a heur├¡stica do pass comparou com um trecho de refer├¬ncia de outro form/contexto, n├úo com o WHERE real deste c├│digo.
+
+**Conclus├úo**: nenhuma altera├º├úo foi feita. O `WHERE cidchaves = ...` em `TbOBO.prg` ├® correto, corresponde ├á PK real do banco (Pilar 2 ÔÇö schema id├¬ntico) e ├® necess├írio para identifica├º├úo segura de linha. Sinalizando para n├úo reaplicar esse "fix" em sweeps futuros deste form.

@@ -1,0 +1,22 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Revisei os dois problemas apontados contra o c├│digo completo (que a task-description s├│ me mostrou em trechos truncados) e **nenhum dos dois se confirma** ÔÇö ambos j├í est├úo implementados corretamente no arquivo atual. N├úo fiz altera├º├Áes.
+
+## Verifica├º├úo
+
+**1. [BUSCA-CURSOR]** ÔÇö `AbrirLookupTabelaDesconto()` (linha 663-668):
+```foxpro
+loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
+IF VARTYPE(loc_oBusca) = "O"
+    loc_oBusca.DefinirCursor("cursor_4c_LkpTbd", "Cods", "Descs", "Tabelas de Desconto")
+    IF loc_oBusca.Mostrar()
+```
+`DefinirCursor()` j├í ├® chamado **antes** de `Mostrar()` (que internamente chama `Show()`). Conferi a implementa├º├úo em `formbuscaauxiliar.prg:412-419`: `DefinirCursor` seta `THIS.this_cCursorDestino = par_cCursor` diretamente. ├ë exatamente o Pattern A can├┤nico documentado (Modo 2 sem params + `DefinirCursor` + `Mostrar()`, o mesmo que a li├º├úo `feedback_formbuscaauxiliar_pattern_b_broken` recomenda). N├úo h├í segunda ocorr├¬ncia de `CREATEOBJECT("FormBuscaAuxiliar")` no arquivo sem esse padr├úo.
+
+**2. [METODO-INEXISTENTE] `THIS.BtnSalvarClick()`** ÔÇö chamado em `BtnConfirmarClick()` (linha 968), e definido em `FUNCTION BtnSalvarClick()` na linha 1170, dentro da mesma `DEFINE CLASS FormTbd`. O m├®todo existe e est├í corretamente acess├¡vel (n├úo ├® `PROTECTED`, ent├úo `THIS.` funciona normalmente). O trecho de c├│digo enviado no prompt cortava justamente as linhas 1109-1169, o que provavelmente fez a ferramenta de review perder a defini├º├úo.
+
+## Conclus├úo
+Nenhuma corre├º├úo foi aplicada porque n├úo h├í defeito real ÔÇö alterar o c├│digo nesse caso seria mexer em l├│gica funcional j├í correta sem necessidade, violando a regra "Corrigir APENAS os problemas listados, NAO alterar logica de negocio". Se quiser, posso reportar esses dois achados como falso-positivo do pass autom├ítico para calibrar o pipeline (skill `propagate-lesson`).

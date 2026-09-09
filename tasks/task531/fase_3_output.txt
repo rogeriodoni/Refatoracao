@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 3/8 conclu├¡da. Criei `C:\4c\projeto\app\forms\cadastros\FormTbO.prg` (298 linhas) com a estrutura base:
+
+- **DEFINE CLASS FormTbO AS FormBase** com propriedades visuais can├┤nicas (Width=1000, Height=600, sem barra de t├¡tulo, `ForeColor`/`FontName` padr├úo)
+- **Init()** ÔÇö apenas `RETURN DODEFAULT()` (sem chamar `InicializarForm()` duas vezes)
+- **InicializarForm()** ÔÇö cria `TbOBO`, chama `ConfigurarPageFrame/ConfigurarPaginaLista/ConfigurarPaginaDados`, seta `ActivePage=1` e `this_cModoAtual="LISTA"`; **n├úo** chama `CarregarLista()` ainda (grid s├│ existe na Fase 4)
+- **ConfigurarPageFrame()** ÔÇö PageFrame `Top=-29`, `Tabs=.F.`, 2 p├íginas (Lista/Dados) com fundo `fundo_cad_1003.jpg`, espelhando exatamente o padr├úo can├┤nico j├í usado em `FormDepartamento.prg`
+- **ConfigurarPaginaLista()** / **ConfigurarPaginaDados()** ÔÇö apenas os containers estruturais vazios exigidos nesta fase: `cnt_4c_Cabecalho` (com `lbl_4c_Sombra`/`lbl_4c_Titulo` usando `THIS.Caption`) e os *shells* vazios `cnt_4c_Botoes` / `cnt_4c_BotoesAcao` (sem grid nem bot├Áes ÔÇö isso ├® Fase 4)
+- **TornarControlesVisiveis()** ÔÇö implementado (necess├írio para as chamadas acima funcionarem, sem stub)
+- **Destroy()** ÔÇö libera `cursor_4c_Dados` e o BO, chama `DODEFAULT()`
+
+N├úo inclu├¡ (propositalmente, conforme escopo desta fase): grid/bot├Áes CRUD, TextBoxes de dados, `FormParaBO`/`BOParaForm`, eventos `Btn*Click` ÔÇö essas v├¬m nas Fases 4 a 8. Tamb├®m n├úo toquei `config.prg`/`menu.prg` nesta fase, pois `config.prg` j├í carrega `Form*.prg` automaticamente via ADIR (conforme CLAUDE.md) e o item de menu s├│ faz sentido quando o form estiver funcional.
+
+Verifiquei que n├úo h├í nenhum `RETURN` dentro de blocos TRY/CATCH (regra cr├¡tica do CLAUDE.md) e que a estrutura `PROCEDURE/ENDPROC/ENDDEFINE` est├í balanceada.

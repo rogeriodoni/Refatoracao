@@ -1,0 +1,21 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+This looks correct. All applicable fixes have been applied to `FormTbv.prg`.
+
+## Resumo das corre├º├Áes aplicadas
+
+Verifiquei os 54 problemas apontados contra o estado **atual** do arquivo e apliquei as corre├º├Áes funcionais reais:
+
+**Corrigidos:**
+1. **[CONTAINER-VISIVEL]** `TornarControlesVisiveis()` agora usa `INLIST` para pular `CNT_4C_CABECALHO`, `CNT_4C_CONTAINER1` e `CNT_4C_PGCONFDESCONTO` ÔÇö containers de visibilidade condicional n├úo s├úo mais for├ºados a `Visible=.T.` pelo m├®todo recursivo.
+2. **[GRID-WITH]** Em `MontarConfiguracaoDesconto()`, `.RecordSource` do `loc_oGD` foi movido para **fora** do `WITH` (usando `loc_oGD.RecordSource = ...` expl├¡cito antes do `WITH`), evitando "Unknown member COLUMN1".
+3. **[NULL-CURSOR]** ├ù3 ÔÇö adicionado `SET NULL ON` antes / `SET NULL OFF` depois de `CREATE CURSOR cursor_4c_Dados`, `cursor_4c_TipoDesconto` e `cursor_4c_DiaSemana`.
+
+**J├í corrigidos (falsos positivos ÔÇö verificados no arquivo real, n├úo nos trechos do relat├│rio):**
+- **[BINDEVENT-PARAMS]** `GradeiConfColumn3LostFocus` j├í declara `(par_nKeyCode, par_nShiftAltCtrl)`.
+- **[METODO-INEXISTENTE]** `FormatarHorarioValidado()` (linha 3457) e `FaixaTemInicial()` (linha 3483) j├í existem como `PROTECTED FUNCTION` no form ÔÇö n├úo foram inventados.
+
+**Fora do escopo deste pass** (proibido mexer, conforme regras): os 40+ itens de `LAYOUT-POSITION` (Top/Left) e `GRID-HEADER` (Caption) s├úo de outro pass (visual/layout), n├úo deste pass funcional.

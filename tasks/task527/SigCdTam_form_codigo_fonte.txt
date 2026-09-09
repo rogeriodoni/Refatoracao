@@ -1,0 +1,377 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigCdTam.SCX
+* Data/Hora: 08/09/2026 18:01:39
+* Total de registros: 10
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDTAM
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Getcods
+  Parent: SIGCDTAM.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Getvarias
+  Parent: SIGCDTAM.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGCDTAM.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Getdescs
+  Parent: SIGCDTAM.Pagina.Dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGCDTAM.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGCDTAM.Pagina.Dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 122
+  Left = 30
+  Width = 137
+  Height = 200
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTAM
+------------------------------------------------------------
+  DataSession = 2
+  Height = 600
+  Width = 1000
+  DoCreate = .T.
+  Caption = "Cadastro de Tamanhos"
+  Name = "SIGCDTAM"
+  Pagina.ErasePage = .T.
+  Pagina.Lista.cntSombra.lblSombra.Name = "lblSombra"
+  Pagina.Lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  Pagina.Lista.cntSombra.Top = 1
+  Pagina.Lista.cntSombra.Left = -1
+  Pagina.Lista.cntSombra.Width = 1020
+  Pagina.Lista.cntSombra.Height = 80
+  Pagina.Lista.cntSombra.Name = "cntSombra"
+  Pagina.Lista.Grade.FontName = "Tahoma"
+  Pagina.Lista.Grade.FontSize = 8
+  Pagina.Lista.Grade.Height = 470
+  Pagina.Lista.Grade.Left = 12
+  Pagina.Lista.Grade.RowHeight = 16
+  Pagina.Lista.Grade.Top = 121
+  Pagina.Lista.Grade.Width = 940
+  Pagina.Lista.Grade.ForeColor = 90,90,90
+  Pagina.Lista.Grade.Name = "Grade"
+  Pagina.Lista.Grupo_op.AutoSize = .T.
+  Pagina.Lista.Grupo_op.Inserir.Top = 5
+  Pagina.Lista.Grupo_op.Inserir.Left = 5
+  Pagina.Lista.Grupo_op.Inserir.Name = "Inserir"
+  Pagina.Lista.Grupo_op.Consultar.Top = 5
+  Pagina.Lista.Grupo_op.Consultar.Left = 80
+  Pagina.Lista.Grupo_op.Consultar.Name = "Consultar"
+  Pagina.Lista.Grupo_op.Alterar.Top = 5
+  Pagina.Lista.Grupo_op.Alterar.Left = 155
+  Pagina.Lista.Grupo_op.Alterar.Name = "Alterar"
+  Pagina.Lista.Grupo_op.Excluir.Top = 5
+  Pagina.Lista.Grupo_op.Excluir.Left = 230
+  Pagina.Lista.Grupo_op.Excluir.Name = "Excluir"
+  Pagina.Lista.Grupo_op.procurar.Top = 5
+  Pagina.Lista.Grupo_op.procurar.Left = 305
+  Pagina.Lista.Grupo_op.procurar.Name = "procurar"
+  Pagina.Lista.Grupo_op.Height = 85
+  Pagina.Lista.Grupo_op.Left = 544
+  Pagina.Lista.Grupo_op.Top = -1
+  Pagina.Lista.Grupo_op.Width = 385
+  Pagina.Lista.Grupo_op.Name = "Grupo_op"
+  Pagina.Lista.Grupo_Saida.Sair.Top = 5
+  Pagina.Lista.Grupo_Saida.Sair.Left = 5
+  Pagina.Lista.Grupo_Saida.Sair.Name = "Sair"
+  Pagina.Lista.Grupo_Saida.Left = 919
+  Pagina.Lista.Grupo_Saida.Top = -1
+  Pagina.Lista.Grupo_Saida.Name = "Grupo_Saida"
+  Pagina.Lista.cntFiltros.Name = "cntFiltros"
+  Pagina.Lista.Picture = ..\framework\imagens\new_background.jpg
+  Pagina.Lista.Name = "Lista"
+  Pagina.Dados.Grupo_Salva.AutoSize = .T.
+  Pagina.Dados.Grupo_Salva.Salva.Top = 5
+  Pagina.Dados.Grupo_Salva.Salva.Left = 5
+  Pagina.Dados.Grupo_Salva.Salva.Name = "Salva"
+  Pagina.Dados.Grupo_Salva.Cancelar.Top = 5
+  Pagina.Dados.Grupo_Salva.Cancelar.Left = 80
+  Pagina.Dados.Grupo_Salva.Cancelar.Name = "Cancelar"
+  Pagina.Dados.Grupo_Salva.Left = 820
+  Pagina.Dados.Grupo_Salva.Top = 10
+  Pagina.Dados.Grupo_Salva.TabIndex = 7
+  Pagina.Dados.Grupo_Salva.ZOrderSet = 1
+  Pagina.Dados.Grupo_Salva.Name = "Grupo_Salva"
+  Pagina.Dados.Picture = ..\framework\imagens\new_background.jpg
+  Pagina.Dados.Name = "Dados"
+  Pagina.Width = 1003
+  Pagina.Name = "Pagina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTAM.Pagina.Dados.Getcods
+------------------------------------------------------------
+  Alignment = 3
+  ControlSource = "crSigCdTam.cods"
+  Format = ""
+  Height = 24
+  Left = 414
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 135
+  Width = 38
+  ZOrderSet = 2
+  plprocurar = .T.
+  Name = "Getcods"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTAM.Pagina.Dados.Getvarias
+------------------------------------------------------------
+  Alignment = 3
+  Value = 0
+  ControlSource = "crSigCdTam.varias"
+  Height = 24
+  InputMask = "9999.99"
+  Left = 414
+  SpecialEffect = 1
+  TabIndex = 6
+  Top = 189
+  Width = 74
+  ZOrderSet = 8
+  Name = "Getvarias"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTAM.Pagina.Dados.Say1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Codigo :"
+  Height = 15
+  Left = 368
+  Top = 140
+  Width = 42
+  TabIndex = 1
+  ForeColor = 90,90,90
+  ZOrderSet = 4
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTAM.Pagina.Dados.Getdescs
+------------------------------------------------------------
+  ControlSource = "crSigCdTam.descs"
+  Height = 24
+  Left = 414
+  ReadOnly = .F.
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 162
+  Width = 150
+  ZOrderSet = 5
+  plprocurar = .T.
+  Name = "Getdescs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTAM.Pagina.Dados.Say3
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Variação de preço :"
+  Height = 15
+  Left = 315
+  Top = 194
+  Width = 95
+  TabIndex = 5
+  ForeColor = 90,90,90
+  ZOrderSet = 7
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTAM.Pagina.Dados.Say2
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Caption = "Descrição :"
+  Height = 15
+  Left = 355
+  Top = 167
+  Width = 55
+  TabIndex = 3
+  ForeColor = 90,90,90
+  ZOrderSet = 6
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDTAM
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+LPARAMETERS lcacesso
+
+With ThisForm
+	.poDatamgr = CreateObject('fSqlConector')
+	With .poDatamgr
+		.AddCursor('SigCdTam','cods','crSigCdTam','',ThisForm.pagina.lista.grade)
+		.pfSqlTabela(1).pColuna('cods','','','Código',50,.t.)
+		.pfSqlTabela(1).pColuna('descs','','','Descrição',150,.t.)
+		.pfSqlTabela(1).pColuna('varias','','','Variação de Preço',100,.t.)
+	EndWith
+	= DoDefault()
+	.LockScreen = .f.
+EndWith
+
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_procurar
+------------------------------------------------------------
+PROCEDURE msv_procurar
+Local lcBusca
+
+If !IsEmpty(ThisForm.Pagina.Dados.getcods.Value)
+	ThisForm.poDataMgr.LocateCursor('crSigCdTam','cods',ThisForm.Pagina.Dados.Getcods.Value)
+Else
+	If .Not.IsEmpty(ThisForm.Pagina.Dados.Getdescs.Value)
+		ThisForm.poDataMgr.LocateCursor('crSigCdTam','descs',ThisForm.Pagina.Dados.Getdescs.Value)
+	EndIf
+EndIf
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Lista.Grupo_op.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Lista.Grupo_op.Click
+parameters lcOpcao
+
+If !dodefault( lcopcao )
+	ThisForm.mAtivapagina1
+	Return
+Endif
+
+do case
+case thisform.pcEscolha='INSERIR' or ;
+	thisform.pcEscolha='PROCURAR'
+	thisform.Pagina.Dados.getcods.setfocus
+case thisform.pcEscolha='ALTERAR'
+	thisform.pagina.dados.getdescs.setfocus
+case thisform.pcEscolha='CONSULTAR' or ;
+	thisform.pcEscolha='EXCLUIR'
+	thisform.pagina.dados.grupo_salva.salva.setfocus
+endcase
+	
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Salva.Click
+if inlist(thisform.pcEscolha,'INSERIR')
+    if IsEmpty(thisform.Pagina.Dados.getcods.value)
+       messagebox('Tamanho Inválido !!',0+48,'')
+       thisform.Pagina.Dados.getcods.setfocus
+		return 	
+	endif	
+	
+	if ThisForm.poDataMgr.ChkRegister('SigCdTam','Cods',ThisForm.Pagina.Dados.GetCods.Value)
+       messagebox('Tamanho já Cadastrado !!',0+48,'')
+       thisform.Pagina.Dados.getcods.setfocus
+      	return
+	endif			
+endif
+DoDefault()
+Thisform.mAtivapagina1
+
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+------------------------------------------------------------
+PROCEDURE Pagina.Dados.Grupo_Salva.Cancelar.Click
+DoDefault()
+if thisform.plCancelar
+	thisform.mAtivapagina1
+endif
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+* Objeto: SIGCDTAM
+RESERVED3 (ClassInfo): nrecno
+
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 5
+================================================================================

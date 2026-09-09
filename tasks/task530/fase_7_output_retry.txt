@@ -1,0 +1,30 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**Fase 7 conclu├¡da** ÔÇö `FormTBI.prg` atualizado (683 ÔåÆ 716 linhas, 33,48 KB), compila sem erros no VFP9 (junto com `TBIBO.prg`).
+
+## O que foi feito
+
+Adicionei os 4 eventos exigidos pela fase, ap├│s `BtnEncerrarClick`:
+
+| M├®todo | Implementa├º├úo |
+|---|---|
+| `BtnIncluirClick` | Bloqueio real ÔÇö espelha o override `TBIBO.Inserir()` que j├í retorna `.F.`; restaura estado (`AlternarPagina(1)`) e devolve foco ao c├│digo da moeda |
+| `BtnAlterarClick` | Bloqueio real ÔÇö espelha `TBIBO.Atualizar()` |
+| `BtnExcluirClick` | Bloqueio real ÔÇö excluir a moeda de refer├¬ncia quebraria `SigCdCot`/`SigOpTdz` |
+| `BtnVisualizarClick` | **L├│gica funcional**: valida a moeda, chama `TBIBO.GerarTabelaReferencia()` (mesma regra de neg├│cio migrada do `cmd_ok.Click`) e exibe na tela o conte├║do exato que seria impresso, sem la├ºo de c├│pias, sem `SET DEVICE TO PRINTER` e sem `Release()` |
+
+## Ponto que preciso sinalizar
+
+**O gate da Fase 7 assume um form CRUD, e SIGCDTBI n├úo ├® um.** O SCX legado tem 10 objetos e um ├║nico `CommandGroup` com apenas `cmd_ok` (Confirma) e `cmd_cancela` (Encerrar) ÔÇö n├úo h├í grid, n├úo h├í lista, e em nenhum ponto do fonte (`Load`, `Init`, os dois `Valid`, `cmd_ok.Click`, `cmd_cancela.Click`) existe INSERT/UPDATE/DELETE. ├ë um di├ílogo de impress├úo.
+
+Por isso **n├úo criei bot├Áes CRUD na interface** ÔÇö isso inventaria funcionalidade inexistente e violaria o PILAR 1. Os handlers existem para cumprir o contrato de eventos do `FormBase` e garantir que uma chamada externa n├úo tente gravar por este form. Os tr├¬s bloqueios seguem exatamente o precedente j├í estabelecido na Fase 2 deste mesmo task (`TBIBO.Inserir`/`Atualizar` s├úo overrides de bloqueio, n├úo stubs). As mensagens declaram uma regra de neg├│cio permanente ("utilize o Cadastro de Moedas"), n├úo trabalho adiado ÔÇö o detector de stubs/TODO passa limpo.
+
+## Lacunas que encontrei e **n├úo** corrigi (fora do escopo da Fase 7)
+
+1. **Sele├º├úo de impressora de etiqueta perdida**: o `cmd_ok.Click` legado tem ~60 linhas consultando `SigCdmp`/`SigSyImp`/`SigCdAcG` para achar impressoras de etiqueta autorizadas ao usu├írio e, se houver mais de uma, abre `SigOpIpb` para o usu├írio escolher. O `BtnConfirmarClick` atual (Fase 6) substituiu isso por `SET PRINTER TO DEFAULT`. ├ë um desvio funcional real do legado.
+2. **`TBIBO` n├úo tem override de `ExecutarExclusao()`** ÔÇö tem `Inserir()` e `Atualizar()`, mas a exclus├úo s├│ est├í bloqueada na camada de UI.
+
+Ambos s├úo candidatos naturais para a Fase 8 (consolida├º├úo). Diga se quer que eu trate algum agora.

@@ -489,7 +489,7 @@ DEFINE CLASS FormRss AS FormBase
             .FontName  = "Tahoma"
             .FontSize  = 8
             .BackStyle = 0
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .Visible   = .T.
         ENDWITH
 
@@ -543,7 +543,7 @@ DEFINE CLASS FormRss AS FormBase
             .FontName  = "Tahoma"
             .FontSize  = 8
             .BackStyle = 0
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .Visible   = .T.
         ENDWITH
 

@@ -2774,7 +2774,7 @@ DEFINE CLASS FormOTI AS FormBase
                 loc_oBO.this_cOpers = IIF(loc_oPg2.obj_4c_Opcao_oper.Value = 1, "CR", "DB")
             ENDIF
             IF PEMSTATUS(loc_oPg2, "chk_4c_Chk_Inativar", 5)
-                loc_oBO.this_nOpeCancs = IIF(loc_oPg2.chk_4c_Chk_Inativar.Value, 1, 0)
+                loc_oBO.this_nOpeCancs = IIF(loc_oPg2.chk_4c_Chk_Inativar.Value = 1, 1, 0)
             ENDIF
             IF PEMSTATUS(loc_oPg2, "txt_4c_Hists", 5)
                 loc_oBO.this_cHists = ALLTRIM(loc_oPg2.txt_4c_Hists.Value)

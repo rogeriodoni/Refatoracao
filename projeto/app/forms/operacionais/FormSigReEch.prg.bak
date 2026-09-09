@@ -528,7 +528,7 @@ DEFINE CLASS FormSigReEch AS FormBase
             THIS.AddObject("cmd_4c_Visualizar", "CommandButton")
             WITH THIS.cmd_4c_Visualizar
                 .Top             = 2
-                .Left            = 573
+                .Left = 80
                 .Height          = 75
                 .Width           = 75
                 .Caption         = "V" + CHR(237) + "deo"
@@ -572,7 +572,7 @@ DEFINE CLASS FormSigReEch AS FormBase
             THIS.AddObject("cmd_4c_Encerrar", "CommandButton")
             WITH THIS.cmd_4c_Encerrar
                 .Top             = 2
-                .Left            = 723
+                .Left = 5
                 .Height          = 75
                 .Width           = 75
                 .Caption         = "Encerrar"

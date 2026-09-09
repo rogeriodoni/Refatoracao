@@ -1,0 +1,22 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Good ÔÇö matches usage `FormatarNumeroSQL(THIS.this_nX, 0)`. The file is complete and consistent with established patterns. Phase 2 is done.
+
+## Resumo
+
+Completei a **Fase 2/8** de `SreBO.prg`, adicionando os m├®todos CRUD sobre a base criada na Fase 1:
+
+- **`CarregarDoCursor`** ÔÇö mapeia todas as 16 colunas de `SigCdSer` (via `SELECT (par_cAliasCursor)` antes de acessar campos, conforme regra cr├¡tica).
+- **`ValidarDados`** ÔÇö reproduz a l├│gica do legado (`Grupo_Salva.Click`): c├│digo obrigat├│rio, checagem de duplicidade de `EmpCods` s├│ em inclus├úo, e Tipo Nota Fiscal (`ctiponfs`) obrigat├│rio.
+- **`VerificarChaveExistente`** ÔÇö equivalente ao `ChkRegister('SigCdSer','EmpCods',...)` do legado.
+- **`Inserir`** ÔÇö monta `EmpCods = Emps(3) + Cods(3)` e faz o INSERT completo com todas as colunas.
+- **`Atualizar`** ÔÇö UPDATE por `empcods` (chave n├úo ├® alterada).
+- **`ExecutarExclusao`** ÔÇö replica a checagem do legado contra `SigMvNfi.series` antes de excluir, bloqueando com a mesma mensagem original.
+- **`ObterChavePrimaria`** ÔÇö retorna `EmpCods`.
+- **`Buscar`** / **`CarregarPorCodigo`** ÔÇö usados pelo Form nas fases seguintes (lista e carregamento por chave).
+- **`BuscarDescricaoEmpresa`** ÔÇö auxiliar para o lookup `SigCdEmp.Razas`, usado no `getDEmps` do legado.
+
+Todos os SQLs usam nomes exatos do schema (`SigCdSer`, `SigMvNfi`, `SigCdEmp`), `RegistrarAuditoria` ├® chamado em INSERT/UPDATE/DELETE, e nenhum `RETURN` est├í dentro de `TRY/CATCH`. Arquivo completo em `C:\4c\projeto\app\classes\SreBO.prg` (390 linhas).

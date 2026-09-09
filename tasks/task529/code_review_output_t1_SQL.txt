@@ -1,0 +1,23 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Corrigido o problema `SQL-FILTRO-INVENTADO` em `FormTbd.prg` (m├®todo `AbrirLookupTabelaDesconto`, linhas 640-644):
+
+**Antes:**
+```foxpro
+loc_cSQL = "SELECT codigos AS Cods, descrs AS Descs FROM SigOpTdz" + ;
+           " WHERE codigos LIKE " + EscaparSQL(loc_cValor + "%") + ;
+           " OR descrs LIKE " + EscaparSQL(loc_cValor + "%") + ;
+           " ORDER BY codigos"
+```
+
+**Depois:**
+```foxpro
+loc_cSQL = "SELECT codigos AS Cods, descrs AS Descs FROM SigOpTdz" + ;
+           " WHERE codigos LIKE " + EscaparSQL(loc_cValor + "%") + ;
+           " ORDER BY codigos"
+```
+
+O c├│digo legado (`Where a.Dopes = ... And a.codigos = b.codigos`) s├│ filtra por `DOPES`/`CODIGOS`; a condi├º├úo `OR descrs LIKE ...` n├úo existe no original e foi inventada pela migra├º├úo. Removida, mantendo o restante da l├│gica (fallback SHOW-ALL, FormBuscaAuxiliar, etc.) intacto ÔÇö nenhuma outra query do arquivo (`FormTbd.prg` e `TbdBO.prg`) tinha esse problema; todas as demais j├í filtram apenas por `codigos`/`cidchaves`/`dopes`, batendo com o SQL original.

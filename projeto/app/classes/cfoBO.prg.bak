@@ -111,6 +111,88 @@ DEFINE CLASS cfoBO AS BusinessBase
         RETURN .T.
     ENDPROC
 
+
+    *--------------------------------------------------------------------------
+    * LimparDados - Zera as propriedades ao iniciar um novo registro
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE LimparDados()
+        DODEFAULT()
+        THIS.this_cCodigos = ""
+        THIS.this_cDescricaos = ""
+        THIS.this_cDesc2s = ""
+        THIS.this_cOperacaos = ""
+        THIS.this_nTipos = 0
+        THIS.this_nNdigitos = 0
+        THIS.this_cIcms = ""
+        THIS.this_cSittribs = ""
+        THIS.this_nAliqivcs = 0
+        THIS.this_nInclicms = 0
+        THIS.this_nIcmsdscs = 0
+        THIS.this_nIcmsincs = 0
+        THIS.this_nIncicmnfs = 0
+        THIS.this_cCgergia1s = ""
+        THIS.this_nFrticms = 0
+        THIS.this_nSegicms = 0
+        THIS.this_nDesicms = 0
+        THIS.this_cSubtribs = ""
+        THIS.this_nPbcsts = 0
+        THIS.this_cCfosts = ""
+        THIS.this_cCoddests = ""
+        THIS.this_nTransps = 0
+        THIS.this_cIpis = ""
+        THIS.this_cIpi_icms = ""
+        THIS.this_nInclipis = 0
+        THIS.this_nPbcipis = 0
+        THIS.this_cBcipis = ""
+        THIS.this_nAliqipis = 0
+        THIS.this_cAcresipis = ""
+        THIS.this_cIpiimpors = ""
+        THIS.this_cIpiom2s = ""
+        THIS.this_nFrtipis = 0
+        THIS.this_nSegipis = 0
+        THIS.this_nDesipis = 0
+        THIS.this_nIpincreds = 0
+        THIS.this_nPontedescs = 0
+        THIS.this_cIpicst = ""
+        THIS.this_cIpienq = ""
+        THIS.this_cUnitimps = ""
+        THIS.this_cPiscst = ""
+        THIS.this_cCofcst = ""
+        THIS.this_cIssqnl = ""
+        THIS.this_nAliqpis = 0
+        THIS.this_nAliqcofins = 0
+        THIS.this_nAliqissqn = 0
+        THIS.this_nAliqii = 0
+        THIS.this_nCtissqn = 0
+        THIS.this_nRettribs = 0
+        THIS.this_cContribs = ""
+        THIS.this_nSituas = 0
+        THIS.this_cCfost60s = ""
+        THIS.this_nSomaicmfrete = 0
+        THIS.this_cMotdeson = ""
+        THIS.this_cContconts = ""
+        THIS.this_cContvcds = ""
+        THIS.this_cContvccs = ""
+        THIS.this_cContipds = ""
+        THIS.this_cContipcs = ""
+        THIS.this_cConticds = ""
+        THIS.this_cConticcs = ""
+        THIS.this_cContfrt = ""
+        THIS.this_cContseg = ""
+        THIS.this_cContda = ""
+        THIS.this_nAgrupas = 0
+        THIS.this_nZeradas = 0
+        THIS.this_nIntvlrcont = 0
+        THIS.this_nIntvlricms = 0
+        THIS.this_nIntvlripi = 0
+        THIS.this_nUtilvars = 0
+        THIS.this_nIndmov = 0
+        THIS.this_nIndpagto = 0
+        THIS.this_nTiporecs = 0
+        THIS.this_nObspads = 0
+        THIS.this_nDtintfis = 0
+    ENDPROC
+
     *--------------------------------------------------------------------------
     * CarregarDoCursor - Carrega propriedades do BO a partir de um cursor
     *--------------------------------------------------------------------------
@@ -475,27 +557,13 @@ DEFINE CLASS cfoBO AS BusinessBase
             loc_cSQL = loc_cSQL + " ORDER BY codigos"
 
             IF USED("cursor_4c_Dados")
-                loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_DadosTmp")
-                IF loc_nResultado >= 0
-                    SELECT cursor_4c_Dados
-                    ZAP
-                    SET NULL ON
-                    APPEND FROM DBF("cursor_4c_DadosTmp")
-                    SET NULL OFF
-                    IF USED("cursor_4c_DadosTmp")
-                        USE IN cursor_4c_DadosTmp
-                    ENDIF
-                    loc_lSucesso = .T.
-                ELSE
-                    MostrarErro("Erro ao buscar CFOPs:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
-                ENDIF
+                USE IN cursor_4c_Dados
+            ENDIF
+            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Dados")
+            IF loc_nResultado >= 0
+                loc_lSucesso = .T.
             ELSE
-                loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Dados")
-                IF loc_nResultado >= 0
-                    loc_lSucesso = .T.
-                ELSE
-                    MostrarErro("Erro ao buscar CFOPs:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
-                ENDIF
+                MostrarErro("Erro ao buscar CFOPs:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
             ENDIF
 
         CATCH TO loException

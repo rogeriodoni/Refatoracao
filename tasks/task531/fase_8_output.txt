@@ -1,0 +1,22 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Balanced (11/11), file still ends cleanly with `ENDDEFINE`.
+
+## Resumo ÔÇö Fase 8/8 conclu├¡da
+
+**`FormTbO.prg`** ÔÇö adicionados os 4 m├®todos que faltavam (todos `PUBLIC`, chamados via `BINDEVENT`):
+- **`BtnBuscarClick()`** ÔÇö como o legado abria este form j├í com a Opera├º├úo fixada pelo pai, aqui o bot├úo can├┤nico "Buscar" filtra a grade por Opera├º├úo via lookup em `SigCdOpe` (novo `this_cFiltroDopesAtual` + `CarregarLista()` j├í ajustado para us├í-lo).
+- **`BtnEncerrarClick()`** ÔÇö fecha o form (`THIS.Release()`), padr├úo can├┤nico.
+- **`BtnSalvarClick()`** ÔÇö valida├º├Áes completas fora do `TRY` (Opera├º├úo/Tabela obrigat├│rias, Tabela precisa existir), reproduz a checagem de duplicidade Tabds├ùDopes do `cmdSair.Click` legado (agora por registro, via novo m├®todo do BO) e persiste com `Salvar()`.
+- **`BtnCancelarClick()`** ÔÇö `CancelarEdicao()` + volta ├á lista.
+
+**`TbOBO.prg`** ÔÇö dois acr├®scimos:
+- `ExisteVinculoDuplicado()` ÔÇö d├í suporte real ├á valida├º├úo de duplicidade movida do fechamento em lote do legado para o Salvar por registro.
+- `LimparDados()` (faltava) ÔÇö sem isso, `NovoRegistro()` n├úo zerava `this_cCidChaves` de um registro previamente carregado (Visualizar/Alterar), e um `Incluir` subsequente reaproveitaria essa PK antiga em vez de gerar uma nova via `fUniqueIds()`. Confirmei que esse override ├® padr├úo obrigat├│rio em todos os outros BOs do projeto (CADBO, cfoBO, RssBO, etc.) ÔÇö bug real, corrigido.
+
+**Integra├º├úo** ÔÇö `config.prg` j├í carrega `*BO.prg` e `cadastros\Form*.prg` dinamicamente via `ADIR` (confirmado lendo o arquivo), ent├úo nenhuma edi├º├úo foi necess├íria ali. Em `menu.prg` adicionei `DEFINE BAR 175 OF popCadastros` + `ON SELECTION` + a procedure `AbrirFormTbO()` (padr├úo `VARTYPE`/`Show()` sem `Release()`, igual ├ás demais).
+
+Validei manualmente o balanceamento de `PROCEDURE/FUNCTION` vs `ENDPROC/ENDFUNC` em ambos os arquivos (28/28 no Form, 11/11 no BO) e que terminam em `ENDDEFINE` ├║nico ÔÇö sem stubs, TODOs ou `RETURN` dentro de `TRY/CATCH`.

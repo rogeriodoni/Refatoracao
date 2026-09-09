@@ -1190,6 +1190,8 @@ DEFINE CLASS Formsigrechp AS FormBase
             .Width     = 22
         ENDWITH
         loc_oGrid.Column1.CurrentControl  = "Check1"
+        *-- Pattern #185 / Erro146: CheckBox de grid nao alterna sem handlers
+        THIS.BindToggleOpera1(THIS.pgf_4c_Paginas.Page1.grd_4c_Opera.Column1.Check1)
 
         *-- Column2: TextBox somente leitura para Operacaos
         WITH loc_oGrid.Column2
@@ -2356,4 +2358,48 @@ DEFINE CLASS Formsigrechp AS FormBase
         ENDIF
     ENDPROC
 
+
+    *==========================================================================
+    * Toggle do CheckBox de grid - grd_4c_Opera.Column1 (THIS.this_oRelatorio.this_cCursorOperacoes -> .Flag)
+    * Pattern #185 / Erro146 (2026-09-04): CheckBox em coluna de Grid nao alterna
+    * pelo binding nativo. Click/MouseDown suprimem o padrao; MouseUp delega ao
+    * KeyPress, que alterna por codigo com REPLACE no cursor + Refresh do grid.
+    *==========================================================================
+    PROTECTED PROCEDURE BindToggleOpera1(par_oChk)
+        BINDEVENT(par_oChk, "KeyPress",  THIS, "TgOpera1KeyPress")
+        BINDEVENT(par_oChk, "MouseUp",   THIS, "TgOpera1MouseUp")
+        BINDEVENT(par_oChk, "MouseDown", THIS, "TgOpera1MouseDown")
+        BINDEVENT(par_oChk, "Click",     THIS, "TgOpera1Click")
+    ENDPROC
+
+    PROCEDURE TgOpera1KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF !INLIST(par_nKeyCode, 13, 32)
+            RETURN
+        ENDIF
+        NODEFAULT
+        LOCAL loc_cCur
+        loc_cCur = THIS.this_oRelatorio.this_cCursorOperacoes
+        IF VARTYPE(loc_cCur) != "C" OR !USED(loc_cCur) OR EOF(loc_cCur)
+            RETURN
+        ENDIF
+        SELECT (loc_cCur)
+        IF VARTYPE(Flag) == "L"
+            REPLACE Flag WITH !Flag
+        ELSE
+            REPLACE Flag WITH IIF(Flag = 0, 1, 0)
+        ENDIF        THIS.pgf_4c_Paginas.Page1.grd_4c_Opera.Refresh()
+    ENDPROC
+
+    PROCEDURE TgOpera1MouseUp(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+        THIS.TgOpera1KeyPress(13, 0)
+        NODEFAULT
+    ENDPROC
+
+    PROCEDURE TgOpera1MouseDown(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+        NODEFAULT
+    ENDPROC
+
+    PROCEDURE TgOpera1Click()
+        NODEFAULT
+    ENDPROC
 ENDDEFINE

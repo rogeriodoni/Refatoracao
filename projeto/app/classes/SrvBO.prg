@@ -1,625 +1,855 @@
-*==============================================================================
-* SrvBO.prg - Business Object para Servicos (Saidas/Entradas)
-* Tabela: SigCdSrv | PK: CodServs
+*====================================================================
+* SRVBO.prg
+*
+* Business Object para Cadastro de Servicos (Entradas/Saidas)
+* Tabela: SigCdSrv (mestre) / SigSeRvp (detalhe - produtos do servico)
 * Herda de: BusinessBase
-*==============================================================================
+*====================================================================
 
-DEFINE CLASS SrvBO AS BusinessBase
+DEFINE CLASS SRVBO AS BusinessBase
 
-    *-- Configuracao da tabela
-    this_cTabela       = "SigCdSrv"
-    this_cCampoChave   = "CodServs"
-    this_cMensagemErro = ""
-
-    *-- Campos principais
-    this_cCodServs  = ""
-    this_cDescServs = ""
-    this_cTipos     = "S"
-    this_cIdChaves  = ""
+    *-- Propriedades da entidade (mapeamento para tabela SigCdSrv)
+    this_cCidChaves     = ""    && cidchaves char(20) - PK
+    this_cCodigo        = ""    && codservs char(10)
+    this_cDescricao     = ""    && descservs char(40)
+    this_cTipo          = "S"   && ctipos char(1) - S=Saidas / E=Entradas
 
     *-- Aliquotas (%)
-    this_nAiss     = 0
-    this_nApiss    = 0
-    this_nAcofinss = 0
-    this_nAirrfs   = 0
-    this_nAinss    = 0
-    this_nAcslls   = 0
+    this_nAliquotaPis     = 0   && apiss numeric(4,2)
+    this_nAliquotaCofins  = 0   && acofinss numeric(4,2)
+    this_nAliquotaIrrf    = 0   && airrfs numeric(4,2)
+    this_nAliquotaInss    = 0   && ainss numeric(4,2)
+    this_nAliquotaCsll    = 0   && acslls numeric(4,2)
+    this_nAliquotaIss     = 0   && aiss numeric(4,2)
 
-    *-- Valores Minimos a recolher
-    this_nVminpiss   = 0
-    this_nVmincofins = 0
-    this_nVMinIrrfs  = 0
-    this_nVMinInss   = 0
-    this_nVMinCslls  = 0
+    *-- Valores minimos a recolher
+    this_nValorMinimoPis     = 0   && vminpiss numeric(11,2)
+    this_nValorMinimoCofins  = 0   && vmincofins numeric(11,2)
+    this_nValorMinimoIrrf    = 0   && vminirrfs numeric(11,2)
+    this_nValorMinimoInss    = 0   && vmininss numeric(11,2)
+    this_nValorMinimoCsll    = 0   && vmincslls numeric(11,2)
 
-    *-- Base de Calculo Minima
-    this_nVminbpiss  = 0
-    this_nVminbcofin = 0
-    this_nVMinbIrrfs = 0
-    this_nVMinbInss  = 0
-    this_nVMinbCslls = 0
+    *-- Base de calculo minima
+    this_nBaseMinimaPis     = 0   && vminbpiss numeric(11,2)
+    this_nBaseMinimaCofins  = 0   && vminbcofin numeric(11,2)
+    this_nBaseMinimaIrrf    = 0   && vminbirrfs numeric(11,2)
+    this_nBaseMinimaInss    = 0   && vminbinss numeric(11,2)
+    this_nBaseMinimaCsll    = 0   && vminbcslls numeric(11,2)
 
-    *-- Lancamento Financeiro (numericos: 0=desmarcado, 1=marcado)
-    this_nNLanFPiss  = 0
-    this_nNLanFCofin = 0
-    this_nNLanFIrrfs = 0
-    this_nNLanFInss  = 0
-    this_nNLanFIss   = 0
-    this_nNLanFCslls = 0
+    *-- Recolhimento Mensal (checkboxes)
+    this_lMensalPis     = .F.   && bpisms numeric(1,0)
+    this_lMensalCofins  = .F.   && bcofinms numeric(1,0)
+    this_lMensalIrrf    = .F.   && birrfms numeric(1,0)
+    this_lMensalInss    = .F.   && binssms numeric(1,0)
+    this_lMensalCsll    = .F.   && bcsllms numeric(1,0)
 
-    *-- Periodicidade Mensal (numericos: 0=desmarcado, 1=marcado)
-    this_nBpisms   = 0
-    this_nBcofinms = 0
-    this_nBirrfms  = 0
-    this_nBinssms  = 0
-    this_nBcsllms  = 0
+    *-- Lancamento Financeiro (checkboxes)
+    this_lLancFinPis     = .F.   && nlanfpiss numeric(1,0)
+    this_lLancFinCofins  = .F.   && nlanfcofin numeric(1,0)
+    this_lLancFinIrrf    = .F.   && nlanfirrfs numeric(1,0)
+    this_lLancFinInss    = .F.   && nlanfinss numeric(1,0)
+    this_lLancFinCsll    = .F.   && nlanfcslls numeric(1,0)
+    this_lLancFinIss     = .F.   && nlanfiss numeric(1,0)
 
-    *-- Codigos de Ocorrencia
-    this_cOcorPiss  = ""
-    this_cOcorCofin = ""
-    this_cOcorIrrfs = ""
-    this_cOcorInss  = ""
-    this_cOcorCslls = ""
-    this_cOcoriSS   = ""
+    *-- Codigos de Ocorrencia (F4 - crSigOpOco)
+    this_cCodOcorPis     = ""   && cocorpiss char(10)
+    this_cCodOcorCofins  = ""   && cocorcofin char(10)
+    this_cCodOcorIrrf    = ""   && cocorirrfs char(10)
+    this_cCodOcorInss    = ""   && cocorinss char(10)
+    this_cCodOcorCsll    = ""   && cocorcslls char(10)
+    this_cCodOcorIss     = ""   && cocoriss char(10)
 
-    *-- Conta Contabil (PIS - principal)
-    this_cGrupo  = ""
-    this_cContab = ""
+    *-- Codigos reduzidos de imposto (nao exibidos no form legado, mas fazem parte da tabela)
+    this_cCodCofins  = ""   && codcofinss char(5)
+    this_cCodCsll    = ""   && codcslls char(5)
+    this_cCodPis     = ""   && codpiss char(5)
 
-    *-- Vencimentos (1=Titulo, 2=10 D F Mes, 3=Ult Dia Util Quinz Seg)
-    this_nVcpis    = 1
-    this_nVccofins = 1
-    this_nVcirrf   = 1
-    this_nVcinss   = 1
-    this_nVccsll   = 1
-    this_nVciss    = 1
+    *-- Conta contabil principal (Get_grupoo / Get_contao / Get_dcontao)
+    this_cGrupoContab  = ""   && cgrupo char(10)
+    this_cContaContab  = ""   && ccontab char(10)
 
-    *-- Grupos/Contas Contabeis por imposto (Vencimentos)
-    this_cGrppiss   = ""
-    this_cCtaPiss   = ""
-    this_cGrpCofins = ""
-    this_cCtaCofins = ""
-    this_cGrpIrrfs  = ""
-    this_cCtaIrrfs  = ""
-    this_cGrpInss   = ""
-    this_cCtaInss   = ""
-    this_cGrpCslls  = ""
-    this_cCtaCslls  = ""
-    this_cGrpIss    = ""
-    this_cCtaIss    = ""
+    *-- Grupo/Conta contabil por imposto (aba Vencimentos)
+    this_cGrupoPis      = ""   && cgrppiss char(10)
+    this_cContaPis      = ""   && cctapiss char(10)
+    this_cGrupoCofins   = ""   && cgrpcofins char(10)
+    this_cContaCofins   = ""   && cctacofins char(10)
+    this_cGrupoIrrf     = ""   && cgrpirrfs char(10)
+    this_cContaIrrf     = ""   && cctairrfs char(10)
+    this_cGrupoInss     = ""   && cgrpinss char(10)
+    this_cContaInss     = ""   && cctainss char(10)
+    this_cGrupoCsll     = ""   && cgrpcslls char(10)
+    this_cContaCsll     = ""   && cctacslls char(10)
+    this_cGrupoIss      = ""   && cgrpiss char(10)
+    this_cContaIss      = ""   && cctaiss char(10)
 
-    *-- Codigos de retencao (nao-RPA): PIS, COFINS, CSLL
-    this_cCodpiss    = ""
-    this_cCodcofinss = ""
-    this_cCodcslls   = ""
+    *-- Opcao de vencimento por imposto (OptionGroup 1/2/3)
+    this_nVencimentoPis      = 0   && vcpis numeric(1,0)
+    this_nVencimentoCofins   = 0   && vccofins numeric(1,0)
+    this_nVencimentoIrrf     = 0   && vcirrf numeric(1,0)
+    this_nVencimentoInss     = 0   && vcinss numeric(1,0)
+    this_nVencimentoCsll     = 0   && vccsll numeric(1,0)
+    this_nVencimentoIss      = 0   && vciss numeric(1,0)
 
-    *-- Codigos DARF (RPA): PIS, COFINS, CSLL, IRRF
-    this_cCodrecpis  = ""
-    this_cCodreccof  = ""
-    this_cCodreccsll = ""
-    this_cCodrecirrf = ""
+    *-- RPA (Recibo de Pagamento Autonomo)
+    this_nRPA                     = 0   && nrpas numeric(1,0) - OptionGroup S/N
+    this_nValorMaximoRetencaoInss = 0   && maxretinss numeric(11,2)
+    this_cCodRecCofins            = ""   && codreccof char(5)
+    this_cCodRecPis               = ""   && codrecpis char(5)
+    this_cCodRecCsll              = ""   && codreccsll char(5)
+    this_cCodRecIrrf              = ""   && codrecirrf char(5)
 
-    *-- RPA (1=Sim, 2=Nao)
-    this_nNrpas      = 2
-    this_nMaxretinss = 0
+    *-- Detalhe: produtos do servico (SigSeRvp) - gerenciado via cursor proprio
+    this_cCursorProdutos = "cursor_4c_Produtos"   && cursor local do grid de produtos (codservs, cpros)
 
-    *--------------------------------------------------------------------------
-    * Init - Construtor
-    *--------------------------------------------------------------------------
+    *====================================================================
+    * Init - Inicializa Business Object
+    *====================================================================
     PROCEDURE Init()
-        DODEFAULT("SigCdSrv")
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * ObterChavePrimaria - Retorna valor da PK para auditoria
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE ObterChavePrimaria()
-        RETURN THIS.this_cCodServs
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * LimparDados - Limpa todas as propriedades
-    *--------------------------------------------------------------------------
-    PROCEDURE LimparDados()
-        THIS.this_cCodServs  = ""
-        THIS.this_cDescServs = ""
-        THIS.this_cIdChaves  = ""
-        THIS.this_nAiss      = 0
-        THIS.this_nApiss     = 0
-        THIS.this_nAcofinss  = 0
-        THIS.this_nAirrfs    = 0
-        THIS.this_nAinss     = 0
-        THIS.this_nAcslls    = 0
-        THIS.this_nVminpiss   = 0
-        THIS.this_nVmincofins = 0
-        THIS.this_nVMinIrrfs  = 0
-        THIS.this_nVMinInss   = 0
-        THIS.this_nVMinCslls  = 0
-        THIS.this_nVminbpiss  = 0
-        THIS.this_nVminbcofin = 0
-        THIS.this_nVMinbIrrfs = 0
-        THIS.this_nVMinbInss  = 0
-        THIS.this_nVMinbCslls = 0
-        THIS.this_nNLanFPiss  = 0
-        THIS.this_nNLanFCofin = 0
-        THIS.this_nNLanFIrrfs = 0
-        THIS.this_nNLanFInss  = 0
-        THIS.this_nNLanFIss   = 0
-        THIS.this_nNLanFCslls = 0
-        THIS.this_nBpisms     = 0
-        THIS.this_nBcofinms   = 0
-        THIS.this_nBirrfms    = 0
-        THIS.this_nBinssms    = 0
-        THIS.this_nBcsllms    = 0
-        THIS.this_cOcorPiss   = ""
-        THIS.this_cOcorCofin  = ""
-        THIS.this_cOcorIrrfs  = ""
-        THIS.this_cOcorInss   = ""
-        THIS.this_cOcorCslls  = ""
-        THIS.this_cOcoriSS    = ""
-        THIS.this_cGrupo      = ""
-        THIS.this_cContab     = ""
-        THIS.this_nVcpis      = 1
-        THIS.this_nVccofins   = 1
-        THIS.this_nVcirrf     = 1
-        THIS.this_nVcinss     = 1
-        THIS.this_nVccsll     = 1
-        THIS.this_nVciss      = 1
-        THIS.this_cGrppiss    = ""
-        THIS.this_cCtaPiss    = ""
-        THIS.this_cGrpCofins  = ""
-        THIS.this_cCtaCofins  = ""
-        THIS.this_cGrpIrrfs   = ""
-        THIS.this_cCtaIrrfs   = ""
-        THIS.this_cGrpInss    = ""
-        THIS.this_cCtaInss    = ""
-        THIS.this_cGrpCslls   = ""
-        THIS.this_cCtaCslls   = ""
-        THIS.this_cGrpIss     = ""
-        THIS.this_cCtaIss     = ""
-        THIS.this_cCodpiss    = ""
-        THIS.this_cCodcofinss = ""
-        THIS.this_cCodcslls   = ""
-        THIS.this_cCodrecpis  = ""
-        THIS.this_cCodreccof  = ""
-        THIS.this_cCodreccsll = ""
-        THIS.this_cCodrecirrf = ""
-        THIS.this_nNrpas      = 2
-        THIS.this_nMaxretinss = 0
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * ValidarDados - Validacoes de negocio antes de salvar
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE ValidarDados()
-        IF EMPTY(ALLTRIM(THIS.this_cCodServs))
-            THIS.this_cMensagemErro = "C" + CHR(243) + "digo do Servi" + CHR(231) + CHR(227) + "o obrigat" + CHR(243) + "rio"
-            RETURN .F.
-        ENDIF
-        IF EMPTY(ALLTRIM(THIS.this_cDescServs))
-            THIS.this_cMensagemErro = "Descri" + CHR(231) + CHR(227) + "o do Servi" + CHR(231) + CHR(227) + "o obrigat" + CHR(243) + "ria"
-            RETURN .F.
-        ENDIF
-        RETURN .T.
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * Inserir - INSERT INTO SigCdSrv
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE Inserir()
-        LOCAL loc_cSQL, loc_nRet, loc_lResultado
-        loc_lResultado = .F.
-        loc_cSQL = "INSERT INTO SigCdSrv (" + ;
-                   "codservs, DescServs, cTipos, cIdChaves, " + ;
-                   "aiss, apiss, acofinss, airrfs, ainss, acslls, " + ;
-                   "vminpiss, vmincofins, vMinIrrfs, vMinInss, vMinCslls, " + ;
-                   "vminbpiss, vminbcofin, vMinbIrrfs, vMinbInss, vMinbCslls, " + ;
-                   "nlanfpiss, nLanFCofin, nLanFIrrfs, nLanFInss, nLanFIss, nLanFCslls, " + ;
-                   "bpisms, bcofinms, birrfms, binssms, bcsllms, " + ;
-                   "cocorpiss, cOcorCofin, cOcorIrrfs, cOcorInss, cOcorCslls, cOcoriSS, " + ;
-                   "cgrupo, cContab, vcpis, vccofins, vcirrf, vcinss, vccsll, vciss, " + ;
-                   "cgrppiss, cCtaPiss, cGrpCofins, cCtaCofins, cGrpIrrfs, cCtaIrrfs, " + ;
-                   "cgrpinss, cCtaInss, cGrpCslls, cCtaCslls, cGrpIss, cCtaIss, " + ;
-                   "codpiss, codcofinss, codcslls, codrecpis, codreccof, codreccsll, codrecirrf, " + ;
-                   "nrpas, maxretinss" + ;
-                   ") VALUES (" + ;
-                   EscaparSQL(ALLTRIM(THIS.this_cCodServs)) + ", " + ;
-                   EscaparSQL(ALLTRIM(THIS.this_cDescServs)) + ", " + ;
-                   EscaparSQL(THIS.this_cTipos) + ", " + ;
-                   EscaparSQL(ALLTRIM(THIS.this_cIdChaves)) + ", " + ;
-                   FormatarNumeroSQL(THIS.this_nAiss) + ", " + ;
-                   FormatarNumeroSQL(THIS.this_nApiss) + ", " + ;
-                   FormatarNumeroSQL(THIS.this_nAcofinss) + ", " + ;
-                   FormatarNumeroSQL(THIS.this_nAirrfs) + ", " + ;
-                   FormatarNumeroSQL(THIS.this_nAinss) + ", " + ;
-                   FormatarNumeroSQL(THIS.this_nAcslls) + ", " + ;
-                   FormatarNumeroSQL(THIS.this_nVminpiss) + ", " + ;
-                   FormatarNumeroSQL(THIS.this_nVmincofins) + ", " + ;
-                   FormatarNumeroSQL(THIS.this_nVMinIrrfs) + ", " + ;
-                   FormatarNumeroSQL(THIS.this_nVMinInss) + ", " + ;
-                   FormatarNumeroSQL(THIS.this_nVMinCslls) + ", " + ;
-                   FormatarNumeroSQL(THIS.this_nVminbpiss) + ", " + ;
-                   FormatarNumeroSQL(THIS.this_nVminbcofin) + ", " + ;
-                   FormatarNumeroSQL(THIS.this_nVMinbIrrfs) + ", " + ;
-                   FormatarNumeroSQL(THIS.this_nVMinbInss) + ", " + ;
-                   FormatarNumeroSQL(THIS.this_nVMinbCslls) + ", " + ;
-                   FormatarNumeroSQL(THIS.this_nNLanFPiss) + ", " + ;
-                   FormatarNumeroSQL(THIS.this_nNLanFCofin) + ", " + ;
-                   FormatarNumeroSQL(THIS.this_nNLanFIrrfs) + ", " + ;
-                   FormatarNumeroSQL(THIS.this_nNLanFInss) + ", " + ;
-                   FormatarNumeroSQL(THIS.this_nNLanFIss) + ", " + ;
-                   FormatarNumeroSQL(THIS.this_nNLanFCslls) + ", " + ;
-                   FormatarNumeroSQL(THIS.this_nBpisms) + ", " + ;
-                   FormatarNumeroSQL(THIS.this_nBcofinms) + ", " + ;
-                   FormatarNumeroSQL(THIS.this_nBirrfms) + ", " + ;
-                   FormatarNumeroSQL(THIS.this_nBinssms) + ", " + ;
-                   FormatarNumeroSQL(THIS.this_nBcsllms) + ", " + ;
-                   EscaparSQL(ALLTRIM(THIS.this_cOcorPiss)) + ", " + ;
-                   EscaparSQL(ALLTRIM(THIS.this_cOcorCofin)) + ", " + ;
-                   EscaparSQL(ALLTRIM(THIS.this_cOcorIrrfs)) + ", " + ;
-                   EscaparSQL(ALLTRIM(THIS.this_cOcorInss)) + ", " + ;
-                   EscaparSQL(ALLTRIM(THIS.this_cOcorCslls)) + ", " + ;
-                   EscaparSQL(ALLTRIM(THIS.this_cOcoriSS)) + ", " + ;
-                   EscaparSQL(ALLTRIM(THIS.this_cGrupo)) + ", " + ;
-                   EscaparSQL(ALLTRIM(THIS.this_cContab)) + ", " + ;
-                   FormatarNumeroSQL(THIS.this_nVcpis) + ", " + ;
-                   FormatarNumeroSQL(THIS.this_nVccofins) + ", " + ;
-                   FormatarNumeroSQL(THIS.this_nVcirrf) + ", " + ;
-                   FormatarNumeroSQL(THIS.this_nVcinss) + ", " + ;
-                   FormatarNumeroSQL(THIS.this_nVccsll) + ", " + ;
-                   FormatarNumeroSQL(THIS.this_nVciss) + ", " + ;
-                   EscaparSQL(ALLTRIM(THIS.this_cGrppiss)) + ", " + ;
-                   EscaparSQL(ALLTRIM(THIS.this_cCtaPiss)) + ", " + ;
-                   EscaparSQL(ALLTRIM(THIS.this_cGrpCofins)) + ", " + ;
-                   EscaparSQL(ALLTRIM(THIS.this_cCtaCofins)) + ", " + ;
-                   EscaparSQL(ALLTRIM(THIS.this_cGrpIrrfs)) + ", " + ;
-                   EscaparSQL(ALLTRIM(THIS.this_cCtaIrrfs)) + ", " + ;
-                   EscaparSQL(ALLTRIM(THIS.this_cGrpInss)) + ", " + ;
-                   EscaparSQL(ALLTRIM(THIS.this_cCtaInss)) + ", " + ;
-                   EscaparSQL(ALLTRIM(THIS.this_cGrpCslls)) + ", " + ;
-                   EscaparSQL(ALLTRIM(THIS.this_cCtaCslls)) + ", " + ;
-                   EscaparSQL(ALLTRIM(THIS.this_cGrpIss)) + ", " + ;
-                   EscaparSQL(ALLTRIM(THIS.this_cCtaIss)) + ", " + ;
-                   EscaparSQL(ALLTRIM(THIS.this_cCodpiss)) + ", " + ;
-                   EscaparSQL(ALLTRIM(THIS.this_cCodcofinss)) + ", " + ;
-                   EscaparSQL(ALLTRIM(THIS.this_cCodcslls)) + ", " + ;
-                   EscaparSQL(ALLTRIM(THIS.this_cCodrecpis)) + ", " + ;
-                   EscaparSQL(ALLTRIM(THIS.this_cCodreccof)) + ", " + ;
-                   EscaparSQL(ALLTRIM(THIS.this_cCodreccsll)) + ", " + ;
-                   EscaparSQL(ALLTRIM(THIS.this_cCodrecirrf)) + ", " + ;
-                   FormatarNumeroSQL(THIS.this_nNrpas) + ", " + ;
-                   FormatarNumeroSQL(THIS.this_nMaxretinss) + ")"
-        loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL)
-        IF loc_nRet > 0
-            THIS.RegistrarAuditoria("INSERT")
-            loc_lResultado = .T.
-        ELSE
-            THIS.this_cMensagemErro = "Erro ao inserir servi" + CHR(231) + CHR(227) + "o"
-        ENDIF
-        RETURN loc_lResultado
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * Atualizar - UPDATE SigCdSrv
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE Atualizar()
-        LOCAL loc_cSQL, loc_nRet, loc_lResultado
-        loc_lResultado = .F.
-        loc_cSQL = "UPDATE SigCdSrv SET " + ;
-                   "DescServs = "    + EscaparSQL(ALLTRIM(THIS.this_cDescServs)) + ", " + ;
-                   "cIdChaves = "    + EscaparSQL(ALLTRIM(THIS.this_cIdChaves)) + ", " + ;
-                   "aiss = "         + FormatarNumeroSQL(THIS.this_nAiss) + ", " + ;
-                   "apiss = "        + FormatarNumeroSQL(THIS.this_nApiss) + ", " + ;
-                   "acofinss = "     + FormatarNumeroSQL(THIS.this_nAcofinss) + ", " + ;
-                   "airrfs = "       + FormatarNumeroSQL(THIS.this_nAirrfs) + ", " + ;
-                   "ainss = "        + FormatarNumeroSQL(THIS.this_nAinss) + ", " + ;
-                   "acslls = "       + FormatarNumeroSQL(THIS.this_nAcslls) + ", " + ;
-                   "vminpiss = "     + FormatarNumeroSQL(THIS.this_nVminpiss) + ", " + ;
-                   "vmincofins = "   + FormatarNumeroSQL(THIS.this_nVmincofins) + ", " + ;
-                   "vMinIrrfs = "    + FormatarNumeroSQL(THIS.this_nVMinIrrfs) + ", " + ;
-                   "vMinInss = "     + FormatarNumeroSQL(THIS.this_nVMinInss) + ", " + ;
-                   "vMinCslls = "    + FormatarNumeroSQL(THIS.this_nVMinCslls) + ", " + ;
-                   "vminbpiss = "    + FormatarNumeroSQL(THIS.this_nVminbpiss) + ", " + ;
-                   "vminbcofin = "   + FormatarNumeroSQL(THIS.this_nVminbcofin) + ", " + ;
-                   "vMinbIrrfs = "   + FormatarNumeroSQL(THIS.this_nVMinbIrrfs) + ", " + ;
-                   "vMinbInss = "    + FormatarNumeroSQL(THIS.this_nVMinbInss) + ", " + ;
-                   "vMinbCslls = "   + FormatarNumeroSQL(THIS.this_nVMinbCslls) + ", " + ;
-                   "nLanFPiss = "    + FormatarNumeroSQL(THIS.this_nNLanFPiss) + ", " + ;
-                   "nLanFCofin = "   + FormatarNumeroSQL(THIS.this_nNLanFCofin) + ", " + ;
-                   "nLanFIrrfs = "   + FormatarNumeroSQL(THIS.this_nNLanFIrrfs) + ", " + ;
-                   "nLanFInss = "    + FormatarNumeroSQL(THIS.this_nNLanFInss) + ", " + ;
-                   "nLanFIss = "     + FormatarNumeroSQL(THIS.this_nNLanFIss) + ", " + ;
-                   "nLanFCslls = "   + FormatarNumeroSQL(THIS.this_nNLanFCslls) + ", " + ;
-                   "bpisms = "       + FormatarNumeroSQL(THIS.this_nBpisms) + ", " + ;
-                   "bcofinms = "     + FormatarNumeroSQL(THIS.this_nBcofinms) + ", " + ;
-                   "birrfms = "      + FormatarNumeroSQL(THIS.this_nBirrfms) + ", " + ;
-                   "binssms = "      + FormatarNumeroSQL(THIS.this_nBinssms) + ", " + ;
-                   "bcsllms = "      + FormatarNumeroSQL(THIS.this_nBcsllms) + ", " + ;
-                   "cOcorPiss = "    + EscaparSQL(ALLTRIM(THIS.this_cOcorPiss)) + ", " + ;
-                   "cOcorCofin = "   + EscaparSQL(ALLTRIM(THIS.this_cOcorCofin)) + ", " + ;
-                   "cOcorIrrfs = "   + EscaparSQL(ALLTRIM(THIS.this_cOcorIrrfs)) + ", " + ;
-                   "cOcorInss = "    + EscaparSQL(ALLTRIM(THIS.this_cOcorInss)) + ", " + ;
-                   "cOcorCslls = "   + EscaparSQL(ALLTRIM(THIS.this_cOcorCslls)) + ", " + ;
-                   "cOcoriSS = "     + EscaparSQL(ALLTRIM(THIS.this_cOcoriSS)) + ", " + ;
-                   "cGrupo = "       + EscaparSQL(ALLTRIM(THIS.this_cGrupo)) + ", " + ;
-                   "cContab = "      + EscaparSQL(ALLTRIM(THIS.this_cContab)) + ", " + ;
-                   "vcpis = "        + FormatarNumeroSQL(THIS.this_nVcpis) + ", " + ;
-                   "vccofins = "     + FormatarNumeroSQL(THIS.this_nVccofins) + ", " + ;
-                   "vcirrf = "       + FormatarNumeroSQL(THIS.this_nVcirrf) + ", " + ;
-                   "vcinss = "       + FormatarNumeroSQL(THIS.this_nVcinss) + ", " + ;
-                   "vccsll = "       + FormatarNumeroSQL(THIS.this_nVccsll) + ", " + ;
-                   "vciss = "        + FormatarNumeroSQL(THIS.this_nVciss) + ", " + ;
-                   "cGrppiss = "     + EscaparSQL(ALLTRIM(THIS.this_cGrppiss)) + ", " + ;
-                   "cCtaPiss = "     + EscaparSQL(ALLTRIM(THIS.this_cCtaPiss)) + ", " + ;
-                   "cGrpCofins = "   + EscaparSQL(ALLTRIM(THIS.this_cGrpCofins)) + ", " + ;
-                   "cCtaCofins = "   + EscaparSQL(ALLTRIM(THIS.this_cCtaCofins)) + ", " + ;
-                   "cGrpIrrfs = "    + EscaparSQL(ALLTRIM(THIS.this_cGrpIrrfs)) + ", " + ;
-                   "cCtaIrrfs = "    + EscaparSQL(ALLTRIM(THIS.this_cCtaIrrfs)) + ", " + ;
-                   "cGrpInss = "     + EscaparSQL(ALLTRIM(THIS.this_cGrpInss)) + ", " + ;
-                   "cCtaInss = "     + EscaparSQL(ALLTRIM(THIS.this_cCtaInss)) + ", " + ;
-                   "cGrpCslls = "    + EscaparSQL(ALLTRIM(THIS.this_cGrpCslls)) + ", " + ;
-                   "cCtaCslls = "    + EscaparSQL(ALLTRIM(THIS.this_cCtaCslls)) + ", " + ;
-                   "cGrpIss = "      + EscaparSQL(ALLTRIM(THIS.this_cGrpIss)) + ", " + ;
-                   "cCtaIss = "      + EscaparSQL(ALLTRIM(THIS.this_cCtaIss)) + ", " + ;
-                   "codpiss = "      + EscaparSQL(ALLTRIM(THIS.this_cCodpiss)) + ", " + ;
-                   "codcofinss = "   + EscaparSQL(ALLTRIM(THIS.this_cCodcofinss)) + ", " + ;
-                   "codcslls = "     + EscaparSQL(ALLTRIM(THIS.this_cCodcslls)) + ", " + ;
-                   "codrecpis = "    + EscaparSQL(ALLTRIM(THIS.this_cCodrecpis)) + ", " + ;
-                   "codreccof = "    + EscaparSQL(ALLTRIM(THIS.this_cCodreccof)) + ", " + ;
-                   "codreccsll = "   + EscaparSQL(ALLTRIM(THIS.this_cCodreccsll)) + ", " + ;
-                   "codrecirrf = "   + EscaparSQL(ALLTRIM(THIS.this_cCodrecirrf)) + ", " + ;
-                   "nrpas = "        + FormatarNumeroSQL(THIS.this_nNrpas) + ", " + ;
-                   "maxretinss = "   + FormatarNumeroSQL(THIS.this_nMaxretinss) + ;
-                   " WHERE CodServs = " + EscaparSQL(ALLTRIM(THIS.this_cCodServs)) + ;
-                   " AND cTipos = "    + EscaparSQL(THIS.this_cTipos)
-        loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL)
-        IF loc_nRet > 0
-            THIS.RegistrarAuditoria("UPDATE")
-            loc_lResultado = .T.
-        ELSE
-            THIS.this_cMensagemErro = "Erro ao atualizar servi" + CHR(231) + CHR(227) + "o"
-        ENDIF
-        RETURN loc_lResultado
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * ExecutarExclusao - DELETE de SigSeRvp e SigCdSrv
-    *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE ExecutarExclusao()
-        LOCAL loc_cSQL, loc_nRet, loc_lResultado
-        loc_lResultado = .F.
+        LOCAL loc_lSucesso
+        loc_lSucesso = .F.
         TRY
-            *-- Exclui produtos vinculados primeiro
-            loc_cSQL = "DELETE FROM SigSeRvp WHERE CodServs = " + EscaparSQL(ALLTRIM(THIS.this_cCodServs))
-            SQLEXEC(gnConnHandle, loc_cSQL)
+            DODEFAULT()
+            THIS.this_cTabela     = "SigCdSrv"
+            THIS.this_cCampoChave = "cidchaves"
+            loc_lSucesso = .T.
+        CATCH TO loException
+            MostrarErro(loException, "SRVBO.Init")
+        ENDTRY
+        RETURN loc_lSucesso
+    ENDPROC
 
-            *-- Exclui o servico
-            loc_cSQL = "DELETE FROM SigCdSrv WHERE CodServs = " + EscaparSQL(ALLTRIM(THIS.this_cCodServs)) + ;
-                       " AND cTipos = " + EscaparSQL(THIS.this_cTipos)
-            loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL)
-            IF loc_nRet > 0
-                THIS.RegistrarAuditoria("DELETE")
+    *====================================================================
+    * ObterChavePrimaria - Retorna PK para auditoria (RegistrarAuditoria)
+    *====================================================================
+    PROTECTED FUNCTION ObterChavePrimaria()
+        RETURN ALLTRIM(THIS.this_cCidChaves)
+    ENDFUNC
+
+    *====================================================================
+    * LimparDados - Reseta todas as propriedades para novo registro
+    *====================================================================
+    PROTECTED PROCEDURE LimparDados()
+        DODEFAULT()
+
+        THIS.this_cCidChaves = ""
+        THIS.this_cCodigo    = ""
+        THIS.this_cDescricao = ""
+        *-- this_cTipo NAO eh resetado: contexto Saidas/Entradas definido pelo Form
+
+        THIS.this_nAliquotaPis    = 0
+        THIS.this_nAliquotaCofins = 0
+        THIS.this_nAliquotaIrrf   = 0
+        THIS.this_nAliquotaInss   = 0
+        THIS.this_nAliquotaCsll   = 0
+        THIS.this_nAliquotaIss    = 0
+
+        THIS.this_nValorMinimoPis    = 0
+        THIS.this_nValorMinimoCofins = 0
+        THIS.this_nValorMinimoIrrf   = 0
+        THIS.this_nValorMinimoInss   = 0
+        THIS.this_nValorMinimoCsll   = 0
+
+        THIS.this_nBaseMinimaPis    = 0
+        THIS.this_nBaseMinimaCofins = 0
+        THIS.this_nBaseMinimaIrrf   = 0
+        THIS.this_nBaseMinimaInss   = 0
+        THIS.this_nBaseMinimaCsll   = 0
+
+        THIS.this_lMensalPis    = .F.
+        THIS.this_lMensalCofins = .F.
+        THIS.this_lMensalIrrf   = .F.
+        THIS.this_lMensalInss   = .F.
+        THIS.this_lMensalCsll   = .F.
+
+        THIS.this_lLancFinPis    = .F.
+        THIS.this_lLancFinCofins = .F.
+        THIS.this_lLancFinIrrf   = .F.
+        THIS.this_lLancFinInss   = .F.
+        THIS.this_lLancFinCsll   = .F.
+        THIS.this_lLancFinIss    = .F.
+
+        THIS.this_cCodOcorPis    = ""
+        THIS.this_cCodOcorCofins = ""
+        THIS.this_cCodOcorIrrf   = ""
+        THIS.this_cCodOcorInss   = ""
+        THIS.this_cCodOcorCsll   = ""
+        THIS.this_cCodOcorIss    = ""
+
+        THIS.this_cCodCofins = ""
+        THIS.this_cCodCsll   = ""
+        THIS.this_cCodPis    = ""
+
+        THIS.this_cGrupoContab = ""
+        THIS.this_cContaContab = ""
+
+        THIS.this_cGrupoPis    = ""
+        THIS.this_cContaPis    = ""
+        THIS.this_cGrupoCofins = ""
+        THIS.this_cContaCofins = ""
+        THIS.this_cGrupoIrrf   = ""
+        THIS.this_cContaIrrf   = ""
+        THIS.this_cGrupoInss   = ""
+        THIS.this_cContaInss   = ""
+        THIS.this_cGrupoCsll   = ""
+        THIS.this_cContaCsll   = ""
+        THIS.this_cGrupoIss    = ""
+        THIS.this_cContaIss    = ""
+
+        THIS.this_nVencimentoPis    = 0
+        THIS.this_nVencimentoCofins = 0
+        THIS.this_nVencimentoIrrf   = 0
+        THIS.this_nVencimentoInss   = 0
+        THIS.this_nVencimentoCsll   = 0
+        THIS.this_nVencimentoIss    = 0
+
+        THIS.this_nRPA                     = 0
+        THIS.this_nValorMaximoRetencaoInss = 0
+        THIS.this_cCodRecCofins            = ""
+        THIS.this_cCodRecPis               = ""
+        THIS.this_cCodRecCsll              = ""
+        THIS.this_cCodRecIrrf              = ""
+
+        IF USED(THIS.this_cCursorProdutos)
+            USE IN (THIS.this_cCursorProdutos)
+        ENDIF
+        SET NULL ON
+        CREATE CURSOR cursor_4c_Produtos (CidChaves C(20), CodServs C(10), CPros C(14), DPros C(40))
+        SET NULL OFF
+    ENDPROC
+
+    *====================================================================
+    * Buscar - SELECT servicos do tipo atual (this_cTipo), filtro opcional
+    *====================================================================
+    FUNCTION Buscar(par_cFiltro)
+        LOCAL loc_lResultado, loc_cSQL, loc_nResultado
+        loc_lResultado = .F.
+
+        TRY
+            loc_cSQL = "SELECT cidchaves, codservs, descservs, ctipos" + ;
+                       " FROM SigCdSrv" + ;
+                       " WHERE ctipos = " + EscaparSQL(THIS.this_cTipo)
+
+            IF VARTYPE(par_cFiltro) = "C" AND !EMPTY(par_cFiltro)
+                loc_cSQL = loc_cSQL + ;
+                    " AND (UPPER(codservs) LIKE UPPER(" + ;
+                    EscaparSQL("%" + ALLTRIM(par_cFiltro) + "%") + ")" + ;
+                    " OR UPPER(descservs) LIKE UPPER(" + ;
+                    EscaparSQL("%" + ALLTRIM(par_cFiltro) + "%") + "))"
+            ENDIF
+
+            loc_cSQL = loc_cSQL + " ORDER BY codservs"
+
+            IF USED("cursor_4c_Dados")
+                USE IN cursor_4c_Dados
+            ENDIF
+
+            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Dados")
+            IF loc_nResultado >= 0
                 loc_lResultado = .T.
             ELSE
-                THIS.this_cMensagemErro = "Erro ao excluir servi" + CHR(231) + CHR(227) + "o"
+                MsgErro("Erro ao buscar servicos:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
             ENDIF
         CATCH TO loc_oErro
-            THIS.this_cMensagemErro = loc_oErro.Message
+            MsgErro("Erro em SRVBO.Buscar:" + CHR(13) + loc_oErro.Message, "Erro")
         ENDTRY
-        RETURN loc_lResultado
-    ENDPROC
 
-    *--------------------------------------------------------------------------
-    * Buscar - SELECT SigCdSrv filtrado por cTipos e filtro opcional
-    * Popula cursor_4c_Dados (protegido via temp)
-    *--------------------------------------------------------------------------
-    PROCEDURE Buscar(par_cFiltro)
-        LOCAL loc_cSQL, loc_cWhere, loc_nRet, loc_lResultado
+        RETURN loc_lResultado
+    ENDFUNC
+
+    *====================================================================
+    * CarregarPorCodigo - SELECT registro por codigo (+ tipo atual) e produtos
+    *====================================================================
+    FUNCTION CarregarPorCodigo(par_cCodigo)
+        LOCAL loc_lResultado, loc_cSQL, loc_nResultado
         loc_lResultado = .F.
+
         TRY
-            loc_cWhere = "cTipos = " + EscaparSQL(THIS.this_cTipos)
-            IF TYPE("par_cFiltro") = "C" AND !EMPTY(ALLTRIM(par_cFiltro))
-                loc_cWhere = loc_cWhere + " AND CodServs LIKE " + EscaparSQL("%" + ALLTRIM(par_cFiltro) + "%")
+            loc_cSQL = "SELECT cidchaves, codservs, descservs, ctipos," + ;
+                " apiss, acofinss, airrfs, ainss, aiss, acslls," + ;
+                " vminpiss, vmincofins, vminirrfs, vmininss, vmincslls," + ;
+                " vminbpiss, vminbcofin, vminbirrfs, vminbinss, vminbcslls," + ;
+                " bpisms, bcofinms, birrfms, binssms, bcsllms," + ;
+                " nlanfpiss, nlanfcofin, nlanfirrfs, nlanfinss, nlanfcslls, nlanfiss," + ;
+                " cocorpiss, cocorcofin, cocorirrfs, cocorinss, cocorcslls, cocoriss," + ;
+                " codpiss, codcslls, codcofinss, cgrupo, ccontab," + ;
+                " cgrppiss, cctapiss, cgrpcofins, cctacofins, cgrpirrfs, cctairrfs," + ;
+                " cgrpinss, cctainss, cgrpcslls, cctacslls, cgrpiss, cctaiss," + ;
+                " vcpis, vccofins, vcirrf, vcinss, vccsll, vciss," + ;
+                " nrpas, maxretinss, codreccof, codrecpis, codreccsll, codrecirrf" + ;
+                " FROM SigCdSrv" + ;
+                " WHERE codservs = " + EscaparSQL(ALLTRIM(par_cCodigo)) + ;
+                " AND ctipos = " + EscaparSQL(THIS.this_cTipo)
+
+            IF USED("cursor_4c_Carrega")
+                USE IN cursor_4c_Carrega
             ENDIF
-            loc_cSQL = "SELECT * FROM SigCdSrv WHERE " + loc_cWhere + " ORDER BY CodServs"
-            IF USED("cursor_4c_DadosTemp")
-                USE IN cursor_4c_DadosTemp
-            ENDIF
-            loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_DadosTemp")
-            IF loc_nRet > 0
-                IF USED("cursor_4c_Dados")
-                    USE IN cursor_4c_Dados
+
+            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Carrega")
+            IF loc_nResultado >= 0 AND RECCOUNT("cursor_4c_Carrega") > 0
+                loc_lResultado = THIS.CarregarDoCursor("cursor_4c_Carrega")
+                IF loc_lResultado
+                    THIS.this_lNovoRegistro = .F.
+                    THIS.CarregarProdutos(THIS.this_cCodigo)
                 ENDIF
-                SELECT * FROM cursor_4c_DadosTemp INTO CURSOR cursor_4c_Dados READWRITE
-                USE IN cursor_4c_DadosTemp
-                loc_lResultado = .T.
             ELSE
-                THIS.this_cMensagemErro = "Erro ao buscar servi" + CHR(231) + CHR(227) + "os"
-            ENDIF
-        CATCH TO loc_oErro
-            THIS.this_cMensagemErro = loc_oErro.Message
-        ENDTRY
-        RETURN loc_lResultado
-    ENDPROC
-
-    *--------------------------------------------------------------------------
-    * CarregarPorCodigo - Carrega propriedades do BO a partir do banco
-    *--------------------------------------------------------------------------
-    PROCEDURE CarregarPorCodigo(par_cCodigo)
-        LOCAL loc_cSQL, loc_nRet, loc_lResultado
-        loc_lResultado = .F.
-        TRY
-            loc_cSQL = "SELECT * FROM SigCdSrv WHERE CodServs = " + EscaparSQL(ALLTRIM(par_cCodigo)) + ;
-                       " AND cTipos = " + EscaparSQL(THIS.this_cTipos)
-            IF USED("cursor_4c_CarregaTemp")
-                USE IN cursor_4c_CarregaTemp
-            ENDIF
-            loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_CarregaTemp")
-            IF loc_nRet > 0 AND USED("cursor_4c_CarregaTemp") AND !EOF("cursor_4c_CarregaTemp")
-                THIS.this_cCodServs   = ALLTRIM(cursor_4c_CarregaTemp.CodServs)
-                THIS.this_cDescServs  = ALLTRIM(cursor_4c_CarregaTemp.DescServs)
-                THIS.this_cIdChaves   = ALLTRIM(NVL(cursor_4c_CarregaTemp.cIdChaves, ""))
-                THIS.this_nAiss       = NVL(cursor_4c_CarregaTemp.aiss, 0)
-                THIS.this_nApiss      = NVL(cursor_4c_CarregaTemp.apiss, 0)
-                THIS.this_nAcofinss   = NVL(cursor_4c_CarregaTemp.acofinss, 0)
-                THIS.this_nAirrfs     = NVL(cursor_4c_CarregaTemp.airrfs, 0)
-                THIS.this_nAinss      = NVL(cursor_4c_CarregaTemp.ainss, 0)
-                THIS.this_nAcslls     = NVL(cursor_4c_CarregaTemp.acslls, 0)
-                THIS.this_nVminpiss   = NVL(cursor_4c_CarregaTemp.vminpiss, 0)
-                THIS.this_nVmincofins = NVL(cursor_4c_CarregaTemp.vmincofins, 0)
-                THIS.this_nVMinIrrfs  = NVL(cursor_4c_CarregaTemp.vMinIrrfs, 0)
-                THIS.this_nVMinInss   = NVL(cursor_4c_CarregaTemp.vMinInss, 0)
-                THIS.this_nVMinCslls  = NVL(cursor_4c_CarregaTemp.vMinCslls, 0)
-                THIS.this_nVminbpiss  = NVL(cursor_4c_CarregaTemp.vminbpiss, 0)
-                THIS.this_nVminbcofin = NVL(cursor_4c_CarregaTemp.vminbcofin, 0)
-                THIS.this_nVMinbIrrfs = NVL(cursor_4c_CarregaTemp.vMinbIrrfs, 0)
-                THIS.this_nVMinbInss  = NVL(cursor_4c_CarregaTemp.vMinbInss, 0)
-                THIS.this_nVMinbCslls = NVL(cursor_4c_CarregaTemp.vMinbCslls, 0)
-                THIS.this_nNLanFPiss  = NVL(cursor_4c_CarregaTemp.nLanFPiss, 0)
-                THIS.this_nNLanFCofin = NVL(cursor_4c_CarregaTemp.nLanFCofin, 0)
-                THIS.this_nNLanFIrrfs = NVL(cursor_4c_CarregaTemp.nLanFIrrfs, 0)
-                THIS.this_nNLanFInss  = NVL(cursor_4c_CarregaTemp.nLanFInss, 0)
-                THIS.this_nNLanFIss   = NVL(cursor_4c_CarregaTemp.nLanFIss, 0)
-                THIS.this_nNLanFCslls = NVL(cursor_4c_CarregaTemp.nLanFCslls, 0)
-                THIS.this_nBpisms     = NVL(cursor_4c_CarregaTemp.bpisms, 0)
-                THIS.this_nBcofinms   = NVL(cursor_4c_CarregaTemp.bcofinms, 0)
-                THIS.this_nBirrfms    = NVL(cursor_4c_CarregaTemp.birrfms, 0)
-                THIS.this_nBinssms    = NVL(cursor_4c_CarregaTemp.binssms, 0)
-                THIS.this_nBcsllms    = NVL(cursor_4c_CarregaTemp.bcsllms, 0)
-                THIS.this_cOcorPiss   = ALLTRIM(NVL(cursor_4c_CarregaTemp.cOcorPiss, ""))
-                THIS.this_cOcorCofin  = ALLTRIM(NVL(cursor_4c_CarregaTemp.cOcorCofin, ""))
-                THIS.this_cOcorIrrfs  = ALLTRIM(NVL(cursor_4c_CarregaTemp.cOcorIrrfs, ""))
-                THIS.this_cOcorInss   = ALLTRIM(NVL(cursor_4c_CarregaTemp.cOcorInss, ""))
-                THIS.this_cOcorCslls  = ALLTRIM(NVL(cursor_4c_CarregaTemp.cOcorCslls, ""))
-                THIS.this_cOcoriSS    = ALLTRIM(NVL(cursor_4c_CarregaTemp.cOcoriSS, ""))
-                THIS.this_cGrupo      = ALLTRIM(NVL(cursor_4c_CarregaTemp.cGrupo, ""))
-                THIS.this_cContab     = ALLTRIM(NVL(cursor_4c_CarregaTemp.cContab, ""))
-                THIS.this_nVcpis      = NVL(cursor_4c_CarregaTemp.vcpis, 1)
-                THIS.this_nVccofins   = NVL(cursor_4c_CarregaTemp.vccofins, 1)
-                THIS.this_nVcirrf     = NVL(cursor_4c_CarregaTemp.vcirrf, 1)
-                THIS.this_nVcinss     = NVL(cursor_4c_CarregaTemp.vcinss, 1)
-                THIS.this_nVccsll     = NVL(cursor_4c_CarregaTemp.vccsll, 1)
-                THIS.this_nVciss      = NVL(cursor_4c_CarregaTemp.vciss, 1)
-                THIS.this_cGrppiss    = ALLTRIM(NVL(cursor_4c_CarregaTemp.cGrppiss, ""))
-                THIS.this_cCtaPiss    = ALLTRIM(NVL(cursor_4c_CarregaTemp.cCtaPiss, ""))
-                THIS.this_cGrpCofins  = ALLTRIM(NVL(cursor_4c_CarregaTemp.cGrpCofins, ""))
-                THIS.this_cCtaCofins  = ALLTRIM(NVL(cursor_4c_CarregaTemp.cCtaCofins, ""))
-                THIS.this_cGrpIrrfs   = ALLTRIM(NVL(cursor_4c_CarregaTemp.cGrpIrrfs, ""))
-                THIS.this_cCtaIrrfs   = ALLTRIM(NVL(cursor_4c_CarregaTemp.cCtaIrrfs, ""))
-                THIS.this_cGrpInss    = ALLTRIM(NVL(cursor_4c_CarregaTemp.cGrpInss, ""))
-                THIS.this_cCtaInss    = ALLTRIM(NVL(cursor_4c_CarregaTemp.cCtaInss, ""))
-                THIS.this_cGrpCslls   = ALLTRIM(NVL(cursor_4c_CarregaTemp.cGrpCslls, ""))
-                THIS.this_cCtaCslls   = ALLTRIM(NVL(cursor_4c_CarregaTemp.cCtaCslls, ""))
-                THIS.this_cGrpIss     = ALLTRIM(NVL(cursor_4c_CarregaTemp.cGrpIss, ""))
-                THIS.this_cCtaIss     = ALLTRIM(NVL(cursor_4c_CarregaTemp.cCtaIss, ""))
-                THIS.this_cCodpiss    = ALLTRIM(NVL(cursor_4c_CarregaTemp.codpiss, ""))
-                THIS.this_cCodcofinss = ALLTRIM(NVL(cursor_4c_CarregaTemp.codcofinss, ""))
-                THIS.this_cCodcslls   = ALLTRIM(NVL(cursor_4c_CarregaTemp.codcslls, ""))
-                THIS.this_cCodrecpis  = ALLTRIM(NVL(cursor_4c_CarregaTemp.codrecpis, ""))
-                THIS.this_cCodreccof  = ALLTRIM(NVL(cursor_4c_CarregaTemp.codreccof, ""))
-                THIS.this_cCodreccsll = ALLTRIM(NVL(cursor_4c_CarregaTemp.codreccsll, ""))
-                THIS.this_cCodrecirrf = ALLTRIM(NVL(cursor_4c_CarregaTemp.codrecirrf, ""))
-                THIS.this_nNrpas      = NVL(cursor_4c_CarregaTemp.nrpas, 2)
-                THIS.this_nMaxretinss = NVL(cursor_4c_CarregaTemp.maxretinss, 0)
-                THIS.this_lNovoRegistro = .F.
-                USE IN cursor_4c_CarregaTemp
-                loc_lResultado = .T.
-            ELSE
-                THIS.this_cMensagemErro = "Servi" + CHR(231) + CHR(227) + "o n" + CHR(227) + "o encontrado"
-                IF USED("cursor_4c_CarregaTemp")
-                    USE IN cursor_4c_CarregaTemp
+                IF loc_nResultado < 0
+                    MsgErro("Erro ao carregar servico:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
                 ENDIF
             ENDIF
         CATCH TO loc_oErro
-            THIS.this_cMensagemErro = loc_oErro.Message
-            IF USED("cursor_4c_CarregaTemp")
-                USE IN cursor_4c_CarregaTemp
-            ENDIF
+            MsgErro("Erro em SRVBO.CarregarPorCodigo:" + CHR(13) + loc_oErro.Message, "Erro")
         ENDTRY
-        RETURN loc_lResultado
-    ENDPROC
 
-    *--------------------------------------------------------------------------
-    * CarregarDoCursor - Popula propriedades do BO a partir de cursor posicionado
-    *--------------------------------------------------------------------------
-    PROCEDURE CarregarDoCursor(par_cAlias)
+        IF USED("cursor_4c_Carrega")
+            USE IN cursor_4c_Carrega
+        ENDIF
+
+        RETURN loc_lResultado
+    ENDFUNC
+
+    *====================================================================
+    * CarregarDoCursor - Mapeia TODAS as colunas do cursor para as
+    * propriedades this_* (chamado por CarregarPorCodigo)
+    *====================================================================
+    PROTECTED FUNCTION CarregarDoCursor(par_cAliasCursor)
         LOCAL loc_lResultado
         loc_lResultado = .F.
+
         TRY
-            IF NOT (USED(par_cAlias) AND !EOF(par_cAlias))
-                THIS.this_cMensagemErro = "Cursor " + par_cAlias + " n" + CHR(227) + "o dispon" + CHR(237) + "vel"
-            ELSE
-                THIS.this_cCodServs   = ALLTRIM(EVALUATE(par_cAlias + ".CodServs"))
-                THIS.this_cDescServs  = ALLTRIM(EVALUATE(par_cAlias + ".DescServs"))
-                THIS.this_cIdChaves   = ALLTRIM(NVL(EVALUATE(par_cAlias + ".cIdChaves"), ""))
-                THIS.this_nAiss       = NVL(EVALUATE(par_cAlias + ".aiss"), 0)
-                THIS.this_nApiss      = NVL(EVALUATE(par_cAlias + ".apiss"), 0)
-                THIS.this_nAcofinss   = NVL(EVALUATE(par_cAlias + ".acofinss"), 0)
-                THIS.this_nAirrfs     = NVL(EVALUATE(par_cAlias + ".airrfs"), 0)
-                THIS.this_nAinss      = NVL(EVALUATE(par_cAlias + ".ainss"), 0)
-                THIS.this_nAcslls     = NVL(EVALUATE(par_cAlias + ".acslls"), 0)
-                THIS.this_nVminpiss   = NVL(EVALUATE(par_cAlias + ".vminpiss"), 0)
-                THIS.this_nVmincofins = NVL(EVALUATE(par_cAlias + ".vmincofins"), 0)
-                THIS.this_nVMinIrrfs  = NVL(EVALUATE(par_cAlias + ".vMinIrrfs"), 0)
-                THIS.this_nVMinInss   = NVL(EVALUATE(par_cAlias + ".vMinInss"), 0)
-                THIS.this_nVMinCslls  = NVL(EVALUATE(par_cAlias + ".vMinCslls"), 0)
-                THIS.this_nVminbpiss  = NVL(EVALUATE(par_cAlias + ".vminbpiss"), 0)
-                THIS.this_nVminbcofin = NVL(EVALUATE(par_cAlias + ".vminbcofin"), 0)
-                THIS.this_nVMinbIrrfs = NVL(EVALUATE(par_cAlias + ".vMinbIrrfs"), 0)
-                THIS.this_nVMinbInss  = NVL(EVALUATE(par_cAlias + ".vMinbInss"), 0)
-                THIS.this_nVMinbCslls = NVL(EVALUATE(par_cAlias + ".vMinbCslls"), 0)
-                THIS.this_nNLanFPiss  = NVL(EVALUATE(par_cAlias + ".nLanFPiss"), 0)
-                THIS.this_nNLanFCofin = NVL(EVALUATE(par_cAlias + ".nLanFCofin"), 0)
-                THIS.this_nNLanFIrrfs = NVL(EVALUATE(par_cAlias + ".nLanFIrrfs"), 0)
-                THIS.this_nNLanFInss  = NVL(EVALUATE(par_cAlias + ".nLanFInss"), 0)
-                THIS.this_nNLanFIss   = NVL(EVALUATE(par_cAlias + ".nLanFIss"), 0)
-                THIS.this_nNLanFCslls = NVL(EVALUATE(par_cAlias + ".nLanFCslls"), 0)
-                THIS.this_nBpisms     = NVL(EVALUATE(par_cAlias + ".bpisms"), 0)
-                THIS.this_nBcofinms   = NVL(EVALUATE(par_cAlias + ".bcofinms"), 0)
-                THIS.this_nBirrfms    = NVL(EVALUATE(par_cAlias + ".birrfms"), 0)
-                THIS.this_nBinssms    = NVL(EVALUATE(par_cAlias + ".binssms"), 0)
-                THIS.this_nBcsllms    = NVL(EVALUATE(par_cAlias + ".bcsllms"), 0)
-                THIS.this_cOcorPiss   = ALLTRIM(NVL(EVALUATE(par_cAlias + ".cOcorPiss"), ""))
-                THIS.this_cOcorCofin  = ALLTRIM(NVL(EVALUATE(par_cAlias + ".cOcorCofin"), ""))
-                THIS.this_cOcorIrrfs  = ALLTRIM(NVL(EVALUATE(par_cAlias + ".cOcorIrrfs"), ""))
-                THIS.this_cOcorInss   = ALLTRIM(NVL(EVALUATE(par_cAlias + ".cOcorInss"), ""))
-                THIS.this_cOcorCslls  = ALLTRIM(NVL(EVALUATE(par_cAlias + ".cOcorCslls"), ""))
-                THIS.this_cOcoriSS    = ALLTRIM(NVL(EVALUATE(par_cAlias + ".cOcoriSS"), ""))
-                THIS.this_cGrupo      = ALLTRIM(NVL(EVALUATE(par_cAlias + ".cGrupo"), ""))
-                THIS.this_cContab     = ALLTRIM(NVL(EVALUATE(par_cAlias + ".cContab"), ""))
-                THIS.this_nVcpis      = NVL(EVALUATE(par_cAlias + ".vcpis"), 1)
-                THIS.this_nVccofins   = NVL(EVALUATE(par_cAlias + ".vccofins"), 1)
-                THIS.this_nVcirrf     = NVL(EVALUATE(par_cAlias + ".vcirrf"), 1)
-                THIS.this_nVcinss     = NVL(EVALUATE(par_cAlias + ".vcinss"), 1)
-                THIS.this_nVccsll     = NVL(EVALUATE(par_cAlias + ".vccsll"), 1)
-                THIS.this_nVciss      = NVL(EVALUATE(par_cAlias + ".vciss"), 1)
-                THIS.this_cGrppiss    = ALLTRIM(NVL(EVALUATE(par_cAlias + ".cGrppiss"), ""))
-                THIS.this_cCtaPiss    = ALLTRIM(NVL(EVALUATE(par_cAlias + ".cCtaPiss"), ""))
-                THIS.this_cGrpCofins  = ALLTRIM(NVL(EVALUATE(par_cAlias + ".cGrpCofins"), ""))
-                THIS.this_cCtaCofins  = ALLTRIM(NVL(EVALUATE(par_cAlias + ".cCtaCofins"), ""))
-                THIS.this_cGrpIrrfs   = ALLTRIM(NVL(EVALUATE(par_cAlias + ".cGrpIrrfs"), ""))
-                THIS.this_cCtaIrrfs   = ALLTRIM(NVL(EVALUATE(par_cAlias + ".cCtaIrrfs"), ""))
-                THIS.this_cGrpInss    = ALLTRIM(NVL(EVALUATE(par_cAlias + ".cGrpInss"), ""))
-                THIS.this_cCtaInss    = ALLTRIM(NVL(EVALUATE(par_cAlias + ".cCtaInss"), ""))
-                THIS.this_cGrpCslls   = ALLTRIM(NVL(EVALUATE(par_cAlias + ".cGrpCslls"), ""))
-                THIS.this_cCtaCslls   = ALLTRIM(NVL(EVALUATE(par_cAlias + ".cCtaCslls"), ""))
-                THIS.this_cGrpIss     = ALLTRIM(NVL(EVALUATE(par_cAlias + ".cGrpIss"), ""))
-                THIS.this_cCtaIss     = ALLTRIM(NVL(EVALUATE(par_cAlias + ".cCtaIss"), ""))
-                THIS.this_cCodpiss    = ALLTRIM(NVL(EVALUATE(par_cAlias + ".codpiss"), ""))
-                THIS.this_cCodcofinss = ALLTRIM(NVL(EVALUATE(par_cAlias + ".codcofinss"), ""))
-                THIS.this_cCodcslls   = ALLTRIM(NVL(EVALUATE(par_cAlias + ".codcslls"), ""))
-                THIS.this_cCodrecpis  = ALLTRIM(NVL(EVALUATE(par_cAlias + ".codrecpis"), ""))
-                THIS.this_cCodreccof  = ALLTRIM(NVL(EVALUATE(par_cAlias + ".codreccof"), ""))
-                THIS.this_cCodreccsll = ALLTRIM(NVL(EVALUATE(par_cAlias + ".codreccsll"), ""))
-                THIS.this_cCodrecirrf = ALLTRIM(NVL(EVALUATE(par_cAlias + ".codrecirrf"), ""))
-                THIS.this_nNrpas      = NVL(EVALUATE(par_cAlias + ".nrpas"), 2)
-                THIS.this_nMaxretinss = NVL(EVALUATE(par_cAlias + ".maxretinss"), 0)
+            IF USED(par_cAliasCursor)
+                SELECT (par_cAliasCursor)
+
+                THIS.this_cCidChaves = ALLTRIM(TratarNulo(cidchaves, "C"))
+                THIS.this_cCodigo    = ALLTRIM(TratarNulo(codservs, "C"))
+                THIS.this_cDescricao = ALLTRIM(TratarNulo(descservs, "C"))
+                THIS.this_cTipo      = ALLTRIM(TratarNulo(ctipos, "C"))
+
+                THIS.this_nAliquotaPis    = TratarNulo(apiss, "N")
+                THIS.this_nAliquotaCofins = TratarNulo(acofinss, "N")
+                THIS.this_nAliquotaIrrf   = TratarNulo(airrfs, "N")
+                THIS.this_nAliquotaInss   = TratarNulo(ainss, "N")
+                THIS.this_nAliquotaCsll   = TratarNulo(acslls, "N")
+                THIS.this_nAliquotaIss    = TratarNulo(aiss, "N")
+
+                THIS.this_nValorMinimoPis    = TratarNulo(vminpiss, "N")
+                THIS.this_nValorMinimoCofins = TratarNulo(vmincofins, "N")
+                THIS.this_nValorMinimoIrrf   = TratarNulo(vminirrfs, "N")
+                THIS.this_nValorMinimoInss   = TratarNulo(vmininss, "N")
+                THIS.this_nValorMinimoCsll   = TratarNulo(vmincslls, "N")
+
+                THIS.this_nBaseMinimaPis    = TratarNulo(vminbpiss, "N")
+                THIS.this_nBaseMinimaCofins = TratarNulo(vminbcofin, "N")
+                THIS.this_nBaseMinimaIrrf   = TratarNulo(vminbirrfs, "N")
+                THIS.this_nBaseMinimaInss   = TratarNulo(vminbinss, "N")
+                THIS.this_nBaseMinimaCsll   = TratarNulo(vminbcslls, "N")
+
+                THIS.this_lMensalPis    = (TratarNulo(bpisms, "N") = 1)
+                THIS.this_lMensalCofins = (TratarNulo(bcofinms, "N") = 1)
+                THIS.this_lMensalIrrf   = (TratarNulo(birrfms, "N") = 1)
+                THIS.this_lMensalInss   = (TratarNulo(binssms, "N") = 1)
+                THIS.this_lMensalCsll   = (TratarNulo(bcsllms, "N") = 1)
+
+                THIS.this_lLancFinPis    = (TratarNulo(nlanfpiss, "N") = 1)
+                THIS.this_lLancFinCofins = (TratarNulo(nlanfcofin, "N") = 1)
+                THIS.this_lLancFinIrrf   = (TratarNulo(nlanfirrfs, "N") = 1)
+                THIS.this_lLancFinInss   = (TratarNulo(nlanfinss, "N") = 1)
+                THIS.this_lLancFinCsll   = (TratarNulo(nlanfcslls, "N") = 1)
+                THIS.this_lLancFinIss    = (TratarNulo(nlanfiss, "N") = 1)
+
+                THIS.this_cCodOcorPis    = ALLTRIM(TratarNulo(cocorpiss, "C"))
+                THIS.this_cCodOcorCofins = ALLTRIM(TratarNulo(cocorcofin, "C"))
+                THIS.this_cCodOcorIrrf   = ALLTRIM(TratarNulo(cocorirrfs, "C"))
+                THIS.this_cCodOcorInss   = ALLTRIM(TratarNulo(cocorinss, "C"))
+                THIS.this_cCodOcorCsll   = ALLTRIM(TratarNulo(cocorcslls, "C"))
+                THIS.this_cCodOcorIss    = ALLTRIM(TratarNulo(cocoriss, "C"))
+
+                THIS.this_cCodCofins = ALLTRIM(TratarNulo(codcofinss, "C"))
+                THIS.this_cCodCsll   = ALLTRIM(TratarNulo(codcslls, "C"))
+                THIS.this_cCodPis    = ALLTRIM(TratarNulo(codpiss, "C"))
+
+                THIS.this_cGrupoContab = ALLTRIM(TratarNulo(cgrupo, "C"))
+                THIS.this_cContaContab = ALLTRIM(TratarNulo(ccontab, "C"))
+
+                THIS.this_cGrupoPis    = ALLTRIM(TratarNulo(cgrppiss, "C"))
+                THIS.this_cContaPis    = ALLTRIM(TratarNulo(cctapiss, "C"))
+                THIS.this_cGrupoCofins = ALLTRIM(TratarNulo(cgrpcofins, "C"))
+                THIS.this_cContaCofins = ALLTRIM(TratarNulo(cctacofins, "C"))
+                THIS.this_cGrupoIrrf   = ALLTRIM(TratarNulo(cgrpirrfs, "C"))
+                THIS.this_cContaIrrf   = ALLTRIM(TratarNulo(cctairrfs, "C"))
+                THIS.this_cGrupoInss   = ALLTRIM(TratarNulo(cgrpinss, "C"))
+                THIS.this_cContaInss   = ALLTRIM(TratarNulo(cctainss, "C"))
+                THIS.this_cGrupoCsll   = ALLTRIM(TratarNulo(cgrpcslls, "C"))
+                THIS.this_cContaCsll   = ALLTRIM(TratarNulo(cctacslls, "C"))
+                THIS.this_cGrupoIss    = ALLTRIM(TratarNulo(cgrpiss, "C"))
+                THIS.this_cContaIss    = ALLTRIM(TratarNulo(cctaiss, "C"))
+
+                THIS.this_nVencimentoPis    = TratarNulo(vcpis, "N")
+                THIS.this_nVencimentoCofins = TratarNulo(vccofins, "N")
+                THIS.this_nVencimentoIrrf   = TratarNulo(vcirrf, "N")
+                THIS.this_nVencimentoInss   = TratarNulo(vcinss, "N")
+                THIS.this_nVencimentoCsll   = TratarNulo(vccsll, "N")
+                THIS.this_nVencimentoIss    = TratarNulo(vciss, "N")
+
+                THIS.this_nRPA                     = TratarNulo(nrpas, "N")
+                THIS.this_nValorMaximoRetencaoInss = TratarNulo(maxretinss, "N")
+                THIS.this_cCodRecCofins            = ALLTRIM(TratarNulo(codreccof, "C"))
+                THIS.this_cCodRecPis               = ALLTRIM(TratarNulo(codrecpis, "C"))
+                THIS.this_cCodRecCsll              = ALLTRIM(TratarNulo(codreccsll, "C"))
+                THIS.this_cCodRecIrrf              = ALLTRIM(TratarNulo(codrecirrf, "C"))
+
                 loc_lResultado = .T.
             ENDIF
         CATCH TO loc_oErro
-            THIS.this_cMensagemErro = loc_oErro.Message
+            MsgErro("Erro em SRVBO.CarregarDoCursor:" + CHR(13) + loc_oErro.Message, "Erro")
         ENDTRY
+
         RETURN loc_lResultado
-    ENDPROC
+    ENDFUNC
+
+    *====================================================================
+    * Inserir - INSERT INTO SigCdSrv (todas as colunas) + produtos
+    *====================================================================
+    PROTECTED FUNCTION Inserir()
+        LOCAL loc_lResultado, loc_cSQL, loc_nResultado
+        loc_lResultado = .F.
+
+        TRY
+            IF EMPTY(ALLTRIM(THIS.this_cCidChaves))
+                THIS.this_cCidChaves = fUniqueIds()
+            ENDIF
+
+            loc_cSQL = "INSERT INTO SigCdSrv" + ;
+                " (cidchaves, codservs, descservs, ctipos," + ;
+                " apiss, acofinss, airrfs, ainss, aiss, acslls," + ;
+                " vminpiss, vmincofins, vminirrfs, vmininss, vmincslls," + ;
+                " vminbpiss, vminbcofin, vminbirrfs, vminbinss, vminbcslls," + ;
+                " bpisms, bcofinms, birrfms, binssms, bcsllms," + ;
+                " nlanfpiss, nlanfcofin, nlanfirrfs, nlanfinss, nlanfcslls, nlanfiss," + ;
+                " cocorpiss, cocorcofin, cocorirrfs, cocorinss, cocorcslls, cocoriss," + ;
+                " codpiss, codcslls, codcofinss, cgrupo, ccontab," + ;
+                " cgrppiss, cctapiss, cgrpcofins, cctacofins, cgrpirrfs, cctairrfs," + ;
+                " cgrpinss, cctainss, cgrpcslls, cctacslls, cgrpiss, cctaiss," + ;
+                " vcpis, vccofins, vcirrf, vcinss, vccsll, vciss," + ;
+                " nrpas, maxretinss, codreccof, codrecpis, codreccsll, codrecirrf)"
+
+            loc_cSQL = loc_cSQL + " VALUES (" + ;
+                EscaparSQL(THIS.this_cCidChaves) + ", " + ;
+                EscaparSQL(THIS.this_cCodigo) + ", " + ;
+                EscaparSQL(THIS.this_cDescricao) + ", " + ;
+                EscaparSQL(THIS.this_cTipo) + ","
+
+            loc_cSQL = loc_cSQL + ;
+                FormatarNumeroSQL(THIS.this_nAliquotaPis) + ", " + ;
+                FormatarNumeroSQL(THIS.this_nAliquotaCofins) + ", " + ;
+                FormatarNumeroSQL(THIS.this_nAliquotaIrrf) + ", " + ;
+                FormatarNumeroSQL(THIS.this_nAliquotaInss) + ", " + ;
+                FormatarNumeroSQL(THIS.this_nAliquotaIss) + ", " + ;
+                FormatarNumeroSQL(THIS.this_nAliquotaCsll) + ","
+
+            loc_cSQL = loc_cSQL + ;
+                FormatarNumeroSQL(THIS.this_nValorMinimoPis) + ", " + ;
+                FormatarNumeroSQL(THIS.this_nValorMinimoCofins) + ", " + ;
+                FormatarNumeroSQL(THIS.this_nValorMinimoIrrf) + ", " + ;
+                FormatarNumeroSQL(THIS.this_nValorMinimoInss) + ", " + ;
+                FormatarNumeroSQL(THIS.this_nValorMinimoCsll) + ","
+
+            loc_cSQL = loc_cSQL + ;
+                FormatarNumeroSQL(THIS.this_nBaseMinimaPis) + ", " + ;
+                FormatarNumeroSQL(THIS.this_nBaseMinimaCofins) + ", " + ;
+                FormatarNumeroSQL(THIS.this_nBaseMinimaIrrf) + ", " + ;
+                FormatarNumeroSQL(THIS.this_nBaseMinimaInss) + ", " + ;
+                FormatarNumeroSQL(THIS.this_nBaseMinimaCsll) + ","
+
+            loc_cSQL = loc_cSQL + ;
+                FormatarNumeroSQL(IIF(THIS.this_lMensalPis, 1, 0)) + ", " + ;
+                FormatarNumeroSQL(IIF(THIS.this_lMensalCofins, 1, 0)) + ", " + ;
+                FormatarNumeroSQL(IIF(THIS.this_lMensalIrrf, 1, 0)) + ", " + ;
+                FormatarNumeroSQL(IIF(THIS.this_lMensalInss, 1, 0)) + ", " + ;
+                FormatarNumeroSQL(IIF(THIS.this_lMensalCsll, 1, 0)) + ","
+
+            loc_cSQL = loc_cSQL + ;
+                FormatarNumeroSQL(IIF(THIS.this_lLancFinPis, 1, 0)) + ", " + ;
+                FormatarNumeroSQL(IIF(THIS.this_lLancFinCofins, 1, 0)) + ", " + ;
+                FormatarNumeroSQL(IIF(THIS.this_lLancFinIrrf, 1, 0)) + ", " + ;
+                FormatarNumeroSQL(IIF(THIS.this_lLancFinInss, 1, 0)) + ", " + ;
+                FormatarNumeroSQL(IIF(THIS.this_lLancFinCsll, 1, 0)) + ", " + ;
+                FormatarNumeroSQL(IIF(THIS.this_lLancFinIss, 1, 0)) + ","
+
+            loc_cSQL = loc_cSQL + ;
+                EscaparSQL(THIS.this_cCodOcorPis) + ", " + ;
+                EscaparSQL(THIS.this_cCodOcorCofins) + ", " + ;
+                EscaparSQL(THIS.this_cCodOcorIrrf) + ", " + ;
+                EscaparSQL(THIS.this_cCodOcorInss) + ", " + ;
+                EscaparSQL(THIS.this_cCodOcorCsll) + ", " + ;
+                EscaparSQL(THIS.this_cCodOcorIss) + ","
+
+            loc_cSQL = loc_cSQL + ;
+                EscaparSQL(THIS.this_cCodPis) + ", " + ;
+                EscaparSQL(THIS.this_cCodCsll) + ", " + ;
+                EscaparSQL(THIS.this_cCodCofins) + ", " + ;
+                EscaparSQL(THIS.this_cGrupoContab) + ", " + ;
+                EscaparSQL(THIS.this_cContaContab) + ","
+
+            loc_cSQL = loc_cSQL + ;
+                EscaparSQL(THIS.this_cGrupoPis) + ", " + ;
+                EscaparSQL(THIS.this_cContaPis) + ", " + ;
+                EscaparSQL(THIS.this_cGrupoCofins) + ", " + ;
+                EscaparSQL(THIS.this_cContaCofins) + ", " + ;
+                EscaparSQL(THIS.this_cGrupoIrrf) + ", " + ;
+                EscaparSQL(THIS.this_cContaIrrf) + ","
+
+            loc_cSQL = loc_cSQL + ;
+                EscaparSQL(THIS.this_cGrupoInss) + ", " + ;
+                EscaparSQL(THIS.this_cContaInss) + ", " + ;
+                EscaparSQL(THIS.this_cGrupoCsll) + ", " + ;
+                EscaparSQL(THIS.this_cContaCsll) + ", " + ;
+                EscaparSQL(THIS.this_cGrupoIss) + ", " + ;
+                EscaparSQL(THIS.this_cContaIss) + ","
+
+            loc_cSQL = loc_cSQL + ;
+                FormatarNumeroSQL(THIS.this_nVencimentoPis) + ", " + ;
+                FormatarNumeroSQL(THIS.this_nVencimentoCofins) + ", " + ;
+                FormatarNumeroSQL(THIS.this_nVencimentoIrrf) + ", " + ;
+                FormatarNumeroSQL(THIS.this_nVencimentoInss) + ", " + ;
+                FormatarNumeroSQL(THIS.this_nVencimentoCsll) + ", " + ;
+                FormatarNumeroSQL(THIS.this_nVencimentoIss) + ","
+
+            loc_cSQL = loc_cSQL + ;
+                FormatarNumeroSQL(THIS.this_nRPA) + ", " + ;
+                FormatarNumeroSQL(THIS.this_nValorMaximoRetencaoInss) + ", " + ;
+                EscaparSQL(THIS.this_cCodRecCofins) + ", " + ;
+                EscaparSQL(THIS.this_cCodRecPis) + ", " + ;
+                EscaparSQL(THIS.this_cCodRecCsll) + ", " + ;
+                EscaparSQL(THIS.this_cCodRecIrrf) + ")"
+
+            *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
+            IF USED("cursor_4c_Ins")
+                TABLEREVERT(.T., "cursor_4c_Ins")
+                USE IN cursor_4c_Ins
+            ENDIF
+
+            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Ins")
+            IF USED("cursor_4c_Ins")
+                USE IN cursor_4c_Ins
+            ENDIF
+
+            IF loc_nResultado >= 0
+                THIS.RegistrarAuditoria("INSERT")
+                loc_lResultado = THIS.SalvarProdutos(THIS.this_cCodigo)
+                IF !loc_lResultado
+                    MsgErro("Servico inserido mas erro ao salvar produtos.", "Erro")
+                ENDIF
+            ELSE
+                MsgErro("Erro ao inserir servico:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro("Erro em SRVBO.Inserir:" + CHR(13) + loc_oErro.Message, "Erro")
+        ENDTRY
+
+        RETURN loc_lResultado
+    ENDFUNC
+
+    *====================================================================
+    * Atualizar - UPDATE SigCdSrv (todas as colunas editaveis) + produtos
+    *====================================================================
+    PROTECTED FUNCTION Atualizar()
+        LOCAL loc_lResultado, loc_cSQL, loc_nResultado
+        loc_lResultado = .F.
+
+        TRY
+            loc_cSQL = "UPDATE SigCdSrv SET" + ;
+                " descservs = " + EscaparSQL(THIS.this_cDescricao) + "," + ;
+                " apiss = " + FormatarNumeroSQL(THIS.this_nAliquotaPis) + "," + ;
+                " acofinss = " + FormatarNumeroSQL(THIS.this_nAliquotaCofins) + "," + ;
+                " airrfs = " + FormatarNumeroSQL(THIS.this_nAliquotaIrrf) + "," + ;
+                " ainss = " + FormatarNumeroSQL(THIS.this_nAliquotaInss) + "," + ;
+                " aiss = " + FormatarNumeroSQL(THIS.this_nAliquotaIss) + "," + ;
+                " acslls = " + FormatarNumeroSQL(THIS.this_nAliquotaCsll) + "," + ;
+                " vminpiss = " + FormatarNumeroSQL(THIS.this_nValorMinimoPis) + "," + ;
+                " vmincofins = " + FormatarNumeroSQL(THIS.this_nValorMinimoCofins) + "," + ;
+                " vminirrfs = " + FormatarNumeroSQL(THIS.this_nValorMinimoIrrf) + "," + ;
+                " vmininss = " + FormatarNumeroSQL(THIS.this_nValorMinimoInss) + "," + ;
+                " vmincslls = " + FormatarNumeroSQL(THIS.this_nValorMinimoCsll)
+
+            loc_cSQL = loc_cSQL + "," + ;
+                " vminbpiss = " + FormatarNumeroSQL(THIS.this_nBaseMinimaPis) + "," + ;
+                " vminbcofin = " + FormatarNumeroSQL(THIS.this_nBaseMinimaCofins) + "," + ;
+                " vminbirrfs = " + FormatarNumeroSQL(THIS.this_nBaseMinimaIrrf) + "," + ;
+                " vminbinss = " + FormatarNumeroSQL(THIS.this_nBaseMinimaInss) + "," + ;
+                " vminbcslls = " + FormatarNumeroSQL(THIS.this_nBaseMinimaCsll) + "," + ;
+                " bpisms = " + FormatarNumeroSQL(IIF(THIS.this_lMensalPis, 1, 0)) + "," + ;
+                " bcofinms = " + FormatarNumeroSQL(IIF(THIS.this_lMensalCofins, 1, 0)) + "," + ;
+                " birrfms = " + FormatarNumeroSQL(IIF(THIS.this_lMensalIrrf, 1, 0)) + "," + ;
+                " binssms = " + FormatarNumeroSQL(IIF(THIS.this_lMensalInss, 1, 0)) + "," + ;
+                " bcsllms = " + FormatarNumeroSQL(IIF(THIS.this_lMensalCsll, 1, 0))
+
+            loc_cSQL = loc_cSQL + "," + ;
+                " nlanfpiss = " + FormatarNumeroSQL(IIF(THIS.this_lLancFinPis, 1, 0)) + "," + ;
+                " nlanfcofin = " + FormatarNumeroSQL(IIF(THIS.this_lLancFinCofins, 1, 0)) + "," + ;
+                " nlanfirrfs = " + FormatarNumeroSQL(IIF(THIS.this_lLancFinIrrf, 1, 0)) + "," + ;
+                " nlanfinss = " + FormatarNumeroSQL(IIF(THIS.this_lLancFinInss, 1, 0)) + "," + ;
+                " nlanfcslls = " + FormatarNumeroSQL(IIF(THIS.this_lLancFinCsll, 1, 0)) + "," + ;
+                " nlanfiss = " + FormatarNumeroSQL(IIF(THIS.this_lLancFinIss, 1, 0)) + "," + ;
+                " cocorpiss = " + EscaparSQL(THIS.this_cCodOcorPis) + "," + ;
+                " cocorcofin = " + EscaparSQL(THIS.this_cCodOcorCofins) + "," + ;
+                " cocorirrfs = " + EscaparSQL(THIS.this_cCodOcorIrrf) + "," + ;
+                " cocorinss = " + EscaparSQL(THIS.this_cCodOcorInss)
+
+            loc_cSQL = loc_cSQL + "," + ;
+                " cocorcslls = " + EscaparSQL(THIS.this_cCodOcorCsll) + "," + ;
+                " cocoriss = " + EscaparSQL(THIS.this_cCodOcorIss) + "," + ;
+                " codpiss = " + EscaparSQL(THIS.this_cCodPis) + "," + ;
+                " codcslls = " + EscaparSQL(THIS.this_cCodCsll) + "," + ;
+                " codcofinss = " + EscaparSQL(THIS.this_cCodCofins) + "," + ;
+                " cgrupo = " + EscaparSQL(THIS.this_cGrupoContab) + "," + ;
+                " ccontab = " + EscaparSQL(THIS.this_cContaContab) + "," + ;
+                " cgrppiss = " + EscaparSQL(THIS.this_cGrupoPis) + "," + ;
+                " cctapiss = " + EscaparSQL(THIS.this_cContaPis) + "," + ;
+                " cgrpcofins = " + EscaparSQL(THIS.this_cGrupoCofins)
+
+            loc_cSQL = loc_cSQL + "," + ;
+                " cctacofins = " + EscaparSQL(THIS.this_cContaCofins) + "," + ;
+                " cgrpirrfs = " + EscaparSQL(THIS.this_cGrupoIrrf) + "," + ;
+                " cctairrfs = " + EscaparSQL(THIS.this_cContaIrrf) + "," + ;
+                " cgrpinss = " + EscaparSQL(THIS.this_cGrupoInss) + "," + ;
+                " cctainss = " + EscaparSQL(THIS.this_cContaInss) + "," + ;
+                " cgrpcslls = " + EscaparSQL(THIS.this_cGrupoCsll) + "," + ;
+                " cctacslls = " + EscaparSQL(THIS.this_cContaCsll) + "," + ;
+                " cgrpiss = " + EscaparSQL(THIS.this_cGrupoIss) + "," + ;
+                " cctaiss = " + EscaparSQL(THIS.this_cContaIss) + "," + ;
+                " vcpis = " + FormatarNumeroSQL(THIS.this_nVencimentoPis)
+
+            loc_cSQL = loc_cSQL + "," + ;
+                " vccofins = " + FormatarNumeroSQL(THIS.this_nVencimentoCofins) + "," + ;
+                " vcirrf = " + FormatarNumeroSQL(THIS.this_nVencimentoIrrf) + "," + ;
+                " vcinss = " + FormatarNumeroSQL(THIS.this_nVencimentoInss) + "," + ;
+                " vccsll = " + FormatarNumeroSQL(THIS.this_nVencimentoCsll) + "," + ;
+                " vciss = " + FormatarNumeroSQL(THIS.this_nVencimentoIss) + "," + ;
+                " nrpas = " + FormatarNumeroSQL(THIS.this_nRPA) + "," + ;
+                " maxretinss = " + FormatarNumeroSQL(THIS.this_nValorMaximoRetencaoInss) + "," + ;
+                " codreccof = " + EscaparSQL(THIS.this_cCodRecCofins) + "," + ;
+                " codrecpis = " + EscaparSQL(THIS.this_cCodRecPis) + "," + ;
+                " codreccsll = " + EscaparSQL(THIS.this_cCodRecCsll) + "," + ;
+                " codrecirrf = " + EscaparSQL(THIS.this_cCodRecIrrf)
+
+            loc_cSQL = loc_cSQL + ;
+                " WHERE cidchaves = " + EscaparSQL(THIS.this_cCidChaves)
+
+            *-- Fechar cursor anterior se existir (evita "Table buffer contains uncommitted changes")
+            IF USED("cursor_4c_Upd")
+                TABLEREVERT(.T., "cursor_4c_Upd")
+                USE IN cursor_4c_Upd
+            ENDIF
+
+            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Upd")
+            IF USED("cursor_4c_Upd")
+                USE IN cursor_4c_Upd
+            ENDIF
+
+            IF loc_nResultado >= 0
+                THIS.RegistrarAuditoria("UPDATE")
+                loc_lResultado = THIS.SalvarProdutos(THIS.this_cCodigo)
+                IF !loc_lResultado
+                    MsgErro("Servico atualizado mas erro ao salvar produtos.", "Erro")
+                ENDIF
+            ELSE
+                MsgErro("Erro ao atualizar servico:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro("Erro em SRVBO.Atualizar:" + CHR(13) + loc_oErro.Message, "Erro")
+        ENDTRY
+
+        RETURN loc_lResultado
+    ENDFUNC
+
+    *====================================================================
+    * ExecutarExclusao - DELETE SigSeRvp (produtos) + DELETE SigCdSrv
+    *====================================================================
+    PROTECTED FUNCTION ExecutarExclusao()
+        LOCAL loc_lResultado, loc_cSQL, loc_nResultado
+        loc_lResultado = .F.
+
+        TRY
+            *-- Remove produtos relacionados primeiro
+            loc_cSQL = "DELETE FROM SigSeRvp WHERE codservs = " + ;
+                       EscaparSQL(THIS.this_cCodigo)
+
+            IF USED("cursor_4c_DelProd")
+                TABLEREVERT(.T., "cursor_4c_DelProd")
+                USE IN cursor_4c_DelProd
+            ENDIF
+
+            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_DelProd")
+            IF USED("cursor_4c_DelProd")
+                USE IN cursor_4c_DelProd
+            ENDIF
+
+            IF loc_nResultado < 0
+                MsgErro("Erro ao excluir produtos do servico:" + CHR(13) + ;
+                         CapturarErroSQL(), "Erro SQL")
+            ELSE
+                *-- Remove o registro principal
+                loc_cSQL = "DELETE FROM SigCdSrv WHERE cidchaves = " + ;
+                           EscaparSQL(THIS.this_cCidChaves)
+
+                IF USED("cursor_4c_Del")
+                    TABLEREVERT(.T., "cursor_4c_Del")
+                    USE IN cursor_4c_Del
+                ENDIF
+
+                loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Del")
+                IF USED("cursor_4c_Del")
+                    USE IN cursor_4c_Del
+                ENDIF
+
+                IF loc_nResultado >= 0
+                    THIS.RegistrarAuditoria("DELETE")
+                    loc_lResultado = .T.
+                ELSE
+                    MsgErro("Erro ao excluir servico:" + CHR(13) + ;
+                             CapturarErroSQL(), "Erro SQL")
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro("Erro em SRVBO.ExecutarExclusao:" + CHR(13) + ;
+                     loc_oErro.Message, "Erro")
+        ENDTRY
+
+        RETURN loc_lResultado
+    ENDFUNC
+
+    *====================================================================
+    * CarregarProdutos - Carrega produtos do servico (SigSeRvp) no cursor
+    * do grid (this_cCursorProdutos), com descricao via JOIN SigCdPro
+    *====================================================================
+    FUNCTION CarregarProdutos(par_cCodigo)
+        LOCAL loc_lResultado, loc_cSQL, loc_nResultado
+        loc_lResultado = .F.
+
+        TRY
+            IF USED(THIS.this_cCursorProdutos)
+                USE IN (THIS.this_cCursorProdutos)
+            ENDIF
+
+            SET NULL ON
+            CREATE CURSOR cursor_4c_Produtos (CidChaves C(20), CodServs C(10), CPros C(14), DPros C(40))
+            SET NULL OFF
+
+            IF !EMPTY(ALLTRIM(par_cCodigo))
+                loc_cSQL = "SELECT a.cidchaves AS CidChaves, a.codservs AS CodServs," + ;
+                           " a.cpros AS CPros, b.dpros AS DPros" + ;
+                           " FROM SigSeRvp a" + ;
+                           " LEFT JOIN SigCdPro b ON b.cpros = a.cpros" + ;
+                           " WHERE a.codservs = " + EscaparSQL(ALLTRIM(par_cCodigo))
+
+                IF USED("cursor_4c_ProdTmp")
+                    TABLEREVERT(.T., "cursor_4c_ProdTmp")
+                    USE IN cursor_4c_ProdTmp
+                ENDIF
+
+                loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_ProdTmp")
+                IF loc_nResultado >= 0
+                    SELECT cursor_4c_Produtos
+                    APPEND FROM DBF("cursor_4c_ProdTmp")
+                    IF USED("cursor_4c_ProdTmp")
+                        USE IN cursor_4c_ProdTmp
+                    ENDIF
+                ELSE
+                    MsgErro("Erro ao carregar produtos do servico:" + CHR(13) + ;
+                             CapturarErroSQL(), "Erro SQL")
+                ENDIF
+            ENDIF
+
+            GO TOP IN cursor_4c_Produtos
+            loc_lResultado = .T.
+        CATCH TO loc_oErro
+            MsgErro("Erro em SRVBO.CarregarProdutos:" + CHR(13) + ;
+                     loc_oErro.Message, "Erro")
+        ENDTRY
+
+        RETURN loc_lResultado
+    ENDFUNC
+
+    *====================================================================
+    * SalvarProdutos - Persiste cursor_4c_Produtos em SigSeRvp
+    * (remove todos os produtos do servico e reinsere os atuais)
+    *====================================================================
+    PROTECTED FUNCTION SalvarProdutos(par_cCodigo)
+        LOCAL loc_lResultado, loc_cSQL, loc_nResultado
+        LOCAL loc_nTotal, loc_nI, loc_aProdutos[1]
+        loc_lResultado = .F.
+
+        TRY
+            *-- Remove todos os produtos existentes para este servico
+            loc_cSQL = "DELETE FROM SigSeRvp WHERE codservs = " + ;
+                       EscaparSQL(ALLTRIM(par_cCodigo))
+
+            IF USED("cursor_4c_DelProdSalvar")
+                TABLEREVERT(.T., "cursor_4c_DelProdSalvar")
+                USE IN cursor_4c_DelProdSalvar
+            ENDIF
+
+            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_DelProdSalvar")
+            IF USED("cursor_4c_DelProdSalvar")
+                USE IN cursor_4c_DelProdSalvar
+            ENDIF
+
+            IF loc_nResultado < 0
+                MsgErro("Erro ao limpar produtos do servico:" + CHR(13) + ;
+                         CapturarErroSQL(), "Erro SQL")
+            ELSE
+                loc_lResultado = .T.
+
+                *-- Coleta codigos de produto nao-vazios do cursor numa array
+                IF USED(THIS.this_cCursorProdutos)
+                    loc_nTotal = RECCOUNT(THIS.this_cCursorProdutos)
+                    IF loc_nTotal > 0
+                        DIMENSION loc_aProdutos[loc_nTotal]
+                        SELECT (THIS.this_cCursorProdutos)
+                        GO TOP
+                        FOR loc_nI = 1 TO loc_nTotal
+                            loc_aProdutos[loc_nI] = ALLTRIM(cursor_4c_Produtos.CPros)
+                            IF !EOF(THIS.this_cCursorProdutos)
+                                SKIP IN (THIS.this_cCursorProdutos)
+                            ENDIF
+                        ENDFOR
+
+                        *-- Insere os produtos via SQL
+                        FOR loc_nI = 1 TO loc_nTotal
+                            IF !EMPTY(loc_aProdutos[loc_nI])
+                                loc_cSQL = "INSERT INTO SigSeRvp (cidchaves, codservs, cpros)" + ;
+                                           " VALUES (" + ;
+                                           EscaparSQL(fUniqueIds()) + ", " + ;
+                                           EscaparSQL(ALLTRIM(par_cCodigo)) + ", " + ;
+                                           EscaparSQL(loc_aProdutos[loc_nI]) + ")"
+
+                                IF USED("cursor_4c_InsProd")
+                                    TABLEREVERT(.T., "cursor_4c_InsProd")
+                                    USE IN cursor_4c_InsProd
+                                ENDIF
+
+                                loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_InsProd")
+                                IF USED("cursor_4c_InsProd")
+                                    USE IN cursor_4c_InsProd
+                                ENDIF
+
+                                IF loc_nResultado < 0
+                                    MsgErro("Erro ao inserir produto " + loc_aProdutos[loc_nI] + ;
+                                             ":" + CHR(13) + CapturarErroSQL(), "Erro SQL")
+                                    loc_lResultado = .F.
+                                ENDIF
+                            ENDIF
+                        ENDFOR
+                    ENDIF
+                ENDIF
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro("Erro em SRVBO.SalvarProdutos:" + CHR(13) + ;
+                     loc_oErro.Message, "Erro")
+            loc_lResultado = .F.
+        ENDTRY
+
+        RETURN loc_lResultado
+    ENDFUNC
 
 ENDDEFINE

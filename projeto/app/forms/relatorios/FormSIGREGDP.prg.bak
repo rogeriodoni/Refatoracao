@@ -615,6 +615,8 @@ DEFINE CLASS FormSIGREGDP AS FormBase
             .Column1.Check1.AutoSize   = .T.
             .Column1.Check1.Value      = 0
             .Column1.CurrentControl    = "Check1"
+            *-- Pattern #185 / Erro146: CheckBox de grid nao alterna sem handlers
+            THIS.BindToggleDados1(THIS.pgf_4c_Paginas.Page1.grd_4c_Dados.Column1.Check1)
             .Column1.ControlSource     = THIS.this_oRelatorio.this_cCursorDados + ".flag"
 
             *-- Column2: NFis - Numero (W=45)
@@ -1229,4 +1231,48 @@ DEFINE CLASS FormSIGREGDP AS FormBase
         DODEFAULT()
     ENDPROC
 
+
+    *==========================================================================
+    * Toggle do CheckBox de grid - grd_4c_Dados.Column1 (THIS.this_oRelatorio.this_cCursorDados -> .flag)
+    * Pattern #185 / Erro146 (2026-09-04): CheckBox em coluna de Grid nao alterna
+    * pelo binding nativo. Click/MouseDown suprimem o padrao; MouseUp delega ao
+    * KeyPress, que alterna por codigo com REPLACE no cursor + Refresh do grid.
+    *==========================================================================
+    PROTECTED PROCEDURE BindToggleDados1(par_oChk)
+        BINDEVENT(par_oChk, "KeyPress",  THIS, "TgDados1KeyPress")
+        BINDEVENT(par_oChk, "MouseUp",   THIS, "TgDados1MouseUp")
+        BINDEVENT(par_oChk, "MouseDown", THIS, "TgDados1MouseDown")
+        BINDEVENT(par_oChk, "Click",     THIS, "TgDados1Click")
+    ENDPROC
+
+    PROCEDURE TgDados1KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF !INLIST(par_nKeyCode, 13, 32)
+            RETURN
+        ENDIF
+        NODEFAULT
+        LOCAL loc_cCur
+        loc_cCur = THIS.this_oRelatorio.this_cCursorDados
+        IF VARTYPE(loc_cCur) != "C" OR !USED(loc_cCur) OR EOF(loc_cCur)
+            RETURN
+        ENDIF
+        SELECT (loc_cCur)
+        IF VARTYPE(flag) == "L"
+            REPLACE flag WITH !flag
+        ELSE
+            REPLACE flag WITH IIF(flag = 0, 1, 0)
+        ENDIF        THIS.pgf_4c_Paginas.Page1.grd_4c_Dados.Refresh()
+    ENDPROC
+
+    PROCEDURE TgDados1MouseUp(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+        THIS.TgDados1KeyPress(13, 0)
+        NODEFAULT
+    ENDPROC
+
+    PROCEDURE TgDados1MouseDown(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+        NODEFAULT
+    ENDPROC
+
+    PROCEDURE TgDados1Click()
+        NODEFAULT
+    ENDPROC
 ENDDEFINE

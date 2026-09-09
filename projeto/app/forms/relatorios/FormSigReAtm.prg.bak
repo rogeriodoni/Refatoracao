@@ -1224,6 +1224,7 @@ DEFINE CLASS FormSigReAtm AS FormBase
             .FontName      = "Tahoma"
         ENDWITH
         loc_oGrd.Column1.AddObject("chk_4c_Marca", "CheckBox")
+        THIS.BindToggleTgDados1(THIS.pgf_4c_Paginas.Page1.cnt_4c_Local.cnt_4c_Ope.grd_4c_Dados.Column1.chk_4c_Marca)
         WITH loc_oGrd.Column1.chk_4c_Marca
             .Caption       = ""
             .Alignment     = 0
@@ -2521,4 +2522,52 @@ DEFINE CLASS FormSigReAtm AS FormBase
         DODEFAULT()
     ENDPROC
 
+
+    *==========================================================================
+    * Toggle do CheckBox chk_4c_Marca - grd_4c_Dados.Column1 (cursor_4c_TiposMat.Marca)
+    *
+    * CheckBox em coluna de Grid NAO alterna pelo binding nativo: o legado
+    * suprime o toggle padrao (NODEFAULT em Click/MouseDown) e alterna o valor
+    * por codigo no MouseUp/KeyPress, com REPLACE no cursor + Refresh do grid.
+    * Sem estes handlers o CheckBox renderiza e recebe foco, mas clicar ou
+    * teclar Espaco/Enter nao muda nada. Pattern #185 / Erro146 (2026-09-04).
+    * Ref canonico: Formsigredtv.prg (grd_4c_Emps) e Formacg.prg.
+    *==========================================================================
+    PROTECTED PROCEDURE BindToggleTgDados1(par_oChk)
+        BINDEVENT(par_oChk, "KeyPress",  THIS, "TgDados1KeyPress")
+        BINDEVENT(par_oChk, "MouseUp",   THIS, "TgDados1MouseUp")
+        BINDEVENT(par_oChk, "MouseDown", THIS, "TgDados1MouseDown")
+        BINDEVENT(par_oChk, "Click",     THIS, "TgDados1Click")
+    ENDPROC
+
+    PROCEDURE TgDados1KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF !INLIST(par_nKeyCode, 13, 32)
+            RETURN
+        ENDIF
+        *-- NODEFAULT sempre que a tecla for tratada: suprime o toggle nativo
+        NODEFAULT
+        IF !USED("cursor_4c_TiposMat") OR EOF("cursor_4c_TiposMat")
+            RETURN
+        ENDIF
+        *-- Campo pode ser LOGICO (legado) ou NUMERICO (CASE WHEN ... 1 ELSE 0)
+        IF VARTYPE(cursor_4c_TiposMat.Marca) == "L"
+            REPLACE cursor_4c_TiposMat.Marca WITH !cursor_4c_TiposMat.Marca
+        ELSE
+            REPLACE cursor_4c_TiposMat.Marca WITH IIF(cursor_4c_TiposMat.Marca = 0, 1, 0)
+        ENDIF
+        THIS.pgf_4c_Paginas.Page1.cnt_4c_Local.cnt_4c_Ope.grd_4c_Dados.Refresh()
+    ENDPROC
+
+    PROCEDURE TgDados1MouseUp(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+        THIS.TgDados1KeyPress(13, 0)
+        NODEFAULT
+    ENDPROC
+
+    PROCEDURE TgDados1MouseDown(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+        NODEFAULT
+    ENDPROC
+
+    PROCEDURE TgDados1Click()
+        NODEFAULT
+    ENDPROC
 ENDDEFINE

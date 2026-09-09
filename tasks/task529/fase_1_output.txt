@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 1/8 conclu├¡da.
+
+Criei `C:\4c\projeto\app\classes\TbdBO.prg` com:
+
+- **Heran├ºa**: `TbdBO AS BusinessBase`
+- **Propriedades da entidade** (extra├¡das do schema `SigCdTbd`, confirmado em `docs/schema.sql`):
+  - `this_cCodigos` ÔÇö `codigos char(10)`, FK para `SigOpTdz.codigos` (tabela de desconto, usada no lookup `fwbuscaext` da grade)
+  - `this_cCidChaves` ÔÇö `cidchaves char(20)`, PK da tabela (gerada via `fUniqueIds()` conforme `comportamento.json`)
+  - `this_cDopes` ÔÇö `dopes char(20)`, FK para `SigCdOpe.dopes` (opera├º├úo ├á qual as tabelas de desconto pertencem)
+  - `this_cDescOperacao` ÔÇö propriedade local (n├úo persiste), guarda a descri├º├úo da opera├º├úo para o cabe├ºalho do form (`crSigCdOpe.Dopes`, mesmo padr├úo de `SigCdOpe` ser single-column PK+descri├º├úo)
+- **Init()**: chama `DODEFAULT()` e configura `this_cTabela = "SigCdTbd"` e `this_cCampoChave = "cidchaves"`.
+
+Pr├│xima fase (2/8) completar├í o BO com `CarregarDoCursor()`, `Inserir()`, `Atualizar()` e a l├│gica de neg├│cio (valida├º├úo de duplicidade, ZAP+INSERT em lote replicando o `cmdSair.Click` do legado).

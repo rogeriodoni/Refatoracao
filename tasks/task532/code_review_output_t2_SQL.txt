@@ -1,0 +1,23 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Analisei os 16 problemas apontados neste pass e verifiquei cada um contra o c├│digo real (form + BO). Conclus├úo: **os 16 s├úo falsos positivos** ÔÇö nenhuma altera├º├úo foi aplicada aos arquivos. Detalhamento:
+
+## GRID-SQL (13 itens) ÔÇö falsos positivos
+Os campos apontados como "ausentes do SELECT" **est├úo** presentes nos SELECTs que populam os cursors, s├│ que grafados em min├║sculas na string SQL (VFP/SQL Server n├úo s├úo case-sensitive para nomes de coluna; o comparador do pass parece ter feito match case-sensitive contra o `ControlSource`, que usa PascalCase):
+
+- `cursor_4c_Tds` ÔåÉ `TbvBO::CarregarFaixasDesconto` (`TbvBO.prg:527-533`): SELECT inclui `campo1is, campo1fs, campo2is, campo2fs, campo3is, campo3fs, ... dfators` ÔÇö cobre Campo1is/fs, Campo2is/fs, Campo3is/fs, dfators.
+- `cursor_4c_Tdi` ÔåÉ `TbvBO::CarregarComissoesDesconto` (`TbvBO.prg:672-676`): SELECT inclui `grupos, contas, moedas, pintegrals, pdivididas, patendes` ÔÇö cobre os 6 apontados.
+
+Nenhum campo inventado; nada a corrigir.
+
+## SQL-FILTRO-INVENTADO (3 itens) ÔÇö falsos positivos
+- **CMOES**: ├║nica ocorr├¬ncia ├® `TbvBO::ObterDescricaoMoeda` (`TbvBO.prg:305`) ÔÇö `SELECT dmoes FROM SigCdMoe WHERE cmoes = ...`, um lookup leg├¡timo por PK de moeda (mesmo padr├úo usado em outros lookups do arquivo, ex. `SigCdCli.iclis`). Corresponde ao `Seek(..., 'CrSigCdMoe', 'CMoes')` do legado (a lista de refer├¬ncia j├í mostra esse SEEK usando a tag `CMoes`). Remover quebraria a busca de descri├º├úo de moeda.
+- **TIPODS**: ├║nica ocorr├¬ncia ├® `SET FILTER TO ... AND tipods = loc_nTipoDs` (`FormTbv.prg:3388`), um `SET FILTER` **local** (n├úo ├® WHERE enviado ao SQL Server) que reproduz o `MontaTbDes` do legado ÔÇö filtra as faixas de desconto pela combina├º├úo Tipo+C├│digo+**TipoDesconto** da linha corrente. O item "LNTIPOD" citado como coluna original do WHERE ├® exatamente a vari├ível local legada equivalente a este `tipods`. Remover misturaria faixas de tipos de desconto diferentes (dia da semana/dia do m├¬s/hor├írio/data) na mesma grade ÔÇö bug grave.
+- **CAMPO3IS**: n├úo existe nenhuma cl├íusula WHERE/SET FILTER com essa coluna no c├│digo. As ├║nicas ocorr├¬ncias s├úo compara├º├Áes internas do VFP (`IF cursor_4c_Tds.Campo3fs < cursor_4c_Tds.Campo3is`, linhas 3572/3637) usadas para validar intervalo Inicial/Final ÔÇö n├úo s├úo filtros de consulta.
+
+Como as 3 condi├º├Áes s├úo replica├º├Áes fi├®is do comportamento legado (apenas com nomes de vari├ível/coluna diferentes, esperado pelo Pilar 3 da arquitetura), remov├¬-las **quebraria funcionalidade** (Pilar 1: UX/comportamento id├¬ntico ao legado) sem corrigir bug real algum.
+
+Nenhum arquivo foi modificado neste pass.

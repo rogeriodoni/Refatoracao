@@ -1,0 +1,21 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Revisei o `FormTBI.prg` e o `TBIBO.prg` antes de tentar qualquer edi├º├úo da Fase 6, e conclu├¡ que **n├úo h├í nada a adicionar** ÔÇö o formul├írio j├í est├í 100% completo:
+
+**Por que n├úo h├í "├║ltimos 50% dos campos" a migrar**
+O SIGCDTBI original ├® um di├ílogo utilit├írio min├║sculo (284x197, sem Lista/CRUD): `layout.json` lista s├│ 13 objetos no total ÔÇö cabe├ºalho (cntSombra + 2 labels), moldura (shp_relatorio), e os ├║nicos 3 campos de dados: `get_moeda`, `get_moeda_desc`, `get_copias`, mais o `cmd_grupo` (Confirma/Encerrar). Todos os 13 j├í est├úo implementados em `ConfigurarPageFrame()` + `ConfigurarPaginaDados()` + `ConfigurarBotoes()` ÔÇö n├úo sobrou nenhum campo da Fase 5 para completar aqui.
+
+**Lookups ÔÇö j├í implementados por completo (n├úo s├úo stubs)**
+- `ValidarMoeda` / `ValidarMoedaDesc`: BINDEVENT em KeyPress (ENTER/TAB/F4), fazem SELECT exato em `SigCdMoe` e, se n├úo achar, chamam `AbrirBuscaMoeda`.
+- `AbrirBuscaMoeda`: usa o helper can├┤nico `THIS.AbrirLookupCanonico("SigCdMoe", "cmoes", "dmoes", ...)` (Pattern A), preenchendo c├│digo+descri├º├úo a partir da sele├º├úo do usu├írio ÔÇö exatamente o `fwBuscaExt('SigCdMoe', ..., 'CMoes'/'DMoes', ...)` do `comportamento.json`.
+- `AlternarPagina` reproduz o `When` original de `get_moeda_desc` (`Return Empty(ThisForm.get_moeda.Value)`), bloqueando a descri├º├úo via `ReadOnly` enquanto o c├│digo n├úo estiver vazio.
+
+**Bot├Áes (equivalente ao `cnt_4c_BotoesAcao`)**
+Este form n├úo usa Page2/CRUD, ent├úo o par Confirma/Encerrar j├í est├í no `obj_4c_Cmd_grupo` (CommandGroup, espelhando `cmd_grupo` do legado) com `BtnConfirmarClick`/`BtnEncerrarClick` plenamente implementados, chamando `TBIBO.GerarTabelaReferencia()` (que por sua vez reproduz as ~270 linhas do `cmd_ok.Click` original: cota├º├úo, convers├úo por moeda, montagem do texto e impress├úo).
+
+Verifiquei tamb├®m que n├úo h├í `TODO`/`FIXME`/stub no arquivo (o ├║nico "match" do grep foi falso-positivo: a palavra "metodo" cont├®m a substring "todo").
+
+**Conclus├úo**: nenhuma edi├º├úo foi necess├íria nesta fase ÔÇö as fases anteriores (1-5) j├í haviam entregue a migra├º├úo completa deste di├ílogo pequeno, incluindo os lookups que normalmente seriam o foco da Fase 6.

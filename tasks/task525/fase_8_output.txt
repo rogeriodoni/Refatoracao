@@ -1,0 +1,21 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**Fase 8/8 conclu├¡da.** Resumo do que foi feito em `FormSRV.prg`:
+
+1. **`FormParaBO()`** ÔÇö transfere todos os campos das 3 abas (Impostos, Vencimentos, Reten├º├úo) para as propriedades `this_*` do `SRVBO`.
+2. **`BOParaForm()`** ÔÇö caminho inverso, incluindo reconsulta das descri├º├Áes de conta cont├íbil (`ObterDescricaoConta`, replicando o `CursorQuery SigCdCli` do legado) e revincula├º├úo do grid de produtos.
+3. **`LimparCampos()`** ÔÇö reseta todos os campos das 3 abas para os defaults, chamado por `BtnIncluirClick`/`BtnBuscarClick`.
+4. **`AtualizarGridProdutos()`** ÔÇö corrige um gap real: o grid de produtos (aba Vencimentos) nunca tinha `RecordSource` setado, ent├úo nunca exibiria dados; agora ├® revinculado ao `cursor_4c_Produtos` em `LimparCampos()` e `BOParaForm()`.
+5. **`BtnSalvarClick()`** ÔÇö salva (modo INCLUIR/ALTERAR) ou localiza registro na lista (modo BUSCAR), com valida├º├Áes de c├│digo/descri├º├úo fora do TRY.
+6. **`BtnCancelarClick()`** ÔÇö volta para a lista.
+
+Achados/corre├º├Áes extras durante a integra├º├úo:
+- **`BtnBuscarClick`/`BtnEncerrarClick`/`HabilitarCampos`/`CarregarLista`/`AjustarBotoesPorModo`** j├í estavam implementados nas fases anteriores ÔÇö n├úo precisaram de trabalho.
+- **Integra├º├úo via `config.prg`**: n├úo precisou de altera├º├úo ÔÇö j├í usa `ADIR()` din├ómico (carrega `SRVBO.prg`/`FormSRV.prg` automaticamente).
+- **Integra├º├úo via `menu.prg`**: **faltava completamente**. Adicionei `DEFINE BAR 172 OF popCadastros` + `ON SELECTION BAR 172` + a procedure de abertura.
+- **Bug evitado**: havia um bar de menu pr├®-existente (`AbrirFormSrv`, bar 9) para um formul├írio *diferente* (`FormSER` = "Servi├ºos dos Produtos"). Como VFP9 trata nomes de procedure sem distin├º├úo de mai├║sculas/min├║sculas, nomear minha procedure `AbrirFormSRV` colidiria silenciosamente com `AbrirFormSrv`. Usei `AbrirFormSrvImpostos` para evitar a colis├úo.
+
+Validado: TRY/CATCH balanceados, sem `RETURN` dentro de TRY, sem duplica├º├úo de nomes de procedure/bar, todos os handlers referenciados por `BINDEVENT` existem.

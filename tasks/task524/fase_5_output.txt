@@ -1,0 +1,21 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 5/8 aplicada em `C:\4c\projeto\app\forms\cadastros\FormSre.prg`.
+
+Adicionei em `ConfigurarPaginaDados()` (mantendo o container `cnt_4c_BotoesAcao` j├í existente) os primeiros 50% dos campos de Page2, ordenados por Top do legado, todos com compensa├º├úo +29 do `PageFrame.Top=-29`, usando os nomes exatos do `mapeamento.json`:
+
+- `txt_4c_Codigo` + `lbl_4c_Label1` ("C├│digo :")
+- `txt_4c_Descricao` + `lbl_4c_Label2` ("Descri├º├úo :")
+- `lbl_4c_Label7` ("Empresa :") + `txt_4c_Emps` + `txt_4c_DEmps` (somente exibi├º├úo, `ReadOnly=.T.`)
+- `txt_4c_Modelo` + `lbl_4c_Label12` ("Modelo :")
+- `txt_4c_Tiponf` + `lbl_4c_Label14` ("Tipo NF :")
+- `chk_4c_Ck_BlqInss` ("Bloquear NF Caso Exista Anterior N├úo Impressa")
+- `obj_4c_Op_TipoNF` (OptionGroup 4 bot├Áes: Autom├ítico / Manual / Autom├ítico Sem Altera├º├úo / Documento ÔÇö cada Button com Left/Top/AutoSize/ForeColor/Themes individuais, conforme li├º├úo do Problema 30)
+- `lbl_4c_Label3` ("Numera├º├úo de NF :" ÔÇö label do grupo que ser├í completado na Fase 6)
+
+Ficam para a Fase 6: `fwoption2` (nnfobrigs), `Say13`, `Op_AlteraPeso` (impnfs), `Say4`, `Optiongroup1` (mostecfs), `Say5`, `fwoption1` (tpservicos), `Say6`, `getInicials`/`getFinals`/`optSeloTrans` (selo transporte), `Say11`, `Say8`, `Say9`.
+
+Todos os m├®todos terminam corretamente com `ENDWITH`/`ENDPROC`, sem stubs ou TODOs, e a chamada final `THIS.TornarControlesVisiveis(loc_oPg2)` foi preservada no fim do procedimento.

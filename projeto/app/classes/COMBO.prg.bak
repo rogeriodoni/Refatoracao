@@ -397,7 +397,7 @@ DEFINE CLASS COMBO AS BusinessBase
 
             loc_cSQL = "INSERT INTO sigcmcab" + ;
                        " (pkchaves, cods, emps, dtinis, dtfims, metaemps," + ;
-                       "  pctvd1, pctvd2, moedas, CodGerente, usuars, usualts)" + ;
+                       "  pctvd1, pctvd2, moedas, CodGerente, usuars, usualts, usuprocs)" + ;
                        " VALUES (" + ;
                        EscaparSQL(loc_cPk) + ", " + ;
                        EscaparSQL(ALLTRIM(THIS.this_cDescricao)) + ", " + ;
@@ -410,7 +410,8 @@ DEFINE CLASS COMBO AS BusinessBase
                        EscaparSQL(ALLTRIM(THIS.this_cMoedas)) + ", " + ;
                        EscaparSQL(ALLTRIM(THIS.this_cCodGerente)) + ", " + ;
                        EscaparSQL(ALLTRIM(gc_4c_UsuarioLogado)) + ", " + ;
-                       EscaparSQL(ALLTRIM(gc_4c_UsuarioLogado)) + ")"
+                       EscaparSQL(ALLTRIM(gc_4c_UsuarioLogado)) + ", " + ;
+                       EscaparSQL("") + ")"
 
             loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL)
             IF loc_nResult >= 0

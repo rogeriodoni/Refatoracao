@@ -1,0 +1,35 @@
+﻿{
+    "arquivo":  "C:\\4c\\projeto\\app\\forms\\operacionais\\FormTbd.prg",
+    "timestamp":  "2026-09-08T19:35:37",
+    "correcoes":  [
+                      {
+                          "Tipo":  "WARN-CNT-BOTOES-LEFT-BOTAO-EXTRA",
+                          "Linha":  0,
+                          "Original":  "cnt_4c_Botoes com botao extra: cmd_4c_Inserir",
+                          "Corrigido":  "(auto-fix Left=542 suprimido — container precisa de mais largura)",
+                          "Descricao":  "cnt_4c_Botoes contem botao(oes) EXTRA (cmd_4c_Inserir) alem dos CRUD canonicos, entao Left=542 (que assume 5 botoes terminando em 917) NAO se aplica — o container precisa comecar mais a esquerda. Auto-fix suprimido. REVISAR MANUAL junto com Pattern #182 v2. Ref Formacg: Left=390, Width=540, CopiarAcesso=5 e bloco CRUD em 152/227/302/377/452 (abs 542..917). Origem: Erro145-v2 (2026-09-04)."
+                      },
+                      {
+                          "Tipo":  "WARN-168-MISSING-PICTURE",
+                          "Linha":  0,
+                          "Original":  "(sem fundo_cad_1003.jpg no arquivo)",
+                          "Corrigido":  "(REVISAR MANUAL - injetar THIS.Picture no InicializarForm)",
+                          "Descricao":  "Pattern #168 WARN: form REPORT canonico usa THIS.Picture = gc_4c_CaminhoIcones + \u0027fundo_cad_1003.jpg\u0027 no InicializarForm(). Sem essa injecao form abre com fundo default. Referencia: Formsigrecrf.prg:91."
+                      },
+                      {
+                          "Tipo":  "WARN-182-CONTAINER-COM-BOTAO-EXTRA",
+                          "Linha":  0,
+                          "Original":  "cnt_4c_Botoes com botao extra: cmd_4c_Inserir",
+                          "Corrigido":  "(auto-fix de Left suprimido — revisar posicoes manualmente)",
+                          "Descricao":  "Pattern #182 v2 (Erro145-v2): cnt_4c_Botoes contem botao(oes) EXTRA (cmd_4c_Inserir) alem dos CRUD canonicos, entao os offsets 5/80/155/230/305 NAO se aplicam — o bloco CRUD fica legitimamente deslocado para abrir espaco. Auto-mutate SUPRIMIDO para nao empilhar dois botoes no mesmo Left e quebrar o layout. REVISAR MANUAL: manter passo de 75px entre botoes e terminar o ultimo em Left absoluto 917 (onde comeca cnt_4c_Saida). Ref Formacg: CopiarAcesso=5, Incluir=152, Visualizar=227, Alterar=302, Excluir=377, Buscar=452 (container Left=390)."
+                      },
+                      {
+                          "Tipo":  "WARN-183-COLUMNCOUNT-EM-CARREGAR",
+                          "Linha":  711,
+                          "Original":  "loc_oGrid.ColumnCount  = 2",
+                          "Corrigido":  "(remover — ColumnCount ja definido em ConfigurarAba*)",
+                          "Descricao":  "Pattern #183 (Erro144): ColumnCount reatribuido em metodo Carregar* (linha 711). Em VFP9, qualquer atribuicao a ColumnCount recria TODOS os objetos de coluna, destruindo controles AddObject (CheckBox/ComboBox). Remover esta linha se ColumnCount ja foi definido em ConfigurarAba*/ConfigurarGrid* durante inicializacao. Adicionar protecao defensiva: PEMSTATUS(grid.ColumnN, \u0027controle\u0027, 5) antes de acessar."
+                      }
+                  ],
+    "totalCorrecoes":  4
+}

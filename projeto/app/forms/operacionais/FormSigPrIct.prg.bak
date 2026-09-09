@@ -278,7 +278,7 @@ DEFINE CLASS FormSigPrIct AS FormBase
         THIS.AddObject("cmd_4c_Encerrar", "CommandButton")
         WITH THIS.cmd_4c_Encerrar
             .Top             = 95
-            .Left            = 401
+            .Left = 5
             .Height          = 75
             .Width           = 75
             .FontBold        = .T.

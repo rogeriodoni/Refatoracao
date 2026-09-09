@@ -507,6 +507,52 @@ DEFINE CLASS FormDup AS FormBase
 
         *-- Fundo padrao do framework frmcadastro (sem isso a pagina fica branca)
         loc_oPagina.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
+        *-- Cabecalho cinza (identico ao da pagina Lista) - Erro152
+        *-- conteudo da pagina deslocado +10 para nao ficar sob a faixa
+        loc_oPagina.AddObject("cnt_4c_Cabecalho", "Container")
+        WITH loc_oPagina.cnt_4c_Cabecalho
+            .Top           = 29
+            .Left          = 0
+            .Width         = THIS.Width
+            .Height        = 80
+            .BackColor     = RGB(100, 100, 100)
+            .BorderWidth   = 0
+            .SpecialEffect = 0
+            .Visible       = .T.
+
+            .AddObject("lbl_4c_Sombra", "Label")
+            WITH .lbl_4c_Sombra
+                .Caption   = THIS.Caption
+                .Top       = 15
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 40
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(0, 0, 0)
+                .BackStyle = 0
+                .AutoSize  = .F.
+                .Visible   = .T.
+            ENDWITH
+
+            .AddObject("lbl_4c_Titulo", "Label")
+            WITH .lbl_4c_Titulo
+                .Caption   = THIS.Caption
+                .Top       = 18
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 46
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(255, 255, 255)
+                .BackStyle = 0
+                .AutoSize  = .F.
+                .Visible   = .T.
+            ENDWITH
+        ENDWITH
+
 
         TRY
             *------------------------------------------------------------------
@@ -515,7 +561,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("lbl_4c_LblSerie", "Label")
             WITH loc_oPagina.lbl_4c_LblSerie
                 .Caption   = "S" + CHR(233) + "rie :"
-                .Top       = 101
+                .Top       = 111
                 .Left      = 185
                 .Width     = 37
                 .Height    = 15
@@ -529,7 +575,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Series", "TextBox")
             WITH loc_oPagina.txt_4c_Series
                 .Value    = ""
-                .Top      = 99
+                .Top      = 109
                 .Left     = 229
                 .Width    = 31
                 .Height   = 18
@@ -545,7 +591,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("lbl_4c_SecCabecalho", "Label")
             WITH loc_oPagina.lbl_4c_SecCabecalho
                 .Caption   = "Cabe" + CHR(231) + "alho"
-                .Top       = 132
+                .Top       = 142
                 .Left      = 183
                 .Width     = 80
                 .Height    = 15
@@ -575,7 +621,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("lbl_4c_LblDtDoc", "Label")
             WITH loc_oPagina.lbl_4c_LblDtDoc
                 .Caption   = "Data Emiss" + CHR(227) + "o"
-                .Top       = 153
+                .Top       = 163
                 .Left      = 184
                 .Width     = 66
                 .Height    = 15
@@ -588,7 +634,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text5", "TextBox")
             WITH loc_oPagina.txt_4c_Text5
                 .Value    = 0
-                .Top      = 167
+                .Top      = 177
                 .Left     = 184
                 .Width    = 41
                 .Height   = 18
@@ -599,7 +645,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("lbl_4c_XDtDoc", "Label")
             WITH loc_oPagina.lbl_4c_XDtDoc
                 .Caption   = "x"
-                .Top       = 169
+                .Top       = 179
                 .Left      = 226
                 .Width     = 8
                 .Height    = 15
@@ -612,7 +658,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text6", "TextBox")
             WITH loc_oPagina.txt_4c_Text6
                 .Value    = 0
-                .Top      = 167
+                .Top      = 177
                 .Left     = 233
                 .Width    = 41
                 .Height   = 18
@@ -625,7 +671,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("lbl_4c_LblNota", "Label")
             WITH loc_oPagina.lbl_4c_LblNota
                 .Caption   = "Nota Fiscal"
-                .Top       = 153
+                .Top       = 163
                 .Left      = 293
                 .Width     = 54
                 .Height    = 15
@@ -638,7 +684,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text1", "TextBox")
             WITH loc_oPagina.txt_4c_Text1
                 .Value    = 0
-                .Top      = 167
+                .Top      = 177
                 .Left     = 293
                 .Width    = 41
                 .Height   = 18
@@ -649,7 +695,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("lbl_4c_XNota", "Label")
             WITH loc_oPagina.lbl_4c_XNota
                 .Caption   = "x"
-                .Top       = 169
+                .Top       = 179
                 .Left      = 335
                 .Width     = 8
                 .Height    = 15
@@ -662,7 +708,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text2", "TextBox")
             WITH loc_oPagina.txt_4c_Text2
                 .Value    = 0
-                .Top      = 167
+                .Top      = 177
                 .Left     = 342
                 .Width    = 41
                 .Height   = 18
@@ -675,7 +721,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("lbl_4c_LblVlDoc", "Label")
             WITH loc_oPagina.lbl_4c_LblVlDoc
                 .Caption   = "Valor da Duplicata"
-                .Top       = 153
+                .Top       = 163
                 .Left      = 403
                 .Width     = 88
                 .Height    = 15
@@ -688,7 +734,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text9", "TextBox")
             WITH loc_oPagina.txt_4c_Text9
                 .Value    = 0
-                .Top      = 168
+                .Top      = 178
                 .Left     = 403
                 .Width    = 41
                 .Height   = 18
@@ -699,7 +745,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("lbl_4c_XVlDoc", "Label")
             WITH loc_oPagina.lbl_4c_XVlDoc
                 .Caption   = "x"
-                .Top       = 169
+                .Top       = 179
                 .Left      = 445
                 .Width     = 8
                 .Height    = 15
@@ -712,7 +758,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text10", "TextBox")
             WITH loc_oPagina.txt_4c_Text10
                 .Value    = 0
-                .Top      = 168
+                .Top      = 178
                 .Left     = 452
                 .Width    = 41
                 .Height   = 18
@@ -725,7 +771,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("lbl_4c_LblNrDoc", "Label")
             WITH loc_oPagina.lbl_4c_LblNrDoc
                 .Caption   = "N" + CHR(176) + " da Duplicata"
-                .Top       = 153
+                .Top       = 163
                 .Left      = 513
                 .Width     = 76
                 .Height    = 15
@@ -738,7 +784,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text7", "TextBox")
             WITH loc_oPagina.txt_4c_Text7
                 .Value    = 0
-                .Top      = 167
+                .Top      = 177
                 .Left     = 513
                 .Width    = 41
                 .Height   = 18
@@ -749,7 +795,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("lbl_4c_XNrDoc", "Label")
             WITH loc_oPagina.lbl_4c_XNrDoc
                 .Caption   = "x"
-                .Top       = 169
+                .Top       = 179
                 .Left      = 555
                 .Width     = 8
                 .Height    = 15
@@ -762,7 +808,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text8", "TextBox")
             WITH loc_oPagina.txt_4c_Text8
                 .Value    = 0
-                .Top      = 167
+                .Top      = 177
                 .Left     = 562
                 .Width    = 41
                 .Height   = 18
@@ -775,7 +821,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("lbl_4c_LblDtVenc", "Label")
             WITH loc_oPagina.lbl_4c_LblDtVenc
                 .Caption   = "Vencimento"
-                .Top       = 153
+                .Top       = 163
                 .Left      = 623
                 .Width     = 57
                 .Height    = 15
@@ -788,7 +834,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text3", "TextBox")
             WITH loc_oPagina.txt_4c_Text3
                 .Value    = 0
-                .Top      = 167
+                .Top      = 177
                 .Left     = 623
                 .Width    = 41
                 .Height   = 18
@@ -799,7 +845,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("lbl_4c_XDtVenc", "Label")
             WITH loc_oPagina.lbl_4c_XDtVenc
                 .Caption   = "x"
-                .Top       = 169
+                .Top       = 179
                 .Left      = 665
                 .Width     = 8
                 .Height    = 15
@@ -812,7 +858,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text4", "TextBox")
             WITH loc_oPagina.txt_4c_Text4
                 .Value    = 0
-                .Top      = 167
+                .Top      = 177
                 .Left     = 672
                 .Width    = 41
                 .Height   = 18
@@ -828,7 +874,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("lbl_4c_SecSacado", "Label")
             WITH loc_oPagina.lbl_4c_SecSacado
                 .Caption   = "Sacado"
-                .Top       = 203
+                .Top       = 213
                 .Left      = 183
                 .Width     = 43
                 .Height    = 15
@@ -858,7 +904,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("lbl_4c_LblRazCli", "Label")
             WITH loc_oPagina.lbl_4c_LblRazCli
                 .Caption   = "Raz" + CHR(227) + "o Social"
-                .Top       = 224
+                .Top       = 234
                 .Left      = 183
                 .Width     = 62
                 .Height    = 15
@@ -871,7 +917,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text15", "TextBox")
             WITH loc_oPagina.txt_4c_Text15
                 .Value    = 0
-                .Top      = 239
+                .Top      = 249
                 .Left     = 183
                 .Width    = 41
                 .Height   = 18
@@ -882,7 +928,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("lbl_4c_XRazCli", "Label")
             WITH loc_oPagina.lbl_4c_XRazCli
                 .Caption   = "x"
-                .Top       = 240
+                .Top       = 250
                 .Left      = 225
                 .Width     = 8
                 .Height    = 15
@@ -895,7 +941,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text16", "TextBox")
             WITH loc_oPagina.txt_4c_Text16
                 .Value    = 0
-                .Top      = 239
+                .Top      = 249
                 .Left     = 232
                 .Width    = 41
                 .Height   = 18
@@ -908,7 +954,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("lbl_4c_LblCgcCli", "Label")
             WITH loc_oPagina.lbl_4c_LblCgcCli
                 .Caption   = "C.G.C./C.P.F."
-                .Top       = 224
+                .Top       = 234
                 .Left      = 293
                 .Width     = 70
                 .Height    = 15
@@ -921,7 +967,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text17", "TextBox")
             WITH loc_oPagina.txt_4c_Text17
                 .Value    = 0
-                .Top      = 239
+                .Top      = 249
                 .Left     = 293
                 .Width    = 41
                 .Height   = 18
@@ -932,7 +978,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("lbl_4c_XCgcCli", "Label")
             WITH loc_oPagina.lbl_4c_XCgcCli
                 .Caption   = "x"
-                .Top       = 240
+                .Top       = 250
                 .Left      = 335
                 .Width     = 8
                 .Height    = 15
@@ -945,7 +991,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text18", "TextBox")
             WITH loc_oPagina.txt_4c_Text18
                 .Value    = 0
-                .Top      = 239
+                .Top      = 249
                 .Left     = 342
                 .Width    = 41
                 .Height   = 18
@@ -958,7 +1004,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("lbl_4c_LblEstCli", "Label")
             WITH loc_oPagina.lbl_4c_LblEstCli
                 .Caption   = "Insc. Estadual"
-                .Top       = 224
+                .Top       = 234
                 .Left      = 403
                 .Width     = 70
                 .Height    = 15
@@ -971,7 +1017,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text11", "TextBox")
             WITH loc_oPagina.txt_4c_Text11
                 .Value    = 0
-                .Top      = 239
+                .Top      = 249
                 .Left     = 403
                 .Width    = 41
                 .Height   = 18
@@ -982,7 +1028,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("lbl_4c_XEstCli", "Label")
             WITH loc_oPagina.lbl_4c_XEstCli
                 .Caption   = "x"
-                .Top       = 240
+                .Top       = 250
                 .Left      = 445
                 .Width     = 8
                 .Height    = 15
@@ -995,7 +1041,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text12", "TextBox")
             WITH loc_oPagina.txt_4c_Text12
                 .Value    = 0
-                .Top      = 239
+                .Top      = 249
                 .Left     = 452
                 .Width    = 41
                 .Height   = 18
@@ -1008,7 +1054,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("lbl_4c_LblExtens", "Label")
             WITH loc_oPagina.lbl_4c_LblExtens
                 .Caption   = "Valor por Extenso"
-                .Top       = 223
+                .Top       = 233
                 .Left      = 516
                 .Width     = 87
                 .Height    = 15
@@ -1021,7 +1067,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text13", "TextBox")
             WITH loc_oPagina.txt_4c_Text13
                 .Value    = 0
-                .Top      = 238
+                .Top      = 248
                 .Left     = 516
                 .Width    = 41
                 .Height   = 18
@@ -1032,7 +1078,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("lbl_4c_XExtens", "Label")
             WITH loc_oPagina.lbl_4c_XExtens
                 .Caption   = "x"
-                .Top       = 239
+                .Top       = 249
                 .Left      = 558
                 .Width     = 8
                 .Height    = 15
@@ -1045,7 +1091,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text14", "TextBox")
             WITH loc_oPagina.txt_4c_Text14
                 .Value    = 0
-                .Top      = 238
+                .Top      = 248
                 .Left     = 565
                 .Width    = 41
                 .Height   = 18
@@ -1058,7 +1104,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("lbl_4c_LblPraca", "Label")
             WITH loc_oPagina.lbl_4c_LblPraca
                 .Caption   = "Pra" + CHR(231) + "a"
-                .Top       = 224
+                .Top       = 234
                 .Left      = 626
                 .Width     = 32
                 .Height    = 15
@@ -1071,7 +1117,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text32", "TextBox")
             WITH loc_oPagina.txt_4c_Text32
                 .Value    = 0
-                .Top      = 239
+                .Top      = 249
                 .Left     = 626
                 .Width    = 41
                 .Height   = 18
@@ -1082,7 +1128,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("lbl_4c_XPraca", "Label")
             WITH loc_oPagina.lbl_4c_XPraca
                 .Caption   = "x"
-                .Top       = 240
+                .Top       = 250
                 .Left      = 668
                 .Width     = 8
                 .Height    = 15
@@ -1095,7 +1141,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text33", "TextBox")
             WITH loc_oPagina.txt_4c_Text33
                 .Value    = 0
-                .Top      = 239
+                .Top      = 249
                 .Left     = 675
                 .Width    = 41
                 .Height   = 18
@@ -1140,7 +1186,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("lbl_4c_LblEnd", "Label")
             WITH loc_oPagina.lbl_4c_LblEnd
                 .Caption   = "Endere" + CHR(231) + "o"
-                .Top       = 258
+                .Top       = 268
                 .Left      = 183
                 .Width     = 47
                 .Height    = 15
@@ -1153,7 +1199,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text19", "TextBox")
             WITH loc_oPagina.txt_4c_Text19
                 .Value    = 0
-                .Top      = 273
+                .Top      = 283
                 .Left     = 183
                 .Width    = 41
                 .Height   = 18
@@ -1164,7 +1210,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("lbl_4c_XEnd", "Label")
             WITH loc_oPagina.lbl_4c_XEnd
                 .Caption   = "x"
-                .Top       = 275
+                .Top       = 285
                 .Left      = 225
                 .Width     = 8
                 .Height    = 15
@@ -1177,7 +1223,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text20", "TextBox")
             WITH loc_oPagina.txt_4c_Text20
                 .Value    = 0
-                .Top      = 273
+                .Top      = 283
                 .Left     = 232
                 .Width    = 41
                 .Height   = 18
@@ -1190,7 +1236,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("lbl_4c_LblBairro", "Label")
             WITH loc_oPagina.lbl_4c_LblBairro
                 .Caption   = "Bairro"
-                .Top       = 258
+                .Top       = 268
                 .Left      = 293
                 .Width     = 30
                 .Height    = 15
@@ -1203,7 +1249,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text21", "TextBox")
             WITH loc_oPagina.txt_4c_Text21
                 .Value    = 0
-                .Top      = 273
+                .Top      = 283
                 .Left     = 293
                 .Width    = 41
                 .Height   = 18
@@ -1214,7 +1260,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("lbl_4c_XBairro", "Label")
             WITH loc_oPagina.lbl_4c_XBairro
                 .Caption   = "x"
-                .Top       = 274
+                .Top       = 284
                 .Left      = 335
                 .Width     = 8
                 .Height    = 15
@@ -1227,7 +1273,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text22", "TextBox")
             WITH loc_oPagina.txt_4c_Text22
                 .Value    = 0
-                .Top      = 273
+                .Top      = 283
                 .Left     = 342
                 .Width    = 41
                 .Height   = 18
@@ -1240,7 +1286,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("lbl_4c_LblCep", "Label")
             WITH loc_oPagina.lbl_4c_LblCep
                 .Caption   = "C.E.P."
-                .Top       = 259
+                .Top       = 269
                 .Left      = 403
                 .Width     = 33
                 .Height    = 15
@@ -1253,7 +1299,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text27", "TextBox")
             WITH loc_oPagina.txt_4c_Text27
                 .Value    = 0
-                .Top      = 273
+                .Top      = 283
                 .Left     = 403
                 .Width    = 41
                 .Height   = 18
@@ -1264,7 +1310,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("lbl_4c_XCep", "Label")
             WITH loc_oPagina.lbl_4c_XCep
                 .Caption   = "x"
-                .Top       = 274
+                .Top       = 284
                 .Left      = 445
                 .Width     = 8
                 .Height    = 15
@@ -1277,7 +1323,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text28", "TextBox")
             WITH loc_oPagina.txt_4c_Text28
                 .Value    = 0
-                .Top      = 273
+                .Top      = 283
                 .Left     = 452
                 .Width    = 41
                 .Height   = 18
@@ -1290,7 +1336,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("lbl_4c_LblCidade", "Label")
             WITH loc_oPagina.lbl_4c_LblCidade
                 .Caption   = "Cidade"
-                .Top       = 259
+                .Top       = 269
                 .Left      = 516
                 .Width     = 35
                 .Height    = 15
@@ -1303,7 +1349,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text23", "TextBox")
             WITH loc_oPagina.txt_4c_Text23
                 .Value    = 0
-                .Top      = 273
+                .Top      = 283
                 .Left     = 516
                 .Width    = 41
                 .Height   = 18
@@ -1314,7 +1360,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("lbl_4c_XCidade", "Label")
             WITH loc_oPagina.lbl_4c_XCidade
                 .Caption   = "x"
-                .Top       = 274
+                .Top       = 284
                 .Left      = 558
                 .Width     = 8
                 .Height    = 15
@@ -1327,7 +1373,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text24", "TextBox")
             WITH loc_oPagina.txt_4c_Text24
                 .Value    = 0
-                .Top      = 273
+                .Top      = 283
                 .Left     = 565
                 .Width    = 41
                 .Height   = 18
@@ -1340,7 +1386,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("lbl_4c_LblUF", "Label")
             WITH loc_oPagina.lbl_4c_LblUF
                 .Caption   = "U.F."
-                .Top       = 259
+                .Top       = 269
                 .Left      = 626
                 .Width     = 23
                 .Height    = 15
@@ -1353,7 +1399,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text25", "TextBox")
             WITH loc_oPagina.txt_4c_Text25
                 .Value    = 0
-                .Top      = 273
+                .Top      = 283
                 .Left     = 626
                 .Width    = 41
                 .Height   = 18
@@ -1364,7 +1410,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("lbl_4c_XUF", "Label")
             WITH loc_oPagina.lbl_4c_XUF
                 .Caption   = "x"
-                .Top       = 274
+                .Top       = 284
                 .Left      = 668
                 .Width     = 8
                 .Height    = 15
@@ -1377,7 +1423,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text26", "TextBox")
             WITH loc_oPagina.txt_4c_Text26
                 .Value    = 0
-                .Top      = 273
+                .Top      = 283
                 .Left     = 675
                 .Width    = 41
                 .Height   = 18
@@ -1393,7 +1439,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("lbl_4c_SecObs", "Label")
             WITH loc_oPagina.lbl_4c_SecObs
                 .Caption   = "Observa" + CHR(231) + CHR(227) + "o"
-                .Top       = 302
+                .Top       = 312
                 .Left      = 184
                 .Width     = 69
                 .Height    = 15
@@ -1409,7 +1455,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text36", "TextBox")
             WITH loc_oPagina.txt_4c_Text36
                 .Value    = 0
-                .Top      = 333
+                .Top      = 343
                 .Left     = 184
                 .Width    = 41
                 .Height   = 18
@@ -1420,7 +1466,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("lbl_4c_XObs", "Label")
             WITH loc_oPagina.lbl_4c_XObs
                 .Caption   = "x"
-                .Top       = 335
+                .Top       = 345
                 .Left      = 227
                 .Width     = 8
                 .Height    = 15
@@ -1433,7 +1479,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text37", "TextBox")
             WITH loc_oPagina.txt_4c_Text37
                 .Value    = 0
-                .Top      = 333
+                .Top      = 343
                 .Left     = 233
                 .Width    = 41
                 .Height   = 18
@@ -1446,7 +1492,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("lbl_4c_LblNcol", "Label")
             WITH loc_oPagina.lbl_4c_LblNcol
                 .Caption   = "N" + CHR(176) + " Colunas"
-                .Top       = 321
+                .Top       = 331
                 .Left      = 298
                 .Width     = 55
                 .Height    = 15
@@ -1459,7 +1505,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text38", "TextBox")
             WITH loc_oPagina.txt_4c_Text38
                 .Value    = 0
-                .Top      = 333
+                .Top      = 343
                 .Left     = 298
                 .Width    = 41
                 .Height   = 18
@@ -1470,7 +1516,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("lbl_4c_LblNlin", "Label")
             WITH loc_oPagina.lbl_4c_LblNlin
                 .Caption   = "N" + CHR(176) + " Linhas"
-                .Top       = 321
+                .Top       = 331
                 .Left      = 369
                 .Width     = 47
                 .Height    = 15
@@ -1483,7 +1529,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text39", "TextBox")
             WITH loc_oPagina.txt_4c_Text39
                 .Value    = 0
-                .Top      = 333
+                .Top      = 343
                 .Left     = 369
                 .Width    = 41
                 .Height   = 18
@@ -1496,7 +1542,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("lbl_4c_LblVlNF", "Label")
             WITH loc_oPagina.lbl_4c_LblVlNF
                 .Caption   = "Valor da NF"
-                .Top       = 320
+                .Top       = 330
                 .Left      = 443
                 .Width     = 57
                 .Height    = 15
@@ -1509,7 +1555,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text34", "TextBox")
             WITH loc_oPagina.txt_4c_Text34
                 .Value    = 0
-                .Top      = 335
+                .Top      = 345
                 .Left     = 443
                 .Width    = 41
                 .Height   = 18
@@ -1520,7 +1566,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("lbl_4c_XVlNF", "Label")
             WITH loc_oPagina.lbl_4c_XVlNF
                 .Caption   = "x"
-                .Top       = 336
+                .Top       = 346
                 .Left      = 485
                 .Width     = 8
                 .Height    = 15
@@ -1533,7 +1579,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text35", "TextBox")
             WITH loc_oPagina.txt_4c_Text35
                 .Value    = 0
-                .Top      = 335
+                .Top      = 345
                 .Left     = 492
                 .Width    = 41
                 .Height   = 18
@@ -1546,7 +1592,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("lbl_4c_LblCod", "Label")
             WITH loc_oPagina.lbl_4c_LblCod
                 .Caption   = "C" + CHR(243) + "digo"
-                .Top       = 320
+                .Top       = 330
                 .Left      = 556
                 .Width     = 35
                 .Height    = 15
@@ -1559,7 +1605,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text41", "TextBox")
             WITH loc_oPagina.txt_4c_Text41
                 .Value    = 0
-                .Top      = 335
+                .Top      = 345
                 .Left     = 556
                 .Width    = 41
                 .Height   = 18
@@ -1570,7 +1616,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("lbl_4c_XCod", "Label")
             WITH loc_oPagina.lbl_4c_XCod
                 .Caption   = "x"
-                .Top       = 336
+                .Top       = 346
                 .Left      = 598
                 .Width     = 8
                 .Height    = 15
@@ -1583,7 +1629,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text42", "TextBox")
             WITH loc_oPagina.txt_4c_Text42
                 .Value    = 0
-                .Top      = 335
+                .Top      = 345
                 .Left     = 605
                 .Width    = 41
                 .Height   = 18
@@ -1614,7 +1660,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("lbl_4c_SecImpr", "Label")
             WITH loc_oPagina.lbl_4c_SecImpr
                 .Caption   = "Impressora / Fonte"
-                .Top       = 367
+                .Top       = 377
                 .Left      = 183
                 .Width     = 112
                 .Height    = 15
@@ -1630,7 +1676,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("lbl_4c_LblNomeImp", "Label")
             WITH loc_oPagina.lbl_4c_LblNomeImp
                 .Caption   = "Nome da Impressora"
-                .Top       = 388
+                .Top       = 398
                 .Left      = 183
                 .Width     = 101
                 .Height    = 15
@@ -1643,7 +1689,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text29", "TextBox")
             WITH loc_oPagina.txt_4c_Text29
                 .Value    = ""
-                .Top      = 402
+                .Top      = 412
                 .Left     = 183
                 .Width    = 240
                 .Height   = 18
@@ -1656,7 +1702,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("lbl_4c_LblFonte", "Label")
             WITH loc_oPagina.lbl_4c_LblFonte
                 .Caption   = "Fonte Padr" + CHR(227) + "o"
-                .Top       = 421
+                .Top       = 431
                 .Left      = 183
                 .Width     = 67
                 .Height    = 15
@@ -1669,7 +1715,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text30", "TextBox")
             WITH loc_oPagina.txt_4c_Text30
                 .Value    = ""
-                .Top      = 435
+                .Top      = 445
                 .Left     = 183
                 .Width    = 192
                 .Height   = 18
@@ -1682,7 +1728,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("lbl_4c_LblTamFonte", "Label")
             WITH loc_oPagina.lbl_4c_LblTamFonte
                 .Caption   = "Tamanho"
-                .Top       = 421
+                .Top       = 431
                 .Left      = 384
                 .Width     = 46
                 .Height    = 15
@@ -1695,7 +1741,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text31", "TextBox")
             WITH loc_oPagina.txt_4c_Text31
                 .Value    = 0
-                .Top      = 435
+                .Top      = 445
                 .Left     = 384
                 .Width    = 41
                 .Height   = 18
@@ -1708,7 +1754,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("lbl_4c_LblTamFolha", "Label")
             WITH loc_oPagina.lbl_4c_LblTamFolha
                 .Caption   = "Tamanho da Folha"
-                .Top       = 453
+                .Top       = 463
                 .Left      = 183
                 .Width     = 90
                 .Height    = 15
@@ -1721,7 +1767,7 @@ DEFINE CLASS FormDup AS FormBase
             loc_oPagina.AddObject("txt_4c_Text40", "TextBox")
             WITH loc_oPagina.txt_4c_Text40
                 .Value    = ""
-                .Top      = 468
+                .Top      = 478
                 .Left     = 183
                 .Width    = 240
                 .Height   = 18
@@ -2899,3 +2945,4 @@ DEFINE CLASS FormDup AS FormBase
     ENDPROC
 
 ENDDEFINE
+

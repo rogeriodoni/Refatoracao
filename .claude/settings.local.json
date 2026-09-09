@@ -455,7 +455,23 @@
       "Bash(taskkill *)",
       "PowerShell($p = Start-Process -FilePath \"C:\\\\Program Files \\(x86\\)\\\\Microsoft Visual FoxPro 9\\\\vfp9.exe\" -ArgumentList \"-t\",\"DO C:\\\\4c\\\\compile_formcargo_check.prg\" -PassThru -Wait -WindowStyle Hidden; \"ExitCode: $\\($p.ExitCode\\)\"; if \\(Test-Path C:\\\\4c\\\\compile_formcargo_check.log\\) { Get-Content C:\\\\4c\\\\compile_formcargo_check.log })",
       "PowerShell(& \"C:\\\\Program Files\\\\PowerShell\\\\7\\\\pwsh.exe\" -NoProfile -ExecutionPolicy Bypass -Command \"& { & 'C:\\\\4c\\\\automation\\\\CorretorAutomatico.ps1' -ArquivoPrg 'C:\\\\4c\\\\test_pattern175.prg' }\" 2>&1 | Select-String -Pattern 'Pattern #175|Correcoes aplicadas|CORRECAO CONCLUIDA')",
-      "PowerShell(& \"C:\\\\4c\\\\automation\\\\CorretorAutomatico.ps1\" -ArquivoPrg \"C:\\\\4c\\\\test_pattern176.prg\" 2>&1 | Select-String -Pattern 'Pattern #176|Correcoes aplicadas' | ForEach-Object { $_.Line })"
+      "PowerShell(& \"C:\\\\4c\\\\automation\\\\CorretorAutomatico.ps1\" -ArquivoPrg \"C:\\\\4c\\\\test_pattern176.prg\" 2>&1 | Select-String -Pattern 'Pattern #176|Correcoes aplicadas' | ForEach-Object { $_.Line })",
+      "PowerShell(Get-ChildItem -Path \"C:\\\\4c\\\\projeto\\\\app\\\\forms\" -Recurse | Where-Object { $_.Extension -eq \".prg\" } | Sort-Object LastWriteTime -Descending | Select-Object FullName, LastWriteTime | Select-Object -First 30)",
+      "PowerShell(Get-Content \"C:\\\\4c\\\\tasks\\\\task521\\\\logs\\\\06b_testeAutomatico.log\" -Raw | Select-String -Pattern \"BtnEncerrar|CarregarLista|ModoIncluir|FALHOU|PASSOU|Linha:\" | Select-Object -First 30 | ForEach-Object { $_.Line })",
+      "PowerShell(Get-Content \"C:\\\\4c\\\\tasks\\\\task521\\\\logs\\\\06b_testeAutomatico.log\" -Raw | Select-Object -Last 1 | ForEach-Object { $_.Substring\\([Math]::Max\\(0, $_.Length - 5000\\)\\) })",
+      "Bash(where python3 *)",
+      "Bash(where python *)",
+      "Bash(where pwsh *)",
+      "Bash(where powershell *)",
+      "PowerShell(cd C:\\\\4c; powershell -ExecutionPolicy Bypass -File fix_buttons_left.ps1 2>&1)",
+      "Bash(Select-String -Pattern \"WARN|warn|Pattern #183|Total|Arquivo|modificad|correcoes\")",
+      "Bash(Select-Object -Last 20)",
+      "Bash(echo \"EXIT:$?\")",
+      "Bash(Out-File \"C:\\\\4c\\\\sweep_183_result.txt\" -Encoding utf8)",
+      "Bash(Get-Content \"C:\\\\4c\\\\sweep_183_result.txt\")",
+      "Bash(Select-String -Pattern \"183|WARN|Total|modificad|conclu\")",
+      "Bash(Get-Content \"C:/Users/roger/AppData/Local/Temp/claude/C--4c/cfb5c94b-4558-41de-8fd3-d1df299b4028/tasks/b3hkt2gng.output\")",
+      "Bash(Select-Object -Last 30)"
     ]
   }
 }

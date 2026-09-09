@@ -518,10 +518,13 @@ DEFINE CLASS mtzBO AS BusinessBase
         loc_lResultado = .F.
 
         TRY
+            *-- cidchaves (NOT NULL, indice unico) e usualts (NOT NULL) faltavam:
+            *-- o SQL Server recusava o INSERT (Erro151)
             loc_cSQL = "INSERT INTO SigCdMtz" + ;
-                       " (Codigo, Ano, sGrupos, sContas, Moeda, Inativas," + ;
-                       "  DtIncs, UsuIncs)" + ;
+                       " (cidchaves, Codigo, Ano, sGrupos, sContas, Moeda, Inativas," + ;
+                       "  DtIncs, UsuIncs, UsuAlts)" + ;
                        " VALUES (" + ;
+                       EscaparSQL(fUniqueIds()) + "," + ;
                        EscaparSQL(THIS.this_cCodigo) + "," + ;
                        EscaparSQL(THIS.this_cAno) + "," + ;
                        EscaparSQL(THIS.this_cSGrupos) + "," + ;
@@ -529,6 +532,7 @@ DEFINE CLASS mtzBO AS BusinessBase
                        EscaparSQL(THIS.this_cMoeda) + "," + ;
                        IIF(THIS.this_lInativas, "1", "0") + "," + ;
                        "GETDATE()," + ;
+                       EscaparSQL(gc_4c_UsuarioLogado) + "," + ;
                        EscaparSQL(gc_4c_UsuarioLogado) + ")"
 
             loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL)

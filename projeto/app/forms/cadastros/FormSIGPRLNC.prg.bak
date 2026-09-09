@@ -333,7 +333,7 @@ DEFINE CLASS FormSIGPRLNC AS FormBase
             .Left               = 2
             .Width              = 950
             .Height             = 452
-            .ColumnCount        = 2
+            .ColumnCount        = 3
             .FontName           = "Verdana"
             .FontSize           = 8
             .ForeColor          = RGB(90, 90, 90)
@@ -362,6 +362,52 @@ DEFINE CLASS FormSIGPRLNC AS FormBase
         loc_oPagina = THIS.pgf_4c_Paginas.Page2
 
         loc_oPagina.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
+        *-- Cabecalho cinza (identico ao da pagina Lista) - Erro152
+        loc_oPagina.AddObject("cnt_4c_Cabecalho", "Container")
+        WITH loc_oPagina.cnt_4c_Cabecalho
+            .Top           = 29
+            .Left          = 0
+            .Width         = THIS.Width
+            .Height        = 80
+            .BackColor     = RGB(100, 100, 100)
+            .BorderWidth   = 0
+            .SpecialEffect = 0
+            .Visible       = .T.
+
+            .AddObject("lbl_4c_Sombra", "Label")
+            WITH .lbl_4c_Sombra
+                .Caption   = THIS.Caption
+                .Top       = 15
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 40
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(0, 0, 0)
+                .BackStyle = 0
+                .AutoSize  = .F.
+                .Visible   = .T.
+            ENDWITH
+
+            .AddObject("lbl_4c_Titulo", "Label")
+            WITH .lbl_4c_Titulo
+                .Caption   = THIS.Caption
+                .Top       = 18
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 46
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(255, 255, 255)
+                .BackStyle = 0
+                .AutoSize  = .F.
+                .Visible   = .T.
+            ENDWITH
+        ENDWITH
+
+
 
         *-- Container botoes de acao (Grupo_Salva: Left=844, Top=-3+29=26 -> canonico 38)
         loc_oPagina.AddObject("cnt_4c_BotoesAcao", "Container")
@@ -650,25 +696,31 @@ DEFINE CLASS FormSIGPRLNC AS FormBase
                 IF USED("cursor_4c_Dados")
                     USE IN cursor_4c_Dados
                 ENDIF
-                CREATE CURSOR cursor_4c_Dados (grupos C(10), contas C(10), grucontas C(20))
+                CREATE CURSOR cursor_4c_Dados (grupos C(10), contas C(10), cocos C(2), ;
+                                               cidchaves C(20), grucontas C(20))
                 loc_lSucesso = .T.
             ELSE
                 IF THIS.this_oBusinessObject.Buscar("")
                     loc_oGrid = THIS.pgf_4c_Paginas.Page1.grd_4c_Lista
 
                     *-- RecordSource e ColumnCount ANTES do WITH (Problema 48/36)
-                    loc_oGrid.ColumnCount = 3
+                    loc_oGrid.ColumnCount = 4
                     loc_oGrid.RecordSource = "cursor_4c_Dados"
-                    loc_oGrid.ColumnCount  = 2
+                    loc_oGrid.ColumnCount  = 3
 
+                    *-- Colunas do legado (Init): Grupos / Contas / Cocos ("Operacao"), 80px cada
                     WITH loc_oGrid
                         .Column1.ControlSource   = "cursor_4c_Dados.grupos"
-                        .Column1.Width           = 200
-                        .Column1.Header1.Caption = "Ocorr" + CHR(234) + "ncia"
+                        .Column1.Width           = 80
+                        .Column1.Header1.Caption = "Grupos"
 
                         .Column2.ControlSource   = "cursor_4c_Dados.contas"
-                        .Column2.Width           = 200
-                        .Column2.Header1.Caption = "Descri" + CHR(231) + CHR(227) + "o"
+                        .Column2.Width           = 80
+                        .Column2.Header1.Caption = "Contas"
+
+                        .Column3.ControlSource   = "cursor_4c_Dados.cocos"
+                        .Column3.Width           = 80
+                        .Column3.Header1.Caption = "Opera" + CHR(231) + CHR(227) + "o"
                     ENDWITH
 
                     THIS.FormatarGridLista(loc_oGrid)
@@ -870,30 +922,40 @@ DEFINE CLASS FormSIGPRLNC AS FormBase
     * BtnExcluirClick - Exclui todos os lancamentos do grupo+conta selecionado
     *--------------------------------------------------------------------------
     PROCEDURE BtnExcluirClick()
-        LOCAL loc_cGrupos, loc_cContas, loc_cGruContas, loc_lConfirmar
+        LOCAL loc_cGrupos, loc_cContas, loc_cCocos, loc_cCidChaves, loc_lConfirmar
         loc_cGrupos    = ""
         loc_cContas    = ""
-        loc_cGruContas = ""
+        loc_cCocos     = ""
+        loc_cCidChaves = ""
         loc_lConfirmar = .F.
 
         IF USED("cursor_4c_Dados") AND !EOF("cursor_4c_Dados") AND RECCOUNT("cursor_4c_Dados") > 0
             SELECT cursor_4c_Dados
             loc_cGrupos    = ALLTRIM(grupos)
             loc_cContas    = ALLTRIM(contas)
-            loc_cGruContas = ALLTRIM(grucontas)
+            loc_cCocos     = ALLTRIM(cocos)
+            loc_cCidChaves = ALLTRIM(cidchaves)
         ELSE
             MsgAviso("Selecione um registro na lista.", "Selecionar")
             RETURN
         ENDIF
 
-        loc_lConfirmar = MsgConfirma("Confirma a exclus" + CHR(227) + "o de todos os lan" + CHR(231) + "amentos" + CHR(13) + ;
-                                     "do grupo '" + loc_cGrupos + "' / conta '" + loc_cContas + "'?", ;
+        *-- Legado: a lista mostra UMA linha por lancamento e Excluir remove apenas o
+        *-- registro corrente (chave cidchaves). Excluir o grupo+conta inteiro fica
+        *-- por conta de Alterar (remover as ocorrencias) — Erro148.
+        loc_lConfirmar = MsgConfirma("Confirma a exclus" + CHR(227) + "o do lan" + CHR(231) + "amento" + CHR(13) + ;
+                                     "grupo '" + loc_cGrupos + "' / conta '" + loc_cContas + ;
+                                     "' / opera" + CHR(231) + CHR(227) + "o '" + loc_cCocos + "'?", ;
                                      "Confirmar Exclus" + CHR(227) + "o")
 
         IF loc_lConfirmar
-            IF THIS.this_oBusinessObject.ExcluirPorGruContas(loc_cGruContas)
-                MsgInfo("Lan" + CHR(231) + "amentos exclu" + CHR(237) + "dos com sucesso!", "Sucesso")
-                THIS.CarregarLista()
+            IF THIS.this_oBusinessObject.CarregarPorCodigo(loc_cCidChaves)
+                IF THIS.this_oBusinessObject.Excluir()
+                    MsgInfo("Lan" + CHR(231) + "amento exclu" + CHR(237) + "do com sucesso!", "Sucesso")
+                    THIS.CarregarLista()
+                ENDIF
+            ELSE
+                MsgErro("Erro ao carregar lan" + CHR(231) + "amento para exclus" + CHR(227) + "o.", "Erro")
             ENDIF
         ENDIF
     ENDPROC
@@ -953,13 +1015,53 @@ DEFINE CLASS FormSIGPRLNC AS FormBase
                 RETURN
             ENDIF
 
-            IF THIS.this_oBusinessObject.SalvarOcorrencias(loc_cGrupos, loc_cContas, "cursor_4c_OcoLocal")
+            *-- O registro deste cadastro E a associacao grupo+conta+ocorrencia: sem
+            *-- nenhuma ocorrencia preenchida nao ha o que gravar. Antes o Salvar
+            *-- seguia adiante, o BO nao inseria nada e mesmo assim era exibido
+            *-- "Lancamentos salvos com sucesso!" (Erro148). Em ALTERAR a lista vazia
+            *-- continua valida: significa remover todas as ocorrencias do grupo+conta.
+            IF THIS.this_cModoAtual = "INSERIR" AND THIS.ContarOcorrenciasPreenchidas() = 0
+                MsgAviso("Informe ao menos uma ocorr" + CHR(234) + "ncia antes de gravar.", ;
+                         "Aten" + CHR(231) + CHR(227) + "o")
+                IF PEMSTATUS(loc_oPagina, "grd_4c_Ocorrencias", 5) AND ;
+                        loc_oPagina.grd_4c_Ocorrencias.Enabled
+                    loc_oPagina.grd_4c_Ocorrencias.SetFocus
+                ENDIF
+                RETURN
+            ENDIF
+
+            *-- 4o parametro: lista vazia so eh aceita em ALTERAR (remove todas as ocorrencias)
+            IF THIS.this_oBusinessObject.SalvarOcorrencias(loc_cGrupos, loc_cContas, ;
+                    "cursor_4c_OcoLocal", (THIS.this_cModoAtual = "ALTERAR"))
                 MsgInfo("Lan" + CHR(231) + "amentos salvos com sucesso!", "Sucesso")
                 THIS.this_cModoAtual = "LISTA"
                 THIS.AlternarPagina(1)
             ENDIF
         ENDIF
     ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ContarOcorrenciasPreenchidas - Quantas linhas do cursor local tem Cocos
+    * preenchido (as unicas que o BO grava em SigClLan)
+    *--------------------------------------------------------------------------
+    PROTECTED FUNCTION ContarOcorrenciasPreenchidas()
+        LOCAL loc_nTotal, loc_nPonteiro
+        loc_nTotal = 0
+
+        IF !USED("cursor_4c_OcoLocal")
+            RETURN 0
+        ENDIF
+
+        SELECT cursor_4c_OcoLocal
+        loc_nPonteiro = IIF(RECCOUNT("cursor_4c_OcoLocal") > 0, RECNO(), 0)
+        COUNT TO loc_nTotal FOR !EMPTY(ALLTRIM(cursor_4c_OcoLocal.Cocos))
+
+        IF loc_nPonteiro > 0 AND loc_nPonteiro <= RECCOUNT("cursor_4c_OcoLocal")
+            GO loc_nPonteiro IN cursor_4c_OcoLocal
+        ENDIF
+
+        RETURN loc_nTotal
+    ENDFUNC
 
     *--------------------------------------------------------------------------
     * BtnCancelarClick - Cancela a operacao e volta para a lista (Page1)
@@ -1257,27 +1359,52 @@ DEFINE CLASS FormSIGPRLNC AS FormBase
                 loc_cCocosOk = ALLTRIM(Cods)
                 loc_cDescsOk = ALLTRIM(Descs)
             ELSE
+                *-- Pattern A canonico (Erro114/Pattern #166): a SQL fica no caller e o
+                *-- picker recebe um cursor JA populado. O Pattern B (CREATEOBJECT com
+                *-- parametros) fechava o cursor quando nem o codigo exato nem o prefixo
+                *-- batiam, e a janela "Selecao" abria vazia, sem colunas e sem explicacao
+                *-- (Erro149). Aqui: prefixo em Cods OU Descs -> fallback mostrando tudo
+                *-- -> aviso explicito quando nao ha ocorrencia cadastrada.
                 IF USED("cursor_4c_BuscaCoco")
                     USE IN cursor_4c_BuscaCoco
                 ENDIF
-                loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
-                    "SigCcCco", "cursor_4c_BuscaCoco", "Cods", loc_cCocos, ;
-                    "Sele" + CHR(231) + CHR(227) + "o")
-                IF VARTYPE(loc_oBusca) = "O"
-                    IF !loc_oBusca.this_lAchouRegistro
+
+                loc_cSQL = "SELECT Cods, Descs FROM SigCcCco" + ;
+                           " WHERE Cods LIKE "  + EscaparSQL(loc_cCocos + "%") + ;
+                           " OR Descs LIKE " + EscaparSQL(loc_cCocos + "%") + ;
+                           " ORDER BY Cods"
+                loc_nRes = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaCoco")
+
+                *-- Fallback SHOW-ALL: prefixo nao bateu, mas pode haver outras ocorrencias
+                IF loc_nRes >= 0 AND USED("cursor_4c_BuscaCoco") AND RECCOUNT("cursor_4c_BuscaCoco") = 0
+                    USE IN cursor_4c_BuscaCoco
+                    loc_cSQL = "SELECT Cods, Descs FROM SigCcCco ORDER BY Cods"
+                    loc_nRes = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_BuscaCoco")
+                ENDIF
+
+                IF loc_nRes >= 0 AND USED("cursor_4c_BuscaCoco") AND RECCOUNT("cursor_4c_BuscaCoco") > 0
+                    loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar")
+                    IF VARTYPE(loc_oBusca) = "O"
+                        loc_oBusca.DefinirCursor("cursor_4c_BuscaCoco", "Cods", "Descs", ;
+                            "Sele" + CHR(231) + CHR(227) + "o")
+                        *-- DefinirCursor titula as colunas com o nome do campo; repor os
+                        *-- titulos do legado (fwBuscaExt: 'Codigo' / 'Descricao')
+                        loc_oBusca.this_nColunas = 0
                         loc_oBusca.mAddColuna("Cods",  "", "C" + CHR(243) + "digo")
                         loc_oBusca.mAddColuna("Descs", "", "Descri" + CHR(231) + CHR(227) + "o")
-                        loc_oBusca.Show()
+
+                        IF loc_oBusca.Mostrar()
+                            loc_cCocosOk = ALLTRIM(loc_oBusca.cCodigoSelecionado)
+                            loc_cDescsOk = ALLTRIM(loc_oBusca.cDescricaoSelecionada)
+                        ELSE
+                            loc_cCocosOk = ""
+                            loc_cDescsOk = ""
+                        ENDIF
+                        loc_oBusca.Release()
                     ENDIF
-                    IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaCoco") AND RECCOUNT("cursor_4c_BuscaCoco") > 0
-                        SELECT cursor_4c_BuscaCoco
-                        loc_cCocosOk = ALLTRIM(Cods)
-                        loc_cDescsOk = ALLTRIM(Descs)
-                    ELSE
-                        loc_cCocosOk = ""
-                        loc_cDescsOk = ""
-                    ENDIF
-                    loc_oBusca.Release()
+                ELSE
+                    MsgAviso("Nenhuma ocorr" + CHR(234) + "ncia cadastrada.", ;
+                             "Sele" + CHR(231) + CHR(227) + "o")
                 ENDIF
             ENDIF
 
@@ -1615,3 +1742,4 @@ DEFINE CLASS FormSIGPRLNC AS FormBase
     ENDPROC
 
 ENDDEFINE
+

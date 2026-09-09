@@ -1,0 +1,21 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 4/8 conclu├¡da em `C:\4c\projeto\app\forms\cadastros\FormTbO.prg`:
+
+**Adicionado em `ConfigurarPaginaLista()` (Page1):**
+- Container `cnt_4c_Botoes` (Left=542, padr├úo Framework) com 5 bot├Áes CRUD: `cmd_4c_Incluir`, `cmd_4c_Visualizar`, `cmd_4c_Alterar`, `cmd_4c_Excluir`, `cmd_4c_Buscar` ÔÇö todos com Caption + Picture + PicturePosition=13, fonte "Comic Sans MS", conforme padr├úo can├┤nico.
+- Container `cnt_4c_Saida` (Left=917, Width=90 ÔÇö padr├úo can├┤nico CLAUDE.md regra #10) com `cmd_4c_Encerrar`.
+- BINDEVENT de todos os 6 bot├Áes para os handlers `Btn*Click` (ser├úo implementados nas Fases 7-8).
+- Grid `grd_4c_Dados` (3 colunas: Opera├º├úo, Tab.Desconto, Descri├º├úo ÔÇö refletindo o JOIN `SigOpTdo`├ù`SigOpTdz` do `TbOBO.Buscar()`; `cidchaves` fica no cursor mas n├úo ├® exibido, pois ├® um GUID interno sem significado para o usu├írio, igual ao legado).
+
+**M├®todos novos:**
+- `CarregarLista()` ÔÇö chama `TbOBO.Buscar("")`, seta RecordSource/ControlSource, reconfigura Width/ReadOnly/Header1.Caption (que s├úo resetados pelo RecordSource ÔÇö Problema 32/48 do guia), com guard de `gb_4c_ValidandoUI`.
+- `FormatarGridLista(par_oGrid)` ÔÇö padr├úo Tahoma/8.
+- `AlternarPagina(par_nPagina)` ÔÇö navega entre Page1/Page2 e recarrega a lista ao voltar para Page1.
+
+`InicializarForm()` agora chama `THIS.CarregarLista()` ap├│s montar a estrutura, para a grade j├í vir populada na abertura.
+
+Os bot├Áes `Btn*Click` referenciados via BINDEVENT ainda n├úo existem ÔÇö isso ├® esperado, ser├úo implementados nas Fases 7-8, seguindo a ordem sequencial do pipeline.

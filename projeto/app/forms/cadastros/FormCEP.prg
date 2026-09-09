@@ -354,7 +354,7 @@ DEFINE CLASS FormCEP AS FormBase
             .AutoSize  = .T.
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH
@@ -386,7 +386,7 @@ DEFINE CLASS FormCEP AS FormBase
             .AutoSize  = .F.
             .FontName  = "Tahoma"
             .FontSize  = 8
-            .ForeColor = RGB(255, 255, 255)
+            .ForeColor = RGB(90, 90, 90)
             .BackStyle = 0
             .Visible   = .T.
         ENDWITH

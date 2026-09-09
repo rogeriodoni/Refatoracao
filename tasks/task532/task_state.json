@@ -1,0 +1,262 @@
+﻿{
+    "taskId":  "task532",
+    "arquivoOriginal":  "",
+    "tipoArquivo":  "SCX",
+    "comentario_tipoArquivo":  "SCX=Form, FRX=Report, VCX=ClassLib",
+    "status":  "COMPLETED",
+    "statusComentario":  "PENDING | IN_PROGRESS | COMPLETED | FAILED | BLOCKED",
+    "criadoEm":  "2026-09-08T21:24:30",
+    "atualizadoEm":  "2026-09-08T23:13:13",
+    "etapas":  {
+                   "01_moverArquivos":  {
+                                            "status":  "COMPLETED",
+                                            "inicio":  "2026-09-08T21:24:30",
+                                            "fim":  "2026-09-08T21:24:30",
+                                            "tentativas":  1,
+                                            "erro":  null,
+                                            "sctFile":  "C:\\4c\\tasks\\task532\\SigCdTbv.sct",
+                                            "baseName":  "SigCdTbv",
+                                            "scxFile":  "C:\\4c\\tasks\\task532\\SigCdTbv.scx"
+                                        },
+                   "02_extractCode":  {
+                                          "status":  "COMPLETED",
+                                          "inicio":  "2026-09-08T21:24:30",
+                                          "fim":  "2026-09-08T21:24:31",
+                                          "tentativas":  1,
+                                          "arquivoGerado":  "SIGCDCOR_codigo_fonte.txt",
+                                          "erro":  null,
+                                          "baseNameNormalizado":  "SigCdTbv",
+                                          "txtFile":  "C:\\4c\\tasks\\task532\\SigCdTbv_form_codigo_fonte.txt"
+                                      },
+                   "02b_analisarTarefa":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-09-08T21:24:31",
+                                              "fim":  "2026-09-08T21:24:31",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "analise.json",
+                                              "erro":  null,
+                                              "comentario":  "NOVO - Analise inteligente do codigo fonte",
+                                              "analiseFile":  "C:\\4c\\tasks\\task532\\analise.json"
+                                          },
+                   "03_gerarMetaPrompt":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-09-08T21:24:32",
+                                              "fim":  "2026-09-08T21:24:40",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "meta_prompt.md",
+                                              "erro":  null,
+                                              "formType":  "CRUD",
+                                              "phaseBFile":  "C:\\4c\\tasks\\task532\\meta_prompt_phaseB.md",
+                                              "metaPromptFile":  "C:\\4c\\tasks\\task532\\meta_prompt.md",
+                                              "boClass":  "TbvBO",
+                                              "formClass":  "FormTbv",
+                                              "phaseAFile":  "C:\\4c\\tasks\\task532\\meta_prompt_phaseA.md"
+                                          },
+                   "04_gerarMapeamento":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-09-08T21:24:40",
+                                              "fim":  "2026-09-08T21:24:41",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  "mapeamento.json",
+                                              "erro":  null,
+                                              "jsonFile":  "C:\\4c\\tasks\\task532\\mapeamento.json"
+                                          },
+                   "04b_gerarEsqueletos":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-09-08T21:24:41",
+                                               "fim":  "2026-09-08T21:24:41",
+                                               "tentativas":  1,
+                                               "arquivosGerados":  [
+
+                                                                   ],
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Geracao de codigo base ~70% completo",
+                                               "esqueletosDir":  "C:\\4c\\tasks\\task532\\esqueletos",
+                                               "arquivos":  [
+                                                                "FormTbv_esqueleto.prg",
+                                                                "TbvBO_esqueleto.prg"
+                                                            ]
+                                           },
+                   "05_migracao":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-09-08T21:24:41",
+                                       "fim":  "2026-09-08T22:42:20",
+                                       "tentativas":  1,
+                                       "maxTentativas":  3,
+                                       "arquivosGerados":  [
+
+                                                           ],
+                                       "comentario":  "FormXXX.prg, XXXBO.prg",
+                                       "erro":  null,
+                                       "boExists":  true,
+                                       "boFile":  "C:\\4c\\projeto\\app\\classes\\TbvBO.prg",
+                                       "formExists":  true,
+                                       "tamanhoKB":  179.22,
+                                       "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormTbv.prg",
+                                       "complexidade":  "COMPLEXO",
+                                       "linhas":  6272
+                                   },
+                   "05b_corrigirAutomatico":  {
+                                                  "status":  "COMPLETED",
+                                                  "inicio":  "2026-09-08T22:42:20",
+                                                  "fim":  "2026-09-08T22:42:49",
+                                                  "tentativas":  1,
+                                                  "correcoesAplicadas":  0,
+                                                  "erro":  null,
+                                                  "comentario":  "NOVO - Correcao automatica de anti-padroes",
+                                                  "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormTbv.prg",
+                                                  "boFile":  "C:\\4c\\projeto\\app\\classes\\TbvBO.prg"
+                                              },
+                   "05c_validarCompilacao":  {
+                                                 "status":  "COMPLETED",
+                                                 "inicio":  "2026-09-08T22:42:49",
+                                                 "fim":  "2026-09-08T22:42:51",
+                                                 "tentativas":  1,
+                                                 "errosCompilacao":  [
+
+                                                                     ],
+                                                 "erro":  null,
+                                                 "comentario":  "NOVO - Valida compilacao dos .prg antes de testar",
+                                                 "arquivosValidados":  2,
+                                                 "sucesso":  true
+                                             },
+                   "06_testForm":  {
+                                       "status":  "COMPLETED",
+                                       "inicio":  "2026-09-08T22:56:03",
+                                       "fim":  "2026-09-08T22:57:51",
+                                       "tentativas":  1,
+                                       "maxTentativas":  5,
+                                       "errosEncontrados":  [
+
+                                                            ],
+                                       "erro":  null,
+                                       "tentativasUsadas":  1
+                                   },
+                   "06b_testeAutomatico":  {
+                                               "status":  "COMPLETED",
+                                               "inicio":  "2026-09-08T22:57:51",
+                                               "fim":  "2026-09-08T23:13:09",
+                                               "tentativas":  1,
+                                               "erro":  null,
+                                               "comentario":  "NOVO - Testes CRUD automaticos",
+                                               "threshold":  100,
+                                               "falhou":  0,
+                                               "passou":  9,
+                                               "total":  9,
+                                               "percentual":  100,
+                                               "tentativasUsadas":  4,
+                                               "resultFile":  "C:\\4c\\tasks\\task532\\teste_resultado.json"
+                                           },
+                   "07_validarUI":  {
+                                        "status":  "COMPLETED",
+                                        "inicio":  "2026-09-08T23:13:11",
+                                        "fim":  "2026-09-08T23:13:13",
+                                        "tentativas":  1,
+                                        "maxTentativas":  5,
+                                        "problemas":  {
+                                                          "erros":  0,
+                                                          "avisos":  0,
+                                                          "diferencas":  0,
+                                                          "total":  0
+                                                      },
+                                        "limiteProblemas":  10,
+                                        "erro":  null,
+                                        "exitCode":  0,
+                                        "htmlFile":  "C:\\4c\\projeto\\app\\utils\\relatorios\\UIFidelity_FormTbv_20260908231313.html",
+                                        "diferencas":  0,
+                                        "erros":  0,
+                                        "totalProblemas":  1207,
+                                        "avisos":  1207
+                                    },
+                   "08_gerarTestManual":  {
+                                              "status":  "COMPLETED",
+                                              "inicio":  "2026-09-08T23:13:13",
+                                              "fim":  "2026-09-08T23:13:13",
+                                              "tentativas":  1,
+                                              "arquivoGerado":  null,
+                                              "erro":  null,
+                                              "testManualFile":  "C:\\4c\\SolicitacaoTesteManual\\task532_SigCdTbv.md"
+                                          },
+                   "02c_analisarComportamento":  {
+                                                     "inicio":  "2026-09-08T21:24:31",
+                                                     "tentativas":  1,
+                                                     "erro":  null,
+                                                     "fim":  "2026-09-08T21:24:32",
+                                                     "comportamentoFile":  "C:\\4c\\tasks\\task532\\comportamento.json",
+                                                     "status":  "COMPLETED"
+                                                 },
+                   "02d_extrairLayout":  {
+                                             "inicio":  "2026-09-08T21:24:32",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-09-08T21:24:32"
+                                         },
+                   "05b2_atualizarMapeamento":  {
+                                                    "inicio":  "2026-09-08T22:42:49",
+                                                    "status":  "COMPLETED",
+                                                    "tentativas":  1,
+                                                    "erro":  null,
+                                                    "fim":  "2026-09-08T22:42:49",
+                                                    "destFile":  "C:\\4c\\projeto\\app\\utils\\mapeamentos\\FormTbv_mapeamento.json",
+                                                    "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormTbv.prg",
+                                                    "mapeamentoFile":  "C:\\4c\\tasks\\task532\\mapeamento.json"
+                                                },
+                   "05d_validarCompletude":  {
+                                                 "inicio":  "2026-09-08T22:42:51",
+                                                 "status":  "COMPLETED",
+                                                 "tentativas":  1,
+                                                 "erro":  null,
+                                                 "fim":  "2026-09-08T22:42:51",
+                                                 "sucesso":  true,
+                                                 "arquivosComProblema":  0
+                                             },
+                   "05e_codeReview":  {
+                                          "inicio":  "2026-09-08T22:42:51",
+                                          "status":  "COMPLETED",
+                                          "erro":  null,
+                                          "fim":  "2026-09-08T22:55:31",
+                                          "passes":  5,
+                                          "problemas":  "[GRID-SQL] Campo \u0027Campo2is\u0027 usado em ControlSource de cursor_4c_Tds mas NAO aparece no SELECT SQL; [GRID-SQL] Campo \u0027Campo2fs\u0027 usado em ControlSource de cursor_4c_Tds mas NAO aparece no SELECT SQL; [GRID-SQL] Campo \u0027dfators\u0027 usado em ControlSource de cursor_4c_Tds mas NAO aparece no SELECT SQL; [GRID-SQL] Campo \u0027Campo3is\u0027 usado em ControlSource de cursor_4c_Tds mas NAO aparece no SELECT SQL; [GRID-SQL] Campo \u0027Campo3fs\u0027 usado em ControlSource de cursor_4c_Tds mas NAO aparece no SELECT SQL; [GRID-SQL] Campo \u0027Campo1is\u0027 usado em ControlSource de cursor_4c_Tds mas NAO aparece no SELECT SQL; [GRID-SQL] Campo \u0027Campo1fs\u0027 usado em ControlSource de cursor_4c_Tds mas NAO aparece no SELECT SQL; [GRID-SQL] Campo \u0027grupos\u0027 usado em ControlSource de cursor_4c_Tdi mas NAO aparece no SELECT SQL; [GRID-SQL] Campo \u0027contas\u0027 usado em ControlSource de cursor_4c_Tdi mas NAO aparece no SELECT SQL; [GRID-SQL] Campo \u0027pintegrals\u0027 usado em ControlSource de cursor_4c_Tdi mas NAO aparece no SELECT SQL; [GRID-SQL] Campo \u0027pdivididas\u0027 usado em ControlSource de cursor_4c_Tdi mas NAO aparece no SELECT SQL; [GRID-SQL] Campo \u0027patendes\u0027 usado em ControlSource de cursor_4c_Tdi mas NAO aparece no SELECT SQL; [GRID-SQL] Campo \u0027moedas\u0027 usado em ControlSource de cursor_4c_Tdi mas NAO aparece no SELECT SQL; [CONTAINER-VISIVEL] TornarControlesVisiveis() NAO filtra containers ocultos: CNT_4C_CABECALHO, CNT_4C_CONTAINER1, CNT_4C_PGCONFDESCONTO. Estes containers tem Visible=.F. mas serao forcados a Visible=.T. pelo metodo recursivo.; [GRID-HEADER] Header Caption \u0027Descrição\u0027 no codigo migrado NAO foi encontrado no fonte legado. Headers legado encontrados: , Descrs, Tipo, Código, Valor, Fator, E, Faixa, Inicial, Final, Grupo, Conta, Integral, Dividida, Atendim, Moe, Tipos Desconto, Preço. Verificar se o caption foi inventado ou abreviado pelo Claude - deve ser IDENTICO ao legado.; [GRID-HEADER] Header Caption \u0027Moeda Refência\u0027 no codigo migrado NAO foi encontrado no fonte legado. Headers legado encontrados: , Descrs, Tipo, Código, Valor, Fator, E, Faixa, Inicial, Final, Grupo, Conta, Integral, Dividida, Atendim, Moe, Tipos Desconto, Preço. Verificar se o caption foi inventado ou abreviado pelo Claude - deve ser IDENTICO ao legado.; [GRID-HEADER] Header Caption \u0027Desconto (%)\u0027 no codigo migrado NAO foi encontrado no fonte legado. Headers legado encontrados: , Descrs, Tipo, Código, Valor, Fator, E, Faixa, Inicial, Final, Grupo, Conta, Integral, Dividida, Atendim, Moe, Tipos Desconto, Preço. Verificar se o caption foi inventado ou abreviado pelo Claude - deve ser IDENTICO ao legado.; [GRID-HEADER] Header Caption \u0027Empresa\u0027 no codigo migrado NAO foi encontrado no fonte legado. Headers legado encontrados: , Descrs, Tipo, Código, Valor, Fator, E, Faixa, Inicial, Final, Grupo, Conta, Integral, Dividida, Atendim, Moe, Tipos Desconto, Preço. Verificar se o caption foi inventado ou abreviado pelo Claude - deve ser IDENTICO ao legado.; [GRID-HEADER] Header Caption \u0027Código \u0027 no codigo migrado NAO foi encontrado no fonte legado. Headers legado encontrados: , Descrs, Tipo, Código, Valor, Fator, E, Faixa, Inicial, Final, Grupo, Conta, Integral, Dividida, Atendim, Moe, Tipos Desconto, Preço. Verificar se o caption foi inventado ou abreviado pelo Claude - deve ser IDENTICO ao legado.; [GRID-HEADER] Header Caption \u0027Código \u0027 no codigo migrado NAO foi encontrado no fonte legado. Headers legado encontrados: , Descrs, Tipo, Código, Valor, Fator, E, Faixa, Inicial, Final, Grupo, Conta, Integral, Dividida, Atendim, Moe, Tipos Desconto, Preço. Verificar se o caption foi inventado ou abreviado pelo Claude - deve ser IDENTICO ao legado.; [GRID-HEADER] Header Caption \u0027Empresa\u0027 no codigo migrado NAO foi encontrado no fonte legado. Headers legado encontrados: , Descrs, Tipo, Código, Valor, Fator, E, Faixa, Inicial, Final, Grupo, Conta, Integral, Dividida, Atendim, Moe, Tipos Desconto, Preço. Verificar se o caption foi inventado ou abreviado pelo Claude - deve ser IDENTICO ao legado.; [GRID-HEADER] Header Caption \u0027Código \u0027 no codigo migrado NAO foi encontrado no fonte legado. Headers legado encontrados: , Descrs, Tipo, Código, Valor, Fator, E, Faixa, Inicial, Final, Grupo, Conta, Integral, Dividida, Atendim, Moe, Tipos Desconto, Preço. Verificar se o caption foi inventado ou abreviado pelo Claude - deve ser IDENTICO ao legado.; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027CMOES\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: CODIGOS, ORDEM, DFATORS, ICLIS, TIPOS, CODTIPS, GRUPOS, CONTAS, MOEDAS, NDIAS, LNTIPOD; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027TIPODS\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: CODIGOS, ORDEM, DFATORS, ICLIS, TIPOS, CODTIPS, GRUPOS, CONTAS, MOEDAS, NDIAS, LNTIPOD; [SQL-FILTRO-INVENTADO] Condicao WHERE com coluna \u0027CAMPO3IS\u0027 existe no codigo migrado mas NAO existe no WHERE do codigo original. A LLM pode ter inventado esta condicao de filtro. VERIFICAR: comparar o WHERE do SQL migrado com o WHERE do codigo legado e REMOVER condicoes que nao existem no original. WHERE original usa: CODIGOS, ORDEM, DFATORS, ICLIS, TIPOS, CODTIPS, GRUPOS, CONTAS, MOEDAS, NDIAS, LNTIPOD; [METODO-INEXISTENTE] Metodo \u0027THIS.FormatarHorarioValidado()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [METODO-INEXISTENTE] Metodo \u0027THIS.FaixaTemInicial()\u0027 chamado mas NAO definido como PROCEDURE no Form nem herdado de FormBase. A LLM pode ter inventado este metodo. VERIFICAR se existe no legado e IMPLEMENTAR ou REMOVER a chamada.; [LAYOUT-POSITION] Controle \u0027lbl_obss\u0027 (parent: SIGCDTBV.Pagina.Dados.Page1.pgDados): Top original=133 vs migrado \u0027lbl_4c_Lbl_obss\u0027 Top=284 (diff=151px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027lbl_descos\u0027 (parent: SIGCDTBV.Pagina.Dados.Page1.pgDados): Top original=107 vs migrado \u0027lbl_4c_Lbl_descos\u0027 Top=258 (diff=151px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027lbl_moerefs\u0027 (parent: SIGCDTBV.Pagina.Dados.Page1.pgDados): Top original=81 vs migrado \u0027lbl_4c_Lbl_moerefs\u0027 Top=232 (diff=151px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027lbl_descrs\u0027 (parent: SIGCDTBV.Pagina.Dados.Page1.pgDados): Top original=56 vs migrado \u0027lbl_4c_Lbl_descrs\u0027 Top=207 (diff=151px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027lbl_codigos\u0027 (parent: SIGCDTBV.Pagina.Dados.Page1.pgDados): Top original=30 vs migrado \u0027lbl_4c_Lbl_codigos\u0027 Top=181 (diff=151px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027lbl_imprime\u0027 (parent: SIGCDTBV.Pagina.Dados.Page1.pgDados): Top original=309 vs migrado \u0027lbl_4c_Lbl_imprime\u0027 Top=460 (diff=151px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027opt_rel_descs\u0027 (parent: SIGCDTBV.Pagina.Dados.Page1.pgDados): Top original=305 vs migrado \u0027obj_4c_Opt_rel_descs\u0027 Top=456 (diff=151px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Chk_Acesso\u0027 (parent: SIGCDTBV.Pagina.Dados.Page1.pgDados): Top original=282 vs migrado \u0027obj_4c_Chk_Acesso\u0027 Top=433 (diff=151px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027chkAplicado\u0027 (parent: SIGCDTBV.Pagina.Dados.Page1.pgDados): Top original=235 vs migrado \u0027chk_4c_ChkAplicado\u0027 Top=386 (diff=151px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027optAbateCus\u0027 (parent: SIGCDTBV.Pagina.Dados.Page1.pgDados): Top original=329 vs migrado \u0027obj_4c_OptAbateCus\u0027 Top=480 (diff=151px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027opt_agrucoms\u0027 (parent: SIGCDTBV.Pagina.Dados.Page1.pgDados): Top original=351 vs migrado \u0027obj_4c_Opt_agrucoms\u0027 Top=502 (diff=151px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027cmbTpDesc\u0027 (parent: SIGCDTBV.Pagina.Dados.Page1.pgDados): Top original=378 vs migrado \u0027cbo_4c_CmbTpDesc\u0027 Top=529 (diff=151px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Container1\u0027 (parent: SIGCDTBV.Pagina.Dados.Page1.pgDados): Top original=354 vs migrado \u0027cnt_4c_Container1\u0027 Top=505 (diff=151px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label1\u0027 (parent: SIGCDTBV.Pagina.Dados.Page1.pgDesconto.F�rmula2): Top original=12 vs migrado \u0027lbl_4c_Label10\u0027 Top=334 (diff=322px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label1\u0027 (parent: SIGCDTBV.Pagina.Dados.Page1.pgDesconto.F�rmula2): Left original=14 vs migrado \u0027lbl_4c_Label10\u0027 Left=299 (diff=285px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label2\u0027 (parent: SIGCDTBV.Pagina.Dados.Page1.pgDesconto.F�rmula2): Top original=12 vs migrado \u0027lbl_4c_Label2\u0027 Top=576 (diff=564px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label2\u0027 (parent: SIGCDTBV.Pagina.Dados.Page1.pgDesconto.F�rmula2): Left original=662 vs migrado \u0027lbl_4c_Label2\u0027 Left=466 (diff=196px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027lbl_descos\u0027 (parent: SIGCDTBV.Pagina.Dados.Page1.pgDesconto): Top original=343 vs migrado \u0027lbl_4c_Lbl_descos\u0027 Top=258 (diff=85px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027lbl_descos\u0027 (parent: SIGCDTBV.Pagina.Dados.Page1.pgDesconto): Left original=800 vs migrado \u0027lbl_4c_Lbl_descos\u0027 Left=206 (diff=594px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027inserir\u0027 (parent: SIGCDTBV.Pagina.Dados.Page1.pgDesconto): Left original=5 vs migrado \u0027cmd_4c_InserirComissao\u0027 Left=577 (diff=572px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label1\u0027 (parent: SIGCDTBV.Pagina.Dados.Page1.pgDesconto.F�rmula1): Top original=12 vs migrado \u0027lbl_4c_Label10\u0027 Top=334 (diff=322px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label1\u0027 (parent: SIGCDTBV.Pagina.Dados.Page1.pgDesconto.F�rmula1): Left original=14 vs migrado \u0027lbl_4c_Label10\u0027 Left=299 (diff=285px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label2\u0027 (parent: SIGCDTBV.Pagina.Dados.Page1.pgDesconto.F�rmula1): Top original=12 vs migrado \u0027lbl_4c_Label2\u0027 Top=576 (diff=564px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label2\u0027 (parent: SIGCDTBV.Pagina.Dados.Page1.pgDesconto.F�rmula1): Left original=662 vs migrado \u0027lbl_4c_Label2\u0027 Left=466 (diff=196px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label2\u0027 (parent: SIGCDTBV.Pagina.Dados.Page1.pgDesconto): Top original=2 vs migrado \u0027lbl_4c_Label2\u0027 Top=576 (diff=574px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label2\u0027 (parent: SIGCDTBV.Pagina.Dados.Page1.pgDesconto): Left original=4 vs migrado \u0027lbl_4c_Label2\u0027 Left=466 (diff=462px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label1\u0027 (parent: SIGCDTBV.Pagina.Dados.Page1.pgDesconto): Top original=2 vs migrado \u0027lbl_4c_Label10\u0027 Top=334 (diff=332px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label1\u0027 (parent: SIGCDTBV.Pagina.Dados.Page1.pgDesconto): Left original=575 vs migrado \u0027lbl_4c_Label10\u0027 Left=299 (diff=276px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label3\u0027 (parent: SIGCDTBV.Pagina.Dados.Page1.pgDesconto): Top original=342 vs migrado \u0027lbl_4c_Label3\u0027 Top=484 (diff=142px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label3\u0027 (parent: SIGCDTBV.Pagina.Dados.Page1.pgDesconto): Left original=555 vs migrado \u0027lbl_4c_Label3\u0027 Left=68 (diff=487px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label4\u0027 (parent: SIGCDTBV.Pagina.Dados.Page1.pgDesconto): Top original=342 vs migrado \u0027lbl_4c_Label4\u0027 Top=437 (diff=95px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label4\u0027 (parent: SIGCDTBV.Pagina.Dados.Page1.pgDesconto): Left original=20 vs migrado \u0027lbl_4c_Label4\u0027 Left=180 (diff=160px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label5\u0027 (parent: SIGCDTBV.Pagina.Dados.Page1.pgDesconto): Left original=270 vs migrado \u0027lbl_4c_Label5\u0027 Left=211 (diff=59px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027chkAplicado\u0027 (parent: SIGCDTBV.Pagina.Dados.Page1.pgDesconto): Left original=836 vs migrado \u0027chk_4c_ChkAplicado\u0027 Left=314 (diff=522px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label1\u0027 (parent: SIGCDTBV.Pagina.Dados.Page1.PgConfDesconto): Top original=11 vs migrado \u0027lbl_4c_Label10\u0027 Top=334 (diff=323px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label1\u0027 (parent: SIGCDTBV.Pagina.Dados.Page1.PgConfDesconto): Left original=622 vs migrado \u0027lbl_4c_Label10\u0027 Left=299 (diff=323px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label2\u0027 (parent: SIGCDTBV.Pagina.Dados.Page1.PgConfDesconto): Top original=11 vs migrado \u0027lbl_4c_Label2\u0027 Top=576 (diff=565px, tolerancia=30px); [LAYOUT-POSITION] Controle \u0027Label2\u0027 (parent: SIGCDTBV.Pagina.Dados.Page1.PgConfDesconto): Left original=704 vs migrado \u0027lbl_4c_Label2\u0027 Left=466 (diff=238px, tolerancia=30px)",
+                                          "tentativas":  3,
+                                          "problemasRestantes":  65
+                                      },
+                   "05f_validarSQLSchema":  {
+                                                "inicio":  "2026-09-08T22:55:31",
+                                                "tentativas":  1,
+                                                "erro":  null,
+                                                "fim":  "2026-09-08T22:56:03",
+                                                "status":  "PASSED",
+                                                "boFile":  "C:\\4c\\projeto\\app\\classes\\TbvBO.prg",
+                                                "formFile":  "C:\\4c\\projeto\\app\\forms\\cadastros\\FormTbv.prg"
+                                            },
+                   "06c_validarLayout":  {
+                                             "inicio":  "2026-09-08T23:13:09",
+                                             "status":  "COMPLETED",
+                                             "tentativas":  1,
+                                             "erro":  null,
+                                             "fim":  "2026-09-08T23:13:11",
+                                             "thresholdPx":  5,
+                                             "unmatched":  38,
+                                             "errors":  38,
+                                             "matched":  53,
+                                             "warnings":  52,
+                                             "reportFile":  "C:\\4c\\tasks\\task532\\layout_vs_prg_report.json"
+                                         }
+               },
+    "metricas":  {
+                     "tempoTotalSegundos":  0,
+                     "tempoExtracao":  0,
+                     "tempoAnalise":  0,
+                     "tempoEsqueletos":  0,
+                     "tempoMigracao":  0,
+                     "tempoCorrecao":  0,
+                     "tempoCompilacao":  0,
+                     "tempoTesteAuto":  0,
+                     "tempoValidacao":  0,
+                     "linhasCodigoOriginal":  0,
+                     "linhasCodigoGerado":  0,
+                     "correcoesAutomaticas":  0,
+                     "testesAutomaticos":  0
+                 }
+}

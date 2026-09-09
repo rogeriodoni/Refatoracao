@@ -1,0 +1,32 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Resumo da Fase 6/8 ÔÇö FormTbv
+
+**Arquivos modificados:**
+- `C:\4c\projeto\app\forms\cadastros\FormTbv.prg` (926 ÔåÆ 1754 linhas)
+- `C:\4c\projeto\app\classes\TbvBO.prg` (381 ÔåÆ 457 linhas)
+
+**Campos restantes adicionados em `ConfigurarPaginaDados()`:**
+- Prazo M├®dio (oculto, paridade de schema ÔÇö "sem uso" no legado)
+- Imprime no Rel. Tab.Desconto (OptionGroup)
+- Checar Acesso (OptionGroup)
+- Aplicado Na Quantidade de Produtos (CheckBox ÔåÆ `chkrets`)
+- Abater Custo de Produto da Comiss├úo (OptionGroup)
+- Agrupar Comiss├úo por ÔÇö Linha/Grupo de Vendas (OptionGroup)
+- Tipo de Desconto Progressivo (ComboBox ligado a cursor local `cursor_4c_TipoDesconto`, r├®plica exata da lista fixa do legado)
+- Grade de empresas (`Container1`/`GrdEmp`), vis├¡vel apenas quando tipo=11, com bot├Áes Marcar/Desmarcar Todos e checkbox por linha usando o padr├úo de 4 handlers (MouseDown/MouseUp/Click/KeyPress + NODEFAULT) exigido para checkbox em grid com campo num├®rico
+
+**Lookups 100% implementados (BINDEVENT KeyPress F4 + DblClick):**
+- Moeda de Refer├¬ncia ÔåÆ preenche c├│digo e descri├º├úo
+- Moeda do Fator
+
+**Container `cnt_4c_BotoesAcao`:** bot├Áes `cmd_4c_Confirmar`/`cmd_4c_Cancelar` adicionados com BINDEVENT (corpo dos handlers `BtnConfirmarClick`/`BtnCancelarClick` fica para a fase de Eventos, mesmo padr├úo j├í usado nos bot├Áes CRUD da Page1 desde a fase 4).
+
+**`FormParaBO`/`BOParaForm`:** agora mapeiam **todos** os campos do BO (fases 5 e 6), incluindo convers├Áes l├│gicoÔåönum├®rico e a montagem/leitura da lista de empresas.
+
+**BO (`TbvBO.prg`):** dois m├®todos novos ÔÇö `ObterDescricaoMoeda()` e `CarregarEmpresas()` (cursor READWRITE via `SELECT...INTO CURSOR`, evitando o cursor somente-leitura do SQLEXEC).
+
+**Fora de escopo desta fase (sinalizado, n├úo omitido silenciosamente):** o sub-PageFrame legado `Pagina.Dados.Page1` com as grades de F├│rmulas/Comiss├Áes/Faixas (`Gradei`/`GradeC`/`GradeD`, tabelas `SigOpTdt`/`SigOpTdi`/`SigOpTds`) e o bot├úo "duplicar cadastro" (`cmdGarqicone`) n├úo fazem parte da estrutura simplificada adotada nas fases 1-5 (BO s├│ trata essas tabelas em `ExecutarExclusao`). Recomendo tratar isso como tarefa adicional dedicada, j├í que envolve grids complexos com f├│rmulas condicionais.

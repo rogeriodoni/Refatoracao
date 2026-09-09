@@ -1,0 +1,15 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 1/8 conclu├¡da: criei `C:\4c\projeto\app\classes\StoBO.prg` com a estrutura inicial do BO.
+
+**O que foi inclu├¡do:**
+- `DEFINE CLASS StoBO AS BusinessBase`
+- Propriedades mapeadas para a tabela `SigCdSts` (schema.sql: `cods char(3)` PK, `ddvals char(10)`, `descs char(30)`):
+  - `this_cCodigo` (cods), `this_cDescricao` (descs), `this_cDiasValidos` (ddvals bruto)
+  - 8 propriedades l├│gicas derivadas (`this_lEntregaDomingo` ... `this_lEntregaFeriado`), espelhando os 8 checkboxes do form original (`chkEntregaDo`, `chkEntrega02..06`, `chkEntregaSa`, `chkEntregaFe`) conforme `comportamento.json` ÔÇö necess├írias porque o Valid original concatena `Str(chk.Value,1)` de cada um para montar `ddVals`.
+- `Init()` no padr├úo can├┤nico: `DODEFAULT()` dentro de TRY/CATCH, seta `this_cTabela = "SigCdSts"` e `this_cCampoChave = "cods"` (nomes corretos herdados de BusinessBase), `RETURN` fora do TRY/CATCH.
+
+Pr├│xima fase (2/8) vai completar `CarregarDoCursor()`, `Inserir()`, `Atualizar()` no BO.

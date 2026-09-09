@@ -208,25 +208,13 @@ DEFINE CLASS cmpBO AS BusinessBase
 
             *-- Protecao de grid: se cursor ja esta aberto (grid vinculado), usar ZAP+APPEND
             IF USED("cursor_4c_Dados")
-                loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_DadosTmp")
-                IF loc_nResultado >= 0
-                    SELECT cursor_4c_Dados
-                    ZAP
-                    APPEND FROM DBF("cursor_4c_DadosTmp")
-                    IF USED("cursor_4c_DadosTmp")
-                        USE IN cursor_4c_DadosTmp
-                    ENDIF
-                    loc_lSucesso = .T.
-                ELSE
-                    MostrarErro("Erro ao buscar compra para:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
-                ENDIF
+                USE IN cursor_4c_Dados
+            ENDIF
+            loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Dados")
+            IF loc_nResultado >= 0
+                loc_lSucesso = .T.
             ELSE
-                loc_nResultado = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_Dados")
-                IF loc_nResultado >= 0
-                    loc_lSucesso = .T.
-                ELSE
-                    MostrarErro("Erro ao buscar compra para:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
-                ENDIF
+                MostrarErro("Erro ao buscar compra para:" + CHR(13) + CapturarErroSQL(), "Erro SQL")
             ENDIF
 
         CATCH TO loException

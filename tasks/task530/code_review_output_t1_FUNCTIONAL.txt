@@ -1,0 +1,25 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+The only file that matters here is `projeto\app\classes\formbase.prg` (the others are stale agent worktrees). I checked it directly.
+
+## Conclus├úo: falso positivo ÔÇö nenhuma corre├º├úo necess├íria
+
+Verifiquei o ├║nico problema apontado neste pass:
+
+- **`THIS.AbrirLookupCanonico(...)`** (chamado em `FormTBI.prg:562-564`, dentro de `AbrirBuscaMoeda`) **existe sim**, definido em `C:\4c\projeto\app\classes\formbase.prg:393-471` como `PROCEDURE AbrirLookupCanonico(par_cTabela, par_cCampoCod, par_cCampoDesc, par_cTitulo, par_cValorFiltro, par_oTxtCod, par_oTxtDesc, par_cFiltroExtra)`. ├ë PUBLIC (default), ent├úo ├® herdado normalmente por `FormTBI AS FormBase` ÔÇö nenhum problema de visibilidade.
+- A assinatura da chamada bate exatamente com a defini├º├úo:
+  - `"SigCdMoe"` ÔåÆ par_cTabela
+  - `"cmoes"` ÔåÆ par_cCampoCod
+  - `"dmoes"` ÔåÆ par_cCampoDesc
+  - `"Selecao de Moeda"` ÔåÆ par_cTitulo
+  - `par_cValorDigitado` ÔåÆ par_cValorFiltro
+  - `THIS.txt_4c__moeda` / `THIS.txt_4c__moeda_desc` ÔåÆ par_oTxtCod / par_oTxtDesc
+  - `par_cFiltroExtra` omitido (opcional, tratado com `VARTYPE(...) = "C"` guard)
+- O pr├│prio coment├írio do m├®todo em `formbase.prg` documenta que ele foi criado exatamente para este padr├úo (Pattern A do `FormBuscaAuxiliar`, ref. Erro114), e cita outros forms can├┤nicos que j├í o usam da mesma forma.
+
+Ou seja, o detector autom├ítico marcou como "m├®todo inventado" um helper leg├¡timo da `FormBase` (n├úo ├® algo que precise existir no legado VFP ÔÇö ├® infraestrutura da nova arquitetura, como `MsgAviso`/`MsgErro`). N├úo h├í chamada quebrada, n├úo h├í m├®todo a implementar nem a remover.
+
+Como as regras deste pass dizem para corrigir **apenas** os problemas listados e n├úo alterar l├│gica de neg├│cio desnecessariamente, e o ├║nico item da lista n├úo ├® um problema real, **nenhuma altera├º├úo foi feita em `FormTBI.prg` ou `TBIBO.prg`**.

@@ -1,0 +1,19 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Both edits are in place. Summary:
+
+## Corre├º├Áes aplicadas
+
+**1. `TBIBO.prg` (`ObterCotacao`) ÔÇö coluna `DATAS` no WHERE**
+O SQL original de refer├¬ncia n├úo tem `WHERE ... AND datas <= ...`. Removi essa condi├º├úo do `WHERE` (mantendo s├│ `cmoes`, que est├í na lista de colunas WHERE permitidas) e passei o filtro de data para um `LOCATE` em mem├│ria sobre o cursor j├í ordenado por `datas DESC, horas DESC`. Comportamento de neg├│cio id├¬ntico (cota├º├úo mais recente at├® a data informada), sem alterar a l├│gica de "GerarTabelaReferencia".
+
+**2. `FormTBI.prg` (`ValidarMoedaDesc`) ÔÇö coluna `DMOES` no WHERE**
+O SQL original (`Select * From SigCdMoe`) n├úo tem `WHERE dmoes = ...` ÔÇö carregava a tabela inteira. Troquei a query filtrada por uma busca sem `WHERE` (`SELECT cmoes, dmoes FROM SigCdMoe`) seguida de `LOCATE FOR ALLTRIM(UPPER(dmoes)) == loc_cValor`, preservando a mesma funcionalidade de valida├º├úo por descri├º├úo (com fallback para `AbrirBuscaMoeda`).
+
+**3. `EVENTUA` ÔÇö falso positivo, nada a corrigir**
+N├úo existe nenhuma coluna ou condi├º├úo `WHERE` com `EVENTUA` em `FormTBI.prg` nem `TBIBO.prg`. A ├║nica ocorr├¬ncia da substring ├® dentro da palavra "**eventua**is" em um coment├írio do `TBIBO.prg` (linha 54) ÔÇö o detector aparentemente casou parcialmente essa palavra. N├úo h├í nada para remover.
+
+**Item n├úo alterado por n├úo estar na lista de problemas:** o `WHERE cmoes = ...` em `ValidarMoeda` (linha 480) ficou como estava ÔÇö `CMOES` est├í na lista de colunas WHERE originais permitidas e n├úo foi reportado.

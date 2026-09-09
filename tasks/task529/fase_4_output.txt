@@ -1,0 +1,21 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+No literal accented characters (all accents use `CHR()` codes as required). Both files are clean and balanced.
+
+## Summary
+
+Completed **Fase 4/8** for FormTbd ÔÇö Grid + CRUD buttons on Page1.
+
+**`FormTbd.prg`** (`C:\4c\projeto\app\forms\operacionais\FormTbd.prg`):
+- `ConfigurarPaginaLista()` ÔÇö creates `grd_4c_Dados` mirroring the legacy `GradeOpe` exactly (Top=98+29 compensated, Left=236, W=313, H=274; Column1 "Tabela" 80px editable Courier New, Column2 "Descri├º├úo" 200px read-only) plus `cmd_4c_Inserir`/`cmd_4c_Excluir` buttons in the existing `cnt_4c_Botoes` container (real icons `cadastro_inserir_60.jpg`/`cadastro_excluir_60.jpg`, verified present in `vbmp/`).
+- `CarregarLista()` ÔÇö calls `TbdBO.BuscarPorOperacao()` and binds the grid, re-applying Column Width/Header.Caption after `RecordSource` reset (Problema 48 lesson).
+- `BtnInserirClick()` / `BtnExcluirClick()` ÔÇö mirror the legacy `cmdInserir.Click`/`cmdExcluir.Click` logic exactly (append blank row + focus Column1; delete current row + reposition, no confirmation dialog, matching legacy behavior).
+- `AlternarPagina(par_nPagina)` ÔÇö switches `pgf_4c_Paginas.ActivePage`.
+- Wired all of this into `InicializarForm()`.
+
+**`TbdBO.prg`** ÔÇö fixed `BuscarPorOperacao()` to convert the SQLEXEC result into a `READWRITE` cursor (Pattern #184: SQLEXEC cursors are read-only by default, but the grid needs INSERT/DELETE support for the Inserir/Excluir buttons).
+
+All new code avoids `RETURN` inside `TRY/CATCH` (flag variables used instead, per CLAUDE.md rule #1), uses `CHR()` for accented captions, and structural balance (WITH/TRY/IF/PROCEDURE/FUNCTION) was verified for both files.

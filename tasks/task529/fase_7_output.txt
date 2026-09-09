@@ -1,0 +1,28 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Analisei o `FormTbd.prg` (897 linhas) e o `comportamento.json` do task529 antes de tocar em qualquer coisa, porque o objetivo gen├®rico da Fase 7 ("adicionar BtnIncluirClick/BtnAlterarClick/BtnVisualizarClick/BtnExcluirClick") ├® o template padr├úo de form **CRUD**, mas o `SIGCDTBD` ├® um form **OPERACIONAL** (sub-form modal de grid, sem conceito de Incluir/Alterar/Visualizar) ÔÇö e isso j├í est├í documentado no pr├│prio cabe├ºalho do arquivo e no contexto da tarefa.
+
+Conferindo o `comportamento.json` linha a linha contra o c├│digo j├í existente:
+
+| M├®todo original (legado) | J├í implementado em FormTbd.prg |
+|---|---|
+| `SIGCDTBD.Init` | `Init()` / `InicializarForm()` Ô£à |
+| `SIGCDTBD.GradeOpe.Column1.Text1.Valid` (lookup `fwbuscaext`) | `ColCodigosKeyPress` + `ValidarCodigoTabela` + `AbrirLookupTabelaDesconto` Ô£à |
+| `SIGCDTBD.GradeOpe.Column1.Text1.When` | `GridBeforeRowColChange` Ô£à |
+| `SIGCDTBD.GradeOpe.Column2.Text1.When` (`Return .F.`) | `GridAfterRowColChange` (redireciona foco) Ô£à |
+| `SIGCDTBD.cmdInserir.Click` | `BtnInserirClick()` (linha 735) Ô£à |
+| `SIGCDTBD.cmdExcluir.Click` | `BtnExcluirClick()` (linha 765) Ô£à |
+| `SIGCDTBD.cmdSair.Click` (Confirmar) | `BtnConfirmarClick()` (linha 802) Ô£à |
+| `SIGCDTBD.Cancela.Click` | `BtnCancelarClick()` (linha 837) Ô£à |
+
+Todos os 9 m├®todos do `comportamento.json` j├í t├¬m implementa├º├úo real (SQL, lookup, verifica├º├úo de duplicidade, `SalvarPorOperacao`), com `BINDEVENT` ligado corretamente e `CATCH` n├úo-silencioso em todos.
+
+**N├úo vou adicionar `BtnIncluirClick`/`BtnAlterarClick`/`BtnVisualizarClick`** porque:
+- O legado `SIGCDTBD` n├úo tem esses conceitos ÔÇö ├® uma tela ├║nica de grid (Inserir/Excluir linha + Confirmar/Cancelar), n├úo um CRUD Lista/Dados com modos Incluir/Alterar/Visualizar.
+- Criar esses m├®todos seria inventar funcionalidade inexistente no original, violando o PILAR 1 (UX) e a regra "NUNCA inventar tabelas/funcionalidades que n├úo existem no original".
+- `BtnExcluirClick` j├í existe e faz exatamente o que o `cmdExcluir.Click` legado fazia (excluir linha do grid) ÔÇö criar outro m├®todo com o mesmo nome/prop├│sito duplicaria e quebraria o binding existente.
+
+**Conclus├úo da Fase 7/8**: nenhuma altera├º├úo necess├íria ÔÇö os "eventos principais" reais deste form operacional j├í foram implementados nas Fases 4 e 6 com paridade funcional 100% ao `SIGCDTBD` original. O arquivo `C:\4c\projeto\app\forms\operacionais\FormTbd.prg` est├í completo e n├úo foi modificado.

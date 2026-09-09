@@ -191,14 +191,15 @@ DEFINE CLASS SedBO AS BusinessBase
                     loc_cBarEtiq   = THIS.CalcularBarraSedex(loc_cServico + loc_cSeqPadded + loc_cPais)
 
                     loc_cSQL = "INSERT INTO SigCdSed " + ;
-                               "(cEmps, DtIncs, nNumEtiqs, FaixaInis, FaixaFins, cBarSedexs, EmpDopNums) " + ;
+                               "(cEmps, DtIncs, nNumEtiqs, FaixaInis, FaixaFins, cBarSedexs, EmpDopNums, nImpress) " + ;
                                "VALUES (" + ;
                                EscaparSQL(par_cEmps) + ", GETDATE(), " + ;
                                FormatarNumeroSQL(loc_nX, 0) + ", " + ;
                                EscaparSQL(par_cFaixaIni) + ", " + ;
                                EscaparSQL(par_cFaixaFin) + ", " + ;
                                EscaparSQL(loc_cBarEtiq) + ", " + ;
-                               EscaparSQL("") + ")"
+                               EscaparSQL("") + ", " + ;
+                               FormatarNumeroSQL(0, 0) + ")"   && nImpress NOT NULL (Erro151)
 
                     loc_nResult = SQLEXEC(gnConnHandle, loc_cSQL)
 

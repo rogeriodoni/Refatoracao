@@ -1597,7 +1597,7 @@ DEFINE CLASS sigreinrBO AS RelatorioBase
                     loc_cArquivo = SYS(5) + CURDIR() + "sigreinr_" + ;
                                    STRTRAN(DTOC(DATE()), "/", "") + ".xls"
                     REPORT FORM (gc_4c_CaminhoReports + THIS.this_cArquivoRelatorio) ;
-                        TO FILE (loc_cArquivo) NOPREVIEW NOCONSOLE ASCII
+                        TO FILE (loc_cArquivo) NOCONSOLE ASCII
                     IF FILE(loc_cArquivo)
                         MsgInfo("Arquivo gerado:" + CHR(13) + loc_cArquivo, "Excel")
                     ENDIF

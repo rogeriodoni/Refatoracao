@@ -677,7 +677,7 @@ DEFINE CLASS SigPrEmlBO AS BusinessBase
                 loc_cSQL = "INSERT INTO SigAlert " + ;
                            "(pkchaves, Emps, Dopes, Numes, Grupos, Contas, " + ;
                            "usualerts, msg2s, priors, EmpDopNums, Acaos, " + ;
-                           "DtAlerts, msg1s, Usuars) VALUES (" + ;
+                           "DtAlerts, DtAlert2s, msg1s, Usuars) VALUES (" + ;
                            "CAST(NEWID() AS VARCHAR(36)), " + ;
                            EscaparSQL(LEFT(ALLTRIM(SUBSTR(par_cEmpDopNums, 1, 3)), 3)) + ", " + ;
                            EscaparSQL(LEFT(ALLTRIM(SUBSTR(par_cEmpDopNums, 4, 20)), 20)) + ", " + ;
@@ -690,6 +690,7 @@ DEFINE CLASS SigPrEmlBO AS BusinessBase
                            EscaparSQL(LEFT(ALLTRIM(par_cEmpDopNums), 29)) + ", " + ;
                            EscaparSQL(LEFT(ALLTRIM(par_cAcao), 10)) + ", " + ;
                            "GETDATE(), " + ;
+                           "'19000101', " + ;
                            EscaparSQL(par_cTextMsg) + ", " + ;
                            EscaparSQL(LEFT(ALLTRIM(gc_4c_UsuarioLogado), 20)) + ")"
 
@@ -1022,7 +1023,7 @@ DEFINE CLASS SigPrEmlBO AS BusinessBase
             loc_cSQL = "INSERT INTO SigAlert " + ;
                        "(pkchaves, Emps, Dopes, Numes, Grupos, Contas, " + ;
                        "usualerts, msg2s, priors, EmpDopNums, Acaos, " + ;
-                       "DtAlerts, msg1s, Usuars) VALUES (" + ;
+                       "DtAlerts, DtAlert2s, msg1s, Usuars) VALUES (" + ;
                        EscaparSQL(LEFT(loc_cPk, 36)) + ", " + ;
                        EscaparSQL(LEFT(ALLTRIM(THIS.this_cEmp), 3)) + ", " + ;
                        EscaparSQL(LEFT(ALLTRIM(THIS.this_cDopes), 20)) + ", " + ;
@@ -1035,6 +1036,7 @@ DEFINE CLASS SigPrEmlBO AS BusinessBase
                        EscaparSQL(LEFT(ALLTRIM(THIS.this_cEmpDopNums), 29)) + ", " + ;
                        EscaparSQL(LEFT(ALLTRIM(THIS.this_cAcaos), 10)) + ", " + ;
                        loc_tData + ", " + ;
+                       "'19000101', " + ;
                        EscaparSQL(ALLTRIM(THIS.this_cMsg1s)) + ", " + ;
                        EscaparSQL(LEFT(ALLTRIM(NVL(THIS.this_cUsuars, ;
                             gc_4c_UsuarioLogado)), 20)) + ")"

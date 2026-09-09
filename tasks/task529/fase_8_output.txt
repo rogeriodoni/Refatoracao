@@ -1,0 +1,21 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Nenhum `.fxp` compilado desses arquivos existe ainda, ent├úo n├úo h├í nada para limpar.
+
+## Resumo da Fase 8/8 ÔÇö FormTbd (task529)
+
+Ao revisar o estado atual, `FormTbd.prg` e `TbdBO.prg` j├í estavam com todos os m├®todos essenciais implementados pelas fases 1-7 (grid de edi├º├úo inline, lookup F4/Enter/Tab em `SigOpTdz`, `BtnIncluirClick`/`BtnExcluirClick`/`BtnConfirmarClick`/`BtnCancelarClick`, `CarregarLista`, `HabilitarEdicaoGrid`, `VerificarDuplicidade`, `SalvarPorOperacao`). Como este ├® um form OPERACIONAL sub-modal (n├úo CRUD Page1/Page2 padr├úo), os m├®todos gen├®ricos do template de Fase 8 (`BtnBuscarClick`/`BtnEncerrarClick`/`FormParaBO`/`BOParaForm`/`LimparCampos`) n├úo se aplicam ÔÇö o legado (`SIGCDTBD`) s├│ tem 4 bot├Áes (Inserir/Excluir/Confirmar/Cancelar) e edi├º├úo acontece inline no grid, sem tela de campos separada.
+
+Na confer├¬ncia linha a linha contra o c├│digo-fonte original (`SigCdTbd_form_codigo_fonte.txt`), encontrei uma diverg├¬ncia real de comportamento em `BtnConfirmarClick` (espelha `cmdSair.Click`):
+
+- **Bug corrigido**: no legado, apenas a checagem de duplicidade (`Return .f.`) impede o fechamento do form. Uma falha na grava├º├úo (INSERT/DELETE) s├│ exibe o `MessageBox` de erro, mas o fluxo **cai direto** em `ParentForm.Enabled=.T. / Release` ÔÇö ou seja, o form fecha mesmo com erro de grava├º├úo. O c├│digo migrado bloqueava o fechamento nos dois casos. Corrigi para que s├│ a duplicidade impe├ºa o fechamento, mantendo o PILAR 1 (comportamento id├¬ntico ao legado).
+
+Tamb├®m verifiquei:
+- Estrutura balanceada (TRY/CATCH/ENDTRY: 19/19/19; PROCEDURE+FUNCTION vs ENDPROC+ENDFUNC: 22/22; WITH/ENDWITH: 15/15; DEFINE CLASS/ENDDEFINE: 1/1).
+- `config.prg` j├í carrega `TbdBO.prg` e `FormTbd.prg` automaticamente via `ADIR` (wildcards `classes\*BO.prg` e `forms\operacionais\Form*.prg`) ÔÇö nenhuma edi├º├úo manual necess├íria.
+- O ├║nico ponto de entrada natural do form (`FormOPE.prg` ÔåÆ `BtnTabDescontoClick`) est├í deliberadamente como stub "Fase B", junto com **outros 18 bot├Áes** no mesmo padr├úo (Transportes, Fretes, Caixa, MontaLista, etc.) ÔÇö ├® um adiamento sistem├ítico de escopo de uma tarefa diferente, n├úo um esquecimento pontual desta task. N├úo toquei nesse arquivo para n├úo extrapolar o escopo de task529 (que s├│ entrega `TbdBO.prg` + `FormTbd.prg`).
+
+Arquivo final: `C:\4c\projeto\app\forms\operacionais\FormTbd.prg` (completo e funcional).

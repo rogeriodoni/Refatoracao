@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Investiguei o ├║nico problema listado no pass (`TITULO-NAO-PROPAGADO`) e ele **n├úo se aplica** a este form ÔÇö ├® um falso positivo do detector gen├®rico.
+
+**Por qu├¬:**
+
+`FormTbd.prg` j├í implementa a propaga├º├úo do t├¡tulo de forma mais robusta que o fix sugerido:
+
+1. `InicializarForm()` (linha 116) chama `THIS.BOParaForm()` **depois** de `ConfigurarPageFrame()`, `ConfigurarPaginaLista()` e `ConfigurarPaginaDados()`.
+2. `BOParaForm()` (linha 1081-1083) monta o caption din├ómico (`"Grupos de Produtos " + ALLTRIM(THIS.this_cDopes)`), grava em `THIS.Caption` e chama `THIS.AtualizarTitulo(loc_cCaption)`.
+3. `AtualizarTitulo()` (linhas 1134-1154) faz `FOR loc_nPag = 1 TO THIS.pgf_4c_Paginas.PageCount`, propagando o caption para `lbl_4c_Sombra` e `lbl_4c_Titulo` de **ambas** as p├íginas, com guards `PEMSTATUS`.
+
+Al├®m disso, o fix sugerido pelo pass usa o caminho `THIS.pgf_4c_Paginas.Page1.cnt_4c_Sombra.lbl_4c_Sombra.Caption` ÔÇö mas este form **n├úo tem** um container chamado `cnt_4c_Sombra`; o container real ├® `cnt_4c_Cabecalho` (linhas 179, 393). Aplicar o fix literal quebraria o c├│digo (`Property CNT_4C_SOMBRA is not found`).
+
+**Conclus├úo:** nenhuma altera├º├úo foi feita no arquivo ÔÇö a propaga├º├úo de t├¡tulo j├í est├í correta e mais completa (cobre N p├íginas, n├úo s├│ Page1) do que o padr├úo sugerido pelo detector. Se quiser, posso revisar manualmente os outros crit├®rios visuais do pass (alinhamento de bot├Áes, CheckBox.Value, FontName Comic Sans) mesmo n├úo tendo sido sinalizados ÔÇö mas por instru├º├úo deveria corrigir apenas os problemas listados, e este n├úo se sustentou ap├│s inspe├º├úo.

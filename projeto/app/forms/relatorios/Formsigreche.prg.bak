@@ -1112,6 +1112,7 @@ DEFINE CLASS Formsigreche AS FormBase
                 .Sparse    = .F.
                 .ReadOnly  = .F.
                 .AddObject("Check1", "CheckBox")
+                THIS.BindToggleTgOperacoes1(THIS.grd_4c_Operacoes.Column1.Check1)
                 WITH .Check1
                     .Caption   = ""
                     .Alignment = 0
@@ -1201,6 +1202,7 @@ DEFINE CLASS Formsigreche AS FormBase
                 .Sparse    = .F.
                 .ReadOnly  = .F.
                 .AddObject("Check1", "CheckBox")
+                THIS.BindToggleTgImprimir1(THIS.grd_4c_Imprimir.Column1.Check1)
                 WITH .Check1
                     .Caption   = ""
                     .Alignment = 0
@@ -2267,4 +2269,100 @@ DEFINE CLASS Formsigreche AS FormBase
         DODEFAULT()
     ENDPROC
 
+
+    *==========================================================================
+    * Toggle do CheckBox Check1 - grd_4c_Imprimir.Column1 (cursor_4c_Imprimir.Marcas)
+    *
+    * CheckBox em coluna de Grid NAO alterna pelo binding nativo: o legado
+    * suprime o toggle padrao (NODEFAULT em Click/MouseDown) e alterna o valor
+    * por codigo no MouseUp/KeyPress, com REPLACE no cursor + Refresh do grid.
+    * Sem estes handlers o CheckBox renderiza e recebe foco, mas clicar ou
+    * teclar Espaco/Enter nao muda nada. Pattern #185 / Erro146 (2026-09-04).
+    * Ref canonico: Formsigredtv.prg (grd_4c_Emps) e Formacg.prg.
+    *==========================================================================
+    PROTECTED PROCEDURE BindToggleTgImprimir1(par_oChk)
+        BINDEVENT(par_oChk, "KeyPress",  THIS, "TgImprimir1KeyPress")
+        BINDEVENT(par_oChk, "MouseUp",   THIS, "TgImprimir1MouseUp")
+        BINDEVENT(par_oChk, "MouseDown", THIS, "TgImprimir1MouseDown")
+        BINDEVENT(par_oChk, "Click",     THIS, "TgImprimir1Click")
+    ENDPROC
+
+    PROCEDURE TgImprimir1KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF !INLIST(par_nKeyCode, 13, 32)
+            RETURN
+        ENDIF
+        *-- NODEFAULT sempre que a tecla for tratada: suprime o toggle nativo
+        NODEFAULT
+        IF !USED("cursor_4c_Imprimir") OR EOF("cursor_4c_Imprimir")
+            RETURN
+        ENDIF
+        *-- Campo pode ser LOGICO (legado) ou NUMERICO (CASE WHEN ... 1 ELSE 0)
+        IF VARTYPE(cursor_4c_Imprimir.Marcas) == "L"
+            REPLACE cursor_4c_Imprimir.Marcas WITH !cursor_4c_Imprimir.Marcas
+        ELSE
+            REPLACE cursor_4c_Imprimir.Marcas WITH IIF(cursor_4c_Imprimir.Marcas = 0, 1, 0)
+        ENDIF
+        THIS.grd_4c_Imprimir.Refresh()
+    ENDPROC
+
+    PROCEDURE TgImprimir1MouseUp(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+        THIS.TgImprimir1KeyPress(13, 0)
+        NODEFAULT
+    ENDPROC
+
+    PROCEDURE TgImprimir1MouseDown(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+        NODEFAULT
+    ENDPROC
+
+    PROCEDURE TgImprimir1Click()
+        NODEFAULT
+    ENDPROC
+
+    *==========================================================================
+    * Toggle do CheckBox Check1 - grd_4c_Operacoes.Column1 (cursor_4c_Operacoes.Marcas)
+    *
+    * CheckBox em coluna de Grid NAO alterna pelo binding nativo: o legado
+    * suprime o toggle padrao (NODEFAULT em Click/MouseDown) e alterna o valor
+    * por codigo no MouseUp/KeyPress, com REPLACE no cursor + Refresh do grid.
+    * Sem estes handlers o CheckBox renderiza e recebe foco, mas clicar ou
+    * teclar Espaco/Enter nao muda nada. Pattern #185 / Erro146 (2026-09-04).
+    * Ref canonico: Formsigredtv.prg (grd_4c_Emps) e Formacg.prg.
+    *==========================================================================
+    PROTECTED PROCEDURE BindToggleTgOperacoes1(par_oChk)
+        BINDEVENT(par_oChk, "KeyPress",  THIS, "TgOperacoes1KeyPress")
+        BINDEVENT(par_oChk, "MouseUp",   THIS, "TgOperacoes1MouseUp")
+        BINDEVENT(par_oChk, "MouseDown", THIS, "TgOperacoes1MouseDown")
+        BINDEVENT(par_oChk, "Click",     THIS, "TgOperacoes1Click")
+    ENDPROC
+
+    PROCEDURE TgOperacoes1KeyPress(par_nKeyCode, par_nShiftAltCtrl)
+        IF !INLIST(par_nKeyCode, 13, 32)
+            RETURN
+        ENDIF
+        *-- NODEFAULT sempre que a tecla for tratada: suprime o toggle nativo
+        NODEFAULT
+        IF !USED("cursor_4c_Operacoes") OR EOF("cursor_4c_Operacoes")
+            RETURN
+        ENDIF
+        *-- Campo pode ser LOGICO (legado) ou NUMERICO (CASE WHEN ... 1 ELSE 0)
+        IF VARTYPE(cursor_4c_Operacoes.Marcas) == "L"
+            REPLACE cursor_4c_Operacoes.Marcas WITH !cursor_4c_Operacoes.Marcas
+        ELSE
+            REPLACE cursor_4c_Operacoes.Marcas WITH IIF(cursor_4c_Operacoes.Marcas = 0, 1, 0)
+        ENDIF
+        THIS.grd_4c_Operacoes.Refresh()
+    ENDPROC
+
+    PROCEDURE TgOperacoes1MouseUp(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+        THIS.TgOperacoes1KeyPress(13, 0)
+        NODEFAULT
+    ENDPROC
+
+    PROCEDURE TgOperacoes1MouseDown(par_nButton, par_nShift, par_nXCoord, par_nYCoord)
+        NODEFAULT
+    ENDPROC
+
+    PROCEDURE TgOperacoes1Click()
+        NODEFAULT
+    ENDPROC
 ENDDEFINE

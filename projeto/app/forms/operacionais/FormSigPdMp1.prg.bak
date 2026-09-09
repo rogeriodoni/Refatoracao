@@ -704,7 +704,7 @@ DEFINE CLASS FormSigPdMp1 AS FormBase
         THIS.AddObject("cmd_4c_Alterar", "CommandButton")
         WITH THIS.cmd_4c_Alterar
             .Top             = 3
-            .Left            = 650
+            .Left = 155
             .Width           = 75
             .Height          = 75
             .Caption         = "Alterar"

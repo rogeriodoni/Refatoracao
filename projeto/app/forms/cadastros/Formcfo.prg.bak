@@ -647,9 +647,9 @@ DEFINE CLASS Formcfo AS FormBase
             .Width         = 107
             .Height        = 24
             .RowSourceType = 1
-            .RowSource     = "E,S"
+            .RowSource     = "Entrada,Sa" + CHR(237) + "da"
             .Style         = 2
-            .Value         = "E"
+            .Value         = ""
             .FontName      = "Tahoma"
             .FontSize      = 8
             .Visible       = .T.
@@ -669,17 +669,20 @@ DEFINE CLASS Formcfo AS FormBase
             .Visible   = .T.
         ENDWITH
 
-        *-- cmbtipo - tipos numeric(1,0)
+        *-- cmbtipo - tipos numeric(1,0) - legado: 2 colunas (texto exibido / valor gravado 1-5)
         loc_oPage1.AddObject("cbo_4c_Cmbtipo", "ComboBox")
         WITH loc_oPage1.cbo_4c_Cmbtipo
             .Top           = 7
             .Left          = 653
             .Width         = 151
             .Height        = 24
+            .ColumnCount   = 2
+            .ColumnWidths  = "189,0"
+            .BoundColumn   = 2
             .RowSourceType = 1
-            .RowSource     = "0,1,2,3,4,5,6,7,8,9"
+            .RowSource     = "Compras,1,Devolu" + CHR(231) + CHR(227) + "o compras,2,Vendas,3,Devolu" + CHR(231) + CHR(227) + "o vendas,4,Servi" + CHR(231) + "os prestados,5"
             .Style         = 2
-            .Value         = "0"
+            .Value         = ""
             .FontName      = "Tahoma"
             .FontSize      = 8
             .Visible       = .T.
@@ -706,9 +709,11 @@ DEFINE CLASS Formcfo AS FormBase
             .Left             = 947
             .Width            = 40
             .Height           = 24
-            .SpinnerLowValue  = 0
-            .SpinnerHighValue = 99
-            .Value            = 0
+            .SpinnerLowValue   = 0
+            .SpinnerHighValue  = 6
+            .KeyboardLowValue  = 0
+            .KeyboardHighValue = 6
+            .Value             = 0
             .FontName         = "Tahoma"
             .FontSize         = 8
             .Visible          = .T.
@@ -794,9 +799,9 @@ DEFINE CLASS Formcfo AS FormBase
             .Width         = 82
             .Height        = 23
             .RowSourceType = 1
-            .RowSource     = "T,I,O,N"
+            .RowSource     = "Tributado,Isento,Outros,N Tributa"
             .Style         = 2
-            .Value         = "T"
+            .Value         = ""
             .FontName      = "Tahoma"
             .FontSize      = 8
             .Visible       = .T.
@@ -816,7 +821,7 @@ DEFINE CLASS Formcfo AS FormBase
             .Visible   = .T.
         ENDWITH
 
-        *-- Combo6 - icmsincs numeric(1,0)
+        *-- Combo6 - icmsdscs numeric(1,0) - grava ListIndex (1=Sim, 2=Nao, 0=nao informado)
         loc_oPage1.AddObject("cbo_4c_Combo6", "ComboBox")
         WITH loc_oPage1.cbo_4c_Combo6
             .Top           = 127
@@ -824,9 +829,9 @@ DEFINE CLASS Formcfo AS FormBase
             .Width         = 82
             .Height        = 23
             .RowSourceType = 1
-            .RowSource     = "0,1"
+            .RowSource     = "Sim,N" + CHR(227) + "o"
             .Style         = 2
-            .Value         = "0"
+            .Value         = ""
             .FontName      = "Tahoma"
             .FontSize      = 8
             .Visible       = .T.
@@ -846,7 +851,7 @@ DEFINE CLASS Formcfo AS FormBase
             .Visible   = .T.
         ENDWITH
 
-        *-- Combo3 - inclicms numeric(1,0)
+        *-- Combo3 - inclicms numeric(1,0) - grava ListIndex (1=Nao, 2=Base, 3=Preco, 0=nao informado)
         loc_oPage1.AddObject("cbo_4c_Combo3", "ComboBox")
         WITH loc_oPage1.cbo_4c_Combo3
             .Top           = 101
@@ -854,9 +859,9 @@ DEFINE CLASS Formcfo AS FormBase
             .Width         = 82
             .Height        = 23
             .RowSourceType = 1
-            .RowSource     = "0,1"
+            .RowSource     = "N" + CHR(227) + "o,Base,Pre" + CHR(231) + "o"
             .Style         = 2
-            .Value         = "0"
+            .Value         = ""
             .FontName      = "Tahoma"
             .FontSize      = 8
             .Visible       = .T.
@@ -876,7 +881,7 @@ DEFINE CLASS Formcfo AS FormBase
             .Visible   = .T.
         ENDWITH
 
-        *-- Combo4 - inclipis numeric(1,0)
+        *-- Combo4 - ipi_icms char(1) - grava primeira letra da opcao (S/N)
         loc_oPage1.AddObject("cbo_4c_Combo4", "ComboBox")
         WITH loc_oPage1.cbo_4c_Combo4
             .Top           = 127
@@ -884,9 +889,9 @@ DEFINE CLASS Formcfo AS FormBase
             .Width         = 82
             .Height        = 23
             .RowSourceType = 1
-            .RowSource     = "0,1"
+            .RowSource     = "Sim,N" + CHR(227) + "o"
             .Style         = 2
-            .Value         = "0"
+            .Value         = ""
             .FontName      = "Tahoma"
             .FontSize      = 8
             .Visible       = .T.
@@ -1044,9 +1049,9 @@ DEFINE CLASS Formcfo AS FormBase
             .Width         = 82
             .Height        = 23
             .RowSourceType = 1
-            .RowSource     = "S,N"
+            .RowSource     = "Sim,N" + CHR(227) + "o"
             .Style         = 2
-            .Value         = "N"
+            .Value         = ""
             .FontName      = "Tahoma"
             .FontSize      = 8
             .Visible       = .T.
@@ -1095,7 +1100,7 @@ DEFINE CLASS Formcfo AS FormBase
             .Visible   = .T.
         ENDWITH
 
-        *-- Combo5 - transps numeric(1,0)
+        *-- Combo5 - transps numeric(1,0) - grava ListIndex (1=Sim, 2=Nao, 0=nao informado)
         loc_oPage1.AddObject("cbo_4c_Combo5", "ComboBox")
         WITH loc_oPage1.cbo_4c_Combo5
             .Top           = 153
@@ -1103,9 +1108,9 @@ DEFINE CLASS Formcfo AS FormBase
             .Width         = 82
             .Height        = 23
             .RowSourceType = 1
-            .RowSource     = "0,1"
+            .RowSource     = "Sim,N" + CHR(227) + "o"
             .Style         = 2
-            .Value         = "0"
+            .Value         = ""
             .FontName      = "Tahoma"
             .FontSize      = 8
             .Visible       = .T.
@@ -1153,7 +1158,7 @@ DEFINE CLASS Formcfo AS FormBase
             .Visible   = .T.
         ENDWITH
 
-        *-- Combo10 - icmsdscs numeric(1,0)
+        *-- Combo10 - icmsincs numeric(1,0) - grava ListIndex (1=Sim, 2=Nao, 0=nao informado)
         loc_oPage1.AddObject("cbo_4c_Combo10", "ComboBox")
         WITH loc_oPage1.cbo_4c_Combo10
             .Top           = 178
@@ -1161,9 +1166,9 @@ DEFINE CLASS Formcfo AS FormBase
             .Width         = 82
             .Height        = 23
             .RowSourceType = 1
-            .RowSource     = "0,1"
+            .RowSource     = "Sim,N" + CHR(227) + "o"
             .Style         = 2
-            .Value         = "0"
+            .Value         = ""
             .FontName      = "Tahoma"
             .FontSize      = 8
             .Visible       = .T.
@@ -1191,9 +1196,9 @@ DEFINE CLASS Formcfo AS FormBase
             .Width         = 82
             .Height        = 23
             .RowSourceType = 1
-            .RowSource     = "S,N,O"
+            .RowSource     = "Sim,N" + CHR(227) + "o,Outros"
             .Style         = 2
-            .Value         = "N"
+            .Value         = ""
             .FontName      = "Tahoma"
             .FontSize      = 8
             .Visible       = .T.
@@ -1292,9 +1297,9 @@ DEFINE CLASS Formcfo AS FormBase
             .Width         = 82
             .Height        = 23
             .RowSourceType = 1
-            .RowSource     = "S,N"
+            .RowSource     = "Sim,N" + CHR(227) + "o"
             .Style         = 2
-            .Value         = "N"
+            .Value         = ""
             .FontName      = "Tahoma"
             .FontSize      = 8
             .Visible       = .T.
@@ -1366,9 +1371,9 @@ DEFINE CLASS Formcfo AS FormBase
             .Width         = 82
             .Height        = 23
             .RowSourceType = 1
-            .RowSource     = "T,I,O"
+            .RowSource     = "Tributado,Isento,Outros"
             .Style         = 2
-            .Value         = "T"
+            .Value         = ""
             .FontName      = "Tahoma"
             .FontSize      = 8
             .Visible       = .T.
@@ -1396,9 +1401,9 @@ DEFINE CLASS Formcfo AS FormBase
             .Width         = 82
             .Height        = 23
             .RowSourceType = 1
-            .RowSource     = "S,N"
+            .RowSource     = "Sim,N" + CHR(227) + "o"
             .Style         = 2
-            .Value         = "N"
+            .Value         = ""
             .FontName      = "Tahoma"
             .FontSize      = 8
             .Visible       = .T.
@@ -1475,7 +1480,7 @@ DEFINE CLASS Formcfo AS FormBase
             .Visible   = .T.
         ENDWITH
 
-        *-- Combo7 - pontedescs numeric(1,0)
+        *-- Combo7 - inclipis numeric(1,0) - grava ListIndex (1=Sim, 2=Nao, 0=nao informado)
         loc_oPage1.AddObject("cbo_4c_Combo7", "ComboBox")
         WITH loc_oPage1.cbo_4c_Combo7
             .Top           = 289
@@ -1483,9 +1488,9 @@ DEFINE CLASS Formcfo AS FormBase
             .Width         = 82
             .Height        = 23
             .RowSourceType = 1
-            .RowSource     = "0,1"
+            .RowSource     = "Sim,N" + CHR(227) + "o"
             .Style         = 2
-            .Value         = "0"
+            .Value         = ""
             .FontName      = "Tahoma"
             .FontSize      = 8
             .Visible       = .T.
@@ -1505,7 +1510,7 @@ DEFINE CLASS Formcfo AS FormBase
             .Visible   = .T.
         ENDWITH
 
-        *-- Combo1 - ipincreds numeric(1,0)
+        *-- Combo1 - ipincreds numeric(1,0) - grava ListIndex (1=Sim, 2=Nao, 0=nao informado)
         loc_oPage1.AddObject("cbo_4c_Combo1", "ComboBox")
         WITH loc_oPage1.cbo_4c_Combo1
             .Top           = 315
@@ -1513,9 +1518,9 @@ DEFINE CLASS Formcfo AS FormBase
             .Width         = 82
             .Height        = 23
             .RowSourceType = 1
-            .RowSource     = "0,1"
+            .RowSource     = "Sim,N" + CHR(227) + "o"
             .Style         = 2
-            .Value         = "0"
+            .Value         = ""
             .FontName      = "Tahoma"
             .FontSize      = 8
             .Visible       = .T.
@@ -1543,9 +1548,9 @@ DEFINE CLASS Formcfo AS FormBase
             .Width         = 82
             .Height        = 23
             .RowSourceType = 1
-            .RowSource     = "S,N"
+            .RowSource     = "Sim,N" + CHR(227) + "o"
             .Style         = 2
-            .Value         = "N"
+            .Value         = ""
             .FontName      = "Tahoma"
             .FontSize      = 8
             .Visible       = .T.
@@ -1573,9 +1578,9 @@ DEFINE CLASS Formcfo AS FormBase
             .Width         = 196
             .Height        = 24
             .RowSourceType = 1
-            .RowSource     = "F,P,T,O"
+            .RowSource     = "Fator Markup,Preco Venda,Base C.M" + CHR(233) + "dio,Valor Merc.,Grupo Prod,Movimenta" + CHR(231) + CHR(227) + "o"
             .Style         = 2
-            .Value         = "P"
+            .Value         = ""
             .FontName      = "Tahoma"
             .FontSize      = 8
             .Visible       = .T.
@@ -1691,9 +1696,9 @@ DEFINE CLASS Formcfo AS FormBase
             .Width         = 82
             .Height        = 23
             .RowSourceType = 1
-            .RowSource     = "S,N"
+            .RowSource     = "Sim,N" + CHR(227) + "o"
             .Style         = 2
-            .Value         = "N"
+            .Value         = ""
             .FontName      = "Tahoma"
             .FontSize      = 8
             .Visible       = .T.
@@ -3063,6 +3068,8 @@ DEFINE CLASS Formcfo AS FormBase
     PROCEDURE BtnIncluirClick()
         THIS.this_oBusinessObject.NovoRegistro()
         THIS.LimparCampos()
+        *-- Aplica os valores padrao do legado para registro em branco (combos char)
+        THIS.BOParaForm()
         THIS.this_cModoAtual = "INCLUIR"
         THIS.HabilitarCampos(.T.)
         THIS.AjustarBotoesPorModo()
@@ -3238,10 +3245,21 @@ DEFINE CLASS Formcfo AS FormBase
     ENDPROC
 
     *==========================================================================
+    * InicialOpcao - Inicial maiuscula da opcao escolhida em um combo
+    * Equivale ao PADR(UPPER(ALLTRIM(combo.Value)), 1) usado no sistema legado
+    *==========================================================================
+    PROTECTED FUNCTION InicialOpcao(par_cValor)
+        LOCAL loc_cValor
+        loc_cValor = IIF(VARTYPE(par_cValor) = "C", par_cValor, "")
+        RETURN LEFT(UPPER(ALLTRIM(loc_cValor)), 1)
+    ENDFUNC
+
+    *==========================================================================
     * FormParaBO - Transfere valores dos campos da Page2 para o BO
     *==========================================================================
-    PROTECTED PROCEDURE FormParaBO()
-        LOCAL loc_oBO, loc_oPage1, loc_oPage2
+    PROTECTED FUNCTION FormParaBO()
+        LOCAL loc_oBO, loc_oPage1, loc_oPage2, loc_lSucesso
+        loc_lSucesso = .F.
         TRY
             loc_oBO    = THIS.this_oBusinessObject
             loc_oPage1 = THIS.pgf_4c_Paginas.Page2.pgf_4c_PagDados.Page1
@@ -3251,51 +3269,53 @@ DEFINE CLASS Formcfo AS FormBase
             loc_oBO.this_cCodigos    = ALLTRIM(loc_oPage1.txt_4c_Codigo.Value)
             loc_oBO.this_cDescricaos = ALLTRIM(loc_oPage1.txt_4c_Descricao.Value)
             loc_oBO.this_cDesc2s     = ALLTRIM(loc_oPage1.txt_4c_Desc2s.Value)
-            loc_oBO.this_cOperacaos  = ALLTRIM(loc_oPage1.cbo_4c_CmbOperacao.Value)
-            loc_oBO.this_nTipos      = ALLTRIM(loc_oPage1.cbo_4c_Cmbtipo.Value)
+            loc_oBO.this_cOperacaos  = THIS.InicialOpcao(loc_oPage1.cbo_4c_CmbOperacao.Value)
+            *-- tipos: combo 2 colunas, valor gravado = ListIndex (1=Compras ... 5=Servicos)
+            loc_oBO.this_nTipos      = loc_oPage1.cbo_4c_Cmbtipo.ListIndex
             loc_oBO.this_nNdigitos   = loc_oPage1.spn_4c_Ndigito.Value
 
-            *-- Situacao (Ativo=Button1?Value=1?situas=0; Inativo=Button2?Value=2?situas=1)
-            loc_oBO.this_nSituas = IIF(loc_oPage1.obj_4c_Opc_situacao.Value = 1, 0, 1)
+            *-- Situacao: OptionGroup gravado direto (1=Ativo, 2=Inativo, 0=nao informado)
+            loc_oBO.this_nSituas = loc_oPage1.obj_4c_Opc_situacao.Value
 
             *-- ICMS
-            loc_oBO.this_cIcms       = ALLTRIM(loc_oPage1.cbo_4c_CmbIcms.Value)
+            loc_oBO.this_cIcms       = THIS.InicialOpcao(loc_oPage1.cbo_4c_CmbIcms.Value)
             loc_oBO.this_cSittribs   = ALLTRIM(loc_oPage1.txt_4c_Sittricm.Value)
             loc_oBO.this_nAliqivcs   = loc_oPage1.txt_4c_AliqIVCs.Value
-            loc_oBO.this_nInclicms   = ALLTRIM(loc_oPage1.cbo_4c_Combo3.Value)
-            loc_oBO.this_nIcmsdscs   = ALLTRIM(loc_oPage1.cbo_4c_Combo10.Value)
-            loc_oBO.this_nIcmsincs   = ALLTRIM(loc_oPage1.cbo_4c_Combo6.Value)
-            loc_oBO.this_nIncicmnfs  = IIF(loc_oPage1.chk_4c_Fwcheckbox1.Value, 1, 0)
+            loc_oBO.this_nInclicms   = loc_oPage1.cbo_4c_Combo3.ListIndex
+            loc_oBO.this_nIcmsdscs   = loc_oPage1.cbo_4c_Combo6.ListIndex
+            loc_oBO.this_nIcmsincs   = loc_oPage1.cbo_4c_Combo10.ListIndex
+            loc_oBO.this_nIncicmnfs  = IIF(loc_oPage1.chk_4c_Fwcheckbox1.Value = 1, 1, 0)
             loc_oBO.this_cCgergia1s  = ALLTRIM(loc_oPage1.txt_4c_Gergia1.Value)
-            loc_oBO.this_nFrticms    = IIF(loc_oPage1.chk_4c_ObjFreteICM.Value, 1, 0)
-            loc_oBO.this_nSegicms    = IIF(loc_oPage1.chk_4c_ObjSegIcm.Value, 1, 0)
-            loc_oBO.this_nDesicms    = IIF(loc_oPage1.chk_4c_ObjDespIcm.Value, 1, 0)
+            loc_oBO.this_nFrticms    = IIF(loc_oPage1.chk_4c_ObjFreteICM.Value = 1, 1, 0)
+            loc_oBO.this_nSegicms    = IIF(loc_oPage1.chk_4c_ObjSegIcm.Value = 1, 1, 0)
+            loc_oBO.this_nDesicms    = IIF(loc_oPage1.chk_4c_ObjDespIcm.Value = 1, 1, 0)
 
             *-- Substituicao Tributaria ICMS
-            loc_oBO.this_cSubtribs   = ALLTRIM(loc_oPage1.cbo_4c_CmbSTRIB.Value)
+            loc_oBO.this_cSubtribs   = THIS.InicialOpcao(loc_oPage1.cbo_4c_CmbSTRIB.Value)
             loc_oBO.this_nPbcsts     = loc_oPage1.txt_4c_Bcst.Value
             loc_oBO.this_cCfosts     = ALLTRIM(loc_oPage1.txt_4c_CfoST.Value)
             loc_oBO.this_cCfost60s   = ALLTRIM(loc_oPage1.txt_4c_CfoST60.Value)
             loc_oBO.this_cCoddests   = ALLTRIM(loc_oPage1.txt_4c_Cfdest.Value)
-            loc_oBO.this_nTransps    = ALLTRIM(loc_oPage1.cbo_4c_Combo5.Value)
+            loc_oBO.this_nTransps    = loc_oPage1.cbo_4c_Combo5.ListIndex
 
             *-- IPI
-            loc_oBO.this_cIpis       = ALLTRIM(loc_oPage1.cbo_4c_CmbIpi.Value)
-            loc_oBO.this_cIpiimpors  = ALLTRIM(loc_oPage1.cbo_4c_CmbIpiI.Value)
-            loc_oBO.this_nInclipis   = ALLTRIM(loc_oPage1.cbo_4c_Combo4.Value)
+            loc_oBO.this_cIpis       = THIS.InicialOpcao(loc_oPage1.cbo_4c_CmbIpi.Value)
+            loc_oBO.this_cIpiimpors  = THIS.InicialOpcao(loc_oPage1.cbo_4c_CmbIpiI.Value)
+            *-- ipi_icms: char(1), grava a inicial da opcao (S/N)
+            loc_oBO.this_cIpi_icms   = LEFT(UPPER(ALLTRIM(loc_oPage1.cbo_4c_Combo4.Value)), 1)
             loc_oBO.this_nPbcipis    = loc_oPage1.txt_4c_BcIPI.Value
-            loc_oBO.this_cBcipis     = ALLTRIM(loc_oPage1.cbo_4c_CmbBIPI.Value)
+            loc_oBO.this_cBcipis     = THIS.InicialOpcao(loc_oPage1.cbo_4c_CmbBIPI.Value)
             loc_oBO.this_nAliqipis   = loc_oPage1.txt_4c_Aliqs.Value
-            loc_oBO.this_cAcresipis  = ALLTRIM(loc_oPage1.cbo_4c_Combo2.Value)
-            loc_oBO.this_cIpiom2s    = ALLTRIM(loc_oPage1.cbo_4c_Combo8.Value)
-            loc_oBO.this_nFrtipis    = IIF(loc_oPage1.chk_4c_ObjFreteIPI.Value, 1, 0)
-            loc_oBO.this_nSegipis    = IIF(loc_oPage1.chk_4c_ObjSegIPI.Value, 1, 0)
-            loc_oBO.this_nDesipis    = IIF(loc_oPage1.chk_4c_ObjDespIPI.Value, 1, 0)
-            loc_oBO.this_nIpincreds  = ALLTRIM(loc_oPage1.cbo_4c_Combo1.Value)
-            loc_oBO.this_nPontedescs = ALLTRIM(loc_oPage1.cbo_4c_Combo7.Value)
+            loc_oBO.this_cAcresipis  = THIS.InicialOpcao(loc_oPage1.cbo_4c_Combo2.Value)
+            loc_oBO.this_cIpiom2s    = THIS.InicialOpcao(loc_oPage1.cbo_4c_Combo8.Value)
+            loc_oBO.this_nFrtipis    = IIF(loc_oPage1.chk_4c_ObjFreteIPI.Value = 1, 1, 0)
+            loc_oBO.this_nSegipis    = IIF(loc_oPage1.chk_4c_ObjSegIPI.Value = 1, 1, 0)
+            loc_oBO.this_nDesipis    = IIF(loc_oPage1.chk_4c_ObjDespIPI.Value = 1, 1, 0)
+            loc_oBO.this_nIpincreds  = loc_oPage1.cbo_4c_Combo1.ListIndex
+            loc_oBO.this_nInclipis   = loc_oPage1.cbo_4c_Combo7.ListIndex
             loc_oBO.this_cIpicst     = ALLTRIM(loc_oPage1.txt_4c_IPICST.Value)
             loc_oBO.this_cIpienq     = ALLTRIM(loc_oPage1.txt_4c_Enqipi.Value)
-            loc_oBO.this_cUnitimps   = ALLTRIM(loc_oPage1.cbo_4c_Combo9.Value)
+            loc_oBO.this_cUnitimps   = THIS.InicialOpcao(loc_oPage1.cbo_4c_Combo9.Value)
 
             *-- PIS / COFINS / ISSQN / II
             loc_oBO.this_cPiscst     = ALLTRIM(loc_oPage1.txt_4c_PISCST.Value)
@@ -3305,15 +3325,16 @@ DEFINE CLASS Formcfo AS FormBase
             loc_oBO.this_nAliqcofins = loc_oPage1.txt_4c_AliqCofins.Value
             loc_oBO.this_nAliqissqn  = loc_oPage1.txt_4c_AliqISSQN.Value
             loc_oBO.this_nAliqii     = loc_oPage1.txt_4c_AliqII.Value
-            *-- ctissqn: OptionGroup 5 botoes (0-4), Value=1 ? ctissqn=0
-            loc_oBO.this_nCtissqn    = loc_oPage1.obj_4c_Fwoption1.Value - 1
-            *-- rettribs: Sim=Button1?Value=1?1, Nao=Button2?Value=2?0
-            loc_oBO.this_nRettribs   = IIF(loc_oPage1.obj_4c_Fwoption2.Value = 1, 1, 0)
+            *-- ctissqn: OptionGroup 5 botoes, valor gravado = indice do botao (1-5, 0=nao informado)
+            loc_oBO.this_nCtissqn    = loc_oPage1.obj_4c_Fwoption1.Value
+            *-- rettribs: 1=Sim (Button1), 2=Nao (Button2), 0=nao informado
+            loc_oBO.this_nRettribs   = loc_oPage1.obj_4c_Fwoption2.Value
 
             *-- Contribuinte
-            loc_oBO.this_cContribs   = ALLTRIM(loc_oPage1.cbo_4c_CmbContribuinte.Value)
+            loc_oBO.this_cContribs   = THIS.InicialOpcao(loc_oPage1.cbo_4c_CmbContribuinte.Value)
 
             *-- Contabilidade - contas DB/CR (Page2)
+            *-- pontedescs: grava ListIndex (1=Sim-Descricao CFOP, 2=Nao-Nenhuma, 3=Sim-Obs. Operacao)
             loc_oBO.this_nPontedescs = loc_oPage2.cbo_4c_CmbPonted.ListIndex
             loc_oBO.this_cContconts  = LEFT(UPPER(ALLTRIM(loc_oPage2.cbo_4c_CmbFixa.Value)), 1)
             loc_oBO.this_cContvcds   = ALLTRIM(loc_oPage2.txt_4c_Vrcds.Value)
@@ -3327,23 +3348,26 @@ DEFINE CLASS Formcfo AS FormBase
             loc_oBO.this_cContda     = ALLTRIM(loc_oPage2.txt_4c_ContDa.Value)
 
             *-- Contabilidade - opcoes (Page2)
-            *-- agrupas/zeradas/utilvars: Sim=Value=1?1, Nao=Value=2?0
-            loc_oBO.this_nAgrupas    = IIF(loc_oPage2.obj_4c_OptAgrupas.Value = 1, 1, 0)
-            loc_oBO.this_nZeradas    = IIF(loc_oPage2.obj_4c_OptZeradas.Value = 1, 1, 0)
-            loc_oBO.this_nUtilvars   = IIF(loc_oPage2.obj_4c_Optutilvars.Value = 1, 1, 0)
-            *-- dtintfis: 2 botoes, Value=1=Data Integracao, Value=2=Data N.F.
+            *-- Todos os OptionGroups gravam o indice do botao (1=Sim, 2=Nao, 0=nao informado)
+            loc_oBO.this_nAgrupas    = loc_oPage2.obj_4c_OptAgrupas.Value
+            loc_oBO.this_nZeradas    = loc_oPage2.obj_4c_OptZeradas.Value
+            loc_oBO.this_nUtilvars   = loc_oPage2.obj_4c_Optutilvars.Value
+            *-- dtintfis: 1=Data Integracao, 2=Data N.F.
             loc_oBO.this_nDtintfis   = loc_oPage2.obj_4c_Fwoption1.Value
-            *-- intvlrcont/ricms/ripi/indmov/indpagto: Sim=1/Nao=2
-            loc_oBO.this_nIntvlrcont = IIF(loc_oPage2.obj_4c_Fwoption2.Value = 1, 1, 0)
-            loc_oBO.this_nIntvlricms = IIF(loc_oPage2.obj_4c_Fwoption3.Value = 1, 1, 0)
-            loc_oBO.this_nIntvlripi  = IIF(loc_oPage2.obj_4c_Fwoption4.Value = 1, 1, 0)
-            loc_oBO.this_nIndmov     = IIF(loc_oPage2.obj_4c_Fwoption5.Value = 1, 1, 0)
-            loc_oBO.this_nIndpagto   = IIF(loc_oPage2.obj_4c_Fwoption6.Value = 1, 1, 0)
+            loc_oBO.this_nIntvlrcont = loc_oPage2.obj_4c_Fwoption2.Value
+            loc_oBO.this_nIntvlricms = loc_oPage2.obj_4c_Fwoption3.Value
+            loc_oBO.this_nIntvlripi  = loc_oPage2.obj_4c_Fwoption4.Value
+            loc_oBO.this_nIndmov     = loc_oPage2.obj_4c_Fwoption5.Value
+            loc_oBO.this_nIndpagto   = loc_oPage2.obj_4c_Fwoption6.Value
+
+            loc_lSucesso = .T.
 
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro em FormParaBO")
         ENDTRY
-    ENDPROC
+
+        RETURN loc_lSucesso
+    ENDFUNC
 
     *==========================================================================
     * BOParaForm - Transfere valores do BO para os campos da Page2
@@ -3359,20 +3383,21 @@ DEFINE CLASS Formcfo AS FormBase
             loc_oPage1.txt_4c_Codigo.Value       = loc_oBO.this_cCodigos
             loc_oPage1.txt_4c_Descricao.Value    = loc_oBO.this_cDescricaos
             loc_oPage1.txt_4c_Desc2s.Value       = loc_oBO.this_cDesc2s
-            loc_oPage1.cbo_4c_CmbOperacao.Value  = loc_oBO.this_cOperacaos
-            loc_oPage1.cbo_4c_Cmbtipo.Value      = LTRIM(STR(loc_oBO.this_nTipos, 1))
+            *-- Combos char: replicam os defaults do legado quando o campo esta vazio
+            loc_oPage1.cbo_4c_CmbOperacao.Value  = IIF(THIS.InicialOpcao(loc_oBO.this_cOperacaos) == "E", "Entrada", "Sa" + CHR(237) + "da")
+            loc_oPage1.cbo_4c_Cmbtipo.ListIndex  = IIF(BETWEEN(loc_oBO.this_nTipos, 1, 5), loc_oBO.this_nTipos, 0)
             loc_oPage1.spn_4c_Ndigito.Value      = loc_oBO.this_nNdigitos
 
-            *-- Situacao (situas=0?Ativo=Button1?Value=1; situas=1?Inativo=Button2?Value=2)
-            loc_oPage1.obj_4c_Opc_situacao.Value = IIF(loc_oBO.this_nSituas = 0, 1, 2)
+            *-- Situacao (situas=1?Ativo=Button1; situas=2?Inativo=Button2; 0=nenhum)
+            loc_oPage1.obj_4c_Opc_situacao.Value = IIF(BETWEEN(loc_oBO.this_nSituas, 1, 2), loc_oBO.this_nSituas, 0)
 
             *-- ICMS
-            loc_oPage1.cbo_4c_CmbIcms.Value      = loc_oBO.this_cIcms
+            loc_oPage1.cbo_4c_CmbIcms.Value      = ICASE(THIS.InicialOpcao(loc_oBO.this_cIcms) == "O", "Outros", THIS.InicialOpcao(loc_oBO.this_cIcms) == "I", "Isento", THIS.InicialOpcao(loc_oBO.this_cIcms) == "N", "N Tributa", "Tributado")
             loc_oPage1.txt_4c_Sittricm.Value     = loc_oBO.this_cSittribs
             loc_oPage1.txt_4c_AliqIVCs.Value     = loc_oBO.this_nAliqivcs
-            loc_oPage1.cbo_4c_Combo3.Value       = LTRIM(STR(loc_oBO.this_nInclicms, 1))
-            loc_oPage1.cbo_4c_Combo10.Value      = LTRIM(STR(loc_oBO.this_nIcmsdscs, 1))
-            loc_oPage1.cbo_4c_Combo6.Value       = LTRIM(STR(loc_oBO.this_nIcmsincs, 1))
+            loc_oPage1.cbo_4c_Combo3.ListIndex   = IIF(BETWEEN(loc_oBO.this_nInclicms, 1, 3), loc_oBO.this_nInclicms, 0)
+            loc_oPage1.cbo_4c_Combo6.ListIndex   = IIF(BETWEEN(loc_oBO.this_nIcmsdscs, 1, 2), loc_oBO.this_nIcmsdscs, 0)
+            loc_oPage1.cbo_4c_Combo10.ListIndex  = IIF(BETWEEN(loc_oBO.this_nIcmsincs, 1, 2), loc_oBO.this_nIcmsincs, 0)
             loc_oPage1.chk_4c_Fwcheckbox1.Value  = IIF(loc_oBO.this_nIncicmnfs = 1, 1, 0)
             loc_oPage1.txt_4c_Gergia1.Value      = loc_oBO.this_cCgergia1s
             loc_oPage1.chk_4c_ObjFreteICM.Value  = IIF(loc_oBO.this_nFrticms = 1, 1, 0)
@@ -3380,30 +3405,33 @@ DEFINE CLASS Formcfo AS FormBase
             loc_oPage1.chk_4c_ObjDespIcm.Value   = IIF(loc_oBO.this_nDesicms = 1, 1, 0)
 
             *-- Substituicao Tributaria ICMS
-            loc_oPage1.cbo_4c_CmbSTRIB.Value     = loc_oBO.this_cSubtribs
+            loc_oPage1.cbo_4c_CmbSTRIB.Value     = IIF(THIS.InicialOpcao(loc_oBO.this_cSubtribs) == "S", "Sim", "N" + CHR(227) + "o")
             loc_oPage1.txt_4c_Bcst.Value         = loc_oBO.this_nPbcsts
             loc_oPage1.txt_4c_CfoST.Value        = loc_oBO.this_cCfosts
             loc_oPage1.txt_4c_CfoST60.Value      = loc_oBO.this_cCfost60s
             loc_oPage1.txt_4c_Cfdest.Value       = loc_oBO.this_cCoddests
-            loc_oPage1.cbo_4c_Combo5.Value       = LTRIM(STR(loc_oBO.this_nTransps, 1))
+            loc_oPage1.cbo_4c_Combo5.ListIndex   = IIF(BETWEEN(loc_oBO.this_nTransps, 1, 2), loc_oBO.this_nTransps, 0)
 
             *-- IPI
-            loc_oPage1.cbo_4c_CmbIpi.Value       = loc_oBO.this_cIpis
-            loc_oPage1.cbo_4c_CmbIpiI.Value      = loc_oBO.this_cIpiimpors
-            loc_oPage1.cbo_4c_Combo4.Value       = LTRIM(STR(loc_oBO.this_nInclipis, 1))
+            loc_oPage1.cbo_4c_CmbIpi.Value       = ICASE(THIS.InicialOpcao(loc_oBO.this_cIpis) == "O", "Outros", THIS.InicialOpcao(loc_oBO.this_cIpis) == "I", "Isento", "Tributado")
+            loc_oPage1.cbo_4c_CmbIpiI.Value      = IIF(THIS.InicialOpcao(loc_oBO.this_cIpiimpors) == "S", "Sim", "N" + CHR(227) + "o")
+            *-- ipi_icms: char(1) S/N ? ListIndex 1/2
+            loc_oPage1.cbo_4c_Combo4.ListIndex   = MAX(0, AT(UPPER(LEFT(ALLTRIM(loc_oBO.this_cIpi_icms) + " ", 1)), "SN"))
             loc_oPage1.txt_4c_BcIPI.Value        = loc_oBO.this_nPbcipis
-            loc_oPage1.cbo_4c_CmbBIPI.Value      = loc_oBO.this_cBcipis
+            loc_oPage1.cbo_4c_CmbBIPI.Value      = ICASE(THIS.InicialOpcao(loc_oBO.this_cBcipis) == "F", "Fator Markup", THIS.InicialOpcao(loc_oBO.this_cBcipis) == "P", "Preco Venda", THIS.InicialOpcao(loc_oBO.this_cBcipis) == "B", "Base C.M" + CHR(233) + "dio", THIS.InicialOpcao(loc_oBO.this_cBcipis) == "G", "Grupo Prod", THIS.InicialOpcao(loc_oBO.this_cBcipis) == "M", "Movimenta" + CHR(231) + CHR(227) + "o", "Valor Merc.")
             loc_oPage1.txt_4c_Aliqs.Value        = loc_oBO.this_nAliqipis
-            loc_oPage1.cbo_4c_Combo2.Value       = loc_oBO.this_cAcresipis
-            loc_oPage1.cbo_4c_Combo8.Value       = loc_oBO.this_cIpiom2s
+            loc_oPage1.cbo_4c_Combo2.Value       = IIF(THIS.InicialOpcao(loc_oBO.this_cAcresipis) == "S", "Sim", "N" + CHR(227) + "o")
+            loc_oPage1.cbo_4c_Combo8.Value       = IIF(THIS.InicialOpcao(loc_oBO.this_cIpiom2s) == "S", "Sim", "N" + CHR(227) + "o")
+            *-- Legado: Combo8 so fica habilitado quando IPI Importacao = Sim
+            loc_oPage1.cbo_4c_Combo8.Enabled     = (THIS.InicialOpcao(loc_oBO.this_cIpiimpors) == "S")
             loc_oPage1.chk_4c_ObjFreteIPI.Value  = IIF(loc_oBO.this_nFrtipis = 1, 1, 0)
             loc_oPage1.chk_4c_ObjSegIPI.Value    = IIF(loc_oBO.this_nSegipis = 1, 1, 0)
             loc_oPage1.chk_4c_ObjDespIPI.Value   = IIF(loc_oBO.this_nDesipis = 1, 1, 0)
-            loc_oPage1.cbo_4c_Combo1.Value       = LTRIM(STR(loc_oBO.this_nIpincreds, 1))
-            loc_oPage1.cbo_4c_Combo7.Value       = LTRIM(STR(loc_oBO.this_nPontedescs, 1))
+            loc_oPage1.cbo_4c_Combo1.ListIndex   = IIF(BETWEEN(loc_oBO.this_nIpincreds, 1, 2), loc_oBO.this_nIpincreds, 0)
+            loc_oPage1.cbo_4c_Combo7.ListIndex   = IIF(BETWEEN(loc_oBO.this_nInclipis, 1, 2), loc_oBO.this_nInclipis, 0)
             loc_oPage1.txt_4c_IPICST.Value       = loc_oBO.this_cIpicst
             loc_oPage1.txt_4c_Enqipi.Value       = loc_oBO.this_cIpienq
-            loc_oPage1.cbo_4c_Combo9.Value       = loc_oBO.this_cUnitimps
+            loc_oPage1.cbo_4c_Combo9.Value       = IIF(THIS.InicialOpcao(loc_oBO.this_cUnitimps) == "S", "Sim", "N" + CHR(227) + "o")
 
             *-- PIS / COFINS / ISSQN / II
             loc_oPage1.txt_4c_PISCST.Value       = loc_oBO.this_cPiscst
@@ -3413,17 +3441,17 @@ DEFINE CLASS Formcfo AS FormBase
             loc_oPage1.txt_4c_AliqCofins.Value   = loc_oBO.this_nAliqcofins
             loc_oPage1.txt_4c_AliqISSQN.Value    = loc_oBO.this_nAliqissqn
             loc_oPage1.txt_4c_AliqII.Value       = loc_oBO.this_nAliqii
-            *-- ctissqn: OptionGroup Value = ctissqn + 1
-            loc_oPage1.obj_4c_Fwoption1.Value    = loc_oBO.this_nCtissqn + 1
-            *-- rettribs: Sim=1?Value=1, Nao=0?Value=2
-            loc_oPage1.obj_4c_Fwoption2.Value    = IIF(loc_oBO.this_nRettribs = 1, 1, 2)
+            *-- ctissqn: valor gravado = indice do botao (1-5, 0=nenhum)
+            loc_oPage1.obj_4c_Fwoption1.Value    = IIF(BETWEEN(loc_oBO.this_nCtissqn, 1, 5), loc_oBO.this_nCtissqn, 0)
+            *-- rettribs: 1=Sim, 2=Nao, 0=nenhum
+            loc_oPage1.obj_4c_Fwoption2.Value    = IIF(BETWEEN(loc_oBO.this_nRettribs, 1, 2), loc_oBO.this_nRettribs, 0)
 
             *-- Contribuinte
-            loc_oPage1.cbo_4c_CmbContribuinte.Value = loc_oBO.this_cContribs
+            loc_oPage1.cbo_4c_CmbContribuinte.Value = ICASE(THIS.InicialOpcao(loc_oBO.this_cContribs) == "O", "Outros", THIS.InicialOpcao(loc_oBO.this_cContribs) == "S", "Sim", "N" + CHR(227) + "o")
 
             *-- Contabilidade - contas DB/CR (Page2)
-            loc_oPage2.cbo_4c_CmbPonted.ListIndex   = IIF(loc_oBO.this_nPontedescs >= 1 AND loc_oBO.this_nPontedescs <= 3, loc_oBO.this_nPontedescs, 1)
-            loc_oPage2.cbo_4c_CmbFixa.ListIndex  = MAX(1, AT(loc_oBO.this_cContconts, "SNC"))
+            loc_oPage2.cbo_4c_CmbPonted.ListIndex   = IIF(BETWEEN(loc_oBO.this_nPontedescs, 1, 3), loc_oBO.this_nPontedescs, 0)
+            loc_oPage2.cbo_4c_CmbFixa.ListIndex  = AT(UPPER(LEFT(ALLTRIM(loc_oBO.this_cContconts) + " ", 1)), "SNC")
             loc_oPage2.txt_4c_Vrcds.Value        = loc_oBO.this_cContvcds
             loc_oPage2.txt_4c_Vrccs.Value        = loc_oBO.this_cContvccs
             loc_oPage2.txt_4c_Ipids.Value        = loc_oBO.this_cContipds
@@ -3434,19 +3462,17 @@ DEFINE CLASS Formcfo AS FormBase
             loc_oPage2.txt_4c_ContSeg.Value      = loc_oBO.this_cContseg
             loc_oPage2.txt_4c_ContDa.Value       = loc_oBO.this_cContda
 
-            *-- Contabilidade - opcoes (Page2)
-            *-- agrupas/zeradas/utilvars: 1?Value=1 (Sim), 0?Value=2 (Nao)
-            loc_oPage2.obj_4c_OptAgrupas.Value   = IIF(loc_oBO.this_nAgrupas = 1, 1, 2)
-            loc_oPage2.obj_4c_OptZeradas.Value   = IIF(loc_oBO.this_nZeradas = 1, 1, 2)
-            loc_oPage2.obj_4c_Optutilvars.Value  = IIF(loc_oBO.this_nUtilvars = 1, 1, 2)
+            *-- Contabilidade - opcoes (Page2): valor gravado = indice do botao (1=Sim, 2=Nao, 0=nenhum)
+            loc_oPage2.obj_4c_OptAgrupas.Value   = IIF(BETWEEN(loc_oBO.this_nAgrupas, 1, 2), loc_oBO.this_nAgrupas, 0)
+            loc_oPage2.obj_4c_OptZeradas.Value   = IIF(BETWEEN(loc_oBO.this_nZeradas, 1, 2), loc_oBO.this_nZeradas, 0)
+            loc_oPage2.obj_4c_Optutilvars.Value  = IIF(BETWEEN(loc_oBO.this_nUtilvars, 1, 2), loc_oBO.this_nUtilvars, 0)
             *-- dtintfis: 1=Data Integracao, 2=Data N.F.
-            loc_oPage2.obj_4c_Fwoption1.Value    = IIF(loc_oBO.this_nDtintfis = 2, 2, 1)
-            *-- intvlrcont/ricms/ripi/indmov/indpagto: 1?Value=1, 0?Value=2
-            loc_oPage2.obj_4c_Fwoption2.Value    = IIF(loc_oBO.this_nIntvlrcont = 1, 1, 2)
-            loc_oPage2.obj_4c_Fwoption3.Value    = IIF(loc_oBO.this_nIntvlricms = 1, 1, 2)
-            loc_oPage2.obj_4c_Fwoption4.Value    = IIF(loc_oBO.this_nIntvlripi = 1, 1, 2)
-            loc_oPage2.obj_4c_Fwoption5.Value    = IIF(loc_oBO.this_nIndmov = 1, 1, 2)
-            loc_oPage2.obj_4c_Fwoption6.Value    = IIF(loc_oBO.this_nIndpagto = 1, 1, 2)
+            loc_oPage2.obj_4c_Fwoption1.Value    = IIF(BETWEEN(loc_oBO.this_nDtintfis, 1, 2), loc_oBO.this_nDtintfis, 0)
+            loc_oPage2.obj_4c_Fwoption2.Value    = IIF(BETWEEN(loc_oBO.this_nIntvlrcont, 1, 2), loc_oBO.this_nIntvlrcont, 0)
+            loc_oPage2.obj_4c_Fwoption3.Value    = IIF(BETWEEN(loc_oBO.this_nIntvlricms, 1, 2), loc_oBO.this_nIntvlricms, 0)
+            loc_oPage2.obj_4c_Fwoption4.Value    = IIF(BETWEEN(loc_oBO.this_nIntvlripi, 1, 2), loc_oBO.this_nIntvlripi, 0)
+            loc_oPage2.obj_4c_Fwoption5.Value    = IIF(BETWEEN(loc_oBO.this_nIndmov, 1, 2), loc_oBO.this_nIndmov, 0)
+            loc_oPage2.obj_4c_Fwoption6.Value    = IIF(BETWEEN(loc_oBO.this_nIndpagto, 1, 2), loc_oBO.this_nIndpagto, 0)
 
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro em BOParaForm")
@@ -3457,8 +3483,11 @@ DEFINE CLASS Formcfo AS FormBase
     * BtnSalvarClick - Salvar registro (PUBLIC para BINDEVENT)
     *==========================================================================
     PROCEDURE BtnSalvarClick()
-        LOCAL loc_lProsseguir, loc_cCodigo, loc_cSQL, loc_nRet
+        LOCAL loc_lProsseguir, loc_cCodigo, loc_cSQL, loc_nRet, loc_oPage1, loc_oPage2
+        LOCAL loc_cMensagem, loc_nPagina, loc_oControle
         loc_lProsseguir = .T.
+        loc_oPage1 = THIS.pgf_4c_Paginas.Page2.pgf_4c_PagDados.Page1
+        loc_oPage2 = THIS.pgf_4c_Paginas.Page2.pgf_4c_PagDados.Page2
 
         *-- Validacao: codigo obrigatorio
         loc_cCodigo = ALLTRIM(THIS.pgf_4c_Paginas.Page2.pgf_4c_PagDados.Page1.txt_4c_Codigo.Value)
@@ -3491,8 +3520,68 @@ DEFINE CLASS Formcfo AS FormBase
             ENDTRY
         ENDIF
 
+        *-- Validacoes de conteudo (equivalentes as do sistema legado)
+        IF loc_lProsseguir AND INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
+
+            loc_cMensagem = ""
+            loc_nPagina   = 1
+
+            DO CASE
+            CASE EMPTY(ALLTRIM(loc_oPage1.txt_4c_Descricao.Value))
+                loc_cMensagem = "Descri" + CHR(231) + CHR(227) + "o Inv" + CHR(225) + "lida."
+                loc_oControle = loc_oPage1.txt_4c_Descricao
+
+            CASE !INLIST(THIS.InicialOpcao(loc_oPage1.cbo_4c_CmbOperacao.Value), "E", "S")
+                loc_cMensagem = "Opera" + CHR(231) + CHR(227) + "o Inv" + CHR(225) + "lida."
+                loc_oControle = loc_oPage1.cbo_4c_CmbOperacao
+
+            CASE !INLIST(THIS.InicialOpcao(loc_oPage1.cbo_4c_CmbIcms.Value), "T", "I", "O", "N")
+                loc_cMensagem = "ICMS Inv" + CHR(225) + "lido."
+                loc_oControle = loc_oPage1.cbo_4c_CmbIcms
+
+            CASE !INLIST(THIS.InicialOpcao(loc_oPage1.cbo_4c_CmbIpi.Value), "T", "I", "O")
+                loc_cMensagem = "IPI Inv" + CHR(225) + "lido."
+                loc_oControle = loc_oPage1.cbo_4c_CmbIpi
+
+            CASE !INLIST(THIS.InicialOpcao(loc_oPage1.cbo_4c_CmbContribuinte.Value), "S", "N", "O")
+                loc_cMensagem = "Contribuinte Inv" + CHR(225) + "lido."
+                loc_oControle = loc_oPage1.cbo_4c_CmbContribuinte
+
+            CASE !INLIST(UPPER(ALLTRIM(loc_oPage1.txt_4c_Gergia1.Value)), "S", "N")
+                loc_cMensagem = "Especifica" + CHR(231) + CHR(227) + "o Inv" + CHR(225) + ;
+                    "lida p/ Processar a GIA. (S/N)"
+                loc_oControle = loc_oPage1.txt_4c_Gergia1
+
+            CASE THIS.InicialOpcao(loc_oPage1.cbo_4c_CmbIcms.Value) <> "T" AND ;
+                    EMPTY(ALLTRIM(loc_oPage1.txt_4c_Sittricm.Value))
+                loc_cMensagem = "A Situa" + CHR(231) + CHR(227) + "o Tribut" + CHR(225) + ;
+                    "ria deve ser informada!"
+                loc_oControle = loc_oPage1.txt_4c_Sittricm
+
+            CASE loc_oPage2.cbo_4c_CmbFixa.ListIndex = 0
+                loc_cMensagem = "Conta N" + CHR(227) + "o Preenchida."
+                loc_oControle = loc_oPage2.cbo_4c_CmbFixa
+                loc_nPagina   = 2
+            ENDCASE
+
+            IF !EMPTY(loc_cMensagem)
+                MsgAviso(loc_cMensagem, "")
+                THIS.pgf_4c_Paginas.Page2.pgf_4c_PagDados.ActivePage = loc_nPagina
+                IF loc_oControle.Visible AND loc_oControle.Enabled
+                    loc_oControle.SetFocus()
+                ENDIF
+                loc_oControle   = .NULL.
+                loc_lProsseguir = .F.
+            ENDIF
+
+        ENDIF
+
+        *-- Nao gravar se a transferencia dos campos para o BO falhar (evitaria gravar valores parciais)
+        IF loc_lProsseguir AND !THIS.FormParaBO()
+            loc_lProsseguir = .F.
+        ENDIF
+
         IF loc_lProsseguir
-            THIS.FormParaBO()
             TRY
                 IF THIS.this_oBusinessObject.Salvar()
                     MsgInfo("Registro salvo com sucesso!", "Sucesso")
@@ -3562,6 +3651,12 @@ DEFINE CLASS Formcfo AS FormBase
             FOR loc_nI = 1 TO loc_oPagDados.PageCount
                 THIS.HabilitarControles(loc_oPagDados.Pages(loc_nI), par_lHabilitar)
             ENDFOR
+
+            *-- Legado: Combo8 (IPI p/ origem mercadoria=2) so fica ativo com IPI Importacao = Sim
+            IF par_lHabilitar
+                loc_oPagDados.Page1.cbo_4c_Combo8.Enabled = ;
+                    (THIS.InicialOpcao(loc_oPagDados.Page1.cbo_4c_CmbIpiI.Value) == "S")
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Erro em HabilitarCampos")
         ENDTRY

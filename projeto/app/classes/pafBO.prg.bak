@@ -1,4 +1,4 @@
-﻿*==============================================================================
+*==============================================================================
 * pafBO.prg - Business Object para Configuracao PAF-ECF
 * Tabela principal: SigCdPaf
 * Chave primaria: Dopes char(20) - armazenado CODIFICADO no banco

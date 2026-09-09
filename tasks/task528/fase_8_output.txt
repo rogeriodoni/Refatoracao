@@ -1,0 +1,23 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Balanced: 1 `DEFINE CLASS`/`ENDDEFINE`, 23 procedure/function declarations matched by 23 `ENDPROC`/`ENDFUNC`. Menu integration is clean with no duplicate bar numbers or procedure names.
+
+## Resumo ÔÇö Fase 8/8 conclu├¡da
+
+**FormTAN.prg** finalizado com todos os m├®todos obrigat├│rios desta fase, totalmente implementados (sem stubs/TODOs):
+
+- **`BtnBuscarClick()`** ÔÇö vai para Page2 em modo BUSCAR (espelha o `Procedure` do legado que fazia `LocateCursor` por c├│digo)
+- **`BtnEncerrarClick()`** ÔÇö fecha o form
+- **`BtnSalvarClick()`** ÔÇö trata modo BUSCAR (LOCATE no grid por c├│digo) e modo normal (INCLUIR/ALTERAR), reproduzindo exatamente a valida├º├úo do legado (`comportamento.json` evento Click linhas=18): c├│digo obrigat├│rio + checagem de duplicidade ("Tipo de An├ílise j├í Cadastrada!") via `this_oBusinessObject.Buscar()`, sem tocar no BO
+- **`BtnCancelarClick()`** ÔÇö cancela edi├º├úo e volta ├á lista
+- **`FormParaBO()` / `BOParaForm()`** ÔÇö cobrem os 2 campos do BO (`this_nCodigo`, `this_cDescricao`), 100% de paridade
+- **`LimparCampos()` / `HabilitarCampos()` / `AjustarBotoesPorModo()`** ÔÇö completos, seguindo o padr├úo can├┤nico (FormCargo)
+
+**Integra├º├úo:**
+- `config.prg`: n├úo precisou de altera├º├úo ÔÇö carregamento ├® autom├ítico via `ADIR()` (conforme CLAUDE.md)
+- `menu.prg`: adicionado `DEFINE BAR 174 OF popCadastros` + `ON SELECTION BAR 174 DO AbrirFormTAN` + procedure `AbrirFormTAN()` completa (padr├úo VARTYPE/Show()/sem Release())
+
+Validado: nenhum `RETURN` dentro de `TRY/CATCH`, nenhum m├®todo duplicado, `DEFINE CLASS`/`ENDDEFINE` e `PROCEDURE`/`ENDPROC` balanceados, sem duplicidade de BAR/procedure no menu.prg.

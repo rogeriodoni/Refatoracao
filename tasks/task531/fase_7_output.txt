@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+24 procedures/functions and 24 matching ENDPROC ÔÇö balanced, with a single `ENDDEFINE` at the end. 
+
+Phase 7/8 complete. I added to `C:\4c\projeto\app\forms\cadastros\FormTbO.prg`:
+
+- **`BtnIncluirClick()`** ÔÇö prepares a new v├¡nculo (`NovoRegistro`, clears fields, mode `INCLUIR`, enables fields, navigates to Page2, focuses Opera├º├úo).
+- **`BtnVisualizarClick()`** ÔÇö loads the selected grid row by `cidchaves`, populates read-only Page2.
+- **`BtnAlterarClick()`** ÔÇö loads selected row, calls `EditarRegistro()`, enables Tabela de Desconto for editing (Opera├º├úo stays fixed once a v├¡nculo exists).
+- **`BtnExcluirClick()`** ÔÇö confirms via `MsgConfirma()` (logical, per CLAUDE.md rule #7), then calls `Excluir()` and reloads the list.
+
+Since these four events depend on infrastructure that hadn't been created in earlier phases, I also implemented the three supporting methods they call (to avoid leaving dangling references/stubs, per the completude rule):
+- **`LimparCampos()`**
+- **`HabilitarCampos(par_lHabilitar)`** ÔÇö Opera├º├úo (`dopes`) editable only in `INCLUIR`; Tabela de Desconto (`tabds`) editable in `INCLUIR`/`ALTERAR`; Descri├º├úo always read-only (derived from JOIN).
+- **`AjustarBotoesPorModo()`** ÔÇö Confirmar enabled only in `INCLUIR`/`ALTERAR`.
+
+All guard-clause `RETURN`s sit outside `TRY/CATCH` blocks, `CATCH` blocks call `MostrarErro`, and the file is balanced (24 procedures/functions Ôåö 24 `ENDPROC`, single `ENDDEFINE`). No TODOs or stubs were left in.

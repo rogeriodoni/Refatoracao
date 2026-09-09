@@ -1,0 +1,25 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Both files are structurally balanced. The implementation is complete. Let me summarize the deliverable.
+
+## Resumo da Fase 4
+
+O prompt gen├®rico da Fase 4 pedia "Grid e Bot├Áes CRUD (Page1)", mas **FormTBI n├úo ├® um form CRUD** ÔÇö ├® um di├ílogo utilit├írio de impress├úo (284x197, sem PageFrame, sem grid, sem lista), conforme j├í identificado corretamente nas Fases 1-3 (`analise.json` marca `formType: "OPERACIONAL"`, e o `TBIBO` j├í bloqueia Inserir/Atualizar). Adaptei a fase para o equivalente real deste form: completar a ├írea funcional (campos + bot├Áes de a├º├úo), lendo a l├│gica completa do `cmd_ok.Click`/`cmd_cancela.Click` no c├│digo-fonte original (`SIGCDTBI_form_codigo_fonte.txt`).
+
+**`FormTBI.prg`** (Edit):
+- `ConfigurarCampos()`: shape de moldura, labels "Moeda :" / "C├│pias :", e os 3 textboxes (`txt_4c__moeda`, `txt_4c__moeda_desc`, `txt_4c__copias`) com posi├º├Áes/fontes/m├íscaras exatas do legado.
+- `ValidarMoeda` / `ValidarMoedaDesc`: lookup por c├│digo ou descri├º├úo em `SigCdMoe` (KeyPress ENTER/TAB/F4), com fallback para `AbrirBuscaMoeda`.
+- `AbrirBuscaMoeda`: usa o helper can├┤nico `THIS.AbrirLookupCanonico` (Pattern A do `FormBuscaAuxiliar`, evitando o Pattern B defeituoso documentado no hist├│rico de bugs).
+- `ConfigurarBotoes()`: `CommandGroup` com os 2 bot├Áes reais do legado ("Confirma" / "Encerrar"), ├¡cones e cores exatos.
+- `BtnConfirmarClick` / `BtnEncerrarClick`: valida├º├úo completa + impress├úo real (sem stub).
+
+**`TBIBO.prg`** (Edit, necess├írio para n├úo deixar l├│gica de neg├│cio/SQL dentro do Form ÔÇö Pilar 3):
+- `ObterCotacao()`: busca a cota├º├úo mais recente em `SigCdCot`.
+- `GerarTabelaReferencia()`: monta o texto da tabela de c├ómbio (moedas com `TabRefs`, tabelas `SigOpTdz` com `Rel_Descs = 1`), replicando o c├ílculo de convers├úo do legado.
+
+Simplifiquei apenas a sele├º├úo de impressora de etiqueta multi-impressora do legado (specific ao hardware antigo) ÔÇö imprime na impressora padr├úo do Windows via `SET DEVICE TO PRINTER`, mantendo o restante do comportamento e UX.
+
+Validei balanceamento de `PROCEDURE/ENDPROC`, `TRY/ENDTRY`, `IF/ENDIF`, `WITH/ENDWITH`, `SCAN/ENDSCAN` e aus├¬ncia de caracteres acentuados literais (s├│ `CHR()`) em ambos os arquivos.

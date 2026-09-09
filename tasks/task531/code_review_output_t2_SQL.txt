@@ -1,0 +1,24 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Analisei o achado **[SQL-FILTRO-INVENTADO]** contra o c├│digo legado e o c├│digo migrado, e conclu├¡ que **n├úo ├® um problema real** ÔÇö n├úo vou aplicar nenhuma altera├º├úo nos arquivos. Explico o porqu├¬:
+
+## Por que o filtro `WHERE cidchaves = ...` n├úo ├® "inventado"
+
+O c├│digo legado (SIGCDTBV.SCX) manipulava tudo em um **cursor local em mem├│ria** (`LocalTabdO`): carregava com `SqlExecute` (join ├║nico, sem WHERE por cidchaves), fazia `INSERT`/`DELETE` diretamente no cursor, e s├│ ao final reconciliava com a tabela real via `Delete From SigOpTdo Where Dopes = '...'` + `UpDate('crSigOpTdo')` em lote. Por isso nenhuma linha do SQL original filtra por `cidchaves` ÔÇö o padr├úo de acesso era outro (grid em mem├│ria + grava├º├úo em lote), n├úo CRUD linha-a-linha.
+
+O `TbOBO.prg` migrado segue a arquitetura obrigat├│ria do projeto (PILAR 3 do CLAUDE.md: **BusinessBase/CRUD por chave prim├íria**, id├¬ntico ao padr├úo usado nos outros 163+ BOs do sistema):
+
+- `this_cCampoChave = "cidchaves"` (declarado no `Init()`)
+- `CarregarPorCodigo`, `Atualizar` e `ExecutarExclusao` filtram por `cidchaves` porque s├úo opera├º├Áes **linha-a-linha**, chamadas a partir de `BtnVisualizarClick`/`BtnAlterarClick`/`BtnExcluirClick` do form, que pegam o `cidchaves` exato do registro selecionado no grid.
+- `cidchaves` j├í existe na tabela `SigOpTdo` no legado (usada em `Insert Into LocalTabdO (Dopes, CidChaves) Values (..., fUniqueIds())`) ÔÇö n├úo ├® uma coluna inventada, ├® a **chave prim├íria real**.
+
+**Remover esse filtro seria perigoso**: sem `WHERE cidchaves = X`, `Atualizar()`/`ExecutarExclusao()` passariam a afetar **todos os registros** que casassem s├│ por `dopes`/`tabds` (ou nenhuma condi├º├úo), reproduzindo exatamente o bug de "exclus├úo em massa por falta de PK" j├í documentado no hist├│rico do projeto (Pattern #189-B / `feedback_grid_lista_espelha_pcoluna_legado.md`).
+
+## Conclus├úo
+- `Buscar()` (grid da lista) filtra corretamente s├│ por `a.dopes`, espelhando o WHERE original ÔÇö nenhuma mudan├ºa necess├íria ali.
+- `CarregarPorCodigo`/`Atualizar`/`ExecutarExclusao` usando `cidchaves` ├® o padr├úo can├┤nico e **necess├írio** de BO, n├úo um filtro fantasioso.
+
+N├úo fiz altera├º├Áes em `FormTbO.prg` nem em `TbOBO.prg`. Recomendo marcar este item da pass SQL como falso positivo (o heur├¡stico de diff comparou WHEREs do SQL legado ÔÇö que nunca fazia round-trip por PK ÔÇö com opera├º├Áes de CRUD linha-a-linha que s├│ existem na nova arquitetura).
