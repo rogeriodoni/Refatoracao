@@ -415,6 +415,74 @@ FUNCTION ConverterParaLogico(puValor)
 ENDFUNC
 
 *------------------------------------------------------------------------------
+* fChecarInativas - Conta (cliente) esta ATIVA?
+*
+* Porte de SIGFUNCS.PRG:7734 do legado:
+*   Function fChecarInativas(pCta, pCnx) As Boolean
+*   If (pCnx.SQLExecute([Select Inativas From SigCdCli Where IClis = ']+pCta+['], [crAt1]) < 1)
+*       =Messagebox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexao (crAt1)])
+*       Return .F.
+*   Endif
+*   llRet = Not (crAt1.Inativas = 1)
+*
+* pCnx do legado nao existe no sistema novo (a conexao eh a global
+* gnConnHandle); o parametro fica na assinatura so para o call site continuar
+* igual ao do legado, e nao eh usado.
+*
+* Conta VAZIA retorna .T. - o legado nao bloqueia campo em branco aqui, quem
+* cuida disso eh a validacao de obrigatoriedade.
+*
+* Parametros: pCta - codigo da conta (SigCdCli.IClis)
+*             pCnx - ignorado (compatibilidade com o call site do legado)
+* Retorno: .T. se a conta esta ativa (ou vazia), .F. se inativa ou se a
+*          consulta falhou
+*------------------------------------------------------------------------------
+FUNCTION fChecarInativas(pCta, pCnx)
+    LOCAL loc_cAlias, loc_lRetorno, loc_nResult
+
+    pCta = IIF(VARTYPE(pCta) = "C", ALLTRIM(pCta), "")
+    loc_cAlias  = ALIAS()
+    loc_lRetorno = .T.
+
+    IF !EMPTY(pCta)
+        TRY
+            IF USED("crAt1")
+                USE IN crAt1
+            ENDIF
+
+            loc_nResult = SQLEXEC(gnConnHandle, ;
+                "SELECT Inativas FROM SigCdCli WHERE IClis = " + EscaparSQL(pCta), ;
+                "crAt1")
+
+            IF loc_nResult < 1
+                MsgErro("Favor Reinicializar o Processo!!!", ;
+                    "Falha na Conex" + CHR(227) + "o (crAt1)")
+                loc_lRetorno = .F.
+            ELSE
+                IF USED("crAt1") AND RECCOUNT("crAt1") > 0
+                    SELECT crAt1
+                    GO TOP IN crAt1
+                    loc_lRetorno = !ConverterParaLogico(crAt1.Inativas)
+                ENDIF
+            ENDIF
+
+            IF USED("crAt1")
+                USE IN crAt1
+            ENDIF
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "fChecarInativas")
+            loc_lRetorno = .F.
+        ENDTRY
+    ENDIF
+
+    IF !EMPTY(loc_cAlias) AND USED(loc_cAlias)
+        SELECT (loc_cAlias)
+    ENDIF
+
+    RETURN loc_lRetorno
+ENDFUNC
+
+*------------------------------------------------------------------------------
 * Centralizar - Centraliza um formulário na tela
 * Parâmetros: poForm - referência ao formulário
 *------------------------------------------------------------------------------
