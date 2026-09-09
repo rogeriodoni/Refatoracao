@@ -4144,7 +4144,7 @@ DEFINE CLASS Formlch AS FormBase
     ENDPROC
 
     PROCEDURE ValidarContaOrig(par_nKeyCode, par_nShiftAltCtrl)
-        THIS.BuscarDescConta("cnt_4c_Origem", "txt_4c_ConOrig", "txt_4c_DConOrig")
+        THIS.BuscarDescConta("cnt_4c_Origem", "txt_4c_ConOrig", "txt_4c_DConOrig", "txt_4c_GruOrig", "txt_4c_CpfOrig")
     ENDPROC
 
     PROCEDURE ValidarGrupoEmts(par_nKeyCode, par_nShiftAltCtrl)
@@ -4152,7 +4152,7 @@ DEFINE CLASS Formlch AS FormBase
     ENDPROC
 
     PROCEDURE ValidarContaEmts(par_nKeyCode, par_nShiftAltCtrl)
-        THIS.BuscarDescConta("cnt_4c_Despesa", "txt_4c_ConEmts", "txt_4c_DConEmts")
+        THIS.BuscarDescConta("cnt_4c_Despesa", "txt_4c_ConEmts", "txt_4c_DConEmts", "txt_4c_GruEmts", "txt_4c_CpfEmts")
     ENDPROC
 
     PROCEDURE ValidarGrupoDest(par_nKeyCode, par_nShiftAltCtrl)
@@ -4160,7 +4160,7 @@ DEFINE CLASS Formlch AS FormBase
     ENDPROC
 
     PROCEDURE ValidarContaDest(par_nKeyCode, par_nShiftAltCtrl)
-        THIS.BuscarDescConta("cnt_4c_Destino", "txt_4c_Conta", "txt_4c_DConta")
+        THIS.BuscarDescConta("cnt_4c_Destino", "txt_4c_Conta", "txt_4c_DConta", "txt_4c_Grupo", "txt_4c_CpfDest")
     ENDPROC
 
     PROCEDURE ValidarGrupoCC(par_nKeyCode, par_nShiftAltCtrl)
@@ -4168,7 +4168,7 @@ DEFINE CLASS Formlch AS FormBase
     ENDPROC
 
     PROCEDURE ValidarContaCC(par_nKeyCode, par_nShiftAltCtrl)
-        THIS.BuscarDescConta("cnt_4c_CCusto", "txt_4c_ContaCcs", "txt_4c_DContaCcs")
+        THIS.BuscarDescConta("cnt_4c_CCusto", "txt_4c_ContaCcs", "txt_4c_DContaCcs", "txt_4c_GrupoCcs", "txt_4c_CpfCCs")
     ENDPROC
 
     PROCEDURE ValidarGrupoCart(par_nKeyCode, par_nShiftAltCtrl)
@@ -4176,7 +4176,7 @@ DEFINE CLASS Formlch AS FormBase
     ENDPROC
 
     PROCEDURE ValidarContaCart(par_nKeyCode, par_nShiftAltCtrl)
-        THIS.BuscarDescConta("cnt_4c_Carteira", "txt_4c_ConCart", "txt_4c_DConCart")
+        THIS.BuscarDescConta("cnt_4c_Carteira", "txt_4c_ConCart", "txt_4c_DConCart", "txt_4c_GruCart", "")
     ENDPROC
 
     PROCEDURE ValidarGrupoEmiss(par_nKeyCode, par_nShiftAltCtrl)
@@ -4184,7 +4184,7 @@ DEFINE CLASS Formlch AS FormBase
     ENDPROC
 
     PROCEDURE ValidarContaEmiss(par_nKeyCode, par_nShiftAltCtrl)
-        THIS.BuscarDescConta("cnt_4c_Emissor", "txt_4c_ConEmiss", "txt_4c_DConEmiss")
+        THIS.BuscarDescConta("cnt_4c_Emissor", "txt_4c_ConEmiss", "txt_4c_DConEmiss", "txt_4c_GruEmiss", "")
     ENDPROC
 
     PROCEDURE ValidarGrupoRes(par_nKeyCode, par_nShiftAltCtrl)
@@ -4192,7 +4192,7 @@ DEFINE CLASS Formlch AS FormBase
     ENDPROC
 
     PROCEDURE ValidarContaRes(par_nKeyCode, par_nShiftAltCtrl)
-        THIS.BuscarDescConta("cnt_4c_Responsavel", "txt_4c_ConRes", "txt_4c_DConRes")
+        THIS.BuscarDescConta("cnt_4c_Responsavel", "txt_4c_ConRes", "txt_4c_DConRes", "txt_4c_GruRes", "")
     ENDPROC
 
     PROCEDURE ValidarEmpresa(par_nKeyCode, par_nShiftAltCtrl)
@@ -4333,52 +4333,71 @@ DEFINE CLASS Formlch AS FormBase
     *--------------------------------------------------------------------------
     * BuscarDescConta - helper para buscar descricao de conta (SigCdCli.RClis - coluna goSistema.BuscaNome, igual ao fAcessoContas do legado)
     *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE BuscarDescConta(par_cCnt, par_cTxtCon, par_cTxtDesc)
-        LOCAL loc_oPg2, loc_oCnt, loc_cConta, loc_nRes, loc_cDesc
-        loc_oPg2 = THIS.pgf_4c_Paginas.Page2
+    PROTECTED PROCEDURE BuscarDescConta(par_cCnt, par_cTxtCon, par_cTxtDesc, par_cTxtGru, par_cTxtCpf)
+        *-- Espelha o Valid do legado (ex.: CntOrigem.Get_ConOrig.Valid):
+        *--   If !Empty(This.Value) and EMPTY(this.Parent.get_CPF.Value) And ;
+        *--      !fAcessoContas( Usuar, lcGrupo, 'C', This.Value, This, .Get_dConOrig )
+        *--       Messagebox( 'Acesso Negado...', 32, '' )
+        *--
+        *-- O GRUPO eh parte da regra de acesso: fAcessoContas cruza SigSyAgc/SigSyAcc
+        *-- com SigCdAcG para decidir quais contas o usuario enxerga naquele grupo, e
+        *-- so entao preenche codigo e descricao. A versao anterior fazia um SELECT
+        *-- direto em SigCdCli sem grupo nenhum, exibindo conta de qualquer grupo -
+        *-- buraco de permissao, nao so de exibicao.
+        LOCAL loc_oPg2, loc_oCnt, loc_cConta, loc_cGrupo, loc_oTxtCon, loc_oTxtDesc
 
-        IF VARTYPE(loc_oPg2) = "O"
-            loc_oCnt = EVALUATE("loc_oPg2." + par_cCnt)
-        ELSE
+        loc_oPg2 = THIS.pgf_4c_Paginas.Page2
+        IF VARTYPE(loc_oPg2) != "O"
             RETURN
         ENDIF
 
+        loc_oCnt = EVALUATE("loc_oPg2." + par_cCnt)
         IF VARTYPE(loc_oCnt) != "O"
             RETURN
         ENDIF
         IF EVALUATE("VARTYPE(loc_oCnt." + par_cTxtCon + ")") != "O"
             RETURN
         ENDIF
-        loc_cConta = ALLTRIM(EVALUATE("loc_oCnt." + par_cTxtCon + ".Value"))
+        loc_oTxtCon = EVALUATE("loc_oCnt." + par_cTxtCon)
 
+        loc_oTxtDesc = .NULL.
+        IF !EMPTY(par_cTxtDesc) AND EVALUATE("VARTYPE(loc_oCnt." + par_cTxtDesc + ")") = "O"
+            loc_oTxtDesc = EVALUATE("loc_oCnt." + par_cTxtDesc)
+        ENDIF
+
+        loc_cConta = ALLTRIM(loc_oTxtCon.Value)
         IF EMPTY(loc_cConta)
-            IF !EMPTY(par_cTxtDesc) AND EVALUATE("VARTYPE(loc_oCnt." + par_cTxtDesc + ")") = "O"
-                EVALUATE("loc_oCnt." + par_cTxtDesc + ".Value = ''")
+            IF VARTYPE(loc_oTxtDesc) = "O"
+                loc_oTxtDesc.Value = ""
             ENDIF
             RETURN
         ENDIF
 
+        *-- Guarda do legado: quando o container tem CPF preenchido, a conta ja veio
+        *-- da busca por CPF e o Valid NAO revalida (CntOrigem/Despesa/Destino/CCusto).
+        IF !EMPTY(par_cTxtCpf) AND EVALUATE("VARTYPE(loc_oCnt." + par_cTxtCpf + ")") = "O"
+            IF !EMPTY(ALLTRIM(EVALUATE("loc_oCnt." + par_cTxtCpf + ".Value")))
+                RETURN
+            ENDIF
+        ENDIF
+
+        loc_cGrupo = ""
+        IF !EMPTY(par_cTxtGru) AND EVALUATE("VARTYPE(loc_oCnt." + par_cTxtGru + ")") = "O"
+            loc_cGrupo = ALLTRIM(EVALUATE("loc_oCnt." + par_cTxtGru + ".Value"))
+        ENDIF
+
         TRY
-            loc_nRes = SQLEXEC(gnConnHandle, ;
-                "SELECT iclis, RClis FROM SigCdCli WHERE iclis = " + EscaparSQL(loc_cConta), ;
-                "cursor_4c_DescCon")
-            loc_cDesc = ""
-            IF loc_nRes >= 0 AND RECCOUNT("cursor_4c_DescCon") > 0
-                SELECT cursor_4c_DescCon
-                loc_cDesc = ALLTRIM(cursor_4c_DescCon.RClis)
-            ELSE
-                MsgAviso("Conta/cliente n" + CHR(227) + "o encontrado: " + loc_cConta, "")
-                EVALUATE("loc_oCnt." + par_cTxtCon + ".Value = ''")
+            IF !fAcessoContas(Usuar, loc_cGrupo, "C", loc_cConta, loc_oTxtCon, loc_oTxtDesc)
+                MsgAviso("Acesso Negado...", "")
+                loc_oTxtCon.Value = ""
+                IF VARTYPE(loc_oTxtDesc) = "O"
+                    loc_oTxtDesc.Value = ""
+                ENDIF
             ENDIF
-            IF !EMPTY(par_cTxtDesc) AND EVALUATE("VARTYPE(loc_oCnt." + par_cTxtDesc + ")") = "O"
-                EVALUATE("loc_oCnt." + par_cTxtDesc + ".Value = loc_cDesc")
-            ENDIF
+            loc_oTxtCon.Refresh
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Formlch.BuscarDescConta")
         ENDTRY
-        IF USED("cursor_4c_DescCon")
-            USE IN cursor_4c_DescCon
-        ENDIF
     ENDPROC
 
     *--------------------------------------------------------------------------
@@ -4502,7 +4521,7 @@ DEFINE CLASS Formlch AS FormBase
 
     PROCEDURE KeyPressConOrig(par_nKeyCode, par_nShiftAltCtrl)
         IF INLIST(par_nKeyCode, 115, 116)
-            THIS.AbrirLookupConta("cnt_4c_Origem",  "txt_4c_ConOrig", "txt_4c_DConOrig")
+            THIS.AbrirLookupConta("cnt_4c_Origem",  "txt_4c_ConOrig", "txt_4c_DConOrig", "txt_4c_GruOrig")
         ENDIF
     ENDPROC
 
@@ -4520,7 +4539,7 @@ DEFINE CLASS Formlch AS FormBase
 
     PROCEDURE KeyPressConEmts(par_nKeyCode, par_nShiftAltCtrl)
         IF INLIST(par_nKeyCode, 115, 116)
-            THIS.AbrirLookupConta("cnt_4c_Despesa", "txt_4c_ConEmts", "txt_4c_DConEmts")
+            THIS.AbrirLookupConta("cnt_4c_Despesa", "txt_4c_ConEmts", "txt_4c_DConEmts", "txt_4c_GruEmts")
         ENDIF
     ENDPROC
 
@@ -4538,7 +4557,7 @@ DEFINE CLASS Formlch AS FormBase
 
     PROCEDURE KeyPressConDest(par_nKeyCode, par_nShiftAltCtrl)
         IF INLIST(par_nKeyCode, 115, 116)
-            THIS.AbrirLookupConta("cnt_4c_Destino", "txt_4c_Conta",   "txt_4c_DConta")
+            THIS.AbrirLookupConta("cnt_4c_Destino", "txt_4c_Conta",   "txt_4c_DConta", "txt_4c_Grupo")
         ENDIF
     ENDPROC
 
@@ -4556,7 +4575,7 @@ DEFINE CLASS Formlch AS FormBase
 
     PROCEDURE KeyPressConCC(par_nKeyCode, par_nShiftAltCtrl)
         IF INLIST(par_nKeyCode, 115, 116)
-            THIS.AbrirLookupConta("cnt_4c_CCusto",  "txt_4c_ContaCcs","txt_4c_DContaCcs")
+            THIS.AbrirLookupConta("cnt_4c_CCusto",  "txt_4c_ContaCcs","txt_4c_DContaCcs", "txt_4c_GrupoCcs")
         ENDIF
     ENDPROC
 
@@ -4574,7 +4593,7 @@ DEFINE CLASS Formlch AS FormBase
 
     PROCEDURE KeyPressConCart(par_nKeyCode, par_nShiftAltCtrl)
         IF INLIST(par_nKeyCode, 115, 116)
-            THIS.AbrirLookupConta("cnt_4c_Carteira","txt_4c_ConCart", "txt_4c_DConCart")
+            THIS.AbrirLookupConta("cnt_4c_Carteira","txt_4c_ConCart", "txt_4c_DConCart", "txt_4c_GruCart")
         ENDIF
     ENDPROC
 
@@ -4586,7 +4605,7 @@ DEFINE CLASS Formlch AS FormBase
 
     PROCEDURE KeyPressConEmiss(par_nKeyCode, par_nShiftAltCtrl)
         IF INLIST(par_nKeyCode, 115, 116)
-            THIS.AbrirLookupConta("cnt_4c_Emissor", "txt_4c_ConEmiss","txt_4c_DConEmiss")
+            THIS.AbrirLookupConta("cnt_4c_Emissor", "txt_4c_ConEmiss","txt_4c_DConEmiss", "txt_4c_GruEmiss")
         ENDIF
     ENDPROC
 
@@ -4628,7 +4647,7 @@ DEFINE CLASS Formlch AS FormBase
 
     PROCEDURE KeyPressConRes(par_nKeyCode, par_nShiftAltCtrl)
         IF INLIST(par_nKeyCode, 115, 116)
-            THIS.AbrirLookupConta("cnt_4c_Responsavel","txt_4c_ConRes","txt_4c_DConRes")
+            THIS.AbrirLookupConta("cnt_4c_Responsavel","txt_4c_ConRes","txt_4c_DConRes", "txt_4c_GruRes")
         ENDIF
     ENDPROC
 
@@ -4762,50 +4781,48 @@ DEFINE CLASS Formlch AS FormBase
     *--------------------------------------------------------------------------
     * AbrirLookupConta - lookup generico SigCdCli (iclis/RClis - RClis eh a coluna goSistema.BuscaNome)
     *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE AbrirLookupConta(par_cCnt, par_cTxtCon, par_cTxtDesc)
-        LOCAL loc_oPg2, loc_oCnt, loc_oBusca, loc_lResultado, loc_oTxtCon, loc_oTxtDesc
+    PROTECTED PROCEDURE AbrirLookupConta(par_cCnt, par_cTxtCon, par_cTxtDesc, par_cTxtGru)
+        *-- No legado nao existe picker proprio de conta: quem abre a lista eh o
+        *-- fAcessoContas, ja filtrado pelo acesso do usuario naquele grupo
+        *-- (FormBuscaSimples sobre o cursor crAc4). O picker anterior montava um
+        *-- FormBuscaAuxiliar direto sobre SigCdCli, sem filtro nenhum, listando
+        *-- conta de qualquer grupo.
+        LOCAL loc_oPg2, loc_oCnt, loc_cGrupo, loc_cConta, loc_oTxtCon, loc_oTxtDesc, loc_lResultado
         loc_lResultado = .F.
+
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
+        IF VARTYPE(loc_oPg2) != "O"
+            RETURN loc_lResultado
+        ENDIF
 
         TRY
             loc_oCnt = EVALUATE("loc_oPg2." + par_cCnt)
-            IF VARTYPE(loc_oCnt) = "O"
-                loc_oBusca = CREATEOBJECT("FormBuscaAuxiliar", gnConnHandle, ;
-                    "SigCdCli", "cursor_4c_BuscaCon", "iclis", "", ;
-                    "Conta / Cliente")
+            IF VARTYPE(loc_oCnt) = "O" AND ;
+               EVALUATE("VARTYPE(loc_oCnt." + par_cTxtCon + ")") = "O"
 
-                IF VARTYPE(loc_oBusca) = "O"
-                    loc_oBusca.mAddColuna("iclis",  "", "Conta")
-                    loc_oBusca.mAddColuna("RClis", "", "Nome")
-                    loc_oBusca.Show()
+                loc_oTxtCon = EVALUATE("loc_oCnt." + par_cTxtCon)
 
-                    IF loc_oBusca.this_lSelecionou AND USED("cursor_4c_BuscaCon")
-                        SELECT cursor_4c_BuscaCon
-                        IF !EOF("cursor_4c_BuscaCon")
-                            loc_oTxtCon = EVALUATE("loc_oCnt." + par_cTxtCon)
-                            IF VARTYPE(loc_oTxtCon) = "O"
-                                loc_oTxtCon.Value = ALLTRIM(cursor_4c_BuscaCon.iclis)
-                            ENDIF
-                            IF !EMPTY(par_cTxtDesc)
-                                loc_oTxtDesc = EVALUATE("loc_oCnt." + par_cTxtDesc)
-                                IF VARTYPE(loc_oTxtDesc) = "O"
-                                    loc_oTxtDesc.Value = ALLTRIM(cursor_4c_BuscaCon.RClis)
-                                ENDIF
-                            ENDIF
-                        ENDIF
-                    ENDIF
-
-                    loc_oBusca.Release()
-                    loc_lResultado = .T.
+                loc_oTxtDesc = .NULL.
+                IF !EMPTY(par_cTxtDesc) AND EVALUATE("VARTYPE(loc_oCnt." + par_cTxtDesc + ")") = "O"
+                    loc_oTxtDesc = EVALUATE("loc_oCnt." + par_cTxtDesc)
                 ENDIF
+
+                loc_cGrupo = ""
+                IF !EMPTY(par_cTxtGru) AND EVALUATE("VARTYPE(loc_oCnt." + par_cTxtGru + ")") = "O"
+                    loc_cGrupo = ALLTRIM(EVALUATE("loc_oCnt." + par_cTxtGru + ".Value"))
+                ENDIF
+
+                loc_cConta = ALLTRIM(loc_oTxtCon.Value)
+
+                *-- pTxt vazio faz o fAcessoContas nao localizar direto e abrir a lista
+                fAcessoContas(Usuar, loc_cGrupo, "C", loc_cConta, loc_oTxtCon, loc_oTxtDesc)
+                loc_oTxtCon.Refresh
+                loc_lResultado = .T.
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Formlch.AbrirLookupConta")
         ENDTRY
 
-        IF USED("cursor_4c_BuscaCon")
-            USE IN cursor_4c_BuscaCon
-        ENDIF
         RETURN loc_lResultado
     ENDPROC
 
