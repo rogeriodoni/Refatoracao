@@ -13958,6 +13958,103 @@ function Corrigir-ChamadaFuncaoNaoDefinida {
     return $Linhas
 }
 
+function Get-CatalogoTabelasSchema {
+    # Catalogo de tabelas do schema canonico, usado pelo Pattern #193.
+    #
+    # ENCODING: docs\schema.sql eh UTF-16LE. Get-Content -Raw respeita o BOM;
+    # grep/awk/findstr tratam o arquivo como BINARIO e devolvem ZERO
+    # SILENCIOSAMENTE - foi assim que o Erro155 gerou o diagnostico falso de
+    # "10 tabelas nao existem" quando so 1 faltava. Por isso ha um piso de
+    # sanidade: menos de 100 tabelas lidas = falha de leitura, e o pattern se
+    # cala em vez de acusar o projeto inteiro.
+    #
+    # NAO usar tasks\<task>\schema_ascii.sql: eh snapshot congelado na epoca da
+    # task (task351 tem 674 tabelas contra 682 do canonico) e faz tabela nova
+    # parecer inexistente.
+    if ($null -ne $script:CatalogoTabelas) { return $script:CatalogoTabelas }
+
+    $cat = @{}
+    $arq = "C:\4c\docs\schema.sql"
+    if (Test-Path $arq) {
+        try {
+            $texto = Get-Content $arq -Raw
+            foreach ($m in [regex]::Matches($texto, '(?i)CREATE TABLE \[dbo\]\.\[([A-Za-z0-9_]+)\]')) {
+                $cat[$m.Groups[1].Value.ToLower()] = $true
+            }
+        } catch { }
+    }
+    if ($cat.Count -lt 100) { $cat = @{} }   # leitura falhou: nao acusar nada
+    $script:CatalogoTabelas = $cat
+    return $cat
+}
+
+function Corrigir-TabelaInexistenteNoSchema {
+    # Pattern #193 (Erro155, 2026-09-09) - WARNING-only.
+    #
+    # BO referenciando em FROM/INTO/UPDATE/DELETE uma tabela que nao existe no
+    # schema canonico. Nao quebra compilacao: o erro vem do SQL Server em
+    # RUNTIME, ao abrir a tela - "Nome de objeto 'SigCdXxx' invalido."
+    #
+    # WARNING-only, e de proposito: a tabela certa NAO se adivinha. Antes de
+    # mexer no codigo eh obrigatorio conferir o CODIGO LEGADO
+    # (tasks\<task>\*_form_codigo_fonte.txt). Se o legado usa o MESMO nome, o
+    # migrado esta fiel e a lacuna eh de BANCO/ambiente (tabela a criar ou
+    # importar) - trocar o BO para outra tabela violaria o PILAR 2 e gravaria
+    # dado no lugar errado.
+    #
+    # Auditoria do projeto: automation\VerificarTabelasInexistentes.ps1
+    param([string[]]$Linhas, [string]$Arquivo = "")
+
+    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
+    if ([string]::IsNullOrEmpty($Arquivo)) { return $Linhas }
+    $nomeArq = Split-Path -Leaf $Arquivo
+    if ($nomeArq -notmatch '(?i)BO\.prg$') { return $Linhas }
+
+    # pre-filtro barato: so monta o catalogo se houver referencia a tabela Sig*
+    $temRef = $false
+    foreach ($l in $Linhas) {
+        if ($l -match '(?i)\b(?:FROM|INTO|UPDATE|DELETE\s+FROM)\s+Sig[A-Za-z0-9_]+') { $temRef = $true; break }
+    }
+    if (-not $temRef) { return $Linhas }
+
+    $cat = Get-CatalogoTabelasSchema
+    if ($cat.Count -eq 0) { return $Linhas }
+
+    $achados = @{}
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        $l = $Linhas[$i] -replace '\s*&&.*$', ''
+        if ($l -match '^\s*\*') { continue }
+        foreach ($m in [regex]::Matches($l, '(?i)\b(?:FROM|INTO|UPDATE|DELETE\s+FROM)\s+(Sig[A-Za-z0-9_]+)')) {
+            $t = $m.Groups[1].Value
+            if ($cat.ContainsKey($t.ToLower())) { continue }
+            if (-not $achados.ContainsKey($t)) { $achados[$t] = @() }
+            $achados[$t] += ($i + 1)
+        }
+    }
+    if ($achados.Count -eq 0) { return $Linhas }
+
+    foreach ($t in ($achados.Keys | Sort-Object)) {
+        $lns = (($achados[$t] | Select-Object -First 5) -join ', ')
+        Add-Correcao -Tipo "WARN-193-TABELA-INEXISTENTE-NO-SCHEMA" -Linha $achados[$t][0] `
+            -Original ($t + " referenciada em " + $achados[$t].Count + " ponto(s): linha(s) " + $lns) `
+            -Corrigido "(REVISAR MANUAL)" `
+            -Descricao ("Pattern #193: a tabela '" + $t + "' nao existe no schema canonico (docs\schema.sql). " +
+                "Isso nao quebra a compilacao - o erro vem do SQL Server em RUNTIME, ao abrir a tela: " +
+                "[Nome de objeto '" + $t + "' invalido.] ANTES de mexer no codigo, conferir o CODIGO LEGADO em " +
+                "tasks\<task>\*_form_codigo_fonte.txt: se o legado usa o MESMO nome, o migrado esta FIEL e a " +
+                "lacuna eh de BANCO/ambiente (tabela a criar ou importar) - apontar o BO para outra tabela " +
+                "violaria o PILAR 2 e gravaria dado no lugar errado. Se o legado usa outro nome, corrigir para " +
+                "o nome do legado. NUNCA validar schema com grep/awk direto em docs\schema.sql: o arquivo eh " +
+                "UTF-16LE e essas ferramentas devolvem ZERO ocorrencias silenciosamente, fazendo tabela " +
+                "existente parecer inexistente. Tambem nao usar tasks\<task>\schema_ascii.sql como verdade: eh " +
+                "snapshot congelado (task351 tem 674 tabelas contra 682 do canonico). Auditoria: " +
+                "automation\VerificarTabelasInexistentes.ps1. Origem: Erro155 (2026-09-09, FormBlq).")
+        Write-Host ("[Pattern #193] tabela fora do schema: " + $t + " (linha " + $lns + ")") -ForegroundColor Yellow
+    }
+
+    return $Linhas
+}
+
 function Invoke-CorrecaoAutomatica {
     param(
         [string]$Arquivo,
@@ -14173,6 +14270,7 @@ function Invoke-CorrecaoAutomatica {
     $linhas = Corrigir-PaginaDadosSemCabecalho -Linhas $linhas -Arquivo $Arquivo
     $linhas = Corrigir-LabelForeColorBrancoInvisivel -Linhas $linhas -Arquivo $Arquivo
     $linhas = Corrigir-ChamadaFuncaoNaoDefinida -Linhas $linhas -Arquivo $Arquivo
+    $linhas = Corrigir-TabelaInexistenteNoSchema -Linhas $linhas -Arquivo $Arquivo
 
     # Salva arquivo corrigido em UTF-8 SEM BOM.
     # - VFP9 nao suporta BOM (por isso removemos no read com bytes[3..])
