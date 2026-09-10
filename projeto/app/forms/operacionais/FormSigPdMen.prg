@@ -423,7 +423,7 @@ DEFINE CLASS FormSigPdMen AS FormBase
     *   - par_nPagina = 2 (Dados) -> idem (mesma area visual)
     * O foco eh sempre devolvido ao botao OK (unico controle interativo).
     *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE AlternarPagina(par_nPagina)
+    PROCEDURE AlternarPagina(par_nPagina)
         LOCAL loc_nPagina
         loc_nPagina = IIF(VARTYPE(par_nPagina) = "N", par_nPagina, 1)
 
@@ -549,7 +549,7 @@ DEFINE CLASS FormSigPdMen AS FormBase
     *--------------------------------------------------------------------------
     * AjustarBotoesPorModo - Dialog sem botoes CRUD; nada a ajustar
     *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE AjustarBotoesPorModo()
+    PROCEDURE AjustarBotoesPorModo()
         IF PEMSTATUS(THIS, "cmd_4c_Ok", 5)
             THIS.cmd_4c_Ok.Visible = .T.
             THIS.cmd_4c_Ok.Enabled = .T.

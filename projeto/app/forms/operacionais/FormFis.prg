@@ -542,7 +542,7 @@ DEFINE CLASS FormFis AS FormBase
     * garante que o cursor esta posicionado corretamente e transfere foco para
     * o controle inicial (Spinner de Porta de Comunicacao).
     *==========================================================================
-    PROTECTED PROCEDURE AlternarPagina(par_nPagina)
+    PROCEDURE AlternarPagina(par_nPagina)
         LOCAL loc_nPagina
 
         loc_nPagina = IIF(VARTYPE(par_nPagina) = "N", par_nPagina, 1)

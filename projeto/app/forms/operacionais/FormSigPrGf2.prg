@@ -1020,7 +1020,7 @@ DEFINE CLASS FormSigPrGf2 AS FormBase
     * Form OPERACIONAL sem modo CRUD: apenas garante que o CmdGroup esta visivel
     * quando o grafico foi gerado.
     *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE AjustarBotoesPorModo()
+    PROCEDURE AjustarBotoesPorModo()
         LOCAL loc_lTemGrafico
         loc_lTemGrafico = USED("crGrafico1") AND RECCOUNT("crGrafico1") > 0
 

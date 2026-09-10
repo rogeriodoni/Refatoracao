@@ -602,7 +602,7 @@ DEFINE CLASS FormSIGPRCOT AS FormBase
     ENDPROC
 
     *==========================================================================
-    PROTECTED PROCEDURE AlternarPagina
+    PROCEDURE AlternarPagina
     *==========================================================================
         LPARAMETERS par_nPagina
         *-- Form operacional flat - sem alternancia de paginas

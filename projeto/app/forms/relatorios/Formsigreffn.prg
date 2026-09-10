@@ -313,7 +313,7 @@ DEFINE CLASS Formsigreffn AS FormBase
     *--------------------------------------------------------------------------
     * AlternarPagina - Ativa a p" + CHR(225) + "gina indicada do PageFrame
     *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE AlternarPagina(par_nPagina)
+    PROCEDURE AlternarPagina(par_nPagina)
         LOCAL loc_nPagina, loc_oErro
         TRY
             IF VARTYPE(par_nPagina) != "N"

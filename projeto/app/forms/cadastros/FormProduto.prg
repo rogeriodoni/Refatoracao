@@ -11413,6 +11413,10 @@ DEFINE CLASS FormProduto AS FormBase
                 .Height    = 17
                 .Width     = 22
             ENDWITH
+
+            *-- CurrentControl: sem isto a coluna continua desenhando o Text1 e o
+            *-- CheckBox acima NUNCA aparece (CorretorAutomatico #198)
+            loc_oGrid.Column3.CurrentControl = "Check1"
             BINDEVENT(loc_oGrid.Column3.Check1, "When",     THIS, "GrdServicoChk3When")
             BINDEVENT(loc_oGrid.Column3.Check1, "KeyPress", THIS, "GrdServicoChk3KeyPress")
 

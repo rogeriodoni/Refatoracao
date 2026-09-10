@@ -1374,7 +1374,7 @@ DEFINE CLASS Formsigprnfe AS FormBase
     * que funciona logicamente como uma "segunda pagina" para captura de dados
     * de inutilizacao. par_nPagina = 1 restaura visao principal; = 2 abre overlay.
     *==========================================================================
-    PROTECTED PROCEDURE AlternarPagina(par_nPagina)
+    PROCEDURE AlternarPagina(par_nPagina)
         LOCAL loc_nPag, loc_oErro
         loc_nPag = IIF(VARTYPE(par_nPagina) = "N", par_nPagina, 1)
         TRY

@@ -273,7 +273,7 @@ DEFINE CLASS Formsigprrcu AS FormBase
     * enable dos botoes, flag interna e mensagem de status.
     *   par_cEstado: "PROCESSANDO" | "AGUARDANDO" | "IDLE"
     *==========================================================================
-    PROTECTED PROCEDURE AlternarPagina(par_cEstado)
+    PROCEDURE AlternarPagina(par_cEstado)
         LOCAL loc_cEstado
         loc_cEstado = UPPER(ALLTRIM(par_cEstado))
 

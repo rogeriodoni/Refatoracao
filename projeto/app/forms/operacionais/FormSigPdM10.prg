@@ -1820,7 +1820,7 @@ DEFINE CLASS FormSigPdM10 AS FormBase
     * Reaplica a visibilidade dos containers/grades de acordo com o estado do BO
     * (cnt_4c_Ops vs grades principais e cnt_4c_Etiquetas conforme parametro).
     *==========================================================================
-    PROTECTED PROCEDURE AlternarPagina(par_nPagina)
+    PROCEDURE AlternarPagina(par_nPagina)
         IF PCOUNT() = 0
             par_nPagina = 1
         ENDIF
@@ -2032,7 +2032,7 @@ DEFINE CLASS FormSigPdM10 AS FormBase
     * AjustarBotoesPorModo - Form OPERACIONAL (sem modo CRUD)
     * Garante que o botao Encerrar permanece habilitado e visivel
     *==========================================================================
-    PROTECTED PROCEDURE AjustarBotoesPorModo()
+    PROCEDURE AjustarBotoesPorModo()
         IF PEMSTATUS(THIS, "cnt_4c_Saida", 5) AND ;
            PEMSTATUS(THIS.cnt_4c_Saida, "cmd_4c_Encerrar", 5)
             THIS.cnt_4c_Saida.cmd_4c_Encerrar.Visible = .T.

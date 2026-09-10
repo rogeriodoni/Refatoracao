@@ -613,7 +613,7 @@ DEFINE CLASS FormSIGPDPNS AS FormBase
     * Forms OPERACIONAIS nao usam PageFrame CRUD; metodo presente por
     * compatibilidade com o pipeline multi-fase.
     *==========================================================================
-    PROTECTED PROCEDURE AlternarPagina(par_nPagina)
+    PROCEDURE AlternarPagina(par_nPagina)
         RETURN
     ENDPROC
 

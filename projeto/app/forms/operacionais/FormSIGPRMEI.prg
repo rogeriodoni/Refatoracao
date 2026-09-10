@@ -499,7 +499,7 @@ DEFINE CLASS FormSIGPRMEI AS FormBase
     *   1 = OCIOSO       (Processar habilitado, aguardando comando do usuario)
     *   2 = PROCESSANDO  (Processar desabilitado durante loop de leitura/gravacao)
     *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE AlternarPagina(par_nPagina)
+    PROCEDURE AlternarPagina(par_nPagina)
         LOCAL loc_lProcessando
         loc_lProcessando = (par_nPagina = 2)
         IF PEMSTATUS(THIS, "btn_4c_Processar", 5)
@@ -683,7 +683,7 @@ DEFINE CLASS FormSIGPRMEI AS FormBase
     * Neste form OPERACIONAL, restaura sempre ao estado IDLE (Processar
     * habilitado, Encerrar habilitado) apos conclusao de qualquer operacao.
     *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE AjustarBotoesPorModo()
+    PROCEDURE AjustarBotoesPorModo()
         THIS.HabilitarCampos("IDLE")
     ENDPROC
 

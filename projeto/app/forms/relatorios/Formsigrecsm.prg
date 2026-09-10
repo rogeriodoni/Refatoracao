@@ -111,7 +111,7 @@ DEFINE CLASS Formsigrecsm AS FormBase
     *--------------------------------------------------------------------------
     * AlternarPagina - REPORT form nao possui PageFrame
     *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE AlternarPagina(par_nPagina)
+    PROCEDURE AlternarPagina(par_nPagina)
         RETURN .T.
     ENDPROC
 

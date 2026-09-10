@@ -681,7 +681,7 @@ DEFINE CLASS FormSIGPRCIC AS FormBase
     ENDPROC
 
     *==========================================================================
-    PROTECTED PROCEDURE AjustarBotoesPorModo
+    PROCEDURE AjustarBotoesPorModo
     *==========================================================================
         LPARAMETERS par_cModo
         *-- Form picker flat sem modos CRUD (sem CommandGroups para ajustar).

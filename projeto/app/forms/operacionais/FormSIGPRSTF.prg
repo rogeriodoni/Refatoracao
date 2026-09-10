@@ -250,7 +250,7 @@ DEFINE CLASS FormSIGPRSTF AS FormBase
     * SigTfSup legado nao tem navegacao Lista<->Dados.
     * Mantido para satisfazer contrato de forms OPERACIONAL do pipeline.
     *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE AlternarPagina(par_nPagina)
+    PROCEDURE AlternarPagina(par_nPagina)
         THIS.this_cModoAtual = IIF(par_nPagina = 1, "LISTA", "DADOS")
     ENDPROC
 
