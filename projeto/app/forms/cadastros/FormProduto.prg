@@ -1905,7 +1905,7 @@ DEFINE CLASS FormProduto AS FormBase
             loc_oPg.txt_4c_Cbars.Value     = loc_oBO.this_nCbars
             loc_oPg.opt_4c_Situacao.Value  = IIF(loc_oBO.this_nSituas = 1, 1, 2)
             loc_oPg.txt_4c_DtSituas.Value  = IIF(EMPTY(loc_oBO.this_dDtsituas), {}, ;
-                TTOD(loc_oBO.this_dDtsituas))
+                ConverterParaData(loc_oBO.this_dDtsituas))
             loc_oPg.txt_4c_Cgrus.Value     = ALLTRIM(loc_oBO.this_cCgrus)
             loc_oPg.txt_4c_Dgrus.Value     = ""
             loc_oPg.txt_4c_SGrus.Value     = ALLTRIM(loc_oBO.this_cSgrus)
@@ -1932,9 +1932,9 @@ DEFINE CLASS FormProduto AS FormBase
             loc_oPg.txt_4c_Cunis.Value     = ALLTRIM(loc_oBO.this_cCunis)
             loc_oPg.txt_4c_Dunis.Value     = ""
             loc_oPg.txt_4c_DtIncs.Value    = IIF(EMPTY(loc_oBO.this_dDtincs), {}, ;
-                TTOD(loc_oBO.this_dDtincs))
+                ConverterParaData(loc_oBO.this_dDtincs))
             loc_oPg.txt_4c_DtAlts.Value    = IIF(EMPTY(loc_oBO.this_dDtalts), {}, ;
-                TTOD(loc_oBO.this_dDtalts))
+                ConverterParaData(loc_oBO.this_dDtalts))
 
             *-- Carregar descricoes dos campos lookup (silencioso - sem dialogo)
             THIS.CarregarDescricoes()
@@ -1960,7 +1960,7 @@ DEFINE CLASS FormProduto AS FormBase
                 loc_oPgFP.txt_4c_Volumes.Value     = loc_oBO.this_nVolumes
                 loc_oPgFP.txt_4c_LtMinsV.Value     = loc_oBO.this_nLtminsv
                 loc_oPgFP.txt_4c_DtUcp.Value       = IIF(EMPTY(loc_oBO.this_dUltcomps), "", ;
-                    TRANSFORM(TTOD(loc_oBO.this_dUltcomps), "@YL"))
+                    TRANSFORM(ConverterParaData(loc_oBO.this_dUltcomps), "@YL"))
                 loc_oPgFP.txt_4c_VUcp.Value        = loc_oBO.this_nVultcomps
                 loc_oPgFP.txt_4c_MUcp.Value        = ALLTRIM(loc_oBO.this_cMultcomps)
                 loc_oPgFP.opt_4c_Prodvars.Value    = IIF(loc_oBO.this_nProdvars = 1, 1, 2)

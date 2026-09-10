@@ -191,7 +191,7 @@ DEFINE CLASS SIGREGDPBO AS RelatorioBase
 
                     *-- Calcular campo Vecto: data de vencimento ou forma de pagamento
                     IF loc_nImpNot = 1
-                        loc_cVecto = DTOC(TTOD(NVL(loc_dVencs, CTOT(""))))
+                        loc_cVecto = DTOC(ConverterParaData(NVL(loc_dVencs, CTOT(""))))
                     ELSE
                         loc_cVecto = loc_cFPags
                     ENDIF

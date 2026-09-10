@@ -2051,7 +2051,7 @@ DEFINE CLASS sigprccpBO AS BusinessBase
 
         DO CASE
             CASE VARTYPE(par_xData) == "T"
-                loc_dData = TTOD(par_xData)
+                loc_dData = ConverterParaData(par_xData)
             CASE VARTYPE(par_xData) == "D"
                 loc_dData = par_xData
             OTHERWISE

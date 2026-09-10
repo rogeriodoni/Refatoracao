@@ -467,20 +467,20 @@ DEFINE CLASS SigReIivBO AS RelatorioBase
                     SELECT cursor_4c_LocalIvOpe
                     DO CASE
                         CASE cursor_4c_LocalIvOpe.optEmis = 2
-                            loc_lcDtE = DTOC(TTOD(NVL(loc_ldDat, DATETIME())))
+                            loc_lcDtE = DTOC(ConverterParaData(NVL(loc_ldDat, DATETIME())))
                             loc_lcDtE = loc_lcCdE + SUBSTR(loc_lcDtE, 7, 4) + "/" + ;
                                         SUBSTR(loc_lcDtE, 4, 2) + "/" + SUBSTR(loc_lcDtE, 1, 2)
                         CASE cursor_4c_LocalIvOpe.optEmis = 3
-                            loc_ldDtE = TTOD(NVL(loc_ldDat, DATETIME()))
+                            loc_ldDtE = ConverterParaData(NVL(loc_ldDat, DATETIME()))
                             IF !EMPTY(loc_ldDtE)
                                 loc_lcDtE = loc_lcCdE + CMONTH(loc_ldDtE) + " " + ;
                                             ALLTRIM(STR(DAY(loc_ldDtE), 20, 0)) + ", " + ;
                                             ALLTRIM(STR(YEAR(loc_ldDtE), 20, 0))
                             ENDIF
                         CASE cursor_4c_LocalIvOpe.optEmis = 4
-                            loc_lcDtE = loc_lcCdE + fMontaDtChq(TTOD(NVL(loc_ldDat, DATETIME())))
+                            loc_lcDtE = loc_lcCdE + fMontaDtChq(ConverterParaData(NVL(loc_ldDat, DATETIME())))
                         OTHERWISE
-                            loc_lcDtE = loc_lcCdE + DTOC(TTOD(NVL(loc_ldDat, DATETIME())))
+                            loc_lcDtE = loc_lcCdE + DTOC(ConverterParaData(NVL(loc_ldDat, DATETIME())))
                     ENDCASE
                 ENDIF
 
