@@ -30,6 +30,13 @@ DEFINE CLASS CCJBO AS BusinessBase
     this_nTiposDias = 1    && Tipo calculo: 1=Corridos, 2=Uteis (optDias.Value)
 
     *==========================================================================
+    * Cache de feriados (SigCdFer) usado por VerificarFeriado/AjustarDiasUteis
+    * Formato: "|AAAAMMDD|AAAAMMDD|..." - evita um SELECT por dia no laco
+    *==========================================================================
+    this_cFeriados           = ""
+    this_lFeriadosCarregados = .F.
+
+    *==========================================================================
     * Init - Inicializa o Business Object configurando tabela e chave primaria
     *==========================================================================
     PROCEDURE Init()
@@ -452,72 +459,86 @@ DEFINE CLASS CCJBO AS BusinessBase
     * Recalcular - Recalcula juros de cada linha do detalhe
     * Prerequisito: this_dDataBase, this_nFator e this_nTiposDias setados
     * Atualiza Dias/Liquido no cursor_4c_Detalhe e acumula this_n* totais
+    *
+    * Fiel ao legado SIGCDCCJ.Pagina.recalcular:
+    *   lnDias = Ttod(Datas) - Ttod(DataBase)          (pode ser NEGATIVO)
+    *   lnLiq  = Round(Valor - (Valor*((lnDias/30)*(Fator/100))),2)
+    *   Abs(lnDias) > 999 -> avisa, limpa Datas e aborta
+    *   Totais via Count/Sum/Avg Where Not Empty(Dias)
     *==========================================================================
     PROCEDURE Recalcular()
-        LOCAL loc_lSucesso, loc_cAlias
+        LOCAL loc_lSucesso, loc_cAlias, loc_oErro
         LOCAL loc_dBase, loc_nFator, loc_nTipo
-        LOCAL loc_nQtde, loc_nTotalDias, loc_nTotal, loc_nTotLiq
         LOCAL loc_nDias, loc_nLiquido, loc_dDatas_d, loc_dBase_d, loc_nValor
+        LOCAL loc_lExcedeu
 
-        loc_lSucesso   = .F.
-        loc_cAlias     = THIS.this_cCursorDetalhe
-        loc_dBase      = THIS.this_dDataBase
-        loc_nFator     = THIS.this_nFator
-        loc_nTipo      = THIS.this_nTiposDias
-        loc_nQtde      = 0
-        loc_nTotalDias = 0
-        loc_nTotal     = 0
-        loc_nTotLiq    = 0
+        loc_lSucesso = .F.
+        loc_lExcedeu = .F.
+        loc_cAlias   = THIS.this_cCursorDetalhe
+        loc_dBase    = THIS.this_dDataBase
+        loc_nFator   = NVL(THIS.this_nFator, 0)
+        loc_nTipo    = NVL(THIS.this_nTiposDias, 1)
 
         IF !USED(loc_cAlias)
             MsgErro("Cursor de detalhe n" + CHR(227) + "o dispon" + CHR(237) + "vel.", "Recalcular")
             RETURN .F.
         ENDIF
 
-        IF EMPTY(loc_dBase)
+        IF ISNULL(loc_dBase) OR EMPTY(loc_dBase)
             MsgErro("Data Base n" + CHR(227) + "o informada.", "Recalcular")
             RETURN .F.
         ENDIF
 
         TRY
-            loc_dBase_d = TTOD(loc_dBase)
+            *-- Data Base chega como DATE (TextBox .Value = {}) ou como DATETIME
+            *-- (coluna sigcdccj.data_base). TTOD() SO aceita DATETIME - passar
+            *-- um DATE dispara erro 11 "Function argument value, type, or count
+            *-- is invalid". Normalizar sempre via ConverterParaData().
+            loc_dBase_d = ConverterParaData(loc_dBase)
+
+            *-- Dias uteis (optDias = 2): carrega feriados uma unica vez
+            IF loc_nTipo = 2
+                THIS.CarregarFeriados()
+            ENDIF
 
             SELECT (loc_cAlias)
             GO TOP
 
             SCAN
-                IF EMPTY(datas)
+                IF ISNULL(datas) OR EMPTY(datas)
                     LOOP
                 ENDIF
 
-                loc_dDatas_d = TTOD(datas)
+                loc_dDatas_d = ConverterParaData(datas)
                 loc_nValor   = NVL(valor, 0)
                 loc_nDias    = loc_dDatas_d - loc_dBase_d
 
-                IF loc_nDias < 0
-                    loc_nDias = 0
-                ENDIF
-
                 IF loc_nDias > 0 AND loc_nTipo = 2
-                    loc_nDias = THIS.ContarDiasUteis(loc_dBase_d, loc_dDatas_d)
+                    loc_nDias = THIS.AjustarDiasUteis(loc_dBase_d, loc_dDatas_d)
                 ENDIF
 
-                loc_nLiquido = loc_nValor + loc_nValor * (loc_nFator / 100) * loc_nDias
+                loc_nLiquido = ROUND(loc_nValor - (loc_nValor * ((loc_nDias / 30) * (loc_nFator / 100))), 2)
+
+                *-- sigdtccj.dias eh numeric(3,0): acima de 999 nao cabe
+                IF ABS(loc_nDias) > 999
+                    MsgAviso("Quantidade de dias superior a 999 dias.", "Aten" + CHR(231) + CHR(227) + "o")
+                    REPLACE datas WITH {}
+                    loc_lExcedeu = .T.
+                    EXIT
+                ENDIF
 
                 REPLACE dias WITH loc_nDias, liquido WITH loc_nLiquido
-
-                loc_nQtde      = loc_nQtde + 1
-                loc_nTotalDias = loc_nTotalDias + loc_nDias
-                loc_nTotal     = loc_nTotal + loc_nValor
-                loc_nTotLiq    = loc_nTotLiq + loc_nLiquido
             ENDSCAN
 
-            THIS.this_nQtde   = loc_nQtde
-            THIS.this_nMedia  = IIF(loc_nQtde > 0, loc_nTotalDias / loc_nQtde, 0)
-            THIS.this_nTotal  = loc_nTotal
-            THIS.this_nTotLiq = loc_nTotLiq
+            IF !loc_lExcedeu
+                THIS.AtualizarTotaisDetalhe()
+                loc_lSucesso = .T.
+            ENDIF
 
-            loc_lSucesso = .T.
+            IF USED(loc_cAlias)
+                SELECT (loc_cAlias)
+                GO TOP
+            ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "Recalcular")
         ENDTRY
@@ -526,22 +547,138 @@ DEFINE CLASS CCJBO AS BusinessBase
     ENDPROC
 
     *==========================================================================
-    * ContarDiasUteis - Conta dias seg-sex entre par_dInicio e par_dFim (inc.)
+    * AtualizarTotaisDetalhe - Recalcula this_nQtde/Media/Total/TotLiq a partir
+    * do cursor de detalhe. Fiel ao legado:
+    *   Select Count(*), Sum(Valor), Sum(Liquido), Avg(Dias)
+    *     From crDetalhe Where Not Empty(Dias)
+    * (linhas com Dias = 0 NAO entram nos totais - comportamento do legado)
     *==========================================================================
-    PROTECTED PROCEDURE ContarDiasUteis(par_dInicio, par_dFim)
-        LOCAL loc_nCount, loc_dCurrent, loc_nDow
-        loc_nCount   = 0
-        loc_dCurrent = par_dInicio
+    PROCEDURE AtualizarTotaisDetalhe()
+        LOCAL loc_cAlias, loc_cCursorTot, loc_lSucesso, loc_oErro
 
-        DO WHILE loc_dCurrent <= par_dFim
-            loc_nDow = DOW(loc_dCurrent)
-            IF loc_nDow != 1 AND loc_nDow != 7
-                loc_nCount = loc_nCount + 1
+        loc_lSucesso   = .F.
+        loc_cAlias     = THIS.this_cCursorDetalhe
+        loc_cCursorTot = "cursor_4c_TotCcj"
+
+        THIS.this_nQtde   = 0
+        THIS.this_nMedia  = 0
+        THIS.this_nTotal  = 0
+        THIS.this_nTotLiq = 0
+
+        IF USED(loc_cAlias)
+            TRY
+                IF USED(loc_cCursorTot)
+                    USE IN (loc_cCursorTot)
+                ENDIF
+
+                SELECT COUNT(*)            AS qtd, ;
+                       SUM(NVL(valor, 0))   AS totvalor, ;
+                       SUM(NVL(liquido, 0)) AS totliqui, ;
+                       AVG(NVL(dias, 0))    AS meddias ;
+                    FROM (loc_cAlias) ;
+                    WHERE NOT EMPTY(NVL(dias, 0)) ;
+                    INTO CURSOR (loc_cCursorTot) READWRITE
+
+                SELECT (loc_cCursorTot)
+                THIS.this_nQtde   = NVL(qtd, 0)
+                THIS.this_nMedia  = NVL(meddias, 0)
+                THIS.this_nTotal  = NVL(totvalor, 0)
+                THIS.this_nTotLiq = NVL(totliqui, 0)
+
+                USE IN (loc_cCursorTot)
+                SELECT (loc_cAlias)
+                loc_lSucesso = .T.
+            CATCH TO loc_oErro
+                MsgErro(loc_oErro.Message, "AtualizarTotaisDetalhe")
+            ENDTRY
+        ENDIF
+
+        RETURN loc_lSucesso
+    ENDPROC
+
+    *==========================================================================
+    * CarregarFeriados - Le SigCdFer uma unica vez para this_cFeriados
+    * (string "|AAAAMMDD|..."), evitando um SELECT por dia dentro do laco.
+    *==========================================================================
+    PROTECTED PROCEDURE CarregarFeriados()
+        LOCAL loc_cSQL, loc_nRet, loc_cLista, loc_cAliasAnt, loc_oErro
+
+        IF THIS.this_lFeriadosCarregados
+            RETURN .T.
+        ENDIF
+
+        loc_cLista    = "|"
+        loc_cAliasAnt = ALIAS()
+
+        TRY
+            IF USED("cursor_4c_FerLoad")
+                USE IN cursor_4c_FerLoad
             ENDIF
-            loc_dCurrent = loc_dCurrent + 1
+
+            loc_cSQL = "SELECT DISTINCT datas FROM SigCdFer WHERE datas IS NOT NULL"
+
+            loc_nRet = SQLEXEC(gnConnHandle, loc_cSQL, "cursor_4c_FerLoad")
+
+            IF loc_nRet > 0 AND USED("cursor_4c_FerLoad")
+                SELECT cursor_4c_FerLoad
+                SCAN
+                    IF !ISNULL(datas) AND !EMPTY(datas)
+                        loc_cLista = loc_cLista + DTOS(ConverterParaData(datas)) + "|"
+                    ENDIF
+                ENDSCAN
+                USE IN cursor_4c_FerLoad
+            ENDIF
+
+            THIS.this_cFeriados           = loc_cLista
+            THIS.this_lFeriadosCarregados = .T.
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "CarregarFeriados")
+        ENDTRY
+
+        IF !EMPTY(loc_cAliasAnt) AND USED(loc_cAliasAnt)
+            SELECT (loc_cAliasAnt)
+        ENDIF
+
+        RETURN .T.
+    ENDPROC
+
+    *==========================================================================
+    * VerificarFeriado - .T. se a data eh sabado, domingo ou feriado (SigCdFer)
+    * Equivalente a fChkFeriado(poDataMgr, ldDia, .T., .T.) do legado.
+    *==========================================================================
+    PROTECTED PROCEDURE VerificarFeriado(par_dData)
+        LOCAL loc_nDow, loc_lNaoUtil
+
+        loc_lNaoUtil = .F.
+        loc_nDow     = DOW(par_dData)
+
+        IF loc_nDow = 1 OR loc_nDow = 7
+            loc_lNaoUtil = .T.
+        ELSE
+            loc_lNaoUtil = ("|" + DTOS(par_dData) + "|") $ THIS.this_cFeriados
+        ENDIF
+
+        RETURN loc_lNaoUtil
+    ENDPROC
+
+    *==========================================================================
+    * AjustarDiasUteis - Fiel ao legado: parte dos dias corridos e SUBTRAI
+    * cada sabado/domingo/feriado do intervalo [inicio, fim].
+    *==========================================================================
+    PROTECTED PROCEDURE AjustarDiasUteis(par_dInicio, par_dFim)
+        LOCAL loc_nDias, loc_dAtual
+
+        loc_nDias  = par_dFim - par_dInicio
+        loc_dAtual = par_dInicio
+
+        DO WHILE loc_dAtual <= par_dFim
+            IF THIS.VerificarFeriado(loc_dAtual)
+                loc_nDias = loc_nDias - 1
+            ENDIF
+            loc_dAtual = loc_dAtual + 1
         ENDDO
 
-        RETURN loc_nCount
+        RETURN loc_nDias
     ENDPROC
 
 ENDDEFINE

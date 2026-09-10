@@ -96,6 +96,8 @@ Use `EMPTY()`. ISEMPTY generates "File 'isempty.prg' does not exist".
 ### 3. BINDEVENT requires PUBLIC methods
 PROTECTED methods fail silently. Handlers must declare event parameters (AfterRowColChange needs par_nColIndex, KeyPress needs par_nKeyCode + par_nShiftAltCtrl).
 
+**Mesma regra vale para `TesteAutomatico.prg`**: o harness chama `THIS.oForm.CarregarLista()` / `AlternarPagina()` / `AjustarBotoesPorModo()` / `BtnIncluirClick()` / `BtnCancelarClick()` direto de fora da classe (nao via BINDEVENT). `PEMSTATUS(oForm, "Metodo", 5)` retorna `.T.` mesmo se o metodo for PROTECTED (so verifica existencia, nao escopo) - o teste entra no branch e a chamada real falha em runtime com `Property METODO is not found.`. Esses metodos DEVEM ser PUBLIC. Auto-fix: CorretorAutomatico Pattern #196.
+
 ### 4. Portuguese accents: use CHR() codes
 NEVER literal accented chars in .PRG. Key codes: CHR(225)=a-acute, CHR(227)=a-tilde, CHR(231)=c-cedilla, CHR(233)=e-acute, CHR(237)=i-acute, CHR(243)=o-acute, CHR(245)=o-tilde, CHR(250)=u-acute.
 
@@ -164,6 +166,8 @@ A faixa cinza do cabecalho vai na pagina **Lista E na pagina Dados**. No `frmcad
 **Ao varrer os forms**, a pagina chega aos metodos de tres formas: variavel (`loc_oPagina = ...Page2`), `Pages(2)` e **PARAMETRO** (`ConfigurarPaginaDados(par_oPagina)`, encadeado ate 3 niveis no FormCTA). Ignorar o caso do parametro faz a ferramenta "nao ver" a faixa que ja existe (FormEmn) nem os controles que ficariam soterrados. Variavel reatribuida a outra coisa (`loc_oPage = par_oPage`, Formpag) tem de PERDER o mapeamento.
 
 Nao se aplica a form sem pagina de dados real: `FormFpd` (OPERACIONAL com PageFrame stub fora da tela) e `FormGcp` (Page2 declarada "reservada").
+
+A faixa tem de ser o PRIMEIRO `AddObject` da pagina Dados: os containers de botao ficam em `Top = 29..33`, DENTRO da area da faixa, e so aparecem se criados DEPOIS dela — invertido, o cabecalho COBRE Confirmar/Encerrar (Erro156, auto-fix **#195**). O `ZOrder(0)` da excecao (`Formgpd`) eh o que distingue esse caso de um bug. Conferir tambem que os labels da faixa nao ficaram PELADOS (`AddObject` sem propriedade nenhuma) — o titulo sai como label default minusculo, preto sobre cinza.
 
 WARNING: CorretorAutomatico **#190**. Ferramentas: `automation\LibCabecalhoPaginas.ps1` (parsers compartilhados), `automation\DiagnosticoCabecalhoPaginas.ps1`, `automation\AplicarCabecalhoComDeslocamento.ps1` (injeta + re-layouta), `automation\InjetarCabecalhoPaginaDados.ps1` (so paginas com espaco livre). Referencia: `Formcfo`.
 
@@ -240,6 +244,51 @@ IF EVALUATE("loc_oCnt." + par_cTxtCon + ".Value") = "X"
 ```
 
 Auto-fix: CorretorAutomatico **#194** (forma segura; valor com concatenacao/funcao vira WARNING). Origem: Erro155 - no `Formlch` a descricao do GRUPO nunca apareceu nos 7 containers, desde a migracao.
+
+### 16. `TTOD()` so aceita DATETIME - com DATE dispara erro 11 em RUNTIME
+`TTOD()` converte DATETIME -> DATE. Passar um **DATE** estoura `Function argument value, type, or count is invalid.` O `.prg` **compila limpo** — o usuario so descobre ao acionar o botao.
+
+O mesmo campo chega com tipos DIFERENTES conforme o caminho:
+
+| Origem do valor | Tipo |
+|-----------------|------|
+| TextBox criado com `.Value = {}` | **DATE** (modo INCLUIR) |
+| coluna `datetime` do SQL Server via SQLEXEC | **DATETIME** (modo ALTERAR) |
+| cursor VFP com coluna `D` / `T` | DATE / DATETIME |
+
+Por isso o form **funciona em ALTERAR e explode em INCLUIR**. No legado nao acontecia porque o TextBox tinha `ControlSource` na coluna datetime.
+
+```foxpro
+* ERRADO
+loc_dBase_d = TTOD(THIS.this_dDataBase)     && erro 11 quando eh DATE
+
+* CERTO
+loc_dBase_d = ConverterParaData(THIS.this_dDataBase)
+```
+
+`ConverterParaData()` (`utils\functions.prg`) normaliza DATE/DATETIME/CHAR; com DATETIME o resultado eh identico ao TTOD, entao a troca nao regride. `TTOD()` direto **so** em coluna de cursor vinda de SQLEXEC. **NUNCA** trocar dentro de `SELECT`/`INDEX ON` — UDF ali muda o plano e quebra Rushmore.
+
+Auto-fix: CorretorAutomatico **#197**. Origem: Erro157 (FormCCJ "Calculo de Juros" nao gravava nada).
+
+### 17. Formula de calculo do legado: TRANSCREVER, nunca reescrever
+A expressao aritmetica eh **regra de negocio**. Reescrita, a tela grava valor errado **sem erro nenhum na tela** — ninguem reporta.
+
+```foxpro
+* Legado: lnLiq = Round(lnValor - (lnValor*((lnDias/30*(lnFator/100)))),2)
+* ERRADO (o que o migrador escreveu): juros SOMADOS, taxa DIARIA
+loc_nLiquido = loc_nValor + loc_nValor * (loc_nFator / 100) * loc_nDias
+* CERTO: juros DESCONTADOS, taxa MENSAL prorrateada
+loc_nLiquido = ROUND(loc_nValor - (loc_nValor * ((loc_nDias / 30) * (loc_nFator / 100))), 2)
+```
+
+Vao JUNTO com a formula, e o migrador costuma jogar fora:
+1. **SINAL** — o legado NAO zera diferenca de datas negativa; data anterior a base gera dias negativos de proposito.
+2. **GUARDS** — `Abs(lnDias) > 999` avisa, limpa o campo e ABORTA porque a coluna destino eh `numeric(3,0)`; sem ele a gravacao estoura no SQL Server.
+3. **CRITERIO DOS TOTAIS** — `Where Not Empty(Dias)` exclui as linhas com zero, resultado diferente de acumular tudo no `SCAN`. Totais com **fonte unica**: o BO calcula, o form so espelha.
+
+Transcrever do dump legado (`tasks\<task>\*_form_codigo_fonte.txt`) linha a linha e so depois trocar os nomes. Sem auto-fix possivel — regra de negocio nao se detecta por regex.
+
+
 **Full VFP9 reference, control properties, and 58 common errors**: See vfp9-migration skill.
 
 ## BusinessBase Property Names (CORRECT)
