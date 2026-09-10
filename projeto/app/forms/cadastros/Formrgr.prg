@@ -1294,9 +1294,9 @@ DEFINE CLASS Formrgr AS FormBase
         loc_oPg2.txt_4c_Valor.Value       = THIS.this_oBusinessObject.this_nValor
         loc_oPg2.chk_4c_Check1.Value      = THIS.this_oBusinessObject.this_nInativas
         loc_oPg2.edt_4c_Observacao.Value  = ALLTRIM(THIS.this_oBusinessObject.this_cObservacao)
-        loc_oPg2.txt_4c_DtIncs.Value      = TTOD(THIS.this_oBusinessObject.this_dDatas)
+        loc_oPg2.txt_4c_DtIncs.Value      = ConverterParaData(THIS.this_oBusinessObject.this_dDatas)
         loc_oPg2.txt_4c_Usuario.Value     = ALLTRIM(THIS.this_oBusinessObject.this_cUsuIncs)
-        loc_oPg2.txt_4c_DataAlts.Value    = TTOD(THIS.this_oBusinessObject.this_dDtaAlts)
+        loc_oPg2.txt_4c_DataAlts.Value    = ConverterParaData(THIS.this_oBusinessObject.this_dDtaAlts)
         loc_oPg2.txt_4c_UsuaAlts.Value    = ALLTRIM(THIS.this_oBusinessObject.this_cUsaAlts)
     ENDPROC
 
