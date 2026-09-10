@@ -12514,13 +12514,26 @@ function Corrigir-GridColumnCountEmCarregar {
 
     if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
 
-    # Guard de escopo: sem controle criado por AddObject em alguma Column, a
-    # reatribuicao de ColumnCount nao destroi nada que este pattern proteja.
-    $temAddObjectEmColuna = $false
-    foreach ($l in $Linhas) {
-        if ($l -match '(?i)\.Column\d+\.AddObject\s*\(') { $temAddObjectEmColuna = $true; break }
+    # Guard de escopo. O dano so ocorre sob TRES condicoes simultaneas, medidas
+    # no VFP9 (2026-09-10):
+    #   1. existe controle criado com AddObject em alguma Column
+    #   2. ColumnCount recebe valor MENOR que o indice dessa coluna
+    #      (mesmo valor ou valor maior NAO destroem nada - testado)
+    #   3. a atribuicao acontece DEPOIS do AddObject na ordem de execucao
+    #      (reduzir e voltar nao restaura o controle: a coluna volta com
+    #       CurrentControl = "Text1")
+    # Ignorar a ordem era o que sobrava de ruido: no FormFpo o idioma
+    # "ColumnCount=3 / RecordSource / ColumnCount=5" roda ANTES dos AddObject,
+    # dentro do mesmo Carregar*, e eh inofensivo.
+    $maiorColComAdd = 0
+    $ultimoAddObject = -1
+    for ($z = 0; $z -lt $Linhas.Count; $z++) {
+        if ($Linhas[$z] -match '(?i)\.Column(\d+)\.AddObject\s*\(') {
+            $ultimoAddObject = $z
+            if ([int]$Matches[1] -gt $maiorColComAdd) { $maiorColComAdd = [int]$Matches[1] }
+        }
     }
-    if (-not $temAddObjectEmColuna) { return $Linhas }
+    if ($maiorColComAdd -eq 0) { return $Linhas }
 
     $inCarregar  = $false
     $profWith    = 0  # profundidade de WITH blocks dentro do metodo
@@ -12548,7 +12561,10 @@ function Corrigir-GridColumnCountEmCarregar {
             if ($ln -match '(?i)^\s*ENDWITH\s*$') { $profWith-- }
 
             # Detectar standalone `var.ColumnCount = N` (nao `.ColumnCount` relativo)
-            if ($profWith -eq 0 -and $ln -match '(?i)^\s*\w[\w.]*\.ColumnCount\s*=\s*\d+') {
+            if ($profWith -eq 0 -and $ln -match '(?i)^\s*\w[\w.]*\.ColumnCount\s*=\s*(\d+)') {
+                # so avisa se REDUZ abaixo da coluna do controle E vem depois do AddObject
+                if ([int]$Matches[1] -ge $maiorColComAdd) { continue }
+                if ($i -lt $ultimoAddObject) { continue }
                 $descricao = "Pattern #183 (Erro144): ColumnCount reatribuido em metodo Carregar* (linha $($i + 1)). " +
                     "Em VFP9, qualquer atribuicao a ColumnCount recria TODOS os objetos de coluna, destruindo " +
                     "controles AddObject (CheckBox/ComboBox). Remover esta linha se ColumnCount ja foi definido " +
