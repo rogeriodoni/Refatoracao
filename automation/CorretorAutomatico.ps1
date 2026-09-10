@@ -14601,61 +14601,6 @@ function Corrigir-MaxLengthCopiadoDoWidth {
     return $Linhas
 }
 
-function Corrigir-SalvarSemElseSilencioso {
-    # Pattern #200 (Erro158, 2026-09-10, FormCco) - WARNING-only.
-    #
-    # BusinessBase.Salvar() devolve .F. SEM EXIBIR NADA em tres caminhos: nao
-    # esta em modo de edicao (this_lEmEdicao), ValidarDados() recusou ou
-    # AntesDeGravar() recusou. Ele apenas preenche this_cMensagemErro - quem
-    # exibe eh o chamador.
-    #
-    # Com `IF <bo>.Salvar()` sem ELSE, o usuario clica Confirmar e NADA acontece:
-    # nenhuma mensagem, nenhum registro, nenhuma pista. Foi o sintoma reportado
-    # no Erro158 ("ao gravar as informacoes digitadas nao faz a gravacao").
-    #
-    # WARNING-only: injetar um ELSE eh mexer em fluxo de controle, e ha forms que
-    # tratam a falha depois do ENDIF. O aviso aponta o site para revisao.
-    param([string[]]$Linhas, [string]$Arquivo = "")
-
-    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
-
-    for ($i = 0; $i -lt $Linhas.Count; $i++) {
-        $linha = $Linhas[$i]
-        if ($linha -match '^\s*\*') { continue }
-        if ($linha -notmatch '(?i)^\s*IF\s+.*\.(Salvar|Excluir)\s*\(\s*\)') { continue }
-
-        $metodo = if ($linha -imatch '\.Salvar\s*\(') { 'Salvar' } else { 'Excluir' }
-
-        $nivel   = 1
-        $temElse = $false
-        for ($j = $i + 1; $j -lt $Linhas.Count; $j++) {
-            $l = $Linhas[$j]
-            if ($l -match '^\s*\*') { continue }
-            if ($l -imatch '^\s*IF\s')      { $nivel++ ; continue }
-            if ($l -imatch '^\s*ENDIF\s*$') {
-                $nivel--
-                if ($nivel -eq 0) { break }
-                continue
-            }
-            if ($nivel -eq 1 -and $l -imatch '^\s*ELSE\s*$') { $temElse = $true ; break }
-        }
-        if ($temElse) { continue }
-
-        Add-Correcao -Tipo "WARN-200-SALVAR-SEM-ELSE" -Linha ($i + 1) `
-            -Original $linha.Trim() `
-            -Corrigido "(REVISAR MANUAL - acrescentar ELSE com MsgErro(this_cMensagemErro))" `
-            -Descricao ("Pattern #200: BusinessBase.$metodo() devolve .F. SEM exibir nada quando nao esta em modo " +
-                "de edicao ou quando ValidarDados/AntesDeGravar recusam - so preenche this_cMensagemErro. Sem ELSE " +
-                "o usuario aciona o botao e NADA acontece: nenhuma mensagem, nenhum registro, nenhuma pista. " +
-                "Acrescentar ELSE com MsgErro(<bo>.this_cMensagemErro, 'Confirmar'), com texto generico quando a " +
-                "propriedade estiver vazia. Mesma logica da regra #9 do CLAUDE.md: caminho de falha nunca eh mudo. " +
-                "Origem: Erro158 (2026-09-10, FormCco 'Cadastro de Classificacao de Contas').")
-        Write-Host "[Pattern #200 WARN] Linha $($i + 1): IF ....$metodo() sem ELSE" -ForegroundColor Yellow
-    }
-
-    return $Linhas
-}
-
 function Invoke-CorrecaoAutomatica {
     param(
         [string]$Arquivo,
@@ -14877,7 +14822,6 @@ function Invoke-CorrecaoAutomatica {
     $linhas = Corrigir-TtodEmValorQuePodeSerDate -Linhas $linhas -Arquivo $Arquivo
     $linhas = Corrigir-ColumnAddObjectSemCurrentControl -Linhas $linhas -Arquivo $Arquivo
     $linhas = Corrigir-MaxLengthCopiadoDoWidth -Linhas $linhas -Arquivo $Arquivo
-    $linhas = Corrigir-SalvarSemElseSilencioso -Linhas $linhas -Arquivo $Arquivo
 
     # Salva arquivo corrigido em UTF-8 SEM BOM.
     # - VFP9 nao suporta BOM (por isso removemos no read com bytes[3..])

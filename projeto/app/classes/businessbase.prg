@@ -14,6 +14,7 @@ DEFINE CLASS BusinessBase AS Custom
     this_lNovoRegistro = .F.        && Indica se e um novo registro
     this_lDadosAlterados = .F.      && Indica se houve alteracoes
     this_cMensagemErro = ""         && Mensagem de erro da ultima operacao
+    this_lErroExibido = .F.         && .T. quando a falha JA foi mostrada ao usuario
 
     *-- Propriedades de dados (a serem sobrescritas pelas subclasses)
     * Cada subclasse deve definir suas propriedades especificas
@@ -89,21 +90,27 @@ DEFINE CLASS BusinessBase AS Custom
     PROCEDURE Salvar()
         LOCAL llResultado
 
+        THIS.this_cMensagemErro = ""
+        THIS.this_lErroExibido  = .F.
+
         * Valida estado
         IF !THIS.this_lEmEdicao
             THIS.this_cMensagemErro = "N" + CHR(227) + "o est" + CHR(225) + " em modo de edi" + CHR(231) + CHR(227) + "o"
+            THIS.ExibirFalha("Salvar")
             RETURN .F.
         ENDIF
 
         * Executa validacoes (metodo a ser implementado nas subclasses)
         IF !THIS.ValidarDados()
-            * Mensagem de erro ja foi definida em ValidarDados()
+            * ValidarDados DEFINE a mensagem; quem EXIBE eh a linha abaixo
+            THIS.ExibirFalha("Salvar")
             RETURN .F.
         ENDIF
 
         * Executa regras de negocio antes de salvar
         IF !THIS.AntesDeGravar()
-            * Mensagem de erro ja foi definida em AntesDeGravar()
+            * AntesDeGravar DEFINE a mensagem; quem EXIBE eh a linha abaixo
+            THIS.ExibirFalha("Salvar")
             RETURN .F.
         ENDIF
 
@@ -124,10 +131,22 @@ DEFINE CLASS BusinessBase AS Custom
                 THIS.this_lEmEdicao = .F.
                 THIS.this_lNovoRegistro = .F.
                 THIS.this_lDadosAlterados = .F.
+            ELSE
+                * Inserir/Atualizar das subclasses exibem o proprio MsgErro com o
+                * texto do SQL Server e nao preenchem this_cMensagemErro - nesse
+                * caso so marcamos como exibido, para nao duplicar a mensagem.
+                * Se a subclasse DEIXOU uma mensagem sem exibir (o stub da base
+                * faz isso), exibimos aqui: falha nunca pode ser muda.
+                IF EMPTY(ALLTRIM(NVL(THIS.this_cMensagemErro, "")))
+                    THIS.this_lErroExibido = .T.
+                ELSE
+                    THIS.ExibirFalha("Salvar")
+                ENDIF
             ENDIF
 
         CATCH TO loException
             THIS.this_cMensagemErro = "Erro ao salvar: " + loException.Message
+            THIS.ExibirFalha("Salvar")
             llResultado = .F.
         ENDTRY
 
@@ -138,14 +157,23 @@ DEFINE CLASS BusinessBase AS Custom
     * Excluir - Valida e exclui registro
     *--------------------------------------------------------------------------
     PROCEDURE Excluir()
+        LOCAL llResultado
+        llResultado = .F.
+
+        THIS.this_cMensagemErro = ""
+        THIS.this_lErroExibido  = .F.
+
         * Valida estado
         IF THIS.this_lNovoRegistro
             THIS.this_cMensagemErro = "N" + CHR(227) + "o h" + CHR(225) + " registro para excluir"
+            THIS.ExibirFalha("Excluir")
             RETURN .F.
         ENDIF
 
         * Executa validacoes antes de excluir
         IF !THIS.AntesDeExcluir()
+            * AntesDeExcluir DEFINE a mensagem; quem EXIBE eh a linha abaixo
+            THIS.ExibirFalha("Excluir")
             RETURN .F.
         ENDIF
 
@@ -153,10 +181,49 @@ DEFINE CLASS BusinessBase AS Custom
         IF THIS.ExecutarExclusao()
             THIS.DepoisDeExcluir()
             THIS.LimparDados()
-            RETURN .T.
+            llResultado = .T.
+        ELSE
+            * ExecutarExclusao das subclasses exibe o proprio MsgErro e nao
+            * preenche this_cMensagemErro - nesse caso so marcamos como exibido.
+            * Se deixou mensagem sem exibir, exibimos aqui: falha nunca eh muda.
+            IF EMPTY(ALLTRIM(NVL(THIS.this_cMensagemErro, "")))
+                THIS.this_lErroExibido = .T.
+            ELSE
+                THIS.ExibirFalha("Excluir")
+            ENDIF
         ENDIF
 
-        RETURN .F.
+        RETURN llResultado
+    ENDPROC
+
+    *--------------------------------------------------------------------------
+    * ExibirFalha - Mostra ao usuario a falha da ultima operacao e marca
+    * this_lErroExibido, para que o chamador nao repita a mensagem.
+    *
+    * Existe porque Salvar()/Excluir() devolviam .F. em SILENCIO nos caminhos de
+    * validacao: apenas preenchiam this_cMensagemErro, e o form que fizesse
+    * `IF oBO.Salvar()` sem ELSE deixava o usuario clicar Confirmar e nao ver
+    * absolutamente nada. Era o caso de 249 sites em 107 forms do projeto
+    * (Erro158). Centralizar aqui resolve todos de uma vez, no lugar certo:
+    * quem sabe que a operacao falhou eh o BO.
+    *
+    * O form NAO precisa mais de ELSE. Se tiver um, deve guardar com
+    * `IF !oBO.this_lErroExibido` para nao mostrar a mensagem duas vezes.
+    *--------------------------------------------------------------------------
+    PROTECTED PROCEDURE ExibirFalha(par_cContexto)
+        LOCAL loc_cMensagem, loc_cTitulo
+
+        loc_cTitulo = IIF(VARTYPE(par_cContexto) = "C" AND !EMPTY(par_cContexto), ;
+            par_cContexto, "Erro")
+
+        loc_cMensagem = ALLTRIM(NVL(THIS.this_cMensagemErro, ""))
+        IF EMPTY(loc_cMensagem)
+            loc_cMensagem = "N" + CHR(227) + "o foi poss" + CHR(237) + "vel concluir a opera" + ;
+                CHR(231) + CHR(227) + "o."
+        ENDIF
+
+        THIS.this_lErroExibido = .T.
+        MsgErro(loc_cMensagem, loc_cTitulo)
     ENDPROC
 
     *--------------------------------------------------------------------------
