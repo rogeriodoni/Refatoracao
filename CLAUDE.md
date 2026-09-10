@@ -321,22 +321,25 @@ O usuario digita mais do que cabe e o SQL Server recusa o INSERT com *String or 
 
 WARNING: CorretorAutomatico **#199**. Origem: Erro158.
 
-### 20. `IF oBO.Salvar()` SEM `ELSE` = gravacao que falha muda
-`BusinessBase.Salvar()` devolve `.F.` **sem exibir nada** quando nao esta em modo de edicao ou quando `ValidarDados`/`AntesDeGravar` recusam — so preenche `this_cMensagemErro`. Sem `ELSE`, o usuario clica Confirmar e NADA acontece: nenhuma mensagem, nenhum registro, nenhuma pista.
+### 20. Falha de gravacao NUNCA eh muda - o `BusinessBase` ja reporta
+`BusinessBase.Salvar()` e `Excluir()` chamam `ExibirFalha()` em todo caminho de validacao que antes devolvia `.F.` calado (fora de edicao, `ValidarDados`/`AntesDeGravar`/`AntesDeExcluir` recusando, CATCH), e marcam `this_lErroExibido`.
+
+**O form NAO precisa de `ELSE`** em `IF <bo>.Salvar()`. Se tiver um, guardar:
 
 ```foxpro
 IF THIS.this_oBusinessObject.Salvar()
     MsgInfo("Registro salvo com sucesso!", "Confirmar")
     THIS.AlternarPagina(1)
 ELSE
-    MsgErro(IIF(EMPTY(THIS.this_oBusinessObject.this_cMensagemErro), ;
-        "N" + CHR(227) + "o foi poss" + CHR(237) + "vel gravar o registro.", ;
-        THIS.this_oBusinessObject.this_cMensagemErro), "Confirmar")
+    IF !THIS.this_oBusinessObject.this_lErroExibido
+        MsgErro("N" + CHR(227) + "o foi poss" + CHR(237) + "vel gravar o registro.", "Confirmar")
+    ENDIF
 ENDIF
 ```
 
-Mesma logica da regra #9: caminho de falha nunca eh mudo. Vale para `Excluir()` tambem. WARNING: CorretorAutomatico **#200**. Origem: Erro158.
+Subclasses (`Inserir`/`Atualizar`/`ExecutarExclusao`) continuam exibindo o proprio `MsgErro` com o texto do SQL Server — a base detecta e nao repete. Se a subclasse deixar `this_cMensagemErro` preenchido sem exibir, a base exibe.
 
+Origem: Erro158 — o defeito estava em **249 sites de 107 forms** e foi corrigido num arquivo so. O pattern #200, que os acusava um a um, foi **aposentado**.
 ### 21. Popular cursor NAO repinta a grade; e a condicao que CERCA a validacao eh regra
 **(a)** Grade ligada a cursor vazio nao passa a exibir sozinha as linhas inseridas depois. O legado sempre fecha com `Go Top In <cursor>` + `<grid>.Refresh` — reproduzir num metodo unico chamado em TODO caminho que popula o cursor (Incluir/Alterar/Visualizar). Sem isso a grade fica visualmente vazia com o cursor cheio, e o sintoma reportado ("a tela nao traz dados") manda o diagnostico para SQL/cursor/permissao.
 

@@ -10831,59 +10831,59 @@ largura real da coluna. **Sinal de alerta imediato: `MaxLength` igual ao
 
 ---
 
-## 203. `IF oBO.Salvar()` sem ELSE — Gravacao que Falha em Silencio (Erro158 2026-09-10)
+## 203. Falha de Gravacao Muda — Resolvido no BusinessBase (Erro158 2026-09-10)
 
-`BusinessBase.Salvar()` devolve `.F.` **sem exibir nada** em tres caminhos:
+`BusinessBase.Salvar()` devolvia `.F.` **sem exibir nada** em tres caminhos — nao
+esta em modo de edicao, `ValidarDados()` recusou, `AntesDeGravar()` recusou — e
+no proprio CATCH. Ele apenas preenchia `this_cMensagemErro`. Com
+`IF <bo>.Salvar()` sem `ELSE`, o usuario clicava Confirmar e **nada acontecia**.
+
+### A medicao que mudou a solucao
+
+O primeiro instinto foi um pattern de WARNING apontando cada `IF ... Salvar()`
+sem `ELSE`, para corrigir form a form. O sweep mediu: **249 sites em 107 forms**
+— praticamente todo form CRUD do projeto.
+
+Esse numero eh o diagnostico. Um defeito que aparece em quase todo arquivo nao
+eh uma lista de revisao, eh **arquitetura**; 249 correcoes manuais identicas
+seriam a resposta errada. O pattern foi aposentado e a correcao subiu um nivel.
+
+### A correcao
 
 ```foxpro
-IF !THIS.this_lEmEdicao
-    THIS.this_cMensagemErro = "Nao esta em modo de edicao"
-    RETURN .F.
-ENDIF
-IF !THIS.ValidarDados()      && mensagem "ja foi definida" - mas nao exibida
-    RETURN .F.
-ENDIF
-IF !THIS.AntesDeGravar()     && idem
+* BusinessBase.Salvar()
+IF !THIS.ValidarDados()
+    THIS.ExibirFalha("Salvar")      && exibe e marca this_lErroExibido
     RETURN .F.
 ENDIF
 ```
 
-Ele apenas **preenche `this_cMensagemErro`**. Quem tem de exibir eh o chamador.
+`ExibirFalha()` mostra `this_cMensagemErro` (ou um texto generico se vazio) e
+marca `this_lErroExibido`, para o chamador saber que a mensagem ja saiu.
 
-### ERRADO
+### O contrato com as subclasses
 
-```foxpro
-IF THIS.this_oBusinessObject.Salvar()
-    MsgInfo("Registro salvo com sucesso!", "Confirmar")
-    THIS.AlternarPagina(1)
-ENDIF
-*-- sem ELSE: o usuario clica Confirmar e NADA acontece.
-*-- Nenhuma mensagem, nenhum registro, nenhuma pista do que houve.
-```
-
-### CERTO
+`Inserir`/`Atualizar`/`ExecutarExclusao` **continuam exibindo o proprio
+`MsgErro`** com o texto do SQL Server. A base distingue os dois casos:
 
 ```foxpro
-IF THIS.this_oBusinessObject.Salvar()
-    MsgInfo("Registro salvo com sucesso!", "Confirmar")
-    THIS.AlternarPagina(1)
+IF EMPTY(ALLTRIM(NVL(THIS.this_cMensagemErro, "")))
+    THIS.this_lErroExibido = .T.     && subclasse ja exibiu: nao repetir
 ELSE
-    MsgErro(IIF(EMPTY(THIS.this_oBusinessObject.this_cMensagemErro), ;
-        "N" + CHR(227) + "o foi poss" + CHR(237) + "vel gravar o registro.", ;
-        THIS.this_oBusinessObject.this_cMensagemErro), "Confirmar")
+    THIS.ExibirFalha("Salvar")       && deixou mensagem sem exibir: exibir aqui
 ENDIF
 ```
 
-Mesma logica da regra #9 do CLAUDE.md (CATCH nunca silencioso): **caminho de
-falha nunca eh mudo**. Vale igual para `Excluir()`, que tem a mesma estrutura.
+Validado: subclasse que exibe o proprio erro produz **uma** mensagem, nao duas.
+
+### No form
+
+Nao precisa de `ELSE`. Se tiver, guardar com `IF !<bo>.this_lErroExibido`.
 
 ### Referencias
 
-- WARNING: CorretorAutomatico Pattern #200.
+- Pattern #200 **aposentado** (a contagem dele foi o que indicou a solucao certa).
 - Origem: Erro158 (2026-09-10, FormCco — task357).
-
----
-
 ## 204. Popular Cursor Nao Repinta a Grade, e as Guardas do Legado Sao Regra (Erro158 2026-09-10)
 
 Duas coisas que o migrador descarta com frequencia por parecerem acessorias.

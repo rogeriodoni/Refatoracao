@@ -1207,11 +1207,12 @@ DEFINE CLASS FormCco AS FormBase
                 MsgInfo("Registro exclu" + CHR(237) + "do com sucesso!", "Excluir")
                 THIS.CarregarLista()
             ELSE
-                *-- Excluir() tambem devolve .F. em silencio (so preenche
-                *-- this_cMensagemErro) - sem ELSE o botao nao daria retorno algum
-                MsgErro(IIF(EMPTY(THIS.this_oBusinessObject.this_cMensagemErro), ;
-                    "N" + CHR(227) + "o foi poss" + CHR(237) + "vel excluir o registro.", ;
-                    THIS.this_oBusinessObject.this_cMensagemErro), "Excluir")
+                *-- BusinessBase.Excluir() ja exibe a falha e marca
+                *-- this_lErroExibido; guard contra mensagem duplicada (Erro158)
+                IF !THIS.this_oBusinessObject.this_lErroExibido
+                    MsgErro("N" + CHR(227) + "o foi poss" + CHR(237) + ;
+                        "vel excluir o registro.", "Excluir")
+                ENDIF
             ENDIF
         ENDIF
     ENDPROC
@@ -1354,13 +1355,12 @@ DEFINE CLASS FormCco AS FormBase
             MsgInfo("Registro salvo com sucesso!", "Confirmar")
             THIS.AlternarPagina(1)
         ELSE
-            *-- BusinessBase.Salvar() devolve .F. em silencio quando nao esta em
-            *-- modo de edicao ou quando ValidarDados/AntesDeGravar recusam - so
-            *-- preenche this_cMensagemErro. Sem este ELSE o usuario clicava
-            *-- Confirmar e NADA acontecia, sem nenhum aviso. Erro158.
-            MsgErro(IIF(EMPTY(THIS.this_oBusinessObject.this_cMensagemErro), ;
-                "N" + CHR(227) + "o foi poss" + CHR(237) + "vel gravar o registro.", ;
-                THIS.this_oBusinessObject.this_cMensagemErro), "Confirmar")
+            *-- BusinessBase.Salvar() ja exibe a falha e marca this_lErroExibido;
+            *-- este guard evita a mensagem sair duas vezes (Erro158)
+            IF !THIS.this_oBusinessObject.this_lErroExibido
+                MsgErro("N" + CHR(227) + "o foi poss" + CHR(237) + ;
+                    "vel gravar o registro.", "Confirmar")
+            ENDIF
         ENDIF
     ENDPROC
 
