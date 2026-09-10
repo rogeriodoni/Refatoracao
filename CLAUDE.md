@@ -289,6 +289,61 @@ Vao JUNTO com a formula, e o migrador costuma jogar fora:
 Transcrever do dump legado (`tasks\<task>\*_form_codigo_fonte.txt`) linha a linha e so depois trocar os nomes. Sem auto-fix possivel — regra de negocio nao se detecta por regex.
 
 
+### 18. `Column.AddObject` NAO faz o controle aparecer - falta o `CurrentControl`
+Adicionar OptionGroup/CheckBox/ComboBox/Spinner a uma `Column` de Grid **cria o objeto mas nao o exibe**: a coluna segue desenhando o `Text1` dela. O controle existe, responde a `PEMSTATUS` e nunca aparece — o usuario ve o valor cru numa caixa de texto e nao tem como marcar nada.
+
+```foxpro
+grd.Column3.AddObject("opt_4c_Tipos", "OptionGroup")
+WITH grd.Column3.opt_4c_Tipos
+    .ButtonCount = 3
+ENDWITH
+grd.Column3.CurrentControl = "opt_4c_Tipos"   && SEM ISTO nada aparece
+grd.Column3.Sparse         = .F.              && senao so aparece na linha ativa
+grd.Column3.ReadOnly       = .F.              && senao aparece mas nao aceita clique
+```
+
+`Column.ReadOnly` tem de vir **DEPOIS** de `Grid.ReadOnly` — o do grid propaga para as colunas e sobrescreve.
+
+Auto-fix: CorretorAutomatico **#198**. Origem: Erro158 (FormCco — OptionGroup Inserir/Excluir da coluna Tipo nunca apareceu).
+
+### 19. `MaxLength` vem da largura da COLUNA no schema, nunca do `Width` em pixels
+O migrador copia o `Width` do controle para o `MaxLength` — sao numeros vizinhos no mesmo `WITH`, mas um eh pixel e o outro caractere.
+
+```foxpro
+* ERRADO (FormCco, como saiu da migracao)
+.Width = 220
+.MaxLength = 220          && SigCdClc.descs eh char(30)
+* CERTO
+.MaxLength = 30
+```
+
+O usuario digita mais do que cabe e o SQL Server recusa o INSERT com *String or binary data would be truncated*. O `LEFT()` do INSERT/UPDATE no BO tem de usar o MESMO numero. **Alerta imediato: `MaxLength` igual ao `Width`.** Conferir em `docs/schema.sql` (UTF-16, ler com `Get-Content -Raw`).
+
+WARNING: CorretorAutomatico **#199**. Origem: Erro158.
+
+### 20. `IF oBO.Salvar()` SEM `ELSE` = gravacao que falha muda
+`BusinessBase.Salvar()` devolve `.F.` **sem exibir nada** quando nao esta em modo de edicao ou quando `ValidarDados`/`AntesDeGravar` recusam — so preenche `this_cMensagemErro`. Sem `ELSE`, o usuario clica Confirmar e NADA acontece: nenhuma mensagem, nenhum registro, nenhuma pista.
+
+```foxpro
+IF THIS.this_oBusinessObject.Salvar()
+    MsgInfo("Registro salvo com sucesso!", "Confirmar")
+    THIS.AlternarPagina(1)
+ELSE
+    MsgErro(IIF(EMPTY(THIS.this_oBusinessObject.this_cMensagemErro), ;
+        "N" + CHR(227) + "o foi poss" + CHR(237) + "vel gravar o registro.", ;
+        THIS.this_oBusinessObject.this_cMensagemErro), "Confirmar")
+ENDIF
+```
+
+Mesma logica da regra #9: caminho de falha nunca eh mudo. Vale para `Excluir()` tambem. WARNING: CorretorAutomatico **#200**. Origem: Erro158.
+
+### 21. Popular cursor NAO repinta a grade; e a condicao que CERCA a validacao eh regra
+**(a)** Grade ligada a cursor vazio nao passa a exibir sozinha as linhas inseridas depois. O legado sempre fecha com `Go Top In <cursor>` + `<grid>.Refresh` — reproduzir num metodo unico chamado em TODO caminho que popula o cursor (Incluir/Alterar/Visualizar). Sem isso a grade fica visualmente vazia com o cursor cheio, e o sintoma reportado ("a tela nao traz dados") manda o diagnostico para SQL/cursor/permissao.
+
+**(b)** As condicoes ao redor da validacao fazem parte dela. No FormCco o legado so dispara a consulta de sobreposicao quando `(FaixaI + FaixaF) <> 0` — sem esse guard, faixa 0 a 0 casa com qualquer registro cujo intervalo contenha zero e bloqueia a gravacao indevidamente. O migrado tambem tinha descartado a checagem `FaixaI > FaixaF` inteira e rodava tudo so no INCLUIR, quando o legado roda em INCLUIR **e** ALTERAR.
+
+Sem auto-fix. Origem: Erro158.
+
 **Full VFP9 reference, control properties, and 58 common errors**: See vfp9-migration skill.
 
 ## BusinessBase Property Names (CORRECT)

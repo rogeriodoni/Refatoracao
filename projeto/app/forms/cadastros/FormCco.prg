@@ -541,7 +541,7 @@ DEFINE CLASS FormCco AS FormBase
             .FontSize      = 8
             .ForeColor     = RGB(0, 0, 0)
             .BorderColor   = RGB(100, 100, 100)
-            .MaxLength     = 80
+            .MaxLength     = 30
             .Visible       = .T.
         ENDWITH
 
@@ -572,7 +572,7 @@ DEFINE CLASS FormCco AS FormBase
             .FontSize      = 8
             .ForeColor     = RGB(0, 0, 0)
             .BorderColor   = RGB(100, 100, 100)
-            .MaxLength     = 220
+            .MaxLength     = 30
             .Visible       = .T.
         ENDWITH
 
@@ -945,6 +945,15 @@ DEFINE CLASS FormCco AS FormBase
             .FontSize = 8
         ENDWITH
 
+        *-- CurrentControl: sem isto a Column3 continua exibindo o Text1 e o
+        *-- OptionGroup adicionado acima NUNCA aparece - o usuario ve o numero
+        *-- de Tipos numa caixa de texto e nao tem como marcar Inserir/Excluir.
+        *-- AddObject SO cria o controle; quem escolhe qual controle a coluna
+        *-- desenha eh o CurrentControl (default "Text1").  Erro158.
+        par_oPagina.grd_4c_Motivos.Column3.CurrentControl = "opt_4c_Tipos"
+        par_oPagina.grd_4c_Motivos.Column3.Sparse         = .F.
+        par_oPagina.grd_4c_Motivos.Column3.ReadOnly       = .F.
+
         *-- BINDEVENTs dos botoes Confirmar/Cancelar
         BINDEVENT(par_oPagina.cnt_4c_Salva.cmd_4c_Salvar,   "Click", THIS, "BtnSalvarClick")
         BINDEVENT(par_oPagina.cnt_4c_Salva.cmd_4c_Cancelar, "Click", THIS, "BtnCancelarClick")
@@ -1085,6 +1094,7 @@ DEFINE CLASS FormCco AS FormBase
         IF USED("crMotivos")
             ZAP IN crMotivos
             THIS.this_oBusinessObject.CompletarMotivosFS()
+            THIS.AtualizarGradeMotivos()
         ENDIF
 
         THIS.AlternarPagina(2)
@@ -1117,6 +1127,7 @@ DEFINE CLASS FormCco AS FormBase
             IF USED("crMotivos")
                 ZAP IN crMotivos
                 THIS.this_oBusinessObject.CarregarMotivosClassif(loc_cIdChaves)
+                THIS.AtualizarGradeMotivos()
             ENDIF
 
             THIS.AlternarPagina(2)
@@ -1152,6 +1163,7 @@ DEFINE CLASS FormCco AS FormBase
                 ZAP IN crMotivos
                 THIS.this_oBusinessObject.CarregarMotivosClassif(loc_cIdChaves)
                 THIS.this_oBusinessObject.CompletarMotivosFS()
+                THIS.AtualizarGradeMotivos()
             ENDIF
 
             THIS.AlternarPagina(2)
@@ -1194,6 +1206,12 @@ DEFINE CLASS FormCco AS FormBase
             IF THIS.this_oBusinessObject.Excluir()
                 MsgInfo("Registro exclu" + CHR(237) + "do com sucesso!", "Excluir")
                 THIS.CarregarLista()
+            ELSE
+                *-- Excluir() tambem devolve .F. em silencio (so preenche
+                *-- this_cMensagemErro) - sem ELSE o botao nao daria retorno algum
+                MsgErro(IIF(EMPTY(THIS.this_oBusinessObject.this_cMensagemErro), ;
+                    "N" + CHR(227) + "o foi poss" + CHR(237) + "vel excluir o registro.", ;
+                    THIS.this_oBusinessObject.this_cMensagemErro), "Excluir")
             ENDIF
         ENDIF
     ENDPROC
@@ -1285,12 +1303,12 @@ DEFINE CLASS FormCco AS FormBase
             RETURN
         ENDIF
 
-        *-- Verificar duplicidade e sobreposicao de faixa apenas no INCLUIR
-        IF THIS.this_cModoAtual = "INCLUIR"
-            loc_cEmps    = ALLTRIM(THIS.this_oBusinessObject.this_cEmps)
-            loc_cGrupos  = ALLTRIM(THIS.this_oBusinessObject.this_cGrupos)
-            loc_cCodigos = ALLTRIM(THIS.this_oBusinessObject.this_cCodigos)
+        loc_cEmps    = ALLTRIM(THIS.this_oBusinessObject.this_cEmps)
+        loc_cGrupos  = ALLTRIM(THIS.this_oBusinessObject.this_cGrupos)
+        loc_cCodigos = ALLTRIM(THIS.this_oBusinessObject.this_cCodigos)
 
+        *-- Duplicidade: so no INCLUIR (legado: pcEscolha = 'INSERIR')
+        IF THIS.this_cModoAtual = "INCLUIR"
             IF THIS.this_oBusinessObject.VerificarDuplicidade( ;
                     loc_cEmps, loc_cGrupos, loc_cCodigos, "")
                 MsgAviso("J" + CHR(225) + " existe um registro com este c" + CHR(243) + ;
@@ -1298,14 +1316,32 @@ DEFINE CLASS FormCco AS FormBase
                 loc_oPg2.txt_4c_Codigo.SetFocus
                 RETURN
             ENDIF
+        ENDIF
 
-            loc_cFaixaMsg = THIS.this_oBusinessObject.VerificarFaixaSobreposta( ;
-                loc_cEmps, loc_cGrupos, ;
-                THIS.this_oBusinessObject.this_nFaixaIs, ;
-                THIS.this_oBusinessObject.this_nFaixaFs, "")
-            IF !EMPTY(loc_cFaixaMsg)
-                MsgAviso(loc_cFaixaMsg, "Confirmar")
+        *-- Faixa: o legado valida em INCLUIR **e** ALTERAR
+        *-- (If pcEscolha = 'ALTERAR' Or pcEscolha = 'INSERIR'), e so dispara a
+        *-- consulta de sobreposicao quando (FaixaI + FaixaF) <> 0. Sem esse
+        *-- guard, faixa 0 a 0 casa com qualquer registro cujo intervalo contenha
+        *-- zero e a gravacao eh bloqueada indevidamente. Erro158.
+        IF INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")
+            IF THIS.this_oBusinessObject.this_nFaixaIs > THIS.this_oBusinessObject.this_nFaixaFs
+                MsgAviso("Valor da Faixa Inicial > que o valor da Faixa Final !", "Confirmar")
+                loc_oPg2.txt_4c_FaixaF.SetFocus
                 RETURN
+            ENDIF
+
+            IF (THIS.this_oBusinessObject.this_nFaixaIs + ;
+                THIS.this_oBusinessObject.this_nFaixaFs) <> 0
+                loc_cFaixaMsg = THIS.this_oBusinessObject.VerificarFaixaSobreposta( ;
+                    loc_cEmps, loc_cGrupos, ;
+                    THIS.this_oBusinessObject.this_nFaixaIs, ;
+                    THIS.this_oBusinessObject.this_nFaixaFs, ;
+                    IIF(THIS.this_cModoAtual = "ALTERAR", ;
+                        THIS.this_oBusinessObject.this_cIdChaves, ""))
+                IF !EMPTY(loc_cFaixaMsg)
+                    MsgAviso(loc_cFaixaMsg, "Confirmar")
+                    RETURN
+                ENDIF
             ENDIF
         ENDIF
 
@@ -1317,7 +1353,37 @@ DEFINE CLASS FormCco AS FormBase
             ENDIF
             MsgInfo("Registro salvo com sucesso!", "Confirmar")
             THIS.AlternarPagina(1)
+        ELSE
+            *-- BusinessBase.Salvar() devolve .F. em silencio quando nao esta em
+            *-- modo de edicao ou quando ValidarDados/AntesDeGravar recusam - so
+            *-- preenche this_cMensagemErro. Sem este ELSE o usuario clicava
+            *-- Confirmar e NADA acontecia, sem nenhum aviso. Erro158.
+            MsgErro(IIF(EMPTY(THIS.this_oBusinessObject.this_cMensagemErro), ;
+                "N" + CHR(227) + "o foi poss" + CHR(237) + "vel gravar o registro.", ;
+                THIS.this_oBusinessObject.this_cMensagemErro), "Confirmar")
         ENDIF
+    ENDPROC
+
+    *==========================================================================
+    * AtualizarGradeMotivos - Reposiciona e repinta grd_4c_Motivos apos popular
+    * o cursor crMotivos. Equivale ao `Go Top In crMotivos` +
+    * `ThisForm.Pagina.Dados.grdMotivos.Refresh` do legado (Grupo_op.Click).
+    *==========================================================================
+    PROTECTED PROCEDURE AtualizarGradeMotivos()
+        LOCAL loc_oPg2
+
+        TRY
+            IF USED("crMotivos")
+                GO TOP IN crMotivos
+            ENDIF
+
+            loc_oPg2 = THIS.pgf_4c_Paginas.Page2
+            IF VARTYPE(loc_oPg2) = "O" AND PEMSTATUS(loc_oPg2, "grd_4c_Motivos", 5)
+                loc_oPg2.grd_4c_Motivos.Refresh()
+            ENDIF
+        CATCH TO loException
+            MsgErro("Erro em FormCco.AtualizarGradeMotivos: " + loException.Message, "Erro")
+        ENDTRY
     ENDPROC
 
     *==========================================================================

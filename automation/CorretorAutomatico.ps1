@@ -14448,6 +14448,214 @@ function Corrigir-TtodEmValorQuePodeSerDate {
     return $Linhas
 }
 
+function Corrigir-ColumnAddObjectSemCurrentControl {
+    # Pattern #198 (Erro158, 2026-09-10, FormCco) - AUTO-FIX.
+    #
+    # Column.AddObject("opt_4c_Tipos", "OptionGroup") CRIA o objeto e NAO o
+    # exibe: a coluna continua desenhando o Text1 dela. O controle existe,
+    # responde a PEMSTATUS e nunca aparece na tela - o usuario ve o valor cru
+    # numa caixa de texto e nao tem como marcar nada.
+    #
+    # Quem decide o controle que a coluna desenha eh Column.CurrentControl
+    # (default "Text1"), e ele tem de receber o NOME exato passado ao AddObject.
+    # Junto vai Sparse = .F., senao o controle so aparece na LINHA ATIVA.
+    #
+    # No Erro158 o OptionGroup Inserir/Excluir/Nenhum da coluna Tipo do
+    # grd_4c_Motivos foi criado na migracao e nunca apareceu: a tela de
+    # Classificacao de Contas nao tinha como cadastrar o motivo.
+    #
+    # DETECCAO conservadora: so classes que se distinguem visualmente do Text1
+    # (OptionGroup/CheckBox/ComboBox/Spinner/EditBox). O guard eh procurar
+    # CurrentControl = "<nome>" em QUALQUER lugar do arquivo - assim um form que
+    # ja resolve por outro caminho (variavel intermediaria, outro alias do mesmo
+    # grid) nunca eh tocado.
+    #
+    # INJECAO depois do ENDWITH que fecha o bloco de configuracao do controle,
+    # nunca no meio dele (ver memoria sobre injetar apos ENDWITH).
+    param([string[]]$Linhas, [string]$Arquivo = "")
+
+    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
+
+    $rxAdd = '^(?<ind>\s*)(?<path>[A-Za-z_][\w.]*\.Column\d+)\.AddObject\(\s*"(?<nome>[^"]+)"\s*,\s*"(?<classe>OptionGroup|CheckBox|ComboBox|Spinner|EditBox)"\s*\)\s*$'
+    $texto = $Linhas -join "`n"
+
+    $lista = New-Object System.Collections.Generic.List[string]
+    $Linhas | ForEach-Object { $lista.Add($_) }
+
+    # de tras para frente: injetar nao desloca os indices ainda por examinar
+    for ($i = $lista.Count - 1; $i -ge 0; $i--) {
+        $m = [regex]::Match($lista[$i], $rxAdd, 'IgnoreCase')
+        if (-not $m.Success) { continue }
+
+        $ind    = $m.Groups['ind'].Value
+        $path   = $m.Groups['path'].Value
+        $nome   = $m.Groups['nome'].Value
+        $classe = $m.Groups['classe'].Value
+
+        # ja existe CurrentControl apontando para este controle? nao mexe
+        $rxCur = 'CurrentControl\s*=\s*"' + [regex]::Escape($nome) + '"'
+        if ([regex]::IsMatch($texto, $rxCur, 'IgnoreCase')) { continue }
+
+        # ponto de injecao: depois do ENDWITH que fecha "WITH <path>.<nome>",
+        # se esse WITH existir logo abaixo; senao logo apos o AddObject
+        $destino = $i
+        $rxWith  = '^\s*WITH\s+' + [regex]::Escape($path + '.' + $nome) + '\s*$'
+        for ($j = $i + 1; $j -lt [Math]::Min($i + 6, $lista.Count); $j++) {
+            if ([string]::IsNullOrWhiteSpace($lista[$j])) { continue }
+            if ([regex]::IsMatch($lista[$j], $rxWith, 'IgnoreCase')) {
+                $nivel = 0
+                for ($k = $j; $k -lt $lista.Count; $k++) {
+                    if ($lista[$k] -match '^\s*WITH\s')    { $nivel++ }
+                    if ($lista[$k] -match '^\s*ENDWITH\s*$') {
+                        $nivel--
+                        if ($nivel -eq 0) { $destino = $k; break }
+                    }
+                }
+            }
+            break
+        }
+
+        $jaSparse = [regex]::IsMatch($texto, [regex]::Escape($path) + '\.Sparse\s*=', 'IgnoreCase')
+
+        $novo = New-Object System.Collections.Generic.List[string]
+        $novo.Add('')
+        $novo.Add($ind + '*-- CurrentControl: sem isto a coluna continua desenhando o Text1 e o')
+        $novo.Add($ind + '*-- ' + $classe + ' acima NUNCA aparece (CorretorAutomatico #198)')
+        $novo.Add($ind + $path + '.CurrentControl = "' + $nome + '"')
+        if (-not $jaSparse) {
+            $novo.Add($ind + $path + '.Sparse         = .F.')
+        }
+        $lista.InsertRange($destino + 1, [string[]]$novo)
+
+        Add-Correcao -Tipo "COLUMN_ADDOBJECT_SEM_CURRENTCONTROL" -Linha ($i + 1) `
+            -Original ($path + '.AddObject("' + $nome + '", "' + $classe + '") sem CurrentControl') `
+            -Corrigido ($path + '.CurrentControl = "' + $nome + '"' + $(if (-not $jaSparse) { ' + Sparse = .F.' } else { '' })) `
+            -Descricao ("Pattern #198: Column.AddObject CRIA o controle mas NAO o exibe - a coluna continua " +
+                "desenhando o Text1 dela. O controle existe, responde a PEMSTATUS e nunca aparece: o usuario ve o " +
+                "valor cru numa caixa de texto e nao tem como marcar nada. Quem escolhe o controle desenhado eh " +
+                "Column.CurrentControl (default 'Text1'), que precisa do nome exato passado ao AddObject; junto vai " +
+                "Sparse = .F., senao o controle so aparece na linha ativa. Conferir tambem Column.ReadOnly = .F. " +
+                "DEPOIS do Grid.ReadOnly quando o campo for editavel. Origem: Erro158 (2026-09-10, FormCco " +
+                "'Cadastro de Classificacao de Contas').")
+        Write-Host "[Pattern #198] CurrentControl injetado para '$nome' (linha $($i + 1))" -ForegroundColor Green
+    }
+
+    return $lista.ToArray()
+}
+
+function Corrigir-MaxLengthCopiadoDoWidth {
+    # Pattern #199 (Erro158, 2026-09-10, FormCco) - WARNING-only.
+    #
+    # O migrador copia o Width do controle (PIXEL) para o MaxLength (CARACTERE).
+    # Sao numeros vizinhos no mesmo bloco WITH e nao tem nenhuma relacao. Em
+    # FormCco o Codigo saiu .Width = 80 / .MaxLength = 80 e a Descricao
+    # .Width = 220 / .MaxLength = 220, quando as duas colunas sao char(30):
+    # o usuario digita mais do que cabe e o SQL Server recusa o INSERT com
+    # "String or binary data would be truncated".
+    #
+    # WARNING-only de proposito: o .prg nao diz com seguranca a qual coluna do
+    # schema cada TextBox corresponde, entao o numero certo exige leitura humana
+    # (docs\schema.sql, que eh UTF-16 - ler com Get-Content -Raw).
+    #
+    # Piso de 20 para nao acusar coincidencia legitima (.Width = 3 com
+    # .MaxLength = 3 em campo de empresa, por exemplo).
+    param([string[]]$Linhas, [string]$Arquivo = "")
+
+    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
+
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        $m = [regex]::Match($Linhas[$i], '^\s*\.MaxLength\s*=\s*(\d+)\s*(&&.*)?$')
+        if (-not $m.Success) { continue }
+        $valor = [int]$m.Groups[1].Value
+        if ($valor -lt 20) { continue }
+
+        # procura .Width no mesmo bloco WITH (para tras e para frente ate a borda)
+        $achou = -1
+        foreach ($dir in @(-1, 1)) {
+            for ($d = 1; $d -le 20; $d++) {
+                $j = $i + ($d * $dir)
+                if ($j -lt 0 -or $j -ge $Linhas.Count) { break }
+                if ($Linhas[$j] -match '^\s*(WITH\s|ENDWITH\s*$)') { break }
+                $mw = [regex]::Match($Linhas[$j], '^\s*\.Width\s*=\s*(\d+)\s*(&&.*)?$')
+                if ($mw.Success) {
+                    if ([int]$mw.Groups[1].Value -eq $valor) { $achou = $j + 1 }
+                    break
+                }
+            }
+            if ($achou -ge 0) { break }
+        }
+        if ($achou -lt 0) { continue }
+
+        Add-Correcao -Tipo "WARN-199-MAXLENGTH-IGUAL-AO-WIDTH" -Linha ($i + 1) `
+            -Original (".MaxLength = $valor com .Width = $valor (linha $achou)") `
+            -Corrigido "(REVISAR MANUAL - usar a largura da coluna em docs\schema.sql)" `
+            -Descricao ("Pattern #199: MaxLength igual ao Width eh a assinatura do migrador ter copiado a " +
+                "largura em PIXEL para o limite em CARACTERE. O usuario digita mais do que cabe na coluna e o " +
+                "SQL Server recusa o INSERT com 'String or binary data would be truncated' - a tela simplesmente " +
+                "nao grava. Conferir a coluna em docs\schema.sql (UTF-16: ler com Get-Content -Raw) e usar a " +
+                "largura real no MaxLength E no LEFT() do INSERT/UPDATE do BO. Origem: Erro158 (2026-09-10, " +
+                "FormCco: .MaxLength 80 e 220 para colunas char(30)).")
+        Write-Host "[Pattern #199 WARN] Linha $($i + 1): MaxLength = $valor igual ao Width" -ForegroundColor Yellow
+    }
+
+    return $Linhas
+}
+
+function Corrigir-SalvarSemElseSilencioso {
+    # Pattern #200 (Erro158, 2026-09-10, FormCco) - WARNING-only.
+    #
+    # BusinessBase.Salvar() devolve .F. SEM EXIBIR NADA em tres caminhos: nao
+    # esta em modo de edicao (this_lEmEdicao), ValidarDados() recusou ou
+    # AntesDeGravar() recusou. Ele apenas preenche this_cMensagemErro - quem
+    # exibe eh o chamador.
+    #
+    # Com `IF <bo>.Salvar()` sem ELSE, o usuario clica Confirmar e NADA acontece:
+    # nenhuma mensagem, nenhum registro, nenhuma pista. Foi o sintoma reportado
+    # no Erro158 ("ao gravar as informacoes digitadas nao faz a gravacao").
+    #
+    # WARNING-only: injetar um ELSE eh mexer em fluxo de controle, e ha forms que
+    # tratam a falha depois do ENDIF. O aviso aponta o site para revisao.
+    param([string[]]$Linhas, [string]$Arquivo = "")
+
+    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
+
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        $linha = $Linhas[$i]
+        if ($linha -match '^\s*\*') { continue }
+        if ($linha -notmatch '(?i)^\s*IF\s+.*\.(Salvar|Excluir)\s*\(\s*\)') { continue }
+
+        $metodo = if ($linha -imatch '\.Salvar\s*\(') { 'Salvar' } else { 'Excluir' }
+
+        $nivel   = 1
+        $temElse = $false
+        for ($j = $i + 1; $j -lt $Linhas.Count; $j++) {
+            $l = $Linhas[$j]
+            if ($l -match '^\s*\*') { continue }
+            if ($l -imatch '^\s*IF\s')      { $nivel++ ; continue }
+            if ($l -imatch '^\s*ENDIF\s*$') {
+                $nivel--
+                if ($nivel -eq 0) { break }
+                continue
+            }
+            if ($nivel -eq 1 -and $l -imatch '^\s*ELSE\s*$') { $temElse = $true ; break }
+        }
+        if ($temElse) { continue }
+
+        Add-Correcao -Tipo "WARN-200-SALVAR-SEM-ELSE" -Linha ($i + 1) `
+            -Original $linha.Trim() `
+            -Corrigido "(REVISAR MANUAL - acrescentar ELSE com MsgErro(this_cMensagemErro))" `
+            -Descricao ("Pattern #200: BusinessBase.$metodo() devolve .F. SEM exibir nada quando nao esta em modo " +
+                "de edicao ou quando ValidarDados/AntesDeGravar recusam - so preenche this_cMensagemErro. Sem ELSE " +
+                "o usuario aciona o botao e NADA acontece: nenhuma mensagem, nenhum registro, nenhuma pista. " +
+                "Acrescentar ELSE com MsgErro(<bo>.this_cMensagemErro, 'Confirmar'), com texto generico quando a " +
+                "propriedade estiver vazia. Mesma logica da regra #9 do CLAUDE.md: caminho de falha nunca eh mudo. " +
+                "Origem: Erro158 (2026-09-10, FormCco 'Cadastro de Classificacao de Contas').")
+        Write-Host "[Pattern #200 WARN] Linha $($i + 1): IF ....$metodo() sem ELSE" -ForegroundColor Yellow
+    }
+
+    return $Linhas
+}
+
 function Invoke-CorrecaoAutomatica {
     param(
         [string]$Arquivo,
@@ -14667,6 +14875,9 @@ function Invoke-CorrecaoAutomatica {
     $linhas = Corrigir-EvaluateAtribuicaoQueNaoAtribui -Linhas $linhas -Arquivo $Arquivo
     $linhas = Corrigir-FaixaCabecalhoDepoisDosBotoes -Linhas $linhas -Arquivo $Arquivo
     $linhas = Corrigir-TtodEmValorQuePodeSerDate -Linhas $linhas -Arquivo $Arquivo
+    $linhas = Corrigir-ColumnAddObjectSemCurrentControl -Linhas $linhas -Arquivo $Arquivo
+    $linhas = Corrigir-MaxLengthCopiadoDoWidth -Linhas $linhas -Arquivo $Arquivo
+    $linhas = Corrigir-SalvarSemElseSilencioso -Linhas $linhas -Arquivo $Arquivo
 
     # Salva arquivo corrigido em UTF-8 SEM BOM.
     # - VFP9 nao suporta BOM (por isso removemos no read com bytes[3..])
