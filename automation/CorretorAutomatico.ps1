@@ -14582,6 +14582,47 @@ function Invoke-CorrecaoAutomatica {
     Write-Host "Aplicando correcoes..." -ForegroundColor Yellow
 
     # Aplica correÃ§Ãµes em sequÃªncia
+    # =========================================================================
+    # MODO SEGURO para arquivos que NAO sao form nem BO
+    # =========================================================================
+    # A cobertura do sweep foi ampliada (2026-09-10) para classes\*.prg e
+    # utils\*.prg, porque ate entao ele so via forms\**\*.prg e classes\*BO.prg:
+    # as CLASSES BASE e os UTILITARIOS que todo form usa nunca eram checados, e
+    # foi assim que TextBoxGridLookup.prg e ExtratoReduzido.prg ficaram meses
+    # sem compilar.
+    #
+    # Mas rodar os ~198 patterns nesses arquivos eh PERIGOSO: a maioria aplica
+    # geometria canonica de form CRUD (Width=1000, cnt_4c_Botoes.Left=542,
+    # cmd_4c_Encerrar 75x75) e so 13 tem guard de \classes\. Os patterns #63,
+    # #77 e #89 ja corromperam o FormBuscaAuxiliar (Width=374) jogando os botoes
+    # do picker para fora do form - o usuario ficou sem como selecionar.
+    #
+    # Por isso, para esses arquivos roda apenas a lista abaixo: patterns de
+    # SINTAXE, que nao dependem de geometria nem de estrutura de form CRUD.
+    $ehFormOuBO = $false
+    if (-not [string]::IsNullOrEmpty($Arquivo)) {
+        $nomeArq = Split-Path -Leaf $Arquivo
+        $ehFormOuBO = ($Arquivo -match '(?i)\\forms\\') -or ($nomeArq -like '*BO.prg')
+    } else {
+        $ehFormOuBO = $true   # sem path, mantem o comportamento antigo
+    }
+
+    if (-not $ehFormOuBO) {
+        Write-Host "Modo SEGURO (classe base / utilitario): apenas patterns de sintaxe" -ForegroundColor Cyan
+        $linhas = Corrigir-ElseIf -Linhas $linhas
+        $linhas = Corrigir-IsEmptyParaEmpty -Linhas $linhas
+        $linhas = Corrigir-TernarioParaIIF -Linhas $linhas
+        $linhas = Corrigir-InlineIfThen -Linhas $linhas
+        $linhas = Corrigir-PublicProcedureEmDefineClass -Linhas $linhas
+        $linhas = Corrigir-EncodingInvalido -Linhas $linhas
+        $linhas = Corrigir-AspasDuplicadasSQL -Linhas $linhas
+        $linhas = Corrigir-LocateIn -Linhas $linhas
+        $linhas = Corrigir-CountToIn -Linhas $linhas
+        $linhas = Corrigir-SelfAssignmentObjeto -Linhas $linhas
+        $linhas = Corrigir-TtodEmValorQuePodeSerDate -Linhas $linhas -Arquivo $Arquivo
+    }
+
+    if ($ehFormOuBO) {
     $linhas = Corrigir-ReturnNoTryCatch -Linhas $linhas
     $linhas = Corrigir-InicializarFormDuplicado -Linhas $linhas
     $linhas = Corrigir-ShowModal -Linhas $linhas
@@ -14759,6 +14800,8 @@ function Invoke-CorrecaoAutomatica {
     $linhas = Corrigir-TtodEmValorQuePodeSerDate -Linhas $linhas -Arquivo $Arquivo
     $linhas = Corrigir-ColumnAddObjectSemCurrentControl -Linhas $linhas -Arquivo $Arquivo
     $linhas = Corrigir-MaxLengthCopiadoDoWidth -Linhas $linhas -Arquivo $Arquivo
+
+    }
 
     # Salva arquivo corrigido em UTF-8 SEM BOM.
     # - VFP9 nao suporta BOM (por isso removemos no read com bytes[3..])

@@ -70,21 +70,26 @@ DEFINE CLASS Formsigprdis AS FormBase
                 *-- Fechados/substituidos pelos metodos do BO antes de cada SQLEXEC
                 SET NULL ON
                 CREATE CURSOR cursor_4c_Dados (Codigos C(20), Datas T)
-                SELECT 0 AS nMarca, SPACE(36) AS cidchaves, SPACE(4) AS emps, ;
-                    SPACE(10) AS grupos, SPACE(15) AS contas ;
-                    INTO CURSOR cursor_4c_Estoques READWRITE
-                SELECT SPACE(14) AS cpros, SPACE(65) AS dpros, SPACE(4) AS codcors, ;
-                    SPACE(4) AS codtams, 0.00 AS QtdEstoque, 0.00 AS QtdSaida, 0.00 AS QtdSaldo ;
-                    INTO CURSOR cursor_4c_Disponivel READWRITE
+                *-- CREATE CURSOR e nao SELECT ... INTO CURSOR: em VFP-SQL o
+                *-- SELECT EXIGE clausula FROM, entao "SELECT <constantes> INTO
+                *-- CURSOR" nao compila ("Command is missing required clause").
+                *-- Estes sao cursores VAZIOS so para as grades terem a que se
+                *-- ligar no Init - os metodos do BO os substituem via SQLEXEC.
+                CREATE CURSOR cursor_4c_Estoques ;
+                    (nMarca N(1), cidchaves C(36), emps C(4), ;
+                     grupos C(10), contas C(15))
+                CREATE CURSOR cursor_4c_Disponivel ;
+                    (cpros C(14), dpros C(65), codcors C(4), ;
+                     codtams C(4), QtdEstoque N(10,2), QtdSaida N(10,2), QtdSaldo N(10,2))
                 CREATE CURSOR cursor_4c_Distribui (emps C(4), grupos C(10), contas C(15), QtdSaldo N(10,2), QtdDistr N(10,2), locals C(10))
-                SELECT SPACE(4) AS emps, SPACE(20) AS dopes, SPACE(10) AS numes, ;
-                    DATETIME() AS datas, SPACE(10) AS grupos, SPACE(40) AS empdopnums, ;
-                    SPACE(3) AS empds, SPACE(10) AS contaos, SPACE(10) AS grupods, ;
-                    SPACE(10) AS contads ;
-                    INTO CURSOR cursor_4c_CabOpera READWRITE
-                SELECT SPACE(14) AS cpros, SPACE(65) AS dpros, SPACE(4) AS codcors, ;
-                    SPACE(4) AS codtams, 0.00 AS qtds, SPACE(10) AS locals ;
-                    INTO CURSOR cursor_4c_ItensOper READWRITE
+                CREATE CURSOR cursor_4c_CabOpera ;
+                    (emps C(4), dopes C(20), numes C(10), ;
+                     datas T, grupos C(10), empdopnums C(40), ;
+                     empds C(3), contaos C(10), grupods C(10), ;
+                     contads C(10))
+                CREATE CURSOR cursor_4c_ItensOper ;
+                    (cpros C(14), dpros C(65), codcors C(4), ;
+                     codtams C(4), qtds N(10,2), locals C(10))
                 SET NULL OFF
 
                 THIS.ConfigurarPageFrame()

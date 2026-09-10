@@ -99,7 +99,8 @@ DEFINE CLASS TextBoxGridBase AS TextBox
                     USE IN cursor_4c_ValidaGrid
                 ENDIF
                 RETURN .T.
-            ELSE IF loc_nResultado > 0 AND RECCOUNT("cursor_4c_ValidaGrid") > 1
+            ELSE
+                IF loc_nResultado > 0 AND RECCOUNT("cursor_4c_ValidaGrid") > 1
                 * Multiplos - abre busca com o valor digitado
                 IF USED("cursor_4c_ValidaGrid")
                     USE IN cursor_4c_ValidaGrid
@@ -115,6 +116,7 @@ DEFINE CLASS TextBoxGridBase AS TextBox
                 THIS.AbrirBuscaTodos()
                 RETURN .T.
             ENDIF
+        ENDIF
         ENDIF
 
         RETURN .T.
