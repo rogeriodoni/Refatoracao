@@ -10770,105 +10770,6 @@ function Corrigir-ReportPageFrameTopOffsetWarning {
     return $Linhas
 }
 
-function Corrigir-FormBuscaAuxiliarPatternBWarning {
-    <#
-    .SYNOPSIS
-    Pattern #166 — WARNING-only. Detecta CREATEOBJECT("FormBuscaAuxiliar",<args>) —
-    o Pattern B defeituoso — e sugere refactor para helper AbrirLookupCanonico
-    (preferido) ou Pattern A manual (fallback).
-
-    Bug (Erro114 Formsigrecog 2026-08-13):
-      1. FormBuscaAuxiliar.Init faz WHERE campo = 'X' + LIKE 'X%'; se ambos 0
-         rows, FECHA o cursor e picker abre VAZIO.
-      2. FormBuscaAuxiliar herda DataSession=1 (shared); se form pai eh
-         DataSession=2 (private), USED() pos-Show retorna .F. no caller e
-         selecao perde silenciosamente.
-      3. Cursor scope isolado entre sessoes causa selecao invisivel ao caller.
-
-    Fix preferido: THIS.AbrirLookupCanonico(par_cTabela, par_cCampoCod,
-    par_cCampoDesc, par_cTitulo, par_cValorFiltro, par_oTxtCod, par_oTxtDesc,
-    par_cFiltroExtra) — helper novo em FormBase.prg (2026-08-13).
-
-    Fix fallback (Pattern A manual): ver migration-patterns.md #166.
-
-    NAO auto-mutate: cada call tem tabela/campos/titulo/textbox destino/logica
-    pos-selecao especificos. Refactor exige contexto — LLM pode fazer, regex nao.
-    #>
-    param([string[]]$Linhas)
-
-    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
-
-    # Guard: skip arquivos-fonte de FormBuscaAuxiliar/FormBase (definicoes
-    # internas, nao chamadas de callers).
-    $conteudo = $Linhas -join "`n"
-    if ($conteudo -match '(?im)^\s*DEFINE\s+CLASS\s+(FormBuscaAuxiliar|FormBase)\b') {
-        return $Linhas
-    }
-
-    $suspects = @()
-
-    for ($i = 0; $i -lt $Linhas.Count; $i++) {
-        $linha = $Linhas[$i]
-
-        # Skip comentarios
-        if ($linha -match '^\s*\*') { continue }
-
-        # Detecta Pattern B: CREATEOBJECT("FormBuscaAuxiliar", ...) com >=2 args.
-        # Aceita whitespace/case variados. A virgula apos "FormBuscaAuxiliar"
-        # (antes do proximo arg) e a marca do Pattern B.
-        if ($linha -match '(?i)CREATEOBJECT\s*\(\s*"FormBuscaAuxiliar"\s*,') {
-            $suspects += [PSCustomObject]@{
-                Line = ($i + 1)
-                Snippet = ($linha.Trim())
-            }
-        }
-    }
-
-    foreach ($susp in $suspects) {
-        $sugestao = "Refactor para THIS.AbrirLookupCanonico(par_cTabela, par_cCampoCod, par_cCampoDesc, par_cTitulo, par_cValorFiltro, par_oTxtCod, par_oTxtDesc, par_cFiltroExtra) [PREFERIDO — helper em FormBase.prg] OU Pattern A manual [FALLBACK — ver migration-patterns.md #166]. Pattern B defeitos: (1) Init WHERE exato + LIKE prefixo; se ambos 0 rows, FECHA cursor -> picker vazio; (2) DataSession=1 vs pai DataSession=2 -> USED() pos-Show retorna .F. no caller -> selecao perdida; (3) cursor scope isolado."
-        Add-Correcao -Tipo "WARN-166-FORMBUSCAAUXILIAR-PATTERN-B" -Linha $susp.Line `
-            -Original $susp.Snippet `
-            -Corrigido "(REVISAR MANUAL — auto-mutate inseguro)" `
-            -Descricao "Pattern #166 WARNING: CREATEOBJECT('FormBuscaAuxiliar', <args>) eh Pattern B defeituoso. $sugestao Ref canonico: Formsigrecrf.prg (task066), Formsigrecog.prg (task059 pos-Erro114). Origem: Erro114 (2026-08-13, Formsigrecog — digita 'M' em vendedor+Enter, picker abre vazio pois WHERE codigos='M' e LIKE 'M%' ambos 0 rows)."
-    }
-
-    if ($suspects.Count -gt 0) {
-        Write-Host "[Pattern #166] $($suspects.Count) chamada(s) Pattern B de FormBuscaAuxiliar - REVISAR (refactor para AbrirLookupCanonico ou Pattern A)" -ForegroundColor Yellow
-    }
-
-    return $Linhas
-}
-
-#==============================================================================
-# Pattern #167: Corrigir-ReportPrepararDadosEmptyCursorGuard
-# AUTO-MUTATE: injeta guard `IF RECCOUNT("<cursor>") = 0 / this_cMensagemErro =
-# "Nenhum registro encontrado..." / EXIT / ENDIF` antes de `loc_l<flag> = .T. /
-# EXIT` no final de PrepararDados (ou Processar/MontarDados) em BOs REPORT.
-#
-# Motivo: SQLEXEC retorna sucesso (1) mesmo quando query retorna 0 rows. Sem
-# guard, PrepararDados retorna .T. com cursor vazio, Visualizar chama
-# REPORT FORM sobre cursor vazio -> preview em branco SEM mensagem para o
-# usuario (que esperava "Nenhum registro encontrado com os filtros informados").
-#
-# Detector:
-#   1. Guard: BO herda `RelatorioBase`
-#   2. Encontra bloco final `SELECT <cursor> / [INDEX ON | SET ORDER | GO TOP] /
-#      loc_l<flag> = .T. / EXIT` dentro de PrepararDados/Processar/MontarDados
-#   3. Se ja tem `IF RECCOUNT(<cursor>)` no janela de 15 linhas antes: skip
-#   4. Se cursor eh literal (nao expressao dinamica com var): injetar guard
-#
-# Auto-fix SEGURO porque:
-#   (a) Nome do cursor eh detectado do proprio codigo (SELECT literal)
-#   (b) Mensagem eh generica ("Nenhum registro encontrado...")
-#   (c) Comportamento resultante eh amigavel: usuario ve dialog em vez de
-#      preview em branco
-#   (d) Se cursor NAO estiver vazio, RECCOUNT>0 e guard nao dispara — zero
-#      impacto no fluxo happy-path
-#
-# Origem: Erro115 (2026-08-13, Formsigrecop "Comissoes por Recebimento").
-# Sweep 2026-08-13 detectou 67 BOs REPORT sem RECCOUNT guard (25 tinham). O
-# Pattern #164 (WARNING-only) documentava o problema mas nao consertava.
-#==============================================================================
 function Corrigir-ReportPrepararDadosEmptyCursorGuard {
     param([string[]]$Linhas)
 
@@ -12594,11 +12495,32 @@ function Corrigir-GridColumnCountEmCarregar {
     # Regra: ColumnCount deve ser definido APENAS em ConfigurarAba*/ConfigurarGrid*
     # durante inicializacao. Nos metodos Carregar*Aba/CarregarLista NAO reatribuir.
     #
-    # WARNING-only: nao sabemos se ha AddObject nas colunas sem analisar o form inteiro.
-    # Origem: Erro144 (2026-09-03, Formacg — CheckBox sumia apos carregar dados).
+    # WARNING-only. Origem: Erro144 (2026-09-03, Formacg — CheckBox sumia apos
+    # carregar dados).
+    #
+    # ESCOPO ESTREITADO (2026-09-10): o dano documentado — destruir controles
+    # criados com AddObject — so existe se a grade TIVER controles assim. O
+    # detector antigo avisava em qualquer `ColumnCount =` dentro de Carregar*, e
+    # a medicao mostrou 188 arquivos acusados para 20 com risco real: 89% de
+    # falso positivo, que afogava os 20 que importam.
+    #
+    # O comentario antigo dizia "nao sabemos se ha AddObject sem analisar o form
+    # inteiro" - mas a funcao RECEBE o arquivo inteiro em $Linhas. Basta olhar.
+    #
+    # Reatribuir ColumnCount numa grade sem AddObject tambem reseta larguras e
+    # headers, mas isso ja eh coberto pelo pattern de RecordSource/reconfiguracao
+    # - nao eh este o alarme.
     param([string[]]$Linhas)
 
     if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
+
+    # Guard de escopo: sem controle criado por AddObject em alguma Column, a
+    # reatribuicao de ColumnCount nao destroi nada que este pattern proteja.
+    $temAddObjectEmColuna = $false
+    foreach ($l in $Linhas) {
+        if ($l -match '(?i)\.Column\d+\.AddObject\s*\(') { $temAddObjectEmColuna = $true; break }
+    }
+    if (-not $temAddObjectEmColuna) { return $Linhas }
 
     $inCarregar  = $false
     $profWith    = 0  # profundidade de WITH blocks dentro do metodo
@@ -14788,7 +14710,6 @@ function Invoke-CorrecaoAutomatica {
     $linhas = Corrigir-SigMvCempsJoinInvalido -Linhas $linhas
     $linhas = Corrigir-PrepararDadosUncondSuccessFlag -Linhas $linhas
     $linhas = Corrigir-ReportPageFrameTopOffsetWarning -Linhas $linhas
-    $linhas = Corrigir-FormBuscaAuxiliarPatternBWarning -Linhas $linhas
     $linhas = Corrigir-ReportPrepararDadosEmptyCursorGuard -Linhas $linhas
     $linhas = Corrigir-RelatorioBaseTrioMetodosAusentes -Linhas $linhas
     $linhas = Corrigir-ReportFormBackColorFlat -Linhas $linhas
