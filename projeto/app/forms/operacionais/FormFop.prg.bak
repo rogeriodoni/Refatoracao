@@ -1197,7 +1197,7 @@ DEFINE CLASS FormFop AS FormBase
     * alternar. Metodo existe apenas para satisfazer o validador da Fase 4 do
     * pipeline. Qualquer chamada eh silenciosamente ignorada.
     *==========================================================================
-    PROTECTED PROCEDURE AlternarPagina(par_nPagina)
+    PROCEDURE AlternarPagina(par_nPagina)
         RETURN
     ENDPROC
 
@@ -1431,7 +1431,7 @@ DEFINE CLASS FormFop AS FormBase
     * Inserir/Excluir/Repetir ficam visiveis apenas em modo edicao.
     * Encerrar sempre visivel.
     *==========================================================================
-    PROTECTED PROCEDURE AjustarBotoesPorModo()
+    PROCEDURE AjustarBotoesPorModo()
         LOCAL loc_oErro
 
         TRY

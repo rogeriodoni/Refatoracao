@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 2 conclu├¡da. `C:\4c\projeto\app\classes\TfiBO.prg` agora est├í completo com todos os m├®todos CRUD:
+
+- **`ObterChavePrimaria()`** ÔÇö retorna `codigos` para auditoria
+- **`CarregarDoCursor()`** ÔÇö mapeia as 14 colunas com `SELECT (par_cAliasCursor)` + `TratarNulo()`
+- **`ValidarDados()`** + **`VerificarCodigoExistente()`** ÔÇö c├│digo obrigat├│rio, duplicidade no INSERT, descri├º├úo obrigat├│ria
+- **`Inserir()`** ÔÇö INSERT incluindo **todas as 14 colunas NOT NULL** da tabela (confirmei o schema via `Get-Content -Raw` no `schema.sql` UTF-16, conforme regra #14 do CLAUDE.md ÔÇö `codigos, descricaos, adendos, pqtdes, pvalors, adendocs, opcsnas, oorig, oaden, ocor, oemb, otam, tamdesc, tpdescs`)
+- **`Atualizar()`** ÔÇö UPDATE de todas as colunas exceto a PK
+- **`ExecutarExclusao()`** ÔÇö DELETE simples (n├úo h├í checagem de depend├¬ncia no `comportamento.json` original)
+- **`Buscar(par_cFiltro)`** ÔÇö retorna `cursor_4c_Dados` com `codigos, descricaos, pqtdes, pvalors` (colunas do grid original), com fallback de cursor vazio quando `gnConnHandle` inv├ílido
+- **`CarregarPorCodigo()`** ÔÇö SELECT completo + reset de `this_lNovoRegistro`
+- **`RegistrarAuditoria()`** chamada em Inserir/Atualizar/ExecutarExclusao (herdada do BusinessBase)
+
+Todos os m├®todos seguem o padr├úo can├┤nico do `CorBO.prg` (refer├¬ncia do CLAUDE.md), sem `RETURN` dentro de `TRY/CATCH`, sem stubs/TODOs, com `CATCH` sempre reportando erro via `MostrarErro`.

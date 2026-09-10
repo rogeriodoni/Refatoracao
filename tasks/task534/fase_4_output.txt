@@ -1,0 +1,19 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Balanceamento OK (0 PROCEDURE/ENDPROC pendentes, 0 WITH/ENDWITH pendentes). A Fase 4/8 est├í completa.
+
+## Resumo da Fase 4/8 ÔÇö FormTfi.prg
+
+Atualizei `C:\4c\projeto\app\forms\cadastros\FormTfi.prg` completando a Page1 (Lista):
+
+**`ConfigurarPaginaLista()`** ÔÇö adicionados:
+- `cnt_4c_Botoes` (Left=542, Top=29, Width=390, Height=85) com os 5 bot├Áes CRUD: `cmd_4c_Incluir`, `cmd_4c_Visualizar`, `cmd_4c_Alterar`, `cmd_4c_Excluir`, `cmd_4c_Buscar` ÔÇö Caption/Picture/PicturePosition=13 e as propriedades can├┤nicas (ForeColor RGB(90,90,90), Themes=.F., etc.), copiadas exatamente do padr├úo `FormCor.prg`.
+- `cnt_4c_Saida` (Left=917, Top=29, Width=90) com `cmd_4c_Encerrar` ÔÇö padr├úo can├┤nico da regra #10 do CLAUDE.md, que prevalece sobre o legado (que usava `Grupo_Saida` em posi├º├úo/tamanho diferentes).
+- `grd_4c_Lista` (Top=117, Left=26, Width=880, Height=498, Verdana 8) com 4 colunas espelhando exatamente o `fCarregaGrade` do legado (`comportamento.json`): C├│digo(80)/Descri├º├úo(320)/% Qtde(80)/% Valor(80).
+
+**Novos m├®todos**: `CarregarLista()` (Buscar() no BO + RecordSource/ControlSource/Width/Headers na ordem correta, evitando os bugs #2/#36/#48 j├í documentados), `FormatarGridLista()` (Tahoma 8) e `AlternarPagina(par_nPagina)` (troca de p├ígina + recarrega lista ao voltar para Page1). Tamb├®m adicionei a chamada de `CarregarLista()` em `InicializarForm()`, guardada por `gb_4c_ValidandoUI`, igual ao `FormCor`.
+
+**Decis├úo importante**: n├úo adicionei `BINDEVENT` nos bot├Áes nem os m├®todos `Btn*Click` ÔÇö pelo `automation/OrquestradorMigracao.ps1` (fun├º├úo `New-PromptFase`, fonte de verdade do pipeline), esses eventos s├úo explicitamente responsabilidade das Fases 7 e 8. Deixei coment├írios no c├│digo apontando isso, para a pr├│xima fase n├úo esquecer.

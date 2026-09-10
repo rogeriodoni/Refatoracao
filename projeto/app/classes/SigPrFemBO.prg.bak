@@ -335,8 +335,8 @@ DEFINE CLASS SigPrFemBO AS BusinessBase
 			lcConfig = THIS.this_cDemonstrativo
 
 			*-- Timestamps para queries parametrizadas
-			loc_pDatBefore = TTOD(THIS.this_dDataInicio - 1)
-			loc_pDtI       = TTOD(THIS.this_dDataInicio)
+			loc_pDatBefore = ConverterParaData(THIS.this_dDataInicio - 1)
+			loc_pDtI       = ConverterParaData(THIS.this_dDataInicio)
 			loc_pDtF       = DATETIME(YEAR(THIS.this_dDataFinal), MONTH(THIS.this_dDataFinal), ;
 				DAY(THIS.this_dDataFinal), 23, 59, 59)
 			loc_pPescI     = loc_pDtI

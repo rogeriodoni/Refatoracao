@@ -460,7 +460,7 @@ DEFINE CLASS FormSIGPRPRO AS FormBase
     ENDPROC
 
     *---------------------------------------------------------------------------
-    PROTECTED PROCEDURE AlternarPagina(par_nPagina)
+    PROCEDURE AlternarPagina(par_nPagina)
     *-- Form plano (sem PageFrame) - nao aplica alternancia de paginas
     *---------------------------------------------------------------------------
         RETURN
@@ -663,7 +663,7 @@ DEFINE CLASS FormSIGPRPRO AS FormBase
     ENDPROC
 
     *---------------------------------------------------------------------------
-    PROTECTED PROCEDURE AjustarBotoesPorModo()
+    PROCEDURE AjustarBotoesPorModo()
     *-- Form plano sem modos CRUD (somente-leitura).
     *-- Nenhum ajuste de botoes necessario.
     *---------------------------------------------------------------------------

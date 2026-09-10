@@ -1,0 +1,27 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+All 6 bound methods (`GrupoKeyPress`, `GrupoDescKeyPress`, `ContaKeyPress`, `ContaDescKeyPress`, `CodAcbKeyPress`, `EmpPadKeyPress`) are declared as PUBLIC `PROCEDURE` (confirmed in the listing above ÔÇö none have `PROTECTED`). Everything checks out. 
+
+## Resumo da Fase 6/8 ÔÇö FormTml.prg
+
+Completei `ConfigurarPaginaDados()` e adicionei:
+
+**Campos restantes (segunda metade da Page2):**
+- Lan├ºar Somente E/S, Analisa Produ├º├úo, Valor, Checar Devolu├º├úo (com `Format="M"`+`InputMask` can├┤nico para os campos S/N)
+- Checkboxes Produzido/Trabalhado/Modelagem, Checar Duplicidade, Aceita Retrabalho
+- Empresa Padr├úo (Courier New, MaxLength=3)
+
+**Container `cnt_4c_BotoesAcao`:** bot├Áes `cmd_4c_Confirmar`/`cmd_4c_Cancelar` (├¡cones can├┤nicos, BINDEVENT para `BtnSalvarClick`/`BtnCancelarClick`, a implementar na fase 7/8).
+
+**5 lookups completamente implementados** (KeyPress guardado por F4/Enter/Tab, nunca stub):
+1. **Grupo** (SigCdGcr) + busca reversa por descri├º├úo ÔÇö usa SQL exato + `FormBuscaAuxiliar`, substituindo `fAcessoContab` (bug de UX conhecido de auto-carregar registro sem sele├º├úo).
+2. **Conta** (SigCdCli) + busca reversa ÔÇö mant├®m `fAcessoContas` com filtro de Grupo, pois aqui ├® controle de **acesso**, n├úo autocomplete puro (mesma exce├º├úo consciente aplicada em `FormBch`, Erro155).
+3. **Tipo de Acabamento** (SigCdAca) ÔÇö habilitado dinamicamente conforme Grupo (`When` do legado).
+4. **Empresa Padr├úo** (SigCdEmp).
+
+Corrigi tamb├®m uma inconsist├¬ncia que eu mesmo teria introduzido: `FormBuscaAuxiliar.Init()` j├í faz a busca exata internamente, ent├úo `AbrirLookupGrupo/CodAcb/EmpPad` agora checam `this_lAchouRegistro` antes de chamar `.Show()` ÔÇö evitando reabrir o picker num F4 sobre um c├│digo j├í v├ílido (padr├úo MODO 1 documentado no pr├│prio prompt da fase).
+
+Validei balanceamento de `PROCEDURE/ENDPROC` (25/25), `TRY/ENDTRY` (13/13), `WITH/ENDWITH` (62/62), `DO CASE/ENDCASE` (3/3), nomes de m├®todo ├║nicos, e que todo handler de `BINDEVENT` ├® `PUBLIC`.

@@ -684,7 +684,7 @@ DEFINE CLASS Formsigrecrp AS FormBase
     *--------------------------------------------------------------------------
     * AlternarPagina - Compatibilidade pipeline (form REPORT: pagina unica, sem CRUD)
     *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE AlternarPagina(par_nPagina)
+    PROCEDURE AlternarPagina(par_nPagina)
         IF VARTYPE(THIS.pgf_4c_Paginas) = "O"
             THIS.pgf_4c_Paginas.Visible = .T.
             THIS.pgf_4c_Paginas.ActivePage = 1

@@ -336,7 +336,7 @@ DEFINE CLASS FormSIGREFUN AS FormBase
     *   nao-numerico, fora do range 1..PageCount) cai em Page1.
     *   Mantida como API publica de navegacao (paridade com FormBase CRUD).
     *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE AlternarPagina(par_nPagina)
+    PROCEDURE AlternarPagina(par_nPagina)
         LOCAL loc_nPagina, loc_nTotal
         loc_nTotal  = THIS.pgf_4c_Paginas.PageCount
         loc_nPagina = par_nPagina

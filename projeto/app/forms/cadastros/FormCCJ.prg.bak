@@ -1078,11 +1078,21 @@ DEFINE CLASS FormCCJ AS FormBase
             ENDIF
 
             THIS.FormParaBO()
-            THIS.this_oBusinessObject.Recalcular()
 
-            IF THIS.this_oBusinessObject.Salvar()
-                MsgInfo("Registro salvo com sucesso!", "Confirmar")
-                THIS.AlternarPagina(1)
+            *-- Recalcular pode abortar (ex.: Abs(Dias) > 999, que nao cabe em
+            *-- sigdtccj.dias numeric(3,0)) - nesse caso NAO gravar
+            loc_lSucesso = THIS.this_oBusinessObject.Recalcular()
+
+            THIS.AtualizarTotais()
+            IF PEMSTATUS(loc_oPg2, "grd_4c_Detalhe", 5)
+                loc_oPg2.grd_4c_Detalhe.Refresh()
+            ENDIF
+
+            IF loc_lSucesso
+                IF THIS.this_oBusinessObject.Salvar()
+                    MsgInfo("Registro salvo com sucesso!", "Confirmar")
+                    THIS.AlternarPagina(1)
+                ENDIF
             ENDIF
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "BtnConfirmarClick")
@@ -1632,39 +1642,30 @@ DEFINE CLASS FormCCJ AS FormBase
     * AtualizarTotais - Escaneia cursor de detalhe e atualiza campos de totais
     * Chamado apos Recalcular(), ExcluirVClick() e BOParaForm()
     *--------------------------------------------------------------------------
+    * Os totais sao computados pelo BO (AtualizarTotaisDetalhe), com o mesmo
+    * criterio do legado (Count/Sum/Avg Where Not Empty(Dias)); aqui apenas
+    * espelhamos as propriedades nos TextBoxes - fonte unica de verdade.
     PROTECTED PROCEDURE AtualizarTotais()
-        LOCAL loc_oPg2, loc_cAlias
-        LOCAL loc_nQtde, loc_nTotalDias, loc_nTotal, loc_nTotLiq, loc_nDias
-        loc_oPg2       = THIS.pgf_4c_Paginas.Page2
-        loc_cAlias     = THIS.this_oBusinessObject.this_cCursorDetalhe
-        loc_nQtde      = 0
-        loc_nTotalDias = 0
-        loc_nTotal     = 0
-        loc_nTotLiq    = 0
-        loc_nDias      = 0
+        LOCAL loc_oPg2, loc_oBO
+        loc_oPg2 = THIS.pgf_4c_Paginas.Page2
+        loc_oBO  = THIS.this_oBusinessObject
 
         IF !PEMSTATUS(loc_oPg2, "txt_4c_Qtde", 5)
             RETURN
         ENDIF
 
         TRY
-            IF USED(loc_cAlias)
-                SELECT (loc_cAlias)
-                SCAN
-                    IF !EMPTY(datas)
-                        loc_nQtde      = loc_nQtde + 1
-                        loc_nDias      = NVL(dias, 0)
-                        loc_nTotalDias = loc_nTotalDias + loc_nDias
-                        loc_nTotal     = loc_nTotal + NVL(valor, 0)
-                        loc_nTotLiq    = loc_nTotLiq + NVL(liquido, 0)
-                    ENDIF
-                ENDSCAN
-            ENDIF
+            loc_oBO.AtualizarTotaisDetalhe()
 
-            loc_oPg2.txt_4c_Qtde.Value   = loc_nQtde
-            loc_oPg2.txt_4c_Media.Value  = IIF(loc_nQtde > 0, loc_nTotalDias / loc_nQtde, 0)
-            loc_oPg2.txt_4c_Total.Value  = loc_nTotal
-            loc_oPg2.txt_4c_TotLiq.Value = loc_nTotLiq
+            loc_oPg2.txt_4c_Qtde.Value   = loc_oBO.this_nQtde
+            loc_oPg2.txt_4c_Media.Value  = loc_oBO.this_nMedia
+            loc_oPg2.txt_4c_Total.Value  = loc_oBO.this_nTotal
+            loc_oPg2.txt_4c_TotLiq.Value = loc_oBO.this_nTotLiq
+
+            loc_oPg2.txt_4c_Qtde.Refresh()
+            loc_oPg2.txt_4c_Media.Refresh()
+            loc_oPg2.txt_4c_Total.Refresh()
+            loc_oPg2.txt_4c_TotLiq.Refresh()
         CATCH TO loc_oErro
             MsgErro(loc_oErro.Message, "AtualizarTotais")
         ENDTRY
@@ -1677,7 +1678,11 @@ DEFINE CLASS FormCCJ AS FormBase
         LOCAL loc_oPg2
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
 
-        IF EMPTY(THIS.this_oBusinessObject.this_dDataBase)
+        *-- Legado (RecalculoItem) le Get_DataBase/Get_Fator/optDias direto do
+        *-- form; sem FormParaBO o BO ficaria com a Data Base/Fator anteriores
+        THIS.FormParaBO()
+
+        IF EMPTY(NVL(THIS.this_oBusinessObject.this_dDataBase, {}))
             RETURN
         ENDIF
 

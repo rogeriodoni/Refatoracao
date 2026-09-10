@@ -1,0 +1,23 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Revisei os 10 achados deste pass. Apenas **1 era um bug real**; os outros 9 s├úo falsos positivos da ferramenta de detec├º├úo ÔÇö corrigi-los quebraria os Pilares 1/2 (fidelidade ao legado) ou a regra #11 do CLAUDE.md. Segue o detalhamento:
+
+## Corrigido
+
+**[NULL-CURSOR]** `FormTpc.prg:1075-1077` ÔÇö `CREATE CURSOR cursor_4c_Dados` (stub usado em `gb_4c_ValidandoUI`) agora tem `SET NULL ON` antes / `SET NULL OFF` depois, como no padr├úo j├í usado em `TpcBO::InicializarCursoresGrid()`.
+
+## N├âO alterado (falsos positivos verificados)
+
+**[GRID-HEADER] 'Tipos' e 'Descrs' (4 ocorr├¬ncias)** ÔÇö Fui checar `tasks/task541/SigCdTpc_form_codigo_fonte.txt` (fonte legado real). O grid da Lista no legado usa o mecanismo `AddCursor`/`pfSqlTabela(1).pColuna(...)`, n├úo `mAddColuna`:
+```
+.pfSqlTabela(1).pColuna([Tipos],  [], [], [Tipos],  150, .t.)
+.pfSqlTabela(1).pColuna([Descrs], [], [], [Descrs], 290, .t.)
+```
+O 4┬║ par├ómetro ├® o caption ÔÇö e no legado ele ├® literalmente `"Tipos"`/`"Descrs"` (igual ao nome do campo). Os captions "Grupo"/"Descri├º├úo" que a ferramenta encontrou s├úo do grid de **detalhe** (SigCdCom, via `mAddColuna`), n├úo da Lista. Migrado est├í fiel ao legado; alterar o caption divergiria do Pilar 1. Isso j├í ├® uma li├º├úo registrada em mem├│ria (`feedback_grid_lista_espelha_pcoluna_legado`).
+
+**[LAYOUT-POSITION] 5 controles (OptMaius, optUsarPAs, OptImp, optCustos, cmdExcluir)** ÔÇö Todos os diffs s├úo exatamente **37px = 29 (PageFrame.Top=-29) + 8 (re-layout da faixa de cabe├ºalho)**, a compensa├º├úo documentada e obrigat├│ria pela **regra #11 do CLAUDE.md** ("nenhum controle de dados pode ter Top < 109... usamos >=115 como piso seguro"). Os coment├írios no pr├│prio c├│digo (`FormTpc.prg:602-604`, `658-660`, `713-715`, `769-772`, `877-880`) j├í explicitam a conta `original + 29 + 8`. N├úo ├® desalinhamento ÔÇö ├® o deslocamento can├┤nico exigido pela faixa do cabe├ºalho, e essa categoria (LAYOUT-POSITION vs. legado original) n├úo est├í entre as listadas em "Foco deste pass" (ALINHAMENTO/ALINHAMENTO-CONTAINER/TITULO-NAO-PROPAGADO/CHECKBOX-TIPO/FONTNAME-ERRADO).
+
+Nenhuma outra altera├º├úo foi feita ÔÇö l├│gica de neg├│cio, layout e captions permanecem intactos.

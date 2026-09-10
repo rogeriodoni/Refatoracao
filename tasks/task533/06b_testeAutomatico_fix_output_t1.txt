@@ -1,0 +1,22 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+O sweep retroativo (`CorrigirTodosFormularios.ps1`) est├í rodando em background ÔÇö ├® uma varredura pesada (~54 arquivos) e passou do timeout de 10 min, ent├úo segue executando; serei notificado quando terminar e reporto o resultado.
+
+**Resumo do trabalho at├® aqui:**
+
+| Etapa | Status |
+|---|---|
+| Bug corrigido (`FormTCL.prg` ÔÇö `AjustarBotoesPorModo` PROTECTEDÔåÆPUBLIC) | Ô£à |
+| `CLAUDE.md` regra #3 estendida | Ô£à |
+| `migration-patterns.md` ÔÇö nova se├º├úo #198 (Erro157) | Ô£à |
+| `CorretorAutomatico.ps1` ÔÇö Pattern #196 (generalizou o antigo `Corrigir-CarregarListaProtected` para os 5 m├®todos do harness) | Ô£à |
+| `corretor-patterns.md` ÔÇö tabela atualizada (196 total) | Ô£à |
+| `OrquestradorMigracao.ps1` ÔÇö regra adicionada nos 4 blocos de prompt | Ô£à |
+| Mem├│ria (`feedback_teste_automatico_metodo_protected.md` + ├¡ndice `MEMORY.md`) | Ô£à |
+| `MEMORY.md` tamb├®m compactado de 51.7KB ÔåÆ 15.7KB (estava estourando o limite de leitura, hook pediu corre├º├úo) | Ô£à |
+| Sweep retroativo `CorrigirTodosFormularios.ps1` | ­ƒöä rodando em background |
+
+Aviso: o pattern #196 ├® uma lista fechada de nomes (`CarregarLista`, `AlternarPagina`, `AjustarBotoesPorModo`, `BtnIncluirClick`, `BtnCancelarClick`) extra├¡da do `TesteAutomatico.prg` atual ÔÇö se esse harness ganhar novas chamadas diretas a `oForm.Metodo()` no futuro, a lista precisa ser revisada.

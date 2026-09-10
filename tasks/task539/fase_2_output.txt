@@ -1,0 +1,16 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Arquivo `TotBO.prg` completado com os m├®todos CRUD da Fase 2, seguindo exatamente o padr├úo de `TANBO.prg` (mesmo formato de PK num├®rica `codigos`), validado contra `docs/schema.sql` (via `Get-Content -Raw`, evitando o problema de UTF-16):
+
+- **`ObterChavePrimaria()`** ÔÇö `TRANSFORM(THIS.this_nCodigo)`
+- **`Buscar(par_cFiltro)`** ÔÇö SELECT das 3 colunas (`codigos, descrs, tpgdmis`) para `cursor_4c_Dados`
+- **`CarregarPorCodigo(par_nCodigo)`** ÔÇö SELECT por PK para `cursor_4c_Carrega`, reseta `this_lNovoRegistro`
+- **`CarregarDoCursor(par_cAliasCursor)`** ÔÇö `SELECT (par_cAliasCursor)` + mapeamento direto (sem sintaxe `(var).campo`)
+- **`Inserir()`** ÔÇö INSERT completo com `FormatarNumeroSQL`/`EscaparSQL` + `RegistrarAuditoria("INSERT")`
+- **`Atualizar()`** ÔÇö UPDATE completo + `RegistrarAuditoria("UPDATE")`
+- **`ExecutarExclusao()`** ÔÇö DELETE + `RegistrarAuditoria("DELETE")` (PROTECTED, chamado via `BusinessBase.Excluir()`)
+
+Todos os m├®todos usam `LOCAL loc_lSucesso` com `RETURN` fora do `TRY/CATCH` (regra cr├¡tica #1), CATCH nunca silencioso (`MsgErro`), e colunas exatamente conforme `SigCdToi` no schema (`codigos numeric(2,0)`, `descrs char(30)`, `tpgdmis numeric(1,0)`, todas NOT NULL).

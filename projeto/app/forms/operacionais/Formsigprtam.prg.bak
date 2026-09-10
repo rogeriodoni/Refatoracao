@@ -205,7 +205,7 @@ DEFINE CLASS Formsigprtam AS FormBase
     * par_nPagina: 1 = grid de tamanhos (unica pagina existente)
     * Delega foco ao grid quando a pagina alvo eh a de lista.
     *==========================================================================
-    PROTECTED PROCEDURE AlternarPagina(par_nPagina)
+    PROCEDURE AlternarPagina(par_nPagina)
         LOCAL loc_nPagina
         loc_nPagina = IIF(VARTYPE(par_nPagina) = "N", par_nPagina, 1)
 
@@ -573,7 +573,7 @@ DEFINE CLASS Formsigprtam AS FormBase
     * AjustarBotoesPorModo - Oculta botoes de edicao em modo CONSULTAR
     * Chamado APOS TornarControlesVisiveis para sobrescrever visibilidade
     *==========================================================================
-    PROTECTED PROCEDURE AjustarBotoesPorModo()
+    PROCEDURE AjustarBotoesPorModo()
         LOCAL loc_lModoEdicao, loc_i
         loc_lModoEdicao = INLIST(THIS.this_cPcEscolha, "INSERIR", "ALTERAR")
         THIS.cmd_4c_Inserir.Visible = loc_lModoEdicao

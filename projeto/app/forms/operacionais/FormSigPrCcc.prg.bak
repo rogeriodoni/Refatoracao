@@ -1993,7 +1993,7 @@ DEFINE CLASS FormSigPrCcc AS FormBase
     *   par_cModo = "PROCESSANDO"  -> execucao SQL em curso (tudo disabled)
     *   par_cModo = "CONCLUIDO"    -> processamento terminado (Cancela habilita)
     *==========================================================================
-    PROTECTED PROCEDURE AjustarBotoesPorModo(par_cModo)
+    PROCEDURE AjustarBotoesPorModo(par_cModo)
         LOCAL loc_cModo
         loc_cModo = IIF(VARTYPE(par_cModo) = "C" AND !EMPTY(par_cModo), UPPER(par_cModo), "INICIAL")
 

@@ -1354,7 +1354,7 @@ DEFINE CLASS FormSigReJur AS FormBase
     * Posiciona foco no primeiro campo editavel da area de credito (SGRUPO)
     * ou na grade se apenas alteracao de juros estiver liberada.
     *==========================================================================
-    PROTECTED PROCEDURE BtnIncluirClick()
+    PROCEDURE BtnIncluirClick()
         LOCAL loc_oErro
         TRY
             IF THIS.this_lAlteraContas AND VARTYPE(THIS.txt_4c_SGRUPO) = "O" ;

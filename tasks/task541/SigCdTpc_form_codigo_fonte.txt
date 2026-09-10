@@ -1,0 +1,1141 @@
+================================================================================
+* EXTRACAO DE CODIGO - VISUAL FOXPRO
+* Arquivo Origem: SigCdTpc.SCX
+* Data/Hora: 09/09/2026 23:05:18
+* Total de registros: 24
+================================================================================
+
+================================================================================
+* SECAO 1: ESTRUTURA DO FORMULARIO (ARVORE DE OBJETOS)
+================================================================================
+
+Objeto: Dataenvironment
+  Parent: (raiz)
+  Class: dataenvironment
+  BaseClass: dataenvironment
+
+Objeto: SIGCDTPC
+  Parent: (raiz)
+  Class: frmcadastro
+  BaseClass: form
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: getDescrs
+  Parent: SIGCDTPC.pagina.dados
+  Class: fwget
+  BaseClass: textbox
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Label1
+  Parent: SIGCDTPC.pagina.dados
+  Class: label
+  BaseClass: label
+
+Objeto: Label3
+  Parent: SIGCDTPC.pagina.dados
+  Class: label
+  BaseClass: label
+
+Objeto: getTipos
+  Parent: SIGCDTPC.pagina.dados
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: GetnOrdems
+  Parent: SIGCDTPC.pagina.dados
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Label2
+  Parent: SIGCDTPC.pagina.dados
+  Class: label
+  BaseClass: label
+
+Objeto: OptMaius
+  Parent: SIGCDTPC.pagina.dados
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: optUsarPAs
+  Parent: SIGCDTPC.pagina.dados
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: OptImp
+  Parent: SIGCDTPC.pagina.dados
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say2
+  Parent: SIGCDTPC.pagina.dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: optCustos
+  Parent: SIGCDTPC.pagina.dados
+  Class: fwoption
+  BaseClass: optiongroup
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say10
+  Parent: SIGCDTPC.pagina.dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say3
+  Parent: SIGCDTPC.pagina.dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: Say1
+  Parent: SIGCDTPC.pagina.dados
+  Class: say
+  BaseClass: label
+  ClassLoc: ..\framework\framework.vcx
+
+Objeto: cmdExcluir
+  Parent: SIGCDTPC.pagina.dados
+  Class: commandbutton
+  BaseClass: commandbutton
+
+Objeto: grdProdutos
+  Parent: SIGCDTPC.pagina.dados
+  Class: grid
+  BaseClass: grid
+
+Objeto: Header1
+  Parent: SIGCDTPC.pagina.dados.grdProdutos.Column1
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDTPC.pagina.dados.grdProdutos.Column1
+  Class: textbox
+  BaseClass: textbox
+
+Objeto: Header1
+  Parent: SIGCDTPC.pagina.dados.grdProdutos.Column2
+  Class: header
+  BaseClass: header
+
+Objeto: Text1
+  Parent: SIGCDTPC.pagina.dados.grdProdutos.Column2
+  Class: textbox
+  BaseClass: textbox
+
+================================================================================
+* SECAO 2: PROPRIEDADES CUSTOMIZADAS
+================================================================================
+
+------------------------------------------------------------
+* PROPRIEDADES DE: Dataenvironment
+------------------------------------------------------------
+  Top = 0
+  Left = 0
+  Width = 0
+  Height = 0
+  DataSource = .NULL.
+  Name = "Dataenvironment"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPC
+------------------------------------------------------------
+  DataSession = 2
+  Height = 600
+  Width = 1000
+  DoCreate = .T.
+  Caption = "Cadastro de Tipos de Composição"
+  Name = "SIGCDTPC"
+  pagina.ErasePage = .T.
+  pagina.lista.cntSombra.lblSombra.Name = "lblSombra"
+  pagina.lista.cntSombra.lblTitulo.Name = "lblTitulo"
+  pagina.lista.cntSombra.Width = 1100
+  pagina.lista.cntSombra.Name = "cntSombra"
+  pagina.lista.grade.Height = 484
+  pagina.lista.grade.Left = 29
+  pagina.lista.grade.Top = 100
+  pagina.lista.grade.Width = 941
+  pagina.lista.grade.Name = "grade"
+  pagina.lista.grupo_op.AutoSize = .T.
+  pagina.lista.grupo_op.inserir.Top = 5
+  pagina.lista.grupo_op.inserir.Left = 5
+  pagina.lista.grupo_op.inserir.Name = "inserir"
+  pagina.lista.grupo_op.consultar.Top = 5
+  pagina.lista.grupo_op.consultar.Left = 80
+  pagina.lista.grupo_op.consultar.Name = "consultar"
+  pagina.lista.grupo_op.alterar.Top = 5
+  pagina.lista.grupo_op.alterar.Left = 155
+  pagina.lista.grupo_op.alterar.Name = "alterar"
+  pagina.lista.grupo_op.excluir.Top = 5
+  pagina.lista.grupo_op.excluir.Left = 230
+  pagina.lista.grupo_op.excluir.Name = "excluir"
+  pagina.lista.grupo_op.procurar.Top = 5
+  pagina.lista.grupo_op.procurar.Left = 305
+  pagina.lista.grupo_op.procurar.Name = "procurar"
+  pagina.lista.grupo_op.Height = 85
+  pagina.lista.grupo_op.Left = 544
+  pagina.lista.grupo_op.Top = -1
+  pagina.lista.grupo_op.Width = 385
+  pagina.lista.grupo_op.Name = "grupo_op"
+  pagina.lista.grupo_saida.sair.Top = 5
+  pagina.lista.grupo_saida.sair.Left = 5
+  pagina.lista.grupo_saida.sair.Name = "sair"
+  pagina.lista.grupo_saida.Left = 919
+  pagina.lista.grupo_saida.Top = -1
+  pagina.lista.grupo_saida.Name = "grupo_saida"
+  pagina.lista.cntFiltros.Top = 25
+  pagina.lista.cntFiltros.Left = 479
+  pagina.lista.cntFiltros.Name = "cntFiltros"
+  pagina.lista.Picture = ..\framework\imagens\new_background.jpg
+  pagina.lista.Name = "lista"
+  pagina.dados.grupo_salva.AutoSize = .T.
+  pagina.dados.grupo_salva.salva.Top = 5
+  pagina.dados.grupo_salva.salva.Left = 5
+  pagina.dados.grupo_salva.salva.Name = "salva"
+  pagina.dados.grupo_salva.cancelar.Top = 5
+  pagina.dados.grupo_salva.cancelar.Left = 80
+  pagina.dados.grupo_salva.cancelar.Name = "cancelar"
+  pagina.dados.grupo_salva.Left = 843
+  pagina.dados.grupo_salva.Top = -4
+  pagina.dados.grupo_salva.TabIndex = 17
+  pagina.dados.grupo_salva.ZOrderSet = 2
+  pagina.dados.grupo_salva.Name = "grupo_salva"
+  pagina.dados.Picture = ..\framework\imagens\new_background.jpg
+  pagina.dados.Name = "dados"
+  pagina.Width = 1003
+  pagina.Name = "pagina"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPC.pagina.dados.getDescrs
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  ControlSource = "crSigCdTpc.Descrs"
+  Format = "!K"
+  Height = 23
+  Left = 398
+  MaxLength = 40
+  SpecialEffect = 1
+  TabIndex = 6
+  Top = 105
+  Width = 331
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 3
+  Name = "getDescrs"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPC.pagina.dados.Label1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "\<Tipo :"
+  Height = 15
+  Left = 367
+  Top = 83
+  Width = 29
+  TabIndex = 1
+  ForeColor = 90,90,90
+  ZOrderSet = 4
+  Name = "Label1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPC.pagina.dados.Label3
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "Ordem de Impressão :"
+  Height = 15
+  Left = 586
+  Top = 83
+  Width = 109
+  TabIndex = 3
+  ForeColor = 90,90,90
+  ZOrderSet = 4
+  Name = "Label3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPC.pagina.dados.getTipos
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  ControlSource = "crSigCdTpc.Tipos"
+  Format = "K!"
+  Height = 23
+  Left = 398
+  MaxLength = 20
+  SpecialEffect = 1
+  TabIndex = 2
+  Top = 79
+  Width = 150
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 5
+  Name = "getTipos"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPC.pagina.dados.GetnOrdems
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  ControlSource = "crSigCdTpc.nOrdems"
+  Format = ""
+  Height = 23
+  InputMask = "99"
+  Left = 697
+  MaxLength = 2
+  SpecialEffect = 1
+  TabIndex = 4
+  Top = 79
+  Width = 32
+  ForeColor = 0,0,0
+  BorderColor = 100,100,100
+  ZOrderSet = 5
+  Name = "GetnOrdems"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPC.pagina.dados.Label2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  BackStyle = 0
+  Caption = "\<Descrição :"
+  Height = 15
+  Left = 341
+  Top = 108
+  Width = 55
+  TabIndex = 5
+  ForeColor = 90,90,90
+  ZOrderSet = 6
+  Name = "Label2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPC.pagina.dados.OptMaius
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  ControlSource = "crSigCdTpc.nChkMais"
+  Height = 25
+  Left = 393
+  SpecialEffect = 0
+  Top = 193
+  Width = 93
+  TabIndex = 14
+  ZOrderSet = 7
+  Name = "OptMaius"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.Alignment = 0
+  Option1.BackStyle = 0
+  Option1.Caption = "Sim"
+  Option1.Value = 1
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.Width = 34
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Não"
+  Option2.Left = 51
+  Option2.Top = 5
+  Option2.Width = 37
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPC.pagina.dados.optUsarPAs
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  ControlSource = "crSigCdTpc.UsarPAs"
+  Height = 25
+  Left = 393
+  SpecialEffect = 0
+  Top = 171
+  Width = 93
+  TabIndex = 12
+  ZOrderSet = 7
+  Name = "optUsarPAs"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.Alignment = 0
+  Option1.BackStyle = 0
+  Option1.Caption = "Sim"
+  Option1.Value = 1
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.Width = 34
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,9
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Não"
+  Option2.Left = 51
+  Option2.Top = 5
+  Option2.Width = 37
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,9
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPC.pagina.dados.OptImp
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  ControlSource = "crSigCdTpc.nChkImps"
+  Height = 25
+  Left = 393
+  SpecialEffect = 0
+  Top = 149
+  Width = 93
+  TabIndex = 10
+  ZOrderSet = 7
+  Name = "OptImp"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.Alignment = 0
+  Option1.BackStyle = 0
+  Option1.Caption = "Sim"
+  Option1.Value = 1
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.Width = 34
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Não"
+  Option2.Left = 51
+  Option2.Top = 5
+  Option2.Width = 37
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPC.pagina.dados.Say2
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = "Imprimir :"
+  Height = 15
+  Left = 349
+  Top = 154
+  Width = 47
+  TabIndex = 9
+  ForeColor = 90,90,90
+  ZOrderSet = 8
+  Name = "Say2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPC.pagina.dados.optCustos
+------------------------------------------------------------
+  AutoSize = .T.
+  ButtonCount = 2
+  BackStyle = 0
+  BorderStyle = 0
+  Value = 1
+  ControlSource = "crSigCdTpc.Custos"
+  Height = 25
+  Left = 393
+  SpecialEffect = 0
+  Top = 128
+  Width = 93
+  TabIndex = 8
+  ZOrderSet = 7
+  Name = "optCustos"
+  Option1.FontName = "Tahoma"
+  Option1.FontSize = 8
+  Option1.Alignment = 0
+  Option1.BackStyle = 0
+  Option1.Caption = "Sim"
+  Option1.Value = 1
+  Option1.Left = 5
+  Option1.Top = 5
+  Option1.Width = 34
+  Option1.AutoSize = .T.
+  Option1.ForeColor = 90,90,90
+  Option1.Name = "Option1"
+  Option2.FontName = "Tahoma"
+  Option2.FontSize = 8
+  Option2.BackStyle = 0
+  Option2.Caption = "Não"
+  Option2.Left = 51
+  Option2.Top = 5
+  Option2.Width = 37
+  Option2.AutoSize = .T.
+  Option2.ForeColor = 90,90,90
+  Option2.Name = "Option2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPC.pagina.dados.Say10
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = "\<Calcula Custos :"
+  Height = 15
+  Left = 317
+  Top = 133
+  Width = 79
+  TabIndex = 7
+  ForeColor = 90,90,90
+  ZOrderSet = 8
+  Name = "Say10"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPC.pagina.dados.Say3
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = "Maiúsculos :"
+  Height = 15
+  Left = 336
+  Top = 198
+  Width = 60
+  TabIndex = 13
+  ForeColor = 90,90,90
+  ZOrderSet = 8
+  Name = "Say3"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPC.pagina.dados.Say1
+------------------------------------------------------------
+  AutoSize = .T.
+  FontBold = .F.
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 0
+  Caption = "Utilizar Produto Acabado :"
+  Height = 15
+  Left = 269
+  Top = 176
+  Width = 127
+  TabIndex = 11
+  ForeColor = 90,90,90
+  ZOrderSet = 8
+  Name = "Say1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPC.pagina.dados.cmdExcluir
+------------------------------------------------------------
+  Top = 373
+  Left = 626
+  Height = 46
+  Width = 45
+  FontBold = .F.
+  FontItalic = .F.
+  FontName = "Arial"
+  FontSize = 7
+  Picture = ..\framework\imagens\cadastro_excluir_26.jpg
+  Caption = ""
+  TabIndex = 16
+  ToolTipText = "Excluir Item da Grade"
+  BackColor = 255,255,255
+  ZOrderSet = 34
+  Name = "cmdExcluir"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPC.pagina.dados.grdProdutos
+------------------------------------------------------------
+  ColumnCount = 2
+  FontName = "Verdana"
+  FontSize = 8
+  AllowHeaderSizing = .F.
+  AllowRowSizing = .F.
+  DeleteMark = .F.
+  HeaderHeight = 16
+  Height = 350
+  Left = 400
+  Panel = 1
+  RecordMark = .T.
+  RecordSource = "crGrdCdCom"
+  RowHeight = 15
+  ScrollBars = 2
+  TabIndex = 15
+  Top = 221
+  Width = 223
+  GridLineColor = 238,238,238
+  ZOrderSet = 35
+  Name = "grdProdutos"
+  Column1.FontName = "Verdana"
+  Column1.FontSize = 8
+  Column1.ControlSource = "crGrdCdCom.CGrus"
+  Column1.CurrentControl = "Text1"
+  Column1.Width = 40
+  Column1.Movable = .F.
+  Column1.Resizable = .F.
+  Column1.Name = "Column1"
+  Column2.FontName = "Verdana"
+  Column2.FontSize = 8
+  Column2.ControlSource = "crGrdCdCom.DGrus"
+  Column2.CurrentControl = "Text1"
+  Column2.Width = 150
+  Column2.Movable = .F.
+  Column2.Resizable = .F.
+  Column2.ReadOnly = .F.
+  Column2.Name = "Column2"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPC.pagina.dados.grdProdutos.Column1.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Grupo"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPC.pagina.dados.grdProdutos.Column1.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .F.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPC.pagina.dados.grdProdutos.Column2.Header1
+------------------------------------------------------------
+  FontName = "Tahoma"
+  FontSize = 8
+  Alignment = 2
+  Caption = "Descrição"
+  Name = "Header1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: SIGCDTPC.pagina.dados.grdProdutos.Column2.Text1
+------------------------------------------------------------
+  FontName = "Verdana"
+  FontSize = 8
+  BorderStyle = 0
+  Margin = 0
+  ReadOnly = .F.
+  ForeColor = 0,0,0
+  BackColor = 255,255,255
+  Name = "Text1"
+
+
+------------------------------------------------------------
+* PROPRIEDADES DE: 
+------------------------------------------------------------
+  Verdana, 0, 8, 6, 13, 11, 23, 2, 0
+  Comic Sans MS, 3, 8, 7, 15, 12, 37, 3, 0
+  Tahoma, 0, 8, 5, 13, 11, 27, 2, 0
+  Arial, 0, 7, 4, 12, 9, 24, 3, 0
+
+
+================================================================================
+* SECAO 3: METODOS E EVENTOS (CODIGO FONTE)
+================================================================================
+
+================================================================================
+* OBJETO: SIGCDTPC
+* Classe: frmcadastro (Base: form)
+* Registro: 3
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Init
+------------------------------------------------------------
+PROCEDURE Init
+With ThisForm
+	.poDataMgr = CreateObject([fSqlConector], .Name)
+
+	If (.poDataMgr.pnIdconn > 0)
+		With .poDataMgr
+			.AddCursor([SigCdTpc], [Tipos], [crSigCdTpc], [], ThisForm.Pagina.Lista.Grade)
+			.pfSqlTabela(1).pColuna([Tipos],  [], [], [Tipos],  150, .t.)
+			.pfSqlTabela(1).pColuna([Descrs], [], [], [Descrs], 290, .t.)
+
+			.AddCursor([SigCdCom], [cIdChaves], [crSigCdCom])
+		EndWith
+
+		=DoDefault()
+
+		.Pagina.Lista.Grade.Column1.SetFocus
+	Else
+		=Messagebox([Impossível Efetuar Conexão Com o Servidor de Banco de Dados...], 0+48, [CreateObject])
+		Return .f.
+	EndIf
+EndWith
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE Load
+------------------------------------------------------------
+PROCEDURE Load
+=fConfigGeral()
+
+Create Cursor crGrdCdCom (CGrus c(3), DGrus c(20))
+
+=DoDefault()
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_alterar
+------------------------------------------------------------
+PROCEDURE msv_alterar
+Local llOks
+
+llOks = .t.
+
+If llOks 
+	If Not ThisForm.poDataMgr.Update([crSigCdCom])
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update - crSigCdCom)])
+		llOks = .f.
+	EndIf
+EndIf
+
+If llOks 
+	=DoDefault()
+Else
+	ThisForm.poDataMgr.RollBack()
+	Return .f.
+EndIf
+* Fim *********************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_inserir
+------------------------------------------------------------
+PROCEDURE msv_inserir
+Local llOks
+
+llOks = .t.
+
+If llOks 
+	If Not ThisForm.poDataMgr.Update([crSigCdCom])
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Update - crSigCdCom)])
+		llOks = .f.
+	EndIf
+EndIf
+
+If llOks 
+	=DoDefault()
+Else
+	ThisForm.poDataMgr.RollBack()
+	Return .f.
+EndIf
+* Fim *********************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE msv_procurar
+------------------------------------------------------------
+PROCEDURE msv_procurar
+Select crSigCdTpc
+If Not Empty(ThisForm.Pagina.Dados.getTipos.Value)
+	Locate For Tipos = ThisForm.Pagina.Dados.getTipos.Value
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE pagina.lista.grupo_op.Click
+------------------------------------------------------------
+PROCEDURE pagina.lista.grupo_op.Click
+LParameters lnOpcao
+
+If (Type([lnOpcao]) = [N])
+	This.Value = lnOpcao
+EndIf
+
+Select crSigCdTpc
+
+If Not DoDefault(lnOpcao)
+	ThisForm.mAtivaPagina1
+	Return .f.
+EndIf
+
+Zap In crGrdCdCom
+
+lcQuery = [Select * ] + ;
+		    [From SigCdCom ] + ;
+		   [Where Tipos = '] + crSigCdTpc.Tipos + [' ] + ;
+		   [Order By CGrus]
+
+If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalCdCom]) < 1)
+	=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalCdCom)])
+	Return .f.
+EndIf
+
+Select LocalCdCom
+Scan
+	lcQuery = [Select DGrus ] + ;
+			    [From SigCdGrp ] + ;
+			   [Where CGrus = '] + LocalCdCom.CGrus + [']
+
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalGru]) < 1)
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalGru)])
+		Return .f.
+	EndIf
+	Go Top In LocalGru
+
+	Insert Into crGrdCdCom (CGrus, DGrus) Values (LocalCdCom.CGrus, LocalGru.DGrus)
+EndScan
+Go Top In crGrdCdCom
+If Eof([crGrdCdCom]) And InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])
+	Append Blank In crGrdCdCom
+	Go Top In crGrdCdCom
+EndIf
+
+loDad = ThisForm.Pagina.Dados
+
+Do Case
+	Case Inlist(ThisForm.pcEscolha, [PROCURAR], [INSERIR])
+		loDad.getTipos.Setfocus	
+
+	Case (ThisForm.pcEscolha = [ALTERAR])
+		loDad.getDescrs.Setfocus	
+
+	Case Inlist(ThisForm.pcEscolha, [CONSULTAR], [EXCLUIR])
+		loDad.Grupo_Salva.Salva.Setfocus
+EndCase
+
+Select crSigCdTpc
+
+loDad.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE pagina.dados.grupo_salva.salva.Click
+------------------------------------------------------------
+PROCEDURE pagina.dados.grupo_salva.salva.Click
+Local loDad, lcPro
+
+loDad = ThisForm.Pagina.Dados
+
+Select crSigCdTpc
+
+If (ThisForm.pcEscolha = [INSERIR])
+	If Empty(loDad.getTipos.Value)
+		=MessageBox([Código de Tipo Não Informado...], 0+48, [Atenção!!!])
+		loDad.getTipos.SetFocus
+		Return .f.
+	EndIf
+
+	lcQuery = [Select * ] + ;
+			    [From SigCdTpc ] + ;
+			   [Where Tipos = '] + loDad.getTipos.Value + [']
+
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, [LocalTpCom]) < 1)
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (LocalTpCom)])
+		loDad.getTipos.SetFocus
+		Return .f.
+	EndIf
+	Select LocalTpCom
+	Go Top In LocalTpCom
+	If Not Eof([LocalTpCom])
+		=MessageBox([Código de Tipo Já Cadastrado...], 0+48, [Atenção!!!])
+		loDad.getTipos.SetFocus
+		Return .f.
+	EndIf
+EndIf
+
+If InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])
+	If Empty(crSigCdTpc.Descrs)
+		=MessageBox([Descrição Inválida!!!], 16, [Atenção!!!])
+		ThisForm.Pagina.Dados.getDescrs.SetFocus
+		Return .f.
+	EndIf
+EndIf
+
+If InList(ThisForm.pcEscolha, [EXCLUIR], [ALTERAR])
+	lcQuery = [Delete From SigCdCom ] + ;
+			   [Where Tipos = '] + crSigCdTpc.Tipos + [']
+
+	If (ThisForm.poDataMgr.SqlExecute(lcQuery, []) < 1)
+		=MessageBox([Favor Reinicializar o Processo!!!], 16, [Falha na Conexão (Delete - LocalCdCom)])
+		Return .f.
+	EndIf
+EndIf
+
+Zap In crSigCdCom
+
+Select Distinct CGrus ;
+  From crGrdCdCom ;
+ Where Not Empty(CGrus) ;
+ Order By CGrus ;
+  Into Cursor crGravar
+
+Select crGravar
+Scan
+	Insert Into crSigCdCom (Tipos, CGrus, cIdChaves) ;
+					Values (crSigCdTpc.Tipos, crGravar.CGrus, fUniqueIds())
+EndScan
+Go Top In crSigCdCom
+
+Select crSigCdTpc
+
+=DoDefault()
+
+ThisForm.mAtivaPagina1
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE pagina.dados.grupo_salva.cancelar.Click
+------------------------------------------------------------
+PROCEDURE pagina.dados.grupo_salva.cancelar.Click
+=DoDefault()
+
+If ThisForm.plCancelar
+	ThisForm.mAtivapagina1
+EndIf
+* Fim **************************************************************************************
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDTPC.pagina.dados.getDescrs
+* Classe: fwget (Base: textbox)
+* Registro: 4
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDTPC.pagina.dados.getTipos
+* Classe: textbox (Base: textbox)
+* Registro: 7
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return InList(ThisForm.pcEscolha, [INSERIR], [PROCURAR])
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDTPC.pagina.dados.GetnOrdems
+* Classe: textbox (Base: textbox)
+* Registro: 8
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDTPC.pagina.dados.cmdExcluir
+* Classe: commandbutton (Base: commandbutton)
+* Registro: 18
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Click
+------------------------------------------------------------
+PROCEDURE Click
+Select crGrdCdCom
+Delete In crGrdCdCom
+ThisForm.Pagina.Dados.grdProdutos.Refresh 
+ThisForm.Refresh
+ThisForm.Pagina.Dados.grdProdutos.Column1.SetFocus
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDTPC.pagina.dados.grdProdutos.Column1.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 21
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+If Not Empty(crGrdCdCom.CGrus)
+	loLista = CreateObject([fwBuscaExt], ThisForm.poDataMgr.pnIdConn, [SigCdGrp], ;
+						   [crListaRemota], [CGrus], crGrdCdCom.CGrus, [Seleção], .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna([CGrus], [], [Grupo])
+		loLista.mAddColuna([DGrus], [], [Descrição])
+		loLista.Show()
+	EndIf
+	
+	Replace CGrus With crListaRemota.CGrus, ;
+			DGrus With crListaRemota.DGrus In crGrdCdCom
+	Use In crListaRemota
+Else
+	Replace DGrus With [] In crGrdCdCom
+EndIf
+
+If Not Empty(crGrdCdCom.CGrus) And (Lastkey()=13)
+	If Not Eof([crGrdCdCom])
+		Skip In crGrdCdCom
+		Keyboard '{DNARROW}'
+	EndIf
+	If Eof([crGrdCdCom])
+		Append Blank In crGrdCdCom
+		Keyboard '{DNARROW}'
+	EndIf
+EndIf
+ThisForm.Pagina.Dados.grdProdutos.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR])
+ENDPROC
+
+
+================================================================================
+* OBJETO: SIGCDTPC.pagina.dados.grdProdutos.Column2.Text1
+* Classe: textbox (Base: textbox)
+* Registro: 23
+================================================================================
+
+------------------------------------------------------------
+* PROCEDURE Valid
+------------------------------------------------------------
+PROCEDURE Valid
+Local loLista
+
+
+If Not Empty(crGrdCdCom.CGrus)
+	loLista = CreateObject([fwBuscaExt], ThisForm.poDataMgr.pnIdConn, [SigCdGrp], ;
+						   [crListaRemota], [DGrus], crGrdCdCom.DGrus, [Seleção], .t.)
+
+	If Not loLista.plAchouRegistro
+		loLista.mAddColuna([DGrus], [], [Descrição])
+		loLista.mAddColuna([CGrus], [], [Grupo])
+		loLista.Show()
+	EndIf
+	
+	Replace CGrus With crListaRemota.CGrus, ;
+			DGrus With crListaRemota.DGrus In crGrdCdCom
+	Use In crListaRemota
+Else
+	Replace CGrus With [] In crGrdCdCom
+EndIf
+
+If Not Empty(crGrdCdCom.DGrus) And (Lastkey()=13)
+	If Not Eof([crGrdCdCom])
+		Skip In crGrdCdCom
+		Keyboard '{DNARROW}'
+	EndIf
+	If Eof([crGrdCdCom])
+		Append Blank In crGrdCdCom
+		Keyboard '{DNARROW}'
+	EndIf
+EndIf
+ThisForm.Pagina.Dados.grdProdutos.Refresh
+* Fim **************************************************************************************
+ENDPROC
+
+------------------------------------------------------------
+* PROCEDURE When
+------------------------------------------------------------
+PROCEDURE When
+Return InList(ThisForm.pcEscolha, [INSERIR], [ALTERAR]) And Empty(ThisForm.Pagina.Dados.grdProdutos.Column1.Text1.Value)
+ENDPROC
+
+
+================================================================================
+* SECAO 4: INFORMACOES ADICIONAIS
+================================================================================
+
+* Objeto: 
+RESERVED1 (Include): VERSION =   3.00
+
+* Objeto: Dataenvironment
+RESERVED2 (Comentarios): 1
+
+
+================================================================================
+* FIM DA EXTRACAO
+* Total de metodos/eventos com codigo: 17
+================================================================================

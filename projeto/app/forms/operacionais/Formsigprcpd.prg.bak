@@ -714,7 +714,7 @@ DEFINE CLASS Formsigprcpd AS FormBase
     ENDPROC
 
     *==========================================================================
-    PROTECTED PROCEDURE AlternarPagina
+    PROCEDURE AlternarPagina
     *==========================================================================
         LPARAMETERS par_nPagina
         *-- Form OPERACIONAL flat: nao possui multiplas paginas. O parametro

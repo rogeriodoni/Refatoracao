@@ -1393,7 +1393,7 @@ DEFINE CLASS FormSET AS FormBase
     * AjustarBotoesPorModo - Ajusta estado dos botoes conforme this_cModoAtual
     * LISTA: CRUD habilitados | INCLUIR/ALTERAR/VISUALIZAR/EXCLUIR: CRUD desabilitados
     *===========================================================================
-    PROTECTED PROCEDURE AjustarBotoesPorModo()
+    PROCEDURE AjustarBotoesPorModo()
         LOCAL loc_oPg1, loc_oPg2, loc_lEmEdicao, loc_oCnt
         loc_oPg1      = THIS.pgf_4c_Paginas.Page1
         loc_oPg2      = THIS.pgf_4c_Paginas.Page2

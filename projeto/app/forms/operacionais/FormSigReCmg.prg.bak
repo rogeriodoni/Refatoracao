@@ -1349,7 +1349,7 @@ DEFINE CLASS FormSigReCmg AS FormBase
     * Em form OPERACIONAL nao ha modos INCLUIR/ALTERAR/VISUALIZAR; aqui o
     * ajuste depende apenas da posicao atual do grafico (pnNumGrf).
     *==========================================================================
-    PROTECTED PROCEDURE AjustarBotoesPorModo()
+    PROCEDURE AjustarBotoesPorModo()
         IF PEMSTATUS(THIS, "obj_4c_CmdGgrafico", 5)
             *-- Anterior: desabilitado quando esta no primeiro grafico
             THIS.obj_4c_CmdGgrafico.Buttons(1).Enabled = (THIS.pnNumGrf > 1)

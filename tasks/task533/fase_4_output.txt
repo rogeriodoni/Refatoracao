@@ -1,0 +1,22 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 4/8 conclu├¡da. Editei `C:\4c\projeto\app\forms\cadastros\FormTCL.prg` (Read + Edit, arquivo j├í existente da Fase 3):
+
+**`ConfigurarPaginaLista()` completada** com:
+- 5 bot├Áes CRUD dentro de `cnt_4c_Botoes` (Incluir/Visualizar/Alterar/Excluir/Buscar), com ├¡cones, `PicturePosition=13`, `BINDEVENT` para os respectivos `Btn*Click` ÔÇö padr├úo can├┤nico copiado de `FormCor.prg`
+- `cnt_4c_Saida` + `cmd_4c_Encerrar` seguindo o padr├úo can├┤nico do CLAUDE.md regra #10 (Left=917/Width=90, bot├úo 75├ù75, Caption="Encerrar") ÔÇö **n├úo** usei o legado (que nem define esse bloco no SCX gerado, ent├úo apliquei o can├┤nico direto)
+- `grd_4c_Lista` (3 colunas: `classes`/`descrs`/`nivels`, larguras 100/319/83 ÔÇö exatamente os valores de `pColuna()` no `SIGCDTCL.Init` original registrados em `comportamento.json`)
+- `THIS.TornarControlesVisiveis(loc_oPg1)` no final
+
+**M├®todos novos adicionados** (antes do `Destroy()`):
+- `CarregarLista()` ÔÇö chama `TCLBO.Buscar("")`, seta `RecordSource`/`ControlSource` **antes** dos headers (Problema 2/32), redefine `Header1.Caption` = "Classe" / "Descri├º├úo" / "N├¡vel" ap├│s o `RecordSource` (evita reset de cabe├ºalhos)
+- `AlternarPagina(par_nPagina)` ÔÇö troca `ActivePage`, recarrega lista ao voltar pra Page1
+- `FormatarGridLista(par_oGrid)` ÔÇö Tahoma 8, exigido por `CarregarLista()`
+- `TornarControlesVisiveis(par_oContainer)` ÔÇö recursivo (Pages + Controls), exigido pelo `ConfigurarPaginaLista()`
+
+Todos os `TRY/CATCH` seguem a regra de nunca dar `RETURN` dentro do bloco (vari├ível `loc_lResultado`), e o arquivo est├í balanceado (todo `PROCEDURE`/`WITH`/`TRY` fechado, `ENDDEFINE` no final).
+
+Os handlers `Btn*Click` (Incluir/Visualizar/Alterar/Excluir/Buscar/Encerrar) ficam para a fase de "Eventos CRUD" (Page2/dados ainda n├úo existem ÔÇö `LimparCampos`, `HabilitarCampos`, `BOParaForm` etc. ser├úo criados nas pr├│ximas fases); os `BINDEVENT` j├í apontam pros nomes corretos, ent├úo nada precisa ser retocado quando essa fase chegar.

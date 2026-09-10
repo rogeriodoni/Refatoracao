@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+No hits ÔÇö clean on both fronts.
+
+**Fase 3/8 conclu├¡da.** Criei `C:\4c\projeto\app\forms\cadastros\FormTpc.prg` com a estrutura base:
+
+- `DEFINE CLASS FormTpc AS FormBase` com propriedades visuais (Height=600, Width=1000, Caption="Cadastro de Tipos de Composi├º├úo") e estado (`this_oBusinessObject`, `this_cModoAtual`)
+- `Init()` ÔåÆ apenas `RETURN DODEFAULT()`
+- `InicializarForm()` ÔåÆ cria `TpcBO`, chama `ConfigurarPageFrame()`, propaga `Caption` para os labels do cabe├ºalho, ativa Page1, carrega lista se n├úo estiver em `gb_4c_ValidandoUI`
+- `ConfigurarPageFrame()` ÔåÆ PageFrame com `Top=-29`, `Tabs=.F.`, Page1="Lista", Page2="Dados"
+- `ConfigurarPaginaLista()` (Page1) ÔåÆ `cnt_4c_Cabecalho` completo (faixa cinza + `lbl_4c_Sombra`/`lbl_4c_Titulo`, primeiro AddObject da p├ígina) + `cnt_4c_Botoes` **vazio** (posicionado no can├┤nico Left=542/Top=29/390x85 ÔÇö bot├Áes CRUD entram na Fase 4)
+- `ConfigurarPaginaDados()` (Page2) ÔåÆ `cnt_4c_BotoesAcao` **vazio** (Top=33/Left=842/160x85 ÔÇö bot├Áes Confirmar/Cancelar entram na Fase 6; o cabe├ºalho da Page2 fica para a Fase 5, junto com os primeiros campos)
+- `FormParaBO()`/`BOParaForm()` com WITH vazio (sem campos ainda)
+- `TornarControlesVisiveis()` e `FormatarGridLista()` (helpers padr├úo)
+- `Destroy()` ÔåÆ `DODEFAULT()`
+
+Verifiquei: nenhum `RETURN` dentro de `TRY/CATCH`, 10 `PROCEDURE`/10 `ENDPROC` balanceados, `DEFINE CLASS`/`ENDDEFINE` ├║nicos, sem `Container.Themes` nem `PageFrame.BackColor` (erros comuns do CLAUDE.md). Grid, bot├Áes CRUD, campos de dados e eventos ficam para as Fases 4ÔÇô8, conforme o escopo desta fase.

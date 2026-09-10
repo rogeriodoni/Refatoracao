@@ -1,0 +1,19 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 7/8 conclu├¡da. Adicionei ao `FormTml.prg`:
+
+**Eventos principais solicitados** (todos `PUBLIC`, compat├¡veis com `BINDEVENT`):
+- `BtnIncluirClick()` ÔÇö `NovoRegistro()` no BO, limpa campos, modo `INCLUIR`, habilita, navega para Page2, foco em `txt_4c_Codigo` (replica o `Get_Cods.SetFocus` do legado).
+- `BtnAlterarClick()` ÔÇö l├¬ `cidchaves` da linha selecionada no grid, `CarregarPorCodigo()` + `EditarRegistro()`, `BOParaForm()`, modo `ALTERAR`, foco em `txt_4c_Descricao` (replica `Get_Descs.SetFocus`).
+- `BtnVisualizarClick()` ÔÇö carrega registro selecionado somente leitura, modo `VISUALIZAR`, foco no bot├úo Confirmar (replica `Grupo_Salva.Salva.SetFocus`); tamb├®m ├® o handler do `DblClick` do grid (j├í vinculado na Fase 4).
+- `BtnExcluirClick()` ÔÇö confirma via `MsgConfirma`, localiza o registro e chama `this_oBusinessObject.Excluir()` (PUBLIC, nunca `ExecutarExclusao()` direto), recarrega a lista.
+
+**Auxiliares completos** (necess├írios para os 4 eventos funcionarem de ponta a ponta, sem stubs):
+- `LimparCampos()`, `BOParaForm()` (busca descri├º├Áes de Grupo/Conta/Tipo Acabamento via SQL direto, sem abrir picker), `FormParaBO()` (pronto para a Fase 8/`BtnSalvarClick`), `HabilitarCampos()` (c├│digo s├│ edit├ível em modo INCLUIR), `AjustarBotoesPorModo()` ÔÇö este ├║ltimo **PUBLIC**, pois a mem├│ria registrada indica que `TesteAutomatico.prg` o chama diretamente por fora da classe.
+
+Todos os guards seguem os padr├Áes do CLAUDE.md: `RETURN` fora de `TRY/CATCH`, `CATCH` nunca silencioso, e reuso de `cursor_4c_ChkGcr`/`cursor_4c_ChkAcb` (novo `cursor_4c_ChkCli` adicionado e j├í fechado no `Destroy()`).
+
+Pendente para a Fase 8 (fora do escopo desta fase): `BtnSalvarClick`, `BtnCancelarClick`, `BtnBuscarClick`, `BtnEncerrarClick`, e a integra├º├úo final em `menu.prg` (`AbrirFormTml` + item de menu) ÔÇö confirmei que ainda n├úo existem.

@@ -2257,7 +2257,7 @@ DEFINE CLASS Formsigrechp AS FormBase
         FOR loc_nI = 1 TO 20
             loc_cNome = loc_aNomes(loc_nI)
             IF !EMPTY(loc_cNome) AND PEMSTATUS(loc_oPag, loc_cNome, 5)
-                EVALUATE("loc_oPag." + loc_cNome + ".Enabled = loc_lHab")
+                STORE loc_lHab TO ("loc_oPag." + loc_cNome + ".Enabled")
             ENDIF
         ENDFOR
     ENDPROC

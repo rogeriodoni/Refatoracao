@@ -1,0 +1,19 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 1/8 conclu├¡da: criei **`C:\4c\projeto\app\classes\TPDBO.prg`** com a estrutura inicial do `TPDBO`.
+
+Conte├║do desta fase:
+- `DEFINE CLASS TPDBO AS BusinessBase`
+- Propriedades completas extra├¡das do schema (`docs/schema.sql` ÔåÆ tabela `SigCdTpD`) e do c├│digo-fonte legado:
+  - `this_cPkchave` (char(20), PK t├®cnica gerada por `fUniqueIds()`)
+  - `this_cCodigos` (char(2), campo de neg├│cio `codigos`)
+  - `this_cDescs` (char(30), `descs`)
+  - `this_nTipos` (numeric(1,0), `tipos` ÔÇö vem do `OptTipos` OptionGroup de 4 bot├Áes: Obrigat├│rio / N├úo / Obrigat├│rio+Permite Duplicados / N├úo+Permite Duplicados)
+- `Init()` chamando `DODEFAULT()` e configurando `this_cTabela = "SigCdTpD"` e `this_cCampoChave = "pkchave"` (nomes corretos de propriedade herdada, conforme regra do BusinessBase).
+
+N├úo inclu├¡ `CarregarDoCursor()`, `Inserir()`, `Atualizar()`, `ExecutarExclusao()`, `Buscar()`, `CarregarPorCodigo()` nem `ObterChavePrimaria()` ÔÇö ficam para a Fase 2, conforme escopo desta fase.
+
+Pronto para a pr├│xima fase quando voc├¬ mandar continuar.

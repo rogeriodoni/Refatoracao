@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FormTgp.prg was created with the Fase 3/8 base structure:
+
+- **DEFINE CLASS FormTgp AS FormBase** ÔÇö propriedades visuais (Height=600, Width=1000, Caption="Cadastro de Tipos de Gera├º├úo de O.P." usando CHR() para acentos), `this_oBusinessObject`, `this_cModoAtual`.
+- **Init()** ÔÇö apenas `RETURN DODEFAULT()` (sem chamada duplicada a InicializarForm).
+- **InicializarForm()** ÔÇö cria `TgpBO`, chama `ConfigurarPageFrame()`, guarda `gb_4c_ValidandoUI` antes de `CarregarLista()`.
+- **ConfigurarPageFrame()** ÔÇö PageFrame `pgf_4c_Paginas` com Top=-29, Tabs=.F., PageCount=2, Page1="Lista"/Page2="Dados" com `fundo_cad_1003.jpg`.
+- **ConfigurarPaginaLista()** ÔÇö cria `cnt_4c_Cabecalho` (primeiro AddObject, can├┤nico Top=29/Height=80/RGB(100,100,100)) e `cnt_4c_Botoes` (Top=29/Left=542), ambos **vazios** por enquanto.
+- **ConfigurarPaginaDados()** ÔÇö cria `cnt_4c_Cabecalho` (repetido na p├ígina Dados, regra #11) e `cnt_4c_BotoesAcao` (Left=615/Top=46, compensado do legado Grupo_Salva), tamb├®m vazios.
+- **TornarControlesVisiveis()** ÔÇö helper recursivo (Pages + Controls).
+- **Destroy()** ÔÇö libera BO e cursor.
+
+Grid, bot├Áes CRUD (Fase 4), campos de dados (Fases 5-6) e eventos/lookups (Fases 7-8) foram deliberadamente **n├úo** inclu├¡dos, conforme escopo desta fase ÔÇö sem TODOs ou stubs, apenas estrutura funcional parcial que as pr├│ximas fases v├úo completar via Read+Edit.

@@ -1,0 +1,24 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Resumo ÔÇö Fase 8/8 (FormTPD)
+
+Ao inspecionar `FormTPD.prg` (1037 linhas) e `TPDBO.prg` (225 linhas), constatei que as fases 1-7 j├í tinham deixado **tudo implementado e funcional**, sem stubs/TODOs:
+
+- `BtnBuscarClick`, `BtnEncerrarClick`, `BtnSalvarClick`, `BtnCancelarClick` Ô£ô
+- `FormParaBO()`/`BOParaForm()` completos (Codigos, Descs, Tipos)
+- `HabilitarCampos()`, `LimparCampos()`, `CarregarLista()`, `AlternarPagina()`, `AjustarBotoesPorModo()` Ô£ô
+- `TornarControlesVisiveis()`, `FormatarGridLista()` Ô£ô
+- L├│gica espelhando `comportamento.json` (valida├º├úo C├│digo/Descri├º├úo, foco p├│s-clique, PK t├®cnica via `fUniqueIds()`, bloqueio de duplicidade) Ô£ô
+
+O que faltava de fato era a **integra├º├úo com o sistema**, que fiz agora:
+
+1. **config.prg**: nada a fazer ÔÇö usa `ADIR()` para carregar `*BO.prg` e `Form*.prg` dinamicamente (conforme CLAUDE.md), ent├úo `TPDBO.prg` e `FormTPD.prg` j├í s├úo carregados automaticamente.
+2. **menu.prg**:
+   - `DEFINE BAR 185 OF popCadastros PROMPT "Tipos de Documentos"` (ap├│s o item 184, Tipos de Composi├º├úo)
+   - `ON SELECTION BAR 185 OF popCadastros DO AbrirFormTPD`
+   - Adicionada a procedure `AbrirFormTPD()` no final do arquivo, seguindo exatamente o padr├úo can├┤nico (VARTYPE, Show() sem par├ómetro, sem Release(), MostrarErro com Erro+Linha+Procedure).
+
+Arquivo final: `C:\4c\projeto\app\forms\cadastros\FormTPD.prg` ÔÇö completo e agora acess├¡vel via menu Cadastros ÔåÆ Tipos de Documentos.

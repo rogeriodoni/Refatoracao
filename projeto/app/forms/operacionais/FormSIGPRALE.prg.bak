@@ -275,7 +275,7 @@ DEFINE CLASS FormSIGPRALE AS FormBase
     * SIGPRALE nao alterna entre paginas; sempre exibe imagem + 3 mensagens.
     * Metodo mantido apenas para conformidade com o contrato da pipeline (Fase 4).
     *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE AlternarPagina(par_nPagina)
+    PROCEDURE AlternarPagina(par_nPagina)
         *-- Sem-operacao: dialogo nao possui paginas para alternar.
         RETURN
     ENDPROC
@@ -458,7 +458,7 @@ DEFINE CLASS FormSIGPRALE AS FormBase
     * O dialogo e exibido enquanto processamento externo executa e e encerrado
     * pelo chamador via THIS.Release() apos conclusao.
     *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE AjustarBotoesPorModo()
+    PROCEDURE AjustarBotoesPorModo()
         *-- Sem-operacao: dialogo de progresso nao possui modos nem botoes CRUD.
         RETURN
     ENDPROC

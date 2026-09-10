@@ -1,0 +1,37 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+## Fase 6/8 conclu├¡da
+
+Arquivo **modificado**: `C:\4c\projeto\app\forms\cadastros\FormTfi.prg` (815 ÔåÆ 1215 linhas)
+
+### O que foi adicionado
+
+1. **├Ültimos campos de `ConfigurarPaginaDados()`** (Page2) ÔÇö bloco "Configura├º├úo da Descri├º├úo do Produto" completo, copiado com Tops compensados +29 do original:
+   - `lin_4c_Line1` (linha separadora) + `lbl_4c_Label25` (t├¡tulo da se├º├úo, bold)
+   - `lbl_4c_TamDesc`/`txt_4c_TamDesc` (Qtde M├íxima Caracteres)
+   - `lbl_4c_Label26`/`txt_4c_OOrig` (Descri├º├úo Original)
+   - `lbl_4c_Label27`/`txt_4c_OAdendo` (Adendo Tipo Fatura)
+   - `lbl_4c_Label28`/`txt_4c_OCor` (Cor)
+   - `lbl_4c_Label29`/`txt_4c_OEmb` (Embalagem)
+   - `lbl_4c_Label30`/`txt_4c_OTam` (Tamanho)
+   - `lbl_4c_Label1`/`obj_4c_OptTipoDesc` (OptionGroup 4 bot├Áes: Normal/Fiscal/Digitada/Autom├ítica)
+
+2. **Container `cnt_4c_BotoesAcao`** preenchido com `cmd_4c_Confirmar` e `cmd_4c_Cancelar` (BackStyle=0 conforme o padr├úo can├┤nico do framework, corrigindo o stub vazio da Fase 5).
+
+3. **`shp_4c_Shape1`** ÔÇö adicionado diretamente em `THIS` (form raiz), pois no legado seu parent ├® `SIGCDTFI` e n├úo `Pagina.Dados`.
+
+4. **`ConfigurarHabilitacaoComposicao()`** ÔÇö novo m├®todo que porta a l├│gica do `Init()` legado que l├¬ `SigCdPam.tipoestos` via SQL e habilita/desabilita `txt_4c_OCor`/`OEmb`/`OTam` conforme `InList(TipoEstos,2,3,4)`. Chamado do `InicializarForm()` logo ap├│s `CarregarLista()`, com o mesmo guard de `gb_4c_ValidandoUI`.
+
+### Sobre lookups (ponto central da Fase 6)
+Reexaminei `SigCdTfi_form_codigo_fonte.txt` linha a linha: **n├úo h├í nenhum padr├úo de lookup** no original (nenhum `fwbuscaext`, `fwBuscaSel`, `sigacess(` ou `CreateObject` de busca). Os campos `Get_O*`/`Get_TamDesc` s├úo TextBox num├®ricos simples (`InputMask="99"`), sem `PROCEDURE Valid` de busca ÔÇö s├│ `PROCEDURE When` de habilita├º├úo condicional. Documentei isso explicitamente no c├│digo para n├úo inventar lookup inexistente (regra anti-inven├º├úo do CLAUDE.md).
+
+### Valida├º├Áes feitas
+- `WITH`/`ENDWITH` balanceados (57/57), `TRY`/`ENDTRY` (5/5), 50 `AddObject`s no total.
+- Nenhum `RETURN` dentro de `TRY/CATCH`.
+- Todos os `Top` conferidos contra o `.txt` original com compensa├º├úo +29.
+- Tipos de coluna (`oaden`, `ocor`, `oemb`, `oorig`, `otam`, `tamdesc` = `numeric(2,0)`; `tipoestos` em `SigCdPam` = `numeric(1,0)`) confirmados via `docs/schema.sql` (lido com `Get-Content -Raw`, respeitando UTF-16).
+
+`cmd_4c_Confirmar`/`cmd_4c_Cancelar` e seus `Btn*Click` (BINDEVENT) ficam para a Fase 7/8, conforme o plano.

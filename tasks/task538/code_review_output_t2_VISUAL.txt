@@ -1,0 +1,21 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Confirmed ÔÇö no `Comic Sans MS` in the file, and no CHECKBOX-TIPO items were flagged either. Nothing further to do on those categories.
+
+## Resumo do PASS VISUAL
+
+**Corrigido (1 problema real):**
+- **NULL-CURSOR** (`FormTop.prg:1780-1782`): adicionado `SET NULL ON` antes / `SET NULL OFF` depois do `CREATE CURSOR cursor_4c_Dados` (branch de teste autom├ítico `gb_4c_ValidandoUI`), conforme instru├¡do.
+
+**N├úo aplicado ÔÇö falsos positivos verificados (34 problemas):**
+
+- **GRID-WITH**: o bloco real em `CarregarLista()` (linha ~1786-1806) **j├í usa** `loc_oGrid.RecordSource = ...` e `loc_oGrid.ColumnN.ControlSource = ...` com refer├¬ncia expl├¡cita **fora** de qualquer `WITH` ÔÇö n├úo existe no arquivo nenhum `WITH` que misture `.RecordSource` e `.ColumnN` no mesmo bloco. O coment├írio na linha 358 (`"ColumnCount FORA do WITH... (Problema 36)"`) mostra que esse padr├úo j├í foi corrigido anteriormente. Nada a mudar.
+
+- **LAYOUT-POSITION (33 itens)**: todos com diff de exatos **72px no Top** s├úo o deslocamento **obrigat├│rio e documentado** em CLAUDE.md regra #11 (`Top_novo = Top_original + 72`, compensando `PageFrame.Top=-29` + faixa de cabe├ºalho `Top=29/Height=80`) ÔÇö est├í explicitado no pr├│prio c├│digo-fonte (linhas 503-505: *"Top_novo = Top_original + 72... CLAUDE.md #11"*). "Corrigir" esses Tops de volta ao valor legado **quebraria** a faixa can├┤nica de cabe├ºalho (regra que **prevalece sobre o PILAR 1**) e violaria a proibi├º├úo de alterar Top/Left fora de casos de ALINHAMENTO (que no escopo deste pass cobre apenas grupos de bot├Áes `cmd_4c_*`/`cnt_4c_*`, n├úo labels/OptionGroups individuais).
+
+  - Caso especial **'Label1'**: o relat├│rio comparou o `Label1` original (Top=74, Left=110) contra `lbl_4c_Label11` migrado ÔÇö controle errado, provavelmente por casamento de nome por substring no auditor (`Label1` ├® prefixo de `Label11`). O correspondente real ├® `lbl_4c_Label1` (linha 595), que tem Top=146/Left=110 ÔÇö exatamente Top original+72 e Left id├¬ntico, confirmando que a migra├º├úo est├í correta e o finding ├® ru├¡do do auditor, n├úo um defeito no c├│digo.
+
+Nenhuma altera├º├úo visual (Width/Height/Top/Left/cores/fontes) foi feita al├®m do `SET NULL ON/OFF`, conforme as regras obrigat├│rias do pass.

@@ -1,0 +1,29 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Everything balances and both files are in place under the paths `config.prg`'s `ADIR()` auto-discovery already scans (`classes\*BO.prg` and `forms\cadastros\Form*.prg`).
+
+## Resumo da Fase 8/8 ÔÇö FormTgp
+
+Completei o `FormTgp.prg` adicionando os m├®todos finais que faltavam:
+
+- **`BtnBuscarClick()`** ÔÇö abre Page2 em modo `BUSCAR` (C├│digo/Descri├º├úo como crit├®rio), espelhando o bot├úo "Buscar" do `grp_operacao` legado
+- **`BtnEncerrarClick()`** ÔÇö fecha o form (`THIS.Release()`, sem chamada dupla)
+- **`BtnSalvarClick()`** ÔÇö valida C├│digo/Descri├º├úo obrigat├│rios (fora do TRY), grava via `FormParaBO()` + `this_oBusinessObject.Salvar()`, ou localiza o registro na lista quando em modo `BUSCAR`
+- **`BtnCancelarClick()`** ÔÇö cancela edi├º├úo e volta para a lista recarregando o grid via `AlternarPagina(1)`
+- **`FormParaBO()` / `BOParaForm()`** ÔÇö mapeiam **todos** os 5 campos do BO (`this_cCodigos`, `this_cDescs`, `this_nEntpes`, `this_nOpzers`, `this_cDopps`) para/de `txt_4c_Codigos`, `txt_4c_Descrs`, `opt_4c_Entpes`, `opt_4c_Opzers`, `txt_4c_Nivel`
+- **`LimparCampos()`** e **`HabilitarCampos(par_lHabilitar)`** ÔÇö este ├║ltimo trava `txt_4c_Codigos` fora dos modos INCLUIR/BUSCAR (chave prim├íria), espelhando o `When` do `Get_Codigos` legado
+- **`AjustarBotoesPorModo()`** ÔÇö desabilita Confirmar em VISUALIZAR, mantendo Cancelar sempre ativo
+
+Validei manualmente que:
+- Nenhum `RETURN` est├í dentro de blocos `TRY/CATCH` (regra cr├¡tica do projeto)
+- Todos os pares `TRY/ENDTRY`, `WITH/ENDWITH`, `IF/ENDIF`, `FOR/ENDFOR`, `PROCEDURE/ENDPROC` e `DEFINE CLASS/ENDDEFINE` est├úo balanceados (27 procedures, 27 ENDPROCs)
+- Todos os m├®todos chamados via `BINDEVENT` (Btn*Click) permanecem `PUBLIC`
+
+Tamb├®m completei a integra├º├úo pendente (o prompt da fase pedia isso, mas as fases anteriores n├úo tinham feito):
+- `config.prg` **n├úo precisou de edi├º├úo** ÔÇö ele j├í usa `ADIR()` para carregar dinamicamente `classes\*BO.prg` e `forms\cadastros\Form*.prg`, e os dois arquivos j├í est├úo nesses caminhos
+- `menu.prg`: adicionei `DEFINE BAR 179 OF popCadastros` + `ON SELECTION BAR 179 OF popCadastros DO AbrirFormTgp` + a procedure `AbrirFormTgp()` completa (padr├úo `VARTYPE`/`Show()` sem par├ómetro/sem `Release()` p├│s-Show, conforme os 23 problemas documentados)
+
+N├úo fiz testes de execu├º├úo (VFP9 n├úo est├í dispon├¡vel neste ambiente) ÔÇö recomendo rodar o pipeline de valida├º├úo (`TesteAutomatico.prg`/`ValidarUIFidelity.prg`) para essa entidade antes de considerar a migra├º├úo fechada.

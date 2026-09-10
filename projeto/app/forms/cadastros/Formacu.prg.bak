@@ -734,6 +734,11 @@ DEFINE CLASS Formacu AS FormBase
 
             *-- CheckBox na coluna 3 (Sparse=.F. ja definido acima)
             loc_oGrid.Column3.AddObject("Check1", "CheckBox")
+
+            *-- CurrentControl: sem isto a coluna continua desenhando o Text1 e o
+            *-- CheckBox acima NUNCA aparece (CorretorAutomatico #198)
+            loc_oGrid.Column3.CurrentControl = "Check1"
+            loc_oGrid.Column3.Sparse         = .F.
             loc_oGrid.Column3.Check1.Caption = ""
             loc_oGrid.Column3.Check1.Value   = .F.
 
@@ -795,6 +800,10 @@ DEFINE CLASS Formacu AS FormBase
             loc_oGrid.Column4.Sparse          = .F.
             loc_oGrid.Column4.Header1.Caption = ""
             loc_oGrid.Column4.AddObject("Check1", "CheckBox")
+
+            *-- CurrentControl: sem isto a coluna continua desenhando o Text1 e o
+            *-- CheckBox acima NUNCA aparece (CorretorAutomatico #198)
+            loc_oGrid.Column4.CurrentControl = "Check1"
             loc_oGrid.Column4.Check1.Caption  = ""
             loc_oGrid.Column4.Check1.Value    = .F.
 
@@ -868,7 +877,7 @@ DEFINE CLASS Formacu AS FormBase
     *--------------------------------------------------------------------------
     * AlternarPagina - Alterna entre Page1 (Lista=1) e Page2 (Dados=2)
     *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE AlternarPagina(par_nPagina)
+    PROCEDURE AlternarPagina(par_nPagina)
         LOCAL loc_lSucesso
         loc_lSucesso = .F.
 

@@ -1,0 +1,28 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+This all looks correct and consistent with the established patterns (no RETURN inside TRY/CATCH, PUBLIC Btn*Click methods for BINDEVENT, THIS. prefix everywhere, proper HabilitarCampos/LimparCampos/FormParaBO/BOParaForm support, no TODOs/stubs).
+
+## Resumo da Fase 7/8
+
+Modifiquei `C:\4c\projeto\app\forms\cadastros\FormTfi.prg` (Read + Edit, arquivo j├í existia das fases anteriores):
+
+**4 eventos principais adicionados** (todos `PUBLIC`, exigido pelo BINDEVENT ÔÇö regra #17):
+- `BtnIncluirClick()` ÔÇö chama `NovoRegistro()`, limpa campos, habilita edi├º├úo, vai para Page2
+- `BtnVisualizarClick()` ÔÇö l├¬ `codigos` da linha selecionada na grade, `CarregarPorCodigo()`, abre Page2 somente leitura
+- `BtnAlterarClick()` ÔÇö carrega registro, chama `EditarRegistro()`, habilita edi├º├úo
+- `BtnExcluirClick()` ÔÇö confirma via `MsgConfirma()` (retorno l├│gico, n├úo num├®rico) e chama `Excluir()` (p├║blico, n├úo `ExecutarExclusao`)
+
+**BINDEVENT wiring** adicionado em `ConfigurarPaginaLista()` para os 4 bot├Áes (Incluir/Visualizar/Alterar/Excluir) + `DblClick` do grid ÔåÆ `BtnVisualizarClick`. O bot├úo Buscar/Encerrar ficam para a Fase 8, como j├í indicado nos coment├írios NOTA do arquivo.
+
+**M├®todos de apoio criados** (necess├írios para os 4 eventos funcionarem de fato, sem stub) ÔÇö n├úo estavam implementados em fases anteriores:
+- `FormParaBO()` / `BOParaForm()` ÔÇö mapeiam os 14 campos da Page2 Ôåö propriedades do `TfiBO`
+- `HabilitarCampos()` ÔÇö C├│digo s├│ edit├ível em modo INCLUIR; OCor/OEmb/OTam respeitam adicionalmente `this_lComposicaoHabilitada` (regra do `SigCdPam.tipoestos`, j├í existente em `ConfigurarHabilitacaoComposicao`)
+- `LimparCampos()` ÔÇö reseta todos os campos, com defaults do legado (OpcaoSNA=3 "Ambos", TipoDesc=1 "Normal")
+- `AjustarBotoesPorModo()` ÔÇö Confirmar habilitado s├│ em INCLUIR/ALTERAR
+
+Tamb├®m adicionei a propriedade `this_lComposicaoHabilitada` e ajustei `ConfigurarHabilitacaoComposicao()` para persistir esse flag (antes s├│ era local).
+
+Valida├º├úo estrutural: 20 PROCEDURE/20 ENDPROC, 57 WITH/57 ENDWITH, 5 TRY/5 ENDTRY, 2 FOR/2 ENDFOR, 24 IF/24 ENDIF ÔÇö tudo balanceado. Sem `RETURN` dentro de TRY/CATCH, sem TODO/stub.

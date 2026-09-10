@@ -1610,7 +1610,7 @@ DEFINE CLASS Formsigprccp AS FormBase
     ENDPROC
 
     *==========================================================================
-    PROTECTED PROCEDURE AjustarBotoesPorModo()
+    PROCEDURE AjustarBotoesPorModo()
     *==========================================================================
         THIS.cmg_4c_Botoes.Buttons(2).Enabled = .F.
         THIS.cmd_4c_Imprimir.Enabled          = .F.

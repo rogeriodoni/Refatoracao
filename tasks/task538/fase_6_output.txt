@@ -1,0 +1,24 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+O arquivo est├í completo e consistente. Resumo do que foi feito na Fase 6/8:
+
+**`C:\4c\projeto\app\forms\cadastros\FormTop.prg`** ÔÇö atualizado via Read+Edit:
+
+1. **Container `cnt_4c_BotoesAcao`** (Page2) agora tem os bot├Áes `cmd_4c_Confirmar` e `cmd_4c_Cancelar` (props can├┤nicas: 75x75, ├¡cones `cadastro_salvar_60.jpg`/`cadastro_cancelar_60.jpg`, Comic Sans MS) com `BINDEVENT` para `BtnSalvarClick`/`BtnCancelarClick` (m├®todos ser├úo implementados na fase de CRUD/data-binding).
+
+2. **Novo m├®todo `AdicionarCamposPrincipais2()`** com a segunda metade dos campos de `SIGCDTOP.Pagina.Dados` (offset +72 igual ├á Fase 5), mapeados 1:1 para as propriedades do `TopBO`:
+   - `fwoption6` ÔåÆ `this_nBxVendas` (Baixa de Estoque)
+   - `fwoption5` ÔåÆ `this_nChkSDFs` (Calcular Rel. de Comiss├úo, com ToolTipText do legado)
+   - `getEntPends` ÔåÆ `this_nEntPends` (Exibir como entrada pendente)
+   - `fwoption7` ÔåÆ `this_nFlxCaixa` (Fluxo de Caixa ÔÇö Sim/Sim-Pago/N├úo)
+   - `Fwoption9` ÔåÆ `this_nGeraCmvs` (Gera CMV)
+   - `getMaxEnts`/`getMaxEnt2s`/`getMaxEnt3s` ÔåÆ `this_nMaxEnts`/`this_nMaxEnt2s`/`this_nMaxEnt3s` (Dias ├Üteis/S├íbados/Domingos-Feriados)
+   - `optReposicaos` ÔåÆ `this_nReposicaos` (8 op├º├Áes: Nenhum/Solicitado/Tr├ónsito/Pedido Geral/Pedido Empresa/Pedido de Compra/Entrada/Sa├¡da)
+   - Duas linhas divis├│rias (`shp_4c_Shape1`, `shp_4c_Shape2`) e t├¡tulos de se├º├úo (`lbl_4c_Say3`, `lbl_4c_Say4`)
+
+3. **Lookups**: confirmado (via `comportamento.json` e `analise.json`) que este form **n├úo tem nenhum lookup F4/DblClick** ÔÇö nenhum `fwbuscaext`, `fwBuscaSel` ou `sigacess` no fonte original, apenas OptionGroups e TextBoxes num├®ricos. Documentei essa constata├º├úo no cabe├ºalho do arquivo para n├úo ser reinvestigada nas pr├│ximas fases.
+
+Todos os 21 novos objetos s├úo ├║nicos dentro de Page2 (sem colis├úo de nomes), e a contagem de blocos `WITH/ENDWITH` (109/109), `PROCEDURE/ENDPROC` (12/12) e `TRY/ENDTRY` (2/2) est├í balanceada.

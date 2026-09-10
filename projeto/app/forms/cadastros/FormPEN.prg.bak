@@ -1188,7 +1188,16 @@ DEFINE CLASS FormPEN AS FormBase
     ENDPROC
 
     PROCEDURE ValidarContas()
-        LOCAL loc_cContas, loc_cDesc, loc_oPg2
+        *-- Espelha o Valid do legado (SIGCDPEN.Pagina.Dados.Get_Contas.Valid):
+        *--   grupo = thisform.pagina.dados.Get_Grupos.value
+        *--   If !fAcessoContas( Usuar, grupo, 'C', this.value, This, thisform.pagina.dados.get_C )
+        *--       Messagebox( 'Acesso Negado !!', 0+48, '' )
+        *--
+        *-- O GRUPO faz parte da regra: fAcessoContas cruza SigSyAgc/SigSyAcc com
+        *-- SigCdAcG para decidir quais contas o usuario enxerga naquele grupo. A
+        *-- versao anterior chamava BuscarDescConta, que le SigCdCli sem filtro de
+        *-- grupo nenhum - buraco de permissao, nao so de exibicao.
+        LOCAL loc_cContas, loc_cGrupo, loc_oPg2
         loc_oPg2 = THIS.pgf_4c_Paginas.Page2
         IF !PEMSTATUS(loc_oPg2, "txt_4c_Contas", 5)
             RETURN
@@ -1198,12 +1207,23 @@ DEFINE CLASS FormPEN AS FormBase
             loc_oPg2.txt_4c_DContas.Value = ""
             RETURN
         ENDIF
-        loc_cDesc = THIS.this_oBusinessObject.BuscarDescConta(loc_cContas)
-        IF EMPTY(loc_cDesc)
-            loc_oPg2.txt_4c_DContas.Value = ""
-        ELSE
-            loc_oPg2.txt_4c_DContas.Value = loc_cDesc
+
+        loc_cGrupo = ""
+        IF PEMSTATUS(loc_oPg2, "txt_4c_Grupos", 5)
+            loc_cGrupo = ALLTRIM(loc_oPg2.txt_4c_Grupos.Value)
         ENDIF
+
+        TRY
+            IF !fAcessoContas(Usuar, loc_cGrupo, "C", loc_cContas, ;
+                              loc_oPg2.txt_4c_Contas, loc_oPg2.txt_4c_DContas)
+                MsgAviso("Acesso Negado !!", "")
+                loc_oPg2.txt_4c_Contas.Value  = ""
+                loc_oPg2.txt_4c_DContas.Value = ""
+            ENDIF
+            loc_oPg2.txt_4c_Contas.Refresh
+        CATCH TO loc_oErro
+            MsgErro(loc_oErro.Message, "FormPEN.ValidarContas")
+        ENDTRY
     ENDPROC
 
     PROCEDURE ContasKeyPress(par_nKeyCode, par_nShiftAltCtrl)

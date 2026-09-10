@@ -574,7 +574,7 @@ DEFINE CLASS Formsigprico AS FormBase
     *============================================================================
     * AlternarPagina - Alterna a pagina ativa do PageFrame
     *============================================================================
-    PROTECTED PROCEDURE AlternarPagina(par_nPagina)
+    PROCEDURE AlternarPagina(par_nPagina)
         IF par_nPagina >= 1 AND par_nPagina <= THIS.pgf_4c_Paginas.PageCount
             THIS.pgf_4c_Paginas.ActivePage = par_nPagina
         ENDIF
@@ -644,7 +644,7 @@ DEFINE CLASS Formsigprico AS FormBase
     *============================================================================
     * AjustarBotoesPorModo - Formulario visual: botoes CRUD ocultos
     *============================================================================
-    PROTECTED PROCEDURE AjustarBotoesPorModo()
+    PROCEDURE AjustarBotoesPorModo()
         *-- Form puramente visual: cnt_4c_Botoes permanece oculto (sem CRUD)
         RETURN
     ENDPROC

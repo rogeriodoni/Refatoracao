@@ -426,6 +426,48 @@ DEFINE CLASS FormCAD AS FormBase
             *-- Fundo padrao do framework frmcadastro (sem isso a pagina fica branca)
             loc_oPagina.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
 
+            *-- Container cabecalho na Page2 (espelha Page1 para consistencia visual)
+            loc_oPagina.AddObject("cnt_4c_Cabecalho", "Container")
+            WITH loc_oPagina.cnt_4c_Cabecalho
+                .Top         = 31
+                .Left        = 0
+                .Width       = THIS.Width
+                .Height      = 80
+                .BackColor   = RGB(100, 100, 100)
+                .BorderWidth = 0
+                .Visible     = .T.
+
+                .AddObject("lbl_4c_Sombra", "Label")
+                WITH .lbl_4c_Sombra
+                    .Caption   = THIS.Caption
+                    .Top       = 15
+                    .Left      = 10
+                    .Width     = THIS.Width
+                    .Height    = 40
+                    .FontName  = "Tahoma"
+                    .FontSize  = 16
+                    .FontBold  = .T.
+                    .ForeColor = RGB(0, 0, 0)
+                    .BackStyle = 0
+                    .AutoSize  = .F.
+                ENDWITH
+
+                .AddObject("lbl_4c_Titulo", "Label")
+                WITH .lbl_4c_Titulo
+                    .Caption   = THIS.Caption
+                    .Top       = 18
+                    .Left      = 10
+                    .Width     = THIS.Width
+                    .Height    = 46
+                    .FontName  = "Tahoma"
+                    .FontSize  = 16
+                    .FontBold  = .T.
+                    .ForeColor = RGB(255, 255, 255)
+                    .BackStyle = 0
+                    .AutoSize  = .F.
+                ENDWITH
+            ENDWITH
+
             *-- Container botoes Salvar/Cancelar (Grupo_Salva: Top=9+29=38 -> canonico Left=842)
             loc_oPagina.AddObject("cnt_4c_BotoesAcao", "Container")
             WITH loc_oPagina.cnt_4c_BotoesAcao
@@ -478,48 +520,6 @@ DEFINE CLASS FormCAD AS FormBase
                     .MousePointer    = 15
                     .WordWrap        = .T.
                     .AutoSize        = .F.
-                ENDWITH
-            ENDWITH
-
-            *-- Container cabecalho na Page2 (espelha Page1 para consistencia visual)
-            loc_oPagina.AddObject("cnt_4c_Cabecalho", "Container")
-            WITH loc_oPagina.cnt_4c_Cabecalho
-                .Top         = 31
-                .Left        = 0
-                .Width       = THIS.Width
-                .Height      = 80
-                .BackColor   = RGB(100, 100, 100)
-                .BorderWidth = 0
-                .Visible     = .T.
-
-                .AddObject("lbl_4c_Sombra", "Label")
-                WITH .lbl_4c_Sombra
-                    .Caption   = THIS.Caption
-                    .Top       = 15
-                    .Left      = 10
-                    .Width     = THIS.Width
-                    .Height    = 40
-                    .FontName  = "Tahoma"
-                    .FontSize  = 16
-                    .FontBold  = .T.
-                    .ForeColor = RGB(0, 0, 0)
-                    .BackStyle = 0
-                    .AutoSize  = .F.
-                ENDWITH
-
-                .AddObject("lbl_4c_Titulo", "Label")
-                WITH .lbl_4c_Titulo
-                    .Caption   = THIS.Caption
-                    .Top       = 18
-                    .Left      = 10
-                    .Width     = THIS.Width
-                    .Height    = 46
-                    .FontName  = "Tahoma"
-                    .FontSize  = 16
-                    .FontBold  = .T.
-                    .ForeColor = RGB(255, 255, 255)
-                    .BackStyle = 0
-                    .AutoSize  = .F.
                 ENDWITH
             ENDWITH
 

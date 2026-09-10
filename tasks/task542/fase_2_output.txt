@@ -1,0 +1,19 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+No stubs/TODOs, and no `RETURN` appears inside any `TRY/CATCH` block (all are after `ENDTRY`, outside the try blocks). Phase 2 is complete.
+
+**Summary ÔÇö `TPDBO.prg` (Fase 2/8 conclu├¡da):**
+
+Adicionei ao BO j├í existente (que tinha s├│ `Init()`):
+- **`ObterChavePrimaria()`** ÔÇö retorna `Codigos` (chave de neg├│cio, usada na auditoria)
+- **`Buscar(par_cFiltro)`** ÔÇö lista `codigos, descs` em `cursor_4c_Dados`
+- **`CarregarPorCodigo(par_cCodigos)`** ÔÇö busca por `Codigos` (├® o que o usu├írio digita em `getCodigos`)
+- **`CarregarDoCursor(par_cAliasCursor)`** ÔÇö mapeia `pkchave`, `codigos`, `descs`, `tipos` (todas as 4 colunas da tabela)
+- **`Inserir()`** ÔÇö replica a valida├º├úo exata do legado (`Select Codigos From SigCdTpD Where Codigos = ...` antes de gravar, bloqueando duplicado com a mensagem original "C├│digo J├í Cadastrado!!!"), gera a PK t├®cnica via `fUniqueIds()` (equivalente ao `Replace pkchave With fUniqueIds()` do legado)
+- **`Atualizar()`** ÔÇö UPDATE por `pkchave` (j├í que `Codigos` fica desabilitado no modo ALTERAR, conforme o `When` do `getCodigos` no fonte legado)
+- **`ExecutarExclusao()`** ÔÇö DELETE por `pkchave`
+
+Todos os m├®todos de grava├º├úo chamam `THIS.RegistrarAuditoria()`. Nenhum `RETURN` dentro de `TRY/CATCH`, sem stubs/TODOs, seguindo fielmente o padr├úo de `TpcBO.prg`/`CargoBO.prg` e o schema real (`codigos char(2)`, `pkchave char(20)` PK, `descs char(30)`, `tipos numeric(1,0)`, todos NOT NULL).

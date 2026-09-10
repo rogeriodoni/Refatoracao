@@ -441,7 +441,7 @@ DEFINE CLASS FormSigPrAop AS FormBase
     ENDPROC
 
     *---------------------------------------------------------------------------
-    PROTECTED PROCEDURE AlternarPagina(par_nPagina)
+    PROCEDURE AlternarPagina(par_nPagina)
     *-- Form OPERACIONAL nao possui PageFrame (layout plano). Metodo mantido por
     *-- compatibilidade com padrao dos forms CRUD e para uso futuro caso o form
     *-- evolua para multi-pagina. Devolve foco ao campo O.P. quando invocado.

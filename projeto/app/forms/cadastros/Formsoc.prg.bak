@@ -288,7 +288,7 @@ DEFINE CLASS Formsoc AS FormBase
     *====================================================================
     * AlternarPagina - Alterna entre Page1 (Lista=1) e Page2 (Dados=2)
     *====================================================================
-    PROTECTED PROCEDURE AlternarPagina(par_nPagina)
+    PROCEDURE AlternarPagina(par_nPagina)
         LOCAL loc_lResultado
         loc_lResultado = .F.
 

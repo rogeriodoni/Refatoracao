@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Revisei o `FormTot.prg` e o problema **TITULO-NAO-PROPAGADO** apontado no relat├│rio j├í est├í resolvido no c├│digo atual ÔÇö n├úo ├® necess├írio nenhum ajuste.
+
+Confirma├º├úo (grep pelos 4 pontos de cria├º├úo de `lbl_4c_Sombra`/`lbl_4c_Titulo`):
+
+- `ConfigurarPaginaLista()` (Page1), linhas 174-199: `lbl_4c_Sombra.Caption = THIS.Caption` (linha 176) e `lbl_4c_Titulo.Caption = THIS.Caption` (linha 192).
+- `ConfigurarPaginaDados()` (Page2), linhas 560-585: mesmo padr├úo ÔÇö `lbl_4c_Sombra.Caption = THIS.Caption` (linha 562) e `lbl_4c_Titulo.Caption = THIS.Caption` (linha 578).
+
+Em ambos os casos os labels j├í recebem `THIS.Caption` diretamente no momento do `AddObject`, e `THIS.Caption` ├® definido como propriedade de classe (linha 60) com o t├¡tulo real ("Cadastro de Tipos de Opera..."), ent├úo j├í est├í correto antes de `InicializarForm`/`ConfigurarPageFrame` rodarem ÔÇö n├úo h├í propaga├º├úo tardia nem valor gen├®rico "Cadastro de Testes" sobrando.
+
+N├úo vi tamb├®m nenhuma outra ocorr├¬ncia dos outros itens do checklist (alinhamento de bot├Áes desalinhados, CheckBox.Value inconsistente, FontName "Comic Sans MS") nos trechos fornecidos ÔÇö os grupos de bot├Áes (`cnt_4c_Botoes`, `cnt_4c_BotoesAcao`, `cnt_4c_Saida`) j├í usam `Top = 5` consistente entre si, e todo `FontName` ├® `"Tahoma"`.
+
+Como o ├║nico problema listado j├í est├í corrigido no arquivo e as regras pro├¡bem alterar propriedades visuais fora do escopo do pass, n├úo fiz nenhuma edi├º├úo em `FormTot.prg` nem em `TotBO.prg`.

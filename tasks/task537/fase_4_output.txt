@@ -1,0 +1,20 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Balanced (10 PROCEDURE/ENDPROC pairs, 18 WITH/ENDWITH pairs). Fase 4 is complete.
+
+## Resumo
+
+Atualizei `C:\4c\projeto\app\forms\cadastros\FormTml.prg` completando a Page1 (Lista):
+
+**`ConfigurarPaginaLista()`** ÔÇö adicionei ao `cnt_4c_Botoes` (can├┤nico Left=542/Top=29/Width=390) os 5 bot├Áes CRUD do legado `Grupo_op` (InserirÔåÆIncluir, ConsultarÔåÆVisualizar, Alterar, Excluir, procurarÔåÆBuscar), cada um com Caption/Picture/PicturePosition/cores can├┤nicas e `BINDEVENT` para o respectivo `Btn*Click`. Adicionei tamb├®m `cnt_4c_Saida`/`cmd_4c_Encerrar` seguindo o **padr├úo can├┤nico** (Left=917, Caption="Encerrar" ÔÇö n├úo o legado `Grupo_Saida`/"Sair") e o `grd_4c_Lista` com 5 colunas espelhando exatamente o `SIGCDTML.Init()` original (`Cods` 115, `descs` 270, `pfalhas` 80, `Grupos` 80, `CodAcbs` 40 ÔÇö esta ├║ltima mantida `Visible = .F.` pois o legado a cria com `.f.` no `pColuna`).
+
+**`CarregarLista()`** (nova) ÔÇö busca via `TmlBO.Buscar("")`, popula o grid com `RecordSource`/`ControlSource`/`Header1.Caption` reconfigurados na ordem correta (regra do `RecordSource` resetar headers/bind).
+
+**`AlternarPagina()`** (nova) ÔÇö alterna `ActivePage` e recarrega a lista ao voltar para Page1, padr├úo id├¬ntico ao `FormCor.prg` de refer├¬ncia.
+
+Tamb├®m limpei uma duplica├º├úo de coment├írio que a edi├º├úo introduziu no cabe├ºalho de `ConfigurarPaginaDados()` e ajustei notas obsoletas ("Fase 4") para refletir que campos/bot├Áes de Confirmar-Cancelar ficam para a pr├│xima fase. Validei que o arquivo ficou balanceado (10 PROCEDURE/ENDPROC, 18 WITH/ENDWITH).
+
+Os handlers `Btn*Click` referenciados nos `BINDEVENT` ainda n├úo existem ÔÇö isso ├® esperado nesta fase (ser├úo implementados na Fase 7, "Eventos", conforme `docs/PROCESSAMENTO_MULTI_FASE.md`), mirando o mesmo padr├úo j├í usado em `FormCor.prg`.

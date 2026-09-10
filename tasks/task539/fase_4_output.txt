@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+All balanced: 10 PROCEDUREs/ENDPROC, 17 WITH/ENDWITH, 2 FOR/ENDFOR, 2 TRY/ENDTRY. Also confirmed no `RETURN` inside TRY/CATCH blocks (both use flag variables per CLAUDE.md rule #1).
+
+## Resumo da Fase 4/8
+
+Completei `Page1` (Lista) de `C:\4c\projeto\app\forms\cadastros\FormTot.prg`:
+
+- **`ConfigurarPaginaLista()`**: faixa do cabe├ºalho (`cnt_4c_Cabecalho` + `lbl_4c_Sombra`/`lbl_4c_Titulo`, criada primeiro conforme regra #11), `cnt_4c_Botoes` (Incluir/Visualizar/Alterar/Excluir/Buscar, Left=542 can├┤nico), `cnt_4c_Saida`/`cmd_4c_Encerrar` (valores can├┤nicos da regra #10), `grd_4c_Lista` com 2 colunas (C├│digo/Descri├º├úo, espelhando `pColuna('Codigos',...,44)` + `pColuna('Descrs',...,279)` do legado), BINDEVENTs para os 6 bot├Áes e `TornarControlesVisiveis()`.
+- **`AlternarPagina(par_nPagina)`**: navega entre Page1/Page2 e recarrega a lista ao voltar para Page1.
+- **`CarregarLista()`**: chama `TotBO.Buscar("")`, vincula `cursor_4c_Dados` ao grid, reconfigura headers ap├│s `RecordSource` (regra do CLAUDE.md sobre grid perder cabe├ºalhos) e trata `gb_4c_ValidandoUI` com cursor placeholder.
+- **`TornarControlesVisiveis()`** e **`FormatarGridLista()`**: implementados (n├úo existem no `FormBase`).
+- `InicializarForm()` agora chama `THIS.CarregarLista()` ao abrir o form.
+
+Nenhum stub/TODO deixado ÔÇö todos os m├®todos t├¬m l├│gica funcional completa. Balanceamento de `PROCEDURE/ENDPROC`, `WITH/ENDWITH`, `FOR/ENDFOR` e `TRY/ENDTRY` verificado. Page2 (campos, bot├Áes Confirmar/Cancelar, eventos `Btn*Click`) fica para as fases 5-7, conforme escopo desta fase.

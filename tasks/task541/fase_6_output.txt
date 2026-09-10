@@ -1,0 +1,27 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+All lookups implemented completely (`GridGruposColumn1/2KeyPress/DblClick` ÔåÆ `AbrirLookupGrupoGrid`), and `BtnExcluirLinhaGrupoClick` is fully functional now ÔÇö matching the established multi-phase pattern where `BtnSalvarClick`/`BtnCancelarClick`/`BtnIncluirClick` etc. get bound now and implemented in a later phase (same as `BtnIncluirClick` etc. were bound in Phase 4 without yet existing).
+
+Fase 6/8 conclu├¡da. Resumo do que foi adicionado em `C:\4c\projeto\app\forms\cadastros\FormTpc.prg`:
+
+**Campos restantes da Page2** (compensa├º├úo +37px, mesma f├│rmula usada na Fase 5):
+- `obj_4c_OptImp` (Imprimir, Sim/N├úo)
+- `obj_4c_OptUsarPAs` (Utilizar Produto Acabado, Sim/N├úo)
+- `obj_4c_OptMaius` (Mai├║sculos, Sim/N├úo)
+
+**Grid de Grupos vinculados** (`grd_4c_Dados`, espelha `grdProdutos` do legado):
+- Grid criado com 2 colunas (Grupo/Descri├º├úo), estrutura visual id├¬ntica ao legado (Verdana 8, GridLineColor, HeaderHeight, etc.)
+- `CarregarGridGrupos()`: liga `RecordSource`/`ControlSource` ao cursor `this_cCursorGrupos` do BO em runtime (evita reset de colunas ÔÇö Problema 36/48 do guia)
+
+**Lookup completo (SigCdGrp.cgrus/dgrus)** ÔÇö nenhum stub/TODO:
+- `GridGruposColumn1/2KeyPress` (F4) e `DblClick` ÔåÆ `AbrirLookupGrupoGrid()`
+- `AbrirLookupGrupoGrid()`: `CREATEOBJECT("FormBuscaAuxiliar", ...)`, `mAddColuna`, `Show()`, checa `this_lAchouRegistro`/`this_lSelecionou`, grava na linha atual do cursor, avan├ºa/`APPEND BLANK` (equivalente ao Skip+Append do legado), `USE IN` + `Release()`
+
+**Bot├úo Excluir linha** (`cmd_4c_CmdExcluir` ÔåÆ `BtnExcluirLinhaGrupoClick`): remove a linha atual do cursor de grupos, replicando o `Delete In crGrdCdCom` do legado.
+
+**Container `cnt_4c_BotoesAcao`**: adicionados `cmd_4c_Confirmar`/`cmd_4c_Cancelar` com ├¡cones e captions can├┤nicos, `BINDEVENT` para `BtnSalvarClick`/`BtnCancelarClick` (implementa├º├úo desses m├®todos e de `FormParaBO`/`BOParaForm` fica para a pr├│xima fase, seguindo o mesmo padr├úo j├í usado na Fase 4 para os bot├Áes CRUD da Page1).
+
+Validado: `PROCEDURE`/`ENDPROC`, `WITH`/`ENDWITH`, `IF`/`ENDIF`, `FOR`/`ENDFOR`, `TRY`/`ENDTRY` todos balanceados; sem nomes de m├®todo duplicados; `DEFINE CLASS`/`ENDDEFINE` ├║nicos.

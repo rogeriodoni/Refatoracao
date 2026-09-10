@@ -849,7 +849,7 @@ DEFINE CLASS FormFpN AS FormBase
     * AjustarBotoesPorModo - Nao aplicavel: form OPERACIONAL sem modo CRUD
     * Stub de compatibilidade com FormBase
     *==========================================================================
-    PROTECTED PROCEDURE AjustarBotoesPorModo(par_cModo)
+    PROCEDURE AjustarBotoesPorModo(par_cModo)
         RETURN
     ENDPROC
 

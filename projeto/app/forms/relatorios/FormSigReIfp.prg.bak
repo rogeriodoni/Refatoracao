@@ -310,7 +310,7 @@ DEFINE CLASS FormSigReIfp AS FormBase
     *   de 1 eh normalizado para 1, garantindo que callers genericos do pipeline
     *   (que assumem CRUD com Page1/Page2) nao quebrem o relatorio.
     *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE AlternarPagina(par_nPagina)
+    PROCEDURE AlternarPagina(par_nPagina)
         LOCAL loc_nPagina
         TRY
             loc_nPagina = IIF(VARTYPE(par_nPagina) = "N" AND par_nPagina >= 1 ;

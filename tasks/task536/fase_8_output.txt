@@ -1,0 +1,27 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+These are false-positive matches on "PU**BLIC**" containing no actual stub markers ÔÇö no TODO/FIXME/placeholder found. FASE 8/8 is complete.
+
+## Resumo
+
+Finalizei o **FormTme.prg** (Fase 8/8) adicionando os m├®todos que faltavam, todos com implementa├º├úo funcional completa (sem stubs):
+
+**`C:\4c\projeto\app\forms\cadastros\FormTme.prg`** (agora com 2030 linhas):
+- **`BtnBuscarClick()`** ÔÇö abre `FormBuscaAuxiliar` sobre `SigCdMe` (chave `tipos`), localiza o registro selecionado em `cursor_4c_Dados` pela PK composta `tipoemps`.
+- **`BtnEncerrarClick()`** ÔÇö `THIS.Release()` (padr├úo can├┤nico, sem l├│gica extra).
+- **`FormParaBO()`** ÔÇö transfere todos os 18 campos edit├íveis da Page2 para as propriedades `this_*` do `TmeBO` (a PK `this_cTipoEmps` ├® calculada dentro de `TmeBO.ValidarDados()`, n├úo precisa ser setada aqui).
+- **`BtnSalvarClick()`** ÔÇö guarda de modo (INCLUIR/ALTERAR) fora do TRY, chama `FormParaBO()` + `Salvar()`, `MsgSucesso()` e volta para a lista.
+- **`BtnCancelarClick()`** ÔÇö volta para Page1 e recarrega a lista.
+
+Os m├®todos `CarregarLista()`, `AlternarPagina()`, `BOParaForm()`, `HabilitarCampos()`, `LimparCampos()` e `AjustarBotoesPorModo()` j├í estavam completos das fases anteriores ÔÇö s├│ validei que cobrem todos os campos do BO (18 propriedades, todas mapeadas).
+
+**Integra├º├úo** (`C:\4c\projeto\app\menu\menu.prg`):
+- `DEFINE BAR 180 OF popCadastros` + `ON SELECTION BAR 180 ... DO AbrirFormTme`
+- `PROCEDURE AbrirFormTme()` no padr├úo can├┤nico (VARTYPE, `Show()` sem par├ómetro, sem `Release()` p├│s-Show, `MostrarErro` com linha/procedure).
+
+**`config.prg`**: nenhuma altera├º├úo necess├íria ÔÇö confirmei que usa `ADIR()` para carregar `*BO.prg` e `Form*.prg` dinamicamente (carregamento autom├ítico), conforme CLAUDE.md.
+
+Validei balanceamento estrutural de ambos os arquivos (PROCEDURE/ENDPROC, TRY/ENDTRY, WITH/ENDWITH todos batendo) e aus├¬ncia de TODOs/stubs/placeholders.

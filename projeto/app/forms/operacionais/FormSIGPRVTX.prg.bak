@@ -926,7 +926,7 @@ DEFINE CLASS FormSIGPRVTX AS FormBase
     ENDPROC
 
     *==========================================================================
-    PROTECTED PROCEDURE AjustarBotoesPorModo()
+    PROCEDURE AjustarBotoesPorModo()
     *-- Form OPERACIONAL flat: sem modos (INCLUIR/ALTERAR/VISUALIZAR)
     *-- Todos os botoes permanecem habilitados
     *==========================================================================

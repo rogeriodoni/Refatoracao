@@ -1,0 +1,26 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Investiguei as 5 linhas com badge `DIFERENCA` no relat├│rio (`UIFidelity_FormTpc_20260909234753.html`, linhas 2069-2111) e n├úo s├úo um bug real ÔÇö ├® um **falso positivo do validador**, causado por ele casar o controle errado com o valor original errado. N├úo fiz nenhuma altera├º├úo no `.prg`; segue a evid├¬ncia:
+
+**O que o relat├│rio reportou** (objeto rotulado `SIGCDTPC.pagina.dados.grdProdutos`):
+
+| Propriedade | Original (legado) | Migrado (relat├│rio) |
+|---|---|---|
+| Height | 350 | 498 |
+| Left | 400 | 26 |
+| RowHeight | 15 | 16 |
+| Top | 221 | 117 |
+| Width | 223 | 890 |
+
+**O que realmente existe no `FormTpc.prg`:**
+
+1. `grd_4c_Dados` (linhas 833-838) ÔÇö ├® o grid de **grupos vinculados** da p├ígina Dados, correspondente ao legado `grdProdutos`. J├í est├í com os valores corretos e fi├®is ao legado (`Top=258` compensado por +29+8 conforme regra #11 do CLAUDE.md, `Left=400`, `Width=223`, `Height=350`, `RowHeight=15`) ÔÇö bate 100% com a coluna "Original" do relat├│rio, exceto o Top, que ├® intencionalmente deslocado pela faixa do cabe├ºalho (regra que **prevalece** sobre pixel-perfect).
+
+2. `grd_4c_Lista` (linhas 328-357) ÔÇö ├® o grid de **listagem** da p├ígina Lista (legado `pagina.lista.grade`), com `Top=117, Left=26, Width=890, Height=498, RowHeight=16` ÔÇö **exatamente os valores que o relat├│rio rotulou como "Migrado"** do suposto `grdProdutos`.
+
+Ou seja: o validador pegou os valores reais do `grd_4c_Lista` (P├ígina Lista) e comparou contra a expectativa legada do `grdProdutos` (P├ígina Dados) ÔÇö dois controles diferentes, cada um j├í correto para o seu pr├│prio contexto. Corrigir `grd_4c_Dados` para `Top=221/Left=400/Width=223/Height=350/RowHeight=15` (ignorando a compensa├º├úo) quebraria o alinhamento com os demais campos da p├ígina (todos deslocados +37), sem resolver nada real.
+
+N├úo h├í altera├º├úo de c├│digo necess├íria. Se quiser, posso registrar esse bug do validador (mapeamento incorreto objetoÔåövalor-original quando h├í m├║ltiplos grids no form) para propagar como li├º├úo, mas n├úo vou tocar no `FormTpc.prg` porque ele j├í est├í correto.

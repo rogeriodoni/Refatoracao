@@ -1,0 +1,26 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+The file is complete and consistent now. Summary of Fase 4/8 changes to `C:\4c\projeto\app\forms\cadastros\FormTop.prg`:
+
+**`ConfigurarPaginaLista()` completed:**
+- `cnt_4c_Botoes` (Left=542, canonical CRUD position) now has 5 buttons: Incluir, Visualizar, Alterar, Excluir, Buscar ÔÇö Comic Sans MS font, icons, PicturePosition=13, per framework canon.
+- New `cnt_4c_Saida` container (Left=917, Width=90) with `cmd_4c_Encerrar` (75├ù75, Caption="Encerrar") ÔÇö following **CLAUDE.md rule #10**, which prevails over the legacy layout for this block.
+- New `grd_4c_Lista` grid (Top=117, Left=12, Width=895, Height=455, Verdana 8) with 2 columns mirroring the legacy `AddCursor`/`pColuna` calls in `comportamento.json`: **Codigo** (numeric, right-aligned) and **Descricao**.
+- BINDEVENTs wired for all 6 buttons to `Btn*Click` handlers (to be implemented in a later phase, following the same pattern as FormMoe/FormCor).
+- `TornarControlesVisiveis(loc_oPagina)` called at the end (AddObject creates controls hidden by default).
+
+**New methods added:**
+- `CarregarLista()` ÔÇö calls `TopBO.Buscar("")`, binds `cursor_4c_Dados` to the grid, re-sets headers after `RecordSource` (per FormCor lesson #2), guards against `gb_4c_ValidandoUI`.
+- `AlternarPagina(par_nPagina)` ÔÇö switches Page1/Page2, reloads the list when returning to Page1.
+- `TornarControlesVisiveis(par_oContainer)` ÔÇö standard recursive visibility helper.
+- `FormatarGridLista(par_oGrid)` ÔÇö Verdana 8pt.
+
+**Other fixes applied while completing the phase:**
+- `InicializarForm()` now propagates `THIS.Caption` to both pages' header labels and calls `THIS.CarregarLista()` (was missing).
+- `ConfigurarPaginaDados()` now also calls `TornarControlesVisiveis()` (was missing ÔÇö its `cnt_4c_Cabecalho`/`cnt_4c_BotoesAcao` would otherwise stay invisible).
+- `Destroy()` now also releases `cursor_4c_Carrega`.
+
+No stubs, TODOs, or empty procedures were introduced ÔÇö every method added has full working logic matching the reference forms (FormMoe/FormCor) already in this codebase.

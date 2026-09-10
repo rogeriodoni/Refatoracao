@@ -1407,7 +1407,7 @@ DEFINE CLASS FormFti AS FormBase
     *==========================================================================
     * AlternarPagina - Navega entre Page1 (1=Lista) e Page2 (2=Dados)
     *==========================================================================
-    PROTECTED PROCEDURE AlternarPagina(par_nPagina)
+    PROCEDURE AlternarPagina(par_nPagina)
         LOCAL loc_lResultado
         loc_lResultado = .F.
 
@@ -1741,7 +1741,7 @@ DEFINE CLASS FormFti AS FormBase
     *==========================================================================
     * AjustarBotoesPorModo - Ajusta botoes CRUD conforme modo atual
     *==========================================================================
-    PROTECTED PROCEDURE AjustarBotoesPorModo()
+    PROCEDURE AjustarBotoesPorModo()
         LOCAL loc_oBotoes, loc_lEditando, loc_lVisualizando
         loc_oBotoes      = THIS.pgf_4c_Paginas.Page1.cnt_4c_Botoes
         loc_lEditando    = INLIST(THIS.this_cModoAtual, "INCLUIR", "ALTERAR")

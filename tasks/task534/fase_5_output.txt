@@ -1,0 +1,27 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+This looks correct. The Fase 5/8 update to `FormTfi.prg` is complete:
+
+**Added to `ConfigurarPaginaDados()`** (first half of Page2 fields, per `SigCdTfi_form_codigo_fonte.txt` + `docs/schema.sql` for `SigCdTif`):
+
+| Campo | Controle | Coluna DB | Detalhe |
+|---|---|---|---|
+| C├│digo | `txt_4c_Codigo` / `lbl_4c_Codigo` | `codigos` char(3) | `InputMask="!!!"` |
+| Descri├º├úo | `txt_4c_Descricao` / `lbl_4c_Descricao` | `descricaos` char(40) | InputMask 40x`X` |
+| % Qtde | `txt_4c_PQtde` / `lbl_4c_PQtde` | `pqtdes` numeric(9,2) | `InputMask="999.99"` |
+| % Valor | `txt_4c_PValor` / `lbl_4c_PValor` | `pvalors` numeric(9,2) | `InputMask="999.99"` |
+| Adendo ├á Descri├º├úo | `txt_4c_Adendo` / `lbl_4c_AdendoDesc` | `adendos` char(10) | |
+| Adendo ao C├│digo | `txt_4c_ACodigo` / `lbl_4c_ACodigo` | `adendocs` char(2) | |
+| Op├º├úo S/N/Ambos | `obj_4c_OpcaoSNA` (OptionGroup, 3 bot├Áes) | `opcsnas` numeric(1,0) | Sim/N├úo/Ambos, `Value=3` (Ambos, default do legado) |
+
+Notes on decisions made:
+- All `Top` values compensated +29 for the `PageFrame.Top=-29` offset (CLAUDE.md problem #7).
+- Renamed labels to descriptive names (`lbl_4c_Codigo`, `lbl_4c_PQtde`, etc.) instead of following `mapeamento.json` literally ÔÇö that file has a naming collision bug (`Say4` and `Label4` both map to `lbl_4c_Label4`, `Say1`/`Label1` both to `lbl_4c_Label1`), which would throw "member already exists" if used as-is.
+- Pulled exact `Caption`/`InputMask`/`MaxLength`/`ForeColor` values from the original `.txt` source (not just `layout.json`, which lacked InputMask/ForeColor/OptionGroup button captions).
+- Behavioral logic (the `When` clauses gating editability by `pcEscolha`) intentionally deferred ÔÇö this phase is structure-only per the phase instructions; that logic belongs in `HabilitarCampos`/validations in a later phase.
+- Remaining fields (`Get_OOrig`, `Get_OAdendo`, `Get_OCor`, `Get_OEmb`, `Get_OTam`, `Get_TamDesc`, `OptTipoDesc`, plus the `Line1`/section-title labels) are left for Fase 6/8.
+
+WITH/ENDWITH counts balance (34/34) and no TODO/stub/placeholder comments were introduced.

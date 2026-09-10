@@ -1,0 +1,40 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+I researched each of the 9 flagged items against the actual legacy source (`tasks/task541/SigCdTpc_form_codigo_fonte.txt` and `comportamento.json`) before touching anything, and **all 9 are false positives** ÔÇö applying the suggested "fixes" would actually break PILAR 1/2 fidelity rather than restore it. I made **no changes** to `FormTpc.prg` or `TpcBO.prg`. Details:
+
+## GRID-HEADER (4 itens) ÔÇö falso positivo, headers J├ü s├úo id├¬nticos ao legado
+
+O grid de lista (`pagina.lista.grade`) do legado **n├úo** define headers estaticamente no SCX ÔÇö eles s├úo setados em runtime via `AddCursor`/`pColuna()`. O c├│digo legado real (capturado em `comportamento.json`, `codigoOriginal` do Init) ├®:
+
+```foxpro
+.pfSqlTabela(1).pColuna([Tipos],  [], [], [Tipos],  150, .t.)
+.pfSqlTabela(1).pColuna([Descrs], [], [], [Descrs], 290, .t.)
+```
+
+O 4┬║ par├ómetro de `pColuna` ├® o caption (confirmado comparando outras migra├º├Áes, ex. `sigcdccr`: `.pColuna('Descrs','','','Descri├º├úo',290,.T.)` onde fieldÔëácaption). Neste form espec├¡fico, o desenvolvedor legado literalmente repetiu o nome do campo como caption ("Tipos"/"Descrs"), em vez de um r├│tulo tratado. O detector s├│ varreu captions **est├íticas** do SCX (por isso s├│ achou "Grupo"/"Descri├º├úo", do outro grid `grdProdutos`) e n├úo viu essa atribui├º├úo din├ómica no `.prg`.
+
+Os captions migrados (`FormTpc.prg:354,356,1093,1094`) j├í reproduzem exatamente esse comportamento "feio" do legado. Trocar para "Tipo"/"Descri├º├úo" seria **inventar** um caption que nunca existiu no sistema legado ÔÇö violaria o PILAR 1.
+
+## LAYOUT-POSITION (5 itens) ÔÇö falso positivo, offset uniforme e documentado
+
+Conferi o Top original de **todos** os controles da Page2 no dump legado, n├úo s├│ os 5 apontados:
+
+| Controle | Top legado | Top migrado | Offset |
+|---|---|---|---|
+| getTipos (txt_4c_Tipos) | 79 | 116 | +37 |
+| getDescrs (txt_4c_Descrs) | 105 | 142 | +37 |
+| optCustos | 128 | 165 | +37 |
+| OptImp | 149 | 186 | +37 |
+| optUsarPAs | 171 | 208 | +37 |
+| OptMaius | 193 | 230 | +37 |
+| grdProdutos (grd_4c_Dados) | 221 | 258 | +37 |
+| cmdExcluir | 373 | 410 | +37 |
+
+O offset **+37 (29 do PageFrame + 8 do buffer da faixa do cabe├ºalho, CLAUDE.md regra #11)** ├® uniforme na p├ígina inteira ÔÇö inclusive nos 3 controles que o detector n├úo flagou (`getTipos`, `getDescrs`, `grdProdutos`). Eles n├úo foram sinalizados porque seus nomes legado (`getTipos`, `grdProdutos`) n├úo t├¬m correspond├¬ncia textual direta com os nomes migrados (`txt_4c_Tipos`, `grd_4c_Dados`), enquanto os 5 flagados t├¬m nomes que batem por substring (`OptMaius` Ôèé `obj_4c_OptMaius`, `cmdExcluir` Ôèé `cmd_4c_CmdExcluir` etc.) ÔÇö ├® uma lacuna do casador de nomes do detector, n├úo um problema real de posi├º├úo.
+
+Se eu reduzisse o Top s├│ desses 5 controles (removendo o +8), quebraria o espa├ºamento relativo consistente com os vizinhos que mant├¬m +37 ÔÇö por exemplo o gap `OptMaiusÔåÆgrd_4c_Dados`, hoje 3px (id├¬ntico ao legado: 221ÔêÆ193ÔêÆ25=3, migrado 258ÔêÆ230ÔêÆ25=3), passaria a 11px. Isso introduziria uma diverg├¬ncia pixel nova onde hoje n├úo existe nenhuma.
+
+**Conclus├úo**: o c├│digo atual j├í implementa corretamente a regra #11 do CLAUDE.md (piso `Top>=115`) com deslocamento uniforme; nenhuma altera├º├úo foi necess├íria ou aplicada.

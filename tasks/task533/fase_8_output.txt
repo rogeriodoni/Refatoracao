@@ -1,0 +1,23 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Confirmed ÔÇö `Salvar()` in BusinessBase calls `ValidarDados()` (validates level/classe/descri├º├úo) before persisting, so `BtnSalvarClick` correctly relies on it. `this_lEmEdicao` requires `NovoRegistro()`/`EditarRegistro()` to have been called first, which `BtnIncluirClick`/`BtnAlterarClick` already do. Everything checks out.
+
+Phase 8/8 is complete. Summary of what was done:
+
+**FormTCL.prg** ÔÇö added the final auxiliary/navigation methods:
+- `BtnBuscarClick()` ÔÇö filters the list by classe/descri├º├úo (via `INPUTBOX` + `LIKE`, no lookup exists in the legacy source per `comportamento.json`) and rebinds the grid (RecordSource ÔåÆ ControlSource ÔåÆ Width ÔåÆ Header captions, in the correct order per CLAUDE.md rule #2/Problem 6).
+- `BtnEncerrarClick()` ÔÇö closes the form (`THIS.Release()`).
+- `BtnSalvarClick()` ÔÇö `FormParaBO()` then `Salvar()` (no parameter), success message, back to list.
+- `BtnCancelarClick()` ÔÇö back to list mode.
+- `AjustarBotoesPorModo()` ÔÇö enables/disables Confirmar/Cancelar per `this_cModoAtual`, wired into `HabilitarCampos()`.
+
+All previously-built methods (`FormParaBO`/`BOParaForm` covering all 5 form-bound BO properties, `HabilitarCampos`, `LimparCampos`, `CarregarLista`, `AlternarPagina`) were already complete from earlier phases ÔÇö verified against `TCLBO.prg` property/method names.
+
+**Integration**:
+- `config.prg` needed no changes ÔÇö it loads `*BO.prg`/`Form*.prg` dynamically via `ADIR()`.
+- `menu.prg` ÔÇö added `DEFINE BAR 177 OF popCadastros PROMPT "Classes"` + `ON SELECTION BAR 177 ... DO AbrirFormTCL`, and a new `PROCEDURE AbrirFormTCL()` following the canonical `VARTYPE`/`Show()`-without-parameter/no-`Release()` pattern.
+
+**Validation**: 25 `PROCEDURE`/`FUNCTION` blocks match 25 `ENDPROC`, 21 `TRY` match 21 `ENDTRY`, 1 `DEFINE CLASS`/`ENDDEFINE` pair, and no `RETURN` statements found inside any `TRY`/`CATCH` block (CLAUDE.md rule #1).
