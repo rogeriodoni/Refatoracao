@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+WITH/ENDWITH and PROCEDURE/ENDPROC counts balance. The Phase 3 structural skeleton for **FormTml.prg** is complete:
+
+- `DEFINE CLASS FormTml AS FormBase` with canonical visual properties (Width=1000, Height=600, Caption="Tipos de Material")
+- `Init()` ÔåÆ only `RETURN DODEFAULT()`
+- `InicializarForm()` ÔåÆ creates `TmlBO`, builds the PageFrame, propagates Caption to both pages' header labels, guards `CarregarLista()` via `PEMSTATUS` (not implemented until Fase 4)
+- `ConfigurarPageFrame()` ÔåÆ 2 Pages, `Top=-29`/`Tabs=.F.` compensation, `fundo_cad_1003.jpg` background
+- `ConfigurarPaginaLista()` ÔåÆ `cnt_4c_Cabecalho` (faixa cinza + `lbl_4c_Sombra`/`lbl_4c_Titulo`, first AddObject per regra #11) + empty `cnt_4c_Botoes` container positioned canonically (Left=542/Top=29/390x85)
+- `ConfigurarPaginaDados()` ÔåÆ mirrored `cnt_4c_Cabecalho` on Page2 + empty `cnt_4c_BotoesAcao` container (Left=842/Top=33/160x85)
+- `TornarControlesVisiveis()` and `FormatarGridLista()` helpers implemented (ready for Fase 4's grid)
+- `Destroy()` releases the BO and closes cursors that later fases will open
+
+Grid, CRUD buttons, data fields and event handlers were deliberately left out per the Fase 3 scope ÔÇö those land in Fases 4ÔÇô8. File was written and WITH/ENDWITH/PROCEDURE/ENDPROC counts balance (10/10, 8/8).

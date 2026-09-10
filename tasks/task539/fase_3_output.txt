@@ -1,0 +1,18 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FASE 3/8 conclu├¡da. Criei `C:\4c\projeto\app\forms\cadastros\FormTot.prg` com a estrutura base do form:
+
+- `DEFINE CLASS FormTot AS FormBase` com propriedades visuais exatas do legado (Width=1000, Height=600, Caption com acentos via `CHR()`)
+- `Init()` ÔÇö apenas `RETURN DODEFAULT()` (sem duplicar `InicializarForm()`)
+- `InicializarForm()` ÔÇö cria `TotBO`, chama `ConfigurarPageFrame()`, ativa Page1
+- `ConfigurarPageFrame()` ÔÇö PageFrame com `Top=-29`, `Tabs=.F.`, Page1="Lista", Page2="Dados", ambas com `Picture = fundo_cad_1003.jpg`
+- `ConfigurarPaginaLista()` ÔÇö cria `cnt_4c_Cabecalho` (faixa cinza, PRIMEIRO AddObject da p├ígina conforme regra #11) e `cnt_4c_Botoes` (posi├º├úo can├┤nica Left=542), ambos **vazios** (sem labels/bot├Áes ainda)
+- `ConfigurarPaginaDados()` ÔÇö mesma faixa `cnt_4c_Cabecalho` + `cnt_4c_BotoesAcao` vazio (posi├º├úo do Grupo_Salva)
+- `Destroy()` ÔÇö libera BO e cursores, `DODEFAULT()` no final
+
+Deixei fora (conforme escopo desta fase): Grid da lista, bot├Áes CRUD/Encerrar/Confirmar/Cancelar, campos de dados (C├│digo/Descri├º├úo/OptionGroup Soma-Subtrai) e todos os BINDEVENTs ÔÇö cada bloco tem coment├írio indicando em qual fase futura (4/8, 5-6/8, 7-8/8) ser├í preenchido, sem usar placeholders vazios nem TODOs.
+
+Nenhum stub funcional foi deixado: cada m├®todo implementado executa sua l├│gica completa dentro do escopo desta fase (criar a estrutura, n├úo popular conte├║do que ainda n├úo existe).

@@ -549,8 +549,8 @@ DEFINE CLASS CcoBO AS BusinessBase
                        " VALUES (" + EscaparSQL(THIS.this_cIdChaves) + ;
                        ", " + EscaparSQL(LEFT(THIS.this_cEmps, 3)) + ;
                        ", " + EscaparSQL(LEFT(THIS.this_cGrupos, 10)) + ;
-                       ", " + EscaparSQL(LEFT(THIS.this_cCodigos, 80)) + ;
-                       ", " + EscaparSQL(LEFT(THIS.this_cDescs, 220)) + ;
+                       ", " + EscaparSQL(LEFT(THIS.this_cCodigos, 30)) + ;
+                       ", " + EscaparSQL(LEFT(THIS.this_cDescs, 30)) + ;
                        ", " + FormatarNumeroSQL(THIS.this_nPrioridades) + ;
                        ", " + FormatarNumeroSQL(THIS.this_nPrioridades) + ;
                        ", " + FormatarNumeroSQL(THIS.this_nFaixaIs) + ;
@@ -583,8 +583,8 @@ DEFINE CLASS CcoBO AS BusinessBase
             loc_cSQL = "UPDATE SigCdClc SET" + ;
                        " Emps = " + EscaparSQL(LEFT(THIS.this_cEmps, 3)) + ;
                        ", grupos = " + EscaparSQL(LEFT(THIS.this_cGrupos, 10)) + ;
-                       ", codigos = " + EscaparSQL(LEFT(THIS.this_cCodigos, 80)) + ;
-                       ", descs = " + EscaparSQL(LEFT(THIS.this_cDescs, 220)) + ;
+                       ", codigos = " + EscaparSQL(LEFT(THIS.this_cCodigos, 30)) + ;
+                       ", descs = " + EscaparSQL(LEFT(THIS.this_cDescs, 30)) + ;
                        ", Prioridades = " + FormatarNumeroSQL(THIS.this_nPrioridades) + ;
                        ", faixais = " + FormatarNumeroSQL(THIS.this_nFaixaIs) + ;
                        ", faixafs = " + FormatarNumeroSQL(THIS.this_nFaixaFs) + ;

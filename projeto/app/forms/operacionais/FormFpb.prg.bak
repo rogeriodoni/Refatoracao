@@ -599,7 +599,7 @@ DEFINE CLASS FormFpb AS FormBase
     *--------------------------------------------------------------------------
     * AlternarPagina - Alterna entre Page1 (Lista) e Page2 (Dados)
     *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE AlternarPagina(par_nPagina)
+    PROCEDURE AlternarPagina(par_nPagina)
         LOCAL loc_oErro
         TRY
             THIS.pgf_4c_Paginas.ActivePage = par_nPagina
@@ -1021,7 +1021,7 @@ DEFINE CLASS FormFpb AS FormBase
     * LISTA/INCLUIR -> Inserir+Excluir habilitados
     * ALTERAR/VISUALIZAR -> Inserir+Excluir desabilitados (edicao inline ativa)
     *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE AjustarBotoesPorModo()
+    PROCEDURE AjustarBotoesPorModo()
         LOCAL loc_oCnt, loc_lHabilitar, loc_oErro
         TRY
             loc_oCnt     = THIS.pgf_4c_Paginas.Page1.cnt_4c_Botoes

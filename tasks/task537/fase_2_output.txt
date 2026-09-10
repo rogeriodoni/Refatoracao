@@ -1,0 +1,23 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 2 conclu├¡da. Adicionei ao `C:\4c\projeto\app\classes\TmlBO.prg` os m├®todos CRUD completos, seguindo o template can├┤nico de `CatBO.prg`:
+
+- **`ObterChavePrimaria()`** ÔÇö retorna `this_cCidchaves` (PK t├®cnica).
+- **`Buscar(par_cFiltro)`** ÔÇö SELECT das 21 colunas de `SigOpOpt` (com/sem filtro por `cods`) para `cursor_4c_Dados`.
+- **`CarregarPorCodigo(par_cCidchaves)`** ÔÇö SELECT por `cidchaves` para `cursor_4c_Carrega`, chama `CarregarDoCursor`, reseta `this_lNovoRegistro = .F.`.
+- **`CarregarDoCursor(par_cAliasCursor)`** ÔÇö `SELECT (par_cAliasCursor)` + mapeia as 21 colunas via `TratarNulo`.
+- **`Inserir()`** ÔÇö gera `this_cCidchaves = LEFT(fUniqueIds(), 20)`, INSERT com todas as 21 colunas (todas `NOT NULL` no schema), `EscaparSQL`/`FormatarNumeroSQL` com o n├║mero de decimais correto por coluna (`pfalhas`/`valors`/`indprods` = 2 decimais; `situas`/`prodzs`/`trabas`/`models`/`duptpops`/`retrab` = 0 decimais), `RegistrarAuditoria("INSERT")`.
+- **`Atualizar()`** ÔÇö UPDATE de todas as colunas exceto a PK, `RegistrarAuditoria("UPDATE")`.
+- **`ExecutarExclusao()`** ÔÇö DELETE por `cidchaves`, `RegistrarAuditoria("DELETE")`.
+
+Pontos verificados contra `docs/schema.sql` (lido via `Get-Content -Raw`, respeitando UTF-16) e `BusinessBase.prg`:
+- Tabela real ├® `SigOpOpt` (n├úo `SIGCDTML`, que ├® s├│ o nome do form legado) ÔÇö confirmado em `comportamento.json` e `analise.json`.
+- Todas as 21 colunas s├úo `NOT NULL`, ent├úo `geraccs` (sem campo na UI legada) recebe default `" "` via `NVL(...)`.
+- Nenhum `RETURN` dentro de `TRY/CATCH` (regra cr├¡tica #1 do CLAUDE.md).
+- `THIS.` em todos os acessos a propriedades/m├®todos.
+- CATCH sempre com `MsgErro(...)`, nunca silencioso.
+
+Nenhum stub, TODO ou placeholder ÔÇö todos os m├®todos t├¬m l├│gica SQL completa e funcional.

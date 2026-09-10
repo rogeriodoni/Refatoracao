@@ -972,6 +972,11 @@ DEFINE CLASS Formmtz AS FormBase
             .Width     = 22
         ENDWITH
 
+        *-- CurrentControl: sem isto a coluna continua desenhando o Text1 e o
+        *-- CheckBox acima NUNCA aparece (CorretorAutomatico #198)
+        loc_oGrid.Column28.CurrentControl = "chk_4c_Check1"
+        loc_oGrid.Column28.Sparse         = .F.
+
         *--------------------------------------------------------------------------
         *-- Container botoes Inserir/Excluir linha (cmdInsFtc)
         *-- Original: cmdInsFtc.Top=253, Left=1055, Width=50, Height=90

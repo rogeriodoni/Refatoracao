@@ -118,7 +118,7 @@ DEFINE CLASS Formsigredtv AS FormBase
         RETURN .T.
     ENDPROC
 
-    PROTECTED PROCEDURE AlternarPagina(par_nPagina)
+    PROCEDURE AlternarPagina(par_nPagina)
         RETURN .T.
     ENDPROC
 

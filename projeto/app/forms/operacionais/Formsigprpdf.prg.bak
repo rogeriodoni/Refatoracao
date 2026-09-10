@@ -860,7 +860,7 @@ DEFINE CLASS Formsigprpdf AS FormBase
     *--------------------------------------------------------------------------
     * AlternarPagina - N/A (dialogo plano sem paginas para alternar)
     *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE AlternarPagina(par_nPagina)
+    PROCEDURE AlternarPagina(par_nPagina)
         RETURN
     ENDPROC
 
@@ -1056,7 +1056,7 @@ DEFINE CLASS Formsigprpdf AS FormBase
     * SIGPRPDF opera em modo unico (dialogo modal de gravar/enviar).
     * Mantido para compatibilidade com a interface do pipeline.
     *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE AjustarBotoesPorModo()
+    PROCEDURE AjustarBotoesPorModo()
         RETURN
     ENDPROC
 

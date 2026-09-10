@@ -882,7 +882,7 @@ DEFINE CLASS FormSigPrGst AS FormBase
     *==========================================================================
     * AjustarBotoesPorModo - Para OPERACIONAL: habilita Confirmar e Encerrar.
     *==========================================================================
-    PROTECTED PROCEDURE AjustarBotoesPorModo
+    PROCEDURE AjustarBotoesPorModo
         IF VARTYPE(THIS.cmd_4c_Confirmar) = "O"
             THIS.cmd_4c_Confirmar.Enabled = .T.
         ENDIF

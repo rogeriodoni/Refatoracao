@@ -604,7 +604,7 @@ FUNCTION CarregarCambioCSM(par_cMoeda, par_dData)
         CASE VARTYPE(par_dData) = "D"
             loc_dData = par_dData
         CASE VARTYPE(par_dData) = "T"
-            loc_dData = TTOD(par_dData)
+            loc_dData = ConverterParaData(par_dData)
         OTHERWISE
             loc_dData = DATE()
     ENDCASE

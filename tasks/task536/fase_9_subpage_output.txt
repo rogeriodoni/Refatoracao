@@ -1,0 +1,24 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+File integrity confirmed. Summary of what I did for FASE 9:
+
+## Summary
+
+`FormTme.prg` had no inner PageFrame at all yet ÔÇö the entire legacy `Pageframe1.Page2.Configuracao` sub-tab structure (3 grid tabs) was missing. To satisfy the task's explicit access pattern (`THIS.pgf_4c_Paginas.Page2.pgf_4c_DadosInternos.Page2`), I:
+
+1. **Created `pgf_4c_DadosInternos`** inside `ConfigurarPaginaDados()` ÔÇö a 3-page inner PageFrame (`Titulos/Pag/Rec/Lote Chq`, `Opera├º├Áes de Estoque`, `Configura├º├úo`), positioned below the existing FTP section (Top=420), and bumped `THIS.Height` to 730 (+ resynced `pgf_4c_Paginas.Height`) since it didn't fit in the original 600px form.
+
+2. **Added `ConfigurarPgPage1()`** populating `pgf_4c_DadosInternos.Page2` ÔÇö the legacy `Configuracao.Page1` ("Opera├º├Áes de Estoque"):
+   - `cursor_4c_Grade` placeholder (mirrors legacy `csGrade`)
+   - `grd_4c_Grade`: 11-column grid with exact legacy widths/ColumnOrder/headers (with CHR() accents)
+   - S/N/T `Format="M"` + `InputMask` masks on the enumerated columns
+   - 14 legend labels (S/N/T captions) below the grid, exact legacy positions
+
+3. **Added 7 PUBLIC LostFocus validation handlers** for the grid columns (Opera├º├úo PAGAMENTO/RECEBIMENTO warning, Pg/Bx S-N-T checks, Del/NN/DT S-N confirmations, Local Entrega focus-return) ÔÇö `fAcessoEmpresa`/`fAcessoMovmto`/`fAcessoContas` were **not** reproduced since they're known-unported legacy lookups (per project memory), so those columns are simple fields, documented inline.
+
+4. **Updated `Destroy()`** to release `cursor_4c_Grade`.
+
+**Flagging one assumption I had to make**: since `pgf_4c_DadosInternos` didn't pre-exist, I had to decide Page1/Page2/Page3 assignment myself. I followed the task's literal instruction (legacy Page1 ÔåÆ new `.Page2`) but the mapping for the other two pages (TitulosÔåÆPage1, Configura├º├úoÔåÆPage3) is my own guess with no confirmation from earlier phases ÔÇö worth double-checking against whatever phase populates those next, so captions/order don't collide.

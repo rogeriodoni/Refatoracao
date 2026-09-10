@@ -381,6 +381,50 @@ DEFINE CLASS FormCat AS FormBase
         *-- Fundo padrao do framework frmcadastro (sem isso a pagina fica branca)
         loc_oPagina.Picture = gc_4c_CaminhoIcones + "fundo_cad_1003.jpg"
 
+        *-- ============================================================
+        loc_oPagina.AddObject("cnt_4c_Cabecalho", "Container")
+
+        WITH loc_oPagina.cnt_4c_Cabecalho
+            .Top         = 31
+            .Left        = 0
+            .Width       = THIS.Width
+            .Height      = 80
+            .BackColor   = RGB(100, 100, 100)
+            .BorderWidth = 0
+            .Visible     = .T.
+            .AddObject("lbl_4c_Sombra", "Label")
+            WITH .lbl_4c_Sombra
+                .Caption   = THIS.Caption
+                .Top       = 15
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 40
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(0, 0, 0)
+                .BackStyle = 0
+                .AutoSize  = .F.
+                .Visible   = .T.
+            ENDWITH
+
+            .AddObject("lbl_4c_Titulo", "Label")
+            WITH .lbl_4c_Titulo
+                .Caption   = THIS.Caption
+                .Top       = 18
+                .Left      = 10
+                .Width     = THIS.Width
+                .Height    = 46
+                .FontName  = "Tahoma"
+                .FontSize  = 16
+                .FontBold  = .T.
+                .ForeColor = RGB(255, 255, 255)
+                .BackStyle = 0
+                .AutoSize  = .F.
+                .Visible   = .T.
+            ENDWITH
+        ENDWITH
+
         *-- Container botoes salvar/cancelar (Grupo_Salva no legado)
         loc_oPagina.AddObject("cnt_4c_BotoesAcao", "Container")
         loc_oCnt = loc_oPagina.cnt_4c_BotoesAcao
@@ -449,21 +493,6 @@ DEFINE CLASS FormCat AS FormBase
 
         *-- ============================================================
         *-- Container cabecalho Page2 (cinza, mesmo estilo da Page1)
-        *-- ============================================================
-        loc_oPagina.AddObject("cnt_4c_Cabecalho", "Container")
-
-        WITH loc_oPagina.cnt_4c_Cabecalho
-            .Top         = 31
-            .Left        = 0
-            .Width       = THIS.Width
-            .Height      = 80
-            .BackColor   = RGB(100, 100, 100)
-            .BorderWidth = 0
-            .Visible     = .T.
-            .AddObject("lbl_4c_Sombra", "Label")
-            .AddObject("lbl_4c_Titulo", "Label")
-        ENDWITH
-
         WITH loc_oPagina.cnt_4c_Cabecalho.lbl_4c_Sombra
             .Caption   = "Categorias de Produto"
             .Top       = 15

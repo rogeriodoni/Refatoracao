@@ -401,6 +401,11 @@ DEFINE CLASS FormFNF AS FormBase
             .Width     = 22
         ENDWITH
 
+        *-- CurrentControl: sem isto a coluna continua desenhando o Text1 e o
+        *-- CheckBox acima NUNCA aparece (CorretorAutomatico #198)
+        loc_oGrid.Column4.CurrentControl = "Check1"
+        loc_oGrid.Column4.Sparse         = .F.
+
         THIS.TornarControlesVisiveis(loc_oPagina)
     ENDPROC
 

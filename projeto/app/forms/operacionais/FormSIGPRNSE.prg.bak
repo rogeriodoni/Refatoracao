@@ -1106,7 +1106,7 @@ DEFINE CLASS FormSIGPRNSE AS FormBase
     *   editaveis, grade inativa) e modo PROCESSAMENTO (grade ativa, filtros
     *   bloqueados). par_nPagina = 1 -> ENTRADA; par_nPagina = 2 -> PROCESSAMENTO.
     *==========================================================================
-    PROTECTED PROCEDURE AlternarPagina(par_nPagina)
+    PROCEDURE AlternarPagina(par_nPagina)
         LOCAL loc_nPag
         loc_nPag = IIF(TYPE("par_nPagina") = "N", par_nPagina, 1)
         THIS.AjustarControles(loc_nPag = 1)

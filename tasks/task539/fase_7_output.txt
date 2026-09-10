@@ -1,0 +1,23 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+File structure is intact and correctly closed with `ENDDEFINE`.
+
+## Resumo da Fase 7/8
+
+Implementei em `C:\4c\projeto\app\forms\cadastros\FormTot.prg` os 4 eventos principais solicitados, mais os m├®todos de suporte necess├írios para que eles funcionem de verdade (sem stubs):
+
+**Eventos principais (PUBLIC, compat├¡veis com BINDEVENT):**
+- `BtnIncluirClick()` ÔÇö chama `NovoRegistro()`, limpa campos, habilita modo INCLUIR, foca `txt_4c_Codigos` (replica `Get_Codigos.SetFocus` do legado no caso INSERIR)
+- `BtnAlterarClick()` ÔÇö l├¬ o c├│digo selecionado no grid, `CarregarPorCodigo` + `EditarRegistro`, foca `txt_4c_Descrs` (replica o caso ALTERAR do dispatcher `Click(Opcao)` do legado)
+- `BtnVisualizarClick()` ÔÇö carrega o registro em modo somente-leitura
+- `BtnExcluirClick()` ÔÇö confirma via `MsgConfirma`, exclui e recarrega a lista
+
+**M├®todos de suporte adicionados** (necess├írios para os 4 acima n├úo falharem em runtime):
+- `BOParaForm()` / `FormParaBO()` ÔÇö mapeamento 1:1 com as propriedades do `TotBO` (`this_nCodigo`, `this_cDescricao`, `this_nTipoOperacao`)
+- `AjustarBotoesPorModo()` ÔÇö PUBLIC (regra do `TesteAutomatico.prg`), habilita/desabilita os bot├Áes CRUD de Page1
+- `LimparCampos()` / `HabilitarCampos(par_cModo)` ÔÇö replicam os eventos `When` do legado: `Get_Codigos` s├│ edit├ível em INCLUIR; `Descrs`/`fwoption1` edit├íveis em INCLUIR/ALTERAR
+
+`BtnSalvarClick`, `BtnCancelarClick`, `BtnBuscarClick` e `BtnEncerrarClick` (j├í vinculados via BINDEVENT nas fases anteriores) ficam para a Fase 8, conforme o pr├│prio prompt da tarefa definiu.

@@ -554,7 +554,7 @@ DEFINE CLASS Formsigreimc AS FormBase
     * Garante que a pagina solicitada esteja dentro do range valido e atualiza
     * o estado dos campos apos a troca (equivalente ao When do legado).
     *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE AlternarPagina(par_nPagina)
+    PROCEDURE AlternarPagina(par_nPagina)
         LOCAL loc_nPagina, loc_oPgf
         IF VARTYPE(par_nPagina) != "N"
             loc_nPagina = 1

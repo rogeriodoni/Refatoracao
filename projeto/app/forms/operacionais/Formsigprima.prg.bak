@@ -274,7 +274,7 @@ DEFINE CLASS Formsigprima AS FormBase
     *   1 = Produtos, 2 = Auxiliar, 3 = Exportar
     * (equivalente semantico ao switch de pagina em forms CRUD)
     *==========================================================================
-    PROTECTED PROCEDURE AlternarPagina(par_nTipo)
+    PROCEDURE AlternarPagina(par_nTipo)
         IF VARTYPE(par_nTipo) = "N" AND BETWEEN(par_nTipo, 1, 3)
             IF PEMSTATUS(THIS, "obj_4c_OptTipo", 5) AND ;
                VARTYPE(THIS.obj_4c_OptTipo) = "O"

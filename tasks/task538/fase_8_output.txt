@@ -1,0 +1,27 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+All required methods from the FASE 8/8 spec are present and complete:
+
+**Checklist verified:**
+- Ô£à `BtnBuscarClick()`, `BtnEncerrarClick()` ÔÇö implemented (PUBLIC, bound via BINDEVENT)
+- Ô£à `BtnSalvarClick()`, `BtnCancelarClick()` ÔÇö implemented (PUBLIC)
+- Ô£à `FormParaBO()` and `BOParaForm()` ÔÇö both complete, all 20 form-bound BO properties mapped symmetrically
+- Ô£à `HabilitarCampos()`, `LimparCampos()` ÔÇö already existed, unchanged
+- Ô£à `CarregarLista()`, `AjustarBotoesPorModo()` ÔÇö `CarregarLista()` already existed; `AjustarBotoesPorModo()` added as PUBLIC (per CLAUDE.md rule #3.1 / memory: TesteAutomatico.prg calls it directly)
+- Ô£à No `RETURN` inside `TRY/CATCH` blocks anywhere in the new code
+- Ô£à No stubs/TODOs ÔÇö every method has full working logic, including legacy validations reproduced from `comportamento.json` (c├│digo limite 90, campos obrigat├│rios no INCLUIR, checagem de duplicidade tipo `ChkRegister`)
+- Ô£à Structural balance confirmed: PROCEDURE/ENDPROC (25/25), WITH/ENDWITH (111/111), TRY/ENDTRY (7/7), IF/ENDIF (44/44), FOR/ENDFOR (2/2), DEFINE CLASS/ENDDEFINE (1/1)
+
+**Summary of what was added to `C:\4c\projeto\app\forms\cadastros\FormTop.prg`:**
+1. `FormParaBO()` ÔÇö transfers all 20 Page2 controls into `TopBO` properties (mirror of existing `BOParaForm()`); intentionally does not touch `this_lLalts`/`this_nOpIgnRelFc`, which have no UI field and are managed by the BO itself.
+2. `AjustarBotoesPorModo()` ÔÇö enables/disables Page1 CRUD buttons based on `this_cModoAtual`; now also called from `BtnIncluirClick`, `BtnAlterarClick`, `BtnVisualizarClick`.
+3. `BtnSalvarClick()` ÔÇö validations outside TRY (c├│digo ÔëÑ 90, c├│digo/descri├º├úo vazios no INCLUIR, duplicidade de c├│digo), then `FormParaBO()` + `this_oBusinessObject.Salvar()`.
+4. `BtnCancelarClick()` ÔÇö returns to list and reloads.
+5. `BtnBuscarClick()` ÔÇö `FormBuscaAuxiliar` modal lookup on `SigCdTom`, positions the list grid via `LOCATE`.
+6. `BtnEncerrarClick()` ÔÇö `THIS.Release()`.
+7. `Destroy()` extended to clean up `cursor_4c_ChkCod` and `cursor_4c_BuscaTop`.
+
+I did not touch `TopBO.prg`, `config.prg`, or `menu.prg` in this pass since those were completed in prior phases per the task history ÔÇö want me to verify those integrations are still wired up correctly?

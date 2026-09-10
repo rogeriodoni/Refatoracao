@@ -3626,7 +3626,7 @@ DEFINE CLASS FormGpe AS FormBase
     *--------------------------------------------------------------------------
     * AjustarBotoesPorModo - Ajusta estado dos botoes conforme modo atual
     *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE AjustarBotoesPorModo()
+    PROCEDURE AjustarBotoesPorModo()
         LOCAL loc_oBotoes, loc_lTemRegistro
 
         TRY

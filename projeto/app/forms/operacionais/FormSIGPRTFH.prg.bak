@@ -788,7 +788,7 @@ DEFINE CLASS FormSIGPRTFH AS FormBase
     * a consulta SiTef (cabecalho + campos do cheque + container de status).
     * Metodo mantido apenas para conformidade com o contrato da pipeline (Fase 4).
     *==========================================================================
-    PROTECTED PROCEDURE AlternarPagina(par_nPagina)
+    PROCEDURE AlternarPagina(par_nPagina)
         *-- Sem-operacao: dialogo nao possui paginas para alternar.
         RETURN
     ENDPROC

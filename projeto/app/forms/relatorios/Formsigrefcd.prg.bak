@@ -748,7 +748,7 @@ DEFINE CLASS Formsigrefcd AS FormBase
     *   entre Lista/Dados. Mantido apenas para satisfazer contratos do
     *   pipeline de migracao e qualquer chamada herdada que possa ocorrer.
     *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE AlternarPagina(par_nPagina)
+    PROCEDURE AlternarPagina(par_nPagina)
         IF VARTYPE(THIS.pgf_4c_Paginas) = "O"
             THIS.pgf_4c_Paginas.Visible = .T.
             THIS.pgf_4c_Paginas.ActivePage = 1

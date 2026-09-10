@@ -1289,7 +1289,7 @@ DEFINE CLASS FormSigPdMpf AS FormBase
     * habilitado e que o form esteja em estado interativo apos retorno de
     * FormSigPdMp7.
     *==========================================================================
-    PROTECTED PROCEDURE AjustarBotoesPorModo()
+    PROCEDURE AjustarBotoesPorModo()
         THIS.Enabled = .T.
 
         IF VARTYPE(THIS.cmd_4c_Pesquisar) = "O"

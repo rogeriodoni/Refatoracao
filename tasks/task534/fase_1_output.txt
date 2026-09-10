@@ -1,0 +1,31 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 1/8 conclu├¡da ÔÇö criei `C:\4c\projeto\app\classes\TfiBO.prg` com:
+
+- `DEFINE CLASS TfiBO AS BusinessBase` com as **14 propriedades** correspondentes 1:1 ├ás 14 colunas de `SigCdTif` (validadas em `docs/schema.sql`, todas `NOT NULL`):
+
+| Propriedade | Coluna | Tipo |
+|---|---|---|
+| this_cCodigo | codigos | char(3) - PK |
+| this_cDescricao | descricaos | char(40) |
+| this_cAdendo | adendos | char(10) |
+| this_nPQtde | pqtdes | numeric(9,2) |
+| this_nPValor | pvalors | numeric(9,2) |
+| this_cAdendoCodigo | adendocs | char(2) |
+| this_nOpcaoSNA | opcsnas | numeric(1,0) |
+| this_nOOrig | oorig | numeric(2,0) |
+| this_nOAdendo | oaden | numeric(2,0) |
+| this_nOCor | ocor | numeric(2,0) |
+| this_nOEmb | oemb | numeric(2,0) |
+| this_nOTam | otam | numeric(2,0) |
+| this_nTamDesc | tamdesc | numeric(2,0) |
+| this_nTipoDesc | tpdescs | numeric(1,0) |
+
+- `Init()` seguindo o padr├úo can├┤nico (DODEFAULT dentro de TRY, `this_cTabela = "SigCdTif"`, `this_cCampoChave = "codigos"`, RETURN fora do TRY/CATCH).
+
+Nomes extra├¡dos diretamente dos `ControlSource` do c├│digo-fonte original (`crSigCdTif.*`) e confirmados contra o schema can├┤nico ÔÇö nenhum nome inventado. As colunas `descs`/coisas parecidas dos labels n├úo existem; usei os nomes reais (`descricaos`, `adendos`, `adendocs`, `oaden`, etc).
+
+Ainda n├úo inclu├¡ `CarregarDoCursor`, `Inserir`, `Atualizar`, `ExecutarExclusao`, `Buscar`, `CarregarPorCodigo` nem `ObterChavePrimaria` ÔÇö ficam para a Fase 2 conforme o escopo desta fase.

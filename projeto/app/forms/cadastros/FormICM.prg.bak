@@ -822,7 +822,7 @@ DEFINE CLASS FormICM AS FormBase
     ENDPROC
 
     *==========================================================================
-    PROTECTED PROCEDURE AlternarPagina(par_nPagina)
+    PROCEDURE AlternarPagina(par_nPagina)
     *==========================================================================
         LOCAL loc_lResultado
         loc_lResultado = .F.
@@ -1319,7 +1319,7 @@ DEFINE CLASS FormICM AS FormBase
     ENDPROC
 
     *==========================================================================
-    PROTECTED PROCEDURE AjustarBotoesPorModo()
+    PROCEDURE AjustarBotoesPorModo()
     *==========================================================================
         LOCAL loc_oPg1, loc_lEmLista
         TRY

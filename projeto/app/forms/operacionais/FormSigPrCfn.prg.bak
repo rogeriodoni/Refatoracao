@@ -906,7 +906,7 @@ DEFINE CLASS FormSigPrCfn AS FormBase
     *---------------------------------------------------------------------------
     * AlternarPagina - Navega entre Page1 (Calculo) e Page2 (Vencimentos).
     *---------------------------------------------------------------------------
-    PROTECTED PROCEDURE AlternarPagina(par_nPagina)
+    PROCEDURE AlternarPagina(par_nPagina)
         THIS.pgf_4c_Paginas.ActivePage = par_nPagina
     ENDPROC
 

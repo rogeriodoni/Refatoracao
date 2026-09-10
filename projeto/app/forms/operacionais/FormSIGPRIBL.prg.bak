@@ -1228,7 +1228,7 @@ DEFINE CLASS FormSIGPRIBL AS FormBase
     * AjustarBotoesPorModo - Ajusta estado do botao Imprimir conforme config
     * Form OPERACIONAL: o "modo" eh determinado por loc_lAchou em AtualizaBoleto
     *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE AjustarBotoesPorModo(par_cModo)
+    PROCEDURE AjustarBotoesPorModo(par_cModo)
         LOCAL loc_lTemConfig, loc_oErro
         TRY
             loc_lTemConfig = USED("cursor_4c_Config") AND RECCOUNT("cursor_4c_Config") > 0

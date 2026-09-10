@@ -147,7 +147,7 @@ DEFINE CLASS FormSigReIpc AS FormBase
     *
     * par_nPagina - mantido por compatibilidade com a assinatura padrao.
     *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE AlternarPagina(par_nPagina)
+    PROCEDURE AlternarPagina(par_nPagina)
         LOCAL loc_nPagina
         loc_nPagina = IIF(VARTYPE(par_nPagina) = "N", par_nPagina, 1)
         IF loc_nPagina = 1

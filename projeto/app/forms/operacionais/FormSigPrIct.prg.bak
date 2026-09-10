@@ -617,7 +617,7 @@ DEFINE CLASS FormSigPrIct AS FormBase
     ENDPROC
 
     *==========================================================================
-    PROTECTED PROCEDURE AlternarPagina(par_nPagina)
+    PROCEDURE AlternarPagina(par_nPagina)
     *-- Form OPERACIONAL flat: NAO possui PageFrame nem multiplas pages para
     *-- alternar. A alternancia de UI se da via visibility toggle no container
     *-- cnt_4c_PosProc (metodos ChamarProcessar/ChamarGravar controlam Visible).
@@ -799,7 +799,7 @@ DEFINE CLASS FormSigPrIct AS FormBase
     ENDPROC
 
     *==========================================================================
-    PROTECTED PROCEDURE AjustarBotoesPorModo()
+    PROCEDURE AjustarBotoesPorModo()
     *-- Form OPERACIONAL flat: NAO possui modos INCLUIR/ALTERAR/VISUALIZAR.
     *-- O estado dos botoes e controlado diretamente em ChamarProcessar/Gravar.
     *-- Metodo mantido para satisfazer contrato do pipeline multi-fase.

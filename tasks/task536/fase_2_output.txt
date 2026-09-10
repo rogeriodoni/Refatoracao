@@ -1,0 +1,19 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+File looks complete and well-formed ÔÇö no RETURN inside TRY/CATCH, PADR pattern for the composite PK, correct schema-validated table/column names for SigCdMe/SigCdMei/SigCdMet, and bit-column handling per the ConverterParaLogico/FormatarNumeroSQL(IIF(...)) conventions used elsewhere in the codebase.
+
+Fase 2/8 is complete. Summary of what was added to `C:\4c\projeto\app\classes\TmeBO.prg`:
+
+- **`ObterChavePrimaria()`** ÔÇö retorna `tipoemps` (ALLTRIM).
+- **`CarregarDoCursor()`** ÔÇö mapeia as 21 colunas de `SigCdMe`, com `TratarNulo`/`ConverterParaLogico` para os 3 campos bit (`nchkseqs`, `locdel`, `ftpdel`).
+- **`ValidarDados()`** ÔÇö replica as valida├º├Áes do legado (`mSv_Confirma`: c├│digo do transporte obrigat├│rio, c├│digo da empresa obrigat├│rio) e computa `this_cTipoEmps = PADR(Tipos,6)+PADR(Emps,3)` antes de checar duplicidade em registro novo.
+- **`VerificarChaveExistente()`** ÔÇö SELECT COUNT em `SigCdMe.tipoemps`.
+- **`Inserir()`/`Atualizar()`** ÔÇö INSERT/UPDATE completos com as 21 colunas, usando `EscaparSQL`/`FormatarNumeroSQL`, sem inventar nomes de tabela/coluna (validado contra `docs/schema.sql` via `Get-Content -Raw`, j├í que ├® UTF-16).
+- **`ExecutarExclusao()`** ÔÇö replica o legado `mSv_Excluir`: apaga primeiro `SigCdMei`, depois `SigCdMet`, depois `SigCdMe`.
+- **`Buscar()`/`CarregarPorCodigo()`** ÔÇö padr├úo can├┤nico (cursor placeholder quando sem conex├úo, `cursor_4c_Carrega` tempor├írio).
+- **`BuscarItens()`/`BuscarTitulos()`** ÔÇö carregam os cursors dos dois grids de detalhe da Page2 (Configuracao.Page1/Page2), usando os nomes reais de coluna de `SigCdMei`/`SigCdMet` (note: tabelas reais s├úo `SigCdMei`/`SigCdMet`, min├║sculas, n├úo `SigCdMeI`/`SigCdMeT` como grafado no c├│digo legado ÔÇö VFP/SQL Server s├úo case-insensitive para nomes de objeto, ent├úo usei a grafia do schema).
+
+Todos os m├®todos seguem a regra "nunca RETURN dentro de TRY/CATCH" e todo CATCH chama `MostrarErro`.

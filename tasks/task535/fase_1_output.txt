@@ -1,0 +1,19 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+**Fase 1/8 conclu├¡da** ÔÇö `C:\4c\projeto\app\classes\TgpBO.prg` criado com:
+
+- `DEFINE CLASS TgpBO AS BusinessBase`
+- 5 propriedades `this_*` mapeando 1:1 as colunas de `SigInTgo` (schema can├┤nico validado via `docs/schema.sql`, todas `NOT NULL`):
+  - `this_cCodigos` (codigos, char(10), PK)
+  - `this_cDescs` (descs, char(30))
+  - `this_nEntpes` (entpes, numeric(1,0) ÔÇö OptionGroup "Gerar Entrada do Peso")
+  - `this_nOpzers` (opzers, numeric(1,0) ÔÇö OptionGroup "Gerar OP Sem Peso M├®dio")
+  - `this_cDopps` (dopps, char(20) ÔÇö lookup para SigCdOpd, campo "Opera├º├úo de Produ├º├úo")
+- `Init()` com `DODEFAULT()` + `THIS.this_cTabela = "SigInTgo"` + `THIS.this_cCampoChave = "codigos"` (corrigido do esqueleto, que tinha `"cods"` ÔÇö nome errado, coluna real ├® `codigos`)
+
+Nota: o esqueleto gerado automaticamente (`tasks\task535\esqueletos\TgpBO_esqueleto.prg`) tinha a chave prim├íria errada (`"cods"` em vez de `"codigos"`) ÔÇö corrigido aqui com base no schema real e no c├│digo-fonte legado (`ChkRegister('SigInTgo','Codigos',...)`).
+
+Pr├│xima fase (2/8) deve completar `CarregarDoCursor()`, `Inserir()`, `Atualizar()`, `ExecutarExclusao()`, `Buscar()` e `ObterChavePrimaria()`.

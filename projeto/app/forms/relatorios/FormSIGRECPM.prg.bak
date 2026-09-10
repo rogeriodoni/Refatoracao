@@ -882,7 +882,7 @@ DEFINE CLASS FormSIGRECPM AS FormBase
     *--------------------------------------------------------------------------
     * AlternarPagina - REPORT forms usam layout flat (1 pagina)
     *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE AlternarPagina(par_nPagina)
+    PROCEDURE AlternarPagina(par_nPagina)
         IF VARTYPE(par_nPagina) = "N" AND par_nPagina >= 1 AND ;
            par_nPagina <= THIS.pgf_4c_Paginas.PageCount
             THIS.pgf_4c_Paginas.ActivePage = par_nPagina

@@ -1,0 +1,23 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Everything is well-formed. Let's summarize the final state.
+
+## Resumo da Fase 8/8 ÔÇö FormTml (Tipos de Material)
+
+Ao revisar `FormTml.prg` (2098 linhas herdadas das Fases 1-7), constatei que **quase tudo j├í estava completo**: `CarregarLista()`, `AlternarPagina()`, `FormParaBO()`/`BOParaForm()` (com os 20 campos mapeados), `HabilitarCampos()`, `LimparCampos()`, `AjustarBotoesPorModo()`, `TornarControlesVisiveis()` e `FormatarGridLista()` j├í existiam e funcionais. Faltavam s├│ os **4 m├®todos de evento vinculados por `BINDEVENT` mas nunca implementados** (o que causaria erro em runtime ao clicar nos bot├Áes):
+
+- **`BtnBuscarClick()`** ÔÇö abre `FormBuscaAuxiliar` em `SigOpOpt`/`cods`, e faz `LOCATE` no `cursor_4c_Dados` j├í carregado (padr├úo can├┤nico de `FormCor`).
+- **`BtnEncerrarClick()`** ÔÇö `THIS.Release()`.
+- **`BtnSalvarClick()`** ÔÇö reproduz a valida├º├úo do legado (`SIGCDTML.Click`): c├│digo e descri├º├úo obrigat├│rios, checagem de duplicidade de `cods` via SQL **somente em modo INCLUIR** (equivalente ao `CursorQuery` antes do `Replace cIdChaves`), tudo fora do `TRY` para respeitar a regra de nunca usar `RETURN` dentro de `TRY/CATCH`.
+- **`BtnCancelarClick()`** ÔÇö chama `CancelarEdicao()` no BO e volta para a lista.
+
+Tamb├®m adicionei limpeza dos novos cursores (`cursor_4c_BuscaTml`, `cursor_4c_ChkDup`) no `Destroy()`.
+
+Por fim, completei a **integra├º├úo obrigat├│ria** que ainda faltava:
+- `config.prg`: n├úo precisou de altera├º├úo ÔÇö usa `ADIR()` din├ómico, j├í carrega `TmlBO.prg`/`FormTml.prg` automaticamente.
+- `menu.prg`: adicionei `DEFINE BAR 181 OF popCadastros PROMPT "Tipos de Material"`, `ON SELECTION BAR 181 ... DO AbrirFormTml` e a procedure `AbrirFormTml()` (padr├úo `VARTYPE`/`Show()` sem `Release()`, seguindo exatamente o molde de `AbrirFormTme`).
+
+Validado: 38 `PROCEDURE`/38 `ENDPROC` balanceados, `ENDDEFINE` presente, nenhum `TODO`/stub/placeholder no arquivo, e nenhum `RETURN` dentro de `TRY/CATCH` nos m├®todos novos.

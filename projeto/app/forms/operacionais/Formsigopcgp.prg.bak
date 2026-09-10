@@ -4983,7 +4983,7 @@ DEFINE CLASS Formsigopcgp AS FormBase
 
   *------------------------------------------------------------
   *-- AjustarBotoesPorModo: habilita/desabilita botoes de acao conforme permissoes e estado
-  PROTECTED PROCEDURE AjustarBotoesPorModo
+  PROCEDURE AjustarBotoesPorModo
     LOCAL loc_oCnt, loc_lHabilitar
 
     loc_lHabilitar = THIS.this_lAlteraPreco AND THIS.this_lConsultaExecutada

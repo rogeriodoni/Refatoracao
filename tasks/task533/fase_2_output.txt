@@ -1,0 +1,25 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Fase 2 conclu├¡da. `C:\4c\projeto\app\classes\TCLBO.prg` foi completado com todos os m├®todos CRUD do BO, usando o padr├úo can├┤nico do `CorBO.prg` e as colunas exatas de `SigCdCss` (classes, descrs, ff, nivels, opbalancos, invemisccs ÔÇö confirmado via `docs/schema.sql`, evitando grep no arquivo UTF-16 e usando `Get-Content -Raw`).
+
+Resumo do que foi adicionado:
+
+- **`InicializarValoresPadrao()`** ÔÇö seta `this_cFf = SPACE(10)` (coluna `ff` NOT NULL sem controle no form original, legado grava espa├ºos).
+- **`ObterChavePrimaria()`** ÔÇö retorna `ALLTRIM(this_cClasse)`.
+- **`CarregarDoCursor(par_cAliasCursor)`** ÔÇö `SELECT (par_cAliasCursor)` antes de acessar campos (regra cr├¡tica), mapeia as 6 colunas com `TratarNulo`.
+- **`ValidarDados()`** ÔÇö replica as regras do legado extra├¡das de `comportamento.json`:
+  - `Get_nivel.Valid`: n├¡vel deve estar em `[1,2,3]` ("N├¡vel Inv├ílido !!").
+  - Se n├¡vel Ôëá 1, for├ºa `this_nOpBalanco = 1` (mesma regra de `optGreps.Value = IIF(nivel==1, ..., 1)`).
+  - Click do Confirmar: tamanho da classe (sem espa├ºos) deve casar com `VAL(SUBSTR("124", nivel, 1))` ÔåÆ 1/2/4 d├¡gitos conforme o n├¡vel ("Classe Inv├ílida !!").
+  - Descri├º├úo obrigat├│ria.
+  - Duplicidade de classe em novo registro (equivalente ao `ChkRegister`).
+- **`VerificarClasseExistente()`** ÔÇö SELECT COUNT em cursor auxiliar pr├│prio (`cursor_4c_ChkCla`).
+- **`Inserir()`** / **`Atualizar()`** ÔÇö SQL completo com `EscaparSQL`/`FormatarNumeroSQL`, chamando `RegistrarAuditoria("INSERT"/"UPDATE")`.
+- **`ExecutarExclusao()`** ÔÇö DELETE simples (sem checagem de depend├¬ncia inventada, pois o comportamento original n├úo evidenciou nenhuma) + auditoria.
+- **`Buscar(par_cFiltro)`** ÔÇö cursor `cursor_4c_Dados` com `classes, descrs, nivels` (mesmas colunas da grade original: `pColuna('classes'...)`, `pColuna('descrs'...)`, `pColuna('nivels'...)`).
+- **`CarregarPorCodigo(par_cClasse)`** ÔÇö SELECT pela PK, reseta `this_lNovoRegistro = .F.`.
+
+Todos os `RETURN` ficam fora de `TRY/CATCH`, todo `CATCH` chama `MostrarErro`, e nenhuma linha excede o padr├úo de quebra de string SQL. Nenhum stub ou TODO foi deixado ÔÇö cada m├®todo tem l├│gica funcional completa.

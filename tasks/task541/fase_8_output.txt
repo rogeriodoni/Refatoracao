@@ -1,0 +1,23 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+No RETURNs inside TRY/CATCH ÔÇö all validations are outside the TRY block, matching CLAUDE.md rule #1. All required Phase 8 methods are implemented with full logic (no stubs/TODOs), and the file is syntactically balanced.
+
+## Summary
+
+Completed Phase 8/8 for **FormTpc** (Cadastro de Tipos de Composi├º├úo):
+
+**Added to `FormTpc.prg`:**
+- `GridDblClick()` ÔÇö duplo-clique na lista abre em modo Visualizar (padr├úo can├┤nico)
+- `BtnBuscarClick()` ÔÇö localiza um Tipo pelo c├│digo exato via `TpcBO.Buscar()`, espelhando `msv_procurar` do legado
+- `BtnSalvarClick()` ÔÇö replica fielmente as valida├º├Áes do legado (`grupo_salva.salva.Click`): c├│digo obrigat├│rio e duplicidade em modo INCLUIR, descri├º├úo obrigat├│ria em INCLUIR/ALTERAR, depois `FormParaBO()` + `Salvar()` (que j├í grava a grade de Grupos via `SalvarGrupos()` no BO)
+- `BtnCancelarClick()` ÔÇö `CancelarEdicao()` + volta para a lista
+- `BtnEncerrarClick()` ÔÇö fecha o formul├írio
+
+**Integra├º├úo:**
+- `config.prg` j├í carrega `TpcBO.prg`/`FormTpc.prg` automaticamente via `ADIR()` ÔÇö nenhuma altera├º├úo necess├íria
+- `menu.prg`: adicionado `DEFINE BAR 184 OF popCadastros "Tipos de Composi├º├úo"`, `ON SELECTION BAR 184` e a procedure `AbrirFormTpc()` (padr├úo VARTYPE + Show() sem par├ómetro, sem Release())
+
+Validado: TRY/ENDTRY, IF/ENDIF, WITH/ENDWITH, PROCEDURE/ENDPROC e FOR/ENDFOR todos balanceados; nenhum RETURN dentro de TRY/CATCH. A migra├º├úo do FormTpc est├í completa nas 8 fases.

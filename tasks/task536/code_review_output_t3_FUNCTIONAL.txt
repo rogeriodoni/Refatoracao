@@ -1,0 +1,22 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Confirmed `extensao` exists in the canonical schema for `SigCdMe`, so the fix is safe (PILAR 2 preserved).
+
+## Resumo das corre├º├Áes ÔÇö FormTme.prg / TmeBO.prg
+
+Verifiquei os 5 problemas contra o fonte legado (`tasks/task536/SigCdTme_form_codigo_fonte.txt`) antes de tocar em qualquer coisa ÔÇö 3 eram falsos positivos do scanner est├ítico, 2 eram reais:
+
+**Falsos positivos (n├úo alterados, s├│ esclarecidos em coment├írio):**
+- `THIS.pfSqlTabela()` ÔÇö s├│ existe dentro de um coment├írio explicativo, nunca ├® chamado como c├│digo real. Corrigi o coment├írio para remover o prefixo `THIS.` (o legado usa `.pfSqlTabela(1)` no contexto do form dele, n├úo ├® um m├®todo do form migrado) e apontei a linha exata do fonte legado, evitando que o scanner confunda de novo.
+- Header `'Tipo'` ÔÇö confirmado linha 2677 do legado: `.pColuna('Tipos','','','Tipo',52,.t.)`. Est├í correto; o scanner n├úo viu porque ├® setado em runtime, n├úo em objeto `Header1` est├ítico do SCX.
+- `chk_4c_Chklocdel`/`chk_4c_Chkftpdel` Top=313 ÔÇö ├® o offset sist├¬mico `+103` da faixa de cabe├ºalho (regra #11 do CLAUDE.md), documentado e correto; bate com os controles vizinhos na mesma linha (Top=313/314). N├úo alterado.
+
+**Bug real corrigido:**
+- Header `'Descri├º├úo'` ÔÇö o legado (linha 2677-2679) declara exatamente 3 colunas na grade da Lista: `TiposÔåÆ"Tipo"`, `EmpsÔåÆ"Emp"`, `ExtensaoÔåÆ"Extensao"`. `Descrs` **n├úo existe** nessa grade legada ÔÇö era um desvio do PILAR 1 (grid deve ser id├¬ntica ao legado), documentado no pr├│prio c├│digo como "decis├úo de produto" mas na verdade violava a regra inegoci├ível.
+  - `FormTme.prg`: `Column3.ControlSource` agora aponta para `cursor_4c_Dados.extensao`, header `"Extensao"` (sem acento, igual ao literal do `pColuna` legado).
+  - `TmeBO.prg`: `Buscar()` agora seleciona `extensao` (SELECT real e cursor stub offline), coluna confirmada existente em `SigCdMe` no `docs/schema.sql` can├┤nico (PILAR 2 preservado).
+
+Nenhuma propriedade visual (Width/Top/Left/etc.) foi alterada fora do que j├í estava listado, e a l├│gica de neg├│cio do BO s├│ ganhou a coluna adicional necess├íria para a corre├º├úo do header.

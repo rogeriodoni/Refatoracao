@@ -774,7 +774,7 @@ DEFINE CLASS FormICN AS FormBase
     ENDPROC
 
     *==========================================================================
-    PROTECTED PROCEDURE AjustarBotoesPorModo(par_cModo)
+    PROCEDURE AjustarBotoesPorModo(par_cModo)
     *==========================================================================
     * OPERACIONAL: sem modos CRUD. Garante botoes Ok/Encerrar habilitados.
     *==========================================================================

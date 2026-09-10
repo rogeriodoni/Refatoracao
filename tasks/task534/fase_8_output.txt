@@ -1,0 +1,22 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+All correctly balanced and complete. Fase 8/8 conclu├¡da. Resumo do que foi feito no `FormTfi.prg` e integra├º├úo:
+
+**FormTfi.prg** ÔÇö adicionados os 4 m├®todos que faltavam:
+- `BtnBuscarClick()` ÔÇö abre `FormBuscaAuxiliar` em `SigCdTif`/`codigos`/`descricaos`, posiciona a grade no registro selecionado via `LOCATE`.
+- `BtnEncerrarClick()` ÔÇö `THIS.Release()` (padr├úo can├┤nico).
+- `BtnSalvarClick()` ÔÇö s├│ age em modo INCLUIR/ALTERAR, chama `FormParaBO()` + `this_oBusinessObject.Salvar()` sem par├ómetro.
+- `BtnCancelarClick()` ÔÇö volta para Page1 e recarrega a lista.
+
+Tamb├®m amarrei os `BINDEVENT` que estavam pendentes desde as fases 4/5 (`cmd_4c_Buscar`, `cmd_4c_Encerrar`, `cmd_4c_Confirmar`, `cmd_4c_Cancelar`), que antes s├│ tinham coment├írios "sera adicionado na Fase 8".
+
+Conferido que j├í estavam completos desde fases anteriores: `FormParaBO`/`BOParaForm` (14 campos, batendo 1:1 com as propriedades `this_*` do `TfiBO.prg`), `HabilitarCampos`, `LimparCampos`, `CarregarLista`, `AjustarBotoesPorModo`, `AlternarPagina` ÔÇö todos `PUBLIC` (sem `PROTECTED`) onde exigido pelo harness/BINDEVENT.
+
+**Integra├º├úo** (exigida pela Fase 8):
+- `config.prg` n├úo precisou de altera├º├úo ÔÇö usa `ADIR()` din├ómico para `*BO.prg` e `Form*.prg`, j├í cobre `TfiBO.prg` e `FormTfi.prg`.
+- `menu.prg` ÔÇö adicionei `PROCEDURE AbrirFormTfi()` (padr├úo `VARTYPE`/`Show()` sem `Release()`), `DEFINE BAR 178 OF popCadastros PROMPT "Tipos de Fatura"` e `ON SELECTION BAR 178 OF popCadastros DO AbrirFormTfi`.
+
+Nenhum stub, TODO ou placeholder foi deixado ÔÇö todos os m├®todos t├¬m l├│gica funcional completa espelhando o legado (`SigCdTfi`).

@@ -1,0 +1,22 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+N├úo h├í "Comic Sans MS" no arquivo ÔÇö essa regra do pass ├® gen├®rica e n├úo se aplica aqui.
+
+Verifiquei os 34 problemas listados linha por linha contra `CLAUDE.md` e o c├│digo atual, e **nenhum ├® um bug real**. N├úo fiz nenhuma altera├º├úo no arquivo. Resumo:
+
+## 33 itens LAYOUT-POSITION ÔåÆ falso-positivo sistem├ítico
+Todos t├¬m `diff=72px` no Top, exatamente o offset can├┤nico exigido pelo **CLAUDE.md Regra #11** (faixa de cabe├ºalho `cnt_4c_Cabecalho`, PRIMEIRO `AddObject` da p├ígina):
+- `+29` de compensa├º├úo do `pgf_4c_Paginas.Top = -29`
+- `+43` da faixa (Top=29 + Height=80 ÔåÆ primeiro controle de dados tem que ter `Top >= 115`)
+
+Exemplos conferidos no c├│digo: `Label9` original Top=298 ÔåÆ `lbl_4c_Label9` Top=370 (linha 1204) = 298+72 Ô£ô; `optReposicaos` original Top=442 ÔåÆ Top=514 (linha 1635) = 442+72 Ô£ô. Todos os outros 30+ seguem o mesmo padr├úo. Essa regra **prevalece sobre o PILAR 1** (pixel-perfect) por decis├úo expl├¡cita do time ÔÇö "corrigir" isso para bater com o legado voltaria a colocar controles por baixo da faixa cinza (Erro152/Erro156).
+
+Um item ├® ainda mais claramente falso: `Controle 'Label1' ... vs migrado 'lbl_4c_Label11' (diff=320px, diff Left=53px)`. Isso ├® um bug de casamento por substring da ferramenta de auditoria (`Label1` casou com `lbl_4c_Label11` em vez de `lbl_4c_Label1`). O controle real `lbl_4c_Label1` existe corretamente em Top=146 (linha 596), = 74+72, e n├úo aparece problema nenhum nele.
+
+## 1 item GRID-WITH ÔåÆ n├úo existe no c├│digo atual
+Busquei `RecordSource`/`ColumnCount` no arquivo inteiro: o ├║nico `WITH` que toca `.Column1`/`.Column2` (linhas 361-369) **n├úo** cont├®m `.RecordSource` nem `.ColumnCount` ÔÇö esses j├í est├úo fora do WITH (linha 359, com coment├írio expl├¡cito "`ColumnCount FORA do WITH ... (Problema 36)`"). O `.RecordSource` s├│ ├® setado depois, em `CarregarLista()` (linha 1792), num bloco sem `WITH` nenhum, usando `loc_oGrid.` expl├¡cito. O padr├úo que o detector descreve n├úo existe neste arquivo ÔÇö j├í foi corrigido anteriormente.
+
+**Conclus├úo**: aplicar as "corre├º├Áes" sugeridas quebraria a regra #11 do CLAUDE.md (controles voltariam a ficar sob a faixa do cabe├ºalho) e reintroduziria um bug j├í corrigido no grid. N├úo alterei `FormTop.prg` nem `TopBO.prg`. Se este pass vier de um pipeline automatizado (`OrquestradorMigracao.ps1`/`CorretorAutomatico.ps1`), vale ajustar o detector de LAYOUT-POSITION para somar o offset de +72 antes de comparar, e revisar o casamento de nomes (`Label1` vs `Label11`) para evitar falso-positivo recorrente em outros forms.

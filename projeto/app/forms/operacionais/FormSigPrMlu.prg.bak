@@ -903,7 +903,7 @@ DEFINE CLASS FormSigPrMlu AS FormBase
     *==========================================================================
     * AjustarBotoesPorModo - sem modo CRUD neste form OPERACIONAL
     *==========================================================================
-    PROTECTED PROCEDURE AjustarBotoesPorModo()
+    PROCEDURE AjustarBotoesPorModo()
         *-- OPERACIONAL: habilita Processar somente se BO inicializado
         IF PEMSTATUS(THIS, "cmd_4c_Processar", 5)
             THIS.cmd_4c_Processar.Enabled = (VARTYPE(THIS.this_oBusinessObject) = "O")

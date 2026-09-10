@@ -250,7 +250,7 @@ DEFINE CLASS FormTBI AS FormBase
     * FormBase (contrato chamado por AlternarPagina), mas aqui ele apenas
     * delega para HabilitarCampos().
     *==========================================================================
-    PROTECTED PROCEDURE AjustarBotoesPorModo()
+    PROCEDURE AjustarBotoesPorModo()
         THIS.HabilitarCampos(THIS.this_nPaginaAtual = 1)
     ENDPROC
 

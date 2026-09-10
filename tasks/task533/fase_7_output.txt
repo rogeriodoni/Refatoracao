@@ -1,0 +1,21 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+FormTCL.prg atualizado com sucesso para a Fase 7/8. Resumo do que foi adicionado (Read + Edit, sem recriar o arquivo):
+
+**Eventos principais dos bot├Áes CRUD** (todos `PUBLIC`, sem `PROTECTED`, exigido pelo CLAUDE.md #3 para funcionar com `BINDEVENT`):
+- `BtnIncluirClick()` ÔÇö chama `NovoRegistro()` do BO, seta modo `INCLUIR` **antes** de `HabilitarCampos` (evita bug #19), limpa campos, navega para Page2.
+- `BtnAlterarClick()` ÔÇö l├¬ a classe selecionada em `cursor_4c_Dados`, `CarregarPorCodigo` + `EditarRegistro()`, popula via `BOParaForm`, habilita campos.
+- `BtnVisualizarClick()` ÔÇö mesma leitura da grade, mas `HabilitarCampos(.F.)` (somente leitura).
+- `BtnExcluirClick()` ÔÇö confirma com `MsgConfirma` (uso l├│gico, n├úo num├®rico ÔÇö regra #7), `CarregarPorCodigo` + `Excluir()` (que internamente chama `ExecutarExclusao()` do BO), recarrega a lista.
+
+**M├®todos de apoio necess├írios para esses 4 eventos serem funcionais de verdade (n├úo stubs)**, sobrescrevendo os hooks vazios do `FormBase`:
+- `FormParaBO()` / `BOParaForm()` ÔÇö mapeamento completo dos 5 campos edit├íveis (`txt_4c_Classe`, `txt_4c_Descr`, `txt_4c_Nivel`, `opt_4c_OpBalanco`, `opt_4c_InvEmisCc`) para as propriedades exatas do `TCLBO` (validado por leitura direta do BO).
+- `LimparCampos()` ÔÇö reseta os campos para o modo INCLUIR.
+- `HabilitarCampos(par_lHabilitar)` ÔÇö trava `txt_4c_Classe` (PK) fora do modo INCLUIR, e aplica a regra do Pattern #178 (Confirmar habilitado tamb├®m em modo EXCLUIR).
+
+Todos os m├®todos seguem a regra cr├¡tica: nenhum `RETURN` dentro de `TRY/CATCH`, e todo `CATCH` chama `MsgErro` (nunca silencioso). O bot├úo Excluir na grade tamb├®m j├í estava vinculado via `DblClick` a `BtnVisualizarClick` desde fases anteriores ÔÇö mantido.
+
+**N├úo implementado nesta fase** (fora do escopo declarado da Fase 7, que listava explicitamente s├│ os 4 eventos acima): `BtnSalvarClick`, `BtnCancelarClick`, `BtnBuscarClick`, `BtnEncerrarClick` ÔÇö j├í est├úo vinculados via `BINDEVENT` desde as fases 4/6 mas ainda sem corpo; presumo que sejam o escopo da Fase 8, junto da integra├º├úo com `config.prg`/`menu.prg`. Se a Fase 8 n├úo cobrir isso, sinalize que preciso complet├í-los para o form n├úo quebrar em runtime (regra #13 do CLAUDE.md).

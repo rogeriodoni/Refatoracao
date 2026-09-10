@@ -1,0 +1,17 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+The file looks well-formed. FASE 6/8 for FormTpa.prg is complete.
+
+## Resumo
+
+Editei `C:\4c\projeto\app\forms\cadastros\FormTpa.prg` (`ConfigurarPaginaDados()`), adicionando o campo restante:
+
+- **`lbl_4c_Label2`** (Descri├º├úo) ÔÇö Top=189, Left=395, Width=55, alinhado ├á direita at├® Left=454 (mesmo ponto do campo C├│digo), espelhando `Say2` do legado (Top=160+29).
+- **`txt_4c_Descrs`** ÔÇö Top=186, Left=454, Width=150, MaxLength=20, TabIndex=4, espelhando `getDescrs` do legado (Top=157+29, `ControlSource = "crSigCdAca.descrs"`).
+
+**Sobre lookups**: verifiquei o c├│digo-fonte original (`SigCdTpa_form_codigo_fonte.txt`) e confirmei que este formul├írio **n├úo tem nenhum lookup** ÔÇö n├úo h├í `fwbuscaext`, `fwBuscaSel`, `sigacess` nem `CreateObject` em nenhum dos dois campos (`getCodigos`/`getDescrs`). O ├║nico evento em `getCodigos.When` apenas controla foco condicional (`pcEscolha`), sem abrir busca externa. Deixei um coment├írio no c├│digo documentando essa verifica├º├úo, para n├úo gerar BINDEVENTs/lookup fantasmas.
+
+Com isso, **todos os campos do form original j├í est├úo migrados** (C├│digo + Descri├º├úo, ├║nicos campos da tabela `SigCdAca`). Restam apenas os bot├Áes Confirmar/Cancelar e eventos/BINDEVENTs, previstos para as Fases 7-8 conforme o cabe├ºalho do arquivo j├í indicava ÔÇö mantive essa divis├úo para n├úo duplicar `AddObject` de bot├Áes em fases futuras.

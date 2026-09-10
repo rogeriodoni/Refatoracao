@@ -166,7 +166,7 @@ DEFINE CLASS FormSigPrRsa AS FormBase
     * Form OPERACIONAL nao tem PageFrame, entao nao ha alternancia de paginas:
     * ao ser invocada, garante foco no campo de prioridade (unico input).
     *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE AlternarPagina(par_nPagina)
+    PROCEDURE AlternarPagina(par_nPagina)
         IF TYPE("THIS.txt_4c_Prioridade") = "O" AND !THIS.this_lParametrizado
             THIS.txt_4c_Prioridade.SetFocus()
         ENDIF

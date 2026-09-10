@@ -654,7 +654,7 @@ DEFINE CLASS FormPgb AS FormBase
     *   SIGCDPGB nao tem modos INCLUIR/ALTERAR/VISUALIZAR/EXCLUIR.
     *   O unico controle disponivel ao usuario e o botao Encerrar.
     *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE AjustarBotoesPorModo(par_cModo)
+    PROCEDURE AjustarBotoesPorModo(par_cModo)
         RETURN
     ENDPROC
 

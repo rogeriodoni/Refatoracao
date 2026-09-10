@@ -1,0 +1,22 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Revisei os 35 itens apontados contra o c├│digo **atual** de `FormTop.prg`/`TopBO.prg` e n├úo apliquei nenhuma altera├º├úo ÔÇö todos os achados, ao serem checados, caem em uma destas categorias:
+
+**1. Os 32 [LAYOUT-POSITION] com diff=72px** ÔÇö n├úo s├úo bug, s├úo o deslocamento can├┤nico obrigat├│rio do CLAUDE.md regra #11 (faixa de cabe├ºalho nas duas p├íginas: +29 do `pgf_4c_Paginas.Top=-29` + 43 da faixa `cnt_4c_Cabecalho` = +72). O pr├│prio c├│digo j├í documenta isso (`*-- Top_novo = Top_original + 72`, linhas 503-505). "Corrigir" isso significaria reverter o Top e contrariar a regra que **prevalece sobre o PILAR 1** ÔÇö n├úo fiz.
+
+**2. O [LAYOUT-POSITION] do 'Label1' com diff=320px/53px** ÔÇö ├® um artefato do diagnosticador: ele comparou `Label1` original (Top=74) com `lbl_4c_Label11` migrado, mas o par correto ├® `lbl_4c_Label1` (Top=146 = 74+72, bate certinho ÔÇö linha 595-609). N├úo ├® defeito real de migra├º├úo.
+
+**3. [NULL-CURSOR]** ÔÇö o ├║nico `CREATE CURSOR cursor_4c_Dados` do arquivo (linha 1781) ├® usado s├│ no stub de `gb_4c_ValidandoUI` (harness de teste), nunca seguido de `APPEND FROM`. Dado real vem via `SQLEXEC(..., "cursor_4c_Dados")` na BO, que j├í popula certo. N├úo h├í o cen├írio que o alerta descreve.
+
+**4. [GRID-WITH]** ÔÇö j├í corrigido no c├│digo atual: o `ColumnCount` est├í fora do `WITH` (linha 358-359, coment├írio `Problema 36`) e o acesso a `.Column1/.Column2` est├í em `WITH` separado, sem tocar `.RecordSource` no meio. `CarregarLista()` tamb├®m j├í usa `loc_oGrid.RecordSource`/`loc_oGrid.Column1...` expl├¡citos, sem `WITH`.
+
+**5. [TITULO-NAO-PROPAGADO]** ÔÇö j├í propagado corretamente: `THIS.Caption` ├® atribu├¡do a `lbl_4c_Sombra`/`lbl_4c_Titulo` tanto na Page1 quanto na Page2 (linhas 57-60, 136-153, 407-424).
+
+**6. [ALINHAMENTO]/[ALINHAMENTO-CONTAINER]** ÔÇö os bot├Áes de cada grupo (`cnt_4c_Botoes`, `cnt_4c_BotoesAcao`, `cnt_4c_Saida`) j├í est├úo todos com `Top=5`.
+
+**7. [CHECKBOX-TIPO] e [FONTNAME-ERRADO]** ÔÇö n├úo se aplicam a este form: n├úo h├í nenhum `CheckBox` nem `FontName = "Comic Sans MS"` em `FormTop.prg` (confirmado por busca no arquivo inteiro).
+
+N├úo houve mudan├ºa nos arquivos porque aplicar qualquer uma dessas "corre├º├Áes" seria um no-op ou uma regress├úo contra o CLAUDE.md. Se esse relat├│rio veio de uma execu├º├úo automatizada do pipeline, vale investigar por que o diagnosticador de layout n├úo est├í aplicando a toler├óncia/compensa├º├úo de +72px da regra #11 antes de reportar diffs ÔÇö isso vai gerar falso-positivo em todo form que segue o padr├úo can├┤nico de cabe├ºalho.

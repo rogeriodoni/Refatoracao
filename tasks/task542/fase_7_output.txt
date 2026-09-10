@@ -1,0 +1,21 @@
+﻿Permission allow rule (.claude\settings.local.json): Bash(grep -rln 'gc_4c_ArquivoErroTeste\\|ValidarUIFidelity\\|test.*runner\\|TestRunner' C:\\\\4c\\\\projeto\\\\app\\\\start C:\\\\4c\\\\projeto\\\\app\\\\classes) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frx C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/*.frt C:/4c/projeto/app/reports/bak_erro105_sweep/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frx C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+Permission allow rule (.claude\settings.local.json): Bash(cp C:/4c/projeto/app/reports/bak_erro105_sweep/*.frt C:/4c/projeto/app/reports/) has a wildcard before the rest of the command, so it also matches any options inserted at that position and approves them without a prompt. Replace that * with the exact value you mean, or only use * after the subcommand.
+File structure is intact. The Fase 7/8 update to `FormTPD.prg` is complete.
+
+**Resumo do que foi adicionado** (`C:\4c\projeto\app\forms\cadastros\FormTPD.prg`):
+
+- **Eventos principais** (pedidos pela fase): `BtnIncluirClick`, `BtnAlterarClick`, `BtnVisualizarClick`, `BtnExcluirClick`
+- **M├®todos de suporte necess├írios** para esses eventos funcionarem de fato (sem stubs, j├í que estavam referenciados via `BINDEVENT` nas fases anteriores mas ainda n├úo implementados): `BtnBuscarClick`, `BtnEncerrarClick`, `BtnSalvarClick`, `BtnCancelarClick`, `FormParaBO`, `BOParaForm`, `HabilitarCampos`, `LimparCampos`, `AjustarBotoesPorModo`
+
+Pontos seguidos do `comportamento.json` e do padr├úo de `FormTfi.prg` (refer├¬ncia mais pr├│xima j├í migrada):
+- Valida├º├úo de C├│digo/Descri├º├úo obrigat├│rios em `BtnSalvarClick`, replicando as mensagens exatas do legado (`"C├│digo Inv├ílido!!!"` / `"Descri├º├úo Inv├ílida!!!"`) com `SetFocus()` de volta ao campo.
+- `txt_4c_Codigos` s├│ fica edit├ível em modo `INCLUIR` (espelha o `When` do `getCodigos` legado: `InList(pcEscolha,[INSERIR],[PROCURAR])`).
+- `BtnExcluirClick` com `MsgConfirma()` (retorno l├│gico, sem comparar com n├║mero) antes de chamar `this_oBusinessObject.Excluir()` (p├║blico, que aciona `ExecutarExclusao()` no BO).
+- `BtnAlterarClick`/`BtnVisualizarClick` leem o c├│digo da linha selecionada em `cursor_4c_Dados`, chamam `CarregarPorCodigo()` e usam `EditarRegistro()`/somente-leitura conforme o modo.
+- `BtnBuscarClick` usa o padr├úo MODO 1 do `FormBuscaAuxiliar` (`gnConnHandle` primeiro par├ómetro, `mAddColuna` com 3 par├ómetros, leitura via `this_lSelecionou` + cursor).
+- Todos os `Btn*Click` s├úo `PROCEDURE` (PUBLIC), exigido pelo `BINDEVENT` (regra #17/CLAUDE.md #3).
+
+Nenhum `TRY/RETURN` misturado, nenhum placeholder/TODO. O arquivo est├í pronto para a Fase 8 (integra├º├úo em `config.prg` e `menu.prg`).

@@ -101,7 +101,7 @@ DEFINE CLASS Formsigrebal AS FormBase
     * Mantido por contrato com a infraestrutura de migracao multi-fase.
     * O fluxo de REPORT eh sempre: ajustar filtros -> Visualizar/Imprimir.
     *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE AlternarPagina(par_nPagina)
+    PROCEDURE AlternarPagina(par_nPagina)
         RETURN .T.
     ENDPROC
 

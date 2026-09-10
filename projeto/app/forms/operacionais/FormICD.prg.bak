@@ -311,7 +311,7 @@ DEFINE CLASS FormICD AS FormBase
     * entre paginas. par_nPagina eh ignorado.
     * Metodo mantido apenas para conformidade com contrato do pipeline.
     *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE AlternarPagina(par_nPagina)
+    PROCEDURE AlternarPagina(par_nPagina)
         RETURN
     ENDPROC
 
