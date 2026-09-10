@@ -54,13 +54,34 @@ $formFiles = Get-ChildItem -Path "$basePath\forms" -Recurse -Filter "*.prg" -Err
 $boFiles = Get-ChildItem -Path "$basePath\classes" -Recurse -Filter "*BO.prg" -ErrorAction SilentlyContinue |
     Where-Object { $_.Name -notmatch "\.bak$|\.BAK$" }
 
+# Classes BASE e utilitarios (2026-09-10): ate entao o sweep so via
+# forms\**\*.prg e classes\*BO.prg, ou seja NUNCA checava formbase.prg,
+# businessbase.prg, TextBoxGridLookup.prg, functions.prg... - justamente o que
+# todo form usa. Foi assim que TextBoxGridLookup.prg e ExtratoReduzido.prg
+# ficaram meses sem compilar sem ninguem notar.
+# O CorretorAutomatico roda esses arquivos em MODO SEGURO (so patterns de
+# sintaxe), porque a maioria dos ~198 patterns aplica geometria canonica de
+# form CRUD e ja corrompeu o FormBuscaAuxiliar no passado.
+$classeFiles = Get-ChildItem -Path "$basePath\classes" -Recurse -Filter "*.prg" -ErrorAction SilentlyContinue |
+    Where-Object { $_.Name -notmatch "\.bak$|\.BAK$" -and $_.Name -notlike "*BO.prg" }
+
+$utilFiles = Get-ChildItem -Path "$basePath\utils" -Recurse -Filter "*.prg" -ErrorAction SilentlyContinue |
+    Where-Object { $_.Name -notmatch "\.bak$|\.BAK$" }
+
+$startFiles = Get-ChildItem -Path "$basePath\start" -Recurse -Filter "*.prg" -ErrorAction SilentlyContinue |
+    Where-Object { $_.Name -notmatch "\.bak$|\.BAK$" }
+
 $totalFiles = @()
 $totalFiles += $formFiles
 $totalFiles += $boFiles
+$totalFiles += $classeFiles
+$totalFiles += $utilFiles
+$totalFiles += $startFiles
 
 Write-Host "Arquivos encontrados:" -ForegroundColor Yellow
 Write-Host "  Forms: $($formFiles.Count)" -ForegroundColor White
 Write-Host "  BOs:   $($boFiles.Count)" -ForegroundColor White
+Write-Host "  Classes base / utils / start: $($classeFiles.Count + $utilFiles.Count + $startFiles.Count)   (modo SEGURO: so patterns de sintaxe)" -ForegroundColor White
 Write-Host "  Total: $($totalFiles.Count)" -ForegroundColor White
 Write-Host ""
 

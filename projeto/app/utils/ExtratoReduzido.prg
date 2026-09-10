@@ -348,7 +348,8 @@ DEFINE CLASS ExtratorReduzido AS Custom
                 loc_cConteudoMetodo = loc_cLinha + CHR(13) + CHR(10)
                 loc_cMetodoAtual = loc_cNomeMetodo
 
-            ELSE IF loc_lDentroMetodo
+            ELSE
+                IF loc_lDentroMetodo
                 *-- Adicionar linha ao metodo atual
                 loc_cConteudoMetodo = loc_cConteudoMetodo + loc_cLinha + CHR(13) + CHR(10)
 
@@ -416,7 +417,8 @@ DEFINE CLASS ExtratorReduzido AS Custom
         IF "PROCEDURE " $ loc_cLinhaUpper
             loc_nPos = ATC("PROCEDURE ", loc_cLinhaUpper)
             loc_cNome = SUBSTR(loc_cLinhaUpper, loc_nPos + 10)
-        ELSE IF "FUNCTION " $ loc_cLinhaUpper
+        ELSE
+            IF "FUNCTION " $ loc_cLinhaUpper
             loc_nPos = ATC("FUNCTION ", loc_cLinhaUpper)
             loc_cNome = SUBSTR(loc_cLinhaUpper, loc_nPos + 9)
         ELSE
@@ -496,7 +498,7 @@ DEFINE CLASS ExtratorReduzido AS Custom
             *-- Ignorar linhas vazias, comentarios, declaracoes
             IF EMPTY(loc_cLinhaTemp) OR ;
                LEFT(loc_cLinhaTemp, 1) = "*" OR ;
-               LEFT(loc_cLinhaTemp, 2) = "&&" OR ;
+               LEFT(loc_cLinhaTemp, 2) = CHR(38) + CHR(38) OR ;
                LEFT(loc_cLinhaTemp, 9) = "PROCEDURE" OR ;
                LEFT(loc_cLinhaTemp, 8) = "FUNCTION" OR ;
                LEFT(loc_cLinhaTemp, 7) = "ENDPROC" OR ;
