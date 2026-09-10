@@ -382,6 +382,42 @@ FUNCTION TratarNulo(puValor, puPadrao)
 ENDFUNC
 
 *------------------------------------------------------------------------------
+* ConverterParaData - Converte para DATE qualquer valor de data
+*
+* TTOD() SO aceita DATETIME: passar um DATE dispara o erro 11 do VFP9
+* "Function argument value, type, or count is invalid.". O MESMO campo chega
+* com tipos diferentes conforme o caminho:
+*   - TextBox criado com `.Value = {}`            -> DATE     (modo INCLUIR)
+*   - coluna `datetime` do SQL Server via SQLEXEC -> DATETIME (modo ALTERAR)
+*   - cursor VFP criado com coluna `D`            -> DATE
+* Por isso toda conta de data feita sobre valor que passou por form/propriedade
+* deve normalizar aqui, NUNCA chamar TTOD() direto.
+*
+* Parametros: puValor - DATE, DATETIME, CHAR ("dd/mm/aaaa") ou NULL
+* Retorno: DATE ({} para NULL e tipos nao conversiveis)
+*------------------------------------------------------------------------------
+FUNCTION ConverterParaData(puValor)
+    LOCAL lcTipo, ldRetorno
+
+    ldRetorno = {}
+
+    IF !ISNULL(puValor)
+        lcTipo = VARTYPE(puValor)
+
+        DO CASE
+            CASE lcTipo = "T"
+                ldRetorno = TTOD(puValor)
+            CASE lcTipo = "D"
+                ldRetorno = puValor
+            CASE lcTipo = "C"
+                ldRetorno = CTOD(ALLTRIM(puValor))
+        ENDCASE
+    ENDIF
+
+    RETURN ldRetorno
+ENDFUNC
+
+*------------------------------------------------------------------------------
 * ConverterParaLogico - Converte para LOGICO o valor lido de um cursor
 *
 * Coluna `bit` do SQL Server chega ao VFP ora como Logico (.T./.F.), ora como

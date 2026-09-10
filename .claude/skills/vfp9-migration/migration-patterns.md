@@ -10401,3 +10401,319 @@ faz nada. Os outros dois sites nunca limpavam o campo quando deveriam.
   valor com concatenacao/funcao vira WARNING).
 - Origem: Erro155 (2026-09-09, `Formlch.prg` — 3 dos 4 sites eram pre-existentes,
   encontrados ao portar o `fChecarInativas`).
+
+## 197. Faixa do Cabecalho Criada DEPOIS dos Botoes Cobre Confirmar/Encerrar (Erro156 2026-09-09)
+
+O testador abre a aba **Dados** e nao ha botao nenhum: a faixa cinza do
+cabecalho ocupa o topo inteiro. Olhando de perto sobra uma **lasca** do
+container de botoes espiando no canto direito — os ~10px que passam da altura
+da faixa.
+
+### Por que
+
+Os containers de botao ficam em `Top = 29..33`, ou seja **dentro** da area da
+faixa (`Top = 29..31`, `Height = 80`). Em VFP a ordem de `AddObject` define o
+empilhamento: quem eh criado depois desenha por cima. Entao a faixa **tem** de
+ser o primeiro `AddObject` da pagina (CLAUDE.md #11).
+
+### ERRADO
+
+```foxpro
+PROTECTED PROCEDURE ConfigurarPaginaDados()
+    loc_oPagina.AddObject("cnt_4c_BotoesAcao", "Container")   && Top=33
+    ...
+    loc_oPagina.AddObject("cnt_4c_Cabecalho", "Container")    && Top=31, Height=80
+```
+
+### CERTO
+
+```foxpro
+PROTECTED PROCEDURE ConfigurarPaginaDados()
+    loc_oPagina.AddObject("cnt_4c_Cabecalho", "Container")    && PRIMEIRO
+    ...
+    loc_oPagina.AddObject("cnt_4c_BotoesAcao", "Container")   && desenha por cima
+```
+
+No `FormCAD` a pagina **Lista** estava certa e so a **Dados** invertida — vale
+conferir as duas.
+
+### A excecao que nao pode ser "corrigida"
+
+Pagina com PageFrame/Container interno que cobre tudo (`Formgpd.pgf_4c_Divisoes`)
+pinta por cima da faixa. Ali a faixa vem **depois** de proposito e a barra de
+botoes eh trazida para frente na mao:
+
+```foxpro
+*-- (pgf_4c_Divisoes e o ultimo AddObject, cobre tudo; ZOrder(0) = traz para frente)
+loc_oPagina.opt_4c_Navegacao.ZOrder(0)
+loc_oPagina.cnt_4c_Salva.ZOrder(0)
+```
+
+**A presenca do `ZOrder(0)` eh o que distingue esse caso de um bug.** Sem esse
+guard, um detector de ordem "corrige" um form que estava certo.
+
+### Correlato: labels da faixa PELADOS
+
+No `FormCat` a faixa da pagina Dados criava os labels sem configurar nada:
+
+```foxpro
+.AddObject("lbl_4c_Sombra", "Label")
+.AddObject("lbl_4c_Titulo", "Label")
+```
+
+Sem `Top`/`Left`/fonte/cor, o titulo sai como label default minusculo, preto
+sobre cinza — mesmo com o `Caption` setado no `Init`. Eh a injecao do Erro152
+que ficou pela metade. Os valores certos estao na faixa da pagina **Lista do
+proprio form**.
+
+### Deteccao
+
+Sempre por `BackColor = RGB(100,100,100)` **+** `Height >= 60`, **nunca pelo
+nome** — 8 forms chamam a faixa de `cnt_4c_Sombra` e o `Formpgr` usa
+`cnt_4c_Cabecalho` para um container de CAMPOS (CLAUDE.md #11).
+
+### Referencias
+
+- Auto-fix: Pattern #195 (move o bloco; labels pelados viram WARNING).
+- Sweep: 3 achados — `FormCAD` e `FormCat` corrigidos, `Formgpd` preservado.
+- Origem: Erro156 (2026-09-09, FormCAD "Cadastros Gerais").
+
+## 198. PROTECTED em Metodo que TesteAutomatico.prg Chama Direto no oForm (Erro157 2026-09-09)
+
+O teste `ModoVisualizar` falha com `Property AJUSTARBOTOESPORMODO is not found.` mesmo
+o metodo existindo e sendo chamado corretamente de dentro da classe via
+`THIS.AjustarBotoesPorModo()`.
+
+### Por que
+
+`TesteAutomatico.prg` nao eh so BINDEVENT — para alguns metodos ele chama
+`THIS.oForm.Metodo()` **direto, de fora da classe** do form:
+
+```foxpro
+* TesteAutomatico.prg (harness, fora da classe do form)
+IF PEMSTATUS(THIS.oForm, "AjustarBotoesPorModo", 5)
+    THIS.oForm.this_cModoAtual = "VISUALIZAR"
+    THIS.oForm.AjustarBotoesPorModo()     && FALHA se for PROTECTED
+ENDIF
+```
+
+`PEMSTATUS(oRef, cNome, 5)` retorna `.T.` para metodo **PROTECTED** tambem —
+ele so confere se o member existe, nao se o chamador tem permissao de acesso.
+O `IF` entra no branch, mas a chamada real do lado de fora da classe esbarra
+na protecao e o VFP9 devolve o mesmo erro generico de member ausente
+(`Property X is not found.`), em vez de um erro de escopo mais claro.
+
+Isso eh a mesma familia do CLAUDE.md #3 (BINDEVENT exige PUBLIC), so que o
+chamador externo aqui eh o harness de teste, nao um evento.
+
+### Metodos que o harness chama direto (devem ser PUBLIC)
+
+`CarregarLista`, `AlternarPagina`, `AjustarBotoesPorModo`, `BtnIncluirClick`,
+`BtnCancelarClick` — ver `TesteAutomatico.prg` (grep por `THIS.oForm.`).
+
+### ERRADO
+
+```foxpro
+PROTECTED PROCEDURE AjustarBotoesPorModo()
+    ...
+ENDPROC
+```
+
+### CERTO
+
+```foxpro
+PROCEDURE AjustarBotoesPorModo()      && PUBLIC (default) - sem PROTECTED
+    ...
+ENDPROC
+```
+
+A chamada interna `THIS.AjustarBotoesPorModo()` dentro de `HabilitarCampos()`
+continua funcionando igual — tornar o metodo PUBLIC so amplia quem pode
+chama-lo, nunca restringe.
+
+### Referencias
+
+- Auto-fix: CorretorAutomatico Pattern #196 (lista fechada de nomes conhecidos
+  do harness; remove `PROTECTED ` de `PROCEDURE`/`FUNCTION` com esse nome em
+  `Form*.prg`).
+- Origem: Erro157 (2026-09-09, FormTCL "Cadastro de Classes" — task533).
+
+---
+
+## 199. TTOD() So Aceita DATETIME — Com DATE Dispara Erro 11 em RUNTIME (Erro157 2026-09-10)
+
+`TTOD()` converte **DATETIME -> DATE**. Passar um **DATE** nao eh no-op: o VFP9
+dispara o erro 11, *"Function argument value, type, or count is invalid."*
+O `.prg` **compila limpo** — o usuario so descobre ao acionar o botao.
+
+A armadilha eh que o **MESMO campo** chega com tipos **diferentes** conforme o
+caminho, e o migrador so enxerga um deles:
+
+| Origem do valor | Tipo no VFP |
+|-----------------|-------------|
+| TextBox criado com `.Value = {}` | **DATE** (modo INCLUIR) |
+| coluna `datetime` do SQL Server via `SQLEXEC` | **DATETIME** (modo ALTERAR) |
+| cursor VFP com coluna declarada `T` | DATETIME |
+| cursor VFP com coluna declarada `D` | **DATE** |
+
+Por isso o defeito passa despercebido: o form **funciona em ALTERAR** (valor veio
+do banco, DATETIME) e **explode em INCLUIR** (valor veio do TextBox, DATE).
+
+No legado nao acontecia porque o TextBox tinha `ControlSource` apontando para a
+coluna `datetime`, entao o `.Value` ja nascia DATETIME:
+
+```
+* SIGCDCCJ.Pagina.Dados.Get_DataBase
+ControlSource = "crSigCdCcj.data_base"     && datetime -> .Value eh T
+...
+lnDias = Ttod(crDetalhe.DataS) - Ttod(ldDBase)
+```
+
+No migrado o TextBox nasce com `{}` (DATE) e o mesmo `TTOD()` estoura.
+
+### ERRADO
+
+```foxpro
+loc_oPg2.AddObject("txt_4c_DataBase", "TextBox")
+loc_oPg2.txt_4c_DataBase.Value = {}          && DATE
+
+...
+loc_dBase   = THIS.this_dDataBase             && DATE em INCLUIR, DATETIME em ALTERAR
+loc_dBase_d = TTOD(loc_dBase)                 && erro 11 quando eh DATE
+```
+
+### CERTO
+
+```foxpro
+loc_dBase_d = ConverterParaData(loc_dBase)    && utils\functions.prg
+```
+
+`ConverterParaData()` normaliza DATE/DATETIME/CHAR para DATE. Para DATETIME o
+resultado eh **identico** ao `TTOD()`, entao a troca nunca causa regressao:
+
+```foxpro
+FUNCTION ConverterParaData(puValor)
+    LOCAL lcTipo, ldRetorno
+    ldRetorno = {}
+    IF !ISNULL(puValor)
+        lcTipo = VARTYPE(puValor)
+        DO CASE
+            CASE lcTipo = "T"
+                ldRetorno = TTOD(puValor)
+            CASE lcTipo = "D"
+                ldRetorno = puValor
+            CASE lcTipo = "C"
+                ldRetorno = CTOD(ALLTRIM(puValor))
+        ENDCASE
+    ENDIF
+    RETURN ldRetorno
+ENDFUNC
+```
+
+### Quando `TTOD()` direto continua CERTO
+
+Coluna de cursor vinda de `SQLEXEC` sobre coluna `datetime` — o tipo eh
+garantido. Trocar esses ~100 sites do projeto seria so ruido, e dentro de
+`SELECT ... INTO CURSOR` ou de `INDEX ON` a troca eh **ativamente ruim**: uma UDF
+na expressao muda o plano e quebra a otimizacao Rushmore.
+
+O idioma defensivo que ja aparecia em `sigmvcabBO`/`sigpdmp7BO`/`FpbBO` continua
+valido e eh equivalente:
+
+```foxpro
+THIS.this_dDatas = IIF(VARTYPE(datas) = "T", TTOD(datas), TratarNulo(datas, {}))
+```
+
+### Referencias
+
+- Helper: `projeto\app\utils\functions.prg` -> `ConverterParaData()`
+- Auto-fix: CorretorAutomatico Pattern #197 (so quando o argumento pode ser
+  DATE: raiz `THIS.`/`THISFORM.`, variavel `par_`/`loc_` sem ponto, ou cadeia
+  terminada em `.Value`; nunca em linha de `SELECT`/`INDEX ON`/`VARTYPE`).
+- Origem: Erro157 (2026-09-10, FormCCJ/CCJBO "Calculo de Juros" — task356).
+
+---
+
+## 200. Formula de Calculo do Legado Reescrita pelo Migrador (Erro157 2026-09-10)
+
+A expressao aritmetica de um metodo de calculo **eh regra de negocio**. O
+migrador tende a "limpar" a formula — trocar o sinal, remover parenteses que
+pareciam redundantes, cortar um divisor, tirar o `ROUND` — e o resultado eh uma
+tela que **grava valor errado sem exibir erro nenhum**. Ninguem reporta, porque
+nao ha mensagem: so um numero diferente.
+
+No Erro157 a diferenca era total — juros **descontados** viraram juros
+**somados**, e a taxa **mensal prorrateada** virou taxa **diaria**:
+
+### ERRADO (o que o migrador escreveu)
+
+```foxpro
+loc_nLiquido = loc_nValor + loc_nValor * (loc_nFator / 100) * loc_nDias
+```
+
+### CERTO (transcricao literal do legado)
+
+```foxpro
+* Legado: lnLiq = Round(lnValor - (lnValor*((lnDias/30*(lnFator/100)))),2)
+loc_nLiquido = ROUND(loc_nValor - (loc_nValor * ((loc_nDias / 30) * (loc_nFator / 100))), 2)
+```
+
+Para 1000,00 com fator 3% e 31 dias: legado **969,00**, migrado **1930,00**.
+
+### Tres coisas que vao JUNTO com a formula e o migrador costuma jogar fora
+
+**1. O SINAL.** O legado nao "conserta" diferenca de datas negativa — data
+anterior a base gera dias negativos **de proposito** (e o liquido sobe, nao
+desce). Clampar para zero eh mudar a regra:
+
+```foxpro
+* ERRADO - o legado nao faz isso
+IF loc_nDias < 0
+    loc_nDias = 0
+ENDIF
+```
+
+**2. OS GUARDS.** Quase sempre existem porque a **coluna destino** nao aguenta o
+valor. Aqui `sigdtccj.dias` eh `numeric(3, 0)`: sem o guard, o `REPLACE` estoura
+o campo e a gravacao falha no SQL Server.
+
+```foxpro
+IF ABS(loc_nDias) > 999
+    MsgAviso("Quantidade de dias superior a 999 dias.", "Aten" + CHR(231) + CHR(227) + "o")
+    REPLACE datas WITH {}
+    loc_lExcedeu = .T.
+    EXIT
+ENDIF
+```
+
+**3. O CRITERIO DOS TOTAIS.** `Where Not Empty(Dias)` **exclui as linhas com
+zero** — resultado diferente de acumular tudo dentro do `SCAN`, que eh o atalho
+natural de quem esta reescrevendo:
+
+```foxpro
+* Legado: Select Count(*) As Qtd, Sum(Valor), Sum(Liquido), Avg(Dias)
+*           From crDetalhe Where Not Empty(Dias) Into Cursor CsQtdDt
+SELECT COUNT(*)            AS qtd, ;
+       SUM(NVL(valor, 0))   AS totvalor, ;
+       SUM(NVL(liquido, 0)) AS totliqui, ;
+       AVG(NVL(dias, 0))    AS meddias ;
+    FROM (loc_cAlias) ;
+    WHERE NOT EMPTY(NVL(dias, 0)) ;
+    INTO CURSOR (loc_cCursorTot) READWRITE
+```
+
+E o total tem de ter **fonte unica**: no Erro157 o BO acumulava no `SCAN` e o
+form recalculava por conta propria em `AtualizarTotais()`, com criterio
+diferente — duas respostas para a mesma pergunta.
+
+### Procedimento
+
+Ao migrar qualquer metodo de calculo: abrir `tasks\<task>\*_form_codigo_fonte.txt`,
+**transcrever a formula linha a linha** e so depois trocar os nomes das
+variaveis. Nao ha auto-fix possivel — regra de negocio nao se detecta por regex;
+a defesa eh a transcricao literal e a conferencia numerica contra o legado.
+
+### Referencias
+
+- Nao automavel (sem pattern no CorretorAutomatico).
+- Origem: Erro157 (2026-09-10, FormCCJ/CCJBO "Calculo de Juros" — task356).

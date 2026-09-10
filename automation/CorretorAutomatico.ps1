@@ -990,24 +990,34 @@ function Corrigir-CreateCursorFieldWidth {
 function Corrigir-CarregarListaProtected {
     <#
     .SYNOPSIS
-    Remove PROTECTED de PROCEDURE CarregarLista
+    Pattern #196: Remove PROTECTED de metodos que TesteAutomatico.prg chama
+    direto no oForm (nao so BINDEVENT).
 
     .DESCRIPTION
-    CarregarLista deve ser PUBLIC para o TesteAutomatico poder chama-la.
-    PEMSTATUS com flag 5 retorna .T. mesmo para metodos PROTECTED,
-    mas a chamada subsequente falha com "Property CARREGARLISTA is not found".
+    TesteAutomatico.prg chama alguns metodos como `THIS.oForm.Metodo()` de
+    FORA da classe do form (CarregarLista, AlternarPagina,
+    AjustarBotoesPorModo, BtnIncluirClick, BtnCancelarClick - lista fechada,
+    ver grep por 'THIS.oForm.' no proprio TesteAutomatico.prg).
+    PEMSTATUS(oForm, "Metodo", 5) retorna .T. mesmo se o metodo for
+    PROTECTED (so verifica existencia, nao escopo de acesso) - o teste entra
+    no branch, mas a chamada real de fora da classe esbarra na protecao e
+    falha com "Property METODO is not found." em runtime.
+    Origem: Erro157 (2026-09-09, FormTCL.AjustarBotoesPorModo - task533).
+    Complementa CLAUDE.md #3 (BINDEVENT exige PUBLIC).
     #>
     param([string[]]$Linhas)
 
     $resultado = @()
+    $metodosHarness = 'CarregarLista|AlternarPagina|AjustarBotoesPorModo|BtnIncluirClick|BtnCancelarClick'
+    $rxProtected = "^(\s*)PROTECTED\s+(PROCEDURE|FUNCTION)\s+($metodosHarness)\b"
 
     for ($i = 0; $i -lt $Linhas.Count; $i++) {
         $linha = $Linhas[$i]
         $linhaOriginal = $linha
 
-        if ($linha -match '^\s*PROTECTED\s+PROCEDURE\s+CarregarLista\b') {
-            $linha = $linha -replace 'PROTECTED\s+', ''
-            Add-Correcao -Tipo "CARREGAR_LISTA_PROTECTED" -Linha ($i + 1) -Original $linhaOriginal.Trim() -Corrigido $linha.Trim() -Descricao "CarregarLista deve ser PUBLIC - PROTECTED impede chamada do TesteAutomatico"
+        if ($linha -match "(?i)$rxProtected") {
+            $linha = $linha -replace '(?i)PROTECTED\s+', ''
+            Add-Correcao -Tipo "PATTERN196_METODO_HARNESS_PROTECTED" -Linha ($i + 1) -Original $linhaOriginal.Trim() -Corrigido $linha.Trim() -Descricao "Pattern #196: metodo chamado direto por TesteAutomatico.prg (THIS.oForm.Metodo()) deve ser PUBLIC - PEMSTATUS retorna .T. mesmo PROTECTED, mas a chamada externa real falha com 'Property is not found'"
         }
 
         $resultado += $linha
@@ -14153,6 +14163,291 @@ function Corrigir-EvaluateAtribuicaoQueNaoAtribui {
     return $Linhas
 }
 
+function Corrigir-FaixaCabecalhoDepoisDosBotoes {
+    # Pattern #195 (Erro156, 2026-09-09) - AUTO-FIX + WARNING.
+    #
+    # Na pagina DADOS, a faixa cinza do cabecalho tem de ser o PRIMEIRO
+    # AddObject (CLAUDE.md #11). Os containers de botao ficam em Top=29..33,
+    # DENTRO da area da faixa (Top=29..31, Height=80), entao so aparecem se
+    # forem criados DEPOIS dela. Com a ordem invertida a faixa desenha por cima
+    # e o usuario ve o cabecalho comendo Confirmar/Encerrar - no Erro156 sobrava
+    # so a lasca dos ~10px que passam da altura da faixa.
+    #
+    # DUAS COISAS TRATADAS:
+    #   (A) ordem invertida -> move o bloco da faixa para antes do 1o container
+    #       de botao (AUTO-FIX)
+    #   (B) faixa com labels PELADOS -> .AddObject("lbl_4c_Sombra","Label") sem
+    #       nenhuma propriedade (injecao do Erro152 que ficou pela metade): o
+    #       Caption ate era setado no Init, mas o titulo saia como label default
+    #       minusculo, preto sobre cinza (WARNING - os valores vem da faixa da
+    #       pagina Lista do proprio form)
+    #
+    # DETECCAO SEMPRE por BackColor=RGB(100,100,100) + Height>=60, NUNCA pelo
+    # nome: 8 forms chamam a faixa de cnt_4c_Sombra e o Formpgr usa
+    # cnt_4c_Cabecalho para um container de CAMPOS (CLAUDE.md #11).
+    #
+    # EXCECAO que NAO pode ser tocada: pagina com PageFrame/Container interno que
+    # cobre tudo (Formgpd.pgf_4c_Divisoes). Ali a faixa vem DEPOIS de proposito e
+    # a barra de botoes eh trazida para frente com ZOrder(0). O guard eh a
+    # presenca de ZOrder(0) no mesmo metodo - sem ele o pattern "corrigiria" um
+    # form que estava certo.
+    param([string[]]$Linhas, [string]$Arquivo = "")
+
+    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
+    if ([string]::IsNullOrEmpty($Arquivo)) { return $Linhas }
+    if ((Split-Path -Leaf $Arquivo) -notlike 'Form*.prg') { return $Linhas }
+
+    $ini = -1
+    $fim = $Linhas.Count
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        if ($Linhas[$i] -match '(?i)PROCEDURE\s+ConfigurarPaginaDados') { $ini = $i; break }
+    }
+    if ($ini -lt 0) { return $Linhas }
+    for ($i = $ini + 1; $i -lt $Linhas.Count; $i++) {
+        if ($Linhas[$i] -match '(?i)^\s*(PROTECTED\s+|HIDDEN\s+)?(PROCEDURE|FUNCTION)\s') { $fim = $i; break }
+    }
+
+    $iCab = -1
+    $iBtn = -1
+    $nomeCab = ''
+    for ($i = $ini; $i -lt $fim; $i++) {
+        if ($Linhas[$i] -match '(?i)AddObject\s*\(\s*"(\w+)"\s*,\s*"Container"') {
+            $nome = $Matches[1]
+            $alt = 0
+            $cor = $false
+            $lim = [Math]::Min($i + 25, $fim)
+            for ($j = $i + 1; $j -lt $lim; $j++) {
+                if ($Linhas[$j] -match '(?i)AddObject\s*\(\s*"\w+"\s*,\s*"Container"') { break }
+                if ($Linhas[$j] -match '(?i)^\s*\.BackColor\s*=\s*RGB\(\s*100\s*,\s*100\s*,\s*100\s*\)') { $cor = $true }
+                if ($Linhas[$j] -match '(?i)^\s*\.Height\s*=\s*(\d+)' -and $alt -eq 0) { $alt = [int]$Matches[1] }
+            }
+            if ($cor -and $alt -ge 60) {
+                if ($iCab -lt 0) { $iCab = $i; $nomeCab = $nome }
+            }
+            elseif ($nome -match '(?i)(Botoes|Salva|Saida)') {
+                if ($iBtn -lt 0) { $iBtn = $i }
+            }
+        }
+    }
+    if ($iCab -lt 0) { return $Linhas }
+
+    $indent = ($Linhas[$iCab] -replace '^(\s*).*$', '$1').Length
+    $fimCab = -1
+    for ($j = $iCab + 1; $j -lt $fim; $j++) {
+        if ($Linhas[$j] -match '^\s*ENDWITH\s*$') {
+            $ind = ($Linhas[$j] -replace '^(\s*).*$', '$1').Length
+            if ($ind -eq $indent) { $fimCab = $j; break }
+        }
+    }
+    if ($fimCab -lt 0) {
+        Add-Correcao -Tipo "WARN-195-FAIXA-BLOCO-MAL-FORMADO" -Linha ($iCab + 1) `
+            -Original ("faixa '" + $nomeCab + "' sem ENDWITH pareado") -Corrigido "(REVISAR MANUAL)" `
+            -Descricao "Pattern #195: nao consegui delimitar o bloco da faixa; ordem e labels nao foram avaliados."
+        Write-Host "[Pattern #195] bloco da faixa mal formado (linha $($iCab + 1))" -ForegroundColor Yellow
+        return $Linhas
+    }
+
+    foreach ($lbl in @('lbl_4c_Sombra', 'lbl_4c_Titulo')) {
+        for ($j = $iCab; $j -le $fimCab; $j++) {
+            $rx = '(?i)^\s*\.AddObject\("' + $lbl + '"\s*,\s*"Label"\)\s*$'
+            if ($Linhas[$j] -match $rx) {
+                $prox = ''
+                if (($j + 1) -le $fimCab) { $prox = $Linhas[$j + 1] }
+                if ($prox -notmatch '(?i)^\s*WITH\s') {
+                    Add-Correcao -Tipo "WARN-195-FAIXA-LABEL-SEM-PROPRIEDADES" -Linha ($j + 1) `
+                        -Original ($lbl + " criado sem nenhuma propriedade") -Corrigido "(REVISAR MANUAL)" `
+                        -Descricao ("Pattern #195: a faixa da pagina Dados cria '" + $lbl + "' com AddObject e nao " +
+                            "configura nada. Sem Top/Left/fonte/cor o titulo sai como label default minusculo, preto " +
+                            "sobre cinza, mesmo com o Caption setado no Init - injecao do Erro152 que ficou pela " +
+                            "metade. Copiar o bloco canonico da faixa da pagina Lista do proprio form (CLAUDE.md #11): " +
+                            "Sombra Top=15 ForeColor RGB(0,0,0); Titulo Top=18 ForeColor RGB(255,255,255); ambos " +
+                            "Left=10, Width=THIS.Width, Tahoma 16 bold, BackStyle=0, AutoSize=.F. " +
+                            "Origem: Erro156 (2026-09-09, FormCat).")
+                    Write-Host "[Pattern #195] $lbl sem propriedades (linha $($j + 1))" -ForegroundColor Yellow
+                }
+            }
+        }
+    }
+
+    if ($iBtn -lt 0 -or $iCab -lt $iBtn) { return $Linhas }
+
+    for ($j = $ini; $j -lt $fim; $j++) {
+        if ($Linhas[$j] -match '(?i)\.ZOrder\s*\(\s*0\s*\)') {
+            Write-Host "[Pattern #195] faixa depois dos botoes, mas ha ZOrder(0) - excecao legitima, nao tocado" -ForegroundColor DarkGray
+            return $Linhas
+        }
+    }
+
+    $iniCab = $iCab
+    if ($iCab -gt 0 -and $Linhas[$iCab - 1] -match '^\s*\*') { $iniCab = $iCab - 1 }
+    $destino = $iBtn
+    if ($iBtn -gt 0 -and $Linhas[$iBtn - 1] -match '^\s*\*') { $destino = $iBtn - 1 }
+
+    $lista = New-Object System.Collections.Generic.List[string]
+    $Linhas | ForEach-Object { $lista.Add($_) }
+    $bloco = $lista.GetRange($iniCab, $fimCab - $iniCab + 1)
+    $temBranco = $false
+    if (($fimCab + 1) -lt $lista.Count) { $temBranco = [string]::IsNullOrWhiteSpace($lista[$fimCab + 1]) }
+    $qtd = ($fimCab - $iniCab + 1)
+    if ($temBranco) { $qtd = $qtd + 1 }
+    $lista.RemoveRange($iniCab, $qtd)
+    $novo = New-Object System.Collections.Generic.List[string]
+    $bloco | ForEach-Object { $novo.Add($_) }
+    $novo.Add('')
+    $lista.InsertRange($destino, [string[]]$novo)
+
+    Add-Correcao -Tipo "FAIXA_CABECALHO_DEPOIS_DOS_BOTOES" -Linha ($iCab + 1) `
+        -Original ("faixa '" + $nomeCab + "' criada na linha " + ($iCab + 1) + ", depois do container de botao da linha " + ($iBtn + 1)) `
+        -Corrigido ("faixa movida para antes da linha " + ($destino + 1)) `
+        -Descricao ("Pattern #195: na pagina Dados a faixa do cabecalho tem de ser o PRIMEIRO AddObject " +
+            "(CLAUDE.md #11). Os containers de botao ficam em Top=29..33, DENTRO da area da faixa " +
+            "(Top=29..31, Height=80), e so aparecem se criados DEPOIS dela. Com a ordem invertida a faixa " +
+            "desenha por cima e come Confirmar/Encerrar. Excecao respeitada: pagina com PageFrame interno que " +
+            "cobre tudo, onde a faixa vem depois de proposito e a barra de botoes usa ZOrder(0) - nesse caso o " +
+            "pattern nao mexe. Origem: Erro156 (2026-09-09, FormCAD e FormCat).")
+    Write-Host "[Pattern #195] faixa movida para antes dos botoes (era linha $($iCab + 1))" -ForegroundColor Green
+
+    return $lista.ToArray()
+}
+
+function Corrigir-TtodEmValorQuePodeSerDate {
+    # Pattern #197 (Erro157, 2026-09-10, FormCCJ/CCJBO) - AUTO-FIX.
+    #
+    # TTOD() SO aceita DATETIME. Passar um DATE dispara, em RUNTIME, o erro 11
+    # do VFP9: "Function argument value, type, or count is invalid." Compila
+    # limpo - o usuario so descobre ao clicar o botao.
+    #
+    # A armadilha eh que o MESMO campo chega com tipos DIFERENTES conforme o
+    # caminho, e o codigo migrado costuma ver so um deles:
+    #   - TextBox criado com `.Value = {}`            -> DATE     (modo INCLUIR)
+    #   - coluna `datetime` do SQL Server via SQLEXEC -> DATETIME (modo ALTERAR)
+    #   - cursor VFP com coluna declarada `D`         -> DATE
+    # No Erro157 o legado fazia `Ttod(Get_DataBase.Value)` e funcionava porque
+    # la o TextBox tinha `ControlSource = crSigCdCcj.data_base` (datetime). No
+    # migrado o TextBox nasce com `{}` (DATE) e o mesmo TTOD explodia - a tela
+    # de Calculo de Juros nao gravava nada, so o messagebox de erro 11.
+    #
+    # FIX: trocar TTOD() por ConverterParaData() (utils\functions.prg), que
+    # normaliza DATE/DATETIME/CHAR para DATE. Para DATETIME o resultado eh
+    # identico ao TTOD; para DATE deixa de estourar. Nao ha regressao possivel:
+    # todo caso que hoje funciona continua com o mesmo valor.
+    #
+    # ESCOPO ESTREITO DE PROPOSITO - so mexe quando o argumento pode ser DATE:
+    #   (a) raiz THIS. / THISFORM.        -> propriedade de BO ou controle
+    #   (b) variavel par_* / loc_* sem ponto -> parametro/local
+    #   (c) cadeia terminada em .Value       -> valor de controle
+    #   (d) loc_oBO.this_*                   -> propriedade de BO por referencia
+    # `TTOD(<alias>.<coluna>)` NAO eh tocado: coluna vinda de SQLEXEC eh
+    # datetime e a reescrita seria ruido em ~100 sites. Tambem NUNCA mexe em
+    # linha de SELECT/INDEX ON (UDF dentro de SQL/indice muda plano e quebra
+    # Rushmore) nem em linha que ja se protege com VARTYPE.
+    param([string[]]$Linhas, [string]$Arquivo = "")
+
+    if ($null -eq $Linhas -or $Linhas.Count -eq 0) { return $Linhas }
+
+    # functions.prg DEFINE o helper e usa TTOD legitimamente la dentro
+    if (-not [string]::IsNullOrEmpty($Arquivo)) {
+        if ((Split-Path -Leaf $Arquivo) -ieq 'functions.prg') { return $Linhas }
+    }
+
+    for ($i = 0; $i -lt $Linhas.Count; $i++) {
+        $linha = $Linhas[$i]
+        if ([string]::IsNullOrWhiteSpace($linha)) { continue }
+        if ($linha -notmatch '(?i)\bTTOD\s*\(') { continue }
+
+        $trim = $linha.TrimStart()
+        if ($trim.StartsWith('*')) { continue }
+        if ($linha -match '(?i)\bVARTYPE\b') { continue }
+        if ($linha -match '(?i)\bConverterParaData\b') { continue }
+        # SQL / indice: UDF ali muda plano de consulta e quebra Rushmore
+        if ($linha -match '(?i)(^|\s)(SELECT|INDEX\s+ON|GROUP\s+BY|ORDER\s+BY)\b') { continue }
+
+        $linhaOriginal = $linha
+        $mudou = $false
+        $pos = 0
+
+        while ($true) {
+            $m = [regex]::Match($linha.Substring($pos), '(?i)\bTTOD\s*\(')
+            if (-not $m.Success) { break }
+
+            $inicioTok = $pos + $m.Index
+            $abre = $pos + $m.Index + $m.Length - 1   # posicao do '('
+
+            # argumento com parenteses balanceados
+            $nivel = 0
+            $fecha = -1
+            $emAspas = ''
+            for ($k = $abre; $k -lt $linha.Length; $k++) {
+                $ch = $linha[$k]
+                if ($emAspas -ne '') {
+                    if ($ch -eq $emAspas) { $emAspas = '' }
+                    continue
+                }
+                if ($ch -eq '"' -or $ch -eq "'") { $emAspas = $ch; continue }
+                if ($ch -eq '(') { $nivel++ }
+                elseif ($ch -eq ')') {
+                    $nivel--
+                    if ($nivel -eq 0) { $fecha = $k; break }
+                }
+            }
+            if ($fecha -lt 0) { break }   # continuacao de linha - deixa quieto
+
+            $arg = $linha.Substring($abre + 1, $fecha - $abre - 1).Trim()
+
+            # desembrulha um NVL(<alvo>, <default>) externo
+            $alvo = $arg
+            $mNvl = [regex]::Match($alvo, '(?i)^NVL\s*\(')
+            if ($mNvl.Success) {
+                $n2 = 0
+                for ($k = $mNvl.Length - 1; $k -lt $alvo.Length; $k++) {
+                    $ch = $alvo[$k]
+                    if ($ch -eq '(') { $n2++ }
+                    elseif ($ch -eq ')') { $n2-- ; if ($n2 -eq 0) { break } }
+                    elseif ($ch -eq ',' -and $n2 -eq 1) {
+                        $alvo = $alvo.Substring($mNvl.Length, $k - $mNvl.Length).Trim()
+                        break
+                    }
+                }
+            }
+
+            # primeira cadeia de identificadores do alvo
+            $mCad = [regex]::Match($alvo, '^[A-Za-z_][A-Za-z0-9_]*(\.[A-Za-z_][A-Za-z0-9_]*)*')
+            $aplica = $false
+            if ($mCad.Success) {
+                $cadeia = $mCad.Value
+                if ($cadeia -imatch '^(THIS|THISFORM)\.') { $aplica = $true }
+                elseif ($cadeia -imatch '^(par_|loc_)[A-Za-z0-9_]*$') { $aplica = $true }
+                elseif ($cadeia -imatch '\.Value$') { $aplica = $true }
+                elseif ($cadeia -imatch '^(par_|loc_)[A-Za-z0-9_]*\.this_') { $aplica = $true }
+            }
+
+            if ($aplica) {
+                $linha = $linha.Substring(0, $inicioTok) + 'ConverterParaData' + $linha.Substring($inicioTok + 4)
+                $mudou = $true
+                $pos = $inicioTok + 'ConverterParaData'.Length
+            }
+            else {
+                $pos = $abre + 1
+            }
+        }
+
+        if ($mudou) {
+            $Linhas[$i] = $linha
+            Add-Correcao -Tipo "TTOD_EM_VALOR_QUE_PODE_SER_DATE" -Linha ($i + 1) `
+                -Original $linhaOriginal.Trim() -Corrigido $linha.Trim() `
+                -Descricao ("Pattern #197: TTOD() so aceita DATETIME - com um DATE dispara em RUNTIME o erro 11 " +
+                    "'Function argument value, type, or count is invalid.' O mesmo campo chega como DATE " +
+                    "(TextBox criado com .Value = {}, cursor VFP com coluna D) ou DATETIME (coluna datetime via " +
+                    "SQLEXEC) conforme o modo do form, entao o codigo funciona em ALTERAR e explode em INCLUIR. " +
+                    "Trocado por ConverterParaData() (utils\functions.prg), que normaliza os dois - para DATETIME " +
+                    "o resultado eh identico ao TTOD. Origem: Erro157 (2026-09-10, FormCCJ/CCJBO 'Calculo de Juros').")
+            Write-Host "[Pattern #197] TTOD -> ConverterParaData (linha $($i + 1))" -ForegroundColor Green
+        }
+    }
+
+    return $Linhas
+}
+
 function Invoke-CorrecaoAutomatica {
     param(
         [string]$Arquivo,
@@ -14370,6 +14665,8 @@ function Invoke-CorrecaoAutomatica {
     $linhas = Corrigir-ChamadaFuncaoNaoDefinida -Linhas $linhas -Arquivo $Arquivo
     $linhas = Corrigir-TabelaInexistenteNoSchema -Linhas $linhas -Arquivo $Arquivo
     $linhas = Corrigir-EvaluateAtribuicaoQueNaoAtribui -Linhas $linhas -Arquivo $Arquivo
+    $linhas = Corrigir-FaixaCabecalhoDepoisDosBotoes -Linhas $linhas -Arquivo $Arquivo
+    $linhas = Corrigir-TtodEmValorQuePodeSerDate -Linhas $linhas -Arquivo $Arquivo
 
     # Salva arquivo corrigido em UTF-8 SEM BOM.
     # - VFP9 nao suporta BOM (por isso removemos no read com bytes[3..])
