@@ -140,7 +140,7 @@ DEFINE CLASS FormSIGPRCCR AS FormBase
     *   valores sao ignoradas silenciosamente (compatibilidade com framework).
     *   par_nPagina - deve ser 1 (layout unico do REPORT)
     *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE AlternarPagina(par_nPagina)
+    PROCEDURE AlternarPagina(par_nPagina)
         LOCAL loc_lValida
         loc_lValida = .F.
         IF VARTYPE(par_nPagina) = "N" AND par_nPagina = 1

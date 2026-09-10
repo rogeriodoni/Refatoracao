@@ -739,7 +739,7 @@ DEFINE CLASS FormDepartamento AS FormBase
     *--------------------------------------------------------------------------
     * CarregarLista - Carrega dados no grid da Page1
     *--------------------------------------------------------------------------
-    PROTECTED FUNCTION CarregarLista()
+    FUNCTION CarregarLista()
         LOCAL loc_lResultado, loc_oGrid
         loc_lResultado = .F.
 
@@ -780,7 +780,7 @@ DEFINE CLASS FormDepartamento AS FormBase
     *--------------------------------------------------------------------------
     * AlternarPagina - Alterna entre Page1 (lista) e Page2 (dados)
     *--------------------------------------------------------------------------
-    PROTECTED FUNCTION AlternarPagina(par_nPagina)
+    FUNCTION AlternarPagina(par_nPagina)
         LOCAL loc_lResultado
         loc_lResultado = .F.
 
@@ -897,7 +897,7 @@ DEFINE CLASS FormDepartamento AS FormBase
     *--------------------------------------------------------------------------
     * AjustarBotoesPorModo - Ajusta estado dos botoes conforme modo atual
     *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE AjustarBotoesPorModo()
+    PROCEDURE AjustarBotoesPorModo()
         LOCAL loc_oPg1, loc_lLista
         loc_oPg1  = THIS.pgf_4c_Paginas.Page1
         loc_lLista = (THIS.this_cModoAtual = "LISTA")

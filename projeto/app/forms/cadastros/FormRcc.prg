@@ -710,6 +710,11 @@ DEFINE CLASS FormRcc AS FormBase
             .Width     = 22
         ENDWITH
 
+        *-- CurrentControl: sem isto a coluna continua desenhando o Text1 e o
+        *-- CheckBox acima NUNCA aparece (CorretorAutomatico #198)
+        loc_oPagina.grd_4c_Dados.Column6.CurrentControl = "Check1"
+        loc_oPagina.grd_4c_Dados.Column6.Sparse         = .F.
+
         *-- cmd_4c_SelTudo (SelTudo no legado: top=305+29=334, left=599, width=45, height=40)
         loc_oPagina.AddObject("cmd_4c_SelTudo", "CommandButton")
         WITH loc_oPagina.cmd_4c_SelTudo

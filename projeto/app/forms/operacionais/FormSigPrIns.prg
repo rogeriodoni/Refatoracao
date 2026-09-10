@@ -114,7 +114,7 @@ DEFINE CLASS FormSigPrIns AS FormBase
     * AlternarPagina - Nao aplicavel a este dialog OPERACIONAL
     * Dialog nao tem PageFrame nem multiplas paginas. Satisfaz contrato multi-fase.
     *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE AlternarPagina(par_nPagina)
+    PROCEDURE AlternarPagina(par_nPagina)
         RETURN
     ENDPROC
 
@@ -444,7 +444,7 @@ DEFINE CLASS FormSigPrIns AS FormBase
     *--------------------------------------------------------------------------
     * AjustarBotoesPorModo - Nao aplicavel a este dialog OPERACIONAL
     *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE AjustarBotoesPorModo()
+    PROCEDURE AjustarBotoesPorModo()
         RETURN
     ENDPROC
 

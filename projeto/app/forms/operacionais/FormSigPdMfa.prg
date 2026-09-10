@@ -1272,7 +1272,7 @@ DEFINE CLASS FormSigPdMfa AS FormBase
     * AjustarBotoesPorModo - Form OPERACIONAL nao tem modos CRUD.
     * Garante que cmd_4c_Processa e cmd_4c_Cancela estao habilitados.
     *==========================================================================
-    PROTECTED PROCEDURE AjustarBotoesPorModo()
+    PROCEDURE AjustarBotoesPorModo()
         IF PEMSTATUS(THIS, "cmd_4c_Processa", 5)
             THIS.cmd_4c_Processa.Enabled = .T.
         ENDIF

@@ -883,7 +883,7 @@ DEFINE CLASS FormSigPrSer AS FormBase
     *                      TmpDistrib pelo form pai)
     * Retorna .T. se conseguiu alternar; .F. em qualquer excecao.
     *==========================================================================
-    PROTECTED PROCEDURE AlternarPagina(par_nPagina)
+    PROCEDURE AlternarPagina(par_nPagina)
         LOCAL loc_lSucesso, loc_nPagina, loc_oErro
         loc_lSucesso = .F.
 
@@ -1298,7 +1298,7 @@ DEFINE CLASS FormSigPrSer AS FormBase
     * AjustarBotoesPorModo - Popup com unico cmd_4c_Ok (sempre habilitado)
     * par_cModo ignorado
     *==========================================================================
-    PROTECTED PROCEDURE AjustarBotoesPorModo(par_cModo)
+    PROCEDURE AjustarBotoesPorModo(par_cModo)
         LOCAL loc_oErro
 
         TRY

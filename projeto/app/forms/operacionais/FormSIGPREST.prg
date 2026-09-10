@@ -446,7 +446,7 @@ DEFINE CLASS FormSIGPREST AS FormBase
     *--------------------------------------------------------------------------
     * AjustarBotoesPorModo - Dialogo utilitario: botoes sempre visiveis/habilitados
     *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE AjustarBotoesPorModo()
+    PROCEDURE AjustarBotoesPorModo()
         IF PEMSTATUS(THIS, "cmd_4c_OK", 5)
             THIS.cmd_4c_OK.Visible      = .T.
             THIS.cmd_4c_OK.Enabled      = .T.

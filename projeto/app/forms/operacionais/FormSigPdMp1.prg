@@ -368,7 +368,7 @@ DEFINE CLASS FormSigPdMp1 AS FormBase
     * compatibilidade com a estrutura padrao da pipeline de migracao; apenas
     * garante o foco na grade principal quando chamado.
     *==========================================================================
-    PROTECTED PROCEDURE AlternarPagina(par_nPagina)
+    PROCEDURE AlternarPagina(par_nPagina)
         IF VARTYPE(THIS.grd_4c_Dados) = "O"
             THIS.grd_4c_Dados.SetFocus()
         ENDIF
@@ -1007,7 +1007,7 @@ DEFINE CLASS FormSigPdMp1 AS FormBase
     * AjustarBotoesPorModo - Controla visibilidade do botao Alterar conforme modo
     * Botao Alterar visivel somente no modo INSERIR (replica fChecaAcesso do legado)
     *==========================================================================
-    PROTECTED PROCEDURE AjustarBotoesPorModo()
+    PROCEDURE AjustarBotoesPorModo()
         IF VARTYPE(THIS.cmd_4c_Alterar) = "O"
             THIS.cmd_4c_Alterar.Visible = INLIST(ALLTRIM(THIS.this_cEscolha), "INSERIR")
         ENDIF

@@ -642,7 +642,7 @@ DEFINE CLASS FormSIGREIPS AS FormBase
     *--------------------------------------------------------------------------
     * AlternarPagina - Devolve foco ao primeiro botao (sem PageFrame neste form)
     *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE AlternarPagina(par_nPagina)
+    PROCEDURE AlternarPagina(par_nPagina)
         IF PEMSTATUS(THIS, "cmg_4c_Botoes", 5)
             THIS.cmg_4c_Botoes.Buttons(1).SetFocus()
         ENDIF

@@ -1259,7 +1259,7 @@ DEFINE CLASS FormInf AS FormBase
     * VISUALIZAR       : Confirmar desabilitado, Cancelar habilitado
     * LISTA            : Todos os botoes CRUD habilitados
     *===========================================================================
-    PROTECTED PROCEDURE AjustarBotoesPorModo()
+    PROCEDURE AjustarBotoesPorModo()
         LOCAL loc_oPg1, loc_oPg2, loc_lEditando, loc_lVisualizando
         loc_oPg1         = THIS.pgf_4c_Paginas.Page1
         loc_oPg2         = THIS.pgf_4c_Paginas.Page2

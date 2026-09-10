@@ -2716,7 +2716,7 @@ DEFINE CLASS FormGpd AS FormBase
     *==========================================================================
     * AjustarBotoesPorModo - Ajusta estado dos botoes conforme modo atual
     *==========================================================================
-    PROTECTED PROCEDURE AjustarBotoesPorModo()
+    PROCEDURE AjustarBotoesPorModo()
         LOCAL loc_lLista, loc_lDados, loc_lEditar
         loc_lLista  = (THIS.this_cModoAtual = "LISTA")
         loc_lDados  = !loc_lLista
@@ -13052,6 +13052,11 @@ DEFINE CLASS FormGpd AS FormBase
             .FontName      = "Tahoma"
             .FontSize      = 8
         ENDWITH
+
+        *-- CurrentControl: sem isto a coluna continua desenhando o Text1 e o
+        *-- ComboBox acima NUNCA aparece (CorretorAutomatico #198)
+        loc_oGrd.Column2.CurrentControl = "cbo_4c_Fwcombo1"
+        loc_oGrd.Column2.Sparse         = .F.
         BINDEVENT(loc_oGrd.Column2.cbo_4c_Fwcombo1, "InteractiveChange", ;
             THIS, "PgDescrs_GrdDados_Col2_InteractiveChange")
         BINDEVENT(loc_oGrd.Column2.cbo_4c_Fwcombo1, "When", ;
@@ -13085,6 +13090,11 @@ DEFINE CLASS FormGpd AS FormBase
             .FontName      = "Tahoma"
             .FontSize      = 8
         ENDWITH
+
+        *-- CurrentControl: sem isto a coluna continua desenhando o Text1 e o
+        *-- ComboBox acima NUNCA aparece (CorretorAutomatico #198)
+        loc_oGrd.Column3.CurrentControl = "cbo_4c_Fwcombo1"
+        loc_oGrd.Column3.Sparse         = .F.
         BINDEVENT(loc_oGrd.Column3.cbo_4c_Fwcombo1, "When", ;
             THIS, "PgDescrs_GrdDados_Col3_When")
 
@@ -13119,6 +13129,11 @@ DEFINE CLASS FormGpd AS FormBase
             .FontName      = "Tahoma"
             .FontSize      = 8
         ENDWITH
+
+        *-- CurrentControl: sem isto a coluna continua desenhando o Text1 e o
+        *-- ComboBox acima NUNCA aparece (CorretorAutomatico #198)
+        loc_oGrd.Column4.CurrentControl = "cbo_4c_Fwcombo1"
+        loc_oGrd.Column4.Sparse         = .F.
         BINDEVENT(loc_oGrd.Column4.cbo_4c_Fwcombo1, "When", ;
             THIS, "PgDescrs_GrdDados_Col4_When")
 
@@ -13150,6 +13165,11 @@ DEFINE CLASS FormGpd AS FormBase
             .FontName      = "Tahoma"
             .FontSize      = 8
         ENDWITH
+
+        *-- CurrentControl: sem isto a coluna continua desenhando o Text1 e o
+        *-- ComboBox acima NUNCA aparece (CorretorAutomatico #198)
+        loc_oGrd.Column5.CurrentControl = "cbo_4c_Fwcombo1"
+        loc_oGrd.Column5.Sparse         = .F.
         BINDEVENT(loc_oGrd.Column5.cbo_4c_Fwcombo1, "When", ;
             THIS, "PgDescrs_GrdDados_Col5_When")
 
@@ -13181,6 +13201,11 @@ DEFINE CLASS FormGpd AS FormBase
             .FontName      = "Tahoma"
             .FontSize      = 8
         ENDWITH
+
+        *-- CurrentControl: sem isto a coluna continua desenhando o Text1 e o
+        *-- ComboBox acima NUNCA aparece (CorretorAutomatico #198)
+        loc_oGrd.Column6.CurrentControl = "cbo_4c_Fwcombo1"
+        loc_oGrd.Column6.Sparse         = .F.
         BINDEVENT(loc_oGrd.Column6.cbo_4c_Fwcombo1, "When", ;
             THIS, "PgDescrs_GrdDados_Col6_When")
 
@@ -13212,6 +13237,11 @@ DEFINE CLASS FormGpd AS FormBase
             .FontName      = "Tahoma"
             .FontSize      = 8
         ENDWITH
+
+        *-- CurrentControl: sem isto a coluna continua desenhando o Text1 e o
+        *-- ComboBox acima NUNCA aparece (CorretorAutomatico #198)
+        loc_oGrd.Column7.CurrentControl = "cbo_4c_Fwcombo1"
+        loc_oGrd.Column7.Sparse         = .F.
         BINDEVENT(loc_oGrd.Column7.cbo_4c_Fwcombo1, "When", ;
             THIS, "PgDescrs_GrdDados_Col7_When")
 

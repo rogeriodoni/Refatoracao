@@ -654,7 +654,7 @@ DEFINE CLASS FormSigPrEtq AS FormBase
 	*====================================================================
 	* AlternarPagina - Stub (form flat, sem PageFrame)
 	*====================================================================
-	PROTECTED PROCEDURE AlternarPagina(par_nPagina)
+	PROCEDURE AlternarPagina(par_nPagina)
 		RETURN
 	ENDPROC
 

@@ -1566,7 +1566,7 @@ DEFINE CLASS Formsigtosen AS FormBase
     * AjustarBotoesPorModo - Ajusta estado dos botoes conforme estado do login
     * No formulario de login nao ha modo CRUD; apenas SAIDA eh ajustado
     *==========================================================================
-    PROTECTED PROCEDURE AjustarBotoesPorModo()
+    PROCEDURE AjustarBotoesPorModo()
         IF PEMSTATUS(THIS, "obj_4c_SAIDA", 5)
             THIS.obj_4c_SAIDA.Visible = .T.
             THIS.obj_4c_SAIDA.Enabled = .T.

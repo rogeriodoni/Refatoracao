@@ -459,7 +459,7 @@ DEFINE CLASS FormSigPrRss AS FormBase
     * de fluxo eh controlada por this_lProcessando (habilitando/desabilitando
     * cmd_4c_Processar e cmd_4c_Encerrar dentro de BtnProcessarClick).
     *==========================================================================
-    PROTECTED PROCEDURE AlternarPagina(par_nPagina)
+    PROCEDURE AlternarPagina(par_nPagina)
         *-- Form OPERACIONAL: pagina unica, nenhuma alternancia necessaria.
         RETURN .T.
     ENDPROC
@@ -576,7 +576,7 @@ DEFINE CLASS FormSigPrRss AS FormBase
     * AjustarBotoesPorModo - Ajusta botoes conforme estado de processamento
     * Chamado antes de iniciar e apos concluir BtnProcessarClick.
     *==========================================================================
-    PROTECTED PROCEDURE AjustarBotoesPorModo
+    PROCEDURE AjustarBotoesPorModo
         LOCAL loc_lHabilitar
         loc_lHabilitar = !THIS.this_lProcessando
         THIS.HabilitarCampos(loc_lHabilitar)

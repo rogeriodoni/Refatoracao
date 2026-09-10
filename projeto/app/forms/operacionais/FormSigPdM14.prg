@@ -1151,7 +1151,7 @@ DEFINE CLASS FormSigPdM14 AS FormBase
     * a distribuicao em xNensi via ConfirmarRateio. Aqui delegamos para o
     * mesmo fluxo de confirmacao.
     *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE BtnIncluirClick()
+    PROCEDURE BtnIncluirClick()
         TRY
             THIS.this_cPcEscolha = "INSERIR"
             IF VARTYPE(THIS.this_oParentForm) = "O"

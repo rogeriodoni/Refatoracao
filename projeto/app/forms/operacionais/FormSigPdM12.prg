@@ -711,7 +711,7 @@ DEFINE CLASS FormSigPdM12 AS FormBase
     * AjustarBotoesPorModo - Ajusta estado dos botoes conforme modo
     * Popup com unico botao OK: sempre habilitado
     *==========================================================================
-    PROTECTED PROCEDURE AjustarBotoesPorModo(par_cModo)
+    PROCEDURE AjustarBotoesPorModo(par_cModo)
         THIS.cmd_4c_Ok.Enabled = .T.
     ENDPROC
 

@@ -371,7 +371,7 @@ DEFINE CLASS Formsigreffi AS FormBase
     *   que ActivePage seja explicitamente posicionado apos InicializarForm.
     *   Valida par_nPagina contra PageCount real para evitar erro de range.
     *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE AlternarPagina(par_nPagina)
+    PROCEDURE AlternarPagina(par_nPagina)
         LOCAL loc_nPagina, loc_oErro
         TRY
             IF VARTYPE(par_nPagina) != "N"

@@ -993,7 +993,7 @@ DEFINE CLASS Formsigprenv AS FormBase
     *--------------------------------------------------------------------------
     * AjustarBotoesPorModo - Nao aplicavel (form OPERACIONAL sem modo CRUD)
     *--------------------------------------------------------------------------
-    PROTECTED PROCEDURE AjustarBotoesPorModo()
+    PROCEDURE AjustarBotoesPorModo()
         RETURN
     ENDPROC
 

@@ -181,7 +181,7 @@ DEFINE CLASS FormFPP AS FormBase
     * Metodo mantido apenas para compatibilidade com validacao textual do
     * pipeline de migracao (Fase 4 valida presenca do identificador).
     *==========================================================================
-    PROTECTED PROCEDURE AlternarPagina(par_nPagina)
+    PROCEDURE AlternarPagina(par_nPagina)
         RETURN
     ENDPROC
 
