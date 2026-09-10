@@ -83,26 +83,56 @@ $workerScript = {
         Name         = [System.IO.Path]::GetFileName($ArquivoPrg)
         Status       = 'unknown'
         NumCorrecoes = 0
+        Mutou        = $false
         ErrorMsg     = $null
         ElapsedMs    = 0
     }
 
     $sw = [System.Diagnostics.Stopwatch]::StartNew()
     try {
-        $output = & $CorretorScriptPath -ArquivoPrg $ArquivoPrg 2>&1
+        # hash NORMALIZADO: o corretor sempre regrava UTF-8 sem BOM e com CRLF,
+        # entao um hash de bytes acusaria "alterado" so pela normalizacao, em
+        # arquivo que ele nao tocou. Descarta BOM e uniformiza a quebra de linha
+        # antes de medir, para sobrar apenas mudanca de CONTEUDO.
+        $fnHashConteudo = {
+            param($caminho)
+            $bytes = [System.IO.File]::ReadAllBytes($caminho)
+            if ($bytes.Length -ge 3 -and $bytes[0] -eq 0xEF -and $bytes[1] -eq 0xBB -and $bytes[2] -eq 0xBF) {
+                $bytes = $bytes[3..($bytes.Length - 1)]
+            }
+            $texto = [System.Text.Encoding]::UTF8.GetString($bytes) -replace "`r`n", "`n"
+            $md5 = [System.Security.Cryptography.MD5]::Create()
+            try {
+                return [System.BitConverter]::ToString($md5.ComputeHash([System.Text.Encoding]::UTF8.GetBytes($texto)))
+            } finally {
+                $md5.Dispose()
+            }
+        }
+
+        $hashAntes = & $fnHashConteudo $ArquivoPrg
+
+        # *>&1 e nao 2>&1: o corretor reporta com Write-Host, que escreve no
+        # stream 6 (information). 2>&1 funde so o stream 2 (error), entao a
+        # captura vinha vazia e NENHUM arquivo era contado como corrigido.
+        $output = & $CorretorScriptPath -ArquivoPrg $ArquivoPrg *>&1
         $outputText = $output | Out-String
+
+        # reemite para o host, senao o log perde o detalhe por pattern
+        foreach ($linha in $output) { Write-Host $linha }
+
+        $hashDepois = & $fnHashConteudo $ArquivoPrg
+        $resultado.Mutou = ($hashAntes -ne $hashDepois)
 
         if ($outputText -match "(\d+) correcao\(oes\) aplicada") {
             $resultado.NumCorrecoes = [int]$Matches[1]
-            if ($resultado.NumCorrecoes -gt 0) {
-                $resultado.Status = 'corrigido'
-            } else {
-                $resultado.Status = 'sem_correcao'
-            }
-        } elseif ($outputText -match "Nenhuma correcao necessaria") {
-            $resultado.Status = 'sem_correcao'
+        }
+
+        # o status vem do HASH, nao do texto: o contador do corretor inclui os
+        # patterns WARNING-only, que registram achado sem alterar uma linha
+        if ($resultado.Mutou) {
+            $resultado.Status = 'alterado'
         } else {
-            $resultado.Status = 'processado'
+            $resultado.Status = 'sem_alteracao'
         }
     } catch {
         $resultado.Status = 'erro'
@@ -119,6 +149,7 @@ $workerScript = {
 $corrigidos = 0
 $semCorrecao = 0
 $erros = 0
+$comAchados = 0
 $processados = 0
 $total = $totalFiles.Count
 $swTotal = [System.Diagnostics.Stopwatch]::StartNew()
@@ -129,9 +160,10 @@ if ($Parallel -le 1) {
         $processados++
         $r = & $workerScript $file.FullName $corretorScript
         $tempo = "{0:0.0}s" -f ($r.ElapsedMs / 1000)
+        if ($r.NumCorrecoes -gt 0) { $comAchados++ }
         switch ($r.Status) {
-            'corrigido' {
-                Write-Host ("[{0,3}/{1}] {2,-45} {3,7}  -> {4} correcao(oes)" -f $processados, $total, $r.Name, $tempo, $r.NumCorrecoes) -ForegroundColor Green
+            'alterado' {
+                Write-Host ("[{0,3}/{1}] {2,-45} {3,7}  -> ALTERADO ({4} achado(s))" -f $processados, $total, $r.Name, $tempo, $r.NumCorrecoes) -ForegroundColor Green
                 $corrigidos++
             }
             'erro' {
@@ -139,7 +171,11 @@ if ($Parallel -le 1) {
                 $erros++
             }
             default {
-                Write-Host ("[{0,3}/{1}] {2,-45} {3,7}  -> sem correcoes" -f $processados, $total, $r.Name, $tempo) -ForegroundColor Gray
+                if ($r.NumCorrecoes -gt 0) {
+                    Write-Host ("[{0,3}/{1}] {2,-45} {3,7}  -> sem alteracao ({4} achado(s) WARNING)" -f $processados, $total, $r.Name, $tempo, $r.NumCorrecoes) -ForegroundColor Yellow
+                } else {
+                    Write-Host ("[{0,3}/{1}] {2,-45} {3,7}  -> sem alteracao" -f $processados, $total, $r.Name, $tempo) -ForegroundColor Gray
+                }
                 $semCorrecao++
             }
         }
@@ -193,9 +229,10 @@ if ($Parallel -le 1) {
                 $jobs[$i] = $null
 
                 $tempo = "{0:0.0}s" -f ($r.ElapsedMs / 1000)
+                if ($r.NumCorrecoes -gt 0) { $comAchados++ }
                 switch ($r.Status) {
-                    'corrigido' {
-                        Write-Host ("[{0,3}/{1}] {2,-45} {3,7}  -> {4} correcao(oes)" -f $processados, $total, $r.Name, $tempo, $r.NumCorrecoes) -ForegroundColor Green
+                    'alterado' {
+                        Write-Host ("[{0,3}/{1}] {2,-45} {3,7}  -> ALTERADO ({4} achado(s))" -f $processados, $total, $r.Name, $tempo, $r.NumCorrecoes) -ForegroundColor Green
                         $corrigidos++
                     }
                     'erro' {
@@ -203,7 +240,11 @@ if ($Parallel -le 1) {
                         $erros++
                     }
                     default {
-                        Write-Host ("[{0,3}/{1}] {2,-45} {3,7}  -> sem correcoes" -f $processados, $total, $r.Name, $tempo) -ForegroundColor Gray
+                        if ($r.NumCorrecoes -gt 0) {
+                            Write-Host ("[{0,3}/{1}] {2,-45} {3,7}  -> sem alteracao ({4} achado(s) WARNING)" -f $processados, $total, $r.Name, $tempo, $r.NumCorrecoes) -ForegroundColor Yellow
+                        } else {
+                            Write-Host ("[{0,3}/{1}] {2,-45} {3,7}  -> sem alteracao" -f $processados, $total, $r.Name, $tempo) -ForegroundColor Gray
+                        }
                         $semCorrecao++
                     }
                 }
@@ -225,8 +266,9 @@ Write-Host ""
 Write-Host "========================================" -ForegroundColor Cyan
 Write-Host "  RESUMO" -ForegroundColor Cyan
 Write-Host "========================================" -ForegroundColor Cyan
-Write-Host ("  Arquivos com correcoes: {0}" -f $corrigidos) -ForegroundColor Green
-Write-Host ("  Arquivos sem correcoes: {0}" -f $semCorrecao) -ForegroundColor Gray
+Write-Host ("  Arquivos ALTERADOS:     {0}   (conteudo mudou de fato - hash do arquivo)" -f $corrigidos) -ForegroundColor Green
+Write-Host ("  Arquivos inalterados:   {0}" -f $semCorrecao) -ForegroundColor Gray
+Write-Host ("  Arquivos com achados:   {0}   (inclui patterns WARNING-only, que NAO mutam)" -f $comAchados) -ForegroundColor Yellow
 Write-Host ("  Erros:                  {0}" -f $erros) -ForegroundColor $(if ($erros -gt 0) { "Red" } else { "Gray" })
 Write-Host ("  Tempo total:            {0:hh\:mm\:ss}" -f $tempoTotal) -ForegroundColor Cyan
 if ($processados -gt 0) {
