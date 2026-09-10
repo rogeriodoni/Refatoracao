@@ -10717,3 +10717,234 @@ a defesa eh a transcricao literal e a conferencia numerica contra o legado.
 
 - Nao automavel (sem pattern no CorretorAutomatico).
 - Origem: Erro157 (2026-09-10, FormCCJ/CCJBO "Calculo de Juros" — task356).
+
+---
+
+## 201. Column.AddObject NAO Faz o Controle Aparecer — Falta o CurrentControl (Erro158 2026-09-10)
+
+Adicionar um OptionGroup/CheckBox/ComboBox/Spinner a uma `Column` de Grid **cria
+o objeto mas nao o exibe**. A coluna continua desenhando o `Text1` dela; o
+controle existe, responde a `PEMSTATUS`, e **nunca aparece na tela**. O usuario
+ve o valor cru numa caixa de texto e nao tem como marcar nada.
+
+Quem decide qual controle a coluna desenha eh **`Column.CurrentControl`**, cujo
+default eh `"Text1"`. Ele tem de receber o **nome exato** passado ao `AddObject`.
+
+### ERRADO
+
+```foxpro
+par_oPagina.grd_4c_Motivos.Column3.AddObject("opt_4c_Tipos", "OptionGroup")
+WITH par_oPagina.grd_4c_Motivos.Column3.opt_4c_Tipos
+    .ButtonCount = 3
+    ...
+ENDWITH
+*-- e acabou aqui: a coluna segue mostrando Text1 com o numero de Tipos
+```
+
+### CERTO
+
+```foxpro
+par_oPagina.grd_4c_Motivos.Column3.AddObject("opt_4c_Tipos", "OptionGroup")
+WITH par_oPagina.grd_4c_Motivos.Column3.opt_4c_Tipos
+    .ButtonCount = 3
+    ...
+ENDWITH
+
+par_oPagina.grd_4c_Motivos.Column3.CurrentControl = "opt_4c_Tipos"
+par_oPagina.grd_4c_Motivos.Column3.Sparse         = .F.
+par_oPagina.grd_4c_Motivos.Column3.ReadOnly       = .F.
+```
+
+### As tres propriedades andam juntas
+
+| Propriedade | Sem ela |
+|-------------|---------|
+| `CurrentControl` | o controle **nunca** aparece — a coluna desenha o Text1 |
+| `Sparse = .F.` | o controle so aparece na **linha ativa**; as demais mostram texto |
+| `ReadOnly = .F.` | o controle aparece mas **nao aceita clique** |
+
+**Ordem importa no ReadOnly**: `Grid.ReadOnly = .T.` propaga para as colunas,
+entao o `Column.ReadOnly = .F.` tem de vir **DEPOIS** do ReadOnly do grid. No
+`grdMotivos` legado eh exatamente assim — grid `ReadOnly = .T.` com
+`Column3.ReadOnly = .F.`.
+
+### Referencias
+
+- Auto-fix: CorretorAutomatico Pattern #198.
+- Correlatos: secoes sobre `Sparse = .F.` em CheckBox de Grid e sobre as 7
+  propriedades explicitas do CheckBox de Column.
+- Origem: Erro158 (2026-09-10, FormCco "Cadastro de Classificacao de Contas" —
+  task357): o OptionGroup Inserir/Excluir/Nenhum da coluna Tipo foi criado na
+  migracao e nunca apareceu, entao nao havia como cadastrar o motivo.
+
+---
+
+## 202. MaxLength Copiado do Width em Pixels (Erro158 2026-09-10)
+
+O migrador tende a copiar o **Width do controle** para o `MaxLength`. Os dois sao
+numeros que aparecem juntos no mesmo bloco `WITH`, mas um eh **pixel** e o outro
+eh **caractere** — nao tem nenhuma relacao.
+
+O estrago eh silencioso ate a gravacao: o usuario digita mais do que cabe na
+coluna, o SQL Server recusa com *"String or binary data would be truncated"* e a
+tela nao grava.
+
+### ERRADO (FormCco, como saiu da migracao)
+
+```foxpro
+WITH loc_oPg2.txt_4c_Codigo
+    .Width     = 80
+    .MaxLength = 80        && SigCdClc.codigos eh char(30)
+ENDWITH
+WITH loc_oPg2.txt_4c_Descricao
+    .Width     = 220
+    .MaxLength = 220       && SigCdClc.descs eh char(30)
+ENDWITH
+```
+
+### CERTO
+
+```foxpro
+.Width     = 80
+.MaxLength = 30            && largura da coluna em docs\schema.sql
+```
+
+E o `LEFT()` do INSERT/UPDATE no BO tem de usar o **mesmo** numero:
+
+```foxpro
+", " + EscaparSQL(LEFT(THIS.this_cDescs, 30)) + ;
+```
+
+### Como conferir
+
+Ler `docs\schema.sql` com `Get-Content -Raw` (o arquivo eh UTF-16; `grep`
+devolve zero em silencio — ver a secao sobre isso) e comparar cada TextBox com a
+largura real da coluna. **Sinal de alerta imediato: `MaxLength` igual ao
+`Width`.** Coincidencia legitima existe para valores pequenos (`Width = 3` /
+`MaxLength = 3`), por isso o detector so avisa a partir de 20.
+
+### Referencias
+
+- WARNING: CorretorAutomatico Pattern #199 (nao ha auto-fix: o `.prg` nao diz
+  com seguranca a qual coluna cada TextBox corresponde).
+- Origem: Erro158 (2026-09-10, FormCco/CcoBO — task357).
+
+---
+
+## 203. `IF oBO.Salvar()` sem ELSE — Gravacao que Falha em Silencio (Erro158 2026-09-10)
+
+`BusinessBase.Salvar()` devolve `.F.` **sem exibir nada** em tres caminhos:
+
+```foxpro
+IF !THIS.this_lEmEdicao
+    THIS.this_cMensagemErro = "Nao esta em modo de edicao"
+    RETURN .F.
+ENDIF
+IF !THIS.ValidarDados()      && mensagem "ja foi definida" - mas nao exibida
+    RETURN .F.
+ENDIF
+IF !THIS.AntesDeGravar()     && idem
+    RETURN .F.
+ENDIF
+```
+
+Ele apenas **preenche `this_cMensagemErro`**. Quem tem de exibir eh o chamador.
+
+### ERRADO
+
+```foxpro
+IF THIS.this_oBusinessObject.Salvar()
+    MsgInfo("Registro salvo com sucesso!", "Confirmar")
+    THIS.AlternarPagina(1)
+ENDIF
+*-- sem ELSE: o usuario clica Confirmar e NADA acontece.
+*-- Nenhuma mensagem, nenhum registro, nenhuma pista do que houve.
+```
+
+### CERTO
+
+```foxpro
+IF THIS.this_oBusinessObject.Salvar()
+    MsgInfo("Registro salvo com sucesso!", "Confirmar")
+    THIS.AlternarPagina(1)
+ELSE
+    MsgErro(IIF(EMPTY(THIS.this_oBusinessObject.this_cMensagemErro), ;
+        "N" + CHR(227) + "o foi poss" + CHR(237) + "vel gravar o registro.", ;
+        THIS.this_oBusinessObject.this_cMensagemErro), "Confirmar")
+ENDIF
+```
+
+Mesma logica da regra #9 do CLAUDE.md (CATCH nunca silencioso): **caminho de
+falha nunca eh mudo**. Vale igual para `Excluir()`, que tem a mesma estrutura.
+
+### Referencias
+
+- WARNING: CorretorAutomatico Pattern #200.
+- Origem: Erro158 (2026-09-10, FormCco — task357).
+
+---
+
+## 204. Popular Cursor Nao Repinta a Grade, e as Guardas do Legado Sao Regra (Erro158 2026-09-10)
+
+Duas coisas que o migrador descarta com frequencia por parecerem acessorias.
+
+### 1. `GO TOP` + `Refresh()` depois de encher o cursor
+
+Uma grade cujo `RecordSource` foi ligado a um cursor **vazio** nao passa a exibir
+sozinha as linhas inseridas depois. O legado sempre fecha o bloco assim:
+
+```foxpro
+* Legado (SIGCDCCO.Pagina.Lista.Grupo_op.Click)
+Go Top In crMotivos
+ThisForm.Pagina.Dados.grdMotivos.Refresh
+```
+
+No migrado isso vira um metodo unico, chamado em TODO caminho que popula o
+cursor (Incluir, Alterar, Visualizar):
+
+```foxpro
+PROTECTED PROCEDURE AtualizarGradeMotivos()
+    IF USED("crMotivos")
+        GO TOP IN crMotivos
+    ENDIF
+    loc_oPg2 = THIS.pgf_4c_Paginas.Page2
+    IF VARTYPE(loc_oPg2) = "O" AND PEMSTATUS(loc_oPg2, "grd_4c_Motivos", 5)
+        loc_oPg2.grd_4c_Motivos.Refresh()
+    ENDIF
+ENDPROC
+```
+
+Sem isso a grade fica **visualmente vazia com o cursor cheio** — e o sintoma
+reportado eh "a tela nao traz os dados", que manda o diagnostico para o lado
+errado (SQL, cursor, permissao).
+
+### 2. A condicao que CERCA a validacao faz parte da validacao
+
+```foxpro
+* Legado
+If ThisForm.pcEscolha = 'ALTERAR' OR ThisForm.pcEscolha = 'INSERIR'
+    If get_faixai.value > get_faixaf.value
+        Messagebox('Valor da Faixa Inicial > que o valor da Faixa Final !', 48, '')
+        Return
+    EndIf
+    lnValIni = Get_faixai.Value
+    lnValFim = Get_faixaf.Value
+    If (lnValIni + lnValFim <> 0)        && <-- GUARD
+        ... consulta de sobreposicao ...
+    EndIf
+EndIf
+```
+
+O migrado tinha perdido as **tres** camadas: rodava a consulta de sobreposicao
+sem o guard `(FaixaI + FaixaF) <> 0` (faixa 0 a 0 casa com qualquer registro cujo
+intervalo contenha zero, e a gravacao era bloqueada indevidamente), tinha
+descartado a checagem `FaixaI > FaixaF` inteira, e rodava tudo **so no INCLUIR**
+quando o legado roda em INCLUIR **e** ALTERAR.
+
+Transcrever a validacao do dump legado **com as condicoes que a cercam**, nunca
+so o corpo. Ver tambem a secao sobre transcrever a formula de calculo.
+
+### Referencias
+
+- Nao automavel (sem pattern no CorretorAutomatico).
+- Origem: Erro158 (2026-09-10, FormCco/CcoBO — task357).
